@@ -30,7 +30,7 @@ echo_msg(1, '客户端信息：'.$_SERVER['HTTP_USER_AGENT']);
 if (version_compare(PHP_VERSION, '7.0.0') < 0) {
     exit("<font color=red>PHP版本必须在7.0及以上，当前".PHP_VERSION."</font>");
 } else {
-    echo_msg(1, 'PHP版本要求：7.0及以上，当前'.PHP_VERSION);
+    echo_msg(1, 'PHP版本要求：7.0及以上，当前'.PHP_VERSION.'，<a style="color:blue;text-decoration:none;" href="'.SELF.'?phpinfo=true">查看环境</a>');
 }
 
 // GD库判断
