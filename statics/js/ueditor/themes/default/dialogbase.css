@@ -90,9 +90,11 @@ a.button {
     text-decoration: none;
     height: 24px;
     width: 95px;
-    border: 0;
-    color: #838383;
-    background: url(../../themes/default/images/icons-all.gif) no-repeat;
+    font-size: 12px;
+    border-color: #01b7ee;
+    background: #01b7ee;
+    color: #fff;
+    border-radius: 4px;
 }
 
 a.button:hover {

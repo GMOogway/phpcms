@@ -6,11 +6,11 @@
 !defined('IS_ADMIN') && define('IS_ADMIN', FALSE);
 define('IS_DEV', 0);
 @set_time_limit(1000);
-if(version_compare(PHP_VERSION, '7.0.0') < 0) exit('您的php版本过低，不能安装本软件，请升级到7.0或更高版本再安装，谢谢！');
+if (version_compare(PHP_VERSION, '7.0.0') < 0) exit('<font color=red>PHP版本必须在7.0以上</font>');
 include '../cms/base.php';
 define('INSTALL_MODULE',true);
 defined('IN_CMS') or exit('No permission resources.');
-if(file_exists(CACHE_PATH.'install.lock')) exit('安装程序已经被锁定，重新安装请删除：./caches/install.lock 文件！');
+if (is_file(CACHE_PATH.'install.lock')) exit('安装程序已经被锁定，重新安装请删除：caches/install.lock');
 pc_base::load_sys_class('param','','','0');
 pc_base::load_sys_func('global');
 pc_base::load_sys_func('dir');
