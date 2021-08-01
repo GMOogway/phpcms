@@ -483,7 +483,7 @@ class create_html extends admin {
 					$class = 'ok';
 					$ok = '<a class="ok" href="'.$t['url'].'" target="_blank">生成成功</a>';
 				}
-				$html.= '<p class="'.$class.'"><label class="rleft">(#'.$t['catid'].')'.$t['catname'].'</label><label class="rright">'.$ok.'</label></p>';
+				$html.= '<p class="todo_p '.$class.'"><label class="rleft">(#'.$t['catid'].')'.$t['catname'].'</label><label class="rright">'.$ok.'</label></p>';
 			}
 			// 完成
 			//$cache_class->del_auth_data($name);
@@ -553,7 +553,7 @@ class create_html extends admin {
 					$class = 'p_error';
 					$ok = '<a class="error" href="'.$t['url'].'" target="_blank">它是动态模式</a>';
 				}
-				$html.= '<p class="'.$class.'"><label class="rleft">(#'.$t['id'].')'.$t['title'].'</label><label class="rright">'.$ok.'</label></p>';
+				$html.= '<p class="todo_p '.$class.'"><label class="rleft">(#'.$t['id'].')'.$t['title'].'</label><label class="rright">'.$ok.'</label></p>';
 			}
 			// 完成
 			//$cache_class->del_auth_data($name);
