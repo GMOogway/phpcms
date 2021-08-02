@@ -90,8 +90,7 @@ class attachments {
 			pc_base::load_sys_class('upload','',0);
 			$upload = new upload($this->input->post('module'),$this->input->post('catid'),$this->input->post('siteid'));
 			$upload->set_userid($this->input->post('userid'));
-			$siteid = get_siteid();
-			$site_setting = get_site_setting($siteid);
+			$site_setting = get_site_setting($this->input->post('siteid'));
 			$site_allowext = $site_setting['upload_allowext'];
 			$upload_maxsize = $site_setting['upload_maxsize'];
 			if ($this->input->post('filetype_post')) {
@@ -183,9 +182,10 @@ class attachments {
 			dr_json(0, L('下载文件地址中不能包含#号'));
 		}
 		pc_base::load_sys_class('upload','',0);
-		$upload = new upload($this->input->post('module'),$this->input->post('catid'),$this->get_siteid());
+		
+		$siteid = $this->get_siteid() ? $this->get_siteid() : 1 ;
+		$upload = new upload($this->input->post('module'),$this->input->post('catid'),$siteid);
 		$upload->set_userid($this->userid);
-		$siteid = get_siteid();
 		$site_setting = get_site_setting($siteid);
 		$site_allowext = $site_setting['upload_allowext'];
 		$upload_maxsize = $site_setting['upload_maxsize'];
@@ -230,8 +230,7 @@ class attachments {
 		if(!$this->admin_username) return false;
 		$uploadtime= '';
 		$this->att_db= pc_base::load_model('attachment_model');
-		$siteid = param::get_cookie('siteid');
-		if(!$siteid) $siteid = get_siteid() ? get_siteid() : 1 ;
+		$siteid = $this->get_siteid() ? $this->get_siteid() : 1 ;
 		$site_setting = get_site_setting($siteid);
 		$upload_allowext = $site_setting['upload_allowext'];
 		if($this->input->get('args')) extract(geth5init($this->input->get('args')));
@@ -243,7 +242,7 @@ class attachments {
 			$s_str .= "'".$array_test[$i]."',";
 		}
 		$s_str = substr($s_str, 0, strlen($s_str) - 1);
-		$where = "fileext in (".$s_str.") AND userid=".(int)$this->userid;
+		$where = "fileext in (".$s_str.") AND siteid=".$siteid." AND userid=".(int)$this->userid;
 		if($this->input->get('dosubmit')){
 			extract($this->input->get('info'));
 			$filename = safe_replace($filename);

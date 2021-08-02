@@ -44,11 +44,11 @@ class cache {
             return false;
         }
 
-        $cache_file = self::parse_cache_file(strtolower($key), $cache_dir); // 分析缓存文件
+        $cache_file = self::parse_cache_file(strtolower($key), $cache_dir ? 'caches_'.$cache_dir.'/caches_data/' : ''); // 分析缓存文件
         $value = dr_array2string($value); // 分析缓存内容
 
         // 分析缓存目录
-        $cache_dir = ($cache_dir ? CACHE_PATH.$cache_dir.'/' : $this->file_dir);
+        $cache_dir = ($cache_dir ? CACHE_PATH.'caches_'.$cache_dir.'/caches_data/' : $this->file_dir);
         !is_dir($cache_dir) ? create_folder($cache_dir, 0777) : (!is_writeable($cache_dir) && chmod($cache_dir, 0777));
 
         // 重置Zend OPcache
@@ -71,7 +71,7 @@ class cache {
             return false;
         }
 
-        $cache_file = self::parse_cache_file(strtolower($key), $cache_dir); // 分析缓存文件
+        $cache_file = self::parse_cache_file(strtolower($key), $cache_dir ? 'caches_'.$cache_dir.'/caches_data/' : ''); // 分析缓存文件
 
         return is_file($cache_file) ? json_decode(file_get_contents($cache_file), true) : false;
     }
@@ -88,7 +88,7 @@ class cache {
             return true;
         }
 
-        $cache_file = self::parse_cache_file(strtolower($key), $cache_dir);  // 分析缓存文件
+        $cache_file = self::parse_cache_file(strtolower($key), $cache_dir ? 'caches_'.$cache_dir.'/caches_data/' : '');  // 分析缓存文件
 
         return is_file($cache_file) ? unlink($cache_file) : true;
     }

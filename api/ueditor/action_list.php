@@ -94,8 +94,7 @@ $end = $start + $size;
 
 /* 获取文件列表 */
 $thisdb = pc_base::load_model('attachment_model');
-//$where = " and catid=".$catid." and siteid=".$siteid;
-$where = "fileext in (".$s_str.") ".$where." and userid=".$userid."";
+$where = "fileext in (".$s_str.") and siteid=".$siteid." and userid=".(int)$userid;
 $total = $thisdb->count($where);
 $data = $thisdb->listinfo($where,'aid desc','',$total);
 $files = array();

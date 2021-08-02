@@ -901,9 +901,14 @@ function dr_string2array($data) {
  * 附件信息
  */
 function get_attachment($id) {
+	$cache = pc_base::load_sys_class('cache');
 	$att_db = pc_base::load_model('attachment_model');
 	if (!$id) {
 		return null;
+	}
+	$data = $cache->get_file('attach-info-'.$id, 'attach');
+	if ($data) {
+		return $data;
 	}
 	if (is_numeric($id)) {
 		$id = (int)$id;
@@ -942,6 +947,8 @@ function get_attachment($id) {
 	$data['attachinfo'] = dr_string2array($data['attachinfo']);
 
 	$data['url'] = dr_get_file_url($data);
+
+	$cache->set_file('attach-info-'.$data['aid'], $data, 'attach');
 
 	return $data;
 }

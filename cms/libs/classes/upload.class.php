@@ -398,6 +398,7 @@ class upload {
      * @param $where 删除sql语句
      */
     public function delete($where) {
+        $cache = pc_base::load_sys_class('cache');
         $this->att_db = pc_base::load_model('attachment_model');
         $result = $this->att_db->select($where);
         foreach($result as $r) {
@@ -411,8 +412,12 @@ class upload {
                 $storage->delete($this->get_attach_info($r['remote']), $r['filepath']);
             }
             //@unlink($images);
-            $thumbs = glob(dirname($images).'/*'.basename($images));
-            if($thumbs) foreach($thumbs as $thumb) @unlink($thumb);
+            //if (dr_is_image($r['fileext'])) {
+                $thumbs = glob(dirname($images).'/*'.basename($images));
+                if($thumbs) foreach($thumbs as $thumb) @unlink($thumb);
+            //}
+            // 删除缓存
+            $cache->del_file('attach-info-'.$r['aid'], 'attach');
         }
         return $this->att_db->delete($where);
     }
