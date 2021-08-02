@@ -1,6 +1,22 @@
 if(typeof jQuery == 'undefined'){
 	window.alert("没有引用jquery库");
 }
+function dr_isEllipsis(dom) {
+	var checkDom = dom.cloneNode(),parent, flag;
+	checkDom.style.width = dom.offsetWidth + 'px';
+	checkDom.style.height = dom.offsetHeight + 'px';
+	checkDom.style.overflow = 'auto';
+	checkDom.style.position = 'absolute';
+	checkDom.style.zIndex = -1;
+	checkDom.style.opacity = 0;
+	checkDom.style.whiteSpace = "nowrap";
+	checkDom.innerHTML = dom.innerHTML;
+	parent = dom.parentNode;
+	parent.appendChild(checkDom);
+	flag = checkDom.scrollWidth > checkDom.offsetWidth;
+	parent.removeChild(checkDom);
+	return flag;
+};
 $(function(){
 	if ($('.table-checkable')) {
 		var table = $('.table-checkable');
@@ -18,6 +34,21 @@ $(function(){
 			});
 		});
 	}
+	// 当存在隐藏时单击显示区域
+	$(".table td,.table th").click(function() {
+		var e = $(this);
+		if (1 == dr_isEllipsis(e[0])) {
+			var t = e.html();
+			if (t.indexOf("checkbox") != -1) return;
+			if (t.indexOf("<input") != -1) return;
+			if (t.indexOf('class="btn') != -1);
+			else if (t.indexOf('href="') != -1) return;
+			layer.tips(t, e, {
+				tips: [1, "#fff"],
+				time: 5e3
+			})
+		}
+	});
 });
 function geturlpathname() {
 	var url = document.location.toString();

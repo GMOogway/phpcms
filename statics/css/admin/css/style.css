@@ -188,7 +188,7 @@ fieldset{margin-top: 10px;}
 body .table_form tbody td,body .table_form tbody th,body .table_form tbody tr{border-bottom:1px dashed #f1f1f1;line-height: 22px;}
 body .table-list {width: 100%;overflow-x: auto;overflow-y: hidden;margin: 10px 0!important;}
 body .table-list table{width: 100%!important;margin: 0!important;background-color: #fff;border: 1px solid #e7ecf1;}
-body .table-list thead tr>th {background-color: #f9f9f9;}
+body .table-list thead tr>th {background-color: #edf2f7;}
 body .table-list thead th {font-weight: 700!important;}
 body .table-list tbody>tr>td, body .table-list tbody>tr>th, body .table-list thead>tr>td, body .table-list thead>tr>th {border: 1px solid #e7ecf1;}
 body .table-list tbody>tr:nth-of-type(odd) {background-color: #fff!important;}
@@ -199,6 +199,7 @@ body .table-list tr>td:first-child, body .table-list tr>th:first-child {text-ali
 body .table-list tr:hover,body .table-list table tbody tr:hover{background:#dee5ec !important;}
 body .table-list tbody>tr:hover, body .table-list tbody>tr.active>td, body .table-list tbody>tr.active>th, body .table-list tbody>tr>td.active, body .table-list tbody>tr>th.active, body .table-list tfoot>tr.active>td, body .table-list tfoot>tr.active>th, body .table-list tfoot>tr>td.active, body .table-list tfoot>tr>th.active, body .table-list thead>tr.active>td, body .table-list thead>tr.active>th, body .table-list thead>tr>td.active, body .table-list thead>tr>th.active {background-color: #eef1f5;}
 body .table-list tbody>tr.active:hover>td,body .table-list tbody>tr.active:hover>th,body .table-list tbody>tr:hover>.active,body .table-list tbody>tr>td.active:hover,body .table-list tbody>tr>th.active:hover {background-color: #dee5ec;}
+body .table-list tbody>tr>td,body .table-list tbody>tr>th,body .table-list tfoot>tr>td,body .table-list tfoot>tr>th,body .table-list thead>tr>td,body .table-list thead>tr>th {vertical-align: middle;}
 .table-list .button {margin-bottom: 4px;}
 body .y-bg .radio-label tr td{border-bottom:1px solid #e4e2e2;}
 .text-c{text-align: center;}
