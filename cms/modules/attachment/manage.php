@@ -52,11 +52,12 @@ class manage extends admin {
 					$rs['module'] = $modules[$r['module']]['name'];
 					if ($r['module']=='member' && $r['catid']==0) {
 						$rs['catname'] = '头像';
+						$rs['filepath'] = dr_file(SYS_AVATAR_URL.$r['filepath']);
 					} else {
 						$rs['catname'] = $category[$r['catid']]['catname'];
+						$rs['filepath'] = dr_file($r['filepath']);
 					}
 					$rs['filename'] = $r['filename'];
-					$rs['filepath'] = dr_file($r['filepath']);
 					$rs['fileext'] = $r['fileext'].'<img src="'.file_icon('.'.$r['fileext'],'gif').'" />'.($thumb ? '<img title="'.L('att_thumb_manage').'" src="'.IMG_PATH.'admin_img/havthumb.png" onclick="showthumb('.$r['aid'].', \''.new_addslashes($r['filename']).'\')"/>':'').($r['status'] ? ' <img src="'.IMG_PATH.'admin_img/link.png"':'');
 					$rs['status'] = $r['status'];
 					$rs['filesize'] = format_file_size($r['filesize']);

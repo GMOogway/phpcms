@@ -242,7 +242,7 @@ class attachments {
 			$s_str .= "'".$array_test[$i]."',";
 		}
 		$s_str = substr($s_str, 0, strlen($s_str) - 1);
-		$where = "fileext in (".$s_str.") AND siteid=".$siteid." AND userid=".(int)$this->userid;
+		$where = "fileext in (".$s_str.") AND module<>'member' AND siteid=".$siteid." AND userid=".(int)$this->userid;
 		if($this->input->get('dosubmit')){
 			extract($this->input->get('info'));
 			$filename = safe_replace($filename);
