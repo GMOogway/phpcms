@@ -479,11 +479,13 @@ class upload {
         !$name && $name = substr(md5(SYS_TIME.(is_array($file) ? dr_array2string($file) : $file).uniqid()), rand(0, 20), 15);
 
         if (isset($config['save_file']) && $config['save_file']) {
+            // 指定存储名称
             $file_path = $config['save_file'];
             $config['save_file'] = dirname($file_path);
             $config['attachment']['value']['path'] = 'null';
         } else {
             if (isset($config['save_path']) && $config['save_path']) {
+                // 指定存储路径
                 $path = $config['save_path'];
                 $config['save_file'] = $path;
                 $config['attachment']['value']['path'] = 'null';
@@ -658,6 +660,9 @@ class local {
 
     // 完整的文件路径
     protected $fullname;
+
+    // 是否指定路径
+    protected $is_diy_save_path = 0;
     
     function __construct($module='', $catid = 0,$siteid = 0) {
         $this->catid = intval($catid);
@@ -675,10 +680,12 @@ class local {
             $attachment['value']['path'] = '';
             $this->filename = $filename;
             $this->filepath = dirname($filename);
+            $this->is_diy_save_path = 1;
         } else {
             $this->filename = trim($filename, DIRECTORY_SEPARATOR);
             $this->filepath = dirname($filename);
             $this->filepath == '.' && $this->filepath = '';
+            $this->is_diy_save_path = 0;
             if (is_dir(SYS_UPLOAD_PATH.$attachment['value']['path'])) {
                 // 相对路径
                 $attachment['value']['path'] = SYS_UPLOAD_PATH.$attachment['value']['path'];
@@ -713,7 +720,7 @@ class local {
 
         // 上传成功
         return dr_return_data(1, 'ok', array(
-            'url' => $this->attachment['url'].$this->filename,
+            'url' => $this->is_diy_save_path ? '指定存储路径时无法获取到访问URL地址' : $this->attachment['url'].$this->filename,
             'md5' => md5_file($this->fullname),
             'size' => $rt['msg'],
             'info' => $rt['data']
