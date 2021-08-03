@@ -1,10 +1,10 @@
 {template 'member', 'header'}
 <script src="{JS_PATH}jquery-3.5.1.min.js"></script>
 <link href="{CSS_PATH}bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link href="{JS_PATH}avatar/cropper.min.css" rel="stylesheet">
+<link href="{JS_PATH}cropper/cropper.min.css" rel="stylesheet">
 <link href="{JS_PATH}avatar/avatar.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="{CSS_PATH}font-awesome/css/font-awesome.min.css">
-<script src="{JS_PATH}avatar/cropper.min.js"></script>
+<script src="{JS_PATH}cropper/cropper.min.js"></script>
 <script src="{JS_PATH}avatar/avatar.js"></script>
 <script src="{CSS_PATH}bootstrap/js/bootstrap.min.js"></script>
 <div class="member_container main">
@@ -85,8 +85,6 @@
 		</div>
 	</div>
 </div>
-<div class="loading" aria-label="Loading" role="img" tabindex="-1"></div>
-<script src="{JS_PATH}avatar/html2canvas.min.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
 $('#avatarInput').on('change', function(e) {
 	var filemaxsize = 1024 * 5;
@@ -116,23 +114,17 @@ $(".avatar-save").on("click", function() {
 		$('#avatarInput').val('');
 		return false;
 	} else {
-		var img_lg = $('#imageHead');
 		//截图小的显示框内的内容
-		html2canvas(img_lg, {
-			allowTaint: true,
-			taintTest: false,
-			onrendered: function(canvas) {
-				canvas.id = "mycanvas";
-				//生成base64图片数据
-				var dataUrl = canvas.toDataURL("image/png");
-				var newImg = document.createElement("img");
-				newImg.src = dataUrl;
-				imagesAjax(dataUrl);
-				$('#avatarInput').val('');
-				$("#avatar-name").empty();
-				$(".avatar-wrapper").empty();
-			}
-		});
+		var img_lg = $('.cropper-hidden');
+		var cas = img_lg.cropper('getCroppedCanvas');
+		//生成base64图片数据
+		var dataUrl = cas.toDataURL('image/png');
+		var newImg = document.createElement("img");
+		newImg.src = dataUrl;
+		imagesAjax(dataUrl);
+		$('#avatarInput').val('');
+		$("#avatar-name").empty();
+		$(".avatar-wrapper").empty();
 	}
 })
 function imagesAjax(src) {
@@ -146,6 +138,7 @@ function imagesAjax(src) {
 		success: function(re) {
 			if(re.code == '1') {
 				$('.avatar-view img').attr('src',re.info.url);
+				location.reload();
 			} else {
 				alert(re.msg);
 			}
