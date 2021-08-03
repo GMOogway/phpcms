@@ -196,15 +196,15 @@
         this.$avatarWrapper.empty().html(this.$img);
         this.$img.cropper({
           aspectRatio: 1,
-          preview: this.$avatarPreview.selector,
+          preview: this.$avatarPreview,
           strict: false,
           crop: function (data) {
             var json = [
-                  '{"x":' + data.x,
-                  '"y":' + data.y,
-                  '"height":' + data.height,
-                  '"width":' + data.width,
-                  '"rotate":' + data.rotate + '}'
+                  '{"x":' + data.detail.x,
+                  '"y":' + data.detail.y,
+                  '"height":' + data.detail.height,
+                  '"width":' + data.detail.width,
+                  '"rotate":' + data.detail.rotate + '}'
                 ].join();
 
             _this.$avatarData.val(json);

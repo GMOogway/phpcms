@@ -1,6 +1,7 @@
 if(typeof jQuery == 'undefined'){
 	window.alert("没有引用jquery库");
 }
+// 是否有隐藏区域
 function dr_isEllipsis(dom) {
 	var checkDom = dom.cloneNode(),parent, flag;
 	checkDom.style.width = dom.offsetWidth + 'px';
@@ -18,6 +19,7 @@ function dr_isEllipsis(dom) {
 	return flag;
 };
 $(function(){
+	// tabl
 	if ($('.table-checkable')) {
 		var table = $('.table-checkable');
 		table.find('.group-checkable').change(function () {
@@ -107,7 +109,7 @@ function topinyin(name, from, url) {
 		$('#'+name).val(data);
 	});
 }
-//滚动条
+//text
 $(function(){
 	$(":text").addClass('input-text');
 })

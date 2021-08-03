@@ -3,8 +3,8 @@ defined('IN_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH;?>iconfont/iconfont.min.css" />
-<link rel="stylesheet" type="text/css" href="<?php echo JS_PATH;?>cropper/3.1.6/cropper.css?v=20191120">
-<script type="text/javascript" src="<?php echo JS_PATH;?>cropper/3.1.6/cropper.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo JS_PATH;?>cropper/cropper.min.css">
+<script type="text/javascript" src="<?php echo JS_PATH;?>cropper/cropper.min.js"></script>
 </head>
 <body>
 <div class="container_box">
@@ -55,10 +55,10 @@ include $this->admin_tpl('header','admin');
             viewMode : 1,
             preview: '.preview_img', 
             crop: function(data) {
-                $("input[name='x']").val(data.x);
-                $("input[name='y']").val(data.y);
-                $("input[name='w']").val(data.width);
-                $("input[name='h']").val(data.height);
+                $("input[name='x']").val(data.detail.x);
+                $("input[name='y']").val(data.detail.y);
+                $("input[name='w']").val(data.detail.width);
+                $("input[name='h']").val(data.detail.height);
             }
         })
     }
