@@ -13,10 +13,10 @@ class create_html extends admin {
 		$this->db = pc_base::load_model('content_model');
 		$this->siteid = $this->get_siteid();
 		$this->categorys = getcache('category_content_'.$this->siteid,'commons');
-        // 不是超级管理员
-        /*if ($_SESSION['roleid']!=1) {
-            showmessage(L('需要超级管理员账号操作'));
-        }*/
+		// 不是超级管理员
+		/*if ($_SESSION['roleid']!=1) {
+			showmessage(L('需要超级管理员账号操作'));
+		}*/
 	}
 	
 	public function update_urls() {
