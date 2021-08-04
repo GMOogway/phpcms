@@ -34,8 +34,8 @@ if (!is_file(CACHE_PATH.'install.lock')) {
 	exit;
 }
 // 判断环境
-if (version_compare(PHP_VERSION, '7.0.0') < 0) {
-    echo "<font color=red>PHP版本必须在7.0及以上</font>";exit;
+if (version_compare(PHP_VERSION, '7.1.0') < 0) {
+    echo "<font color=red>PHP版本必须在7.1及以上</font>";exit;
 }
 if (file_exists('install') && is_file(CACHE_PATH.'install.lock')) {
 	pc_base::load_sys_func('dir');

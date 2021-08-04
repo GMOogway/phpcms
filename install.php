@@ -12,8 +12,8 @@ ini_set('display_errors', 1);
 
 $rt = array();
 // 判断环境
-if (version_compare(PHP_VERSION, '7.0.0') < 0) {
-    $rt[] = echo_msg('PHP版本要求：7.0及以上，当前'.PHP_VERSION);
+if (version_compare(PHP_VERSION, '7.1.0') < 0) {
+    $rt[] = echo_msg('PHP版本要求：7.1及以上，当前'.PHP_VERSION);
 }
 
 // GD库判断

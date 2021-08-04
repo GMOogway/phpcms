@@ -3,7 +3,7 @@
 !defined('SELF') && define('SELF', pathinfo(__FILE__, PATHINFO_BASENAME));
 
 @set_time_limit(1000);
-if (version_compare(PHP_VERSION, '7.0.0') < 0) exit('<font color=red>PHP版本必须在7.0以上</font>');
+if (version_compare(PHP_VERSION, '7.1.0') < 0) exit('<font color=red>PHP版本必须在7.1以上</font>');
 include '../cms/base.php';
 define('INSTALL_MODULE',true);
 defined('IN_CMS') or exit('No permission resources.');
