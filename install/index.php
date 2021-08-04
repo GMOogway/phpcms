@@ -2,9 +2,6 @@
 // 入口文件名称
 !defined('SELF') && define('SELF', pathinfo(__FILE__, PATHINFO_BASENAME));
 
-// 后台管理标识
-!defined('IS_ADMIN') && define('IS_ADMIN', FALSE);
-define('IS_DEV', 0);
 @set_time_limit(1000);
 if (version_compare(PHP_VERSION, '7.0.0') < 0) exit('<font color=red>PHP版本必须在7.0以上</font>');
 include '../cms/base.php';

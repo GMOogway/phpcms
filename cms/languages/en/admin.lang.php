@@ -203,6 +203,8 @@ $LANG['editormode'] = 'Editor mode';
 $LANG['setting_category_ajax_desc'] = '<font color="gray">The default is 0, namely direct display item list. When the column level is large, can be set up for the first time loading level, the remaining use asynchronous loading, generally set to 2 to 3</font>';
 
 $LANG['setting_admin_log'] = 'Enable backend operation logs';
+$LANG['setting_csrf'] = 'Cross validation';
+$LANG['setting_csrf_desc'] = 'Open cross-site after verification will ban the external site data submitted to the site';
 $LANG['need_check_come_url'] = 'Whether you need to check the external access';
 $LANG['setting_error_log'] = 'Save Error logs';
 $LANG['setting_error_log_size'] = 'Error logs size';

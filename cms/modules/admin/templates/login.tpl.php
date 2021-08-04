@@ -19,6 +19,7 @@
 <body>
 <div class="container login">
     <form class="layui-form layui-form-pane" action="?m=admin&c=index&a=<?php echo SYS_ADMIN_PATH;?>&dosubmit=1" method="post" id="myform" name="myform" onsubmit="return login()">
+        <?php echo dr_form_hidden();?>
         <div id="content" class="content">
             <div id="large-header" class="large-header">
                 <div id="canvas"></div>

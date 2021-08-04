@@ -3,9 +3,8 @@
  *  index.php API 入口
  *
  * @copyright			(C) 2005-2010
- * @lastmodify			2010-7-26
+ * @lastmodify			2021-06-06
  */
-define('IS_DEV', 0);
 define('CMS_PATH', dirname(__FILE__).DIRECTORY_SEPARATOR);
 include CMS_PATH.'cms/base.php';
 $param = pc_base::load_sys_class('param');

@@ -2,7 +2,7 @@
 /**
  * 邮件发送函数
  * @copyright			(C) 2005-2010
- * @lastmodify			2010-6-1
+ * @lastmodify			2021-06-06
  */
 function runlog($server, $msg) {
 	if (is_gb2312($msg) && function_exists('iconv')) {

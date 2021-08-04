@@ -3,13 +3,13 @@
  *  index.php CMS 入口
  *
  * @copyright			(C) 2005-2010
- * @lastmodify			2010-6-1
+ * @lastmodify			2021-06-06
  */
 //declare(strict_types=1);
 header('X-Frame-Options: SAMEORIGIN'); //防止被站外加入iframe中浏览
 
-// 是否是开发者模式（1开启、0关闭）
-define('IS_DEV', 0);
+// 是否是开发者模式
+define('IS_DEV', FALSE);
 
 // 后台管理标识
 !defined('IS_ADMIN') && define('IS_ADMIN', FALSE);
@@ -25,7 +25,6 @@ define('IS_DEV', 0);
 
 //CMS根目录
 define('CMS_PATH', dirname(__FILE__).DIRECTORY_SEPARATOR);
-define('PHPCMS_PATH', dirname(__FILE__).DIRECTORY_SEPARATOR);
 
 include CMS_PATH.'cms/base.php';
 

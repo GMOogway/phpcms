@@ -25,6 +25,7 @@ body{padding: 20px 20px 0px 20px;}
 </style>
 <script type="text/javascript">var catid=<?php echo $catid;?></script>
 <form name="myform" id="myform" action="?m=content&c=content&a=add" class="form-horizontal" onsubmit="return checkall()" method="post" enctype="multipart/form-data">
+<?php echo dr_form_hidden();?>
 <div class="myfbody">
         <div class="row ">
             <div class="col-md-9">

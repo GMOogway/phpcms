@@ -3,10 +3,13 @@
  *  base.php CMS框架入口文件
  *
  * @copyright			(C) 2005-2010
- * @lastmodify			2010-6-7
+ * @lastmodify			2021-06-06
  */
 define('IN_CMS', TRUE);
-define('IN_PHPCMS', TRUE);
+define('IN_PHPCMS', IN_CMS);
+
+// 是否是开发者模式
+!defined('IS_DEV') && define('IS_DEV', FALSE);
 
 // 后台管理标识
 !defined('IS_ADMIN') && define('IS_ADMIN', FALSE);
@@ -18,7 +21,7 @@ define('IN_PHPCMS', TRUE);
 define('PC_PATH', dirname(__FILE__).DIRECTORY_SEPARATOR);
 
 if(!defined('CMS_PATH')) define('CMS_PATH', PC_PATH.'..'.DIRECTORY_SEPARATOR);
-if(!defined('PHPCMS_PATH')) define('PHPCMS_PATH', PC_PATH.'..'.DIRECTORY_SEPARATOR);
+if(!defined('PHPCMS_PATH')) define('PHPCMS_PATH', CMS_PATH);
 
 //缓存文件夹地址
 define('CACHE_PATH', CMS_PATH.'caches'.DIRECTORY_SEPARATOR);
@@ -37,62 +40,9 @@ pc_base::load_sys_func('global');
 pc_base::load_sys_func('extention');
 pc_base::auto_load_func();
 
-// 设置时区
-if (is_numeric(pc_base::load_config('system','timezone')) && strlen(pc_base::load_config('system','timezone')) > 0) {
-	function_exists('date_default_timezone_set') && date_default_timezone_set('Etc/GMT'.(pc_base::load_config('system','timezone') > 0 ? '-' : '+').abs(pc_base::load_config('system','timezone'))); // 设置时区
-}
+// 主站URL
+define('ROOT_URL', siteurl(1).'/');
 
-define('CHARSET' ,pc_base::load_config('system','charset'));
-//输出页面字符集
-header('Content-Type: text/html; charset='.CHARSET);
-
-// 最大栏目数量限制category
-!defined('MAX_CATEGORY') && define('MAX_CATEGORY', 100);
-//temp目录
-define('TEMPPATH', PC_PATH.'temp/');
-//是否来自ajax提交
-define('IS_AJAX', (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'));
-//是否来自post提交
-define('IS_POST', isset($_POST) && count($_POST) ? TRUE : FALSE);
-define('IS_AJAX_POST', IS_POST);
-//当前系统时间戳
-define('SYS_TIME', $_SERVER['REQUEST_TIME'] ? $_SERVER['REQUEST_TIME'] : time());
-//定义网站根路径
-define('WEB_PATH',pc_base::load_config('system','web_path'));
-//js 路径
-define('JS_PATH',pc_base::load_config('system','js_path'));
-//css 路径
-define('CSS_PATH',pc_base::load_config('system','css_path'));
-//img 路径
-define('IMG_PATH',pc_base::load_config('system','img_path'));
-//手机js 路径
-define('MOBILE_JS_PATH',pc_base::load_config('system','mobile_js_path'));
-//手机css 路径
-define('MOBILE_CSS_PATH',pc_base::load_config('system','mobile_css_path'));
-//手机img 路径
-define('MOBILE_IMG_PATH',pc_base::load_config('system','mobile_img_path'));
-//动态程序路径
-define('APP_PATH',pc_base::load_config('system','app_path'));
-//动态程序手机路径
-define('MOBILE_PATH',pc_base::load_config('system','mobile_path'));
-define('ROOT_URL', siteurl(1).'/'); // 主站URL
-//自定义的后台登录地址
-define('SYS_ADMIN_PATH', pc_base::load_config('system','admin_login_path') ? pc_base::load_config('system','admin_login_path') : 'login');
-//是否需要检查外部访问
-define('NeedCheckComeUrl',pc_base::load_config('system','needcheckcomeurl'));
-//站点id
-!defined('SITE_ID') && define('SITE_ID', 1);
-define('SITE_URL', siteurl(SITE_ID));
-define('SITE_MURL', sitemobileurl(SITE_ID));
-//附件是否使用分站
-define('SYS_ATTACHMENT_FILE',pc_base::load_config('system','attachment_file'));
-// 本地附件上传目录和地址
-define('SYS_ATTACHMENT_SAVE_ID',pc_base::load_config('system','sys_attachment_save_id'));
-define('SYS_ATTACHMENT_SAFE',pc_base::load_config('system','sys_attachment_safe'));
-define('SYS_ATTACHMENT_PATH',pc_base::load_config('system','sys_attachment_path'));
-define('SYS_ATTACHMENT_URL',pc_base::load_config('system','sys_attachment_url'));
-define('SYS_ATTACHMENT_SAVE_TYPE',pc_base::load_config('system','sys_attachment_save_type'));
-define('SYS_ATTACHMENT_SAVE_DIR',pc_base::load_config('system','sys_attachment_save_dir'));
 // 系统变量
 /*$system = array(
     'WEB_PATH' => '',
@@ -131,8 +81,9 @@ define('SYS_ATTACHMENT_SAVE_DIR',pc_base::load_config('system','sys_attachment_s
 	'MOBILE_PATH' => '',
 	'EDITOR' => '0',
 	'CHARSET' => 'utf-8',
-	'TIMEZONE' => 'Etc/GMT-8',
+	'TIMEZONE' => '8',
 	'DEBUG' => 0,
+	'SYS_CSRF' => 0,
 	'NEEDCHECKCOMEURL' => 1,
 	'ADMIN_LOG' => 1,
 	'ERRORLOG' => 1,
@@ -176,6 +127,70 @@ foreach ($system as $var => $value) {
 }
 unset($my, $system);*/
 
+// 设置时区
+if (is_numeric(pc_base::load_config('system','timezone')) && strlen(pc_base::load_config('system','timezone')) > 0) {
+	function_exists('date_default_timezone_set') && date_default_timezone_set('Etc/GMT'.(pc_base::load_config('system','timezone') > 0 ? '-' : '+').abs(pc_base::load_config('system','timezone'))); // 设置时区
+}
+
+define('CHARSET' ,pc_base::load_config('system','charset'));
+//输出页面字符集
+header('Content-Type: text/html; charset='.CHARSET);
+
+// 最大栏目数量限制category
+!defined('MAX_CATEGORY') && define('MAX_CATEGORY', 100);
+//temp目录
+define('TEMPPATH', PC_PATH.'temp/');
+//是否来自ajax提交
+define('IS_AJAX', (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'));
+//是否来自post提交
+define('IS_POST', isset($_POST) && count($_POST) ? TRUE : FALSE);
+define('IS_AJAX_POST', IS_POST);
+//当前系统时间戳
+define('SYS_TIME', $_SERVER['REQUEST_TIME'] ? $_SERVER['REQUEST_TIME'] : time());
+//定义网站根路径
+define('WEB_PATH',pc_base::load_config('system','web_path'));
+//js 路径
+define('JS_PATH',pc_base::load_config('system','js_path'));
+//css 路径
+define('CSS_PATH',pc_base::load_config('system','css_path'));
+//img 路径
+define('IMG_PATH',pc_base::load_config('system','img_path'));
+//手机js 路径
+define('MOBILE_JS_PATH',pc_base::load_config('system','mobile_js_path'));
+//手机css 路径
+define('MOBILE_CSS_PATH',pc_base::load_config('system','mobile_css_path'));
+//手机img 路径
+define('MOBILE_IMG_PATH',pc_base::load_config('system','mobile_img_path'));
+//动态程序路径
+define('APP_PATH',pc_base::load_config('system','app_path'));
+//动态程序手机路径
+define('MOBILE_PATH',pc_base::load_config('system','mobile_path'));
+//Cookie前缀
+define('COOKIE_PRE',pc_base::load_config('system','cookie_pre'));
+//Cookie作用域
+define('COOKIE_DOMAIN',pc_base::load_config('system','cookie_domain'));
+//Cookie作用路径
+define('COOKIE_PATH',pc_base::load_config('system','cookie_path'));
+//自定义的后台登录地址
+define('SYS_ADMIN_PATH', pc_base::load_config('system','admin_login_path') ? pc_base::load_config('system','admin_login_path') : 'login');
+//是否需要检查外部访问
+define('NeedCheckComeUrl',pc_base::load_config('system','needcheckcomeurl'));
+//跨站验证
+define('SYS_CSRF',pc_base::load_config('system','sys_csrf'));
+//站点id
+!defined('SITE_ID') && define('SITE_ID', 1);
+define('SITE_URL', siteurl(SITE_ID));
+define('SITE_MURL', sitemobileurl(SITE_ID));
+//附件是否使用分站
+define('SYS_ATTACHMENT_FILE',pc_base::load_config('system','attachment_file'));
+// 本地附件上传目录和地址
+define('SYS_ATTACHMENT_SAVE_ID',pc_base::load_config('system','sys_attachment_save_id'));
+define('SYS_ATTACHMENT_SAFE',pc_base::load_config('system','sys_attachment_safe'));
+define('SYS_ATTACHMENT_PATH',pc_base::load_config('system','sys_attachment_path'));
+define('SYS_ATTACHMENT_URL',pc_base::load_config('system','sys_attachment_url'));
+define('SYS_ATTACHMENT_SAVE_TYPE',pc_base::load_config('system','sys_attachment_save_type'));
+define('SYS_ATTACHMENT_SAVE_DIR',pc_base::load_config('system','sys_attachment_save_dir'));
+
 define('CI_DEBUG', IS_DEV ? 1 : IS_ADMIN && pc_base::load_config('system','debug'));
 
 // 显示错误提示
@@ -189,6 +204,17 @@ if (CI_DEBUG) {
 	define('ENVIRONMENT', 'development');
 } else {
 	ini_set('display_errors', 0);
+}
+
+if (defined('SYS_CSRF') && SYS_CSRF) {
+	if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
+		session_start();
+		if (!isset($_POST['csrf_test_name'], $_SESSION[COOKIE_PRE.md5('csrf_token')]) || $_POST['csrf_test_name'] !== $_SESSION[COOKIE_PRE.md5('csrf_token')]) {
+			//CI_DEBUG && log_message('error', '跨站验证禁止此操作：'.FC_NOW_URL);
+			dr_json(0, '跨站验证禁止此操作', 'CSRFVerify');
+		}
+	}
+	unset($_POST['csrf_test_name']);
 }
 
 if (SYS_ATTACHMENT_PATH
@@ -211,40 +237,41 @@ if (pc_base::load_config('system','sys_avatar_path')
 	&& (strpos(pc_base::load_config('system','sys_avatar_path'), '/') === 0 || strpos(pc_base::load_config('system','sys_avatar_path'), ':') !== false)
 	&& is_dir(pc_base::load_config('system','sys_avatar_path'))) {
 	// 相对于根目录
-	// 附件上传目录
+	// 头像上传目录
 	define('SYS_AVATAR_PATH', rtrim(pc_base::load_config('system','sys_avatar_path'), DIRECTORY_SEPARATOR).'/');
-	// 附件访问URL
+	// 头像访问URL
 	define('SYS_AVATAR_URL', trim(pc_base::load_config('system','sys_avatar_url'), '/').'/');
 } else {
 	// 在当前网站目录
 	$avatarpath = trim(pc_base::load_config('system','sys_avatar_path') ? pc_base::load_config('system','sys_avatar_path') : 'avatar', '/');
-	// 附件上传目录
+	// 头像上传目录
 	define('SYS_AVATAR_PATH', SYS_UPLOAD_PATH.$avatarpath.'/');
-	// 附件访问URL
+	// 头像访问URL
 	define('SYS_AVATAR_URL', SYS_UPLOAD_URL.$avatarpath.'/');
 }
 if (pc_base::load_config('system','sys_thumb_path')
 	&& (strpos(pc_base::load_config('system','sys_thumb_path'), '/') === 0 || strpos(pc_base::load_config('system','sys_thumb_path'), ':') !== false)
 	&& is_dir(pc_base::load_config('system','sys_thumb_path'))) {
 	// 相对于根目录
-	// 附件上传目录
+	// 缩略图上传目录
 	define('SYS_THUMB_PATH', rtrim(pc_base::load_config('system','sys_thumb_path'), DIRECTORY_SEPARATOR).'/');
-	// 附件访问URL
+	// 缩略图访问URL
 	define('SYS_THUMB_URL', trim(pc_base::load_config('system','sys_thumb_url'), '/').'/');
 } else {
 	// 在当前网站目录
 	$thumbpath = trim(pc_base::load_config('system','sys_thumb_path') ? pc_base::load_config('system','sys_thumb_path') : 'thumb', '/');
-	// 附件上传目录
+	// 缩略图上传目录
 	define('SYS_THUMB_PATH', SYS_UPLOAD_PATH.$thumbpath.'/');
-	// 附件访问URL
+	// 缩略图访问URL
 	define('SYS_THUMB_URL', SYS_UPLOAD_URL.$thumbpath.'/');
 }
 if (PHP_SAPI === 'cli' || defined('STDIN')) {
 	// CLI命令行模式
-	 define('ADMIN_URL', 'http://localhost/');
-	 define('FC_NOW_URL', 'http://localhost/');
-	 define('FC_NOW_HOST', 'http://localhost/');
-	 define('DOMAIN_NAME', 'http://localhost/');
+	define('ADMIN_URL', 'http://localhost/');
+	define('FC_NOW_URL', 'http://localhost/');
+	define('FC_NOW_HOST', 'http://localhost/');
+	define('DOMAIN_NAME', 'http://localhost/');
+	define('WEB_DIR', '/');
 	if ($_SERVER["argv"]) {
 		foreach ($_SERVER["argv"] as $val) {
 			if (strpos($val, '=') !== false) {
@@ -267,23 +294,27 @@ if (PHP_SAPI === 'cli' || defined('STDIN')) {
 	) {
 		$url.= 's';
 	}
-	$url.= '://'.$_SERVER['HTTP_HOST'];
+	$host = strtolower($_SERVER['HTTP_HOST']);
+	if (strpos($host, ':') !== false) {
+		list($nhost, $port) = explode(':', $host);
+		if ($port == 80) {
+			$host = $nhost; // 排除80端口
+		}
+	}
+	$url.= '://'.$host;
 	IS_ADMIN && define('ADMIN_URL', $url.'/'); // 优先定义后台域名
 	define('FC_NOW_URL', $url.($_SERVER['REQUEST_URI'] ? $_SERVER['REQUEST_URI'] : $_SERVER['PHP_SELF']));
 	define('FC_NOW_HOST', $url.'/'); // 域名部分
-	define('DOMAIN_NAME', strtolower($_SERVER['HTTP_HOST'])); // 当前域名
+	define('DOMAIN_NAME', $host); // 当前域名
 
 	// 伪静态字符串
 	/*$uu = isset($_SERVER['HTTP_X_REWRITE_URL']) || trim($_SERVER['REQUEST_URI'], '/') == SELF ? trim($_SERVER['HTTP_X_REWRITE_URL'], '/') : ($_SERVER['REQUEST_URI'] ? trim($_SERVER['REQUEST_URI'], '/') : NULL);
-	if (defined('FIX_WEB_DIR') && FIX_WEB_DIR && strpos($uu, FIX_WEB_DIR) !== false &&  strpos($uu, FIX_WEB_DIR) === 0) {
-		$uu = trim(substr($uu, strlen(FIX_WEB_DIR)), '/');
-	}
-
-	// 以index.php或者?开头的uri不做处理
-	$uri = strpos($uu, SELF) === 0 || strpos($uu, '?') === 0 ? '' : $uu;
-
-	// 当前URI
-	define('CMSURI', $uri);*/
+    if (defined('FIX_WEB_DIR') && FIX_WEB_DIR && strpos($uu, FIX_WEB_DIR) !== false &&  strpos($uu, FIX_WEB_DIR) === 0) {
+        $uu = trim(substr($uu, strlen(FIX_WEB_DIR)), '/');
+        define('WEB_DIR', '/'.trim(FIX_WEB_DIR, '/').'/');
+    } else {
+        define('WEB_DIR', '/');
+    }*/
 }
 
 //应用静态文件路径

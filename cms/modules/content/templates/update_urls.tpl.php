@@ -52,12 +52,14 @@ include $this->admin_tpl('header','admin');?>
             <li class="active">
                 <a data-toggle="tab_0"> <i class="fa fa-th-large"></i> <?php echo L('according_model');?> </a>
             </li>
+            <?php if ($_SESSION['roleid']==1) {?>
             <li>
                 <a data-toggle="tab_1"> <i class="fa fa-database"></i> <?php echo L('内容批量替换');?> </a>
             </li>
             <li>
                 <a data-toggle="tab_2"> <i class="fa fa-edit"></i> <?php echo L('内容批量设置');?> </a>
             </li>
+            <?php }?>
         </ul>
     </div>
     <div class="portlet-body form">
@@ -84,11 +86,13 @@ include $this->admin_tpl('header','admin');?>
                             <td><?php echo $_v['name'];?></td>
                             <td>
                                 <button type="button" onclick="dr_submit_todo('thumbform', '?m=content&c=create_html&a=public_show_url&modelid=<?php echo $_v['modelid'];?>')" class="btn blue btn-xs"> <i class="fa fa-refresh"></i> <?php echo L('批量更新内容URL地址')?> </button>
+                                <?php if ($_SESSION['roleid']==1) {?>
                                 <button type="button" onclick="dr_iframe_show_html('desc',<?php echo $_v['modelid'];?>)" class="btn drak btn-xs"> <i class="fa fa-th-large"></i> <?php echo L('批量提取描述字段')?> </button>
                                 <button type="button" onclick="dr_iframe_show_html('thumb',<?php echo $_v['modelid'];?>)" class="btn green btn-xs"> <i class="fa fa-photo"></i> <?php echo L('批量提取缩略图')?> </button>
                                 <button type="button" onclick="dr_iframe_show_html('tag',<?php echo $_v['modelid'];?>)" class="btn yellow btn-xs"> <i class="fa fa-tag"></i> <?php echo L('批量提取关键词')?> </button>
                                 <button type="button" onclick="dr_iframe_show_html('del',<?php echo $_v['modelid'];?>)" class="btn red btn-xs"> <i class="fa fa-trash"></i> <?php echo L('批量彻底删除内容')?> </button>
                                 <button type="button" onclick="dr_iframe_show_html('cat',<?php echo $_v['modelid'];?>)" class="btn green btn-xs"> <i class="fa fa-reorder"></i> <?php echo L('批量变更栏目')?> </button>
+                                <?php }?>
                             </td>
                         </tr>
                         <?php $i++;

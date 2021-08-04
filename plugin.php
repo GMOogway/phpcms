@@ -3,9 +3,8 @@
  *   plugin.php 插件入口
  *
  * @copyright			(C) 2005-2010
- * @lastmodify			2013-06-07
+ * @lastmodify			2021-06-06
  */
-define('IS_DEV', 0);
 define('CMS_PATH', dirname(__FILE__).DIRECTORY_SEPARATOR);
 include CMS_PATH.'cms/base.php';
 $param = pc_base::load_sys_class('param');

@@ -204,6 +204,8 @@ $LANG['editormode'] = '编辑器模式';
 $LANG['setting_category_ajax_desc'] = '<font color="gray">默认为0,即直接显示栏目列表。当栏目层级较多时，可设置首次加载层级，其余使用异步加载，一般设置为2-3</font>';
 
 $LANG['setting_admin_log'] = '启用后台管理操作日志';
+$LANG['setting_csrf'] = '跨站验证';
+$LANG['setting_csrf_desc'] = '开启跨站验证后将禁止外部站点向本站提交数据';
 $LANG['need_check_come_url'] = '是否需要检查外部访问';
 $LANG['setting_error_log'] = '保存错误日志';
 $LANG['setting_error_log_size'] = '错误日志预警大小';
