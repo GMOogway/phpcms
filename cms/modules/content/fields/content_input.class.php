@@ -41,22 +41,42 @@ class content_input {
 				if($isimport) {
 					return false;
 				} else {
-					showmessage($name.' '.L('not_less_than').' '.$minlength.L('characters'));
+					if(ROUTE_M && ROUTE_M=='excel') {
+						dr_json(0, $name.' '.L('not_less_than').' '.$minlength.L('characters'));
+					} else {
+						showmessage($name.' '.L('not_less_than').' '.$minlength.L('characters'));
+					}
 				}
 			}
 			if($maxlength && $length > $maxlength) {
 				if($isimport) {
 					$value = str_cut($value,$maxlength,'');
 				} else {
-					showmessage($name.' '.L('not_more_than').' '.$maxlength.L('characters'));
+					if(ROUTE_M && ROUTE_M=='excel') {
+						dr_json(0, $name.' '.L('not_more_than').' '.$maxlength.L('characters'));
+					} else {
+						showmessage($name.' '.L('not_more_than').' '.$maxlength.L('characters'));
+					}
 				}
 			} elseif($maxlength) {
 				$value = str_cut($value,$maxlength,'');
 			}
-			if($pattern && $length && !preg_match($pattern, $value) && !$isimport) showmessage($errortips);
+			if($pattern && $length && !preg_match($pattern, $value) && !$isimport) {
+				if(ROUTE_M && ROUTE_M=='excel') {
+					dr_json(0, $errortips);
+				} else {
+					showmessage($errortips);
+				}
+			}
 			$MODEL = getcache('model', 'commons');
             $this->db->table_name = $this->fields[$field]['issystem'] ? $this->db_pre.$MODEL[$this->modelid]['tablename'] : $this->db_pre.$MODEL[$this->modelid]['tablename'].'_data';
-            if($this->fields[$field]['isunique'] && $this->db->get_one(array($field=>$value),$field) && ROUTE_A != 'edit') showmessage($name.L('the_value_must_not_repeat'));
+            if($this->fields[$field]['isunique'] && $this->db->get_one(array($field=>$value),$field) && ROUTE_A != 'edit') {
+				if(ROUTE_M && ROUTE_M=='excel') {
+					dr_json(0, $name.L('the_value_must_not_repeat'));
+				} else {
+					showmessage($name.L('the_value_must_not_repeat'));
+				}
+			}
 			$func = $this->fields[$field]['formtype'];
 			if(method_exists($this, $func)) $value = $this->$func($field, $value);
 			if($this->fields[$field]['issystem']) {
