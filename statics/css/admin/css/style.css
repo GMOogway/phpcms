@@ -62,6 +62,7 @@ img{border:none;}
 h1,h2,h3,h4,h5{font-weight:normal;color: #676a6c;}
 table{border-collapse:collapse;}
 input,label,img,th {vertical-align: middle;}
+button[disabled],html input[disabled] {cursor: default;}
 input.dialog{height:0; font-size:0; line-height:0; border:none}
 
 /*定义清除浮动*/

@@ -32,12 +32,14 @@ a.close-own:hover{background-position: left -46px}
 .common-form .set table td.y-bg{background: url(../images/admin_img/set_y_line.png) repeat-y right top}
 .common-form .set table td input{ background-image:none; height:34px; font-size:12px}
 .input-text,.measure-input,textarea,input.date,input.endDate,.input-focus{height: 34px;margin-right: 5px;padding: 6px 12px;background-color: #fff;border: 1px solid #E4E6EF;color: #3F4254;background-clip: padding-box;border-radius: 4px;-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);-webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;-o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;font-size: 14px;line-height: 1.42857;box-shadow: none!important;outline: 0!important;}
-.input-focus{background: #FFF url(../images/admin_img/input_focus.png) repeat-x; border-color:#afcee6;font-size:12px;}
+.input-text:focus,.measure-input:focus,textarea:focus,input.date:focus,input.endDate:focus,.input-focus:focus {border-color: #93a1bb;outline: 0;-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(147,161,187,.6);box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(147,161,187,.6);}
 input.date,input.endDate{background: #fff url(../images/admin_img/input_date.png) no-repeat right 6px; padding-right:18px;font-size:12px;}
 textarea{height:auto; padding: 6px 12px !important; margin:0;display:block;}
 select{vertical-align:middle;height: 34px;margin-right: 5px;padding: 6px 12px;background-color: #fff;border: 1px solid #E4E6EF;color: #3F4254;background-clip: padding-box;border-radius: 4px;-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);-webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;-o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;font-size: 14px;line-height: 1.42857;box-shadow: none!important;outline: 0!important;}
-.search-form{ margin-bottom:10px}
 .input-text[disabled], .input-text[readonly], fieldset[disabled] .input-text{background-color: #eee;opacity: 1;}
+.input-text[disabled],fieldset[disabled] .input-text {cursor: not-allowed;}
+.search-form{ margin-bottom:10px}
+
 /*表格表单*/
 .table_form{font-size:12px}
 .table_form td{padding-left:12px}
