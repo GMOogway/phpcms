@@ -103,6 +103,7 @@ if ($data) {
     foreach ($data as $t) {
         if ($index >= $start && $index < $end) {
             $files[] = array(
+                'id'=> $t['aid'],
                 'url'=> dr_get_file_url($t),
                 'name'=> $t['filename'],
                 'original'=> $t['filename'],

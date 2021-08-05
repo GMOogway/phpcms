@@ -128,7 +128,7 @@ include $this->admin_tpl('header');?>
 <div id="div_setting_2" class="contentList pad-10 hidden">
 	<table width="100%"  class="table_form">
   <tr>
-    <th width="120"><?php echo L('need_check_come_url')?></th>
+    <th width="130"><?php echo L('need_check_come_url')?></th>
     <td class="y-bg">
 	  <div class="mt-radio-inline">
           <label class="mt-radio mt-radio-outline"><input name="setconfig[needcheckcomeurl]" value="1" type="radio" <?php echo ($needcheckcomeurl=='1') ? ' checked' : ''?>> <?php echo L('setting_yes')?> <span></span></label>
@@ -137,7 +137,7 @@ include $this->admin_tpl('header');?>
      </td>
   </tr>
   <tr>
-    <th width="120"><?php echo L('setting_admin_log')?></th>
+    <th><?php echo L('setting_admin_log')?></th>
     <td class="y-bg">
 	  <div class="mt-radio-inline">
           <label class="mt-radio mt-radio-outline"><input name="setconfig[admin_log]" value="1" type="radio" <?php echo ($admin_log=='1') ? ' checked' : ''?>> <?php echo L('setting_yes')?> <span></span></label>
@@ -146,7 +146,7 @@ include $this->admin_tpl('header');?>
      </td>
   </tr>
   <tr>
-    <th width="120"><?php echo L('setting_error_log')?></th>
+    <th><?php echo L('setting_error_log')?></th>
     <td class="y-bg">
 	  <div class="mt-radio-inline">
           <label class="mt-radio mt-radio-outline"><input name="setconfig[errorlog]" value="1" type="radio" <?php echo ($errorlog=='1') ? ' checked' : ''?>> <?php echo L('setting_yes')?> <span></span></label>
@@ -159,7 +159,7 @@ include $this->admin_tpl('header');?>
     <td class="y-bg"><input type="text" class="input-text" name="setting[errorlog_size]" id="errorlog_size" size="5" value="<?php echo $errorlog_size?>"/> MB</td>
   </tr>
   <tr>
-    <th width="120"><?php echo L('setting_admin_code')?></th>
+    <th><?php echo L('setting_admin_code')?></th>
     <td class="y-bg">
 	  <div class="mt-radio-inline">
           <label class="mt-radio mt-radio-outline"><input name="setting[sysadmincode]" value="0" type="radio" <?php echo (!$sysadmincode) ? ' checked' : ''?> onclick="$('#sysadmincodemodel').show();"> <?php echo L('setting_yes')?> <span></span></label>
@@ -168,7 +168,7 @@ include $this->admin_tpl('header');?>
      </td>
   </tr> 
   <tr id="sysadmincodemodel"<?php echo ($sysadmincode) ? ' style="display: none;"' : ''?>>
-    <th width="120"><?php echo L('setting_admin_code_model')?></th>
+    <th><?php echo L('setting_admin_code_model')?></th>
     <td class="y-bg">
 	  <div class="mt-radio-inline">
           <label class="mt-radio mt-radio-outline"><input name="setting[sysadmincodemodel]" value="0" type="radio" <?php echo (!$sysadmincodemodel) ? ' checked' : ''?> onclick="$('#captcha_charset').hide();$('#sysadmincodevoicemodel').hide();"> <?php echo L('setting_confusion')?> <span></span></label>
@@ -179,11 +179,11 @@ include $this->admin_tpl('header');?>
      </td>
   </tr> 
   <tr id="captcha_charset"<?php echo ($sysadmincode || $sysadmincodemodel=='0' || $sysadmincodemodel=='1' || $sysadmincodemodel=='2') ? ' style="display: none;"' : ''?>>
-    <th width="120"><?php echo L('setting_code_character')?></th>
+    <th><?php echo L('setting_code_character')?></th>
     <td class="y-bg"><input type="text" class="input-text" name="setting[captcha_charset]" size="40" value="<?php echo $captcha_charset?>"/></td>
   </tr> 
   <tr id="sysadmincodevoicemodel"<?php echo ($sysadmincode || $sysadmincodemodel=='0' || $sysadmincodemodel=='1' || $sysadmincodemodel=='3') ? ' style="display: none;"' : ''?>>
-    <th width="120"><?php echo L('setting_voice_model')?></th>
+    <th><?php echo L('setting_voice_model')?></th>
     <td class="y-bg">
 	  <div class="mt-radio-inline">
           <label class="mt-radio mt-radio-outline"><input name="setting[sysadmincodevoicemodel]" value="0" type="radio" <?php echo (!$sysadmincodevoicemodel) ? ' checked' : ''?>> <?php echo L('setting_voice_default')?> <span></span></label>

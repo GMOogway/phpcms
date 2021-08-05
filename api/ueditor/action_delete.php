@@ -6,34 +6,29 @@ defined('IN_CMS') or exit('No permission resources.');
  */
 if ($userid) {
     /* 获取路径 */
-    $path = $input->post('path');
+    $aid = $input->post('id');
 
-    if ($path) {
+    if ($aid) {
         /* 删除数据 */
+        $upload = pc_base::load_sys_class('upload');
         $thisdb= pc_base::load_model('attachment_model');
-        $data = $thisdb->delete(array('filepath'=>str_replace(WEB_PATH.'uploadfile/','',$path)));
-
-        /* 获取完整路径 */
-        $path = str_replace('../', '', $path);
-        $path = str_replace('/', '\\', $path);
-        $path = $_SERVER['DOCUMENT_ROOT'].$path;
-        if(file_exists($path)) {
-            //删除文件
-            unlink($path);
+        $attachment_index = pc_base::load_model('attachment_index_model');
+        if($upload->delete(array('aid'=>$aid))) {
+            $attachment_index->delete(array('aid'=>$aid));
             $result = json_encode(array(
                 'code'=> '1',
-                'state'=> '文件删除成功。'
+                'state'=> '删除成功。'
             ), JSON_UNESCAPED_UNICODE);
         } else {
             $result = json_encode(array(
                 'code'=> '0',
-                'state'=> '文件删除失败，未找到'.$path
+                'state'=> '文件数据不存在。'
             ), JSON_UNESCAPED_UNICODE);
         }
     } else {
         $result = json_encode(array(
             'code'=> '0',
-            'state'=> '文件删除失败，未找到'.$path
+            'state'=> '所选附件不存在。'
         ), JSON_UNESCAPED_UNICODE);
     }
 } else {

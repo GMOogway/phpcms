@@ -703,7 +703,7 @@
                     item.appendChild(preview);
                     item.appendChild(icon);
                     //增加删除按钮
-                    /*item.appendChild($("<span class='delbtn' url='" + list[i].url + "'>✖</span>").click(function() {
+                    /*item.appendChild($("<span class='delbtn' id='" + list[i].id + "'>✖</span>").click(function() {
                         var del = $(this);
                         try {
                             window.event.cancelBubble = true; //停止冒泡
@@ -712,8 +712,8 @@
                             window.event.stopPropagation(); //阻止事件的传播
                         } finally {
                             if (!confirm("确定要删除吗？")) return;
-                            $.post(editor.getOpt("serverUrl") + "&action=deleteimage", {
-                                "path": del.attr("url")
+                            $.post(editor.getOpt("serverUrl") + "&action=deletefile", {
+                                "id": del.attr("id")
                             },
                             function(result) {
                                 var json = $.parseJSON(result);
