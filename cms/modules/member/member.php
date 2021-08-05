@@ -189,7 +189,7 @@ class member extends admin {
 			$memberlist[$k]['avatar'] = get_memberavatar($v['userid']);
 		}
 		$pages = $this->db->pages;
-		$big_menu = array('?m=member&c=member&a=manage&menuid=72', L('member_research'));
+		$big_menu = array('?m=member&c=member&a=manage&menuid='.$this->input->get('menuid'), L('member_research'));
 		include $this->admin_tpl('member_list');
 	}
 	
@@ -412,7 +412,7 @@ class member extends admin {
 			require CACHE_MODEL_PATH.'member_form.class.php';
 			$member_form = new member_form($modelid);
 			
-			$form_overdudate = form::date('info[overduedate]', date('Y-m-d H:i:s',$memberinfo['overduedate']), 1);
+			$form_overdudate = form::date('info[overduedate]', $memberinfo['overduedate'] ? date('Y-m-d H:i:s',$memberinfo['overduedate']) : '', 1);
 			$this->db->set_model($modelid);
 			$membermodelinfo = $this->db->get_one(array('userid'=>$userid));
 			$forminfos = $forminfos_arr = $member_form->get($membermodelinfo);

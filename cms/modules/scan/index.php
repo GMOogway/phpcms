@@ -117,7 +117,7 @@ class index extends admin {
 			}
 		}
 		setcache('scan_bad_file', $badfiles, 'scan');
-		showmessage(L('scan_completed'), '?m=scan&c=index&a=scan_report&menuid=1005');
+		showmessage(L('scan_completed'), '?m=scan&c=index&a=scan_report&menuid='.$this->input->get('menuid'));
 	}
 	
 	public function scan_report() {
@@ -170,7 +170,7 @@ class index extends admin {
 				ob_clean();
 				$list = scan_file_lists(CMS_PATH, 1, 'php', 0, 1);
 				setcache('md5_'.date('Y-m-d'), $list, 'scan');
-				echo '<script type="text/javascript">location.href="?m=scan&c=index&a=md5_creat&pro=2&pc_hash='.$_SESSION['pc_hash'].'"</script>';
+				echo '<script type="text/javascript">location.href="?m=scan&c=index&a=md5_creat&pro=2&menuid='.$this->input->get('menuid').'&pc_hash='.$_SESSION['pc_hash'].'"</script>';
 				break;
 				
 			case '2':

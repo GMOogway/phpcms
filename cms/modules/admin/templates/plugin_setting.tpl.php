@@ -34,17 +34,4 @@ include $this->admin_tpl('header');?>
 </div>
 </form>
 </body>
-<script type="text/javascript">
-function SwapTab(name,title,content,Sub,cur){
-	  $(name+' '+title).click(function(){
-		  $(this).addClass(cur).siblings().removeClass(cur);
-		  $(content+" > "+Sub).eq($(name+' '+title).index(this)).show().siblings().hide();
-	  });
-	}
-function loadfile(data) {
-	$("#"+data).load('?m=admin&c=plugin&a=config&pluginid=<?php echo $pluginid?>&module='+data
-	+'&pc_hash=<?php echo $_SESSION['pc_hash']?>');
-}
-new SwapTab(".tabBut","li","#tab-content",".contentList","on");//排行TAB	
-</script>
 </html>

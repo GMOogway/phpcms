@@ -141,7 +141,6 @@ include $this->admin_tpl('header','admin');?>
                             </div>
                         </div>
 
-
                         <div class="form-actions row">
                             <label class="col-md-2 control-label">&nbsp;</label>
                             <div class="col-md-9" style="padding-left: 5px;">
@@ -198,7 +197,6 @@ include $this->admin_tpl('header','admin');?>
                                 <p style="padding-top:9px;" class="help-block"> <?php echo L('设置修改后的字符内容')?> </p>
                             </div>
                         </div>
-
 
                         <div class="form-actions row">
                             <label class="col-md-2 control-label">&nbsp;</label>

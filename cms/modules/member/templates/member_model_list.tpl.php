@@ -43,7 +43,7 @@
 		<td align="left"><?php echo $this->db->db_tablepre.$v['tablename']?></td>
 		<td align="center"><?php echo $v['disabled'] ? L('icon_locked') : L('icon_unlock')?></td>
 		<td align="center">
-		<a onclick="_M(892);" href="?m=member&c=member_modelfield&a=manage&modelid=<?php echo $v['modelid']?>&menuid=892"><?php echo L('field').L('manage')?></a> | <a href="javascript:edit(<?php echo $v['modelid']?>, '<?php echo $v['name']?>')"><?php echo L('edit')?></a> | <a href="?m=member&c=member_model&a=export&modelid=<?php echo $v['modelid']?>"><?php echo L('export')?></a> | <a href="javascript:move(<?php echo $v['modelid']?>, '<?php echo $v['name']?>')"><?php echo L('move')?></a>
+		<a href="?m=member&c=member_modelfield&a=manage&modelid=<?php echo $v['modelid']?>&menuid=<?php echo $this->input->get('menuid');?>"><?php echo L('field').L('manage')?></a> | <a href="javascript:edit(<?php echo $v['modelid']?>, '<?php echo $v['name']?>')"><?php echo L('edit')?></a> | <a href="?m=member&c=member_model&a=export&modelid=<?php echo $v['modelid']?>"><?php echo L('export')?></a> | <a href="javascript:move(<?php echo $v['modelid']?>, '<?php echo $v['name']?>')"><?php echo L('move')?></a>
 		</td>
     </tr>
 <?php

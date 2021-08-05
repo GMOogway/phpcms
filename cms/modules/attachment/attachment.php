@@ -142,7 +142,7 @@ class attachment extends admin {
 			$this->db->insert($data);
 			// 自动更新缓存
 			$this->public_cache_remote();
-			showmessage(L('operation_success'),'?m=attachment&c=attachment&a=remote&menuid=1598');
+			showmessage(L('operation_success'),'?m=attachment&c=attachment&a=remote&menuid='.$this->input->get('menuid'));
 		}
 		include $this->admin_tpl('remote_add');
 	}
@@ -158,7 +158,7 @@ class attachment extends admin {
 			$this->db->update($data,array('id'=>$id));
 			// 自动更新缓存
 			$this->public_cache_remote();
-			showmessage(L('operation_success'),'?m=attachment&c=attachment&a=remote&menuid=1598');
+			showmessage(L('operation_success'),'?m=attachment&c=attachment&a=remote&menuid='.$this->input->get('menuid'));
 		}
 		$data = $this->db->get_one(array('id'=>$this->input->get('id')));
 		$data['value'] = dr_string2array($data['value']);

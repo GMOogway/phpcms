@@ -62,7 +62,7 @@ class sitemodel_field extends admin {
 			$info['unsetroleids'] = $this->input->post('unsetroleids') ? implode(',',$this->input->post('unsetroleids')) : '';
 			$this->db->insert($info);
 			$this->cache_field($modelid);
-			showmessage(L('add_success'),'?m=content&c=sitemodel_field&a=init&modelid='.$modelid.'&menuid=59');
+			showmessage(L('add_success'),'?m=content&c=sitemodel_field&a=init&modelid='.$modelid.'&menuid='.$this->input->get('menuid'));
 		} else {
 			$show_header = $show_validator = $show_dialog = '';
 			pc_base::load_sys_class('form','',0);
@@ -137,7 +137,7 @@ class sitemodel_field extends admin {
 			$info['unsetroleids'] = $this->input->post('unsetroleids') ? implode(',',$this->input->post('unsetroleids')) : '';
 			$this->db->update($info,array('fieldid'=>$fieldid,'siteid'=>$this->siteid));
 			$this->cache_field($modelid);
-			showmessage(L('update_success'),'?m=content&c=sitemodel_field&a=init&modelid='.$modelid.'&menuid=59');
+			showmessage(L('update_success'),'?m=content&c=sitemodel_field&a=init&modelid='.$modelid.'&menuid='.$this->input->get('menuid'));
 		} else {
 			$show_header = $show_validator = $show_dialog = '';
 			pc_base::load_sys_class('form','',0);

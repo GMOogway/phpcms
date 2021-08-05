@@ -147,7 +147,7 @@ class database extends admin {
 		$tables = is_array($tables) ? implode(',',$tables) : $tables;
 		if($tables && in_array($operation,array('repair','optimize','flush'))) {
 			$this->db->query("$operation TABLE $tables");
-			showmessage(L('operation_success'),'?m=admin&c=database&a=export&menuid=914&pdoname='.$pdo_name);
+			showmessage(L('operation_success'),'?m=admin&c=database&a=export&menuid='.$this->input->get('menuid').'&pdoname='.$pdo_name);
 		} elseif ($tables && $operation == 'showcreat') {
 			$this->db->query("SHOW CREATE TABLE $tables");
 			$structure = $this->db->fetch_next();
@@ -158,16 +158,16 @@ class database extends admin {
 			foreach ($this->input->post('tables') as $table) {
 				$this->db->query('ALTER TABLE `'.$table.'` DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;');
 			}
-			showmessage(L('operation_success'),'?m=admin&c=database&a=export&menuid=914&pdoname='.$pdo_name);
+			showmessage(L('operation_success'),'?m=admin&c=database&a=export&menuid='.$this->input->get('menuid').'&pdoname='.$pdo_name);
 		} elseif ($tables && $operation == 'jc') {
 			$data = $this->db->query("CHECK TABLE $tables");
 			if (!$data) {
-				showmessage(L('database_table'),'?m=admin&c=database&a=export&menuid=914&pdoname='.$pdo_name);
+				showmessage(L('database_table'),'?m=admin&c=database&a=export&menuid='.$this->input->get('menuid').'&pdoname='.$pdo_name);
 			} else {
-				showmessage(L('operation_success'),'?m=admin&c=database&a=export&menuid=914&pdoname='.$pdo_name);
+				showmessage(L('operation_success'),'?m=admin&c=database&a=export&menuid='.$this->input->get('menuid').'&pdoname='.$pdo_name);
 			}
 		} else {
-			showmessage(L('select_tbl'),'?m=admin&c=database&a=export&menuid=914&pdoname='.$pdo_name);
+			showmessage(L('select_tbl'),'?m=admin&c=database&a=export&menuid='.$this->input->get('menuid').'&pdoname='.$pdo_name);
 		}
 	}
 	
@@ -185,11 +185,11 @@ class database extends admin {
 						@unlink($bakfile_path.$filename);
 					}
 				}
-				showmessage(L('operation_success'),'?m=admin&c=database&a=import&menuid=914&pdoname='.$pdo_name);
+				showmessage(L('operation_success'),'?m=admin&c=database&a=import&menuid='.$this->input->get('menuid').'&pdoname='.$pdo_name);
 			} else {
 				if(fileext($filenames)=='sql') {
 					@unlink($bakfile_path.$filename);
-					showmessage(L('operation_success'),'?m=admin&c=database&a=import&menuid=914&pdoname='.$pdo_name);
+					showmessage(L('operation_success'),'?m=admin&c=database&a=import&menuid='.$this->input->get('menuid').'&pdoname='.$pdo_name);
 				}
 			}
 		} else {
@@ -402,12 +402,12 @@ class database extends admin {
 			file_put_contents($bakfile, $tabledump);
 			@chmod($bakfile, 0777);
 			if(!pc_base::load_config('system', 'execution_sql')) $filename = L('bundling').$altid.'#';
-			showmessage(L('bakup_file')." $filename ".L('bakup_write_succ'), '?m=admin&c=database&a=export&menuid=914&sizelimit='.$sizelimit.'&sqlcompat='.$sqlcompat.'&sqlcharset='.$sqlcharset.'&tableid='.$tableid.'&fileid='.$fileid.'&startfrom='.$startrow.'&random='.$random.'&dosubmit=1&tabletype='.$tabletype.'&allow='.$allow.'&pdo_select='.$this->pdo_name);
+			showmessage(L('bakup_file')." $filename ".L('bakup_write_succ'), '?m=admin&c=database&a=export&menuid='.$this->input->get('menuid').'&sizelimit='.$sizelimit.'&sqlcompat='.$sqlcompat.'&sqlcharset='.$sqlcharset.'&tableid='.$tableid.'&fileid='.$fileid.'&startfrom='.$startrow.'&random='.$random.'&dosubmit=1&tabletype='.$tabletype.'&allow='.$allow.'&pdo_select='.$this->pdo_name);
 		} else {
 		   $bakfile_path = CACHE_PATH.'bakup'.DIRECTORY_SEPARATOR.$this->pdo_name.DIRECTORY_SEPARATOR;
 		   file_put_contents($bakfile_path.'index.html','');
 		   delcache('bakup_tables','commons');
-		   showmessage(L('bakup_succ'),'?m=admin&c=database&a=import&menuid=914&pdoname='.$this->pdo_name);
+		   showmessage(L('bakup_succ'),'?m=admin&c=database&a=import&menuid='.$this->input->get('menuid').'&pdoname='.$this->pdo_name);
 		}
 	}
 	/**
@@ -430,9 +430,9 @@ class database extends admin {
 				$sql = file_get_contents($filepath);
 				$this->sql_execute($sql);
 				$fileid++;
-				showmessage(L('bakup_data_file')." $filename ".L('load_success'),"?m=admin&c=database&a=import&menuid=914&pdoname=".$this->pdo_name."&pre=".$pre."&fileid=".$fileid."&dosubmit=1");
+				showmessage(L('bakup_data_file')." $filename ".L('load_success'),"?m=admin&c=database&a=import&menuid=".$this->input->get('menuid')."&pdoname=".$this->pdo_name."&pre=".$pre."&fileid=".$fileid."&dosubmit=1");
 			} else {
-				showmessage(L('data_recover_succ'),'?m=admin&c=database&a=import&menuid=914');
+				showmessage(L('data_recover_succ'),'?m=admin&c=database&a=import&menuid='.$this->input->get('menuid'));
 			}
 		}
 	}

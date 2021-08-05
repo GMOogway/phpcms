@@ -30,7 +30,7 @@ if(window.top.$("#current_pos").data('clicknum')==1 || window.top.$("#current_po
     <blockquote class="layui-elem-quote">
         <?php 
         foreach($datas2 as $r) {
-            echo "<a href=\"?m=content&c=content&a=initall&modelid=".$r['modelid']."&menuid=822&pc_hash=".$pc_hash."\" class=\"layui-btn layui-btn-sm";
+            echo "<a href=\"?m=content&c=content&a=initall&modelid=".$r['modelid']."&menuid=".$this->input->get('menuid')."&pc_hash=".$pc_hash."\" class=\"layui-btn layui-btn-sm";
             if($r['modelid']==$modelid) echo " layui-btn-danger";
             if ($r['modelid']==2) {
                 echo "\"><i class=\"fa fa-download\"></i> ".$r['name']."</a>";

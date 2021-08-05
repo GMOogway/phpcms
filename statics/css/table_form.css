@@ -7,12 +7,12 @@ body fieldset.blue legend{padding:3px 8px;font-weight:700;color:#347add; backgro
 
 .table-list td,.table-list th{padding-left:12px}
 .table-list thead th{ height:30px; background:#eef3f7; border-bottom:1px solid #d5dfe8; font-weight:normal}
-.table-list tbody td,.table-list .btn{border-bottom: #eee 1px solid; padding-top:5px; padding-bottom:5px}
-div.btn{background:#f6f6f6; padding:6px 12px 0 12px; height:30px;line-height:30px}
+.table-list tbody td,.table-list .btn{padding-top:5px; padding-bottom:5px}
+div.btn{padding:6px 12px 0 12px;}
 .table-list tr:hover,.table-list table tbody tr:hover{background:#fbffe4}
 .nHover tr:hover,.nHover tr:hover td{ background:none}
-.table-list .input-text-c{width: 45px!important;height:22px;line-height:22px;padding: 2px 5px;}
-.input-text-c{border:1px solid #A7A6AA;height:18px;padding:2px 0 0; text-align:center}
+.table-list .input-text-c{width: 45px!important;height:24px;line-height:24px;padding: 2px 5px;}
+.input-text-c{border:1px solid #A7A6AA;height:34px;padding:2px 0 0; text-align:center}
 .td-line{border:1px solid #eee}
 .td-line td,.td-line th{border:1px solid #eee}
 .button{background:#ddd;height:24px; border-top:0;border-left:0; border-bottom:1px solid #666; border-right:1px solid #666; padding:3px 6px; margin-right:5px}
@@ -30,13 +30,14 @@ a.close-own:hover{background-position: left -46px}
 .common-form .set table th{font-weight:normal; text-align:left;padding:0 8px}
 .common-form .set table td{ padding:3px 0 3px 5px}
 .common-form .set table td.y-bg{background: url(../images/admin_img/set_y_line.png) repeat-y right top}
-.common-form .set table td input{ background-image:none; height:18px; font-size:12px}
-.input-text,.measure-input,textarea,input.date,input.endDate,.input-focus{height: 18px;padding: 6px 12px;margin-right: 5px;background-color: #fff;border: 1px solid #c2cad8;border-radius: 4px;-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);box-shadow: inset 0 1px 1px rgba(0,0,0,.075);-webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;-o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;}
+.common-form .set table td input{ background-image:none; height:34px; font-size:12px}
+.input-text,.measure-input,textarea,input.date,input.endDate,.input-focus{height: 34px;margin-right: 5px;padding: 6px 12px;background-color: #fff;border: 1px solid #E4E6EF;color: #3F4254;background-clip: padding-box;border-radius: 4px;-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);-webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;-o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;font-size: 14px;line-height: 1.42857;box-shadow: none!important;outline: 0!important;}
 .input-focus{background: #FFF url(../images/admin_img/input_focus.png) repeat-x; border-color:#afcee6;font-size:12px;}
 input.date,input.endDate{background: #fff url(../images/admin_img/input_date.png) no-repeat right 6px; padding-right:18px;font-size:12px;}
-textarea,textarea.input-text,textarea.input-focus{font-size:12px;height:auto; padding:5px; margin:0;display:block;}
-select{vertical-align:middle;height: 32px;padding: 6px 12px;margin-right: 5px;background-color: #fff;border: 1px solid #c2cad8;border-radius: 4px;-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);box-shadow: inset 0 1px 1px rgba(0,0,0,.075);-webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;-o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;}
+textarea{height:auto; padding: 6px 12px !important; margin:0;display:block;}
+select{vertical-align:middle;height: 34px;margin-right: 5px;padding: 6px 12px;background-color: #fff;border: 1px solid #E4E6EF;color: #3F4254;background-clip: padding-box;border-radius: 4px;-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);-webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;-o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;font-size: 14px;line-height: 1.42857;box-shadow: none!important;outline: 0!important;}
 .search-form{ margin-bottom:10px}
+.input-text[disabled], .input-text[readonly], fieldset[disabled] .input-text{background-color: #eee;opacity: 1;}
 /*表格表单*/
 .table_form{font-size:12px}
 .table_form td{padding-left:12px}
@@ -53,7 +54,7 @@ ul.newList {margin:0; padding:0; list-style:none; color:#000; background:#fff; p
 .newListSelected span {display:block;}
 ul.newList li a {padding:3px 8px;display:block;text-decoration: none;}
 .selectedTxt {overflow:hidden; height:16px; padding:0 23px 0 0;}
-.measure-input {background:url("../images/ruler.gif") repeat-x scroll 0 17px transparent}
+.measure-input {background:url("../images/ruler.gif") repeat-x scroll 0 18px transparent}
 .hiLite {background:#e0ebf4!important; color:#444!important;}
 .newListHover {background:#f2f7fb!important; color:#000!important; cursor:default;}
 .newListSelHover, .newListSelFocus {background-position:right -26px; cursor:default;}

@@ -12,28 +12,28 @@ include $this->admin_tpl('header');?>
         <legend><?php echo L('category_manage');?></legend>
     </fieldset>
     <blockquote class="layui-elem-quote">
-        <a href="javascript:addedit('?m=admin&c=category&a=add&menuid=<?php echo $menuid;?>&pc_hash=<?php echo $_SESSION['pc_hash'];?>&s=0', '<?php echo L('add_category')?>')" class="layui-btn layui-btn-sm">
+        <a href="javascript:addedit('?m=admin&c=category&a=add&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo $_SESSION['pc_hash'];?>&s=0', '<?php echo L('add_category')?>')" class="layui-btn layui-btn-sm">
             <i class="fa fa-plus"></i> <?php echo L('add_category');?>
         </a>
-        <a href="javascript:addedit('?m=admin&c=category&a=add&menuid=<?php echo$this->input->get('menuid');?>&pc_hash=<?php echo $_SESSION['pc_hash'];?>&s=1', '<?php echo L('add_page')?>')" class="layui-btn layui-btn-sm">
+        <a href="javascript:addedit('?m=admin&c=category&a=add&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo $_SESSION['pc_hash'];?>&s=1', '<?php echo L('add_page')?>')" class="layui-btn layui-btn-sm">
             <i class="fa fa-plus-square"></i> <?php echo L('add_page');?>
         </a>
-        <a href="javascript:addedit('?m=admin&c=category&a=add&menuid=<?php echo$this->input->get('menuid');?>&pc_hash=<?php echo $_SESSION['pc_hash'];?>&s=2', '<?php echo L('add_cat_link')?>')" class="layui-btn layui-btn-sm">
+        <a href="javascript:addedit('?m=admin&c=category&a=add&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo $_SESSION['pc_hash'];?>&s=2', '<?php echo L('add_cat_link')?>')" class="layui-btn layui-btn-sm">
             <i class="fa fa-plus-square-o"></i> <?php echo L('add_cat_link');?>
         </a>
-        <a href="?m=admin&c=category&a=public_cache&menuid=<?php echo$this->input->get('menuid');?>&pc_hash=<?php echo $_SESSION['pc_hash'];?>&module=admin" class="layui-btn layui-btn-sm">
+        <a href="?m=admin&c=category&a=public_cache&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo $_SESSION['pc_hash'];?>&module=admin" class="layui-btn layui-btn-sm">
             <i class="fa fa-refresh"></i> <?php echo L('category_cache');?>
         </a>
-        <a href="?m=admin&c=category&a=count_items&menuid=<?php echo$this->input->get('menuid');?>&pc_hash=<?php echo $_SESSION['pc_hash'];?>" class="layui-btn layui-btn-sm">
+        <a href="?m=admin&c=category&a=count_items&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo $_SESSION['pc_hash'];?>" class="layui-btn layui-btn-sm">
             <i class="fa fa-sort-amount-asc"></i> <?php echo L('count_items');?>
         </a>
-        <a href="?m=admin&c=category&a=batch_edit&menuid=<?php echo$this->input->get('menuid');?>&pc_hash=<?php echo $_SESSION['pc_hash'];?>" class="layui-btn layui-btn-sm">
+        <a href="?m=admin&c=category&a=batch_edit&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo $_SESSION['pc_hash'];?>" class="layui-btn layui-btn-sm">
             <i class="fa fa-edit"></i> <?php echo L('category_batch_edit');?>
         </a>
-        <a href="?m=content&c=sitemodel_field&a=init&menuid=<?php echo$this->input->get('menuid');?>&modelid=-1&pc_hash=<?php echo $_SESSION['pc_hash'];?>" class="layui-btn layui-btn-sm">
+        <a href="?m=content&c=sitemodel_field&a=init&menuid=<?php echo $this->input->get('menuid');?>&modelid=-1&pc_hash=<?php echo $_SESSION['pc_hash'];?>" class="layui-btn layui-btn-sm">
             <i class="fa fa-bars"></i> <?php echo L('category_field_manage');?>
         </a>
-        <a href="?m=content&c=sitemodel_field&a=init&menuid=<?php echo$this->input->get('menuid');?>&modelid=-2&pc_hash=<?php echo $_SESSION['pc_hash'];?>" class="layui-btn layui-btn-sm">
+        <a href="?m=content&c=sitemodel_field&a=init&menuid=<?php echo $this->input->get('menuid');?>&modelid=-2&pc_hash=<?php echo $_SESSION['pc_hash'];?>" class="layui-btn layui-btn-sm">
             <i class="fa fa-list"></i> <?php echo L('page_field_manage');?>
         </a>
         <a class="layui-btn layui-btn-normal layui-btn-sm"  onclick="openAll();">
@@ -74,7 +74,7 @@ include $this->admin_tpl('header');?>
     <a href="?m=admin&c=category&a=remove&catid={{d.id}}&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo $this->input->get('pc_hash');?>" class="layui-btn layui-btn-danger layui-btn-xs"><i class="fa fa-arrows"></i> <?php echo L('remove','','content');?></a>
 </script>
 <script type="text/html" id="topBtn">
-   <a href="javascript:addedit('?m=admin&c=category&a=add&menuid=<?php echo $menuid;?>&pc_hash=<?php echo $_SESSION['pc_hash'];?>&s=0', '<?php echo L('add_category')?>')" class="layui-btn layui-btn-sm"><?php echo L('add_category');?></a>
+   <a href="javascript:addedit('?m=admin&c=category&a=add&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo $_SESSION['pc_hash'];?>&s=0', '<?php echo L('add_category')?>')" class="layui-btn layui-btn-sm"><?php echo L('add_category');?></a>
 </script>
 <script>
     var pc_file = '<?php echo JS_PATH;?>';

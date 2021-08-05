@@ -4,18 +4,15 @@
 ?>
 <link rel="stylesheet" href="<?php echo JS_PATH;?>layui/css/layui.css" media="all" />
 <link rel="stylesheet" href="<?php echo CSS_PATH;?>admin/css/global.css" media="all" />
-<style type="text/css">
-.list_order {text-align: left;}
-.btn-group {margin-left: 10px;}
-.measure-input, input.date, input.endDate, .input-focus {height: 32px;}
-.layui-input, .layui-laypage-btn {color: #000000;}
-</style>
 <script type="text/javascript" src="<?php echo JS_PATH;?>layui/layui.js"></script>
 <div class="admin-main layui-anim layui-anim-upbit">
     <!--<fieldset class="layui-elem-field layui-field-title">
         <legend><?php echo L('存储策略');?></legend>
     </fieldset>-->
     <blockquote class="layui-elem-quote">
+        <a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=public_cache_all',1);" class="layui-btn layui-btn-sm">
+            <i class="fa fa-refresh"></i> <?php echo L('操作之前请更新下全站缓存');?>
+        </a>
         <a href="?m=attachment&c=attachment&a=remote_add&menuid=<?php echo $this->input->get('menuid');?>" class="layui-btn layui-btn-sm">
             <i class="fa fa-plus"></i> <?php echo L('add');?>
         </a>

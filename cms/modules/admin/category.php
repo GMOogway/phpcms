@@ -136,7 +136,7 @@ class category extends admin {
 			$inputinfo = $content_input->get($info);
 			$systeminfo = $inputinfo['system'];
 			
-			$end_str = $old_end =  '<script type="text/javascript">Dialog.warn("'.L("operation_success").L("edit_following_operation").'",function(){window.top.$(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.location = "?m=admin&c=category&a=public_cache&menuid=43&module=admin";});</script>';
+			$end_str = $old_end =  '<script type="text/javascript">Dialog.warn("'.L("operation_success").L("edit_following_operation").'",function(){window.top.$(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.location = "?m=admin&c=category&a=public_cache&menuid='.$this->input->get('menuid').'&module=admin";});</script>';
 			if(!$this->input->post('batch_add') || empty($this->input->post('batch_add'))) {
 				$catname = CHARSET == 'gbk' ? $info['catname'] : iconv('utf-8','gbk',$info['catname']);
 				$letters = gbk_to_pinyin($catname);
@@ -204,7 +204,7 @@ class category extends admin {
 						break;
 					}
 				}
-				if(!$exists_model) showmessage(L('please_add_model'),'?m=content&c=sitemodel&a=init&menuid=59',5000);
+				if(!$exists_model) showmessage(L('please_add_model'),'?m=content&c=sitemodel&a=init&menuid=151',5000);
 				include $this->admin_tpl('category_add');
 			} elseif ($type==1) {
 				include $this->admin_tpl('category_page_add');
@@ -319,7 +319,7 @@ class category extends admin {
 				$this->attachment_db = pc_base::load_model('attachment_model');
 				$this->attachment_db->api_update($info['image'],'catid-'.$catid,1);
 			}
-			showmessage(L('operation_success').'<script type="text/javascript">Dialog.warn("'.L("operation_success").L("edit_following_operation").'",function(){window.top.$(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.location = "?m=admin&c=category&a=public_cache&menuid=43&module=admin";});</script>');
+			showmessage(L('operation_success').'<script type="text/javascript">Dialog.warn("'.L("operation_success").L("edit_following_operation").'",function(){window.top.$(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.location = "?m=admin&c=category&a=public_cache&menuid='.$this->input->get('menuid').'&module=admin";});</script>');
 		} else {
 			$show_header = $show_dialog = '';
 			//获取站点模板信息
@@ -676,7 +676,7 @@ class category extends admin {
 	public function public_cache() {
 		$this->repair();
 		$this->cache();
-		showmessage(L('operation_success'),'?m=admin&c=category&a=init&module=admin&menuid=43');
+		showmessage(L('operation_success'),'?m=admin&c=category&a=init&module=admin&menuid='.$this->input->get('menuid'));
 	}
 	/**
 	* 修复栏目数据
@@ -1087,7 +1087,7 @@ class category extends admin {
 				}
 			}
 			$this->public_cache();
-			showmessage(L('operation_success'),'?m=admin&c=category&a=init&module=admin&menuid=43');
+			showmessage(L('operation_success'),'?m=admin&c=category&a=init&module=admin&menuid='.$this->input->get('menuid'));
 		} else {
 			if($this->input->post('catids')) {
 				//获取站点模板信息

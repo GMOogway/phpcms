@@ -3,10 +3,8 @@ defined('IN_ADMIN') or exit('No permission resources.');$addbg=1;
 include $this->admin_tpl('header','admin');?>
 <link rel="stylesheet" href="<?php echo JS_PATH?>layui/css/layui.css" media="all" />
 <style type="text/css">
-html,body{background:#f5f6f8!important;}
-body{padding: 20px 20px 0px 20px;}
-.input-text, .measure-input, textarea, input.date, input.endDate, .input-focus {padding: 6px 12px;height: 32px;}
-.keywords {height: 100%!important;}
+.page-content {margin-left: 0px;margin-top: 0;padding: 25px 20px 10px;}
+.main-content {background: #f5f6f8;}
 </style>
 <script type="text/javascript">
 <!--
@@ -24,6 +22,7 @@ body{padding: 20px 20px 0px 20px;}
 .my-sysfield .control-label {text-align: left!important;margin-bottom: 10px;}
 </style>
 <script type="text/javascript">var catid=<?php echo $catid;?></script>
+<div class="page-content main-content">
 <div class="form-horizontal">
 <div class="myfbody">
         <div class="row ">
@@ -121,6 +120,7 @@ if(is_array($forminfos['senior'])) {
             </div>
         </div>
     </div>
+</div>
 </div>
 </body>
 </html>

@@ -4,13 +4,13 @@ include $this->admin_tpl('header','admin');?>
 <div class="subnav">
 <div class="content-menu ib-a blue line-x">
 <?php if($super_admin) {?>
-<a href='?m=content&c=content&a=public_checkall&menuid=822' class="on"><em><?php echo L('all_check_list');?></em></a>
+<a href='?m=content&c=content&a=public_checkall&menuid=<?php echo $this->input->get('menuid');?>' class="on"><em><?php echo L('all_check_list');?></em></a>
 <?php } else {
 	echo L('check_status');
 }
 for ($j=0;$j<5;$j++) {
 ?>
-<span>|</span><a href='?m=content&c=content&a=public_checkall&menuid=822&status=<?php echo $j;?>' class="<?php if($status==$j) echo 'on';?>"><em><?php echo L('workflow_'.$j);?></em></a>
+<span>|</span><a href='?m=content&c=content&a=public_checkall&menuid=<?php echo $this->input->get('menuid');?>&status=<?php echo $j;?>' class="<?php if($status==$j) echo 'on';?>"><em><?php echo L('workflow_'.$j);?></em></a>
 <?php }?>
 </div>
 </div>
@@ -53,7 +53,7 @@ for ($j=0;$j<5;$j++) {
 		<td align='center' ><?php echo $modelname;?></td>
 		<td align='center' ><?php echo $flowname;?></td>
 		<td align='center' ><?php echo $stepname;?></td>
-		<td align='center' ><a href="?m=content&c=content&a=init&menuid=822&catid=<?php echo $r['catid'];?>"><?php echo $this->categorys[$r['catid']]['catname'];?></a></td>
+		<td align='center' ><a href="?m=content&c=content&a=init&menuid=<?php echo $this->input->get('menuid');?>&catid=<?php echo $r['catid'];?>"><?php echo $this->categorys[$r['catid']]['catname'];?></a></td>
 		<td align='center' ><?php echo format::date($r['inputtime'],1);?></td>
 		<td align='center'>
 		<?php

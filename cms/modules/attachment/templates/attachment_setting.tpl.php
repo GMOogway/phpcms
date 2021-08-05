@@ -1,237 +1,265 @@
 <?php
 defined('IN_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header', 'admin');?>
-<style type="text/css">
-html,body{background:#f5f6f8!important;}
-body{padding: 20px 20px 0px 20px;}
-.input-text, .measure-input, textarea, input.date, input.endDate, .input-focus {height: 32px;}
-.keywords {height: 100%!important;}
-</style>
 <link rel="stylesheet" href="<?php echo CSS_PATH;?>bootstrap/css/bootstrap.min.css" media="all" />
-<div class="page-container" style="margin-bottom: 0px !important;">
-    <div class="page-content-wrapper">
-        <div class="page-content page-content3 mybody-nheader main-content  ">
-<div class="page-body" style="padding-top:17px;margin-bottom:90px;">
+<style type="text/css">
+.page-content {margin-left: 0px;margin-top: 0;padding: 25px 20px 10px;}
+.main-content {background: #f5f6f8;}
+.note.note-danger {background-color: #fef7f8;border-color: #f0868e;color: #210406;}
+.note.note-danger {border-radius: 4px;border-left: 4px solid #f0868e;background-color: #ffffff;color: #888;}
+.my-content-top-tool {margin-top: -25px;margin-bottom: 10px;}
+.note {margin: 0 0 20px;padding: 15px 30px 15px 15px;border-left: 5px solid #eee;border-radius: 0 4px 4px 0;}
+.note, .tabs-right.nav-tabs>li>a:focus, .tabs-right.nav-tabs>li>a:hover {-webkit-border-radius: 0 4px 4px 0;-moz-border-radius: 0 4px 4px 0;-ms-border-radius: 0 4px 4px 0;-o-border-radius: 0 4px 4px 0;}
+.note p:last-child {margin-bottom: 0;}
+.note p {margin: 0;}
+.note p, .page-loading, .panel .panel-body {font-size: 13px;}
+.note.note-danger a {color: #666;}
+.myfbody {margin-bottom: 90px;}
+.portlet.light {padding: 12px 20px 15px;background-color: #fff;}
+.portlet.light>.portlet-title {padding: 0;color: #181C32;font-weight: 500;}
+.portlet.bordered>.portlet-title {border-bottom: 0;}
+.portlet>.portlet-title {padding: 0;margin-bottom: 2px;-webkit-border-radius: 4px 4px 0 0;-moz-border-radius: 4px 4px 0 0;-ms-border-radius: 4px 4px 0 0;-o-border-radius: 4px 4px 0 0;border-radius: 4px 4px 0 0;}
+.portlet>.portlet-title>.caption {float: left;display: inline-block;font-size: 18px;line-height: 18px;padding: 10px 0;}
+.portlet.light>.portlet-title>.caption.caption-md>.caption-subject, .portlet.light>.portlet-title>.caption>.caption-subject {font-size: 15px;}
+.font-dark {color: #2f353b!important;}
+.portlet>.portlet-title:after,.portlet>.portlet-title:before {content: " ";display: table;}
+.portlet>.portlet-title:after {clear: both;}
+.portlet>.portlet-title>.nav-tabs {background: 0 0;margin: 1px 0 0;float: right;display: inline-block;border: 0;}
+.portlet>.portlet-title>.nav-tabs>li {background: 0 0;margin: 0;border: 0;}
+.portlet>.portlet-title>.nav-tabs>li>a {background: 0 0;margin: 5px 0 0 1px;border: 0;padding: 8px 10px;color: #fff;}
+.portlet>.portlet-title>.nav-tabs>li.active>a,.portlet>.portlet-title>.nav-tabs>li:hover>a {color: #333;background: #fff;border: 0;}
+.portlet.light>.portlet-title>.nav-tabs>li {margin: 0;padding: 0;}
+.portlet.light>.portlet-title>.nav-tabs>li>a {margin: 0;padding: 12px 13px 13px;color: #666;}
+.portlet.light>.portlet-title>.nav-tabs>li>a {font-size: 14px!important;}
+.tabbable-line>.nav-tabs {border: none;margin: 0;}
+.tabbable-line>.nav-tabs>li {margin: 0;border-bottom: 4px solid transparent;}
+.tabbable-line>.nav-tabs>li>a {background: 0 0!important;border: 0;margin: 0;padding-left: 15px;padding-right: 15px;color: #737373;cursor: pointer;}
+.tabbable-line>.nav-tabs>li>a>i {color: #a6a6a6;}
+.tabbable-line>.nav-tabs>li.active {background: 0 0;border-bottom: 4px solid #3ea9e2;position: relative;}
+.tabbable-line>.nav-tabs>li.active>a {border: 0;color: #333;}
+.tabbable-line>.nav-tabs>li.active>a>i {color: #404040;}
+.tabbable-line>.nav-tabs>li.open,.tabbable-line>.nav-tabs>li:hover {background: 0 0;border-bottom: 4px solid #dadbde;}
+.tabbable-line>.nav-tabs>li.open>a,.tabbable-line>.nav-tabs>li:hover>a {border: 0;background: 0 0!important;color: #333;}
+.tabbable-line>.nav-tabs>li.open>a>i,.tabbable-line>.nav-tabs>li:hover>a>i {color: #a6a6a6;}
+.tabbable-line>.nav-tabs>li.active {border-bottom: 4px solid #40aae3;}
+.form .form-body,.portlet-form .form-body {padding: 20px;}
+</style>
+<div class="page-content main-content">
+<div class="note note-danger my-content-top-tool">
+    <p><a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=public_cache_all',1);"><?php echo L('操作之前请更新下全站缓存');?></a></p>
+</div>
 <form action="?m=attachment&c=attachment&a=save" class="form-horizontal" method="post" name="myform" id="myform">
-    <div class="portlet light myfbody">
-        <div class="col-tab">
-            <ul class="tabBut cu-li">
-                <li id="tab_setting_1" class="on" onclick="SwapTab('setting','on','',3,1);"><?php echo L('附件设置')?></li>
-                <li id="tab_setting_2" onclick="SwapTab('setting','on','',3,2);"><?php echo L('头像存储')?></li>
-                <li id="tab_setting_3" onclick="SwapTab('setting','on','',3,3);"><?php echo L('缩略图')?></li>
-            </ul>
-            <div class="portlet-body">
-                <div class="tab-content">
+<div class="portlet light bordered myfbody">
+    <div class="portlet-title tabbable-line">
+        <ul class="nav nav-tabs" style="float:left;">
+            <li class="active">
+                <a data-toggle="tab_0"> <i class="fa fa-cog"></i> <?php echo L('附件设置');?> </a>
+            </li>
+            <li>
+                <a data-toggle="tab_1"> <i class="fa fa-user"></i> <?php echo L('头像存储');?> </a>
+            </li>
+            <li>
+                <a data-toggle="tab_2"> <i class="fa fa-photo"></i> <?php echo L('缩略图');?> </a>
+            </li>
+        </ul>
+    </div>
+    <div class="portlet-body form">
+        <div class="tab-content">
+            <div class="tab-pane active" id="tab_0">
 
-                    <div class="tab-pane active" id="div_setting_1">
-                        <div class="form-body">
+                <div class="form-body">
 
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">附件存储策略</label>
-                                <div class="col-md-9">
-                                    <label><select class="form-control" name="data[sys_attachment_save_id]">
-                                        <option value="0"<?php echo ($sys_attachment_save_id=='0') ? ' selected' : ''?>>本地存储</option>
-                                        <?php foreach ($remote as $i=>$t) {?>
-                                        <option value="<?php echo $i;?>"<?php echo ($i == $sys_attachment_save_id ? ' selected' : '');?>> <?php echo L($t['name']);?> </option>
-                                        <?php }?>
-                                    </select></label>
-                                    <span class="help-block">远程附件存储建议设置小文件存储，推荐10MB内，大文件会导致数据传输失败</span>
-                                </div>
-                            </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">附件存储策略</label>
+                        <div class="col-md-9">
+                            <label><select class="form-control" name="data[sys_attachment_save_id]">
+                                <option value="0"<?php echo ($sys_attachment_save_id=='0') ? ' selected' : ''?>>本地存储</option>
+                                <?php foreach ($remote as $i=>$t) {?>
+                                <option value="<?php echo $i;?>"<?php echo ($i == $sys_attachment_save_id ? ' selected' : '');?>> <?php echo L($t['name']);?> </option>
+                                <?php }?>
+                            </select></label>
+                            <span class="help-block">远程附件存储建议设置小文件存储，推荐10MB内，大文件会导致数据传输失败</span>
+                        </div>
+                    </div>
 
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">上传安全策略</label>
-                                <div class="col-md-9">
-                                    <div class="mt-radio-inline">
-                                        <label class="mt-radio mt-radio-outline"><input type="radio" name="data[sys_attachment_safe]" value="0"<?php echo ($sys_attachment_safe=='0') ? ' checked' : ''?>> <?php echo L('严格模式');?> <span></span></label>
-                                        <label class="mt-radio mt-radio-outline"><input type="radio" name="data[sys_attachment_safe]" value="1"<?php echo ($sys_attachment_safe=='1') ? ' checked' : ''?>> <?php echo L('宽松模式');?> <span></span></label>
-                                    </div>
-                                    <span class="help-block">严格模式将对文件进行全面检测是否存在非法特征</span>
-                                </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">上传安全策略</label>
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="data[sys_attachment_safe]" value="0"<?php echo ($sys_attachment_safe=='0') ? ' checked' : ''?>> <?php echo L('严格模式');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="data[sys_attachment_safe]" value="1"<?php echo ($sys_attachment_safe=='1') ? ' checked' : ''?>> <?php echo L('宽松模式');?> <span></span></label>
                             </div>
+                            <span class="help-block">严格模式将对文件进行全面检测是否存在非法特征</span>
+                        </div>
+                    </div>
 
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">附件归档</label>
-                                <div class="col-md-9">
-                                    <div class="mt-radio-inline">
-                                        <label class="mt-radio mt-radio-outline"><input type="radio" name="data[attachment_stat]" value="1"<?php echo ($attachment_stat=='1') ? ' checked' : ''?>> <?php echo L('是');?> <span></span></label>
-                                        <label class="mt-radio mt-radio-outline"><input type="radio" name="data[attachment_stat]" value="0"<?php echo ($attachment_stat=='0') ? ' checked' : ''?>> <?php echo L('否');?> <span></span></label>
-                                    </div>
-                                    <span class="help-block">附件将分为已使用的附件和未使用的附件，归档存储</span>
-                                </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">附件归档</label>
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="data[attachment_stat]" value="1"<?php echo ($attachment_stat=='1') ? ' checked' : ''?>> <?php echo L('是');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="data[attachment_stat]" value="0"<?php echo ($attachment_stat=='0') ? ' checked' : ''?>> <?php echo L('否');?> <span></span></label>
                             </div>
+                            <span class="help-block">附件将分为已使用的附件和未使用的附件，归档存储</span>
+                        </div>
+                    </div>
 
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">开启附件分站状态</label>
-                                <div class="col-md-9">
-                                    <div class="mt-radio-inline">
-                                        <label class="mt-radio mt-radio-outline"><input type="radio" name="data[attachment_file]" value="1"<?php echo ($attachment_file=='1') ? ' checked' : ''?>> <?php echo L('是');?> <span></span></label>
-                                        <label class="mt-radio mt-radio-outline"><input type="radio" name="data[attachment_file]" value="0"<?php echo ($attachment_file=='0') ? ' checked' : ''?>> <?php echo L('否');?> <span></span></label>
-                                    </div>
-                                    <span class="help-block">默认为否,开启附件上传为分站上传</span>
-                                </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">开启附件分站状态</label>
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="data[attachment_file]" value="1"<?php echo ($attachment_file=='1') ? ' checked' : ''?>> <?php echo L('是');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="data[attachment_file]" value="0"<?php echo ($attachment_file=='0') ? ' checked' : ''?>> <?php echo L('否');?> <span></span></label>
                             </div>
+                            <span class="help-block">默认为否,开启附件上传为分站上传</span>
+                        </div>
+                    </div>
 
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">存储目录方式</label>
-                                <div class="col-md-9">
-                                    <div class="mt-radio-inline">
-                                        <label class="mt-radio mt-radio-outline"><input type="radio" onclick="$('.dr_attachment_type').hide()" name="data[sys_attachment_save_type]" value="0"<?php echo ($sys_attachment_save_type=='0') ? ' checked' : ''?> /> 默认 <span></span></label>
-                                        <label class="mt-radio mt-radio-outline"><input type="radio" onclick="$('.dr_attachment_type').show()" name="data[sys_attachment_save_type]" value="1"<?php echo ($sys_attachment_save_type=='1') ? ' checked' : ''?> /> 自定义 <span></span></label>
-                                    </div>
-                                    <span class="help-block">默认存储目录为：/年/月日/文件名</span>
-                                </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">存储目录方式</label>
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input type="radio" onclick="$('.dr_attachment_type').hide()" name="data[sys_attachment_save_type]" value="0"<?php echo ($sys_attachment_save_type=='0') ? ' checked' : ''?> /> 默认 <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" onclick="$('.dr_attachment_type').show()" name="data[sys_attachment_save_type]" value="1"<?php echo ($sys_attachment_save_type=='1') ? ' checked' : ''?> /> 自定义 <span></span></label>
                             </div>
+                            <span class="help-block">默认存储目录为：/年/月日/文件名</span>
+                        </div>
+                    </div>
 
-                            <div class="form-group dr_attachment_type"<?php echo ($sys_attachment_save_type=='0') ? ' style="display: none"' : ''?>>
-                                <label class="col-md-2 control-label">存储目录格式</label>
-                                <div class="col-md-9">
-                                    <input class="form-control" type="text" name="data[sys_attachment_save_dir]" value="<?php echo $sys_attachment_save_dir;?>" >
-                                    <span class="help-block">留空表示不要目录存储，可填参数格式：{y}表示年，{m}表示月，{d}表示日，/表示目录，不要填写其他特殊符号</span>
-                                </div>
-                            </div>
+                    <div class="form-group dr_attachment_type"<?php echo ($sys_attachment_save_type=='0') ? ' style="display: none"' : ''?>>
+                        <label class="col-md-2 control-label">存储目录格式</label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" name="data[sys_attachment_save_dir]" value="<?php echo $sys_attachment_save_dir;?>" >
+                            <span class="help-block">留空表示不要目录存储，可填参数格式：{y}表示年，{m}表示月，{d}表示日，/表示目录，不要填写其他特殊符号</span>
+                        </div>
+                    </div>
 
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">附件上传目录</label>
-                                <div class="col-md-9">
-                                    <div class="input-group input-xlarge">
-                                        <input class="form-control " type="text" id="dr_attachment_dir" name="data[sys_attachment_path]" value="<?php echo $sys_attachment_path;?>">
-                                        <span class="input-group-btn">
-                                                <button class="btn blue" onclick="dr_test_domain_dir('dr_attachment_dir')" type="button"><i class="fa fa-code"></i> 测试</button>
-                                            </span>
-                                    </div>
-                                    <span class="help-block">此目录必须有读写权限，绝对路径请以“/”开头</span>
-                                </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">附件上传目录</label>
+                        <div class="col-md-9">
+                            <div class="input-group input-xlarge">
+                                <input class="form-control " type="text" id="dr_attachment_dir" name="data[sys_attachment_path]" value="<?php echo $sys_attachment_path;?>">
+                                <span class="input-group-btn">
+                                        <button class="btn blue" onclick="dr_test_domain_dir('dr_attachment_dir')" type="button"><i class="fa fa-code"></i> 测试</button>
+                                    </span>
                             </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">附件URL地址</label>
-                                <div class="col-md-9">
-                                    <div class="input-group input-xlarge">
-                                        <input class="form-control " type="text" name="data[sys_attachment_url]" value="<?php echo $sys_attachment_url;?>" >
-                                        <span class="input-group-btn">
-                                                <button class="btn blue" onclick="dr_test_domain()" type="button"><i class="fa fa-wrench"></i> 检测</button>
-                                            </span>
-                                    </div>
-                                    <span class="help-block">当设置了附件上传目录后，必须为该目录指定域名，用于分离附件，留空表示默认本站地址（站外保存时必须指定域名）</span>
-                                </div>
+                            <span class="help-block">此目录必须有读写权限，绝对路径请以“/”开头</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">附件URL地址</label>
+                        <div class="col-md-9">
+                            <div class="input-group input-xlarge">
+                                <input class="form-control " type="text" name="data[sys_attachment_url]" value="<?php echo $sys_attachment_url;?>" >
+                                <span class="input-group-btn">
+                                        <button class="btn blue" onclick="dr_test_domain()" type="button"><i class="fa fa-wrench"></i> 检测</button>
+                                    </span>
                             </div>
-                            <div class="form-group" style="display: none" id="dr_test_domain">
-                                <label class="col-md-2 control-label">目录检测结果</label>
-                                <div class="col-md-9" style="padding-top: 3px; line-height: 25px; color:green" id="dr_test_domain_result">
-
-                                </div>
-                            </div>
+                            <span class="help-block">当设置了附件上传目录后，必须为该目录指定域名，用于分离附件，留空表示默认本站地址（站外保存时必须指定域名）</span>
+                        </div>
+                    </div>
+                    <div class="form-group" style="display: none" id="dr_test_domain">
+                        <label class="col-md-2 control-label">目录检测结果</label>
+                        <div class="col-md-9" style="padding-top: 3px; line-height: 25px; color:green" id="dr_test_domain_result">
 
                         </div>
                     </div>
 
+                </div>
+            </div>
+            <div class="tab-pane" id="tab_1">
+                <div class="form-body">
 
-                    <div class="tab-pane " id="div_setting_2">
-                        <div class="form-body">
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">头像存储目录</label>
+                        <div class="col-md-9">
 
-
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">头像存储目录</label>
-                                <div class="col-md-9">
-
-                                    <div class="input-group input-xlarge">
-                                        <input class="form-control " type="text" id="dr_avatar_dir" name="data[sys_avatar_path]" value="<?php echo $sys_avatar_path;?>" >
-                                        <span class="input-group-btn">
-                                                <button class="btn blue" onclick="dr_test_domain_dir('dr_avatar_dir')" type="button"><i class="fa fa-code"></i> 测试</button>
-                                            </span>
-                                    </div>
-                                    <span class="help-block">绝对路径请以“/”开头，默认：上传路径/avatar/</span>
-                                </div>
+                            <div class="input-group input-xlarge">
+                                <input class="form-control " type="text" id="dr_avatar_dir" name="data[sys_avatar_path]" value="<?php echo $sys_avatar_path;?>" >
+                                <span class="input-group-btn">
+                                        <button class="btn blue" onclick="dr_test_domain_dir('dr_avatar_dir')" type="button"><i class="fa fa-code"></i> 测试</button>
+                                    </span>
                             </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">头像访问URL地址</label>
-                                <div class="col-md-9">
-                                    <div class="input-group input-xlarge">
-                                        <input class="form-control " type="text" id="dr_avatar_url" name="data[sys_avatar_url]" value="<?php echo $sys_avatar_url;?>" >
-                                        <span class="input-group-btn">
-                                                <button class="btn blue" onclick="dr_test_avatar_domain()" type="button"><i class="fa fa-wrench"></i> 检测</button>
-                                            </span>
-                                    </div>
-                                    <span class="help-block">头像文件访问地址，可单独指定域名，默认：/上传路径/avatar/</span>
-                                </div>
+                            <span class="help-block">绝对路径请以“/”开头，默认：上传路径/avatar/</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">头像访问URL地址</label>
+                        <div class="col-md-9">
+                            <div class="input-group input-xlarge">
+                                <input class="form-control " type="text" id="dr_avatar_url" name="data[sys_avatar_url]" value="<?php echo $sys_avatar_url;?>" >
+                                <span class="input-group-btn">
+                                        <button class="btn blue" onclick="dr_test_avatar_domain()" type="button"><i class="fa fa-wrench"></i> 检测</button>
+                                    </span>
                             </div>
+                            <span class="help-block">头像文件访问地址，可单独指定域名，默认：/上传路径/avatar/</span>
+                        </div>
+                    </div>
 
-                            <div class="form-group" style="display: none" id="dr_test_avatar_domain">
-                                <label class="col-md-2 control-label">目录检测结果</label>
-                                <div class="col-md-9" style="padding-top: 3px; line-height: 25px; color:green" id="dr_test_avatar_domain_result">
-
-                                </div>
-                            </div>
+                    <div class="form-group" style="display: none" id="dr_test_avatar_domain">
+                        <label class="col-md-2 control-label">目录检测结果</label>
+                        <div class="col-md-9" style="padding-top: 3px; line-height: 25px; color:green" id="dr_test_avatar_domain_result">
 
                         </div>
                     </div>
 
+                </div>
+            </div>
+            <div class="tab-pane" id="tab_2">
+                <div class="form-body">
 
-                    <div class="tab-pane " id="div_setting_3">
-                        <div class="form-body">
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">缩略图存储目录</label>
+                        <div class="col-md-9">
 
-
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">缩略图存储目录</label>
-                                <div class="col-md-9">
-
-                                    <div class="input-group input-xlarge">
-                                        <input class="form-control " type="text" id="dr_thumb_dir" name="data[sys_thumb_path]" value="<?php echo $sys_thumb_path;?>" >
-                                        <span class="input-group-btn">
-                                                <button class="btn blue" onclick="dr_test_domain_dir('dr_thumb_dir')" type="button"><i class="fa fa-code"></i> 测试</button>
-                                            </span>
-                                    </div>
-                                    <span class="help-block">绝对路径请以“/”开头，默认：上传路径/thumb/</span>
-                                </div>
+                            <div class="input-group input-xlarge">
+                                <input class="form-control " type="text" id="dr_thumb_dir" name="data[sys_thumb_path]" value="<?php echo $sys_thumb_path;?>" >
+                                <span class="input-group-btn">
+                                        <button class="btn blue" onclick="dr_test_domain_dir('dr_thumb_dir')" type="button"><i class="fa fa-code"></i> 测试</button>
+                                    </span>
                             </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">缩略图访问URL地址</label>
-                                <div class="col-md-9">
-                                    <div class="input-group input-xlarge">
-                                        <input class="form-control " type="text" id="dr_thumb_url" name="data[sys_thumb_url]" value="<?php echo $sys_thumb_url;?>" >
-                                        <span class="input-group-btn">
-                                                <button class="btn blue" onclick="dr_test_thumb_domain()" type="button"><i class="fa fa-wrench"></i> 检测</button>
-                                            </span>
-                                    </div>
-                                    <span class="help-block">缩略图文件访问地址，可单独指定域名，默：/上传路径/thumb/</span>
-                                </div>
+                            <span class="help-block">绝对路径请以“/”开头，默认：上传路径/thumb/</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">缩略图访问URL地址</label>
+                        <div class="col-md-9">
+                            <div class="input-group input-xlarge">
+                                <input class="form-control " type="text" id="dr_thumb_url" name="data[sys_thumb_url]" value="<?php echo $sys_thumb_url;?>" >
+                                <span class="input-group-btn">
+                                        <button class="btn blue" onclick="dr_test_thumb_domain()" type="button"><i class="fa fa-wrench"></i> 检测</button>
+                                    </span>
                             </div>
-
-                            <div class="form-group" style="display: none" id="dr_test_thumb_domain">
-                                <label class="col-md-2 control-label">目录检测结果</label>
-                                <div class="col-md-9" style="padding-top: 3px; line-height: 25px; color:green" id="dr_test_thumb_domain_result">
-
-                                </div>
-                            </div>
-
+                            <span class="help-block">缩略图文件访问地址，可单独指定域名，默：/上传路径/thumb/</span>
                         </div>
                     </div>
 
+                    <div class="form-group" style="display: none" id="dr_test_thumb_domain">
+                        <label class="col-md-2 control-label">目录检测结果</label>
+                        <div class="col-md-9" style="padding-top: 3px; line-height: 25px; color:green" id="dr_test_thumb_domain_result">
+
+                        </div>
+                    </div>
 
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="portlet-body form myfooter">
-        <div class="form-actions text-center">
-            <button name="dosubmit" type="submit" class="btn green"> <i class="fa fa-save"></i> 保存</button>
+        <div class="portlet-body form myfooter">
+            <div class="form-actions text-center">
+                <button name="dosubmit" type="submit" class="btn green"> <i class="fa fa-save"></i> 保存</button>
+            </div>
         </div>
     </div>
+</div>
 </form>
-
+</div>
 <script>
-function SwapTab(name,cls_show,cls_hide,cnt,cur){
-    for(i=1;i<=cnt;i++){
-        if(i==cur){
-             $('#div_'+name+'_'+i).show();
-             $('#tab_'+name+'_'+i).attr('class',cls_show);
-        }else{
-             $('#div_'+name+'_'+i).hide();
-             $('#tab_'+name+'_'+i).attr('class',cls_hide);
-        }
-    }
-}
+$('.nav-tabs a').click(function (e) {
+    $('.nav-tabs').find('li').removeClass('active');
+    $('.tab-pane').removeClass('active');
+    $(this).parent().addClass('active');
+    $('#'+$(this).attr("data-toggle")).addClass('active');
+})
 function dr_test_domain() {
     // 延迟加载
     var loading = layer.load(2, {
@@ -300,9 +328,5 @@ function dr_test_domain_dir(id) {
     });
 }
 </script>
-</div>
-</div>
-</div>
-</div>
 </body>
 </html>

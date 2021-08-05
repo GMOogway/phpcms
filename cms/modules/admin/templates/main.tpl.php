@@ -86,10 +86,10 @@ padding-right: 70px !important;text-overflow:ellipsis!important;overflow:hidden!
                                 <div class="welcome-module">
                                     <div class="layui-row layui-col-space10 layuimini-qiuck" style="color:#ff0000;">
                                         <?php if(is_file(CACHE_PATH.'caches_error/caches_data/log-'.date('Y-m-d',SYS_TIME).'.php')) {?>
-                                        <p><?php echo L('※ 错误日志，<a href="javascript:;" layuimini-content-href="?m=admin&c=index&a=public_error_log&pc_hash='.$_SESSION['pc_hash'].'" data-title="错误日志" data-icon="fa fa-list-alt"><i class="fa fa-list-alt"></i><cite>点击查看</cite></a>')?></p>
+                                        <p><?php echo L('※ 错误日志，<a href="javascript:;" layuimini-content-href="?m=admin&c=index&a=public_error_log&menuid=249&pc_hash='.$_SESSION['pc_hash'].'" data-title="错误日志" data-icon="fa fa-list-alt"><i class="fa fa-list-alt"></i><cite>点击查看</cite></a>')?></p>
                                         <?php } ?>
                                         <?php if(is_file(CACHE_PATH.'error_log.php')) {?>
-                                        <p><?php echo L('※ 系统错误，<a href="javascript:;" layuimini-content-href="?m=admin&c=index&a=public_error&menuid=1597&pc_hash='.$_SESSION['pc_hash'].'" data-title="系统错误" data-icon="fa fa-list-alt"><i class="fa fa-list-alt"></i><cite>点击查看</cite></a>')?></p>
+                                        <p><?php echo L('※ 系统错误，<a href="javascript:;" layuimini-content-href="?m=admin&c=index&a=public_error&menuid=246&pc_hash='.$_SESSION['pc_hash'].'" data-title="系统错误" data-icon="fa fa-list-alt"><i class="fa fa-list-alt"></i><cite>点击查看</cite></a>')?></p>
                                         <?php } ?>
                                         <?php if(SELF == 'admin.php') {?>
                                         <p><?php echo L('※ 为了系统安全，请修改根目录admin.php的文件名')?></p>

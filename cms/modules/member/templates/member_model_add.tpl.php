@@ -63,13 +63,13 @@ $(function(){
 		<tr>
 			<td><?php echo L('model_description')?></td>
 			<td>
-			<input type="text" name="info[description]" value="" class="input-text" id="description" size="80"></input>
+			<input type="text" name="info[description]" value="" class="input-text" id="description" size="50"></input>
 			</td>
 		</tr>
 		<tr>
 			<td><?php echo L('model_import')?></td>
 			<td>
-			<input type="text" class='input-text' onchange="FileName.value=this.value" id="myfile" name="myfile" size="26" style="width: 160px;height: 34px;padding: 6px 12px;background-color: #fff;border: 1px solid #c2cad8;border-radius: 4px;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">&nbsp;<div class="button green uploader"><i class="fa fa-plus"></i> <?php echo L('select_file');?> <input type="file" name="model_import" id="model_import" onchange="myfile.value=this.value"></div><?php echo L('create_new_model_can_empty')?>
+			<input type="text" class='input-text' id="myfile" name="myfile" size="26" readonly="readonly">&nbsp;<span class="btn green fileinput-button"><i class="fa fa-cloud-upload"></i> <span> <?php echo L('select_file');?> </span> <input type="file" name="model_import" id="model_import" onchange="myfile.value=this.value"></span><?php echo L('create_new_model_can_empty')?>
 			</td>
 		</tr>
 	</table>

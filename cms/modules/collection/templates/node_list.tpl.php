@@ -39,7 +39,7 @@
 		<td align="left">
 		<a href="javascript:void(0)" onclick="test_spider(<?php echo $v['nodeid']?>)">[<?php echo L('test')?>]</a>
 		
-		<a href="?m=collection&c=node&a=edit&nodeid=<?php echo $v['nodeid']?>&menuid=957">[<?php echo L('edit')?>]</a>
+		<a href="?m=collection&c=node&a=edit&nodeid=<?php echo $v['nodeid']?>&menuid=<?php echo $this->input->get('menuid');?>">[<?php echo L('edit')?>]</a>
 		 <a href="javascript:void(0)"  onclick="copy_spider(<?php echo $v['nodeid']?>)">[<?php echo L('copy')?>]</a>
 		 <a href="?m=collection&c=node&a=export&nodeid=<?php echo $v['nodeid']?>">[<?php echo L('export')?>]</a>
 		
