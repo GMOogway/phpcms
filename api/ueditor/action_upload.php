@@ -100,7 +100,6 @@ switch (htmlspecialchars($input->get('action'))) {
             "maxSize" => $CONFIG['snapscreenMaxSize'],
             "allowFiles" => $CONFIG['snapscreenAllowFiles']
         );
-        $snapscreenuserid = $CONFIG['snapscreenuserid'];
         $fieldName = $CONFIG['snapscreenFieldName'];
         break;
 }
