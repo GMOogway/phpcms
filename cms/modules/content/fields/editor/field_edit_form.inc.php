@@ -13,7 +13,7 @@
     </tr>
     <tr id="bjqms"<?php if($setting['toolbar']!='modetool') echo ' style="display:none;"';?>>
       <td width="225">工具栏：</td>
-      <td><textarea name="setting[toolvalue]" rows="2" cols="20" id="toolvalue" style="height:100px;width:250px;"><?php echo $setting['toolvalue'];?></textarea><br><?php if (pc_base::load_config('system', 'editor')) {?>必须严格按照CKEditor工具栏格式：'Maximize', 'Source', '-', 'Undo', 'Redo'<?php } else {?>必须严格按照Ueditor工具栏格式：'Fullscreen', 'Source', '|', 'Undo', 'Redo'<?php }?></td>
+      <td><textarea name="setting[toolvalue]" rows="2" cols="20" id="toolvalue" style="height:100px;width:250px;"><?php echo $setting['toolvalue'];?></textarea><br><?php if (SYS_EDITOR) {?>必须严格按照CKEditor工具栏格式：'Maximize', 'Source', '-', 'Undo', 'Redo'<?php } else {?>必须严格按照Ueditor工具栏格式：'Fullscreen', 'Source', '|', 'Undo', 'Redo'<?php }?></td>
     </tr>
     <tr> 
       <td>默认值：</td>
@@ -33,7 +33,7 @@
           <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[link_mode]" value="0" <?php if($setting['link_mode']==0) echo 'checked';?>> 网址链接 <span></span></label>
         </div></td>
     </tr>
-    <tr<?php if (!pc_base::load_config('system', 'editor')) {?> style="display: none;"<?php }?>> 
+    <tr<?php if (!SYS_EDITOR) {?> style="display: none;"<?php }?>> 
       <td>编辑器颜色：</td>
       <td><input type="text" id="style_color" name="setting[color]" value="<?php echo $setting['color'];?>" size="6" autocomplete="off" class="input-text" style="height: 22px;">
       <script type="text/javascript">
@@ -53,21 +53,21 @@
       });
       </script></td>
     </tr>
-    <tr<?php if (pc_base::load_config('system', 'editor')) {?> style="display: none;"<?php }?>> 
+    <tr<?php if (SYS_EDITOR) {?> style="display: none;"<?php }?>> 
       <td>编辑器样式：</td>
       <td><div class="mt-radio-inline">
           <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[theme]" value="default" <?php if($setting['theme']=='default') echo 'checked';?>> 默认 <span></span></label>
           <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[theme]" value="notadd" <?php if($setting['theme']=='notadd') echo 'checked';?>> 样式1 <span></span></label>
         </div></td>
     </tr>
-    <tr<?php if (pc_base::load_config('system', 'editor')) {?> style="display: none;"<?php }?>> 
+    <tr<?php if (SYS_EDITOR) {?> style="display: none;"<?php }?>> 
       <td>固定编辑器图标栏：</td>
       <td><div class="mt-radio-inline">
           <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[autofloat]" value="1" <?php if($setting['autofloat']==1) echo 'checked';?>> 是 <span></span></label>
           <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[autofloat]" value="0" <?php if($setting['autofloat']==0) echo 'checked';?>> 否 <span></span></label>
         </div></td>
     </tr>
-    <tr<?php if (pc_base::load_config('system', 'editor')) {?> style="display: none;"<?php }?>> 
+    <tr<?php if (SYS_EDITOR) {?> style="display: none;"<?php }?>> 
       <td>自动伸长高度：</td>
       <td><div class="mt-radio-inline">
           <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[autoheight]" value="1" <?php if($setting['autoheight']==1) echo 'checked';?>> 是 <span></span></label>
@@ -88,7 +88,7 @@
         </div></td>
     </tr>
     <?php }?>
-    <tr<?php if (pc_base::load_config('system', 'editor')) {?> style="display: none;"<?php }?>> 
+    <tr<?php if (SYS_EDITOR) {?> style="display: none;"<?php }?>> 
       <td>将div标签转换为p标签：</td>
       <td><div class="mt-radio-inline">
           <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[div2p]" value="1" <?php if($setting['div2p']==1) echo 'checked';?>> 开启 <span></span></label>

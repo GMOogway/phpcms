@@ -38,8 +38,22 @@ class form {
 			$autoHeightEnabled = 'false';
 		}
 		$show_page = ($module == 'content' && !$disabled_page) ? 'true' : 'false';
+		if($allowupload) {
+			$authkey = upload_key("$siteid,$allowuploadnum,$alowuploadexts,$allowbrowser,,,$watermark,$attachment,$image_reduce");
+			$p = dr_authcode(array(
+				'siteid' => $siteid,
+				'file_upload_limit' => $allowuploadnum,
+				'file_types_post' => $alowuploadexts,
+				'allowupload' => $allowbrowser,
+				'thumb_width' => '',
+				'thumb_height' => '',
+				'watermark_enable' => $watermark,
+				'attachment' => $attachment,
+				'image_reduce' => $image_reduce,
+			), 'ENCODE');
+		}
 		$str ='';
-		if (pc_base::load_config('system', 'editor')) {
+		if (SYS_EDITOR) {
 			if(!defined('EDITOR_INIT')) {
 				$str = '<script type="text/javascript" src="'.JS_PATH.'ckeditor/ckeditor.js"></script>';
 				define('EDITOR_INIT', 1);
@@ -95,11 +109,7 @@ class form {
 			$str .= "var editor = CKEDITOR.replace( '$textareaid',{";
 			$str .= "height:{$height},";
 			$str .="textareaid:'".$textareaid."',module:'".$module."',catid:'".$catid."',\r\n";
-			if($allowupload) {
-				$authkey = upload_key("$allowuploadnum,$alowuploadexts,$allowbrowser");
-				$str .="h5upload:true,alowuploadexts:'".$alowuploadexts."',allowbrowser:'".$allowbrowser."',allowuploadnum:'".$allowuploadnum."',authkey:'".$authkey."',\r\n";
-			}
-			if($allowupload) $str .= "filebrowserUploadUrl : 'index.php?m=attachment&c=attachments&a=upload&module=".$module."&catid=".$catid."&dosubmit=1&watermark_enable=".intval($watermark)."&attachment=".intval($attachment)."&image_reduce=".intval($image_reduce)."',\r\n";
+			if($allowupload) $str .= "filebrowserUploadUrl : 'index.php?m=attachment&c=attachments&a=upload&module=".$module."&catid=".$catid."&dosubmit=1&args=".$p."&authkey=".$authkey."',\r\n";
 			if($color) {
 				$str .= "uiColor: '$color',";
 			}
@@ -174,11 +184,7 @@ class form {
 		}
 		$ext_str = "<div class='editor_bottom'>";
 		if(!defined('IMAGES_INIT')) {
-			if (pc_base::load_config('system', 'editor')) {
-				$ext_str .= '<script type="text/javascript" src="'.JS_PATH.'h5upload/ckeditor.js"></script>';
-			} else {
-				$ext_str .= '<script type="text/javascript" src="'.JS_PATH.'h5upload/ueditor.js"></script>';
-			}
+			$ext_str .= '<script type="text/javascript" src="'.JS_PATH.'h5upload/h5editor.js"></script>';
 			define('IMAGES_INIT', 1);
 		}
 		$ext_str .= "<div class='cke_footer'>";
@@ -186,8 +192,7 @@ class form {
 			$ext_str .= "<a href='javascript:insert_page(\"$textareaid\")'>".L('pagebreak')."</a><a href='javascript:insert_page_title(\"$textareaid\")'>".L('subtitle')."</a>";
 		}
 		if($allowupload) {
-			$authkey = upload_key("$allowuploadnum,$alowuploadexts,$allowbrowser,,,,$attachment,$image_reduce");
-			$ext_str.="<a onclick=\"h5upload('h5upload', '".L('attachmentupload')."','{$textareaid}','','{$allowuploadnum},{$alowuploadexts},{$allowbrowser},,,,{$attachment},{$image_reduce}','{$module}','{$catid}','{$authkey}');return false;\" href=\"javascript:void(0);\">".L('attachmentupload')."</a>";
+			$ext_str.="<a onclick=\"h5upload('h5upload', '".L('attachmentupload')."','{$textareaid}','','{$p}','{$module}','{$catid}','{$authkey}',".SYS_EDITOR.");return false;\" href=\"javascript:void(0);\">".L('attachmentupload')."</a>";
 		}
 		$ext_str .= "</div>";
 		if ($show_page=="true") {
@@ -216,22 +221,32 @@ class form {
 	 * @param int $image_reduce
 	 */
 	public static function images($name, $id = '', $value = '', $moudle='', $catid='', $size = 50, $class = '', $ext = '', $alowexts = '',$thumb_setting = array(),$watermark_setting = 0,$attachment = 0, $image_reduce = '') {
+		$input = pc_base::load_sys_class('input');
+		$siteid = $input->get('siteid') ? $input->get('siteid') : param::get_cookie('siteid');
+		if(!$siteid) $siteid = get_siteid() ? get_siteid() : 1 ;
 		if(!$id) $id = $name;
 		if(!$size) $size= 50;
 		if(!empty($thumb_setting) && count($thumb_setting)) $thumb_ext = $thumb_setting[0].','.$thumb_setting[1];
 		else $thumb_ext = ',';
 		if(!$alowexts) $alowexts = 'jpg|jpeg|gif|bmp|png';
 		if(!defined('IMAGES_INIT')) {
-			if (pc_base::load_config('system', 'editor')) {
-				$str = '<script type="text/javascript" src="'.JS_PATH.'h5upload/ckeditor.js"></script>';
-			} else {
-				$str = '<script type="text/javascript" src="'.JS_PATH.'h5upload/ueditor.js"></script>';
-			}
+			$str = '<script type="text/javascript" src="'.JS_PATH.'h5upload/h5editor.js"></script>';
 			define('IMAGES_INIT', 1);
 		}
 		$value = new_html_special_chars($value);
-		$authkey = upload_key("1,$alowexts,1,$thumb_ext,$watermark_setting,$attachment,$image_reduce");
-		return $str."<input type=\"text\" name=\"$name\" id=\"$id\" value=\"$value\" size=\"$size\" class=\"$class\" $ext/>  <input type=\"button\" class=\"button\" onclick=\"javascript:h5upload('{$id}_images', '".L('attachmentupload')."','{$id}','submit_images','1,{$alowexts},1,{$thumb_ext},{$watermark_setting},{$attachment},{$image_reduce}','{$moudle}','{$catid}','{$authkey}')\"/ value=\"".L('imagesupload')."\">";
+		$authkey = upload_key("$siteid,1,$alowexts,1,$thumb_ext,$watermark_setting,$attachment,$image_reduce");
+		$p = dr_authcode(array(
+			'siteid' => $siteid,
+			'file_upload_limit' => 1,
+			'file_types_post' => $alowexts,
+			'allowupload' => 1,
+			'thumb_width' => $file_setting[0],
+			'thumb_height' => $file_setting[1],
+			'watermark_enable' => $watermark_setting,
+			'attachment' => $attachment,
+			'image_reduce' => $image_reduce,
+		), 'ENCODE');
+		return $str."<input type=\"text\" name=\"$name\" id=\"$id\" value=\"$value\" size=\"$size\" class=\"$class\" $ext/>  <input type=\"button\" class=\"button\" onclick=\"javascript:h5upload('{$id}_images', '".L('attachmentupload')."','{$id}','submit_images','{$p}','{$moudle}','{$catid}','{$authkey}',".SYS_EDITOR.")\"/ value=\"".L('imagesupload')."\">";
 	}
 
 	/**
@@ -250,21 +265,31 @@ class form {
 	 * @param int $image_reduce
 	 */
 	public static function upfiles($name, $id = '', $value = '', $moudle='', $catid='', $size = 50, $class = '', $ext = '', $alowexts = '',$file_setting = array(),$attachment = 0, $image_reduce = '' ) {
+		$input = pc_base::load_sys_class('input');
+		$siteid = $input->get('siteid') ? $input->get('siteid') : param::get_cookie('siteid');
+		if(!$siteid) $siteid = get_siteid() ? get_siteid() : 1 ;
 		if(!$id) $id = $name;
 		if(!$size) $size= 50;
 		if(!empty($file_setting) && count($file_setting)) $file_ext = $file_setting[0].','.$file_setting[1];
 		else $file_ext = ',';
 		if(!$alowexts) $alowexts = 'rar|zip';
 		if(!defined('IMAGES_INIT')) {
-			if (pc_base::load_config('system', 'editor')) {
-				$str = '<script type="text/javascript" src="'.JS_PATH.'h5upload/ckeditor.js"></script>';
-			} else {
-				$str = '<script type="text/javascript" src="'.JS_PATH.'h5upload/ueditor.js"></script>';
-			}
+			$str = '<script type="text/javascript" src="'.JS_PATH.'h5upload/h5editor.js"></script>';
 			define('IMAGES_INIT', 1);
 		}
-		$authkey = upload_key("1,$alowexts,1,$file_ext,,$attachment,$image_reduce");
-	return $str."<input type=\"text\" name=\"$name\" id=\"$id\" value=\"$value\" size=\"$size\" class=\"$class\" $ext/>  <input type=\"button\" class=\"button\" onclick=\"javascript:h5upload('{$id}_files', '".L('attachmentupload')."','{$id}','submit_attachment','1,{$alowexts},1,{$file_ext},,{$attachment},{$image_reduce}','{$moudle}','{$catid}','{$authkey}')\"/ value=\"".L('filesupload')."\">";
+		$authkey = upload_key("$siteid,1,$alowexts,1,$file_ext,,$attachment,$image_reduce");
+		$p = dr_authcode(array(
+			'siteid' => $siteid,
+			'file_upload_limit' => 1,
+			'file_types_post' => $alowexts,
+			'allowupload' => 1,
+			'thumb_width' => $file_setting[0],
+			'thumb_height' => $file_setting[1],
+			'watermark_enable' => '',
+			'attachment' => $attachment,
+			'image_reduce' => $image_reduce,
+		), 'ENCODE');
+		return $str."<input type=\"text\" name=\"$name\" id=\"$id\" value=\"$value\" size=\"$size\" class=\"$class\" $ext/>  <input type=\"button\" class=\"button\" onclick=\"javascript:h5upload('{$id}_files', '".L('attachmentupload')."','{$id}','submit_attachment','{$p}','{$moudle}','{$catid}','{$authkey}',".SYS_EDITOR.")\"/ value=\"".L('filesupload')."\">";
 	}
 	
 	/**

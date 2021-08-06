@@ -1,4 +1,4 @@
-function h5upload(uploadid, name, textareaid, funcName, args, module, catid, authkey) {
+function h5upload(uploadid, name, textareaid, funcName, args, module, catid, authkey, syseditor) {
 	var w = '76%';
 	var h = '68%';
 	if (is_mobile()) {
@@ -140,7 +140,11 @@ function h5upload(uploadid, name, textareaid, funcName, args, module, catid, aut
 				img += IsImg(data[n]) ? '<img src="'+data[n]+'" alt="'+filename+'" /><br />' : (IsSwf(data[n]) ? '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0"><param name="quality" value="high" /><param name="movie" value="'+data[n]+'" /><embed pluginspage="http://www.macromedia.com/go/getflashplayer" quality="high" src="'+data[n]+'" type="application/x-shockwave-flash" width="460"></embed></object>' :'<a href="'+data[n]+'" title="'+filename+'" />'+data[n]+'</a><br />') ;
 			}
 			$.get("index.php?m=attachment&c=attachments&a=h5delete",{data: del_content},function(data){});
-			CKEDITOR.instances[textareaid].insertHtml(img);
+			if (syseditor==1) {
+				CKEDITOR.instances[textareaid].insertHtml(img);
+			} else {
+				UE.getEditor(textareaid).execCommand('insertHtml', img);
+			}
 		}
 		diag.close();
 	};
@@ -151,35 +155,35 @@ function h5upload(uploadid, name, textareaid, funcName, args, module, catid, aut
 }
 
 function IsImg(url){
-  var sTemp;
-  var b=false;
-  var opt="jpg|gif|png|bmp|jpeg";
-  var s=opt.toUpperCase().split("|");
-  for (var i=0;i<s.length ;i++ ){
-    sTemp=url.substr(url.length-s[i].length-1);
-    sTemp=sTemp.toUpperCase();
-    s[i]="."+s[i];
-    if (s[i]==sTemp){
-      b=true;
-      break;
-    }
-  }
-  return b;
+	var sTemp;
+	var b=false;
+	var opt="jpg|gif|png|bmp|jpeg";
+	var s=opt.toUpperCase().split("|");
+	for (var i=0;i<s.length ;i++ ){
+		sTemp=url.substr(url.length-s[i].length-1);
+		sTemp=sTemp.toUpperCase();
+		s[i]="."+s[i];
+		if (s[i]==sTemp){
+			b=true;
+			break;
+		}
+	}
+	return b;
 }
 
 function IsSwf(url){
-	  var sTemp;
-	  var b=false;
-	  var opt="swf";
-	  var s=opt.toUpperCase().split("|");
-	  for (var i=0;i<s.length ;i++ ){
-	    sTemp=url.substr(url.length-s[i].length-1);
-	    sTemp=sTemp.toUpperCase();
-	    s[i]="."+s[i];
-	    if (s[i]==sTemp){
-	      b=true;
-	      break;
-	    }
-	  }
-	  return b;
+	var sTemp;
+	var b=false;
+	var opt="swf";
+	var s=opt.toUpperCase().split("|");
+	for (var i=0;i<s.length ;i++ ){
+		sTemp=url.substr(url.length-s[i].length-1);
+		sTemp=sTemp.toUpperCase();
+		s[i]="."+s[i];
+		if (s[i]==sTemp){
+			b=true;
+			break;
+		}
 	}
+	return b;
+}

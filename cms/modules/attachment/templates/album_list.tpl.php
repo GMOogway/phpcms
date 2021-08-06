@@ -10,7 +10,7 @@ include $this->admin_tpl('header', 'attachment');
 <input type="hidden" value="attachment" name="m">
 <input type="hidden" value="attachments" name="c">
 <input type="hidden" value="album_load" name="a">
-<input type="hidden" value="<?php echo $site_allowext?>" name="site_allowext">
+<input type="hidden" value="<?php echo $file_types_post?>" name="site_allowext">
 <input type="hidden" value="<?php echo $file_upload_limit?>" name="info[file_upload_limit]">
 <div class="lh26" style="padding:10px 0 0">
 <label><?php echo L('name')?></label>

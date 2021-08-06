@@ -24,7 +24,7 @@
 		$str .= '					$(\'#keywords\').val(arr.keyword);';
 		$str .= '					$(\'#keywords\').tagsinput(\'add\', arr.keyword);';
 		$str .= '				}';
-		if (pc_base::load_config('system', 'editor')) {
+		if (SYS_EDITOR) {
 			$str .= '				CKEDITOR.instances[\'content\'].setData(arr.content);';
 		} else {
 			$str .= '				UE.getEditor(\'content\').setContent(arr.content);';

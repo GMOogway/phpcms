@@ -51,6 +51,21 @@ $(function(){
 			})
 		}
 	});
+	// 当存在隐藏时单击显示区域
+	$(".table-list table td,.table-list table th").click(function() {
+		var e = $(this);
+		if (1 == dr_isEllipsis(e[0])) {
+			var t = e.html();
+			if (t.indexOf("checkbox") != -1) return;
+			if (t.indexOf("<input") != -1) return;
+			if (t.indexOf('class="btn') != -1);
+			else if (t.indexOf('href="') != -1) return;
+			layer.tips(t, e, {
+				tips: [1, "#000"],
+				time: 5e3
+			})
+		}
+	});
 });
 function geturlpathname() {
 	var url = document.location.toString();
@@ -710,7 +725,7 @@ function check_title(linkurl,title) {
 		}
 	});
 }
-function get_wxurl(field,linkurl,titlename,keywordname,contentname) {
+function get_wxurl(syseditor, field, linkurl, titlename, keywordname, contentname) {
 	var index = layer.load(2, {
 		shade: [0.3,'#fff'], //0.1透明度的白色背景
 		time: 5000
@@ -726,31 +741,11 @@ function get_wxurl(field,linkurl,titlename,keywordname,contentname) {
 					$('#'+keywordname).val(arr.keyword);
 					$('#'+keywordname).tagsinput('add', arr.keyword);
 				}
-				UE.getEditor(contentname).setContent(arr.content);
-			}
-		},
-		error: function(HttpRequest, ajaxOptions, thrownError) {
-			dr_ajax_admin_alert_error(HttpRequest, ajaxOptions, thrownError);
-		}
-	});
-}
-function get_wxurlckeditor(field,linkurl,titlename,keywordname,contentname) {
-	var index = layer.load(2, {
-		shade: [0.3,'#fff'], //0.1透明度的白色背景
-		time: 5000
-	});
-	$.ajax({type: "GET",dataType:"json", url: linkurl+'&url='+encodeURIComponent($('#'+field).val()),
-		success: function(json) {
-			layer.close(index);
-			dr_tips(json.code, json.msg);
-			if (json.code > 0) {
-				var arr = json.data;
-				$('#'+titlename).val(arr.title);
-				if ($('#'+keywordname).length > 0) {
-					$('#'+keywordname).val(arr.keyword);
-					$('#'+keywordname).tagsinput('add', arr.keyword);
+				if (syseditor==1) {
+					CKEDITOR.instances[contentname].setData(arr.content);
+				} else {
+					UE.getEditor(contentname).setContent(arr.content);
 				}
-				CKEDITOR.instances[contentname].setData(arr.content);
 			}
 		},
 		error: function(HttpRequest, ajaxOptions, thrownError) {

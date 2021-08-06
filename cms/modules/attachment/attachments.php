@@ -32,23 +32,31 @@ class attachments {
 		if($this->isadmin==1) {
 			!defined('IN_ADMIN') && define('IN_ADMIN', TRUE);
 		}
+		$args = $this->input->get('args');
+		$p = dr_string2array(dr_authcode($args, 'DECODE'));
+		if (!$p) {
+			showmessage(L('attachment_parameter_error'));
+		}
+		$authkey = $this->input->get('authkey');
+		foreach($p as $k=>$v) {
+			$arraykey[$k] = $v;
+		}
+		$argskey = str_replace('"', '', dr_array2string(implode(',', $arraykey)));
+		if(upload_key($argskey) != $authkey) showmessage(L('attachment_parameter_error'));
+		extract(geth5init($args));
 		pc_base::load_sys_class('upload','',0);
 		$module = trim($this->input->get('module'));
 		$catid = intval($this->input->get('catid'));
-		$siteid = $this->get_siteid();
-		$site_setting = get_site_setting($siteid);
-		$site_allowext = $site_setting['upload_allowext'];
-		$upload_maxsize = $site_setting['upload_maxsize'];
-		$watermark = $site_setting['ueditor'] ? 1 : intval($this->input->get('watermark_enable'));
+		$watermark = $site_setting['ueditor'] ? 1 : intval($watermark_enable);
 		$upload = new upload($module,$catid,$siteid);
 		$upload->set_userid($this->userid);
 		$rt = $upload->upload_file(array(
 			'path' => '',
 			'form_name' => 'upload',
-			'file_exts' => explode('|', strtolower($site_allowext)),
-			'file_size' => ($upload_maxsize/1024) * 1024 * 1024,
+			'file_exts' => explode('|', strtolower($file_types_post)),
+			'file_size' => ($file_size_limit/1024) * 1024 * 1024,
 			'watermark' => $watermark,
-			'attachment' => $upload->get_attach_info(intval($this->input->get('attachment')), intval($this->input->get('image_reduce'))),
+			'attachment' => $upload->get_attach_info(intval($attachment), intval($image_reduce)),
 		));
 		if (!$rt['code']) {
 			$result = array("uploaded"=>false,"error"=>array("message"=>$rt['msg']));
@@ -154,12 +162,18 @@ class attachments {
 		} else {
 			if($this->isadmin==0 && !$grouplist[$this->groupid]['allowattachment']) showmessage(L('att_no_permission'));
 			$args = $this->input->get('args');
+			$p = dr_string2array(dr_authcode($args, 'DECODE'));
+            if (!$p) {
+                showmessage(L('attachment_parameter_error'));
+            }
 			$authkey = $this->input->get('authkey');
-			if(upload_key($args) != $authkey) showmessage(L('attachment_parameter_error'));
-			extract(geth5init($this->input->get('args')));
-			$siteid = $this->get_siteid();
-			$site_setting = get_site_setting($siteid);
-			$file_size_limit = sizecount($site_setting['upload_maxsize']*1024);		
+			foreach($p as $k=>$v) {
+				$arraykey[$k] = $v;
+			}
+			$argskey = str_replace('"', '', dr_array2string(implode(',', $arraykey)));
+			if(upload_key($argskey) != $authkey) showmessage(L('attachment_parameter_error'));
+			extract(geth5init($args));
+			$file_size_limit = sizecount($file_size_limit*1024);		
 			$att_not_used = getcache('att_json', 'commons');
 			if(empty($att_not_used) || !isset($att_not_used)) $tab_status = ' class="on"';
 			if(!empty($att_not_used)) $div_status = ' hidden';
@@ -182,22 +196,24 @@ class attachments {
 			dr_json(0, L('下载文件地址中不能包含#号'));
 		}
 		pc_base::load_sys_class('upload','',0);
-		
-		$siteid = $this->get_siteid() ? $this->get_siteid() : 1 ;
+		$args = $this->input->post('args');
+		$p = dr_string2array(dr_authcode($args, 'DECODE'));
+		if (!$p) {
+			dr_json(0, L('参数传递错误'));
+		}
+		$authkey = $this->input->post('authkey');
+		foreach($p as $k=>$v) {
+			$arraykey[$k] = $v;
+		}
+		$argskey = str_replace('"', '', dr_array2string(implode(',', $arraykey)));
+		if(upload_key($argskey) != $authkey) dr_json(0, L('参数传递错误'));
+		extract(geth5init($args));
 		$upload = new upload($this->input->post('module'),$this->input->post('catid'),$siteid);
 		$upload->set_userid($this->userid);
-		$site_setting = get_site_setting($siteid);
-		$site_allowext = $site_setting['upload_allowext'];
-		$upload_maxsize = $site_setting['upload_maxsize'];
-		if ($this->input->post('filetype_post')) {
-			$filetype_post = $this->input->post('filetype_post');
-		} else {
-			$filetype_post = $site_allowext;
-		}
 		// 下载远程文件
 		$rt = $upload->down_file(array(
 			'url' => $this->input->post('filename'),
-			'attachment' => $upload->get_attach_info(intval($this->input->post('attachment')), intval($this->input->post('image_reduce'))),
+			'attachment' => $upload->get_attach_info(intval($attachment), intval($image_reduce)),
 		));
 		if (!$rt['code']) {
 			exit(dr_array2string($rt));
@@ -217,7 +233,17 @@ class attachments {
 	 */
 	public function att_not(){
 		$args = $this->input->get('args');
-		extract(geth5init($this->input->get('args')));
+		$p = dr_string2array(dr_authcode($args, 'DECODE'));
+		if (!$p) {
+			showmessage(L('attachment_parameter_error'));
+		}
+		$authkey = $this->input->get('authkey');
+		foreach($p as $k=>$v) {
+			$arraykey[$k] = $v;
+		}
+		$argskey = str_replace('"', '', dr_array2string(implode(',', $arraykey)));
+		if(upload_key($argskey) != $authkey) showmessage(L('attachment_parameter_error'));
+		extract(geth5init($args));
 		//获取临时未处理文件列表
 		$att = $this->att_not_used();
 		include $this->admin_tpl('att_not');
@@ -230,12 +256,21 @@ class attachments {
 		if(!$this->admin_username) return false;
 		$uploadtime= '';
 		$this->att_db= pc_base::load_model('attachment_model');
-		$siteid = $this->get_siteid() ? $this->get_siteid() : 1 ;
+		$args = $this->input->get('args');
+		$p = dr_string2array(dr_authcode($args, 'DECODE'));
+		if (!$p) {
+			showmessage(L('attachment_parameter_error'));
+		}
+		$authkey = $this->input->get('authkey');
+		foreach($p as $k=>$v) {
+			$arraykey[$k] = $v;
+		}
+		$argskey = str_replace('"', '', dr_array2string(implode(',', $arraykey)));
+		if(upload_key($argskey) != $authkey) showmessage(L('attachment_parameter_error'));
+		extract(geth5init($args));
 		$site_setting = get_site_setting($siteid);
 		$upload_allowext = $site_setting['upload_allowext'];
-		if($this->input->get('args')) extract(geth5init($this->input->get('args')));
-		$args = explode(',',$this->input->get('args'));
-		$site_allowext = ($args[1]!='') ? $args[1] : ($this->input->get('site_allowext') ? $this->input->get('site_allowext') : $upload_allowext);
+		$site_allowext = ($file_types_post!='') ? $file_types_post : ($this->input->get('site_allowext') ? $this->input->get('site_allowext') : $upload_allowext);
 		$array_test = explode('|',$site_allowext);
 		$length = sizeof($array_test);
 		for($i=0;$i<$length;$i++){
@@ -275,7 +310,18 @@ class attachments {
 	 */
 	public function album_dir() {
 		if(!$this->admin_username) return false;
-		if($this->input->get('args')) extract(geth5init($this->input->get('args')));
+		$args = $this->input->get('args');
+		$p = dr_string2array(dr_authcode($args, 'DECODE'));
+		if (!$p) {
+			showmessage(L('attachment_parameter_error'));
+		}
+		$authkey = $this->input->get('authkey');
+		foreach($p as $k=>$v) {
+			$arraykey[$k] = $v;
+		}
+		$argskey = str_replace('"', '', dr_array2string(implode(',', $arraykey)));
+		if(upload_key($argskey) != $authkey) showmessage(L('attachment_parameter_error'));
+		extract(geth5init($args));
 		$dir = $this->input->get('dir') && trim($this->input->get('dir')) ? str_replace(array('..\\', '../', './', '.\\','..','.*'), '', trim($this->input->get('dir'))) : '';
 		$filepath = SYS_UPLOAD_PATH.$dir;
 		$list = glob($filepath.'/'.'*');

@@ -46,9 +46,6 @@
 		$grouplist = getcache('grouplist','member');
 		if($isadmin==0 && !$grouplist[$groupid]['allowattachment']) return false;
 		extract(geth5init($args));
-		$siteid = param::get_cookie('siteid');
-		$site_setting = get_site_setting($siteid);
-		$file_size_limit = $site_setting['upload_maxsize'];
 		if ($file_upload_limit==1) {
 			$multi = 'false';
 		} else {
@@ -124,26 +121,25 @@
 	 * @param array $args h5上传配置信息
 	 */
 	function geth5init($args) {
-		$siteid = get_siteid();
+		$args = dr_string2array(dr_authcode($args, 'DECODE'));
+		$siteid = param::get_cookie('siteid');
+		if(!$siteid) $siteid = get_siteid() ? get_siteid() : 1;
 		$site_setting = get_site_setting($siteid);
 		$site_allowext = $site_setting['upload_allowext'];
-		$args = explode(',',$args);
-		$arr['file_upload_limit'] = intval($args[0]) ? intval($args[0]) : '8';
-		$args['1'] = ($args[1]!='') ? $args[1] : $site_allowext;
-		$arr_allowext = explode('|', $args[1]);
-		foreach($arr_allowext as $k=>$v) {
-			$v = '*.'.$v;
-			$array[$k] = $v;
-		}
-		$upload_allowext = implode(';', $array);
-		$arr['file_types'] = $upload_allowext;
-		$arr['file_types_post'] = $args[1];
-		$arr['allowupload'] = intval($args[2]);
-		$arr['thumb_width'] = intval($args[3]);
-		$arr['thumb_height'] = intval($args[4]);
-		$arr['watermark_enable'] = ($args[5]=='') ? 1 : intval($args[5]);
-		$arr['attachment'] = intval($args[6]);
-		$arr['image_reduce'] = intval($args[7]);
+		$file_size_limit = $site_setting['upload_maxsize'];
+		/*foreach($args as $k=>$v) {
+			$arr[$k] = $v;
+		}*/
+		$arr['siteid'] = intval($args['siteid']) ? intval($args['siteid']) : intval($siteid);
+		$arr['file_upload_limit'] = intval($args['file_upload_limit']) ? intval($args['file_upload_limit']) : 10;
+		$arr['file_types_post'] = $args['file_types_post'] ? $args['file_types_post'] : $site_allowext;
+		$arr['file_size_limit'] = $file_size_limit ? $file_size_limit : 0;
+		$arr['allowupload'] = intval($args['allowupload']);
+		$arr['thumb_width'] = intval($args['thumb_width']);
+		$arr['thumb_height'] = intval($args['thumb_height']);
+		$arr['watermark_enable'] = ($args['watermark_enable']=='') ? 1 : intval($args['watermark_enable']);
+		$arr['attachment'] = intval($args['attachment']);
+		$arr['image_reduce'] = intval($args['image_reduce']);
 		return $arr;
 	}
 ?>

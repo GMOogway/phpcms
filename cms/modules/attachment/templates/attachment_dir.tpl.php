@@ -3,7 +3,7 @@ defined('IN_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');
 ?>
 <style type="text/css">
-body .table-list tr>td:first-child, body .table-list tr>th:first-child {text-align: left;padding: 8px;}
+body .table-list table tr>td:first-child, body .table-list table tr>th:first-child {text-align: left;padding: 8px;}
 </style>
 <div class="bk15"></div>
 <div class="pad-lr-10">

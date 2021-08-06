@@ -2,6 +2,9 @@
 defined('IN_ADMIN') or exit('No permission resources.'); 
 include $this->admin_tpl('header','admin');
 ?>
+<style type="text/css">
+body .table-list table tr>td:first-child, body .table-list table tr>th:first-child {text-align: left;padding: 8px;}
+</style>
 <div class="subnav">
   <h1 class="title-2 line-x"><?php echo $this->style_info['name'].' - '.L('detail')?></h1>
 </div>

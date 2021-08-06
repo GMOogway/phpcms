@@ -2,6 +2,17 @@
 defined('IN_ADMIN') or exit('No permission resources.'); 
 $show_dialog = $show_validator = $show_header = 1; 
 include $this->admin_tpl('header','admin');
+$authkey = upload_key('1,jpg|jpeg|gif|bmp|png,,300,300,,,');
+$p = dr_authcode(array(
+	'file_upload_limit' => 1,
+	'file_types_post' => 'jpg|jpeg|gif|bmp|png',
+	'allowupload' => '',
+	'thumb_width' => 300,
+	'thumb_height' => 300,
+	'watermark_enable' => '',
+	'attachment' => '',
+	'image_reduce' => '',
+), 'ENCODE');
 ?>
 <style type="text/css"> 
 html,body{ background:#e2e9ea}
@@ -23,7 +34,7 @@ html,body{ background:#e2e9ea}
         	<div class="content pad-6">
 	<h6> <?php echo L('content_thumb')?></h6>
 	 <div class="upload-pic img-wrap"><div class="bk10"></div><input type="hidden" name="info[thumb]" id="thumb">
-						<a href="javascript:;" onclick="h5upload('thumb_images', '<?php echo L('file_upload')?>','thumb','thumb_images','1,jpg|jpeg|gif|bmp|png,,300,300,,','content','39','<?php echo upload_key("1,jpg|jpeg|gif|bmp|png,,300,300,,")?>');return false;"><img src="<?php echo IMG_PATH;?>icon/upload-pic.png" id="thumb_preview" width="135" height="113" style="cursor:hand" /></a><input type="button" style="width: 66px;" class="button" onclick="crop_cut($('#thumb').val());return false;" value="<?php echo L('crop_thumb')?>"><script type="text/javascript">function crop_cut(id){
+						<a href="javascript:;" onclick="h5upload('thumb_images', '<?php echo L('file_upload')?>','thumb','thumb_images','<?php echo $p?>','content','39','<?php echo $authkey?>',<?php echo SYS_EDITOR;?>);return false;"><img src="<?php echo IMG_PATH;?>icon/upload-pic.png" id="thumb_preview" width="135" height="113" style="cursor:hand" /></a><input type="button" style="width: 66px;" class="button" onclick="crop_cut($('#thumb').val());return false;" value="<?php echo L('crop_thumb')?>"><script type="text/javascript">function crop_cut(id){
 	if (id=='') { Dialog.alert('<?php echo L('please_upload_thumb')?>');return false;}
 	var diag = new Dialog({id:'crop',title:'<?php echo L('crop_thumb')?>',url:'index.php?m=content&c=content&a=public_crop&module=cms&spec=2&picurl='+window.btoa(unescape(encodeURIComponent(id)))+'&input=thumb&preview=thumb_preview',width:770,height:510,modal:true});diag.onOk = function(){$DW.dosbumit();return false;};diag.onCancel=function() {$DW.close();};diag.show();
 };</script><input type="button" value="<?php echo L('cancel_thumb')?>" onclick="$('#thumb_preview').attr('src','<?php echo IMG_PATH;?>icon/upload-pic.png');$('#thumb').val('');return false;" class="button" style="width: 66px;"></div> 

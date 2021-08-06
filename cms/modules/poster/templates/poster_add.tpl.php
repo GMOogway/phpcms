@@ -4,7 +4,17 @@ defined('IN_ADMIN') or exit('No permission resources.');
 $show_dialog = $show_header = 1; 
 include $this->admin_tpl('header', 'admin');
 $thisExt = isset($this->setting['ext'])?$this->setting['ext']:'';
-$authkey = upload_key('1,'.$thisExt.',1');
+$authkey = upload_key('1,'.$thisExt.',1,,,,,');
+$p = dr_authcode(array(
+	'file_upload_limit' => 1,
+	'file_types_post' => $thisExt,
+	'allowupload' => 1,
+	'thumb_width' => '',
+	'thumb_height' => '',
+	'watermark_enable' => '',
+	'attachment' => '',
+	'image_reduce' => '',
+), 'ENCODE');
 ?>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH;?>formvalidator.js" charset="UTF-8"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH;?>formvalidatorregex.js" charset="UTF-8"></script>
@@ -54,7 +64,7 @@ $authkey = upload_key('1,'.$thisExt.',1');
   <tr>
     <th width="80"><?php echo L('linkurl')?>：</th>
     <td class="y-bg"><input type="text" class="input-text" name="setting[images][<?php echo $i;?>][linkurl]" id="linkurl<?php echo $i;?>" size="30" value="http://" /></td>
-    <td rowspan="2"><a href="javascript:h5upload('imgurl<?php echo $i;?>_images', '<?php echo L('upload_photo')?>','imgurl<?php echo $i;?>','preview','1,<?php echo $thisExt?>,1','poster', '', '<?php echo $authkey?>');void(0);"><img src="<?php echo IMG_PATH;?>icon/upload-pic.png" id="imgurl<?php echo $i;?>_s" width="105" height="88"></a><input type="hidden" id="imgurl<?php echo $i;?>" name="setting[images][<?php echo $i;?>][imageurl]"></td>
+    <td rowspan="2"><a href="javascript:h5upload('imgurl<?php echo $i;?>_images', '<?php echo L('upload_photo')?>','imgurl<?php echo $i;?>','preview','<?php echo $p?>','poster', '', '<?php echo $authkey?>',<?php echo SYS_EDITOR;?>);void(0);"><img src="<?php echo IMG_PATH;?>icon/upload-pic.png" id="imgurl<?php echo $i;?>_s" width="105" height="88"></a><input type="hidden" id="imgurl<?php echo $i;?>" name="setting[images][<?php echo $i;?>][imageurl]"></td>
   </tr>
   <tr>
     <th><?php echo L('alt')?>：</th>
@@ -67,7 +77,7 @@ $authkey = upload_key('1,'.$thisExt.',1');
   <tr>
     <th width="80"><?php echo L('linkurl')?>：</th>
     <td class="y-bg"><input type="text" class="input-text" name="setting[images][1][linkurl]" id="linkurl3" size="30" value="http://" /></td>
-    <td rowspan="2"><a href="javascript:h5upload('imgurl_images', '<?php echo L('upload_photo')?>','imgurl','preview','1,<?php echo $thisExt?>,1','poster', '', '<?php echo $authkey?>');void(0);"><img src="<?php echo IMG_PATH;?>icon/upload-pic.png" id="imgurl_s" width="105" height="88"></a><input type="hidden" id="imgurl" name="setting[images][1][imageurl]"></td>
+    <td rowspan="2"><a href="javascript:h5upload('imgurl_images', '<?php echo L('upload_photo')?>','imgurl','preview','<?php echo $p?>','poster', '', '<?php echo $authkey?>',<?php echo SYS_EDITOR;?>);void(0);"><img src="<?php echo IMG_PATH;?>icon/upload-pic.png" id="imgurl_s" width="105" height="88"></a><input type="hidden" id="imgurl" name="setting[images][1][imageurl]"></td>
   </tr>
   <tr>
     <th><?php echo L('alt')?>：</th>
@@ -86,7 +96,7 @@ $authkey = upload_key('1,'.$thisExt.',1');
   <tr>
     <th width="80"><?php echo L('flash_url')?>：</th>
     <td class="y-bg"><input type="text" class="input-text" name="setting[flash][<?php echo $i;?>][flashurl]" id="flashurl<?php echo $i;?>" size="40" /></td>
-    <td class="y-bg"><input type="button" class="button" onclick="javascript:h5upload('flashurl<?php echo $i;?>_images', '<?php echo L('flash_upload')?>','flashurl<?php echo $i;?>','submit_attachment','1,<?php echo $thisExt?>,1','poster', '', '<?php echo $authkey?>')" value="<?php echo L('flash_upload')?>"></td>
+    <td class="y-bg"><input type="button" class="button" onclick="javascript:h5upload('flashurl<?php echo $i;?>_images', '<?php echo L('flash_upload')?>','flashurl<?php echo $i;?>','submit_attachment','<?php echo $p?>','poster', '', '<?php echo $authkey?>',<?php echo SYS_EDITOR;?>)" value="<?php echo L('flash_upload')?>"></td>
   </tr>
   </tbody>
 </table>
@@ -96,7 +106,7 @@ $authkey = upload_key('1,'.$thisExt.',1');
   <tr>
     <th width="80"><?php echo L('flash_url')?>：</th>
     <td class="y-bg"><input type="text" class="input-text" name="setting[flash][1][flashurl]" id="flashurl" size="40"  /></td>
-    <td class="y-bg"><input type="button" class="button" onclick="javascript:h5upload('flashurl_images', '<?php echo L('flash_upload')?>','flashurl','submit_attachment','1,<?php echo $thisExt?>,1','poster', '', '<?php echo $authkey?>')" value="<?php echo L('flash_upload')?>"></td>
+    <td class="y-bg"><input type="button" class="button" onclick="javascript:h5upload('flashurl_images', '<?php echo L('flash_upload')?>','flashurl','submit_attachment','<?php echo $p?>','poster', '', '<?php echo $authkey?>',<?php echo SYS_EDITOR;?>)" value="<?php echo L('flash_upload')?>"></td>
   </tr>
   </tbody>
 </table>
@@ -162,8 +172,4 @@ $(document).ready(function(){
 	<?php } }?>
 });
 </script>
-<?php if (pc_base::load_config('system', 'editor')) {?>
-<script type="text/javascript" src="<?php echo JS_PATH?>h5upload/ckeditor.js"></script>
-<?php } else {?>
-<script type="text/javascript" src="<?php echo JS_PATH?>h5upload/ueditor.js"></script>
-<?php }?>
+<script type="text/javascript" src="<?php echo JS_PATH?>h5upload/h5editor.js"></script>

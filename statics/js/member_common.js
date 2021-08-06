@@ -275,7 +275,7 @@ function dr_ajax_alert_error(HttpRequest, ajaxOptions, thrownError) {
 	}
 }
 
-function get_wxurl(field,linkurl,titlename,keywordname,contentname) {
+function get_wxurl(syseditor, field, linkurl, titlename, keywordname, contentname) {
 	var index = layer.load(2, {
 		shade: [0.3,'#fff'], //0.1透明度的白色背景
 		time: 5000
@@ -291,32 +291,11 @@ function get_wxurl(field,linkurl,titlename,keywordname,contentname) {
 					$('#'+keywordname).val(arr.keyword);
 					$('#'+keywordname).tagsinput('add', arr.keyword);
 				}
-				UE.getEditor(contentname).setContent(arr.content);
-			}
-		},
-		error: function(HttpRequest, ajaxOptions, thrownError) {
-			dr_ajax_admin_alert_error(HttpRequest, ajaxOptions, thrownError);
-		}
-	});
-}
-
-function get_wxurlckeditor(field,linkurl,titlename,keywordname,contentname) {
-	var index = layer.load(2, {
-		shade: [0.3,'#fff'], //0.1透明度的白色背景
-		time: 5000
-	});
-	$.ajax({type: "GET",dataType:"json", url: linkurl+'&url='+encodeURIComponent($('#'+field).val()),
-		success: function(json) {
-			layer.close(index);
-			dr_tips(json.code, json.msg);
-			if (json.code > 0) {
-				var arr = json.data;
-				$('#'+titlename).val(arr.title);
-				if ($('#'+keywordname).length > 0) {
-					$('#'+keywordname).val(arr.keyword);
-					$('#'+keywordname).tagsinput('add', arr.keyword);
+				if (syseditor==1) {
+					CKEDITOR.instances[contentname].setData(arr.content);
+				} else {
+					UE.getEditor(contentname).setContent(arr.content);
 				}
-				CKEDITOR.instances[contentname].setData(arr.content);
 			}
 		},
 		error: function(HttpRequest, ajaxOptions, thrownError) {

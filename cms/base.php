@@ -79,7 +79,7 @@ define('ROOT_URL', siteurl(1).'/');
 	'MOBILE_IMG_PATH' => '',
 	'APP_PATH' => '',
 	'MOBILE_PATH' => '',
-	'EDITOR' => '0',
+	'SYS_EDITOR' => '0',
 	'CHARSET' => 'utf-8',
 	'TIMEZONE' => '8',
 	'DEBUG' => 0,
@@ -127,12 +127,13 @@ foreach ($system as $var => $value) {
 }
 unset($my, $system);*/
 
+//pc_base::load_config('system','errorlog') ? set_error_handler('my_error_handler') : error_reporting(E_ERROR | E_WARNING | E_PARSE);
 // 设置时区
 if (is_numeric(pc_base::load_config('system','timezone')) && strlen(pc_base::load_config('system','timezone')) > 0) {
 	function_exists('date_default_timezone_set') && date_default_timezone_set('Etc/GMT'.(pc_base::load_config('system','timezone') > 0 ? '-' : '+').abs(pc_base::load_config('system','timezone'))); // 设置时区
 }
 
-define('CHARSET' ,pc_base::load_config('system','charset'));
+define('CHARSET' , pc_base::load_config('system','charset'));
 //输出页面字符集
 header('Content-Type: text/html; charset='.CHARSET);
 
@@ -148,48 +149,50 @@ define('IS_AJAX_POST', IS_POST);
 //当前系统时间戳
 define('SYS_TIME', $_SERVER['REQUEST_TIME'] ? $_SERVER['REQUEST_TIME'] : time());
 //定义网站根路径
-define('WEB_PATH',pc_base::load_config('system','web_path'));
+define('WEB_PATH', pc_base::load_config('system','web_path'));
 //js 路径
-define('JS_PATH',pc_base::load_config('system','js_path'));
+define('JS_PATH', pc_base::load_config('system','js_path'));
 //css 路径
-define('CSS_PATH',pc_base::load_config('system','css_path'));
+define('CSS_PATH', pc_base::load_config('system','css_path'));
 //img 路径
-define('IMG_PATH',pc_base::load_config('system','img_path'));
+define('IMG_PATH', pc_base::load_config('system','img_path'));
 //手机js 路径
-define('MOBILE_JS_PATH',pc_base::load_config('system','mobile_js_path'));
+define('MOBILE_JS_PATH', pc_base::load_config('system','mobile_js_path'));
 //手机css 路径
-define('MOBILE_CSS_PATH',pc_base::load_config('system','mobile_css_path'));
+define('MOBILE_CSS_PATH', pc_base::load_config('system','mobile_css_path'));
 //手机img 路径
-define('MOBILE_IMG_PATH',pc_base::load_config('system','mobile_img_path'));
+define('MOBILE_IMG_PATH', pc_base::load_config('system','mobile_img_path'));
 //动态程序路径
-define('APP_PATH',pc_base::load_config('system','app_path'));
+define('APP_PATH', pc_base::load_config('system','app_path'));
 //动态程序手机路径
-define('MOBILE_PATH',pc_base::load_config('system','mobile_path'));
+define('MOBILE_PATH', pc_base::load_config('system','mobile_path'));
+//编辑器模式
+define('SYS_EDITOR', pc_base::load_config('system','sys_editor') ? pc_base::load_config('system','sys_editor') : 0);
 //Cookie前缀
-define('COOKIE_PRE',pc_base::load_config('system','cookie_pre'));
+define('COOKIE_PRE', pc_base::load_config('system','cookie_pre'));
 //Cookie作用域
-define('COOKIE_DOMAIN',pc_base::load_config('system','cookie_domain'));
+define('COOKIE_DOMAIN', pc_base::load_config('system','cookie_domain'));
 //Cookie作用路径
-define('COOKIE_PATH',pc_base::load_config('system','cookie_path'));
+define('COOKIE_PATH', pc_base::load_config('system','cookie_path'));
 //自定义的后台登录地址
 define('SYS_ADMIN_PATH', pc_base::load_config('system','admin_login_path') ? pc_base::load_config('system','admin_login_path') : 'login');
 //是否需要检查外部访问
-define('NeedCheckComeUrl',pc_base::load_config('system','needcheckcomeurl'));
+define('NeedCheckComeUrl', pc_base::load_config('system','needcheckcomeurl'));
 //跨站验证
-define('SYS_CSRF',pc_base::load_config('system','sys_csrf'));
+define('SYS_CSRF', pc_base::load_config('system','sys_csrf'));
 //站点id
 !defined('SITE_ID') && define('SITE_ID', 1);
 define('SITE_URL', siteurl(SITE_ID));
 define('SITE_MURL', sitemobileurl(SITE_ID));
 //附件是否使用分站
-define('SYS_ATTACHMENT_FILE',pc_base::load_config('system','attachment_file'));
+define('SYS_ATTACHMENT_FILE', pc_base::load_config('system','attachment_file'));
 // 本地附件上传目录和地址
-define('SYS_ATTACHMENT_SAVE_ID',pc_base::load_config('system','sys_attachment_save_id'));
-define('SYS_ATTACHMENT_SAFE',pc_base::load_config('system','sys_attachment_safe'));
-define('SYS_ATTACHMENT_PATH',pc_base::load_config('system','sys_attachment_path'));
-define('SYS_ATTACHMENT_URL',pc_base::load_config('system','sys_attachment_url'));
-define('SYS_ATTACHMENT_SAVE_TYPE',pc_base::load_config('system','sys_attachment_save_type'));
-define('SYS_ATTACHMENT_SAVE_DIR',pc_base::load_config('system','sys_attachment_save_dir'));
+define('SYS_ATTACHMENT_SAVE_ID', pc_base::load_config('system','sys_attachment_save_id'));
+define('SYS_ATTACHMENT_SAFE', pc_base::load_config('system','sys_attachment_safe'));
+define('SYS_ATTACHMENT_PATH', pc_base::load_config('system','sys_attachment_path'));
+define('SYS_ATTACHMENT_URL', pc_base::load_config('system','sys_attachment_url'));
+define('SYS_ATTACHMENT_SAVE_TYPE', pc_base::load_config('system','sys_attachment_save_type'));
+define('SYS_ATTACHMENT_SAVE_DIR', pc_base::load_config('system','sys_attachment_save_dir'));
 
 define('CI_DEBUG', IS_DEV ? 1 : IS_ADMIN && pc_base::load_config('system','debug'));
 

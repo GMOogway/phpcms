@@ -52,8 +52,8 @@ include $this->admin_tpl('header');?>
     <th width="120"><?php echo L('editormode')?></th>
     <td class="y-bg">
       <div class="mt-radio-inline">
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="setconfig[editor]" value="0"<?php echo ($editor=='0') ? ' checked' : ''?>> <?php echo L('UEditor');?> <span></span></label>
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="setconfig[editor]" value="1"<?php echo ($editor=='1') ? ' checked' : ''?>> <?php echo L('CKEditor');?> <span></span></label>
+        <label class="mt-radio mt-radio-outline"><input type="radio" name="setconfig[sys_editor]" value="0"<?php echo ($sys_editor=='0') ? ' checked' : ''?>> <?php echo L('UEditor');?> <span></span></label>
+        <label class="mt-radio mt-radio-outline"><input type="radio" name="setconfig[sys_editor]" value="1"<?php echo ($sys_editor=='1') ? ' checked' : ''?>> <?php echo L('CKEditor');?> <span></span></label>
       </div>
     </td>
   </tr>

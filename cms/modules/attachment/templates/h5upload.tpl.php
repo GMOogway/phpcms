@@ -13,11 +13,11 @@
             <li id="tab_h5_1"<?php echo $tab_status?> onclick="SwapTab('h5','on','',5,1);"><?php echo L('upload_attachment')?></li>
             <li id="tab_h5_2" onclick="SwapTab('h5','on','',5,2);"><?php echo L('net_file')?></li>
             <?php if($allowupload && $this->admin_username && $_SESSION['userid']) {?>
-            <li id="tab_h5_3" onclick="SwapTab('h5','on','',5,3);set_iframe('album_list','index.php?m=attachment&c=attachments&a=album_load&args=<?php echo $args?>');"><?php echo L('gallery')?></li>
-            <li id="tab_h5_4" onclick="SwapTab('h5','on','',5,4);set_iframe('album_dir','index.php?m=attachment&c=attachments&a=album_dir&args=<?php echo $args?>');"><?php echo L('directory_browse')?></li>
+            <li id="tab_h5_3" onclick="SwapTab('h5','on','',5,3);set_iframe('album_list','index.php?m=attachment&c=attachments&a=album_load&args=<?php echo $args?>&authkey=<?php echo $authkey;?>');"><?php echo L('gallery')?></li>
+            <li id="tab_h5_4" onclick="SwapTab('h5','on','',5,4);set_iframe('album_dir','index.php?m=attachment&c=attachments&a=album_dir&args=<?php echo $args?>&authkey=<?php echo $authkey;?>');"><?php echo L('directory_browse')?></li>
             <?php }?>
             <?php if($att_not_used!='') {?>
-            <li id="tab_h5_5" class="on icon" onclick="SwapTab('h5','on','',5,5);set_iframe('att_not','index.php?m=attachment&c=attachments&a=att_not&args=<?php echo $args?>');"><?php echo L('att_not_used')?></li>
+            <li id="tab_h5_5" class="on icon" onclick="SwapTab('h5','on','',5,5);set_iframe('att_not','index.php?m=attachment&c=attachments&a=att_not&args=<?php echo $args?>&authkey=<?php echo $authkey;?>');"><?php echo L('att_not_used')?></li>
             <?php }?>
         </ul>
         <div id="div_h5_1" class="content pad-10<?php echo $div_status?>">
@@ -26,7 +26,7 @@
                 <button type="button" class="layui-btn" id="file_upload"><i class="layui-icon">&#xe67c;</i><?php echo L('select_file')?></button>
                 <div id="nameTip" class="onShow"><?php echo L('upload_up_to')?><font color="red"> <?php echo $file_upload_limit?></font> <?php echo L('attachments')?>,<?php echo L('largest')?> <font color="red"><?php echo $file_size_limit?></font></div>
                 <div class="bk3"></div>
-                <div class="lh24"><?php echo L('supported')?> <font style="font-family: Arial, Helvetica, sans-serif"><?php echo str_replace(array('*.',';'),array('','、'),$file_types)?></font> <?php echo L('formats')?></div>
+                <div class="lh24"><?php echo L('supported')?> <font style="font-family: Arial, Helvetica, sans-serif"><?php echo str_replace('|','、',$file_types_post)?></font> <?php echo L('formats')?></div>
 				<div id="progress" class="fileupload-progress fade" style="display:none">
 					<div class="layui-progress layui-progress-big progress progress-striped active" lay-showpercent="yes" lay-filter="progress">
 				        <div class="layui-progress-bar progress-bar progress-bar-success" lay-percent=""></div>
@@ -61,7 +61,7 @@
         <div role="presentation" id="div_h5_5" class="contentList pad-10">
             <script type="text/javascript">
             $(document).ready(function(){
-                set_iframe('att_not','index.php?m=attachment&c=attachments&a=att_not&args=<?php echo $args?>');
+                set_iframe('att_not','index.php?m=attachment&c=attachments&a=att_not&args=<?php echo $args?>&authkey=<?php echo $authkey;?>');
             })
             </script>
             <ul class="attachment-list">
@@ -111,7 +111,7 @@ function dr_download(obj) {
         type: 'POST',
         dataType: 'json',
         url: '<?php echo APP_PATH;?>index.php?m=attachment&c=attachments&a=download',
-        data: {module:'<?php echo $this->input->get('module');?>',catid:'<?php echo $this->input->get('catid');?>',attachment:<?php echo intval($args[6]);?>,image_reduce:<?php echo intval($args[7]);?>,filename:$('#dr_'+obj).val()},
+        data: {module:'<?php echo $this->input->get('module');?>',catid:'<?php echo $this->input->get('catid');?>',args:'<?php echo $args;?>',authkey:'<?php echo $authkey;?>',filename:$('#dr_'+obj).val()},
         success: function(json) {
             if (json.code) {
                 dr_tips(json.code, json.msg);

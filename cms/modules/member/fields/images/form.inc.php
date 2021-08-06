@@ -27,18 +27,25 @@
 		<div class="bk10"></div>
 		';
 		if(!defined('IMAGES_INIT')) {
-			if (pc_base::load_config('system', 'editor')) {
-				$str = '<script type="text/javascript" src="'.JS_PATH.'h5upload/ckeditor.js"></script>';
-			} else {
-				$str = '<script type="text/javascript" src="'.JS_PATH.'h5upload/ueditor.js"></script>';
-			}
+			$str = '<script type="text/javascript" src="'.JS_PATH.'h5upload/h5editor.js"></script>';
 			define('IMAGES_INIT', 1);
 		}
-		$authkey = upload_key("$upload_number,$upload_allowext,$isselectimage,,,,$attachment,$image_reduce");
+		$authkey = upload_key($this->input->get('siteid').",$upload_number,$upload_allowext,$isselectimage,,,,$attachment,$image_reduce");
+		$p = dr_authcode(array(
+			'siteid' => $this->input->get('siteid'),
+			'file_upload_limit' => $upload_number,
+			'file_types_post' => $upload_allowext,
+			'allowupload' => $isselectimage,
+			'thumb_width' => '',
+			'thumb_height' => '',
+			'watermark_enable' => '',
+			'attachment' => $attachment,
+			'image_reduce' => $image_reduce,
+		), 'ENCODE');
 		if($show_type && defined('IN_ADMIN')) {
-			$string .= $str."<input type='button' class='button' onclick=\"javascript:h5upload('{$field}_images', '".L('attachment_upload')."','{$field}','change_thumbs','{$upload_number},{$upload_allowext},{$isselectimage},,,,{$attachment},{$image_reduce}','content','$this->catid','{$authkey}')\"/ value='".L('select_pic')."'>";
+			$string .= $str."<input type='button' class='button' onclick=\"javascript:h5upload('{$field}_images', '".L('attachment_upload')."','{$field}','change_thumbs','{$p}','content','$this->catid','{$authkey}',".SYS_EDITOR.")\"/ value='".L('select_pic')."'>";
 		} else {
-		$string .= $str."<input type='button' class='button' onclick=\"javascript:h5upload('{$field}_images', '".L('attachment_upload')."','{$field}','change_images','{$upload_number},{$upload_allowext},{$isselectimage},,,,{$attachment},{$image_reduce}','content','$this->catid','{$authkey}')\"/ value='".L('select_pic')."'>";
+		$string .= $str."<input type='button' class='button' onclick=\"javascript:h5upload('{$field}_images', '".L('attachment_upload')."','{$field}','change_images','{$p}','content','$this->catid','{$authkey}',".SYS_EDITOR.")\"/ value='".L('select_pic')."'>";
 		}
 		return $string;
 	}

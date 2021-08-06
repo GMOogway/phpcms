@@ -18,14 +18,21 @@
 		';
 		
 		if(!defined('IMAGES_INIT')) {
-			if (pc_base::load_config('system', 'editor')) {
-				$str = '<script type="text/javascript" src="'.JS_PATH.'h5upload/ckeditor.js"></script>';
-			} else {
-				$str = '<script type="text/javascript" src="'.JS_PATH.'h5upload/ueditor.js"></script>';
-			}
+			$str = '<script type="text/javascript" src="'.JS_PATH.'h5upload/h5editor.js"></script>';
 			define('IMAGES_INIT', 1);
 		}
-		$authkey = upload_key("$upload_number,$upload_allowext,$isselectimage,,,,$attachment,$image_reduce");
-		$string .= $str."<input type=\"button\"  class=\"button\" value=\"".L('multiple_file_list')."\" onclick=\"javascript:h5upload('{$field}_multifile', '".L('attachment_upload')."','{$field}','change_multifile','{$upload_number},{$upload_allowext},{$isselectimage},,,,{$attachment},{$image_reduce}','content','$this->catid','{$authkey}')\"/>    <input type=\"button\" class=\"button\" value=\"".L('add_remote_url')."\" onclick=\"add_multifile('{$field}')\">";
+		$authkey = upload_key($this->input->get('siteid').",$upload_number,$upload_allowext,$isselectimage,,,,$attachment,$image_reduce");
+		$p = dr_authcode(array(
+			'siteid' => $this->input->get('siteid'),
+			'file_upload_limit' => $upload_number,
+			'file_types_post' => $upload_allowext,
+			'allowupload' => $isselectimage,
+			'thumb_width' => '',
+			'thumb_height' => '',
+			'watermark_enable' => '',
+			'attachment' => $attachment,
+			'image_reduce' => $image_reduce,
+		), 'ENCODE');
+		$string .= $str."<input type=\"button\"  class=\"button\" value=\"".L('multiple_file_list')."\" onclick=\"javascript:h5upload('{$field}_multifile', '".L('attachment_upload')."','{$field}','change_multifile','{$p}','content','$this->catid','{$authkey}',".SYS_EDITOR.")\"/>    <input type=\"button\" class=\"button\" value=\"".L('add_remote_url')."\" onclick=\"add_multifile('{$field}')\">";
 		return $string;
 	}

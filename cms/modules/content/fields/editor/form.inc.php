@@ -10,7 +10,7 @@
 		if(!$value) $value = $defaultvalue;
 		//if(!$toolvalue) $toolvalue = '\'Source\',\'Bold\', \'Italic\', \'Underline\'';
 		if($minlength || $pattern) $allow_empty = '';
-		if (pc_base::load_config('system', 'editor')) {
+		if (SYS_EDITOR) {
 			if($minlength) $this->checkall .= 'if(CKEDITOR.instances.'.$field.'.getData()==""){
 				Dialog.alert("'.$errortips.'",function(){editor.focus();})
 				return false;

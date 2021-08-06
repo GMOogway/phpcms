@@ -26,15 +26,14 @@ function closeParent() {
 }*/
 //-->
 </SCRIPT>
-<?php if (pc_base::load_config('system', 'editor')) {?>
+<?php if (SYS_EDITOR) {?>
 <script type="text/javascript" src="<?php echo JS_PATH;?>ckeditor/ckeditor.js"></script>
-<script type="text/javascript" src="<?php echo JS_PATH;?>h5upload/ckeditor.js"></script>
 <?php } else {?>
 <script type="text/javascript" src="<?php echo JS_PATH;?>ueditor/ueditor.config.js"></script>
 <script type="text/javascript" src="<?php echo JS_PATH;?>ueditor/ueditor.all.js"></script>
-<script type="text/javascript" src="<?php echo JS_PATH;?>h5upload/ueditor.js"></script>
-<?php }
-define('EDITOR_INIT', 1);
+<?php }?>
+<script type="text/javascript" src="<?php echo JS_PATH;?>h5upload/h5editor.js"></script>
+<?php define('EDITOR_INIT', 1);
 define('IMAGES_INIT', 1);?>
 <div class="pad-lr-10">
 <div class="pad-10">

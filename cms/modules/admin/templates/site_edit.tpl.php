@@ -239,7 +239,7 @@ function default_list() {
     <th width="130" valign="top"><?php echo L('site_att_allow_ext')?></th>
     <td class="y-bg"><input type="text" class="input-text" name="setting[upload_allowext]" id="upload_allowext" size="80" value="<?php echo $setting['upload_allowext']?>"/></td>
   </tr>
-  <tr<?php if (pc_base::load_config('system', 'editor')) {?> style="display: none;"<?php }?>>
+  <tr<?php if (SYS_EDITOR) {?> style="display: none;"<?php }?>>
     <td valign="top" colspan="2"><fieldset>
 	<legend><?php echo L('att_ueditor')?></legend>
 	<table width="100%" class="radio-label">

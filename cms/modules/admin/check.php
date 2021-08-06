@@ -114,6 +114,10 @@ class check extends admin {
                     }
                 }
 
+                if (!is_file(CMS_PATH.'api/controller.php')) {
+                    $this->halt('百度编辑器配置文件不存在：'.CMS_PATH.'api/controller.php', 0);
+                }
+
                 if (!is_dir(CMS_PATH.'api/ueditor/')) {
                     $this->halt('百度编辑器目录不存在：'.CMS_PATH.'api/ueditor/', 0);
                 }
@@ -523,7 +527,7 @@ class check extends admin {
 \'mobile_img_path\' => \''.(pc_base::load_config('system','mobile_img_path') ? pc_base::load_config('system','mobile_img_path') : pc_base::load_config('system','app_path').'mobile/statics/images/').'\', //CDN img
 \'app_path\' => \''.pc_base::load_config('system','app_path').'\', //动态域名配置地址
 \'mobile_path\' => \''.(pc_base::load_config('system','mobile_path') ? pc_base::load_config('system','mobile_path') : pc_base::load_config('system','app_path').'mobile/').'\', //动态手机域名配置地址
-\'editor\' => \''.(pc_base::load_config('system','editor') ? pc_base::load_config('system','editor') : 0).'\', //编辑器模式    0 UEditor 1 CKEditor
+\'sys_editor\' => \''.(pc_base::load_config('system','sys_editor') ? pc_base::load_config('system','sys_editor') : 0).'\', //编辑器模式    0 UEditor 1 CKEditor
 
 \'charset\' => \''.pc_base::load_config('system','charset').'\', //网站字符集
 \'timezone\' => \''.(pc_base::load_config('system','timezone')=='Etc/GMT-8' ? 8 : (pc_base::load_config('system','timezone') ? pc_base::load_config('system','timezone') : 8)).'\', //网站时区（只对php 5.1以上版本有效），Etc/GMT-8 实际表示的是 GMT+8
@@ -567,7 +571,7 @@ class check extends admin {
 
 \'admin_login_path\' => \''.pc_base::load_config('system','admin_login_path').'\', //自定义的后台登录地址';
                 $system_data.= PHP_EOL.');'.PHP_EOL.'?>';
-                if (!strstr($system, 'IN_CMS') || strstr($system, 'admin_url') || strstr($system, 'safe_card') || strstr($system, 'phpsso') || strstr($system, 'phpsso_appid') || strstr($system, 'phpsso_api_url') || strstr($system, 'phpsso_auth_key') || strstr($system, 'phpsso_version') || strstr($system, '\'timezone\' => \'Etc/GMT-8\'') || !strstr($system, 'attachment_file') || !strstr($system, 'sys_attachment_save_id') || !strstr($system, 'sys_attachment_safe') || !strstr($system, 'sys_attachment_path') || !strstr($system, 'sys_attachment_save_type') || !strstr($system, 'sys_attachment_save_dir') || !strstr($system, 'sys_attachment_url') || !strstr($system, 'sys_avatar_path') || !strstr($system, 'sys_avatar_url') || !strstr($system, 'sys_thumb_path') || !strstr($system, 'sys_thumb_url') || !strstr($system, 'mobile_js_path') || !strstr($system, 'mobile_css_path') || !strstr($system, 'mobile_img_path') || !strstr($system, 'mobile_path') || !strstr($system, 'editor') || !strstr($system, 'sys_csrf') || !strstr($system, 'needcheckcomeurl') || !strstr($system, 'mobile_root') || !strstr($system, 'keywordapi') || !strstr($system, 'baidu_aid') || !strstr($system, 'baidu_skey') || !strstr($system, 'baidu_arcretkey') || !strstr($system, 'baidu_qcnum') || !strstr($system, 'xunfei_aid') || !strstr($system, 'xunfei_skey') || !strstr($system, 'admin_login_path')) {
+                if (!strstr($system, 'IN_CMS') || strstr($system, 'admin_url') || strstr($system, 'safe_card') || strstr($system, 'phpsso') || strstr($system, 'phpsso_appid') || strstr($system, 'phpsso_api_url') || strstr($system, 'phpsso_auth_key') || strstr($system, 'phpsso_version') || strstr($system, '\'timezone\' => \'Etc/GMT-8\'') || !strstr($system, 'attachment_file') || !strstr($system, 'sys_attachment_save_id') || !strstr($system, 'sys_attachment_safe') || !strstr($system, 'sys_attachment_path') || !strstr($system, 'sys_attachment_save_type') || !strstr($system, 'sys_attachment_save_dir') || !strstr($system, 'sys_attachment_url') || !strstr($system, 'sys_avatar_path') || !strstr($system, 'sys_avatar_url') || !strstr($system, 'sys_thumb_path') || !strstr($system, 'sys_thumb_url') || !strstr($system, 'mobile_js_path') || !strstr($system, 'mobile_css_path') || !strstr($system, 'mobile_img_path') || !strstr($system, 'mobile_path') || !strstr($system, 'sys_editor') || !strstr($system, 'sys_csrf') || !strstr($system, 'needcheckcomeurl') || !strstr($system, 'mobile_root') || !strstr($system, 'keywordapi') || !strstr($system, 'baidu_aid') || !strstr($system, 'baidu_skey') || !strstr($system, 'baidu_arcretkey') || !strstr($system, 'baidu_qcnum') || !strstr($system, 'xunfei_aid') || !strstr($system, 'xunfei_skey') || !strstr($system, 'admin_login_path')) {
                     file_put_contents($rt,$system_data);
                 }
 
