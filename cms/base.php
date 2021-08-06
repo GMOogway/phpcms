@@ -133,7 +133,7 @@ if (is_numeric(pc_base::load_config('system','timezone')) && strlen(pc_base::loa
 	function_exists('date_default_timezone_set') && date_default_timezone_set('Etc/GMT'.(pc_base::load_config('system','timezone') > 0 ? '-' : '+').abs(pc_base::load_config('system','timezone'))); // 设置时区
 }
 
-define('CHARSET' , pc_base::load_config('system','charset'));
+define('CHARSET', pc_base::load_config('system','charset'));
 //输出页面字符集
 header('Content-Type: text/html; charset='.CHARSET);
 
