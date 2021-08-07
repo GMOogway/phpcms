@@ -1,9 +1,11 @@
 <?php
 defined('IN_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');?>
+<style type="text/css">
+body .table-list table tr>td:first-child, body .table-list table tr>th:first-child {text-align: left;padding: 8px;}
+</style>
 <div class="pad-10">
 <div class="bk10"></div>
-
 <div class="table-list">
 <form action="?m=content&c=content&a=clear_data" method="post" name="myform">
 <table width="100%" cellspacing="0">
