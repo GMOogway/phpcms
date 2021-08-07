@@ -77,6 +77,7 @@ class content extends admin {
 			}
 			$special_db = pc_base::load_model('special_model');
 			$info = $special_db->get_one(array('id'=>$_GET['specialid']));
+			if (!$info) showmessage(L('illegal_action'));
 			@extract($info);
 			include $this->admin_tpl('content_add');
 		}

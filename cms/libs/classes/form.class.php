@@ -240,8 +240,8 @@ class form {
 			'file_upload_limit' => 1,
 			'file_types_post' => $alowexts,
 			'allowupload' => 1,
-			'thumb_width' => $file_setting[0],
-			'thumb_height' => $file_setting[1],
+			'thumb_width' => $thumb_setting[0],
+			'thumb_height' => $thumb_setting[1],
 			'watermark_enable' => $watermark_setting,
 			'attachment' => $attachment,
 			'image_reduce' => $image_reduce,
@@ -331,14 +331,14 @@ class form {
 		$model = $model_db->get_one(array('modelid'=>$modelid));
 		$module_setting = dr_string2array($model['setting']);
 		$updatetime_select = $module_setting['updatetime_select'];
-		$model && $id == 'updatetime' && $str .= '<input type="hidden" name="old_'.$id.'" value="'.$value.'">';
+		defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $id == 'updatetime' && $str .= '<input type="hidden" name="old_'.$id.'" value="'.$value.'">';
 		if ($value == 'SYS_TIME' || $id == 'updatetime') {
 			$value = date('Y-m-d H:i:s');
 		}
-		$model && $id == 'updatetime' && $str .= '<div class="form-date">';
+		defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $id == 'updatetime' && $str .= '<div class="form-date">';
 		$str .= '<input type="text" name="'.$name.'" id="'.$id.'" value="'.$value.'" size="'.$size.'" class="date" readonly>';
-		$model && $id == 'updatetime' && $str .= '</div>';
-		$model && $id == 'updatetime' && $str .= '<div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="no_time"'.(isset($updatetime_select) && $updatetime_select ? ' checked' : '').' class="dr_no_time" type="checkbox" value="1" /> '.L('不更新').'<span></span></label></div>';
+		defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $id == 'updatetime' && $str .= '</div>';
+		defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $id == 'updatetime' && $str .= '<div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="no_time"'.(isset($updatetime_select) && $updatetime_select ? ' checked' : '').' class="dr_no_time" type="checkbox" value="1" /> '.L('不更新').'<span></span></label></div>';
 		$str .= '<script type="text/javascript">
 			Calendar.setup({
 			weekNumbers: '.$showweek.',

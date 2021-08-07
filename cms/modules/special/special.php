@@ -378,7 +378,9 @@ class special extends admin {
 			showmessage(L('illegal_action'), HTTP_REFERER);
 		}
 		if(is_array($_POST['id']) && !$id) {
-			array_map(array($this, delete), $_POST['id']);
+			foreach($_POST['id'] as $sid) {
+				$this->special_api->_del_special($sid);
+			}
 			$this->special_cache();
 			showmessage(L('operation_success'), HTTP_REFERER);
 		} elseif(is_numeric($id) && $id) {
