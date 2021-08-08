@@ -13,16 +13,16 @@ include $this->admin_tpl('header','admin');?>
     <table width="100%" cellspacing="0" >
         <thead>
             <tr>
-			 <th width="70"><?php echo L('listorder')?></th>
-            <th width="90"><?php echo L('fieldname')?></th>
-			<th width="100"><?php echo L('cnames');?></th>
-			<th width="100"><?php echo L('type');?></th>
+			<th width="70"><?php echo L('listorder')?></th>
+            <th><?php echo L('fieldname')?></th>
+			<th width="150"><?php echo L('cnames');?></th>
+			<th width="150"><?php echo L('type');?></th>
 			<th width="50"><?php echo L('system');?></th> 
             <th width="50"><?php echo L('must_input');?></th>
             <th width="50"><?php echo L('search');?></th>
             <th width="50"><?php echo L('listorder');?></th>
             <th width="50"><?php echo L('contribute');?></th>
-			<th ><?php echo L('operations_manage');?></th>
+			<th width="150"><?php echo L('operations_manage');?></th>
             </tr>
         </thead>
     <tbody class="td-line">

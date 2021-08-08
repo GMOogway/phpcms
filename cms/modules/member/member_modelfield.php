@@ -40,6 +40,9 @@ class member_modelfield extends admin {
 			$minlength = $this->input->post('info')['minlength'] ? $_POST['info']['minlength'] : 0;
 			$maxlength = $this->input->post('info')['maxlength'] ? $_POST['info']['maxlength'] : 0;
 			$field_type = $this->input->post('info')['formtype'];
+			$where = 'modelid='.$modelid.' AND field=\''.$field.'\' AND siteid='.$this->siteid.'';
+			$model_field = $this->db->get_one($where);
+			if ($model_field) showmessage(L('fieldname').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
 			
 			require MODEL_PATH.$field_type.DIRECTORY_SEPARATOR.'config.inc.php';
 			
@@ -81,6 +84,7 @@ class member_modelfield extends admin {
 	public function edit() {
 		if(isset($_POST['dosubmit'])) {
 			$model_cache = getcache('member_model','commons');
+			$fieldid = intval($_POST['fieldid']);
 			$modelid = $this->input->post('info')['modelid'] = intval($_POST['info']['modelid']);
 			$model_table = $model_cache[$modelid]['tablename'];
 
@@ -90,6 +94,12 @@ class member_modelfield extends admin {
 			$minlength = $this->input->post('info')['minlength'] ? $_POST['info']['minlength'] : 0;
 			$maxlength = $this->input->post('info')['maxlength'] ? $_POST['info']['maxlength'] : 0;
 			$field_type = $this->input->post('info')['formtype'];
+			$where = 'modelid='.$modelid.' AND field=\''.$field.'\' AND siteid='.$this->siteid.'';
+			if ($fieldid) {
+				$where .= ' AND fieldid<>'.$fieldid;
+			}
+			$model_field = $this->db->get_one($where);
+			if ($model_field) showmessage(L('fieldname').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
 			
 			require MODEL_PATH.$field_type.DIRECTORY_SEPARATOR.'config.inc.php';
 			
@@ -100,7 +110,6 @@ class member_modelfield extends admin {
 			require MODEL_PATH.'edit.sql.php';
 			//附加属性值
 			$_POST['info']['setting'] = array2string($_POST['setting']);
-			$fieldid = intval($_POST['fieldid']);
 			$_POST['info']['unsetgroupids'] = isset($_POST['unsetgroupids']) ? implode(',',$_POST['unsetgroupids']) : '';
 			$_POST['info']['unsetroleids'] = isset($_POST['unsetroleids']) ? implode(',',$_POST['unsetroleids']) : '';
 			$this->db->update($_POST['info'],array('fieldid'=>$fieldid));
@@ -183,18 +192,24 @@ class member_modelfield extends admin {
 	 * 检查字段是否存在
 	 */
 	public function public_checkfield() {
-		$field = strtolower($_GET['field']);
-		$oldfield = strtolower($_GET['oldfield']);
-		if($field==$oldfield) exit('1');
-		
-		$modelid = intval($_GET['modelid']);
-		$model_cache = getcache('member_model','commons');
+		$field = strtolower($this->input->get('field'));
+		$fieldid = intval($this->input->get('fieldid'));
+		//$oldfield = strtolower($_GET['oldfield']);
+		//if($field==$oldfield) exit('1');
+		$modelid = intval($this->input->get('modelid'));
+		/*$model_cache = getcache('member_model','commons');
 		$tablename = $model_cache[$modelid]['tablename'];
 		$this->db->table_name = $this->db->db_tablepre.$tablename;
 
-		$fields = $this->db->get_fields();
-	
-		if(array_key_exists($field, $fields)) {
+		$fields = $this->db->get_fields();*/
+		$where = 'modelid='.$modelid.' AND field=\''.$field.'\' AND siteid='.$this->siteid.'';
+		if ($fieldid) {
+			$where .= ' AND fieldid<>'.$fieldid;
+		}
+		$fields = $this->db->get_one($where);
+		
+		if($fields) {
+		//if(array_key_exists($field, $fields)) {
 			exit('0');
 		} else {
 			exit('1');
@@ -247,6 +262,23 @@ class member_modelfield extends admin {
 		$forminfos = $content_form->get();
 		include $this->admin_tpl('sitemodel_priview');
 	}
-	
+	/**
+	 * 汉字转换拼音
+	 */
+	public function public_ajax_pinyin() {
+		$pinyin = pc_base::load_sys_class('pinyin');
+		$name = dr_safe_replace($this->input->get('name'));
+		if (!$name) {
+			exit('');
+		}
+		$py = $pinyin->result($name);
+		if (strlen($py) > 12) {
+			$sx = $pinyin->result($name, 0);
+			if ($sx) {
+				exit($sx);
+			}
+		}
+		exit($py);
+	}
 }
 ?>

@@ -93,7 +93,7 @@ class category extends admin {
 			$info = $this->input->post('info');
 			$info['type'] = intval($this->input->post('type'));
 			
-			if(!$this->input->post('batch_add') && empty($this->input->post('batch_add'))) {
+			if(!$this->input->post('addtype')) {
 				if($info['catname']=='') showmessage(L('input_catname'));
 				$info['catname'] = safe_replace($info['catname']);
 				$info['catname'] = str_replace(array('%'),'',$info['catname']);
@@ -137,7 +137,7 @@ class category extends admin {
 			$systeminfo = $inputinfo['system'];
 			
 			$end_str = $old_end =  '<script type="text/javascript">Dialog.warn("'.L("operation_success").L("edit_following_operation").'",function(){window.top.$(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.location = "?m=admin&c=category&a=public_cache&menuid='.$this->input->get('menuid').'&module=admin";});</script>';
-			if(!$this->input->post('batch_add') || empty($this->input->post('batch_add'))) {
+			if(!$this->input->post('addtype')) {
 				$catname = CHARSET == 'gbk' ? $info['catname'] : iconv('utf-8','gbk',$info['catname']);
 				$letters = gbk_to_pinyin($catname);
 				$info['letter'] = strtolower(implode('', $letters));

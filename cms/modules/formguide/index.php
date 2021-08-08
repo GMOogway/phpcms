@@ -12,6 +12,9 @@ class index {
 		$setting = new_html_special_chars(getcache('formguide', 'commons'));
 		$this->siteid = intval($_GET['siteid']) ? intval($_GET['siteid']) : get_siteid();
 		$this->setting = $setting[$this->siteid];
+		if (!$this->setting) {
+			$this->setting = array();
+		}
 	}
 	
 	/**

@@ -13,17 +13,21 @@ include $this->admin_tpl('header','admin');?>
 <form action="?m=admin&c=category&a=batch_edit" method="post" name="myform">
 <tbody height="200" class="nHover td-line">
 	<tr> 
-      <td width="200" align="left">
+      <td>
 	<?php echo L('category_batch_edit');?> <font color="red"><?php echo L('category_manage');?></font>
 	<div class="mt-radio-inline">
           <label class="mt-radio mt-radio-outline"><input type="radio" name="type" value="0" <?php if($type==0) echo 'checked';?>> <?php echo L('category_batch_edit');?> <span></span></label>
           <label class="mt-radio mt-radio-outline"><input type="radio" name="type" value="1" <?php if($type==1) echo 'checked';?>> <?php echo L('category_type_page');?> <span></span></label>
         </div>
 	</td>
-      <td width="420" align="center">
+    </tr>
+	<tr> 
+      <td>
 <select name='catids[]' id='catids'  multiple="multiple"  style="height:300px;width:400px" title="<?php echo L('push_ctrl_to_select','','content');?>">
 <?php echo $string;?>
 </select></td>
+    </tr>
+	<tr> 
       <td>
 	  <input type="hidden" value="<?php echo $type;?>">
 	  <input type="submit" value="<?php echo L('submit');?>" class="button">

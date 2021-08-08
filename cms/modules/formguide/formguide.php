@@ -12,6 +12,10 @@ class formguide extends admin {
 		$this->tablename = '';
 		$setting = new_html_special_chars(getcache('formguide', 'commons'));
 		$this->setting = $setting[$this->get_siteid()];
+		if (!$this->setting) {
+			$this->setting = array();
+		}
+		
 		$this->db = pc_base::load_model('sitemodel_model');
 	}
 	
@@ -243,7 +247,9 @@ class formguide extends admin {
 			
 			showmessage(L('setting_updates_successful'), HTTP_REFERER, '', 'setting');
 		} else {
-			@extract($this->setting); 
+			if ($this->setting) {
+				@extract($this->setting); 
+			}
     		include $this->admin_tpl('setting');
 		}
 	}

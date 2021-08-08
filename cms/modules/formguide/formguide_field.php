@@ -49,6 +49,9 @@ class formguide_field extends admin {
 			$info['siteid'] = $this->siteid;
 			$info['unsetgroupids'] = $this->input->post('unsetgroupids') ? implode(',',$this->input->post('unsetgroupids')) : '';
 			$info['unsetroleids'] = $this->input->post('unsetroleids') ? implode(',',$this->input->post('unsetroleids')) : '';
+			if (in_array($field, array('dataid', 'userid', 'username', 'datetime', 'ip'))) {
+				showmessage(L('fieldname').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
+			}
 			
 			require MODEL_PATH.$field_type.DIRECTORY_SEPARATOR.'config.inc.php';
 				
@@ -57,6 +60,9 @@ class formguide_field extends admin {
 			}
 			if (isset($info['modelid']) && !empty($info['modelid'])) {
 				$formid = intval($info['modelid']);
+				$where = 'modelid='.$formid.' AND field=\''.$field.'\' AND siteid='.$this->siteid.'';
+				$model_field = $this->db->get_one($where);
+				if ($model_field) showmessage(L('fields').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
 				$forminfo = $this->model_db->get_one(array('modelid'=>$formid, 'siteid'=>$this->siteid), 'tablename');
 				$tablename = $this->db->db_tablepre.'form_'.$forminfo['tablename'];
 				require MODEL_PATH.'add.sql.php';
@@ -69,7 +75,7 @@ class formguide_field extends admin {
 				require MODEL_PATH.'add.sql.php';
 				
 				$form_public_field_array = getcache('form_public_field_array', 'model');
-				if (array_key_exists($info['field'], $form_public_field_array)) {
+				if (is_array($form_public_field_array) && array_key_exists($info['field'], $form_public_field_array)) {
 					showmessage(L('fields').L('already_exist'), HTTP_REFERER);
 				} else {
 					$form_public_field_array[$info['field']] = array('info'=>$info, 'sql'=>$sql); 
@@ -117,6 +123,9 @@ class formguide_field extends admin {
 			$info['siteid'] = $this->siteid;
 			$info['unsetgroupids'] = $this->input->post('unsetgroupids') ? implode(',',$this->input->post('unsetgroupids')) : '';
 			$info['unsetroleids'] = $this->input->post('unsetroleids') ? implode(',',$this->input->post('unsetroleids')) : '';
+			if (in_array($field, array('dataid', 'userid', 'username', 'datetime', 'ip'))) {
+				showmessage(L('fieldname').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
+			}
 			
 			require MODEL_PATH.$field_type.DIRECTORY_SEPARATOR.'config.inc.php';
 			
@@ -126,11 +135,16 @@ class formguide_field extends admin {
 			$oldfield = $this->input->post('oldfield');
 			if (isset($info['modelid']) && !empty($info['modelid'])) {
 				$formid = intval($info['modelid']);
+				$fieldid = intval($this->input->post('fieldid'));
+				$where = 'modelid='.$formid.' AND field=\''.$field.'\' AND siteid='.$this->siteid.'';
+				if ($fieldid) {
+					$where .= ' AND fieldid<>'.$fieldid;
+				}
+				$model_field = $this->db->get_one($where);
+				if ($model_field) showmessage(L('fields').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
 				$forminfo = $this->model_db->get_one(array('modelid'=>$formid, 'siteid'=>$this->siteid), 'tablename');
 				$tablename = $this->db->db_tablepre.'form_'.$forminfo['tablename'];
 				
-				$fieldid = intval($this->input->post('fieldid'));
-
 				require MODEL_PATH.'edit.sql.php';
 				$this->db->update($info,array('fieldid'=>$fieldid,'siteid'=>$this->siteid));
 			} else {
@@ -146,7 +160,7 @@ class formguide_field extends admin {
 					if ($oldfield == $info['field']) {
 						$form_public_field_array[$info['field']] = array('info'=>$info, 'sql'=>$sql);
 					} else {
-						if (array_key_exists($info['field'], $form_public_field_array)) {
+						if (is_array($form_public_field_array) && array_key_exists($info['field'], $form_public_field_array)) {
 							showmessage(L('fields').L('already_exist'), HTTP_REFERER);
 						}
 						$new_form_field = $form_public_field_array;
@@ -333,6 +347,24 @@ class formguide_field extends admin {
 		}
 		setcache('formguide_field_'.$formid,$field_array,'model');
 		return true;
+	}
+	/**
+	 * 汉字转换拼音
+	 */
+	public function public_ajax_pinyin() {
+		$pinyin = pc_base::load_sys_class('pinyin');
+		$name = dr_safe_replace($this->input->get('name'));
+		if (!$name) {
+			exit('');
+		}
+		$py = $pinyin->result($name);
+		if (strlen($py) > 12) {
+			$sx = $pinyin->result($name, 0);
+			if ($sx) {
+				exit($sx);
+			}
+		}
+		exit($py);
 	}
 }
 ?>

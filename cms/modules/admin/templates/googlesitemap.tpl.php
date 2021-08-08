@@ -9,26 +9,27 @@ include $this->admin_tpl('header');
 <table width="100%" cellspacing="0">
 <thead>
   	<tr>
-    	<th class="tablerowhighlight" colspan=2><?php echo L('google_info')?></th>
+    	<th class="tablerowhighlight"><?php echo L('google_info')?></th>
   	</tr>
-</thead> 
+</thead>
+</table>
+<table width="100%" cellspacing="0">
 	<tr> 
-      <td align="right" width="100"><?php echo L('explain')?>: </td> 
-      <td> 
-<?php echo L('google_infos')?>
- </td> 
+      <td width="200"><?php echo L('explain')?>: </td> 
+      <td><?php echo L('google_infos')?> </td> 
     </tr>
-</table>     
-
+</table>
 <table width="100%" cellspacing="0">    
 <thead>
   	<tr>
-    	<th class="tablerowhighlight" colspan=2><?php echo L('google_sitemaps')?></th>
+    	<th class="tablerowhighlight"><?php echo L('google_sitemaps')?></th>
   	</tr>
-</thead> 
+</thead>
+</table>
+<table width="100%" cellspacing="0">  
   	<tr>
-	    <td align="right" width="100"> <?php echo L('google_rate')?> : </td>
-	    <td colspan=1>
+	    <td width="200"> <?php echo L('google_rate')?> : </td>
+	    <td>
 		    <select name="content_priority">
 		    <option value="1">1</option><option value="0.9">0.9</option>
 		    <option value="0.8">0.8</option><option selected="" value="0.7">0.7</option>
@@ -45,8 +46,8 @@ include $this->admin_tpl('header');
 	    </td>
   	</tr>
    	<tr>
-    <td  align="right"><?php echo L('google_nums')?> : </td>
-    <td colspan=3>  
+    <td><?php echo L('google_nums')?> : </td>
+    <td>  
     <input type=text name="num" value="20" size=5>
     </td>
   	</tr> 
@@ -55,48 +56,44 @@ include $this->admin_tpl('header');
 <table width="100%" cellspacing="0">    
 <thead>
   	<tr>
-    	<th class="tablerowhighlight" colspan=2><?php echo L('google_baidunews')?></th>
+    	<th class="tablerowhighlight"><?php echo L('google_baidunews')?></th>
   	</tr>
-</thead> 
+</thead>
+</table>
+<table width="100%" cellspacing="0">  
 <tr>
-	    <td  align="right"><?php echo L('google_ismake')?> : </td>
-	    <td colspan=1><div class="mt-radio-inline">
+	    <td width="200"><?php echo L('google_ismake')?> : </td>
+	    <td><div class="mt-radio-inline">
           <label class="mt-radio mt-radio-outline"><input type="radio" name="mark" value="1" checked> <?php echo L('setting_yes')?> <span></span></label>
           <label class="mt-radio mt-radio-outline"><input type="radio" name="mark" value="0"> <?php echo L('setting_no')?> <span></span></label>
         </div></td>
   	</tr>
-  	
   	<tr>
-	    <td align="right" width="100"> <?php echo L('google_select_db')?> : </td>
-<td colspan=1>
-<select name='catids[]' id='catids'  multiple="multiple"  style="height:200px;" title="<?php echo L('push_ctrl_to_select','','content');?>">
+	    <td> <?php echo L('google_select_db')?> : </td>
+<td>
+<select name='catids[]' id='catids'  multiple="multiple"  style="width:350px;height:200px;" title="<?php echo L('push_ctrl_to_select','','content');?>">
 <?php echo $string;?>
 </select>
-
 </td>
   	</tr> 
-  	
   	<tr>
-	    <td align="right" width="100"> <?php echo L('google_period')?> : </td>
-	    <td colspan=1><input type=text name="time" value="40" size=20> </td>
+	    <td> <?php echo L('google_period')?> : </td>
+	    <td><input type=text name="time" value="40" size=20> </td>
   	</tr>
   	<tr>
-	    <td align="right" width="100"> Email : </td>
-	    <td colspan=3><input type=text name="email" value="cms@cms.cn" size=20></td>
+	    <td> Email : </td>
+	    <td><input type=text name="email" value="cms@cms.cn" size=20></td>
   	</tr>
   	<tr>
-	    <td align="right" width="100"> <?php echo L('google_nums')?> : </td>
-	    <td colspan=3><input type=text name="baidunum" value="20" size=5> </td>
+	    <td> <?php echo L('google_nums')?> : </td>
+	    <td><input type=text name="baidunum" value="20" size=5> </td>
   	</tr>
-   	 
   	<tr>
-    	<th class="tablerowhighlight" colspan=2>
-    	<br>
+    	<td class="tablerowhighlight" colspan=2>
     	<input type="submit" name="dosubmit" value=" <?php echo  L('google_startmake')?> " class="button">
-    	<br>
-    	</th>
+    	</td>
   	</tr>
-</table>  
+</table>
 </form>
 </div>
 </div> 

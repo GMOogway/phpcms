@@ -54,7 +54,7 @@ include $this->admin_tpl('header');?>
 	 <?php
 		foreach($batch_array as $catid=>$cat) {
 	?>
-		<td><b><?php echo L('description')?>：</b><br><textarea name="info[<?php echo $catid;?>][description]" maxlength="255" style="width:240px;height:40px;"><?php echo $cat['description'];?></textarea></td>
+		<td><b><?php echo L('description')?>：</b><br><textarea name="info[<?php echo $catid;?>][description]" maxlength="255" style="width:240px;height:80px;"><?php echo $cat['description'];?></textarea></td>
 	<?php
 		}
 	?>

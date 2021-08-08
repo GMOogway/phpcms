@@ -6,25 +6,6 @@ include $this->admin_tpl('header','admin');?>
 <!--
 $(function(){
 	$.formValidator.initConfig({autotip:true,formid:"myform"});
-	$("#field").formValidator({onshow:"<?php echo L('input').L('fieldname')?>",onfocus:"<?php echo L('fieldname').L('between_1_to_20')?>"}).regexValidator({regexp:"^[a-zA-Z]{1}([a-zA-Z0-9]|[_]){0,19}$",onerror:"<?php echo L('fieldname_was_wrong');?>"}).inputValidator({min:1,max:20,onerror:"<?php echo L('fieldname').L('between_1_to_20')?>"}).ajaxValidator({
-	    type : "get",
-		url : "",
-		data : "m=formguide&c=formguide_field&a=public_checkfield&modelid=<?php echo $formid?>",
-		datatype : "html",
-		cached:false,
-		getdata:{issystem:'issystem'},
-		async:'false',
-		success : function(data){	
-            if( data == "1" ){
-                return true;
-			} else {
-                return false;
-			}
-		},
-		buttons: $("#dosubmit"),
-		onerror : "<?php echo L('fieldname').L('already_exist')?>",
-		onwait : "<?php echo L('connecting_please_wait')?>"
-	});
 	$("#formtype").formValidator({onshow:"<?php echo L('select_fieldtype');?>",onfocus:"<?php echo L('select_fieldtype');?>",oncorrect:"<?php echo L('input_right');?>",defaultvalue:""}).inputValidator({min:1,onerror: "<?php echo L('select_fieldtype');?>"});
 	$("#name").formValidator({onshow:"<?php echo L('input_nickname');?>",onfocus:"<?php echo L('nickname_empty');?>",oncorrect:"<?php echo L('input_right');?>"}).inputValidator({min:1,onerror:"<?php echo L('input_nickname');?>"});
 })
@@ -49,18 +30,18 @@ $(function(){
 	  </td>
     </tr>
 	<tr> 
+      <th><font color="red">*</font> <strong><?php echo L('field_nickname');?></strong><br /><?php echo L('nickname_tips');?></th>
+      <td><input type="text" name="info[name]" id="name" size="30" class="input-text" onblur="topinyin('field','name','?m=formguide&c=formguide_field&a=public_ajax_pinyin');"></td>
+    </tr>
+	<tr> 
       <th width="25%"><font color="red">*</font> <strong><?php echo L('fieldname');?></strong><br />
 	  <?php echo L('fieldname_tips');?>
 	  </th>
       <td><input type="text" name="info[field]" id="field" size="20" class="input-text"></td>
     </tr>
 	<tr> 
-      <th><font color="red">*</font> <strong><?php echo L('field_nickname');?></strong><br /><?php echo L('nickname_tips');?></th>
-      <td><input type="text" name="info[name]" id="name" size="30" class="input-text"></td>
-    </tr>
-	<tr> 
       <th><strong><?php echo L('field_tip');?></strong><br /><?php echo L('field_tips');?></th>
-      <td><textarea name="info[tips]" rows="2" cols="20" id="tips" style="height:40px; width:80%"></textarea></td>
+      <td><textarea name="info[tips]" rows="2" cols="20" id="tips" style="height:120px; width:80%"></textarea></td>
     </tr>
 
 	<tr> 

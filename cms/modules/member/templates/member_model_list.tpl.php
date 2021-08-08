@@ -12,17 +12,17 @@
 <table width="100%" cellspacing="0">
 	<thead>
 		<tr>
-			<th align="left" width="30px" class="myselect">
+			<th class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="group-checkable" value="" id="check_box" onclick="selectall('modelid[]');" />
                         <span></span>
                     </label></th>
-			<th align="left">ID</th>
-			<th><?php echo L('sort')?></th>
-			<th align="left"><?php echo L('model_name')?></th>
-			<th align="left"><?php echo L('model_description')?></th>
-			<th align="left"><?php echo L('table_name')?></th>
-			<th align="center"><?php echo L('status')?></th>
+			<th width="70"><?php echo L('sort')?></th>
+			<th width="100">ID</th>
+			<th width="280"><?php echo L('model_name')?></th>
+			<th width="180"><?php echo L('table_name')?></th>
+			<th width="300"><?php echo L('model_description')?></th>
+			<th width="100"><?php echo L('status')?></th>
 			<th><?php echo L('operation')?></th>
 		</tr>
 	</thead>
@@ -31,16 +31,16 @@
 	foreach($member_model_list as $k=>$v) {
 ?>
     <tr>
-		<td align="left" class="myselect">
+		<td class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="checkboxes" value="<?php echo $v['modelid']?>" name="modelid[]" <?php if($v['modelid']==10) echo "disabled";?> />
                         <span></span>
                     </label></td>
-		<td align="left"><?php echo $v['modelid']?></td>
-		<td align="center"><input type="text" name="sort[<?php echo $v['modelid']?>]" class="input-text-c input-text" size="3" value="<?php echo $v['sort']?>"></th>
-		<td align="left"><?php echo $v['name']?></td>
-		<td align="left"><?php echo $v['description']?></td>
-		<td align="left"><?php echo $this->db->db_tablepre.$v['tablename']?></td>
+		<td align="center"><input type="text" name="sort[<?php echo $v['modelid']?>]" class="input-text-c input-text" size="3" value="<?php echo $v['sort']?>"></td>
+		<td align="center"><?php echo $v['modelid']?></td>
+		<td align="center"><?php echo $v['name']?></td>
+		<td align="center"><?php echo $this->db->db_tablepre.$v['tablename']?></td>
+		<td><?php echo $v['description']?></td>
 		<td align="center"><?php echo $v['disabled'] ? L('icon_locked') : L('icon_unlock')?></td>
 		<td align="center">
 		<a href="?m=member&c=member_modelfield&a=manage&modelid=<?php echo $v['modelid']?>&menuid=<?php echo $this->input->get('menuid');?>"><?php echo L('field').L('manage')?></a> | <a href="javascript:edit(<?php echo $v['modelid']?>, '<?php echo $v['name']?>')"><?php echo L('edit')?></a> | <a href="?m=member&c=member_model&a=export&modelid=<?php echo $v['modelid']?>"><?php echo L('export')?></a> | <a href="javascript:move(<?php echo $v['modelid']?>, '<?php echo $v['name']?>')"><?php echo L('move')?></a>

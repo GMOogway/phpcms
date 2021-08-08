@@ -5,8 +5,8 @@ include $this->admin_tpl('header');?>
 <table cellpadding="2" cellspacing="1" class="table_form" width="100%">
 <form action="?m=admin&c=badword&a=import" method="post" name="myform">
  	<tr> 
-      <th width="10%"> <?php echo L('badword_name')?> </th>
-      <td width="200"><textarea name="info" cols="50" rows="6" require="true" datatype="limit" ></textarea> </td>
+      <th width="100"> <?php echo L('badword_name')?> </th>
+      <td><textarea name="info" cols="50" rows="6" require="true" datatype="limit" ></textarea> </td>
     </tr>
    
     <tr> 

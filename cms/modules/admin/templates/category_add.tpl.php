@@ -239,11 +239,11 @@ include $this->admin_tpl('header');?>
     </tr>
     <tr>
       <th ><?php echo L('meta_keywords');?></th>
-      <td><textarea name='setting[meta_keywords]' id='meta_keywords' style="width:90%;height:40px"><?php echo $setting['meta_keywords'];?></textarea></td>
+      <td><textarea name='setting[meta_keywords]' id='meta_keywords' style="width:90%;height:80px"><?php echo $setting['meta_keywords'];?></textarea></td>
     </tr>
     <tr>
       <th ><strong><?php echo L('meta_description');?></th>
-      <td><textarea name='setting[meta_description]' id='meta_description' style="width:90%;height:50px"><?php echo $setting['meta_description'];?></textarea></td>
+      <td><textarea name='setting[meta_description]' id='meta_description' style="width:90%;height:80px"><?php echo $setting['meta_description'];?></textarea></td>
     </tr>
 </table>
 </div>

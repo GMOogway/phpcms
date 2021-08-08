@@ -5,28 +5,6 @@ include $this->admin_tpl('header','admin');?>
 <!--
 $(function(){
 	$.formValidator.initConfig({autotip:true,formid:"myform"});
-	$("#field").formValidator({onshow:"<?php echo L('input').L('fieldname')?>",onfocus:"<?php echo L('fieldname').L('between_1_to_20')?>"}).regexValidator({regexp:"^[a-zA-Z]{1}([a-zA-Z0-9]|[_]){0,19}$",onerror:"<?php echo L('fieldname_was_wrong');?>"}).inputValidator({min:1,max:20,onerror:"<?php echo L('fieldname').L('between_1_to_20')?>"}).ajaxValidator({
-	    type : "get",
-		url : "",
-		data : "m=content&c=sitemodel_field&a=public_checkfield&modelid=<?php echo $modelid?>&oldfield=<?php echo $field;?>",
-		datatype : "html",
-		cached:false,
-		getdata:{issystem:'issystem'},
-		async:'true',
-		success : function(data){	
-            if( data == "1" )
-			{
-                return true;
-			}
-            else
-			{
-                return false;
-			}
-		},
-		buttons: $("#dosubmit"),
-		onerror : "<?php echo L('fieldname').L('already_exist')?>",
-		onwait : "<?php echo L('connecting_please_wait')?>"
-	}).defaultPassed();
 	$("#formtype").formValidator({onshow:"<?php echo L('select_fieldtype');?>",onfocus:"<?php echo L('select_fieldtype');?>",oncorrect:"<?php echo L('input_right');?>",defaultvalue:""}).inputValidator({min:1,onerror: "<?php echo L('select_fieldtype');?>"});
 	$("#name").formValidator({onshow:"<?php echo L('input_nickname');?>",onfocus:"<?php echo L('nickname_empty');?>",oncorrect:"<?php echo L('input_right');?>"}).inputValidator({min:1,onerror:"<?php echo L('input_nickname');?>"});
 })
@@ -69,18 +47,18 @@ $(function(){
       </td>
     </tr>
 	<tr> 
+      <th><font color="red">*</font> <strong><?php echo L('field_nickname');?></strong><br /><?php echo L('nickname_tips');?></th>
+      <td><input type="text" name="info[name]" id="name" size="30" class="input-text" value="<?php echo $name?>" onblur="topinyin('field','name','?m=content&c=sitemodel_field&a=public_ajax_pinyin');"></td>
+    </tr>
+	<tr> 
       <th width="25%"><font color="red">*</font> <strong><?php echo L('fieldname');?></strong><br />
 	  <?php echo L('fieldname_tips');?>
 	  </th>
       <td><input type="text" name="info[field]" id="field" size="20" class="input-text" value="<?php echo $field?>" <?php if(in_array($field,$forbid_delete)) echo 'readonly';?>></td>
     </tr>
 	<tr> 
-      <th><font color="red">*</font> <strong><?php echo L('field_nickname');?></strong><br /><?php echo L('nickname_tips');?></th>
-      <td><input type="text" name="info[name]" id="name" size="30" class="input-text" value="<?php echo $name?>"></td>
-    </tr>
-	<tr> 
       <th><strong><?php echo L('field_tip');?></strong><br /><?php echo L('field_tips');?></th>
-      <td><textarea name="info[tips]" rows="2" cols="20" id="tips" style="height:40px; width:80%"><?php echo new_html_special_chars($tips);?></textarea></td>
+      <td><textarea name="info[tips]" rows="2" cols="20" id="tips" style="height:120px; width:80%"><?php echo new_html_special_chars($tips);?></textarea></td>
     </tr>
 
 	<tr> 

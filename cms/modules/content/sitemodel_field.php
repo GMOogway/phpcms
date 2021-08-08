@@ -45,6 +45,9 @@ class sitemodel_field extends admin {
 			}
 
 			$field = $info['field'];
+			$where = 'modelid='.$modelid.' AND field=\''.$field.'\' AND siteid='.$this->siteid.'';
+			$model_field = $this->db->get_one($where);
+			if ($model_field) showmessage(L('fieldname').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
 			$minlength = $info['minlength'] ? $info['minlength'] : 0;
 			$maxlength = $info['maxlength'] ? $info['maxlength'] : 0;
 			$field_type = $info['formtype'];
@@ -104,6 +107,7 @@ class sitemodel_field extends admin {
 	public function edit() {
 		if($this->input->post('dosubmit')) {
 			$model_cache = getcache('model','commons');
+			$fieldid = intval($this->input->post('fieldid'));
 			$info = $this->input->post('info');
 			$modelid = $info['modelid'];
 			if($modelid==-1) {
@@ -121,6 +125,12 @@ class sitemodel_field extends admin {
 			$minlength = $info['minlength'] ? $info['minlength'] : 0;
 			$maxlength = $info['maxlength'] ? $info['maxlength'] : 0;
 			$field_type = $info['formtype'];
+			$where = 'modelid='.$modelid.' AND field=\''.$field.'\' AND siteid='.$this->siteid.'';
+			if ($fieldid) {
+				$where .= ' AND fieldid<>'.$fieldid;
+			}
+			$model_field = $this->db->get_one($where);
+			if ($model_field) showmessage(L('fieldname').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
 			
 			require MODEL_PATH.$field_type.DIRECTORY_SEPARATOR.'config.inc.php';
 			
@@ -131,7 +141,6 @@ class sitemodel_field extends admin {
 			require MODEL_PATH.'edit.sql.php';
 			//附加属性值
 			$info['setting'] = array2string($this->input->post('setting'));
-			$fieldid = intval($this->input->post('fieldid'));
 			
 			$info['unsetgroupids'] = $this->input->post('unsetgroupids') ? implode(',',$this->input->post('unsetgroupids')) : '';
 			$info['unsetroleids'] = $this->input->post('unsetroleids') ? implode(',',$this->input->post('unsetroleids')) : '';
@@ -218,10 +227,11 @@ class sitemodel_field extends admin {
 	 */
 	public function public_checkfield() {
 		$field = strtolower($this->input->get('field'));
-		$oldfield = strtolower($this->input->get('oldfield'));
-		if($field==$oldfield) exit('1');
+		$fieldid = intval($this->input->get('fieldid'));
+		//$oldfield = strtolower($this->input->get('oldfield'));
+		//if($field==$oldfield) exit('1');
 		$modelid = intval($this->input->get('modelid'));
-		if($modelid==-1) {
+		/*if($modelid==-1) {
 			$tablename = 'category';
 		} else if($modelid==-2) {
 			$tablename = 'page';
@@ -245,9 +255,14 @@ class sitemodel_field extends admin {
 		} else {
 			$this->db->table_name = $this->db->db_tablepre.$tablename;
 		}
-		$fields = $this->db->get_fields();
+		$fields = $this->db->get_fields();*/
+		$where = 'modelid='.$modelid.' AND field=\''.$field.'\' AND siteid='.$this->siteid.'';
+		if ($fieldid) {
+			$where .= ' AND fieldid<>'.$fieldid;
+		}
+		$fields = $this->db->get_one($where);
 		
-		if(array_key_exists($field,$fields)) {
+		if($fields) {
 			exit('0');
 		} else {
 			exit('1');
@@ -298,6 +313,24 @@ class sitemodel_field extends admin {
 		$r = $this->model_db->get_one(array('modelid'=>$modelid));
 		$forminfos = $content_form->get();
 		include $this->admin_tpl('sitemodel_priview');
+	}
+	/**
+	 * 汉字转换拼音
+	 */
+	public function public_ajax_pinyin() {
+		$pinyin = pc_base::load_sys_class('pinyin');
+		$name = dr_safe_replace($this->input->get('name'));
+		if (!$name) {
+			exit('');
+		}
+		$py = $pinyin->result($name);
+		if (strlen($py) > 12) {
+			$sx = $pinyin->result($name, 0);
+			if ($sx) {
+				exit($sx);
+			}
+		}
+		exit($py);
 	}
 }
 ?>

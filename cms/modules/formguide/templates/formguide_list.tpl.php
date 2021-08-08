@@ -15,17 +15,17 @@ include $this->admin_tpl('header', 'admin');
     <table width="100%" cellspacing="0">
         <thead>
             <tr>
-            <th width="35" align="center" class="myselect">
+            <th class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="group-checkable" value="" id="check_box" onclick="selectall('formid[]');" />
                         <span></span>
                     </label></th>
-			<th align="center"><?php echo L('name_items')?></th>
-			<th width='100' align="center"><?php echo L('tablename')?></th>
-			<th width='150' align="center"><?php echo L('introduction')?></th>
-			<th width="140" align="center"><?php echo L('create_time')?></th>
-			<th width="160" align="center"><?php echo L('call')?></th>
-			<th width="220" align="center"><?php echo L('operations_manage')?></th>
+			<th><?php echo L('name_items')?></th>
+			<th width='180'><?php echo L('tablename')?></th>
+			<th width='300'><?php echo L('introduction')?></th>
+			<th width="180"><?php echo L('create_time')?></th>
+			<th width="220"><?php echo L('call')?></th>
+			<th width="220"><?php echo L('operations_manage')?></th>
             </tr>
         </thead>
     <tbody>
@@ -34,7 +34,7 @@ if(is_array($data)){
 	foreach($data as $form){
 ?>   
 	<tr>
-	<td align="center" class="myselect">
+	<td class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="checkboxes" name="formid[]" value="<?php echo $form['modelid']?>" />
                         <span></span>
