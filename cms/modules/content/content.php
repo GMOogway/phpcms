@@ -1059,7 +1059,7 @@ class content extends admin {
 	 * 图片裁切
 	 */
 	public function public_crop() {
-		$this->userid = $_SESSION['userid'] ? $_SESSION['userid'] : (param::get_cookie('_userid') ? param::get_cookie('_userid') : sys_auth($this->input->post('userid_h5'),'DECODE'));
+		$this->userid = $_SESSION['userid'] ? $_SESSION['userid'] : (param::get_cookie('_userid') ? param::get_cookie('_userid') : param::get_cookie('userid'));
 		$siteid = param::get_cookie('siteid');
 		if(!$siteid) $siteid = $this->get_siteid() ? $this->get_siteid() : 1 ;
 		if($this->input->post('filepath')){
