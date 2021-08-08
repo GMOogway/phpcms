@@ -5,7 +5,7 @@
 <script type="text/javascript" src="<?php echo JS_PATH?>layui/layui.js"></script>
 <script language="JavaScript" type="text/javascript" src="<?php echo JS_PATH?>h5upload/handlers.js"></script>
 <script type="text/javascript">
-<?php echo initupload($this->input->get('module'),$this->input->get('catid'),$args,$this->userid,$this->groupid,$this->isadmin,$userid_h5)?>
+<?php echo initupload($this->input->get('module'),$this->input->get('catid'),$args,$this->userid,$this->groupid,$this->isadmin)?>
 </script>
 <div class="pad-10">
     <div class="col-tab">

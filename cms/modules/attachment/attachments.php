@@ -14,7 +14,7 @@ class attachments {
 		pc_base::load_app_func('global');
 		$this->upload = pc_base::load_sys_class('upload');
 		$this->imgext = array('jpg','gif','png','bmp','jpeg');
-		$this->userid = $_SESSION['userid'] ? $_SESSION['userid'] : (param::get_cookie('_userid') ? param::get_cookie('_userid') : sys_auth($this->input->post('userid_h5'),'DECODE'));
+		$this->userid = $_SESSION['userid'] ? $_SESSION['userid'] : (param::get_cookie('_userid') ? param::get_cookie('_userid') : param::get_cookie('userid'));
 		$this->isadmin = $this->admin_username = $_SESSION['roleid'] ? 1 : 0;
 		$this->groupid = param::get_cookie('_groupid') ? param::get_cookie('_groupid') : 8;
 		//判断是否登录
@@ -177,7 +177,6 @@ class attachments {
 			$att_not_used = getcache('att_json', 'commons');
 			if(empty($att_not_used) || !isset($att_not_used)) $tab_status = ' class="on"';
 			if(!empty($att_not_used)) $div_status = ' hidden';
-			$userid_h5=sys_auth($this->userid, 'ENCODE');
 			include $this->admin_tpl('h5upload');
 		}
 	}

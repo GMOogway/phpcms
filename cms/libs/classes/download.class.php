@@ -12,12 +12,10 @@ class download {
      * 构造函数
      */
     public function __construct($module='', $catid = 0,$siteid = 0) {
-        $session_storage = 'session_'.pc_base::load_config('system','session_storage');
-        pc_base::load_sys_class($session_storage);
         $this->catid = intval($catid);
         $this->siteid = intval($siteid)== 0 ? 1 : intval($siteid);
         $this->module = $module ? $module : 'content';
-        $this->userid = $_SESSION['userid'] ? $_SESSION['userid'] : (param::get_cookie('_userid') ? param::get_cookie('_userid') : sys_auth($_POST['userid_h5'],'DECODE'));
+        $this->userid = $_SESSION['userid'] ? $_SESSION['userid'] : (param::get_cookie('_userid') ? param::get_cookie('_userid') : param::get_cookie('userid'));
     }
 
     /**

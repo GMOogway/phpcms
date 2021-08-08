@@ -10,7 +10,7 @@ class attachment extends admin {
 		$this->input = pc_base::load_sys_class('input');
 		$this->upload = pc_base::load_sys_class('upload');
 		$this->admin_username = param::get_cookie('admin_username');
-		$this->userid = $_SESSION['userid'] ? $_SESSION['userid'] : (param::get_cookie('_userid') ? param::get_cookie('_userid') : sys_auth($this->input->post('userid_h5'),'DECODE'));
+		$this->userid = $_SESSION['userid'] ? $_SESSION['userid'] : (param::get_cookie('_userid') ? param::get_cookie('_userid') : param::get_cookie('userid'));
 		$this->siteid = $this->get_siteid();
 		$this->db = pc_base::load_model('attachment_remote_model');
 		$this->type = array(

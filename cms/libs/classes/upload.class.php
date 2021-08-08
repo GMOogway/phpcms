@@ -288,7 +288,7 @@ class upload {
     }
 
     public function set_userid($userid) {
-        $this->userid = $userid;
+        $this->userid = intval($userid);
     }
 
     // 附件归档存储

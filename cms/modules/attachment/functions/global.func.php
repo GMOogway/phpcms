@@ -42,7 +42,7 @@
 	 * @param $groupid 用户组id
 	 * @param $isadmin 是否为管理员模式
 	 */
-	function initupload($module, $catid,$args, $userid, $groupid = '8', $isadmin = '0',$userid_h5='0'){
+	function initupload($module, $catid,$args, $userid, $groupid = '8', $isadmin = '0'){
 		$grouplist = getcache('grouplist','member');
 		if($isadmin==0 && !$grouplist[$groupid]['allowattachment']) return false;
 		extract(geth5init($args));
@@ -60,7 +60,7 @@
 					elem:'#file_upload',
 					accept:'file',
 					field:'file_upload',
-					data: {H5UPLOADSESSID : '".$sess_id."',module:'".$module."',catid:'".$catid."',userid:'".$userid."',siteid:'".$siteid."',dosubmit:'1',thumb_width:'".$thumb_width."',thumb_height:'".$thumb_height."',watermark_enable:'".$watermark_enable."',attachment:'".$attachment."',image_reduce:'".$image_reduce."',filetype_post:'".$file_types_post."',h5_auth_key:'".$h5_auth_key."',isadmin:'".$isadmin."',groupid:'".$groupid."',userid_h5:'".$userid_h5."'},
+					data: {H5UPLOADSESSID : '".$sess_id."',module:'".$module."',catid:'".$catid."',userid:'".$userid."',siteid:'".$siteid."',dosubmit:'1',thumb_width:'".$thumb_width."',thumb_height:'".$thumb_height."',watermark_enable:'".$watermark_enable."',attachment:'".$attachment."',image_reduce:'".$image_reduce."',filetype_post:'".$file_types_post."',h5_auth_key:'".$h5_auth_key."',isadmin:'".$isadmin."',groupid:'".$groupid."'},
 					url: '".APP_PATH."index.php?m=attachment&c=attachments&a=h5upload',
 					exts: '".$file_types_post."',
 					size: ".$file_size_limit.",
