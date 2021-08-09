@@ -25,7 +25,7 @@
 						<label>登录次数：</label> {$memberinfo['loginnum']} 次
 					</div>
 					<div class="row">
-						<label>上次登录：</label> {date('Y年m月d日 H:i:s',$memberinfo['lastdate'])} [ IP地址： {$memberinfo['lastip']} ] 
+						<label>上次登录：</label> {if $memberinfo['lastdate']}{date('Y年m月d日 H:i:s',$memberinfo['lastdate'])}{else}无{/if} [ IP地址：{if $memberinfo['lastip']}{$memberinfo['lastip']}{else}无{/if} ] 
 					</div>
 				</div>
 			</div>
@@ -44,7 +44,7 @@
 					</tr>
 					<tr>
 						<th width="120">{L('lastlogintime')}：</th>        
-						<td>{FORMAT::date($memberinfo['lastdate'] ,1)}</td>
+						<td>{if $memberinfo['lastdate']}{FORMAT::date($memberinfo['lastdate'] ,1)}{else}无{/if}</td>
 					</tr>
 					<tr>
 						<th width="120">{L('regip')}：</th>        
@@ -52,7 +52,7 @@
 					</tr>
 					<tr>
 						<th width="120">{L('lastip')}：</th>        
-						<td>{$memberinfo['lastip']}</td>
+						<td>{if $memberinfo['lastip']}{$memberinfo['lastip']}{else}无{/if}</td>
 					</tr>
 					<tr>
 						<th width="120">{L('mp')}：</th>        
