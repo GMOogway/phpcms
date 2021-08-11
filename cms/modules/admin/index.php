@@ -313,8 +313,8 @@ class index extends admin {
 		ob_end_clean();
 		system_information($data);
 	}
-    // 版本检查
-    public function public_version_cms() {
+	// 版本检查
+	public function public_version_cms() {
 		define('CMS_VERSION', pc_base::load_config('version','cms_version'));
 		define('CMS_RELEASE', pc_base::load_config('version','cms_release'));
 		define('CMS_ID', pc_base::load_config('license','cms_id'));
@@ -329,7 +329,7 @@ class index extends admin {
 		$this->service_url = 'http://ceshi.kaixin100.cn/index.php?m=cloud&c=index&a=cloud&domain='.dr_get_domain_name(ROOT_URL).'&admin='.urlencode($this->admin_url).'&version='.CMS_VERSION.'&cms='.CMS_ID.'&license='.CMS_LICENSE.'&sitename='.$this->sitename.'&siteurl='.urlencode($this->siteurl).'&updatetime='.strtotime(CMS_UPDATETIME).'&downtime='.strtotime(CMS_DOWNTIME).'&php='.PHP_VERSION.'&mysql='.$this->db->version().'&browser='.urlencode($_SERVER['HTTP_USER_AGENT']).'&admin_username='.urlencode(param::get_cookie('admin_username')).'&admin_email='.urlencode(param::get_cookie('admin_email')).'&sitelist='.urlencode($this->sitelist);
 		$surl = $this->service_url.'&action=check_version&php='.PHP_VERSION.'&get_http=1';
 		exit(dr_catcher_data($surl));
-    }
+	}
 	public function public_icon() {
 		$show_header = $show_pc_hash = 1;
 		include $this->admin_tpl('icon');
