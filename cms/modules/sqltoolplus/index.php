@@ -51,7 +51,7 @@ class index extends admin {
 			$replace = array();
 			$replace[0][] = '{tablepre}';
 			$replace[1][] = $this -> db_tablepre;
-			$sql_data = explode(';SQL_FINECMS_EOL', trim(str_replace(array(PHP_EOL, chr(13), chr(10)), 'SQL_FINECMS_EOL', str_replace($replace[0], $replace[1], $sqls))));
+			$sql_data = explode(';SQL_CMS_EOL', trim(str_replace(array(PHP_EOL, chr(13), chr(10)), 'SQL_CMS_EOL', str_replace($replace[0], $replace[1], $sqls))));
 			if ($pdo_name == '') {
 				dr_json(0, L('select_pdo'));
 			}
@@ -61,7 +61,7 @@ class index extends admin {
 						continue;
 					}
 					$ret = '';
-					$queries = explode('SQL_FINECMS_EOL', trim($query));
+					$queries = explode('SQL_CMS_EOL', trim($query));
 					foreach($queries as $query) {
 						$ret.= $query[0] == '#' || $query[0].$query[1] == '--' ? '' : $query;
 					}

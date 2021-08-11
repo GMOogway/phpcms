@@ -24,7 +24,6 @@ include $this->admin_tpl('header','admin');?>
 <script type="text/javascript">var catid=<?php echo $catid;?></script>
 <div class="page-content main-content">
 <form name="myform" id="myform" action="?m=content&c=content&a=edit" class="form-horizontal" onsubmit="return checkall()" method="post" enctype="multipart/form-data">
-<?php echo dr_form_hidden();?>
 <div class="myfbody">
         <div class="row ">
             <div class="col-md-9">

@@ -255,4 +255,7 @@ $LANG['public_email_log'] = 'Email Log';
 $LANG['import_wxurl'] = 'A key to import';
 $LANG['import_wxurl_publish'] = 'Administrators have access this function';
 $LANG['import_word'] = 'Upload the Word document';
+$LANG['cloud_service'] = 'Cloud service';
+$LANG['version_update'] = 'Version update';
+$LANG['file_compare'] = 'File compare';
 ?>

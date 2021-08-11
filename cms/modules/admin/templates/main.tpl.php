@@ -63,10 +63,6 @@ padding-right: 70px !important;text-overflow:ellipsis!important;overflow:hidden!
                         <div class="layui-card">
                             <div class="layui-card-header"><i class="fa fa-warning icon"></i><?php echo L('personal_information')?></div>
                             <div class="layui-card-body">
-                                <script type="text/javascript">
-                                $(function(){if ($.browser.msie && parseInt($.browser.version) < 7) $('#browserVersionAlert').show();}); 
-                                </script>
-                                <div style="border: 1px solid #ffbe7a;background: #fffced;padding: 8px 10px;line-height: 20px;display:none" id="browserVersionAlert"><?php echo L('ie8_tip')?></div>
                                 <div class="welcome-module">
                                     <div class="layui-row layui-col-space10">
                                         <p><span id="nowTime"></span></p>
@@ -181,14 +177,22 @@ padding-right: 70px !important;text-overflow:ellipsis!important;overflow:hidden!
                                 <col>
                             </colgroup>
                             <tbody>
-                            <!--<tr>
-                                <td>程序版本</td>
-                                <td>Phpcms <?php echo PC_VERSION?>  Release <?php echo PC_RELEASE?></td>
-                            </tr>-->
                             <tr>
-                                <td>当前版本</td>
-                                <td>Cms <?php echo CMS_VERSION?> [<?php echo CMS_RELEASE?>]</td>
+                                <td>系统版本</td>
+                                <td>Cms <?php echo CMS_VERSION?> [<?php echo CMS_RELEASE?>]&nbsp;&nbsp;<a id="dr_cms_update" href="javascript:;" layuimini-content-href="?m=admin&c=cloud&a=init&menuid=276&pc_hash=<?php echo $_SESSION['pc_hash']?>" data-title="版本升级" data-icon="fa fa-refresh" style="margin-left: 10px;display: none" class="badge badge-danger badge-roundless">  </a></td>
                             </tr>
+                            <script>
+                            $(function () {
+                                $.ajax({type: "GET",dataType:"json", url: "?m=admin&c=index&a=public_version_cms",
+                                    success: function(json) {
+                                        if (json.code) {
+                                            $('#dr_cms_update').show();
+                                            $('#dr_cms_update').html(json.msg);
+                                        }
+                                    }
+                                });
+                            });
+                            </script>
                             <tr>
                                 <td><?php echo L('main_os')?></td>
                                 <td><?php echo $sysinfo['os']?></td>

@@ -454,6 +454,62 @@ function map(id,linkurl,title,tcstr,w,h) {
 	};
 	diag.show();
 }
+// 处理post提交
+function dr_post_submit(url, form, time, go) {
+	var p = url.split('/');
+	if ((p[0] == 'http:' || p[0] == 'https:') && document.location.protocol != p[0]) {
+		alert('当前提交的URL是'+p[0]+'模式，请使用'+document.location.protocol+'模式访问再提交');
+		return;
+	}
+
+	url = url.replace(/&page=\d+&page/g, '&page');
+
+	var loading = layer.load(2, {
+		shade: [0.3,'#fff'], //0.1透明度的白色背景
+		time: 100000000
+	});
+
+	$("#"+form+' .form-group').removeClass('has-error');
+
+	$('.dr_ueditor').each(function () {
+		var uev = $(this).attr('id');
+		if(UE.getEditor(uev).queryCommandState('source')!=0){
+			UE.getEditor(uev).execCommand('source');
+		}
+	});
+
+	$.ajax({
+		type: "POST",
+		dataType: "json",
+		url: url,
+		data: $("#"+form).serialize(),
+		success: function(json) {
+			layer.close(loading);
+			if (json.code) {
+				dr_tips(1, json.msg, json.data.time);
+				if (time) {
+					var gourl = url;
+					if (go != '' && go != undefined && go != 'undefined') {
+						gourl = go;
+					} else if (json.data.url) {
+						gourl = json.data.url;
+					}
+					setTimeout("window.location.href = '"+gourl+"'", time);
+				}
+			} else {
+				dr_tips(0, json.msg, json.data.time);
+				$('.fc-code img').click();
+				if (json.data.field) {
+					$('#dr_row_'+json.data.field).addClass('has-error');
+					$('#dr_'+json.data.field).focus();
+				}
+			}
+		},
+		error: function(HttpRequest, ajaxOptions, thrownError) {
+			dr_ajax_alert_error(HttpRequest, ajaxOptions, thrownError)
+		}
+	});
+}
 function dr_admin_menu_ajax(e, t) {
 	var a = layer.load(2, {
 		shade: [.3, "#fff"],

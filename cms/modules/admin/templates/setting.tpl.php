@@ -127,6 +127,15 @@ include $this->admin_tpl('header');?>
 </div>
 <div id="div_setting_2" class="contentList pad-10 hidden">
 	<table width="100%"  class="table_form">
+  <!--<tr>
+    <th width="130"><?php echo L('setting_csrf')?></th>
+    <td class="y-bg">
+	  <div class="mt-radio-inline">
+          <label class="mt-radio mt-radio-outline"><input name="setconfig[sys_csrf]" value="1" type="radio" <?php echo ($sys_csrf=='1') ? ' checked' : ''?>> <?php echo L('setting_yes')?> <span></span></label>
+          <label class="mt-radio mt-radio-outline"><input name="setconfig[sys_csrf]" value="0" type="radio" <?php echo ($sys_csrf=='0') ? ' checked' : ''?>> <?php echo L('setting_no')?> <span></span></label>
+        </div><?php echo L('setting_csrf_desc')?>
+     </td>
+  </tr>-->
   <tr>
     <th width="130"><?php echo L('need_check_come_url')?></th>
     <td class="y-bg">

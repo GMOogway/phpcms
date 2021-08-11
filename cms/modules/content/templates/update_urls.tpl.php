@@ -65,7 +65,7 @@ include $this->admin_tpl('header','admin');?>
     <div class="portlet-body form">
         <div class="tab-content">
             <div class="tab-pane active" id="tab_0">
-                <div class="table-scrollable">
+                <div class="table-list">
                     <table style="margin-top: 30px;" class="table table-striped table-bordered table-hover table-checkable dataTable">
                         <thead>
                         <tr class="heading">

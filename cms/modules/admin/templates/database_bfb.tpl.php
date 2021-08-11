@@ -9,7 +9,7 @@ a:hover {text-decoration: underline;}
 .note {margin: 0 0 20px;padding: 15px 30px 15px 15px;border-left: 5px solid #eee;border-radius: 0 4px 4px 0;}
 .note, .tabs-right.nav-tabs>li>a:focus, .tabs-right.nav-tabs>li>a:hover {-webkit-border-radius: 0 4px 4px 0;-moz-border-radius: 0 4px 4px 0;-ms-border-radius: 0 4px 4px 0;-o-border-radius: 0 4px 4px 0;}
 .page-container {margin: 0;padding: 0;position: relative;}
-.finecms-file-ts, .progress {margin-bottom: 8px!important;}
+.progress {margin-bottom: 8px!important;}
 .progress {border: 0;background-image: none;filter: none;-webkit-box-shadow: none;-moz-box-shadow: none;box-shadow: none;}
 .progress {height: 20px;background-color: #fff;border-radius: 4px;}
 .embed-responsive, .modal, .modal-open, .progress {overflow: hidden;}

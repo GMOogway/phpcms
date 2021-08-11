@@ -53,6 +53,9 @@ class manage extends admin {
 					if ($r['module']=='member' && $r['catid']==0) {
 						$rs['catname'] = '头像';
 						$rs['filepath'] = dr_file(SYS_AVATAR_URL.$r['filepath']);
+					} else if ($r['module']=='cloud' && $r['catid']==0) {
+						$rs['catname'] = '云服务';
+						$rs['filepath'] = dr_file(SYS_AVATAR_URL.$r['filepath']);
 					} else {
 						$rs['catname'] = $category[$r['catid']]['catname'];
 						$rs['filepath'] = dr_file($r['filepath']);

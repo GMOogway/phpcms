@@ -53,6 +53,17 @@ if(isset($show_dialog)) {?>
 		}
 	}
 <?php } ?>
+$(function(){
+	var html_form2 = document.forms;
+	var num2 = html_form2.length;
+	for(var i=0;i<num2;i++) {
+		var csrfNode = document.createElement("input");
+		csrfNode.name = 'csrf_test_name';
+		csrfNode.type = 'hidden';
+		csrfNode.value = '<?php echo csrf_hash();?>';
+		html_form2[i].appendChild(csrfNode);
+	}
+});
 </script>
 </head>
 <body>

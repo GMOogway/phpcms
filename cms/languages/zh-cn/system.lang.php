@@ -258,4 +258,7 @@ $LANG['public_email_log'] = '邮件日志';
 $LANG['import_wxurl'] = '一键导入';
 $LANG['import_wxurl_publish'] = '此功能后台管理员拥有权限';
 $LANG['import_word'] = '上传Word文件';
+$LANG['cloud_service'] = '服务';
+$LANG['version_update'] = '版本升级';
+$LANG['file_compare'] = '文件对比';
 ?>

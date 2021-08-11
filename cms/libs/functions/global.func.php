@@ -2928,8 +2928,8 @@ function dr_catcher_data($url, $timeout = 0) {
 		$data = curl_exec($ch);
 		$code = curl_getinfo($ch,CURLINFO_HTTP_CODE);
 		$errno = curl_errno($ch);
-		if ($errno) {
-			//log_message('error', '获取远程数据失败['.$url.']：（'.$errno.'）'.curl_error($ch));
+		if (CI_DEBUG && $errno) {
+			log_message('error', '获取远程数据失败['.$url.']：（'.$errno.'）'.curl_error($ch));
 		}
 		curl_close($ch);
 		if ($code == 200) {
@@ -2944,22 +2944,22 @@ function dr_catcher_data($url, $timeout = 0) {
 	//设置超时参数
 	if ($timeout && function_exists('stream_context_create')) {
 		// 解析协议
-		$opt = array(
-			'http' => array(
+		$opt = [
+			'http' => [
 				'method'  => 'GET',
 				'timeout' => $timeout,
-			),
-			'https' => array(
+			],
+			'https' => [
 				'method'  => 'GET',
 				'timeout' => $timeout,
-			)
-		);
+			]
+		];
 		$ptl = substr($url, 0, 8) == "https://" ? 'https' : 'http';
-		$data = @file_get_contents($url, 0, stream_context_create(array(
+		$data = file_get_contents($url, 0, stream_context_create([
 			$ptl => $opt[$ptl]
-		)));
+		]));
 	} else {
-		$data = @file_get_contents($url);
+		$data = file_get_contents($url);
 	}
 
 	return $data;
@@ -2990,6 +2990,12 @@ function format_create_sql($sql) {
 	$sql = trim(str_replace('ENGINE=InnoDB', 'ENGINE=MyISAM', $sql));
 	$sql = trim(str_replace('CHARSET=utf8 ', 'CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci ', $sql));
 	return $sql;
+}
+
+// 获取域名部分
+function dr_get_domain_name($url) {
+	list($url) = explode(':', str_replace(array('https://', 'http://', '/'), '', $url));
+	return $url;
 }
 
 /**

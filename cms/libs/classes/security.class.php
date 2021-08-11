@@ -72,7 +72,7 @@ class security {
 
 	// 替换前的处理
 	protected $_never_call_str = array(
-        '&quot;javascript:'    => '&quot;javascript_xunruicms:',
+        '&quot;javascript:'    => '&quot;javascript_cms:',
     );
 
 	/**

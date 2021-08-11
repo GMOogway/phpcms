@@ -23,7 +23,7 @@ class fclient extends admin {
 		}
 		$infos = $this->db->listinfo($where,$order = 'id DESC',$page, $pages = '10');
 		$pages = $this->db->pages;
-		$user = $this->db2->listinfo('',$order = 'userid DESC');
+		$user = $this->db2->select();
 		$user = new_html_special_chars($user);
  		$user_arr = array ();
  		foreach($user as $userid=>$user){
@@ -110,7 +110,7 @@ class fclient extends admin {
 			}
 			if((!$fclient['sn']) || empty($fclient['sn'])) showmessage(L('sn_noempty'));
 			$fclient['uid'] = $data['userid'];
-			$fclient['setting'] = json_encode($fclient['setting'], JSON_UNESCAPED_UNICODE);
+			$fclient['setting'] = dr_array2string($fclient['setting']);
 			if ($fclient['inputtime']) {
 				$fclient['inputtime'] = strtotime($fclient['inputtime']);
 			}

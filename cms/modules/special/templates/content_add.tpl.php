@@ -35,7 +35,6 @@ $p = dr_authcode(array(
 </style>
 <div class="page-content main-content">
 <form name="myform" id="myform" action="?m=special&c=content&a=add&specialid=<?php echo $_GET['specialid']?>" class="form-horizontal" onsubmit="return checkall()" method="post" enctype="multipart/form-data">
-<?php echo dr_form_hidden();?>
 <div class="myfbody">
         <div class="row ">
             <div class="col-md-9">
