@@ -283,7 +283,6 @@ class index extends admin {
 		define('PC_RELEASE', pc_base::load_config('version','pc_release'));
 		define('CMS_VERSION', pc_base::load_config('version','cms_version'));
 		define('CMS_RELEASE', pc_base::load_config('version','cms_release'));
-
 		$admin_username = param::get_cookie('admin_username');
 		$roles = getcache('role','commons');
 		$userid = $_SESSION['userid'];
@@ -313,6 +312,23 @@ class index extends admin {
 		$data = ob_get_contents();
 		ob_end_clean();
 		system_information($data);
+	}
+	// 版本检查
+	public function public_version_cms() {
+		define('CMS_VERSION', pc_base::load_config('version','cms_version'));
+		define('CMS_RELEASE', pc_base::load_config('version','cms_release'));
+		define('CMS_ID', pc_base::load_config('license','cms_id'));
+		define('CMS_LICENSE', pc_base::load_config('license','cms_license') ? pc_base::load_config('license','cms_license') : 'dev');
+		define('CMS_UPDATETIME', pc_base::load_config('version','cms_updatetime'));
+		define('CMS_DOWNTIME', pc_base::load_config('version','cms_downtime'));
+		$this->site = getcache('sitelist','commons');
+		$this->sitename = $this->site['1']['name'];
+		$this->siteurl = $this->site['1']['domain'];
+		foreach ($this->site as $list) $this->sitelist .= $list['domain'].',';
+		list($this->admin_url) = explode('?', FC_NOW_URL);
+		$this->service_url = 'http://ceshi.kaixin100.cn/index.php?m=cloud&c=index&a=cloud&domain='.dr_get_domain_name(ROOT_URL).'&admin='.urlencode($this->admin_url).'&version='.CMS_VERSION.'&cms='.CMS_ID.'&license='.CMS_LICENSE.'&sitename='.$this->sitename.'&siteurl='.urlencode($this->siteurl).'&updatetime='.strtotime(CMS_UPDATETIME).'&downtime='.strtotime(CMS_DOWNTIME).'&php='.PHP_VERSION.'&mysql='.$this->db->version().'&browser='.urlencode($_SERVER['HTTP_USER_AGENT']).'&admin_username='.urlencode(param::get_cookie('admin_username')).'&admin_email='.urlencode(param::get_cookie('admin_email')).'&sitelist='.urlencode($this->sitelist);
+		$surl = $this->service_url.'&action=check_version&php='.PHP_VERSION.'&get_http=1';
+		exit(dr_catcher_data($surl));
 	}
 	public function public_icon() {
 		$show_header = $show_pc_hash = 1;
