@@ -468,16 +468,15 @@ class check extends admin {
                 $app = pc_base::load_config('version');
                 $version_data = '<?php'.PHP_EOL.'if (!defined(\'IN_CMS\')) exit(\'No direct script access allowed\');'.PHP_EOL;
                 $version_data .= 'return array('.PHP_EOL;
-                $version_data .= '\'pc_version\' => \''.($app['pc_version'] ? $app['pc_version'] : 'V9.6.3').'\',    //版本号
-\'pc_release\' => \''.($app['pc_release'] ? $app['pc_release'] : '20170515').'\',    //更新日期
-\'cms_version\' => \''.($app['cms_version'] ? $app['cms_version'] : 'V9.6.6').'\',    //cms 版本号
-\'cms_release\' => \''.($app['cms_release'] ? $app['cms_release'] : dr_date(SYS_TIME, 'Ymd')).'\',    //cms 更新日期
+                $version_data .= '\'pc_version\' => \''.($app['pc_version'] ? $app['pc_version'] : 'V9.6.3').'\', //版本号
+\'pc_release\' => \''.($app['pc_release'] ? $app['pc_release'] : '20170515').'\', //更新日期
+\'cms_version\' => \''.($app['cms_version'] ? $app['cms_version'] : 'V9.6.6').'\', //cms 版本号
+\'cms_release\' => \''.($app['cms_release'] ? $app['cms_release'] : dr_date(SYS_TIME, 'Ymd')).'\', //cms 更新日期
 \'cms_updatetime\' => \''.($app['cms_updatetime'] ? $app['cms_updatetime'] : dr_date(SYS_TIME, 'Y-m-d')).'\', // 服务端最近更新时间
 \'cms_downtime\' => \''.($app['cms_downtime'] ? $app['cms_downtime'] : dr_date(SYS_TIME, 'Y-m-d H:i:s')).'\', // 本网站程序下载时间
-\'cms_license\' => \''.($app['cms_license'] ? $app['cms_license'] : '').'\',
-\'update\' => \'0\',    //cms 更新';
+\'update\' => \'0\', //cms 更新';
                 $version_data.= PHP_EOL.');'.PHP_EOL.'?>';
-                if ($app['update'] || !strstr($app_version, 'IN_CMS') || !strstr($app_version, 'cms_version') || !strstr($app_version, 'cms_release') || !strstr($app_version, 'update')) {
+                if ($app['update'] || !strstr($app_version, 'IN_CMS') || !strstr($app_version, 'cms_version') || !strstr($app_version, 'cms_release') || !strstr($app_version, 'cms_updatetime') || !strstr($app_version, 'cms_downtime') || !strstr($app_version, 'update')) {
                     file_put_contents($version,$version_data);
                 }
 

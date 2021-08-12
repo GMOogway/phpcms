@@ -39,7 +39,7 @@ class cloud extends admin {
             include $this->admin_tpl('cloud_login');exit;
         }
 
-        $backup = $this->_is_backup_file(CACHE_PATH.'backups/update/cms/');
+        $backup = str_replace('\\', '/', $this->_is_backup_file(CACHE_PATH.'bakup/update/cms/'));
 
         include $this->admin_tpl('cloud_update');exit;
     }

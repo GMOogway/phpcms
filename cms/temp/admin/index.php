@@ -184,7 +184,7 @@ class index extends admin {
 		$array = admin::admin_menu(0);
 		$app = pc_base::load_config('version');
 		if ($app['update'] || !is_file(CACHE_PATH.'configs/version.php')) {
-			$menu_home = '?m=admin&c=check&a=init&pc_hash='.$_SESSION['pc_hash'];
+			$menu_home = '?m=admin&c=check&a=init&menuid=248&pc_hash='.$_SESSION['pc_hash'];
 		} else {
 			$menu_home = '?m=admin&c=index&a=public_main';
 		}

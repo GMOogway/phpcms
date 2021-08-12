@@ -63,6 +63,8 @@ table td[class*=col-],table th[class*=col-] {position: static;float: none;displa
 .table>tbody>tr>td,.table>tbody>tr>th,.table>tfoot>tr>td,.table>tfoot>tr>th,.table>thead>tr>td,.table>thead>tr>th {vertical-align: middle;}
 .fc-head-table thead th {background-color: #edf2f7;}
 .table-striped>tbody>tr:nth-of-type(odd) {background-color: #fff!important;}
+.label-success {background-color: #3ea9e2;color: #fff!important;}
+.label-success[href]:focus, .label-success[href]:hover {background-color: #27a4b0;}
 </style>
 <div class="page-content main-content">
 <div class="note note-danger">
