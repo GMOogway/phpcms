@@ -171,15 +171,27 @@ class cloud extends admin {
 
         if ($dir == 'cms') {
             // 主程序备份
-            $rt = $this->file->zip(CACHE_PATH.'backups/update/cms/'.date('Y-m-d H:i:s').'.zip', rtrim(CMS_PATH, '/'), [
-                CMS_PATH.'caches',
-                CMS_PATH.'uploadfile'
+            $rt = $this->file->zip(CACHE_PATH.'bakup/update/cms/'.date('Y-m-d-H-i-s').'.zip', PC_PATH, [
+                PC_PATH.'/templates'
             ]);
         }
 
         if ($rt) {
             dr_json(0, '本站：文件备份失败（'.$rt.'）');
         }
+
+        // 备份api
+        $this->file->zip(
+            CACHE_PATH.'bakup/update/api/'.date('Y-m-d-H-i-s').'.zip',
+            CMS_PATH.'api'
+        );
+
+        // 备份模板
+        $this->file->zip(
+            CACHE_PATH.'bakup/update/template/'.date('Y-m-d-H-i-s').'.zip',
+            PC_PATH.'templates'
+        );
+
         dr_json(1, 'ok');
     }
 
