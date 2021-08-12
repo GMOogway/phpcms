@@ -79,10 +79,10 @@ a:hover{color:#1eaff1;}
 
 /*网站头部 */
 .header{height:100px;padding:10px 0;width:1170px;margin:0 auto;}
-.logo{float:left;margin-top:35px;width:370px;}
-.logo a{color: #2196f3;font-size: 30px;overflow: hidden;display: block;height:35px;text-overflow: ellipsis;white-space: nowrap;}
-.logo img{width:265px;height:35px}
-.search{float:left;margin-left:130px;margin-top:30px;}
+.logo{float:left;margin-top:30px;}
+.logo a{color: #2196f3;font-size: 30px;overflow: hidden;display: block;height:40px;text-overflow: ellipsis;white-space: nowrap;}
+.logo img{height:40px}
+.search{float:right;margin-top:30px;}
 .searchtxt .searchmenu .searchselected{background-image:url(../images/icon2.png);background-repeat:no-repeat;}
 .searchtxt{float:left;width:450px;height:36px;border:2px solid #2196f3;border-right:0;position:relative;z-index:100;background:#fff;}
 .searchtxt .searchmenu{float:left;border-right:1px solid #eee;}

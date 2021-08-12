@@ -4,7 +4,6 @@
  */
 defined('IN_CMS') or exit('No permission resources.');
 define('ROUTE_M', '');
-$siteinfo = getcache('sitelist', 'commons');
 
 $siteid = $input->post('siteid');
 $ismobile = $input->post('ismobile');
@@ -12,14 +11,14 @@ $ishtml = $input->post('ishtml');
 $url = urldecode($input->post('url'));
 
 $siteid = $siteid ? $siteid : (get_siteid() ? get_siteid() : SITE_ID);
-$config = $siteinfo[$siteid];
+$config = siteinfo($siteid);
+
+if (!$config) {
+	dr_json(0, L('配置文件不存在'));
+}
 
 if (!$ishtml && isset($config['mobileauto']) && $config['mobileauto']) {
 	dr_json(0, L('系统已经开启自动识别移动端，此功能无效'));
-}
-
-if (!$siteinfo) {
-	dr_json(0, L('配置文件不存在'));
 }
 
 $domain = $config['domain'];

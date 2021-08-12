@@ -24,13 +24,11 @@ class cloud extends admin {
         define('CMS_LICENSE', pc_base::load_config('license','cms_license') ? pc_base::load_config('license','cms_license') : 'dev');
         define('CMS_UPDATETIME', pc_base::load_config('version','cms_updatetime'));
         define('CMS_DOWNTIME', pc_base::load_config('version','cms_downtime'));
-        $this->site = getcache('sitelist','commons');
-        $this->sitename = $this->site['1']['name'];
-        $this->siteurl = $this->site['1']['domain'];
-        foreach ($this->site as $list) $this->sitelist .= $list['domain'].',';
+        $this->site = siteinfo(1);
+        $this->sitename = $this->site['name'];
 
         list($this->admin_url) = explode('?', FC_NOW_URL);
-        $this->service_url = 'http://ceshi.kaixin100.cn/index.php?m=cloud&c=index&a=cloud&domain='.dr_get_domain_name(ROOT_URL).'&admin='.urlencode($this->admin_url).'&version='.CMS_VERSION.'&cms='.CMS_ID.'&license='.CMS_LICENSE.'&sitename='.$this->sitename.'&siteurl='.urlencode($this->siteurl).'&updatetime='.strtotime(CMS_UPDATETIME).'&downtime='.strtotime(CMS_DOWNTIME).'&php='.PHP_VERSION.'&mysql='.$this->db->version().'&browser='.urlencode($_SERVER['HTTP_USER_AGENT']).'&admin_username='.urlencode(param::get_cookie('admin_username')).'&admin_email='.urlencode(param::get_cookie('admin_email')).'&sitelist='.urlencode($this->sitelist);
+        $this->service_url = 'http://ceshi.kaixin100.cn/index.php?m=cloud&c=index&a=cloud&domain='.dr_get_domain_name(ROOT_URL).'&admin='.urlencode($this->admin_url).'&version='.CMS_VERSION.'&cms='.CMS_ID.'&license='.CMS_LICENSE.'&updatetime='.strtotime(CMS_UPDATETIME).'&downtime='.strtotime(CMS_DOWNTIME).'&sitename='.$this->sitename.'&php='.PHP_VERSION.'&mysql='.$this->db->version().'&os='.PHP_OS;
     }
 
     // 程序升级
@@ -41,7 +39,6 @@ class cloud extends admin {
             include $this->admin_tpl('cloud_login');exit;
         }
 
-        $id = 'cms';
         $backup = $this->_is_backup_file(CACHE_PATH.'backups/update/cms/');
 
         include $this->admin_tpl('cloud_update');exit;
@@ -54,7 +51,7 @@ class cloud extends admin {
         if (IS_POST) {
 
             $post = $this->input->post('data');
-            $surl = $this->service_url.'&action=update_login&get_http=1&username='.$post['username'].'&password='.md5($post['password']);
+            $surl = $this->service_url.'&action=update_login&username='.$post['username'].'&password='.md5($post['password']);
             $json = dr_catcher_data($surl);
             if (!$json) {
                 dr_json(0, '本站：没有从服务端获取到数据');
@@ -72,7 +69,7 @@ class cloud extends admin {
         if (IS_POST) {
 
             $post = $this->input->post('data');
-            $surl = $this->service_url.'&action=update_login&get_http=1&username='.$post['username'].'&password='.md5($post['password']);
+            $surl = $this->service_url.'&action=update_login&username='.$post['username'].'&password='.md5($post['password']);
 
             $json = dr_catcher_data($surl);
             if (!$json) {
@@ -147,7 +144,7 @@ class cloud extends admin {
         }
 
         $vid = dr_safe_replace($this->input->get('version'));
-        $surl = $this->service_url.'&action=check_version&php='.PHP_VERSION.'&get_http=1&id='.$cid.'&version='.$vid;
+        $surl = $this->service_url.'&action=check_version&id='.$cid.'&version='.$vid;
         $json = dr_catcher_data($surl);
         if (!$json) {
             dr_json(0, '本站：没有从服务端获取到数据');
@@ -194,7 +191,7 @@ class cloud extends admin {
             dr_json(0, '本站：没有选择任何升级程序');
         }
 
-        $surl = $this->service_url.'&action=update_file&php='.PHP_VERSION.'&get_http=1&ls='.dr_safe_replace($this->input->get('ls'));
+        $surl = $this->service_url.'&action=update_file&ls='.dr_safe_replace($this->input->get('ls'));
         $json = dr_catcher_data($surl);
         if (!$json) {
             dr_json(0, '本站：没有从服务端获取到数据', $surl);

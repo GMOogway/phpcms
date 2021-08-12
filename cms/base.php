@@ -194,7 +194,7 @@ define('SYS_ATTACHMENT_URL', pc_base::load_config('system','sys_attachment_url')
 define('SYS_ATTACHMENT_SAVE_TYPE', pc_base::load_config('system','sys_attachment_save_type'));
 define('SYS_ATTACHMENT_SAVE_DIR', pc_base::load_config('system','sys_attachment_save_dir'));
 
-define('CI_DEBUG', IS_DEV ? 1 : IS_ADMIN && pc_base::load_config('system','debug'));
+define('CI_DEBUG', IS_DEV ? 1 : IS_ADMIN && pc_base::load_config('system','errorlog'));
 
 // 显示错误提示
 IS_ADMIN || IS_DEV ? error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING ^ E_STRICT ^ E_DEPRECATED) : error_reporting(0);
