@@ -158,6 +158,7 @@ class cloud extends admin {
 
         $ls = dr_safe_replace($this->input->get('ls'));
         $dir = dr_safe_replace($this->input->get('dir'));
+        $is_bf = intval($this->input->get('is_bf'));
         include $this->admin_tpl('cloud_todo_update');exit;
     }
 
@@ -169,11 +170,18 @@ class cloud extends admin {
             dr_json(0, '本站：没有选择任何升级程序');
         }
 
+        $is_bf = intval($this->input->get('is_bf'));
+        if ($is_bf) {
+            $this->_json(1, '你选择不备份直接升级程序');
+        }
+
         if ($dir == 'cms') {
             // 主程序备份
-            $rt = $this->file->zip(CACHE_PATH.'bakup/update/cms/'.date('Y-m-d-H-i-s').'.zip', PC_PATH, [
-                PC_PATH.'/templates'
-            ]);
+            $rt = $this->file->zip(
+                CACHE_PATH.'bakup/update/cms/'.date('Y-m-d-H-i-s').'.zip',
+                PC_PATH,
+                [PC_PATH.'/templates']
+            );
         }
 
         if ($rt) {

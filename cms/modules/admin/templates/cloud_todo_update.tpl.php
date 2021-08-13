@@ -96,7 +96,7 @@ label {font-weight: 400;}
         $.ajax({
             type: "GET",
             dataType: "json",
-            url: "?m=admin&c=cloud&a=update_backup&id=<?php echo CMS_ID;?>&dir=<?php echo $dir;?>&pc_hash="+pc_hash,
+            url: "?m=admin&c=cloud&a=update_backup&id=<?php echo CMS_ID;?>&dir=<?php echo $dir;?>&is_bf=<?php echo $is_bf;?>&pc_hash="+pc_hash,
             success: function (json) {
                 if (json.code == 0) {
 					$('#dr_check_button_ing').html('<i class="fa fa-times-circle"></i> 备份失败');
