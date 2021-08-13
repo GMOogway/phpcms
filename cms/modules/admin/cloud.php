@@ -172,7 +172,7 @@ class cloud extends admin {
 
         $is_bf = intval($this->input->get('is_bf'));
         if ($is_bf) {
-            $this->_json(1, '你选择不备份直接升级程序');
+            dr_json(1, '你选择不备份直接升级程序');
         }
 
         if ($dir == 'cms') {
