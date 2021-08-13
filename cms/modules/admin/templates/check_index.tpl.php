@@ -99,7 +99,7 @@ label {font-weight: 400;}
                 },
                 error: function(HttpRequest, ajaxOptions, thrownError) {
                     $('#dr_<?php echo $id;?>_result').attr('style', 'color:red');
-                    $('#dr_<?php echo $id;?>_result').html('系统异常，请检查错误日志');
+                    $('#dr_<?php echo $id;?>_result').html(HttpRequest.responseText);
                 }
             });
         });
