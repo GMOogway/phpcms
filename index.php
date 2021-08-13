@@ -5,7 +5,7 @@
  * @copyright			(C) 2005-2010
  * @lastmodify			2021-06-06
  */
-//declare(strict_types=1);
+declare(strict_types=1);
 header('X-Frame-Options: SAMEORIGIN'); //防止被站外加入iframe中浏览
 
 // 是否是开发者模式

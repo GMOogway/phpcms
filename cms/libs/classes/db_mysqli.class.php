@@ -420,9 +420,7 @@ final class db_mysqli {
 	public function halt($message = '', $sql = '') {
 		if($this->config['debug']) {
 			$this->errormsg = "<b>MySQL Query : </b> $sql <br /><b> MySQL Error : </b>".$this->error()." <br /> <b>MySQL Errno : </b>".$this->errno()." <br /><b> Message : </b> $message";
-			$msg = $this->errormsg;
-			echo '<div style="font-size:12px;text-align:left; border:1px solid #9cc9e0; padding:1px 4px;color:#000000;font-family:Arial, Helvetica,sans-serif;"><span>'.$msg.'</span></div>';
-			exit;
+			dr_show_error($this->errormsg);
 		} else {
 			return false;
 		}
