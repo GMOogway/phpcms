@@ -390,9 +390,9 @@ class cloud extends admin {
         if ($data) {
             $html = '';
             foreach ($data as $filename => $value) {
-                if (strpos($filename, '/dayrui') === 0) {
-                    $cname = 'PC_PATH'.substr($filename, 7);
-                    $ofile = PC_PATH.substr($filename, 8);
+                if (strpos($filename, '/cms') === 0) {
+                    $cname = 'PC_PATH'.substr($filename, 4);
+                    $ofile = PC_PATH.substr($filename, 5);
                 } else {
                     $cname = 'CMS_PATH'.$filename;
                     $ofile = CMS_PATH.substr($filename, 1);
