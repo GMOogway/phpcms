@@ -134,7 +134,7 @@ $(function(){
  * @param string name 列表check名称,如 uid[]
  */
 function selectall(name) {
-	if ($("#check_box").attr("checked")=='checked') {
+	if ($("#check_box").is(":checked")) {
 		$("input[name='"+name+"']").each(function() {
   			$(this).attr("checked","checked");
 			$(this).parents('tr').addClass("active");

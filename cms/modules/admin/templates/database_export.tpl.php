@@ -9,41 +9,43 @@ include $this->admin_tpl('header');?>
 <table width="100%" cellspacing="0">
 <thead>
   	<tr>
-    	<th class="tablerowhighlight" colspan=4><?php echo L('backup_setting')?></th>
+    	<th width="150"></th>
+    	<th><?php echo L('backup_setting')?></th>
   	</tr>
 </thead>
   	<tr>
-	    <td class="align_r"><?php echo L('sizelimit')?></td>
-	    <td colspan=3><input type=text name="sizelimit" value="2048" size=5> K</td>
+	    <td><?php echo L('sizelimit')?></td>
+	    <td><input type=text name="sizelimit" value="2048" size=5> K</td>
   	</tr>
    	<tr>
-	    <td class="align_r"><?php echo L('sqlcompat')?></td>
-	    <td colspan=3><div class="mt-radio-inline">
+	    <td><?php echo L('sqlcompat')?></td>
+	    <td><div class="mt-radio-inline">
           <label class="mt-radio mt-radio-outline"><input type="radio" name="sqlcompat" value="" checked> <?php echo L('default')?> <span></span></label>
           <label class="mt-radio mt-radio-outline"><input type="radio" name="sqlcompat" value="MYSQL40"> MySQL 3.23/4.0.x <span></span></label>
           <label class="mt-radio mt-radio-outline"><input type="radio" name="sqlcompat" value="MYSQL41"> MySQL 4.1.x/5.x <span></span></label>
         </div></td>
   	</tr>
    	<tr>
-	    <td class="align_r"><?php echo L('sqlcharset')?></td>
-	    <td colspan=3><div class="mt-radio-inline">
+	    <td><?php echo L('sqlcharset')?></td>
+	    <td><div class="mt-radio-inline">
           <label class="mt-radio mt-radio-outline"><input type="radio" name="sqlcharset" value="" checked> <?php echo L('default')?> <span></span></label>
         </div></td>
   	</tr>
   	<tr>
-	    <td class="align_r"><?php echo L('select_pdo')?></td>
-	    <td colspan=3><?php echo form::select($pdos,$pdo_name,'name="pdo_select" onchange="show_tbl(this)"',L('select_pdo'))?></td>
+	    <td><?php echo L('select_pdo')?></td>
+	    <td><?php echo form::select($pdos,$pdo_name,'name="pdo_select" onchange="show_tbl(this)"',L('select_pdo'))?></td>
   	</tr>
   	<tr>
 	    <td></td>
-	    <td colspan=3><input type="submit" name="dosubmit" value=" <?php echo L('backup_starting')?> " class="button"></td>
+	    <td><input type="submit" name="dosubmit" value=" <?php echo L('backup_starting')?> " class="button"></td>
   	</tr>
 </table>
-    <table width="100%" cellspacing="0" class="table-checkable">
+</div>
+<div class="table-list">
+<table width="100%" cellspacing="0" class="table-checkable">
  <?php 
 if(is_array($infos)){
-?>   
-	<thead><tr><th align="center" colspan="8"><strong><?php echo $pdo_name?> <?php echo L('pdo_name')?></strong></th></tr></thead>
+?>
     <thead>
        <tr>
            <th class="myselect">
@@ -51,13 +53,13 @@ if(is_array($infos)){
                         <input type="checkbox" class="group-checkable" data-set=".checkboxes" />
                         <span></span>
                     </label></th>
-           <th ><?php echo L('database_tblname')?></th>
-           <th width="10%"><?php echo L('database_type')?></th>
-           <th width="10%"><?php echo L('database_char')?></th>
-           <th width="15%"><?php echo L('database_records')?></th>
-           <th width="15%"><?php echo L('database_size')?></th>
-           <th width="15%"><?php echo L('database_block')?></th>
-           <th width="15%"><?php echo L('database_op')?></th>
+           <th width="280"><?php echo L('database_tblname')?></th>
+           <th width="150"><?php echo L('database_type')?></th>
+           <th width="180"><?php echo L('database_char')?></th>
+           <th width="100"><?php echo L('database_records')?></th>
+           <th width="150"><?php echo L('database_size')?></th>
+           <th width="150"><?php echo L('database_block')?></th>
+           <th><?php echo L('database_op')?></th>
        </tr>
     </thead>
     <tbody>

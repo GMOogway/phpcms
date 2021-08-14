@@ -640,12 +640,12 @@ function get_url() {
  * 当前URL
  */
 function now_url($url, $siteid = 1, $ismobile = 1, $ishtml = 1) {
-	$siteinfo = getcache('sitelist', 'commons');
+	$siteinfo = siteinfo($siteid);
 	if ($ishtml) {
 		if ($ismobile) {
-			return $url ? $url : $siteinfo[$siteid]['mobile_domain'];
+			return $url ? $url : $siteinfo['mobile_domain'];
 		} else {
-			return $url ? $url : $siteinfo[$siteid]['domain'];
+			return $url ? $url : $siteinfo['domain'];
 		}
 	} else {
 		return FC_NOW_URL;
@@ -735,8 +735,8 @@ function ip() {
 		$client_ip = getenv('HTTP_CLIENT_IP');
 	} elseif(getenv('HTTP_X_FORWARDED_FOR')) {
 		$client_ip = getenv('HTTP_X_FORWARDED_FOR');
-	} elseif(getenv('REMOTE_ADDR')) {
-		$client_ip = getenv('REMOTE_ADDR');
+	} elseif(getenv('REMOTE_ADDR', true)) {
+		$client_ip = getenv('REMOTE_ADDR', true);
 	} else {
 		$client_ip = $_SERVER['REMOTE_ADDR'];
 	}
@@ -1141,9 +1141,9 @@ function template($module = 'content', $template = 'index', $style = '') {
 			$siteid = param::get_cookie('siteid');
 		}
 		if (!$siteid) $siteid = 1;
-		$sitelist = getcache('sitelist', 'commons');
+		$sitelist = siteinfo($siteid);
 		if(!empty($siteid)) {
-			$style = $sitelist[$siteid]['default_style'];
+			$style = $sitelist['default_style'];
 		}
 	} elseif (empty($style) && defined('STYLE')) {
 		$style = STYLE;
@@ -1555,10 +1555,10 @@ function mobilepages($num, $curr_page, $perpage = 20, $urlrule = '', $array = ar
 		$siteid = param::get_cookie('siteid');
 	}
 	if (!$siteid) $siteid = 1;
-	$sitelist = getcache('sitelist', 'commons');
-	if ($sitelist[$siteid]['mobilehtml']==1 && defined('ISHTML')) {
-		//if (substr($sitelist[$siteid]['mobile_domain'],0,-1)) {
-			$mobile_root = substr($sitelist[$siteid]['mobile_domain'],0,-1);
+	$sitelist = siteinfo($siteid);
+	if ($sitelist['mobilehtml']==1 && defined('ISHTML')) {
+		//if (substr($sitelist['mobile_domain'],0,-1)) {
+			$mobile_root = substr($sitelist['mobile_domain'],0,-1);
 		//} else {
 			//$mobile_root = pc_base::load_config('system','mobile_root');
 		//}
@@ -2466,10 +2466,10 @@ function atturl($path) {
 	if(strpos($path, ':/')) {
 		return $path;
 	} else {
-		$sitelist = getcache('sitelist', 'commons');
+		$sitelist = siteinfo($siteid);
 		$siteid =  get_siteid();
-		$siteurl = $sitelist[$siteid]['domain'];
-		$domainlen = strlen($sitelist[$siteid]['domain'])-1;
+		$siteurl = $sitelist['domain'];
+		$domainlen = strlen($sitelist['domain'])-1;
 		$path = $siteurl.$path;
 		$path = substr_replace($path, '/', strpos($path, '//',$domainlen),2);
 		return 	$path;
@@ -2500,8 +2500,8 @@ function seo($siteid, $catid = '', $title = '', $description = '', $keyword = ''
 	if (!empty($title))$title = strip_tags($title);
 	if (!empty($description)) $description = strip_tags($description);
 	if (!empty($keyword)) $keyword = str_replace(' ', ',', strip_tags($keyword));
-	$sites = getcache('sitelist', 'commons');
-	$site = $sites[$siteid];
+	$sites = siteinfo($siteid);
+	$site = $sites;
 	$cat = array();
 	if (!empty($catid)) {
 		$siteids = getcache('category_content','commons');
@@ -2619,9 +2619,9 @@ function title_style($style, $html = 1) {
 function siteurl($siteid) {
 	static $sitelist;
 	if(!$siteid) return WEB_PATH;
-	if(empty($sitelist)) $sitelist = getcache('sitelist', 'commons');
+	if(empty($sitelist)) $sitelist = siteinfo($siteid);
 	if (!$sitelist) return '';
-	return substr($sitelist[$siteid]['domain'],0,-1);
+	return substr($sitelist['domain'],0,-1);
 }
 /**
  * 获取站点手机域名
@@ -2630,21 +2630,21 @@ function siteurl($siteid) {
 function sitemobileurl($siteid) {
 	static $sitelist;
 	if(!$siteid) return WEB_PATH.'index.php?m=mobile';
-	if(empty($sitelist)) $sitelist = getcache('sitelist', 'commons');
+	if(empty($sitelist)) $sitelist = siteinfo($siteid);
 	if (!$sitelist) return '';
-	if(!substr($sitelist[$siteid]['mobile_domain'],0,-1)) return substr($sitelist[$siteid]['domain'],0,-1).WEB_PATH.'index.php?m=mobile';
-	/*if ($sitelist[$siteid]['mobilehtml']==1 || $sitelist[$siteid]['mobile_domain']) {
-		return substr($sitelist[$siteid]['mobile_domain'],0,-1);
+	if(!substr($sitelist['mobile_domain'],0,-1)) return substr($sitelist['domain'],0,-1).WEB_PATH.'index.php?m=mobile';
+	/*if ($sitelist['mobilehtml']==1 || $sitelist['mobile_domain']) {
+		return substr($sitelist['mobile_domain'],0,-1);
 	} else {
-		return substr($sitelist[$siteid]['domain'],0,-1).WEB_PATH.'index.php?m=mobile';
+		return substr($sitelist['domain'],0,-1).WEB_PATH.'index.php?m=mobile';
 	}*/
-	//if ($sitelist[$siteid]['mobilehtml']==1) {
-		return substr($sitelist[$siteid]['mobile_domain'],0,-1);
+	//if ($sitelist['mobilehtml']==1) {
+		return substr($sitelist['mobile_domain'],0,-1);
 	//} else {
 		//if (defined('IS_MOBILE') && IS_MOBILE) {
-			//return substr($sitelist[$siteid]['mobile_domain'],0,-1);
+			//return substr($sitelist['mobile_domain'],0,-1);
 		//} else {
-			//return substr($sitelist[$siteid]['domain'],0,-1).WEB_PATH.'index.php?m=mobile';
+			//return substr($sitelist['domain'],0,-1).WEB_PATH.'index.php?m=mobile';
 		//}
 	//}
 }

@@ -110,25 +110,61 @@ class member extends admin {
 			//如果是超级管理员角色，显示所有用户，否则显示当前站点用户
 			if($_SESSION['roleid'] == 1) {
 				if(!empty($siteid)) {
+					if ($siteid && is_array($siteid)) {
+						$sidin = [];
+						foreach ($siteid as $tid) {
+							$tid = intval($tid);
+							if ($tid) {
+								$sidin[] = $tid;
+							}
+						}
+						if ($sidin) {
+							$where .= "`siteid` in (".implode(',', $sidin).") AND ";
+						}
+					}
 					$where .= "`siteid` = '$siteid' AND ";
 				}
 			} else {
 				$siteid = get_siteid();
 				$where .= "`siteid` = '$siteid' AND ";
 			}
-				
-			if($status) {
-				$islock = $status == 1 ? 1 : 0;
-				$where .= "`islock` = '$islock' AND ";
-			}
-		
-			if($groupid) {
-				$where .= "`groupid` = '$groupid' AND ";
+			
+			if ($status && is_array($status)) {
+				$sin = [];
+				foreach ($status as $sid) {
+					$sid = intval($sid);
+					$sin[] = $sid;
+				}
+				if ($sin) {
+					$where .= "`islock` in (".implode(',', $sin).") AND ";
+				}
 			}
 			
-			if($modelid) {
-				$where .= "`modelid` = '$modelid' AND ";
-			}	
+			if ($groupid && is_array($groupid)) {
+				$in = [];
+				foreach ($groupid as $gid) {
+					$gid = intval($gid);
+					if ($gid) {
+						$in[] = $gid;
+					}
+				}
+				if ($in) {
+					$where .= "`groupid` in (".implode(',', $in).") AND ";
+				}
+			}
+			
+			if ($modelid && is_array($modelid)) {
+				$min = [];
+				foreach ($modelid as $mid) {
+					$mid = intval($mid);
+					if ($mid) {
+						$min[] = $mid;
+					}
+				}
+				if ($min) {
+					$where .= "`modelid` in (".implode(',', $min).") AND ";
+				}
+			}
 			$where .= "`regdate` BETWEEN '$where_start_time' AND '$where_end_time' AND ";
 
 			//资金范围
@@ -166,13 +202,13 @@ class member extends admin {
 				} elseif($type == '2') {
 					$where .= "`userid` = '$keyword'";
 				} elseif($type == '3') {
-					$where .= "`email` like '%$keyword%'";
+					$where .= "`email` LIKE '%$keyword%'";
 				} elseif($type == '4') {
 					$where .= "`regip` = '$keyword'";
 				} elseif($type == '5') {
 					$where .= "`nickname` LIKE '%$keyword%'";
 				} else {
-					$where .= "`username` like '%$keyword%'";
+					$where .= "`username` LIKE '%$keyword%'";
 				}
 			} else {
 				$where .= '1';

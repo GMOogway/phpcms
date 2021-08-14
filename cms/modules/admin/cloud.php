@@ -88,7 +88,7 @@ class cloud extends admin {
             $text .= '\'cms_id\' => \''.$rt['id'].'\','.PHP_EOL;
             $text .= '\'cms_license\' => \''.$rt['data'].'\','.PHP_EOL;
             $text .= '\'cms_name\' => \'CMS\','.PHP_EOL;
-            $text .= '\'cms_url\' => \'http://ceshi.kaixin100.cn\','.PHP_EOL;
+            $text .= '\'cms_url\' => \'https://gitee.com/zhaoxunzhiyin/phpcms\',';
             $text .= PHP_EOL.');'.PHP_EOL.'?>';
             if (file_put_contents(CACHE_PATH.'configs/license.php', $text)) {
                 dr_json(1, '绑定成功');

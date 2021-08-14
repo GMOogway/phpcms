@@ -13,21 +13,13 @@ defined('IN_ADMIN') or exit('No permission resources.');
 <link rel="stylesheet" href="<?php echo JS_PATH?>layui/css/layui.css" media="all">
 <link rel="stylesheet" href="<?php echo CSS_PATH?>font-awesome/css/font-awesome.min.css" media="all">
 <link rel="stylesheet" href="<?php echo CSS_PATH?>layuimini/css/public.css" media="all">
-<?php
-if(!$this->get_siteid()) showmessage(L('admin_login'),'?m=admin&c=index&a=login');
-if(isset($show_dialog)) {?>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>dialog.js"></script>
-<?php } ?>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>jquery.min.js"></script>
+<?php if(!$this->get_siteid()) showmessage(L('admin_login'),'?m=admin&c=index&a=login');?>
+<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>jquery-3.5.1.min.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>Dialog/main.js"></script>
 <script src='<?php echo JS_PATH?>bootstrap-tagsinput.min.js' type='text/javascript'></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>admin_common.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>styleswitch.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>layer/layer.js"></script>
-<?php if(isset($show_validator)) { ?>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>formvalidator.js" charset="UTF-8"></script>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>formvalidatorregex.js" charset="UTF-8"></script>
-<?php } ?>
 <style>
 .layui-card {border:1px solid #f2f2f2;border-radius:5px;}
 .icon {margin-right:10px;color:#1aa094;}
