@@ -46,7 +46,6 @@ include $this->admin_tpl('header','admin');?>
 	</tbody>
 
 </table>
-
 </div>
 <div class="btn">
 <input type="submit" class="dialog" id="dosubmit" value="<?php echo L('submit');?>" name="dosubmit"/>

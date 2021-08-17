@@ -337,7 +337,7 @@ function default_list() {
 			<option<?php if ($t==$setting['wm_font_path']) {?> selected=""<?php }?> value="<?php echo $t;?>"><?php echo $t;?></option>
 			<?php }?>
 		</select>
-	  <?php }?><button type="button" class="layui-btn" id="fileupload-font"><i class="layui-icon">&#xe67c;</i><?php echo L('upload');?></button><br><?php echo L('site_att_text_font_desc')?>
+	  <?php }?><button type="button" class="layui-btn layui-btn-sm" id="fileupload-font"><i class="layui-icon">&#xe67c;</i><?php echo L('upload');?></button><br><?php echo L('site_att_text_font_desc')?>
      </td>
   </tr>
   <tr class="dr_sy dr_sy_1">
@@ -367,7 +367,7 @@ function default_list() {
 			<option<?php if ($t==$setting['wm_overlay_path']) {?> selected=""<?php }?> value="<?php echo $t;?>"><?php echo $t;?></option>
 			<?php }?>
 		</select>
-	  <?php }?><button type="button" class="layui-btn" id="fileupload-img"><i class="layui-icon">&#xe67c;</i><?php echo L('upload');?></button><br><?php echo L('site_att_watermark_img_desc')?>
+	  <?php }?><button type="button" class="layui-btn layui-btn-sm" id="fileupload-img"><i class="layui-icon">&#xe67c;</i><?php echo L('upload');?></button><br><?php echo L('site_att_watermark_img_desc')?>
      </td>
   </tr>
    <tr>
@@ -457,7 +457,7 @@ function dr_preview() {
 	var diag = new Dialog({
 		id:'preview',
 		title:'水印预览',
-		html:'<div style="text-align:center"><img style="-webkit-user-select: none;" src="'+linkurl+'"></div>',
+		html:'<div style="text-align:center"><img style="max-width: 400px;width: 100%;-webkit-user-select: none;" src="'+linkurl+'"></div>',
 		width:'50%',
 		height:'60%',
 		modal:true,

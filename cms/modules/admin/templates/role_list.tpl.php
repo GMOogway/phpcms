@@ -1,8 +1,9 @@
 <?php
 defined('IN_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header');?>
-<div class="table-list pad-lr-10">
+<div class="pad-lr-10">
 <form name="myform" action="?m=admin&c=role&a=listorder" method="post">
+<div class="table-list">
     <table width="100%" cellspacing="0">
         <thead>
 		<tr>
@@ -45,18 +46,18 @@ if(is_array($infos)){
 ?>
 </tbody>
 </table>
+</div>
 <div class="btn"><input type="submit" class="button" name="dosubmit" value="<?php echo L('listorder')?>" /></div>
 </form>
-</div>
 </body>
 <script type="text/javascript">
 <!--
 function setting_role(id, name) {
-	openwinx('?m=admin&c=role&a=priv_setting&roleid='+id+'&pc_hash='+pc_hash,'<?php echo L('sys_setting')?>《'+name+'》',700,500);
+	openwinx('?m=admin&c=role&a=priv_setting&roleid='+id+'&pc_hash='+pc_hash,'<?php echo L('sys_setting')?>《'+name+'》','80%','80%');
 }
 
 function setting_cat_priv(id, name) {
-	openwinx('?m=admin&c=role&a=setting_cat_priv&roleid='+id+'&pc_hash='+pc_hash,'<?php echo L('usersandmenus')?>《'+name+'》',800,500);
+	openwinx('?m=admin&c=role&a=setting_cat_priv&roleid='+id+'&pc_hash='+pc_hash,'<?php echo L('usersandmenus')?>《'+name+'》','80%','80%');
 }
 //-->
 </script>

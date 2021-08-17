@@ -57,11 +57,9 @@ if(is_array($infos)){
 }
 ?></tbody>
  </table>
- <div class="btn"> 
-</div> 
+ </div>
+ <div class="btn"></div> 
 <div id="pages"><?php echo $pages?></div>
-
-</div>
 
 </form></div>
 </body>

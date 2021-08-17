@@ -49,8 +49,8 @@ if(is_array($datas)){
 ?>
 </tbody>
 </table>
-<div class="btn"> 
-<input type="submit" class="button" name="dosubmit" value="<?php echo L('delete')?>"/></div>
+</div>
+<div class="btn"><input type="submit" class="button" name="dosubmit" value="<?php echo L('delete')?>"/></div>
 </form>
 <div id="pages" class="text-c"><?php echo $pages;?></div>
 </div>

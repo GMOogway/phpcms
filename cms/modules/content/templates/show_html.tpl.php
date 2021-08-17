@@ -70,6 +70,7 @@ label {font-weight: 400;}
 <div id="dr_check_div" class="well margin-top-20" style="display: none">
     <div class="scroller" style="height:300px" data-rail-visible="1"  id="dr_check_html"></div>
 </div>
+<input id="dr_check_status" type="hidden" value="1">
 <script>
 $(function () {
     dr_checking();
@@ -116,6 +117,7 @@ function dr_ajax2ajax(page) {
                 $('#dr_check_button').html('<i class="fa fa-times-circle"></i> 重新开始');
             } else {
                 if (json.code == -1) {
+                    $('#dr_check_status').val('0');
                     $('#dr_check_button').attr('disabled', false);
                     $('#dr_check_button').html('<i class="fa fa-check-circle"></i> 生成完毕');
                 } else {

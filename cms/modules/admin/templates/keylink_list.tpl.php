@@ -39,12 +39,12 @@ if(is_array($infos)){
 }
 ?></tbody>
  </table>
+</div>
  <div class="btn">
  <a href="#" onClick="javascript:$('input[type=checkbox]').attr('checked', true)"><?php echo L('selected_all')?></a>/<a href="#" onClick="javascript:$('input[type=checkbox]').attr('checked', false)"><?php echo L('cancel')?></a>
 <input type="button" name="button" class="button" value="<?php echo L('remove_all_selected')?>" onClick="Dialog.confirm('<?php echo L('badword_confom_del')?>',function(){$('#myform').submit();});" /> 
 </div>
 <div id="pages"><?php echo $pages?></div>
-</div>
 </form>
 </div>
 </body>

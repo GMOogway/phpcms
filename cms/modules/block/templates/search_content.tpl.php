@@ -45,8 +45,8 @@ include $this->admin_tpl('header', 'admin');
 	</table>
 	</form>
 <?php if (isset($_GET['dosubmit']) && !empty($data)) :?>	
-	<div class="table-list">
 	<label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" value="" id="check_box" onclick="selectall('ids[]');"><span></span></label><input type="button" value="<?php echo L('insert_a_comment_about_the_selected_text')?>" class="button" onclick="insert_form()">
+<div class="table-list">
 <table width="100%">
 <tbody>
 <?php foreach ($data as $v):?>
@@ -57,10 +57,9 @@ include $this->admin_tpl('header', 'admin');
 <?php endforeach;?>
 </tbody>
 </table>
+</div>
 <div class="btn"><label for="check_box"><?php echo L('select_all')?>/<?php echo L('cancel')?></label> <input type="button" value="<?php echo L('insert_a_comment_about_the_selected_text')?>" class="button" onclick="insert_form()"></div>
 <dir id="pages"><?php echo $pages?></dir>
-	</div>
-	
 <?php endif;?>	
 	</div>
 <script type="text/javascript">

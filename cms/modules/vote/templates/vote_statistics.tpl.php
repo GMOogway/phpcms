@@ -11,8 +11,8 @@ include $this->admin_tpl('header', 'admin');
 </ul>
 <div class="content pad-10" style="height:auto">
 <form name="myform" action="?m=vote&c=vote&a=delete_statistics" method="post">
-
-<table width="100%" cellspacing="0" class="table-list">
+<div class="table-list">
+<table width="100%" cellspacing="0">
 	<thead>
 		<tr>
 			<th><?php echo L('vote_option')?></th>
@@ -50,9 +50,8 @@ foreach($options as $info){
 ?>
 </tbody>
 </table>
-<div id="pages">
-<?php echo L('vote_all_num')?>  <?php echo $vote_data['total'];?><br>
 </div>
+<div id="pages"><?php echo L('vote_all_num')?>  <?php echo $vote_data['total'];?></div>
 </form>
 </div>
 </div>

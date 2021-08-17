@@ -36,10 +36,9 @@ if(is_array($payinfo_arr)) foreach($payinfo_arr as $info){
 ?>
     </tbody>
     </table>
-  
-    <div class="btn"></div>  </div>
-
- <div id="pages"> <?php echo $pages?></div>
+</div>
+<div class="btn"></div>
+<div id="pages"> <?php echo $pages?></div>
 </div>
 </div>
 </form>

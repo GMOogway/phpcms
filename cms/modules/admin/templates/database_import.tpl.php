@@ -14,8 +14,8 @@ include $this->admin_tpl('header');?>
 		</tr>
     </tbody>
 </table>
-<div class="table-list">
 <form method="post" id="myform" name="myform" >
+<div class="table-list">
     <table width="100%" cellspacing="0">
         <thead>
             <tr>
@@ -47,7 +47,7 @@ if(is_array($infos)){
 	<td align="center"><?php echo $info['maketime']?></td>
 	<td align="center"><?php echo $info['number']?></td>
 	<td align="center">
-	<a href="javascript:confirmurl('?m=admin&c=database&pdoname=<?php echo $pdoname?>&a=import&pre=<?php echo $info['pre']?>&dosubmit=1', '<?php echo L('confirm_recovery')?>')"><?php echo L('backup_import')?></a><!-- | <a href="?m=admin&c=database&a=public_down&pdoname=<?php echo $pdoname?>&filename=<?php echo $info['filename']?>"><?php echo L('backup_down')?></a>-->
+	<a href="javascript:confirmurl('?m=admin&c=database&pdoname=<?php echo $pdoname?>&a=import&menuid=<?php echo $this->input->get('menuid');?>&pre=<?php echo $info['pre']?>&dosubmit=1', '<?php echo L('confirm_recovery')?>')"><?php echo L('backup_import')?></a><!-- | <a href="?m=admin&c=database&a=public_down&pdoname=<?php echo $pdoname?>&filename=<?php echo $info['filename']?>"><?php echo L('backup_down')?></a>-->
 	</td>
 	</tr>
 <?php 
@@ -56,12 +56,12 @@ if(is_array($infos)){
 ?>
     </tbody>
     </table>
+</div>
 <div class="fc-list-select table-checkable">
 <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline"><input type="checkbox" class="group-checkable" data-set=".checkboxes" /><span></span></label>
-<input type="button" class="button" name="dosubmit" value="<?php echo L('backup_del')?>" onclick="Dialog.confirm('<?php echo L('confirm_delete')?>',function(){document.myform.action='?m=admin&c=database&a=delete&pdoname=<?php echo $pdoname?>';$('#myform').submit();});"/>
+<input type="button" class="button" name="dosubmit" value="<?php echo L('backup_del')?>" onclick="Dialog.confirm('<?php echo L('confirm_delete')?>',function(){document.myform.action='?m=admin&c=database&a=delete&pdoname=<?php echo $pdoname?>&menuid=<?php echo $this->input->get('menuid');?>';$('#myform').submit();});"/>
 </div>
 </form>
-</div>
 </div>
 
 </body>

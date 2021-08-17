@@ -9,8 +9,8 @@ include $this->admin_tpl('header','admin');
 　<?php if(isset($big_menu)) { foreach($big_menu as $big) { echo '<a class="add fb" href="'.$big[0].'"><em>'.$big[1].'</em></a>　'; } }?>&nbsp;<a class="on" href="?m=special&c=special"><em><?php echo L('special_list')?></em></a></div>
 </div>
 <div class="pad-10">
-<div class="table-list">
 <form name="myform" id="myform" action="?m=special&c=content&a=listorder&specialid=<?php echo $_GET['specialid']?>" method="post">
+<div class="table-list">
     <table width="100%">
         <thead>
             <tr>
@@ -52,10 +52,10 @@ include $this->admin_tpl('header','admin');
      <?php }?>
 </tbody>
      </table>
-    <div class="btn"><label for="check_box"><?php echo L('selected_all')?>/<?php echo L('cancel')?></label> <input type="submit" class="button" value="<?php echo L('listorder')?>" /> <input type="button" class="button" value="<?php echo L('delete')?>" onclick="Dialog.confirm('<?php echo L('confirm', array('message' => L('selected')))?>',function(){document.myform.action='?m=special&c=content&a=delete&specialid=<?php echo $_GET['specialid']?>';$('#myform').submit();});"/></div>
-    <div id="pages"><?php echo $pages;?></div>
-</form>
 </div>
+<div class="btn"><label for="check_box"><?php echo L('selected_all')?>/<?php echo L('cancel')?></label> <input type="submit" class="button" value="<?php echo L('listorder')?>" /> <input type="button" class="button" value="<?php echo L('delete')?>" onclick="Dialog.confirm('<?php echo L('confirm', array('message' => L('selected')))?>',function(){document.myform.action='?m=special&c=content&a=delete&specialid=<?php echo $_GET['specialid']?>';$('#myform').submit();});"/></div>
+<div id="pages"><?php echo $pages;?></div>
+</form>
 </div>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>cookie.js"></script>
 <script type="text/javascript">

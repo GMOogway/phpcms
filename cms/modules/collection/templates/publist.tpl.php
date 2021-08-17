@@ -58,16 +58,14 @@
 ?>
 </tbody>
 </table>
-
+</div>
 <div class="btn">
 <label for="check_box"><?php echo L('select_all')?>/<?php echo L('cancel')?></label> <input type="button" class="button" name="dosubmit" value="<?php echo L('delete')?>" onclick="re_url('m=collection&c=node&a=content_del&nodeid=<?php echo $nodeid?>');return check_checkbox(1);"/> 
 <input type="button" class="button" name="dosubmit"  onclick="re_url('m=collection&c=node&a=content_del&nodeid=<?php echo $nodeid?>&history=1');return check_checkbox(1);" value="<?php echo L('also_delete_the_historical')?>"/> 
 <input type="submit" class="button" name="dosubmit" onclick="re_url('m=collection&c=node&a=import&nodeid=<?php echo $nodeid?>');return check_checkbox();" value="<?php echo L('import_selected')?>"/>
 <input type="submit" class="button" name="dosubmit"  onclick="re_url('m=collection&c=node&a=import&type=all&nodeid=<?php echo $nodeid?>')" value="<?php echo L('import_all')?>"/>
 </div>
-
 <div id="pages"><?php echo $pages?></div>
-</div>
 </form>
 </div>
 </div>

@@ -40,7 +40,7 @@
 		$errortips = $this->fields[$field]['errortips'];
 		if($errortips || $minlength) $this->formValidator .= '$("#'.$field.'_word").formValidator({onshow:"",onfocus:"'.$errortips.'"}).inputValidator({min:1,onerror:"'.$errortips.'"});';
 		//if (defined('IN_ADMIN')) {
-			return '<input type="hidden" name="info['.$field.']" id="'.$field.'_word" value="'.$value.'" '.$formattribute.' '.$css.'><button type="button" class="layui-btn" id="'.$field.'"><i class="layui-icon">&#xe67c;</i>'.L('import_word').'</button>'.$str;
+			return '<input type="hidden" name="info['.$field.']" id="'.$field.'_word" value="'.$value.'" '.$formattribute.' '.$css.'><button type="button" class="layui-btn layui-btn-sm" id="'.$field.'"><i class="layui-icon">&#xe67c;</i>'.L('import_word').'</button>'.$str;
 		//} else {
 			//return L('import_wxurl_publish');
 		//}

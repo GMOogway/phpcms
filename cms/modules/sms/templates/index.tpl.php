@@ -3,7 +3,6 @@
 	include $this->admin_tpl('header','admin');
 ?>
 <div class="pad_10">
-<div class="table-list">
 <form name="smsform" action="" method="get" >
 <input type="hidden" value="sms" name="m">
 <input type="hidden" value="sms" name="c">
@@ -25,7 +24,7 @@
 <div class="btn text-l">
 <span class="font-fixh green">当前服务器IP为 ： <span class="font-fixh"><?php echo $_SERVER["SERVER_ADDR"];?></span> <?php if(!empty($smsinfo_arr['allow_send_ip']) &&!in_array($_SERVER["SERVER_ADDR"],$smsinfo_arr['allow_send_ip'])) echo '当前服务器所在IP不允许发送短信';?>
 </div>
-<br>
+<div class="table-list">
     <table width="100%" cellspacing="0">
         <thead>
             <tr>
@@ -54,9 +53,9 @@
 <?php }?>
     </tbody>
     </table>
+</div>
 <div class="explain-col search-form">
 开启会员注册短信验证方法：后台->用户->会员模块配置->手机强制验证方式 选择 <font color="red">是</font>
-</div>
 </div>
 </div>
 <br>

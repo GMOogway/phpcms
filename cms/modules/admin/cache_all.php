@@ -56,7 +56,7 @@ class cache_all extends admin {
 			}
 		}
 		$this->cache2database();
-		showmessage(L('update').$m['name'].L('site_cache_success'));
+		showmessage(L('全站缓存更新完成'));
 	}
 
 	public function public_cache_all() {

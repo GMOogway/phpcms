@@ -60,12 +60,12 @@ if(is_array($infos)){
 ?>
 </tbody>
     </table>
-  
+</div>
     <div class="btn"><label for="check_box"><?php echo L('selected_all')?>/<?php echo L('cancel')?></label>
     	<input name='dosubmit' type='submit' class="button" value='<?php echo L('listorder')?>'>&nbsp;
         <input name='dosubmit' type='submit' class="button" value='<?php echo L('start')?>' onClick="document.myform.action='?m=poster&c=poster&a=public_approval&passed=0'">&nbsp;
         <input name='dosubmit' type='submit' class="button" value='<?php echo L('stop')?>' onClick="document.myform.action='?m=poster&c=poster&a=public_approval&passed=1'">&nbsp;
-        <input name="button" type="button" class="button" value="<?php echo L('delete')?>" onClick="Dialog.confirm('<?php echo L('confirm', array('message' => L('selected')))?>',function(){document.myform.action='?m=poster&c=poster&a=delete';$('#myform').submit();});">&nbsp;&nbsp;</div>  </div>
+        <input name="button" type="button" class="button" value="<?php echo L('delete')?>" onClick="Dialog.confirm('<?php echo L('confirm', array('message' => L('selected')))?>',function(){document.myform.action='?m=poster&c=poster&a=delete';$('#myform').submit();});">&nbsp;&nbsp;</div>
  <div id="pages"><?php echo $this->db->pages;?></div>
 </form>
 </div>

@@ -32,11 +32,11 @@ if(is_array($list)){
 ?>
     </tbody>
     </table>
+</div>
 <?php if($list){?>
  <div class="btn"><input type="button" class="button" name="dosubmit" value="<?php echo L('清空全部')?>" onclick="ajax_option('?m=admin&c=index&a=public_error_del', '你确定要清空全部记录吗？')" /></div>
 <?php }?>
  <div id="pages"> <?php echo $pages?></div>
-</div>
 </div>
 </body>
 </html>

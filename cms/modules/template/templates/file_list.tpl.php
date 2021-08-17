@@ -9,8 +9,8 @@ body .table-list table tr>td:first-child, body .table-list table tr>th:first-chi
   <h1 class="title-2 line-x"><?php echo $this->style_info['name'].' - '.L('detail')?></h1>
 </div>
 <div class="pad-lr-10">
-<div class="table-list">
 <form action="?m=template&c=file&a=updatefilename&style=<?php echo $this->style?>" method="post">
+<div class="table-list">
     <table width="100%" cellspacing="0">
         <thead>
 		<tr>
@@ -52,10 +52,10 @@ if(is_array($list)):
 endif;
 ?></tbody>
 </table>
-<div class="btn"><input type="button" onclick="location.href='?m=template&c=style&a=init&pc_hash=<?php echo $_SESSION['pc_hash'];?>'" class="button" name="dosubmit" value="<?php echo L('returns_list_style')?>" /> <input type="button" class="button" name="dosubmit" value="<?php echo L('new')?>" onclick="add_file()" /> <input type="submit" class="button" name="dosubmit" value="<?php echo L('update')?>" ></div> 
-</form>
 </div>
+<div class="btn"><input type="button" onclick="location.href='?m=template&c=style&a=init&pc_hash=<?php echo $_SESSION['pc_hash'];?>'" class="button" name="dosubmit" value="<?php echo L('returns_list_style')?>" /> <input type="button" class="button" name="dosubmit" value="<?php echo L('new')?>" onclick="add_file()" /> <input type="submit" class="button" name="dosubmit" value="<?php echo L('update')?>" ></div>
 <div id="pages"><?php echo $pages?></div>
+</form>
 </div>
 <script type="text/javascript">
 <!--

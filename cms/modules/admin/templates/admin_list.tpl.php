@@ -2,8 +2,8 @@
 defined('IN_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header');?>
 <div class="pad_10">
-<div class="table-list">
 <form name="myform" action="?m=admin&c=role&a=listorder" method="post">
+<div class="table-list">
     <table width="100%" cellspacing="0">
         <thead>
 		<tr>
@@ -46,9 +46,9 @@ if(is_array($infos)){
 ?>
 </tbody>
 </table>
- <div id="pages"> <?php echo $pages?></div>
-</form>
 </div>
+</form>
+<div id="pages"> <?php echo $pages?></div>
 </div>
 </body>
 </html>

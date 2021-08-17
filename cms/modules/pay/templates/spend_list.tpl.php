@@ -3,7 +3,6 @@
 	include $this->admin_tpl('header','admin');
 ?>
 <div class="pad_10">
-<div class="table-list">
 <form name="searchform" action="" method="get" >
 <input type="hidden" value="pay" name="m">
 <input type="hidden" value="spend" name="c">
@@ -27,6 +26,7 @@
     </tbody>
 </table>
 </form>
+<div class="table-list">
     <table width="100%" cellspacing="0">
         <thead>
             <tr>
@@ -58,9 +58,8 @@ if(is_array($list)){
 ?>
     </tbody>
     </table>
-
- <div id="pages"> <?php echo $pages?></div>
 </div>
+ <div id="pages"> <?php echo $pages?></div>
 </div>
 </form>
 </body>

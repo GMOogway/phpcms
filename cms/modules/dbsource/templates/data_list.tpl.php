@@ -3,11 +3,11 @@ defined('IN_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header', 'admin');
 ?>
 <div class="pad_10">
-<div class="table-list">
 <form name="myform" id="myform" action="" method="get">
 <input type="hidden" name="m" value="dbsource" />
 <input type="hidden" name="c" value="data" />
 <input type="hidden" name="a" value="del" />
+<div class="table-list">
     <table width="100%" cellspacing="0">
         <thead>
 		<tr>
@@ -46,11 +46,11 @@ endif;
 ?>
 </tbody>
 </table>
+</div>
 <div class="btn">
 <label for="check_box"><?php echo L('select_all')?>/<?php echo L('cancel')?></label> <input type="button" class="button" name="dosubmit" value="<?php echo L('delete')?>" onclick="Dialog.confirm('<?php echo L('sure_deleted')?>',function(){$('#myform').submit();});"/>
 </div>
 </form>
-</div>
 </div>
 <div id="pages"><?php echo $pages?></div>
 <script type="text/javascript">

@@ -32,8 +32,7 @@ endif;
 ?>
 </tbody>
 </table>
-
-</from>
+</form>
 </div>
 </div>
 <div id="pages"><?php echo $pages?></div>

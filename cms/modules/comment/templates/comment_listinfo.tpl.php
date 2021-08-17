@@ -2,7 +2,6 @@
 defined('IN_ADMIN') or exit('No permission resources.'); 
 include $this->admin_tpl('header', 'admin');
 ?>
-
 <div class="pad_10">
 <div id="searchid">
 <form name="searchform" action="" method="get" >
@@ -41,7 +40,7 @@ include $this->admin_tpl('header', 'admin');
 <input type="hidden" value="del" name="a">
 <input type="hidden" value="<?php echo $tableid?>" name="tableid">
 <input type="hidden" value="1" name="dosubmit">
-<div class="table-list comment">
+<div class="table-list">
     <table width="100%">
         <thead>
             <tr>
@@ -82,12 +81,12 @@ include $this->admin_tpl('header', 'admin');
 	?>
 	</tbody>
      </table>
+</div>
     <div class="btn"><label for="check_box"><?php echo L('selected_all');?>/<?php echo L('cancel');?></label>
 		<input type="hidden" value="<?php echo $_SESSION['pc_hash'];?>" name="pc_hash">
 		<input type="submit" class="button" value="<?php echo L('delete');?>" />
 	</div>
     <div id="pages"><?php echo $pages;?></div>
-</div>
 </form>
 </div>
 <script type="text/javascript">

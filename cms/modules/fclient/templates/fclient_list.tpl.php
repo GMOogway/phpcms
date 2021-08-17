@@ -59,7 +59,6 @@ function sync_web(id) {
 }
 </script>
 <div class="pad-lr-10">
-<div class="table-list">
 <form name="searchform" action="" method="get" >
 <input type="hidden" value="fclient" name="m">
 <input type="hidden" value="fclient" name="c">
@@ -81,6 +80,7 @@ function sync_web(id) {
 </div>
 </form>
 <form name="myform" id="myform" action="?m=fclient&c=fclient" method="post">
+<div class="table-list">
 <table width="100%" cellspacing="0">
 	<thead>
 		<tr>

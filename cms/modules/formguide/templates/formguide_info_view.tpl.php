@@ -4,7 +4,8 @@ $show_header = 1;
 include $this->admin_tpl('header', 'admin');
 ?>
 <div class="pad-10">
-<table width="100%" cellspacing="0" class="table-list">
+<div class="table-list">
+<table width="100%" cellspacing="0">
 	<thead>
 		<tr>
 			<th width="15%" align="right"><?php echo L('selects')?></th>
@@ -28,7 +29,7 @@ if(is_array($forminfos_data)){
 ?>
 	</tbody>
 </table>
-
+</div>
 </div>
 </body>
 </html>

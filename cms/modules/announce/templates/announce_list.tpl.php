@@ -50,10 +50,10 @@ if(is_array($data)){
 ?>
 </tbody>
     </table>
-  
+</div>
     <div class="btn"><label for="check_box"><?php echo L('selected_all')?>/<?php echo L('cancel')?></label>
         <?php if($this->input->get('s')==1) {?><input name='dosubmit' type='submit' class="button" value='<?php echo L('cancel_all_selected')?>' onClick="document.myform.action='?m=announce&c=admin_announce&a=public_approval&passed=0'"><?php } elseif($this->input->get('s')==2) {?><input name='dosubmit' type='submit' class="button" value='<?php echo L('pass_all_selected')?>' onClick="document.myform.action='?m=announce&c=admin_announce&a=public_approval&passed=1'"><?php }?>&nbsp;&nbsp;
-		<input name="button" type="button" class="button" value="<?php echo L('remove_all_selected')?>" onClick="Dialog.confirm('<?php echo L('affirm_delete')?>',function(){document.myform.action='?m=announce&c=admin_announce&a=delete';$('#myform').submit();});">&nbsp;&nbsp;</div>  </div>
+		<input name="button" type="button" class="button" value="<?php echo L('remove_all_selected')?>" onClick="Dialog.confirm('<?php echo L('affirm_delete')?>',function(){document.myform.action='?m=announce&c=admin_announce&a=delete';$('#myform').submit();});">&nbsp;&nbsp;</div>
  <div id="pages"><?php echo $this->db->pages;?></div>
 </form>
 </div>

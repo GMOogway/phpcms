@@ -29,9 +29,8 @@ endif;
 ?>
 </tbody>
 </table>
-</from>
-</div>
 </div>
 <div id="pages"><?php echo $pages?></div>
+</div>
 </body>
 </html>

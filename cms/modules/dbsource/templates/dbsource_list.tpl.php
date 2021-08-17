@@ -31,8 +31,8 @@ endif;
 </tbody>
 </table>
 </div>
-</div>
 <div id="pages"><?php echo $pages?></div>
+</div>
 <script type="text/javascript">
 <!--
 function edit(id, name) {

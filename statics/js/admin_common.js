@@ -454,6 +454,52 @@ function map(id,linkurl,title,tcstr,w,h) {
 	};
 	diag.show();
 }
+// ajax提交
+function dr_ajax_submit(url, form, time, go) {
+	var flen = $('[id='+form+']').length;
+	// 验证id是否存在
+	if (flen == 0) {
+		dr_tips(0, '表单id属性不存在' + ' ('+form+')');
+		return;
+	}
+	// 验证重复
+	if (flen > 1) {
+		dr_tips(0, '表单id属性已重复定义' + ' ('+form+')');
+		return;
+	}
+
+	// 验证必填项管理员
+	var tips_obj = $('#'+form).find('[name=is_tips]');
+	if (tips_obj.val() == 'required') {
+		tips_obj.val('');
+	}
+	if ($('#'+form).find('[name=is_admin]').val() == 1) {
+		$('#'+form).find('.dr_required').each(function () {
+			if (!$(this).val()) {
+				tips_obj.val('required');
+			}
+		});
+	}
+
+	var tips = tips_obj.val();
+	if (tips) {
+		if (tips == 'required') {
+			tips = '有必填字段未填写，确认提交吗？';
+		}
+		layer.confirm(
+		tips,
+		{
+			icon: 3,
+			shade: 0,
+			title: '提示',
+			btn: ['确定', '取消']
+		}, function(index){
+			dr_post_submit(url, form, time, go);
+		});
+	} else {
+		dr_post_submit(url, form, time, go);
+	}
+}
 // 处理post提交
 function dr_post_submit(url, form, time, go) {
 	var p = url.split('/');
@@ -592,7 +638,8 @@ function dr_bfb(e, t, a) {
 		},
 		content: a + "&" + $("#" + t).serialize(),
 		cancel: function(e, t) {
-			return layer.confirm("关闭后将中断操作，是否确认关闭呢？", {
+			var a = layer.getChildFrame("body", e);
+			if ("1" == $(a).find("#dr_check_status").val()) return layer.confirm('关闭后将中断操作，是否确认关闭呢？', {
 				icon: 3,
 				shade: 0,
 				title: "提示",
@@ -631,7 +678,8 @@ function dr_bfb_submit(e, t, a) {
 				},
 				content: t.data.url,
 				cancel: function(e, t) {
-					return layer.confirm('关闭后将中断操作，是否确认关闭呢？', {
+					var a = layer.getChildFrame("body", e);
+					if ("1" == $(a).find("#dr_check_status").val()) return layer.confirm('关闭后将中断操作，是否确认关闭呢？', {
 						icon: 3,
 						shade: 0,
 						title: "提示",

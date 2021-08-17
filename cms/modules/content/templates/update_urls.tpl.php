@@ -50,14 +50,14 @@ include $this->admin_tpl('header','admin');?>
     <div class="portlet-title tabbable-line">
         <ul class="nav nav-tabs" style="float:left;">
             <li class="active">
-                <a data-toggle="tab_0"> <i class="fa fa-th-large"></i> <?php echo L('according_model');?> </a>
+                <a data-toggle="tab_0"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('according_model').'\',this,{tips: [1, \'#000\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-th-large"></i> <?php if (!is_mobile(0)) {echo L('according_model');}?> </a>
             </li>
             <?php if ($_SESSION['roleid']==1) {?>
             <li>
-                <a data-toggle="tab_1"> <i class="fa fa-database"></i> <?php echo L('内容批量替换');?> </a>
+                <a data-toggle="tab_1"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('内容批量替换').'\',this,{tips: [1, \'#000\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-database"></i> <?php if (!is_mobile(0)) {echo L('内容批量替换');}?> </a>
             </li>
             <li>
-                <a data-toggle="tab_2"> <i class="fa fa-edit"></i> <?php echo L('内容批量设置');?> </a>
+                <a data-toggle="tab_2"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('内容批量设置').'\',this,{tips: [1, \'#000\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-edit"></i> <?php if (!is_mobile(0)) {echo L('内容批量设置');}?> </a>
             </li>
             <?php }?>
         </ul>
@@ -462,9 +462,6 @@ function dr_sz(v) {
 <script language="JavaScript">
 <!--
 window.top.$('#display_center_id').css('display','none');
-function change_model(modelid) {
-    window.location.href='?m=content&c=create_html&a=update_urls&modelid='+modelid+'&pc_hash='+pc_hash;
-}
 //-->
 </script>
 </body>

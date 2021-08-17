@@ -58,11 +58,11 @@ if(is_array($infos)){
 ?>
 </tbody>
 </table>
+</div>
 <div class="btn"><a href="#" onClick="javascript:$('input[type=checkbox]').attr('checked', true)"><?php echo L('selected_all')?></a>/<a href="#" onClick="javascript:$('input[type=checkbox]').attr('checked', false)"><?php echo L('cancel')?></a>
 <input name="button" type="button" class="button" value="<?php echo L('remove_all_selected')?>" onClick="Dialog.confirm('<?php echo L('confirm', array('message' => L('selected')))?>',function(){$('#myform').submit();});">&nbsp;&nbsp;</div>
 </form>
 <div id="pages" class="text-c"><?php echo $pages;?></div>
-</div>
 </body>
 </html>
 <script type="text/javascript">

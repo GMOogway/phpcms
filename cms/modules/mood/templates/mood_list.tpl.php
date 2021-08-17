@@ -22,8 +22,8 @@
 </form>
 
 
-<div class="table-list">
 <?php if ($catid) :?>
+<div class="table-list">
 <table width="100%" cellspacing="0">
 	<thead>
 		<tr>
@@ -54,10 +54,9 @@
 ?>
 </tbody>
 </table>
-
+</div>
 <div id="pages"><?php echo $pages?></div>
 <?php endif;?>
-</div>
 </div>
 
 </body>

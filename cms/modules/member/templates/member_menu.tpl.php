@@ -18,8 +18,8 @@ include $this->admin_tpl('header', 'admin');?>
     <?php echo $categorys;?>
 	</tbody>
     </table>
-  
-    <div class="btn"><input type="submit" class="button" name="dosubmit" value="<?php echo L('listorder')?>" /></div>  </div>
+</div>
+    <div class="btn"><input type="submit" class="button" name="dosubmit" value="<?php echo L('listorder')?>" /></div>
 </div>
 </div>
 </form>

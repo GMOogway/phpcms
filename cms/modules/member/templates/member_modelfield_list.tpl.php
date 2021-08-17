@@ -5,9 +5,9 @@
 <a href="?m=member&c=member_model&a=manage&menuid=<?php echo $this->input->get('menuid')?>"><em><?php echo L('管理会员模型');?></em></a>
 </div></div>
 <div class="pad-lr-10">
-<div class="table-list">
 <div class="bk10"></div>
 <form name="myform" id="myform" action="?m=member&c=member_modelfield&a=sort" method="post" onsubmit="check();return false;">
+<div class="table-list">
     <table width="100%" cellspacing="0" >
         <thead>
             <tr>
@@ -54,11 +54,10 @@
 	<?php } ?>
     </tbody>
     </table>
-
+</div>
 <div class="btn"><input type="submit" class="button" name="dosubmit" value="<?php echo L('sort')?>"/>
 </div> 
 <div id="pages"><?php if(isset($pages)){echo $pages;}?></div>
-</div>
 </div>
 </form>
 <div id="PC__contentHeight" style="display:none">160</div>

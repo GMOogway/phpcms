@@ -29,12 +29,11 @@ foreach($datas as $r) {
 </tr>
 <?php } ?>
 </tbody>
- </table>
- <div class="btn"><input type="submit" class="button" name="dosubmit" value="<?php echo L('listorder')?>" /></div>  </div>
-<div id="pages"><?php echo $pages?></div>
-
+</table>
 </div>
-
+<div class="btn"><input type="submit" class="button" name="dosubmit" value="<?php echo L('listorder')?>" /></div>
+<div id="pages"><?php echo $pages?></div>
+</div>
 </form></div>
 </body>
 </html>

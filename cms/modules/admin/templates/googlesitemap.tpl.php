@@ -3,9 +3,9 @@ defined('IN_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header');
 ?>
 <div class="pad_10">
-<div class="table-list">
 <form method="post" name="myform" id="myform" action="?m=admin&c=googlesitemap&a=set">
 <input type="hidden" name="tabletype" value="cmstables" id="cmstables">
+<div class="table-list">
 <table width="100%" cellspacing="0">
 <thead>
   	<tr>
@@ -94,8 +94,8 @@ include $this->admin_tpl('header');
     	</td>
   	</tr>
 </table>
-</form>
 </div>
+</form>
 </div> 
 </body> 
 </html>

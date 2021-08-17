@@ -69,8 +69,8 @@ for ($j=0;$j<5;$j++) {
      <?php }?>
 </tbody>
      </table>
- <div id="pages"><?php echo $pages?></div>
 </div>
+ <div id="pages"><?php echo $pages?></div>
 </form>
 </div>
 <script type="text/javascript"> 

@@ -6,7 +6,7 @@ include $this->admin_tpl('header');
 ?>
 <body scroll="no">
 <div style="padding:6px 3px">
-    <div class="col-2 col-left mr6" style="width:140px">
+    <div class="col-2 col-left mr6" style="width:200px">
       <h6><img src="<?php echo IMG_PATH?>icon/sitemap-application-blue.png" width="16" height="16" /> <?php echo L('site_select');?></h6>
        <div id="site_list">
           <ul class="content role-memu" >

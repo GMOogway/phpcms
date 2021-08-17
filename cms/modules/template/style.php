@@ -14,7 +14,7 @@ class style extends admin {
 	public function init() {
 		pc_base::load_app_func('global', 'admin');
 		$list = template_list('', 1);
-		$big_menu = array('javascript:artdialog(\'import\',\'?m=template&c=style&a=import\',\''.L('import_style').'\',560,300);void(0);', L('import_style'));
+		$big_menu = array('javascript:artdialog(\'import\',\'?m=template&c=style&a=import\',\''.L('import_style').'\',600,300);void(0);', L('import_style'));
 		include $this->admin_tpl('style_list');
 	}
 	

@@ -3,8 +3,8 @@ defined('IN_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');
 ?>
 <div class="pad-lr-10">
-<div class="table-list">
 <form action="?m=release&c=index&a=del" method="post">
+<div class="table-list">
     <table width="100%" cellspacing="0">
         <thead>
 		<tr>
@@ -49,9 +49,9 @@ endif;
 ?>
 </tbody>
 </table>
+</div>
 <div class="btn"><label for="check_box"><?php echo L('select_all')?>/<?php echo L('cancel')?></label> <input type="button" class="button" name="dosubmit" value="<?php echo L('sync_agin')?>" onclick="sync_agin()" />　<input type="button" class="button" name="dosubmit" value="<?php echo L('all').L('sync_agin')?>" onclick="var diag = new Dialog({id:'sync',title:'<?php echo L('sync_agin')?>',url:'<?php echo SELF;?>?m=release&c=index&a=init&statuses=-1&iniframe=1&pc_hash='+pc_hash,width:700,height:500,modal:true});diag.onCancel=function() {$DW.close();location.reload(true)};diag.show();" /> <input type="submit" class="button" value="<?php echo L("delete")?>" /></div> 
 </form>
-</div>
 </div>
 <div id="pages"><?php echo $queue->pages?></div>
 <script type="text/javascript">

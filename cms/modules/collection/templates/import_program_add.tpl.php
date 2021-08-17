@@ -81,13 +81,10 @@
 ?>
 </tbody>
 </table>
+</div>
 </fieldset>
-<div class="btn">
- <input type="submit" class="button" name="dosubmit" value="<?php echo L('submit')?>"/>
-</div>
-
+<div class="btn"><input type="submit" class="button" name="dosubmit" value="<?php echo L('submit')?>"/></div>
 <div id="pages"><?php echo $pages?></div>
-</div>
 </form>
 </div>
 

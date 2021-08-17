@@ -29,12 +29,11 @@
 ?>
 </tbody>
 </table>
-
+</div>
 <div class="btn">
 <input type="submit" class="button" name="dosubmit" value="<?php echo L('submit')?>"/>
 </div>
 
-</div>
 </form>
 </div>
 </body>

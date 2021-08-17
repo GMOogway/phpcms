@@ -3,8 +3,8 @@ defined('IN_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header', 'admin');
 ?>
 <div class="pad_10">
-<div class="table-list">
 <form id="myform" name="myform" action="" method="get">
+<div class="table-list">
 <input type="hidden" name="m" value="tag" />
 <input type="hidden" name="c" value="tag" />
 <input type="hidden" name="a" value="del" />
@@ -44,11 +44,9 @@ endif;
 ?>
 </tbody>
 </table>
-<div class="btn">
-<label for="check_box"><?php echo L('select_all')?>/<?php echo L('cancel')?></label> <input type="button" class="button" name="dosubmit" value="<?php echo L('delete')?>" onclick="Dialog.confirm('<?php echo L('sure_deleted')?>',function(){$('#myform').submit();});"/>
 </div>
+<div class="btn"><label for="check_box"><?php echo L('select_all')?>/<?php echo L('cancel')?></label> <input type="button" class="button" name="dosubmit" value="<?php echo L('delete')?>" onclick="Dialog.confirm('<?php echo L('sure_deleted')?>',function(){$('#myform').submit();});"/></div>
 </form>
-</div>
 </div>
 <div id="pages"><?php echo $pages?></div>
 <script type="text/javascript">

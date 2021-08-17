@@ -12,8 +12,6 @@ include $this->admin_tpl('header', 'admin');
             <div class="content pad-10" style="height:auto">
 <form name="myform" action="?m=vote&c=vote&a=delete_statistics" method="post">
 <div class="table-list">
-
-<br>	
 <table width="100%" cellspacing="0">
 	<thead>
 		<tr>
@@ -38,9 +36,9 @@ if(is_array($infos)){
 ?>
 </tbody>
 </table>
+</div>
 <div id="pages"><?php echo $pages?></div>
 </form>
-</div>
 </div>
 </div>
 </body>

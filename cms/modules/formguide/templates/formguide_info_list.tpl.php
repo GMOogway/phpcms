@@ -45,9 +45,9 @@ if(is_array($datas)){
 ?>
 </tbody>
     </table>
-  
+</div>
     <div class="btn"><label for="check_box"><?php echo L('selected_all')?>/<?php echo L('cancel')?></label>
-		<input name="button" type="button" class="button" value="<?php echo L('remove_all_selected')?>" onClick="Dialog.confirm('<?php echo L('affirm_delete')?>',function(){document.myform.action='?m=formguide&c=formguide_info&a=public_delete&formid=<?php echo $formid?>';$('#myform').submit();});">&nbsp;&nbsp;</div>  </div>
+		<input name="button" type="button" class="button" value="<?php echo L('remove_all_selected')?>" onClick="Dialog.confirm('<?php echo L('affirm_delete')?>',function(){document.myform.action='?m=formguide&c=formguide_info&a=public_delete&formid=<?php echo $formid?>';$('#myform').submit();});">&nbsp;&nbsp;</div>
  <div id="pages"><?php echo $pages;?></div>
 </form>
 </div>

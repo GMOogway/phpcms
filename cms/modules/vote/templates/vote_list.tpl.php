@@ -53,6 +53,7 @@ if(is_array($infos)){
 ?>
 </tbody>
 </table>
+</div>
 <div class="btn"><a href="#"
 	onClick="javascript:$('input[type=checkbox]').attr('checked', true)"><?php echo L('selected_all')?></a>/<a
 	href="#"
@@ -62,7 +63,6 @@ if(is_array($infos)){
 	onClick="Dialog.confirm('<?php echo L('vote_confirm_del')?>',function(){$('#myform').submit();});">&nbsp;&nbsp;</div>
 <div id="pages"><?php echo $pages?></div>
 </form>
-</div>
 <script type="text/javascript">
  
 function edit(id, name) {

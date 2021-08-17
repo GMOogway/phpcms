@@ -8,7 +8,8 @@ include $this->admin_tpl('header', 'admin');
 if(is_array($result)){
 	foreach($result as $v){
 ?>
-<table width="100%" cellspacing="0" class="table-list">
+<div class="table-list">
+<table width="100%" cellspacing="0">
 	<thead>
 		<tr>
 			<th align="left"><strong><?php echo $fields[$v['field']]['name']?></strong></th>
@@ -58,6 +59,7 @@ if(is_array($options)){
 ?>
 	</tbody>
 </table>
+</div>
 <div class="bk10"></div>
 <?php 
 	}

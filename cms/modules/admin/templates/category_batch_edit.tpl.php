@@ -4,7 +4,7 @@ include $this->admin_tpl('header');?>
 <style type="text/css">
 .table-list td b{color:#666}
 .tpl_style{background-color:#FBFAE3}
-
+body .table-list table tr>td:first-child, body .table-list table tr>th:first-child {text-align: left;padding: 8px;}
 </style>
 <form name="myform" action="?m=admin&c=category&a=batch_edit" method="post">
 <div class="pad_10">
@@ -325,12 +325,11 @@ include $this->admin_tpl('header');?>
 	 </tr>
     </tbody>
     </table>
+</div>
     <div class="btn">
 	<input type="hidden" name="pc_hash" value="<?php echo $_SESSION['pc_hash'];?>" />
 	<input type="hidden" name="type" value="<?php echo $type;?>" />
 	<input type="submit" class="button" name="dosubmit" value="<?php echo L('submit')?>" /></div>
-	<BR><BR>
-</div>
 </div>
 </div>
 </form>

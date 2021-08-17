@@ -52,6 +52,7 @@ if(is_array($infos)){
 ?>
 </tbody>
 </table>
+</div>
 <div class="btn"><a href="#"
 	onClick="javascript:$('input[type=checkbox]').attr('checked', true)"><?php echo L('selected_all')?></a>/<a
 	href="#"
@@ -60,7 +61,6 @@ if(is_array($infos)){
 </div>
 </form>
 <div id="pages" class="text-c"><?php echo $pages;?></div>
-</div>
 </body>
 </html>
 <script type="text/javascript">

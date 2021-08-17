@@ -3,7 +3,6 @@
 	include $this->admin_tpl('header','admin');
 ?>
 <div class="pad_10">
-<div class="table-list">
 <form name="searchform" action="" method="get" >
 <input type="hidden" value="pay" name="m">
 <input type="hidden" value="payment" name="c">
@@ -17,6 +16,7 @@
 <input type="submit" value="<?php echo L('search')?>" class="button" name="dosubmit">
 </div>
 </form>
+<div class="table-list">
     <table width="100%" cellspacing="0">
         <thead>
             <tr>
@@ -72,11 +72,11 @@ if(is_array($infos)){
 ?>
     </tbody>
     </table>
+</div>
 <div class="btn text-r">
 <?php echo L('thispage').L('totalize')?>  <span class="font-fixh green"><?php echo $number?></span> <?php echo L('bi').L('trade')?>(<?php echo L('money')?>：<span class="font-fixh"><?php echo $num_amount?></span><?php echo L('bi')?>，<?php echo L('point')?>：<span class="font-fixh"><?php echo $num_point?></span><?php echo L('bi')?>)，<?php echo L('total').L('amount')?>：<span class="font-fixh green"><?php echo $sum_amount?></span><?php echo L('yuan')?> ,<?php echo L('trade_succ').L('trade')?>：<span class="font-fixh green"><?php echo $sum_amount_succ?></span><?php echo L('yuan')?> ，总点数：<span class="font-fixh green"><?php echo $sum_point?></span><?php echo L('dian')?> ,<?php echo L('trade_succ').L('trade')?>：<span class="font-fixh green"><?php echo $sum_point_succ?></span><?php echo L('dian')?> 
 </div>
  <div id="pages"> <?php echo $pages?></div>
-</div>
 </div>
 </form>
 </body>

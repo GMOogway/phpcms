@@ -43,6 +43,7 @@
 ?>
  </tbody>
 </table>
+</div>
 <div class="btn">
 <label for="check_box"><?php echo L('select_all')?>/<?php echo L('cancel')?></label>
 <input type="submit" class="button" name="dosubmit" value="<?php echo L('verify_pass')?>" onclick="document.myform.action='?m=member&c=member_verify&a=pass'"/>
@@ -56,7 +57,6 @@
 <?php echo L('verify_message')?>：<input type="text" name="message"><input type="checkbox" value=1 name="sendemail" checked/><?php echo L('sendemail')?>
 </div> 
 <div id="pages"><?php echo $pages?></div>
-</div>
 </div>
 </form>
 <script type="text/javascript">

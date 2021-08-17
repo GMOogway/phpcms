@@ -32,8 +32,8 @@ if(is_array($infos)){
 </tbody>
 </table>
 <input type="hidden" name="msg_id" id="msg_id">
-<div id="pages"><?php echo $this->pages?></div>
 </div>
+<div id="pages"><?php echo $this->pages?></div>
 <SCRIPT LANGUAGE="JavaScript">
 <!--
 	function return_id(voteid, title) {

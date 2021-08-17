@@ -29,9 +29,8 @@ include $this->admin_tpl('header');?>
 	<?php } ?>
 	</tbody>
     </table>
-  
-    <div id="pages"><?php echo $pages;?></div>
 </div>
+    <div id="pages"><?php echo $pages;?></div>
 </div>
 <script type="text/javascript"> 
 <!--

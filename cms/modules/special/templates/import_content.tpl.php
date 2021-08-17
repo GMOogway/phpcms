@@ -29,8 +29,8 @@ include $this->admin_tpl('header','admin');
 </table>
 </form>
 </div>
-<div class="table-list">
 <form name="myform" id="myform" action="?m=special&c=special&a=import&specialid=<?php echo $this->input->get('specialid')?>&modelid=<?php echo $this->input->get('modelid')?>" method="post">
+<div class="table-list">
     <table width="100%">
         <thead>
             <tr>
@@ -57,10 +57,10 @@ include $this->admin_tpl('header','admin');
      <?php } }?>
 </tbody>
      </table>
-    <div class="btn"><label for="check_box"><?php echo L('selected_all')?>/<?php echo L('cancel')?></label> <?php echo form::select($types, '', 'name="typeid" id="typeid"', L('please_choose_type'))?><span id="msg_id"></span> <input type="submit" name="dosubmit" id="dosubmit" class="button" value="<?php echo L('import')?>" /> </div>
-    <div id="pages"><?php echo $pages;?></div>
-</form>
 </div>
+<div class="btn"><label for="check_box"><?php echo L('selected_all')?>/<?php echo L('cancel')?></label> <?php echo form::select($types, '', 'name="typeid" id="typeid"', L('please_choose_type'))?><span id="msg_id"></span> <input type="submit" name="dosubmit" id="dosubmit" class="button" value="<?php echo L('import')?>" /> </div>
+<div id="pages"><?php echo $pages;?></div>
+</form>
 </div>
 </body>
 </html>

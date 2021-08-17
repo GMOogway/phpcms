@@ -44,21 +44,23 @@ include $this->admin_tpl('header');
 <table width="100%" cellspacing="0">
 	<thead>
 	<tr>
-	<th class="text-l cu-span" style='padding-left:30px;'><span onClick="javascript:$('input[name=menuid[]]').attr('checked', true)"><?php echo L('selected_all');?></span>/<span onClick="javascript:$('input[name=menuid[]]').attr('checked', false)"><?php echo L('cancel');?></span></th>
+	<th><label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline"><input type="checkbox" class="group-checkable" id="check_box" onclick="selectall('menuid[]');"><span></span></label></th>
 	</tr>
 	</thead>
 </table>
+</div>
 <form name="myform" action="?m=admin&c=role&a=role_priv" method="post">
 <input type="hidden" name="roleid" value="<?php echo $roleid?>"></input>
 <input type="hidden" name="siteid" value="<?php echo $siteid?>"></input>
+<div class="table-list">
 <table width="100%" cellspacing="0" id="dnd-example">
 <tbody>
 <?php echo $categorys;?>
 </tbody>
 </table>
-    <div class="btn"><input type="submit"  class="button" name="dosubmit" id="dosubmit" value="<?php echo L('submit');?>" /></div>
-</form>
 </div>
+<div class="btn"><input type="submit"  class="button" name="dosubmit" id="dosubmit" value="<?php echo L('submit');?>" /></div>
+</form>
 <?php } else {?>
 <style type="text/css">
 .guery{background: url(<?php echo IMG_PATH?>msg_img/msg_bg.png) no-repeat 0px -560px;padding:10px 12px 10px 45px; font-size:14px; height:100px; line-height:96px}

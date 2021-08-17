@@ -1,7 +1,6 @@
 <?php defined('IN_ADMIN') or exit('No permission resources.');?>
 <?php include $this->admin_tpl('header', 'admin');?>
 <div class="pad-lr-10">
-<div class="table-list">
 
 <div class="explain-col">
 <?php echo L('move_member_model_index_alert')?>
@@ -9,6 +8,7 @@
 
 <div class="bk10"></div>
 <form name="myform" id="myform" action="?m=member&c=member_model&a=delete" method="post" onsubmit="check();return false;">
+<div class="table-list">
 <table width="100%" cellspacing="0">
 	<thead>
 		<tr>
@@ -51,12 +51,11 @@
 ?>
 </tbody>
 </table>
-
+</div>
 <div class="btn"><label for="check_box"><?php echo L('select_all')?>/<?php echo L('cancel')?></label> <input type="button" class="button" name="dosubmit" value="<?php echo L('delete')?>" onclick="Dialog.confirm('<?php echo L('sure_delete')?>',function(){$('#myform').submit();});"/>
 <input type="submit" class="button" name="dosubmit" onclick="document.myform.action='?m=member&c=member_model&a=sort'" value="<?php echo L('sort')?>"/>
 </div> 
 <div id="pages"><?php echo $pages?></div>
-</div>
 </div>
 </form>
 <div id="PC__contentHeight" style="display:none">160</div>

@@ -43,9 +43,9 @@ include $this->admin_tpl('header','admin');
      <?php } }?>
 </tbody>
      </table>
-    <div class="btn"> <input type="hidden" name="msg_id" id="msg_id"> </div>
-    <div id="pages"><?php echo $pages;?></div>
+    <div class="btn"><input type="hidden" name="msg_id" id="msg_id"></div>
 </div>
+<div id="pages"><?php echo $pages;?></div>
 </div>
 </body>
 </html>

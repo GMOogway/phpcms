@@ -40,10 +40,9 @@ if(is_array($paylist_arr)) foreach($paylist_arr as $info){
 ?>
     </tbody>
     </table>
-  
-    <div class="btn"></div>  </div>
-
- <div id="pages"> <?php echo $pages?></div>
+</div>
+<div class="btn"></div>
+<div id="pages"> <?php echo $pages?></div>
 </div>
 </div>
 </form>

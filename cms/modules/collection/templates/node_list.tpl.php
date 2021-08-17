@@ -51,13 +51,12 @@
 ?>
 </tbody>
 </table>
-
+</div>
 <div class="btn">
 <label for="check_box"><?php echo L('select_all')?>/<?php echo L('cancel')?></label> <input type="button" class="button" name="dosubmit" onclick="Dialog.confirm('<?php echo L('sure_delete')?>',function(){$('#myform').submit();});" value="<?php echo L('delete')?>"/>
  <input type="button" class="button" value="<?php echo L('import_collection_points')?>" onclick="import_spider()" />
 </div>
 <div id="pages"><?php echo $pages?></div>
-</div>
 </form>
 </div>
 <script type="text/javascript">

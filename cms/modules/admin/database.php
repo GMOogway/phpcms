@@ -33,7 +33,7 @@ class database extends admin {
 			$this->pdo_name = $this->input->post('pdo_select') ? $this->input->post('pdo_select') : trim($this->input->get('pdo_select'));			
 			$this->db = db_factory::get_instance($database)->get_database($this->pdo_name);
 			$r = $this->db->version();
-			$this->export_database($tables,$sqlcompat,$sqlcharset,$sizelimit,$action,$fileid,$random,$tableid,$startfrom,$tabletype);
+			$this->export_database($tables,$sqlcompat,$sqlcharset,$sizelimit,$action,$fileid,$random,$tableid,$startfrom,$tabletype,$this->input->get('menuid'));
 		} else {
 			foreach($database as $name=>$value) {
 				$pdos[$name] = $value['database'].'['.$value['hostname'].']';
@@ -70,7 +70,7 @@ class database extends admin {
 			$this->db_charset = $database[$this->pdo_name]['charset'];
 			$this->db_tablepre = $database[$pdo_name]['tablepre'];
 			$this->db = db_factory::get_instance($database)->get_database($this->pdo_name);
-			$this->import_database($pre);
+			$this->import_database($pre,$this->input->get('menuid'));
 		} else {
 			$$pdos = $others = array();
 			foreach($database as $name=>$value) {
@@ -310,7 +310,7 @@ class database extends admin {
 	 * @param unknown_type $startfrom 
 	 * @param unknown_type $tabletype 备份数据库类型 （非cms数据与cms数据）
 	 */
-	private function export_database($tables,$sqlcompat,$sqlcharset,$sizelimit,$action,$fileid,$random,$tableid,$startfrom,$tabletype) {
+	private function export_database($tables,$sqlcompat,$sqlcharset,$sizelimit,$action,$fileid,$random,$tableid,$startfrom,$tabletype,$menuid) {
 		$dumpcharset = $sqlcharset ? $sqlcharset : str_replace('-', '', CHARSET);
 
 		$fileid = ($fileid != '') ? $fileid : 1;		
@@ -402,19 +402,19 @@ class database extends admin {
 			file_put_contents($bakfile, $tabledump);
 			@chmod($bakfile, 0777);
 			if(!pc_base::load_config('system', 'execution_sql')) $filename = L('bundling').$altid.'#';
-			showmessage(L('bakup_file')." $filename ".L('bakup_write_succ'), '?m=admin&c=database&a=export&menuid='.$this->input->get('menuid').'&sizelimit='.$sizelimit.'&sqlcompat='.$sqlcompat.'&sqlcharset='.$sqlcharset.'&tableid='.$tableid.'&fileid='.$fileid.'&startfrom='.$startrow.'&random='.$random.'&dosubmit=1&tabletype='.$tabletype.'&allow='.$allow.'&pdo_select='.$this->pdo_name);
+			showmessage(L('bakup_file')." $filename ".L('bakup_write_succ'), '?m=admin&c=database&a=export&menuid='.$menuid.'&sizelimit='.$sizelimit.'&sqlcompat='.$sqlcompat.'&sqlcharset='.$sqlcharset.'&tableid='.$tableid.'&fileid='.$fileid.'&startfrom='.$startrow.'&random='.$random.'&dosubmit=1&tabletype='.$tabletype.'&allow='.$allow.'&pdo_select='.$this->pdo_name);
 		} else {
 		   $bakfile_path = CACHE_PATH.'bakup'.DIRECTORY_SEPARATOR.$this->pdo_name.DIRECTORY_SEPARATOR;
 		   file_put_contents($bakfile_path.'index.html','');
 		   delcache('bakup_tables','commons');
-		   showmessage(L('bakup_succ'),'?m=admin&c=database&a=import&menuid='.$this->input->get('menuid').'&pdoname='.$this->pdo_name);
+		   showmessage(L('bakup_succ'),'?m=admin&c=database&a=import&menuid='.$menuid.'&pdoname='.$this->pdo_name);
 		}
 	}
 	/**
 	 * 数据库恢复
 	 * @param unknown_type $filename
 	 */
-	private function import_database($filename) {
+	private function import_database($filename,$menuid) {
 		if($filename && fileext($filename)=='sql') {
 			$filepath = CACHE_PATH.'bakup'.DIRECTORY_SEPARATOR.$this->pdo_name.DIRECTORY_SEPARATOR.$filename;
 			if(!file_exists($filepath)) showmessage(L('database_sorry')." $filepath ".L('database_not_exist'));
@@ -430,9 +430,9 @@ class database extends admin {
 				$sql = file_get_contents($filepath);
 				$this->sql_execute($sql);
 				$fileid++;
-				showmessage(L('bakup_data_file')." $filename ".L('load_success'),"?m=admin&c=database&a=import&menuid=".$this->input->get('menuid')."&pdoname=".$this->pdo_name."&pre=".$pre."&fileid=".$fileid."&dosubmit=1");
+				showmessage(L('bakup_data_file')." $filename ".L('load_success'),"?m=admin&c=database&a=import&menuid=".$menuid."&pdoname=".$this->pdo_name."&pre=".$pre."&fileid=".$fileid."&dosubmit=1");
 			} else {
-				showmessage(L('data_recover_succ'),'?m=admin&c=database&a=import&menuid='.$this->input->get('menuid'));
+				showmessage(L('data_recover_succ'),'?m=admin&c=database&a=import&menuid='.$menuid);
 			}
 		}
 	}

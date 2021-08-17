@@ -22,6 +22,11 @@ class setting extends admin {
 		extract(string2array($info['setting']));
 		$show_header = true;
 		$show_validator = 1;
+		if (intval($this->input->get('tab'))==0) {
+			$page = intval($this->input->get('tab'));
+		} else {
+			$page = intval($this->input->get('tab')-1);
+		}
 		include $this->admin_tpl('setting');
 	}
 	

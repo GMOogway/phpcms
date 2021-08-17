@@ -47,8 +47,8 @@ include $this->admin_tpl('header','admin');
 	 <?php }?>
 	    </tbody>
     </table>
-   <div id="pages"><?php echo $pages;?></div>
 </div>
+<div id="pages"><?php echo $pages;?></div>
 </div>
 <style type="text/css">
  .line_ff9966,.line_ff9966:hover td{
