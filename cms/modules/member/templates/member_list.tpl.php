@@ -58,22 +58,21 @@
 <table width="100%" cellspacing="0">
 	<thead>
 		<tr>
-			<th align="left" width="20" class="myselect">
+			<th class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="group-checkable" value="" id="check_box" onclick="selectall('userid[]');" />
                         <span></span>
                     </label></th>
-			<th align="left"></th>
-			<th align="left"><?php echo L('uid')?></th>
-			<th align="left"><?php echo L('username')?></th>
-			<th align="left"><?php echo L('nickname')?></th>
-			<th align="left"><?php echo L('email')?></th>
-			<th align="left"><?php echo L('member_group')?></th>
-			<th align="left"><?php echo L('regip')?></th>
-			<th align="left"><?php echo L('lastlogintime')?></th>
-			<th align="left"><?php echo L('amount')?></th>
-			<th align="left"><?php echo L('point')?></th>
-			<th align="left"><?php echo L('operation')?></th>
+			<th width="80"><?php echo L('uid')?></th>
+			<th width="200"><?php echo L('username')?></th>
+			<th width="120"><?php echo L('nickname')?></th>
+			<th width="200"><?php echo L('email')?></th>
+			<th width="100"><?php echo L('member_group')?></th>
+			<th width="150"><?php echo L('regip')?></th>
+			<th width="180"><?php echo L('lastlogintime')?></th>
+			<th width="120"><?php echo L('amount')?></th>
+			<th width="120"><?php echo L('point')?></th>
+			<th><?php echo L('operation')?></th>
 		</tr>
 	</thead>
 <tbody>
@@ -82,22 +81,21 @@
 	foreach($memberlist as $k=>$v) {
 ?>
     <tr>
-		<td align="left" class="myselect">
+		<td class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="checkboxes" value="<?php echo $v['userid']?>" name="userid[]" />
                         <span></span>
                     </label></td>
-		<td align="left"><?php if($v['islock']) {?><img onmouseover="layer.tips('<?php echo L('lock')?>',this,{tips: [1, '#000']});" onmouseout="layer.closeAll();" src="<?php echo IMG_PATH?>icon/icon_padlock.gif"><?php }?></td>
-		<td align="left"><?php echo $v['userid']?></td>
-		<td align="left"><img src="<?php echo $v['avatar']?>" height=18 width=18 onerror="this.src='<?php echo IMG_PATH?>member/nophoto.gif'"><?php if($v['vip']) {?><img title="<?php echo L('vip')?>" src="<?php echo IMG_PATH?>icon/vip.gif"><?php }?><?php echo $v['username']?><a href="javascript:member_infomation(<?php echo $v['userid']?>, '<?php echo $v['modelid']?>', '')"><?php echo $member_model[$v['modelid']]['name']?><img src="<?php echo IMG_PATH?>admin_img/detail.png"></a></td>
-		<td align="left"><?php echo new_html_special_chars($v['nickname'])?></td>
-		<td align="left"><?php echo $v['email']?></td>
-		<td align="left"><?php echo $grouplist[$v['groupid']]?></td>
-		<td align="left"><?php echo $v['regip']?></td>
-		<td align="left"><?php echo format::date($v['lastdate'], 1);?></td>
-		<td align="left"><?php echo $v['amount']?></td>
-		<td align="left"><?php echo $v['point']?></td>
-		<td align="left">
+		<td><?php echo $v['userid']?></td>
+		<td><img src="<?php echo $v['avatar']?>" height="18" width="18" onerror="this.src='<?php echo IMG_PATH?>member/nophoto.gif'"><?php if($v['vip']) {?><img title="<?php echo L('vip')?>" src="<?php echo IMG_PATH?>icon/vip.gif"><?php }?><?php echo $v['username']?><a href="javascript:member_infomation(<?php echo $v['userid']?>, '<?php echo $v['modelid']?>', '')"><?php echo $member_model[$v['modelid']]['name']?><img src="<?php echo IMG_PATH?>admin_img/detail.png"></a><?php if($v['islock']) {?><img onmouseover="layer.tips('<?php echo L('lock')?>',this,{tips: [1, '#000']});" onmouseout="layer.closeAll();" src="<?php echo IMG_PATH?>icon/icon_padlock.gif"><?php }?></td>
+		<td><?php echo new_html_special_chars($v['nickname'])?></td>
+		<td><?php echo $v['email']?></td>
+		<td><?php echo $grouplist[$v['groupid']]?></td>
+		<td><?php echo $v['regip']?></td>
+		<td><?php echo dr_date($v['lastdate'], null, 'red');?></td>
+		<td><?php echo $v['amount']?></td>
+		<td><?php echo $v['point']?></td>
+		<td>
 			<a href="javascript:edit(<?php echo $v['userid']?>, '<?php echo $v['username']?>')">[<?php echo L('edit')?>]</a>
 			<a href="?m=member&c=member&a=alogin_index&id=<?php echo $v['userid']?>" target="_blank">[<?php echo L('login')?>]</a>
 		</td>
