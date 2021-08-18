@@ -54,6 +54,7 @@
 </form>
 
 <form name="myform" id="myform" action="?m=member&c=member&a=delete" method="post" onsubmit="checkuid();return false;">
+<input name="dosubmit" type="hidden" value="1">
 <div class="table-list">
 <table width="100%" cellspacing="0">
 	<thead>
@@ -107,13 +108,19 @@
 </tbody>
 </table>
 </div>
-<div class="btn">
-<label for="check_box"><?php echo L('select_all')?>/<?php echo L('cancel')?></label> <input type="button" class="button" name="dosubmit" value="<?php echo L('delete')?>" onclick="Dialog.confirm('<?php echo L('sure_delete')?>',function(){$('#myform').submit();});"/>
-<input type="submit" class="button" name="dosubmit" onclick="document.myform.action='?m=member&c=member&a=lock'" value="<?php echo L('lock')?>"/>
-<input type="submit" class="button" name="dosubmit" onclick="document.myform.action='?m=member&c=member&a=unlock'" value="<?php echo L('unlock')?>"/>
-<input type="button" class="button" name="dosubmit" onclick="move();return false;" value="<?php echo L('move')?>"/>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select">
+        <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
+            <input type="checkbox" class="group-checkable" data-set=".checkboxes">
+            <span></span>
+        </label>
+        <label><button type="button" onclick="Dialog.confirm('<?php echo L('sure_delete')?>',function(){$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete')?></button></label>
+        <label><button type="submit" onclick="document.myform.action='?m=member&c=member&a=lock'" class="btn dark btn-sm"> <i class="fa fa-lock"></i> <?php echo L('lock')?></button></label>
+        <label><button type="submit" onclick="document.myform.action='?m=member&c=member&a=unlock'" class="btn green btn-sm"> <i class="fa fa-unlock"></i> <?php echo L('unlock')?></button></label>
+        <label><button type="button" onclick="move();return false;" class="btn blue btn-sm"> <i class="fa fa-arrows"></i> <?php echo L('move')?></button></label>
+    </div>
+    <div class="col-md-5 list-page"><?php echo $pages?></div>
 </div>
-<div id="pages"><?php echo $pages?></div>
 </form>
 </div>
 <script type="text/javascript">

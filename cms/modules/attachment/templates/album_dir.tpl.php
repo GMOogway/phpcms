@@ -16,7 +16,7 @@ body .table-list table tr>td:first-child, body .table-list table tr>th:first-chi
 </tr>
 <?php if ($dir !='' && $dir != '.'):?>
 <tr>
-<td align="left"><a href="<?php echo '?m=attachment&c=attachments&a=album_dir&args='.$this->input->get('args').'&dir='.stripslashes(dirname($dir))?>"><img src="<?php echo IMG_PATH?>folder-closed.gif" /><?php echo L("parent_directory")?></td></a>
+<td align="left"><a href="<?php echo '?m=attachment&c=attachments&a=album_dir&args='.$this->input->get('args').'&authkey='.$this->input->get('authkey').'&dir='.stripslashes(dirname($dir))?>"><img src="<?php echo IMG_PATH?>folder-closed.gif" /><?php echo L("parent_directory")?></td></a>
 </tr>
 <?php endif;?>
 <?php 
@@ -26,7 +26,7 @@ if(is_array($list)):
 ?>
 <tr>
 <?php if (is_dir($v)) {
-	echo '<td align="left"><img src="'.IMG_PATH.'folder-closed.gif" /> <a href="?m=attachment&c=attachments&a=album_dir&args='.$this->input->get('args').'&dir='.($this->input->get('dir') && !empty($this->input->get('dir')) ? stripslashes($this->input->get('dir')).'/' : '').$filename.'"><b>'.$filename.'</b></a></td>';
+	echo '<td align="left"><img src="'.IMG_PATH.'folder-closed.gif" /> <a href="?m=attachment&c=attachments&a=album_dir&args='.$this->input->get('args').'&authkey='.$this->input->get('authkey').'&dir='.($this->input->get('dir') && !empty($this->input->get('dir')) ? stripslashes($this->input->get('dir')).'/' : '').$filename.'"><b>'.$filename.'</b></a></td>';
 } else {
 	echo '<td align="left" onclick="javascript:album_cancel(this)"><img src="'.file_icon($filename,'gif').'" /> <a href="javascript:;" rel="'.$url.$filename.'" name="'.file_name($filename).'"';
 	if (dr_is_image(CMS_PATH.$local.'/'.$filename)) {

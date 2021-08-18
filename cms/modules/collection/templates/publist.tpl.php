@@ -59,13 +59,19 @@
 </tbody>
 </table>
 </div>
-<div class="btn">
-<label for="check_box"><?php echo L('select_all')?>/<?php echo L('cancel')?></label> <input type="button" class="button" name="dosubmit" value="<?php echo L('delete')?>" onclick="re_url('m=collection&c=node&a=content_del&nodeid=<?php echo $nodeid?>');return check_checkbox(1);"/> 
-<input type="button" class="button" name="dosubmit"  onclick="re_url('m=collection&c=node&a=content_del&nodeid=<?php echo $nodeid?>&history=1');return check_checkbox(1);" value="<?php echo L('also_delete_the_historical')?>"/> 
-<input type="submit" class="button" name="dosubmit" onclick="re_url('m=collection&c=node&a=import&nodeid=<?php echo $nodeid?>');return check_checkbox();" value="<?php echo L('import_selected')?>"/>
-<input type="submit" class="button" name="dosubmit"  onclick="re_url('m=collection&c=node&a=import&type=all&nodeid=<?php echo $nodeid?>')" value="<?php echo L('import_all')?>"/>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select">
+        <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
+            <input type="checkbox" class="group-checkable" data-set=".checkboxes">
+            <span></span>
+        </label>
+        <label><button type="button" onclick="re_url('m=collection&c=node&a=content_del&nodeid=<?php echo $nodeid?>');return check_checkbox(1);" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete')?></button></label>
+        <label><button type="button" onclick="re_url('m=collection&c=node&a=content_del&nodeid=<?php echo $nodeid?>&history=1');return check_checkbox(1);" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('also_delete_the_historical')?></button></label>
+        <label><button type="submit" onclick="re_url('m=collection&c=node&a=import&nodeid=<?php echo $nodeid?>');return check_checkbox();" class="btn green btn-sm"> <i class="fa fa-cloud-upload"></i> <?php echo L('import_selected')?></button></label>
+        <label><button type="submit" onclick="re_url('m=collection&c=node&a=import&type=all&nodeid=<?php echo $nodeid?>')" class="btn blue btn-sm"> <i class="fa fa-cloud-upload"></i> <?php echo L('import_all')?></button></label>
+    </div>
+    <div class="col-md-5 list-page"><?php echo $pages?></div>
 </div>
-<div id="pages"><?php echo $pages?></div>
 </form>
 </div>
 </div>

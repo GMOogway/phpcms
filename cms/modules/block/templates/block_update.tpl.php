@@ -107,7 +107,10 @@ a.close{background: url(<?php echo IMG_PATH?>cross.png) no-repeat left -46px; di
 </tbody>
 </table>
 </div>
-	<?php if($pages):?><div id="pages"><?php echo $pages;?></div><?php endif;?>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select"></div>
+    <div class="col-md-5 list-page"><?php if($pages):?><?php echo $pages;?><?php endif;?></div>
+</div>
 </fieldset>
 
 

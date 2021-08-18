@@ -3,11 +3,11 @@ defined('IN_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header', 'admin');
 ?>
 <div class="pad_10">
-<div class="table-list">
 <form action="" method="get">
 <input type="hidden" name="m" value="tag" />
 <input type="hidden" name="c" value="tag" />
 <input type="hidden" name="a" value="del" />
+<div class="table-list">
     <table width="100%" cellspacing="0">
         <thead>
 		<tr>
@@ -32,10 +32,13 @@ endif;
 ?>
 </tbody>
 </table>
+</div>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select"></div>
+    <div class="col-md-5 list-page"><?php echo $pages?></div>
+</div>
 </form>
 </div>
-</div>
-<div id="pages"><?php echo $pages?></div>
 <script type="text/javascript">
 <!--
 

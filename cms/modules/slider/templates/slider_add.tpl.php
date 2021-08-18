@@ -10,7 +10,7 @@ include $this->admin_tpl('header','admin');
 
 
 	<tr>
-		<th width="20%"><?php echo L('typeid')?>：</th>
+		<th width="100"><?php echo L('typeid')?>：</th>
 		<td><select name="slider[typeid]" id="">
 		<?php
 		  $i=0;
@@ -43,7 +43,7 @@ include $this->admin_tpl('header','admin');
 
 	<tr>
 		<th width="100"><?php echo L('slider_desc')?>：</th>
-		<td><textarea name="slider[description]" id="slider_description" rows="4" cols="80"></textarea></td>
+		<td><textarea name="slider[description]" id="slider_description" rows="4" cols="50"></textarea></td>
 	</tr>
 
 	

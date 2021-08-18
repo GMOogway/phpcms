@@ -594,7 +594,7 @@ function dr_submit_sql_todo(e, t) {
 		}
 	})
 }
-function dr_install_uninstall(id,msg,title,linkurl,w,h) {
+function dr_install_uninstall(id,msg,title,linkurl,module,w,h) {
 	if (typeof pc_hash == 'string') linkurl += (linkurl.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
 	if (linkurl.toLowerCase().indexOf("http://") != -1 || linkurl.toLowerCase().indexOf("https://") != -1) {
 	} else {
@@ -606,7 +606,22 @@ function dr_install_uninstall(id,msg,title,linkurl,w,h) {
 		w = h = '100%';
 	}
 	Dialog.confirm(msg, function() {
-		artdialog(id,linkurl,title,w,h);
+		var t = layer.load(2, {
+			shade: [.3, "#fff"],
+			time: 5e3
+		});
+		$.ajax({
+			type: "POST",
+			dataType: "json",
+			url: linkurl,
+			data: {module:module},
+			success: function(e) {
+				layer.close(t), dr_tips(e.code, e.msg), 1 == e.code && setTimeout("dr_install_confirm()", 2e3)
+			},
+			error: function(e, t, a) {
+				dr_ajax_admin_alert_error(e, t, a)
+			}
+		})
 	}, function() {})
 }
 function dr_install_confirm() {

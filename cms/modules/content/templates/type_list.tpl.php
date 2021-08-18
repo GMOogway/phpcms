@@ -2,6 +2,7 @@
 defined('IN_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');?>
 <form name="myform" action="?m=content&c=type_manage&a=listorder" method="post">
+<input name="dosubmit" type="hidden" value="1">
 <div class="pad_10">
 <div class="table-list">
     <table width="100%" cellspacing="0" >
@@ -31,10 +32,13 @@ foreach($datas as $r) {
 	</tbody>
     </table>
 </div>
-    <div class="btn"><input type="submit" class="button" name="dosubmit" value="<?php echo L('listorder')?>" /></div>
-	<div id="pages"><?php echo $pages;?></div>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select">
+        <label><button type="submit" class="btn green btn-sm"> <i class="fa fa-refresh"></i> <?php echo L('listorder')?></button></label>
+    </div>
+    <div class="col-md-5 list-page"><?php if(isset($pages)){echo $pages;}?></div>
 </div>
-
+</div>
 </form>
 
 <script type="text/javascript"> 

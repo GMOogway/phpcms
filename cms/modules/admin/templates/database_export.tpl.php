@@ -140,8 +140,11 @@ if(is_array($infos)){
 </table>
 </div>
 <?php if(is_array($infos)){?>
-<div class="fc-list-select table-checkable">
-<label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline"><input type="checkbox" class="group-checkable" data-set=".checkboxes" /><span></span></label></div>
+<div class="row list-footer table-checkable">
+    <div class="col-md-7 fc-list-select">
+        <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline"><input type="checkbox" class="group-checkable" data-set=".checkboxes" /><span></span></label>
+    </div>
+</div>
 <?php }?>
         <div class="portlet-body form myfooter">
             <div class="form-actions text-center">

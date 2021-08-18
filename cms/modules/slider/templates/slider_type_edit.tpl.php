@@ -16,7 +16,7 @@ include $this->admin_tpl('header','admin');
 <table cellpadding="2" cellspacing="1" class="table_form" width="100%">
 
 	<tr>
-		<th width="60"><?php echo L('slider_postion_name')?>：</th>
+		<th width="100"><?php echo L('slider_postion_name')?>：</th>
 		<td><input type="text" name="type[name]" id="type_name"
 			size="30" class="input-text" value="<?php echo $name;?>"></td>
 	</tr>

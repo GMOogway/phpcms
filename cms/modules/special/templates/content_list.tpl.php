@@ -10,22 +10,23 @@ include $this->admin_tpl('header','admin');
 </div>
 <div class="pad-10">
 <form name="myform" id="myform" action="?m=special&c=content&a=listorder&specialid=<?php echo $_GET['specialid']?>" method="post">
+<input name="dosubmit" type="hidden" value="1">
 <div class="table-list">
     <table width="100%">
         <thead>
             <tr>
-			<th width="40" class="myselect">
+			<th class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="group-checkable" value="" id="check_box" onclick="selectall('id[]');" />
                         <span></span>
                     </label></th>
-            <th width="43"><?php echo L('listorder')?></th>
-            <th width="60">ID</th>
+            <th width="80"><?php echo L('listorder')?></th>
+            <th width="80">ID</th>
 			<th><?php echo L('content_title')?></th>
 			<th width="120"><?php echo L('for_type')?></th>
-            <th width="90"><?php echo L('inputman')?></th>
-            <th width="120"><?php echo L('update_time')?></th>
-			<th width="200"><?php echo L('operations_manage')?></th>
+            <th width="100"><?php echo L('inputman')?></th>
+            <th width="180"><?php echo L('update_time')?></th>
+			<th width="120"><?php echo L('operations_manage')?></th>
             </tr>
         </thead>
 <tbody>
@@ -36,25 +37,34 @@ include $this->admin_tpl('header','admin');
     	}
     ?>
         <tr>
-		<td align="center" width="40" class="myselect">
+		<td align="center" class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="checkboxes" name="id[]" value="<?php echo $r['id'];?>" />
                         <span></span>
                     </label></td>
-        <td align='center' width='43'><input name='listorders[<?php echo $r['id'];?>]' type='text' size='3' value='<?php echo $r['listorder'];?>' class='input-text-c'></td>
-		<td align='center' width="60"><?php echo $r['id'];?></td>
+        <td align='center'><input name='listorders[<?php echo $r['id'];?>]' type='text' size='3' value='<?php echo $r['listorder'];?>' class='input-text-c'></td>
+		<td align='center'><?php echo $r['id'];?></td>
 		<td><a href="<?php echo $r['url'];?>" target="_blank"><?php echo $r['title'];?></a></td>
-		<td align='center' width="120"><?php echo $types[$r['typeid']]['name'];?></td>
-		<td align='center' width="90"><?php echo $r['username'];?></td>
-		<td align='center' width="120"><?php echo format::date($r['updatetime'],1);?></td>
-		<td align='center' width="200"><a href="javascript:;" onclick="javascript:contentopen('?m=special&c=content&a=edit&specialid=<?php echo $r['specialid']?>&id=<?php echo $r['id']?>','')"><?php echo L('content_edit')?></a> </td>
+		<td align='center'><?php echo $types[$r['typeid']]['name'];?></td>
+		<td align='center'><?php echo $r['username'];?></td>
+		<td align='center'><?php echo dr_date($r['updatetime'], null, 'red');?></td>
+		<td align='center'><a href="javascript:;" onclick="javascript:contentopen('?m=special&c=content&a=edit&specialid=<?php echo $r['specialid']?>&id=<?php echo $r['id']?>','')"><?php echo L('content_edit')?></a> </td>
 	</tr>
      <?php }?>
 </tbody>
      </table>
 </div>
-<div class="btn"><label for="check_box"><?php echo L('selected_all')?>/<?php echo L('cancel')?></label> <input type="submit" class="button" value="<?php echo L('listorder')?>" /> <input type="button" class="button" value="<?php echo L('delete')?>" onclick="Dialog.confirm('<?php echo L('confirm', array('message' => L('selected')))?>',function(){document.myform.action='?m=special&c=content&a=delete&specialid=<?php echo $_GET['specialid']?>';$('#myform').submit();});"/></div>
-<div id="pages"><?php echo $pages;?></div>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select">
+        <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
+            <input type="checkbox" class="group-checkable" data-set=".checkboxes">
+            <span></span>
+        </label>
+        <label><button type="submit" class="btn green btn-sm"> <i class="fa fa-refresh"></i> <?php echo L('listorder')?></button></label>
+        <label><button type="button" onclick="Dialog.confirm('<?php echo L('confirm', array('message' => L('selected')))?>',function(){document.myform.action='?m=special&c=content&a=delete&specialid=<?php echo $_GET['specialid']?>';$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete')?></button></label>
+    </div>
+    <div class="col-md-5 list-page"><?php echo $pages?></div>
+</div>
 </form>
 </div>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>cookie.js"></script>

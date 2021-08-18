@@ -19,6 +19,7 @@ include $this->admin_tpl('header', 'admin');
 </table>
 
 <form name="myform" id="myform" action="?m=import&c=import&a=delete" method="post" >
+<input name="dosubmit" type="hidden" value="1">
 <div class="table-list">
 <table width="100%" cellspacing="0">
 	<thead>
@@ -64,14 +65,16 @@ if(is_array($infos)){
 </tbody>
 </table>
 </div>
-<div class="btn"><a href="#"
-	onClick="javascript:$('input[type=checkbox]').attr('checked', true)"><?php echo L('selected_all')?></a>/<a
-	href="#"
-	onClick="javascript:$('input[type=checkbox]').attr('checked', false)"><?php echo L('cancel')?></a>
-<input name="submit" type="submit" class="button"
-	value="<?php echo L('delete_select');?>"
-	onClick="return confirm(<?php echo L('delete_confirm');?>)">&nbsp;&nbsp;</div>
-<div id="pages"><?php echo $pages?></div>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select">
+        <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
+            <input type="checkbox" class="group-checkable" data-set=".checkboxes">
+            <span></span>
+        </label>
+        <label><button type="button" onclick="Dialog.confirm('<?php echo L('delete_confirm')?>',function(){$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete_select')?></button></label>
+    </div>
+    <div class="col-md-5 list-page"><?php echo $pages?></div>
+</div>
 </form>
 </div>
 </body>

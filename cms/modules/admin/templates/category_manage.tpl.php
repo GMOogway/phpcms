@@ -126,8 +126,8 @@ include $this->admin_tpl('header');?>
                 Dialog.confirm('您确定要删除该记录吗？', function() {
                     $.ajax({
                         type: 'post',
-                        url: '?m=admin&c=category&a=delete&dosubmit=1&pc_hash='+pc_hash,
-                        data: {catid:data.id},
+                        url: '?m=admin&c=category&a=delete&pc_hash='+pc_hash,
+                        data: {catid:data.id,dosubmit:1},
                         dataType: 'json',
                         success: function(res) {
                             if (res.code == 1) {
@@ -147,8 +147,8 @@ include $this->admin_tpl('header');?>
             var ismenu = obj.elem.checked===true?1:0;
             $.ajax({
                 type: 'post',
-                url: '?m=admin&c=category&a=ismenu&dosubmit=1&pc_hash='+pc_hash,
-                data: {catid:id,ismenu:ismenu},
+                url: '?m=admin&c=category&a=ismenu&pc_hash='+pc_hash,
+                data: {catid:id,ismenu:ismenu,dosubmit:1},
                 dataType: 'json',
                 success: function(res) {
                     layer.close(loading);
@@ -170,8 +170,8 @@ include $this->admin_tpl('header');?>
             var disabled = obj.elem.checked===true?0:1;
             $.ajax({
                 type: 'post',
-                url: '?m=admin&c=category&a=disabled&dosubmit=1&pc_hash='+pc_hash,
-                data: {catid:id,disabled:disabled},
+                url: '?m=admin&c=category&a=disabled&pc_hash='+pc_hash,
+                data: {catid:id,disabled:disabled,dosubmit:1},
                 dataType: 'json',
                 success: function(res) {
                     layer.close(loading);
@@ -193,8 +193,8 @@ include $this->admin_tpl('header');?>
             var iscatpos = obj.elem.checked===true?1:0;
             $.ajax({
                 type: 'post',
-                url: '?m=admin&c=category&a=iscatpos&dosubmit=1&pc_hash='+pc_hash,
-                data: {catid:id,iscatpos:iscatpos},
+                url: '?m=admin&c=category&a=iscatpos&pc_hash='+pc_hash,
+                data: {catid:id,iscatpos:iscatpos,dosubmit:1},
                 dataType: 'json',
                 success: function(res) {
                     layer.close(loading);
@@ -216,8 +216,8 @@ include $this->admin_tpl('header');?>
             var isleft = obj.elem.checked===true?1:0;
             $.ajax({
                 type: 'post',
-                url: '?m=admin&c=category&a=isleft&dosubmit=1&pc_hash='+pc_hash,
-                data: {catid:id,isleft:isleft},
+                url: '?m=admin&c=category&a=isleft&pc_hash='+pc_hash,
+                data: {catid:id,isleft:isleft,dosubmit:1},
                 dataType: 'json',
                 success: function(res) {
                     layer.close(loading);
@@ -239,8 +239,8 @@ include $this->admin_tpl('header');?>
             var loading = layer.load(1, {shade: [0.1, '#fff']});
             $.ajax({
                 type: 'post',
-                url: '?m=admin&c=category&a=listorder&dosubmit=1&pc_hash='+pc_hash,
-                data: {catid:id,listorder:listorder},
+                url: '?m=admin&c=category&a=listorder&pc_hash='+pc_hash,
+                data: {catid:id,listorder:listorder,dosubmit:1},
                 dataType: 'json',
                 success: function(res) {
                     layer.close(loading);

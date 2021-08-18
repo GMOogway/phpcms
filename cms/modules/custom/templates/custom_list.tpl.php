@@ -6,6 +6,7 @@ include $this->admin_tpl('header', 'admin');
 <div class="pad-lr-10">
 
 <form name="myform" id="myform" action="?m=custom&c=custom&a=delete" method="post" onsubmit="checkuid();return false;">
+<input name="dosubmit" type="hidden" value="1">
 <div class="table-list">
 <table width="100%" cellspacing="0">
 	<thead>
@@ -59,9 +60,16 @@ if(is_array($infos)){
 </tbody>
 </table>
 </div>
-<div class="btn"> 
-<input type="button" class="button" name="dosubmit" onClick="Dialog.confirm('<?php echo L('confirm_delete')?>',function(){document.myform.action='?m=custom&c=custom&a=delete';$('#myform').submit();});" value="<?php echo L('delete')?>"/></div>
-<div id="pages"><?php echo $pages?></div>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select">
+        <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
+            <input type="checkbox" class="group-checkable" data-set=".checkboxes">
+            <span></span>
+        </label>
+        <label><button type="button" onClick="Dialog.confirm('<?php echo L('confirm_delete')?>',function(){document.myform.action='?m=custom&c=custom&a=delete';$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete')?></button></label>
+    </div>
+    <div class="col-md-5 list-page"><?php echo $pages?></div>
+</div>
 </form>
 </div>
 <script type="text/javascript">

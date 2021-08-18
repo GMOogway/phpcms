@@ -37,13 +37,16 @@ if(is_array($infos)){
 </tbody>
 </table>
 </div>
-<div id="pages"><?php echo $pages?></div>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select"></div>
+    <div class="col-md-5 list-page"><?php echo $pages?></div>
+</div>
 </form>
+</div>
 </div>
 </div>
 </body>
 </html>
-
 <script type="text/javascript">
 function edit(id, name) {
 	artdialog('edit','?m=vote&c=vote&a=edit&subjectid='+id,'<?php echo L('edit')?> '+name+' ',700,450);

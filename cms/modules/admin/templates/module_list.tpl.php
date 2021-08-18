@@ -29,7 +29,7 @@ if (is_array($directory)){
 	<td align="center"><?php echo $modules[$d]['installdate']?></td>
 	<td align="center"><?php echo $modules[$d]['updatedate']?></td>
 	<td align="center">
-	<?php if ($modules[$d]['iscore']) {?><span style="color: #999"><?php echo L('ban')?></span><?php } else {?><a href="javascript:void(0);" onclick="dr_install_uninstall('uninstall','<?php echo L('confirm', array('message'=>$modules[$d]['name']))?>','<?php echo L('module_unistall', '', 'admin')?>','?m=admin&c=module&a=uninstall&module=<?php echo $d?>');"><font color="red"><?php echo L('unload')?></font></a><?php }?>
+	<?php if ($modules[$d]['iscore']) {?><span style="color: #999"><?php echo L('ban')?></span><?php } else {?><a href="javascript:void(0);" onclick="dr_install_uninstall('uninstall','<?php echo L('confirm', array('message'=>$modules[$d]['name']))?>','<?php echo L('module_unistall', '', 'admin')?>','?m=admin&c=module&a=uninstall','<?php echo $d?>');"><font color="red"><?php echo L('unload')?></font></a><?php }?>
 	</td>
 	</tr>
 <?php 
@@ -50,7 +50,7 @@ if (is_array($directory)){
 	<td align="center"><?php echo L('unknown')?></td>
 	<td align="center"><?php echo L('uninstall_now')?></td>
 	<td align="center">
-	<?php if ($isinstall!=L('no_install')) {?> <a href="javascript:dr_install_uninstall('install','<?php echo L('install_desc')?>','<?php echo L('module_istall')?>','?m=admin&c=module&a=install&module=<?php echo $d?>');"><font color="#009933"><?php echo $isinstall?></font><?php } else {?><font color="#009933"><?php echo $isinstall?></font><?php }?></a>
+	<?php if ($isinstall!=L('no_install')) {?> <a href="javascript:dr_install_uninstall('install','<?php echo L('install_desc')?>','<?php echo L('module_istall')?>','?m=admin&c=module&a=install','<?php echo $d?>');"><font color="#009933"><?php echo $isinstall?></font><?php } else {?><font color="#009933"><?php echo $isinstall?></font><?php }?></a>
 	</td>
 	</tr>
 <?php 
@@ -60,8 +60,11 @@ if (is_array($directory)){
 ?>
 </tbody>
     </table>
-    </div>
- <div id="pages"><?php echo $pages?></div>
+</div>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select"></div>
+    <div class="col-md-5 list-page"><?php echo $pages?></div>
+</div>
 </div>
 </body>
 </html>

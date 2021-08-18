@@ -2,6 +2,7 @@
 defined('IN_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');?>
 <form name="myform" action="?m=search&c=search_type&a=listorder" method="post">
+<input name="dosubmit" type="hidden" value="1">
 <div class="pad_10">
 <div class="explain-col">
 <?php echo L('searh_notice')?>
@@ -39,9 +40,12 @@ foreach($datas as $r) {
 	</tbody>
     </table>
 </div>
-    <div class="btn"><input type="submit" class="button" name="dosubmit" value="<?php echo L('listorder')?>" /></div>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select">
+        <label><button type="submit" class="btn green btn-sm"> <i class="fa fa-refresh"></i> <?php echo L('listorder')?></button></label>
+    </div>
+    <div class="col-md-5 list-page"><?php echo $pages?></div>
 </div>
-<div id="pages"><?php echo $pages;?></div>
 </div>
 </form>
 

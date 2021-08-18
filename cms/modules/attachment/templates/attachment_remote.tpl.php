@@ -10,7 +10,7 @@
         <legend><?php echo L('存储策略');?></legend>
     </fieldset>-->
     <blockquote class="layui-elem-quote">
-        <a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=public_cache_all',1);" class="layui-btn layui-btn-sm">
+        <a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=init&pc_hash='+pc_hash+'&is_ajax=1',1);" class="layui-btn layui-btn-sm">
             <i class="fa fa-refresh"></i> <?php echo L('操作之前请更新下全站缓存');?>
         </a>
         <a href="?m=attachment&c=attachment&a=remote_add&menuid=<?php echo $this->input->get('menuid');?>" class="layui-btn layui-btn-sm">

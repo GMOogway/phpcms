@@ -24,7 +24,7 @@
                 <p class="alert_btnleft"><?php if($url_forward=='goback' || $url_forward=='') {?>
                 <a href="javascript:history.back();" >[<?php echo L('return_previous');?>]</a>
                 <?php } elseif($url_forward=="close") {?>
-                <input type="button" name="close" value="<?php echo L('close');?> " onClick="window.close();">
+                <button type="button" id="close" class="btn red"> <i class="fa fa-close"></i> <?php echo L('close');?></button>
                 <?php } elseif($url_forward=="blank") {?>
                 <?php } elseif($url_forward) {if(strpos($url_forward,'&pc_hash')===false) $url_forward .= '&pc_hash='.$_SESSION['pc_hash'];?>
                 <a href="<?php echo $url_forward?>"><?php echo L('click_here');?></a>
@@ -38,9 +38,23 @@
 </div>
 <script style="text/javascript">
 function close_dialog() {
-	if (window.top.$(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.right) {window.top.$(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.right.location.reload(true);}else{window.top.$(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.location.reload(true);}
-	if(window.top.art.dialog({id:"<?php echo $dialog?>"})){window.top.art.dialog({id:"<?php echo $dialog?>"}).close();}else{ownerDialog.close();}
+    if (window.top.$(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.right) {window.top.$(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.right.location.reload(true);}else{window.top.$(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.location.reload(true);}
+    if(window.top.art.dialog({id:"<?php echo $dialog?>"})){window.top.art.dialog({id:"<?php echo $dialog?>"}).close();}else{ownerDialog.close();}
 }
+</script>
+<script src="<?php echo JS_PATH?>layui/layui.js" charset="utf-8"></script>
+<script src="<?php echo CSS_PATH?>layuimini/js/lay-config.js?v=2.0.0" charset="utf-8"></script>
+<script>
+    layui.use(['form','miniTab'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            miniTab = layui.miniTab;
+
+        //监听关闭
+        $('#close').on('click', function() {
+            miniTab.deleteCurrentByIframe();
+        });
+    });
 </script>
 </body>
 </html>

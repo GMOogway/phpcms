@@ -8,6 +8,7 @@
 
 <div class="bk10"></div>
 <form name="myform" id="myform" action="?m=member&c=member_model&a=delete" method="post" onsubmit="check();return false;">
+<input name="dosubmit" type="hidden" value="1">
 <div class="table-list">
 <table width="100%" cellspacing="0">
 	<thead>
@@ -52,10 +53,17 @@
 </tbody>
 </table>
 </div>
-<div class="btn"><label for="check_box"><?php echo L('select_all')?>/<?php echo L('cancel')?></label> <input type="button" class="button" name="dosubmit" value="<?php echo L('delete')?>" onclick="Dialog.confirm('<?php echo L('sure_delete')?>',function(){$('#myform').submit();});"/>
-<input type="submit" class="button" name="dosubmit" onclick="document.myform.action='?m=member&c=member_model&a=sort'" value="<?php echo L('sort')?>"/>
-</div> 
-<div id="pages"><?php echo $pages?></div>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select">
+        <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
+            <input type="checkbox" class="group-checkable" data-set=".checkboxes">
+            <span></span>
+        </label>
+        <label><button type="submit" onclick="document.myform.action='?m=member&c=member_model&a=sort'" class="btn green btn-sm"> <i class="fa fa-refresh"></i> <?php echo L('sort')?></button></label>
+        <label><button type="button" onclick="Dialog.confirm('<?php echo L('sure_delete')?>',function(){$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete')?></button></label>
+    </div>
+    <div class="col-md-5 list-page"><?php echo $pages?></div>
+</div>
 </div>
 </form>
 <div id="PC__contentHeight" style="display:none">160</div>

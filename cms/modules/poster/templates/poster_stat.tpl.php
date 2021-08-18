@@ -52,7 +52,7 @@ if(is_array($data)){
 }
 ?>
     </table>  </div>
- <div id="pages"><?php echo $pages?></div>
+ <div><?php echo $pages?></div>
 <?php } else {?>
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout:fixed;">
       <tr>
@@ -71,7 +71,7 @@ if(is_array($data)){
       </td>
     </tr>
     <tr>
-     <td><div id="pages"><?php echo $pages;?></div></td>
+     <td><div><?php echo $pages;?></div></td>
     </tr>
 </table>
 <?php } ?>

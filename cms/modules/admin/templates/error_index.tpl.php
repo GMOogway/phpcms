@@ -33,10 +33,15 @@ if(is_array($list)){
     </tbody>
     </table>
 </div>
+<div class="list-footer table-checkable clear">
 <?php if($list){?>
- <div class="btn"><input type="button" class="button" name="dosubmit" value="<?php echo L('清空全部')?>" onclick="ajax_option('?m=admin&c=index&a=public_error_del', '你确定要清空全部记录吗？')" /></div>
+    <div class="col-md-7 list-select">
+        <label><button type="button" onclick="ajax_option('?m=admin&c=index&a=public_error_del', '你确定要清空全部记录吗？')" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('清空全部')?></button></label>
+    </div>
 <?php }?>
- <div id="pages"> <?php echo $pages?></div>
+    <div class="col-md-5 list-page"><?php echo $pages?></div>
+</div>
+</form>
 </div>
 </body>
 </html>

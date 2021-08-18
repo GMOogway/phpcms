@@ -19,24 +19,25 @@ include $this->admin_tpl('header', 'admin');
 		</tr>
     </tbody>
 </table>
-<form name="myform" id="myform" action="?m=slider&c=slider&a=listorder" method="post" >
+<form name="myform" id="myform" action="?m=slider&c=slider&a=listorder" method="post">
+<input name="dosubmit" type="hidden" value="1">
 <div class="table-list">
 <table width="100%" cellspacing="0">
 	<thead>
 		<tr>
-			<th width="35" align="center" class="myselect">
+			<th class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="group-checkable" value="" id="check_box" onclick="selectall('id[]');" />
                         <span></span>
                     </label></th>
-			<th width="35" align="center"><?php echo L('listorder')?></th>
+			<th width="80"><?php echo L('listorder')?></th>
 			<th><?php echo L('slider_name')?></th>
-			<th width="25%" align="center"><?php echo L('image')?></th>
-			<th width="10%" align="center"><?php echo L('url')?></th>
-			<th width='10%' align="center"><?php echo L('typeid')?></th>
-			<th width="8%" align="center"><?php echo L('status')?></th>
-			<th width="13%" align="center"><?php echo L('slider_adddate')?></th>
-			<th width="12%" align="center"><?php echo L('operations_manage')?></th>
+			<th width="300"><?php echo L('image')?></th>
+			<th width="100"><?php echo L('url')?></th>
+			<th width='100'><?php echo L('typeid')?></th>
+			<th width="100"><?php echo L('status')?></th>
+			<th width="100"><?php echo L('slider_adddate')?></th>
+			<th width="120"><?php echo L('operations_manage')?></th>
 		</tr>
 	</thead>
 <tbody>
@@ -45,19 +46,19 @@ if(is_array($infos)){
 	foreach($infos as $info){
 		?>
 	<tr>
-		<td align="center" width="35" class="myselect">
+		<td class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="checkboxes" name="id[]" value="<?php echo $info['id']?>" />
                         <span></span>
                     </label></td>
-		<td align="center" width="35"><input name='listorders[<?php echo $info['id']?>]' type='text' size='3' value='<?php echo $info['listorder']?>' class="input-text-c"></td>
+		<td><input name='listorders[<?php echo $info['id']?>]' type='text' size='3' value='<?php echo $info['listorder']?>' class="input-text-c"></td>
 		<td><?php if ($info['url']!="#" && $info['url']){?><a href="<?php echo $info['url'];?>" title="<?php echo $info['name']?>" target="_blank"><?php }?><?php echo $info['name']?><?php if ($info['url']!="#" && $info['url']){?></a><?php }?></td>
-		<td align="center" width="12%"><a href="javascript:preview(<?php echo $info['id']?>, '<?php echo $info['name']?>','<?php echo $info['image']?>')" title="<?php echo $info['description'];?>"><img src="<?php echo $info['image'];?>" height=60></a></td>
-		<td align="center" width="10%"><?php if ($info['url']!="#" && $info['url']){?><a href="<?php echo $info['url'];?>" target="_blank">点击查看</a><?php }else{?>无<?php }?></td>
-		<td align="center" width="10%"><?php echo $type_arr[$info['typeid']];?></td>
-		<td align="center"><?php if($info['isshow']=='0'){ echo "不显示";}else{echo "显示";}?></td>
-		<td  align="center"><?php echo date("Y-m-d",$info['addtime']);?></td>
-		<td align="center" width="12%"><a href="###"
+		<td><a href="javascript:preview(<?php echo $info['id']?>, '<?php echo $info['name']?>','<?php echo $info['image']?>')" title="<?php echo $info['description'];?>"><img src="<?php echo $info['image'];?>" height=60></a></td>
+		<td><?php if ($info['url']!="#" && $info['url']){?><a href="<?php echo $info['url'];?>" target="_blank">点击查看</a><?php }else{?>无<?php }?></td>
+		<td><?php echo $type_arr[$info['typeid']];?></td>
+		<td><?php if($info['isshow']=='0'){ echo "不显示";}else{echo "显示";}?></td>
+		<td ><?php echo date("Y-m-d",$info['addtime']);?></td>
+		<td><a href="###"
 			onclick="edit(<?php echo $info['id']?>, '<?php echo new_addslashes($info['name'])?>')"
 			title="<?php echo L('edit')?>"><?php echo L('edit')?></a> |  <a
 			href='###'
@@ -71,10 +72,17 @@ if(is_array($infos)){
 </tbody>
 </table>
 </div>
-<div class="btn"> 
-<input name="dosubmit" type="submit" class="button"
-	value="<?php echo L('listorder')?>">&nbsp;&nbsp;<input type="button" class="button" name="dosubmit" onClick="Dialog.confirm('<?php echo L('confirm', array('message' => L('selected')))?>',function(){document.myform.action='?m=slider&c=slider&a=delete';$('#myform').submit();});" value="<?php echo L('delete')?>"/></div>
-<div id="pages"><?php echo $pages?></div>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select">
+        <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
+            <input type="checkbox" class="group-checkable" data-set=".checkboxes">
+            <span></span>
+        </label>
+        <label><button type="submit" class="btn green btn-sm"> <i class="fa fa-refresh"></i> <?php echo L('listorder')?></button></label>
+        <label><button type="button" onClick="Dialog.confirm('<?php echo L('confirm', array('message' => L('selected')))?>',function(){document.myform.action='?m=slider&c=slider&a=delete';$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete')?></button></label>
+    </div>
+    <div class="col-md-5 list-page"><?php echo $pages?></div>
+</div>
 </form>
 </div>
 <script type="text/javascript">

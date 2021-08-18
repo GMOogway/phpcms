@@ -2,9 +2,9 @@
 <?php include $this->admin_tpl('header', 'admin');?>
 
 <form name="myform" id="myform" action="?m=member&c=member_verify&a=delete" method="post"  onsubmit="checkuid();return false;">
+<input name="dosubmit" type="hidden" value="1">
 <div class="pad-lr-10">
 <div class="table-list">
-
 <table width="100%" cellspacing="0">
         <thead>
             <tr>
@@ -44,19 +44,21 @@
  </tbody>
 </table>
 </div>
-<div class="btn">
-<label for="check_box"><?php echo L('select_all')?>/<?php echo L('cancel')?></label>
-<input type="submit" class="button" name="dosubmit" value="<?php echo L('verify_pass')?>" onclick="document.myform.action='?m=member&c=member_verify&a=pass'"/>
-
-<input type="submit" class="button" name="dosubmit" value="<?php echo L('reject')?>" onclick="document.myform.action='?m=member&c=member_verify&a=reject'"/>
-
-<input type="button" class="button" name="dosubmit" value="<?php echo L('delete')?>" onclick="Dialog.confirm('<?php echo L('sure_delete')?>',function(){$('#myform').submit();});"/>
-
-<input type="submit" class="button" name="dosubmit" value="<?php echo L('ignore')?>" onclick="document.myform.action='?m=member&c=member_verify&a=ignore'"/>
-
-<?php echo L('verify_message')?>：<input type="text" name="message"><input type="checkbox" value=1 name="sendemail" checked/><?php echo L('sendemail')?>
-</div> 
-<div id="pages"><?php echo $pages?></div>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select">
+        <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
+            <input type="checkbox" class="group-checkable" data-set=".checkboxes">
+            <span></span>
+        </label>
+        <label><button type="submit" onclick="document.myform.action='?m=member&c=member_verify&a=pass'" class="btn green btn-sm"> <i class="fa fa-refresh"></i> <?php echo L('verify_pass')?></button></label>
+        <label><button type="submit" onclick="document.myform.action='?m=member&c=member_verify&a=reject'" class="btn dark btn-sm"> <i class="fa fa-mail-reply-all"></i> <?php echo L('reject')?></button></label>
+        <label><button type="button" onclick="Dialog.confirm('<?php echo L('sure_delete')?>',function(){$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete')?></button></label>
+        <label><button type="submit" onclick="document.myform.action='?m=member&c=member_verify&a=ignore'" class="btn blue btn-sm"> <i class="fa fa-code"></i> <?php echo L('ignore')?></button></label>
+        <label><?php echo L('verify_message')?>：<input type="text" name="message"></label>
+        <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline"><input type="checkbox" value=1 name="sendemail" checked/><?php echo L('sendemail')?><span></span></label>
+    </div>
+    <div class="col-md-5 list-page"><?php echo $pages?></div>
+</div>
 </div>
 </form>
 <script type="text/javascript">

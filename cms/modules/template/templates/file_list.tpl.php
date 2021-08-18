@@ -53,8 +53,14 @@ endif;
 ?></tbody>
 </table>
 </div>
-<div class="btn"><input type="button" onclick="location.href='?m=template&c=style&a=init&pc_hash=<?php echo $_SESSION['pc_hash'];?>'" class="button" name="dosubmit" value="<?php echo L('returns_list_style')?>" /> <input type="button" class="button" name="dosubmit" value="<?php echo L('new')?>" onclick="add_file()" /> <input type="submit" class="button" name="dosubmit" value="<?php echo L('update')?>" ></div>
-<div id="pages"><?php echo $pages?></div>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select">
+        <label><button type="button" onclick="location.href='?m=template&c=style&a=init&pc_hash=<?php echo $_SESSION['pc_hash'];?>'" class="btn yellow btn-sm"> <i class="fa fa-mail-reply-all"></i> <?php echo L('returns_list_style')?></button></label>
+        <label><button type="button" onclick="add_file()" class="btn blue btn-sm"> <i class="fa fa-plus"></i> <?php echo L('new')?></button></label>
+        <label><button type="submit" class="btn green btn-sm"> <i class="fa fa-refresh"></i> <?php echo L('update')?></button></label>
+    </div>
+    <div class="col-md-5 list-page"><?php echo $pages?></div>
+</div>
 </form>
 </div>
 <script type="text/javascript">
@@ -79,7 +85,7 @@ function history_file(name) {
 }
 
 function add_file() {
-	artdialog('add_file','?m=template&c=file&a=add_file&style=<?php echo $this->style;?>&dir=<?php echo urlencode(stripslashes($dir))?>','<?php echo L("new")?>',500,100);
+	artdialog('add_file','?m=template&c=file&a=add_file&style=<?php echo $this->style;?>&dir=<?php echo urlencode(stripslashes($dir))?>','<?php echo L("new")?>',500,300);
 }
 //-->
 </script>

@@ -83,8 +83,12 @@
 </table>
 </div>
 </fieldset>
-<div class="btn"><input type="submit" class="button" name="dosubmit" value="<?php echo L('submit')?>"/></div>
-<div id="pages"><?php echo $pages?></div>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select">
+        <label><button type="submit" class="btn green btn-sm"> <i class="fa fa-save"></i> <?php echo L('submit')?></button></label>
+    </div>
+    <div class="col-md-5 list-page"><?php echo $pages?></div>
+</div>
 </form>
 </div>
 

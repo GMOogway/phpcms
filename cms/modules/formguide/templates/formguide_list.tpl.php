@@ -11,6 +11,7 @@ include $this->admin_tpl('header', 'admin');
 </div>
 <div class="pad-lr-10">
 <form name="myform" id="myform" action="?m=formguide&c=formguide&a=listorder" method="post">
+<input name="dosubmit" type="hidden" value="1">
 <div class="table-list">
     <table width="100%" cellspacing="0">
         <thead>
@@ -53,9 +54,16 @@ if(is_array($data)){
 </tbody>
     </table>
 </div>
-    <div class="btn"><label for="check_box"><?php echo L('selected_all')?>/<?php echo L('cancel')?></label>
-		<input name="button" type="button" class="button" value="<?php echo L('remove_all_selected')?>" onClick="Dialog.confirm('<?php echo L('affirm_delete')?>',function(){document.myform.action='?m=formguide&c=formguide&a=delete';$('#myform').submit();});">&nbsp;&nbsp;</div>
- <div id="pages"><?php echo $this->db->pages;?></div>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select">
+        <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
+            <input type="checkbox" class="group-checkable" data-set=".checkboxes">
+            <span></span>
+        </label>
+        <label><button type="button" onClick="Dialog.confirm('<?php echo L('affirm_delete')?>',function(){document.myform.action='?m=formguide&c=formguide&a=delete';$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('remove_all_selected')?></button></label>
+    </div>
+    <div class="col-md-5 list-page"><?php echo $this->db->pages;?></div>
+</div>
 </form>
 </div>
 </body>

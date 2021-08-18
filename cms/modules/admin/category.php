@@ -361,7 +361,7 @@ class category extends admin {
 	 * 更新
 	 */
 	function ismenu() {
-		if($this->input->get('dosubmit')) {
+		if($this->input->post('dosubmit')) {
 			$this->db->update(array('ismenu'=>$this->input->post('ismenu')),array('catid'=>$this->input->post('catid')));
 			$this->cache();
 			dr_json(1, L('operation_success'));
@@ -373,7 +373,7 @@ class category extends admin {
 	 * 更新禁用可用
 	 */
 	function disabled() {
-		if($this->input->get('dosubmit')) {
+		if($this->input->post('dosubmit')) {
 			$row = $this->db->get_one(array('catid'=>$this->input->post('catid')));
 			if (!$row) {
 				dr_json(0, L('栏目数据不存在'));
@@ -393,9 +393,7 @@ class category extends admin {
 					dr_json(0, L('当前栏目存在内容数据，无法禁用'));
 				}
 			}
-			if ($this->input->post('disabled')) {
-				$this->db->update(array('setting'=>array2string($row['setting'])),array('catid'=>$this->input->post('catid')));
-			}
+			$this->db->update(array('setting'=>array2string($row['setting'])),array('catid'=>$this->input->post('catid')));
 			$this->cache();
 			dr_json(1, L($row['setting']['disabled'] ? '禁用状态' : '可用状态'));
 		} else {
@@ -406,16 +404,14 @@ class category extends admin {
 	 * 更新显示隐藏
 	 */
 	function iscatpos() {
-		if($this->input->get('dosubmit')) {
+		if($this->input->post('dosubmit')) {
 			$row = $this->db->get_one(array('catid'=>$this->input->post('catid')));
 			if (!$row) {
 				dr_json(0, L('栏目数据不存在'));
 			}
 			$row['setting'] = string2array($row['setting']);
 			$row['setting']['iscatpos'] = $row['setting']['iscatpos'] ? 0 : 1;
-			if ($this->input->post('iscatpos')) {
-				$this->db->update(array('setting'=>array2string($row['setting'])),array('catid'=>$this->input->post('catid')));
-			}
+			$this->db->update(array('setting'=>array2string($row['setting'])),array('catid'=>$this->input->post('catid')));
 			$this->cache();
 			dr_json(1, L($row['setting']['iscatpos'] ? '显示状态' : '隐藏状态'));
 		} else {
@@ -426,16 +422,14 @@ class category extends admin {
 	 * 更新左侧显示隐藏
 	 */
 	function isleft() {
-		if($this->input->get('dosubmit')) {
+		if($this->input->post('dosubmit')) {
 			$row = $this->db->get_one(array('catid'=>$this->input->post('catid')));
 			if (!$row) {
 				dr_json(0, L('栏目数据不存在'));
 			}
 			$row['setting'] = string2array($row['setting']);
 			$row['setting']['isleft'] = $row['setting']['isleft'] ? 0 : 1;
-			if ($this->input->post('isleft')) {
-				$this->db->update(array('setting'=>array2string($row['setting'])),array('catid'=>$this->input->post('catid')));
-			}
+			$this->db->update(array('setting'=>array2string($row['setting'])),array('catid'=>$this->input->post('catid')));
 			$this->cache();
 			dr_json(1, L($row['setting']['isleft'] ? '显示状态' : '隐藏状态'));
 		} else {
@@ -446,7 +440,7 @@ class category extends admin {
 	 * 排序
 	 */
 	public function listorder() {
-		if($this->input->get('dosubmit')) {
+		if($this->input->post('dosubmit')) {
 			$this->db->update(array('listorder'=>$this->input->post('listorder')),array('catid'=>$this->input->post('catid')));
 			$this->cache();
 			dr_json(1, L('operation_success'));
@@ -458,7 +452,7 @@ class category extends admin {
 	 * 删除栏目
 	 */
 	public function delete() {
-		if($this->input->get('dosubmit')) {
+		if($this->input->post('dosubmit')) {
 			$catid = intval($this->input->post('catid'));
 			$categorys = getcache('category_content_'.$this->siteid,'commons');
 			$sethtml = $categorys[$catid]['sethtml'];
@@ -1030,7 +1024,6 @@ class category extends admin {
 	public function batch_edit() {
 		$categorys = getcache('category_content_'.$this->siteid,'commons');
 		if($this->input->post('dosubmit')) {
-			
 			pc_base::load_sys_func('iconv');	
 			$catid = intval($this->input->post('catid'));
 			$post_setting = $this->input->post('setting');

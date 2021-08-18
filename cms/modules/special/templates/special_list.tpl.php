@@ -4,16 +4,17 @@ include $this->admin_tpl('header', 'admin');
 ?>
 <div class="pad-lr-10">
 <form name="myform" id="myform" action="?m=special&c=special&a=listorder" method="post">
+<input name="dosubmit" type="hidden" value="1">
 <div class="table-list">
     <table width="100%" cellspacing="0" class="nHover">
         <thead>
             <tr>
-            <th width="40" class="myselect">
+            <th class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="group-checkable" value="" id="check_box" onclick="selectall('id[]');" />
                         <span></span>
                     </label></th>
-			<th width="40" align="center">ID</th>
+			<th width="80" align="center">ID</th>
 			<th width="80" align="center"><?php echo L('listorder')?></th>
 			<th ><?php echo L('special_info')?></th>
 			<th width="160"><?php echo L('operations_manage')?></th>
@@ -25,7 +26,7 @@ if(is_array($infos)){
 	foreach($infos as $info){
 ?>   
 	<tr>
-	<td align="center" width="40" class="myselect">
+	<td align="center" class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="checkboxes" name="id[]" value="<?php echo $info['id'];?>" />
                         <span></span>
@@ -56,11 +57,18 @@ if(is_array($infos)){
 </tbody>
     </table>
 </div>
-    <div class="btn"><label for="check_box"><?php echo L('selected_all')?>/<?php echo L('cancel')?></label>
-        <input name='dosubmit' type='submit' class="button" value='<?php echo L('listorder')?>'>&nbsp;
-        <input type="button" class="button" value="<?php echo L('delete')?>" onclick="Dialog.confirm('<?php echo L('confirm', array('message' => L('selected')))?>',function(){document.myform.action='?m=special&c=special&a=delete';$('#myform').submit();});"/>
-        &nbsp;<input type="submit" class="button" value="<?php echo L('update')?>html" onclick="document.myform.action='?m=special&c=special&a=html'"/></div>
- <div id="pages"><?php echo $this->db->pages;?></div><script>window.top.$("#display_center_id").css("display","none");</script>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select">
+        <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
+            <input type="checkbox" class="group-checkable" data-set=".checkboxes">
+            <span></span>
+        </label>
+        <label><button type="submit" class="btn green btn-sm"> <i class="fa fa-refresh"></i> <?php echo L('listorder')?></button></label>
+        <label><button type="button" onclick="Dialog.confirm('<?php echo L('confirm', array('message' => L('selected')))?>',function(){document.myform.action='?m=special&c=special&a=delete';$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete')?></button></label>
+        <label><button type="submit" onclick="document.myform.action='?m=special&c=special&a=html'" class="btn blue btn-sm"> <i class="fa fa fa-file-code-o"></i> <?php echo L('update')?>html</button></label>
+    </div>
+    <div class="col-md-5 list-page"><?php echo $pages?></div>
+</div>
 </form>
 </div>
 </body>
@@ -78,5 +86,5 @@ function comment(id, name) {
 function import_c(id) {
 	artdialog('import','?m=special&c=special&a=import&specialid='+id,'<?php echo L('import_news')?>--',700,500);
 }
-
+window.top.$("#display_center_id").css("display","none");
 </script>

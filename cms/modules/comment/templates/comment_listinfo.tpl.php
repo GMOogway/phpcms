@@ -82,11 +82,17 @@ include $this->admin_tpl('header', 'admin');
 	</tbody>
      </table>
 </div>
-    <div class="btn"><label for="check_box"><?php echo L('selected_all');?>/<?php echo L('cancel');?></label>
-		<input type="hidden" value="<?php echo $_SESSION['pc_hash'];?>" name="pc_hash">
-		<input type="submit" class="button" value="<?php echo L('delete');?>" />
-	</div>
-    <div id="pages"><?php echo $pages;?></div>
+<input type="hidden" value="<?php echo $_SESSION['pc_hash'];?>" name="pc_hash">
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select">
+        <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
+            <input type="checkbox" class="group-checkable" data-set=".checkboxes">
+            <span></span>
+        </label>
+        <label><button type="submit" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete')?></button></label>
+    </div>
+    <div class="col-md-5 list-page"><?php echo $pages?></div>
+</div>
 </form>
 </div>
 <script type="text/javascript">

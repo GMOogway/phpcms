@@ -20,6 +20,7 @@ include $this->admin_tpl('header', 'admin');
     </tbody>
   </table>
   <form name="myform" id="myform" action="?m=guestbook&c=guestbook&a=listorder" method="post" >
+  <input name="dosubmit" type="hidden" value="1">
     <div class="table-list">
       <table width="100%" cellspacing="0">
         <thead>
@@ -83,13 +84,17 @@ if(is_array($infos)){
         </tbody>
       </table>
     </div>
-    <div class="btn">
-      <input name="dosubmit" type="submit" class="button"
-	value="<?php echo L('listorder')?>">
-      &nbsp;&nbsp;
-      <input type="button" class="button" name="dosubmit" onClick="Dialog.confirm('<?php echo L('confirm_delete')?>',function(){document.myform.action='?m=guestbook&c=guestbook&a=delete';$('#myform').submit();});" value="<?php echo L('delete')?>"/>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select">
+        <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
+            <input type="checkbox" class="group-checkable" data-set=".checkboxes">
+            <span></span>
+        </label>
+        <label><button type="submit" class="btn green btn-sm"> <i class="fa fa-refresh"></i> <?php echo L('listorder')?></button></label>
+        <label><button type="button" onClick="Dialog.confirm('<?php echo L('confirm_delete')?>',function(){document.myform.action='?m=guestbook&c=guestbook&a=delete';$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete')?></button></label>
     </div>
-    <div id="pages"><?php echo $pages?></div>
+    <div class="col-md-5 list-page"><?php echo $pages?></div>
+</div>
   </form>
 </div>
 <script type="text/javascript">

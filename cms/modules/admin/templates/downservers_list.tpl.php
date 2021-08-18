@@ -14,6 +14,7 @@ include $this->admin_tpl('header');?>
 </table>
 </form>
 <form name="myform" action="?m=admin&c=downservers&a=listorder" method="post">
+<input name="dosubmit" type="hidden" value="1">
 <div class="table-list">
     <table width="100%" cellspacing="0">
         <thead>
@@ -51,12 +52,14 @@ if(is_array($infos)){
     </tbody>
     </table>
 </div>
-    <div class="btn"><input type="submit" class="button" name="dosubmit" value="<?php echo L('listorder')?>" /></div>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select">
+        <label><button type="submit" class="btn green btn-sm"> <i class="fa fa-refresh"></i> <?php echo L('listorder')?></button></label>
+    </div>
+    <div class="col-md-5 list-page"><?php echo $pages?></div>
+</div>
 </form>
- <div id="pages"> <?php echo $pages?></div>
 </div>
-</div>
-
 </body>
 <a href="javascript:edit(<?php echo $v['siteid']?>, '<?php echo $v['name']?>')">
 </html>

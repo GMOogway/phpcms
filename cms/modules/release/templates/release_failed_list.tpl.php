@@ -4,6 +4,7 @@ include $this->admin_tpl('header','admin');
 ?>
 <div class="pad-lr-10">
 <form action="?m=release&c=index&a=del" method="post">
+<input name="dosubmit" type="hidden" value="1">
 <div class="table-list">
     <table width="100%" cellspacing="0">
         <thead>
@@ -50,22 +51,37 @@ endif;
 </tbody>
 </table>
 </div>
-<div class="btn"><label for="check_box"><?php echo L('select_all')?>/<?php echo L('cancel')?></label> <input type="button" class="button" name="dosubmit" value="<?php echo L('sync_agin')?>" onclick="sync_agin()" />　<input type="button" class="button" name="dosubmit" value="<?php echo L('all').L('sync_agin')?>" onclick="var diag = new Dialog({id:'sync',title:'<?php echo L('sync_agin')?>',url:'<?php echo SELF;?>?m=release&c=index&a=init&statuses=-1&iniframe=1&pc_hash='+pc_hash,width:700,height:500,modal:true});diag.onCancel=function() {$DW.close();location.reload(true)};diag.show();" /> <input type="submit" class="button" value="<?php echo L("delete")?>" /></div> 
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select">
+        <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
+            <input type="checkbox" class="group-checkable" data-set=".checkboxes">
+            <span></span>
+        </label>
+        <label><button type="button" onclick="sync_agin()" class="btn green btn-sm"> <i class="fa fa-save"></i> <?php echo L('sync_agin')?></button></label>
+        <label><button type="button" onclick="sync_agin2()" class="btn green btn-sm"> <i class="fa fa-save"></i> <?php echo L('all').L('sync_agin')?></button></label>
+        <label><button type="submit" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete')?></button></label>
+    </div>
+    <div class="col-md-5 list-page"><?php echo $pages?></div>
+</div>
 </form>
 </div>
-<div id="pages"><?php echo $queue->pages?></div>
 <script type="text/javascript">
 <!--
 function sync_agin() {
 	var ids =  '';
 	$("input[type='checkbox'][name='ids[]']:checked").each(function(i,n){ids += ids ? ','+$(n).val() : $(n).val();});
 	if (ids) {
+		var width = '700px';
+        var height = '500px';
+        if (is_mobile()) {
+            width = height = '100%';
+        }
 		var diag = new Dialog({
 			id:'sync',
 			title:'<?php echo L('sync_agin')?>',
 			url:'<?php echo SELF;?>?m=release&c=index&a=init&statuses=-1&iniframe=1&ids='+ids+'&pc_hash='+pc_hash,
-			width:700,
-			height:500,
+			width:width,
+			height:height,
 			modal:true
 		});
 		diag.onCancel=function() {
@@ -74,6 +90,26 @@ function sync_agin() {
 		};
 		diag.show();
 	}
+}
+function sync_agin2() {
+	var width = '700px';
+	var height = '500px';
+	if (is_mobile()) {
+		width = height = '100%';
+	}
+	var diag = new Dialog({
+		id:'sync',
+		title:'<?php echo L('sync_agin')?>',
+		url:'<?php echo SELF;?>?m=release&c=index&a=init&statuses=-1&iniframe=1&pc_hash='+pc_hash,
+		width:width,
+		height:height,
+		modal:true
+	});
+	diag.onCancel=function() {
+		$DW.close();
+		location.reload(true)
+	};
+	diag.show();
 }
 //-->
 </script>

@@ -8,7 +8,7 @@ class page {
 	 *
 	 * @var	string
 	 */
-	protected $base_url		= '';
+	protected $base_url	= '';
 
 	/**
 	 * Prefix
@@ -126,8 +126,6 @@ class page {
 	protected $last_anchor_class = '';
 	protected $first_anchor_class = '';
     protected $anchor_class = '';
-    protected $total_anchor_class = '';
-    protected $total_remove_anchor = false;
 
     protected $compel_page = false;
     protected $compel_prev_page = false;
@@ -361,7 +359,7 @@ class page {
 	{
 
         // If our item count or per-page total is zero there is no need to continue.
-        if ($this->total_rows === 0 OR $this->per_page === 0)
+        if ($this->total_rows == 0 OR $this->per_page == 0)
         {
             return '';
         }
@@ -370,7 +368,7 @@ class page {
         $num_pages = (int) ceil($this->total_rows / $this->per_page);
 
         // Is there only one page? Hm... nothing more to do here then.
-        if ($num_pages === 1 && !$this->compel_page)
+        if ($num_pages == 1 && !$this->compel_page)
         {
             return '';
         }
@@ -387,7 +385,7 @@ class page {
         $this->cur_page = $this->_get_page_id();
 
         // If something isn't quite right, back to the default base page.
-        if ( $this->use_page_numbers && (int) $this->cur_page === 0)
+        if ( $this->use_page_numbers && (int) $this->cur_page == 0)
         {
             $this->cur_page = $base_page;
         }
@@ -429,11 +427,6 @@ class page {
         $output = '';
 
 		if ($this->total_link) {
-		    if (!$this->total_remove_anchor) {
-                $this->total_tag_open.='<a'.($this->total_anchor_class ? ' class="'.$this->total_anchor_class.'"' : '').'>';
-                $this->total_tag_close.='</a>';
-            }
-
 			$output .= $this->total_tag_open.L(str_replace('%s', $this->total_rows, $this->total_link)).$this->total_tag_close;
 		}
 
@@ -441,7 +434,7 @@ class page {
         if ($this->first_link !== FALSE && ($this->cur_page > ($this->num_links + 1) || $this->compel_first_page))
         {
             // Take the general parameters, and squeeze this pagination-page attr in for JS frameworks.
-            $attributes = sprintf(' %s="%d"', $this->data_page_attr, 1);
+            $attributes = $this->data_page_attr ? sprintf(' %s="%d"', $this->data_page_attr, 1) : '';
             if ($this->first_anchor_class) {
                 $attributes.= ' class="'.$this->first_anchor_class.'"';
             } elseif ($this->anchor_class) {
@@ -457,14 +450,14 @@ class page {
         {
             $i = ($this->use_page_numbers) ? $uri_page_number - 1 : $uri_page_number - $this->per_page;
 
-            $attributes = sprintf(' %s="%d"', $this->data_page_attr, (int) $i);
+            $attributes = !$this->data_page_attr ? '' : sprintf(' %s="%d"', $this->data_page_attr, (int) $i);
             if ($this->prev_anchor_class) {
                 $attributes.= ' class="'.$this->prev_anchor_class.'"';
             } elseif ($this->anchor_class) {
                 $attributes.= ' class="'.$this->anchor_class.'"';
             }
 
-            if ($i === $base_page)
+            if ($i == $base_page)
             {
                 // First page
                 $output .= $this->prev_tag_open.'<a href="'.$this->_get_link_url($i).'"'.$attributes.$this->_attr_rel('prev').'>'
@@ -486,7 +479,7 @@ class page {
             {
                 $i = ($this->use_page_numbers) ? $loop : ($loop * $this->per_page) - $this->per_page;
 
-                $attributes = sprintf(' %s="%d"', $this->data_page_attr, (int) $i);
+                $attributes = !$this->data_page_attr ? '' : sprintf(' %s="%d"', $this->data_page_attr, (int) $i);
                 if ($this->num_anchor_class) {
                     $attributes.= ' class="'.$this->num_anchor_class.'"';
                 } elseif ($this->anchor_class) {
@@ -495,12 +488,12 @@ class page {
 
                 if ($i >= $base_page)
                 {
-                    if ($this->cur_page === $loop)
+                    if ($this->cur_page == $loop)
                     {
                         // Current page
                         $output .= $this->cur_tag_open.$loop.$this->cur_tag_close;
                     }
-                    elseif ($i === $base_page)
+                    elseif ($i == $base_page)
                     {
                         // First page
                         $output .= $this->num_tag_open.'<a href="'.$this->_get_link_url(1).'"'.$attributes.$this->_attr_rel('start').'>'
@@ -518,9 +511,9 @@ class page {
         // Render the "next" link
         if ($this->next_link !== FALSE && ($this->cur_page < $num_pages || $this->compel_next_page))
         {
-            $i = ($this->use_page_numbers) ? $this->cur_page + 1 : $this->cur_page * $this->per_page;
+            $i = ($this->use_page_numbers) ? min($num_pages, $this->cur_page + 1) : $this->cur_page * $this->per_page;
 
-            $attributes = sprintf(' %s="%d"', $this->data_page_attr, (int) $i);
+            $attributes = !$this->data_page_attr ? '' : sprintf(' %s="%d"', $this->data_page_attr, (int) $i);
             if ($this->next_anchor_class) {
                 $attributes.= ' class="'.$this->next_anchor_class.'"';
             } elseif ($this->anchor_class) {
@@ -536,7 +529,7 @@ class page {
         {
             $i = ($this->use_page_numbers) ? $num_pages : ($num_pages * $this->per_page) - $this->per_page;
 
-            $attributes = sprintf(' %s="%d"', $this->data_page_attr, (int) $i);
+            $attributes = !$this->data_page_attr ? '' : sprintf(' %s="%d"', $this->data_page_attr, (int) $i);
             if ($this->last_anchor_class) {
                 $attributes.= ' class="'.$this->last_anchor_class.'"';
             } elseif ($this->anchor_class) {

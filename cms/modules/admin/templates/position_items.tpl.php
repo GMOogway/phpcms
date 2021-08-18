@@ -4,6 +4,7 @@ include $this->admin_tpl('header');
 ?>
 <form name="myform" action="?m=admin&c=position&a=public_item" method="post">
 <input type="hidden" value="<?php echo $posid?>" name="posid">
+<input name="dosubmit" type="hidden" value="1">
 <div class="pad_10">
 <div class="table-list">
     <table width="100%" cellspacing="0">
@@ -50,9 +51,17 @@ if(is_array($infos)){
     </tbody>
     </table>
 </div>
-    <div class="btn"><label for="check_box"><?php echo L('select_all')?>/<?php echo L('cancel')?></label> <input type="button" class="button" value="<?php echo L('listorder')?>" onclick="myform.action='?m=admin&c=position&a=public_item_listorder';myform.submit();"/> <input type="submit" class="button" name="dosubmit" value="<?php echo L('posid_item_remove')?>" /> </div>
-
- <div id="pages"> <?php echo $pages?></div>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select">
+        <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
+            <input type="checkbox" class="group-checkable" data-set=".checkboxes">
+            <span></span>
+        </label>
+        <label><button type="button" onclick="myform.action='?m=admin&c=position&a=public_item_listorder';myform.submit();" class="btn green btn-sm"> <i class="fa fa-refresh"></i> <?php echo L('listorder')?></button></label>
+        <label><button type="submit" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('posid_item_remove')?></button></label>
+    </div>
+    <div class="col-md-5 list-page"><?php echo $pages?></div>
+</div>
 </div>
 </div>
 </form>

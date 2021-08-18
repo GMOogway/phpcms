@@ -14,7 +14,8 @@ include $this->admin_tpl('header');?>
 		</tr>
     </tbody>
 </table>
-<form method="post" id="myform" name="myform" >
+<form method="post" id="myform" name="myform">
+<input name="dosubmit" type="hidden" value="1">
 <div class="table-list">
     <table width="100%" cellspacing="0">
         <thead>
@@ -57,13 +58,14 @@ if(is_array($infos)){
     </tbody>
     </table>
 </div>
-<div class="fc-list-select table-checkable">
-<label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline"><input type="checkbox" class="group-checkable" data-set=".checkboxes" /><span></span></label>
-<input type="button" class="button" name="dosubmit" value="<?php echo L('backup_del')?>" onclick="Dialog.confirm('<?php echo L('confirm_delete')?>',function(){document.myform.action='?m=admin&c=database&a=delete&pdoname=<?php echo $pdoname?>&menuid=<?php echo $this->input->get('menuid');?>';$('#myform').submit();});"/>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select">
+        <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline"><input type="checkbox" class="group-checkable" data-set=".checkboxes" /><span></span></label>
+        <label><button type="button" onclick="Dialog.confirm('<?php echo L('confirm_delete')?>',function(){document.myform.action='?m=admin&c=database&a=delete&pdoname=<?php echo $pdoname?>&menuid=<?php echo $this->input->get('menuid');?>';$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('backup_del')?></button></label>
+    </div>
 </div>
 </form>
 </div>
-
 </body>
 </html>
 <script type="text/javascript">

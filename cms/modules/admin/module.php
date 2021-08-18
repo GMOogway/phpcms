@@ -7,6 +7,7 @@ class module extends admin {
 	
 	public function __construct() {
 		$this->input = pc_base::load_sys_class('input');
+		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 		$this->db = pc_base::load_model('module_model');
 		parent::__construct();
 	}
@@ -35,35 +36,108 @@ class module extends admin {
 	 * 模块安装
 	 */
 	public function install() {
-		$this->module = $this->input->post('module') ? $this->input->post('module') : $this->input->get('module');
+		$this->module = $this->input->post('module') ? $this->input->post('module') : dr_json(0, L('illegal_parameters'));
 		$module_api = pc_base::load_app_class('module_api');
-		if (!$module_api->check($this->module)) showmessage($module_api->error_msg, 'blank');
-		if ($this->input->post('dosubmit')) {
-			if ($module_api->install()) showmessage(L('success_module_install'),'blank','','','var w = h = \'60%\';if (is_mobile()) {w = h = \'100%\';}if (w==\'100%\' && h==\'100%\') {var drag = false;} else {var drag = true;}var diag = new Dialog({id:\'module_id\',title:\''.L('update_backup').'\',url:\''.SELF.'?m=admin&c=cache_all&a=init&pc_hash='.$_SESSION['pc_hash'].'\',width:w,height:h,modal:true,draggable:drag});diag.onClose=function(){dr_install_confirm();};diag.show();');
-			else showmesage($module_api->error_msg, HTTP_REFERER);
+		if (!$module_api->check($this->module)) dr_json(0, $module_api->error_msg);
+		if ($module_api->install()) {
+			$this->cache();
+			dr_json(1, L('success_module_install'), '');
+		} else {
+			dr_json(0, $module_api->error_msg);
+		}
+		/*if ($this->input->post('dosubmit')) {
+			if ($module_api->install()) {
+				$this->cache();
+				showmessage(L('success_module_install'),'blank','','','dr_install_confirm();');
+			} else {
+				showmesage($module_api->error_msg, HTTP_REFERER);
+			}
 		} else {
 			include PC_PATH.'modules'.DIRECTORY_SEPARATOR.$this->module.DIRECTORY_SEPARATOR.'install'.DIRECTORY_SEPARATOR.'config.inc.php';
 			include $this->admin_tpl('module_config');
-		}
+		}*/
 	}
 	
 	/**
 	 * 模块卸载
 	 */
 	public function uninstall() {
-		if(!$this->input->get('module') || empty($this->input->get('module'))) showmessage(L('illegal_parameters'));
-		
+		$this->module = $this->input->post('module') ? $this->input->post('module') : dr_json(0, L('illegal_parameters'));
 		$module_api = pc_base::load_app_class('module_api');
-		if(!$module_api->uninstall($this->input->get('module'))) showmessage($module_api->error_msg, 'blank');
-		else showmessage(L('uninstall_success'),'blank','','','var w = h = \'60%\';if (is_mobile()) {w = h = \'100%\';}if (w==\'100%\' && h==\'100%\') {var drag = false;} else {var drag = true;}var diag = new Dialog({id:\'module_id\',title:\''.L('update_backup').'\',url:\''.SELF.'?m=admin&c=cache_all&a=init&pc_hash='.$_SESSION['pc_hash'].'\',width:w,height:h,modal:true,draggable:drag});diag.onClose=function(){dr_install_confirm();};diag.show();');
+		if(!$module_api->uninstall($this->module)) {
+			dr_json(0, $module_api->error_msg);
+		} else {
+			$this->cache();
+			dr_json(1, L('uninstall_success'), '');
+		}
 	}
 	
 	/**
 	 * 更新模块缓存
 	 */
 	public function cache() {
-		echo '<script type="text/javascript">window.top.$(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.location.href = \'?m=admin&c=cache_all&a=init&pc_hash='.$_SESSION['pc_hash'].'\';ownerDialog.close();</script>';
-		//showmessage(L('update_cache').L('success'), '', '', 'install');
+		$modules = array(
+			array('name' => L('module'), 'function' => 'module'),
+			array('name' => L('sites'), 'mod' => 'admin', 'file' => 'sites', 'function' => 'set_cache'),
+			array('name' => L('category'), 'function' => 'category'),
+			array('name' => L('downservers'), 'function' => 'downservers'),
+			array('name' => L('badword_name'), 'function' => 'badword'),
+			array('name' => L('ipbanned'), 'function' => 'ipbanned'),
+			array('name' => L('keylink'), 'function' => 'keylink'),
+			array('name' => L('linkage'), 'function' => 'linkage'),
+			array('name' => L('position'), 'function' => 'position'),
+			array('name' => L('admin_role'), 'function' => 'admin_role'),
+			array('name' => L('urlrule'), 'function' => 'urlrule'),
+			array('name' => L('sitemodel'), 'function' => 'sitemodel'),
+			array('name' => L('type'), 'function' => 'type', 'param' => 'content'),
+			array('name' => L('workflow'), 'function' => 'workflow'),
+			array('name' => L('dbsource'), 'function' => 'dbsource'),
+			array('name' => L('member_setting'), 'function' => 'member_setting'),
+			array('name' => L('member_group'), 'function' => 'member_group'),
+			array('name' => L('membermodel'), 'function' => 'membermodel'),
+			array('name' => L('member_model_field'), 'function' => 'member_model_field'),
+			array('name' => L('search_type'), 'function' => 'type', 'param' => 'search'),
+			array('name' => L('search_setting'), 'function' => 'search_setting'),
+			array('name' => L('update_vote_setting'), 'function' => 'vote_setting'),
+			array('name' => L('update_link_setting'), 'function' => 'link_setting'),
+			array('name' => L('special'), 'function' => 'special'),
+			array('name' => L('setting'), 'function' => 'setting'),
+			array('name' => L('database'), 'function' => 'database'),
+			array('name' => L('update_formguide_model'), 'mod' => 'formguide', 'file' => 'formguide', 'function' => 'public_cache'),
+			array('name' => L('cache_copyfrom'), 'function' => 'copyfrom'),
+			array('name' => L('clear_files'), 'function' => 'del_file'),
+			array('name' => L('远程附件'), 'function' => 'attachment_remote'),
+		);
+		foreach ($modules as $m) {
+			if ($m['mod'] && $m['function']) {
+				if ($m['file'] == '') $m['file'] = $m['function'];
+				$M = getcache('modules', 'commons');
+				if (in_array($m['mod'], array_keys($M))) {
+					$cache = pc_base::load_app_class($m['file'], $m['mod']);
+					$cache->{$m['function']}();
+				}
+			} else {
+				$this->cache_api->cache($m['function'], $m['param']);
+			}
+		}
+		$this->cache2database();
+	}
+	
+	/**
+	 * 根据数据库记录更新缓存
+	 */
+	public function cache2database() {
+		$cache = pc_base::load_model('cache_model');
+		$result = $cache->select();
+		if (is_array($result) && !empty($result)) {
+			foreach ($result as $re) {
+				if (!file_exists(CACHE_PATH.$re['path'].$re['filename'])) {
+					$filesize = pc_base::load_config('system','lock_ex') ? file_put_contents(CACHE_PATH.$re['path'].$re['filename'], $re['data'], LOCK_EX) : file_put_contents(CACHE_PATH.$re['path'].$re['filename'], $re['data']);
+				} else {
+					continue;
+				}
+			}
+		}
 	}
 }
 ?>

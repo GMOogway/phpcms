@@ -10,6 +10,8 @@ include $this->admin_tpl('header', 'attachment');
 <input type="hidden" value="attachment" name="m">
 <input type="hidden" value="attachments" name="c">
 <input type="hidden" value="album_load" name="a">
+<input type="hidden" value="<?php echo $this->input->get('args');?>" name="args">
+<input type="hidden" value="<?php echo $this->input->get('authkey');?>" name="authkey">
 <input type="hidden" value="<?php echo $file_types_post?>" name="site_allowext">
 <input type="hidden" value="<?php echo $file_upload_limit?>" name="info[file_upload_limit]">
 <div class="lh26" style="padding:10px 0 0">
@@ -35,7 +37,7 @@ include $this->admin_tpl('header', 'attachment');
 <?php } ?>
 </div>
 <div class="clear"></div>
-<div id="pages" class="text-c"> <?php echo $pages?></div>
+<div class="col-md-12 text-center margin-bottom-20"><?php echo $pages?></div>
 <script type="text/javascript">
 $(document).ready(function(){
 	set_status_empty();

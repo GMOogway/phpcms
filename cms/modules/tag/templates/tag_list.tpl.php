@@ -4,10 +4,11 @@ include $this->admin_tpl('header', 'admin');
 ?>
 <div class="pad_10">
 <form id="myform" name="myform" action="" method="get">
-<div class="table-list">
+<input name="dosubmit" type="hidden" value="1">
 <input type="hidden" name="m" value="tag" />
 <input type="hidden" name="c" value="tag" />
 <input type="hidden" name="a" value="del" />
+<div class="table-list">
     <table width="100%" cellspacing="0">
         <thead>
 		<tr>
@@ -45,10 +46,18 @@ endif;
 </tbody>
 </table>
 </div>
-<div class="btn"><label for="check_box"><?php echo L('select_all')?>/<?php echo L('cancel')?></label> <input type="button" class="button" name="dosubmit" value="<?php echo L('delete')?>" onclick="Dialog.confirm('<?php echo L('sure_deleted')?>',function(){$('#myform').submit();});"/></div>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select">
+        <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
+            <input type="checkbox" class="group-checkable" data-set=".checkboxes">
+            <span></span>
+        </label>
+        <label><button type="button" onclick="Dialog.confirm('<?php echo L('sure_deleted')?>',function(){$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete')?></button></label>
+    </div>
+    <div class="col-md-5 list-page"><?php echo $pages?></div>
+</div>
 </form>
 </div>
-<div id="pages"><?php echo $pages?></div>
 <script type="text/javascript">
 <!--
 function edit(id, name) {

@@ -30,7 +30,7 @@
 </tbody>
 </table>
 </div>
-<div class="btn">
+<div class="footbtn">
 <input type="submit" class="button" name="dosubmit" value="<?php echo L('submit')?>"/>
 </div>
 

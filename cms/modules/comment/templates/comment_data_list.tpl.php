@@ -26,9 +26,13 @@ include $this->admin_tpl('header', 'admin');
 </div>
 <?php endforeach;?>
 </div>
- <div class="btn"><label for="check_box"><?php echo L('select_all')?>/<?php echo L('cancel')?></label> <input type="button" onclick="Dialog.confirm('<?php echo L('are_you_sure_you_want_to_delete')?>',function(){$('#myform').submit();});" class="button" value="<?php echo L('delete')?>" /></div>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select">
+        <label><button type="button" onclick="Dialog.confirm('<?php echo L('are_you_sure_you_want_to_delete')?>',function(){$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete')?></button></label>
+    </div>
+    <div class="col-md-5 list-page"><?php echo $pages?></div>
+</div>
  </form>
-<div id="pages"><?php echo $pages;?></div>
 </div>
 <script type="text/javascript">
 <?php if(!isset($_GET['show_center_id'])) {?> window.top.$('#display_center_id').css('display','none');<?php }?>

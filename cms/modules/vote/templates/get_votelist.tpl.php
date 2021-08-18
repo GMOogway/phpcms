@@ -31,9 +31,13 @@ if(is_array($infos)){
 ?>
 </tbody>
 </table>
-<input type="hidden" name="msg_id" id="msg_id">
 </div>
-<div id="pages"><?php echo $this->pages?></div>
+<input type="hidden" name="msg_id" id="msg_id">
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select"></div>
+    <div class="col-md-5 list-page"><?php echo $this->pages?></div>
+</div>
+</div>
 <SCRIPT LANGUAGE="JavaScript">
 <!--
 	function return_id(voteid, title) {

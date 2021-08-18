@@ -12,6 +12,7 @@ include $this->admin_tpl('header', 'admin');
 
 <div class="pad-lr-10">
 <form name="myform" action="?m=poster&c=poster&a=listorder" method="post" id="myform">
+<input name="dosubmit" type="hidden" value="1">
 <div class="table-list">
     <table width="100%" cellspacing="0" class="contentWrap">
         <thead>
@@ -61,12 +62,19 @@ if(is_array($infos)){
 </tbody>
     </table>
 </div>
-    <div class="btn"><label for="check_box"><?php echo L('selected_all')?>/<?php echo L('cancel')?></label>
-    	<input name='dosubmit' type='submit' class="button" value='<?php echo L('listorder')?>'>&nbsp;
-        <input name='dosubmit' type='submit' class="button" value='<?php echo L('start')?>' onClick="document.myform.action='?m=poster&c=poster&a=public_approval&passed=0'">&nbsp;
-        <input name='dosubmit' type='submit' class="button" value='<?php echo L('stop')?>' onClick="document.myform.action='?m=poster&c=poster&a=public_approval&passed=1'">&nbsp;
-        <input name="button" type="button" class="button" value="<?php echo L('delete')?>" onClick="Dialog.confirm('<?php echo L('confirm', array('message' => L('selected')))?>',function(){document.myform.action='?m=poster&c=poster&a=delete';$('#myform').submit();});">&nbsp;&nbsp;</div>
- <div id="pages"><?php echo $this->db->pages;?></div>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select">
+        <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
+            <input type="checkbox" class="group-checkable" data-set=".checkboxes">
+            <span></span>
+        </label>
+        <label><button type="submit" class="btn green btn-sm"> <i class="fa fa-refresh"></i> <?php echo L('listorder')?></button></label>
+        <label><button type="submit" onClick="document.myform.action='?m=poster&c=poster&a=public_approval&passed=0'" class="btn blue btn-sm"> <i class="fa fa-play-circle-o"></i> <?php echo L('start')?></button></label>
+        <label><button type="submit" onClick="document.myform.action='?m=poster&c=poster&a=public_approval&passed=1'" class="btn dark btn-sm"> <i class="fa fa-stop-circle-o"></i> <?php echo L('stop')?></button></label>
+        <label><button type="button" onClick="Dialog.confirm('<?php echo L('confirm', array('message' => L('selected')))?>',function(){document.myform.action='?m=poster&c=poster&a=delete';$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete')?></button></label>
+    </div>
+    <div class="col-md-5 list-page"><?php echo $this->db->pages;?></div>
+</div>
 </form>
 </div>
 </body>

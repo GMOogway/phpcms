@@ -35,7 +35,10 @@ if(is_array($templates)){
 ?>
 </tbody>
     </table>  </div>
- <div id="pages"><?php echo $this->pages?></div>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select"></div>
+    <div class="col-md-5 list-page"><?php echo $this->pages?></div>
+</div>
 </div>
 <script type="text/javascript">
 <!--
@@ -44,15 +47,7 @@ function edit(id, name) {
 };
 
 function check(id, name) {
-	var diag = new Dialog({
-		id:'testIframe',
-		title:name,
-		url:'<?php echo SELF;?>?m=poster&c=space&a=public_tempate_setting&template='+id+'&pc_hash='+pc_hash,
-		width:540,
-		height:360,
-		modal:true
-	});
-	diag.show();
+	omnipotent('testIframe',name,'<?php echo SELF;?>?m=poster&c=space&a=public_tempate_setting&template='+id+'&pc_hash='+pc_hash,1,540,360);
 }
 //-->
 </script>

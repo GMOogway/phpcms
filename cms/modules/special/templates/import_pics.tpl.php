@@ -43,9 +43,12 @@ include $this->admin_tpl('header','admin');
      <?php } }?>
 </tbody>
      </table>
-    <div class="btn"><input type="hidden" name="msg_id" id="msg_id"></div>
 </div>
-<div id="pages"><?php echo $pages;?></div>
+<input type="hidden" name="msg_id" id="msg_id">
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select"></div>
+    <div class="col-md-5 list-page"><?php echo $pages;?></div>
+</div>
 </div>
 </body>
 </html>

@@ -30,6 +30,7 @@ include $this->admin_tpl('header','admin');
 </form>
 </div>
 <form name="myform" id="myform" action="?m=special&c=special&a=import&specialid=<?php echo $this->input->get('specialid')?>&modelid=<?php echo $this->input->get('modelid')?>" method="post">
+<input name="dosubmit" type="hidden" value="1">
 <div class="table-list">
     <table width="100%">
         <thead>
@@ -58,8 +59,16 @@ include $this->admin_tpl('header','admin');
 </tbody>
      </table>
 </div>
-<div class="btn"><label for="check_box"><?php echo L('selected_all')?>/<?php echo L('cancel')?></label> <?php echo form::select($types, '', 'name="typeid" id="typeid"', L('please_choose_type'))?><span id="msg_id"></span> <input type="submit" name="dosubmit" id="dosubmit" class="button" value="<?php echo L('import')?>" /> </div>
-<div id="pages"><?php echo $pages;?></div>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select">
+        <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
+            <input type="checkbox" class="group-checkable" data-set=".checkboxes">
+            <span></span>
+        </label>
+        <label><?php echo form::select($types, '', 'name="typeid" id="typeid"', L('please_choose_type'))?><span id="msg_id"></span><button type="submit" class="btn green btn-sm"> <i class="fa fa-save"></i> <?php echo L('import')?></button></label>
+    </div>
+    <div class="col-md-5 list-page"><?php echo $pages?></div>
+</div>
 </form>
 </div>
 </body>

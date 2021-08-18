@@ -9,7 +9,7 @@ include $this->admin_tpl('header','admin');
 温馨提示：您可以手动或者点下面按钮把下面代码复制到模板中,根据情况选择标签使用。
 </div>
 <div style="margin-top:6px;"></div>
-<textarea name="lable" id="lable" rows="12" cols="90">{pc:slider action="lists" postion="<?php echo $typeid;?>" siteid="$siteid" order="desc" num="4"}
+<textarea name="lable" id="lable" rows="12" cols="80">{pc:slider action="lists" postion="<?php echo $typeid;?>" siteid="$siteid" order="desc" num="4"}
     {loop $data $r}
     <p>排序编号：{$r[listorder]}</p>
 	<p>描述：{$r[name]}</p>

@@ -4,6 +4,7 @@ include $this->admin_tpl('header','admin');
 ?>
 <div class="pad-lr-10">
 <form action="?m=template&c=style&a=updatename" method="post">
+<input name="dosubmit" type="hidden" value="1">
 <div class="table-list">
     <table width="100%" cellspacing="0">
         <thead>
@@ -36,8 +37,12 @@ endif;
 </tbody>
 </table>
 </div>
-<div class="btn"><input type="submit" class="button" name="dosubmit" value="<?php echo L('submit')?>" /></div>
-<div id="pages"><?php echo $pages?></div>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select">
+        <label><button type="submit" class="btn green btn-sm"> <i class="fa fa-save"></i> <?php echo L('submit')?></button></label>
+    </div>
+    <div class="col-md-5 list-page"><?php echo $pages?></div>
+</div>
 </form>
 </div>
 </body>

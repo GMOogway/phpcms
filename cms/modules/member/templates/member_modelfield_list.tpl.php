@@ -7,6 +7,7 @@
 <div class="pad-lr-10">
 <div class="bk10"></div>
 <form name="myform" id="myform" action="?m=member&c=member_modelfield&a=sort" method="post" onsubmit="check();return false;">
+<input name="dosubmit" type="hidden" value="1">
 <div class="table-list">
     <table width="100%" cellspacing="0" >
         <thead>
@@ -55,9 +56,12 @@
     </tbody>
     </table>
 </div>
-<div class="btn"><input type="submit" class="button" name="dosubmit" value="<?php echo L('sort')?>"/>
-</div> 
-<div id="pages"><?php if(isset($pages)){echo $pages;}?></div>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select">
+        <label><button type="submit" class="btn green btn-sm"> <i class="fa fa-refresh"></i> <?php echo L('listorder')?></button></label>
+    </div>
+    <div class="col-md-5 list-page"><?php if(isset($pages)){echo $pages;}?></div>
+</div>
 </div>
 </form>
 <div id="PC__contentHeight" style="display:none">160</div>

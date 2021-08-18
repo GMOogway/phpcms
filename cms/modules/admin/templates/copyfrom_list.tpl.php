@@ -5,6 +5,7 @@ include $this->admin_tpl('header','admin');
 ?>
 <div class="pad-lr-10">
 <form name="myform" id="myform" action="?m=admin&c=copyfrom&a=listorder" method="post">
+<input name="dosubmit" type="hidden" value="1">
 <div class="table-list">
  <table width="100%" cellspacing="0">
         <thead>
@@ -31,10 +32,15 @@ foreach($datas as $r) {
 </tbody>
 </table>
 </div>
-<div class="btn"><input type="submit" class="button" name="dosubmit" value="<?php echo L('listorder')?>" /></div>
-<div id="pages"><?php echo $pages?></div>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select">
+        <label><button type="submit" class="btn green btn-sm"> <i class="fa fa-refresh"></i> <?php echo L('listorder')?></button></label>
+    </div>
+    <div class="col-md-5 list-page"><?php echo $pages?></div>
 </div>
-</form></div>
+</div>
+</form>
+</div>
 </body>
 </html>
 <script type="text/javascript"> 

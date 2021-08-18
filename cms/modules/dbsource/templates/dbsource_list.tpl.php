@@ -31,7 +31,10 @@ endif;
 </tbody>
 </table>
 </div>
-<div id="pages"><?php echo $pages?></div>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select"></div>
+    <div class="col-md-5 list-page"><?php echo $pages?></div>
+</div>
 </div>
 <script type="text/javascript">
 <!--

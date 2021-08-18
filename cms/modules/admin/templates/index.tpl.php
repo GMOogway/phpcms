@@ -426,7 +426,7 @@ $(document).ready(function() {
 
         var options = {
             iniUrl: "<?php echo SELF;?>?m=admin&c=index&a=public_menu",    // 初始化接口
-            clearUrl: "<?php echo SELF;?>?m=admin&c=cache_all&a=public_cache_all", // 缓存清理接口
+            clearUrl: "<?php echo SELF;?>?m=admin&c=cache_all&a=init&pc_hash="+pc_hash+"&is_ajax=1", // 缓存清理接口
             urlHashLocation: true,      // 是否打开hash定位
             bgColorDefault: false,      // 主题默认配置
             multiModule: true,          // 是否开启多模块

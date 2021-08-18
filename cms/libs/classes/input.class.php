@@ -97,13 +97,13 @@ class input {
     }
 
     // 后台分页
-    public function page($url, $total, $dir = '') {
+    public function page($url, $total, $size = 10) {
 
         $page = pc_base::load_sys_class('page');
         $config = require CACHE_PATH.'configs/apage.php';
 
         $config['base_url'] = $url.'&page={page}';
-        $config['per_page'] = 10;
+        $config['per_page'] = $size;
         $config['total_rows'] = $total;
 
         return $page->initialize($config)->create_links();
