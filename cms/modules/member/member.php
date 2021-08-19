@@ -64,7 +64,7 @@ class member extends admin {
 		
 		//站点信息
 		$sitelistarr = getcache('sitelist', 'commons');
-		$siteid = isset($_GET['siteid']) ? intval($_GET['siteid']) : '0';
+		$siteid = isset($_GET['siteid']) ? $_GET['siteid'] : '';
 		foreach ($sitelistarr as $k=>$v) {
 			$sitelist[$k] = $v['name'];
 		}
@@ -122,7 +122,6 @@ class member extends admin {
 							$where .= "`siteid` in (".implode(',', $sidin).") AND ";
 						}
 					}
-					$where .= "`siteid` = '$siteid' AND ";
 				}
 			} else {
 				$siteid = get_siteid();

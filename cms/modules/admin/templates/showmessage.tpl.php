@@ -42,6 +42,7 @@ function close_dialog() {
     if(window.top.art.dialog({id:"<?php echo $dialog?>"})){window.top.art.dialog({id:"<?php echo $dialog?>"}).close();}else{ownerDialog.close();}
 }
 </script>
+<?php if($url_forward=="close") {?>
 <script src="<?php echo JS_PATH?>layui/layui.js" charset="utf-8"></script>
 <script src="<?php echo CSS_PATH?>layuimini/js/lay-config.js?v=2.0.0" charset="utf-8"></script>
 <script>
@@ -56,5 +57,6 @@ function close_dialog() {
         });
     });
 </script>
+<?php }?>
 </body>
 </html>

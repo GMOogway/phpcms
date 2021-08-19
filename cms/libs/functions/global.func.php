@@ -596,6 +596,27 @@ function format_js($string, $isjs = 1) {
 	return $str;
 }
 /**
+ * 转为utf8编码格式
+ */
+function dr_code2utf8($str) {
+	if (function_exists('mb_convert_encoding')) {
+		return mb_convert_encoding($str, 'UTF-8', 'GBK');
+	}
+	return $str;
+}
+// 兼容性判断
+if (!function_exists('is_php')) {
+	function is_php($version) {
+		static $_is_php;
+		$version = (string) $version;
+		if ( ! isset($_is_php[$version]))
+		{
+			$_is_php[$version] = version_compare(PHP_VERSION, $version, '>=');
+		}
+		return $_is_php[$version];
+	}
+}
+/**
  * 清除HTML标记
  *
  * @param	string	$str

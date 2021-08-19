@@ -25,7 +25,7 @@ class cloud extends admin {
         define('CMS_UPDATETIME', pc_base::load_config('version','cms_updatetime'));
         define('CMS_DOWNTIME', pc_base::load_config('version','cms_downtime'));
         $this->site = siteinfo(1);
-        $this->sitename = $this->site['name'];
+        $this->sitename = base64_encode($this->site['name']);
 
         list($this->admin_url) = explode('?', FC_NOW_URL);
         $this->service_url = 'http://ceshi.kaixin100.cn/index.php?m=cloud&c=index&a=cloud&domain='.dr_get_domain_name(ROOT_URL).'&admin='.urlencode($this->admin_url).'&version='.CMS_VERSION.'&cms='.CMS_ID.'&license='.CMS_LICENSE.'&updatetime='.strtotime(CMS_UPDATETIME).'&downtime='.strtotime(CMS_DOWNTIME).'&sitename='.$this->sitename.'&php='.PHP_VERSION.'&mysql='.$this->db->version().'&os='.PHP_OS;

@@ -94,9 +94,9 @@ class cache {
     }
 
     // 删除全部文件缓存
-    public function del_all($dir = 'data') {
+    public function del_all($dir = 'caches_data/caches_data') {
 
-        !$dir && $dir = 'data';
+        !$dir && $dir = 'caches_data/caches_data';
         $path = CACHE_PATH.$dir.'/';
 
         dr_dir_delete($path);

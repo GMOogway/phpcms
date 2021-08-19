@@ -45,7 +45,7 @@ class index extends foreground {
 		}
 		//加载短信模块配置
  		$sms_setting_arr = getcache('sms','sms');
-		$sms_setting = $sms_setting_arr[$siteid];		
+		$sms_setting = $sms_setting_arr[$siteid];
 		
 		header("Cache-control: private");
 		if(isset($_POST['dosubmit'])) {
@@ -352,7 +352,7 @@ class index extends foreground {
 	 */
 	public function uploadavatar() {
 		//获取用户siteid
-		$siteid = $this->input->request('siteid') && trim($this->input->request('siteid')) ? intval($this->input->request('siteid')) : 1;
+		$siteid = $this->memberinfo['siteid'] ? $this->memberinfo['siteid'] : 1;
 		//定义站点id常量
 		if (!defined('SITEID')) {
 		   define('SITEID', $siteid);
@@ -592,6 +592,12 @@ class index extends foreground {
 		if (!defined('SITEID')) {
 		   define('SITEID', $siteid);
 		}
+		
+		//加载用户模块配置
+		$member_setting = getcache('member_setting');
+		//加载短信模块配置
+ 		$sms_setting_arr = getcache('sms','sms');
+		$sms_setting = $sms_setting_arr[$siteid];
 		
 		if(isset($_POST['dosubmit'])) {
 			if($member_setting['enablcodecheck']=='1'){//开启验证码
