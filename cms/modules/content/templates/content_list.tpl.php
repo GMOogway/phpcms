@@ -370,7 +370,8 @@ layui.use(['table'], function(){
                             },
                             content:json.data.url,
                             cancel: function(e, t) {
-                                return layer.confirm("关闭后将中断操作，是否确认关闭呢？", {
+                                var a = layer.getChildFrame("body", e);
+                                if ("1" == $(a).find("#dr_check_status").val()) return layer.confirm("关闭后将中断操作，是否确认关闭呢？", {
                                     icon: 3,
                                     shade: 0,
                                     title: "提示",

@@ -1482,6 +1482,29 @@ function to_sqls($data, $front = ' AND ', $in_column = false) {
 }
 
 /**
+ * 后台返回分页路径
+ *
+ * @param $urlrule 分页规则
+ * @param $array 需要传递的数组，用于增加额外的方法
+ * @return 完整的URL路径
+ */
+function apageurl($urlrule, $array = array()) {
+	if(strpos($urlrule, '~')) {
+		$urlrules = explode('~', $urlrule);
+		$urlrule = $urlrules[1];
+	}
+	$findme = array('{$page}');
+	$replaceme = array('{page}');
+	if (is_array($array)) foreach ($array as $k=>$v) {
+		$findme[] = '{$'.$k.'}';
+		$replaceme[] = $v;
+	}
+	$url = str_replace($findme, $replaceme, $urlrule);
+	$url = str_replace(array('http://','https://','//','~'), array('~','~','/',SITE_PROTOCOL), $url);
+	return $url;
+}
+
+/**
  * 分页函数
  *
  * @param $num 信息总数
@@ -1492,15 +1515,69 @@ function to_sqls($data, $front = ' AND ', $in_column = false) {
  * @return 分页
  */
 function pages($num, $curr_page, $perpage = 20, $urlrule = '', $array = array(),$setpages = 10) {
-	$input = pc_base::load_sys_class('input');
 	if(defined('URLRULE') && $urlrule == '') {
 		$urlrule = URLRULE;
 		$array = $GLOBALS['URL_ARRAY'];
 	} elseif($urlrule == '') {
-		$urlrule = get_url();
+		$urlrule = url_par('page={$page}');
 	}
-	$urlrule = pageurl($urlrule, $curr_page, $array);
-	$multipage = $input->page($urlrule, $num, $perpage);
+	if(strpos($urlrule, '.php')) {
+		$input = pc_base::load_sys_class('input');
+		$multipage = $input->page(apageurl($urlrule, $array), $num, $perpage);
+	} else {
+		$multipage = '';
+		if($num > $perpage) {
+			$page = $setpages+1;
+			$offset = ceil($setpages/2-1);
+			$pages = ceil($num / $perpage);
+			if (defined('IN_ADMIN') && !defined('PAGES')) define('PAGES', $pages);
+			$from = $curr_page - $offset;
+			$to = $curr_page + $offset;
+			$more = 0;
+			if($page >= $pages) {
+				$from = 2;
+				$to = $pages-1;
+			} else {
+				if($from <= 1) {
+					$to = $page-1;
+					$from = 2;
+				}  elseif($to >= $pages) {
+					$from = $pages-($page-2);
+					$to = $pages-1;
+				}
+				$more = 1;
+			}
+			$multipage .= '<a class="a1">'.$num.L('page_item').'</a>';
+			if($curr_page>0) {
+				$multipage .= ' <a href="'.pageurl($urlrule, $curr_page-1, $array).'" class="a1">'.L('previous').'</a>';
+				if($curr_page==1) {
+					$multipage .= ' <span>1</span>';
+				} elseif($curr_page>6 && $more) {
+					$multipage .= ' <a href="'.pageurl($urlrule, 1, $array).'">1</a>..';
+				} else {
+					$multipage .= ' <a href="'.pageurl($urlrule, 1, $array).'">1</a>';
+				}
+			}
+			for($i = $from; $i <= $to; $i++) {
+				if($i != $curr_page) {
+					$multipage .= ' <a href="'.pageurl($urlrule, $i, $array).'">'.$i.'</a>';
+				} else {
+					$multipage .= ' <span>'.$i.'</span>';
+				}
+			}
+			if($curr_page<$pages) {
+				if($curr_page<$pages-5 && $more) {
+					$multipage .= ' ..<a href="'.pageurl($urlrule, $pages, $array).'">'.$pages.'</a> <a href="'.pageurl($urlrule, $curr_page+1, $array).'" class="a1">'.L('next').'</a>';
+				} else {
+					$multipage .= ' <a href="'.pageurl($urlrule, $pages, $array).'">'.$pages.'</a> <a href="'.pageurl($urlrule, $curr_page+1, $array).'" class="a1">'.L('next').'</a>';
+				}
+			} elseif($curr_page==$pages) {
+				$multipage .= ' <span>'.$pages.'</span> <a href="'.pageurl($urlrule, $curr_page, $array).'" class="a1">'.L('next').'</a>';
+			} else {
+				$multipage .= ' <a href="'.pageurl($urlrule, $pages, $array).'">'.$pages.'</a> <a href="'.pageurl($urlrule, $curr_page+1, $array).'" class="a1">'.L('next').'</a>';
+			}
+		}
+	}
 	return $multipage;
 }
 
@@ -1515,12 +1592,11 @@ function pages($num, $curr_page, $perpage = 20, $urlrule = '', $array = array(),
  * @return 分页
  */
 function mobilepages($num, $curr_page, $perpage = 20, $urlrule = '', $array = array(),$setpages = 10) {
-	$input = pc_base::load_sys_class('input');
 	if(defined('URLRULE') && $urlrule == '') {
 		$urlrule = URLRULE;
 		$array = $GLOBALS['URL_ARRAY'];
 	} elseif($urlrule == '') {
-		$urlrule = get_url();
+		$urlrule = url_par('page={$page}');
 	}
 	if(defined('SITEID')) {
 		$siteid = SITEID;
@@ -1536,8 +1612,58 @@ function mobilepages($num, $curr_page, $perpage = 20, $urlrule = '', $array = ar
 			//$mobile_root = pc_base::load_config('system','mobile_root');
 		//}
 	}
-	$urlrule = $mobile_root.pageurl($urlrule, $curr_page, $array);
-	$multipage = $input->page($urlrule, $num, $perpage);
+	$multipage = '';
+	if($num > $perpage) {
+		$page = $setpages+1;
+		$offset = ceil($setpages/2-1);
+		$pages = ceil($num / $perpage);
+		if (defined('IN_ADMIN') && !defined('PAGES')) define('PAGES', $pages);
+		$from = $curr_page - $offset;
+		$to = $curr_page + $offset;
+		$more = 0;
+		if($page >= $pages) {
+			$from = 2;
+			$to = $pages-1;
+		} else {
+			if($from <= 1) {
+				$to = $page-1;
+				$from = 2;
+			}  elseif($to >= $pages) {
+				$from = $pages-($page-2);
+				$to = $pages-1;
+			}
+			$more = 1;
+		}
+		$multipage .= '<a class="a1">'.$num.L('page_item').'</a>';
+		if($curr_page>0) {
+			$multipage .= ' <a href="'.$mobile_root.pageurl($urlrule, $curr_page-1, $array).'" class="a1">'.L('previous').'</a>';
+			if($curr_page==1) {
+				$multipage .= ' <span>1</span>';
+			} elseif($curr_page>6 && $more) {
+				$multipage .= ' <a href="'.$mobile_root.pageurl($urlrule, 1, $array).'">1</a>..';
+			} else {
+				$multipage .= ' <a href="'.$mobile_root.pageurl($urlrule, 1, $array).'">1</a>';
+			}
+		}
+		for($i = $from; $i <= $to; $i++) {
+			if($i != $curr_page) {
+				$multipage .= ' <a href="'.$mobile_root.pageurl($urlrule, $i, $array).'">'.$i.'</a>';
+			} else {
+				$multipage .= ' <span>'.$i.'</span>';
+			}
+		}
+		if($curr_page<$pages) {
+			if($curr_page<$pages-5 && $more) {
+				$multipage .= ' ..<a href="'.$mobile_root.pageurl($urlrule, $pages, $array).'">'.$pages.'</a> <a href="'.$mobile_root.pageurl($urlrule, $curr_page+1, $array).'" class="a1">'.L('next').'</a>';
+			} else {
+				$multipage .= ' <a href="'.$mobile_root.pageurl($urlrule, $pages, $array).'">'.$pages.'</a> <a href="'.$mobile_root.pageurl($urlrule, $curr_page+1, $array).'" class="a1">'.L('next').'</a>';
+			}
+		} elseif($curr_page==$pages) {
+			$multipage .= ' <span>'.$pages.'</span> <a href="'.$mobile_root.pageurl($urlrule, $curr_page, $array).'" class="a1">'.L('next').'</a>';
+		} else {
+			$multipage .= ' <a href="'.$mobile_root.pageurl($urlrule, $pages, $array).'">'.$pages.'</a> <a href="'.$mobile_root.pageurl($urlrule, $curr_page+1, $array).'" class="a1">'.L('next').'</a>';
+		}
+	}
 	return $multipage;
 }
 /**
@@ -1551,7 +1677,7 @@ function mobilepages($num, $curr_page, $perpage = 20, $urlrule = '', $array = ar
 function pageurl($urlrule, $page, $array = array()) {
 	if(strpos($urlrule, '~')) {
 		$urlrules = explode('~', $urlrule);
-		$urlrule = $urlrules[0];
+		$urlrule = $page < 2 ? $urlrules[0] : $urlrules[1];
 	}
 	$findme = array('{$page}');
 	$replaceme = array($page);

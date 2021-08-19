@@ -96,13 +96,28 @@ class input {
         return gethostbyname($_SERVER['HTTP_HOST']);
     }
 
-    // 后台分页
+    // 分页
     public function page($url, $total, $size = 10) {
 
         $page = pc_base::load_sys_class('page');
-        $config = require CACHE_PATH.'configs/apage.php';
+        if (defined('IS_ADMIN') && IS_ADMIN && defined('IN_ADMIN') && IN_ADMIN) {
+            // 使用后台分页规则
+            $config = require CACHE_PATH.'configs/apage.php';
+            $config['base_url'] = $url.'&page={page}';
+        } else {
+            // 这里要支持移动端分页条件
+            !$name && $name = 'page';
+            $file = 'configs/page/'.(is_mobile(0) ? 'mobile' : 'pc').'/'.(dr_safe_filename($name)).'.php';
+            if (is_file(CACHE_PATH.$file)) {
+                $config = require CACHE_PATH.$file;
+            } else {
+                exit('无法找到分页配置文件【'.$file.'】');
+            }
+            !$url && $url = '此标签没有设置urlrule参数';
+            $this->_page_urlrule = str_replace(['{$page}', '[page]', '%7Bpage%7D', '%5Bpage%5D', '%7bpage%7d', '%5bpage%5d'], '{page}', $url);
+            $config['base_url'] = $this->_page_urlrule;
+        }
 
-        $config['base_url'] = $url.'&page={page}';
         $config['per_page'] = $size;
         $config['total_rows'] = $total;
 
