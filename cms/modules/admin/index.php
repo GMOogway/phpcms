@@ -247,10 +247,6 @@ class index extends admin {
 	}
 	
 	public function public_ajax_add_panel() {
-		$tablename = $this->panel_db->db_tablepre.'admin_panel';
-		if (!$this->panel_db->field_exists('icon')) {
-			$this->panel_db->query('ALTER TABLE `'.$tablename.'` ADD `icon` varchar(255) NULL DEFAULT NULL COMMENT \'图标标示\' AFTER `name`');
-		}
 		$menuid = $this->input->post('menuid') ? $this->input->post('menuid') : exit('0');
 		$menuarr = $this->menu_db->get_one(array('id'=>$menuid));
 		if ($menuarr['data']) {
@@ -322,8 +318,8 @@ class index extends admin {
 		define('CMS_UPDATETIME', pc_base::load_config('version','cms_updatetime'));
 		define('CMS_DOWNTIME', pc_base::load_config('version','cms_downtime'));
 		$this->site = siteinfo(1);
-        $this->sitename = $this->site['name'];
-        $this->siteurl = $this->site['domain'];
+		$this->sitename = $this->site['name'];
+		$this->siteurl = $this->site['domain'];
 
 		list($this->admin_url) = explode('?', FC_NOW_URL);
 		$this->service_url = 'http://ceshi.kaixin100.cn/index.php?m=cloud&c=index&a=cloud&domain='.dr_get_domain_name(ROOT_URL).'&admin='.urlencode($this->admin_url).'&version='.CMS_VERSION.'&cms='.(CMS_ID ? CMS_ID : 1).'&updatetime='.strtotime(CMS_UPDATETIME).'&downtime='.strtotime(CMS_DOWNTIME).'&sitename='.base64_encode($this->sitename).'&siteurl='.urlencode($this->siteurl).'&php='.PHP_VERSION.'&mysql='.$this->db->version().'&os='.PHP_OS;
