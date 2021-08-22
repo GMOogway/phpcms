@@ -752,34 +752,20 @@ function str_cut($string, $length, $dot = '...') {
 
 // 获取访客ip地址
 function ip() {
-	if (getenv('HTTP_CLIENT_IP')) {
-		$client_ip = getenv('HTTP_CLIENT_IP');
-	} elseif(getenv('HTTP_X_FORWARDED_FOR')) {
-		$client_ip = getenv('HTTP_X_FORWARDED_FOR');
-	} elseif(getenv('REMOTE_ADDR', true)) {
-		$client_ip = getenv('REMOTE_ADDR', true);
-	} else {
-		$client_ip = $_SERVER['REMOTE_ADDR'];
-	}
-	// 验证规范
-	if (!preg_match('/^(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:[.](?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}$/', $client_ip)) {
-		$client_ip = '';
-	}
-	$client_ip = str_replace(array(",", '(', ')', ',', chr(13), PHP_EOL), '', $client_ip);
-	$client_ip = trim($client_ip);
-	return $client_ip;
+	$input = pc_base::load_sys_class('input');
+	return $input->ip_address();
 }
 
 // ip转为实际地址
 function ip2address($ip) {
-	$ip_area = pc_base::load_sys_class('ip_area');
-	return $ip_area->address($ip);
+	$input = pc_base::load_sys_class('input');
+	return $input->ip2address($ip);
 }
 
 // 当前ip实际地址
 function ip_address_info() {
-	$ip_area = pc_base::load_sys_class('ip_area');
-	return $ip_area->address(ip());
+	$input = pc_base::load_sys_class('input');
+	return $input->ip_address_info();
 }
 
 function get_cost_time() {
