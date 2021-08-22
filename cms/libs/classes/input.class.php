@@ -97,13 +97,12 @@ class input {
     }
 
     // 分页
-    public function page($url, $total, $size = 10) {
+    public function page($url, $total, $size = 10, $cur_page = '', $first_url = '') {
 
         $page = pc_base::load_sys_class('page');
         if (defined('IS_ADMIN') && IS_ADMIN && defined('IN_ADMIN') && IN_ADMIN) {
             // 使用后台分页规则
             $config = require CACHE_PATH.'configs/apage.php';
-            $config['base_url'] = $url.'&page={page}';
         } else {
             // 这里要支持移动端分页条件
             !$name && $name = 'page';
@@ -113,13 +112,17 @@ class input {
             } else {
                 exit('无法找到分页配置文件【'.$file.'】');
             }
-            !$url && $url = '此标签没有设置urlrule参数';
-            $this->_page_urlrule = str_replace(['{$page}', '[page]', '%7Bpage%7D', '%5Bpage%5D', '%7bpage%7d', '%5bpage%5d'], '{page}', $url);
-            $config['base_url'] = $this->_page_urlrule;
         }
 
+        !$url && $url = '此标签没有设置urlrule参数';
+        $this->_page_urlrule = str_replace(['{$page}', '[page]', '%7Bpage%7D', '%5Bpage%5D', '%7bpage%7d', '%5bpage%5d'], '{page}', $url);
+        $config['base_url'] = $this->_page_urlrule;
+        $config['first_url'] = $first_url ? $first_url : '';
+        $config['cur_page'] = $cur_page;
         $config['per_page'] = $size;
         $config['total_rows'] = $total;
+        $config['use_page_numbers'] = TRUE;
+        $config['query_string_segment'] = 'page';
 
         return $page->initialize($config)->create_links();
     }

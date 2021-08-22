@@ -123,7 +123,8 @@ function strip_selected_tags($text) {
  * 生成文章分页方法
  */
 
-function mobile_content_pages($num, $curr_page,$pageurls, $siteid = 0, $ishtml = 0,$showremain = 1) {
+function mobile_content_pages($num, $curr_page, $pageurls, $showurls, $siteid = 0, $ishtml = 0,$showremain = 1) {
+	$input = pc_base::load_sys_class('input');
 	if(!$siteid) {
 		$siteid = param::get_cookie('siteid');
 	}
@@ -137,41 +138,9 @@ function mobile_content_pages($num, $curr_page,$pageurls, $siteid = 0, $ishtml =
 		//}
 	}
 	$multipage = '';
-	$page = 11;
-	$offset = 4;
-	$pages = $num;
-	$from = $curr_page - $offset;
-	$to = $curr_page + $offset;
-	$more = 0;
-	if($page >= $pages) {
-		$from = 2;
-		$to = $pages-1;
-	} else {
-		if($from <= 1) {
-			$to = $page-1;
-			$from = 2;
-		} elseif($to >= $pages) {
-			$from = $pages-($page-2);
-			$to = $pages-1;
-		}
-		$more = 1;
-	}
-	$multipage .='('.$curr_page.'/'.$num.')';
-	if($curr_page>0) {
-		$perpage = $curr_page == 1 ? 1 : $curr_page-1;
-		$multipage .= '<a class="a1" href="'.$mobile_root.$pageurls[$perpage][1].'">'.L('previous').'</a>';
-	}
-	
-	if($curr_page<$pages) {
-		if($curr_page<$pages-5 && $more) {
-			$multipage .= ' <a class="a1" href="'.$mobile_root.$pageurls[$curr_page+1][1].'">'.L('next').'</a>';
-		} else {
-			$multipage .= ' <a class="a1" href="'.$mobile_root.$pageurls[$curr_page+1][1].'">'.L('next').'</a>';
-		}
-	} elseif($curr_page==$pages) {
-		$multipage .= ' <a class="a1" href="'.$mobile_root.$pageurls[$curr_page][1].'">'.L('next').'</a>';
-	}
-	if($showremain && $sitelist[$siteid]['mobilehtml']==0 || !$ishtml) $multipage .="| <a href='".$mobile_root.$pageurls[$curr_page][1]."&remains=true'>剩余全文</a>";
+	$first_url = $mobile_root.$showurls[1][1];
+	$multipage = $input->page($mobile_root.$showurls[2][1], $num, 1, $curr_page, $first_url);
+	if($showremain && $sitelist[$siteid]['mobilehtml']==0 || !$ishtml) $multipage .="| <a href='".$mobile_root.$showurls[1][1]."&remains=true'>剩余全文</a>";
 	return $multipage;
 }
 ?>

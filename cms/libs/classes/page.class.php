@@ -382,7 +382,7 @@ class page {
         // Determine the current page number.
         $base_page = ($this->use_page_numbers) ? 1 : 0;
 
-        $this->cur_page = $this->_get_page_id();
+        $this->cur_page = $this->cur_page ? $this->cur_page : $this->_get_page_id();
 
         // If something isn't quite right, back to the default base page.
         if ( $this->use_page_numbers && (int) $this->cur_page == 0)
