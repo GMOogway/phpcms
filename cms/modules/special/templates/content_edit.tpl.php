@@ -26,7 +26,8 @@ $p = dr_authcode(array(
 //-->
 </script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>content_addtop.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>colorpicker.js"></script>
+<link href="<?php echo JS_PATH?>jquery-minicolors/jquery.minicolors.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo JS_PATH?>jquery-minicolors/jquery.minicolors.min.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>cookie.js"></script>
 <link rel="stylesheet" href="<?php echo CSS_PATH;?>bootstrap/css/bootstrap.min.css" media="all" />
 <style type="text/css">
@@ -59,11 +60,11 @@ $p = dr_authcode(array(
                             <div class="form-group">
                                 <label class="control-label col-md-2"><font color="red">*</font> <?php echo L('content_title')?></label>
                                 <div class="col-md-10">
-                                    <input type="text" style="width:350px;" name="info[title]" id="title" value="<?php echo new_html_special_chars($info['title'])?>" class="measure-input " onBlur="check_title('?m=special&c=content&a=public_check_title&specialid=<?php echo intval($_GET['specialid'])?>&id=<?php echo intval($_GET['id'])?>','title');$.post('<?php echo WEB_PATH;?>api.php?op=get_keywords&sid='+Math.random()*5, {data:$('#title').val()}, function(data){if(data && $('#keywords').val()=='') {$('#keywords').val(data); $('#keywords').tagsinput('add', data);}});" />
-		<input type="hidden" name="style_color" id="style_color" value="">
-		<input type="hidden" name="style_font_weight" id="style_font_weight" value="">
-		<input type="button" class="button" id="check_title_alt" value="<?php echo L('check_exist')?>" onclick="$.get('?m=special&c=content&a=public_check_title&id=<?php echo intval($_GET['id'])?>&sid='+Math.random()*5, {data:$('#title').val(), specialid:'<?php echo $_GET['specialid']?>'}, function(data){ if(data=='1') {$('#check_title_alt').val('<?php echo L('title_exist')?>');$('#check_title_alt').css('background-color','#E7505A');} else if(data=='0') {$('#check_title_alt').val('<?php echo L('title_no_exist')?>');$('#check_title_alt').css('background-color','#1E9FFF')}})"/> <img src="<?php echo IMG_PATH;?>icon/colour.png" width="15" height="16" onclick="colorpicker('title_colorpanel','set_title_color');" style="cursor:hand"/> 
-		<img src="<?php echo IMG_PATH;?>icon/bold.png" width="10" height="10" onclick="input_font_bold()" style="cursor:hand"/> <span id="title_colorpanel" style="position:absolute; z-index:200" class="colorpanel"></span>
+                                    <input type="text" style="width:350px;<?php echo ($style_color ? 'color:'.$style_color.';' : '').($style_font_weight ? 'font-weight:'.$style_font_weight.';' : '');?>" name="info[title]" id="title" value="<?php echo new_html_special_chars($info['title'])?>" class="measure-input " onBlur="check_title('?m=special&c=content&a=public_check_title&specialid=<?php echo intval($_GET['specialid'])?>&id=<?php echo intval($_GET['id'])?>','title');$.post('<?php echo WEB_PATH;?>api.php?op=get_keywords&sid='+Math.random()*5, {data:$('#title').val()}, function(data){if(data && $('#keywords').val()=='') {$('#keywords').val(data); $('#keywords').tagsinput('add', data);}});" />
+		<input type="hidden" name="style_font_weight" id="style_font_weight" value="<?php echo $style_font_weight?>">
+		<input type="button" class="button" id="check_title_alt" value="<?php echo L('check_exist')?>" onclick="$.get('?m=special&c=content&a=public_check_title&id=<?php echo intval($_GET['id'])?>&sid='+Math.random()*5, {data:$('#title').val(), specialid:'<?php echo $_GET['specialid']?>'}, function(data){ if(data=='1') {$('#check_title_alt').val('<?php echo L('title_exist')?>');$('#check_title_alt').css('background-color','#E7505A');} else if(data=='0') {$('#check_title_alt').val('<?php echo L('title_no_exist')?>');$('#check_title_alt').css('background-color','#1E9FFF')}})"/> <input type="hidden" name="style_color" id="style_color" value="<?php echo $style_color;?>"> <script type="text/javascript">$(function(){$("#style_color").minicolors({control:$("#style_color").attr("data-control")||"hue",defaultValue:$("#style_color").attr("data-defaultValue")||"",inline:"true"===$("#style_color").attr("data-inline"),letterCase:$("#style_color").attr("data-letterCase")||"lowercase",opacity:$("#style_color").attr("data-opacity"),position:$("#style_color").attr("data-position")||"bottom left",change:function(t,o){t&&(o&&(t+=", "+o),"object"==typeof console&&console.log(t));$("#title").css("color",$("#style_color").val())},theme:"bootstrap"})});</script>
+		<a href="javascript:;" onclick="set_title_color('');$('.minicolors-swatch-color').css('background','');"><?php echo L('清空');?></a>
+		<img src="<?php echo IMG_PATH;?>icon/bold.png" width="10" height="10" onclick="input_font_bold()" style="cursor:hand"/>
                                 </div>
                             </div>
                             <div class="form-group">

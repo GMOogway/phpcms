@@ -446,8 +446,8 @@ a.dropdown-item.active{color:#fff;}
 
 .txtList{overflow:hidden;margin:0;padding:0;list-style:none;}
 .txtList li{margin-bottom:1%;border:1px solid #ddd;padding:5px;border-radius:4px;margin-top:15px;cursor:pointer;position:relative;}
-.txtList li .input-text{width:400px;height: 18px;line-height:18px;margin:5px;padding:8px 10px;color:#999;resize: vertical;font: inherit;border: 1px solid #d0d0d0;background: #FFF url(../../../images/admin_img/input.png) repeat-x;}
-.txtList li .input-textarea{width:160px;height: 18px;line-height:18px;margin:5px;padding:8px 10px;color:#999;resize: vertical;font: inherit;border: 1px solid #d0d0d0;background: #FFF url(../../../images/admin_img/input.png) repeat-x;}
+.txtList li .input-text{width:400px;height: 34px;line-height:34px;margin:5px;padding:8px 10px;color:#999;resize: vertical;font: inherit;border: 1px solid #d0d0d0;background: #fff;}
+.txtList li .input-textarea{width:160px;height: 34px;line-height:34px;margin:5px;padding:8px 10px;color:#999;resize: vertical;font: inherit;border: 1px solid #d0d0d0;border-radius: 4px;background: background-color: #fff;}
 .txtList li a{text-align:center;color:#999;outline:none;padding:8px 10px;}
 .txtList li a:hover{color:#f30;}
 
@@ -617,6 +617,15 @@ form .portlet.light .portlet-body {padding-top: 20px;padding-bottom: 20px;}
 .form .form-actions, .portlet-form .form-actions {padding: 20px;margin: 0;background-color: #f5f5f5;border-top: 1px solid #e7ecf1;}
 .margin-bottom-20 {margin-bottom: 20px!important;}
 .text-center {text-align: center;}
+.minicolors {width: 28px;height: 28px;display: inline-block;}
+.minicolors-theme-bootstrap .minicolors-swatch {width: 28px;height: 28px;}
+.minicolors-theme-bootstrap .minicolors-swatch .minicolors-swatch-color {width: 28px;height: 28px;}
+.datepicker table th {color: #333;font-weight: 400!important;}
+.datepicker table td {color: #000;font-weight: 300!important;}
+.datepicker table tr td span {overflow: hidden!important;}
+.datetimepicker table tr td span {overflow: hidden!important;}
+.datetimepicker table th {color: #333;font-weight: 400!important;}
+.datetimepicker table td {color: #000;font-weight: 300!important;}
 @media (min-width:992px) {
 	.col-md-1,.col-md-10,.col-md-11,.col-md-12,.col-md-2,.col-md-3,.col-md-4,.col-md-5,.col-md-6,.col-md-7,.col-md-8,.col-md-9 {
 		float: left;

@@ -509,16 +509,22 @@ class content extends admin {
 				$this->page_db = pc_base::load_model('page_model');
 				$style_font_weight = $this->input->post('style_font_weight') ? 'font-weight:'.strip_tags($this->input->post('style_font_weight')) : '';
 				$info['style'] = strip_tags($this->input->post('style_color')).';'.$style_font_weight;
-				
+				$modelid = $this->categorys[$catid]['modelid'];
+				require_once CACHE_MODEL_PATH.'content_input.class.php';
+				require_once CACHE_MODEL_PATH.'content_update.class.php';
+				$content_input = new content_input(0);
+				$inputinfo = $content_input->get($info);
+				$systeminfo = $inputinfo['system'];
 				if($this->input->post('edit')) {
 					$this->page_db->update($info,array('catid'=>$catid));
 				} else {
 					$catid = $this->page_db->insert($info,1);
 				}
+				$this->page_db->update($systeminfo,array('catid'=>$catid));
 				$this->page_db->create_html($catid,$info);
 				$forward = HTTP_REFERER;
 			}
-			showmessage(L('add_success'),$forward);
+			showmessage($this->input->post('edit') ? L('update_success') : L('add_success'),$forward);
 		} else {
 			$show_header = $show_dialog = $show_validator = '';
 			//设置cookie 在附件添加处调用
@@ -566,7 +572,7 @@ class content extends admin {
 						extract($r);
 						$style_arr = explode(';',$style);
 						$style_color = $style_arr[0];
-						$style_font_weight = $style_arr[1] ? substr($style_arr[1],12) : '';
+						$style_font_weight = $style_arr[1] ? $style_arr[1] : '';
 					}
 					include $this->admin_tpl('content_page');
 				}

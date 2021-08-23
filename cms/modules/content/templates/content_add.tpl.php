@@ -13,7 +13,8 @@ include $this->admin_tpl('header','admin');?>
 //-->
 </script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>content_addtop.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>colorpicker.js"></script>
+<link href="<?php echo JS_PATH?>jquery-minicolors/jquery.minicolors.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo JS_PATH?>jquery-minicolors/jquery.minicolors.min.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>hotkeys.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>cookie.js"></script>
 <link rel="stylesheet" href="<?php echo CSS_PATH;?>bootstrap/css/bootstrap.min.css" media="all" />

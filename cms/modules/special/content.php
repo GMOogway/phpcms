@@ -28,7 +28,9 @@ class content extends admin {
 				$info['isdata'] = 0;
 			} else {
 				$info['isdata'] = 1;
-			} 
+			}
+			$info['style'] = $this->input->post('style_color') && preg_match('/^#([0-9a-z]+)/i', $this->input->post('style_color')) ? $this->input->post('style_color') : '';
+			if($this->input->post('style_font_weight')=='bold') $info['style'] = $info['style'].';'.strip_tags($this->input->post('style_font_weight'));
 			$info['specialid'] = $this->input->get('specialid');
 			//将基础数据添加到基础表，并返回ID
 			$contentid = $this->db->insert($info, true);
@@ -117,7 +119,9 @@ class content extends admin {
 				$info['isdata'] = 0;
 			} else {
 				$info['isdata'] = 1;
-			} 
+			}
+			$info['style'] = $this->input->post('style_color') && preg_match('/^#([0-9a-z]+)/i', $this->input->post('style_color')) ? $this->input->post('style_color') : '';
+			if($this->input->post('style_font_weight')=='bold') $info['style'] = $info['style'].';'.strip_tags($this->input->post('style_font_weight'));
 			$html = pc_base::load_app_class('html', 'special');
 			if ($info['isdata']) {
 				$data = $this->check($_POST['data'], 'data');
@@ -150,6 +154,9 @@ class content extends admin {
 		} else {
 			$info = $this->db->get_one(array('id'=>$_GET['id'], 'specialid'=>$_GET['specialid']));
 			if($info['isdata']) $data = $this->data_db->get_one(array('id'=>$_GET['id']));
+			$style_arr = explode(';',$info['style']);
+			$style_color = $style_arr[0];
+			$style_font_weight = $style_arr[1] ? $style_arr[1] : '';
 			$rs = $this->type_db->select(array('parentid'=>$_GET['specialid'], 'siteid'=>$this->get_siteid()), 'typeid, name');
 			$types = array();
 			foreach ($rs as $r) {
