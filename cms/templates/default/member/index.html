@@ -18,7 +18,7 @@
 						<a href="index.php?m=member&c=index&a=account_manage_info&t=1" class="member-edit"><span class="iconfont">&#xe628;</span>修改资料</a>
 					</div>
 					<div class="row">
-						<label>注册时间：</label> {date('Y-m-d H:i:s',$memberinfo['regdate'])}
+						<label>注册时间：</label> {dr_date($memberinfo['regdate'], null, 'red')}
 					</div>
 					<div class="row">
 						<label>绑定邮箱：</label> {$memberinfo['email']} {if $memberinfo['email_status']}<span class="green">[已验证]</span>{/if}
@@ -27,7 +27,7 @@
 						<label>登录次数：</label> {$memberinfo['loginnum']} 次
 					</div>
 					<div class="row">
-						<label>上次登录：</label> {if $memberinfo['lastdate']}{date('Y年m月d日 H:i:s',$memberinfo['lastdate'])}{else}无{/if} [ IP地址：{if $memberinfo['lastip']}{$memberinfo['lastip']}{else}无{/if} ] 
+						<label>上次登录：</label> {if $memberinfo['lastdate']}{dr_date($memberinfo['lastdate'], 'Y年m月d日 H:i:s', 'red')}{else}无{/if} [ IP地址：{if $memberinfo['lastip']}{$memberinfo['lastip']}{else}无{/if} ] 
 					</div>
 				</div>
 			</div>

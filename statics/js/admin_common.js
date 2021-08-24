@@ -91,20 +91,20 @@ function dr_strtotime(datetime) {
 // 判断当前终端是否是移动设备
 function is_mobile() {
 	var ua = navigator.userAgent,
-	 isWindowsPhone = /(?:Windows Phone)/.test(ua),
-	 isSymbian = /(?:SymbianOS)/.test(ua) || isWindowsPhone, 
-	 isAndroid = /(?:Android)/.test(ua), 
-	 isFireFox = /(?:Firefox)/.test(ua), 
-	 isChrome = /(?:Chrome|CriOS)/.test(ua),
-	 isTablet = /(?:iPad|PlayBook)/.test(ua) || (isAndroid && !/(?:Mobile)/.test(ua)) || (isFireFox && /(?:Tablet)/.test(ua)),
-	 isPhone = /(?:iPhone)/.test(ua) && !isTablet,
-	 isPc = !isPhone && !isAndroid && !isSymbian;
-	 if (isPc) {
+	isWindowsPhone = /(?:Windows Phone)/.test(ua),
+	isSymbian = /(?:SymbianOS)/.test(ua) || isWindowsPhone, 
+	isAndroid = /(?:Android)/.test(ua), 
+	isFireFox = /(?:Firefox)/.test(ua), 
+	isChrome = /(?:Chrome|CriOS)/.test(ua),
+	isTablet = /(?:iPad|PlayBook)/.test(ua) || (isAndroid && !/(?:Mobile)/.test(ua)) || (isFireFox && /(?:Tablet)/.test(ua)),
+	isPhone = /(?:iPhone)/.test(ua) && !isTablet,
+	isPc = !isPhone && !isAndroid && !isSymbian;
+	if (isPc) {
 		// pc
 		return false;
-	 } else {
+	} else {
 		return true;
-	 }
+	}
 }
 function confirmurl(url,message) {
 	if (typeof pc_hash == 'string') url += (url.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
@@ -128,7 +128,6 @@ function topinyin(name, from, url) {
 $(function(){
 	$(":text").addClass('input-text');
 })
-
 /**
  * 全选checkbox,注意：标识checkbox id固定为为check_box
  * @param string name 列表check名称,如 uid[]
@@ -145,6 +144,16 @@ function selectall(name) {
 			$(this).parents('tr').removeClass("active");
 		});
 	}
+}
+// 显示ip信息
+function dr_show_ip(webdir, value) {
+	$.get(webdir+'api.php?op=ip_address&value='+value, function(html){
+		layer.alert(html, {
+			shade: 0,
+			title: "",
+			icon: 1
+		})
+	}, 'text');
 }
 // 显示视频
 function dr_preview_video(file) {

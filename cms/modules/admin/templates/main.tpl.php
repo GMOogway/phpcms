@@ -22,6 +22,7 @@ defined('IN_ADMIN') or exit('No permission resources.');
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>layer/layer.js"></script>
 <style>
 .layui-card {border:1px solid #f2f2f2;border-radius:5px;}
+.ml10 {margin-left: 10px;}
 .icon {margin-right:10px;color:#1aa094;}
 .icon-cray {color:#ffb800!important;}
 .icon-blue {color:#1e9fff!important;}
@@ -33,7 +34,7 @@ defined('IN_ADMIN') or exit('No permission resources.');
 .panel {background-color:#fff;border:1px solid transparent;border-radius:3px;-webkit-box-shadow:0 1px 1px rgba(0,0,0,.05);box-shadow:0 1px 1px rgba(0,0,0,.05)}
 .panel-body {padding:10px}
 .panel-title {margin-top:0;margin-bottom:0;font-size:12px;color:inherit}
-.label {display:inline;padding:.2em .6em .3em;font-size:75%;font-weight:700;line-height:1;color:#fff;text-align:center;white-space:nowrap;vertical-align:baseline;border-radius:.25em;margin-top: .3em;}
+.label {display:inline;padding:.3em .6em .3em;font-size:75%;font-weight:700;line-height:1;color:#fff;text-align:center;white-space:nowrap;vertical-align:baseline;border-radius:.25em;margin-top: .3em;}
 .layui-red {color:red}
 .main_btn > p {height:40px;}
 .layui-bg-number {background-color:#F8F8F8;}
@@ -61,7 +62,7 @@ padding-right: 70px !important;text-overflow:ellipsis!important;overflow:hidden!
                                         <p><?php echo L('main_dear')?><span style="color:#ff0000;"><?php echo $admin_username?></span><span id="main_hello"></span></p>
                                         <p><?php echo L('main_role')?><?php echo $rolename?></p>
                                         <p><?php echo L('main_last_logintime')?><?php echo dr_date($logintime,null,'red')?></p>
-                                        <p><?php echo L('main_last_loginip')?><?php echo $loginip?></p>
+                                        <p><?php echo L('main_last_loginip')?><?php echo $loginip?><a class="label layui-bg-green ml10" href="javascript:dr_show_ip('<?php echo WEB_PATH;?>', '<?php echo $loginip;?>');"><i class="fa fa-eye" /></i> 查看</a></p>
                                     </div>
                                 </div>
                             </div>
@@ -171,7 +172,7 @@ padding-right: 70px !important;text-overflow:ellipsis!important;overflow:hidden!
                             <tbody>
                             <tr>
                                 <td>系统版本</td>
-                                <td>Cms <?php echo CMS_VERSION?> [<?php echo CMS_RELEASE?>]&nbsp;&nbsp;<a id="dr_cms_update" href="javascript:;" layuimini-content-href="?m=admin&c=cloud&a=init&menuid=276&pc_hash=<?php echo $_SESSION['pc_hash']?>" data-title="版本升级" data-icon="fa fa-refresh" style="margin-left: 10px;display: none" class="badge badge-danger badge-roundless">  </a></td>
+                                <td>Cms <?php echo CMS_VERSION?> [<?php echo CMS_RELEASE?>]&nbsp;&nbsp;<a id="dr_cms_update" href="javascript:;" layuimini-content-href="?m=admin&c=cloud&a=init&menuid=276&pc_hash=<?php echo $_SESSION['pc_hash']?>" data-title="版本升级" data-icon="fa fa-refresh" style="display: none" class="badge badge-danger badge-roundless ml10">  </a></td>
                             </tr>
                             <script>
                             $(function () {

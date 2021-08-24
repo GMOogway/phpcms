@@ -60,6 +60,36 @@
 			</td>
 		</tr>
 		<?php }?>
+		<tr>
+			<td><?php echo L('注册时间')?></td>
+			<td>
+			<?php echo dr_date($memberinfo['regdate'], null, 'red');?></a></p>
+			</td>
+		</tr>
+		<tr>
+			<td><?php echo L('上次登录')?></td>
+			<td>
+			<?php echo dr_date($memberinfo['lastdate'], null, 'red');?></a></p>
+			</td>
+		</tr>
+		<tr>
+			<td><?php echo L('登录次数')?></td>
+			<td>
+			<?php echo $memberinfo['loginnum'];?></a></p>
+			</td>
+		</tr>
+		<tr>
+			<td><?php echo L('regip')?></td>
+			<td>
+			<?php echo $memberinfo['regip'];?>&nbsp;&nbsp;<a class="btn btn-xs green" href="javascript:dr_show_ip('<?php echo WEB_PATH;?>', '<?php echo $memberinfo['regip'];?>');"><i class="fa fa-eye" /></i> <?php echo L('查看')?></a></p>
+			</td>
+		</tr>
+		<tr>
+			<td><?php echo L('lastip')?></td>
+			<td>
+			<?php echo $memberinfo['lastip'];?>&nbsp;&nbsp;<a class="btn btn-xs green" href="javascript:dr_show_ip('<?php echo WEB_PATH;?>', '<?php echo $memberinfo['lastip'];?>');"><i class="fa fa-eye" /></i> <?php echo L('查看')?></a></p>
+			</td>
+		</tr>
 		
 	</table>
 </fieldset>

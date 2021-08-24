@@ -163,9 +163,9 @@ class attachments {
 			if($this->isadmin==0 && !$grouplist[$this->groupid]['allowattachment']) showmessage(L('att_no_permission'));
 			$args = $this->input->get('args');
 			$p = dr_string2array(dr_authcode($args, 'DECODE'));
-            if (!$p) {
-                showmessage(L('attachment_parameter_error'));
-            }
+			if (!$p) {
+				showmessage(L('attachment_parameter_error'));
+			}
 			$authkey = $this->input->get('authkey');
 			foreach($p as $k=>$v) {
 				$arraykey[$k] = $v;

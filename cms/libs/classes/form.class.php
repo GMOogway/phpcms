@@ -304,28 +304,31 @@ class form {
 	public static function date($name, $value = '', $isdatetime = 0, $loadjs = 0, $showweek = 'true', $timesystem = 1, $modelid = 0, $datepicker = 0) {
 		if($value == '0000-00-00 00:00:00') $value = '';
 		$id = preg_match("/\[(.*)\]/", $name, $m) ? $m[1] : $name;
+		if($isdatetime) {
+			$size = 21;
+		} else {
+			$size = 10;
+		}
+		$str = '';
+		if($loadjs || !defined('CALENDAR_INIT')) {
+			define('CALENDAR_INIT', 1);
+			if(!$datepicker) {
+				$str .= '<link href="'.JS_PATH.'bootstrap-datepicker/css/bootstrap-datepicker3.min.css" rel="stylesheet" type="text/css" />';
+			}
+			$str .= '<link href="'.JS_PATH.'bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+			<link href="'.JS_PATH.'bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css" />
+			<script src="'.JS_PATH.'bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
+			<script src="'.JS_PATH.'bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>';
+		}
+		$model_db = pc_base::load_model('sitemodel_model');
+		$model = $model_db->get_one(array('modelid'=>$modelid));
+		$module_setting = dr_string2array($model['setting']);
+		$updatetime_select = $module_setting['updatetime_select'];
+		defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $id == 'updatetime' && $str .= '<input type="hidden" name="old_'.$id.'" value="'.$value.'">';
+		if ($value == 'SYS_TIME' || $id == 'updatetime') {
+			$value = $isdatetime ? date('Y-m-d H:i:s') : date('Y-m-d');
+		}
 		if($datepicker) {
-			if($isdatetime) {
-				$size = 21;
-			} else {
-				$size = 10;
-			}
-			$str = '';
-			if($loadjs || !defined('CALENDAR_INIT')) {
-				define('CALENDAR_INIT', 1);
-				$str .= '<link href="'.JS_PATH.'bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
-				<link href="'.JS_PATH.'bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css" />
-				<script src="'.JS_PATH.'bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
-				<script src="'.JS_PATH.'bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>';
-			}
-			$model_db = pc_base::load_model('sitemodel_model');
-			$model = $model_db->get_one(array('modelid'=>$modelid));
-			$module_setting = dr_string2array($model['setting']);
-			$updatetime_select = $module_setting['updatetime_select'];
-			defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $id == 'updatetime' && $str .= '<input type="hidden" name="old_'.$id.'" value="'.$value.'">';
-			if ($value == 'SYS_TIME' || $id == 'updatetime') {
-				$value = $isdatetime ? date('Y-m-d H:i:s') : date('Y-m-d');
-			}
 			$str .= '<div class="form-date input-group"><div class="input-group date field_date_'.$id.'"><span class="input-group-btn">
 				<button class="btn default date-set" type="button">
 					<i class="fa fa-calendar"></i>
@@ -334,86 +337,44 @@ class form {
 			$str .= '<input type="text" name="'.$name.'" id="'.$id.'" value="'.$value.'" size="'.$size.'" class="form-control" readonly></div>';
 			$str .= '</div>';
 			defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $id == 'updatetime' && $str .= '<div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="no_time"'.(isset($updatetime_select) && $updatetime_select ? ' checked' : '').' class="dr_no_time" type="checkbox" value="1" /> '.L('不更新').'<span></span></label></div>';
-			if ($isdatetime) {
-				// 日期 + 时间
-				$str.= '
-				<script type="text/javascript">
-				$(function(){
-					$(".field_date_'.$id.'").datetimepicker({
-						isRTL: false,
-						format: "yyyy-mm-dd hh:ii:ss",
-						showMeridian: true,
-						autoclose: true,
-						pickerPosition: "bottom-right",
-						todayBtn: "linked"
-					});
-				});
-				</script>
-				';
-			} else {
-				// 日期
-				$str.= '
-				<script type="text/javascript">
-				$(function(){
-					$(".field_date_'.$id.'").datepicker({
-						isRTL: false,
-						format: "yyyy-mm-dd",
-						showMeridian: true,
-						autoclose: true,
-						pickerPosition: "bottom-right",
-						todayBtn: "linked"
-					});
-				});
-				</script>
-				';
-			}
 		} else {
-			if($isdatetime) {
-				$size = 21;
-				$format = '%Y-%m-%d %H:%M:%S';
-				if($timesystem){
-					$showsTime = 'true';
-				} else {
-					$showsTime = '12';
-				}
-				
-			} else {
-				$size = 10;
-				$format = '%Y-%m-%d';
-				$showsTime = 'false';
-			}
-			$str = '';
-			if($loadjs || !defined('CALENDAR_INIT')) {
-				define('CALENDAR_INIT', 1);
-				$str .= '<link rel="stylesheet" type="text/css" href="'.JS_PATH.'calendar/jscal2.css"/>
-				<link rel="stylesheet" type="text/css" href="'.JS_PATH.'calendar/border-radius.css"/>
-				<link rel="stylesheet" type="text/css" href="'.JS_PATH.'calendar/win2k.css"/>
-				<script type="text/javascript" src="'.JS_PATH.'calendar/calendar.js"></script>
-				<script type="text/javascript" src="'.JS_PATH.'calendar/lang/en.js"></script>';
-			}
-			$model_db = pc_base::load_model('sitemodel_model');
-			$model = $model_db->get_one(array('modelid'=>$modelid));
-			$module_setting = dr_string2array($model['setting']);
-			$updatetime_select = $module_setting['updatetime_select'];
-			defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $id == 'updatetime' && $str .= '<input type="hidden" name="old_'.$id.'" value="'.$value.'">';
-			if ($value == 'SYS_TIME' || $id == 'updatetime') {
-				$value = date('Y-m-d H:i:s');
-			}
 			defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $id == 'updatetime' && $str .= '<div class="form-date">';
 			$str .= '<input type="text" name="'.$name.'" id="'.$id.'" value="'.$value.'" size="'.$size.'" class="date" readonly>';
 			defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $id == 'updatetime' && $str .= '</div>';
 			defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $id == 'updatetime' && $str .= '<div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="no_time"'.(isset($updatetime_select) && $updatetime_select ? ' checked' : '').' class="dr_no_time" type="checkbox" value="1" /> '.L('不更新').'<span></span></label></div>';
-			$str .= '<script type="text/javascript">
-				Calendar.setup({
-				weekNumbers: '.$showweek.',
-				inputField : "'.$id.'",
-				trigger    : "'.$id.'",
-				dateFormat: "'.$format.'",
-				showTime: '.$showsTime.',
-				minuteStep: 1,
-				onSelect   : function() {this.hide();}
+		}
+		if ($isdatetime) {
+			// 日期 + 时间
+			$str.= '
+			<script type="text/javascript">
+			$(function(){
+				$('.($datepicker ? '".field_date_'.$id.'"' : '"#'.$id.'"').').datetimepicker({
+					isRTL: false,
+					format: "yyyy-mm-dd hh:ii:ss",
+					showMeridian: true,
+					autoclose: true,
+					pickerPosition: "bottom-right",
+					todayBtn: "linked"
 				});
-			</script>';
+			});
+			</script>
+			';
+		} else {
+			// 日期
+			$str.= '
+			<script type="text/javascript">
+			$(function(){
+				$('.($datepicker ? '".field_date_'.$id.'"' : '"#'.$id.'"').').datepicker({
+					isRTL: false,
+					format: "yyyy-mm-dd",
+					showMeridian: true,
+					autoclose: true,
+					pickerPosition: "bottom-right",
+					todayBtn: "linked"
+				});
+			});
+			</script>
+			';
 		}
 		return $str;
 	}
