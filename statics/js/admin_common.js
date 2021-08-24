@@ -147,7 +147,7 @@ function selectall(name) {
 }
 // 显示ip信息
 function dr_show_ip(url, value) {
-	$.get(url+value, function(html){
+	$.get(url+'&value='+value, function(html){
 		layer.alert(html, {
 			shade: 0,
 			title: "",
