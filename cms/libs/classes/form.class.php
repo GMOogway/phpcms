@@ -326,7 +326,7 @@ class form {
 		$updatetime_select = $module_setting['updatetime_select'];
 		defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $id == 'updatetime' && $str .= '<input type="hidden" name="old_'.$id.'" value="'.$value.'">';
 		if ($value == 'SYS_TIME' || $id == 'updatetime') {
-			$value = $isdatetime ? date('Y-m-d H:i:s') : date('Y-m-d');
+			defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $value = $isdatetime ? date('Y-m-d H:i:s') : date('Y-m-d');
 		}
 		if($datepicker) {
 			$str .= '<div class="form-date input-group"><div class="input-group date field_date_'.$id.'"><span class="input-group-btn">
