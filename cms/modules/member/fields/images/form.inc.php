@@ -15,7 +15,12 @@
 		} else {
 			$list_str .= "<center><div class='onShow' id='nameTip'>".L('upload_pic_max', '', 'content')." <font color='red'>{$upload_number}</font> ".L('tips_pics', '', 'content')."</div></center>";
 		}
-		$string = '<input name="info['.$field.']" type="hidden" value="1">
+		if(!defined('JQUERYUI_INIT')) {
+			$string = '<link rel="stylesheet" href="'.JS_PATH.'jquery-ui/jquery-ui.min.css">
+			<script type="text/javascript" src="'.JS_PATH.'jquery-ui/jquery-ui.min.js"></script>';
+			define('JQUERYUI_INIT', 1);
+		}
+		$string .= '<input name="info['.$field.']" type="hidden" value="1">
 		<fieldset class="blue pad-10">
         <legend>'.L('pic_list').'</legend>';
 		if($show_type && defined('IN_ADMIN')) {
@@ -23,7 +28,7 @@
 		} else {
 			$string .= '<div id="'.$field.'" class="txtList">'.$list_str.'</div>';
 		}
-		$string .= '</fieldset>
+		$string .= '</fieldset><script type="text/javascript">$("#'.$field.'").sortable();</script>
 		<div class="bk10"></div>
 		';
 		if(!defined('IMAGES_INIT')) {

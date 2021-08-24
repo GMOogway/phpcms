@@ -19,7 +19,12 @@
 				}
 			}
 		}
-		$string ='<script type=text/javascript>
+		if(!defined('JQUERYUI_INIT')) {
+			$string = '<link rel="stylesheet" href="'.JS_PATH.'jquery-ui/jquery-ui.min.css">
+			<script type="text/javascript" src="'.JS_PATH.'jquery-ui/jquery-ui.min.js"></script>';
+			define('JQUERYUI_INIT', 1);
+		}
+		$string .= '<script type=text/javascript>
 		function add'.$field.'(id){
 			var html = "<tr>';
 			for($cols=1; $cols<=count($columns); $cols++){
@@ -37,11 +42,11 @@
 		foreach($columns as $column){
 			$string .="<th align='left' style='border-bottom: 1px solid #d5dfe8;'>".$column."</th>";
 		}
-		$string .="<th align='left' style='border-bottom: 1px solid #d5dfe8; width:185px;'>操作</th></tr></thead><tbody>";
+		$string .="<th align='left' style='border-bottom: 1px solid #d5dfe8; width:185px;'>操作</th></tr></thead><tbody class=\"".$field."-sortable\">";
 		$string .= $list_str;
 		$string .= "<tr id='".$field."'></tr></tbody>
 		</table></div>
-		</fieldset>
+		</fieldset><script type=\"text/javascript\">$(\".".$field."-sortable\").sortable();</script>
 		<div class='bk10'></div>";
 		$string .= "<input type=\"button\" class=\"button\" value=\"添加一行\" onclick=\"add".$field."('".$field."')\">";
 		return $string;

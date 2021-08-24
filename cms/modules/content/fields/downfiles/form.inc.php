@@ -9,11 +9,16 @@
 				}
 			}
 		}
-		$string = '<input name="info['.$field.']" type="hidden" value="1">
+		if(!defined('JQUERYUI_INIT')) {
+			$string = '<link rel="stylesheet" href="'.JS_PATH.'jquery-ui/jquery-ui.min.css">
+			<script type="text/javascript" src="'.JS_PATH.'jquery-ui/jquery-ui.min.js"></script>';
+			define('JQUERYUI_INIT', 1);
+		}
+		$string .= '<input name="info['.$field.']" type="hidden" value="1">
 		<fieldset class="blue pad-10">
         <legend>'.L('file_list').'</legend>';
 		$string .= '<ul id="'.$field.'" class="txtList">'.$list_str.'</ul>
-		</fieldset>
+		</fieldset><script type="text/javascript">$("#'.$field.'").sortable();</script>
 		<div class="bk10"></div>
 		';
 		
