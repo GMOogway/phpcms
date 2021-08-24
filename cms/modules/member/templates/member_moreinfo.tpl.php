@@ -81,13 +81,13 @@
 		<tr>
 			<td><?php echo L('regip')?></td>
 			<td>
-			<?php echo $memberinfo['regip'];?>&nbsp;&nbsp;<a class="btn btn-xs green" href="javascript:dr_show_ip('<?php echo WEB_PATH;?>', '<?php echo $memberinfo['regip'];?>');"><i class="fa fa-eye" /></i> <?php echo L('查看')?></a></p>
+			<?php echo $memberinfo['regip'];?><a class="btn btn-xs green" href="javascript:dr_show_ip('<?php echo WEB_PATH;?>api.php?op=ip_address', '<?php echo $memberinfo['regip'];?>');"><i class="fa fa-eye" /></i> <?php echo L('查看')?></a></p>
 			</td>
 		</tr>
 		<tr>
 			<td><?php echo L('lastip')?></td>
 			<td>
-			<?php echo $memberinfo['lastip'];?>&nbsp;&nbsp;<a class="btn btn-xs green" href="javascript:dr_show_ip('<?php echo WEB_PATH;?>', '<?php echo $memberinfo['lastip'];?>');"><i class="fa fa-eye" /></i> <?php echo L('查看')?></a></p>
+			<?php echo $memberinfo['lastip'];?><a class="btn btn-xs green" href="javascript:dr_show_ip('<?php echo WEB_PATH;?>api.php?op=ip_address', '<?php echo $memberinfo['lastip'];?>');"><i class="fa fa-eye" /></i> <?php echo L('查看')?></a></p>
 			</td>
 		</tr>
 		

@@ -62,7 +62,7 @@ padding-right: 70px !important;text-overflow:ellipsis!important;overflow:hidden!
                                         <p><?php echo L('main_dear')?><span style="color:#ff0000;"><?php echo $admin_username?></span><span id="main_hello"></span></p>
                                         <p><?php echo L('main_role')?><?php echo $rolename?></p>
                                         <p><?php echo L('main_last_logintime')?><?php echo dr_date($logintime,null,'red')?></p>
-                                        <p><?php echo L('main_last_loginip')?><?php echo $loginip?><a class="label layui-bg-green ml10" href="javascript:dr_show_ip('<?php echo WEB_PATH;?>', '<?php echo $loginip;?>');"><i class="fa fa-eye" /></i> 查看</a></p>
+                                        <p><?php echo L('main_last_loginip')?><?php echo $loginip?><a class="label layui-bg-green ml10" href="javascript:dr_show_ip('<?php echo WEB_PATH;?>api.php?op=ip_address', '<?php echo $loginip;?>');"><i class="fa fa-eye" /></i> 查看</a></p>
                                     </div>
                                 </div>
                             </div>

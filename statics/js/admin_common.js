@@ -146,8 +146,8 @@ function selectall(name) {
 	}
 }
 // 显示ip信息
-function dr_show_ip(webdir, value) {
-	$.get(webdir+'api.php?op=ip_address&value='+value, function(html){
+function dr_show_ip(url, value) {
+	$.get(url+value, function(html){
 		layer.alert(html, {
 			shade: 0,
 			title: "",
