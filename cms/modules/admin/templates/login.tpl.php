@@ -18,7 +18,8 @@
 </head>
 <body>
 <div class="container login">
-    <form class="layui-form layui-form-pane" action="?m=admin&c=index&a=<?php echo SYS_ADMIN_PATH;?>&dosubmit=1" method="post" id="myform" name="myform" onsubmit="return login()">
+    <form class="layui-form layui-form-pane" action="?m=admin&c=index&a=<?php echo SYS_ADMIN_PATH;?>" method="post" id="myform" name="myform" onsubmit="return login()">
+        <input name="dosubmit" type="hidden" value="1">
         <?php echo dr_form_hidden();?>
         <div id="content" class="content">
             <div id="large-header" class="large-header">
@@ -127,7 +128,7 @@ function login() {
     $('#password').val(pwd);
     $.ajax({
         type: 'post',
-        url: '?m=admin&c=index&a=<?php echo SYS_ADMIN_PATH;?>&dosubmit=1',
+        url: '?m=admin&c=index&a=<?php echo SYS_ADMIN_PATH;?>',
         data: $("#myform").serialize(),
         dataType: 'json',
         success: function(res) {

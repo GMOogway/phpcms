@@ -420,7 +420,7 @@ function dr_safe_username($string) {
  * 安全过滤密码函数
  */
 function dr_safe_password($string) {
-    return trim($string);
+	return trim($string);
 }
 /**
  * 将路径进行安全转换变量模式
@@ -469,16 +469,16 @@ function dr_array22array($a1, $a2) {
 }
 /**
  * 静态生成时权限认证字符(加密)
+ * ip 运行者ip地址
  */
-function dr_html_auth($is = 0) {
+function dr_html_auth($ip = 0) {
 	$cache = pc_base::load_sys_class('cache');
-	$name = md5(ip());
-	if ($is) {
+	if ($ip) {
 		// 存储值
-		return $cache->set_auth_data($name, 1);
+		return $cache->set_auth_data(md5('html_auth'.(strlen($ip) > 5 ? $ip : ip())), 1);
 	} else {
 		// 读取判断
-		$rt = $cache->get_auth_data($name);
+		$rt = $cache->get_auth_data(md5('html_auth'.ip()));
 		if ($rt) {
 			return 1; // 有效
 		} else {
@@ -616,22 +616,30 @@ if (!function_exists('is_php')) {
 		return $_is_php[$version];
 	}
 }
-/**
- * 清除HTML标记
- *
- * @param	string	$str
- * @return  string
- */
-function clearhtml($str) {
-	$str = str_replace(
-		array('&nbsp;', '&amp;', '&quot;', '&#039;', '&ldquo;', '&rdquo;', '&mdash;', '&lt;', '&gt;', '&middot;', '&hellip;'), array(' ', '&', '"', "'", '“', '”', '—', '<', '>', '·', '…'), $str
-	);
-	$str = preg_replace("/\<[a-z]+(.*)\>/iU", "", $str);
-	$str = preg_replace("/\<\/[a-z]+\>/iU", "", $str);
-	$str = str_replace(array(PHP_EOL, chr(13), chr(10), '&nbsp;'), '', $str);
-	$str = strip_tags($str);
+if (! function_exists('dr_clearhtml')) {
+	/**
+	 * 清除HTML标记
+	 *
+	 * @param   string  $str
+	 * @return  string
+	 */
+	function dr_clearhtml($str) {
 
-	return trim($str);
+		if (is_array($str)) {
+			return '';
+		}
+
+		$str = str_replace(
+			array('&nbsp;', '&amp;', '&quot;', '&#039;', '&ldquo;', '&rdquo;', '&mdash;', '&lt;', '&gt;', '&middot;', '&hellip;'), array(' ', '&', '"', "'", '“', '”', '—', '<', '>', '·', '…'), $str
+		);
+
+		$str = preg_replace("/\<[a-z]+(.*)\>/iU", "", $str);
+		$str = preg_replace("/\<\/[a-z]+\>/iU", "", $str);
+		$str = str_replace(array(PHP_EOL, chr(13), chr(10), '&nbsp;'), '', $str);
+		$str = strip_tags($str);
+
+		return trim($str);
+	}
 }
 /**
  * 跳转地址
@@ -2194,9 +2202,9 @@ function array_iconv($data, $input = 'gbk', $output = 'utf-8') {
  * @param  $webimg 剪切网络图片
  */
 function thumb($img, $width = 100, $height = 100 ,$water = 0, $mode = 'auto', $webimg = 0) {
-    if (!$img) {
-        return IMG_PATH.'nopic.gif';
-    }
+	if (!$img) {
+		return IMG_PATH.'nopic.gif';
+	}
 	if ($img || $webimg) {
 		// 强制缩略图水印
 		$config = siteinfo((SITEID ? SITEID : (SITE_ID ? SITE_ID : get_siteid())));
@@ -2209,7 +2217,7 @@ function thumb($img, $width = 100, $height = 100 ,$water = 0, $mode = 'auto', $w
 		return $image->thumb($img, $width, $height, $water, $mode, $webimg);
 	}
 	$file = dr_file($img);
-    return $file ? $file : IMG_PATH.'nopic.gif';
+	return $file ? $file : IMG_PATH.'nopic.gif';
 }
 
 /**
@@ -2611,14 +2619,14 @@ function dr_exit_msg($code, $msg, $data = []) {
 }
 // 兼容错误提示
 function dr_show_error($msg) {
-    if (CI_DEBUG) {
-        $url = '<p>'.FC_NOW_URL.'</p>';
-    } else {
-        $url = '';
-        $msg = '您的系统遇到了故障，请联系管理员处理';
-        http_response_code(404);
-    }
-    exit("<!DOCTYPE html><html lang=\"zh-cn\"><head><meta charset=\"utf-8\"><title>系统错误</title><style>        div.logo {            height: 200px;            width: 155px;            display: inline-block;            opacity: 0.08;            position: absolute;            top: 2rem;            left: 50%;            margin-left: -73px;        }        body {            height: 100%;            background: #fafafa;            font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;            color: #777;            font-weight: 300;        }        h1 {            font-weight: lighter;            letter-spacing: 0.8;            font-size: 3rem;            margin-top: 0;            margin-bottom: 0;            color: #222;        }        .wrap {            max-width: 1024px;            margin: 5rem auto;            padding: 2rem;            background: #fff;            text-align: center;            border: 1px solid #efefef;            border-radius: 0.5rem;            position: relative;            word-wrap:break-word;            word-break:normal;        }        pre {            white-space: normal;            margin-top: 1.5rem;        }        code {            background: #fafafa;            border: 1px solid #efefef;            padding: 0.5rem 1rem;            border-radius: 5px;            display: block;        }        p {            margin-top: 1.5rem;        }        .footer {            margin-top: 2rem;            border-top: 1px solid #efefef;            padding: 1em 2em 0 2em;            font-size: 85%;            color: #999;        }        a:active,        a:link,        a:visited {            color: #dd4814;        }</style></head><body><div class=\"wrap\"><p>{$msg}</p>    {$url}</div></body></html>");
+	if (CI_DEBUG) {
+		$url = '<p>'.FC_NOW_URL.'</p>';
+	} else {
+		$url = '';
+		$msg = '您的系统遇到了故障，请联系管理员处理';
+		http_response_code(404);
+	}
+	exit("<!DOCTYPE html><html lang=\"zh-cn\"><head><meta charset=\"utf-8\"><title>系统错误</title><style>        div.logo {            height: 200px;            width: 155px;            display: inline-block;            opacity: 0.08;            position: absolute;            top: 2rem;            left: 50%;            margin-left: -73px;        }        body {            height: 100%;            background: #fafafa;            font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;            color: #777;            font-weight: 300;        }        h1 {            font-weight: lighter;            letter-spacing: 0.8;            font-size: 3rem;            margin-top: 0;            margin-bottom: 0;            color: #222;        }        .wrap {            max-width: 1024px;            margin: 5rem auto;            padding: 2rem;            background: #fff;            text-align: center;            border: 1px solid #efefef;            border-radius: 0.5rem;            position: relative;            word-wrap:break-word;            word-break:normal;        }        pre {            white-space: normal;            margin-top: 1.5rem;        }        code {            background: #fafafa;            border: 1px solid #efefef;            padding: 0.5rem 1rem;            border-radius: 5px;            display: block;        }        p {            margin-top: 1.5rem;        }        .footer {            margin-top: 2rem;            border-top: 1px solid #efefef;            padding: 1em 2em 0 2em;            font-size: 85%;            color: #999;        }        a:active,        a:link,        a:visited {            color: #dd4814;        }</style></head><body><div class=\"wrap\"><p>{$msg}</p>    {$url}</div></body></html>");
 }
 /**
  * 提交表单默认隐藏域
@@ -3094,15 +3102,15 @@ function mtime($time){
     $now=SYS_TIME;
     $day=date('Y-m-d',$time);
     $today=date('Y-m-d');
-     
+
     $dayArr=explode('-',$day);
     $todayArr=explode('-',$today);
-     
+
     //距离的天数，这种方法超过30天则不一定准确，但是30天内是准确的，因为一个月可能是30天也可能是31天
     $days=($todayArr[0]-$dayArr[0])*365+(($todayArr[1]-$dayArr[1])*30)+($todayArr[2]-$dayArr[2]);
     //距离的秒数
     $secs=$now-$time;
-    
+
     if($todayArr[0]-$dayArr[0]>0 && $days>3){//跨年且超过3天
         return date('Y-m-d H:i:s',$time);
     }else{

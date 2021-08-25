@@ -36,7 +36,7 @@ class index extends admin {
 		$sysadmincode = isset($setting['sysadmincode']) ? (int)$setting['sysadmincode'] : '';
 		$maxloginfailedtimes = isset($setting['maxloginfailedtimes']) ? (int)$setting['maxloginfailedtimes'] : '';
 		$sysadminlogintimes = isset($setting['sysadminlogintimes']) ? (int)$setting['sysadminlogintimes'] : 10;
-		if($this->input->get('dosubmit')) {
+		if($this->input->post('dosubmit')) {
 			$username = $this->input->post('username') && trim($this->input->post('username')) ? trim($this->input->post('username')) : dr_json(0, L('nameerror'));
 			if (!$sysadmincode) {
 				$code = $this->input->post('code') && trim($this->input->post('code')) ? trim($this->input->post('code')) : dr_json(0, L('input_code'));
