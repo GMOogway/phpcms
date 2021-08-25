@@ -312,9 +312,6 @@ class form {
 		$str = '';
 		if($loadjs || !defined('CALENDAR_INIT')) {
 			define('CALENDAR_INIT', 1);
-			if(!$datepicker) {
-				$str .= '<link href="'.JS_PATH.'bootstrap-datepicker/css/bootstrap-datepicker3.min.css" rel="stylesheet" type="text/css" />';
-			}
 			$str .= '<link href="'.JS_PATH.'bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
 			<link href="'.JS_PATH.'bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css" />
 			<script src="'.JS_PATH.'bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
@@ -338,9 +335,13 @@ class form {
 			$str .= '</div>';
 			defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $id == 'updatetime' && $str .= '<div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="no_time"'.(isset($updatetime_select) && $updatetime_select ? ' checked' : '').' class="dr_no_time" type="checkbox" value="1" /> '.L('不更新').'<span></span></label></div>';
 		} else {
-			defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $id == 'updatetime' && $str .= '<div class="form-date">';
-			$str .= '<input type="text" name="'.$name.'" id="'.$id.'" value="'.$value.'" size="'.$size.'" class="date" readonly>';
-			defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $id == 'updatetime' && $str .= '</div>';
+			$str .= '<span class="form-date input-group"><span class="input-group date field_date_'.$id.'"><span class="input-group-btn">
+				<button class="btn default date-set" type="button">
+					<i class="fa fa-calendar"></i>
+				</button>
+			</span>';
+			$str .= '<input type="text" name="'.$name.'" id="'.$id.'" value="'.$value.'" size="'.$size.'" class="form-control" readonly></span>';
+			$str .= '</span>';
 			defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $id == 'updatetime' && $str .= '<div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="no_time"'.(isset($updatetime_select) && $updatetime_select ? ' checked' : '').' class="dr_no_time" type="checkbox" value="1" /> '.L('不更新').'<span></span></label></div>';
 		}
 		if ($isdatetime) {
@@ -348,7 +349,7 @@ class form {
 			$str.= '
 			<script type="text/javascript">
 			$(function(){
-				$('.($datepicker ? '".field_date_'.$id.'"' : '"#'.$id.'"').').datetimepicker({
+				$(".field_date_'.$id.'").datetimepicker({
 					isRTL: false,
 					format: "yyyy-mm-dd hh:ii:ss",
 					showMeridian: true,
@@ -364,7 +365,7 @@ class form {
 			$str.= '
 			<script type="text/javascript">
 			$(function(){
-				$('.($datepicker ? '".field_date_'.$id.'"' : '"#'.$id.'"').').datepicker({
+				$(".field_date_'.$id.'").datepicker({
 					isRTL: false,
 					format: "yyyy-mm-dd",
 					showMeridian: true,

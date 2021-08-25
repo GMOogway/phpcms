@@ -10,7 +10,7 @@
 * {-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;}
 .list_order {text-align: left;}
 .btn-group {margin-left: 10px;}
-.measure-input, input.date, input.endDate, .input-focus, #fileext, #keyword, #search {height: 32px;line-height: 32px;}
+#search {height: 32px;line-height: 32px;}
 .layui-input, .layui-laypage-btn {color: #000000;}
 </style>
 <script type="text/javascript" src="<?php echo JS_PATH;?>layui/layui.js"></script>
@@ -25,14 +25,14 @@
     </blockquote>
     <div class="demoTable" id="searchid" style="display:none;">
         <?php echo L('uploadtime');?>：
-        <?php echo form::date('start_uploadtime',$start_uploadtime)?><?php echo L('to')?><?php echo form::date('end_uploadtime',$end_uploadtime)?>
+        <?php echo form::date('start_uploadtime',$start_uploadtime)?><?php echo L('to')?>&nbsp;&nbsp;<?php echo form::date('end_uploadtime',$end_uploadtime)?>
         <?php echo L('filetype')?>
         <div class="layui-inline">
-            <input class="layui-input" name="fileext" id="fileext" <?php if(isset($fileext)) echo $fileext;?> placeholder="<?php echo L('filetype')?>">
+            <input class="input-text" name="fileext" id="fileext" <?php if(isset($fileext)) echo $fileext;?> placeholder="<?php echo L('filetype')?>">
         </div>        
         <?php echo L('name')?>
         <div class="layui-inline">
-            <input class="layui-input" name="keyword" id="keyword" <?php if(isset($keyword)) echo $keyword;?> placeholder="<?php echo L('name')?>">
+            <input class="input-text" name="keyword" id="keyword" <?php if(isset($keyword)) echo $keyword;?> placeholder="<?php echo L('name')?>">
         </div>
         <button class="layui-btn" id="search" data-type="reload"><i class="fa fa-search"></i> <?php echo L('search');?></button>
         <div style="clear: both;"></div>
@@ -110,8 +110,8 @@ layui.use(['table'], function(){
         }else{
             $.ajax({
                 type: 'post',
-                url: '?m=attachment&c=manage&a=update&dosubmit=1&pc_hash='+pc_hash,
-                data: {aid:data.aid,field:field,value:value},
+                url: '?m=attachment&c=manage&a=update&pc_hash='+pc_hash,
+                data: {aid:data.aid,field:field,value:value,dosubmit:1},
                 dataType: 'json',
                 success: function(res) {
                     if (res.code == 1) {

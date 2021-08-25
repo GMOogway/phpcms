@@ -65,7 +65,7 @@ include $this->admin_tpl('header');?>
                         <label class="col-md-2 control-label"> <?php echo L('sizelimit')?> </label>
                         <div class="col-md-9">
                             <label><input type="text" name="sizelimit" value="2048"></label>
-                            <span class="help-block">K</span>
+                            <span class="help-block">KB&nbsp;&nbsp;&nbsp;&nbsp;<?php echo L('提示：1 M = 1024 KB')?></span>
                         </div>
                     </div>
                     <div class="form-group row">

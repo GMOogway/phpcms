@@ -91,7 +91,7 @@ class manage extends admin {
 	 * 更新
 	 */
 	public function update() {
-		if($this->input->get('dosubmit')) {
+		if($this->input->post('dosubmit')) {
 			$this->db->update(array($this->input->post('field')=>$this->input->post('value')),array('aid'=>$this->input->post('aid')));
 			dr_json(1, L('operation_success'));
 		} else {

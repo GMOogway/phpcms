@@ -9,7 +9,7 @@ include $this->admin_tpl('header','admin');?>
 * {-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;}
 .list_order {text-align: left;}
 .btn-group {margin-left: 10px;}
-.measure-input, input.date, input.endDate, .input-focus, #keyword, #search {height: 32px;line-height: 32px;}
+#search {height: 32px;line-height: 32px;}
 .layui-input, .layui-laypage-btn {color: #000000;}
 </style>
 <script type="text/javascript" src="<?php echo JS_PATH;?>layui/layui.js"></script>
@@ -39,7 +39,7 @@ include $this->admin_tpl('header','admin');?>
     </blockquote>
     <div class="demoTable" id="searchid" style="display:none;">
         <?php echo L('addtime');?>：
-        <?php echo form::date('start_time',$this->input->get('start_time'),0,0,'false');?>- &nbsp;<?php echo form::date('end_time',$this->input->get('end_time'),0,0,'false');?>
+        <?php echo form::date('start_time',$this->input->get('start_time'),0,0,'false');?>-&nbsp;&nbsp;<?php echo form::date('end_time',$this->input->get('end_time'),0,0,'false');?>
                 <select id="posids" name="posids"><option value='' <?php if($this->input->get('posids')=='') echo 'selected';?>><?php echo L('all');?></option>
                 <option value="1" <?php if($this->input->get('posids')==1) echo 'selected';?>><?php echo L('elite');?></option>
                 <option value="2" <?php if($this->input->get('posids')==2) echo 'selected';?>><?php echo L('no_elite');?></option>
@@ -51,7 +51,7 @@ include $this->admin_tpl('header','admin');?>
                     <option value='3' <?php if($this->input->get('searchtype')==3) echo 'selected';?>>ID</option>
                 </select>
         <div class="layui-inline">
-            <input class="layui-input" name="keyword" id="keyword" <?php if(isset($keyword)) echo $keyword;?> placeholder="请输入关键字">
+            <input class="input-text" name="keyword" id="keyword" <?php if(isset($keyword)) echo $keyword;?> placeholder="请输入关键字">
         </div>
         <button class="layui-btn" id="search" data-type="reload"><i class="fa fa-search"></i> <?php echo L('search');?></button>
         <div style="clear: both;"></div>
@@ -170,8 +170,8 @@ layui.use(['table'], function(){
         }else{
             $.ajax({
                 type: 'post',
-                url: '?m=content&c=content&a=update&dosubmit=1&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&pc_hash='+pc_hash,
-                data: {id:data.id,field:field,value:value},
+                url: '?m=content&c=content&a=update&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&pc_hash='+pc_hash,
+                data: {id:data.id,field:field,value:value,dosubmit:1},
                 dataType: 'json',
                 success: function(res) {
                     if (res.code == 1) {
@@ -191,8 +191,8 @@ layui.use(['table'], function(){
         var loading = layer.load(1, {shade: [0.1, '#fff']});
         $.ajax({
             type: 'post',
-            url: '?m=content&c=content&a=listorder&dosubmit=1&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&pc_hash='+pc_hash,
-            data: {id:id,listorder:listorder},
+            url: '?m=content&c=content&a=listorder&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&pc_hash='+pc_hash,
+            data: {id:id,listorder:listorder,dosubmit:1},
             dataType: 'json',
             success: function(res) {
                 layer.close(loading);
@@ -219,8 +219,8 @@ layui.use(['table'], function(){
                 var loading = layer.load(1, {shade: [0.1, '#fff']});
                 $.ajax({
                     type: 'post',
-                    url: '?m=content&c=content&a=delete&dosubmit=1&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&pc_hash='+pc_hash,
-                    data: {ids: ids},
+                    url: '?m=content&c=content&a=delete&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&pc_hash='+pc_hash,
+                    data: {ids: ids,dosubmit:1},
                     dataType: 'json',
                     success: function(res) {
                         layer.close(loading);
@@ -249,8 +249,8 @@ layui.use(['table'], function(){
                 var loading = layer.load(1, {shade: [0.1, '#fff']});
                 $.ajax({
                     type: 'post',
-                    url: '?m=content&c=content&a=recycle&dosubmit=1&recycle=1&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&pc_hash='+pc_hash,
-                    data: {ids: ids},
+                    url: '?m=content&c=content&a=recycle&recycle=1&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&pc_hash='+pc_hash,
+                    data: {ids: ids,dosubmit:1},
                     dataType: 'json',
                     success: function(res) {
                         layer.close(loading);

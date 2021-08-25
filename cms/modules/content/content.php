@@ -662,7 +662,7 @@ class content extends admin {
 	 * 删除
 	 */
 	public function delete() {
-		if($this->input->get('dosubmit')) {
+		if($this->input->post('dosubmit')) {
 			$catid = intval($this->input->get('catid'));
 			if(!$catid) dr_json(0, L('missing_part_parameters'));
 			$modelid = $this->categorys[$catid]['modelid'];
@@ -774,7 +774,7 @@ class content extends admin {
 	 * 更新
 	 */
 	public function recycle() {
-		if($this->input->get('dosubmit')) {
+		if($this->input->post('dosubmit')) {
 			$catid = intval($this->input->get('catid'));
 			$recycle = intval($this->input->get('recycle'));
 			if($this->input->post('id')) {
@@ -803,7 +803,7 @@ class content extends admin {
 	 * 更新
 	 */
 	public function update() {
-		if($this->input->get('dosubmit')) {
+		if($this->input->post('dosubmit')) {
 			$catid = intval($this->input->get('catid'));
 			if ($catid) {
 				$modelid = $this->categorys[$catid]['modelid'];
@@ -925,7 +925,7 @@ class content extends admin {
 	 * 排序
 	 */
 	public function listorder() {
-		if($this->input->get('dosubmit')) {
+		if($this->input->post('dosubmit')) {
 			$catid = intval($this->input->get('catid'));
 			if(!$catid) dr_json(0, L('missing_part_parameters'));
 			$modelid = $this->categorys[$catid]['modelid'];

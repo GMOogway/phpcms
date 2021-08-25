@@ -75,7 +75,7 @@ class menu extends admin {
 		}
 	}
 	function delete() {
-		if($this->input->get('dosubmit')) {
+		if($this->input->post('dosubmit')) {
 			$id = intval($this->input->post('id'));
 			$this->delete_child($id);
 			$this->db->delete(array('id'=>$id));
@@ -218,10 +218,8 @@ class menu extends admin {
 	 * 更新
 	 */
 	function display() {
-		if($this->input->get('dosubmit')) {
-			if ($this->input->post('display')) {
-				$this->db->update(array('display'=>$this->input->post('display')),array('id'=>$this->input->post('id')));
-			}
+		if($this->input->post('dosubmit')) {
+			$this->db->update(array('display'=>$this->input->post('display')),array('id'=>$this->input->post('id')));
 			dr_json(1, L('operation_success'));
 		} else {
 			dr_json(0, L('operation_failure'));
@@ -232,7 +230,7 @@ class menu extends admin {
 	 * 排序
 	 */
 	function listorder() {
-		if($this->input->get('dosubmit')) {
+		if($this->input->post('dosubmit')) {
 			$this->db->update(array('listorder'=>$this->input->post('listorder')),array('id'=>$this->input->post('id')));
 			dr_json(1, L('operation_success'));
 		} else {

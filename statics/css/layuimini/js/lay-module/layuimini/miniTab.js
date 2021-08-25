@@ -381,6 +381,9 @@ layui.define(["element", "layer", "jquery"], function (exports) {
                     } else {
                         miniTab.listenSwitchSingleModule(tabId);
                     }
+                    if ($(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.treemain) {
+                        $(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.treemain.location.reload();
+                    }
                 }
                 miniTab.rollPosition();
             });

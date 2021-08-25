@@ -55,7 +55,7 @@ include $this->admin_tpl('header');?>
         var $=layui.jquery;
         treeGrid = layui.treeGrid;
         layer=layui.layer;
-		form = layui.form;
+        form = layui.form;
         ptable=treeGrid.render({
             id:tableId
             ,elem: '#'+tableId
@@ -77,18 +77,31 @@ include $this->admin_tpl('header');?>
                 {field: 'icon',align: 'center', title: '<?php echo L('菜单图标')?>', width: 100,toolbar: '#icon'},
                 {field: 'display',align: 'center', title: '<?php echo L('menu_display')?>', width: 150,toolbar: '#display'},
                 {field: 'listorder',align: 'center', title: '<?php echo L('listorder');?>', width: 80, templet: '#listorder'},
+                {
+                    field: 'type', width: 80, align: 'center', title: '<?php echo L('类型');?>', templet: function (d) {
+                        if (d.pid == 0) {
+                            return '<span class="layui-badge layui-bg-blue"><?php echo L('目录');?></span>';
+                        } else {
+                            if (d.display == 0) {
+                                return '<span class="layui-badge layui-bg-gray"><?php echo L('按钮');?></span>';
+                            } else {
+                                return '<span class="layui-badge layui-bg-cyan"><?php echo L('菜单');?></span>';
+                            }
+                        }
+                    }
+                },
                 {field: 'manage',title: '<?php echo L('operations_manage');?>',width: 240,align: 'center', toolbar: '#action'<?php if(!is_mobile(0)) {?>, fixed: 'right'<?php }?>}
             ]]
             ,page:false
         });
         treeGrid.on('tool('+tableId+')',function (obj) {
-			var data = obj.data;
+            var data = obj.data;
             if(obj.event === 'del'){
                 Dialog.confirm('您确定要删除该记录吗？', function() {
                     $.ajax({
                         type: 'post',
-                        url: '?m=admin&c=menu&a=delete&dosubmit=1&pc_hash='+pc_hash,
-                        data: {id:data.id},
+                        url: '?m=admin&c=menu&a=delete&pc_hash='+pc_hash,
+                        data: {id:data.id,dosubmit:1},
                         dataType: 'json',
                         success: function(res) {
                             if (res.code == 1) {
@@ -108,8 +121,8 @@ include $this->admin_tpl('header');?>
             var display = obj.elem.checked===true?1:0;
             $.ajax({
                 type: 'post',
-                url: '?m=admin&c=menu&a=display&dosubmit=1&pc_hash='+pc_hash,
-                data: {id:id,display:display},
+                url: '?m=admin&c=menu&a=display&pc_hash='+pc_hash,
+                data: {id:id,display:display,dosubmit:1},
                 dataType: 'json',
                 success: function(res) {
                     layer.close(loading);
@@ -131,8 +144,8 @@ include $this->admin_tpl('header');?>
             var loading = layer.load(1, {shade: [0.1, '#fff']});
             $.ajax({
                 type: 'post',
-                url: '?m=admin&c=menu&a=listorder&dosubmit=1&pc_hash='+pc_hash,
-                data: {id:id,listorder:listorder},
+                url: '?m=admin&c=menu&a=listorder&pc_hash='+pc_hash,
+                data: {id:id,listorder:listorder,dosubmit:1},
                 dataType: 'json',
                 success: function(res) {
                     layer.close(loading);

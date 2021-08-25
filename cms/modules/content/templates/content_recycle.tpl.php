@@ -9,7 +9,7 @@ include $this->admin_tpl('header','admin');?>
 * {-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;}
 .list_order {text-align: left;}
 .btn-group {margin-left: 10px;}
-.measure-input, input.date, input.endDate, .input-focus, #keyword, #search {height: 32px;line-height: 32px;}
+#search {height: 32px;line-height: 32px;}
 .layui-input, .layui-laypage-btn {color: #000000;}
 </style>
 <script type="text/javascript" src="<?php echo JS_PATH;?>layui/layui.js"></script>
@@ -27,7 +27,7 @@ include $this->admin_tpl('header','admin');?>
     </blockquote>
     <div class="demoTable" id="searchid" style="display:none;">
         <?php echo L('addtime');?>：
-        <?php echo form::date('start_time',$this->input->get('start_time'),0,0,'false');?>- &nbsp;<?php echo form::date('end_time',$this->input->get('end_time'),0,0,'false');?>
+        <?php echo form::date('start_time',$this->input->get('start_time'),0,0,'false');?>-&nbsp;&nbsp;<?php echo form::date('end_time',$this->input->get('end_time'),0,0,'false');?>
                 <select id="posids" name="posids"><option value='' <?php if($this->input->get('posids')=='') echo 'selected';?>><?php echo L('all');?></option>
                 <option value="1" <?php if($this->input->get('posids')==1) echo 'selected';?>><?php echo L('elite');?></option>
                 <option value="2" <?php if($this->input->get('posids')==2) echo 'selected';?>><?php echo L('no_elite');?></option>
@@ -39,7 +39,7 @@ include $this->admin_tpl('header','admin');?>
                     <option value='3' <?php if($this->input->get('searchtype')==3) echo 'selected';?>>ID</option>
                 </select>
         <div class="layui-inline">
-            <input class="layui-input" name="keyword" id="keyword" <?php if(isset($keyword)) echo $keyword;?> placeholder="请输入关键字">
+            <input class="input-text" name="keyword" id="keyword" <?php if(isset($keyword)) echo $keyword;?> placeholder="请输入关键字">
         </div>
         <button class="layui-btn" id="search" data-type="reload"><i class="fa fa-search"></i> <?php echo L('search');?></button>
         <div style="clear: both;"></div>
