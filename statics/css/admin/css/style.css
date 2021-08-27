@@ -638,7 +638,7 @@ form .portlet.light .portlet-body {padding-top: 20px;padding-bottom: 20px;}
 .datepicker-dropdown {z-index: 999!important;}
 .datepicker-dropdown .datepicker-days {display: block;}
 .datepicker-dropdown .datepicker-days .table-condensed > tbody > tr > td, .datepicker-dropdown .datepicker-days .table-condensed > tbody > tr > th, .datepicker-dropdown .datepicker-days .table-condensed > tfoot > tr > td, .datepicker-dropdown .datepicker-days .table-condensed > tfoot > tr > th, .datepicker-dropdown .datepicker-days .table-condensed > thead > tr > td, .datepicker-dropdown .datepicker-days .table-condensed > thead > tr > th {padding: 5px;}
-.dropdown-menu {position: absolute;top: 100%;left: 0;display: none;float: left;min-width: 160px;padding: 5px 0;margin: 2px 0 0;font-size: 14px;text-align: left;list-style: none;background-color: #fff;background-clip: padding-box;border: 1px solid #ccc;border: 1px solid rgba(0,0,0,.15);border-radius: 4px;-webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);box-shadow: 0 6px 12px rgba(0,0,0,.175);}
+.dropdown-menu{position:absolute;top:100%;left:0;z-index:1000;display:none;float:left;min-width:160px;padding:5px 0;margin:2px 0 0;font-size:14px;text-align:left;list-style:none;background-color:#fff;background-clip:padding-box;border:1px solid #ccc;border:1px solid rgba(0,0,0,.15);border-radius:4px;-webkit-box-shadow:0 6px 12px rgba(0,0,0,.175);box-shadow:0 6px 12px rgba(0,0,0,.175);}
 .open>.dropdown-menu {display: block;}
 .open>a {outline: 0;}
 .bootstrap-select .dropdown-menu {z-index: 9999!important;}
