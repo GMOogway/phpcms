@@ -641,7 +641,6 @@ form .portlet.light .portlet-body {padding-top: 20px;padding-bottom: 20px;}
 .dropdown-menu{position:absolute;top:100%;left:0;z-index:1000;display:none;float:left;min-width:160px;padding:5px 0;margin:2px 0 0;font-size:14px;text-align:left;list-style:none;background-color:#fff;background-clip:padding-box;border:1px solid #ccc;border:1px solid rgba(0,0,0,.15);border-radius:4px;-webkit-box-shadow:0 6px 12px rgba(0,0,0,.175);box-shadow:0 6px 12px rgba(0,0,0,.175);}
 .open>.dropdown-menu {display: block;}
 .open>a {outline: 0;}
-.bootstrap-select .dropdown-menu {z-index: 9999!important;}
 @media (min-width:992px) {
 	.col-md-1,.col-md-10,.col-md-11,.col-md-12,.col-md-2,.col-md-3,.col-md-4,.col-md-5,.col-md-6,.col-md-7,.col-md-8,.col-md-9 {
 		float: left;
