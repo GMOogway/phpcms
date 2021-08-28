@@ -2,11 +2,10 @@
 defined('IN_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');?>
 <link rel="stylesheet" href="<?php echo CSS_PATH;?>bootstrap/css/bootstrap.min.css" media="all" />
-<link rel="stylesheet" type="text/css" href="<?php echo JS_PATH;?>calendar/jscal2.css"/>
-<link rel="stylesheet" type="text/css" href="<?php echo JS_PATH;?>calendar/border-radius.css"/>
-<link rel="stylesheet" type="text/css" href="<?php echo JS_PATH;?>calendar/win2k.css"/>
-<script type="text/javascript" src="<?php echo JS_PATH;?>calendar/calendar.js"></script>
-<script type="text/javascript" src="<?php echo JS_PATH;?>calendar/lang/en.js"></script>
+<link href="<?php echo JS_PATH;?>bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo JS_PATH;?>bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css" />
+<script src="<?php echo JS_PATH;?>bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
+<script src="<?php echo JS_PATH;?>bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 $(function(){
 	$(":text").removeClass('input-text');
@@ -103,28 +102,30 @@ $(function(){
                             <div class="input-group input-daterange">
                                 <input type="text" placeholder="<?php echo L('按发布时间范围');?>" class="form-control" value="" name="fromdate" id="fromdate">
                                 <script type="text/javascript">
-                                    Calendar.setup({
-                                    weekNumbers: true,
-                                    inputField : "fromdate",
-                                    trigger    : "fromdate",
-                                    dateFormat: "%Y-%m-%d",
-                                    showTime: false,
-                                    minuteStep: 1,
-                                    onSelect   : function() {this.hide();}
+                                $(function(){
+                                    $("#fromdate").datepicker({
+                                        isRTL: false,
+                                        format: "yyyy-mm-dd",
+                                        showMeridian: true,
+                                        autoclose: true,
+                                        pickerPosition: "bottom-right",
+                                        todayBtn: "linked"
                                     });
+                                });
                                 </script>
                                 <span class="input-group-addon"> <?php echo L('到');?> </span>
                                 <input type="text" placeholder="<?php echo L('按发布时间范围');?>" class="form-control" value="" name="todate" id="todate">
                                 <script type="text/javascript">
-                                    Calendar.setup({
-                                    weekNumbers: true,
-                                    inputField : "todate",
-                                    trigger    : "todate",
-                                    dateFormat: "%Y-%m-%d",
-                                    showTime: false,
-                                    minuteStep: 1,
-                                    onSelect   : function() {this.hide();}
+                                $(function(){
+                                    $("#todate").datepicker({
+                                        isRTL: false,
+                                        format: "yyyy-mm-dd",
+                                        showMeridian: true,
+                                        autoclose: true,
+                                        pickerPosition: "bottom-right",
+                                        todayBtn: "linked"
                                     });
+                                });
                                 </script>
                             </div>
                         </div>

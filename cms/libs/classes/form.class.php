@@ -331,17 +331,17 @@ class form {
 					<i class="fa fa-calendar"></i>
 				</button>
 			</span>';
-			$str .= '<input type="text" name="'.$name.'" id="'.$id.'" value="'.$value.'" size="'.$size.'" class="form-control" readonly></div>';
+			$str .= '<input type="text" name="'.$name.'" id="'.$id.'" value="'.$value.'" size="'.$size.'" class="form-control"></div>';
 			$str .= '</div>';
 			defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $id == 'updatetime' && $str .= '<div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="no_time"'.(isset($updatetime_select) && $updatetime_select ? ' checked' : '').' class="dr_no_time" type="checkbox" value="1" /> '.L('不更新').'<span></span></label></div>';
 		} else {
-			$str .= '<span class="form-date input-group"><span class="input-group date field_date_'.$id.'"><span class="input-group-btn">
+			$str .= '<div class="formdate"><div class="form-date input-group"><div class="input-group date field_date_'.$id.'"><span class="input-group-btn">
 				<button class="btn default date-set" type="button">
 					<i class="fa fa-calendar"></i>
 				</button>
 			</span>';
-			$str .= '<input type="text" name="'.$name.'" id="'.$id.'" value="'.$value.'" size="'.$size.'" class="form-control" readonly></span>';
-			$str .= '</span>';
+			$str .= '<input type="text" name="'.$name.'" id="'.$id.'" value="'.$value.'" size="'.$size.'" class="form-control"></div>';
+			$str .= '</div></div>';
 			defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $id == 'updatetime' && $str .= '<div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="no_time"'.(isset($updatetime_select) && $updatetime_select ? ' checked' : '').' class="dr_no_time" type="checkbox" value="1" /> '.L('不更新').'<span></span></label></div>';
 		}
 		if ($isdatetime) {
