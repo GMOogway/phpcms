@@ -100,7 +100,7 @@ class input {
     public function page($url, $total, $size = 10, $cur_page = '', $first_url = '') {
 
         $page = pc_base::load_sys_class('page');
-        if (defined('IS_ADMIN') && IS_ADMIN && defined('IN_ADMIN') && IN_ADMIN) {
+        if (defined('IS_ADMIN') && IS_ADMIN && defined('IN_ADMIN') && IN_ADMIN && strpos($url, '.php')) {
             // 使用后台分页规则
             $config = require CACHE_PATH.'configs/apage.php';
         } else {

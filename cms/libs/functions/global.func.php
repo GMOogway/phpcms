@@ -1493,16 +1493,18 @@ function pages($num, $curr_page, $perpage = 20, $urlrule = '', $array = array(),
 	} elseif($urlrule == '') {
 		$urlrule = url_par('page={$page}');
 	}
-	$urlrules = explode('~', $urlrule);
-	$first_url = $urlrules[0];
-	$findme = array();
-	$replaceme = array();
-	if (is_array($array)) foreach ($array as $k=>$v) {
-		$findme[] = '{$'.$k.'}';
-		$replaceme[] = $v;
+	if(strpos($urlrule, '~')) {
+		$urlrules = explode('~', $urlrule);
+		$first_url = $urlrules[0];
+		$findme = array();
+		$replaceme = array();
+		if (is_array($array)) foreach ($array as $k=>$v) {
+			$findme[] = '{$'.$k.'}';
+			$replaceme[] = $v;
+		}
+		$first_url = str_replace($findme, $replaceme, $first_url);
+		$first_url = str_replace(array('http://','https://','//','~'), array('~','~','/',SITE_PROTOCOL), $first_url);
 	}
-	$first_url = str_replace($findme, $replaceme, $first_url);
-	$first_url = str_replace(array('http://','https://','//','~'), array('~','~','/',SITE_PROTOCOL), $first_url);
 	$multipage = '';
 	if($num > $perpage) {
 		$pages = ceil($num / $perpage);
@@ -1544,16 +1546,18 @@ function mobilepages($num, $curr_page, $perpage = 20, $urlrule = '', $array = ar
 			//$mobile_root = pc_base::load_config('system','mobile_root');
 		//}
 	}
-	$urlrules = explode('~', $urlrule);
-	$first_url = $mobile_root.$urlrules[0];
-	$findme = array();
-	$replaceme = array();
-	if (is_array($array)) foreach ($array as $k=>$v) {
-		$findme[] = '{$'.$k.'}';
-		$replaceme[] = $v;
+	if(strpos($urlrule, '~')) {
+		$urlrules = explode('~', $urlrule);
+		$first_url = $mobile_root.$urlrules[0];
+		$findme = array();
+		$replaceme = array();
+		if (is_array($array)) foreach ($array as $k=>$v) {
+			$findme[] = '{$'.$k.'}';
+			$replaceme[] = $v;
+		}
+		$first_url = str_replace($findme, $replaceme, $first_url);
+		$first_url = str_replace(array('http://','https://','//','~'), array('~','~','/',SITE_PROTOCOL), $first_url);
 	}
-	$first_url = str_replace($findme, $replaceme, $first_url);
-	$first_url = str_replace(array('http://','https://','//','~'), array('~','~','/',SITE_PROTOCOL), $first_url);
 	$multipage = '';
 	if($num > $perpage) {
 		$pages = ceil($num / $perpage);
