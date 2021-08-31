@@ -10,4 +10,4 @@ CREATE TABLE `cms_vote_data` (
   KEY `subjectid` (`subjectid`),
   KEY `userid` (`userid`),
   KEY `ip` (`ip`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;

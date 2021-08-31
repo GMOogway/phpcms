@@ -616,14 +616,14 @@ if (!function_exists('is_php')) {
 		return $_is_php[$version];
 	}
 }
-if (! function_exists('dr_clearhtml')) {
+if (! function_exists('clearhtml')) {
 	/**
 	 * 清除HTML标记
 	 *
 	 * @param   string  $str
 	 * @return  string
 	 */
-	function dr_clearhtml($str) {
+	function clearhtml($str) {
 
 		if (is_array($str)) {
 			return '';

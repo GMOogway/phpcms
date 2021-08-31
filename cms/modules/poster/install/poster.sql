@@ -15,4 +15,4 @@ CREATE TABLE IF NOT EXISTS `cms_poster` (
   `disabled` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `spaceid` (`spaceid`,`siteid`,`disabled`,`listorder`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;

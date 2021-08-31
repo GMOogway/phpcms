@@ -11,4 +11,4 @@ CREATE TABLE `cms_sms_report` (
   `ip` varchar(15) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `mobile` (`mobile`,`posttime`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;

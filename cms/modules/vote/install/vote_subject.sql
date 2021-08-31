@@ -24,4 +24,4 @@ CREATE TABLE `cms_vote_subject` (
   KEY `enabled` (`enabled`),
   KEY `fromdate` (`fromdate`,`todate`),
   KEY `todate` (`todate`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;

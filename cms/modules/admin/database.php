@@ -154,6 +154,10 @@ class database extends admin {
 			$structure = $structure['Create Table'];
 			$show_header = true;
 			include $this->admin_tpl('database_structure');
+		} elseif ($tables && $operation == 'show') {
+			$structure = $this->db->query("SHOW FULL COLUMNS FROM $tables");
+			$show_header = true;
+			include $this->admin_tpl('database_show');
 		} elseif ($tables && $operation == 'ut') {
 			foreach ($this->input->post('tables') as $table) {
 				$this->db->query('ALTER TABLE `'.$table.'` DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;');
@@ -206,7 +210,7 @@ class database extends admin {
 		$other = array();
 		foreach($tables as $table) {
 			$name = $table['Name'];
-			$row = array('name'=>$name,'rows'=>$table['Rows'],'size'=>$table['Data_length']+$row['Index_length'],'engine'=>$table['Engine'],'data_free'=>$table['Data_free'],'collation'=>$table['Collation']);
+			$row = array('name'=>$name,'comment'=>$table['Comment'],'rows'=>$table['Rows'],'size'=>$table['Data_length']+$table['Index_length'],'engine'=>$table['Engine'],'data_free'=>$table['Data_free'],'collation'=>$table['Collation'],'updatetime'=>strtotime($table['Update_time']));
 			if(strpos($name, $tablepre) === 0) {
 				$cms[] = $row;
 			} else {

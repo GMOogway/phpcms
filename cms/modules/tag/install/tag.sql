@@ -13,4 +13,4 @@ CREATE TABLE IF NOT EXISTS `cms_tag` (
   `cache` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `num` smallint(5) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) TYPE=MyISAM ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;

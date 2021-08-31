@@ -9,4 +9,4 @@ CREATE TABLE `phpcms_import` (
   `lastinputtime` int(10) default NULL,
   `status` smallint(2) default '1',
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;

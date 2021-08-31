@@ -8,4 +8,4 @@ CREATE TABLE `cms_vote_option` (
   `listorder` tinyint(2) unsigned DEFAULT '0',
   PRIMARY KEY (`optionid`),
   KEY `subjectid` (`subjectid`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;

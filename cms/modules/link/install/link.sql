@@ -15,4 +15,4 @@ CREATE TABLE `cms_link` (
   `addtime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`linkid`),
   KEY `typeid` (`typeid`,`passed`,`listorder`,`linkid`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;

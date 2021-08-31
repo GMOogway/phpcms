@@ -15,5 +15,5 @@ CREATE TABLE `cms_fclient` (
   KEY `uid` (`uid`),
   KEY `endtime` (`endtime`),
   KEY `inputtime` (`inputtime`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 INSERT INTO `cms_member_menu` VALUES ('', 'website', '0', 'fclient', 'member', 'init', 't=3', '0', '1', '', '');

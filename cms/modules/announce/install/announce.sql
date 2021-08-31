@@ -14,4 +14,4 @@ CREATE TABLE IF NOT EXISTS `cms_announce` (
   `show_template` char(30) NOT NULL,
   PRIMARY KEY (`aid`),
   KEY `siteid` (`siteid`,`passed`,`endtime`)
-) TYPE=MyISAM ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;

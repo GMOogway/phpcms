@@ -112,7 +112,7 @@ if(is_array($infos)){
            <th width="180"><?php echo L('database_char')?></th>
            <th width="100"><?php echo L('database_records')?></th>
            <th width="150"><?php echo L('database_size')?></th>
-           <th width="150"><?php echo L('database_block')?></th>
+           <th width="180"><?php echo L('updatetime')?></th>
            <th><?php echo L('database_op')?></th>
        </tr>
     </thead>
@@ -124,12 +124,12 @@ if(is_array($infos)){
                         <input type="checkbox" class="checkboxes" name="tables[]" value="<?php echo $v['name']?>" />
                         <span></span>
                     </label></td>
-	<td align="center"><?php echo $v['name']?></td>
+	<td align="center"><a href="javascript:void(0);" onclick="show('<?php echo $v['name']?>','<?php echo $pdo_name?>')"><?php echo $v['name']?></a></td>
 	<td align="center"><?php echo $v['engine']?></td>
 	<td align="center"><?php echo $v['collation']?></td>
 	<td align="center"><?php echo $v['rows']?></td>
 	<td align="center"><?php echo format_file_size($v['size'])?></td>
-	<td align="center"><?php echo $v['data_free']?></td>
+	<td align="center"><?php echo dr_date($v['updatetime'], null, 'red')?></td>
 	<td align="center"><a href="?m=admin&c=database&a=public_repair&operation=optimize&pdo_name=<?php echo $pdo_name?>&tables=<?php echo $v['name']?>"><?php echo L('database_optimize')?></a> | <a href="?m=admin&c=database&a=public_repair&operation=repair&pdo_name=<?php echo $pdo_name?>&tables=<?php echo $v['name']?>"><?php echo L('database_repair')?></a> | <a href="?m=admin&c=database&a=public_repair&operation=flush&pdo_name=<?php echo $pdo_name?>&tables=<?php echo $v['name']?>"><?php echo L('database_flush')?></a> | <a href="?m=admin&c=database&a=public_repair&operation=jc&pdo_name=<?php echo $pdo_name?>&tables=<?php echo $v['name']?>"><?php echo L('database_check')?></a> | <a href="javascript:void(0);" onclick="showcreat('<?php echo $v['name']?>','<?php echo $pdo_name?>')"><?php echo L('database_showcreat')?></a></td>
 	</tr>
 	<?php } ?>
@@ -169,6 +169,9 @@ function show_tbl(obj) {
 }
 function showcreat(tblname, pdo_name) {
 	omnipotent('show','?m=admin&c=database&a=public_repair&operation=showcreat&menuid=<?php echo $this->input->get('menuid');?>&pdo_name='+pdo_name+'&tables='+tblname,tblname,1,'60%','70%')
+}
+function show(tblname, pdo_name) {
+	omnipotent('show','?m=admin&c=database&a=public_repair&operation=show&menuid=<?php echo $this->input->get('menuid');?>&pdo_name='+pdo_name+'&tables='+tblname,tblname,1,'60%','70%')
 }
 //-->
 </script>

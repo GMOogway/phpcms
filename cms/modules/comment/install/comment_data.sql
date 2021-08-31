@@ -17,4 +17,4 @@ CREATE TABLE IF NOT EXISTS `cms_comment_data_1` (
   KEY `direction` (`direction`),
   KEY `siteid` (`siteid`),
   KEY `support` (`support`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;

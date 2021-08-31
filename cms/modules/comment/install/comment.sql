@@ -14,4 +14,4 @@ CREATE TABLE IF NOT EXISTS `cms_comment` (
   PRIMARY KEY (`commentid`),
   KEY `lastupdate` (`lastupdate`),
   KEY `siteid` (`siteid`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;

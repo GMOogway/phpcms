@@ -12,4 +12,4 @@ CREATE TABLE `cms_slider` (
   `description` tinytext,
   PRIMARY KEY (`id`),
   KEY `typeid` (`typeid`,`isshow`,`listorder`,`id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;

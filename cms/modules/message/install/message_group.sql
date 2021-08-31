@@ -8,4 +8,4 @@ CREATE TABLE `cms_message_group` (
   `inputtime` int(10) unsigned DEFAULT '0',
   `status` tinyint(2) unsigned DEFAULT '1',
   PRIMARY KEY (`id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;

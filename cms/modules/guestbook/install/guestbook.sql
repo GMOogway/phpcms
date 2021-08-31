@@ -17,4 +17,4 @@ CREATE TABLE `cms_guestbook` (
   `addtime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`guestid`),
   KEY `typeid` (`typeid`,`passed`,`listorder`,`guestid`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;

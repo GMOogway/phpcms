@@ -14,4 +14,4 @@ CREATE TABLE `cms_message` (
   KEY `msgtoid` (`send_to_id`,`folder`),
   KEY `replyid` (`replyid`),
   KEY `folder` (`send_from_id`,`folder`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;

@@ -20,4 +20,4 @@ CREATE TABLE IF NOT EXISTS `cms_mood` (
   KEY `total` (`total`),
   KEY `lastupdate` (`lastupdate`),
   KEY `catid` (`catid`,`siteid`,`contentid`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;

@@ -331,10 +331,14 @@ class check extends admin {
                 $this->db->update(array('iscore'=>1),array('module'=>'scan', 'iscore'=>0));
 
                 $this->db->table_name = $prefix.'model';
-                $this->db->delete(array('modelid' => 11));
+                if ($this->db->delete(array('modelid' => 11, 'siteid' => 1, 'name' => '视频模型', 'tablename' => 'video'))) {
+                    $this->db->query('DROP TABLE IF EXISTS `'.$prefix.'video`');
+                    $this->db->query('DROP TABLE IF EXISTS `'.$prefix.'video_data`');
+                    $this->db->table_name = $prefix.'model_field';
+                    $this->db->delete(array('modelid' => 11));
+                }
 
                 $this->db->table_name = $prefix.'model_field';
-                $this->db->delete(array('modelid' => 11));
                 //$this->db->update(array('tips'=>'<div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="add_introduce" type="checkbox"  value="1" checked>是否截取内容<span></span></label><input type="text" name="introcude_length" value="200" size="3">字符至内容摘要\r\n<label class="mt-checkbox mt-checkbox-outline"><input type=\'\'checkbox\'\' name=\'\'auto_thumb\'\' value="1" checked>是否获取内容第<span></span></label><input type="text" name="auto_thumb_no" value="1" size="2" class="">张图片作为标题图片\r\n<label class="mt-checkbox mt-checkbox-outline"><input type=\'\'checkbox\'\' name=\'\'is_remove_a\'\' value="1" checked>去除站外链接<span></span></label>\r\n</div>'),array('formtype'=>'editor','tips'=>'<div class="content_attr"><label><input name="add_introduce" type="checkbox"  value="1" checked>是否截取内容</label><input type="text" name="introcude_length" value="200" size="3">字符至内容摘要\r\n<label><input type=\'\'checkbox\'\' name=\'\'auto_thumb\'\' value="1" checked>是否获取内容第</label><input type="text" name="auto_thumb_no" value="1" size="2" class="">张图片作为标题图片\r\n</div>'));
                 $this->db->update(array('tips'=>'<div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="add_introduce" type="checkbox"  value="1" checked>是否截取内容<span></span></label><input type="text" name="introcude_length" value="200" size="3">字符至内容摘要\r\n<label class="mt-checkbox mt-checkbox-outline"><input type=\'\'checkbox\'\' name=\'\'auto_thumb\'\' value="1" checked>是否获取内容第<span></span></label><input type="text" name="auto_thumb_no" value="1" size="2" class="">张图片作为标题图片\r\n<label class="mt-checkbox mt-checkbox-outline"><input type=\'\'checkbox\'\' name=\'\'is_remove_a\'\' value="1" checked>去除站外链接<span></span></label>\r\n</div>'),array('formtype'=>'editor'));
                 $this->db->update(array('setting'=>'{"fieldtype":"int","format":"Y-m-d H:i:s","defaulttype":"0"}', 'iscore'=>0, 'isbase'=>0),array('field'=>'updatetime', 'formtype'=>'datetime'));
