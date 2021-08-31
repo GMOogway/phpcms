@@ -166,7 +166,7 @@ class create_all_html extends admin {
 				$catid_arr = getcache('update_all_html_catid'.'-'.$this->siteid.'-'.$_SESSION['userid'],'content');
 				$autoid = $autoid ? intval($autoid) : 0;
 				//if(!isset($catid_arr[$autoid])) showmessage(L('create_update_success'),'?m=content&c=create_all_html&a=show',200);
-				if(!isset($catid_arr[$autoid])){showmessage(L('create_all').L('create_update_success'),'?m=admin&c=index&a=public_main',2000);}
+				if(!isset($catid_arr[$autoid])){showmessage(L('create_all').L('create_update_success'),'close');}
 
 				$catid = $catid_arr[$autoid];
 				
