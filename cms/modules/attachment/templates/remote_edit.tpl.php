@@ -5,15 +5,6 @@ include $this->admin_tpl('header', 'admin');?>
 <style type="text/css">
 .page-content {margin-left: 0px;margin-top: 0;padding: 25px 20px 10px;}
 .main-content {background: #f5f6f8;}
-.note.note-danger {background-color: #fef7f8;border-color: #f0868e;color: #210406;}
-.note.note-danger {border-radius: 4px;border-left: 4px solid #f0868e;background-color: #ffffff;color: #888;}
-.my-content-top-tool {margin-top: -25px;margin-bottom: 10px;}
-.note {margin: 0 0 20px;padding: 15px 30px 15px 15px;border-left: 5px solid #eee;border-radius: 0 4px 4px 0;}
-.note, .tabs-right.nav-tabs>li>a:focus, .tabs-right.nav-tabs>li>a:hover {-webkit-border-radius: 0 4px 4px 0;-moz-border-radius: 0 4px 4px 0;-ms-border-radius: 0 4px 4px 0;-o-border-radius: 0 4px 4px 0;}
-.note p:last-child {margin-bottom: 0;}
-.note p {margin: 0;}
-.note p, .page-loading, .panel .panel-body {font-size: 13px;}
-.note.note-danger a {color: #666;}
 .myfbody {margin-bottom: 90px;}
 .portlet.light {padding: 12px 20px 15px;background-color: #fff;}
 .portlet.light>.portlet-title {padding: 0;color: #181C32;font-weight: 500;}

@@ -3,8 +3,6 @@ defined('IN_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header');?>
 <style>
 body {padding: 25px 20px 10px;}
-.note.note-danger {border-radius: 4px;border-left: 4px solid #f0868e;background-color: #fef7f8;color: #888;}
-.note {margin: 0 0 20px;padding: 15px 30px 15px 15px;border-left: 5px solid #eee;border-radius: 0 4px 4px 0;}
 </style>
 <link href="<?php echo JS_PATH?>codemirror/lib/codemirror.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo JS_PATH?>codemirror/theme/neat.css" rel="stylesheet" type="text/css" />
