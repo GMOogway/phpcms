@@ -166,6 +166,7 @@ class fclient extends admin {
 	 */
 	public function setting() {
 		//读取配置文件
+		$page = intval($this->input->get('page'));
 		$data = array();
  		$siteid = $this->get_siteid();//当前站点 
 		//更新模型数据库,重设setting 数据. 

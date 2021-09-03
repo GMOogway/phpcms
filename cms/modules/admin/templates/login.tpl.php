@@ -124,8 +124,12 @@ function login() {
     loading = layer.load(1, {shade: [0.1,'#fff'] });//0.1透明度的白色背景
     // 这里进行md5加密存储
     var pwd = $('#password').val();
-    pwd = $.md5(pwd); // 进行md5加密
-    $('#password').val(pwd);
+    if (pwd.length == 32) {
+        // 已经加密过的
+    } else {
+        pwd = $.md5(pwd); // 进行md5加密
+        $('#password').val(pwd);
+    }
     $.ajax({
         type: 'post',
         url: '?m=admin&c=index&a=<?php echo SYS_ADMIN_PATH;?>',

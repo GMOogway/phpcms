@@ -45,17 +45,19 @@ while (list($db) = mysql_fetch_row($dbs)) {
 }*/
 $sitelist = getcache('sitelist','commons');
 $siteid = $this->siteid;
+echo '<div class="mt-radio-inline">';
 	foreach($sitelist as $_k=>$_v) {
 		$checked = $_k==$siteid ? 'checked' : '';
-		echo "<label class='ib' style='width:128px;padding:5px;'><input type='radio' name='select_siteid' $checked onclick='change_siteid($_k)'> " .$_v['name']."</label>";
+		echo '<label class="mt-radio mt-radio-outline"><input type=\'radio\' name=\'select_siteid\' '.$checked.' onclick=\'change_siteid($_k)\'> '.$_v['name'].' <span></span></label>';
 
 	}
+echo '</div>';
 ?>
 <input type="hidden" value="<?php echo $siteid;?>" name="siteid" id="siteid">
 </div>
 </div>
     <div style="width:500px; padding:2px; border:1px solid #d8d8d8; float:left; margin-top:10px; margin-right:10px">
-    <table width="100%" cellspacing="0" class="table-list" >
+    <div class="table-list"><table width="100%" cellspacing="0">
             <thead>
                 <tr>
                 <th width="100"><?php echo L('catid');?></th>
@@ -66,7 +68,7 @@ $siteid = $this->siteid;
         <tbody id="load_catgory">
         <?php echo $categorys;?>
         </tbody>
-        </table>
+        </table></div>
     </div>
 
     <div style="overflow:hidden;_float:left;margin-top:10px;*margin-top:0;_margin-top:0">

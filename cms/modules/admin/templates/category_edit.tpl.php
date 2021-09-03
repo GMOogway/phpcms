@@ -251,7 +251,7 @@ include $this->admin_tpl('header');?>
 		<tr>
         <th width="200"><?php echo L('role_private')?>：</th>
         <td>
-			<table width="100%" class="table-list">
+			<div class="table-list"><table width="100%">
 			  <thead>
 				<tr>
 				  <th align="left"><?php echo L('role_name');?></th><th><?php echo L('view');?></th><th><?php echo L('add');?></th><th><?php echo L('edit');?></th><th><?php echo L('delete');?></th><th><?php echo L('listorder');?></th><th><?php echo L('push');?></th><th><?php echo L('move');?></th>
@@ -277,7 +277,7 @@ include $this->admin_tpl('header');?>
 			  <?php }?>
 	
 			 </tbody>
-			</table>
+			</table></div>
 		</td>
 
       </tr>
@@ -287,7 +287,7 @@ include $this->admin_tpl('header');?>
 	  <tr>
         <th width="200"><?php echo L('group_private')?>：</th>
         <td>
-			<table width="100%" class="table-list">
+			<div class="table-list"><table width="100%">
 			  <thead>
 				<tr>
 				  <th align="left"><?php echo L('group_name');?></th><th><?php echo L('allow_vistor');?></th><th><?php echo L('allow_contribute');?></th>
@@ -306,7 +306,7 @@ include $this->admin_tpl('header');?>
 			  </tr>
 			<?php }?>
 			 </tbody>
-			</table>
+			</table></div>
 		</td>
       </tr>
 	  <tr>

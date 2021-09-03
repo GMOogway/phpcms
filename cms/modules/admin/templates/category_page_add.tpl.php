@@ -160,7 +160,7 @@ include $this->admin_tpl('header');?>
 		<tr>
         <th width="200"><?php echo L('role_private')?>：</th>
         <td>
-			<table width="100%" class="table-list">
+			<div class="table-list"><table width="100%">
 			  <thead>
 				<tr>
 				  <th align="left" width="200"><?php echo L('role_name');?></th><th><?php echo L('edit');?></th>
@@ -179,7 +179,7 @@ include $this->admin_tpl('header');?>
 			  <?php }?>
 	
 			 </tbody>
-			</table>
+			</table></div>
 		</td>
 
       </tr>
@@ -189,7 +189,7 @@ include $this->admin_tpl('header');?>
 	  <tr>
         <th width="200"><?php echo L('group_private')?>：</th>
         <td>
-			<table width="100%" class="table-list">
+			<div class="table-list"><table width="100%">
 			  <thead>
 				<tr>
 				  <th align="left" width="200"><?php echo L('group_name');?></th><th><?php echo L('allow_vistor');?></th>
@@ -207,7 +207,7 @@ include $this->admin_tpl('header');?>
 			  </tr>
 			<?php }?>
 			 </tbody>
-			</table>
+			</table></div>
 		</td>
       </tr>
 </table>

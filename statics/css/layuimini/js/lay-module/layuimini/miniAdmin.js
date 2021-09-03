@@ -85,7 +85,7 @@ layui.define(["jquery", "miniMenu", "element","miniTab", "miniTheme"], function 
             if (data.image) {
                 html += '<img src="' + data.image + '" alt="logo">';
             }
-            if (data.icon) {
+            if (!data.image && data.icon) {
                 html += '<i class="' + data.icon + '"></i>';
             }
             html += '<h1>' + data.title + '</h1></a>';

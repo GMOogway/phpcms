@@ -66,12 +66,8 @@ button[disabled],html input[disabled] {cursor: default;}
 input.dialog{height:0; font-size:0; line-height:0; border:none}
 
 /*定义清除浮动*/
-.clear:after{content:'.';display:block;clear: both;overflow:hidden;visibility:hidden;font-size:0;line-height:0;width:0;height:0;}
+.clear:after{content:'.';display:block;clear:both;overflow:hidden;visibility:hidden;font-size:0;line-height:0;width:0;height:0;}
 .clear{zoom:1;}
-
-/*定义清除浮动*/
-.clearfloat:after{content:'.';display:block;clear: both;overflow:hidden;visibility:hidden;font-size:0;line-height:0;width:0;height:0;}
-.clearfloat{zoom:1;}
 
 /*LOGO修改为通用的后台管理,如需LOGO图片请注释以下三行*/
 .logo a:before,.logo a:after{color: #DFE4ED;display: block;position: absolute;top:26px;}
@@ -620,6 +616,9 @@ a.dropdown-item.active{color:#fff;}
 .btn.btn-outline.yellow.active,.btn.btn-outline.yellow:active,.btn.btn-outline.yellow:active:focus,.btn.btn-outline.yellow:active:hover,.btn.btn-outline.yellow:focus,.btn.btn-outline.yellow:hover {border-color: #c49f47;color: #fff;background-color: #c49f47;}
 .btn.yellow-stripe {border-left: 4px solid #c49f47!important;}
 .btn.yellow.btn-no-border:not(.active) {border-color: transparent;}
+.btn-group-lg>.btn,.btn-lg {padding: 10px 16px;font-size: 18px;line-height: 1.33333;border-radius: 6px;}
+.btn-group-sm>.btn,.btn-sm {padding: 5px 10px;font-size: 12px;line-height: 1.5;border-radius: 3px;}
+.btn-group-xs>.btn,.btn-xs {padding: 1px 5px;font-size: 12px;line-height: 1.5;border-radius: 3px;}
 .myselect {width:50px !important;min-width:50px !important;max-width:50px !important;padding:3px 2px!important;overflow: visible !important;}
 .mt-checkbox,.mt-radio{display:inline-block;position:relative;padding-left:30px;margin-bottom:15px;cursor:pointer;font-size:14px;webkit-transition:all .3s;-moz-transition:all .3s;-ms-transition:all .3s;-o-transition:all .3s;transition:all .3s}
 .mt-checkbox.mt-checkbox-disabled,.mt-checkbox.mt-radio-disabled,.mt-radio.mt-checkbox-disabled,.mt-radio.mt-radio-disabled {opacity: .6;filter: alpha(opacity=60)}.mt-checkbox>input,.mt-radio>input {position: absolute;z-index: -1;opacity: 0;filter: alpha(opacity=0)}.mt-checkbox>span,.mt-radio>span {border: 1px solid transparent;position: absolute;top: 0;left: 0;height: 19px;width: 19px;background: #E6E6E6}

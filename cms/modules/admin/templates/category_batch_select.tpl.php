@@ -40,13 +40,14 @@ include $this->admin_tpl('header','admin');?>
 .tabbable-line>.nav-tabs>li.open>a>i,.tabbable-line>.nav-tabs>li:hover>a>i {color: #a6a6a6;}
 .tabbable-line>.nav-tabs>li.active {border-bottom: 4px solid #40aae3;}
 .form .form-body,.portlet-form .form-body {padding: 20px;}
+.myfbody {margin-bottom: 90px;}
 </style>
 <div class="page-content main-content">
 <div class="note note-danger my-content-top-tool">
     <p><a href="?m=admin&c=category&a=init&menuid=<?php echo $this->input->get('menuid');?>"><?php echo L('category_manage');?></a></p>
 </div>
 <form action="?m=admin&c=category&a=batch_edit" class="form-horizontal" method="post" name="myform" id="myform">
-<div class="portlet light bordered">
+<div class="portlet light bordered myfbody">
     <div class="portlet-title tabbable-line">
         <ul class="nav nav-tabs" style="float:left;">
             <li class="active">
@@ -97,3 +98,5 @@ function addedit(url, name) {
 window.top.$('#display_center_id').css('display','none');
 //-->
 </script>
+</body>
+</html>

@@ -543,7 +543,6 @@ include $this->admin_tpl('header');?>
 </div>
 </form>
 </div>
-</body>
 <script type="text/javascript">
 $('.nav-tabs a').click(function (e) {
     $('.nav-tabs').find('li').removeClass('active');
@@ -583,4 +582,5 @@ function dr_site_time() {
 	});
 }
 </script>
+</body>
 </html>

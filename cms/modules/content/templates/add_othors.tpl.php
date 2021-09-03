@@ -18,7 +18,7 @@ include $this->admin_tpl('header','admin');
 ?>
 </fieldset>
     <div style="width:500px; padding:2px; border:1px solid #d8d8d8; float:left; margin-top:10px; margin-right:10px; overflow:hidden">
-    <table width="100%" cellspacing="0" class="table-list" >
+    <div class="table-list"><table width="100%" cellspacing="0">
             <thead>
                 <tr>
                 <th width="100"><?php echo L('catid');?></th>
@@ -29,7 +29,7 @@ include $this->admin_tpl('header','admin');
         <tbody id="load_catgory">
         <?php echo $categorys;?>
         </tbody>
-        </table>
+        </table></div>
     </div>
 
     <div style="overflow:hidden;_float:left;margin-top:10px;*margin-top:0;_margin-top:0; width:144px">
