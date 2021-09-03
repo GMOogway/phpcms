@@ -63,7 +63,7 @@ class content extends admin {
 			//工作流权限判断
 			if($_SESSION['roleid']!=1 && $steps && !in_array($steps,$admin_privs)) showmessage(L('permission_to_operate'));
 			$this->db->set_model($modelid);
-			if($this->db->table_name==$this->db->db_tablepre) showmessage(L('model_table_not_exists'));;
+			if($this->db->table_name==$this->db->db_tablepre) showmessage(L('model_table_not_exists'));
 			$status = $steps ? $steps : 99;
 			if($this->input->get('reject')) $status = 0;
 			$where = 'catid='.$catid.' AND status='.$status;
@@ -203,7 +203,7 @@ class content extends admin {
 				}
 			}
 			$this->db->set_model($modelid);
-			if($this->db->table_name==$this->db->db_tablepre) showmessage(L('model_table_not_exists'));;
+			if($this->db->table_name==$this->db->db_tablepre) showmessage(L('model_table_not_exists'));
 			$status = 100;
 			$where = 'catid='.$catid.' AND status='.$status;
 			if (IS_POST) {
@@ -356,7 +356,7 @@ class content extends admin {
 		//工作流权限判断
 		if($_SESSION['roleid']!=1 && $steps && !in_array($steps,$admin_privs)) showmessage(L('permission_to_operate'));
 		$this->db->set_model($modelid);
-		if($this->db->table_name==$this->db->db_tablepre) showmessage(L('model_table_not_exists'));;
+		if($this->db->table_name==$this->db->db_tablepre) showmessage(L('model_table_not_exists'));
 		$status = $steps ? $steps : 99;
 		if($this->input->get('reject')) $status = 0;
 		$where = 'status='.$status;
@@ -1405,7 +1405,7 @@ class content extends admin {
 			if($status==-1) $status = 1;
 		}
 		if($status>4) $status = 4;
-		$this->priv_db = pc_base::load_model('category_priv_model');;
+		$this->priv_db = pc_base::load_model('category_priv_model');
 		$admin_username = param::get_cookie('admin_username');
 		if($status==-1) {
 			$sql = "`status` NOT IN (99,0,-2) AND `siteid`=$this->siteid";

@@ -136,8 +136,10 @@ class category extends admin {
 			$inputinfo = $content_input->get($info);
 			$systeminfo = $inputinfo['system'];
 			
-			$end_str = $old_end =  '<script type="text/javascript">Dialog.warn("'.L("operation_success").L("edit_following_operation").'",function(){window.top.$(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.location = "?m=admin&c=category&a=public_cache&menuid='.$this->input->get('menuid').'&module=admin";});</script>';
 			if(!$this->input->post('addtype')) {
+				if ($this->check_counts(0)) {
+					showmessage(L('网站栏目数量已达到上限'));
+				}
 				$catname = CHARSET == 'gbk' ? $info['catname'] : iconv('utf-8','gbk',$info['catname']);
 				$letters = gbk_to_pinyin($catname);
 				$info['letter'] = strtolower(implode('', $letters));
@@ -148,6 +150,9 @@ class category extends admin {
 			} else {//批量添加
 				$end_str = '';
 				$batch_adds = explode("\n", $this->input->post('batch_add'));
+				if ($this->check_counts(0, dr_count($batch_adds))) {
+					showmessage(L('网站栏目数量已达到上限'));
+				}
 				foreach ($batch_adds as $_v) {
 					if(trim($_v)=='') continue;
 					$names = explode('|', $_v);
@@ -157,19 +162,21 @@ class category extends admin {
 					$letters = gbk_to_pinyin($catname);
 					$info['letter'] = strtolower(implode('', $letters));
 					$info['catdir'] = trim($names[1]) ? trim($names[1]) : trim($info['letter']);
-					if(!$this->public_check_catdir(0,$info['catdir'])) {
-						$end_str .= $end_str ? ','.$info['catname'].'('.$info['catdir'].')' : $info['catname'].'('.$info['catdir'].')';
-						continue;
-					}
+					$cf = $this->check_dirname(0, $info['catdir']);
 					$catid = $this->db->insert($info, true);
 					$this->db->update($systeminfo,array('catid'=>$catid,'siteid'=>$this->siteid));
 					$this->update_priv($catid, $this->input->post('priv_roleid'));
 					$this->update_priv($catid, $this->input->post('priv_groupid'),0);
+					if ($cf) {
+						// 重复验证
+						$infocf['catdir'] = $cf.$catid;
+						$this->db->update($infocf,array('catid'=>$catid,'siteid'=>$this->siteid));
+					}
 				}
-				$end_str = $end_str ? L('follow_catname_have_exists').$end_str : $old_end;
 			}
+			$this->repair();
 			$this->cache();
-			showmessage(L('add_success').$end_str);
+			showmessage(L('add_success'),HTTP_REFERER,'', 'add');
 		} else {
 			$show_header = $show_dialog = '';
 			//获取站点模板信息
@@ -285,22 +292,22 @@ class category extends admin {
 			
 			//应用模板到所有子栏目
 			if($this->input->post('template_child')){
-                                $this->categorys = $categorys = $this->db->select(array('siteid'=>$this->siteid,'module'=>'content'), '*', '', 'listorder ASC, catid ASC', '', 'catid');
-                                $idstr = $this->get_arrchildid($catid);
-                                 if(!empty($idstr)){
-                                        $sql = "select catid,setting from cms_category where catid in($idstr)";
-                                        $this->db->query($sql);
-                                        $arr = $this->db->fetch_array();
-                                         if(!empty($arr)){
-                                                foreach ($arr as $v){
-                                                        $new_setting = array2string(
-														array_merge(string2array($v['setting']), array('category_template' => $this->input->post('setting')['category_template'],'list_template' =>  $this->input->post('setting')['list_template'],'show_template' =>  $this->input->post('setting')['show_template'])
-                                                                                )
-                                                        );
-                                                        $this->db->update(array('setting'=>$new_setting), 'catid='.$v['catid']);
-                                                }
-                                        }                                
-                                }
+				$this->categorys = $categorys = $this->db->select(array('siteid'=>$this->siteid,'module'=>'content'), '*', '', 'listorder ASC, catid ASC', '', 'catid');
+				$idstr = $this->get_arrchildid($catid);
+				 if(!empty($idstr)){
+					$sql = "select catid,setting from cms_category where catid in($idstr)";
+					$this->db->query($sql);
+					$arr = $this->db->fetch_array();
+					 if(!empty($arr)){
+						foreach ($arr as $v){
+							$new_setting = array2string(
+							array_merge(string2array($v['setting']), array('category_template' => $this->input->post('setting')['category_template'],'list_template' =>  $this->input->post('setting')['list_template'],'show_template' =>  $this->input->post('setting')['show_template'])
+													)
+							);
+							$this->db->update(array('setting'=>$new_setting), 'catid='.$v['catid']);
+						}
+					}                                
+				}
 			}
 			
 			require_once CACHE_MODEL_PATH.'content_input.class.php';
@@ -313,13 +320,14 @@ class category extends admin {
 			$this->db->update($systeminfo,array('catid'=>$catid,'siteid'=>$this->siteid));
 			$this->update_priv($catid, $this->input->post('priv_roleid'));
 			$this->update_priv($catid, $this->input->post('priv_groupid'),0);
+			$this->repair();
 			$this->cache();
 			//更新附件状态
 			if($info['image'] && pc_base::load_config('system','attachment_stat')) {
 				$this->attachment_db = pc_base::load_model('attachment_model');
 				$this->attachment_db->api_update($info['image'],'catid-'.$catid,1);
 			}
-			showmessage(L('operation_success').'<script type="text/javascript">Dialog.warn("'.L("operation_success").L("edit_following_operation").'",function(){window.top.$(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.location = "?m=admin&c=category&a=public_cache&menuid='.$this->input->get('menuid').'&module=admin";});</script>');
+			showmessage(L('operation_success'),HTTP_REFERER,'', 'edit');
 		} else {
 			$show_header = $show_dialog = '';
 			//获取站点模板信息
@@ -685,40 +693,42 @@ class category extends admin {
 		$this->get_categorys($categorys);
 		if(is_array($this->categorys)) {
 			foreach($this->categorys as $catid => $cat) {
-				if($cat['type'] == 2) continue;
-				$arrparentid = $this->get_arrparentid($catid);
-				$setting = string2array($cat['setting']);
-				$arrchildid = $this->get_arrchildid($catid);
-				$child = is_numeric($arrchildid) ? 0 : 1;
-				if($categorys[$catid]['arrparentid']!=$arrparentid || $categorys[$catid]['arrchildid']!=$arrchildid || $categorys[$catid]['child']!=$child) $this->db->update(array('arrparentid'=>$arrparentid,'arrchildid'=>$arrchildid,'child'=>$child),array('catid'=>$catid));
-
-				$parentdir = $this->get_parentdir($catid);
-				$catname = $cat['catname'];
-				$letters = gbk_to_pinyin($catname);
-				$letter = strtolower(implode('', $letters));
-				$listorder = $cat['listorder'] ? $cat['listorder'] : $catid;
-				
-				$this->sethtml = $setting['create_to_html_root'];
-				//检查是否生成到根目录
-				$this->get_sethtml($catid);
-				$sethtml = $this->sethtml ? 1 : 0;
-				
-				if($setting['ishtml']) {
-				//生成静态时
-					$url = $this->update_url($catid);
-					if(!preg_match('/^(http|https):\/\//i', $url)) {
-						$url = $sethtml ? '/'.$url : $html_root.'/'.$url;
-					}
+				if($cat['type'] == 2) {
+					$listorder = $cat['listorder'] ? $cat['listorder'] : $catid;
+					$this->db->update(array('listorder'=>$listorder), array('catid'=>$catid));
 				} else {
-				//不生成静态时
-					$url = $this->update_url($catid);
-					$url = APP_PATH.$url;
+					$arrparentid = $this->get_arrparentid($catid);
+					$setting = string2array($cat['setting']);
+					$arrchildid = $this->get_arrchildid($catid);
+					$child = is_numeric($arrchildid) ? 0 : 1;
+					if($categorys[$catid]['arrparentid']!=$arrparentid || $categorys[$catid]['arrchildid']!=$arrchildid || $categorys[$catid]['child']!=$child) $this->db->update(array('arrparentid'=>$arrparentid,'arrchildid'=>$arrchildid,'child'=>$child),array('catid'=>$catid));
+
+					$parentdir = $this->get_parentdir($catid);
+					$catname = $cat['catname'];
+					$letters = gbk_to_pinyin($catname);
+					$letter = strtolower(implode('', $letters));
+					$listorder = $cat['listorder'] ? $cat['listorder'] : $catid;
+					
+					$this->sethtml = $setting['create_to_html_root'];
+					//检查是否生成到根目录
+					$this->get_sethtml($catid);
+					$sethtml = $this->sethtml ? 1 : 0;
+					
+					if($setting['ishtml']) {
+					//生成静态时
+						$url = $this->update_url($catid);
+						if(!preg_match('/^(http|https):\/\//i', $url)) {
+							$url = $sethtml ? '/'.$url : $html_root.'/'.$url;
+						}
+					} else {
+					//不生成静态时
+						$url = $this->update_url($catid);
+						$url = APP_PATH.$url;
+					}
+					if($cat['url']!=$url) $this->db->update(array('url'=>$url), array('catid'=>$catid));
+
+					if($categorys[$catid]['parentdir']!=$parentdir || $categorys[$catid]['sethtml']!=$sethtml || $categorys[$catid]['letter']!=$letter || $categorys[$catid]['listorder']!=$listorder) $this->db->update(array('parentdir'=>$parentdir,'sethtml'=>$sethtml,'letter'=>$letter,'listorder'=>$listorder), array('catid'=>$catid));
 				}
-				if($cat['url']!=$url) $this->db->update(array('url'=>$url), array('catid'=>$catid));
-				
-				
-				
-				if($categorys[$catid]['parentdir']!=$parentdir || $categorys[$catid]['sethtml']!=$sethtml || $categorys[$catid]['letter']!=$letter || $categorys[$catid]['listorder']!=$listorder) $this->db->update(array('parentdir'=>$parentdir,'sethtml'=>$sethtml,'letter'=>$letter,'listorder'=>$listorder), array('catid'=>$catid));
 			}
 		}
 		
@@ -1200,6 +1210,31 @@ class category extends admin {
 			}
 		}
 		exit($py);
+	}
+	// 检查目录是否可用
+	public function check_dirname($id, $value) {
+		if (!$value) {
+			return 1;
+		} elseif (!preg_match('/^[a-z0-9 \_\-]*$/i', $value)) {
+			return 1;
+		}
+		$where = "siteid='".$this->siteid."' AND module='content' AND catdir='".$value."'";
+		if ($id) {
+			$where .= ' AND catid<>'.$id;
+		}
+		$rt = $this->db->get_one($where);
+		return $rt['catdir'];
+	}
+	// 检查栏目上限
+	public function check_counts($id, $fix = 1) {
+		if ($id) {
+			return 0;
+		}
+		$max = $this->db->count() + $fix;
+		if ($max > MAX_CATEGORY) {
+			return 1;
+		}
+		return 0;
 	}
 }
 ?>

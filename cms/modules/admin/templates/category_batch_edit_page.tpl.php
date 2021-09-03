@@ -5,6 +5,7 @@ include $this->admin_tpl('header');?>
 .table-list td b{color:#666}
 .tpl_style{background-color:#FBFAE3}
 body .table-list table tr>td:first-child, body .table-list table tr>th:first-child {text-align: left;padding: 8px;}
+.myfbody {margin-bottom: 90px;}
 </style>
 <form name="myform" action="?m=admin&c=category&a=batch_edit" method="post">
 <div class="pad_10">
@@ -12,13 +13,14 @@ body .table-list table tr>td:first-child, body .table-list table tr>th:first-chi
 <?php echo L('category_batch_tips');?></a>
 </div>
 <div class="bk10"></div>
+<div class="myfbody">
 <div id="table-lists" class="table-list" >
     <table height="auto" cellspacing="0" >
         <thead >
 		<?php
 		foreach($batch_array as $catid=>$cat) {
 			$batch_array[$catid]['setting'] = string2array($cat['setting']);
-			echo "<th width='260' align='left' ><strong>{$cat['catname']} （catid: <font color='red'>{$catid}</font>）</strong></th>";
+			echo "<th width='300' align='left'><strong>{$cat['catname']} （catid: <font color='red'>{$catid}</font>）</strong></th>";
 		}
 		?>
         </thead>
@@ -216,14 +218,18 @@ body .table-list table tr>td:first-child, body .table-list table tr>th:first-chi
     </tbody>
     </table>
 </div>
-    <div class="btn">
-	<input type="hidden" name="pc_hash" value="<?php echo $_SESSION['pc_hash'];?>" />
-	<input type="hidden" name="type" value="<?php echo $type;?>" />
-	<input type="submit" class="button" name="dosubmit" value="<?php echo L('submit')?>" /></div>
+<input type="hidden" name="dosubmit" value="1" />
+<input type="hidden" name="pc_hash" value="<?php echo $_SESSION['pc_hash'];?>" />
+<input type="hidden" name="type" value="<?php echo $type;?>" />
+<div class="portlet-body form myfooter">
+    <div class="form-actions text-center">
+        <button type="submit" class="btn green"> <i class="fa fa-save"></i> <?php echo L('submit')?></button>
+    </div>
+</div>
+</div>
 </div>
 </div>
 </form>
- 
 <script language="JavaScript">
 <!--
 $(document).keydown(function(event) {
