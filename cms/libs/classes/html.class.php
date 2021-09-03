@@ -197,6 +197,10 @@ class html {
         if (!$cids) {
             dr_json(0, '没有可用生成的内容数据');
         }
+        $count = $this->db->count($where);
+        if ($count > 100000) {
+            dr_json(0, '单次生成数量不能超过10万');
+        }
         if($param['number']) {
             $data = $this->db->select($where, 'id,catid,title,url,islink,inputtime', $param['number'], 'id DESC'); // 获取需要生成的内容索引
         } else {
