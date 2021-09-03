@@ -154,6 +154,7 @@ class menu extends admin {
 	 * 初始化菜单
 	 */
 	public function public_init() {
+		define('INSTALL', true);
 		if(file_exists(TEMPPATH.'menu/menu.sql')) {
 			$sql = file_get_contents(TEMPPATH.'menu/menu.sql');
 			$this->_sql_execute($sql);
@@ -164,7 +165,6 @@ class menu extends admin {
 				$this->installdir = PC_PATH.'modules'.DIRECTORY_SEPARATOR.$t['module'].DIRECTORY_SEPARATOR.'install'.DIRECTORY_SEPARATOR;
 				if (file_exists($this->installdir.'extention.inc.php')) {
 					$menu_db = pc_base::load_model('menu_model');
-					define('INSTALL', true);
 					@include ($this->installdir.'extention.inc.php');
 					if(!defined('INSTALL_MODULE')) {
 						$file = PC_PATH.'languages'.DIRECTORY_SEPARATOR.pc_base::load_config('system', 'lang').DIRECTORY_SEPARATOR.'system_menu.lang.php';
