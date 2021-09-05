@@ -279,18 +279,25 @@ class database extends admin {
  	private function sql_execute($sql) {
 	    $sqls = $this->sql_split($sql);
 		if(is_array($sqls)) {
+			$count = 0;
+			$this->db->query('BEGIN');
 			foreach($sqls as $sql) {
 				if(trim($sql) != '') {
 					$this->db->query($sql);
+					if($count%100==0){
+						$this->db->query('COMMIT');
+						$this->db->query('BEGIN');
+					}
+					$count ++;
 				}
 			}
+			$this->db->query('COMMIT');
 		} else {
 			$this->db->query($sqls);
 		}
 		return true;
 	}
 	
-
  	private function sql_split($sql) {
 		$sql = str_replace('phpcms_', 'cms_', $sql);
 		if($this->db_tablepre != "cms_") $sql = str_replace("`cms_", '`'.$this->db_tablepre, $sql);
