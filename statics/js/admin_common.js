@@ -663,7 +663,7 @@ function dr_bfb(e, t, a) {
 		content: a + "&" + $("#" + t).serialize(),
 		cancel: function(e, t) {
 			var a = layer.getChildFrame("body", e);
-			if ("1" == $(a).find("#dr_check_status").val()) return layer.confirm('关闭后将中断操作，是否确认关闭呢？', {
+			if ($(body).find("#dr_check_status").val() == "1") return layer.confirm('关闭后将中断操作，是否确认关闭呢？', {
 				icon: 3,
 				shade: 0,
 				title: "提示",
@@ -703,7 +703,7 @@ function dr_bfb_submit(e, t, a) {
 				content: t.data.url,
 				cancel: function(e, t) {
 					var a = layer.getChildFrame("body", e);
-					if ("1" == $(a).find("#dr_check_status").val()) return layer.confirm('关闭后将中断操作，是否确认关闭呢？', {
+					if ($(body).find("#dr_check_status").val() == "1") return layer.confirm('关闭后将中断操作，是否确认关闭呢？', {
 						icon: 3,
 						shade: 0,
 						title: "提示",

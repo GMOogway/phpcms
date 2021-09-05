@@ -513,6 +513,33 @@ function dr_dir_delete($path, $del_dir = FALSE, $htdocs = FALSE, $_level = 0) {
 	$_level > 0  && rmdir($path); // 删除子目录
 	return $del_dir && $_level == 0 ? rmdir($path) : TRUE;
 }
+// 颜色选取
+function color_select($name, $color) {
+	$id = preg_match("/\[(.*)\]/", $name, $m) ? $m[1] : $name;
+	$str = '<link href="'.JS_PATH.'jquery-minicolors/jquery.minicolors.css" rel="stylesheet" type="text/css" />';
+	$str.= '<script type="text/javascript" src="'.JS_PATH.'jquery-minicolors/jquery.minicolors.min.js"></script>';
+	$str.= '
+	<input type="text" class="form-control color input-text" name="'.$name.'" id="dr_'.$id.'" value="'.$color.'" >';
+	$str.= '
+<script type="text/javascript">
+$(function(){
+	$("#dr_'.$id.'").minicolors({
+		control: $("#dr_'.$id.'").attr("data-control") || "hue",
+		defaultValue: $("#dr_'.$id.'").attr("data-defaultValue") || "",
+		inline: "true" === $("#dr_'.$id.'").attr("data-inline"),
+		letterCase: $("#dr_'.$id.'").attr("data-letterCase") || "lowercase",
+		opacity: $("#dr_'.$id.'").attr("data-opacity"),
+		position: $("#dr_'.$id.'").attr("data-position") || "bottom left",
+		change: function(t, o) {
+			t && (o && (t += ", " + o), "object" == typeof console && console.log(t));
+		},
+		theme: "bootstrap"
+	});
+});
+</script>';
+
+	return $str;
+}
 /**
  * xss过滤函数
  *

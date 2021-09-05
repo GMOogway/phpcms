@@ -14,104 +14,105 @@ class database extends admin {
 		pc_base::load_sys_func('dir');	
 	}
 	/**
-	 * 数据库导出
+	 * 数据字典
 	 */
 	public function export() {
 		$database = pc_base::load_config('database');
-		$dosubmit = $this->input->post('dosubmit') ? $this->input->post('dosubmit') : $this->input->get('dosubmit');
-		if($dosubmit) {
-			if($this->input->get('pdo_select')=='' && $this->input->post('pdo_select') =='') showmessage(L('select_pdo'));
-			$tables = $this->input->post('tables') ? $this->input->post('tables') : $this->input->get('tables');
-			$sqlcharset = $this->input->post('sqlcharset') ? $this->input->post('sqlcharset') :$this->input->get('sqlcharset');
-			$sqlcompat = $this->input->post('sqlcompat') ? $this->input->post('sqlcompat') : $this->input->get('sqlcompat');
-			$sizelimit = $this->input->post('sizelimit') ? $this->input->post('sizelimit') : $this->input->get('sizelimit');
-			$fileid = $this->input->post('fileid') ? $this->input->post('fileid') : trim($this->input->get('fileid'));
-			$random = $this->input->post('random') ? $this->input->post('random') : trim($this->input->get('random'));
-			$tableid = $this->input->post('tableid') ? $this->input->post('tableid') : trim($this->input->get('tableid'));
-			$startfrom = $this->input->post('startfrom') ? $this->input->post('startfrom') : trim($this->input->get('startfrom'));
-			$tabletype = $this->input->post('tabletype') ? $this->input->post('tabletype') : trim($this->input->get('tabletype'));
-			$this->pdo_name = $this->input->post('pdo_select') ? $this->input->post('pdo_select') : trim($this->input->get('pdo_select'));			
-			$this->db = db_factory::get_instance($database)->get_database($this->pdo_name);
-			$r = $this->db->version();
-			$this->export_database($tables,$sqlcompat,$sqlcharset,$sizelimit,$action,$fileid,$random,$tableid,$startfrom,$tabletype,$this->input->get('menuid'));
-		} else {
-			foreach($database as $name=>$value) {
-				$pdos[$name] = $value['database'].'['.$value['hostname'].']';
-			}
-			if($this->input->get('pdoname')) {
-				delcache('bakup_tables','commons');
-				$pdo_name = trim($this->input->get('pdoname'));
-				$r = array();
-				$db = db_factory::get_instance($database)->get_database($pdo_name);
-				$tbl_show = $db->query("SHOW TABLE STATUS FROM `".$database[$pdo_name]['database']."`");
-				while(($rs = $db->fetch_next()) != false) {
-					$r[] = $rs;
-				}
-				$infos = $this->status($r,$database[$pdo_name]['tablepre']);
-				$db->free_result($tbl_show);
-			}
-			include $this->admin_tpl('database_export');			
+		$r = array();
+		$db = db_factory::get_instance($database)->get_database('default');
+		$tbl_show = $db->query("SHOW TABLE STATUS FROM `".$database['default']['database']."`");
+		while(($rs = $db->fetch_next()) != false) {
+			$r[] = $rs;
 		}
+		$infos = $this->status($r,$database['default']['tablepre']);
+		$db->free_result($tbl_show);
+		include $this->admin_tpl('database_export');
 	}
 	
 	/**
-	 * 数据库导入
+	 * 备份与还原
 	 */
 	public function import() {
 		$database = pc_base::load_config('database');
-		if($this->input->get('dosubmit')) {
-			$admin_founders = explode(',',pc_base::load_config('system','admin_founders'));
-			if(!in_array($this->userid,$admin_founders)) {
-				showmessage(L('only_fonder_operation'));
-			}			
-			$this->pdo_name = $this->input->get('pdoname');
-			$pre = trim($this->input->get('pre'));
-			$this->fileid = trim($this->input->get('fileid'));
-			$this->db_charset = $database[$this->pdo_name]['charset'];
-			$this->db_tablepre = $database[$pdo_name]['tablepre'];
-			$this->db = db_factory::get_instance($database)->get_database($this->pdo_name);
-			$this->import_database($pre,$this->input->get('menuid'));
-		} else {
-			$$pdos = $others = array();
-			foreach($database as $name=>$value) {
-				$pdos[$name] = $value['database'].'['.$value['hostname'].']';
-			}
-			$pdoname = $this->input->get('pdoname') ? $this->input->get('pdoname') : key($pdos);
-			$sqlfiles = glob(CACHE_PATH.'bakup/'.$pdoname.'/*.sql');
-			
-			if(is_array($sqlfiles)) {
-				asort($sqlfiles);
-				$prepre = '';
-				$info = $infos = $other = $others = array();
-				foreach($sqlfiles as $id=>$sqlfile) {
-					//老的数据库备份文件转换为新格式
-					if(preg_match("/([cmstables_|db_][0-9]{8}_[0-9a-z]{20}_)([0-9]+)\.sql/i",basename($sqlfile),$num)) {
-						list($tem_pre, $temp_date, $temp_string, $temp_end) = explode('_', basename($sqlfile));
-						rename($sqlfile, CACHE_PATH.'bakup/'.$pdoname.'/'.$temp_string.'_'.$tem_pre.'_'.$temp_date.'_'.$temp_end);
-					}
-					if(preg_match("/([0-9a-z]{20}_[cmstables_|db_]+[0-9]{8}_)([0-9]+)\.sql/i",basename($sqlfile),$num)) {
-
-						$info['filename'] = basename($sqlfile);
-						$info['filesize'] = format_file_size(filesize($sqlfile));
-						$info['maketime'] = date('Y-m-d H:i:s', filemtime($sqlfile));
-						$info['pre'] = $num[1];
-						$info['number'] = $num[2];
-						if(!$id) $prebgcolor = '#CFEFFF';
-						if($info['pre'] == $prepre) {
-						 $info['bgcolor'] = $prebgcolor;
-						} else {
-						 $info['bgcolor'] = $prebgcolor == '#CFEFFF' ? '#F1F3F5' : '#CFEFFF';
-						}
-						$prebgcolor = $info['bgcolor'];
-						$prepre = $info['pre'];
-						$infos[] = $info;
-					} else {
-						$other['filename'] = basename($sqlfile);
-						$other['filesize'] = format_file_size(filesize($sqlfile));
-						$other['maketime'] = date('Y-m-d H:i:s',filemtime($sqlfile));
-						$others[] = $other;
-					}
+		$backupDir = CACHE_PATH.'bakup/default/';
+		if(IS_POST) {
+			$action = $this->input->post('action');
+			$file = $this->input->post('file');
+			if ($action == 'backup') {
+				pc_base::load_sys_class('backup','',0);
+				$admin_founders = explode(',',pc_base::load_config('system','admin_founders'));
+				if(!in_array($this->userid,$admin_founders)) {
+					dr_json(0, L('only_fonder_operation'));
 				}
+				if (!class_exists('ZipArchive')) {
+					dr_json(0, L('服务器缺少php-zip组件，无法进行备份操作'));
+				}
+				$database = $database['default'];
+				try {
+					$backup = new backup($database['hostname'], $database['username'], $database['database'], $database['password'], $database['port']);
+					$backup->setIgnoreTable('')->backup($backupDir);
+				} catch (Exception $e) {
+					dr_json(0, L($e->getMessage()));
+				}
+				dr_json(1, L('bakup_succ'));
+			} elseif ($action == 'restore') {
+				if (!preg_match("/^backup\-([a-z0-9\-]+)\.zip$/i", $file)) {
+					dr_json(0, L('参数不正确'));
+				}
+				$file = $backupDir.$file;
+				if (!class_exists('ZipArchive')) {
+					dr_json(0, L('服务器缺少php-zip组件，无法进行还原操作'));
+				}
+				try {
+					$dir = $backupDir.'database/';
+					if (!is_dir($dir)) {
+						create_folder($dir, 0755);
+					}
+					$zip = new \ZipArchive;
+					if ($zip->open($file) !== true) {
+						dr_json(0, L('无法打开备份文件'));
+					}
+					if (!$zip->extractTo($dir)) {
+						$zip->close();
+						dr_json(0, L('无法解压备份文件'));
+					}
+					$zip->close();
+					$filename = basename($file);
+					$sqlFile = $dir . str_replace('.zip', '.sql', $filename);
+					if (!is_file($sqlFile)) {
+						dr_json(0, L('未找到SQL文件'));
+					}
+					$sql = file_get_contents($sqlFile);
+					$this->db = db_factory::get_instance($database)->get_database('default');
+					$database = $database['default'];
+					$this->db_charset = $database['charset'];
+					$this->db_tablepre = $database['tablepre'];
+					$this->sql_execute($sql);
+					dr_dir_delete($dir, true);
+				} catch (Exception $e) {
+					dr_json(0, L($e->getMessage()));
+				} catch (PDOException $e) {
+					dr_json(0, L($e->getMessage()));
+				}
+				dr_json(1, L('还原成功'));
+			} elseif ($action == 'delete') {
+				if (!preg_match("/^backup\-([a-z0-9\-]+)\.zip$/i", $file)) {
+					dr_json(0, L('参数不正确'));
+				}
+				$file = $backupDir.$file;
+				unlink($file);
+				dr_json(1, L('删除成功'));
+			}
+		} else {
+			$infos = array();
+			foreach (glob($backupDir . "*.zip") as $filename) {
+				$time = filemtime($filename);
+				$infos[] =
+					[
+						'file' => str_replace($backupDir, '', $filename),
+						'date' => dr_date($time, "Y-m-d H:i:s", 'red'),
+						'size' => format_file_size(filesize($filename))
+					];
 			}
 			$show_validator = true;
 			include $this->admin_tpl('database_import');
@@ -142,12 +143,11 @@ class database extends admin {
 		$database = pc_base::load_config('database');
 		$tables = $this->input->post('tables') ? $this->input->post('tables') : trim($this->input->get('tables'));
 		$operation = trim($this->input->get('operation'));
-		$pdo_name = trim($this->input->get('pdo_name'));
-		$this->db = db_factory::get_instance($database)->get_database($pdo_name);
+		$this->db = db_factory::get_instance($database)->get_database('default');
 		$tables = is_array($tables) ? implode(',',$tables) : $tables;
 		if($tables && in_array($operation,array('repair','optimize','flush'))) {
 			$this->db->query("$operation TABLE $tables");
-			showmessage(L('operation_success'),'?m=admin&c=database&a=export&menuid='.$this->input->get('menuid').'&pdoname='.$pdo_name);
+			showmessage(L('operation_success'),'?m=admin&c=database&a=export&menuid='.$this->input->get('menuid'));
 		} elseif ($tables && $operation == 'showcreat') {
 			$this->db->query("SHOW CREATE TABLE $tables");
 			$structure = $this->db->fetch_next();
@@ -162,43 +162,17 @@ class database extends admin {
 			foreach ($this->input->post('tables') as $table) {
 				$this->db->query('ALTER TABLE `'.$table.'` DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;');
 			}
-			showmessage(L('operation_success'),'?m=admin&c=database&a=export&menuid='.$this->input->get('menuid').'&pdoname='.$pdo_name);
+			showmessage(L('operation_success'),'?m=admin&c=database&a=export&menuid='.$this->input->get('menuid'));
 		} elseif ($tables && $operation == 'jc') {
 			$data = $this->db->query("CHECK TABLE $tables");
 			if (!$data) {
-				showmessage(L('database_table'),'?m=admin&c=database&a=export&menuid='.$this->input->get('menuid').'&pdoname='.$pdo_name);
+				showmessage(L('database_table'),'?m=admin&c=database&a=export&menuid='.$this->input->get('menuid'));
 			} else {
-				showmessage(L('operation_success'),'?m=admin&c=database&a=export&menuid='.$this->input->get('menuid').'&pdoname='.$pdo_name);
+				showmessage(L('operation_success'),'?m=admin&c=database&a=export&menuid='.$this->input->get('menuid'));
 			}
 		} else {
-			showmessage(L('select_tbl'),'?m=admin&c=database&a=export&menuid='.$this->input->get('menuid').'&pdoname='.$pdo_name);
+			showmessage(L('select_tbl'),'?m=admin&c=database&a=export&menuid='.$this->input->get('menuid'));
 		}
-	}
-	
-	/**
-	 * 备份文件删除
-	 */
-	public function delete() {
-		$filenames = $this->input->post('filenames');
-		$pdo_name = $this->input->get('pdoname');
-		$bakfile_path = CACHE_PATH.'bakup'.DIRECTORY_SEPARATOR.$pdo_name.DIRECTORY_SEPARATOR;
-		if($filenames) {
-			if(is_array($filenames)) {
-				foreach($filenames as $filename) {
-					if(fileext($filename)=='sql') {
-						@unlink($bakfile_path.$filename);
-					}
-				}
-				showmessage(L('operation_success'),'?m=admin&c=database&a=import&menuid='.$this->input->get('menuid').'&pdoname='.$pdo_name);
-			} else {
-				if(fileext($filenames)=='sql') {
-					@unlink($bakfile_path.$filename);
-					showmessage(L('operation_success'),'?m=admin&c=database&a=import&menuid='.$this->input->get('menuid').'&pdoname='.$pdo_name);
-				}
-			}
-		} else {
-			showmessage(L('select_delfile'));	
-		}				
 	}
 	/**
 	 * 获取数据表
@@ -219,12 +193,10 @@ class database extends admin {
 		}
 		return array('cmstables'=>$cms, 'othertables'=>$other);
 	}
-	
 	// 批量操作
 	public function public_add() {
 		$show_header = '';
 		$operation = $this->input->get('operation');
-		$pdo_name = $this->input->get('pdo_name');
 		$ids = $this->input->post('tables');
 		if (!$ids) {
 			dr_json(0, L('database_no_table'));
@@ -243,14 +215,13 @@ class database extends admin {
 		}
 		// 存储文件
 		setcache('db-todo-'.$operation, $cache, 'commons');
-		dr_json(1, 'ok', array('url' => '?m=admin&c=database&a=public_count_index&operation='.$operation.'&pdo_name='.$pdo_name));
+		dr_json(1, 'ok', array('url' => '?m=admin&c=database&a=public_count_index&operation='.$operation));
     }
 	
 	public function public_count_index() {
 		$show_header = '';
 		$operation = $this->input->get('operation');
-		$pdo_name = $this->input->get('pdo_name');
-		$todo_url = '?m=admin&c=database&a=public_todo_index&operation='.$operation.'&pdo_name='.$pdo_name;
+		$todo_url = '?m=admin&c=database&a=public_todo_index&operation='.$operation;
 		include $this->admin_tpl('database_bfb');
     }
 	
@@ -258,8 +229,7 @@ class database extends admin {
 		$show_header = '';
 		$database = pc_base::load_config('database');
 		$operation = $this->input->get('operation');
-		$pdo_name = $this->input->get('pdo_name');
-		$this->db = db_factory::get_instance($database)->get_database($pdo_name);
+		$this->db = db_factory::get_instance($database)->get_database('default');
 		$page = max(1, intval($this->input->get('page')));
 		$cache = getcache('db-todo-'.$operation, 'commons');
 		if (!$cache) {
@@ -301,145 +271,6 @@ class database extends admin {
 		delcache('db-todo-'.$operation, 'commons');
 		dr_json(100, '');
     }
-	/**
-	 * 数据库导出方法
-	 * @param unknown_type $tables 数据表数据组
-	 * @param unknown_type $sqlcompat 数据库兼容类型
-	 * @param unknown_type $sqlcharset 数据库字符
-	 * @param unknown_type $sizelimit 卷大小
-	 * @param unknown_type $action 操作
-	 * @param unknown_type $fileid 卷标
-	 * @param unknown_type $random 随机字段
-	 * @param unknown_type $tableid 
-	 * @param unknown_type $startfrom 
-	 * @param unknown_type $tabletype 备份数据库类型 （非cms数据与cms数据）
-	 */
-	private function export_database($tables,$sqlcompat,$sqlcharset,$sizelimit,$action,$fileid,$random,$tableid,$startfrom,$tabletype,$menuid) {
-		$dumpcharset = $sqlcharset ? $sqlcharset : str_replace('-', '', CHARSET);
-
-		$fileid = ($fileid != '') ? $fileid : 1;		
-		if($fileid==1 && $tables) {
-			if(!isset($tables) || !is_array($tables)) showmessage(L('select_tbl'));
-			$random = random(20, 'abcdefghigklmzopqrstuvwxyz0123456789');
-			setcache('bakup_tables',$tables,'commons');
-		} else {
-			if(!$tables = getcache('bakup_tables','commons')) showmessage(L('select_tbl'));
-		}
-		if($this->db->version() > '4.1'){
-			if($sqlcharset) {
-				$this->db->query("SET NAMES '".$sqlcharset."';\n\n");
-			}
-			if($sqlcompat == 'MYSQL40') {
-				$this->db->query("SET SQL_MODE='MYSQL40'");
-			} elseif($sqlcompat == 'MYSQL41') {
-				$this->db->query("SET SQL_MODE=''");
-			}
-		}
-		
-		$tabledump = '';
-
-		$tableid = ($tableid!= '') ? $tableid - 1 : 0;
-		$startfrom = ($startfrom != '') ? intval($startfrom) : 0;
-		for($i = $tableid; $i < count($tables) && strlen($tabledump) < $sizelimit * 1000; $i++) {
-			global $startrow;
-			$offset = 100;
-			if(!$startfrom) {
-				if($tables[$i]!=$this->db_tablepre.'session') {
-					$tabledump .= "DROP TABLE IF EXISTS `$tables[$i]`;\n";
-				}
-				$createtable = $this->db->query("SHOW CREATE TABLE `$tables[$i]` ");
-				$create = $this->db->fetch_next();
-				$tabledump .= $create['Create Table'].";\n\n";
-				$this->db->free_result($createtable);
-							
-				if($sqlcompat == 'MYSQL41' && $this->db->version() < '4.1') {
-					$tabledump = preg_replace("/TYPE\=([a-zA-Z0-9]+)/", "ENGINE=\\1 DEFAULT CHARSET=".$dumpcharset, $tabledump);
-				}
-				if($this->db->version() > '4.1' && $sqlcharset) {
-					$tabledump = preg_replace("/(DEFAULT)*\s*CHARSET=[a-zA-Z0-9]+/", "DEFAULT CHARSET=".$sqlcharset, $tabledump);
-				}
-				if($tables[$i]==$this->db_tablepre.'session') {
-					$tabledump = str_replace("CREATE TABLE `".$this->db_tablepre."session`", "CREATE TABLE IF NOT EXISTS `".$this->db_tablepre."session`", $tabledump);
-				}
-			}
-
-			$numrows = $offset;
-			while(strlen($tabledump) < $sizelimit * 1000 && $numrows == $offset) {
-				if($tables[$i]==$this->db_tablepre.'session' || $tables[$i]==$this->db_tablepre.'member_cache') break;
-				$sql = "SELECT * FROM `$tables[$i]` LIMIT $startfrom, $offset";
-				$numfields = $this->db->num_fields($sql);
-				$numrows = $this->db->num_rows($sql);
-				$fields_name = $this->db->get_fields($tables[$i]);
-				$rows = $this->db->query($sql);
-				$name = array_keys($fields_name);
-				$r = array();
-				while ($row = $this->db->fetch_next()) {
-					$r[] = $row;
-					$comma = "";
-					$tabledump .= "INSERT INTO `$tables[$i]` VALUES(";
-					for($j = 0; $j < $numfields; $j++) {
-						$tabledump .= $comma."'".$this->db->escape($row[$name[$j]])."'";
-						$comma = ",";
-					}
-					$tabledump .= ");\n";
-				}
-				$this->db->free_result($rows);
-				$startfrom += $offset;
-				
-			}
-			$tabledump .= "\n";
-			$startrow = $startfrom;
-			$startfrom = 0;
-		}
-		if(trim($tabledump)) {
-			$tabledump = "# cms bakfile\n# version:CMS V9\n# time:".date('Y-m-d H:i:s')."\n# type:cms\n# cms:\n# --------------------------------------------------------\n\n\n".$tabledump;
-			$tableid = $i;
-			$filename = $random.'_'.$tabletype.'_'.date('Ymd').'_'.$fileid.'.sql';
-			$altid = $fileid;
-			$fileid++;
-			$bakfile_path = CACHE_PATH.'bakup'.DIRECTORY_SEPARATOR.$this->pdo_name;
-			if(!dir_create($bakfile_path)) {
-				showmessage(L('dir_not_be_created'));
-			}
-			$bakfile = $bakfile_path.DIRECTORY_SEPARATOR.$filename;
-			if(!is_writable(CACHE_PATH.'bakup')) showmessage(L('dir_not_be_created'));
-			file_put_contents($bakfile, $tabledump);
-			@chmod($bakfile, 0777);
-			if(!pc_base::load_config('system', 'execution_sql')) $filename = L('bundling').$altid.'#';
-			showmessage(L('bakup_file')." $filename ".L('bakup_write_succ'), '?m=admin&c=database&a=export&menuid='.$menuid.'&sizelimit='.$sizelimit.'&sqlcompat='.$sqlcompat.'&sqlcharset='.$sqlcharset.'&tableid='.$tableid.'&fileid='.$fileid.'&startfrom='.$startrow.'&random='.$random.'&dosubmit=1&tabletype='.$tabletype.'&allow='.$allow.'&pdo_select='.$this->pdo_name);
-		} else {
-		   $bakfile_path = CACHE_PATH.'bakup'.DIRECTORY_SEPARATOR.$this->pdo_name.DIRECTORY_SEPARATOR;
-		   file_put_contents($bakfile_path.'index.html','');
-		   delcache('bakup_tables','commons');
-		   showmessage(L('bakup_succ'),'?m=admin&c=database&a=import&menuid='.$menuid.'&pdoname='.$this->pdo_name);
-		}
-	}
-	/**
-	 * 数据库恢复
-	 * @param unknown_type $filename
-	 */
-	private function import_database($filename,$menuid) {
-		if($filename && fileext($filename)=='sql') {
-			$filepath = CACHE_PATH.'bakup'.DIRECTORY_SEPARATOR.$this->pdo_name.DIRECTORY_SEPARATOR.$filename;
-			if(!file_exists($filepath)) showmessage(L('database_sorry')." $filepath ".L('database_not_exist'));
-			$sql = file_get_contents($filepath);
-			sql_execute($sql);
-			showmessage("$filename ".L('data_have_load_to_database'));
-		} else {
-			$fileid = $this->fileid ? $this->fileid : 1;
-			$pre = $filename;
-			$filename = $filename.$fileid.'.sql';
-			$filepath = CACHE_PATH.'bakup'.DIRECTORY_SEPARATOR.$this->pdo_name.DIRECTORY_SEPARATOR.$filename;
-			if(file_exists($filepath)) {
-				$sql = file_get_contents($filepath);
-				$this->sql_execute($sql);
-				$fileid++;
-				showmessage(L('bakup_data_file')." $filename ".L('load_success'),"?m=admin&c=database&a=import&menuid=".$menuid."&pdoname=".$this->pdo_name."&pre=".$pre."&fileid=".$fileid."&dosubmit=1");
-			} else {
-				showmessage(L('data_recover_succ'),'?m=admin&c=database&a=import&menuid='.$menuid);
-			}
-		}
-	}
 	
 	/**
 	 * 执行SQL
@@ -461,9 +292,6 @@ class database extends admin {
 	
 
  	private function sql_split($sql) {
-		if($this->db->version() > '4.1' && $this->db_charset) {
-			$sql = preg_replace("/TYPE=(InnoDB|MyISAM|MEMORY)( DEFAULT CHARSET=[^; ]+)?/", "ENGINE=\\1 DEFAULT CHARSET=".$this->db_charset,$sql);
-		}
 		$sql = str_replace('phpcms_', 'cms_', $sql);
 		if($this->db_tablepre != "cms_") $sql = str_replace("`cms_", '`'.$this->db_tablepre, $sql);
 		$sql = str_replace("\r", "\n", $sql);

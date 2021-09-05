@@ -4,18 +4,21 @@ include $this->admin_tpl('header');?>
 <style type="text/css">
 .table-list td b{color:#666}
 .tpl_style{background-color:#FBFAE3}
-body .table-list table tr>td:first-child, body .table-list table tr>th:first-child {text-align: left;padding: 8px;}
+.table-list tbody>tr>td, .table-list tbody>tr>th, .table-list thead>tr>td, .table-list thead>tr>th {border: 1px solid #e7ecf1;}
 .myfbody {margin-bottom: 90px;}
 </style>
 <form name="myform" action="?m=admin&c=category&a=batch_edit" method="post">
 <div class="pad_10">
+<div class="note note-danger my-content-top-tool">
+    <p><a href="?m=admin&c=category&a=init&menuid=<?php echo $this->input->get('menuid');?>"><?php echo L('category_manage');?></a></p>
+</div>
 <div class="explain-col">
 <?php echo L('category_batch_tips');?></a>
 </div>
 <div class="bk10"></div>
 <div class="myfbody">
-<div id="table-lists" class="table-list" >
-    <table height="auto" cellspacing="0" >
+<div id="table-lists">
+    <table cellspacing="0" class="table-list">
         <thead >
 		<?php
 		foreach($batch_array as $catid=>$cat) {

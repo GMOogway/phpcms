@@ -301,7 +301,7 @@ class form {
 	 * @param $loadjs 是否重复加载js，防止页面程序加载不规则导致的控件无法显示
 	 * @param $showweek 是否显示周，使用，true | false
 	 */
-	public static function date($name, $value = '', $isdatetime = 0, $loadjs = 0, $showweek = 'true', $timesystem = 1, $modelid = 0, $datepicker = 0) {
+	public static function date($name, $value = '', $isdatetime = 0, $loadjs = 0, $showweek = 'true', $timesystem = 1, $modelid = 0, $datepicker = 0, $is_left = 0, $color = '') {
 		if($value == '0000-00-00 00:00:00') $value = '';
 		$id = preg_match("/\[(.*)\]/", $name, $m) ? $m[1] : $name;
 		if($isdatetime) {
@@ -325,23 +325,21 @@ class form {
 		if ($value == 'SYS_TIME' || $id == 'updatetime') {
 			defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $value = $isdatetime ? date('Y-m-d H:i:s') : date('Y-m-d');
 		}
+		$shuru = '<input type="text" name="'.$name.'" id="'.$id.'" value="'.$value.'" size="'.$size.'" class="form-control">';
+		$tubiao = '<span class="input-group-btn">
+			<button class="btn default date-set"'.($color ? ' style="color: '.$color.';"' : '').' type="button">
+				<i class="fa fa-calendar"></i>
+			</button>
+		</span>';
 		if($datepicker) {
-			$str .= '<div class="form-date input-group"><div class="input-group date field_date_'.$id.'"><span class="input-group-btn">
-				<button class="btn default date-set" type="button">
-					<i class="fa fa-calendar"></i>
-				</button>
-			</span>';
-			$str .= '<input type="text" name="'.$name.'" id="'.$id.'" value="'.$value.'" size="'.$size.'" class="form-control"></div>';
-			$str .= '</div>';
+			$str .= '<div class="form-date input-group"><div class="input-group date field_date_'.$id.'">';
+			$str .= $is_left ? $shuru.$tubiao : $tubiao.$shuru;
+			$str .= '</div></div>';
 			defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $id == 'updatetime' && $str .= '<div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="no_time"'.(isset($updatetime_select) && $updatetime_select ? ' checked' : '').' class="dr_no_time" type="checkbox" value="1" /> '.L('不更新').'<span></span></label></div>';
 		} else {
-			$str .= '<div class="formdate"><div class="form-date input-group"><div class="input-group date field_date_'.$id.'"><span class="input-group-btn">
-				<button class="btn default date-set" type="button">
-					<i class="fa fa-calendar"></i>
-				</button>
-			</span>';
-			$str .= '<input type="text" name="'.$name.'" id="'.$id.'" value="'.$value.'" size="'.$size.'" class="form-control"></div>';
-			$str .= '</div></div>';
+			$str .= '<div class="formdate"><div class="form-date input-group"><div class="input-group date field_date_'.$id.'">';
+			$str .= $is_left ? $shuru.$tubiao : $tubiao.$shuru;
+			$str .= '</div></div></div>';
 			defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $id == 'updatetime' && $str .= '<div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="no_time"'.(isset($updatetime_select) && $updatetime_select ? ' checked' : '').' class="dr_no_time" type="checkbox" value="1" /> '.L('不更新').'<span></span></label></div>';
 		}
 		if ($isdatetime) {

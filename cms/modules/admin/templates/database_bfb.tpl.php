@@ -30,7 +30,7 @@ a:hover {text-decoration: underline;}
 <div id="dr_check_div" class="well margin-top-20" style="display: none">
     <div class="scroller" style="height:300px" data-rail-visible="1"  id="dr_check_html"></div>
 </div>
-<input id="dr_check_status" type="hidden" value="0">
+<input id="dr_check_status" type="hidden" value="1">
 <script>
 function dr_checking() {
     $('#dr_check_button').attr('disabled', true);
@@ -61,6 +61,7 @@ function dr_ajax2ajax(page) {
                 $('#dr_check_result').show();
                 $('#dr_check_result .progress-bar-success').attr('style', 'width:'+json.code+'%');
                 if (json.code == 100) {
+                    $('#dr_check_status').val('0');
                     $('#dr_check_button').attr('disabled', false);
                     $('#dr_check_button').html('<i class="fa fa-refresh"></i> 执行完毕');
                     var isxs = 0;

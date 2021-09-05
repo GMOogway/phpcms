@@ -33,59 +33,20 @@ include $this->admin_tpl('header');?>
 .tabbable-line>.nav-tabs>li.open>a>i,.tabbable-line>.nav-tabs>li:hover>a>i {color: #a6a6a6;}
 .tabbable-line>.nav-tabs>li.active {border-bottom: 4px solid #40aae3;}
 .form .form-body,.portlet-form .form-body {padding: 20px;}
-.myfbody {margin-bottom: 90px;}
 </style>
 <div class="page-content main-content">
-<form action="?m=admin&c=database&a=export&menuid=<?php echo $this->input->get('menuid');?>" class="form-horizontal" method="post" name="myform" id="myform">
+<form action="" class="form-horizontal" method="post" name="myform" id="myform">
 <input type="hidden" name="tabletype" value="db" id="cmstables">
 <input name="dosubmit" type="hidden" value="1">
-<div class="portlet light bordered myfbody">
+<div class="portlet light bordered">
     <div class="portlet-title tabbable-line">
         <ul class="nav nav-tabs" style="float:left;">
             <li class="active">
-                <a data-toggle="tab_0"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('backup_setting').'\',this,{tips: [1, \'#000\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-th-large"></i> <?php if (!is_mobile(0)) {echo L('backup_setting');}?> </a>
+                <a data-toggle="tab_0"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('database_export').'\',this,{tips: [1, \'#000\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-th-large"></i> <?php if (!is_mobile(0)) {echo L('database_export');}?> </a>
             </li>
         </ul>
     </div>
     <div class="portlet-body form">
-        <div class="tab-content">
-            <div class="tab-pane active" id="tab_0">
-                <div class="form-body">
-
-                    <div class="form-group row">
-                        <label class="col-md-2 control-label"> <?php echo L('sizelimit')?> </label>
-                        <div class="col-md-9">
-                            <label><input type="text" name="sizelimit" value="2048"></label>
-                            <span class="help-block">KB&nbsp;&nbsp;&nbsp;&nbsp;<?php echo L('提示：1 M = 1024 KB')?></span>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-md-2 control-label"><?php echo L('sqlcompat')?></label>
-                        <div class="col-md-9">
-                            <div class="mt-radio-inline">
-                                <label class="mt-radio mt-radio-outline"><input type="radio" name="sqlcompat" value="" checked> <?php echo L('default');?> <span></span></label>
-                                <label class="mt-radio mt-radio-outline"><input type="radio" name="sqlcompat" value="MYSQL40"> <?php echo L('MySQL 3.23/4.0.x');?> <span></span></label>
-                                <label class="mt-radio mt-radio-outline"><input type="radio" name="sqlcompat" value="MYSQL41"> <?php echo L('MySQL 4.1.x/5.x');?> <span></span></label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-md-2 control-label"> <?php echo L('sqlcharset')?> </label>
-                        <div class="col-md-9">
-                            <div class="mt-radio-inline">
-                                <label class="mt-radio mt-radio-outline"><input type="radio" name="sqlcharset" value="" checked> <?php echo L('default');?> <span></span></label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-md-2 control-label"> <?php echo L('select_pdo')?> </label>
-                        <div class="col-md-9">
-                            <label><?php echo form::select($pdos,$pdo_name,'name="pdo_select" onchange="show_tbl(this)"',L('select_pdo'))?></label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 		<div class="table-list">
 <table width="100%" cellspacing="0" class="table-checkable">
  <?php 
@@ -134,19 +95,14 @@ if(is_array($infos)){
 <div class="row list-footer table-checkable">
     <div class="col-md-7 fc-list-select">
         <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline"><input type="checkbox" class="group-checkable" data-set=".checkboxes" /><span></span></label>
+        <label><button name="dosubmit" type="button" onclick="dr_bfb_submit('<?php echo L('batch_optimize')?>', 'myform', '<?php echo SELF;?>?m=admin&c=database&a=public_add&operation=y&pdo_name=<?php echo $pdo_name?>')" class="btn green btn-sm"> <i class="fa fa-refresh"></i> <?php echo L('batch_optimize');?></button></label>
+        <label><button name="dosubmit" type="button" onclick="dr_bfb_submit('<?php echo L('batch_repair')?>', 'myform', '<?php echo SELF;?>?m=admin&c=database&a=public_add&operation=x&pdo_name=<?php echo $pdo_name?>')" class="btn blue btn-sm"> <i class="fa fa-wrench"></i> <?php echo L('batch_repair');?></button></label>
+        <label><button name="dosubmit" type="button" onclick="dr_bfb_submit('<?php echo L('batch_flush')?>', 'myform', '<?php echo SELF;?>?m=admin&c=database&a=public_add&operation=s&pdo_name=<?php echo $pdo_name?>')" class="btn yellow btn-sm"> <i class="fa fa-cogs"></i> <?php echo L('batch_flush');?></button></label>
+        <label><button name="dosubmit" type="button" onclick="dr_bfb_submit('<?php echo L('batch_check')?>', 'myform', '<?php echo SELF;?>?m=admin&c=database&a=public_add&operation=jc&pdo_name=<?php echo $pdo_name?>')" class="btn red btn-sm"> <i class="fa fa-retweet"></i> <?php echo L('batch_check');?></button></label>
+        <label><button name="dosubmit" type="button" onclick="dr_bfb_submit('<?php echo L('batch_utf8mb4')?>', 'myform', '<?php echo SELF;?>?m=admin&c=database&a=public_add&operation=ut&pdo_name=<?php echo $pdo_name?>')" class="btn dark btn-sm"> <i class="fa fa-database"></i> <?php echo L('batch_utf8mb4');?></button></label>
     </div>
 </div>
 <?php }?>
-        <div class="portlet-body form myfooter">
-            <div class="form-actions text-center">
-                <label><button name="submit" type="submit" class="btn green"> <i class="fa fa-save"></i> <?php echo L('backup_starting');?></button></label>
-                <?php if(is_array($infos)){?><label><button name="dosubmit" type="button" onclick="dr_bfb_submit('<?php echo L('batch_optimize')?>', 'myform', '<?php echo SELF;?>?m=admin&c=database&a=public_add&operation=y&pdo_name=<?php echo $pdo_name?>')" class="btn green"> <i class="fa fa-refresh"></i> <?php echo L('batch_optimize');?></button></label>
-                <label><button name="dosubmit" type="button" onclick="dr_bfb_submit('<?php echo L('batch_repair')?>', 'myform', '<?php echo SELF;?>?m=admin&c=database&a=public_add&operation=x&pdo_name=<?php echo $pdo_name?>')" class="btn blue"> <i class="fa fa-wrench"></i> <?php echo L('batch_repair');?></button></label>
-                <label><button name="dosubmit" type="button" onclick="dr_bfb_submit('<?php echo L('batch_flush')?>', 'myform', '<?php echo SELF;?>?m=admin&c=database&a=public_add&operation=s&pdo_name=<?php echo $pdo_name?>')" class="btn yellow"> <i class="fa fa-cogs"></i> <?php echo L('batch_flush');?></button></label>
-                <label><button name="dosubmit" type="button" onclick="dr_bfb_submit('<?php echo L('batch_check')?>', 'myform', '<?php echo SELF;?>?m=admin&c=database&a=public_add&operation=jc&pdo_name=<?php echo $pdo_name?>')" class="btn red"> <i class="fa fa-retweet"></i> <?php echo L('batch_check');?></button></label>
-                <label><button name="dosubmit" type="button" onclick="dr_bfb_submit('<?php echo L('batch_utf8mb4')?>', 'myform', '<?php echo SELF;?>?m=admin&c=database&a=public_add&operation=ut&pdo_name=<?php echo $pdo_name?>')" class="btn dark"> <i class="fa fa-database"></i> <?php echo L('batch_utf8mb4');?></button></label><?php }?>
-            </div>
-        </div>
     </div>
 </div>
 </form>

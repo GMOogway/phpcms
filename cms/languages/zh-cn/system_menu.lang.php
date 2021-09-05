@@ -135,8 +135,8 @@ $LANG['dbsource_data_edit'] = '编辑数据源调用';
 $LANG['dbsource_data_del'] = '删除数据源调用';
 $LANG['message'] = '短消息';
 $LANG['database'] = '数据库管理';
-$LANG['database_export'] = '数据库导出';
-$LANG['database_import'] = '数据库导入';
+$LANG['database_export'] = '数据字典';
+$LANG['database_import'] = '备份与还原';
 $LANG['check_bom'] = '文件检测';
 $LANG['check'] = '系统体检';
 
