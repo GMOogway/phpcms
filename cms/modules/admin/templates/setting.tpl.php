@@ -37,6 +37,7 @@ include $this->admin_tpl('header');?>
 .form-group .input-inline {margin-right: 5px;}
 .input-inline, .radio-list>label.radio-inline {display: inline-block;}
 .badge, .input-inline {vertical-align: middle;}
+.input-medium{width: 240px!important;}
 .input-large {width: 320px!important;}
 @media (max-width:768px) {
 .input-large {width: 250px!important;}
@@ -291,17 +292,84 @@ include $this->admin_tpl('header');?>
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('pwd_is_edit')?></label>
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input name="setting[pwd_is_edit]" value="1" type="radio" <?php echo ($pwd_is_edit) ? ' checked' : ''?>> <?php echo L('setting_yes')?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input name="setting[pwd_is_edit]" value="0" type="radio" <?php echo (!$pwd_is_edit) ? ' checked' : ''?>> <?php echo L('setting_no')?> <span></span></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('pwd_day_edit')?></label>
+                        <div class="col-md-9">
+                            <div class="input-inline input-medium">
+                                <div class="input-group">
+                                    <input type="text" name="setting[pwd_day_edit]" id="pwd_day_edit" value="<?php echo $pwd_day_edit;?>" class="form-control">
+                                    <span class="input-group-addon">
+                                        <?php echo L('pwd_day')?>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('pwd_is_login_edit')?></label>
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input name="setting[pwd_is_login_edit]" value="1" type="radio" <?php echo ($pwd_is_login_edit) ? ' checked' : ''?>> <?php echo L('setting_yes')?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input name="setting[pwd_is_login_edit]" value="0" type="radio" <?php echo (!$pwd_is_login_edit) ? ' checked' : ''?>> <?php echo L('setting_no')?> <span></span></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('setting_maxloginfailedtimes')?></label>
                         <div class="col-md-9">
-                            <input class="form-control input-large" type="text" id="maxloginfailedtimes" name="setting[maxloginfailedtimes]" value="<?php echo intval($maxloginfailedtimes);?>" >
+                            <div class="input-inline input-medium">
+                                <div class="input-group">
+                                    <input type="text" name="setting[maxloginfailedtimes]" id="maxloginfailedtimes" value="<?php echo intval($maxloginfailedtimes);?>" class="form-control">
+                                    <span class="input-group-addon">
+                                        <?php echo L('login_ci')?>
+                                    </span>
+                                </div>
+                            </div>
                             <span class="help-block"><?php echo L('setting_maxloginfailedtimes_desc')?></span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('setting_time_limit')?></label>
                         <div class="col-md-9">
-                            <input class="form-control input-large" type="text" id="sysadminlogintimes" name="setting[sysadminlogintimes]" value="<?php echo intval($sysadminlogintimes);?>" >
+                            <div class="input-inline input-medium">
+                                <div class="input-group">
+                                    <input type="text" name="setting[sysadminlogintimes]" id="sysadminlogintimes" value="<?php echo intval($sysadminlogintimes);?>" class="form-control">
+                                    <span class="input-group-addon">
+                                        <?php echo L('minutes')?>
+                                    </span>
+                                </div>
+                            </div>
                             <span class="help-block"><?php echo L('setting_time_limit_desc')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('login_is_option')?></label>
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input name="setting[login_is_option]" value="1" type="radio" <?php echo ($login_is_option) ? ' checked' : ''?>> <?php echo L('setting_yes')?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input name="setting[login_is_option]" value="0" type="radio" <?php echo (!$login_is_option) ? ' checked' : ''?>> <?php echo L('setting_no')?> <span></span></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('login_exit_time')?></label>
+                        <div class="col-md-9">
+                            <div class="input-inline input-medium">
+                                <div class="input-group">
+                                    <input type="text" name="setting[login_exit_time]" id="login_exit_time" value="<?php echo $login_exit_time;?>" class="form-control">
+                                    <span class="input-group-addon">
+                                        <?php echo L('minutes')?>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -315,8 +383,14 @@ include $this->admin_tpl('header');?>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('setting_minrefreshtime')?></label>
                         <div class="col-md-9">
-                            <input class="form-control input-large" type="text" id="minrefreshtime" name="setting[minrefreshtime]" value="<?php echo intval($minrefreshtime);?>" >
-                            <span class="help-block"><?php echo L('miao')?></span>
+                            <div class="input-inline input-medium">
+                                <div class="input-group">
+                                    <input type="text" name="setting[minrefreshtime]" id="minrefreshtime" value="<?php echo intval($minrefreshtime);?>" class="form-control">
+                                    <span class="input-group-addon">
+                                        <?php echo L('miao')?>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 

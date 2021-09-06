@@ -23,6 +23,7 @@ class admin {
 		self::check_ip();
 		self::lock_screen();
 		self::check_hash();
+		self::login_before();
 	}
 	
 	/**
@@ -269,6 +270,80 @@ class admin {
 			return true;
 		} else {
 			showmessage(L('hash_check_false'),HTTP_REFERER);
+		}
+	}
+
+	/**
+ 	 * 登录之前每次运行
+ 	 */
+	private function login_before() {
+		$admin_login_db = pc_base::load_model('admin_login_model');
+		$table = $admin_login_db->db_tablepre.'admin_login';
+		if (!$admin_login_db->table_exists('admin_login')) {
+			$admin_login_db->query(format_create_sql('CREATE TABLE `'.$table.'` (
+			`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+			`uid` mediumint(8) unsigned DEFAULT NULL COMMENT \'会员uid\',
+			`is_login` int(10) unsigned DEFAULT NULL COMMENT \'是否首次登录\',
+			`is_repwd` int(10) unsigned DEFAULT NULL COMMENT \'是否重置密码\',
+			`updatetime` int(10) unsigned NOT NULL COMMENT \'修改密码时间\',
+			`logintime` int(10) unsigned NOT NULL COMMENT \'最近登录时间\',
+			PRIMARY KEY (`id`),
+			KEY `uid` (`uid`),
+			KEY `logintime` (`logintime`),
+			KEY `updatetime` (`updatetime`)
+			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT=\'账号记录\''));
+		}
+		$cache = pc_base::load_sys_class('cache');
+		$userid = $_SESSION['userid'];
+		$config = getcache('common','commons');
+		if ($config && $userid) {
+			$log = $admin_login_db->get_one(array('uid'=>$userid));
+			if (!$log) {
+				$log = array(
+					'uid' => $r['userid'],
+					'is_login' => 0,
+					'is_repwd' => 0,
+					'updatetime' => 0,
+					'logintime' => SYS_TIME,
+				);
+				$admin_login_db->insert($log);
+			}
+			// 首次登录是否强制修改密码
+			if (!$log['is_login'] && isset($config['pwd_is_login_edit']) && $config['pwd_is_login_edit']) {
+				// 该改密码了
+				if (ROUTE_M =='admin' && in_array(ROUTE_C, array('index','admin_manage')) && in_array(ROUTE_A, array(SYS_ADMIN_PATH,'public_edit_pwd','public_password_ajx'))) {
+					return true; // 本身控制器不判断
+				}
+				showmessage(L('首次登录需要强制修改密码'), '?m=admin&c=admin_manage&a=public_edit_pwd');
+			}
+			// 判断定期修改密码
+			if (isset($config['pwd_is_edit']) && $config['pwd_is_edit']
+				&& isset($config['pwd_day_edit']) && $config['pwd_day_edit']) {
+				if ($log['updatetime']) {
+					// 存在修改过密码才判断
+					$time = $config['pwd_day_edit'] * 3600 * 24;
+					if (SYS_TIME - $log['updatetime'] > $time) {
+						// 该改密码了
+						if (ROUTE_M =='admin' && in_array(ROUTE_C, array('index','admin_manage')) && in_array(ROUTE_A, array(SYS_ADMIN_PATH,'public_edit_pwd','public_password_ajx'))) {
+							return true; // 本身控制器不判断
+						}
+						showmessage(L('您需要定期修改密码'), '?m=admin&c=admin_manage&a=public_edit_pwd');
+					}
+				}
+			}
+			// 后台操作标记
+			if (IS_ADMIN && isset($config['login_is_option']) && $config['login_is_option'] && $config['login_exit_time']) {
+				$time = (int)$cache->get_auth_data('admin_option_'.$userid);
+				if ($time && SYS_TIME - $time > $config['login_exit_time'] * 60) {
+					// 长时间不动作退出
+					if (ROUTE_M =='admin' && ROUTE_C =='index' && in_array(ROUTE_A, array(SYS_ADMIN_PATH,'public_logout'))) {
+						return true; // 本身控制器不判断
+					}
+					$cache->del_auth_data('admin_option_'.$userid);
+					showmessage(L('长时间未操作，当前账号自动退出'),'?m=admin&c=index&a=public_logout');
+				}
+				$cache->set_auth_data('admin_option_'.$userid, SYS_TIME);
+			}
 		}
 	}
 

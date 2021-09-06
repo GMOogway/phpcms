@@ -82,7 +82,7 @@ table td[class*=col-],table th[class*=col-] {position: static;float: none;displa
                 <td> <?php echo CMS_UPDATETIME;?> </td>
                 <td><a href="javascript:dr_show_log('<?php echo CMS_ID;?>', '<?php echo CMS_VERSION;?>');"><?php echo CMS_VERSION;?></a></td>
                 <td align="center">
-					<?php if ($backup) {?>
+                    <?php if ($backup) {?>
                     <a href="javascript:dr_tips(1, '备份目录：<?php echo $backup;?>', -1);" class="label label-success"> 已备份 </a>
                     <?php } else {?>
                     <span class="label label-danger"> 未备份 </span>
@@ -90,8 +90,8 @@ table td[class*=col-],table th[class*=col-] {position: static;float: none;displa
                 </td>
                 <td>
                     <label style="display: none" id="dr_update_cms">
-					<button type="button" onclick="dr_update_cms('?m=admin&c=cloud&a=todo_update&id=<?php echo CMS_ID;?>&dir=cms', '升级前请做好系统备份，你确定要升级吗？', 1)" class="btn red btn-xs"> <i class="fa fa-cloud-upload"></i> 在线升级</button>
-					</label>
+                    <button type="button" onclick="dr_update_cms('?m=admin&c=cloud&a=todo_update&id=<?php echo CMS_ID;?>&dir=cms', '升级前请做好系统备份，你确定要升级吗？', 1)" class="btn red btn-xs"> <i class="fa fa-cloud-upload"></i> 在线升级</button>
+                    </label>
                     <label class="dr_check_version" id="dr_row_cms"></label>
                 </td>
             </tr>
@@ -143,6 +143,12 @@ table td[class*=col-],table th[class*=col-] {position: static;float: none;displa
     }
 
     function dr_todo_cms(url) {
+        var width = '500px';
+        var height = '280px';
+        if (is_mobile()) {
+            width = '100%';
+            height = '100%';
+        }
         var login_url = '?m=admin&c=cloud&a=login&pc_hash='+pc_hash;
         layer.open({
             type: 2,
@@ -151,7 +157,7 @@ table td[class*=col-],table th[class*=col-] {position: static;float: none;displa
             scrollbar: false,
             shadeClose: true,
             shade: 0,
-            area: ['500px', '260px'],
+            area: [width, height],
             btn: ['确定', '取消'],
             yes: function(index, layero){
                 var body = layer.getChildFrame('body', index);

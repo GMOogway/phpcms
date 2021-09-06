@@ -76,13 +76,13 @@ if(is_array($infos)){
                         <input type="checkbox" class="checkboxes" name="tables[]" value="<?php echo $v['name']?>" />
                         <span></span>
                     </label></td>
-	<td align="center"><a href="javascript:void(0);" onclick="show('<?php echo $v['name']?>','<?php echo $pdo_name?>')"><?php echo $v['name']?></a></td>
+	<td align="center"><a href="javascript:void(0);" onclick="show('<?php echo $v['name']?>')"><?php echo $v['name']?></a></td>
 	<td align="center"><?php echo $v['engine']?></td>
 	<td align="center"><?php echo $v['collation']?></td>
 	<td align="center"><?php echo $v['rows']?></td>
 	<td align="center"><?php echo format_file_size($v['size'])?></td>
 	<td align="center"><?php echo dr_date($v['updatetime'], null, 'red')?></td>
-	<td align="center"><a href="?m=admin&c=database&a=public_repair&operation=optimize&pdo_name=<?php echo $pdo_name?>&tables=<?php echo $v['name']?>"><?php echo L('database_optimize')?></a> | <a href="?m=admin&c=database&a=public_repair&operation=repair&pdo_name=<?php echo $pdo_name?>&tables=<?php echo $v['name']?>"><?php echo L('database_repair')?></a> | <a href="?m=admin&c=database&a=public_repair&operation=flush&pdo_name=<?php echo $pdo_name?>&tables=<?php echo $v['name']?>"><?php echo L('database_flush')?></a> | <a href="?m=admin&c=database&a=public_repair&operation=jc&pdo_name=<?php echo $pdo_name?>&tables=<?php echo $v['name']?>"><?php echo L('database_check')?></a> | <a href="javascript:void(0);" onclick="showcreat('<?php echo $v['name']?>','<?php echo $pdo_name?>')"><?php echo L('database_showcreat')?></a></td>
+	<td align="center"><a href="?m=admin&c=database&a=public_repair&operation=optimize&tables=<?php echo $v['name']?>"><?php echo L('database_optimize')?></a> | <a href="?m=admin&c=database&a=public_repair&operation=repair&tables=<?php echo $v['name']?>"><?php echo L('database_repair')?></a> | <a href="?m=admin&c=database&a=public_repair&operation=flush&tables=<?php echo $v['name']?>"><?php echo L('database_flush')?></a> | <a href="?m=admin&c=database&a=public_repair&operation=jc&tables=<?php echo $v['name']?>"><?php echo L('database_check')?></a> | <a href="javascript:void(0);" onclick="showcreat('<?php echo $v['name']?>')"><?php echo L('database_showcreat')?></a></td>
 	</tr>
 	<?php } ?>
 	</tbody>
@@ -95,11 +95,11 @@ if(is_array($infos)){
 <div class="row list-footer table-checkable">
     <div class="col-md-7 fc-list-select">
         <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline"><input type="checkbox" class="group-checkable" data-set=".checkboxes" /><span></span></label>
-        <label><button name="dosubmit" type="button" onclick="dr_bfb_submit('<?php echo L('batch_optimize')?>', 'myform', '<?php echo SELF;?>?m=admin&c=database&a=public_add&operation=y&pdo_name=<?php echo $pdo_name?>')" class="btn green btn-sm"> <i class="fa fa-refresh"></i> <?php echo L('batch_optimize');?></button></label>
-        <label><button name="dosubmit" type="button" onclick="dr_bfb_submit('<?php echo L('batch_repair')?>', 'myform', '<?php echo SELF;?>?m=admin&c=database&a=public_add&operation=x&pdo_name=<?php echo $pdo_name?>')" class="btn blue btn-sm"> <i class="fa fa-wrench"></i> <?php echo L('batch_repair');?></button></label>
-        <label><button name="dosubmit" type="button" onclick="dr_bfb_submit('<?php echo L('batch_flush')?>', 'myform', '<?php echo SELF;?>?m=admin&c=database&a=public_add&operation=s&pdo_name=<?php echo $pdo_name?>')" class="btn yellow btn-sm"> <i class="fa fa-cogs"></i> <?php echo L('batch_flush');?></button></label>
-        <label><button name="dosubmit" type="button" onclick="dr_bfb_submit('<?php echo L('batch_check')?>', 'myform', '<?php echo SELF;?>?m=admin&c=database&a=public_add&operation=jc&pdo_name=<?php echo $pdo_name?>')" class="btn red btn-sm"> <i class="fa fa-retweet"></i> <?php echo L('batch_check');?></button></label>
-        <label><button name="dosubmit" type="button" onclick="dr_bfb_submit('<?php echo L('batch_utf8mb4')?>', 'myform', '<?php echo SELF;?>?m=admin&c=database&a=public_add&operation=ut&pdo_name=<?php echo $pdo_name?>')" class="btn dark btn-sm"> <i class="fa fa-database"></i> <?php echo L('batch_utf8mb4');?></button></label>
+        <label><button name="dosubmit" type="button" onclick="dr_bfb_submit('<?php echo L('batch_optimize')?>', 'myform', '<?php echo SELF;?>?m=admin&c=database&a=public_add&operation=y')" class="btn green btn-sm"> <i class="fa fa-refresh"></i> <?php echo L('batch_optimize');?></button></label>
+        <label><button name="dosubmit" type="button" onclick="dr_bfb_submit('<?php echo L('batch_repair')?>', 'myform', '<?php echo SELF;?>?m=admin&c=database&a=public_add&operation=x')" class="btn blue btn-sm"> <i class="fa fa-wrench"></i> <?php echo L('batch_repair');?></button></label>
+        <label><button name="dosubmit" type="button" onclick="dr_bfb_submit('<?php echo L('batch_flush')?>', 'myform', '<?php echo SELF;?>?m=admin&c=database&a=public_add&operation=s')" class="btn yellow btn-sm"> <i class="fa fa-cogs"></i> <?php echo L('batch_flush');?></button></label>
+        <label><button name="dosubmit" type="button" onclick="dr_bfb_submit('<?php echo L('batch_check')?>', 'myform', '<?php echo SELF;?>?m=admin&c=database&a=public_add&operation=jc')" class="btn red btn-sm"> <i class="fa fa-retweet"></i> <?php echo L('batch_check');?></button></label>
+        <label><button name="dosubmit" type="button" onclick="dr_bfb_submit('<?php echo L('batch_utf8mb4')?>', 'myform', '<?php echo SELF;?>?m=admin&c=database&a=public_add&operation=ut')" class="btn dark btn-sm"> <i class="fa fa-database"></i> <?php echo L('batch_utf8mb4');?></button></label>
     </div>
 </div>
 <?php }?>
@@ -114,11 +114,11 @@ function show_tbl(obj) {
 	var pdoname = $(obj).val();
 	location.href='?m=admin&c=database&a=export&pdoname='+pdoname+'&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo $_SESSION['pc_hash']?>';
 }
-function showcreat(tblname, pdo_name) {
-	omnipotent('show','?m=admin&c=database&a=public_repair&operation=showcreat&menuid=<?php echo $this->input->get('menuid');?>&pdo_name='+pdo_name+'&tables='+tblname,tblname,1,'60%','70%')
+function showcreat(tblname) {
+	omnipotent('show','?m=admin&c=database&a=public_repair&operation=showcreat&menuid=<?php echo $this->input->get('menuid');?>&tables='+tblname,tblname,1,'60%','70%')
 }
-function show(tblname, pdo_name) {
-	omnipotent('show','?m=admin&c=database&a=public_repair&operation=show&menuid=<?php echo $this->input->get('menuid');?>&pdo_name='+pdo_name+'&tables='+tblname,tblname,1,'60%','70%')
+function show(tblname) {
+	omnipotent('show','?m=admin&c=database&a=public_repair&operation=show&menuid=<?php echo $this->input->get('menuid');?>&tables='+tblname,tblname,1,'60%','70%')
 }
 //-->
 </script>

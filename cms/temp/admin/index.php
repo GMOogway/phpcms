@@ -107,6 +107,23 @@ class index extends admin {
 			param::set_cookie('userid', $r['userid'],$cookie_time);
 			param::set_cookie('admin_email', $r['email'],$cookie_time);
 			param::set_cookie('sys_lang', $r['lang'],$cookie_time);
+			$this->admin_login_db = pc_base::load_model('admin_login_model');
+			$row = $this->admin_login_db->get_one(array('uid'=>$r['userid']));
+			if (!$row) {
+				$row = array(
+					'uid' => $r['userid'],
+					'is_login' => 0,
+					'is_repwd' => 0,
+					'updatetime' => 0,
+					'logintime' => SYS_TIME,
+				);
+				$this->admin_login_db->insert($row);
+			} else {
+				$row = array(
+					'logintime' => SYS_TIME,
+				);
+				$this->admin_login_db->update($row, array('uid'=>$r['userid']));
+			}
 			dr_json(1, L('login_success'), array('url' => '?m=admin&c=index&pc_hash='.$_SESSION['pc_hash']));
 		} else {
 			pc_base::load_sys_class('form', '', 0);

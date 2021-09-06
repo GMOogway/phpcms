@@ -125,9 +125,28 @@ class admin_manage extends admin {
 			$r = $this->db->get_one(array('userid'=>$userid),'password,encrypt');
 			if (password($this->input->post('old_password'),$r['encrypt']) !== $r['password']) showmessage(L('old_password_wrong'),HTTP_REFERER);
 			if($this->input->post('new_password') && !empty($this->input->post('new_password'))) {
-				$this->op->edit_password($userid, $this->input->post('new_password'));
+				if($this->op->edit_password($userid, $this->input->post('new_password'))) {
+					$this->admin_login_db = pc_base::load_model('admin_login_model');
+					$row = $this->admin_login_db->get_one(array('uid'=>$userid));
+					if (!$row) {
+						$row = array(
+							'uid' => $userid,
+							'is_login' => SYS_TIME,
+							'is_repwd' => SYS_TIME,
+							'updatetime' => SYS_TIME,
+						);
+						$this->admin_login_db->insert($row);
+					} else {
+						$row = array(
+							'is_login' => SYS_TIME,
+							'is_repwd' => SYS_TIME,
+							'updatetime' => SYS_TIME,
+						);
+						$this->admin_login_db->update($row, array('uid'=>$userid));
+					}
+				}
 			}
-			showmessage(L('password_edit_succ_logout'),'?m=admin&c=index&a=public_logout');			
+			showmessage(L('password_edit_succ_logout'),'?m=admin&c=index&a=public_logout');
 		} else {
 			$info = $this->db->get_one(array('userid'=>$userid));
 			extract($info);

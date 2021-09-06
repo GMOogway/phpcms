@@ -18,13 +18,13 @@ define('IN_PHPCMS', IN_CMS);
 !defined('IS_MOBILE') && define('IS_MOBILE', FALSE);
 
 //CMS框架路径
-define('PC_PATH', dirname(__FILE__).DIRECTORY_SEPARATOR);
+!defined('PC_PATH') && define('PC_PATH', dirname(__FILE__).DIRECTORY_SEPARATOR);
 
-if(!defined('CMS_PATH')) define('CMS_PATH', PC_PATH.'..'.DIRECTORY_SEPARATOR);
-if(!defined('PHPCMS_PATH')) define('PHPCMS_PATH', CMS_PATH);
+!defined('CMS_PATH') && define('CMS_PATH', PC_PATH.'..'.DIRECTORY_SEPARATOR);
+!defined('PHPCMS_PATH') && define('PHPCMS_PATH', CMS_PATH);
 
 //缓存文件夹地址
-define('CACHE_PATH', CMS_PATH.'caches'.DIRECTORY_SEPARATOR);
+!defined('CACHE_PATH') && define('CACHE_PATH', CMS_PATH.'caches'.DIRECTORY_SEPARATOR);
 //主机协议
 define('SITE_PROTOCOL', isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == '443' ? 'https://' : 'http://');
 //当前访问的主机名

@@ -786,7 +786,7 @@ form .portlet.light .portlet-body {padding-top: 20px;padding-bottom: 20px;}
 		width: 100%;
 	}
 	.input-text, .measure-input, textarea, select, input.date, input.endDate, .input-focus {
-		width: 98%!important;
+		width: 100%!important;
 	}
 	input[name='introcude_length'],input[name='auto_thumb_no'] {
 		width: auto!important;

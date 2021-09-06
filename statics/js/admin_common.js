@@ -135,12 +135,12 @@ $(function(){
 function selectall(name) {
 	if ($("#check_box").is(":checked")) {
 		$("input[name='"+name+"']").each(function() {
-  			$(this).attr("checked","checked");
+			$(this).attr("checked","checked");
 			$(this).parents('tr').addClass("active");
 		});
 	} else {
 		$("input[name='"+name+"']").each(function() {
-  			$(this).removeAttr("checked");
+			$(this).removeAttr("checked");
 			$(this).parents('tr').removeClass("active");
 		});
 	}
@@ -463,6 +463,76 @@ function map(id,linkurl,title,tcstr,w,h) {
 	};
 	diag.show();
 }
+// 窗口提交
+function dr_iframe(type, url, width, height, rt) {
+	var title = '';
+	if (type == 'add') {
+		title = '<i class="fa fa-plus"></i> '+'添加';
+	} else if (type == 'edit') {
+		title = '<i class="fa fa-edit"></i> '+'修改';
+	} else if (type == 'send') {
+		title = '<i class="fa fa-send"></i> '+'推送';
+	} else if (type == 'save') {
+		title = '<i class="fa fa-save"></i> '+'保存';
+	} else {
+		title = type;
+	}
+	if (!width) {
+		width = '500px';
+	}
+	if (!height) {
+		height = '70%';
+	}
+	if (is_mobile()) {
+		width = '95%';
+		height = '90%';
+	}
+	if (width=='100%' && height=='100%') {
+		var drag = false;
+	} else {
+		var drag = true;
+	}
+	var diag = new Dialog({
+		id:'save_id',
+		title:title,
+		url:url,
+		width:width,
+		height:height,
+		modal:true,
+		draggable:drag
+	});
+	diag.onOk = function(){
+		var body = diag.innerFrame.contentWindow.document;
+		$.ajax({type: "POST",dataType:"json", url: url, data: $(body).find('#myform').serialize(),
+			success: function(json) {
+				if (json.code) {
+					if (json.data.tourl) {
+						setTimeout("window.location.href = '"+json.data.tourl+"'", 2000);
+					} else {
+						if (rt == 'nogo') {
+						} else {
+							setTimeout("window.location.reload(true)", 2000);
+						}
+					}
+					dr_tips(1, json.msg);
+					diag.close()
+				} else {
+					$(body).find('#dr_row_'+json.data.field).addClass('has-error');
+					Dialog.tips(json.msg);
+				}
+				return false;
+			},
+			error: function(HttpRequest, ajaxOptions, thrownError) {
+				dr_ajax_alert_error(HttpRequest, ajaxOptions, thrownError)
+			}
+		});
+		return false;
+	};
+	diag.onCancel=function(){
+		$DW.close();
+	};
+	diag.show();
+}
 // ajax提交
 function dr_ajax_submit(url, form, time, go) {
 	var flen = $('[id='+form+']').length;
@@ -663,7 +733,7 @@ function dr_bfb(e, t, a) {
 		content: a + "&" + $("#" + t).serialize(),
 		cancel: function(e, t) {
 			var a = layer.getChildFrame("body", e);
-			if ($(body).find("#dr_check_status").val() == "1") return layer.confirm('关闭后将中断操作，是否确认关闭呢？', {
+			if ($(a).find("#dr_check_status").val() == "1") return layer.confirm('关闭后将中断操作，是否确认关闭呢？', {
 				icon: 3,
 				shade: 0,
 				title: "提示",
@@ -703,7 +773,7 @@ function dr_bfb_submit(e, t, a) {
 				content: t.data.url,
 				cancel: function(e, t) {
 					var a = layer.getChildFrame("body", e);
-					if ($(body).find("#dr_check_status").val() == "1") return layer.confirm('关闭后将中断操作，是否确认关闭呢？', {
+					if ($(a).find("#dr_check_status").val() == "1") return layer.confirm('关闭后将中断操作，是否确认关闭呢？', {
 						icon: 3,
 						shade: 0,
 						title: "提示",

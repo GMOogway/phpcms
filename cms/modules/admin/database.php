@@ -8,6 +8,7 @@ class database extends admin {
 	function __construct() {
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
+		$this->cache = pc_base::load_sys_class('cache');
 		$this->userid = $_SESSION['userid'];
 		pc_base::load_sys_class('db_factory');
 		pc_base::load_sys_class('form');
@@ -83,12 +84,24 @@ class database extends admin {
 						dr_json(0, L('未找到SQL文件'));
 					}
 					$sql = file_get_contents($sqlFile);
-					$this->db = db_factory::get_instance($database)->get_database('default');
-					$database = $database['default'];
-					$this->db_charset = $database['charset'];
-					$this->db_tablepre = $database['tablepre'];
-					$this->sql_execute($sql);
+					$sqls = $this->sql_split($sql);
+					$cache = array();
+					$count = count($sqls);
+					if ($count > 100) {
+						$pagesize = ceil($count/100);
+						for ($i = 1; $i <= 100; $i ++) {
+							$cache[$i] = array_slice($sqls, ($i - 1) * $pagesize, $pagesize);
+						}
+					} else {
+						for ($i = 1; $i <= $count; $i ++) {
+							$cache[$i] = array_slice($sqls, ($i - 1), 1);
+						}
+					}
+					// 存储文件
+					$this->cache->del_auth_data('db-todo-'.$action);
+					$this->cache->set_auth_data('db-todo-'.$action, $cache);
 					dr_dir_delete($dir, true);
+					dr_json(1, 'ok', array('url' => '?m=admin&c=database&a=public_import_index&action='.$action));
 				} catch (Exception $e) {
 					dr_json(0, L($e->getMessage()));
 				} catch (PDOException $e) {
@@ -118,6 +131,41 @@ class database extends admin {
 			include $this->admin_tpl('database_import');
 		}
 	}
+	
+	public function public_import_index() {
+		$show_header = '';
+		$action = $this->input->get('action');
+		$todo_url = '?m=admin&c=database&a=public_todo_import&action='.$action;
+		include $this->admin_tpl('database_bfb');
+    }
+	
+	public function public_todo_import() {
+		$show_header = '';
+		$action = $this->input->get('action');
+		$page = max(1, intval($this->input->get('page')));
+		$cache = $this->cache->get_auth_data('db-todo-'.$action);
+		if (!$cache) {
+			dr_json(0, L('未找到SQL数据'));
+		}
+		$data = $cache[$page];
+		if ($data) {
+			$html = '';
+			foreach ($data as $table) {
+				$ok = L('database_success');
+				$class = '';
+				switch ($action) {
+					case 'restore':
+						$this->query($table);
+						break;
+				}
+				$html.= '<p class="'.$class.'"><label class="rleft">'.$table.'</label><label class="rright">'.$ok.'</label></p>';
+			}
+			dr_json($page + 1, $html);
+		}
+		// 完成
+		$this->cache->del_auth_data('db-todo-'.$action);
+		dr_json(100, '');
+    }
 	
 	/**
 	 * 备份文件下载
@@ -262,6 +310,7 @@ class database extends admin {
 						} else {
 							$ok = L('database_success');
 						}
+						break;
 				}
 				$html.= '<p class="'.$class.'"><label class="rleft">'.$table.'</label><label class="rright">'.$ok.'</label></p>';
 			}
@@ -272,35 +321,12 @@ class database extends admin {
 		dr_json(100, '');
     }
 	
-	/**
-	 * 执行SQL
-	 * @param unknown_type $sql
-	 */
- 	private function sql_execute($sql) {
-	    $sqls = $this->sql_split($sql);
-		if(is_array($sqls)) {
-			$count = 0;
-			$this->db->query('BEGIN');
-			foreach($sqls as $sql) {
-				if(trim($sql) != '') {
-					$this->db->query($sql);
-					if($count%100==0){
-						$this->db->query('COMMIT');
-						$this->db->query('BEGIN');
-					}
-					$count ++;
-				}
-			}
-			$this->db->query('COMMIT');
-		} else {
-			$this->db->query($sqls);
-		}
-		return true;
-	}
-	
  	private function sql_split($sql) {
+		$database = pc_base::load_config('database');
+		$database = $database['default'];
+		$db_tablepre = $database['tablepre'];
 		$sql = str_replace('phpcms_', 'cms_', $sql);
-		if($this->db_tablepre != "cms_") $sql = str_replace("`cms_", '`'.$this->db_tablepre, $sql);
+		if($db_tablepre != "cms_") $sql = str_replace("`cms_", '`'.$db_tablepre, $sql);
 		$sql = str_replace("\r", "\n", $sql);
 		$ret = array();
 		$num = 0;
@@ -317,6 +343,42 @@ class database extends admin {
 			$num++;
 		}
 		return($ret);
+	}
+	
+	// 数据执行
+	private function query($sql) {
+		$database = pc_base::load_config('database');
+		$this->db = db_factory::get_instance($database)->get_database('default');
+
+		if (!$sql) {
+			return '';
+		}
+
+		$sql_data = explode(';SQL_FINECMS_EOL', trim(str_replace(array(PHP_EOL, chr(13), chr(10)), 'SQL_FINECMS_EOL', $sql)));
+
+		$count = 0;
+		$this->db->query('BEGIN');
+		foreach($sql_data as $query){
+			if (!$query) {
+				continue;
+			}
+			$ret = '';
+			$queries = explode('SQL_FINECMS_EOL', trim($query));
+			foreach($queries as $query) {
+				$ret.= $query[0] == '#' || $query[0].$query[1] == '--' ? '' : $query;
+			}
+			if (!$ret) {
+				continue;
+			}
+			if ($this->db->query(format_create_sql($ret))) {
+				if($count%100==0){
+					$this->db->query('COMMIT');
+					$this->db->query('BEGIN');
+				}
+				$count ++;
+			}
+		}
+		$this->db->query('COMMIT');
 	}
 }
 ?>

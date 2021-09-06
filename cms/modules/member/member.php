@@ -276,6 +276,34 @@ class member extends admin {
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=member&c=member&a=add\',\''.L('member_add').'\',700,500);void(0);', L('member_add'));
 		include $this->admin_tpl('member_list');
 	}
+
+    // 修改账号
+    public function username_edit() {
+		$show_header = '';
+
+        $userid = intval($this->input->get('userid'));
+        $member = $this->db->get_one(array('userid'=>$userid));
+        if (!$member) {
+            dr_json(0, L('该用户不存在'));
+        }
+
+        if (IS_POST) {
+            $name = trim(dr_safe_filename($this->input->post('name')));
+            if (!$name) {
+                dr_json(0, L('新账号不能为空'));
+            } elseif ($member['username'] == $name) {
+                dr_json(0, L('新账号不能和原始账号相同'));
+            } elseif ($this->db->count(array('username'=>$name))) {
+                dr_json(0, L('新账号'.$name.'已经注册'));
+            }
+
+            $this->db->update(array('username'=>$name), array('userid'=>$userid));
+
+            dr_json(1, L('操作成功'));
+        }
+
+        include $this->admin_tpl('member_edit_username');exit;
+    }
 		
 	/**
 	 * add member

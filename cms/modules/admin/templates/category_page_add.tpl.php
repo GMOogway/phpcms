@@ -55,10 +55,9 @@ include $this->admin_tpl('header');?>
 <script type="text/javascript">var catid=0</script>
 <script type="text/javascript"> 
 <!--
-	$(function(){
-		$.formValidator.initConfig({formid:"myform",autotip:true,onerror:function(msg,obj){Dialog.alert(msg,function(){$(obj).focus();})}});
-		$("#catname").formValidator({onshow:"<?php echo L('input_catname');?>",onfocus:"<?php echo L('input_catname');?>",oncorrect:"<?php echo L('input_right');?>"}).inputValidator({min:1,onerror:"<?php echo L('input_catname');?>"});
-	})
+	function checkall(){
+		<?php echo $checkall;?>
+	}
 //-->
 </script>
 <div class="page-content main-content">

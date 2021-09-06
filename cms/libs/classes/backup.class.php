@@ -80,7 +80,7 @@ class backup {
         $sqldump .= "-- version 1.0\n";
         $sqldump .= "--\n";
         $sqldump .= "-- SQL Dump created: " . date('F jS, Y \@ g:i a') . "\n\n";
-        $sqldump .= "SET SQL_MODE=\"NO_AUTO_VALUE_ON_ZERO\";\n\n";
+        $sqldump .= "SET SQL_MODE=\"NO_AUTO_VALUE_ON_ZERO\";\n";
         $tables = $this->db->query("SHOW FULL TABLES WHERE Table_Type != 'VIEW'");
         # LOOP: Get the tables
         foreach ($tables AS $table) {
@@ -101,6 +101,7 @@ class backup {
             $c_columns = $count_columns->fetchColumn();
             /** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** **/
             # MYSQL DUMP: Remove tables if they exists
+            $sqldump .= "\n";
             $sqldump .= "--\n";
             $sqldump .= "-- Remove the table if it exists\n";
             $sqldump .= "--\n";
@@ -115,11 +116,12 @@ class backup {
                 $sqldump .= str_replace('CREATE TABLE', 'CREATE TABLE IF NOT EXISTS', $field['Create Table']);
             }
             # MYSQL DUMP: New rows
-            $sqldump .= ";\n\n";
+            $sqldump .= ";\n";
             /** ** ** ** ** **/
             # CHECK: There are one or more columns
             if ($c_columns != 0) {
                 # MYSQL DUMP: List the data for each table
+                $sqldump .= "\n";
                 $sqldump .= "--\n";
                 $sqldump .= "-- List the data for the table\n";
                 $sqldump .= "--\n";
