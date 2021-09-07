@@ -484,7 +484,26 @@ class index extends foreground {
 			$newpassword = password($_POST['info']['newpassword'], $this->memberinfo['encrypt']);
 			$updateinfo['password'] = $newpassword;
 			
-			$this->db->update($updateinfo, array('userid'=>$this->memberinfo['userid']));
+			if($this->db->update($updateinfo, array('userid'=>$this->memberinfo['userid']))) {
+				$this->member_login_db = pc_base::load_model('member_login_model');
+				$row = $this->member_login_db->get_one(array('uid'=>$this->memberinfo['userid']));
+				if (!$row) {
+					$row = array(
+						'uid' => $this->memberinfo['userid'],
+						'is_login' => SYS_TIME,
+						'is_repwd' => SYS_TIME,
+						'updatetime' => SYS_TIME,
+					);
+					$this->member_login_db->insert($row);
+				} else {
+					$row = array(
+						'is_login' => SYS_TIME,
+						'is_repwd' => SYS_TIME,
+						'updatetime' => SYS_TIME,
+					);
+					$this->member_login_db->update($row, array('uid'=>$this->memberinfo['userid']));
+				}
+			}
 
 			showmessage(L('operation_success'), HTTP_REFERER);
 		} else {
@@ -694,6 +713,23 @@ class index extends foreground {
 			param::set_cookie('_groupid', $groupid, $cookietime);
 			param::set_cookie('_nickname', $nickname, $cookietime);
 			//param::set_cookie('cookietime', $_cookietime, $cookietime);
+			$this->member_login_db = pc_base::load_model('member_login_model');
+			$row = $this->member_login_db->get_one(array('uid'=>$userid));
+			if (!$row) {
+				$row = array(
+					'uid' => $userid,
+					'is_login' => 0,
+					'is_repwd' => 0,
+					'updatetime' => 0,
+					'logintime' => SYS_TIME,
+				);
+				$this->member_login_db->insert($row);
+			} else {
+				$row = array(
+					'logintime' => SYS_TIME,
+				);
+				$this->member_login_db->update($row, array('uid'=>$userid));
+			}
 			$forward = isset($_POST['forward']) && !empty($_POST['forward']) ? urldecode($_POST['forward']) : 'index.php?m=member&c=index';
 			showmessage(L('login_success'), $forward);
 		} else {

@@ -12,6 +12,7 @@ class foreground {
 		if(substr(ROUTE_A, 0, 7) != 'public_') {
 			self::check_member();
 		}
+		self::login_before();
 	}
 	
 	/**
@@ -90,4 +91,77 @@ class foreground {
 		$this->ipbanned->check_ip();
  	}
 	
+	/**
+ 	 * 登录验证
+ 	 */
+	private function login_before() {
+		$member_login_db = pc_base::load_model('member_login_model');
+		$table = $member_login_db->db_tablepre.'member_login';
+		if (!$member_login_db->table_exists('member_login')) {
+			$member_login_db->query(format_create_sql('CREATE TABLE `'.$table.'` (
+			`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+			`uid` mediumint(8) unsigned DEFAULT NULL COMMENT \'会员uid\',
+			`is_login` int(10) unsigned DEFAULT NULL COMMENT \'是否首次登录\',
+			`is_repwd` int(10) unsigned DEFAULT NULL COMMENT \'是否重置密码\',
+			`updatetime` int(10) unsigned NOT NULL COMMENT \'修改密码时间\',
+			`logintime` int(10) unsigned NOT NULL COMMENT \'最近登录时间\',
+			PRIMARY KEY (`id`),
+			KEY `uid` (`uid`),
+			KEY `logintime` (`logintime`),
+			KEY `updatetime` (`updatetime`)
+			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT=\'账号记录\''));
+		}
+		$cache = pc_base::load_sys_class('cache');
+		$userid = $this->memberinfo['userid'];
+		$config = getcache('common','commons');
+		if ($config) {
+			// 长时间未登录的用户就锁定起来
+			if (isset($config['safe_wdl']) && $config['safe_wdl']) {
+				$time = $config['safe_wdl'] * 3600 * 24;
+				$where = 'logintime < '.(SYS_TIME - $time);
+				$log_lock = $member_login_db->select($where);
+				if ($log_lock) {
+					foreach ($log_lock as $t) {
+						$this->db->update(array('islock'=>1), array('uid'=>$t['uid']));
+					}
+				}
+			}
+		}
+		if ($config && $userid) {
+			$log = $member_login_db->get_one(array('uid'=>$userid));
+			if (!$log) {
+				$log = array(
+					'uid' => $r['userid'],
+					'is_login' => 0,
+					'is_repwd' => 0,
+					'updatetime' => 0,
+					'logintime' => SYS_TIME,
+				);
+				$member_login_db->insert($log);
+			}
+			// 首次登录是否强制修改密码
+			if (!$log['is_login'] && isset($config['pwd_is_login_edit']) && $config['pwd_is_login_edit']) {
+				// 该改密码了
+				if (ROUTE_M =='member' && ROUTE_C == 'index' && in_array(ROUTE_A, array('account_manage_password','public_checkemail_ajax'))) {
+					return true; // 本身控制器不判断
+				}
+				showmessage(L('首次登录需要强制修改密码'), '?m=member&c=index&a=account_manage_password&t=1');
+			}
+			// 判断定期修改密码
+			if (isset($config['pwd_is_edit']) && $config['pwd_is_edit']
+				&& isset($config['pwd_day_edit']) && $config['pwd_day_edit']) {
+				if ($log['updatetime']) {
+					// 存在修改过密码才判断
+					$time = $config['pwd_day_edit'] * 3600 * 24;
+					if (SYS_TIME - $log['updatetime'] > $time) {
+						// 该改密码了
+						if (ROUTE_M =='member' && ROUTE_C == 'index' && in_array(ROUTE_A, array('account_manage_password','public_checkemail_ajax'))) {
+							return true; // 本身控制器不判断
+						}
+						showmessage(L('您需要定期修改密码'), '?m=member&c=member_manage&a=account_manage_password&t=1');
+					}
+				}
+			}
+		}
+	}
 }

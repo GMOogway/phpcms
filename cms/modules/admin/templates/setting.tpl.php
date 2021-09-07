@@ -373,6 +373,20 @@ include $this->admin_tpl('header');?>
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('long_time_lock')?></label>
+                        <div class="col-md-9">
+                            <div class="input-inline input-medium">
+                                <div class="input-group">
+                                    <input type="text" name="setting[safe_wdl]" id="safe_wdl" value="<?php echo intval($safe_wdl);?>" class="form-control">
+                                    <span class="input-group-addon">
+                                        <?php echo L('pwd_day')?>
+                                    </span>
+                                </div>
+                            </div>
+                            <span class="help-block"><?php echo L('long_time_lock_desc')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('setting_keys')?></label>
                         <div class="col-md-9">
                             <label><input class="form-control input-large" type="text" id="auth_key" name="setconfig[auth_key]" value="<?php echo $auth_key ? '************' : '';?>" ></label>

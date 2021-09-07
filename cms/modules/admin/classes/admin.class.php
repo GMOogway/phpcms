@@ -274,10 +274,11 @@ class admin {
 	}
 
 	/**
- 	 * 登录之前每次运行
+ 	 * 登录验证
  	 */
 	private function login_before() {
 		$admin_login_db = pc_base::load_model('admin_login_model');
+		$member_login_db = pc_base::load_model('member_login_model');
 		$table = $admin_login_db->db_tablepre.'admin_login';
 		if (!$admin_login_db->table_exists('admin_login')) {
 			$admin_login_db->query(format_create_sql('CREATE TABLE `'.$table.'` (
@@ -293,9 +294,38 @@ class admin {
 			KEY `updatetime` (`updatetime`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT=\'账号记录\''));
 		}
+		$member_table = $member_login_db->db_tablepre.'member_login';
+		if (!$member_login_db->table_exists('member_login')) {
+			$member_login_db->query(format_create_sql('CREATE TABLE `'.$member_table.'` (
+			`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+			`uid` mediumint(8) unsigned DEFAULT NULL COMMENT \'会员uid\',
+			`is_login` int(10) unsigned DEFAULT NULL COMMENT \'是否首次登录\',
+			`is_repwd` int(10) unsigned DEFAULT NULL COMMENT \'是否重置密码\',
+			`updatetime` int(10) unsigned NOT NULL COMMENT \'修改密码时间\',
+			`logintime` int(10) unsigned NOT NULL COMMENT \'最近登录时间\',
+			PRIMARY KEY (`id`),
+			KEY `uid` (`uid`),
+			KEY `logintime` (`logintime`),
+			KEY `updatetime` (`updatetime`)
+			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT=\'账号记录\''));
+		}
 		$cache = pc_base::load_sys_class('cache');
 		$userid = $_SESSION['userid'];
 		$config = getcache('common','commons');
+		if ($config) {
+			$this->member_db = pc_base::load_model('member_model');
+			// 长时间未登录的用户就锁定起来
+			if (isset($config['safe_wdl']) && $config['safe_wdl']) {
+				$time = $config['safe_wdl'] * 3600 * 24;
+				$where = 'logintime < '.(SYS_TIME - $time);
+				$log_lock = $member_login_db->select($where);
+				if ($log_lock) {
+					foreach ($log_lock as $t) {
+						$this->member_db->update(array('islock'=>1), array('uid'=>$t['uid']));
+					}
+				}
+			}
+		}
 		if ($config && $userid) {
 			$log = $admin_login_db->get_one(array('uid'=>$userid));
 			if (!$log) {

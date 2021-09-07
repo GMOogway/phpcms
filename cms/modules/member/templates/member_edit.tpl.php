@@ -1,5 +1,6 @@
 <?php defined('IN_ADMIN') or exit('No permission resources.');?>
 <?php include $this->admin_tpl('header', 'admin');?>
+<link href="<?php echo CSS_PATH?>bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>member_common.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>formvalidator.js" charset="UTF-8"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>formvalidatorregex.js" charset="UTF-8"></script>
@@ -55,7 +56,7 @@
 	<table width="100%" class="table_form">
 		<tr>
 			<td width="80"><?php echo L('username')?></td> 
-			<td><div class="input-group" style="width: 300px;">
+			<td><div class="input-group" style="width: 240px;">
 			    <input type="text" readonly="" value="<?php echo $memberinfo['username']?>" class="form-control input-text">
 			    <span class="input-group-btn">
 			        <a class="btn red" href="javascript:dr_iframe('变更', '?m=member&c=member&a=username_edit&userid=<?php echo $memberinfo['userid']?>&pc_hash=<?php echo $_SESSION['pc_hash']?>', '500px', '280px');"><i class="fa fa-edit"></i> 变更</a>

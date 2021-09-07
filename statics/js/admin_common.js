@@ -465,6 +465,11 @@ function map(id,linkurl,title,tcstr,w,h) {
 }
 // 窗口提交
 function dr_iframe(type, url, width, height, rt) {
+	if (typeof pc_hash == 'string') url += (url.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
+	if (url.toLowerCase().indexOf("http://") != -1 || url.toLowerCase().indexOf("https://") != -1) {
+	} else {
+		url = geturlpathname()+url;
+	}
 	var title = '';
 	if (type == 'add') {
 		title = '<i class="fa fa-plus"></i> '+'添加';

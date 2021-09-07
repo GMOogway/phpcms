@@ -1,6 +1,7 @@
 <?php
 defined('IN_ADMIN') or exit('No permission resources.');
 $show_validator = true;include $this->admin_tpl('header');?>
+<link href="<?php echo CSS_PATH?>bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript">
   $(document).ready(function() {
 	$.formValidator.initConfig({autotip:true,formid:"myform",onerror:function(msg){}});
@@ -17,7 +18,12 @@ $show_validator = true;include $this->admin_tpl('header');?>
 <table width="100%" class="table_form contentWrap">
 <tr>
 <td width="80"><?php echo L('username')?></td> 
-<td><?php echo $username?></td>
+<td><div class="input-group" style="width: 240px;">
+			    <input type="text" readonly="" value="<?php echo $username?>" class="form-control input-text">
+			    <span class="input-group-btn">
+			        <a class="btn red" href="javascript:dr_iframe('变更', '?m=admin&c=admin_manage&a=username_edit&userid=<?php echo $userid?>&pc_hash=<?php echo $_SESSION['pc_hash']?>', '500px', '280px');"><i class="fa fa-edit"></i> 变更</a>
+			    </span>
+			    </div></td>
 </tr>
 <tr>
 <td><?php echo L('password')?></td> 

@@ -6,6 +6,7 @@ class index extends admin {
 	public function __construct() {
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
+		$this->cache = pc_base::load_sys_class('cache');
 		pc_base::load_sys_class('form');
 		$this->db = pc_base::load_model('admin_model');
 		$this->menu_db = pc_base::load_model('menu_model');
@@ -124,6 +125,7 @@ class index extends admin {
 				);
 				$this->admin_login_db->update($row, array('uid'=>$r['userid']));
 			}
+			$this->cache->set_auth_data('admin_option_'.$r['userid'], SYS_TIME);
 			dr_json(1, L('login_success'), array('url' => '?m=admin&c=index&pc_hash='.$_SESSION['pc_hash']));
 		} else {
 			pc_base::load_sys_class('form', '', 0);
@@ -171,6 +173,7 @@ class index extends admin {
 	}
 	
 	public function public_logout() {
+		$this->cache->del_auth_data('admin_option_'.$_SESSION['userid']);
 		$_SESSION['userid'] = 0;
 		$_SESSION['roleid'] = 0;
 		param::set_cookie('admin_username','');

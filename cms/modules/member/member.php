@@ -279,7 +279,7 @@ class member extends admin {
 
     // 修改账号
     public function username_edit() {
-		$show_header = '';
+        $show_header = '';
 
         $userid = intval($this->input->get('userid'));
         $member = $this->db->get_one(array('userid'=>$userid));

@@ -24,6 +24,35 @@ class admin_manage extends admin {
 		$roles = getcache('role','commons');
 		include $this->admin_tpl('admin_list');
 	}
+
+    // 修改账号
+    public function username_edit() {
+        $show_header = '';
+
+        $userid = intval($this->input->get('userid'));
+        $info = $this->db->get_one(array('userid'=>$userid));
+        extract($info);	
+        if (!$info) {
+            dr_json(0, L('该用户不存在'));
+        }
+
+        if (IS_POST) {
+            $name = trim(dr_safe_filename($this->input->post('name')));
+            if (!$name) {
+                dr_json(0, L('新账号不能为空'));
+            } elseif ($info['username'] == $name) {
+                dr_json(0, L('新账号不能和原始账号相同'));
+            } elseif ($this->db->count(array('username'=>$name))) {
+                dr_json(0, L('新账号'.$name.'已经注册'));
+            }
+
+            $this->db->update(array('username'=>$name), array('userid'=>$userid));
+
+            dr_json(1, L('操作成功'));
+        }
+
+        include $this->admin_tpl('admin_edit_username');exit;
+    }
 	
 	/**
 	 * 添加管理员
@@ -86,7 +115,7 @@ class admin_manage extends admin {
 			}
 			$this->db->update($info,array('userid'=>$userid));
 			showmessage(L('operation_success'),'','','edit');
-		} else {					
+		} else {
 			$info = $this->db->get_one(array('userid'=>$this->input->get('userid')));
 			extract($info);	
 			$roles = $this->role_db->select(array('disabled'=>'0'));	

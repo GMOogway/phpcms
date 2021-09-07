@@ -212,6 +212,22 @@ class check extends admin {
                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT=\'账号记录\''));
                 }
 
+                $table = $prefix.'member_login';
+                if (!$this->db->table_exists('member_login')) {
+                    $this->db->query(format_create_sql('CREATE TABLE `'.$table.'` (
+                    `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+                    `uid` mediumint(8) unsigned DEFAULT NULL COMMENT \'会员uid\',
+                    `is_login` int(10) unsigned DEFAULT NULL COMMENT \'是否首次登录\',
+                    `is_repwd` int(10) unsigned DEFAULT NULL COMMENT \'是否重置密码\',
+                    `updatetime` int(10) unsigned NOT NULL COMMENT \'修改密码时间\',
+                    `logintime` int(10) unsigned NOT NULL COMMENT \'最近登录时间\',
+                    PRIMARY KEY (`id`),
+                    KEY `uid` (`uid`),
+                    KEY `logintime` (`logintime`),
+                    KEY `updatetime` (`updatetime`)
+                    ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT=\'账号记录\''));
+                }
+
                 $this->db->table_name = $prefix.'admin_panel';
                 if (!$this->db->field_exists('icon')) {
                     $this->db->query('ALTER TABLE `'.$this->db->table_name.'` ADD `icon` varchar(255) NULL DEFAULT NULL COMMENT \'图标标示\' AFTER `name`');
