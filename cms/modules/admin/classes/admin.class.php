@@ -278,6 +278,7 @@ class admin {
  	 */
 	private function login_before() {
 		$admin_login_db = pc_base::load_model('admin_login_model');
+		$member_db = pc_base::load_model('member_model');
 		$member_login_db = pc_base::load_model('member_login_model');
 		$table = $admin_login_db->db_tablepre.'admin_login';
 		if (!$admin_login_db->table_exists('admin_login')) {
@@ -313,7 +314,6 @@ class admin {
 		$userid = $_SESSION['userid'];
 		$config = getcache('common','commons');
 		if ($config) {
-			$this->member_db = pc_base::load_model('member_model');
 			// 长时间未登录的用户就锁定起来
 			if (isset($config['safe_wdl']) && $config['safe_wdl']) {
 				$time = $config['safe_wdl'] * 3600 * 24;
@@ -321,7 +321,7 @@ class admin {
 				$log_lock = $member_login_db->select($where);
 				if ($log_lock) {
 					foreach ($log_lock as $t) {
-						$this->member_db->update(array('islock'=>1), array('uid'=>$t['uid']));
+						$member_db->update(array('islock'=>1), array('uid'=>$t['uid']));
 					}
 				}
 			}
@@ -330,7 +330,7 @@ class admin {
 			$log = $admin_login_db->get_one(array('uid'=>$userid));
 			if (!$log) {
 				$log = array(
-					'uid' => $r['userid'],
+					'uid' => $userid,
 					'is_login' => 0,
 					'is_repwd' => 0,
 					'updatetime' => 0,

@@ -131,7 +131,7 @@ class foreground {
 			$log = $member_login_db->get_one(array('uid'=>$userid));
 			if (!$log) {
 				$log = array(
-					'uid' => $r['userid'],
+					'uid' => $userid,
 					'is_login' => 0,
 					'is_repwd' => 0,
 					'updatetime' => 0,
