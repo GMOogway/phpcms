@@ -59,7 +59,7 @@
 			<td><div class="input-group" style="width: 240px;">
 			    <input type="text" readonly="" value="<?php echo $memberinfo['username']?>" class="form-control input-text">
 			    <span class="input-group-btn">
-			        <a class="btn red" href="javascript:dr_iframe('变更', '?m=member&c=member&a=username_edit&userid=<?php echo $memberinfo['userid']?>&pc_hash=<?php echo $_SESSION['pc_hash']?>', '500px', '280px');"><i class="fa fa-edit"></i> 变更</a>
+			        <a class="btn red" href="javascript:dr_iframe('变更', '?m=member&c=member&a=username_edit&userid=<?php echo $memberinfo['userid']?>&pc_hash=<?php echo $_SESSION['pc_hash']?>', 500, 280);"><i class="fa fa-edit"></i> 变更</a>
 			    </span>
 			    </div><?php if($memberinfo['islock']) {?><img title="<?php echo L('lock')?>" src="<?php echo IMG_PATH?>icon/icon_padlock.gif"><?php }?><?php if($memberinfo['vip']) {?><img title="<?php echo L('lock')?>" src="<?php echo IMG_PATH?>icon/vip.gif"><?php }?></td>
 		</tr>
