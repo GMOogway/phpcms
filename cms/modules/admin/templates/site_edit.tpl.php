@@ -46,18 +46,19 @@ label {font-weight: 400;}
 </style>
 <div class="pad-10">
 <form action="?m=admin&c=site&a=edit&siteid=<?php echo $siteid?>" method="post" id="myform" onsubmit="return checkall()">
+<input name="dosubmit" type="hidden" value="1">
 <fieldset>
 	<legend><?php echo L('basic_configuration')?></legend>
 	<table width="100%"  class="table_form">
-  <tr>
+  <tr id="dr_row_name">
     <th width="100"><?php echo L('site_name')?>：</th>
     <td class="y-bg"><input type="text" class="input-text" name="info[name]" id="name" size="70" value="<?php echo $data['name']?>" /></td>
   </tr>
-  <tr>
+  <tr id="dr_row_dirname">
     <th><?php echo L('site_dirname')?>：</th>
     <td class="y-bg"><?php if ($siteid == 1) { echo $data['dirname'];} else {?><input type="text" class="input-text" name="info[dirname]" id="dirname" size="70" value="<?php echo $data['dirname']?>" /><?php }?></td>
   </tr>
-  <tr>
+  <tr id="dr_row_domain">
     <th><?php echo L('site_domain')?>：</th>
     <td class="y-bg"><input type="text" class="input-text" name="info[domain]" id="domain" size="70" value="<?php echo $data['domain']?>" /><button type="button" onclick="dr_test_domain('domain','site');" class="button"> <i class="fa fa-send"></i> 测试</button><div id="dr_site_domian_error" style="color: red;display: none"></div></td>
   </tr>
@@ -152,7 +153,7 @@ if(is_array($forminfos['base'])) {
 		}
 	}
  ?>
-	<tr>
+	<tr id="dr_row_<?php echo $field?>">
       <th width="80"><?php if($info['star']){ ?> <font color="red">*</font><?php } ?> <?php echo $info['name']?>
 	  </th>
       <td class="y-bg"><?php echo $info['form']?>  <?php echo $info['tips']?></td>
@@ -166,7 +167,7 @@ if(is_array($forminfos['base'])) {
 <fieldset>
 	<legend><?php echo L('release_point_configuration')?></legend>
 	<table width="100%"  class="table_form">
-  <tr>
+  <tr id="dr_row_release_point">
     <th width="80" valign="top"><?php echo L('release_point')?>：</th>
     <td> <select name="info[release_point][]" size="3" id="release_point" multiple title="<?php echo L('ctrl_more_selected')?>">
     <option value='' <?php if(!$data['release_point']) echo 'selected';?>><?php echo L('not_use_the_publishers_some')?></option>
@@ -181,7 +182,7 @@ if(is_array($forminfos['base'])) {
 <fieldset>
 	<legend><?php echo L('template_style_configuration')?></legend>
 	<table width="100%"  class="table_form">
-  <tr>
+  <tr id="dr_row_template">
     <th width="80" valign="top"><?php echo L('style_name')?>：</th>
     <td class="y-bg"> <select name="template[]" size="3" id="template" multiple title="<?php echo L('ctrl_more_selected')?>" onchange="default_list()">
     
@@ -200,7 +201,7 @@ if(is_array($forminfos['base'])) {
 		  <?php endforeach;endif;?>
 		</select></td>
   </tr>
-  <tr>
+  <tr id="dr_row_default_style">
     <th width="80" valign="top"><?php echo L('default_style')?>：<input type="hidden" name="info[default_style]" id="default_style_input" value="<?php echo $data['default_style']?>"></th>
     <td class="y-bg"><span id="default_style">
 	<?php 
@@ -431,8 +432,6 @@ function default_list() {
   </tr> 
 </table>
 </fieldset>
-<div class="bk15"></div>
-    <input type="submit" class="dialog" id="dosubmit" name="dosubmit" value="<?php echo L('submit')?>" />
 </div>
 </form>
 </div>

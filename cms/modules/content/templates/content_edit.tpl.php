@@ -25,6 +25,7 @@ include $this->admin_tpl('header','admin');?>
 <script type="text/javascript">var catid=<?php echo $catid;?></script>
 <div class="page-content main-content">
 <form name="myform" id="myform" action="?m=content&c=content&a=edit" class="form-horizontal" onsubmit="return checkall()" method="post" enctype="multipart/form-data">
+<input value="1" type="hidden" name="dosubmit">
 <div class="myfbody">
         <div class="row ">
             <div class="col-md-9">
@@ -57,7 +58,7 @@ if(is_array($forminfos['base'])) {
 		}
 	}
  ?>
-<div class="form-group">
+<div class="form-group" id="dr_row_<?php echo $field?>">
     <label class="control-label col-md-2"><?php if($info['star']){ ?><span class="required" aria-required="true"> * </span><?php } ?><?php echo $info['name']?></label>
     <div class="col-md-10">
 		<?php echo $info['form']?>
@@ -94,7 +95,7 @@ if(is_array($forminfos['senior'])) {
 		}
 	}
  ?>
-<div class="form-group">
+<div class="form-group" id="dr_row_<?php echo $field?>">
     <label class="control-label col-md-2"><?php if($info['star']){ ?><span class="required" aria-required="true"> * </span><?php } ?><?php echo $info['name']?></label>
     <div class="col-md-10">
 		<?php echo $info['form']?>
@@ -112,8 +113,7 @@ if(is_array($forminfos['senior'])) {
         </div>
     </div>
 <input value="<?php if($r['upgrade']) echo $r['url'];?>" type="hidden" name="upgrade">
-<input value="<?php echo $id;?>" type="hidden" name="id"><input value="<?php echo L('save_close');?>" type="submit" name="dosubmit" id="dosubmit" class="dialog">
-<input value="<?php echo L('save_continue');?>" type="submit" name="dosubmit_continue" id="dosubmit_continue" class="dialog">
+<input value="<?php echo $id;?>" type="hidden" name="id">
 </form>
 </div>
 </body>

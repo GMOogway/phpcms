@@ -235,6 +235,130 @@ function openwinx(url,name,w,h) {
 	};
 	diag.show();
 }
+function dr_content_submit(url,type,w,h) {
+	if(!w) w='100%';
+	if(!h) h='100%';
+	if (is_mobile()) {
+		w = h = '100%';
+	}
+	if (w=='100%' && h=='100%') {
+		var drag = false;
+	} else {
+		var drag = true;
+	}
+	if (typeof pc_hash == 'string') url += (url.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
+	if (url.toLowerCase().indexOf("http://") != -1 || url.toLowerCase().indexOf("https://") != -1) {
+	} else {
+		url = geturlpathname()+url;
+	}
+	var title = '';
+	if (type == 'add') {
+		title = '<i class="fa fa-plus"></i> '+'添加';
+	} else if (type == 'edit') {
+		title = '<i class="fa fa-edit"></i> '+'修改';
+	} else if (type == 'send') {
+		title = '<i class="fa fa-send"></i> '+'推送';
+	} else if (type == 'save') {
+		title = '<i class="fa fa-save"></i> '+'保存';
+	} else {
+		title = type;
+	}
+	var diag = new Dialog({
+		id:'content_id',
+		title:title,
+		url:url,
+		width:w,
+		height:h,
+		modal:true,
+		draggable:drag
+	});
+	diag.addButton('dosubmit','保存后自动关闭',function(){
+		var body = diag.innerFrame.contentWindow.document;
+		$.ajax({type: "POST",dataType:"json", url: url, data: $(body).find('#myform').serialize(),
+			success: function(json) {
+				if (json.code) {
+					if (json.data.tourl) {
+						setTimeout("window.location.href = '"+json.data.tourl+"'", 2000);
+					} else {
+						setTimeout("window.location.reload(true)", 2000);
+					}
+					dr_tips(1, json.msg);
+					diag.close()
+				} else {
+					if (json.data.field) {
+						$(body).find('#dr_row_'+json.data.field).addClass('has-error');
+						Dialog.warn(json.msg, function(){$(body).find('#'+json.data.field).focus();});
+					} else {
+						Dialog.warn(json.msg);
+					}
+				}
+				return false;
+			},
+			error: function(HttpRequest, ajaxOptions, thrownError) {
+				dr_ajax_alert_error(HttpRequest, ajaxOptions, thrownError)
+			}
+		});
+		return false;
+	},0,1);
+	if (type == 'edit') {
+		diag.okText = '保存并继续修改';
+	} else {
+		diag.okText = '保存并继续发表';
+	}
+	diag.onOk = function(){
+		var body = diag.innerFrame.contentWindow.document;
+		$.ajax({type: "POST",dataType:"json", url: url, data: $(body).find('#myform').serialize(),
+			success: function(json) {
+				if (json.code) {
+					body.location.reload(true);
+					Dialog.tips(json.msg);
+				} else {
+					if (json.data.field) {
+						$(body).find('#dr_row_'+json.data.field).addClass('has-error');
+						Dialog.warn(json.msg, function(){$(body).find('#'+json.data.field).focus();});
+					} else {
+						Dialog.warn(json.msg);
+					}
+				}
+				return false;
+			},
+			error: function(HttpRequest, ajaxOptions, thrownError) {
+				dr_ajax_alert_error(HttpRequest, ajaxOptions, thrownError)
+			}
+		});
+		return false;
+	};
+	diag.cancelText = '关闭(X)';
+	diag.onCancel=function(){
+		if($DW.$V('#title') !='') {
+			Dialog.confirm('内容已经录入，确定离开将不保存数据？', function(){
+				if (parent.right) {
+					parent.right.location.reload(true);
+				} else {
+					window.top.$(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.location.reload(true);
+				}
+				diag.close();
+			}, function(){});
+		} else {
+			if (parent.right) {
+				parent.right.location.reload(true);
+			} else {
+				window.top.$(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.location.reload(true);
+			}
+			diag.close();
+		}
+		return false;
+	};
+	diag.onClose=function(){
+		if (parent.right) {
+			parent.right.location.reload(true);
+		} else {
+			window.top.$(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.location.reload(true);
+		}
+		$DW.close();
+	};
+	diag.show();
+}
 function contentopen(url,name,w,h) {
 	if(!w) w='100%';
 	if(!h) h='100%';
@@ -261,8 +385,6 @@ function contentopen(url,name,w,h) {
 		draggable:drag
 	});
 	diag.addButton('dosubmit','保存后自动关闭',function(){
-		//var body = diag.innerFrame.contentWindow.document;
-		//$(body).find('#myform').serialize()
 		var form = $DW.$('#dosubmit');
 		if(form.length > 0) {
 			form.click();
@@ -489,8 +611,8 @@ function dr_iframe(type, url, width, height, rt) {
 		height = '70%';
 	}
 	if (is_mobile()) {
-		width = '95%';
-		height = '90%';
+		width = '100%';
+		height = '100%';
 	}
 	if (width=='100%' && height=='100%') {
 		var drag = false;
@@ -522,8 +644,12 @@ function dr_iframe(type, url, width, height, rt) {
 					dr_tips(1, json.msg);
 					diag.close()
 				} else {
-					$(body).find('#dr_row_'+json.data.field).addClass('has-error');
-					Dialog.tips(json.msg);
+					if (json.data.field) {
+						$(body).find('#dr_row_'+json.data.field).addClass('has-error');
+						Dialog.warn(json.msg, function(){if(json.data.batch){$(body).find('#'+json.data.batch).focus();}else{$(body).find('#'+json.data.field).focus();}});
+					} else {
+						Dialog.warn(json.msg);
+					}
 				}
 				return false;
 			},

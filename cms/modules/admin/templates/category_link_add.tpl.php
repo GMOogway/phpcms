@@ -70,6 +70,7 @@ include $this->admin_tpl('header');?>
     <p><?php echo L('最多支持创建'.MAX_CATEGORY.'个栏目，请合理的规划网站栏目');?></p>
 </div>
 <form action="?m=admin&c=category&a=<?php echo ROUTE_A;?>" class="form-horizontal" method="post" name="myform" id="myform" onsubmit="return checkall()">
+<input name="dosubmit" type="hidden" value="1">
 <input name="catid" type="hidden" value="<?php echo $catid;?>">
 <input name="type" type="hidden" value="<?php echo $type;?>">
 <input name="page" id="dr_page" type="hidden" value="<?php echo $page;?>">
@@ -96,7 +97,7 @@ include $this->admin_tpl('header');?>
                             <label><?php echo form::select_category('category_content_'.$this->siteid,$parentid,'name="info[parentid]" id="parentid"',L('please_select_parent_category'),0,-1);?></label>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="dr_row_catname">
                         <label class="col-md-2 control-label"><?php echo L('catname')?></label>
                         <div class="col-md-9">
                             <label><input class="form-control input-large" type="text" name="info[catname]" id="catname" value=""></label>
@@ -176,7 +177,7 @@ if(is_array($forminfos['base'])) {
         }
     }
  ?>
-                    <div class="form-group">
+                    <div class="form-group" id="dr_row_<?php echo $field?>">
                         <label class="col-md-2 control-label"><?php if($info['star']){ ?> <font color="red">*</font><?php } ?> <?php echo $info['name']?></label>
                         <div class="col-md-9">
                             <label><?php echo $info['form']?></label>
@@ -190,7 +191,6 @@ if(is_array($forminfos['base'])) {
                 </div>
             </div>
         </div>
-        <input name="dosubmit" id="dosubmit" type="submit" value="<?php echo L('submit')?>" class="dialog">
     </div>
 </div>
 </form>

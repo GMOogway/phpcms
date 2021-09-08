@@ -133,31 +133,13 @@ class attachments {
 			
 			if($rt && $data) {
 				if($upload->uploadedfiles[0]['isimage']) {
-					$result['code'] = 1;
-					$result['msg'] = L('att_upload_succ');
-					$result['id'] = $data['code'];
-					$result['src'] = $rt['data']['url'];
-					$result['ext'] = 1;
-					$result['filename'] = $rt['data']['name'];
-					$result['size'] = format_file_size($rt['data']['size']);
-					exit(json_encode($result));
-				} else {
-					$result['code'] = 1;
-					$result['msg'] = L('att_upload_succ');
-					$result['id'] = $data['code'];
-					$result['src'] = $rt['data']['url'];
-					$result['ext'] = $rt['data']['ext'];
-					$result['filename'] = $rt['data']['name'];
-					$result['size'] = format_file_size($rt['data']['size']);
-					exit(json_encode($result));
+					$rt['data']['ext'] = 1;
 				}
-				exit;
+				$rt['data']['id'] = $data['code'];
+				$rt['data']['size'] = format_file_size($rt['data']['size']);
+				dr_json(1, L('att_upload_succ'), $rt['data']);
 			} else {
-				$result['code'] = 0;
-				$result['msg'] = $rt['msg'];
-				exit(json_encode($result));
-				echo '0,'.$rt['msg'];
-				exit;
+				dr_json(0, $rt['msg']);
 			}
 		} else {
 			if($this->isadmin==0 && !$grouplist[$this->groupid]['allowattachment']) showmessage(L('att_no_permission'));

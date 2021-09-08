@@ -48,19 +48,20 @@ label {font-weight: 400;}
 </style>
 <div class="pad-10">
 <form action="?m=admin&c=site&a=add" method="post" id="myform" onsubmit="return checkall()">
+<input name="dosubmit" type="hidden" value="1">
 <div>
 <fieldset>
 	<legend><?php echo L('basic_configuration')?></legend>
 	<table width="100%"  class="table_form">
-  <tr>
+  <tr id="dr_row_name">
     <th width="100"><?php echo L('site_name')?>：</th>
     <td class="y-bg"><input type="text" class="input-text" name="info[name]" id="name" size="70" /></td>
   </tr>
-  <tr>
+  <tr id="dr_row_dirname">
     <th><?php echo L('site_dirname')?>：</th>
     <td class="y-bg"><input type="text" class="input-text" name="info[dirname]" id="dirname" size="70" /></td>
   </tr>
-    <tr>
+    <tr id="dr_row_domain">
     <th><?php echo L('site_domain')?>：</th>
     <td class="y-bg"><input type="text" class="input-text" name="info[domain]" id="domain"  size="70"/></td>
   </tr>
@@ -155,7 +156,7 @@ if(is_array($forminfos['base'])) {
 		}
 	}
  ?>
-	<tr>
+	<tr id="dr_row_<?php echo $field?>">
       <th width="80"><?php if($info['star']){ ?> <font color="red">*</font><?php } ?> <?php echo $info['name']?>
 	  </th>
       <td class="y-bg"><?php echo $info['form']?>  <?php echo $info['tips']?></td>
@@ -169,7 +170,7 @@ if(is_array($forminfos['base'])) {
 <fieldset>
 	<legend><?php echo L('release_point_configuration')?></legend>
 	<table width="100%"  class="table_form">
-  <tr>
+  <tr id="dr_row_release_point">
     <th width="80" valign="top"><?php echo L('release_point')?>：</th>
     <td> <select name="info[release_point][]" size="3" id="release_point" multiple title="<?php echo L('ctrl_more_selected')?>">
     		<option value='' selected><?php echo L('not_use_the_publishers_some')?></option>
@@ -185,7 +186,7 @@ if(is_array($forminfos['base'])) {
 <fieldset>
 	<legend><?php echo L('template_style_configuration')?></legend>
 	<table width="100%"  class="table_form">
-  <tr>
+  <tr id="dr_row_template">
     <th width="80" valign="top"><?php echo L('style_name')?>：</th>
     <td class="y-bg"> <select name="template[]" size="3" id="template" multiple title="<?php echo L('ctrl_more_selected')?>" onchange="default_list()" ondblclick="default_list()">
     	<?php if(is_array($template_list)):
@@ -196,7 +197,7 @@ if(is_array($forminfos['base'])) {
 		</select></td>
   </tr>
    </tr>
-    <tr>
+    <tr id="dr_row_default_style">
     <th width="80" valign="top"><?php echo L('default_style')?>：<input type="hidden" name="info[default_style]" id="default_style_input" value="0"></th>
     <td class="y-bg"><span id="default_style"><div class="mt-radio-inline"><label class="mt-radio mt-radio-outline"><input type="radio" name="default_style_radio" disabled> <span></span></label></div></span><span id="default_style_msg"></span></td>
   </tr>
@@ -422,8 +423,6 @@ function default_list() {
 </table>
 </fieldset>
 </div>
-<div class="bk15"></div>
-    <input type="submit" class="dialog" id="dosubmit" name="dosubmit" value="<?php echo L('submit')?>" />
 </div>
 </div>
 </form>

@@ -67,7 +67,7 @@ class site extends admin {
 		$total = $this->db->count();
 		$pages = pages($total, $page, $pagesize);
 		$show_dialog = true;
-		$big_menu = array('javascript:artdialog(\'content_id\',\'?m=admin&c=site&a=add\',\''.L('add_site').'\',\'60%\',\'60%\');void(0);', L('add_site'));
+		$big_menu = array('javascript:dr_iframe(\'add\',\'?m=admin&c=site&a=add\',\'60%\',\'60%\');void(0);', L('add_site'));
 		include $this->admin_tpl('site_list');
 	}
 	
@@ -78,42 +78,42 @@ class site extends admin {
 			$info = $this->input->post('info');
 			$template = $this->input->post('template');
 			$setting = $this->input->post('setting');
-			$info['name'] = isset($info['name']) && trim($info['name']) ? trim($info['name']) : showmessage(L('site_name').L('empty'));
-			$info['dirname'] = isset($info['dirname']) && trim($info['dirname']) ? trim($info['dirname']) : showmessage(L('site_dirname').L('empty'));
-			$info['domain'] = isset($info['domain']) && trim($info['domain']) ? trim($info['domain']) : '';
+			$info['name'] = isset($info['name']) && trim($info['name']) ? trim($info['name']) : dr_json(0, L('site_name').L('empty'), array('field' => 'name'));
+			$info['dirname'] = isset($info['dirname']) && trim($info['dirname']) ? trim($info['dirname']) : dr_json(0, L('site_dirname').L('empty'), array('field' => 'dirname'));
+			$info['domain'] = isset($info['domain']) && trim($info['domain']) ? trim($info['domain']) : dr_json(0, L('site_domain').L('empty'), array('field' => 'domain'));
 			$info['ishtml'] = isset($info['ishtml']) && trim($info['ishtml']) ? trim($info['ishtml']) : 0;
 			$info['mobileauto'] = isset($info['mobileauto']) && trim($info['mobileauto']) ? trim($info['mobileauto']) : 0;
 			$info['mobilehtml'] = isset($info['mobilehtml']) && trim($info['mobilehtml']) ? trim($info['mobilehtml']) : 0;
 			$info['not_pad'] = isset($info['not_pad']) && trim($info['not_pad']) ? trim($info['not_pad']) : 0;
-			$template = isset($template) && !empty($template) ? $template : showmessage(L('please_select_a_style'));
-			$info['default_style'] = isset($info['default_style']) && !empty($info['default_style']) ? $info['default_style'] : showmessage(L('please_choose_the_default_style'));
+			$template = isset($template) && !empty($template) ? $template : dr_json(0, L('please_select_a_style'), array('field' => 'template'));
+			$info['default_style'] = isset($info['default_style']) && !empty($info['default_style']) ? $info['default_style'] : dr_json(0, L('please_choose_the_default_style'), array('field' => 'default_style'));
 			if ($this->db->get_one(array('name'=>$info['name']), 'siteid')) {
-				showmessage(L('site_name').L('exists'));
+				dr_json(0, L('site_name').L('exists'), array('field' => 'name'));
 			}
 			if (is_dir(CMS_PATH.$info['dirname'])) {
-				showmessage(L('目录['.$info['dirname'].']已经存在'));
+				dr_json(0, L('目录['.$info['dirname'].']已经存在'), array('field' => 'dirname'));
 			}
 			if (!preg_match('/^\\w+$/i', $info['dirname'])) {
-				showmessage(L('site_dirname').L('site_dirname_err_msg'));
+				dr_json(0, L('site_dirname').L('site_dirname_err_msg'), array('field' => 'dirname'));
 			}
 			if ($this->db->get_one(array('dirname'=>$info['dirname']), 'siteid')) {
-				showmessage(L('site_dirname').L('exists'));
+				dr_json(0, L('site_dirname').L('exists'), array('field' => 'dirname'));
 			}
 			if (!empty($info['domain']) && !preg_match('/http(s?):\/\/(.+)\/$/i', $info['domain'])) {
-				showmessage(L('site_domain').L('site_domain_ex2'));
+				dr_json(0, L('site_domain').L('site_domain_ex2'), array('field' => 'domain'));
 			}
 			if (!empty($info['domain']) && $this->db->get_one(array('domain'=>$info['domain']), 'siteid')) {
-				showmessage(L('site_domain').L('exists'));
+				dr_json(0, L('site_domain').L('exists'), array('field' => 'domain'));
 			}
 			if (!empty($info['mobile_domain']) && !preg_match('/http(s?):\/\/(.+)\/$/i', $info['mobile_domain'])) {
-				showmessage(L('site_domain').L('site_domain_ex2'));
+				dr_json(0, L('site_domain').L('site_domain_ex2'), array('field' => 'mobile_domain'));
 			}
 			if (!empty($info['mobile_domain']) && $this->db->get_one(array('mobile_domain'=>$info['mobile_domain']), 'siteid')) {
-				showmessage(L('site_domain').L('exists'));
+				dr_json(0, L('site_domain').L('exists'), array('field' => 'mobile_domain'));
 			}
 			if (!empty($info['release_point']) && is_array($info['release_point'])) {
 				if (count($info['release_point']) > 4) {
-					showmessage(L('release_point_configuration').L('most_choose_four'));
+					dr_json(0, L('release_point_configuration').L('most_choose_four'), array('field' => 'release_point'));
 				}
 				$s = '';
 				foreach ($info['release_point'] as $key=>$val) {
@@ -163,11 +163,11 @@ class site extends admin {
 						$siteid
 					), file_get_contents(TEMPPATH.'web/'.$file)));
 					if (!$size) {
-						showmessage(L('文件['.$dst.']无法写入'));
+						dr_json(0, L('文件['.$dst.']无法写入'));
 					}
 				}
 			}
-			showmessage(L('operation_success'), '?m=admin&c=site&a=init', '', 'content_id');
+			dr_json(1, L('operation_success'));
 		} else {
 			$show_dialog = '';
 			$locate = $this->locate;
@@ -241,48 +241,48 @@ class site extends admin {
 				$info = $this->input->post('info');
 				$template = $this->input->post('template');
 				$setting = $this->input->post('setting');
-				$info['name'] = isset($info['name']) && trim($info['name']) ? trim($info['name']) : showmessage(L('site_name').L('empty'));
-				if ($siteid != 1) $info['dirname'] = isset($info['dirname']) && trim($info['dirname']) ? trim($info['dirname']) : showmessage(L('site_dirname').L('empty'));
-				$info['domain'] = isset($info['domain']) && trim($info['domain']) ? trim($info['domain']) : '';
+				$info['name'] = isset($info['name']) && trim($info['name']) ? trim($info['name']) : dr_json(0, L('site_name').L('empty'), array('field' => 'name'));
+				if ($siteid != 1) $info['dirname'] = isset($info['dirname']) && trim($info['dirname']) ? trim($info['dirname']) : dr_json(0, L('site_dirname').L('empty'), array('field' => 'dirname'));
+				$info['domain'] = isset($info['domain']) && trim($info['domain']) ? trim($info['domain']) : dr_json(0, L('site_domain').L('empty'), array('field' => 'domain'));
 				$info['ishtml'] = isset($info['ishtml']) && trim($info['ishtml']) ? trim($info['ishtml']) : 0;
 				$info['mobileauto'] = isset($info['mobileauto']) && trim($info['mobileauto']) ? trim($info['mobileauto']) : 0;
 				$info['mobilehtml'] = isset($info['mobilehtml']) && trim($info['mobilehtml']) ? trim($info['mobilehtml']) : 0;
 				$info['not_pad'] = isset($info['not_pad']) && trim($info['not_pad']) ? trim($info['not_pad']) : 0;
-				$template = isset($template) && !empty($template) ? $template : showmessage(L('please_select_a_style'));
-				$info['default_style'] = isset($info['default_style']) && !empty($info['default_style']) ? $info['default_style'] : showmessage(L('please_choose_the_default_style'));
+				$template = isset($template) && !empty($template) ? $template : dr_json(0, L('please_select_a_style'), array('field' => 'template'));
+				$info['default_style'] = isset($info['default_style']) && !empty($info['default_style']) ? $info['default_style'] : dr_json(0, L('please_choose_the_default_style'), array('field' => 'default_style'));
 				if ($data['name'] != $info['name'] && $this->db->get_one(array('name'=>$info['name']), 'siteid')) {
-					showmessage(L('site_name').L('exists'));
+					dr_json(0, L('site_name').L('exists'), array('field' => 'name'));
 				}
 				if ($siteid != 1) {
 					if (!preg_match('/^\\w+$/i', $info['dirname'])) {
-						showmessage(L('site_dirname').L('site_dirname_err_msg'));
+						dr_json(0, L('site_dirname').L('site_dirname_err_msg'), array('field' => 'dirname'));
 					}
 					if ($data['dirname'] != $info['dirname'] && $this->db->get_one(array('dirname'=>$info['dirname']), 'siteid')) {
-						showmessage(L('site_dirname').L('exists'));
+						dr_json(0, L('site_dirname').L('exists'), array('field' => 'dirname'));
 					}
 				}
 				if ($sitelist[$siteid]['dirname']!=$info['dirname']) {
 					$state = rename(CMS_PATH.$sitelist[$siteid]['dirname'], CMS_PATH.$info['dirname']);
 					if (!$state) {
-						showmessage(L('重命名目录['.$sitelist[$siteid]['dirname'].']失败！'));
+						dr_json(0, L('重命名目录['.$sitelist[$siteid]['dirname'].']失败！'), array('field' => 'dirname'));
 					}
 				}
 				
 				if (!empty($info['domain']) && !preg_match('/http(s?):\/\/(.+)\/$/i', $info['domain'])) {
-					showmessage(L('site_domain').L('site_domain_ex2'));
+					dr_json(0, L('site_domain').L('site_domain_ex2'), array('field' => 'domain'));
 				}
 				if (!empty($info['domain']) && $data['domain'] != $info['domain'] && $this->db->get_one(array('domain'=>$info['domain']), 'siteid')) {
-					showmessage(L('site_domain').L('exists'));
+					dr_json(0, L('site_domain').L('exists'), array('field' => 'domain'));
 				}
 				if (!empty($info['mobile_domain']) && !preg_match('/http(s?):\/\/(.+)\/$/i', $info['mobile_domain'])) {
-					showmessage(L('site_domain').L('site_domain_ex2'));
+					dr_json(0, L('site_domain').L('site_domain_ex2'), array('field' => 'mobile_domain'));
 				}
 				if (!empty($info['mobile_domain']) && $data['mobile_domain'] != $info['mobile_domain'] && $this->db->get_one(array('mobile_domain'=>$info['mobile_domain']), 'siteid')) {
-					showmessage(L('site_domain').L('exists'));
+					dr_json(0, L('site_domain').L('exists'), array('field' => 'mobile_domain'));
 				}
 				if (!empty($info['release_point']) && is_array($info['release_point'])) {
 					if (count($info['release_point']) > 4) {
-						showmessage(L('release_point_configuration').L('most_choose_four'));
+						dr_json(0, L('release_point_configuration').L('most_choose_four'), array('field' => 'release_point'));
 					}
 					$s = '';
 					foreach ($info['release_point'] as $key=>$val) {
@@ -309,9 +309,9 @@ class site extends admin {
 					$class_site = pc_base::load_app_class('sites');
 					$class_site->set_cache();
 					$this->db->update($systeminfo,array('siteid'=>$siteid));
-					showmessage(L('operation_success'), '', '', 'content_id');
+					dr_json(1, L('operation_success'));
 				} else {
-					showmessage(L('operation_failure'));
+					dr_json(0, L('operation_failure'));
 				}
 			} else {
 				$show_dialog = '';

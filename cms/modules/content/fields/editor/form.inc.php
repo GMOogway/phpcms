@@ -21,5 +21,5 @@
 				return false;
 			}';
 		}
-		return "<div id='{$field}_tip'></div>".'<textarea name="info['.$field.']" id="'.$field.'" boxid="'.$field.'">'.$value.'</textarea>'.form::editor($field,$toolbar,$toolvalue,'content',$this->catid,$color,$allowupload,1,'',$height,$disabled_page,$autofloat,$autoheight,$theme,$watermark,$attachment,$image_reduce,$div2p,$enablesaveimage);
+		return "<div id='{$field}_tip'></div>".'<textarea class="dr_ueditor" name="info['.$field.']" id="'.$field.'" boxid="'.$field.'">'.$value.'</textarea>'.form::editor($field,$toolbar,$toolvalue,'content',$this->catid,$color,$allowupload,1,'',$height,$disabled_page,$autofloat,$autoheight,$theme,$watermark,$attachment,$image_reduce,$div2p,$enablesaveimage);
 	}

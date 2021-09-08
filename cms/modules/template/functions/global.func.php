@@ -173,7 +173,7 @@ function visualization($html, $style = '', $dir = '', $file = '') {
 		$(function(){
 		$('a').attr('href', 'javascript:void(0)').attr('target', '');
 		$('.admin_piao_edit').click(function(){
-		var url = '?m=template&c=file&a=edit_pc_tag';
+		var url = '".SELF."?m=template&c=file&a=edit_pc_tag';
 		if($(this).parent('.admin_piao').attr('pc_action') == 'block') url = '".SELF."?m=block&c=block_admin&a=add';
 		var diag = new Dialog({id:'edit',title:'".L('pc_tag','' ,'template')."',url:url+'&style=$style&dir=$dir&file=$file&pc_hash='+pc_hash+'&'+$(this).parent('.admin_piao').attr('data'),width:700,height:500,modal:true});diag.onOk = function(){var form = \$DW.$('#dosubmit');form.click();return false;};diag.onCancel=function() {\$DW.close();};diag.show();;})
 		$('.admin_block').click(function(){

@@ -114,7 +114,7 @@ if(is_array($infos)){
 </script>
 <script type="text/html" id="action">
     <a href="{{d.url}}" target="_blank" class="layui-btn layui-btn-xs layui-btn-normal"><i class="fa fa-eye"></i> <?php echo L('preview');?></a>
-    <a href="javascript:;" onclick="javascript:contentopen('?m=content&c=content&a=edit&catid={{d.catid}}&id={{d.id}}','<?php echo L('edit').L('content');?>')" class="layui-btn layui-btn-xs"><i class="fa fa-edit"></i> <?php echo L('edit');?></a>
+    <a href="javascript:;" onclick="javascript:dr_content_submit('?m=content&c=content&a=edit&catid={{d.catid}}&id={{d.id}}','edit')" class="layui-btn layui-btn-xs"><i class="fa fa-edit"></i> <?php echo L('edit');?></a>
     <a href="javascript:view_comment('{{d.idencode}}','{{d.safetitle}}')" class="layui-btn layui-btn-xs layui-btn-danger"><i class="fa fa-comment"></i> <?php echo L('comment');?></a>
 </script>
 <script>

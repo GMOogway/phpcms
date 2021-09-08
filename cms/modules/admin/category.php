@@ -92,18 +92,20 @@ class category extends admin {
 			pc_base::load_sys_func('iconv');
 			$info = $this->input->post('info');
 			$info['type'] = intval($this->input->post('type'));
-			
+			if(!$info['type']) {
+				if(!$info['modelid']) dr_json(0, L('select_model'), array('field' => 'modelid'));
+			}
 			if(!$this->input->post('addtype')) {
-				if($info['catname']=='') showmessage(L('input_catname'));
 				$info['catname'] = safe_replace($info['catname']);
 				$info['catname'] = str_replace(array('%'),'',$info['catname']);
+				if(!$info['catname']) dr_json(0, L('input_catname'), array('field' => 'catname'));
 				if($info['type']!=2) {
 					$pinyin = pc_base::load_sys_class('pinyin');
-					if($info['catdir']=='') $info['catdir'] = $pinyin->result($info['catname']);
+					if(!$info['catdir']) $info['catdir'] = $pinyin->result($info['catname']);
 					if (strlen($info['catdir']) > 12) {
 						$info['catdir'] = $pinyin->result($info['catname'], 0);
 					}
-					if(!$this->public_check_catdir(0,$info['catdir'])) showmessage(L('catname_have_exists'));
+					if(!$this->public_check_catdir(0,$info['catdir'])) dr_json(0, L('catname_have_exists'));
 				}
 			}
 			
@@ -111,6 +113,7 @@ class category extends admin {
 			$info['module'] = 'content';
 			$setting = $this->input->post('setting');
 			if($info['type']!=2) {
+				if(!$setting['template_list']) dr_json(0, L('template_setting'), array('field' => 'template_list'));
 				//栏目生成静态配置
 				if($setting['ishtml']) {
 					$setting['category_ruleid'] = $this->input->post('category_html_ruleid');
@@ -138,7 +141,7 @@ class category extends admin {
 			
 			if(!$this->input->post('addtype')) {
 				if ($this->check_counts(0)) {
-					showmessage(L('网站栏目数量已达到上限'));
+					dr_json(0, L('网站栏目数量已达到上限'));
 				}
 				$catname = CHARSET == 'gbk' ? $info['catname'] : iconv('utf-8','gbk',$info['catname']);
 				$letters = gbk_to_pinyin($catname);
@@ -148,17 +151,17 @@ class category extends admin {
 				$this->update_priv($catid, $this->input->post('priv_roleid'));
 				$this->update_priv($catid, $this->input->post('priv_groupid'),0);
 			} else {//批量添加
-				$end_str = '';
+				if(!$this->input->post('batch_add')) dr_json(0, L('input_catname'), array('field' => 'catname', 'batch' => 'batch'));
 				$batch_adds = explode("\n", $this->input->post('batch_add'));
 				if ($this->check_counts(0, dr_count($batch_adds))) {
-					showmessage(L('网站栏目数量已达到上限'));
+					dr_json(0, L('网站栏目数量已达到上限'));
 				}
 				foreach ($batch_adds as $_v) {
 					if(trim($_v)=='') continue;
 					$names = explode('|', $_v);
 					$catname = $names[0];
 					$info['catname'] = trim($names[0]);
-					if($info['catname']=='') showmessage(L('input_catname'));
+					if(!$info['catname']) dr_json(0, L('input_catname'), array('field' => 'catname'));
 					$letters = gbk_to_pinyin($catname);
 					$info['letter'] = strtolower(implode('', $letters));
 					$info['catdir'] = trim($names[1]) ? trim($names[1]) : trim($info['letter']);
@@ -174,9 +177,8 @@ class category extends admin {
 					}
 				}
 			}
-			$this->repair();
 			$this->cache();
-			showmessage(L('add_success'),HTTP_REFERER,'', 'add');
+			dr_json(1, L('add_success'), array('tourl' => '?m=admin&c=category&a=public_cache&module=admin&menuid=141&pc_hash='.$_SESSION['pc_hash']));
 		} else {
 			$show_header = $show_dialog = '';
 			//获取站点模板信息
@@ -229,15 +231,26 @@ class category extends admin {
 			$catid = intval($this->input->post('catid'));
 			$setting = $this->input->post('setting');
 			$info = $this->input->post('info');
+			if(!$this->input->post('type')) {
+				if(!$info['modelid']) dr_json(0, L('select_model'), array('field' => 'modelid'));
+			}
+			if(!$info['catname']) dr_json(0, L('input_catname'), array('field' => 'catname'));
+			if($this->input->post('type')!=2) {
+				$pinyin = pc_base::load_sys_class('pinyin');
+				if(!$info['catdir']) $info['catdir'] = $pinyin->result($info['catname']);
+				if (strlen($info['catdir']) > 12) {
+					$info['catdir'] = $pinyin->result($info['catname'], 0);
+				}
+			}
 			//上级栏目不能是自身
 			//if($info['parentid']==$catid){
-				//showmessage(L('operation_failure'));
+				//dr_json(0, L('operation_failure'));
 			//}
 			//上级栏目不能是自身  ---也不能是自己的子栏目
 			$arrchildid = $this->db->get_one(array('catid'=>$catid), 'arrchildid');
 			$arrchildid_arr = explode(',',$arrchildid['arrchildid']); 
 			if(in_array($info['parentid'],$arrchildid_arr,true)){
-				showmessage(L('operation_failure'));
+				dr_json(0, L('operation_failure'));
 			}
 			$this->content_db = pc_base::load_model('content_model');
 			$this->categorys = getcache('category_content_'.$this->siteid,'commons');
@@ -249,11 +262,12 @@ class category extends admin {
 				$result = $this->content_db->fetch_array($rs);
 				$total = $result[0]['count'];
 				if ($total && $setting['disabled']) {
-					showmessage(L('当前栏目存在内容数据，无法禁用'));
+					dr_json(0, L('当前栏目存在内容数据，无法禁用'));
 				}
 			}
 			//栏目生成静态配置
 			if($this->input->post('type') != 2) {
+				if(!$setting['template_list']) dr_json(0, L('template_setting'), array('field' => 'template_list'));
 				if($setting['ishtml']) {
 					$setting['category_ruleid'] = $this->input->post('category_html_ruleid');
 				} else {
@@ -320,14 +334,13 @@ class category extends admin {
 			$this->db->update($systeminfo,array('catid'=>$catid,'siteid'=>$this->siteid));
 			$this->update_priv($catid, $this->input->post('priv_roleid'));
 			$this->update_priv($catid, $this->input->post('priv_groupid'),0);
-			$this->repair();
 			$this->cache();
 			//更新附件状态
 			if($info['image'] && pc_base::load_config('system','attachment_stat')) {
 				$this->attachment_db = pc_base::load_model('attachment_model');
 				$this->attachment_db->api_update($info['image'],'catid-'.$catid,1);
 			}
-			showmessage(L('operation_success'),HTTP_REFERER,'', 'edit');
+			dr_json(1, L('operation_success'), array('tourl' => '?m=admin&c=category&a=public_cache&module=admin&menuid=141&pc_hash='.$_SESSION['pc_hash']));
 		} else {
 			$show_header = $show_dialog = '';
 			//获取站点模板信息

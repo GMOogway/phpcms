@@ -75,25 +75,26 @@
 						element.progress('progress', '0%');
 						layer.msg('上传中', {icon: 16, time: 0});
 					},
-					done: function(data){
-						if(data.code == 1){
-							dr_tips(data.code, data.msg);
+					done: function(json){
+						if(json.code == 1){
+							dr_tips(json.code, json.msg);
+							var data = json.data;
 							if(data.id == 0) {
-								dr_tips(0, data.src)
+								dr_tips(0, data.url)
 								return false;
 							}
 							if(data.ext == 1) {
-								var img = '<span class=\"checkbox\"></span><input type=\"checkbox\" class=\"checkboxes\" name=\"ids[]\" value=\"'+data.id+'\" /><a href=\"javascript:;\" onclick=\"javascript:att_cancel(this,'+data.id+',\'upload\')\" class=\"on\"><div class=\"icon\"></div><img src=\"'+data.src+'\" width=\"80\" id=\"'+data.id+'\" path=\"'+data.src+'\" filename=\"'+data.filename+'\"/><i class=\"size\">'+data.size+'</i><i class=\"name\" title=\"'+data.filename+'\">'+data.filename+'</i></a>';
+								var img = '<div onmouseover=\"layer.tips(\''+data.name+'&nbsp;&nbsp;'+data.size+'\',this,{tips: [1, \'#000\']});\" onmouseout=\"layer.closeAll();\"><span class=\"checkbox\"></span><input type=\"checkbox\" class=\"checkboxes\" name=\"ids[]\" value=\"'+data.id+'\" /><a href=\"javascript:;\" onclick=\"javascript:att_cancel(this,'+data.id+',\'upload\')\" class=\"on\"><div class=\"icon\"></div><img src=\"'+data.url+'\" width=\"80\" id=\"'+data.id+'\" path=\"'+data.url+'\" filename=\"'+data.name+'\"/><i class=\"size\">'+data.size+'</i><i class=\"name\" title=\"'+data.name+'\">'+data.name+'</i></a></div>';
 							} else {
-								var img = '<span class=\"checkbox\"></span><input type=\"checkbox\" class=\"checkboxes\" name=\"ids[]\" value=\"'+data.id+'\" /><a href=\"javascript:;\" onclick=\"javascript:att_cancel(this,'+data.id+',\'upload\')\" class=\"on\"><div class=\"icon\"></div><img src=\"".IMG_PATH."ext/'+data.ext+'.png\" width=\"80\" id=\"'+data.id+'\" path=\"'+data.src+'\" filename=\"'+data.filename+'\"/><i class=\"size\">'+data.size+'</i><i class=\"name\" title=\"'+data.filename+'\">'+data.filename+'</i></a>';
+								var img = '<div onmouseover=\"layer.tips(\''+data.name+'&nbsp;&nbsp;'+data.size+'\',this,{tips: [1, \'#000\']});\" onmouseout=\"layer.closeAll();\"><span class=\"checkbox\"></span><input type=\"checkbox\" class=\"checkboxes\" name=\"ids[]\" value=\"'+data.id+'\" /><a href=\"javascript:;\" onclick=\"javascript:att_cancel(this,'+data.id+',\'upload\')\" class=\"on\"><div class=\"icon\"></div><img src=\"".IMG_PATH."ext/'+data.ext+'.png\" width=\"80\" id=\"'+data.id+'\" path=\"'+data.url+'\" filename=\"'+data.name+'\"/><i class=\"size\">'+data.size+'</i><i class=\"name\" title=\"'+data.name+'\">'+data.name+'</i></a></div>';
 							}
-							$.get('index.php?m=attachment&c=attachments&a=h5upload_json&aid='+data.id+'&src='+data.src+'&filename='+data.filename+'&size='+data.size);
+							$.get('index.php?m=attachment&c=attachments&a=h5upload_json&aid='+data.id+'&src='+data.url+'&filename='+data.name+'&size='+data.size);
 							$('#fsUpload').append('<div id=\"attachment_'+data.id+'\" class=\"files_row on\"></div>');
 							$('#attachment_'+data.id).html(img);
-							$('#att-status').append('|'+data.src);
-							$('#att-name').append('|'+data.filename);
+							$('#att-status').append('|'+data.url);
+							$('#att-name').append('|'+data.name);
 						}else{
-							dr_tips(data.code, data.msg);
+							dr_tips(json.code, json.msg);
 						}
 						$('#progress').hide();
 						$('#progress').addClass('fade');

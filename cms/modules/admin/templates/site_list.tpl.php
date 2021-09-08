@@ -44,7 +44,7 @@ endif;
 <script type="text/javascript">
 <!--
 function edit(id, name) {
-	artdialog('content_id','?m=admin&c=site&a=edit&siteid='+id,'<?php echo L('edit_site')?>《'+name+'》','60%','60%');
+	dr_iframe('edit','?m=admin&c=site&a=edit&siteid='+id,'60%','60%');
 }
 //-->
 </script>

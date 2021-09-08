@@ -451,11 +451,11 @@ class content extends admin {
 		include $this->admin_tpl('content_list_all');
 	}
 	public function add() {
-		if($this->input->post('dosubmit') || $this->input->post('dosubmit_continue')) {
+		if($this->input->post('dosubmit')) {
 			define('INDEX_HTML',true);
 			$info = $this->input->post('info');
 			$catid = $info['catid'] = intval($info['catid']);
-			if(trim($info['title'])=='') showmessage(L('title_is_empty'));
+			if(!trim($info['title'])) dr_json(0, L('title_is_empty'), array('field' => 'title'));
 			$category = $this->categorys[$catid];
 			if($category['type']==0) {
 				$modelid = $this->categorys[$catid]['modelid'];
@@ -499,13 +499,10 @@ class content extends admin {
 				}
 				$info['content'] = $value;
 				$this->db->add_content($info);
-				if($this->input->post('dosubmit')) {
-					showmessage(L('add_success').L('2s_close'),'blank','','','window.top.$(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.right.location.reload(true);function set_time() {$("#secondid").html(1);}setTimeout("set_time()", 500);setTimeout("ownerDialog.close()", 1200);');
-				} else {
-					showmessage(L('add_success'),HTTP_REFERER);
-				}
+				dr_json(1, L('add_success'));
 			} else {
 				//单网页
+				if(!$info['content']) dr_json(0, L('content').L('empty'), array('field' => 'content'));
 				$this->page_db = pc_base::load_model('page_model');
 				$style_font_weight = $this->input->post('style_font_weight') ? 'font-weight:'.strip_tags($this->input->post('style_font_weight')) : '';
 				$info['style'] = strip_tags($this->input->post('style_color')).';'.$style_font_weight;
@@ -522,9 +519,8 @@ class content extends admin {
 				}
 				$this->page_db->update($systeminfo,array('catid'=>$catid));
 				$this->page_db->create_html($catid,$info);
-				$forward = HTTP_REFERER;
 			}
-			showmessage($this->input->post('edit') ? L('update_success') : L('add_success'),$forward);
+			dr_json(1, $this->input->post('edit') ? L('update_success') : L('add_success'));
 		} else {
 			$show_header = $show_dialog = $show_validator = '';
 			//设置cookie 在附件添加处调用
@@ -586,12 +582,12 @@ class content extends admin {
 	public function edit() {
 		//设置cookie 在附件添加处调用
 		param::set_cookie('module', 'content');
-		if($this->input->post('dosubmit') || $this->input->post('dosubmit_continue')) {
+		if($this->input->post('dosubmit')) {
 			define('INDEX_HTML',true);
 			$info = $this->input->post('info');
 			$id = $info['id'] = intval($this->input->post('id'));
 			$catid = $info['catid'] = intval($info['catid']);
-			if(trim($info['title'])=='') showmessage(L('title_is_empty'));
+			if(!trim($info['title'])) dr_json(0, L('title_is_empty'), array('field' => 'title'));
 			$modelid = $this->categorys[$catid]['modelid'];
 			$this->db->set_model($modelid);
 			// 去除站外链接
@@ -624,11 +620,7 @@ class content extends admin {
 			}
 			$info['content'] = $value;
 			$this->db->edit_content($info,$id);
-			if($this->input->post('dosubmit')) {
-				showmessage(L('update_success').L('2s_close'),'blank','','','window.top.$(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.right.location.reload(true);function set_time() {$("#secondid").html(1);}setTimeout("set_time()", 500);setTimeout("ownerDialog.close()", 1200);');
-			} else {
-				showmessage(L('update_success'),HTTP_REFERER);
-			}
+			dr_json(1, L('update_success'));
 		} else {
 			$show_header = $show_dialog = $show_validator = '';
 			//从数据库获取内容
@@ -979,7 +971,7 @@ class content extends admin {
 					$r['icon_type'] = $r['vs_show'] = '';
 					$r['category_edit'] = '';
 					$r['type'] = 'init';
-					$r['add_icon'] = "<a target='right' href='?m=content&c=content&menuid=".intval($this->input->get('menuid'))."&catid=".$r['catid']."' onclick=\"javascript:contentopen('?m=content&c=content&a=add&menuid=".intval($this->input->get('menuid'))."&catid=".$r['catid']."&hash_page=".$_SESSION['hash_page']."','".L('add_content')."')\"><img src='".IMG_PATH."add_content.gif' alt='".L('add')."'></a> ";
+					$r['add_icon'] = "<a target='right' href='?m=content&c=content&menuid=".intval($this->input->get('menuid'))."&catid=".$r['catid']."' onclick=\"javascript:dr_content_submit('?m=content&c=content&a=add&menuid=".intval($this->input->get('menuid'))."&catid=".$r['catid']."&hash_page=".$_SESSION['hash_page']."','add')\"><img src='".IMG_PATH."add_content.gif' alt='".L('add')."'></a> ";
 				}
 				$categorys[$r['catid']] = $r;
 			}
@@ -1591,7 +1583,7 @@ class content extends admin {
 				} else {
 					$r['icon_type'] = $r['vs_show'] = '';
 					$r['type'] = 'init';
-					$r['add_icon'] = "<a target='right' href='?m=content&c=content&menuid=".intval($this->input->get('menuid'))."&catid=".$r['catid']."' onclick=javascript:contentopen('?m=content&c=content&a=add&menuid=".intval($this->input->get('menuid'))."&catid=".$r['catid']."&hash_page=".$_SESSION['hash_page']."','".L('add_content')."')><img src='".IMG_PATH."add_content.gif' alt='".L('add')."'></a> ";
+					$r['add_icon'] = "<a target='right' href='?m=content&c=content&menuid=".intval($this->input->get('menuid'))."&catid=".$r['catid']."' onclick=javascript:dr_content_submit('?m=content&c=content&a=add&menuid=".intval($this->input->get('menuid'))."&catid=".$r['catid']."&hash_page=".$_SESSION['hash_page']."','add')><img src='".IMG_PATH."add_content.gif' alt='".L('add')."'></a> ";
 				}
 				$categorys[$r['catid']] = $r;
 			}

@@ -65,6 +65,7 @@ include $this->admin_tpl('header');?>
     <p><?php echo L('最多支持创建'.MAX_CATEGORY.'个栏目，请合理的规划网站栏目');?></p>
 </div>
 <form action="?m=admin&c=category&a=add" class="form-horizontal" method="post" name="myform" id="myform" onsubmit="return checkall()">
+<input name="dosubmit" type="hidden" value="1">
 <input name="catid" type="hidden" value="<?php echo $catid;?>">
 <input name="type" type="hidden" value="<?php echo $type;?>">
 <input name="page" id="dr_page" type="hidden" value="<?php echo $page;?>">
@@ -112,11 +113,11 @@ include $this->admin_tpl('header');?>
                             <label><?php echo form::select_category('category_content_'.$this->siteid,$parentid,'name="info[parentid]" id="parentid"',L('please_select_parent_category'),0,-1);?></label>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="dr_row_catname">
                         <label class="col-md-2 control-label"><?php echo L('catname')?></label>
                         <div class="col-md-9">
                             <label id="normal_add"><input class="form-control input-large" type="text" name="info[catname]" id="catname" value="" onblur="topinyin('catdir','catname','?m=admin&c=category&a=public_ajax_pinyin');"></label>
-                            <span id="batch_add" style="display:none"><textarea class="form-control" name="batch_add" maxlength="255" style="height:90px;"></textarea>
+                            <span id="batch_add" style="display:none"><textarea class="form-control" name="batch_add" id="batch" maxlength="255" style="height:90px;"></textarea>
                             <span class="help-block"><?php echo L('batch_add_tips')?></span>
                             </span>
                         </div>
@@ -210,7 +211,7 @@ include $this->admin_tpl('header');?>
             <div class="tab-pane<?php if ($page==2) {?> active<?php }?>" id="tab_2">
                 <div class="form-body">
 
-                    <div class="form-group">
+                    <div class="form-group" id="dr_row_template_list">
                         <label class="col-md-2 control-label"><?php echo L('available_styles')?></label>
                         <div class="col-md-9">
                             <label><?php echo form::select($template_list, 'default', 'name="setting[template_list]" id="template_list" onchange="load_file_list(this.value)"', L('please_select'))?></label>
@@ -327,7 +328,7 @@ if(is_array($forminfos['base'])) {
         }
     }
  ?>
-                    <div class="form-group">
+                    <div class="form-group" id="dr_row_<?php echo $field?>">
                         <label class="col-md-2 control-label"><?php if($info['star']){ ?> <font color="red">*</font><?php } ?> <?php echo $info['name']?></label>
                         <div class="col-md-9">
                             <label><?php echo $info['form']?></label>
@@ -341,7 +342,6 @@ if(is_array($forminfos['base'])) {
                 </div>
             </div>
         </div>
-        <input name="dosubmit" id="dosubmit" type="submit" value="<?php echo L('submit')?>" class="dialog">
     </div>
 </div>
 </form>
