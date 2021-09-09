@@ -61,6 +61,7 @@ define('ROOT_URL', siteurl(1).'/');
 	'TPL_EDIT'=> 0,
 	'ATTACHMENT_STAT' => '1',
 	'ATTACHMENT_FILE' => '0',
+	'ATTACHMENT_DEL' => '1',
 	'SYS_ATTACHMENT_SAVE_ID' => 0,
 	'SYS_ATTACHMENT_SAFE' => 0,
 	'SYS_ATTACHMENT_PATH' => '',
@@ -184,8 +185,12 @@ define('SYS_CSRF', pc_base::load_config('system','sys_csrf'));
 !defined('SITE_ID') && define('SITE_ID', 1);
 define('SITE_URL', siteurl(SITE_ID));
 define('SITE_MURL', sitemobileurl(SITE_ID));
+//是否记录附件使用状态
+define('SYS_ATTACHMENT_STAT', pc_base::load_config('system','attachment_stat'));
 //附件是否使用分站
 define('SYS_ATTACHMENT_FILE', pc_base::load_config('system','attachment_file'));
+//是否同步删除附件
+define('SYS_ATTACHMENT_DEL', pc_base::load_config('system','attachment_del'));
 // 本地附件上传目录和地址
 define('SYS_ATTACHMENT_SAVE_ID', pc_base::load_config('system','sys_attachment_save_id'));
 define('SYS_ATTACHMENT_SAFE', pc_base::load_config('system','sys_attachment_safe'));
