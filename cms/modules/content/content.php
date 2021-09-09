@@ -1087,7 +1087,7 @@ class content extends admin {
 				$uploadedfile['userid'] = $this->userid;
 				$uploadedfile['uploadtime'] = SYS_TIME;
 				$uploadedfile['uploadip'] = ip();
-				$uploadedfile['status'] = pc_base::load_config('system','attachment_stat') ? 0 : 1;
+				$uploadedfile['status'] = SYS_ATTACHMENT_STAT ? 0 : 1;
 				$uploadedfile['authcode'] = md5($filename.'.'.$filetype);
 				$uploadedfile['filemd5'] = md5_file(SYS_UPLOAD_PATH.$filename.'.'.$filetype);
 				$uploadedfile['remote'] = 0;

@@ -278,7 +278,7 @@ class admin {
  	 */
 	private function login_before() {
 		$admin_login_db = pc_base::load_model('admin_login_model');
-		$member_db = pc_base::load_model('member_model');
+		$member_db = pc_base::load_model('member_lock_model');
 		$member_login_db = pc_base::load_model('member_login_model');
 		$table = $admin_login_db->db_tablepre.'admin_login';
 		if (!$admin_login_db->table_exists('admin_login')) {
@@ -321,7 +321,7 @@ class admin {
 				$log_lock = $member_login_db->select($where);
 				if ($log_lock) {
 					foreach ($log_lock as $t) {
-						$member_db->update(array('islock'=>1), array('uid'=>$t['uid']));
+						$member_db->update(array('islock'=>1), array('userid'=>$t['uid']));
 					}
 				}
 			}

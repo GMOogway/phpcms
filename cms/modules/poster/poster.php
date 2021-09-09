@@ -50,7 +50,7 @@ class poster extends admin {
 						$imgs[] = $im['imageurl'];
 					}
 				}
-				if (pc_base::load_config('system','attachment_stat')) {
+				if (SYS_ATTACHMENT_STAT) {
 					$this->attachment_db = pc_base::load_model('attachment_model');
 					$this->attachment_db->api_update($imgs, 'poster-'.$id, 1);
 				}
@@ -85,7 +85,7 @@ class poster extends admin {
 			foreach ($setting as $im) {
 				$imgs[] = $im['imageurl'];
 			}
-			if(pc_base::load_config('system','attachment_stat')) {
+			if(SYS_ATTACHMENT_STAT) {
 				$this->attachment_db = pc_base::load_model('attachment_model');
 				$this->attachment_db->api_update($imgs, 'poster-'.$_GET['id'], 1);
 			}
@@ -175,7 +175,7 @@ class poster extends admin {
 		$r = $this->db->get_one(array('id'=>$id, 'siteid'=>$this->get_siteid()), 'spaceid');
 		$this->s_db->update(array('items'=>'-=1'), array('spaceid'=>$r['spaceid'], 'siteid'=>$this->get_siteid()));
 		$this->db->delete(array('id'=>$id, 'siteid'=>$this->get_siteid()));
-		if (pc_base::load_config('system','attachment_stat')) {
+		if (SYS_ATTACHMENT_STAT && SYS_ATTACHMENT_DEL) {
 			$this->attachment_db = pc_base::load_model('attachment_model');
 			$keyid = 'poster-'.$id;
 			$this->attachment_db->api_delete($keyid);

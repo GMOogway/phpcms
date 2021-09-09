@@ -27,7 +27,7 @@ class attachment_model extends model {
 	 * @isurl intval 为本地地址时设为1,以cookie形式管理时设置为2
 	 */
 	public function api_update($content, $keyid, $isurl = 0) {
-		if(pc_base::load_config('system','attachment_stat') == 0) return false;
+		if(!SYS_ATTACHMENT_STAT) return false;
 		$keyid = trim($keyid);
 		$isurl = intval($isurl);
 		if($isurl==2 || empty($content)) {
@@ -72,7 +72,7 @@ class attachment_model extends model {
 	 * cookie 方式关联附件
 	 */
 	private function api_update_cookie($keyid) {
-		if(pc_base::load_config('system','attachment_stat') == 0) return false;
+		if(!SYS_ATTACHMENT_STAT) return false;
 		$att_index_db = pc_base::load_model('attachment_index_model');
 		$att_json = getcache('att_json', 'commons');
 		if($att_json) {
@@ -92,7 +92,7 @@ class attachment_model extends model {
 	 * @param string 传入附件关系表中的组装id
 	 */
 	public function api_delete($keyid) {
-		if(pc_base::load_config('system','attachment_stat') == 0) return false;
+		if(!SYS_ATTACHMENT_STAT && !SYS_ATTACHMENT_DEL) return false;
 		$keyid = trim($keyid);
 		if($keyid=='') return false;
 		$att_index_db = pc_base::load_model('attachment_index_model');

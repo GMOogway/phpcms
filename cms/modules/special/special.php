@@ -52,7 +52,7 @@ class special extends admin {
 					$html->_index($id, 20, 5);
 				}
 				//更新附件状态
-				if(pc_base::load_config('system','attachment_stat')) {
+				if(SYS_ATTACHMENT_STAT) {
 					$this->attachment_db = pc_base::load_model('attachment_model');
 					$this->attachment_db->api_update(array($special['thumb'], $special['banner']),'special-'.$id, 1);
 				}
@@ -110,7 +110,7 @@ class special extends admin {
 				$html->_index($_GET['specialid'], 20, 5);
 			}
 			//更新附件状态
-			if(pc_base::load_config('system','attachment_stat')) {
+			if(SYS_ATTACHMENT_STAT) {
 				$this->attachment_db = pc_base::load_model('attachment_model');
 				$this->attachment_db->api_update(array($special['thumb'], $special['banner']),'special-'.$_GET['specialid'], 1);
 			}

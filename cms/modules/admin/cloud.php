@@ -354,7 +354,7 @@ class cloud extends admin {
 
     // 文件对比
     public function compare() {
-
+        $show_header = '';
         include $this->admin_tpl('cloud_bf');exit;
     }
 

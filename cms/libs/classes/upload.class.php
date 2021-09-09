@@ -313,7 +313,7 @@ class upload {
         $uploadedfile['userid'] = $this->userid;
         $uploadedfile['uploadtime'] = SYS_TIME;
         $uploadedfile['uploadip'] = ip();
-        $uploadedfile['status'] = pc_base::load_config('system','attachment_stat') ? 0 : 1;
+        $uploadedfile['status'] = SYS_ATTACHMENT_STAT ? 0 : 1;
         $uploadedfile['authcode'] = md5($data['file']);
         $uploadedfile['filemd5'] = $data['md5'] ? $data['md5'] : 0;
         $uploadedfile['remote'] = $data['remote'];

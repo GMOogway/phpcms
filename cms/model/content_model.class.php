@@ -233,7 +233,7 @@ class content_model extends model {
 		}
 		//END 发布到其他栏目
 		//更新附件状态
-		if(pc_base::load_config('system','attachment_stat')) {
+		if(SYS_ATTACHMENT_STAT) {
 			$this->attachment_db = pc_base::load_model('attachment_model');
 			$this->attachment_db->api_update('','c-'.$systeminfo['catid'].'-'.$id,2);
 		}
@@ -337,7 +337,7 @@ class content_model extends model {
 		$content_update = new content_update($this->modelid,$id);
 		$content_update->update($data);
 		//更新附件状态
-		if(pc_base::load_config('system','attachment_stat')) {
+		if(SYS_ATTACHMENT_STAT) {
 			$this->attachment_db = pc_base::load_model('attachment_model');
 			$this->attachment_db->api_update('','c-'.$systeminfo['catid'].'-'.$id,2);
 		}

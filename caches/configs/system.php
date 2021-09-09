@@ -23,6 +23,7 @@ return array(
 //附件相关配置
 'attachment_stat' => '1', //是否记录附件使用状态 0 统计 1 统计， 注意: 本功能会加重服务器负担
 'attachment_file' => '0', //附件是否使用分站 0 否 1 是
+'attachment_del' => '1', //是否同步删除附件 0 否 1 是
 'sys_attachment_save_id' => 0, //附件存储策略
 'sys_attachment_safe' => 0, //附件上传安全模式
 'sys_attachment_path' => '', //附件上传路径

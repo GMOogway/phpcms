@@ -197,7 +197,7 @@ $LANG['setting_time'] = 'The current time';
 $LANG['setting_upload_url'] = 'Attachment access path ';
 $LANG['setting_attachment_stat'] = 'Enable status statistics';
 $LANG['setting_attachment_file'] = 'Open the attachment substation state';
-$LANG['setting_attachment_file_desc'] = '<font color="gray">The default is no, open upload attachments upload for substation</font>';
+$LANG['setting_attachment_file_desc'] = '<font color="gray">The default is closed, open the attachment to upload upload for substation</font>';
 $LANG['setting_attachment_stat_desc'] = '<font color="gray"> to record attachment status. You will remove an attachment once you remove post. NOTE: This function may increase the burden on the server.</font>';
 $LANG['editormode'] = 'Editor mode';
 $LANG['setting_category_ajax_desc'] = '<font color="gray">The default is 0, namely direct display item list. When the column level is large, can be set up for the first time loading level, the remaining use asynchronous loading, generally set to 2 to 3</font>';

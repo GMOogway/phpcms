@@ -336,7 +336,7 @@ class category extends admin {
 			$this->update_priv($catid, $this->input->post('priv_groupid'),0);
 			$this->cache();
 			//更新附件状态
-			if($info['image'] && pc_base::load_config('system','attachment_stat')) {
+			if($info['image'] && SYS_ATTACHMENT_STAT) {
 				$this->attachment_db = pc_base::load_model('attachment_model');
 				$this->attachment_db->api_update($info['image'],'catid-'.$catid,1);
 			}
@@ -1098,7 +1098,7 @@ class category extends admin {
 				$this->db->update($info,array('catid'=>$catid,'siteid'=>$this->siteid));
 
 				//更新附件状态
-				if($info['image'] && pc_base::load_config('system','attachment_stat')) {
+				if($info['image'] && SYS_ATTACHMENT_STAT) {
 					$this->attachment_db->api_update($info['image'],'catid-'.$catid,1);
 				}
 			}

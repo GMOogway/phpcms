@@ -52,7 +52,7 @@ class content extends admin {
 			$html->_index($_GET['specialid'], 20, 5);
 			$html->_list($info['typeid'], 20, 5);
 			//更新附件状态
-			if(pc_base::load_config('system','attachment_stat')) {
+			if(SYS_ATTACHMENT_STAT) {
 				$this->attachment_db = pc_base::load_model('attachment_model');
 				if ($info['thunb']) {
 					$this->attachment_db->api_update($info['thumb'],'special-c-'.$contentid, 1);
@@ -137,7 +137,7 @@ class content extends admin {
 			}
 			$this->db->update($info, array('id'=>$_GET['id'], 'specialid'=>$_GET['specialid']));
 			//更新附件状态
-			if(pc_base::load_config('system','attachment_stat')) {
+			if(SYS_ATTACHMENT_STAT) {
 				$this->attachment_db = pc_base::load_model('attachment_model');
 				if ($info['thumb']) {
 					$this->attachment_db->api_update($info['thumb'],'special-c-'.$_GET['id'], 1);
@@ -246,7 +246,7 @@ class content extends admin {
 			foreach ($_POST['id'] as $sid) {
 				$sid = intval($sid);
 				$special_api->_delete_content($sid, $info['siteid'], $info['ishtml']);
-				if(pc_base::load_config('system','attachment_stat')) {
+				if(SYS_ATTACHMENT_STAT && SYS_ATTACHMENT_DEL) {
 					$keyid = 'special-c-'.$sid;
 					$this->attachment_db = pc_base::load_model('attachment_model');
 					$this->attachment_db->api_delete($keyid);
@@ -255,7 +255,7 @@ class content extends admin {
 		} elseif (is_numeric($_POST['id'])){
 			$id = intval($_POST['id']);
 			$special_api->_delete_content($id, $info['siteid'], $info['ishtml']);
-			if(pc_base::load_config('system','attachment_stat')) {
+			if(SYS_ATTACHMENT_STAT && SYS_ATTACHMENT_DEL) {
 				$keyid = 'special-c-'.$id;
 				$this->attachment_db = pc_base::load_model('attachment_model');
 				$this->attachment_db->api_delete($keyid);

@@ -83,7 +83,7 @@ class slider extends admin {
 			if(!$sliderid) return FALSE; 
  			$siteid = $this->get_siteid();
 	 		//更新附件状态
-			if(pc_base::load_config('system','attachment_stat') & $_POST['slider']['image']) {
+			if(SYS_ATTACHMENT_STAT & $_POST['slider']['image']) {
 				$this->attachment_db = pc_base::load_model('attachment_model');
 				$this->attachment_db->api_update($_POST['slider']['image'],'slider-'.$id,1);
 			}
@@ -172,7 +172,7 @@ class slider extends admin {
 			if((!$_POST['slider']['name']) || empty($_POST['slider']['name'])) return false;
 			$this->db->update($_POST['slider'],array('id'=>$id));
 			//更新附件状态
-			if(pc_base::load_config('system','attachment_stat') & $_POST['slider']['image']) {
+			if(SYS_ATTACHMENT_STAT & $_POST['slider']['image']) {
 				$this->attachment_db = pc_base::load_model('attachment_model');
 				$this->attachment_db->api_update($_POST['slider']['image'],'slider-'.$id,1);
 			}
@@ -231,7 +231,7 @@ class slider extends admin {
  					//批量删除幻灯片
 					$this->db->delete(array('id'=>$id_arr));
 					//更新附件状态
-					if(pc_base::load_config('system','attachment_stat')) {
+					if(SYS_ATTACHMENT_STAT && SYS_ATTACHMENT_DEL) {
 						$this->attachment_db = pc_base::load_model('attachment_model');
 						$this->attachment_db->api_delete('slider-'.$id_arr);
 					}
@@ -243,7 +243,7 @@ class slider extends admin {
 				//删除幻灯片
 				$result = $this->db->delete(array('id'=>$id));
 				//更新附件状态
-				if(pc_base::load_config('system','attachment_stat')) {
+				if(SYS_ATTACHMENT_STAT && SYS_ATTACHMENT_DEL) {
 					$this->attachment_db = pc_base::load_model('attachment_model');
 					$this->attachment_db->api_delete('slider-'.$id);
 				}

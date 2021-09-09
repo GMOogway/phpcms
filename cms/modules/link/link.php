@@ -89,7 +89,7 @@ class link extends admin {
 			if(!$linkid) return FALSE; 
  			$siteid = $this->get_siteid();
 	 		//更新附件状态
-			if(pc_base::load_config('system','attachment_stat') & $_POST['link']['logo']) {
+			if(SYS_ATTACHMENT_STAT & $_POST['link']['logo']) {
 				$this->attachment_db = pc_base::load_model('attachment_model');
 				$this->attachment_db->api_update($_POST['link']['logo'],'link-'.$linkid,1);
 			}
@@ -196,7 +196,7 @@ class link extends admin {
 			if((!$_POST['link']['name']) || empty($_POST['link']['name'])) return false;
 			$this->db->update($_POST['link'],array('linkid'=>$linkid));
 			//更新附件状态
-			if(pc_base::load_config('system','attachment_stat') & $_POST['link']['logo']) {
+			if(SYS_ATTACHMENT_STAT & $_POST['link']['logo']) {
 				$this->attachment_db = pc_base::load_model('attachment_model');
 				$this->attachment_db->api_update($_POST['link']['logo'],'link-'.$linkid,1);
 			}
@@ -255,7 +255,7 @@ class link extends admin {
  					//批量删除友情链接
 					$this->db->delete(array('linkid'=>$linkid_arr));
 					//更新附件状态
-					if(pc_base::load_config('system','attachment_stat')) {
+					if(SYS_ATTACHMENT_STAT && SYS_ATTACHMENT_DEL) {
 						$this->attachment_db = pc_base::load_model('attachment_model');
 						$this->attachment_db->api_delete('link-'.$linkid_arr);
 					}
@@ -267,7 +267,7 @@ class link extends admin {
 				//删除友情链接
 				$result = $this->db->delete(array('linkid'=>$linkid));
 				//更新附件状态
-				if(pc_base::load_config('system','attachment_stat')) {
+				if(SYS_ATTACHMENT_STAT && SYS_ATTACHMENT_DEL) {
 					$this->attachment_db = pc_base::load_model('attachment_model');
 					$this->attachment_db->api_delete('link-'.$linkid);
 				}

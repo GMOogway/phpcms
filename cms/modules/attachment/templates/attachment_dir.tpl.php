@@ -50,8 +50,8 @@ if(is_array($list)) {
 <script type="text/javascript">
 function preview(file) {
 	if(IsImg(file)) {
-        var width = '400px';
-        var height = '300px';
+        var width = 400;
+        var height = 300;
         var att = 'height: 260px;';
         if (is_mobile()) {
             width = height = '90%';
@@ -66,8 +66,8 @@ function preview(file) {
         });
         diag.show();
     } else if(IsMp4(file)) {
-        var width = '500px';
-        var height = '320px';
+        var width = 500;
+        var height = 320;
         var att = 'width="420" height="238"';
         if (is_mobile()) {
             width = height = '90%';

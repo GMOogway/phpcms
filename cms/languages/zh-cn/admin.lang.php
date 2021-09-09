@@ -198,7 +198,7 @@ $LANG['setting_time'] = '当前时间';
 $LANG['setting_upload_url'] = '附件URL访问路径';
 $LANG['setting_attachment_stat'] = '开启附件状态统计';
 $LANG['setting_attachment_file'] = '开启附件分站状态';
-$LANG['setting_attachment_file_desc'] = '<font color="gray">默认为否,开启附件上传为分站上传</font>';
+$LANG['setting_attachment_file_desc'] = '<font color="gray">默认为关闭，开启附件上传为分站上传</font>';
 $LANG['setting_attachment_stat_desc'] = '<font color="gray">记录附件使用状态 ，删除文章时同步删除附件。注意: 本功能会加重服务器负担</font>';
 $LANG['editormode'] = '编辑器模式';
 $LANG['setting_category_ajax_desc'] = '<font color="gray">默认为0,即直接显示栏目列表。当栏目层级较多时，可设置首次加载层级，其余使用异步加载，一般设置为2-3</font>';

@@ -26,6 +26,7 @@ class check extends admin {
     }
     
     public function init() {
+        $show_header = '';
         $list = $this->_list;
         include $this->admin_tpl('check_index');
     }
@@ -546,6 +547,7 @@ class check extends admin {
 //附件相关配置
 \'attachment_stat\' => \''.pc_base::load_config('system','attachment_stat').'\', //是否记录附件使用状态 0 统计 1 统计， 注意: 本功能会加重服务器负担
 \'attachment_file\' => \''.(pc_base::load_config('system','attachment_file') ? pc_base::load_config('system','attachment_file') : 0).'\', //附件是否使用分站 0 否 1 是
+\'attachment_del\' => \''.(pc_base::load_config('system','attachment_del') ? pc_base::load_config('system','attachment_del') : 1).'\', //是否同步删除附件 0 否 1 是
 \'sys_attachment_save_id\' => '.(pc_base::load_config('system','sys_attachment_save_id') ? pc_base::load_config('system','sys_attachment_save_id') : 0).', //附件存储策略
 \'sys_attachment_safe\' => '.(pc_base::load_config('system','sys_attachment_safe') ? pc_base::load_config('system','sys_attachment_safe') : 0).', //附件上传安全模式
 \'sys_attachment_path\' => \''.(pc_base::load_config('system','sys_attachment_path') ? pc_base::load_config('system','sys_attachment_path') : '').'\', //附件上传路径
@@ -570,7 +572,7 @@ class check extends admin {
 \'charset\' => \''.pc_base::load_config('system','charset').'\', //网站字符集
 \'timezone\' => \''.(pc_base::load_config('system','timezone')=='Etc/GMT-8' ? 8 : (pc_base::load_config('system','timezone') ? pc_base::load_config('system','timezone') : 8)).'\', //网站时区（只对php 5.1以上版本有效），Etc/GMT-8 实际表示的是 GMT+8
 \'debug\' => '.pc_base::load_config('system','debug').', //是否显示调试信息
-\'sys_csrf\' => \''.(pc_base::load_config('system','sys_csrf') ? pc_base::load_config('system','sys_csrf') : 1).'\', //是否跨站验证，1为启用，0为禁用
+\'sys_csrf\' => \''.(pc_base::load_config('system','sys_csrf') ? pc_base::load_config('system','sys_csrf') : 0).'\', //是否跨站验证，1为启用，0为禁用
 \'needcheckcomeurl\' => \''.(pc_base::load_config('system','needcheckcomeurl') ? pc_base::load_config('system','needcheckcomeurl') : 1).'\', //是否需要检查外部访问，1为启用，0为禁用
 \'admin_log\' => '.pc_base::load_config('system','admin_log').', //是否记录后台操作日志
 \'errorlog\' => '.pc_base::load_config('system','errorlog').', //1、保存错误日志到 cache/error_log.php | 0、在页面直接显示
@@ -609,7 +611,7 @@ class check extends admin {
 
 \'admin_login_path\' => \''.pc_base::load_config('system','admin_login_path').'\', //自定义的后台登录地址';
                 $system_data.= PHP_EOL.');'.PHP_EOL.'?>';
-                if (!strstr($system, 'IN_CMS') || strstr($system, 'admin_url') || strstr($system, 'safe_card') || strstr($system, 'phpsso') || strstr($system, 'phpsso_appid') || strstr($system, 'phpsso_api_url') || strstr($system, 'phpsso_auth_key') || strstr($system, 'phpsso_version') || strstr($system, '\'timezone\' => \'Etc/GMT-8\'') || !strstr($system, 'attachment_file') || !strstr($system, 'sys_attachment_save_id') || !strstr($system, 'sys_attachment_safe') || !strstr($system, 'sys_attachment_path') || !strstr($system, 'sys_attachment_save_type') || !strstr($system, 'sys_attachment_save_dir') || !strstr($system, 'sys_attachment_url') || !strstr($system, 'sys_avatar_path') || !strstr($system, 'sys_avatar_url') || !strstr($system, 'sys_thumb_path') || !strstr($system, 'sys_thumb_url') || !strstr($system, 'mobile_js_path') || !strstr($system, 'mobile_css_path') || !strstr($system, 'mobile_img_path') || !strstr($system, 'mobile_path') || !strstr($system, 'sys_editor') || !strstr($system, 'sys_csrf') || !strstr($system, 'needcheckcomeurl') || !strstr($system, 'mobile_root') || !strstr($system, 'keywordapi') || !strstr($system, 'baidu_aid') || !strstr($system, 'baidu_skey') || !strstr($system, 'baidu_arcretkey') || !strstr($system, 'baidu_qcnum') || !strstr($system, 'xunfei_aid') || !strstr($system, 'xunfei_skey') || !strstr($system, 'admin_login_path')) {
+                if (!strstr($system, 'IN_CMS') || strstr($system, 'admin_url') || strstr($system, 'safe_card') || strstr($system, 'phpsso') || strstr($system, 'phpsso_appid') || strstr($system, 'phpsso_api_url') || strstr($system, 'phpsso_auth_key') || strstr($system, 'phpsso_version') || strstr($system, '\'timezone\' => \'Etc/GMT-8\'') || !strstr($system, 'attachment_file') || !strstr($system, 'attachment_del') || !strstr($system, 'sys_attachment_save_id') || !strstr($system, 'sys_attachment_safe') || !strstr($system, 'sys_attachment_path') || !strstr($system, 'sys_attachment_save_type') || !strstr($system, 'sys_attachment_save_dir') || !strstr($system, 'sys_attachment_url') || !strstr($system, 'sys_avatar_path') || !strstr($system, 'sys_avatar_url') || !strstr($system, 'sys_thumb_path') || !strstr($system, 'sys_thumb_url') || !strstr($system, 'mobile_js_path') || !strstr($system, 'mobile_css_path') || !strstr($system, 'mobile_img_path') || !strstr($system, 'mobile_path') || !strstr($system, 'sys_editor') || !strstr($system, 'sys_csrf') || !strstr($system, 'needcheckcomeurl') || !strstr($system, 'mobile_root') || !strstr($system, 'keywordapi') || !strstr($system, 'baidu_aid') || !strstr($system, 'baidu_skey') || !strstr($system, 'baidu_arcretkey') || !strstr($system, 'baidu_qcnum') || !strstr($system, 'xunfei_aid') || !strstr($system, 'xunfei_skey') || !strstr($system, 'admin_login_path')) {
                     file_put_contents($rt,$system_data);
                 }
 

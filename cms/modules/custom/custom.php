@@ -84,7 +84,7 @@ class custom extends admin {
  					//批量删除幻灯片
 					$this->db->delete(array('id'=>$id_arr));
 					//更新附件状态
-					if(pc_base::load_config('system','attachment_stat')) {
+					if(SYS_ATTACHMENT_STAT && SYS_ATTACHMENT_DEL) {
 						$this->attachment_db = pc_base::load_model('attachment_model');
 						$this->attachment_db->api_delete('custom-'.$id_arr);
 					}

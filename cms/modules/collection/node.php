@@ -322,7 +322,7 @@ class node extends admin {
 			$content_db = pc_base::load_model('collection_content_model');
 			//更新附件状态
 			$attach_status = false;
-			if(pc_base::load_config('system','attachment_stat')) {
+			if(SYS_ATTACHMENT_STAT) {
 				$this->attachment_db = pc_base::load_model('attachment_model');
 				$attach_status = true;
 			}
@@ -504,7 +504,7 @@ class node extends admin {
 		$content_db = pc_base::load_model('content_model');
 		//更新附件状态
 		$attach_status = false;
-		if(pc_base::load_config('system','attachment_stat')) {
+		if(SYS_ATTACHMENT_STAT) {
 			$attachment_db = pc_base::load_model('attachment_model');
 			$att_index_db = pc_base::load_model('attachment_index_model');
 			$attach_status = true;

@@ -2,6 +2,8 @@
 defined('IN_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header', 'admin');?>
 <link rel="stylesheet" href="<?php echo CSS_PATH;?>bootstrap/css/bootstrap.min.css" media="all" />
+<link rel="stylesheet" href="<?php echo JS_PATH;?>bootstrap-switch/css/bootstrap-switch.min.css" media="all" />
+<script type="text/javascript" src="<?php echo JS_PATH;?>bootstrap-switch/js/bootstrap-switch.min.js"></script>
 <style type="text/css">
 .page-content {margin-left: 0px;margin-top: 0;padding: 25px 20px 10px;}
 .main-content {background: #f5f6f8;}
@@ -61,15 +63,18 @@ include $this->admin_tpl('header', 'admin');?>
                 <div class="form-body">
 
                     <div class="form-group">
-                        <label class="col-md-2 control-label"><?php echo L('附件存储策略');?></label>
+                        <label class="col-md-2 control-label"><?php echo L('附件归档');?></label>
                         <div class="col-md-9">
-                            <label><select class="form-control" name="data[sys_attachment_save_id]">
-                                <option value="0"<?php echo ($sys_attachment_save_id=='0') ? ' selected' : ''?>><?php echo L('本地存储');?></option>
-                                <?php foreach ($remote as $i=>$t) {?>
-                                <option value="<?php echo $i;?>"<?php echo ($i == $sys_attachment_save_id ? ' selected' : '');?>> <?php echo L($t['name']);?> </option>
-                                <?php }?>
-                            </select></label>
-                            <span class="help-block"><?php echo L('远程附件存储建议设置小文件存储，推荐10MB内，大文件会导致数据传输失败');?></span>
+                            <input type="checkbox" name="data[attachment_stat]" value="1" <?php echo ($attachment_stat) ? ' checked' : ''?> data-on-text="<?php echo L('开启');?>" data-off-text="<?php echo L('关闭');?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+                            <span class="help-block"><?php echo L('附件将分为已使用的附件和未使用的附件，归档存储');?></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('是否同步删除附件');?></label>
+                        <div class="col-md-9">
+                            <input type="checkbox" name="data[attachment_del]" value="1" <?php echo ($attachment_del) ? ' checked' : ''?> data-on-text="<?php echo L('开启');?>" data-off-text="<?php echo L('关闭');?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+                            <span class="help-block"><?php echo L('删除文章将同步删除附件');?></span>
                         </div>
                     </div>
 
@@ -85,24 +90,23 @@ include $this->admin_tpl('header', 'admin');?>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-md-2 control-label"><?php echo L('附件归档');?></label>
+                        <label class="col-md-2 control-label"><?php echo L('附件存储策略');?></label>
                         <div class="col-md-9">
-                            <div class="mt-radio-inline">
-                                <label class="mt-radio mt-radio-outline"><input type="radio" name="data[attachment_stat]" value="1"<?php echo ($attachment_stat=='1') ? ' checked' : ''?>> <?php echo L('是');?> <span></span></label>
-                                <label class="mt-radio mt-radio-outline"><input type="radio" name="data[attachment_stat]" value="0"<?php echo ($attachment_stat=='0') ? ' checked' : ''?>> <?php echo L('否');?> <span></span></label>
-                            </div>
-                            <span class="help-block"><?php echo L('附件将分为已使用的附件和未使用的附件，归档存储');?></span>
+                            <label><select class="form-control" name="data[sys_attachment_save_id]">
+                                <option value="0"<?php echo ($sys_attachment_save_id=='0') ? ' selected' : ''?>><?php echo L('本地存储');?></option>
+                                <?php foreach ($remote as $i=>$t) {?>
+                                <option value="<?php echo $i;?>"<?php echo ($i == $sys_attachment_save_id ? ' selected' : '');?>> <?php echo L($t['name']);?> </option>
+                                <?php }?>
+                            </select></label>
+                            <span class="help-block"><?php echo L('远程附件存储建议设置小文件存储，推荐10MB内，大文件会导致数据传输失败');?></span>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('开启附件分站状态');?></label>
                         <div class="col-md-9">
-                            <div class="mt-radio-inline">
-                                <label class="mt-radio mt-radio-outline"><input type="radio" name="data[attachment_file]" value="1"<?php echo ($attachment_file=='1') ? ' checked' : ''?>> <?php echo L('是');?> <span></span></label>
-                                <label class="mt-radio mt-radio-outline"><input type="radio" name="data[attachment_file]" value="0"<?php echo ($attachment_file=='0') ? ' checked' : ''?>> <?php echo L('否');?> <span></span></label>
-                            </div>
-                            <span class="help-block"><?php echo L('默认为否,开启附件上传为分站上传');?></span>
+                            <input type="checkbox" name="data[attachment_file]" value="1" <?php echo ($attachment_file) ? ' checked' : ''?> data-on-text="<?php echo L('开启');?>" data-off-text="<?php echo L('关闭');?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+                            <span class="help-block"><?php echo L('默认为关闭，开启附件上传为分站上传');?></span>
                         </div>
                     </div>
 
@@ -245,6 +249,9 @@ include $this->admin_tpl('header', 'admin');?>
 </form>
 </div>
 <script>
+$(document).ready(function() {
+    $(".make-switch").bootstrapSwitch();
+});
 $('.nav-tabs a').click(function (e) {
     $('.nav-tabs').find('li').removeClass('active');
     $('.tab-pane').removeClass('active');

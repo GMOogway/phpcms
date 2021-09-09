@@ -248,7 +248,7 @@ class special_api {
 				dir_delete(CMS_PATH.pc_base::load_config('system', 'html_root').DIRECTORY_SEPARATOR.'special'.DIRECTORY_SEPARATOR.$info['filename']); //删除专题目录
 			}
 		}
-		if(pc_base::load_config('system','attachment_stat')) {
+		if(SYS_ATTACHMENT_STAT && SYS_ATTACHMENT_DEL) {
 			$keyid = 'special-'.$id;
 			$this->attachment_db = pc_base::load_model('attachment_model');
 			$this->attachment_db->api_delete($keyid);

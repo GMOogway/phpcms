@@ -122,7 +122,7 @@ class foreground {
 				$log_lock = $member_login_db->select($where);
 				if ($log_lock) {
 					foreach ($log_lock as $t) {
-						$this->db->update(array('islock'=>1), array('uid'=>$t['uid']));
+						$this->db->update(array('islock'=>1), array('userid'=>$t['uid']));
 					}
 				}
 			}

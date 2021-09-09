@@ -126,7 +126,7 @@ class block_admin extends admin {
 			showmessage(L('nofound'));
 		}
 		if ($this->db->delete(array('id'=>$id)) && $this->history_db->delete(array('blockid'=>$id)) && $this->priv_db->delete(array('blockid'=>$id))) {
-			if (pc_base::load_config('system','attachment_stat')) {
+			if (SYS_ATTACHMENT_STAT && SYS_ATTACHMENT_DEL) {
 				$this->attachment_db = pc_base::load_model('attachment_model');
 				$keyid = 'block-'.$id;
 				$this->attachment_db->api_delete($keyid);
@@ -166,7 +166,7 @@ class block_admin extends admin {
 					$block->template_url($id, $template);
 				}
 				if (is_array($thumb) && !empty($thumb)) {
-					if(pc_base::load_config('system','attachment_stat')) {
+					if(SYS_ATTACHMENT_STAT) {
 						$this->attachment_db = pc_base::load_model('attachment_model');
 						$this->attachment_db->api_update($thumb, 'block-'.$id, 1);
 					}
