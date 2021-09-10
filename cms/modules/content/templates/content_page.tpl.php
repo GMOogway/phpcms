@@ -89,7 +89,7 @@ define('IMAGES_INIT', 1);?>
     <label class="control-label col-md-2"><?php echo L('keywords');?></label>
     <div class="col-md-10">
         <input type="text" name="info[keywords]" id="keywords" value="<?php echo $keywords?>" size="50" style='width:400px' data-role='tagsinput'>
-        <span class="help-block"><?php echo L('explode_keywords');?></span>
+        <span class="help-block" id="dr_keywords_tips"><?php echo L('explode_keywords');?></span>
     </div>
 </div>
 <div class="form-group" id="dr_row_content">
@@ -120,7 +120,7 @@ if(is_array($forminfos['base'])) {
     <label class="control-label col-md-2"><?php if($info['star']){ ?><span class="required" aria-required="true"> * </span><?php } ?><?php echo $info['name']?></label>
     <div class="col-md-10">
         <?php echo $info['form']?>
-        <span class="help-block"><?php echo $info['tips']?></span>
+        <span class="help-block" id="dr_<?php echo $field?>_tips"><?php echo $info['tips']?></span>
     </div>
 </div>
 <?php
@@ -144,6 +144,11 @@ if(is_array($forminfos['base'])) {
 <link href="<?php echo JS_PATH?>jquery-minicolors/jquery.minicolors.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="<?php echo JS_PATH?>jquery-minicolors/jquery.minicolors.min.js"></script>
 <script type="text/javascript">
+$('body').keydown(function(e){
+    if (e.keyCode == 13) {
+        $('#my_submit').trigger('click') ;
+    }
+})
 $(document).ready(function() {
     $('#my_submit').click(function () {
         url = '?m=content&c=content&a=add';

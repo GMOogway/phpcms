@@ -41,24 +41,25 @@ include $this->admin_tpl('header', 'admin');?>
 <div class="note note-danger my-content-top-tool">
     <p><a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=init&pc_hash='+pc_hash+'&is_ajax=1',1);"><?php echo L('操作之前请更新下全站缓存');?></a></p>
 </div>
-<form action="?m=attachment&c=attachment&a=save" class="form-horizontal" method="post" name="myform" id="myform">
+<form action="?m=attachment&c=attachment&a=init" class="form-horizontal" method="post" name="myform" id="myform">
+<input name="page" id="dr_page" type="hidden" value="<?php echo $page;?>">
 <div class="portlet light bordered myfbody">
     <div class="portlet-title tabbable-line">
         <ul class="nav nav-tabs" style="float:left;">
-            <li class="active">
-                <a data-toggle="tab_0"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('附件设置').'\',this,{tips: [1, \'#000\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-cog"></i> <?php if (!is_mobile(0)) {echo L('附件设置');}?> </a>
+            <li<?php if ($page==0) {?> class="active"<?php }?>>
+                <a data-toggle="tab_0" onclick="$('#dr_page').val('0')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('附件设置').'\',this,{tips: [1, \'#000\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-cog"></i> <?php if (!is_mobile(0)) {echo L('附件设置');}?> </a>
             </li>
-            <li>
-                <a data-toggle="tab_1"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('头像存储').'\',this,{tips: [1, \'#000\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-user"></i> <?php if (!is_mobile(0)) {echo L('头像存储');}?> </a>
+            <li<?php if ($page==1) {?> class="active"<?php }?>>
+                <a data-toggle="tab_1" onclick="$('#dr_page').val('1')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('头像存储').'\',this,{tips: [1, \'#000\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-user"></i> <?php if (!is_mobile(0)) {echo L('头像存储');}?> </a>
             </li>
-            <li>
-                <a data-toggle="tab_2"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('缩略图').'\',this,{tips: [1, \'#000\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-photo"></i> <?php if (!is_mobile(0)) {echo L('缩略图');}?> </a>
+            <li<?php if ($page==2) {?> class="active"<?php }?>>
+                <a data-toggle="tab_2" onclick="$('#dr_page').val('2')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('缩略图').'\',this,{tips: [1, \'#000\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-photo"></i> <?php if (!is_mobile(0)) {echo L('缩略图');}?> </a>
             </li>
         </ul>
     </div>
     <div class="portlet-body form">
         <div class="tab-content">
-            <div class="tab-pane active" id="tab_0">
+            <div class="tab-pane<?php if ($page==0) {?> active<?php }?>" id="tab_0">
 
                 <div class="form-body">
 
@@ -162,7 +163,7 @@ include $this->admin_tpl('header', 'admin');?>
 
                 </div>
             </div>
-            <div class="tab-pane" id="tab_1">
+            <div class="tab-pane<?php if ($page==1) {?> active<?php }?>" id="tab_1">
                 <div class="form-body">
 
                     <div class="form-group">
@@ -200,7 +201,7 @@ include $this->admin_tpl('header', 'admin');?>
 
                 </div>
             </div>
-            <div class="tab-pane" id="tab_2">
+            <div class="tab-pane<?php if ($page==2) {?> active<?php }?>" id="tab_2">
                 <div class="form-body">
 
                     <div class="form-group">
@@ -241,7 +242,7 @@ include $this->admin_tpl('header', 'admin');?>
         </div>
         <div class="portlet-body form myfooter">
             <div class="form-actions text-center">
-                <button name="dosubmit" type="submit" class="btn green"> <i class="fa fa-save"></i> <?php echo L('保存');?></button>
+                <button type="button" id="my_submit" onclick="dr_ajax_submit('?m=attachment&c=attachment&a=init&page='+$('#dr_page').val(), 'myform', '2000')" class="btn green"> <i class="fa fa-save"></i> <?php echo L('保存');?></button>
             </div>
         </div>
     </div>
@@ -252,6 +253,11 @@ include $this->admin_tpl('header', 'admin');?>
 $(document).ready(function() {
     $(".make-switch").bootstrapSwitch();
 });
+$('body').keydown(function(e){
+    if (e.keyCode == 13) {
+        $('#my_submit').trigger('click') ;
+    }
+})
 $('.nav-tabs a').click(function (e) {
     $('.nav-tabs').find('li').removeClass('active');
     $('.tab-pane').removeClass('active');

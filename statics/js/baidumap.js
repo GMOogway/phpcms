@@ -29,7 +29,7 @@ function drawPoints(mapObj, name, level){
     var zoom = level;
     mapObj.centerAndZoom(new BMap.Point(lngX,latY),zoom);
     // 创建图标对象
-    var myIcon = new BMap.Icon(assets_path+'images/mak.png', new BMap.Size(27, 45));
+    var myIcon = new BMap.Icon(assets_path+'icon/mak.png', new BMap.Size(27, 45));
 
     // 创建标注对象并添加到地图
     var center = mapObj.getCenter();
@@ -59,7 +59,7 @@ function baiduSearchAddress(mapObj, name, level, point){
         var zoom = 17;
         mapObj.centerAndZoom(new BMap.Point(lngX,latY),zoom);
         // 创建图标对象
-        //var myIcon = new BMap.Icon(assets_path+'images/mak.png', new BMap.Size(27, 45));
+        //var myIcon = new BMap.Icon(assets_path+'icon/mak.png', new BMap.Size(27, 45));
 
         // 创建标注对象并添加到地图
         var center = mapObj.getCenter();
@@ -91,7 +91,7 @@ function baiduSearchAddress(mapObj, name, level, point){
 function addMarker(mapObj, name){
     mapObj.clearOverlays();
     // 创建图标对象
-    var myIcon = new BMap.Icon(assets_path+'images/mak.png', new BMap.Size(27, 45));
+    var myIcon = new BMap.Icon(assets_path+'icon/mak.png', new BMap.Size(27, 45));
     // 创建标注对象并添加到地图
     var center = mapObj.getCenter();
     var point = new BMap.Point(center.lng,center.lat);

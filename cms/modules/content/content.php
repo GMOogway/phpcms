@@ -455,7 +455,7 @@ class content extends admin {
 			define('INDEX_HTML',true);
 			$info = $this->input->post('info');
 			$catid = $info['catid'] = intval($info['catid']);
-			if(!trim($info['title'])) dr_json(0, L('title_is_empty'), array('field' => 'title'));
+			//if(!trim($info['title'])) dr_json(0, L('title_is_empty'), array('field' => 'title'));
 			$category = $this->categorys[$catid];
 			if($category['type']==0) {
 				$modelid = $this->categorys[$catid]['modelid'];
@@ -502,6 +502,7 @@ class content extends admin {
 				dr_json(1, L('add_success'));
 			} else {
 				//单网页
+				if(!trim($info['title'])) dr_json(0, L('title_is_empty'), array('field' => 'title'));
 				if(!$info['content']) dr_json(0, L('content').L('empty'), array('field' => 'content'));
 				$this->page_db = pc_base::load_model('page_model');
 				$style_font_weight = $this->input->post('style_font_weight') ? 'font-weight:'.strip_tags($this->input->post('style_font_weight')) : '';
@@ -587,7 +588,7 @@ class content extends admin {
 			$info = $this->input->post('info');
 			$id = $info['id'] = intval($this->input->post('id'));
 			$catid = $info['catid'] = intval($info['catid']);
-			if(!trim($info['title'])) dr_json(0, L('title_is_empty'), array('field' => 'title'));
+			//if(!trim($info['title'])) dr_json(0, L('title_is_empty'), array('field' => 'title'));
 			$modelid = $this->categorys[$catid]['modelid'];
 			$this->db->set_model($modelid);
 			// 去除站外链接

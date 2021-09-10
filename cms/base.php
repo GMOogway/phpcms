@@ -149,6 +149,8 @@ define('IS_POST', isset($_POST) && count($_POST) ? TRUE : FALSE);
 define('IS_AJAX_POST', IS_POST);
 //当前系统时间戳
 define('SYS_TIME', $_SERVER['REQUEST_TIME'] ? $_SERVER['REQUEST_TIME'] : time());
+//百度地图API
+define('SYS_BDMAP_API', pc_base::load_config('system','bdmap_api'));
 //定义网站根路径
 define('WEB_PATH', pc_base::load_config('system','web_path'));
 //js 路径

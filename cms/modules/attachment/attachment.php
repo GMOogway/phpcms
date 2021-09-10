@@ -40,35 +40,32 @@ class attachment extends admin {
 	 * 附件设置
 	 */
 	public function init() {
+		if(IS_AJAX_POST) {
+			$post = $this->input->post('data');
+			if ($post['sys_thumb_path'] || $post['sys_avatar_path']) {
+				if ($post['sys_attachment_path'] && $post['sys_thumb_path'] == $post['sys_attachment_path']) {
+					dr_json(0, L('附件上传目录不能与缩略图存储目录相同'));
+				} elseif ($post['sys_attachment_path'] && $post['sys_avatar_path'] == $post['sys_attachment_path']) {
+					dr_json(0, L('附件上传目录不能与头像存储目录相同'));
+				} elseif ($post['sys_avatar_path'] && $post['sys_thumb_path'] == $post['sys_avatar_path']) {
+					dr_json(0, L('头像存储目录不能与缩略图存储目录相同'));
+				}
+			}
+			$post['sys_attachment_path'] = addslashes($post['sys_attachment_path']);
+			$post['sys_avatar_path'] = addslashes($post['sys_avatar_path']);
+			$post['sys_thumb_path'] = addslashes($post['sys_thumb_path']);
+			$post['attachment_stat'] = (int)$post['attachment_stat'];
+			$post['attachment_file'] = (int)$post['attachment_file'];
+			$post['attachment_del'] = (int)$post['attachment_del'];
+			$this->set_config($post);	 //保存进config文件
+			$this->setcache();
+			dr_json(1, L('修改成功'), array('url' => '?m=attachment&c=attachment&a=init&page='.(int)$this->input->post('page').'&pc_hash='.$_SESSION['pc_hash']));
+		}
 		$setconfig = pc_base::load_config('system');
 		extract($setconfig);
 		$remote = getcache('attachment', 'commons');
+		$page = (int)$this->input->get('page');
 		include $this->admin_tpl('attachment_setting');
-	}
-	
-	/**
-	 * 保存配置信息
-	 */
-	public function save() {
-		$post = $this->input->post('data');
-		if ($post['sys_thumb_path'] || $post['sys_avatar_path']) {
-			if ($post['sys_attachment_path'] && $post['sys_thumb_path'] == $post['sys_attachment_path']) {
-				showmessage(L('附件上传目录不能与缩略图存储目录相同'));
-			} elseif ($post['sys_attachment_path'] && $post['sys_avatar_path'] == $post['sys_attachment_path']) {
-				showmessage(L('附件上传目录不能与头像存储目录相同'));
-			} elseif ($post['sys_avatar_path'] && $post['sys_thumb_path'] == $post['sys_avatar_path']) {
-				showmessage(L('头像存储目录不能与缩略图存储目录相同'));
-			}
-		}
-		$post['sys_attachment_path'] = addslashes($post['sys_attachment_path']);
-		$post['sys_avatar_path'] = addslashes($post['sys_avatar_path']);
-		$post['sys_thumb_path'] = addslashes($post['sys_thumb_path']);
-		$post['attachment_stat'] = (int)$post['attachment_stat'];
-		$post['attachment_file'] = (int)$post['attachment_file'];
-		$post['attachment_del'] = (int)$post['attachment_del'];
-		$this->set_config($post);	 //保存进config文件
-		$this->setcache();
-		showmessage(L('修改成功').$snda_error, HTTP_REFERER);
 	}
 	
 	/**
@@ -78,7 +75,7 @@ class attachment extends admin {
 	 */
 	public function set_config($config, $filename="system") {
 		$configfile = CACHE_PATH.'configs'.DIRECTORY_SEPARATOR.$filename.'.php';
-		if(!is_writable($configfile)) showmessage('Please chmod '.$configfile.' to 0777 !');
+		if(!is_writable($configfile)) dr_json(0, 'Please chmod '.$configfile.' to 0777 !');
 		$pattern = $replacement = array();
 		foreach($config as $k=>$v) {
 			if(in_array($k,array('sys_attachment_save_id','sys_attachment_safe','sys_attachment_path','sys_attachment_save_type','sys_attachment_save_dir','sys_attachment_url','sys_avatar_path','sys_avatar_url','sys_thumb_path','sys_thumb_url','attachment_stat','attachment_file','attachment_del'))) {

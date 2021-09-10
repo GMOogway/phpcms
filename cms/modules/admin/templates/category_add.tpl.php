@@ -140,7 +140,7 @@ include $this->admin_tpl('header');?>
                         <div class="col-md-9">
                             <label id="normal_add"><input class="form-control input-large" type="text" name="info[catname]" id="catname" value="" onblur="topinyin('catdir','catname','?m=admin&c=category&a=public_ajax_pinyin');"></label>
                             <span id="batch_add" style="display:none"><textarea class="form-control" name="batch_add" id="batch" maxlength="255" style="height:90px;"></textarea>
-                            <span class="help-block"><?php echo L('batch_add_tips')?></span>
+                            <span class="help-block" id="dr_catname_tips"><?php echo L('batch_add_tips')?></span>
                             </span>
                         </div>
                     </div>
@@ -454,7 +454,7 @@ if(is_array($forminfos['base'])) {
                         <label class="col-md-2 control-label"><?php if($info['star']){ ?> <font color="red">*</font><?php } ?> <?php echo $info['name']?></label>
                         <div class="col-md-9">
                             <label><?php echo $info['form']?></label>
-                            <span class="help-block"><?php echo $info['tips']?></span>
+                            <span class="help-block" id="dr_<?php echo $field?>_tips"><?php echo $info['tips']?></span>
                         </div>
                     </div>
 <?php

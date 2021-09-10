@@ -4,9 +4,9 @@ include $this->admin_tpl('header','admin');?>
 <style type="text/css">
 .pull-left {float: left!important;}
 .pull-right {float: right!important;}
-#iframecontent{position:relative; overflow:hidden;padding-top: 0px;}
+#iframecontent{position:relative;overflow:hidden;padding-top: 0px;}
 #iframecontent iframe{border:none;}
-.openclose{width: 8px;position:relative;}
+.openclose{width: 8px;position: relative;background: #f5f6f8;}
 #openclose{display:inline-block;width: 8px;height:24px;position:absolute;top:50%;left:0px;}
 .treelistframe{border-right: 3px solid #e6e8ed;}
 </style>

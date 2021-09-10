@@ -231,9 +231,6 @@ class category extends admin {
 			$catid = intval($this->input->post('catid'));
 			$setting = $this->input->post('setting');
 			$info = $this->input->post('info');
-			if(!$this->input->post('type')) {
-				if(!$info['modelid']) dr_json(0, L('select_model'), array('field' => 'modelid'));
-			}
 			if(!$info['catname']) dr_json(0, L('input_catname'), array('field' => 'catname'));
 			if($this->input->post('type')!=2) {
 				$pinyin = pc_base::load_sys_class('pinyin');

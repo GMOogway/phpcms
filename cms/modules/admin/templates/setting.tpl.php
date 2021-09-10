@@ -48,16 +48,16 @@ include $this->admin_tpl('header');?>
 <!--
 	$(function(){
 		$.formValidator.initConfig({formid:"myform",autotip:true,onerror:function(msg,obj){Dialog.alert(msg,function(){$(obj).focus();})}});
-		$("#js_path").formValidator({onshow:"<?php echo L('setting_input').L('setting_js_path')?>",onfocus:"<?php echo L('setting_js_path').L('setting_end_with_x')?>"}).inputValidator({onerror:"<?php echo L('setting_js_path').L('setting_input_error')?>"}).regexValidator({regexp:"(.+)\/$",onerror:"<?php echo L('setting_js_path').L('setting_end_with_x')?>"});
-		$("#css_path").formValidator({onshow:"<?php echo L('setting_input').L('setting_css_path')?>",onfocus:"<?php echo L('setting_css_path').L('setting_end_with_x')?>"}).inputValidator({onerror:"<?php echo L('setting_css_path').L('setting_input_error')?>"}).regexValidator({regexp:"(.+)\/$",onerror:"<?php echo L('setting_css_path').L('setting_end_with_x')?>"});
+		$("#dr_js_path").formValidator({onshow:"<?php echo L('setting_input').L('setting_js_path')?>",onfocus:"<?php echo L('setting_js_path').L('setting_end_with_x')?>"}).inputValidator({onerror:"<?php echo L('setting_js_path').L('setting_input_error')?>"}).regexValidator({regexp:"(.+)\/$",onerror:"<?php echo L('setting_js_path').L('setting_end_with_x')?>"});
+		$("#dr_css_path").formValidator({onshow:"<?php echo L('setting_input').L('setting_css_path')?>",onfocus:"<?php echo L('setting_css_path').L('setting_end_with_x')?>"}).inputValidator({onerror:"<?php echo L('setting_css_path').L('setting_input_error')?>"}).regexValidator({regexp:"(.+)\/$",onerror:"<?php echo L('setting_css_path').L('setting_end_with_x')?>"});
 
-		$("#img_path").formValidator({onshow:"<?php echo L('setting_input').L('setting_img_path')?>",onfocus:"<?php echo L('setting_img_path').L('setting_end_with_x')?>"}).inputValidator({onerror:"<?php echo L('setting_img_path').L('setting_input_error')?>"}).regexValidator({regexp:"(.+)\/$",onerror:"<?php echo L('setting_img_path').L('setting_end_with_x')?>"});
-		$("#mobile_js_path").formValidator({onshow:"<?php echo L('setting_input').L('setting_mobile_js_path')?>",onfocus:"<?php echo L('setting_mobile_js_path').L('setting_end_with_x')?>"}).inputValidator({onerror:"<?php echo L('setting_mobile_js_path').L('setting_input_error')?>"}).regexValidator({regexp:"(.+)\/$",onerror:"<?php echo L('setting_mobile_js_path').L('setting_end_with_x')?>"});
-		$("#mobile_css_path").formValidator({onshow:"<?php echo L('setting_input').L('setting_mobile_css_path')?>",onfocus:"<?php echo L('setting_mobile_css_path').L('setting_end_with_x')?>"}).inputValidator({onerror:"<?php echo L('setting_mobile_css_path').L('setting_input_error')?>"}).regexValidator({regexp:"(.+)\/$",onerror:"<?php echo L('setting_mobile_css_path').L('setting_end_with_x')?>"});
+		$("#dr_img_path").formValidator({onshow:"<?php echo L('setting_input').L('setting_img_path')?>",onfocus:"<?php echo L('setting_img_path').L('setting_end_with_x')?>"}).inputValidator({onerror:"<?php echo L('setting_img_path').L('setting_input_error')?>"}).regexValidator({regexp:"(.+)\/$",onerror:"<?php echo L('setting_img_path').L('setting_end_with_x')?>"});
+		$("#dr_mobile_js_path").formValidator({onshow:"<?php echo L('setting_input').L('setting_mobile_js_path')?>",onfocus:"<?php echo L('setting_mobile_js_path').L('setting_end_with_x')?>"}).inputValidator({onerror:"<?php echo L('setting_mobile_js_path').L('setting_input_error')?>"}).regexValidator({regexp:"(.+)\/$",onerror:"<?php echo L('setting_mobile_js_path').L('setting_end_with_x')?>"});
+		$("#dr_mobile_css_path").formValidator({onshow:"<?php echo L('setting_input').L('setting_mobile_css_path')?>",onfocus:"<?php echo L('setting_mobile_css_path').L('setting_end_with_x')?>"}).inputValidator({onerror:"<?php echo L('setting_mobile_css_path').L('setting_input_error')?>"}).regexValidator({regexp:"(.+)\/$",onerror:"<?php echo L('setting_mobile_css_path').L('setting_end_with_x')?>"});
 
-		$("#mobile_img_path").formValidator({onshow:"<?php echo L('setting_input').L('setting_mobile_img_path')?>",onfocus:"<?php echo L('setting_mobile_img_path').L('setting_end_with_x')?>"}).inputValidator({onerror:"<?php echo L('setting_mobile_img_path').L('setting_input_error')?>"}).regexValidator({regexp:"(.+)\/$",onerror:"<?php echo L('setting_mobile_img_path').L('setting_end_with_x')?>"});
+		$("#dr_mobile_img_path").formValidator({onshow:"<?php echo L('setting_input').L('setting_mobile_img_path')?>",onfocus:"<?php echo L('setting_mobile_img_path').L('setting_end_with_x')?>"}).inputValidator({onerror:"<?php echo L('setting_mobile_img_path').L('setting_input_error')?>"}).regexValidator({regexp:"(.+)\/$",onerror:"<?php echo L('setting_mobile_img_path').L('setting_end_with_x')?>"});
 
-		$("#errorlog_size").formValidator({onshow:"<?php echo L('setting_errorlog_hint')?>",onfocus:"<?php echo L('setting_input').L('setting_error_log_size')?>"}).inputValidator({onerror:"<?php echo L('setting_error_log_size').L('setting_input_error')?>"}).regexValidator({regexp:"num",datatype:"enum",onerror:"<?php echo L('setting_errorlog_type')?>"});	
+		$("#dr_errorlog_size").formValidator({onshow:"<?php echo L('setting_errorlog_hint')?>",onfocus:"<?php echo L('setting_input').L('setting_error_log_size')?>"}).inputValidator({onerror:"<?php echo L('setting_error_log_size').L('setting_input_error')?>"}).regexValidator({regexp:"num",datatype:"enum",onerror:"<?php echo L('setting_errorlog_type')?>"});	
 	})
 //-->
 </script>
@@ -65,7 +65,7 @@ include $this->admin_tpl('header');?>
 <div class="note note-danger my-content-top-tool">
     <p><a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=init&pc_hash='+pc_hash+'&is_ajax=1',1);"><?php echo L('操作之前请更新下全站缓存');?></a></p>
 </div>
-<form action="?m=admin&c=setting&a=save" class="form-horizontal" method="post" name="myform" id="myform">
+<form action="?m=admin&c=setting&a=init" class="form-horizontal" method="post" name="myform" id="myform">
 <input name="page" id="dr_page" type="hidden" value="<?php echo $page;?>">
 <div class="portlet light bordered myfbody">
     <div class="portlet-title tabbable-line">
@@ -94,9 +94,17 @@ include $this->admin_tpl('header');?>
                 <div class="form-body">
 
                     <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('setting_bdmap_api')?></label>
+                        <div class="col-md-9">
+                            <label><input class="form-control input-large" type="text" id="bdmap_api" name="setconfig[bdmap_api]" value="<?php echo $bdmap_api;?>" ></label>
+                            <label><a class="btn btn-sm blue" href="http://lbsyun.baidu.com/apiconsole/center" target="_blank"> <?php echo L('setting_apply_immediately');?> </a></label>
+                            <span class="help-block"><?php echo L('setting_bdmap_api_desc')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group" id="dr_row_admin_email">
                         <label class="col-md-2 control-label"><?php echo L('setting_admin_email')?></label>
                         <div class="col-md-9">
-                            <input class="form-control input-large" type="text" id="admin_email" name="setting[admin_email]" value="<?php echo $admin_email;?>" >
+                            <input class="form-control input-large" type="text" id="dr_admin_email" name="setting[admin_email]" value="<?php echo $admin_email;?>" >
                         </div>
                     </div>
                     <div class="form-group">
@@ -124,40 +132,40 @@ include $this->admin_tpl('header');?>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="dr_row_js_path">
                         <label class="col-md-2 control-label"><?php echo L('setting_js_path')?></label>
                         <div class="col-md-9">
-                            <input class="form-control" type="text" id="js_path" name="setconfig[js_path]" value="<?php echo $js_path;?>" >
+                            <input class="form-control" type="text" id="dr_js_path" name="setconfig[js_path]" value="<?php echo $js_path;?>" >
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="dr_row_css_path">
                         <label class="col-md-2 control-label"><?php echo L('setting_css_path')?></label>
                         <div class="col-md-9">
-                            <input class="form-control" type="text" id="css_path" name="setconfig[css_path]" value="<?php echo $css_path;?>" >
+                            <input class="form-control" type="text" id="dr_css_path" name="setconfig[css_path]" value="<?php echo $css_path;?>" >
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="dr_row_img_path">
                         <label class="col-md-2 control-label"><?php echo L('setting_img_path')?></label>
                         <div class="col-md-9">
-                            <input class="form-control" type="text" id="img_path" name="setconfig[img_path]" value="<?php echo $img_path;?>" >
+                            <input class="form-control" type="text" id="dr_img_path" name="setconfig[img_path]" value="<?php echo $img_path;?>" >
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="dr_row_mobile_js_path">
                         <label class="col-md-2 control-label"><?php echo L('setting_mobile_js_path')?></label>
                         <div class="col-md-9">
-                            <input class="form-control" type="text" id="mobile_js_path" name="setconfig[mobile_js_path]" value="<?php echo $mobile_js_path;?>" >
+                            <input class="form-control" type="text" id="dr_mobile_js_path" name="setconfig[mobile_js_path]" value="<?php echo $mobile_js_path;?>" >
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="dr_row_mobile_css_path">
                         <label class="col-md-2 control-label"><?php echo L('setting_mobile_css_path')?></label>
                         <div class="col-md-9">
-                            <input class="form-control" type="text" id="mobile_css_path" name="setconfig[mobile_css_path]" value="<?php echo $mobile_css_path;?>" >
+                            <input class="form-control" type="text" id="dr_mobile_css_path" name="setconfig[mobile_css_path]" value="<?php echo $mobile_css_path;?>" >
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="dr_row_mobile_img_path">
                         <label class="col-md-2 control-label"><?php echo L('setting_mobile_img_path')?></label>
                         <div class="col-md-9">
-                            <input class="form-control" type="text" id="mobile_img_path" name="setconfig[mobile_img_path]" value="<?php echo $mobile_img_path;?>" >
+                            <input class="form-control" type="text" id="dr_mobile_img_path" name="setconfig[mobile_img_path]" value="<?php echo $mobile_img_path;?>" >
                         </div>
                     </div>
                     <div class="form-group">
@@ -249,10 +257,10 @@ include $this->admin_tpl('header');?>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="dr_row_errorlog_size">
                         <label class="col-md-2 control-label"><?php echo L('setting_error_log_size')?></label>
                         <div class="col-md-9">
-                            <input class="form-control input-large" type="text" id="errorlog_size" name="setting[errorlog_size]" value="<?php echo $errorlog_size;?>" >
+                            <input class="form-control input-large" type="text" id="dr_errorlog_size" name="setting[errorlog_size]" value="<?php echo $errorlog_size;?>" >
                         </div>
                     </div>
                     <div class="form-group">
@@ -489,7 +497,7 @@ include $this->admin_tpl('header');?>
                                     <input type="text" id="snda_skey" name="setconfig[snda_skey]" value="<?php echo $snda_skey;?>" class="form-control" placeholder="">
                                 </div>
                             </div>
-                            <span class="help-block"><a href="http://code.snda.com/index/oauth" target="_blank"><?php echo L('click_register')?></a></span>
+                            <span class="help-block"><a class="btn btn-sm blue" href="http://code.snda.com/index/oauth" target="_blank"> <?php echo L('click_register');?> </a></span>
                         </div>
                     </div>
                     <div class="form-group">
@@ -507,7 +515,7 @@ include $this->admin_tpl('header');?>
                                     <input type="text" id="sina_skey" name="setconfig[sina_skey]" value="<?php echo $sina_skey;?>" class="form-control" placeholder="">
                                 </div>
                             </div>
-                            <span class="help-block"><a href="http://open.t.sina.com.cn/wiki/index.php/<?php echo L('connect_micro')?>" target="_blank"><?php echo L('click_register')?></a></span>
+                            <span class="help-block"><a class="btn btn-sm blue" href="http://open.t.sina.com.cn/wiki/index.php/<?php echo L('connect_micro')?>" target="_blank"> <?php echo L('click_register');?> </a></span>
                         </div>
                     </div>
                     <div class="form-group">
@@ -525,7 +533,7 @@ include $this->admin_tpl('header');?>
                                     <input type="text" id="qq_skey" name="setconfig[qq_skey]" value="<?php echo $qq_skey;?>" class="form-control" placeholder="">
                                 </div>
                             </div>
-                            <span class="help-block"><a href="http://open.t.qq.com/" target="_blank"><?php echo L('click_register')?></a></span>
+                            <span class="help-block"><a class="btn btn-sm blue" href="http://open.t.qq.com/" target="_blank"> <?php echo L('click_register');?> </a></span>
                         </div>
                     </div>
                     <div class="form-group">
@@ -549,7 +557,7 @@ include $this->admin_tpl('header');?>
                                     <input type="text" id="qq_callback" name="setconfig[qq_callback]" value="<?php echo $qq_callback;?>" class="form-control" placeholder="">
                                 </div>
                             </div>
-                            <span class="help-block"><a href="http://connect.qq.com" target="_blank"><?php echo L('click_register')?></a></span>
+                            <span class="help-block"><a class="btn btn-sm blue" href="http://connect.qq.com" target="_blank"> <?php echo L('click_register');?> </a></span>
                         </div>
                     </div>
 
@@ -595,7 +603,7 @@ include $this->admin_tpl('header');?>
                                     <input type="text" id="baidu_arcretkey" name="setconfig[baidu_arcretkey]" value="<?php echo $baidu_arcretkey;?>" class="form-control" placeholder="">
                                 </div>
                             </div>
-                            <span class="help-block"><a href="https://cloud.baidu.com/" target="_blank"><?php echo L('setting_keyword_register')?></a></span>
+                            <span class="help-block"><a class="btn btn-sm blue" href="https://cloud.baidu.com/" target="_blank"> <?php echo L('setting_keyword_register');?> </a></span>
                             <span class="help-block"><?php echo L('setting_baidu_keyword')?></span>
                         </div>
                     </div>
@@ -614,7 +622,7 @@ include $this->admin_tpl('header');?>
                                     <input type="text" id="xunfei_skey" name="setconfig[xunfei_skey]" value="<?php echo $xunfei_skey;?>" class="form-control" placeholder="">
                                 </div>
                             </div>
-                            <span class="help-block"><a href="https://console.xfyun.cn/services/ke" target="_blank"><?php echo L('setting_keyword_register')?></a></span>
+                            <span class="help-block"><a class="btn btn-sm blue" href="https://console.xfyun.cn/services/ke" target="_blank"> <?php echo L('setting_keyword_register');?> </a></span>
                             <span class="help-block"><?php echo L('setting_xunfei_keyword')?></span>
                         </div>
                     </div>
@@ -624,7 +632,7 @@ include $this->admin_tpl('header');?>
         </div>
         <div class="portlet-body form myfooter">
             <div class="form-actions text-center">
-                <button type="submit" class="btn green"> <i class="fa fa-save"></i> <?php echo L('submit')?></button>
+                <button type="button" id="my_submit" onclick="dr_ajax_submit('?m=admin&c=setting&a=init&tab='+$('#dr_page').val(), 'myform', '2000')" class="btn green"> <i class="fa fa-save"></i> <?php echo L('submit')?></button>
             </div>
         </div>
     </div>
@@ -632,6 +640,11 @@ include $this->admin_tpl('header');?>
 </form>
 </div>
 <script type="text/javascript">
+$('body').keydown(function(e){
+    if (e.keyCode == 13) {
+        $('#my_submit').trigger('click') ;
+    }
+})
 $('.nav-tabs a').click(function (e) {
     $('.nav-tabs').find('li').removeClass('active');
     $('.tab-pane').removeClass('active');

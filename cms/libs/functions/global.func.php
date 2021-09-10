@@ -99,13 +99,27 @@ function get_content_url($value, $attr, $ext, $num = 0) {
 }
 
 /**
+ * 提取描述信息过滤函数
+ */
+function dr_filter_description($value, $data = [], $old = []) {
+	return dr_get_description($value, 0);
+}
+
+/**
  * 提取描述信息
  */
 function dr_get_description($text, $limit = 0) {
 	if (!$limit) {
 		$limit = 200;
 	}
-	return trim(str_cut(clearhtml($text), $limit));
+	return trim(str_cut(dr_rp(clearhtml($text), ['　', ' '], ''), $limit, ''));
+}
+
+/**
+ * 字符串替换函数
+ */
+function dr_rp($str, $o, $t) {
+	return str_replace($o, $t, $str);
 }
 
 /**
@@ -706,6 +720,53 @@ function now_url($url, $siteid = 1, $ismobile = 1, $ishtml = 1) {
 	} else {
 		return FC_NOW_URL;
 	}
+}
+// 动态加载js
+function load_js($js) {
+	if (!defined($js)) {
+		define($js, 1);
+		return '<script type=\'text/javascript\' src=\''.$js.'\'></script>';
+	}
+}
+/**
+ * 百度地图调用
+ */
+function dr_baidu_map($value, $zoom = 15, $width = 600, $height = 400, $ak = SYS_BDMAP_API, $class= '', $tips = '') {
+	if (!$value) {
+		return '没有坐标值';
+	}
+	$id = 'dr_map_'.rand(0, 99);
+	!$ak && $ak = SYS_BDMAP_API;
+	!$zoom && $zoom = 15;
+	$width = $width ? $width : '100%';
+	list($lngX, $latY) = explode(',', $value);
+
+	$js = load_js((strpos(FC_NOW_URL, 'https') === 0 ? 'https' : 'http').'://api.map.baidu.com/api?v=2.0&ak='.$ak);
+
+	return $js.'<div class="'.$class.'" id="' . $id . '" style="width:' . $width . 'px; height:' . $height . 'px; overflow:hidden"></div>
+	<script type="text/javascript">
+	var mapObj=null;
+	lngX = "' . $lngX . '";
+	latY = "' . $latY . '";
+	zoom = "' . $zoom . '";     
+	var mapObj = new BMap.Map("'.$id.'");
+	var ctrl_nav = new BMap.NavigationControl({anchor:BMAP_ANCHOR_TOP_LEFT,type:BMAP_NAVIGATION_CONTROL_LARGE});
+	mapObj.addControl(ctrl_nav);
+	mapObj.enableDragging();
+	mapObj.enableScrollWheelZoom();
+	mapObj.enableDoubleClickZoom();
+	mapObj.enableKeyboard();//启用键盘上下左右键移动地图
+	mapObj.centerAndZoom(new BMap.Point(lngX,latY),zoom);
+	drawPoints();
+	function drawPoints(){
+		var myIcon = new BMap.Icon("' . IMG_PATH . 'icon/mak.png", new BMap.Size(27, 45));
+		var center = mapObj.getCenter();
+		var point = new BMap.Point(lngX,latY);
+		var marker = new BMap.Marker(point, {icon: myIcon});
+		mapObj.addOverlay(marker);
+		'.($tips ? 'mapObj.openInfoWindow(new BMap.InfoWindow("'.str_replace('"', '\'', $tips).'",{offset:new BMap.Size(0,-17)}),point);' : '').'
+	}
+	</script>';
 }
 /**
  * 基于本地存储的加解密算法

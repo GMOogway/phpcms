@@ -457,6 +457,11 @@ a.dropdown-item.active{color:#fff;}
 
 .has-error .checkbox, .has-error .checkbox-inline, .has-error .control-label, .has-error .form-control-feedback, .has-error .help-block, .has-error .radio, .has-error .radio-inline, .has-error.checkbox label, .has-error.checkbox-inline label, .has-error.radio label, .has-error.radio-inline label, .has-error th, .has-error td {color: #e73d4a!important;}
 .has-error .input-text, .has-error .input-text:focus {border-color: #e73d4a!important;-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);box-shadow: inset 0 1px 1px rgba(0,0,0,.075);}
+/*.has-error .edui-default .edui-editor-breadcrumb span {color: blue!important;}
+.has-error .edui-editor-breadcrumb {color: #333!important;}
+.has-error .edui-default .edui-editor-wordcount {color: #aaa!important;}
+.has-error .help-block .mt-checkbox-inline {color: #737373!important;}
+.has-error .help-block .mt-checkbox-inline .input-text, .has-error .help-block .mt-checkbox-inline .input-text:focus {border-color: #E4E6EF!important;}*/
 
 .badge,.input-group-addon,.label,.pager,.progress-bar {text-align: center;}
 .progress-bar-striped,.progress-striped .progress-bar,.progress-striped .progress-bar-info,.progress-striped .progress-bar-success,.progress-striped .progress-bar-warning {background-image: -webkit-linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);background-image: -o-linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);}

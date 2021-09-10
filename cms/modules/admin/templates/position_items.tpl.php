@@ -41,7 +41,7 @@ if(is_array($infos)){
 	<td width=""  align="left"><?php echo $info['title']?> <?php if($info['thumb']!='') {echo '<img src="'.IMG_PATH.'icon/small_img.gif">'; }?></td>
 	<td  width="15%" align="center"><?php echo $info['catname']?></td>
 	<td width="15%" align="center"><?php echo date('Y-m-d H:i:s',$info['inputtime'])?></td>
-	<td width="15%" align="center"><a href="<?php echo $info['url']?>" target="_blank"><?php echo L('posid_item_view')?></a> | <a onclick="javascript:contentopen('?m=content&c=content&a=edit&catid=<?php echo $info['catid']?>&id=<?php echo $info['id']?>','修改内容')" href="javascript:;"><?php echo L('posid_item_edit');?></a> | <a href="javascript:item_manage(<?php echo $info['id']?>,<?php echo $info['posid']?>, <?php echo $info['modelid']?>,'<?php echo $info['title']?>')"><?php echo L('posid_item_manage')?></a>
+	<td width="15%" align="center"><a href="<?php echo $info['url']?>" target="_blank"><?php echo L('posid_item_view')?></a> | <a onclick="javascript:contentopen('?m=content&c=content&a=edit&catid=<?php echo $info['catid']?>&id=<?php echo $info['id']?>','<?php echo L('posid_item_edit');?>')" href="javascript:;"><?php echo L('posid_item_edit');?></a> | <a href="javascript:item_manage(<?php echo $info['id']?>,<?php echo $info['posid']?>, <?php echo $info['modelid']?>,'<?php echo $info['title']?>')"><?php echo L('posid_item_manage')?></a>
 	</td>
 	</tr>
 <?php 

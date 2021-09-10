@@ -325,7 +325,7 @@ if(is_array($forminfos['base'])) {
                         <label class="col-md-2 control-label"><?php if($info['star']){ ?> <font color="red">*</font><?php } ?> <?php echo $info['name']?></label>
                         <div class="col-md-9">
                             <label><?php echo $info['form']?></label>
-                            <span class="help-block"><?php echo $info['tips']?></span>
+                            <span class="help-block" id="dr_<?php echo $field?>_tips"><?php echo $info['tips']?></span>
                         </div>
                     </div>
 <?php

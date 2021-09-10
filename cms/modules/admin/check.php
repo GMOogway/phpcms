@@ -241,7 +241,10 @@ class check extends admin {
                 $this->db->delete(array('name' => 'card', 'id' => 1043));
                 $this->db->delete(array('name' => 'creat_card', 'id' => 1044));
                 $this->db->delete(array('name' => 'remove_card', 'id' => 1045));
-                $this->db->delete(array('m' => 'video'));
+                $menu = $this->db->get_one(array('id' => 9, 'name' => 'video', 'parentid' => 0, 'm' => 'video', 'c' => 'video', 'a' => 'init'));
+                if ($menu) {
+                    $this->delete_child(9);
+                }
                 $this->db->update(array('name' => 'email_config', 'icon' => 'fa fa-envelope'),array('id' => 980, 'name' => 'sso_config'));
                 $this->db->update(array('name' => 'connect_config', 'icon' => 'fa fa-html5'),array('id' => 981, 'name' => 'email_config'));
                 $this->db->update(array('name' => 'setting_keyword_enable', 'icon' => 'fa fa-cog'),array('id' => 1093, 'name' => 'connect_config'));
@@ -372,8 +375,8 @@ class check extends admin {
                 }
 
                 $this->db->table_name = $prefix.'model_field';
-                //$this->db->update(array('tips'=>'<div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="add_introduce" type="checkbox"  value="1" checked>是否截取内容<span></span></label><input type="text" name="introcude_length" value="200" size="3">字符至内容摘要\r\n<label class="mt-checkbox mt-checkbox-outline"><input type=\'\'checkbox\'\' name=\'\'auto_thumb\'\' value="1" checked>是否获取内容第<span></span></label><input type="text" name="auto_thumb_no" value="1" size="2" class="">张图片作为标题图片\r\n<label class="mt-checkbox mt-checkbox-outline"><input type=\'\'checkbox\'\' name=\'\'is_remove_a\'\' value="1" checked>去除站外链接<span></span></label>\r\n</div>'),array('formtype'=>'editor','tips'=>'<div class="content_attr"><label><input name="add_introduce" type="checkbox"  value="1" checked>是否截取内容</label><input type="text" name="introcude_length" value="200" size="3">字符至内容摘要\r\n<label><input type=\'\'checkbox\'\' name=\'\'auto_thumb\'\' value="1" checked>是否获取内容第</label><input type="text" name="auto_thumb_no" value="1" size="2" class="">张图片作为标题图片\r\n</div>'));
-                $this->db->update(array('tips'=>'<div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="add_introduce" type="checkbox"  value="1" checked>是否截取内容<span></span></label><input type="text" name="introcude_length" value="200" size="3">字符至内容摘要\r\n<label class="mt-checkbox mt-checkbox-outline"><input type=\'\'checkbox\'\' name=\'\'auto_thumb\'\' value="1" checked>是否获取内容第<span></span></label><input type="text" name="auto_thumb_no" value="1" size="2" class="">张图片作为标题图片\r\n<label class="mt-checkbox mt-checkbox-outline"><input type=\'\'checkbox\'\' name=\'\'is_remove_a\'\' value="1" checked>去除站外链接<span></span></label>\r\n</div>'),array('formtype'=>'editor'));
+                $this->db->update(array('tips'=>'<div class="mt-checkbox-inline" style="margin-top: 10px;"><label style="margin-bottom: 0;" class="mt-checkbox mt-checkbox-outline"><input name="add_introduce" type="checkbox"  value="1" checked>是否截取内容<span></span></label><input type="text" name="introcude_length" value="200" size="3">字符至内容摘要\r\n<label style="margin-bottom: 0;" class="mt-checkbox mt-checkbox-outline"><input type=\'\'checkbox\'\' name=\'\'auto_thumb\'\' value="1" checked>是否获取内容第<span></span></label><input type="text" name="auto_thumb_no" value="1" size="2" class="">张图片作为标题图片\r\n<label style="margin-bottom: 0;" class="mt-checkbox mt-checkbox-outline"><input type=\'\'checkbox\'\' name=\'\'is_remove_a\'\' value="1" checked>去除站外链接<span></span></label>\r\n</div>'),array('formtype'=>'editor','tips'=>'<div class="content_attr"><label><input name="add_introduce" type="checkbox"  value="1" checked>是否截取内容</label><input type="text" name="introcude_length" value="200" size="3">字符至内容摘要\r\n<label><input type=\'\'checkbox\'\' name=\'\'auto_thumb\'\' value="1" checked>是否获取内容第</label><input type="text" name="auto_thumb_no" value="1" size="2" class="">张图片作为标题图片\r\n</div>'));
+                $this->db->update(array('tips'=>'<div class="mt-checkbox-inline" style="margin-top: 10px;"><label style="margin-bottom: 0;" class="mt-checkbox mt-checkbox-outline"><input name="add_introduce" type="checkbox"  value="1" checked>是否截取内容<span></span></label><input type="text" name="introcude_length" value="200" size="3">字符至内容摘要\r\n<label style="margin-bottom: 0;" class="mt-checkbox mt-checkbox-outline"><input type=\'\'checkbox\'\' name=\'\'auto_thumb\'\' value="1" checked>是否获取内容第<span></span></label><input type="text" name="auto_thumb_no" value="1" size="2" class="">张图片作为标题图片\r\n<label style="margin-bottom: 0;" class="mt-checkbox mt-checkbox-outline"><input type=\'\'checkbox\'\' name=\'\'is_remove_a\'\' value="1" checked>去除站外链接<span></span></label>\r\n</div>'),array('tips'=>'<div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="add_introduce" type="checkbox"  value="1" checked>是否截取内容<span></span></label><input type="text" name="introcude_length" value="200" size="3">字符至内容摘要\r\n<label class="mt-checkbox mt-checkbox-outline"><input type=\'\'checkbox\'\' name=\'\'auto_thumb\'\' value="1" checked>是否获取内容第<span></span></label><input type="text" name="auto_thumb_no" value="1" size="2" class="">张图片作为标题图片\r\n<label class="mt-checkbox mt-checkbox-outline"><input type=\'\'checkbox\'\' name=\'\'is_remove_a\'\' value="1" checked>去除站外链接<span></span></label>\r\n</div>', 'formtype'=>'editor'));
                 $this->db->update(array('setting'=>'{"fieldtype":"int","format":"Y-m-d H:i:s","defaulttype":"0"}', 'iscore'=>0, 'isbase'=>0),array('field'=>'updatetime', 'formtype'=>'datetime'));
                 break;
 
@@ -567,6 +570,7 @@ class check extends admin {
 \'mobile_img_path\' => \''.(pc_base::load_config('system','mobile_img_path') ? pc_base::load_config('system','mobile_img_path') : pc_base::load_config('system','app_path').'mobile/statics/images/').'\', //CDN img
 \'app_path\' => \''.pc_base::load_config('system','app_path').'\', //动态域名配置地址
 \'mobile_path\' => \''.(pc_base::load_config('system','mobile_path') ? pc_base::load_config('system','mobile_path') : pc_base::load_config('system','app_path').'mobile/').'\', //动态手机域名配置地址
+\'bdmap_api\' => \''.pc_base::load_config('system','bdmap_api').'\', //百度地图API
 \'sys_editor\' => \''.(pc_base::load_config('system','sys_editor') ? pc_base::load_config('system','sys_editor') : 0).'\', //编辑器模式    0 UEditor 1 CKEditor
 
 \'charset\' => \''.pc_base::load_config('system','charset').'\', //网站字符集
@@ -611,7 +615,7 @@ class check extends admin {
 
 \'admin_login_path\' => \''.pc_base::load_config('system','admin_login_path').'\', //自定义的后台登录地址';
                 $system_data.= PHP_EOL.');'.PHP_EOL.'?>';
-                if (!strstr($system, 'IN_CMS') || strstr($system, 'admin_url') || strstr($system, 'safe_card') || strstr($system, 'phpsso') || strstr($system, 'phpsso_appid') || strstr($system, 'phpsso_api_url') || strstr($system, 'phpsso_auth_key') || strstr($system, 'phpsso_version') || strstr($system, '\'timezone\' => \'Etc/GMT-8\'') || !strstr($system, 'attachment_file') || !strstr($system, 'attachment_del') || !strstr($system, 'sys_attachment_save_id') || !strstr($system, 'sys_attachment_safe') || !strstr($system, 'sys_attachment_path') || !strstr($system, 'sys_attachment_save_type') || !strstr($system, 'sys_attachment_save_dir') || !strstr($system, 'sys_attachment_url') || !strstr($system, 'sys_avatar_path') || !strstr($system, 'sys_avatar_url') || !strstr($system, 'sys_thumb_path') || !strstr($system, 'sys_thumb_url') || !strstr($system, 'mobile_js_path') || !strstr($system, 'mobile_css_path') || !strstr($system, 'mobile_img_path') || !strstr($system, 'mobile_path') || !strstr($system, 'sys_editor') || !strstr($system, 'sys_csrf') || !strstr($system, 'needcheckcomeurl') || !strstr($system, 'mobile_root') || !strstr($system, 'keywordapi') || !strstr($system, 'baidu_aid') || !strstr($system, 'baidu_skey') || !strstr($system, 'baidu_arcretkey') || !strstr($system, 'baidu_qcnum') || !strstr($system, 'xunfei_aid') || !strstr($system, 'xunfei_skey') || !strstr($system, 'admin_login_path')) {
+                if (!strstr($system, 'IN_CMS') || strstr($system, 'admin_url') || strstr($system, 'safe_card') || strstr($system, 'phpsso') || strstr($system, 'phpsso_appid') || strstr($system, 'phpsso_api_url') || strstr($system, 'phpsso_auth_key') || strstr($system, 'phpsso_version') || strstr($system, '\'timezone\' => \'Etc/GMT-8\'') || !strstr($system, 'attachment_file') || !strstr($system, 'attachment_del') || !strstr($system, 'sys_attachment_save_id') || !strstr($system, 'sys_attachment_safe') || !strstr($system, 'sys_attachment_path') || !strstr($system, 'sys_attachment_save_type') || !strstr($system, 'sys_attachment_save_dir') || !strstr($system, 'sys_attachment_url') || !strstr($system, 'sys_avatar_path') || !strstr($system, 'sys_avatar_url') || !strstr($system, 'sys_thumb_path') || !strstr($system, 'sys_thumb_url') || !strstr($system, 'mobile_js_path') || !strstr($system, 'mobile_css_path') || !strstr($system, 'mobile_img_path') || !strstr($system, 'mobile_path') || !strstr($system, 'bdmap_api') || !strstr($system, 'sys_editor') || !strstr($system, 'sys_csrf') || !strstr($system, 'needcheckcomeurl') || !strstr($system, 'mobile_root') || !strstr($system, 'keywordapi') || !strstr($system, 'baidu_aid') || !strstr($system, 'baidu_skey') || !strstr($system, 'baidu_arcretkey') || !strstr($system, 'baidu_qcnum') || !strstr($system, 'xunfei_aid') || !strstr($system, 'xunfei_skey') || !strstr($system, 'admin_login_path')) {
                     file_put_contents($rt,$system_data);
                 }
 
@@ -687,6 +691,19 @@ class check extends admin {
         if ($counts > 100000) {
             return '<font color="green">数据表【'.$name.'/'.$this->db->db_tablepre.$table.'】数据量超过10万，会影响加载速度，建议对其进行数据优化</font>';
         }
+    }
+
+    private function delete_child($id) {
+        $menu_db = pc_base::load_model('menu_model');
+        $id = intval($id);
+        if (empty($id)) return false;
+        $list = $menu_db->select(array('parentid'=>$id));
+        foreach($list as $r) {
+            $this->delete_child($r['id']);
+            $menu_db->delete(array('id'=>$r['id']));
+        }
+        $menu_db->delete(array('id'=>$id));
+        return true;
     }
 
 }

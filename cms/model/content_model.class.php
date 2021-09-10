@@ -82,7 +82,7 @@ class content_model extends model {
 		if($this->input->post('add_introduce') && $systeminfo['description'] == '' && isset($modelinfo['content'])) {
 			$content = htmlspecialchars_decode(stripslashes($modelinfo['content']));
 			$introcude_length = intval($this->input->post('introcude_length'));
-			$systeminfo['description'] = str_cut(str_replace(array("'","\r\n","\t",'[page]','[/page]','&ldquo;','&rdquo;','&nbsp;',' ','　','	'), '', clearhtml($content)),$introcude_length);
+			$systeminfo['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]','&ldquo;','&rdquo;','&nbsp;',' ','　','	'), '', $content), $introcude_length);
 			$inputinfo['system']['description'] = $systeminfo['description'] = addslashes($systeminfo['description']);
 		}
 		//自动提取缩略图
@@ -296,7 +296,7 @@ class content_model extends model {
 		if($this->input->post('add_introduce') && $systeminfo['description'] == '' && isset($modelinfo['content'])) {
 			$content = htmlspecialchars_decode(stripslashes($modelinfo['content']));
 			$introcude_length = intval($this->input->post('introcude_length'));
-			$systeminfo['description'] = str_cut(str_replace(array("\r\n","\t",'[page]','[/page]','&ldquo;','&rdquo;','&nbsp;',' ','　','	'), '', clearhtml($content)),$introcude_length);
+			$systeminfo['description'] = dr_get_description(str_replace(array("\r\n","\t",'[page]','[/page]','&ldquo;','&rdquo;','&nbsp;',' ','　','	'), '', $content), $introcude_length);
 			$inputinfo['system']['description'] = $systeminfo['description'] = addslashes($systeminfo['description']);
 		}
 		//自动提取缩略图

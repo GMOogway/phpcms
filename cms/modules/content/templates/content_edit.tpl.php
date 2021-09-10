@@ -62,7 +62,7 @@ if(is_array($forminfos['base'])) {
     <label class="control-label col-md-2"><?php if($info['star']){ ?><span class="required" aria-required="true"> * </span><?php } ?><?php echo $info['name']?></label>
     <div class="col-md-10">
 		<?php echo $info['form']?>
-		<span class="help-block"><?php echo $info['tips']?></span>
+		<span class="help-block" id="dr_<?php echo $field?>_tips"><?php echo $info['tips']?></span>
 	</div>
 </div>
 <?php
@@ -99,7 +99,7 @@ if(is_array($forminfos['senior'])) {
     <label class="control-label col-md-2"><?php if($info['star']){ ?><span class="required" aria-required="true"> * </span><?php } ?><?php echo $info['name']?></label>
     <div class="col-md-10">
 		<?php echo $info['form']?>
-		<span class="help-block"><?php echo $info['tips']?></span>
+		<span class="help-block" id="dr_<?php echo $field?>_tips"><?php echo $info['tips']?></span>
 	</div>
 </div>
 <?php
