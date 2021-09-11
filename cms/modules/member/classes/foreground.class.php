@@ -142,7 +142,7 @@ class foreground {
 			// 首次登录是否强制修改密码
 			if (!$log['is_login'] && isset($config['pwd_is_login_edit']) && $config['pwd_is_login_edit']) {
 				// 该改密码了
-				if (ROUTE_M =='member' && ROUTE_C == 'index' && in_array(ROUTE_A, array('account_manage_password','public_checkemail_ajax'))) {
+				if (ROUTE_M =='member' && ROUTE_C == 'index' && in_array(ROUTE_A, array('account_manage_password','public_checkemail_ajax','logout'))) {
 					return true; // 本身控制器不判断
 				}
 				showmessage(L('首次登录需要强制修改密码'), '?m=member&c=index&a=account_manage_password&t=1');
@@ -155,7 +155,7 @@ class foreground {
 					$time = $config['pwd_day_edit'] * 3600 * 24;
 					if (SYS_TIME - $log['updatetime'] > $time) {
 						// 该改密码了
-						if (ROUTE_M =='member' && ROUTE_C == 'index' && in_array(ROUTE_A, array('account_manage_password','public_checkemail_ajax'))) {
+						if (ROUTE_M =='member' && ROUTE_C == 'index' && in_array(ROUTE_A, array('account_manage_password','public_checkemail_ajax','logout'))) {
 							return true; // 本身控制器不判断
 						}
 						showmessage(L('您需要定期修改密码'), '?m=member&c=member_manage&a=account_manage_password&t=1');
