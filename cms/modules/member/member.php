@@ -593,7 +593,18 @@ class member extends admin {
 		if(isset($_POST['userid'])) {
 			$uidarr = isset($_POST['userid']) ? $_POST['userid'] : showmessage(L('illegal_parameters'), HTTP_REFERER);
 			$where = to_sqls($uidarr, '', 'userid');
-			$this->db->update(array('islock'=>0), $where);
+			if($this->db->update(array('islock'=>0), $where)) {
+				$config = getcache('common','commons');
+				if ($config) {
+					if (isset($config['safe_wdl']) && $config['safe_wdl']) {
+						$member_login_db = pc_base::load_model('member_login_model');
+						$time = $config['safe_wdl'] * 3600 * 24;
+						$login_where[] = 'logintime < '.(SYS_TIME - $time);
+						$login_where[] = to_sqls($uidarr, '', 'uid');
+						$member_login_db->update(array('logintime'=>SYS_TIME), implode(' AND ', $login_where));
+					}
+				}
+			}
 			showmessage(L('member_unlock').L('operation_success'), HTTP_REFERER);
 		} else {
 			showmessage(L('operation_failure'), HTTP_REFERER);
