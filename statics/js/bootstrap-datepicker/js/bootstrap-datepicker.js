@@ -1713,8 +1713,8 @@
 		immediateUpdates: false,
 		title: '',
 		templates: {
-			leftArrow: '&#x00AB;',
-			rightArrow: '&#x00BB;'
+			leftArrow: '<i class="fa fa-angle-left"/>',
+			rightArrow: '<i class="fa fa-angle-right"/>'
 		},
     showWeekDays: true
 	};
@@ -1726,14 +1726,16 @@
 	$.fn.datepicker.Constructor = Datepicker;
 	var dates = $.fn.datepicker.dates = {
 		en: {
-			days: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"],
-			daysShort: ["周日", "周一", "周二", "周三", "周四", "周五", "周六", "周日"],
-			daysMin:  ["日", "一", "二", "三", "四", "五", "六", "日"],
+			days: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
+			daysShort: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
+			daysMin: ["日", "一", "二", "三", "四", "五", "六"],
 			months: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
 			monthsShort: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
-			today: "今日",
-			clear: "清空",
-			titleFormat: "MM yyyy"
+			today: "今天",
+			monthsTitle: "选择月份",
+			clear: "清除",
+			format:"yyyy-mm-dd",
+			titleFormat: "yyyy年mm月"
 		}
 	};
 

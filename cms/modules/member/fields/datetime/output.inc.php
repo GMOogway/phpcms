@@ -1,19 +1,15 @@
 	function datetime($field, $value) {
 		$setting = string2array($this->fields[$field]['setting']);
 		extract($setting);
-		if($fieldtype=='date') {
-			$format_txt = 'Y-m-d';
-		} elseif($fieldtype=='datetime') {
-			$format_txt = 'Y-m-d H:i:s';
-		} else {
-			$format_txt = $format;
+		if($fieldtype=='int') {
+			if($format) {
+				$value = dr_date($value, 'Y-m-d h:i:s');
+			} else {
+				$value = dr_date($value, 'Y-m-d');
+			}
+			if(!$value) $value = $format ? dr_date(SYS_TIME, 'Y-m-d H:i:s') : dr_date(SYS_TIME, 'Y-m-d');
+		} elseif($fieldtype=='varchar') {
+			if(!$value) $value = $format2 ? dr_date(SYS_TIME, 'H:i:s') : dr_date(SYS_TIME, 'H:i');
 		}
-		if(strlen($format_txt)<6) {
-			$isdatetime = 0;
-		} else {
-			$isdatetime = 1;
-		}
-		if(!$value) $value = SYS_TIME;
-		$value = date($format_txt,$value);
 		return $value;
 	}

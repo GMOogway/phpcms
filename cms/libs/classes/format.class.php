@@ -11,9 +11,9 @@ class format {
 		if(!$times) return true;
 		$lang = pc_base::load_config('system','lang');
 		if($lang == 'zh-cn') {
-			$str = $showtime ? date('Y-m-d H:i:s',$times) : date('Y-m-d',$times);
+			$str = $showtime ? dr_date($times, 'Y-m-d H:i:s') : dr_date($times, 'Y-m-d');
 		} else {
-			$str = $showtime ? date('m/d/Y H:i:s',$times) : date('m/d/Y',$times);
+			$str = $showtime ? dr_date($times, 'm/d/Y H:i:s') : dr_date($times, 'm/d/Y');
 		}
 		return $str;
 	}

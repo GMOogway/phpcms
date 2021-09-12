@@ -301,75 +301,127 @@ class form {
 	 * @param $loadjs 是否重复加载js，防止页面程序加载不规则导致的控件无法显示
 	 * @param $showweek 是否显示周，使用，true | false
 	 */
-	public static function date($name, $value = '', $isdatetime = 0, $loadjs = 0, $showweek = 'true', $timesystem = 1, $modelid = 0, $datepicker = 0, $is_left = 0, $color = '') {
+	public static function date($name, $value = '', $isdatetime = 0, $loadjs = 0, $showweek = 'true', $timesystem = 1, $modelid = 0, $datepicker = 0, $is_left = 0, $color = '', $width = '') {
 		if($value == '0000-00-00 00:00:00') $value = '';
 		$id = preg_match("/\[(.*)\]/", $name, $m) ? $m[1] : $name;
-		if($isdatetime) {
-			$size = 21;
-		} else {
-			$size = 10;
-		}
 		$str = '';
-		if($loadjs || !defined('CALENDAR_INIT')) {
-			define('CALENDAR_INIT', 1);
-			$str .= '<link href="'.JS_PATH.'bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
-			<link href="'.JS_PATH.'bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css" />
-			<script src="'.JS_PATH.'bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
-			<script src="'.JS_PATH.'bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>';
-		}
-		$model_db = pc_base::load_model('sitemodel_model');
-		$model = $model_db->get_one(array('modelid'=>$modelid));
-		$module_setting = dr_string2array($model['setting']);
-		$updatetime_select = $module_setting['updatetime_select'];
-		defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $id == 'updatetime' && $str .= '<input type="hidden" name="old_'.$id.'" value="'.$value.'">';
-		if ($value == 'SYS_TIME' || $id == 'updatetime') {
-			defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $value = $isdatetime ? date('Y-m-d H:i:s') : date('Y-m-d');
-		}
-		$shuru = '<input type="text" name="'.$name.'" id="'.$id.'" value="'.$value.'" size="'.$size.'" class="form-control">';
-		$tubiao = '<span class="input-group-btn">
-			<button class="btn default date-set"'.($color ? ' style="color: '.$color.';"' : '').' type="button">
-				<i class="fa fa-calendar"></i>
-			</button>
-		</span>';
-		if($datepicker) {
-			$str .= '<div class="form-date input-group"><div class="input-group date field_date_'.$id.'">';
-			$str .= $is_left ? $shuru.$tubiao : $tubiao.$shuru;
-			$str .= '</div></div>';
-			defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $id == 'updatetime' && $str .= '<div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="no_time"'.(isset($updatetime_select) && $updatetime_select ? ' checked' : '').' class="dr_no_time" type="checkbox" value="1" /> '.L('不更新').'<span></span></label></div>';
-		} else {
-			$str .= '<div class="formdate"><div class="form-date input-group"><div class="input-group date field_date_'.$id.'">';
-			$str .= $is_left ? $shuru.$tubiao : $tubiao.$shuru;
-			$str .= '</div></div></div>';
-			defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $id == 'updatetime' && $str .= '<div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="no_time"'.(isset($updatetime_select) && $updatetime_select ? ' checked' : '').' class="dr_no_time" type="checkbox" value="1" /> '.L('不更新').'<span></span></label></div>';
-		}
-		if ($isdatetime) {
-			// 日期 + 时间
-			$str.= '
-			<script type="text/javascript">
-			$(function(){
-				$(".field_date_'.$id.'").datetimepicker({
-					isRTL: false,
-					format: "yyyy-mm-dd hh:ii:ss",
-					showMeridian: true,
-					autoclose: true,
-					pickerPosition: "bottom-right",
-					todayBtn: "linked"
+		if($isdatetime==1 || !$isdatetime) {
+			// 表单宽度设置
+			$width = is_mobile(0) ? '100%' : ($width ? $width : 200);
+			// 风格
+			$style = 'style="width:'.$width.(is_numeric($width) ? 'px' : '').';"';
+			if($loadjs || !defined('CALENDAR_INIT')) {
+				define('CALENDAR_INIT', 1);
+				$str .= '<link href="'.JS_PATH.'bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+				<link href="'.JS_PATH.'bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css" />
+				<script src="'.JS_PATH.'bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
+				<script src="'.JS_PATH.'bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>';
+			}
+			$model_db = pc_base::load_model('sitemodel_model');
+			$model = $model_db->get_one(array('modelid'=>$modelid));
+			$module_setting = dr_string2array($model['setting']);
+			$updatetime_select = $module_setting['updatetime_select'];
+			defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $id == 'updatetime' && $str .= '<input type="hidden" name="old_'.$id.'" value="'.$value.'">';
+			// 字段默认值
+			!$value && $value = SYS_TIME;
+			if ($value == 'SYS_TIME' || (defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $id == 'updatetime')) {
+				$value = SYS_TIME;
+			} elseif (strpos($value, '-') === 0) {
+			} elseif (strpos($value, '-') !== false) {
+				$value = strtotime($value);
+			}
+			$value = $isdatetime ? dr_date($value, 'Y-m-d H:i:s') : dr_date($value, 'Y-m-d');
+			$shuru = '<input type="text" name="'.$name.'" id="'.$id.'" '.$style.' value="'.$value.'" class="form-control dateright field_date_'.$id.'">';
+			$tubiao = '<span class="input-group-btn">
+				<button class="btn default date-set"'.($color ? ' style="color: '.$color.';"' : '').' type="button">
+					<i class="fa fa-calendar"></i>
+				</button>
+			</span>';
+			if($datepicker) {
+				$str .= '<div class="form-date input-group"><div class="input-group date">';
+				$str .= $is_left ? $shuru.$tubiao : $tubiao.$shuru;
+				$str .= '</div></div>';
+				defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $id == 'updatetime' && $str .= '<div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="no_time"'.(isset($updatetime_select) && $updatetime_select ? ' checked' : '').' class="dr_no_time" type="checkbox" value="1" /> '.L('不更新').'<span></span></label></div>';
+			} else {
+				$str .= '<div class="formdate"><div class="form-date input-group"><div class="input-group date">';
+				$str .= $is_left ? $shuru.$tubiao : $tubiao.$shuru;
+				$str .= '</div></div></div>';
+				defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $id == 'updatetime' && $str .= '<div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="no_time"'.(isset($updatetime_select) && $updatetime_select ? ' checked' : '').' class="dr_no_time" type="checkbox" value="1" /> '.L('不更新').'<span></span></label></div>';
+			}
+			if ($isdatetime) {
+				// 日期 + 时间
+				$str.= '
+				<script type="text/javascript">
+				$(function(){
+					$(".field_date_'.$id.'").datetimepicker({
+						format: "yyyy-mm-dd hh:ii:ss",
+						autoclose: true,
+						todayBtn: "linked"
+					});
 				});
-			});
-			</script>
-			';
-		} else {
-			// 日期
+				</script>
+				';
+			} else {
+				// 日期
+				$str.= '
+				<script type="text/javascript">
+				$(function(){
+					$(".field_date_'.$id.'").datepicker({
+						format: "yyyy-mm-dd",
+						autoclose: true,
+						todayBtn: "linked"
+					});
+				});
+				</script>
+				';
+			}
+		}
+		if($isdatetime==2 || $isdatetime==3) {
+			// 表单宽度设置
+			$width = is_mobile(0) ? '100%' : ($width ? $width : 100);
+			// 风格
+			$style = 'style="width:'.$width.(is_numeric($width) ? 'px' : '').';"';
+			$format = (int)$isdatetime==2 ? 'H:i:s' : 'H:i';
+			// 字段默认值
+			if ($value == 'SYS_TIME') {
+				$value = dr_date(SYS_TIME, $format);
+			}
+			if($loadjs || !defined('CALENDAR_INIT')) {
+				define('CALENDAR_INIT', 1);
+				$str .= '<link href="'.JS_PATH.'bootstrap-timepicker/css/bootstrap-timepicker.min.css" rel="stylesheet" type="text/css" />
+				<script src="'.JS_PATH.'bootstrap-timepicker/js/bootstrap-timepicker.min.js" type="text/javascript"></script>';
+			}
+			$shuru = '<input type="text" name="'.$name.'" id="'.$id.'" '.$style.' value="'.$value.'" class="form-control timepicker dateright field_time_'.$id.'">';
+			$tubiao = '<span class="input-group-btn">
+				<button class="btn default"'.($color ? ' style="color: '.$color.';"' : '').' type="button">
+					<i class="fa fa-clock-o"></i>
+				</button>
+			</span>';
+			if($datepicker) {
+				$str .= '<div class="form-date input-group"><div class="input-group">';
+				$str .= $is_left ? $shuru.$tubiao : $tubiao.$shuru;
+				$str .= '</div></div>';
+			} else {
+				$str .= '<div class="formdate"><div class="form-date input-group"><div class="input-group">';
+				$str .= $is_left ? $shuru.$tubiao : $tubiao.$shuru;
+				$str .= '</div></div></div>';
+			}
 			$str.= '
-			<script type="text/javascript">
+			<script>
 			$(function(){
-				$(".field_date_'.$id.'").datepicker({
-					isRTL: false,
-					format: "yyyy-mm-dd",
-					showMeridian: true,
+				$(".field_time_'.$id.'").timepicker({
 					autoclose: true,
-					pickerPosition: "bottom-right",
-					todayBtn: "linked"
+					defaultTime:"'.($value ? $value : dr_date(SYS_TIME, $format)).'",
+					minuteStep: 1,
+					secondStep: 1,
+					showSeconds: '.($format == 'H:i:s' ? 'true' : 'false').',
+					showMeridian: false
+				});
+				$(".timepicker").parent(".input-group").on("click", ".input-group-btn", function(e){
+					$(this).parent(".input-group").find(".timepicker").timepicker("showWidget");
+				});
+				$( document ).scroll(function(){
+					$(".field_time_'.$id.'").timepicker("place");
 				});
 			});
 			</script>

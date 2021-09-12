@@ -1,14 +1,22 @@
 	function datetime($field, $value, $fieldinfo) {
 		extract(string2array($fieldinfo['setting']));
 		$isdatetime = 0;
-		$timesystem = 0;
 		if($fieldtype=='int') {
-			if(!$value) $value = $defaultvalue ? strtotime($defaultvalue) : SYS_TIME;
-			$format_txt = $format == 'm-d' ? 'm-d' : $format;
-			$value = date($format_txt,$value);
-			$isdatetime = strlen($format) > 6 ? 1 : 0;
-		} elseif($fieldtype=='datetime') {
-			$isdatetime = 1;
+			if($format) {
+				$value = dr_date($value, 'Y-m-d H:i:s');
+				$isdatetime = 1;
+			} else {
+				$value = dr_date($value, 'Y-m-d');
+				$isdatetime = 0;
+			}
+			if(!$value) $value = $format ? dr_date(SYS_TIME, 'Y-m-d H:i:s') : dr_date(SYS_TIME, 'Y-m-d');
+		} elseif($fieldtype=='varchar') {
+			if($format2) {
+				$isdatetime = 2;
+			} else {
+				$isdatetime = 3;
+			}
+			if(!$value) $value = $format2 ? dr_date(SYS_TIME, 'H:i:s') : dr_date(SYS_TIME, 'H:i');
 		}
-		return form::date("info[$field]",$value,$isdatetime,1,'true',$timesystem,0,1,$is_left,$color);
+		return form::date("info[$field]",$value,$isdatetime,1,'true',0,$this->modelid,1,$is_left,$color,$width);
 	}
