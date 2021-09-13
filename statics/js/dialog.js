@@ -1,13 +1,3 @@
-/*!
- * artDialog 4.1.7
- * Date: 2013-03-03 08:04
- * http://code.google.com/p/artdialog/
- * (c) 2009-2012 TangBin, http://www.planeArt.cn
- *
- * This is licensed under the GNU LGPL, version 2.1 or later.
- * For details, see: http://creativecommons.org/licenses/LGPL/2.1/
- */
- 
 ;(function (window, undefined) {
 //if (window.jQuery) return jQuery;
 
