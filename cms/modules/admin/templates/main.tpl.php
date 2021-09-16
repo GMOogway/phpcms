@@ -205,8 +205,7 @@ padding-right: 70px !important;text-overflow:ellipsis!important;overflow:hidden!
                             <tr>
                                 <td>下载地址</td>
                                 <td>
-                                    修改版：<a href="https://gitee.com/zhaoxunzhiyin/phpcms/" target="_blank">gitee</a> / <a href="https://github.com/zhaoxunzhiyin/phpcms/" target="_blank">github</a><br>
-                                    有意思代码仓库：<a href="https://code.phpcmsx.com/zhaoxunzhiyin/" target="_blank">有意思</a><br>
+                                    修改版：<a href="https://gitee.com/zhaoxunzhiyin/phpcms/" target="_blank">gitee</a> / <a href="https://github.com/zhaoxunzhiyin/phpcms/" target="_blank">github</a>
                                 </td>
                             </tr>
                             <tr>
