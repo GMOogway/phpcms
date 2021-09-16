@@ -57,6 +57,7 @@ class Uploader
     public function __construct($fileField, $config, $type = "upload") {
         pc_base::load_sys_class('upload','',0);
         $this->input = pc_base::load_sys_class('input');
+        $this->cache = pc_base::load_sys_class('cache');
         $this->grouplist = getcache('grouplist', 'member');
         $this->fileField = $fileField;
         $this->config = $config;
@@ -414,13 +415,13 @@ class Uploader
         $arr['filename'] = urlencode($filename);
         $arr['size'] = $size;
         $json_str = json_encode($arr);
-        $att_arr_exist = getcache('att_json', 'commons');
+        $att_arr_exist = $this->cache->get_data('att_json');
         $att_arr_exist_tmp = explode('||', $att_arr_exist);
         if(is_array($att_arr_exist_tmp) && in_array($json_str, $att_arr_exist_tmp)) {
             return true;
         } else {
             $json_str = $att_arr_exist ? $att_arr_exist.'||'.$json_str : $json_str;
-            setcache('att_json', $json_str, 'commons');
+            $this->cache->set_data('att_json', $json_str, 3600);
             return true;
         }
     }

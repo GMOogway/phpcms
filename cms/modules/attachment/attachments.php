@@ -11,6 +11,7 @@ class attachments {
 	private $att_db;
 	function __construct() {
 		$this->input = pc_base::load_sys_class('input');
+		$this->cache = pc_base::load_sys_class('cache');
 		pc_base::load_app_func('global');
 		$this->upload = pc_base::load_sys_class('upload');
 		$this->imgext = array('jpg','gif','png','bmp','jpeg');
@@ -156,7 +157,7 @@ class attachments {
 			if(upload_key($argskey) != $authkey) showmessage(L('attachment_parameter_error'));
 			extract(geth5init($args));
 			$file_size_limit = sizecount($file_size_limit*1024);		
-			$att_not_used = getcache('att_json', 'commons');
+			$att_not_used = $this->cache->get_data('att_json');
 			if(empty($att_not_used) || !isset($att_not_used)) $tab_status = ' class="on"';
 			if(!empty($att_not_used)) $div_status = ' hidden';
 			include $this->admin_tpl('h5upload');
@@ -317,18 +318,19 @@ class attachments {
 	 * 设置upload上传的json格式cookie
 	 */
 	private function upload_json($aid,$src,$filename,$size) {
+		if(!SYS_ATTACHMENT_STAT) return false;
 		$arr['aid'] = intval($aid);
 		$arr['src'] = trim($src);
 		$arr['filename'] = urlencode($filename);
 		$arr['size'] = $size;
 		$json_str = json_encode($arr);
-		$att_arr_exist = getcache('att_json', 'commons');
+		$att_arr_exist = $this->cache->get_data('att_json');
 		$att_arr_exist_tmp = explode('||', $att_arr_exist);
 		if(is_array($att_arr_exist_tmp) && in_array($json_str, $att_arr_exist_tmp)) {
 			return true;
 		} else {
 			$json_str = $att_arr_exist ? $att_arr_exist.'||'.$json_str : $json_str;
-			setcache('att_json', $json_str, 'commons');
+			$this->cache->set_data('att_json', $json_str, 3600);
 			return true;			
 		}
 	}
@@ -337,18 +339,19 @@ class attachments {
 	 * 设置h5upload上传的json格式cookie
 	 */
 	public function h5upload_json() {
+		if(!SYS_ATTACHMENT_STAT) return false;
 		$arr['aid'] = intval($this->input->get('aid'));
 		$arr['src'] = safe_replace(trim($this->input->get('src')));
 		$arr['filename'] = urlencode(safe_replace($this->input->get('filename')));
 		$arr['size'] = $this->input->get('size');
 		$json_str = json_encode($arr);
-		$att_arr_exist = getcache('att_json', 'commons');
+		$att_arr_exist = $this->cache->get_data('att_json');
 		$att_arr_exist_tmp = explode('||', $att_arr_exist);
 		if(is_array($att_arr_exist_tmp) && in_array($json_str, $att_arr_exist_tmp)) {
 			return true;
 		} else {
 			$json_str = $att_arr_exist ? $att_arr_exist.'||'.$json_str : $json_str;
-			setcache('att_json', $json_str, 'commons');
+			$this->cache->set_data('att_json', $json_str, 3600);
 			return true;			
 		}
 	}
@@ -362,16 +365,16 @@ class attachments {
 		$arr['filename'] = urlencode($this->input->get('filename'));
 		$arr['size'] = $this->input->get('size');
 		$json_str = json_encode($arr);
-		$att_arr_exist = getcache('att_json', 'commons');
+		$att_arr_exist = $this->cache->get_data('att_json');
 		$att_arr_exist = str_replace(array($json_str,'||||'), array('','||'), $att_arr_exist);
 		$att_arr_exist = preg_replace('/^\|\|||\|\|$/i', '', $att_arr_exist);
-		setcache('att_json', $att_arr_exist, 'commons');
+		$this->cache->set_data('att_json', $att_arr_exist, 3600);
 	}	
 
 	private function att_not_used() {
 		$this->att_db= pc_base::load_model('attachment_model');
 		//获取临时未处理文件列表
-		if($att_json = getcache('att_json', 'commons')) {
+		if($att_json = $this->cache->get_data('att_json')) {
 			if($att_json) $att_cookie_arr = explode('||', $att_json);	
 			foreach ($att_cookie_arr as $_att_c) $att[] = json_decode($_att_c,true);
 			if(is_array($att) && !empty($att)) {

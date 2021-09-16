@@ -181,6 +181,8 @@ define('COOKIE_PATH', pc_base::load_config('system','cookie_path'));
 define('SYS_ADMIN_PATH', pc_base::load_config('system','admin_login_path') ? pc_base::load_config('system','admin_login_path') : 'login');
 //是否需要检查外部访问
 define('NeedCheckComeUrl', pc_base::load_config('system','needcheckcomeurl'));
+//安全密匙
+define('SYS_KEY', pc_base::load_config('system','auth_key'));
 //跨站验证
 define('SYS_CSRF', pc_base::load_config('system','sys_csrf'));
 //站点id

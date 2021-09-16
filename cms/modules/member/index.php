@@ -363,11 +363,15 @@ class index extends foreground {
 		$upload->set_userid($this->memberinfo['userid']);
 		header("content-type:text/html;charset=utf-8");
 		$base64_img = trim($_POST['img']);
-		if(preg_match('/^(data:\s*image\/(\w+);base64,)/', $base64_img, $result)){
+		if(preg_match('/^(data:\s*image\/(\w+);base64,)/i', $base64_img, $result)){
 			$type = $result[2];
 			if(in_array($type,array('pjpeg','jpeg','jpg','gif','bmp','png'))){
+				$base64_img = base64_decode(str_replace($result[1], '', $base64_img));
+				if (strlen($base64_img) > 30000000) {
+					dr_json(0, L('图片太大了'));
+				}
 				$rt = $upload->base64_image(array(
-					'content' => base64_decode(str_replace($result[1], '', $base64_img)),
+					'content' => $base64_img,
 					'file_exts' => $type,
 					'attachment' => $upload->get_attach_member(SYS_ATTACHMENT_SAVE_ID, 0),
 				));
@@ -385,13 +389,13 @@ class index extends foreground {
 					$this->db->update(array('avatar'=>$data['code']), array('userid'=>$this->memberinfo['userid']));
 					$this->att_db->update(array('status'=>0), array('userid'=>$this->memberinfo['userid'],'status'=>1));
 					$this->att_db->update(array('status'=>1), array('aid'=>$data['code']));
-					exit(dr_array2string(array('code' => 1, 'msg' => L('图片上传成功'), 'id' => $data['code'], 'info' => $rt['data'])));
+					dr_json(1, L('图片上传成功'), $rt['data']);
 				}
 			}else{
 				dr_json(0, L('图片上传类型错误'));
 			}
 		}else{
-			dr_json(0, L('文件错误'));
+			dr_json(0, L('头像内容不规范'));
 		}
 	}
 

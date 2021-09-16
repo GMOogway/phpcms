@@ -18,8 +18,6 @@ class manage extends admin {
 	 * 附件列表
 	 */
 	public function init() {
-		//$sql = "ALTER TABLE `".$this->db->db_tablepre."attachment` CHANGE `filename` `filename` VARCHAR( 255 ) NOT NULL DEFAULT ''";
-		//$this->db->query($sql);
 		pc_base::load_sys_class('form');
 		$modules = getcache('modules','commons');
 		$category = getcache('category_content_'.$this->siteid,'commons');

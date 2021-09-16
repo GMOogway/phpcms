@@ -65,7 +65,8 @@ class attachment_model extends model {
 				}
 			}
 		}
-		delcache('att_json', 'commons');
+		$cache = pc_base::load_sys_class('cache');
+		$cache->clear('att_json');
 		return true;
 	}
 	/*
@@ -73,8 +74,9 @@ class attachment_model extends model {
 	 */
 	private function api_update_cookie($keyid) {
 		if(!SYS_ATTACHMENT_STAT) return false;
+		$cache = pc_base::load_sys_class('cache');
 		$att_index_db = pc_base::load_model('attachment_index_model');
-		$att_json = getcache('att_json', 'commons');
+		$att_json = $cache->get_data('att_json');
 		if($att_json) {
 			$att_cookie_arr = explode('||', $att_json);
 			$att_cookie_arr = array_unique($att_cookie_arr);

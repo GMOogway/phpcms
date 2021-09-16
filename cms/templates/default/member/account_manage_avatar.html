@@ -163,7 +163,7 @@ function imagesAjax(src) {
         dataType: 'json',
         success: function(re) {
             if(re.code == '1') {
-                $('.avatar-view img').attr('src',re.info.url);
+                $('.avatar-view img').attr('src',re.data.url);
                 location.reload();
             } else {
                 alert(re.msg);

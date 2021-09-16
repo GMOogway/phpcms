@@ -15,6 +15,7 @@ class cache {
      * 构造函数,初始化变量
      */
     public function __construct() {
+        $this->cachefile = pc_base::load_sys_class('cachefile');
         $this->file_dir = CACHE_PATH.'caches_data/caches_data/'; // 设置缓存目录
         $this->auth_dir = CACHE_PATH.'caches_authcode/caches_data/'; // 认证数据缓存目录
         $this->siteid = get_siteid();
@@ -195,12 +196,7 @@ class cache {
         // 重置Zend OPcache
         function_exists('opcache_reset') && opcache_reset();
 
-        $s = $_SERVER['SERVER_PORT'] == '443' ? 1 : 0;
-        $httponly = $name=='userid'||$name=='auth'?true:false;
-        $name = pc_base::load_config('system','cookie_pre').md5($siteid.'-'.$name);
-        $_COOKIE[$name] = $value;
-
-        $time && setcookie($name, $value, SYS_TIME + $time, pc_base::load_config('system','cookie_path'), pc_base::load_config('system','cookie_domain'), $s, $httponly);
+        $time && $this->cachefile->save(md5(SYS_KEY.$siteid.$name), $value, $time);
 
         return $value;
     }
@@ -208,16 +204,14 @@ class cache {
     // 获取内容
     public function get_data($name) {
         $siteid = $this->siteid ? $this->siteid : SITE_ID;
-        $name = pc_base::load_config('system','cookie_pre').md5($siteid.'-'.$name);
-        $value = isset($_COOKIE[$name]) ? $_COOKIE[$name] : '';
-        return $value;
+        return $this->cachefile->get(md5(SYS_KEY.$siteid.$name));
     }
 
     // 删除内容
     public function del_data($name) {
         $siteid = $this->siteid ? $this->siteid : SITE_ID;
         function_exists('opcache_reset') && opcache_reset();
-        return param::set_cookie(md5($siteid.'-'.$name));
+        return $this->cachefile->delete(md5(SYS_KEY.$siteid.$name));
     }
 
     // 使用框架
