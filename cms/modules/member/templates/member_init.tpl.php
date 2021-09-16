@@ -1,5 +1,18 @@
 <?php defined('IN_ADMIN') or exit('No permission resources.');?>
 <?php include $this->admin_tpl('header', 'admin');?>
+<link href="<?php echo JS_PATH;?>bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+<script src="<?php echo JS_PATH;?>bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+    if (jQuery().datepicker) {
+        $('.date-picker').datepicker({
+            format: "yyyy-mm-dd",
+            orientation: "left",
+            autoclose: true
+        });
+    }
+});
+</script>
 <div class="pad-10">
 <div class="common-form">
 <fieldset>
@@ -38,13 +51,17 @@
 <input type="hidden" value="member" name="m">
 <input type="hidden" value="member" name="c">
 <input type="hidden" value="search" name="a">
-<input type="hidden" value="879" name="menuid">
+<input type="hidden" value="168" name="menuid">
 <table width="100%" class="table_form contentWrap">
 		<tr>
 			<td width="120"><?php echo L('regtime')?></td> 
-			<td>
-				<?php echo form::date('start_time', $start_time)?>-
-				<?php echo form::date('end_time', $end_time)?>
+			<td><div class="formdate">
+            <div class="input-group input-medium date-picker input-daterange">
+                <input type="text" class="form-control" value="<?php echo $start_time;?>" name="start_time" id="start_time">
+                <span class="input-group-addon"> - </span>
+                <input type="text" class="form-control" value="<?php echo $end_time;?>" name="end_time" id="end_time">
+            </div>
+        </div>
 			</td>
 		</tr>
 		<tr>

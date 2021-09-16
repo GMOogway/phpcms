@@ -1,6 +1,19 @@
 <?php
 defined('IN_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header');?>
+<link href="<?php echo JS_PATH;?>bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+<script src="<?php echo JS_PATH;?>bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+    if (jQuery().datepicker) {
+        $('.date-picker').datepicker({
+            format: "yyyy-mm-dd",
+            orientation: "left",
+            autoclose: true
+        });
+    }
+});
+</script>
 <div class="pad-lr-10">
 <form name="searchform" action="?m=admin&c=index&a=public_error_log" method="get" >
 <input type="hidden" value="admin" name="m">
@@ -9,7 +22,16 @@ include $this->admin_tpl('header');?>
 <table width="100%" cellspacing="0" class="search-form">
     <tbody>
 		<tr>
-		<td><div class="explain-col"><?php echo form::date('time',$time,'0')?><input type="submit" value="搜索" class="button" name="dosubmit">
+		<td><div class="explain-col"><div class="formdate">
+            <div class="input-group input-time date date-picker">
+                        <input type="text" class="form-control" name="time" value="<?php echo $time;?>">
+                        <span class="input-group-btn">
+                            <button class="btn default" type="button">
+                                <i class="fa fa-calendar"></i>
+                            </button>
+                        </span>
+                    </div></div>
+		<input type="submit" value="搜索" class="button" name="dosubmit">
 		</div>
 		</td>
 		</tr>

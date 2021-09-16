@@ -1110,6 +1110,27 @@ function format_file_size($fileSize, $round = 2) {
 	return round($value, $round) . $unit[$i];
 }
 /**
+ * 关键字高亮显示
+ *
+ * @param   string  $string     字符串
+ * @param   string  $keyword    关键字
+ * @return  string
+ */
+function dr_keyword_highlight($string, $keyword, $rule = '') {
+	if (!$keyword) {
+		return $string;
+	}
+	$arr = explode(' ', trim(str_replace('%', ' ', urldecode($keyword)), '%'));
+	if (!$arr) {
+		return $string;
+	}
+	!$rule && $rule = '<font color=red><strong>[value]</strong></font>';
+	foreach ($arr as $t) {
+		$string = str_ireplace($t, str_replace('[value]', $t, $rule), $string);
+	}
+	return $string;
+}
+/**
 * 转换字节数为其他单位
 *
 *

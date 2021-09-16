@@ -8,7 +8,13 @@ include $this->admin_tpl('header','admin');
 <table width="100%" cellspacing="0" class="search-form">
     <tbody>
 		<tr>
-		<td><div class="explain-col"><?php echo L('query_type')?>:<?php echo form::select($trade_status,$status,'name="search[status]"', L('all'))?>      <?php echo L('username')?>:  <input type="text" value="<?php echo $username;?>" class="input-text" name="search[username]">  <?php echo L('time')?>:  <?php echo form::date('search[start_time]',$start_time,'')?> <?php echo L('to')?>   <?php echo form::date('search[end_time]',$end_time,'')?>    <input type="submit" value="<?php echo L('search')?>" class="button" name="dosubmit">
+		<td><div class="explain-col"><?php echo L('query_type')?>:<?php echo form::select($trade_status,$status,'name="search[status]"', L('all'))?>      <?php echo L('username')?>:  <input type="text" value="<?php echo $username;?>" class="input-text" name="search[username]">  <?php echo L('time')?>:  <div class="formdate">
+            <div class="input-group input-medium date-picker input-daterange">
+                <input type="text" class="form-control" value="<?php echo $this->input->get('search')['start_time'];?>" name="search[start_time]">
+                <span class="input-group-addon"> <?php echo L('to')?> </span>
+                <input type="text" class="form-control" value="<?php echo $this->input->get('search')['end_time'];?>" name="search[end_time]">
+            </div>
+        </div>    <input type="submit" value="<?php echo L('search')?>" class="button" name="dosubmit">
 		</div>
 		</td>
 		</tr>

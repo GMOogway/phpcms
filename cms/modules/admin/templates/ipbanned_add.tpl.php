@@ -15,10 +15,10 @@ include $this->admin_tpl('header');
 </script>
 
 <div class="pad_10">
-<form action="?m=admin&c=ipbanned&a=add" method="post" name="myform" id="myform" >
+<form action="?m=admin&c=ipbanned&a=add" method="post" name="myform" id="myform">
 <table width="100%" cellpadding="2" cellspacing="1" class="table_form">
 	<tr> 
-      <th width="60">IP :</th>
+      <th width="80">IP :</th>
       <td><input type="text" name="info[ip]" id="ip" size="25"></td>
     </tr>
 	<tr> 

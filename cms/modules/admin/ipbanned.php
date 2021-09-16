@@ -14,7 +14,7 @@ class ipbanned extends admin {
 		$infos = array();
 		$infos = $this->db->listinfo('','ipbannedid DESC',$page ,'20');
 		$pages = $this->db->pages;	
-		$big_menu = array('javascript:artdialog(\'add\',\'?m=admin&c=ipbanned&a=add\',\''.L('add_ipbanned').'\',450,320);void(0);', L('add_ipbanned'));
+		$big_menu = array('javascript:artdialog(\'add\',\'?m=admin&c=ipbanned&a=add\',\''.L('add_ipbanned').'\',500,320);void(0);', L('add_ipbanned'));
 		include $this->admin_tpl('ipbanned_list');
 	}
 	

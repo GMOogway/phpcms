@@ -6,8 +6,20 @@
 <script type="text/javascript" src="<?php echo CSS_PATH?>bootstrap/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="<?php echo JS_PATH;?>layui/css/layui.css" media="all" />
 <link rel="stylesheet" href="<?php echo CSS_PATH;?>admin/css/global.css" media="all" />
+<link href="<?php echo JS_PATH;?>bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+<script src="<?php echo JS_PATH;?>bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+    if (jQuery().datepicker) {
+        $('.date-picker').datepicker({
+            format: "yyyy-mm-dd",
+            orientation: "left",
+            autoclose: true
+        });
+    }
+});
+</script>
 <style type="text/css">
-* {-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;}
 .list_order {text-align: left;}
 .btn-group {margin-left: 10px;}
 #search {height: 32px;line-height: 32px;}
@@ -24,8 +36,14 @@
         </a>
     </blockquote>
     <div class="demoTable" id="searchid" style="display:none;">
-        <?php echo L('uploadtime');?>：
-        <?php echo form::date('start_uploadtime',$start_uploadtime)?><?php echo L('to')?>&nbsp;&nbsp;<?php echo form::date('end_uploadtime',$end_uploadtime)?>
+        <?php echo L('time');?>：
+        <div class="formdate">
+            <div class="input-group input-medium date-picker input-daterange">
+                <input type="text" class="form-control" value="<?php echo $this->input->get('start_uploadtime');?>" name="start_uploadtime" id="start_uploadtime">
+                <span class="input-group-addon"> <?php echo L('to')?> </span>
+                <input type="text" class="form-control" value="<?php echo $this->input->get('end_uploadtime');?>" name="end_uploadtime" id="end_uploadtime">
+            </div>
+        </div>
         <?php echo L('filetype')?>
         <div class="layui-inline">
             <input class="input-text" name="fileext" id="fileext" <?php if(isset($fileext)) echo $fileext;?> placeholder="<?php echo L('filetype')?>">

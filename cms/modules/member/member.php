@@ -34,8 +34,8 @@ class member extends admin {
 		$keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
 		$type = isset($_GET['type']) ? $_GET['type'] : '';
 		$groupid = isset($_GET['groupid']) ? $_GET['groupid'] : '';
-		$start_time = isset($_GET['start_time']) ? $_GET['start_time'] : date('Y-m-d', SYS_TIME-date('t', SYS_TIME)*86400);
-		$end_time = isset($_GET['end_time']) ? $_GET['end_time'] : date('Y-m-d', SYS_TIME);
+		$start_time = isset($_GET['start_time']) ? $_GET['start_time'] : '';
+		$end_time = isset($_GET['end_time']) ? $_GET['end_time'] : '';
 		$grouplist = getcache('grouplist');
 		foreach($grouplist as $k=>$v) {
 			$grouplist[$k] = $v['name'];
@@ -76,7 +76,7 @@ class member extends admin {
 		$point_to = isset($_GET['point_to']) ? $_GET['point_to'] : '';
 				
 		$start_time = isset($_GET['start_time']) ? $_GET['start_time'] : '';
-		$end_time = isset($_GET['end_time']) ? $_GET['end_time'] : date('Y-m-d', SYS_TIME);
+		$end_time = isset($_GET['end_time']) ? $_GET['end_time'] : '';
 		$grouplist = getcache('grouplist');
 		foreach($grouplist as $k=>$v) {
 			$grouplist[$k] = $v['name'];
@@ -164,7 +164,7 @@ class member extends admin {
 					$where .= "`modelid` in (".implode(',', $min).") AND ";
 				}
 			}
-			$where .= "`regdate` BETWEEN '$where_start_time' AND '$where_end_time' AND ";
+			$start_time && $end_time && $where .= "`regdate` BETWEEN '$where_start_time' AND '$where_end_time' AND ";
 
 			//资金范围
 			if($amount_from) {
@@ -255,7 +255,7 @@ class member extends admin {
 		$keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
 		$type = isset($_GET['type']) ? $_GET['type'] : '';
 		$start_time = isset($_GET['start_time']) ? $_GET['start_time'] : '';
-		$end_time = isset($_GET['end_time']) ? $_GET['end_time'] : date('Y-m-d', SYS_TIME);
+		$end_time = isset($_GET['end_time']) ? $_GET['end_time'] : '';
 		$grouplist = getcache('grouplist');
 		foreach($grouplist as $k=>$v) {
 			$grouplist[$k] = $v['name'];

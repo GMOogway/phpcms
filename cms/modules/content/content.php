@@ -115,7 +115,7 @@ class content extends admin {
 						} else if ($r['style']) {
 							$rs['title'] = '<span style="color:'.$r['style'].';">'.$r['title'].'</span>';
 						} else {
-							$rs['title'] = $r['title'];
+							$rs['title'] = dr_keyword_highlight($r['title'], $keyword);
 						}
 						$rs['thumb'] = $r['thumb'];
 						$rs['posids'] = $r['posids'];
@@ -408,7 +408,7 @@ class content extends admin {
 					} else if ($r['style']) {
 						$rs['title'] = '<span style="color:'.$r['style'].';">'.$r['title'].'</span>';
 					} else {
-						$rs['title'] = $r['title'];
+						$rs['title'] = dr_keyword_highlight($r['title'], $keyword);
 					}
 					$rs['thumb'] = $r['thumb'];
 					$rs['posids'] = $r['posids'];

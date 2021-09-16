@@ -119,7 +119,8 @@ $(function(){
 		<tr>
 			<td><?php echo L('vip')?></td>
 			<td>
-          <label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="info[vip]" value=1 /> <?php echo L('isvip')?> <span></span></label>
+          <label class="mt-checkbox mt-checkbox-outline" style
+		  ="margin-bottom: 0;"><input type="checkbox" name="info[vip]" value=1 /> <?php echo L('isvip')?> <span></span></label>
 			<?php echo L('overduedate')?> <?php echo form::date('info[overduedate]', '', 1)?>
 			</td>
 		</tr>

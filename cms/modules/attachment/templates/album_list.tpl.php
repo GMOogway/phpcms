@@ -2,6 +2,19 @@
 $show_header = $show_validator = $show_scroll = 1; 
 include $this->admin_tpl('header', 'attachment');
 ?>
+<link href="<?php echo JS_PATH;?>bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+<script src="<?php echo JS_PATH;?>bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+    if (jQuery().datepicker) {
+        $('.date-picker').datepicker({
+            format: "yyyy-mm-dd",
+            orientation: "left",
+            autoclose: true
+        });
+    }
+});
+</script>
 <!--上传组件js-->
 <script src="<?php echo JS_PATH?>assets/ds.min.js"></script>
 <link href="<?php echo JS_PATH?>h5upload/h5upload.css" rel="stylesheet" type="text/css" />
@@ -14,16 +27,27 @@ include $this->admin_tpl('header', 'attachment');
 <input type="hidden" value="<?php echo $this->input->get('authkey');?>" name="authkey">
 <input type="hidden" value="<?php echo $file_types_post?>" name="site_allowext">
 <input type="hidden" value="<?php echo $file_upload_limit?>" name="info[file_upload_limit]">
-<div class="lh26" style="padding:10px 0 0">
+<div class="lh26" style="padding:0 0 10px">
 <label><?php echo L('name')?></label>
 <input type="text" value="<?php echo $filename?>" class="input-text" name="info[filename]"> 
 <label><?php echo L('date')?></label>
-<?php echo form::date('info[uploadtime]', $uploadtime)?>
+<div class="formdate">
+<div class="form-date input-group">
+<div class="input-group input-time date date-picker">
+<input type="text" class="form-control" name="info[uploadtime]" value="<?php echo $uploadtime;?>">
+<span class="input-group-btn">
+<button class="btn default" type="button">
+<i class="fa fa-calendar"></i>
+</button>
+</span>
+</div>
+</div>
+</div>
 <input type="submit" value="<?php echo L('search')?>" class="btn blue" style="color: #fff;background-color: #32c5d2;border-color: #32c5d2;line-height: 1.44;outline: 0!important;box-shadow: none!important;display: inline-block;margin-bottom: 0;vertical-align: middle;cursor: pointer;border: 1px solid transparent;white-space: nowrap;padding: 6px 12px;font-size: 14px;line-height: 1.42857;border-radius: 4px;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;" name="dosubmit">
 </div>
 </form>
 </div>
-<div style="float: right;"><span id="all" class="btn blue" style="color: #fff;background-color: #32c5d2;border-color: #32c5d2;line-height: 1.44;outline: 0!important;box-shadow: none!important;display: inline-block;margin-bottom: 0;vertical-align: middle;cursor: pointer;border: 1px solid transparent;white-space: nowrap;padding: 6px 12px;font-size: 14px;line-height: 1.42857;border-radius: 4px;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;margin-left: 10px;">全选</span><span id="allno" class="btn blue" style="color: #fff;background-color: #32c5d2;border-color: #32c5d2;line-height: 1.44;outline: 0!important;box-shadow: none!important;display: inline-block;margin-bottom: 0;vertical-align: middle;cursor: pointer;border: 1px solid transparent;white-space: nowrap;padding: 6px 12px;font-size: 14px;line-height: 1.42857;border-radius: 4px;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;margin-left: 10px;">全不选</span><span id="other" class="btn blue" style="color: #fff;background-color: #32c5d2;border-color: #32c5d2;line-height: 1.44;outline: 0!important;box-shadow: none!important;display: inline-block;margin-bottom: 0;vertical-align: middle;cursor: pointer;border: 1px solid transparent;white-space: nowrap;padding: 6px 12px;font-size: 14px;line-height: 1.42857;border-radius: 4px;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;margin-left: 10px;">反选</span></div>
+<div style="float: right;margin-right:10px;"><span id="all" class="btn blue" style="color: #fff;background-color: #32c5d2;border-color: #32c5d2;line-height: 1.44;outline: 0!important;box-shadow: none!important;display: inline-block;margin-bottom: 0;vertical-align: middle;cursor: pointer;border: 1px solid transparent;white-space: nowrap;padding: 6px 12px;font-size: 14px;line-height: 1.42857;border-radius: 4px;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;margin-left: 10px;">全选</span><span id="allno" class="btn blue" style="color: #fff;background-color: #32c5d2;border-color: #32c5d2;line-height: 1.44;outline: 0!important;box-shadow: none!important;display: inline-block;margin-bottom: 0;vertical-align: middle;cursor: pointer;border: 1px solid transparent;white-space: nowrap;padding: 6px 12px;font-size: 14px;line-height: 1.42857;border-radius: 4px;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;margin-left: 10px;">全不选</span><span id="other" class="btn blue" style="color: #fff;background-color: #32c5d2;border-color: #32c5d2;line-height: 1.44;outline: 0!important;box-shadow: none!important;display: inline-block;margin-bottom: 0;vertical-align: middle;cursor: pointer;border: 1px solid transparent;white-space: nowrap;padding: 6px 12px;font-size: 14px;line-height: 1.42857;border-radius: 4px;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;margin-left: 10px;">反选</span></div>
 <div class="bk20 hr"></div>
 <div class="files clear">
 <?php foreach($infos as $r) {?>

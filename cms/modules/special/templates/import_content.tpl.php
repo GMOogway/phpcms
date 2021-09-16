@@ -3,6 +3,19 @@ defined('IN_ADMIN') or exit('No permission resources.');
 $show_header = $show_validator = $show_scroll = 1; 
 include $this->admin_tpl('header','admin');
 ?>
+<link href="<?php echo JS_PATH;?>bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+<script src="<?php echo JS_PATH;?>bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+    if (jQuery().datepicker) {
+        $('.date-picker').datepicker({
+            format: "yyyy-mm-dd",
+            orientation: "left",
+            autoclose: true
+        });
+    }
+});
+</script>
 <br />
 <div class="pad-lr-10">
 <div id="searchid" style="display:">
@@ -20,7 +33,13 @@ include $this->admin_tpl('header','admin');
 <span id="catids"></span>&nbsp;&nbsp; 
 				<?php echo L('input_time')?>：
 				<?php $start_f = $this->input->get('start_time') ? $this->input->get('start_time') : format::date(SYS_TIME-2592000);$end_f = $this->input->get('end_time') ? $this->input->get('end_time') : format::date(SYS_TIME+86400);?>
-				<?php echo form::date('start_time')?> - <?php echo form::date('end_time')?>
+        <div class="formdate">
+            <div class="input-group input-medium date-picker input-daterange">
+                <input type="text" class="form-control" value="<?php echo $this->input->get('start_time');?>" name="start_time" id="start_time">
+                <span class="input-group-addon"> - </span>
+                <input type="text" class="form-control" value="<?php echo $this->input->get('end_time');?>" name="end_time" id="end_time">
+            </div>
+        </div>
 				 <input type="submit" name="search" class="button" value="<?php echo L('search')?>" />
 	</div>
 		</td>

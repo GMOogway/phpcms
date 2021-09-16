@@ -2,6 +2,19 @@
 	defined('IN_ADMIN') or exit('No permission resources.');
 	include $this->admin_tpl('header','admin');
 ?>
+<link href="<?php echo JS_PATH;?>bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+<script src="<?php echo JS_PATH;?>bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+    if (jQuery().datepicker) {
+        $('.date-picker').datepicker({
+            format: "yyyy-mm-dd",
+            orientation: "left",
+            autoclose: true
+        });
+    }
+});
+</script>
 <div class="pad_10">
 <form name="searchform" action="" method="get" >
 <input type="hidden" value="pay" name="m">
@@ -14,8 +27,13 @@
 		<td>
 		<div class="explain-col">
 		<?php echo  form::select(array('1'=>L('username'), '2'=>L('userid')), $user_type, 'name="user_type"')?>： <input type="text" value="<?php echo $username?>" class="input-text" name="username"> 
-		<?php echo L('from')?>  <?php echo form::date('starttime',format::date($starttime))?> <?php echo L('to')?>   <?php echo form::date('endtime',format::date($endtime))?> 
-		
+		<?php echo L('from')?>  <div class="formdate">
+            <div class="input-group input-medium date-picker input-daterange">
+                <input type="text" class="form-control" value="<?php echo ($starttime ? format::date($starttime) : '');?>" name="starttime">
+                <span class="input-group-addon"> <?php echo L('to')?> </span>
+                <input type="text" class="form-control" value="<?php echo ($endtime ? format::date($endtime) : '');?>" name="endtime">
+            </div>
+        </div>
 		<?php echo  form::select(array(''=>L('op'), '1'=>L('username'), '2'=>L('userid')), $op_type, 'name="op_type"')?>：
 		<input type="text" value="<?php echo $op?>" class="input-text" name="op"> 
 		<?php echo  form::select(array(''=>L('expenditure_patterns'), '1'=>L('money'), '2'=>L('point')), $type, 'name="type"')?>

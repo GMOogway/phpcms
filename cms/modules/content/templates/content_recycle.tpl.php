@@ -5,8 +5,20 @@ include $this->admin_tpl('header','admin');?>
 <script type="text/javascript" src="<?php echo CSS_PATH?>bootstrap/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="<?php echo JS_PATH;?>layui/css/layui.css" media="all" />
 <link rel="stylesheet" href="<?php echo CSS_PATH;?>admin/css/global.css" media="all" />
+<link href="<?php echo JS_PATH;?>bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+<script src="<?php echo JS_PATH;?>bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+    if (jQuery().datepicker) {
+        $('.date-picker').datepicker({
+            format: "yyyy-mm-dd",
+            orientation: "left",
+            autoclose: true
+        });
+    }
+});
+</script>
 <style type="text/css">
-* {-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;}
 .list_order {text-align: left;}
 .btn-group {margin-left: 10px;}
 #search {height: 32px;line-height: 32px;}
@@ -27,17 +39,23 @@ include $this->admin_tpl('header','admin');?>
     </blockquote>
     <div class="demoTable" id="searchid" style="display:none;">
         <?php echo L('addtime');?>：
-        <?php echo form::date('start_time',$this->input->get('start_time'),0,0,'false');?>-&nbsp;&nbsp;<?php echo form::date('end_time',$this->input->get('end_time'),0,0,'false');?>
-                <select id="posids" name="posids"><option value='' <?php if($this->input->get('posids')=='') echo 'selected';?>><?php echo L('all');?></option>
-                <option value="1" <?php if($this->input->get('posids')==1) echo 'selected';?>><?php echo L('elite');?></option>
-                <option value="2" <?php if($this->input->get('posids')==2) echo 'selected';?>><?php echo L('no_elite');?></option>
-                </select>                
-                <select id="searchtype" name="searchtype">
-                    <option value='0' <?php if($this->input->get('searchtype')==0) echo 'selected';?>><?php echo L('title');?></option>
-                    <option value='1' <?php if($this->input->get('searchtype')==1) echo 'selected';?>><?php echo L('intro');?></option>
-                    <option value='2' <?php if($this->input->get('searchtype')==2) echo 'selected';?>><?php echo L('username');?></option>
-                    <option value='3' <?php if($this->input->get('searchtype')==3) echo 'selected';?>>ID</option>
-                </select>
+        <div class="formdate">
+            <div class="input-group input-medium date-picker input-daterange">
+                <input type="text" class="form-control" value="<?php echo $this->input->get('start_time');?>" name="start_time" id="start_time">
+                <span class="input-group-addon"> - </span>
+                <input type="text" class="form-control" value="<?php echo $this->input->get('end_time');?>" name="end_time" id="end_time">
+            </div>
+        </div>
+        <select id="posids" name="posids"><option value='' <?php if($this->input->get('posids')=='') echo 'selected';?>><?php echo L('all');?></option>
+        <option value="1" <?php if($this->input->get('posids')==1) echo 'selected';?>><?php echo L('elite');?></option>
+        <option value="2" <?php if($this->input->get('posids')==2) echo 'selected';?>><?php echo L('no_elite');?></option>
+        </select>                
+        <select id="searchtype" name="searchtype">
+            <option value='0' <?php if($this->input->get('searchtype')==0) echo 'selected';?>><?php echo L('title');?></option>
+            <option value='1' <?php if($this->input->get('searchtype')==1) echo 'selected';?>><?php echo L('intro');?></option>
+            <option value='2' <?php if($this->input->get('searchtype')==2) echo 'selected';?>><?php echo L('username');?></option>
+            <option value='3' <?php if($this->input->get('searchtype')==3) echo 'selected';?>>ID</option>
+        </select> 
         <div class="layui-inline">
             <input class="input-text" name="keyword" id="keyword" <?php if(isset($keyword)) echo $keyword;?> placeholder="请输入关键字">
         </div>

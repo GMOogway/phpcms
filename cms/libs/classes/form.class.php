@@ -323,7 +323,7 @@ class form {
 			$updatetime_select = $module_setting['updatetime_select'];
 			defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $id == 'updatetime' && $str .= '<input type="hidden" name="old_'.$id.'" value="'.$value.'">';
 			// 字段默认值
-			!$value && $value = SYS_TIME;
+			//!$value && $value = SYS_TIME;
 			if ($value == 'SYS_TIME' || (defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $id == 'updatetime')) {
 				$value = SYS_TIME;
 			} elseif (strpos($value, '-') === 0) {

@@ -48,22 +48,21 @@ class log extends admin {
 	 * 日志搜索
 	 */
 	public function search_log() {
- 		$where = '';
 		extract($this->input->get('search'),EXTR_SKIP);
 		if($username){
-			$where .= $where ?  " AND username='$username'" : " username='$username'";
+			$where[] = "username='$username'";
 		}
 		if ($module){
-			$where .= $where ?  " AND module='$module'" : " module='$module'";
+			$where[] = "module='$module'";
 		}
 		if($start_time && $end_time) {
 			$start = $start_time;
 			$end = $end_time;
-			$where .= "AND `time` >= '$start' AND `time` <= '$end' ";
+			$where[] = "`time` >= '".$start." 00:00:00' AND `time` <= '".$end." 23:59:59'";
 		}
  
 		$page = $this->input->get('page') && intval($this->input->get('page')) ? intval($this->input->get('page')) : 1; 
-		$infos = $this->db->listinfo($where,$order = 'logid DESC',$page, $pages = '12'); 
+		$infos = $this->db->listinfo(($where ? implode(' AND ', $where) : ''),$order = 'logid DESC',$page, $pages = '12'); 
  		$pages = $this->db->pages;
  		//模块数组
 		$module_arr = array();

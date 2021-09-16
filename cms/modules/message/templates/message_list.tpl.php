@@ -3,12 +3,31 @@ defined('IN_ADMIN') or exit('No permission resources.');
 $show_dialog = 1;
 include $this->admin_tpl('header','admin');
 ?>
+<link href="<?php echo JS_PATH;?>bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+<script src="<?php echo JS_PATH;?>bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+    if (jQuery().datepicker) {
+        $('.date-picker').datepicker({
+            format: "yyyy-mm-dd",
+            orientation: "left",
+            autoclose: true
+        });
+    }
+});
+</script>
 <div class="pad-lr-10">
 <form name="searchform" action="?m=message&c=message&a=search_message&menuid=<?php echo $_GET['menuid'];?>" method="post" >
 <table width="100%" cellspacing="0" class="search-form">
     <tbody>
 		<tr>
-		<td><div class="explain-col"><?php echo L('query_type')?>:<?php echo form::select($trade_status,$status,'name="search[status]"', L('all'))?>      <?php echo L('username')?>:  <input type="text" value="" class="input-text" name="search[username]">  <?php echo L('time')?>:  <?php echo form::date('search[start_time]','','')?> <?php echo L('to')?>   <?php echo form::date('search[end_time]','','')?>    <input type="submit" value="<?php echo L('search')?>" class="button" name="dosubmit">
+		<td><div class="explain-col"><?php echo L('query_type')?>:<?php echo form::select($trade_status,$status,'name="search[status]"', L('all'))?>      <?php echo L('username')?>:  <input type="text" value="" class="input-text" name="search[username]">  <?php echo L('time')?>:  <div class="formdate">
+            <div class="input-group input-medium date-picker input-daterange">
+                <input type="text" class="form-control" value="<?php echo $this->input->get('search')['start_time'];?>" name="search[start_time]">
+                <span class="input-group-addon"> <?php echo L('to')?> </span>
+                <input type="text" class="form-control" value="<?php echo $this->input->get('search')['end_time'];?>" name="search[end_time]">
+            </div>
+        </div>   <input type="submit" value="<?php echo L('search')?>" class="button" name="dosubmit">
 		</div>
 		</td>
 		</tr>

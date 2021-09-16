@@ -719,6 +719,9 @@ form .portlet.light .portlet-body {padding-top: 20px;padding-bottom: 20px;}
 .input-group-btn>.btn:active,.input-group-btn>.btn:focus,.input-group-btn>.btn:hover {z-index: 2;}
 .input-group-btn:first-child>.btn,.input-group-btn:first-child>.btn-group {margin-right: -1px;}
 .input-group-btn:last-child>.btn,.input-group-btn:last-child>.btn-group {z-index: 2;margin-left: -1px;}
+.input-group .form-control:not(:first-child):not(:last-child), .input-group-addon:not(:first-child):not(:last-child), .input-group-btn:not(:first-child):not(:last-child) {border-bottom-left-radius: 0;border-top-left-radius: 0;}
+.input-daterange {width: 100%;}
+.input-daterange .input-group-addon {width: auto;min-width: 16px;padding: 4px 5px;line-height: 1.42857143;border-width: 1px 0;margin-left: -5px;margin-right: -5px;}
 .table-condensed>tbody>tr>td, .table-condensed>tbody>tr>th, .table-condensed>tfoot>tr>td, .table-condensed>tfoot>tr>th, .table-condensed>thead>tr>td, .table-condensed>thead>tr>th {padding: 5px;}
 .datepicker table th {color: #333;font-weight: 400!important;}
 .datepicker table td {color: #000;font-weight: 300!important;}

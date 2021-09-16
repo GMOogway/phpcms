@@ -2,6 +2,19 @@
 	defined('IN_ADMIN') or exit('No permission resources.');
 	include $this->admin_tpl('header', 'admin');
 ?>
+<link href="<?php echo JS_PATH;?>bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+<script src="<?php echo JS_PATH;?>bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+    if (jQuery().datepicker) {
+        $('.date-picker').datepicker({
+            format: "yyyy-mm-dd",
+            orientation: "left",
+            autoclose: true
+        });
+    }
+});
+</script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>formvalidator.js" charset="UTF-8"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>formvalidatorregex.js" charset="UTF-8"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>content_addtop.js"></script>
@@ -21,9 +34,13 @@
 		<td>
 		<div class="explain-col">		
 			<?php echo L('regtime')?>：
-			<?php echo form::date('start_time', $start_time)?>-
-			<?php echo form::date('end_time', $end_time)?>
-
+        <div class="formdate">
+            <div class="input-group input-medium date-picker input-daterange">
+                <input type="text" class="form-control" value="<?php echo $start_time;?>" name="start_time" id="start_time">
+                <span class="input-group-addon"> - </span>
+                <input type="text" class="form-control" value="<?php echo $end_time;?>" name="end_time" id="end_time">
+            </div>
+        </div>
 			<?php echo form::select($modellist, $modelid, 'name="modelid"', L('member_model'))?>
 			<?php echo form::select($grouplist, $groupid, 'name="groupid"', L('member_group'))?>
 			<input type="submit" name="search" class="button" value="<?php echo L('exportmobile')?>" />
