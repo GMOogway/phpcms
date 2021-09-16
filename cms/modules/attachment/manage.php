@@ -27,8 +27,8 @@ class manage extends admin {
 			$where = '';
 			if($this->input->post('keyword')) $where = "AND `filename` LIKE '%".$this->input->post('keyword')."%' ";
 			if($this->input->post('start_uploadtime') && $this->input->post('end_uploadtime')) {
-				$start = strtotime($this->input->post('start_uploadtime'));
-				$end = strtotime($this->input->post('end_uploadtime'));
+				$start = strtotime($this->input->post('start_uploadtime').' 00:00:00');
+				$end = strtotime($this->input->post('end_uploadtime').' 23:59:59');
 				if($start < $end) {
 					$where .= "AND `uploadtime` >= '$start' AND  `uploadtime` <= '$end' ";
 				}
