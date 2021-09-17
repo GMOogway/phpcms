@@ -322,7 +322,7 @@ if (PHP_SAPI === 'cli' || defined('STDIN')) {
     }*/
 }
 
-if (defined('SYS_CSRF') && SYS_CSRF && defined('IS_API') && !IS_API && $_GET['c'] != 'attachments' && $_GET['a'] != 'public_upload_index' && defined('IS_INSTALL') && !IS_INSTALL) {
+if (defined('SYS_CSRF') && SYS_CSRF && defined('IS_API') && !IS_API && $_GET['c'] != 'attachments' && $_GET['a'] != 'public_upload_index' && $_GET['a'] != 'uploadavatar' && defined('IS_INSTALL') && !IS_INSTALL) {
 	if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
 		$data = @unserialize(file_get_contents(CACHE_PATH.'caches_file/caches_data/'.md5(SYS_KEY.SITE_ID.'csrf_token')));
 		if ($data['ttl'] > 0 && SYS_TIME > $data['time'] + $data['ttl']) {
