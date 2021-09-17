@@ -5,7 +5,7 @@ include $this->admin_tpl('header','admin');?>
 <div class="col-tab">
 <ul class="tabBut cu-li">
 	 		<?php foreach($plugin_menus as $_num => $menu) {?>
-            <li <?php if($menu['url']==$this->input->get('a')) {?>class="on"<?php }?> <?php if($menu['extend']) {?>onclick="loadfile('<?php echo$menu['url'] ?>')"<?php }?> ><a href="?m=sqltoolplus&c=index&a=<?php echo $menu['url']?>&pc_hash=<?php echo $_SESSION['pc_hash']?>"><?php echo $menu['name']?></a></li>
+            <li <?php if($menu['url']==$this->input->get('a')) {?>class="on"<?php }?> <?php if($menu['extend']) {?>onclick="loadfile('<?php echo$menu['url'] ?>')"<?php }?> ><a href="?m=sqltoolplus&c=index&a=<?php echo $menu['url']?>&pc_hash=<?php echo dr_get_csrf_token()?>"><?php echo $menu['name']?></a></li>
             <?php }?>
 </ul>
 <div id="tab-content">
@@ -26,7 +26,7 @@ include $this->admin_tpl('header','admin');?>
   	</tr>
 </table>
 <div class="bk15"></div>
-<input type="hidden" value="<?php echo $_SESSION['pc_hash']?>" name="pc_hash">
+<input type="hidden" value="<?php echo dr_get_csrf_token()?>" name="pc_hash">
 <input name="pluginsubmit" type="submit" value="<?php echo L('submit')?>" class="button">
 </form>
 </div>

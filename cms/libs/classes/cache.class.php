@@ -191,27 +191,23 @@ class cache {
     // 存储内容
     public function set_data($name, $value, $time = 3600) {
 
-        $siteid = $this->siteid ? $this->siteid : SITE_ID;
-
         // 重置Zend OPcache
         function_exists('opcache_reset') && opcache_reset();
 
-        $time && $this->cachefile->save(md5(SYS_KEY.$siteid.$name), $value, $time);
+        $time && $this->cachefile->save(md5(SYS_KEY.SITE_ID.$name), $value, $time);
 
         return $value;
     }
 
     // 获取内容
     public function get_data($name) {
-        $siteid = $this->siteid ? $this->siteid : SITE_ID;
-        return $this->cachefile->get(md5(SYS_KEY.$siteid.$name));
+        return $this->cachefile->get(md5(SYS_KEY.SITE_ID.$name));
     }
 
     // 删除内容
     public function del_data($name) {
-        $siteid = $this->siteid ? $this->siteid : SITE_ID;
         function_exists('opcache_reset') && opcache_reset();
-        return $this->cachefile->delete(md5(SYS_KEY.$siteid.$name));
+        return $this->cachefile->delete(md5(SYS_KEY.SITE_ID.$name));
     }
 
     // 使用框架

@@ -578,7 +578,7 @@ class check extends admin {
 \'charset\' => \''.pc_base::load_config('system','charset').'\', //网站字符集
 \'timezone\' => \''.(pc_base::load_config('system','timezone')=='Etc/GMT-8' ? 8 : (pc_base::load_config('system','timezone') ? pc_base::load_config('system','timezone') : 8)).'\', //网站时区（只对php 5.1以上版本有效），Etc/GMT-8 实际表示的是 GMT+8
 \'debug\' => '.pc_base::load_config('system','debug').', //是否显示调试信息
-\'sys_csrf\' => \''.(pc_base::load_config('system','sys_csrf') ? pc_base::load_config('system','sys_csrf') : 0).'\', //是否跨站验证，1为启用，0为禁用
+\'sys_csrf\' => \''.(pc_base::load_config('system','sys_csrf') ? pc_base::load_config('system','sys_csrf') : 1).'\', //是否跨站验证，1为启用，0为禁用
 \'needcheckcomeurl\' => \''.(pc_base::load_config('system','needcheckcomeurl') ? pc_base::load_config('system','needcheckcomeurl') : 1).'\', //是否需要检查外部访问，1为启用，0为禁用
 \'admin_log\' => '.pc_base::load_config('system','admin_log').', //是否记录后台操作日志
 \'errorlog\' => '.pc_base::load_config('system','errorlog').', //1、保存错误日志到 cache/error_log.php | 0、在页面直接显示

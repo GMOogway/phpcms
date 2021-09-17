@@ -7,14 +7,17 @@ defined('IN_CMS') or exit('No permission resources.');
 $userid = $_SESSION['userid'] ? $_SESSION['userid'] : (param::get_cookie('_userid') ? param::get_cookie('_userid') : param::get_cookie('userid'));
 $siteid = param::get_cookie('siteid');
 if(!$siteid) $siteid = get_siteid() ? get_siteid() : 1 ;
-$url = urldecode($input->get('url'));
+$field = $input->get('field');
+$fieldname = $input->get('fieldname');
+$data = $input->post('info');
+$url = $data[$field];
 if (!$url) {
-	dr_json(0, '微信文章地址不能为空');
+	dr_json(0, L($fieldname.'不能为空'));
 }
 
 $html = dr_catcher_data($url);
 if (!$html) {
-	dr_json(0, '没有获取到任何内容');
+	dr_json(0, L('没有获取到任何内容'));
 }
 
 $preg = '<div class="rich_media_content " id="js_content" style="visibility: hidden;">';
@@ -92,15 +95,15 @@ if (preg_match('/'.$preg.'(.+)<\/div>/sU', $html, $mt)) {
 	}
 } else {
 	echo $url;exit;
-	dr_json(0, '没有获取到文章内容');
+	dr_json(0, L('没有获取到文章内容'));
 }
 if (preg_match('/<meta property="og:title" content="(.+)"/U', $html, $mt)) {
 	$title = trim($mt[1]);
 } else {
-	dr_json(0, '没有获取到文章标题');
+	dr_json(0, L('没有获取到文章标题'));
 }
 
-dr_json(1, '导入成功', array(
+dr_json(1, L('导入成功'), array(
 	'title' => $title,
 	'keyword' => dr_get_keywords($title),
 	'content' => $body,

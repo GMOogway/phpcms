@@ -23,7 +23,7 @@ include $this->admin_tpl('header','admin');?>
 <?php }?>
 　<a class="add fb" href="?m=content&c=sitemodel_field&a=add&modelid=<?php echo $modelid?>&menuid=<?php echo $this->input->get('menuid')?>"><em><?php echo L('add_field');?></em></a>
 　<a class="on" href="?m=content&c=sitemodel_field&a=init&modelid=<?php echo $modelid?>&menuid=<?php echo $this->input->get('menuid')?>"><em><?php if($modelid==-1) {echo L('category').L('field_manage');} else if($modelid==-2) {echo L('category_page').L('field_manage');} else if($modelid) {echo L('manage_field');} else {echo L('sites').L('field_manage');}?></em></a><?php if($modelid && $modelid!=-1 && $modelid!=-2) {?><span>|</span>
-<a href="javascript:;" onclick="javascript:openwinx('?m=content&c=sitemodel_field&a=public_priview&modelid=<?php echo $modelid?>&menuid=<?php echo $this->input->get('menuid')?>&pc_hash=<?php echo $_SESSION['pc_hash'];?>','')"><em><?php echo L('priview_modelfield');?></em></a>
+<a href="javascript:;" onclick="javascript:openwinx('?m=content&c=sitemodel_field&a=public_priview&modelid=<?php echo $modelid?>&menuid=<?php echo $this->input->get('menuid')?>&pc_hash=<?php echo dr_get_csrf_token();?>','')"><em><?php echo L('priview_modelfield');?></em></a>
 <?php }?>
 </div></div>
 <div class="pad-lr-10">

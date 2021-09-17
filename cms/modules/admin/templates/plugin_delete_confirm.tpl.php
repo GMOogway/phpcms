@@ -11,7 +11,7 @@
         <form name="myform" action="?m=admin&c=plugin&a=delete" method="post">
 		<input type="submit" class="button" name="dosubmit" value="<?php echo L('plugin_uninstall_confirm','','plugin')?>">   
 		<input type="hidden" value="<?php echo $pluginid?>" name="pluginid">
-		<input type="hidden" value="<?php echo $_SESSION['pc_hash']?>" name="pc_hash">
+		<input type="hidden" value="<?php echo dr_get_csrf_token()?>" name="pc_hash">
 		</form>
 
 		<input type="button" onclick="history.go(-1);" value="<?php echo L('plugin_uninstall_cancel','','plugin')?>" class="button" name="cancel">   

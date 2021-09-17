@@ -141,9 +141,9 @@ class admin {
 					}
 				} else {
 					if ($i==0) {
-						$child .= '{"id": "'.$value['id'].'","title": "'.L($value['name']).'","href": "?m='.$value['m'].'&c='.$value['c'].'&a='.$value['a'].$valuedata.'&menuid='.$value['id'].'&pc_hash='.$_SESSION['pc_hash'].'","icon": "'.$value['icon'].'","target": "_self"}';
+						$child .= '{"id": "'.$value['id'].'","title": "'.L($value['name']).'","href": "?m='.$value['m'].'&c='.$value['c'].'&a='.$value['a'].$valuedata.'&menuid='.$value['id'].'&pc_hash='.dr_get_csrf_token().'","icon": "'.$value['icon'].'","target": "_self"}';
 					} else {
-						$child .= ',{"id": "'.$value['id'].'","title": "'.L($value['name']).'","href": "?m='.$value['m'].'&c='.$value['c'].'&a='.$value['a'].$valuedata.'&menuid='.$value['id'].'&pc_hash='.$_SESSION['pc_hash'].'","icon": "'.$value['icon'].'","target": "_self"}';
+						$child .= ',{"id": "'.$value['id'].'","title": "'.L($value['name']).'","href": "?m='.$value['m'].'&c='.$value['c'].'&a='.$value['a'].$valuedata.'&menuid='.$value['id'].'&pc_hash='.dr_get_csrf_token().'","icon": "'.$value['icon'].'","target": "_self"}';
 					}
 				}
 				$i ++;

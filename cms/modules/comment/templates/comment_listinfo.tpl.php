@@ -9,7 +9,7 @@ include $this->admin_tpl('header', 'admin');
 <input type="hidden" value="comment_admin" name="c">
 <input type="hidden" value="listinfo" name="a">
 <input type="hidden" value="1" name="search">
-<input type="hidden" value="<?php echo $_SESSION['pc_hash']?>" name="pc_hash">
+<input type="hidden" value="<?php echo dr_get_csrf_token()?>" name="pc_hash">
 <table width="100%" cellspacing="0" class="search-form">
     <tbody>
 		<tr>
@@ -73,7 +73,7 @@ include $this->admin_tpl('header', 'admin');
                     </label></td> 
 		<td width="130"><?php echo $v['username']?><br /><?php echo $v['ip']?></td>
 		<td><font color="#888888"><?php echo L('chez')?> <?php echo format::date($v['creat_at'], 1)?> <?php echo L('release')?></font><br /><?php echo $v['content']?></td>
-		<td width="230"><a href="?m=comment&c=comment_admin&a=listinfo&search=1&searchtype=0&keyword=<?php echo urlencode($comment_info['title'])?>&pc_hash=<?php echo $_SESSION['pc_hash']?>&tableid=<?php echo $tableid?>"><?php echo $comment_info['title']?></td>
+		<td width="230"><a href="?m=comment&c=comment_admin&a=listinfo&search=1&searchtype=0&keyword=<?php echo urlencode($comment_info['title'])?>&pc_hash=<?php echo dr_get_csrf_token()?>&tableid=<?php echo $tableid?>"><?php echo $comment_info['title']?></td>
 		<td align='center' width="72"><a href="###" onclick="Dialog.confirm('<?php echo L('are_you_sure_you_want_to_delete')?>',function(){redirect('?m=comment&c=comment_admin&a=del&ids=<?php echo $v['id']?>&tableid=<?php echo $tableid?>&dosubmit=1&pc_hash='+pc_hash);});"><?php echo L('delete');?></a> </td>
 	</tr>
      <?php }
@@ -82,7 +82,7 @@ include $this->admin_tpl('header', 'admin');
 	</tbody>
      </table>
 </div>
-<input type="hidden" value="<?php echo $_SESSION['pc_hash'];?>" name="pc_hash">
+<input type="hidden" value="<?php echo dr_get_csrf_token();?>" name="pc_hash">
 <div class="list-footer table-checkable clear">
     <div class="col-md-7 list-select">
         <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
@@ -99,7 +99,7 @@ include $this->admin_tpl('header', 'admin');
 window.top.$('#display_center_id').css('display','none');
 function show_tbl(obj) {
 	var pdoname = $(obj).val();
-	location.href='?m=comment&c=comment_admin&a=listinfo&tableid='+pdoname+'&pc_hash=<?php echo $_SESSION['pc_hash']?>';
+	location.href='?m=comment&c=comment_admin&a=listinfo&tableid='+pdoname+'&pc_hash=<?php echo dr_get_csrf_token()?>';
 }
 </script>
 </body>

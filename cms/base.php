@@ -218,15 +218,25 @@ if (CI_DEBUG) {
 	ini_set('display_errors', 0);
 }
 
-if (defined('SYS_CSRF') && SYS_CSRF) {
+// API接口项目标识
+!defined('IS_API') && define('IS_API', FALSE);
+!defined('IS_INSTALL') && define('IS_INSTALL', FALSE);
+
+if (defined('SYS_CSRF') && SYS_CSRF && defined('IS_API') && !IS_API && $_GET['c'] != 'attachments' && $_GET['a'] != 'public_upload_index' && defined('IS_INSTALL') && !IS_INSTALL) {
 	if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
-		session_start();
-		if (!isset($_POST['csrf_test_name'], $_SESSION[COOKIE_PRE.md5('csrf_token')]) || $_POST['csrf_test_name'] !== $_SESSION[COOKIE_PRE.md5('csrf_token')]) {
+		$data = @unserialize(file_get_contents(CACHE_PATH.'caches_file/caches_data/'.md5(SYS_KEY.SITE_ID.'csrf_token')));
+		if ($data['ttl'] > 0 && SYS_TIME > $data['time'] + $data['ttl']) {
+			if (is_file(CACHE_PATH.'caches_file/caches_data/'.md5(SYS_KEY.SITE_ID.'csrf_token'))) {
+				unlink(CACHE_PATH.'caches_file/caches_data/'.md5(SYS_KEY.SITE_ID.'csrf_token'));
+			}
+		}
+		if (!isset($_POST['csrf_test_name'], $data['data']) || $_POST['csrf_test_name'] !== $data['data']) {
 			//CI_DEBUG && log_message('error', '跨站验证禁止此操作：'.FC_NOW_URL);
 			dr_json(0, '跨站验证禁止此操作', 'CSRFVerify');
 		}
+		unset($_POST['csrf_test_name']);
+		is_file(CACHE_PATH.'caches_file/caches_data/'.md5(SYS_KEY.SITE_ID.'csrf_token')) && unlink(CACHE_PATH.'caches_file/caches_data/'.md5(SYS_KEY.SITE_ID.'csrf_token'));
 	}
-	unset($_POST['csrf_test_name']);
 }
 
 if (SYS_ATTACHMENT_PATH

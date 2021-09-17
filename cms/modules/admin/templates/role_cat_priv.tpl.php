@@ -16,7 +16,7 @@ include $this->admin_tpl('header');
     </div>
     <div class="col-2 col-auto">
         <div class="content" style="padding:1px">
-        <iframe name="role" id="role" src="?m=admin&c=role&a=role_priv&pc_hash=<?php echo $_SESSION['pc_hash']?>" frameborder="false" scrolling="auto" style="overflow-x:hidden;border:none" width="100%" height="483" allowtransparency="true"></iframe>
+        <iframe name="role" id="role" src="?m=admin&c=role&a=role_priv&pc_hash=<?php echo dr_get_csrf_token()?>" frameborder="false" scrolling="auto" style="overflow-x:hidden;border:none" width="100%" height="483" allowtransparency="true"></iframe>
         </div>
     </div>
 </div>

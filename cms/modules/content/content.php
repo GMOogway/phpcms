@@ -149,7 +149,7 @@ class content extends admin {
 				}
 				exit(json_encode(array('code'=>0,'msg'=>L('to_success'),'count'=>$total,'data'=>$array,'rel'=>1)));
 			}
-			$pc_hash = $_SESSION['pc_hash'];
+			$pc_hash = dr_get_csrf_token();
 			for($i=1;$i<=$workflow_steps;$i++) {
 				if($_SESSION['roleid']!=1 && !in_array($i,$admin_privs)) continue;
 				$current = $steps==$i ? ' layui-btn-danger' : '';
@@ -289,7 +289,7 @@ class content extends admin {
 				}
 				exit(json_encode(array('code'=>0,'msg'=>L('to_success'),'count'=>$total,'data'=>$array,'rel'=>1)));
 			}
-			$pc_hash = $_SESSION['pc_hash'];
+			$pc_hash = dr_get_csrf_token();
 			//$ = 153fc6d28dda8ca94eaa3686c8eed857;获取模型的thumb字段配置信息
 			$model_fields = getcache('model_field_'.$modelid, 'model');
 			$setting = string2array($model_fields['thumb']['setting']);
@@ -442,7 +442,7 @@ class content extends admin {
 			}
 			exit(json_encode(array('code'=>0,'msg'=>L('to_success'),'count'=>$total,'data'=>$array,'rel'=>1)));
 		}
-		$pc_hash = $_SESSION['pc_hash'];
+		$pc_hash = dr_get_csrf_token();
 		//$ = 153fc6d28dda8ca94eaa3686c8eed857;获取模型的thumb字段配置信息
 		$model_fields = getcache('model_field_'.$modelid, 'model');
 		$setting = string2array($model_fields['thumb']['setting']);
@@ -1323,7 +1323,7 @@ class content extends admin {
 			}
 		}
 		include template('content',$template);
-		$pc_hash = $_SESSION['pc_hash'];
+		$pc_hash = dr_get_csrf_token();
 		$steps = intval($this->input->get('steps'));
 		if ($steps) {
 			echo "
@@ -1594,11 +1594,11 @@ class content extends admin {
 			$tree->init($categorys);
 				switch($from) {
 					case 'block':
-						$strs = "<span class='\$icon_type'>\$add_icon<a href='?m=block&c=block_admin&a=public_visualization&menuid=".intval($this->input->get('menuid'))."&catid=\$catid&type=list&pc_hash=".$_SESSION['pc_hash']."' target='right'>\$catname</a> \$vs_show</span>";
+						$strs = "<span class='\$icon_type'>\$add_icon<a href='?m=block&c=block_admin&a=public_visualization&menuid=".intval($this->input->get('menuid'))."&catid=\$catid&type=list&pc_hash=".dr_get_csrf_token()."' target='right'>\$catname</a> \$vs_show</span>";
 					break;
 
 					default:
-						$strs = "<span class='\$icon_type'>\$add_icon<a href='?m=content&c=content&a=\$type&menuid=".intval($this->input->get('menuid'))."&catid=\$catid&pc_hash=".$_SESSION['pc_hash']."' target='right' onclick='open_list(this)'>\$catname</a></span>";
+						$strs = "<span class='\$icon_type'>\$add_icon<a href='?m=content&c=content&a=\$type&menuid=".intval($this->input->get('menuid'))."&catid=\$catid&pc_hash=".dr_get_csrf_token()."' target='right' onclick='open_list(this)'>\$catname</a></span>";
 						break;
 				}
 			$data = $tree->creat_sub_json($catid,$strs);

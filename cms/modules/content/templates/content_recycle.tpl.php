@@ -112,6 +112,7 @@ layui.use(['table'], function(){
         elem: '#list',
         url:'?m=content&c=content&a=recycle_init&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&pc_hash='+pc_hash,
         method: 'post',
+        where: {csrf_test_name:csrf_hash},
         toolbar: '#topBtn',
         cellMinWidth: 80,
         page: true,
@@ -148,8 +149,8 @@ layui.use(['table'], function(){
                 var loading = layer.load(1, {shade: [0.1, '#fff']});
                 $.ajax({
                     type: 'post',
-                    url: '?m=content&c=content&a=recycle&dosubmit=1&recycle=0&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&pc_hash='+pc_hash,
-                    data: {id:data.id},
+                    url: '?m=content&c=content&a=recycle&recycle=0&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&pc_hash='+pc_hash,
+                    data: {id:data.id,dosubmit:1,csrf_test_name:csrf_hash},
                     dataType: 'json',
                     success: function(res) {
                         layer.close(loading);
@@ -174,8 +175,8 @@ layui.use(['table'], function(){
         }else{
             $.ajax({
                 type: 'post',
-                url: '?m=content&c=content&a=update&dosubmit=1&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&pc_hash='+pc_hash,
-                data: {id:data.id,field:field,value:value},
+                url: '?m=content&c=content&a=update&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&pc_hash='+pc_hash,
+                data: {id:data.id,field:field,value:value,dosubmit:1,csrf_test_name:csrf_hash},
                 dataType: 'json',
                 success: function(res) {
                     if (res.code == 1) {
@@ -195,8 +196,8 @@ layui.use(['table'], function(){
         var loading = layer.load(1, {shade: [0.1, '#fff']});
         $.ajax({
             type: 'post',
-            url: '?m=content&c=content&a=listorder&dosubmit=1&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&pc_hash='+pc_hash,
-            data: {id:id,listorder:listorder},
+            url: '?m=content&c=content&a=listorder&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&pc_hash='+pc_hash,
+            data: {id:id,listorder:listorder,dosubmit:1,csrf_test_name:csrf_hash},
             dataType: 'json',
             success: function(res) {
                 layer.close(loading);
@@ -223,8 +224,8 @@ layui.use(['table'], function(){
                 var loading = layer.load(1, {shade: [0.1, '#fff']});
                 $.ajax({
                     type: 'post',
-                    url: '?m=content&c=content&a=delete&dosubmit=1&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&pc_hash='+pc_hash,
-                    data: {ids: ids},
+                    url: '?m=content&c=content&a=delete&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&pc_hash='+pc_hash,
+                    data: {ids: ids,dosubmit:1,csrf_test_name:csrf_hash},
                     dataType: 'json',
                     success: function(res) {
                         layer.close(loading);
@@ -253,8 +254,8 @@ layui.use(['table'], function(){
                 var loading = layer.load(1, {shade: [0.1, '#fff']});
                 $.ajax({
                     type: 'post',
-                    url: '?m=content&c=content&a=recycle&dosubmit=1&recycle=0&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&pc_hash=<?php echo $pc_hash;?>',
-                    data: {ids: ids},
+                    url: '?m=content&c=content&a=recycle&recycle=0&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&pc_hash=<?php echo $pc_hash;?>',
+                    data: {ids: ids,dosubmit:1,csrf_test_name:csrf_hash},
                     dataType: 'json',
                     success: function(res) {
                         layer.close(loading);

@@ -6,7 +6,7 @@
 <div class="explain-col">
 <?php echo L('attachment_address_replace_msg')?>
 </div>
-<form id="myform" name="myform" action="index.php?m=attachment&c=address&a=update&pc_hash=<?php echo $_SESSION['pc_hash'];?>" method="post">
+<form id="myform" name="myform" action="index.php?m=attachment&c=address&a=update&pc_hash=<?php echo dr_get_csrf_token();?>" method="post">
 <table width="100%"  class="table_form">
   <tr>
     <th width="100"><?php echo L('old_attachment_address')?>：</th>

@@ -222,7 +222,7 @@ include $this->admin_tpl('header');?>
     </table>
 </div>
 <input type="hidden" name="dosubmit" value="1" />
-<input type="hidden" name="pc_hash" value="<?php echo $_SESSION['pc_hash'];?>" />
+<input type="hidden" name="pc_hash" value="<?php echo dr_get_csrf_token();?>" />
 <input type="hidden" name="type" value="<?php echo $type;?>" />
 <div class="portlet-body form myfooter">
     <div class="form-actions text-center">

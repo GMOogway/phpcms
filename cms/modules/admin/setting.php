@@ -85,6 +85,10 @@ class setting extends admin {
 					$setconfig['snda_enable'] = 0;
 				}
 			}
+			if($setconfig['cookie_pre']) {
+				$system_setconfig = pc_base::load_config('system');
+				$setconfig['cookie_pre'] = dr_safe_filename($setconfig['cookie_pre'] == '************' ? $system_setconfig['cookie_pre'] : $setconfig['cookie_pre']);
+			}
 			if($setconfig['auth_key']) {
 				$system_setconfig = pc_base::load_config('system');
 				$setconfig['auth_key'] = dr_safe_filename($setconfig['auth_key'] == '************' ? $system_setconfig['auth_key'] : $setconfig['auth_key']);
@@ -92,7 +96,7 @@ class setting extends admin {
 
 			set_config($setconfig);	 //保存进config文件
 			$this->setcache();
-			dr_json(1, L('setting_succ').$snda_error, array('url' => '?m=admin&c=setting&a=init&tab='.(int)($this->input->post('page')+1).'&pc_hash='.$_SESSION['pc_hash']));
+			dr_json(1, L('setting_succ').$snda_error, array('url' => '?m=admin&c=setting&a=init&tab='.(int)($this->input->post('page')+1).'&pc_hash='.dr_get_csrf_token()));
 		}
 		$setconfig = pc_base::load_config('system');
 		extract($setconfig);
@@ -148,8 +152,13 @@ class setting extends admin {
 	 * 生成安全码
 	 */
 	public function public_syskey() {
-		$site = siteinfo(1);
-		echo token($site['name']);exit;
+		$action = $this->input->get('action');
+		if ($action=='cookie_pre') {
+			echo token().'_';exit;
+		} else {
+			$site = siteinfo(1);
+			echo token($site['name']);exit;
+		}
 	}
 	
 	// 当前时间值

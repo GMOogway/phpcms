@@ -30,7 +30,7 @@ jQuery(document).ready(function() {
                 <span class="input-group-addon"> <?php echo L('to')?> </span>
                 <input type="text" class="form-control" value="<?php echo $this->input->get('search')['end_time'];?>" name="search[end_time]">
             </div>
-        </div>   <input type="submit" value="<?php echo L('determine_search')?>" class="button" name="dosubmit"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="button" name="del_log_4" value="<?php echo L('removed_data')?>" onclick="location='?m=admin&c=log&a=delete&week=4&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo $_SESSION['pc_hash'];?>'"  />
+        </div>   <input type="submit" value="<?php echo L('determine_search')?>" class="button" name="dosubmit"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="button" name="del_log_4" value="<?php echo L('removed_data')?>" onclick="location='?m=admin&c=log&a=delete&week=4&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token();?>'"  />
 		</div>
 		</td>
 		</tr>

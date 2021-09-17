@@ -16,7 +16,7 @@ include $this->admin_tpl('header');
 <form action="?m=admin&c=copyfrom&a=edit" method="post" name="myform" id="myform" >
 <table width="100%" cellpadding="2" cellspacing="1" class="table_form">
 	<tr> 
-      <th width="60"><?php echo L('copyfrom_name');?> :</th>
+      <th width="80"><?php echo L('copyfrom_name');?> :</th>
       <td><input type="text" name="info[sitename]" id="sitename" size="25" value="<?php echo $sitename;?>"></td>
     </tr>
 	<tr> 

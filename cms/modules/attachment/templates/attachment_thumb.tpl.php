@@ -23,7 +23,7 @@
 <!--
 function thumb_delete(filepath,obj){
 	Dialog.confirm('<?php echo L('del_confirm')?>',function(){
-		$.get('?m=attachment&c=manage&a=pullic_delthumbs&filepath='+filepath+'&pc_hash=<?php echo $_SESSION['pc_hash']?>',function(data){
+		$.get('?m=attachment&c=manage&a=pullic_delthumbs&filepath='+filepath+'&pc_hash=<?php echo dr_get_csrf_token()?>',function(data){
 			if(data == 1) $(obj).parent().fadeOut("slow");
 		})
 	});

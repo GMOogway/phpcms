@@ -178,7 +178,7 @@ class category extends admin {
 				}
 			}
 			$this->cache();
-			dr_json(1, L('add_success'), array('tourl' => '?m=admin&c=category&a=public_cache&module=admin&menuid=141&pc_hash='.$_SESSION['pc_hash']));
+			dr_json(1, L('add_success'), array('tourl' => '?m=admin&c=category&a=public_cache&module=admin&menuid=141&pc_hash='.dr_get_csrf_token()));
 		} else {
 			$show_header = $show_dialog = '';
 			//获取站点模板信息
@@ -337,7 +337,7 @@ class category extends admin {
 				$this->attachment_db = pc_base::load_model('attachment_model');
 				$this->attachment_db->api_update($info['image'],'catid-'.$catid,1);
 			}
-			dr_json(1, L('operation_success'), array('tourl' => '?m=admin&c=category&a=public_cache&module=admin&menuid=141&pc_hash='.$_SESSION['pc_hash']));
+			dr_json(1, L('operation_success'), array('tourl' => '?m=admin&c=category&a=public_cache&module=admin&menuid=141&pc_hash='.dr_get_csrf_token()));
 		} else {
 			$show_header = $show_dialog = '';
 			//获取站点模板信息

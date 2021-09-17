@@ -30,7 +30,7 @@ jQuery(document).ready(function() {
         <legend><?php echo L('list');?></legend>
     </fieldset>-->
     <blockquote class="layui-elem-quote">
-        <a href="javascript:;" onclick="javascript:dr_content_submit('?m=content&c=content&a=add&menuid=&catid=<?php echo $catid;?>&pc_hash=<?php echo $_SESSION['pc_hash'];?>','add');" class="layui-btn layui-btn-sm">
+        <a href="javascript:;" onclick="javascript:dr_content_submit('?m=content&c=content&a=add&menuid=&catid=<?php echo $catid;?>&pc_hash=<?php echo dr_get_csrf_token();?>','add');" class="layui-btn layui-btn-sm">
             <i class="fa fa-plus"></i> <?php echo L('add_content');?>
         </a>
         <a href="?m=content&c=content&a=init&catid=<?php echo $catid;?>&pc_hash=<?php echo $pc_hash;?>" class="layui-btn layui-btn-sm<?php if($steps==0 && !$this->input->get('reject')) echo ' on';?>">
@@ -150,6 +150,7 @@ layui.use(['table'], function(){
         elem: '#list',
         url:'?m=content&c=content&a=init&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&pc_hash='+pc_hash,
         method: 'post',
+        where: {csrf_test_name:csrf_hash},
         toolbar: '#topBtn',
         cellMinWidth: 80,
         page: true,
@@ -189,7 +190,7 @@ layui.use(['table'], function(){
             $.ajax({
                 type: 'post',
                 url: '?m=content&c=content&a=update&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&pc_hash='+pc_hash,
-                data: {id:data.id,field:field,value:value,dosubmit:1},
+                data: {id:data.id,field:field,value:value,dosubmit:1,csrf_test_name:csrf_hash},
                 dataType: 'json',
                 success: function(res) {
                     if (res.code == 1) {
@@ -210,7 +211,7 @@ layui.use(['table'], function(){
         $.ajax({
             type: 'post',
             url: '?m=content&c=content&a=listorder&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&pc_hash='+pc_hash,
-            data: {id:id,listorder:listorder,dosubmit:1},
+            data: {id:id,listorder:listorder,dosubmit:1,csrf_test_name:csrf_hash},
             dataType: 'json',
             success: function(res) {
                 layer.close(loading);
@@ -238,7 +239,7 @@ layui.use(['table'], function(){
                 $.ajax({
                     type: 'post',
                     url: '?m=content&c=content&a=delete&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&pc_hash='+pc_hash,
-                    data: {ids: ids,dosubmit:1},
+                    data: {ids: ids,dosubmit:1,csrf_test_name:csrf_hash},
                     dataType: 'json',
                     success: function(res) {
                         layer.close(loading);
@@ -268,7 +269,7 @@ layui.use(['table'], function(){
                 $.ajax({
                     type: 'post',
                     url: '?m=content&c=content&a=recycle&recycle=1&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&pc_hash='+pc_hash,
-                    data: {ids: ids,dosubmit:1},
+                    data: {ids: ids,dosubmit:1,csrf_test_name:csrf_hash},
                     dataType: 'json',
                     success: function(res) {
                         layer.close(loading);
@@ -322,7 +323,7 @@ layui.use(['table'], function(){
             $.ajax({
                 type: 'post',
                 url: '?m=bdts&c=bdts&a=add&modelid=<?php echo $modelid;?>&pc_hash='+pc_hash,
-                data: {ids: ids},
+                data: {ids: ids,csrf_test_name:csrf_hash},
                 dataType: 'json',
                 success: function(res) {
                     layer.close(loading);
@@ -364,7 +365,7 @@ layui.use(['table'], function(){
             $.ajax({
                 type: 'post',
                 url: '?m=content&c=create_html&a=batch_show&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&pc_hash='+pc_hash,
-                data: {ids: ids, dosubmit: 1},
+                data: {ids: ids, dosubmit: 1,csrf_test_name:csrf_hash},
                 dataType: 'json',
                 success:function(json) {
                     layer.close(loading);
@@ -437,7 +438,7 @@ layui.use(['table'], function(){
             $.ajax({
                 type: 'post',
                 url: '?m=content&c=content&a=pass&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&reject=1&pc_hash='+pc_hash,
-                data: {ids: ids, reject_c: $('#reject_c').val()},
+                data: {ids: ids, reject_c: $('#reject_c').val(),csrf_test_name:csrf_hash},
                 dataType: 'json',
                 success: function(res) {
                     layer.close(loading);
@@ -467,7 +468,7 @@ layui.use(['table'], function(){
             $.ajax({
                 type: 'post',
                 url: '?m=content&c=content&a=pass&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&pc_hash='+pc_hash,
-                data: {ids: ids},
+                data: {ids: ids,csrf_test_name:csrf_hash},
                 dataType: 'json',
                 success: function(res) {
                     layer.close(loading);

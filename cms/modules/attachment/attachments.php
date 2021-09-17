@@ -95,7 +95,7 @@ class attachments {
 	public function h5upload(){
 		$grouplist = getcache('grouplist','member');
 		if($this->input->post('dosubmit')){
-			if($this->input->post('h5_auth_key') != md5(pc_base::load_config('system','auth_key').$this->input->post('H5UPLOADSESSID')) || ($this->input->post('isadmin')==0 && !$grouplist[$this->input->post('groupid')]['allowattachment'])) exit();
+			if($this->input->post('h5_auth_key') != md5(SYS_KEY.$this->input->post('H5UPLOADSESSID')) || ($this->input->post('isadmin')==0 && !$grouplist[$this->input->post('groupid')]['allowattachment'])) exit();
 			pc_base::load_sys_class('upload','',0);
 			$upload = new upload($this->input->post('module'),$this->input->post('catid'),$this->input->post('siteid'));
 			$upload->set_userid($this->input->post('userid'));

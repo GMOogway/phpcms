@@ -220,7 +220,7 @@ include $this->admin_tpl('header');?>
             <div class="tab-pane<?php if ($page==1) {?> active<?php }?>" id="tab_1">
                 <div class="form-body">
 
-                    <div class="form-group hidden">
+                    <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('setting_csrf')?></label>
                         <div class="col-md-9">
                             <div class="mt-radio-inline">
@@ -392,6 +392,14 @@ include $this->admin_tpl('header');?>
                                 </div>
                             </div>
                             <span class="help-block"><?php echo L('long_time_lock_desc')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('setting_cookie')?></label>
+                        <div class="col-md-9">
+                            <label><input class="form-control input-large" type="text" id="cookie_pre" name="setconfig[cookie_pre]" value="<?php echo $cookie_pre ? '************' : '';?>" ></label>
+                            <label><button class="button" type="button" name="button" onclick="to_cookie()"> <?php echo L('setting_regenerate')?> </button></label>
+                            <span class="help-block"><?php echo L('setting_cookie_desc')?></span>
                         </div>
                     </div>
                     <div class="form-group">
@@ -667,6 +675,11 @@ function test_mail() {
 function to_key() {
    $.get('?m=admin&c=setting&a=public_syskey&pc_hash='+pc_hash, function(data){
 		$('#auth_key').val(data);
+	});
+}
+function to_cookie() {
+   $.get('?m=admin&c=setting&a=public_syskey&action=cookie_pre&pc_hash='+pc_hash, function(data){
+		$('#cookie_pre').val(data);
 	});
 }
 $(function() {

@@ -12,7 +12,7 @@ class down {
 	public function init() {
 		$a_k = trim($this->input->get('a_k'));
 		if(!isset($a_k)) showmessage(L('illegal_parameters'));
-		$a_k = sys_auth($a_k, 'DECODE', md5(PC_PATH.'down').pc_base::load_config('system','auth_key'));
+		$a_k = sys_auth($a_k, 'DECODE', md5(PC_PATH.'down').SYS_KEY);
 		if(empty($a_k)) showmessage(L('illegal_parameters'));
 		unset($i,$m,$f);
 		$a_k = safe_replace($a_k);
@@ -76,7 +76,7 @@ class down {
 		}
 		if(preg_match('/(php|phtml|php3|php4|jsp|dll|asp|cer|asa|shtml|shtm|aspx|asax|cgi|fcgi|pl)(\.|$)/i',$f) || strpos($f, ":\\")!==FALSE || strpos($f,'..')!==FALSE) showmessage(L('url_error'));
 		if(strpos($f, 'http://') !== FALSE || strpos($f, 'ftp://') !== FALSE || strpos($f, '://') === FALSE) {
-			$a_k = urlencode(sys_auth("i=$i&d=$d&s=$s&t=".SYS_TIME."&ip=".ip()."&m=".$m."&f=$f&modelid=".$modelid, 'ENCODE', md5(PC_PATH.'down').pc_base::load_config('system','auth_key')));
+			$a_k = urlencode(sys_auth("i=$i&d=$d&s=$s&t=".SYS_TIME."&ip=".ip()."&m=".$m."&f=$f&modelid=".$modelid, 'ENCODE', md5(PC_PATH.'down').SYS_KEY));
 			$downurl = '?m=content&c=down&a=download&a_k='.$a_k;
 		} else {
 			$downurl = $f;
@@ -86,7 +86,7 @@ class down {
 	
 	public function download() {
 		$a_k = trim($this->input->get('a_k'));
-		$a_k = sys_auth($a_k, 'DECODE', md5(PC_PATH.'down').pc_base::load_config('system','auth_key'));
+		$a_k = sys_auth($a_k, 'DECODE', md5(PC_PATH.'down').SYS_KEY);
 		if(empty($a_k)) showmessage(L('illegal_parameters'));
 		unset($i,$m,$f,$t,$ip);
 		$a_k = safe_replace($a_k);

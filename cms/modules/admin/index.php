@@ -96,8 +96,8 @@ class index extends admin {
 			$this->db->update(array('lastloginip'=>ip(),'lastlogintime'=>SYS_TIME),array('userid'=>$r['userid']));
 			$_SESSION['userid'] = $r['userid'];
 			$_SESSION['roleid'] = $r['roleid'];
-			$_SESSION['pc_hash'] = bin2hex(random_bytes(16));
 			$_SESSION['lock_screen'] = 0;
+			$this->cache->set_data(COOKIE_PRE.'pc_hash', bin2hex(random_bytes(16)), 3600);
 			$site = pc_base::load_app_class('sites');
 			$sitelist = $site->get_list_login($_SESSION['roleid']);
 			$default_siteid = self::return_siteid_login();
@@ -126,7 +126,7 @@ class index extends admin {
 				$this->admin_login_db->update($row, array('uid'=>$r['userid']));
 			}
 			$this->cache->set_auth_data('admin_option_'.$r['userid'], SYS_TIME);
-			dr_json(1, L('login_success'), array('url' => '?m=admin&c=index&pc_hash='.$_SESSION['pc_hash']));
+			dr_json(1, L('login_success'), array('url' => '?m=admin&c=index&pc_hash='.dr_get_csrf_token()));
 		} else {
 			pc_base::load_sys_class('form', '', 0);
 			include $this->admin_tpl('login');
@@ -158,8 +158,8 @@ class index extends admin {
 
 		$_SESSION['userid'] = $member['userid'];
 		$_SESSION['roleid'] = $member['roleid'];
-		$_SESSION['pc_hash'] = bin2hex(random_bytes(16));
 		$_SESSION['lock_screen'] = 0;
+		$this->cache->set_data(COOKIE_PRE.'pc_hash', bin2hex(random_bytes(16)), 3600);
 		$default_siteid = self::return_siteid();
 		$cookie_time = SYS_TIME+86400*30;
 		if(!$member['lang']) $member['lang'] = 'zh-cn';
@@ -178,6 +178,7 @@ class index extends admin {
 		$_SESSION['roleid'] = 0;
 		param::set_cookie('admin_username','');
 		param::set_cookie('userid',0);
+		$this->cache->clear(COOKIE_PRE.'pc_hash');
 
 		showmessage(L('logout_success'),'?m=admin&c=index&a='.SYS_ADMIN_PATH);
 	}
@@ -204,7 +205,7 @@ class index extends admin {
 		$array = admin::admin_menu(0);
 		$app = pc_base::load_config('version');
 		if ($app['update'] || !is_file(CACHE_PATH.'configs/version.php')) {
-			$menu_home = '?m=admin&c=check&a=init&menuid=248&pc_hash='.$_SESSION['pc_hash'];
+			$menu_home = '?m=admin&c=check&a=init&menuid=248&pc_hash='.dr_get_csrf_token();
 		} else {
 			$menu_home = '?m=admin&c=index&a=public_main';
 		}
@@ -219,7 +220,7 @@ class index extends admin {
 					$valuedata = '&'.$value['data'];
 				}
 			}
-			$menu .= ($i==0 ? '' : ',').'{"id": "'.$_value['id'].'","title": "'.L($_value['name']).'","icon": "'.$_value['icon'].'","href": "?m='.$_value['m'].'&c='.$_value['c'].'&a='.$_value['a'].$valuedata.'&menuid='.$_value['id'].'&pc_hash='.$_SESSION['pc_hash'].'","target": "_self"'.admin::child_menu($_value['id'], 1).'}';
+			$menu .= ($i==0 ? '' : ',').'{"id": "'.$_value['id'].'","title": "'.L($_value['name']).'","icon": "'.$_value['icon'].'","href": "?m='.$_value['m'].'&c='.$_value['c'].'&a='.$_value['a'].$valuedata.'&menuid='.$_value['id'].'&pc_hash='.dr_get_csrf_token().'","target": "_self"'.admin::child_menu($_value['id'], 1).'}';
 			$i++;
 		}
 		$menu .= ']}';
@@ -277,7 +278,7 @@ class index extends admin {
 		$this->panel_db->insert($data, '', 1);
 		$panelarr = $this->panel_db->listinfo(array('userid'=>$_SESSION['userid']), "datetime");
 		foreach($panelarr as $v) {
-			echo '<span><a href="javascript:paneladdclass(this);" layuimini-content-href="'.$v['url'].'&menuid='.$v['menuid'].'&pc_hash='.$_SESSION['pc_hash'].'" data-title="'.L($v['name']).'" data-icon="'.$v['icon'].'"><i class="'.$v['icon'].'"></i><cite>'.L($v['name']).'</cite></a><a class="panel-delete" href="javascript:delete_panel('.$v['menuid'].');"></a></span>';
+			echo '<span><a href="javascript:paneladdclass(this);" layuimini-content-href="'.$v['url'].'&menuid='.$v['menuid'].'&pc_hash='.dr_get_csrf_token().'" data-title="'.L($v['name']).'" data-icon="'.$v['icon'].'"><i class="'.$v['icon'].'"></i><cite>'.L($v['name']).'</cite></a><a class="panel-delete" href="javascript:delete_panel('.$v['menuid'].');"></a></span>';
 		}
 		exit;
 	}
@@ -288,7 +289,7 @@ class index extends admin {
 
 		$panelarr = $this->panel_db->listinfo(array('userid'=>$_SESSION['userid']), "datetime");
 		foreach($panelarr as $v) {
-			echo '<span><a href="javascript:paneladdclass(this);" layuimini-content-href="'.$v['url'].'&menuid='.$v['menuid'].'&pc_hash='.$_SESSION['pc_hash'].'" data-title="'.L($v['name']).'" data-icon="'.$v['icon'].'"><i class="'.$v['icon'].'"></i><cite>'.L($v['name']).'</cite></a><a class="panel-delete" href="javascript:delete_panel('.$v['menuid'].');"></a></span>';
+			echo '<span><a href="javascript:paneladdclass(this);" layuimini-content-href="'.$v['url'].'&menuid='.$v['menuid'].'&pc_hash='.dr_get_csrf_token().'" data-title="'.L($v['name']).'" data-icon="'.$v['icon'].'"><i class="'.$v['icon'].'"></i><cite>'.L($v['name']).'</cite></a><a class="panel-delete" href="javascript:delete_panel('.$v['menuid'].');"></a></span>';
 		}
 		exit;
 	}

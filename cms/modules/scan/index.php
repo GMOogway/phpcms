@@ -170,7 +170,7 @@ class index extends admin {
 				ob_clean();
 				$list = scan_file_lists(CMS_PATH, 1, 'php', 0, 1);
 				setcache('md5_'.date('Y-m-d'), $list, 'scan');
-				echo '<script type="text/javascript">location.href="?m=scan&c=index&a=md5_creat&pro=2&menuid='.$this->input->get('menuid').'&pc_hash='.$_SESSION['pc_hash'].'"</script>';
+				echo '<script type="text/javascript">location.href="?m=scan&c=index&a=md5_creat&pro=2&menuid='.$this->input->get('menuid').'&pc_hash='.dr_get_csrf_token().'"</script>';
 				break;
 				
 			case '2':

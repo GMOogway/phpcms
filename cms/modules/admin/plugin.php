@@ -72,9 +72,9 @@ class plugin extends admin {
 				$license = ($plugin_data['license'] == '' || !isset($plugin_data['license'])) ? 0 : 1;
 			}
 			if(empty($this->input->get('license')) && $license) {
-				$submit_url = '?m=admin&c=plugin&a=import&dir='.$dir.'&license=1&pc_hash='. $_SESSION['pc_hash'].'&menuid='.$this->input->get('menuid');
+				$submit_url = '?m=admin&c=plugin&a=import&dir='.$dir.'&license=1&pc_hash='. dr_get_csrf_token().'&menuid='.$this->input->get('menuid');
 			} else {
-				$submit_url = '?m=admin&c=plugin&a=install&dir='.$dir.'&pc_hash='. $_SESSION['pc_hash'].'&menuid='.$this->input->get('menuid');
+				$submit_url = '?m=admin&c=plugin&a=install&dir='.$dir.'&pc_hash='. dr_get_csrf_token().'&menuid='.$this->input->get('menuid');
 			}	
 				$show_header = 0;
 			include $this->admin_tpl('plugin_import_confirm');

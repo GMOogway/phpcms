@@ -36,20 +36,20 @@ if ($rt && $data) {
 	$title = $rt['data']['name'];
 	upload_json($data['code'],$rt['data']['url'],$title,format_file_size($rt['data']['size']));
 } else {
-	dr_json(0, '文件上传失败');
+	dr_json(0, L('文件上传失败'));
 }
 if (!$rt['data']['path']) {
-	dr_json(0, '没有获取到文件内容');
+	dr_json(0, L('没有获取到文件内容'));
 }
 if (!$title) {
-	dr_json(0, '没有获取到文件标题');
+	dr_json(0, L('没有获取到文件标题'));
 }
 $body = readWordToHtml($rt['data']['path']);
 if (!$body) {
-	dr_json(0, '没有获取到Word内容');
+	dr_json(0, L('没有获取到Word内容'));
 }
 
-dr_json(1, '导入成功', array(
+dr_json(1, L('导入成功'), array(
 	'file' => $rt['data']['url'],
 	'title' => $title,
 	'keyword' => dr_get_keywords($title),

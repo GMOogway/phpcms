@@ -59,7 +59,7 @@ class attachment extends admin {
 			$post['attachment_del'] = (int)$post['attachment_del'];
 			$this->set_config($post);	 //保存进config文件
 			$this->setcache();
-			dr_json(1, L('修改成功'), array('url' => '?m=attachment&c=attachment&a=init&page='.(int)$this->input->post('page').'&pc_hash='.$_SESSION['pc_hash']));
+			dr_json(1, L('修改成功'), array('url' => '?m=attachment&c=attachment&a=init&page='.(int)$this->input->post('page').'&pc_hash='.dr_get_csrf_token()));
 		}
 		$setconfig = pc_base::load_config('system');
 		extract($setconfig);

@@ -112,7 +112,7 @@ if(is_array($infos)){
 <!--
 function show_tbl(obj) {
 	var pdoname = $(obj).val();
-	location.href='?m=admin&c=database&a=export&pdoname='+pdoname+'&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo $_SESSION['pc_hash']?>';
+	location.href='?m=admin&c=database&a=export&pdoname='+pdoname+'&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token()?>';
 }
 function showcreat(tblname) {
 	omnipotent('show','?m=admin&c=database&a=public_repair&operation=showcreat&menuid=<?php echo $this->input->get('menuid');?>&tables='+tblname,tblname,1,'60%','70%')

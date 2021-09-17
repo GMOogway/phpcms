@@ -130,6 +130,7 @@ layui.use(['table'], function(){
         elem: '#list',
         url:'?m=content&c=content&a=initall&modelid=<?php echo $modelid;?>&steps=<?php echo $steps;?>&pc_hash='+pc_hash,
         method: 'post',
+        where: {csrf_test_name:csrf_hash},
         cellMinWidth: 80,
         page: true,
         cols: [[

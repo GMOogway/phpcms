@@ -226,7 +226,7 @@ function put_fields(obj){
 	}
 }
 $('#testdb').click(function(){
-	$.get("?m=import&c=import&a=testdb&pc_hash=<?php echo $_SESSION[pc_hash];?>", {dbtype:$('#dbtype').val(), dbhost:$('#dbhost').val(), dbuser:$('#dbuser').val(), dbpassword:$('#dbpassword').val(), dbname:$('#dbname').val()}, function(data) {
+	$.get("?m=import&c=import&a=testdb&pc_hash=<?php echo dr_get_csrf_token();?>", {dbtype:$('#dbtype').val(), dbhost:$('#dbhost').val(), dbuser:$('#dbuser').val(), dbpassword:$('#dbpassword').val(), dbname:$('#dbname').val()}, function(data) {
 	if(data=='OK') 
 	{
 		Dialog.alert('<?php echo L('connect_succeed')?>');
@@ -240,7 +240,7 @@ $('#testdb').click(function(){
 
 $(".asd").blur(function () {
 	var thisblur = $(this),val = thisblur.val();
- 	$.get("?m=import&c=import&a=test_func&pc_hash=<?php echo $_SESSION[pc_hash];?>",{value:val}, function(data){
+ 	$.get("?m=import&c=import&a=test_func&pc_hash=<?php echo dr_get_csrf_token();?>",{value:val}, function(data){
  		thisblur.parent().children('span').html(data);
  	});
 });
@@ -248,7 +248,7 @@ $(".asd").blur(function () {
 //处理函数
 function test_func(obj){
   	var thisblur = $(obj),val = thisblur.val();
-   	$.get("?m=import&c=import&a=test_func&pc_hash=<?php echo $_SESSION[pc_hash];?>",{value:val}, function(data){
+   	$.get("?m=import&c=import&a=test_func&pc_hash=<?php echo dr_get_csrf_token();?>",{value:val}, function(data){
    		thisblur.parent('th').children('span').html(data);
  	});
 }
@@ -256,7 +256,7 @@ function test_func(obj){
 
 function get_tables(){
 	//if($('#dbtype').val() != 'mysql') return false;
-	$.get("?m=import&c=import&a=get_tables&pc_hash=<?php echo $_SESSION['pc_hash']?>",{dbtype:$('#dbtype').val(), dbhost:$('#dbhost').val(), dbuser:$('#dbuser').val(), dbpassword:$('#dbpassword').val(), dbname:$('#dbname').val(), dbcharset:$('#dbcharset').val()}, function(data){
+	$.get("?m=import&c=import&a=get_tables&pc_hash=<?php echo dr_get_csrf_token()?>",{dbtype:$('#dbtype').val(), dbhost:$('#dbhost').val(), dbuser:$('#dbuser').val(), dbpassword:$('#dbpassword').val(), dbname:$('#dbname').val(), dbcharset:$('#dbcharset').val()}, function(data){
 		$("#select_tables").html(data);
 	});
 }

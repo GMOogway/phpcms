@@ -62,6 +62,7 @@ include $this->admin_tpl('header');?>
             ,idField:'id'
             ,url:'?m=admin&c=menu&a=init&pc_hash='+pc_hash
             ,method: 'post'
+            ,where: {csrf_test_name:csrf_hash}
             ,cellMinWidth: 100
             ,treeId:'id'//树形id字段名称
             ,treeManage:'manage'//树形manage字段名称
@@ -101,7 +102,7 @@ include $this->admin_tpl('header');?>
                     $.ajax({
                         type: 'post',
                         url: '?m=admin&c=menu&a=delete&pc_hash='+pc_hash,
-                        data: {id:data.id,dosubmit:1},
+                        data: {id:data.id,dosubmit:1,csrf_test_name:csrf_hash},
                         dataType: 'json',
                         success: function(res) {
                             if (res.code == 1) {
@@ -122,7 +123,7 @@ include $this->admin_tpl('header');?>
             $.ajax({
                 type: 'post',
                 url: '?m=admin&c=menu&a=display&pc_hash='+pc_hash,
-                data: {id:id,display:display,dosubmit:1},
+                data: {id:id,display:display,dosubmit:1,csrf_test_name:csrf_hash},
                 dataType: 'json',
                 success: function(res) {
                     layer.close(loading);
@@ -145,7 +146,7 @@ include $this->admin_tpl('header');?>
             $.ajax({
                 type: 'post',
                 url: '?m=admin&c=menu&a=listorder&pc_hash='+pc_hash,
-                data: {id:id,listorder:listorder,dosubmit:1},
+                data: {id:id,listorder:listorder,dosubmit:1,csrf_test_name:csrf_hash},
                 dataType: 'json',
                 success: function(res) {
                     layer.close(loading);

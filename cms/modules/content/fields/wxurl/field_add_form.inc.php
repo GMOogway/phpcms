@@ -9,7 +9,7 @@
     </tr>
 	<tr> 
       <td>表单附加属性<br />可以通过此处加入javascript事件</td>
-      <td><input type="text" name="setting[bformattribute]" value="get_wxurl('title','keywords','content')" size="40" class="input-text"><br />javascript事件：get_wxurl('标题字段名称','关键词字段名称','内容字段名称')，内容必须是编辑器。</td>
+      <td><input type="text" name="setting[bformattribute]" value="get_wxurl('myform','title','keywords','content')" size="40" class="input-text"><br />javascript事件：get_wxurl('表单名称','标题字段名称','关键词字段名称','内容字段名称')，内容必须是编辑器。</td>
     </tr>
     <tr> 
       <td>是否保存远程图片：</td>

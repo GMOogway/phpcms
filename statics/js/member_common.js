@@ -275,12 +275,12 @@ function dr_ajax_alert_error(HttpRequest, ajaxOptions, thrownError) {
 	}
 }
 
-function get_wxurl(syseditor, field, linkurl, titlename, keywordname, contentname) {
+function get_wxurl(syseditor, field, linkurl, formname, titlename, keywordname, contentname) {
 	var index = layer.load(2, {
 		shade: [0.3,'#fff'], //0.1透明度的白色背景
 		time: 5000
 	});
-	$.ajax({type: "GET",dataType:"json", url: linkurl+'&url='+encodeURIComponent($('#'+field).val()),
+	$.ajax({type: "POST",dataType:"json", url: linkurl+'&field='+field+'&url='+encodeURIComponent($('#'+field).val()), data: $('#'+formname).serialize(),
 		success: function(json) {
 			layer.close(index);
 			dr_tips(json.code, json.msg);

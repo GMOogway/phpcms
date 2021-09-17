@@ -72,7 +72,7 @@ class cachefile {
             return false;
         }
 
-        if ($data['ttl'] > 0 && time() > $data['time'] + $data['ttl'])
+        if ($data['ttl'] > 0 && SYS_TIME > $data['time'] + $data['ttl'])
         {
             if (is_file($this->path . $filename))
             {

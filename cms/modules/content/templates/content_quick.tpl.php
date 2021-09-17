@@ -12,13 +12,13 @@ include $this->admin_tpl('header','admin');?>
 </style>
 <section id="iframecontent">
   <section class="treelistframe pull-left">
-    <iframe width="180px" name="treemain" id="treemain" frameborder="false" scrolling="auto" height="auto" allowtransparency="true" frameborder="0" src="?m=content&c=content&a=public_categorys&type=add&menuid=<?php echo $_GET['menuid'];?>&pc_hash=<?php echo $_SESSION['pc_hash'];?>"></iframe>
+    <iframe width="180px" name="treemain" id="treemain" frameborder="false" scrolling="auto" height="auto" allowtransparency="true" frameborder="0" src="?m=content&c=content&a=public_categorys&type=add&menuid=<?php echo $_GET['menuid'];?>&pc_hash=<?php echo dr_get_csrf_token();?>"></iframe>
   </section>
   <section class="openclose pull-left">
     <a href="javascript:OpenClose();" id="openclose" onmouseover="layer.tips('展开与关闭',this,{tips: [1, '#000']});" onmouseout="layer.closeAll();"><i class="fa fa-chevron-left"></i></a>
   </section>
   <section id="iframecontent">
-    <iframe width="100%" name="right" id="right" frameborder="false" scrolling="auto" height="auto" allowtransparency="true" frameborder="0" src="?m=content&c=content&a=public_init&menuid=<?php echo $_GET['menuid'];?>&pc_hash=<?php echo $_SESSION['pc_hash'];?>"></iframe>
+    <iframe width="100%" name="right" id="right" frameborder="false" scrolling="auto" height="auto" allowtransparency="true" frameborder="0" src="?m=content&c=content&a=public_init&menuid=<?php echo $_GET['menuid'];?>&pc_hash=<?php echo dr_get_csrf_token();?>"></iframe>
   </section>
 </section>
 <script type="text/javascript">

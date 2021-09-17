@@ -824,7 +824,7 @@ function dr_install_uninstall(id,msg,title,linkurl,module,w,h) {
 			type: "POST",
 			dataType: "json",
 			url: linkurl,
-			data: {module:module},
+			data: {module:module,csrf_test_name:csrf_hash},
 			success: function(e) {
 				layer.close(t), dr_tips(e.code, e.msg), 1 == e.code && setTimeout("dr_install_confirm()", 2e3)
 			},
@@ -1054,12 +1054,12 @@ function check_title(linkurl,title) {
 		}
 	});
 }
-function get_wxurl(syseditor, field, linkurl, titlename, keywordname, contentname) {
+function get_wxurl(syseditor, field, linkurl, formname, titlename, keywordname, contentname) {
 	var index = layer.load(2, {
 		shade: [0.3,'#fff'], //0.1透明度的白色背景
 		time: 5000
 	});
-	$.ajax({type: "GET",dataType:"json", url: linkurl+'&url='+encodeURIComponent($('#'+field).val()),
+	$.ajax({type: "POST",dataType:"json", url: linkurl+'&field='+field+'&url='+encodeURIComponent($('#'+field).val()), data: $('#'+formname).serialize(),
 		success: function(json) {
 			layer.close(index);
 			dr_tips(json.code, json.msg);

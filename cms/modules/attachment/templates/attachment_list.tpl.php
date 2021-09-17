@@ -91,6 +91,7 @@ layui.use(['table'], function(){
         elem: '#list',
         url:'?m=attachment&c=manage&a=init&module=<?php echo $this->input->get('module');?>&status=<?php echo $this->input->get('status');?>&pc_hash='+pc_hash,
         method: 'post',
+        where: {csrf_test_name:csrf_hash},
         toolbar: '#topBtn',
         cellMinWidth: 80,
         page: true,

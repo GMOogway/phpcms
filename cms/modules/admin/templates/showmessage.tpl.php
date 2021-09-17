@@ -26,7 +26,7 @@
                 <?php } elseif($url_forward=="close") {?>
                 <button type="button" id="close" class="btn red"> <i class="fa fa-close"></i> <?php echo L('close');?></button>
                 <?php } elseif($url_forward=="blank") {?>
-                <?php } elseif($url_forward) {if(strpos($url_forward,'&pc_hash')===false) $url_forward .= '&pc_hash='.$_SESSION['pc_hash'];?>
+                <?php } elseif($url_forward) {if(strpos($url_forward,'&pc_hash')===false) $url_forward .= '&pc_hash='.dr_get_csrf_token();?>
                 <a href="<?php echo $url_forward?>"><?php echo L('click_here');?></a>
                 <script language="javascript">setTimeout("redirect('<?php echo $url_forward?>');",<?php echo $ms?>);</script> 
                 <?php }?>

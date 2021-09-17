@@ -75,10 +75,10 @@ padding-right: 70px !important;text-overflow:ellipsis!important;overflow:hidden!
                                 <div class="welcome-module">
                                     <div class="layui-row layui-col-space10 layuimini-qiuck" style="color:#ff0000;">
                                         <?php if(is_file(CACHE_PATH.'caches_error/caches_data/log-'.date('Y-m-d',SYS_TIME).'.php')) {?>
-                                        <p><?php echo L('※ 错误日志，<a href="javascript:;" layuimini-content-href="?m=admin&c=index&a=public_error_log&menuid=249&pc_hash='.$_SESSION['pc_hash'].'" data-title="错误日志" data-icon="fa fa-list-alt"><i class="fa fa-list-alt"></i><cite>点击查看</cite></a>')?></p>
+                                        <p><?php echo L('※ 错误日志，<a href="javascript:;" layuimini-content-href="?m=admin&c=index&a=public_error_log&menuid=249&pc_hash='.dr_get_csrf_token().'" data-title="错误日志" data-icon="fa fa-list-alt"><i class="fa fa-list-alt"></i><cite>点击查看</cite></a>')?></p>
                                         <?php } ?>
                                         <?php if(is_file(CACHE_PATH.'error_log.php')) {?>
-                                        <p><?php echo L('※ 系统错误，<a href="javascript:;" layuimini-content-href="?m=admin&c=index&a=public_error&menuid=246&pc_hash='.$_SESSION['pc_hash'].'" data-title="系统错误" data-icon="fa fa-list-alt"><i class="fa fa-list-alt"></i><cite>点击查看</cite></a>')?></p>
+                                        <p><?php echo L('※ 系统错误，<a href="javascript:;" layuimini-content-href="?m=admin&c=index&a=public_error&menuid=246&pc_hash='.dr_get_csrf_token().'" data-title="系统错误" data-icon="fa fa-list-alt"><i class="fa fa-list-alt"></i><cite>点击查看</cite></a>')?></p>
                                         <?php } ?>
                                         <?php if(SELF == 'admin.php') {?>
                                         <p><?php echo L('※ 为了系统安全，请修改根目录admin.php的文件名')?></p>
@@ -123,7 +123,7 @@ padding-right: 70px !important;text-overflow:ellipsis!important;overflow:hidden!
                                         </div>
                                         <?php foreach($adminpanel as $v) {?>
                                         <div class="layui-col-xs3 layuimini-qiuck-module">
-                                            <a href="javascript:;" layuimini-content-href="<?php echo $v['url'].'&menuid='.$v['menuid'];?>&pc_hash=<?php echo $_SESSION['pc_hash'];?>" data-title="<?php echo L($v['name'])?>" data-icon="<?php echo $v['icon']?>">
+                                            <a href="javascript:;" layuimini-content-href="<?php echo $v['url'].'&menuid='.$v['menuid'];?>&pc_hash=<?php echo dr_get_csrf_token();?>" data-title="<?php echo L($v['name'])?>" data-icon="<?php echo $v['icon']?>">
                                                 <i class="<?php echo $v['icon']?>"></i>
                                                 <cite><?php echo L($v['name'])?></cite>
                                             </a>
@@ -139,7 +139,7 @@ padding-right: 70px !important;text-overflow:ellipsis!important;overflow:hidden!
                             <div class="layui-card-body">
                                 <div class="welcome-module" id="update_tips" style="height:280px;overflow-x:hidden;overflow-y:auto;">
                                     <div id="file" class="layui-row layui-col-space10 layuimini-qiuck">
-                                        <form action="?m=admin&c=cache_all&a=init&pc_hash=<?php echo $_SESSION['pc_hash'];?>" target="cache_if" method="post" id="myform" name="myform">
+                                        <form action="?m=admin&c=cache_all&a=init&pc_hash=<?php echo dr_get_csrf_token();?>" target="cache_if" method="post" id="myform" name="myform">
                                             <input type="hidden" name="dosubmit" value="1">
                                         </form>
                                         <iframe id="cache_if" name="cache_if" class="ifm" width="0" height="0" style="display:none;"></iframe>
@@ -172,7 +172,7 @@ padding-right: 70px !important;text-overflow:ellipsis!important;overflow:hidden!
                             <tbody>
                             <tr>
                                 <td>系统版本</td>
-                                <td>Cms <?php echo CMS_VERSION?> [<?php echo CMS_RELEASE?>]&nbsp;&nbsp;<a id="dr_cms_update" href="javascript:;" layuimini-content-href="?m=admin&c=cloud&a=init&menuid=276&pc_hash=<?php echo $_SESSION['pc_hash']?>" data-title="版本升级" data-icon="fa fa-refresh" style="display: none" class="badge badge-danger badge-roundless ml10">  </a></td>
+                                <td>Cms <?php echo CMS_VERSION?> [<?php echo CMS_RELEASE?>]&nbsp;&nbsp;<a id="dr_cms_update" href="javascript:;" layuimini-content-href="?m=admin&c=cloud&a=init&menuid=276&pc_hash=<?php echo dr_get_csrf_token()?>" data-title="版本升级" data-icon="fa fa-refresh" style="display: none" class="badge badge-danger badge-roundless ml10">  </a></td>
                             </tr>
                             <script>
                             $(function () {

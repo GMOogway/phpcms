@@ -5,6 +5,8 @@
  * @copyright			(C) 2005-2010
  * @lastmodify			2021-06-06
  */
+// API接口项目标识
+define('IS_API', TRUE);
 define('CMS_PATH', dirname(__FILE__).DIRECTORY_SEPARATOR);
 include CMS_PATH.'cms/base.php';
 $param = pc_base::load_sys_class('param');

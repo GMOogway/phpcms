@@ -14,7 +14,7 @@
 			$setting = getcache('weibo_var','plugins');			
 			if(!$this->input->request('oauth_verifier') || $this->input->request('oauth_verifier') == '') {
 				if($this->auth_db->get_one(array('source'=>'sina'))) {
-					$txt = '授权成功，<a href="?m=admin&c=plugin&a=config&pluginid='.$this->pluginid.'&module=removeauth&pc_hash='.$_SESSION['pc_hash'].'">解除绑定</a>';
+					$txt = '授权成功，<a href="?m=admin&c=plugin&a=config&pluginid='.$this->pluginid.'&module=removeauth&pc_hash='.dr_get_csrf_token().'">解除绑定</a>';
 				} else {
 					$o = new WeiboOAuth( $setting['wb_akey'] , $setting['wb_skey']);
 					$keys = $o->getRequestToken();
@@ -31,7 +31,7 @@
 				$ms  = $c->home_timeline(); // done
 				$me = $c->verify_credentials();	
 				$this->auth_db->insert(array('uid'=>$me['id'],'token'=>$last_key['oauth_token'],'tsecret'=>$last_key['oauth_token_secret'],'source'=>'sina'));
-				$txt = '授权成功，'.$me['name'].'<a href="?m=admin&c=plugin&a=config&pluginid='.$this->pluginid.'&module=removeauth&pc_hash='.$_SESSION['pc_hash'].'">解除绑定</a>';
+				$txt = '授权成功，'.$me['name'].'<a href="?m=admin&c=plugin&a=config&pluginid='.$this->pluginid.'&module=removeauth&pc_hash='.dr_get_csrf_token().'">解除绑定</a>';
 			}
 			include $this->op->plugin_tpl('oauth',PLUGIN_ID);
 		}

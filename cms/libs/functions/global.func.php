@@ -1152,7 +1152,7 @@ function sizecount($filesize) {
 */
 function sys_auth($string, $operation = 'ENCODE', $key = '', $expiry = 0) {
 	$ckey_length = 4;
-	$key = md5($key != '' ? $key : pc_base::load_config('system', 'auth_key'));
+	$key = md5($key != '' ? $key : SYS_KEY);
 	$keya = md5(substr($key, 0, 16));
 	$keyb = md5(substr($key, 16, 16));
 	$keyc = $ckey_length ? ($operation == 'DECODE' ? substr($string, 0, $ckey_length): substr(md5(microtime()), -$ckey_length)) : '';
@@ -2758,21 +2758,21 @@ function dr_form_hidden($data = array()) {
 /**
  * 效验安全码
  */
-function csrf_hash() {
+function csrf_hash($key = 'csrf_token') {
+	$cache = pc_base::load_sys_class('cache');
 	$csrf_token = bin2hex(random_bytes(16));
-	$_SESSION[COOKIE_PRE.md5('csrf_token')] = $csrf_token;
-	return $csrf_token;
+	$cache->set_data($key, $csrf_token, 300);
+	return $cache->get_data($key);
 }
 // 验证字符串
-function dr_get_csrf_token() {
+function dr_get_csrf_token($key = 'pc_hash') {
 	$cache = pc_base::load_sys_class('cache');
-	$code = $_SESSION['pc_hash'];
+	$code = $cache->get_data(COOKIE_PRE.$key);
 	if (!$code) {
 		$code = bin2hex(random_bytes(16));
-		//$cache->set_auth_data('pc_hash', $code);
-		$_SESSION['pc_hash'] = $code;
+		$cache->set_data(COOKIE_PRE.$key, $code, 3600);
 	}
-	return $code;
+	return $cache->get_data(COOKIE_PRE.$key);
 }
 /**
  * 生成上传附件验证
@@ -2780,7 +2780,7 @@ function dr_get_csrf_token() {
  * @param $operation   操作类型(加密解密)
  */
 function upload_key($args) {
-	$pc_auth_key = md5(PC_PATH.'upload'.pc_base::load_config('system','auth_key').$_SERVER['HTTP_USER_AGENT']);
+	$pc_auth_key = md5(PC_PATH.'upload'.SYS_KEY.$_SERVER['HTTP_USER_AGENT']);
 	$authkey = md5($args.$pc_auth_key);
 	return $authkey;
 }
@@ -2791,11 +2791,11 @@ function upload_key($args) {
  */
 function get_auth_key($prefix,$suffix="") {
 	if($prefix=='login'){
-		$pc_auth_key = md5(PC_PATH.'login'.pc_base::load_config('system','auth_key').ip());
+		$pc_auth_key = md5(PC_PATH.'login'.SYS_KEY.ip());
 	}else if($prefix=='email'){
-		$pc_auth_key = md5(PC_PATH.'email'.pc_base::load_config('system','auth_key'));
+		$pc_auth_key = md5(PC_PATH.'email'.SYS_KEY);
 	}else{
-		$pc_auth_key = md5(PC_PATH.'other'.pc_base::load_config('system','auth_key').$suffix);
+		$pc_auth_key = md5(PC_PATH.'other'.SYS_KEY.$suffix);
 	}
 	$authkey = md5($prefix.$pc_auth_key);
 	return $authkey;
@@ -3061,7 +3061,7 @@ function dr_get_domain_name($url) {
  */
 function token($name = '') {
 	if ($name) {
-		return 'CMS'.md5($name.rand(1, 999999));
+		return 'CMS'.md5($name.md5(SYS_TIME).rand(1, 999999));
 	} else {
 		return 'CMS'.strtoupper(substr((md5(SYS_TIME)), rand(0, 10), 13));
 	}

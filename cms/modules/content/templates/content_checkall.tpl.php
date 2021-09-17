@@ -49,7 +49,7 @@ for ($j=0;$j<5;$j++) {
 	?>
         <tr>
 		<td align='center' ><?php echo $arr_checkid[1];?></td>
-		<td align='left' ><a href="javascript:;" onclick='change_color(this);window.open("?m=content&c=content&a=public_preview&steps=<?php echo $r['status']?>&catid=<?php echo $r['catid'];?>&id=<?php echo $arr_checkid[1];?>&pc_hash=<?php echo $_SESSION['pc_hash'];?>","manage")'><?php echo $r['title'];?></a></td>
+		<td align='left' ><a href="javascript:;" onclick='change_color(this);window.open("?m=content&c=content&a=public_preview&steps=<?php echo $r['status']?>&catid=<?php echo $r['catid'];?>&id=<?php echo $arr_checkid[1];?>&pc_hash=<?php echo dr_get_csrf_token();?>","manage")'><?php echo $r['title'];?></a></td>
 		<td align='center' ><?php echo $modelname;?></td>
 		<td align='center' ><?php echo $flowname;?></td>
 		<td align='center' ><?php echo $stepname;?></td>
@@ -64,7 +64,7 @@ for ($j=0;$j<5;$j++) {
 			echo $r['username'];
 		}
 		?></td>
-		<td align='center' ><a href="javascript:;" onclick='change_color(this);window.open("?m=content&c=content&a=public_preview&steps=<?php echo $r['status']?>&catid=<?php echo $r['catid'];?>&id=<?php echo $arr_checkid[1];?>&pc_hash=<?php echo $_SESSION['pc_hash'];?>","manage")'><?php echo L('c_check');?></a></td>
+		<td align='center' ><a href="javascript:;" onclick='change_color(this);window.open("?m=content&c=content&a=public_preview&steps=<?php echo $r['status']?>&catid=<?php echo $r['catid'];?>&id=<?php echo $arr_checkid[1];?>&pc_hash=<?php echo dr_get_csrf_token();?>","manage")'><?php echo L('c_check');?></a></td>
 	</tr>
      <?php }?>
 </tbody>

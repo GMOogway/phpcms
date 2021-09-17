@@ -57,7 +57,7 @@ function view(id, name) {
 }
 function data_delete(obj,id,name){
 	Dialog.confirm(name,function(){
-		$.get('?m=content&c=workflow&a=delete&workflowid='+id+'&pc_hash=<?php echo $_SESSION['pc_hash'];?>',function(data){
+		$.get('?m=content&c=workflow&a=delete&workflowid='+id+'&pc_hash=<?php echo dr_get_csrf_token();?>',function(data){
 			if(data) {
 				$(obj).parent().parent().fadeOut("slow");
 			}

@@ -36,7 +36,7 @@ class type_manage extends admin {
 			$ids = $this->input->get_post_ids();
 
 			foreach ($names as $name) {
-				$this->input->post('info')['name'] = $name;
+				$info['name'] = $name;
 				$typeid = $this->db->insert($info,true);
 				if(!empty($ids)) {
 					foreach ($ids as $catid) {

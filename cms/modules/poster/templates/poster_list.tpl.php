@@ -53,7 +53,7 @@ if(is_array($infos)){
 	<td align="center"><?php if($info['disabled']) { echo L('stop'); } elseif((strtotime($info['enddate'])<SYS_TIME) && (strtotime($info['enddate'])>0)) { echo L('past'); } else { echo L('start'); }?></td>
 	<td align="center"><?php echo $info['clicks']?></td>
 	<td align="center"><?php echo format::date($info['addtime'], 1);?></td>
-	<td align="center"><a href="index.php?m=poster&c=poster&a=edit&id=<?php echo $info['id'];?>&pc_hash=<?php echo $_SESSION['pc_hash'];?>&menuid=<?php echo $_GET['menuid']?>" ><?php echo L('edit')?></a>|<a href="?m=poster&c=poster&a=stat&id=<?php echo $info['id']?>&spaceid=<?php echo $_GET['spaceid'];?>"><?php echo L('stat')?></a></td>
+	<td align="center"><a href="index.php?m=poster&c=poster&a=edit&id=<?php echo $info['id'];?>&pc_hash=<?php echo dr_get_csrf_token();?>&menuid=<?php echo $_GET['menuid']?>" ><?php echo L('edit')?></a>|<a href="?m=poster&c=poster&a=stat&id=<?php echo $info['id']?>&spaceid=<?php echo $_GET['spaceid'];?>"><?php echo L('stat')?></a></td>
 	</tr>
 <?php 
 	}

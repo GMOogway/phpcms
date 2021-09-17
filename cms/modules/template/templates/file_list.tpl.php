@@ -55,7 +55,7 @@ endif;
 </div>
 <div class="list-footer table-checkable clear">
     <div class="col-md-7 list-select">
-        <label><button type="button" onclick="location.href='?m=template&c=style&a=init&pc_hash=<?php echo $_SESSION['pc_hash'];?>'" class="btn yellow btn-sm"> <i class="fa fa-mail-reply-all"></i> <?php echo L('returns_list_style')?></button></label>
+        <label><button type="button" onclick="location.href='?m=template&c=style&a=init&pc_hash=<?php echo dr_get_csrf_token();?>'" class="btn yellow btn-sm"> <i class="fa fa-mail-reply-all"></i> <?php echo L('returns_list_style')?></button></label>
         <label><button type="button" onclick="add_file()" class="btn blue btn-sm"> <i class="fa fa-plus"></i> <?php echo L('new')?></button></label>
         <label><button type="submit" class="btn green btn-sm"> <i class="fa fa-refresh"></i> <?php echo L('update')?></button></label>
     </div>

@@ -253,7 +253,7 @@ class admin_manage extends admin {
 	//添加修改用户 验证串验证
 	private function check_admin_manage_code(){
 		$admin_manage_code = $this->input->post('info')['admin_manage_code'];
-		$pc_auth_key = md5(pc_base::load_config('system','auth_key').'adminuser');
+		$pc_auth_key = md5(SYS_KEY.'adminuser');
 		$admin_manage_code = sys_auth($admin_manage_code, 'DECODE', $pc_auth_key);	
 		if($admin_manage_code==""){
 			return false;
@@ -266,7 +266,7 @@ class admin_manage extends admin {
 	}
 	//添加修改用户 生成验证串
 	private function get_admin_manage_code(){
-		$pc_auth_key = md5(pc_base::load_config('system','auth_key').'adminuser');
+		$pc_auth_key = md5(SYS_KEY.'adminuser');
 		$code = sys_auth("adminuser_".$this->input->get('pc_hash')."_".time(), 'ENCODE', $pc_auth_key);
 		return $code;
 	}	

@@ -1,6 +1,6 @@
 <?php
 defined('IN_ADMIN') or exit('No permission resources.');
-$pc_hash = $_SESSION['pc_hash'];
+$pc_hash = dr_get_csrf_token();
 foreach($datas as $_value) {
 	echo '<h3 class="f14"><span class="switchs cu on" title="'.L('expand_or_contract').'"></span>'.L($_value['name']).'</h3>';
 	echo '<ul>';

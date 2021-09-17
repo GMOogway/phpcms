@@ -214,7 +214,7 @@ function put_fields(obj){
 	}
 }
 $('#testdb').click(function(){
-	$.get("?m=import&c=import&a=testdb&pc_hash=<?php echo $_SESSION[pc_hash];?>", {dbtype:$('#dbtype').val(), dbhost:$('#dbhost').val(), dbuser:$('#dbuser').val(), dbpassword:$('#dbpassword').val(), dbname:$('#dbname').val()}, function(data) {
+	$.get("?m=import&c=import&a=testdb&pc_hash=<?php echo dr_get_csrf_token();?>", {dbtype:$('#dbtype').val(), dbhost:$('#dbhost').val(), dbuser:$('#dbuser').val(), dbpassword:$('#dbpassword').val(), dbname:$('#dbname').val()}, function(data) {
 	if(data=='OK') 
 	{
 		Dialog.alert(<?php echo L('connect_succeed')?>);
@@ -228,7 +228,7 @@ $('#testdb').click(function(){
 
 function get_tables(){
 	//if($('#dbtype').val() != 'mysql') return false;
-	$.get("?m=import&c=import&a=get_tables&pc_hash=<?php echo $_SESSION['pc_hash']?>",{dbtype:$('#dbtype').val(), dbhost:$('#dbhost').val(), dbuser:$('#dbuser').val(), dbpassword:$('#dbpassword').val(), dbname:$('#dbname').val(), dbcharset:$('#dbcharset').val()}, function(data){
+	$.get("?m=import&c=import&a=get_tables&pc_hash=<?php echo dr_get_csrf_token()?>",{dbtype:$('#dbtype').val(), dbhost:$('#dbhost').val(), dbuser:$('#dbuser').val(), dbpassword:$('#dbpassword').val(), dbname:$('#dbname').val(), dbcharset:$('#dbcharset').val()}, function(data){
 		$("#select_tables").html(data);
 	});
 }
@@ -236,14 +236,14 @@ function get_tables(){
 //处理函数
 function test_func(obj){
   	var thisblur = $(obj),val = thisblur.val();
-   	$.get("?m=import&c=import&a=test_func&pc_hash=<?php echo $_SESSION[pc_hash];?>",{value:val}, function(data){
+   	$.get("?m=import&c=import&a=test_func&pc_hash=<?php echo dr_get_csrf_token();?>",{value:val}, function(data){
    		thisblur.parent('th').children('span').html(data);
  	});
 }
 
 //获取选择本系统的数据原对应表
 function get_into_tables(){
- 	$.get("?m=import&c=import&a=get_into_tables&pc_hash=<?php echo $_SESSION['pc_hash']?>",{pdo_select:$('#pdo_select').val()}, function(data){
+ 	$.get("?m=import&c=import&a=get_into_tables&pc_hash=<?php echo dr_get_csrf_token()?>",{pdo_select:$('#pdo_select').val()}, function(data){
 		$("#select_into_tables").html(data);
 	});
 }
@@ -273,7 +273,7 @@ function get_keywords() {
 	var db_tables = $("#db_tables").val();
 	var condition = $("#condition").val();
 	var keyid = $("#keyid").val();
- 	location.href='?m=import&c=import&a=import_setting&type=other&modelid=other&importid='+importid+'&pdoname='+pdo_selecte+'&into_tables='+into_tables+'&import_name='+import_name+'&desc='+desc+'&dbtype='+dbtype+'&dbhost='+dbhost+'&dbuser='+dbuser+'&dbpassword='+dbpassword+'&dbname='+dbname+'&dbcharset='+dbcharset+'&db_tables='+db_tables+'&keyid='+keyid+'&pc_hash=<?php echo $_SESSION['pc_hash']?>';
+ 	location.href='?m=import&c=import&a=import_setting&type=other&modelid=other&importid='+importid+'&pdoname='+pdo_selecte+'&into_tables='+into_tables+'&import_name='+import_name+'&desc='+desc+'&dbtype='+dbtype+'&dbhost='+dbhost+'&dbuser='+dbuser+'&dbpassword='+dbpassword+'&dbname='+dbname+'&dbcharset='+dbcharset+'&db_tables='+db_tables+'&keyid='+keyid+'&pc_hash=<?php echo dr_get_csrf_token()?>';
 }
 
 function to_tables(val){
@@ -287,7 +287,7 @@ function to_tables(val){
 function show_tbl(obj) {//根据选择的本系统数据源，显示该源下面的所有数据表
 	var pdoname = $(obj).val();
 	var importid = $("#importid").val();
-	location.href='?m=import&c=import&a=import_setting&type=other&modelid=other&importid='+importid+'&pdoname='+pdoname+'&pc_hash=<?php echo $_SESSION['pc_hash']?>';
+	location.href='?m=import&c=import&a=import_setting&type=other&modelid=other&importid='+importid+'&pdoname='+pdoname+'&pc_hash=<?php echo dr_get_csrf_token()?>';
 }
 function showcreat(tblname, pdo_name) {
 	window.top.art.dialog({title:tblname, id:'show', iframe:'?m=admin&c=database&a=public_repair&operation=showcreat&pdo_name='+pdo_name+'&tables=' +tblname,width:'500px',height:'350px'});

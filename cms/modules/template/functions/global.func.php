@@ -70,9 +70,9 @@ function creat_form($id, $data, $value = '', $op = '') {
 	$str = $ajax = '';
 	if($data['ajax']['name']) {
 		if($data['ajax']['m']) {
-			$url = '$.get(\'?m=content&c=push&a=public_ajax_get\', {html: this.value, id:\''.$data['ajax']['id'].'\', action: \''.$data['ajax']['action'].'\', module: \''.$data['ajax']['m'].'\', pc_hash: \''.$_SESSION['pc_hash'].'\'}, function(data) {$(\'#'.$id.'_td\').html(data)});';
+			$url = '$.get(\'?m=content&c=push&a=public_ajax_get\', {html: this.value, id:\''.$data['ajax']['id'].'\', action: \''.$data['ajax']['action'].'\', module: \''.$data['ajax']['m'].'\', pc_hash: \''.dr_get_csrf_token().'\'}, function(data) {$(\'#'.$id.'_td\').html(data)});';
 		} else {
-			$url = '$.get(\'?m=template&c=file&a=public_ajax_get\', { html: this.value, id:\''.$data['ajax']['id'].'\', action: \''.$data['ajax']['action'].'\', op: \''.$op.'\', style: \'default\', pc_hash: \''.$_SESSION['pc_hash'].'\'}, function(data) {$(\'#'.$id.'_td\').html(data)});';
+			$url = '$.get(\'?m=template&c=file&a=public_ajax_get\', { html: this.value, id:\''.$data['ajax']['id'].'\', action: \''.$data['ajax']['action'].'\', op: \''.$op.'\', style: \'default\', pc_hash: \''.dr_get_csrf_token().'\'}, function(data) {$(\'#'.$id.'_td\').html(data)});';
 		}
 	}
 	switch ($data['htmltype']) {
@@ -169,7 +169,7 @@ function visualization($html, $style = '', $dir = '', $file = '') {
 		<script type='text/javascript' src='".JS_PATH."jquery.min.js'></script>
 		<script language=\"javascript\" type=\"text/javascript\" src=\"".JS_PATH."Dialog/main.js\"></script>
 		<script type='text/javascript'>
-		var pc_hash = '".$_SESSION['pc_hash']."';
+		var pc_hash = '".dr_get_csrf_token()."';
 		$(function(){
 		$('a').attr('href', 'javascript:void(0)').attr('target', '');
 		$('.admin_piao_edit').click(function(){

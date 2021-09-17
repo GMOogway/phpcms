@@ -105,7 +105,7 @@ class sms extends admin {
 	public function sms_sent() {
 		if(!$this->sms_setting['sms_enable']) showmessage(L('please_open_sms_platform_status'));
 		if(empty($this->smsapi->userid)) {
-			showmessage(L('need_band'), 'index.php?m=sms&c=sms&a=sms_setting&menuid='.$_GET[menuid].'&pc_hash='.$_SESSION['pc_hash']);
+			showmessage(L('need_band'), 'index.php?m=sms&c=sms&a=sms_setting&menuid='.$this->input->get('menuid').'&pc_hash='.dr_get_csrf_token());
 		}
 		//检查短信余额
 		if($this->sms_setting['sms_key']) {

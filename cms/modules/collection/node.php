@@ -349,7 +349,7 @@ class node extends admin {
 			}
 			
 			if ($total_page > $page) {
-				showmessage(L('collectioning').($i+($page-1)*2).'/'.$total.'<script type="text/javascript">location.href="?m=collection&c=node&a=col_content&page='.($page+1).'&nodeid='.$nodeid.'&total='.$total.'&pc_hash='.$_SESSION['pc_hash'].'"</script>', '?m=collection&c=node&a=col_content&page='.($page+1).'&nodeid='.$nodeid.'&total='.$total);
+				showmessage(L('collectioning').($i+($page-1)*2).'/'.$total.'<script type="text/javascript">location.href="?m=collection&c=node&a=col_content&page='.($page+1).'&nodeid='.$nodeid.'&total='.$total.'&pc_hash='.dr_get_csrf_token().'"</script>', '?m=collection&c=node&a=col_content&page='.($page+1).'&nodeid='.$nodeid.'&total='.$total);
 			} else {
 				$this->db->update(array('lastdate'=>SYS_TIME), array('nodeid'=>$nodeid));
 				showmessage(L('collection_success'), '?m=collection&c=node&a=manage');
@@ -511,7 +511,7 @@ class node extends admin {
 		}
 		$order = $node['coll_order'] == 1 ? 'id desc' : '';
 		$str = L('operation_success');
-		$url = '?m=collection&c=node&a=publist&nodeid='.$nodeid.'&status=2&pc_hash='.$_SESSION['pc_hash'];
+		$url = '?m=collection&c=node&a=publist&nodeid='.$nodeid.'&status=2&pc_hash='.dr_get_csrf_token();
 		if ($type == 'all') {
 			$total = isset($_GET['total']) && intval($_GET['total']) ? intval($_GET['total']) : '';
 			if (empty($total)) $total = $collection_content_db->count(array('siteid'=>$this->get_siteid(), 'nodeid'=>$nodeid, 'status'=>1));
@@ -577,7 +577,7 @@ class node extends admin {
 		$sql_id = implode('\',\'', $coll_contentid);
 		$collection_content_db->update(array('status'=>2), " id IN ('$sql_id')");
 		if ($type == 'all' && $total_page > $page) {
-			$str = L('are_imported_the_import_process').(($page-1)*20+$i).'/'.$total.'<script type="text/javascript">location.href="?m=collection&c=node&a=import_content&nodeid='.$nodeid.'&programid='.$programid.'&type=all&page='.($page+1).'&total='.$total.'&pc_hash='.$_SESSION['pc_hash'].'"</script>';
+			$str = L('are_imported_the_import_process').(($page-1)*20+$i).'/'.$total.'<script type="text/javascript">location.href="?m=collection&c=node&a=import_content&nodeid='.$nodeid.'&programid='.$programid.'&type=all&page='.($page+1).'&total='.$total.'&pc_hash='.dr_get_csrf_token().'"</script>';
 			$url = '';
 		}
 		showmessage($str, $url);

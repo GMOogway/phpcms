@@ -21,7 +21,7 @@
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>jquery.nicescroll.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>layer/layer.js"></script>
 <script type="text/javascript">
-var pc_hash = '<?php echo $_SESSION['pc_hash']?>';
+var pc_hash = '<?php echo dr_get_csrf_token()?>';
 if (top.location!=self.location){
 top.location="<?php echo SELF;?>";
 }
@@ -341,10 +341,10 @@ $(document).ready(function() {
                     <a href="javascript:;"><?php echo $admin_username;?></a>
                     <dl class="layui-nav-child">
                         <dd>
-                            <a href="javascript:;" layuimini-content-href="?m=admin&c=admin_manage&a=public_edit_info&pc_hash=<?php echo $_SESSION['pc_hash']?>" data-title="<?php echo L('基本资料');?>" data-icon="fa fa-gears"><?php echo L('基本资料');?><span class="layui-badge-dot"></span></a>
+                            <a href="javascript:;" layuimini-content-href="?m=admin&c=admin_manage&a=public_edit_info&pc_hash=<?php echo dr_get_csrf_token()?>" data-title="<?php echo L('基本资料');?>" data-icon="fa fa-gears"><?php echo L('基本资料');?><span class="layui-badge-dot"></span></a>
                         </dd>
                         <dd>
-                            <a href="javascript:;" layuimini-content-href="?m=admin&c=admin_manage&a=public_edit_pwd&pc_hash=<?php echo $_SESSION['pc_hash']?>" data-title="<?php echo L('修改密码');?>" data-icon="fa fa-gears"><?php echo L('修改密码');?></a>
+                            <a href="javascript:;" layuimini-content-href="?m=admin&c=admin_manage&a=public_edit_pwd&pc_hash=<?php echo dr_get_csrf_token()?>" data-title="<?php echo L('修改密码');?>" data-icon="fa fa-gears"><?php echo L('修改密码');?></a>
                         </dd>
                         <dd>
                             <hr>
@@ -404,7 +404,7 @@ $(document).ready(function() {
 					<div id="panellist">
 						<?php foreach($adminpanel as $v) {?>
 								<span>
-								<a href="javascript:paneladdclass(this);" layuimini-content-href="<?php echo $v['url'].'&menuid='.$v['menuid'].'&pc_hash='.$_SESSION['pc_hash'];?>" data-title="<?php echo L($v['name'])?>" data-icon="<?php echo $v['icon'];?>"><i class="<?php echo $v['icon'];?>"></i><cite><?php echo L($v['name'])?></cite></a>
+								<a href="javascript:paneladdclass(this);" layuimini-content-href="<?php echo $v['url'].'&menuid='.$v['menuid'].'&pc_hash='.dr_get_csrf_token();?>" data-title="<?php echo L($v['name'])?>" data-icon="<?php echo $v['icon'];?>"><i class="<?php echo $v['icon'];?>"></i><cite><?php echo L($v['name'])?></cite></a>
 								<a class="panel-delete" href="javascript:delete_panel(<?php echo $v['menuid']?>, this);"></a></span>
 						<?php }?>
 					</div>

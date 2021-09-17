@@ -52,7 +52,7 @@ class import extends admin {
  			}else {
  				$modelid = 'other';
  			}
- 			$url = "?m=import&c=import&a=import_setting&type=".$this->input->post('info')['type']."&modelid=".$modelid."&pc_hash=".$_SESSION['pc_hash'];
+ 			$url = "?m=import&c=import&a=import_setting&type=".$this->input->post('info')['type']."&modelid=".$modelid."&pc_hash=".dr_get_csrf_token();
  			showmessage('进入下一步',$url,'0');
   		}else {
  			$models = getcache('model','commons');
@@ -371,7 +371,7 @@ class import extends admin {
 			}elseif ($type=='member'){
 				$modelid = $this->input->post('info')['membermodelid'];
 			}
-			$url = "?m=import&c=import&a=import_setting&type=".$type."&importid=".$importid."&modelid=".$modelid."&pc_hash=".$_SESSION['pc_hash'];
+			$url = "?m=import&c=import&a=import_setting&type=".$type."&importid=".$importid."&modelid=".$modelid."&pc_hash=".dr_get_csrf_token();
  			showmessage('进入下一步',$url,'0');
 		}else {
 			$importid = intval($this->input->get('importid'));

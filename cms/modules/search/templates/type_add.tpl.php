@@ -46,7 +46,7 @@ include $this->admin_tpl('header','admin');
 <SCRIPT LANGUAGE="JavaScript">
 <!--
 	function change_module(module) {
-		redirect('?m=search&c=search_type&a=add&module='+module+'&pc_hash=<?php echo $_SESSION['pc_hash']?>');
+		redirect('?m=search&c=search_type&a=add&module='+module+'&pc_hash=<?php echo dr_get_csrf_token()?>');
 }
 //-->
 </SCRIPT>

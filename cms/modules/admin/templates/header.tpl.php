@@ -26,7 +26,8 @@ if(isset($show_dialog)) {?>
 <?php } ?>
 <script type="text/javascript">
 	window.focus();
-	var pc_hash = '<?php echo $_SESSION['pc_hash'];?>';
+	var pc_hash = '<?php echo dr_get_csrf_token();?>';
+	var csrf_hash = '<?php echo csrf_hash();?>';
 	<?php if(!isset($show_pc_hash)) { ?>
 		window.onload = function(){
 		var html_a = document.getElementsByTagName('a');
@@ -60,7 +61,7 @@ $(function(){
 		var csrfNode = document.createElement("input");
 		csrfNode.name = 'csrf_test_name';
 		csrfNode.type = 'hidden';
-		csrfNode.value = '<?php echo csrf_hash();?>';
+		csrfNode.value = csrf_hash;
 		html_form2[i].appendChild(csrfNode);
 	}
 });
