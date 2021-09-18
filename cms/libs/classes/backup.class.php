@@ -71,114 +71,189 @@ class backup {
     }
 
     private function _init() {
-        # COUNT
-        $ct = 0;
-        # CONTENT
-        $sqldump = '';
-        # COPYRIGHT & OPTIONS
-        $sqldump .= "-- SQL Dump by Erik Edgren\n";
-        $sqldump .= "-- version 1.0\n";
-        $sqldump .= "--\n";
-        $sqldump .= "-- SQL Dump created: " . date('F jS, Y \@ g:i a') . "\n\n";
-        $sqldump .= "SET SQL_MODE=\"NO_AUTO_VALUE_ON_ZERO\";\n";
-        $tables = $this->db->query("SHOW FULL TABLES WHERE Table_Type != 'VIEW'");
-        # LOOP: Get the tables
-        foreach ($tables AS $table) {
-            // 忽略表
-            if (in_array($table[0], $this->ignoreTables)) {
-                continue;
-            }
-            # COUNT
-            $ct++;
-            /** ** ** ** ** **/
-            # DATABASE: Count the rows in each tables
-            $count_rows = $this->db->prepare("SELECT * FROM " . $table[0]);
-            $count_rows->execute();
-            $c_rows = $count_rows->columnCount();
-            # DATABASE: Count the columns in each tables
-            $count_columns = $this->db->prepare("SELECT COUNT(*) FROM " . $table[0]);
-            $count_columns->execute();
-            $c_columns = $count_columns->fetchColumn();
-            /** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** **/
-            # MYSQL DUMP: Remove tables if they exists
-            $sqldump .= "\n";
-            $sqldump .= "--\n";
-            $sqldump .= "-- Remove the table if it exists\n";
-            $sqldump .= "--\n";
-            $sqldump .= "DROP TABLE IF EXISTS `" . $table[0] . "`;\n\n";
-            /** ** ** ** ** **/
-            # MYSQL DUMP: Create table if they do not exists
-            $sqldump .= "--\n";
-            $sqldump .= "-- Create the table if it not exists\n";
-            $sqldump .= "--\n";
-            # LOOP: Get the fields for the table
-            foreach ($this->db->query("SHOW CREATE TABLE " . $table[0]) AS $field) {
-                $sqldump .= str_replace('CREATE TABLE', 'CREATE TABLE IF NOT EXISTS', $field['Create Table']);
-            }
-            # MYSQL DUMP: New rows
-            $sqldump .= ";\n";
-            /** ** ** ** ** **/
-            # CHECK: There are one or more columns
-            if ($c_columns != 0) {
-                # MYSQL DUMP: List the data for each table
+        if ($this->tables) {
+            foreach ($this->tables AS $table) {
+                # COUNT
+                $ct++;
+                /** ** ** ** ** **/
+                # DATABASE: Count the rows in each tables
+                $count_rows = $this->db->prepare("SELECT * FROM " . $table);
+                $count_rows->execute();
+                $c_rows = $count_rows->columnCount();
+                # DATABASE: Count the columns in each tables
+                $count_columns = $this->db->prepare("SELECT COUNT(*) FROM " . $table);
+                $count_columns->execute();
+                $c_columns = $count_columns->fetchColumn();
+                /** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** **/
+                # MYSQL DUMP: Remove tables if they exists
                 $sqldump .= "\n";
                 $sqldump .= "--\n";
-                $sqldump .= "-- List the data for the table\n";
+                $sqldump .= "-- Remove the table if it exists\n";
                 $sqldump .= "--\n";
-                # COUNT
-                $c = 0;
-                # LOOP: Get the tables
-                foreach ($this->db->query("SELECT * FROM " . $table[0]) AS $data) {
+                $sqldump .= "DROP TABLE IF EXISTS `" . $table . "`;\n\n";
+                /** ** ** ** ** **/
+                # MYSQL DUMP: Create table if they do not exists
+                $sqldump .= "--\n";
+                $sqldump .= "-- Create the table if it not exists\n";
+                $sqldump .= "--\n";
+                # LOOP: Get the fields for the table
+                foreach ($this->db->query("SHOW CREATE TABLE " . $table) AS $field) {
+                    $sqldump .= str_replace('CREATE TABLE', 'CREATE TABLE IF NOT EXISTS', $field['Create Table']);
+                }
+                # MYSQL DUMP: New rows
+                $sqldump .= ";\n";
+                /** ** ** ** ** **/
+                # CHECK: There are one or more columns
+                if ($c_columns != 0) {
+                    # MYSQL DUMP: List the data for each table
+                    $sqldump .= "\n";
+                    $sqldump .= "--\n";
+                    $sqldump .= "-- List the data for the table\n";
+                    $sqldump .= "--\n";
                     # COUNT
-                    $c++;
-                    /** ** ** ** ** **/
-                    # MYSQL DUMP: Insert into each table
-                    /*$sqldump .= "INSERT INTO `" . $table[0] . "` (";
-                    # ARRAY
-                    $rows = Array();
+                    $c = 0;
                     # LOOP: Get the tables
-                    foreach ($this->db->query("DESCRIBE " . $table[0]) AS $row) {
-                        $rows[] = "`" . $row[0] . "`";
-                    }
-                    $sqldump .= implode(', ', $rows);
-                    $sqldump .= ") VALUES(";*/
-                    $sqldump .= "INSERT INTO `" . $table[0] . "` VALUES(";
-                    # ARRAY
-                    $cdata = Array();
-                    # LOOP
-                    for ($i = 0; $i < $c_rows; $i++) {
-                        if (is_null($data[$i])) {
-                            $cdata[] = "null";
-                        } else {
-                            $new_lines = $this->escape($data[$i]);
-                            $cdata[] = "'" . $new_lines . "'";
+                    foreach ($this->db->query("SELECT * FROM " . $table) AS $data) {
+                        # COUNT
+                        $c++;
+                        /** ** ** ** ** **/
+                        # MYSQL DUMP: Insert into each table
+                        /*$sqldump .= "INSERT INTO `" . $table . "` (";
+                        # ARRAY
+                        $rows = Array();
+                        # LOOP: Get the tables
+                        foreach ($this->db->query("DESCRIBE " . $table) AS $row) {
+                            $rows[] = "`" . $row . "`";
                         }
+                        $sqldump .= implode(', ', $rows);
+                        $sqldump .= ") VALUES(";*/
+                        $sqldump .= "INSERT INTO `" . $table . "` VALUES(";
+                        # ARRAY
+                        $cdata = Array();
+                        # LOOP
+                        for ($i = 0; $i < $c_rows; $i++) {
+                            if (is_null($data[$i])) {
+                                $cdata[] = "null";
+                            } else {
+                                $new_lines = $this->escape($data[$i]);
+                                $cdata[] = "'" . $new_lines . "'";
+                            }
+                        }
+                        $sqldump .= implode(', ', $cdata);
+                        $sqldump .= ");\n";
                     }
-                    $sqldump .= implode(', ', $cdata);
-                    $sqldump .= ");\n";
                 }
             }
-        }
-
-        // Backup views
-        $tables = $this->db->query("SHOW FULL TABLES WHERE Table_Type = 'VIEW'");
-        # LOOP: Get the tables
-        if (is_array($tables) && $tables) {
-            $sqldump .= "\n\n\n";
+        } else {
+            # COUNT
+            $ct = 0;
+            # CONTENT
+            $sqldump = '';
+            # COPYRIGHT & OPTIONS
+            $sqldump .= "-- SQL Dump by Erik Edgren\n";
+            $sqldump .= "-- version 1.0\n";
+            $sqldump .= "--\n";
+            $sqldump .= "-- SQL Dump created: " . date('F jS, Y \@ g:i a') . "\n\n";
+            $sqldump .= "SET SQL_MODE=\"NO_AUTO_VALUE_ON_ZERO\";\n";
+            $tables = $this->db->query("SHOW FULL TABLES WHERE Table_Type != 'VIEW'");
+            # LOOP: Get the tables
             foreach ($tables AS $table) {
                 // 忽略表
                 if (in_array($table[0], $this->ignoreTables)) {
                     continue;
                 }
-                foreach ($this->db->query("SHOW CREATE VIEW " . $table[0]) AS $field) {
+                # COUNT
+                $ct++;
+                /** ** ** ** ** **/
+                # DATABASE: Count the rows in each tables
+                $count_rows = $this->db->prepare("SELECT * FROM " . $table[0]);
+                $count_rows->execute();
+                $c_rows = $count_rows->columnCount();
+                # DATABASE: Count the columns in each tables
+                $count_columns = $this->db->prepare("SELECT COUNT(*) FROM " . $table[0]);
+                $count_columns->execute();
+                $c_columns = $count_columns->fetchColumn();
+                /** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** **/
+                # MYSQL DUMP: Remove tables if they exists
+                $sqldump .= "\n";
+                $sqldump .= "--\n";
+                $sqldump .= "-- Remove the table if it exists\n";
+                $sqldump .= "--\n";
+                $sqldump .= "DROP TABLE IF EXISTS `" . $table[0] . "`;\n\n";
+                /** ** ** ** ** **/
+                # MYSQL DUMP: Create table if they do not exists
+                $sqldump .= "--\n";
+                $sqldump .= "-- Create the table if it not exists\n";
+                $sqldump .= "--\n";
+                # LOOP: Get the fields for the table
+                foreach ($this->db->query("SHOW CREATE TABLE " . $table[0]) AS $field) {
+                    $sqldump .= str_replace('CREATE TABLE', 'CREATE TABLE IF NOT EXISTS', $field['Create Table']);
+                }
+                # MYSQL DUMP: New rows
+                $sqldump .= ";\n";
+                /** ** ** ** ** **/
+                # CHECK: There are one or more columns
+                if ($c_columns != 0) {
+                    # MYSQL DUMP: List the data for each table
+                    $sqldump .= "\n";
                     $sqldump .= "--\n";
-                    $sqldump .= "-- Remove the view if it exists\n";
-                    $sqldump .= "--\n\n";
-                    $sqldump .= "DROP VIEW IF EXISTS `{$field[0]}`;\n\n";
+                    $sqldump .= "-- List the data for the table\n";
                     $sqldump .= "--\n";
-                    $sqldump .= "-- Create the view if it not exists\n";
-                    $sqldump .= "--\n\n";
-                    $sqldump .= "{$field[1]};\n\n";
+                    # COUNT
+                    $c = 0;
+                    # LOOP: Get the tables
+                    foreach ($this->db->query("SELECT * FROM " . $table[0]) AS $data) {
+                        # COUNT
+                        $c++;
+                        /** ** ** ** ** **/
+                        # MYSQL DUMP: Insert into each table
+                        /*$sqldump .= "INSERT INTO `" . $table[0] . "` (";
+                        # ARRAY
+                        $rows = Array();
+                        # LOOP: Get the tables
+                        foreach ($this->db->query("DESCRIBE " . $table[0]) AS $row) {
+                            $rows[] = "`" . $row[0] . "`";
+                        }
+                        $sqldump .= implode(', ', $rows);
+                        $sqldump .= ") VALUES(";*/
+                        $sqldump .= "INSERT INTO `" . $table[0] . "` VALUES(";
+                        # ARRAY
+                        $cdata = Array();
+                        # LOOP
+                        for ($i = 0; $i < $c_rows; $i++) {
+                            if (is_null($data[$i])) {
+                                $cdata[] = "null";
+                            } else {
+                                $new_lines = $this->escape($data[$i]);
+                                $cdata[] = "'" . $new_lines . "'";
+                            }
+                        }
+                        $sqldump .= implode(', ', $cdata);
+                        $sqldump .= ");\n";
+                    }
+                }
+            }
+
+            // Backup views
+            $tables = $this->db->query("SHOW FULL TABLES WHERE Table_Type = 'VIEW'");
+            # LOOP: Get the tables
+            if (is_array($tables) && $tables) {
+                $sqldump .= "\n\n\n";
+                foreach ($tables AS $table) {
+                    // 忽略表
+                    if (in_array($table[0], $this->ignoreTables)) {
+                        continue;
+                    }
+                    foreach ($this->db->query("SHOW CREATE VIEW " . $table[0]) AS $field) {
+                        $sqldump .= "--\n";
+                        $sqldump .= "-- Remove the view if it exists\n";
+                        $sqldump .= "--\n\n";
+                        $sqldump .= "DROP VIEW IF EXISTS `{$field[0]}`;\n\n";
+                        $sqldump .= "--\n";
+                        $sqldump .= "-- Create the view if it not exists\n";
+                        $sqldump .= "--\n\n";
+                        $sqldump .= "{$field[1]};\n\n";
+                    }
                 }
             }
         }

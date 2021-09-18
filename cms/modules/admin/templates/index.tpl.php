@@ -21,7 +21,7 @@
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>jquery.nicescroll.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>layer/layer.js"></script>
 <script type="text/javascript">
-var pc_hash = '<?php echo dr_get_csrf_token()?>';
+var pc_hash = '<?php echo dr_get_csrf_token();?>';
 if (top.location!=self.location){
 top.location="<?php echo SELF;?>";
 }

@@ -70,7 +70,7 @@ $(function() {
             type: "POST",
             dataType: "json",
             url: '?m=admin&c=database&a=import&pc_hash='+pc_hash,
-            data: {action: 'backup'},
+            data: {action: 'backup', csrf_test_name: csrf_hash},
             success: function(json) {
                 if (json.code == 1) {
                     layer.close(loading);
@@ -116,7 +116,7 @@ $(function() {
                 type: "POST",
                 dataType: "json",
                 url: '?m=admin&c=database&a=import&pc_hash='+pc_hash,
-                data: {action: 'delete', file: $(that).data('file')},
+                data: {action: 'delete', file: $(that).data('file'), csrf_test_name: csrf_hash},
                 success: function(json) {
                     layer.close(loading);
                     if (json.code == 1) {

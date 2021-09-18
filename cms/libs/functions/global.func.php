@@ -2675,7 +2675,6 @@ function title_style($style, $html = 1) {
  * @param $siteid   站点id
  */
 function siteurl($siteid) {
-	static $sitelist;
 	if(!$siteid) return WEB_PATH;
 	if(empty($sitelist)) $sitelist = siteinfo($siteid);
 	if (!$sitelist) return '';
@@ -2686,7 +2685,6 @@ function siteurl($siteid) {
  * @param $siteid   站点id
  */
 function sitemobileurl($siteid) {
-	static $sitelist;
 	if(!$siteid) return WEB_PATH.'index.php?m=mobile';
 	if(empty($sitelist)) $sitelist = siteinfo($siteid);
 	if (!$sitelist) return '';

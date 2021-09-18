@@ -36,7 +36,6 @@ include $this->admin_tpl('header');?>
 </style>
 <div class="page-content main-content">
 <form action="" class="form-horizontal" method="post" name="myform" id="myform">
-<input type="hidden" name="tabletype" value="db" id="cmstables">
 <input name="dosubmit" type="hidden" value="1">
 <div class="portlet light bordered">
     <div class="portlet-title tabbable-line">
@@ -95,6 +94,7 @@ if(is_array($infos)){
 <div class="row list-footer table-checkable">
     <div class="col-md-7 fc-list-select">
         <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline"><input type="checkbox" class="group-checkable" data-set=".checkboxes" /><span></span></label>
+        <label><button name="dosubmit" type="button" class="btn green btn-sm btn-backup"> <i class="fa fa-database"></i> <?php echo L('backup_starting');?></button></label>
         <label><button name="dosubmit" type="button" onclick="dr_bfb_submit('<?php echo L('batch_optimize')?>', 'myform', '<?php echo SELF;?>?m=admin&c=database&a=public_add&operation=y')" class="btn green btn-sm"> <i class="fa fa-refresh"></i> <?php echo L('batch_optimize');?></button></label>
         <label><button name="dosubmit" type="button" onclick="dr_bfb_submit('<?php echo L('batch_repair')?>', 'myform', '<?php echo SELF;?>?m=admin&c=database&a=public_add&operation=x')" class="btn blue btn-sm"> <i class="fa fa-wrench"></i> <?php echo L('batch_repair');?></button></label>
         <label><button name="dosubmit" type="button" onclick="dr_bfb_submit('<?php echo L('batch_flush')?>', 'myform', '<?php echo SELF;?>?m=admin&c=database&a=public_add&operation=s')" class="btn yellow btn-sm"> <i class="fa fa-cogs"></i> <?php echo L('batch_flush');?></button></label>
@@ -109,7 +109,39 @@ if(is_array($infos)){
 </div>
 </body>
 <script type="text/javascript">
-<!--
+$(function() {
+    $(document).on("click", ".btn-backup", function () {
+        // 延迟加载
+        var loading = layer.load(2, {
+            shade: [0.3,'#fff'], //0.1透明度的白色背景
+            time: 5000
+        });
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: '?m=admin&c=database&a=import&menuid=<?php echo $this->input->get('menuid');?>&pc_hash='+pc_hash,
+            data: $("#myform").serialize(),
+            success: function(json) {
+                if (json.code == 1) {
+                    layer.close(loading);
+                    dr_tips(1, json.msg);
+                    if (json.data.url) {
+                        setTimeout("window.location.href = '"+json.data.url+"'", 2000);
+                    } else {
+                        setTimeout("window.location.reload(true)", 2000);
+                    }
+                } else {
+                    layer.close(loading);
+                    dr_tips(0, json.msg);
+                }
+                return false;
+            },
+            error: function(HttpRequest, ajaxOptions, thrownError) {
+                dr_ajax_alert_error(HttpRequest, ajaxOptions, thrownError)
+            }
+        });
+    });
+});
 function show_tbl(obj) {
 	var pdoname = $(obj).val();
 	location.href='?m=admin&c=database&a=export&pdoname='+pdoname+'&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token()?>';
@@ -120,6 +152,5 @@ function showcreat(tblname) {
 function show(tblname) {
 	omnipotent('show','?m=admin&c=database&a=public_repair&operation=show&menuid=<?php echo $this->input->get('menuid');?>&tables='+tblname,tblname,1,'60%','70%')
 }
-//-->
 </script>
 </html>

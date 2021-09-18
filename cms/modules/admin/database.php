@@ -39,6 +39,7 @@ class database extends admin {
 		if(IS_POST) {
 			$action = $this->input->post('action');
 			$file = $this->input->post('file');
+			$tables = $this->input->post('tables') ? $this->input->post('tables') : trim($this->input->get('tables'));
 			if ($action == 'backup') {
 				pc_base::load_sys_class('backup','',0);
 				$admin_founders = explode(',',pc_base::load_config('system','admin_founders'));
@@ -115,6 +116,24 @@ class database extends admin {
 				$file = $backupDir.$file;
 				unlink($file);
 				dr_json(1, L('删除成功'));
+			} else {
+				if(!isset($tables) || !is_array($tables)) dr_json(0, L('select_tbl'));
+				pc_base::load_sys_class('backup','',0);
+				$admin_founders = explode(',',pc_base::load_config('system','admin_founders'));
+				if(!in_array($this->userid,$admin_founders)) {
+					dr_json(0, L('only_fonder_operation'));
+				}
+				if (!class_exists('ZipArchive')) {
+					dr_json(0, L('服务器缺少php-zip组件，无法进行备份操作'));
+				}
+				$database = $database['default'];
+				try {
+					$backup = new backup($database['hostname'], $database['username'], $database['database'], $database['password'], $database['port']);
+					$backup->setTable($tables)->backup($backupDir);
+				} catch (Exception $e) {
+					dr_json(0, L($e->getMessage()));
+				}
+				dr_json(1, L('bakup_succ'), array('url'=>'?m=admin&c=database&a=import&menuid='.$this->input->get('menuid').'&pc_hash='.dr_get_csrf_token()));
 			}
 		} else {
 			$infos = array();

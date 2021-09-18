@@ -699,6 +699,8 @@ form .portlet.light .portlet-body {padding-top: 20px;padding-bottom: 20px;}
 .minicolors-theme-bootstrap .minicolors-swatch {width: 28px;height: 28px;}
 .minicolors-theme-bootstrap .minicolors-swatch .minicolors-swatch-color {width: 28px;height: 28px;}
 .formdate {display: inline-block;vertical-align: middle;}
+.input-time {width: 150px!important;}
+.input-medium {width: 240px!important;}
 .form-date .dateright {margin-right: 0px;}
 .input-group,.input-group-btn,.input-group-btn>.btn {position: relative;}
 .input-group {display: table;border-collapse: separate;}
@@ -730,6 +732,7 @@ form .portlet.light .portlet-body {padding-top: 20px;padding-bottom: 20px;}
 .datetimepicker table tr td span {overflow: hidden!important;}
 .datetimepicker table th {color: #333;font-weight: 400!important;}
 .datetimepicker table td {color: #000;font-weight: 300!important;}
+.datepicker table tr td, .datepicker table tr th {text-align: center;width: 30px;height: 30px;border-radius: 4px;border: none;}
 .datepicker-dropdown .datepicker-days {display: block;}
 .dropdown-menu{position:absolute;top:100%;left:0;z-index:1000;display:none;float:left;min-width:160px;padding:5px 0;margin:2px 0 0;font-size:14px;text-align:left;list-style:none;background-color:#fff;background-clip:padding-box;border:1px solid #ccc;border:1px solid rgba(0,0,0,.15);border-radius:4px;-webkit-box-shadow:0 6px 12px rgba(0,0,0,.175);box-shadow:0 6px 12px rgba(0,0,0,.175);}
 .open>.dropdown-menu {display: block;}
@@ -798,8 +801,12 @@ form .portlet.light .portlet-body {padding-top: 20px;padding-bottom: 20px;}
 	.formdate, .input-group {
 		width: 100%;
 	}
+	.input-time, .input-medium {
+		margin-bottom: 5px;
+	}
 	.input-text, .measure-input, textarea, select, input.date, input.endDate, .input-focus {
 		width: 100%!important;
+		margin-bottom: 5px;
 	}
 	input[name='introcude_length'],input[name='auto_thumb_no'] {
 		width: auto!important;
