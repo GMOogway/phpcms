@@ -1954,7 +1954,7 @@ function get_memberavatar($uid, $size = '') {
 			$avatar = SYS_AVATAR_URL.$avatar_db['filepath'];
 		}
 	} else {
-		$avatar = dr_letter_avatar($memberinfo['nickname']);
+		$avatar = dr_letter_avatar($memberinfo['nickname'] ? $memberinfo['nickname'] : $memberinfo['username']);
 	}
 	return $avatar;
 }
