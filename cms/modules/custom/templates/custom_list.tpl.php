@@ -45,7 +45,7 @@ if(is_array($infos)){
 		<td align="center" width="10%"><a href="###"
 			onclick="view(<?php echo $info['id']?>, '<?php echo new_addslashes($info['title'])?>','lable')"
 			><?php echo L('custom_click_view')?></a></td>
-		<td  align="center"><?php echo date("Y-m-d H:m:s",$info['inputtime']);?></td>
+		<td  align="center"><?php echo dr_date($info['inputtime'], null, 'red');?></td>
 		<td align="center" width="12%"><a href="###"
 			onclick="edit(<?php echo $info['id']?>, '<?php echo new_addslashes($info['title'])?>')"
 			title="<?php echo L('edit')?>"><?php echo L('edit')?></a> |  <a
@@ -75,7 +75,7 @@ if(is_array($infos)){
 <script type="text/javascript">
 
 function edit(id, name) {
-	artdialog('edit','?m=custom&c=custom&a=edit&id='+id,'<?php echo L('edit')?> '+name+' ',720,380);
+	artdialog('edit','?m=custom&c=custom&a=edit&id='+id,'<?php echo L('edit')?> '+name+' ',720,500);
 }
 function view(id, name,flag) {
 	if(flag=='content') {

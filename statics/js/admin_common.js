@@ -537,15 +537,15 @@ function omnipotent(id,linkurl,title,close_type,w,h) {
 		modal:true,
 		draggable:drag
 	});
-	diag.onOk = function(){
-		if(close_type==1) {
-			diag.close();
-		} else {
+	if(!close_type) {
+		diag.onOk = function(){
 			var form = $DW.$('#dosubmit');
 			form.click();
-		}
-		return false;
-	};
+			return false;
+		};
+	} else {
+		diag.cancelText = '关闭(X)';
+	}
 	diag.onCancel=function() {
 		$DW.close();
 	};

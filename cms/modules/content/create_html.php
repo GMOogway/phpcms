@@ -298,9 +298,9 @@ class create_html extends admin {
 		$data = $this->db->get_one(array('siteid'=>$this->siteid));
 		if($data['ishtml']==1) {
 			$html = $this->html->index();
-			showmessage(L('首页更新成功！').$html);
+			showmessage(L('首页更新成功！').$html, 'close');
 		} else {
-			showmessage(L('index_create_close'));
+			showmessage(L('index_create_close'), 'close');
 		}
 	}
 	//生成首页

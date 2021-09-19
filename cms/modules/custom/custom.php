@@ -14,11 +14,10 @@ class custom extends admin {
 		$infos = $this->db->listinfo($where,$order = 'id DESC',$page, $pages = '30');
 		$pages = $this->db->pages;
 		
-		$big_menu = array('javascript:artdialog(\'add\',\'?m=custom&c=custom&a=add\',\''.L('custom_add').'\',760,380);void(0);', L('custom_add'));
+		$big_menu = array('javascript:artdialog(\'add\',\'?m=custom&c=custom&a=add\',\''.L('custom_add').'\',760,500);void(0);', L('custom_add'));
 		include $this->admin_tpl('custom_list');
 	}
 
-	
 	//添加
  	public function add() {
  		if($this->input->post('dosubmit')) {
@@ -44,8 +43,7 @@ class custom extends admin {
 		}
 
 	}
-	
-	
+
 	public function edit() {
 		if($this->input->post('dosubmit')){
  			$id = intval($this->input->get('id'));
@@ -68,12 +66,10 @@ class custom extends admin {
 		}
 
 	}
-	
-	
 
 	/**
 	 * 删除 
-	 * @param	intval	$sid	幻灯片ID，递归删除
+	 * @param	intval	$sid	ID，递归删除
 	 */
 	public function delete() {
   		if((!$this->input->get('id') || empty($this->input->get('id'))) && (!$this->input->post('id') || empty($this->input->post('id')))) {
@@ -81,7 +77,7 @@ class custom extends admin {
 		} else {
 			if(is_array($this->input->post('id'))){
 				foreach($this->input->post('id') as $id_arr) {
- 					//批量删除幻灯片
+ 					//批量删除
 					$this->db->delete(array('id'=>$id_arr));
 					//更新附件状态
 					if(SYS_ATTACHMENT_STAT && SYS_ATTACHMENT_DEL) {
@@ -93,7 +89,7 @@ class custom extends admin {
 			}else{
 				$id = intval($this->input->get('id'));
 				if($id < 1) return false;
-				//删除幻灯片
+				//删除
 				$result = $this->db->delete(array('id'=>$id));
 				
 				if($result){
@@ -105,25 +101,25 @@ class custom extends admin {
 			showmessage(L('operation_success'), HTTP_REFERER);
 		}
 	}
-	 
+
 	public function view_content(){
+		$show_header = $show_dialog = $show_pc_hash = '';
 		$id=intval($this->input->get('id'));
 		$info = $this->db->get_one(array('id'=>$id));
-
 		if(!$info) showmessage(L('custom_exit'));
 		$content=$info['content'];
  		include $this->admin_tpl('custom_content');
 	}
 
 	public function view_lable(){
+		$show_header = $show_dialog = $show_pc_hash = '';
 		$id=intval($this->input->get('id'));
 		$info = $this->db->get_one(array('id'=>$id));
 		if(!$info) showmessage(L('custom_exit'));
 		extract($info); 
  		include $this->admin_tpl('custom_get_lable');
 	}
-    
-	
+
 	/**
 	 * 说明:对字符串进行处理
 	 * @param $string 待处理的字符串
@@ -133,8 +129,5 @@ class custom extends admin {
 		$string = addslashes(str_replace(array("\r", "\n"), array('', ''), $string));
 		return $isjs ? 'document.write("'.$string.'");' : $string;
 	}
- 
- 
-	
 }
 ?>

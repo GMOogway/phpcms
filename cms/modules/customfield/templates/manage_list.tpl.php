@@ -71,9 +71,9 @@ foreach($root as $k => $r){ ?>
 		<input type="hidden" value="1" name="postdata[<?php echo $j ?>][options]" class="dataoptions" />
 		<input name="postdata[<?php echo $j ?>][listorder]" type='text' size='3' value='<?php echo $f['listorder']?>' class="input-text-c" />
 		</td>
-		<td align="center"><input name="postdata[<?php echo $j ?>][name]" type='text' value='<?php echo $f['name']?>' class="input-text" style="width:200px" /></td>
-		<td align="center"><textarea name="postdata[<?php echo $j ?>][val]" class="input-text" style="width:400px" rows="2"><?php echo $f['val']?></textarea></td>
-		<td align="center"><input name="postdata[<?php echo $j ?>][description]" type='text' value='<?php echo $f['description']?>' class="input-text" style="width:200px" /></td>
+		<td align="center"><input name="postdata[<?php echo $j ?>][name]" type='text' value='<?php echo $f['name']?>' class="input-text" style="width:auto!important;" /></td>
+		<td align="center"><textarea name="postdata[<?php echo $j ?>][val]" class="input-text" style="width:auto!important;" rows="2"><?php echo $f['val']?></textarea></td>
+		<td align="center"><input name="postdata[<?php echo $j ?>][description]" type='text' value='<?php echo $f['description']?>' class="input-text" style="width:auto!important;" /></td>
 		<td align="center"><label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="postdata[<?php echo $j ?>][conf][status]" value="1" <?php if($f['conf']['status'] == 1) echo " checked='checked'"; ?>  /><span></span></label></td>
 		<td align="center"><label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="postdata[<?php echo $j ?>][conf][textarea]" value="1" <?php if($f['conf']['textarea'] == 1) echo " checked='checked'"; ?>  /><span></span></label></td>
 		<td align="center"><a href="javascript:;" onclick="delTr('tr<?php echo $j ?>')"><?php echo L('delete');?></a></td>
@@ -103,9 +103,9 @@ foreach($root as $k => $r){ ?>
 		trHtml  +=	"<input type='hidden' value='2' name='postdata[" + addnum + "][options]' class='dataoptions' />";
 		trHtml  +=	"<input name='postdata[" + addnum + "][listorder]' type='text' size='3' value='0' class='input-text-c' />";
 		trHtml  +=	"</td>";
-		trHtml  +=	"<td align='center'><input name='postdata[" + addnum + "][name]' type='text' value='' class='input-text' style='width:200px' /></td>";
-		trHtml  +=	"<td align='center'><textarea name='postdata[" + addnum + "][val]' class='input-text' style='width:400px' rows='2'></textarea></td>";
-		trHtml  +=	"<td align='center'><input name='postdata[" + addnum + "][description]' type='text' value='' class='input-text' style='width:200px' /></td>";
+		trHtml  +=	"<td align='center'><input name='postdata[" + addnum + "][name]' type='text' value='' class='input-text' style='width:auto!important;' /></td>";
+		trHtml  +=	"<td align='center'><textarea name='postdata[" + addnum + "][val]' class='input-text' style='width:auto!important;' rows='2'></textarea></td>";
+		trHtml  +=	"<td align='center'><input name='postdata[" + addnum + "][description]' type='text' value='' class='input-text' style='width:auto!important;' /></td>";
 		trHtml  +=	"<td align='center'><label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' name='postdata[" + addnum + "][conf][status]' value='1' checked='checked' /><span></span></label></td>";
 		trHtml  +=	"<td align='center'><label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' name='postdata[" + addnum + "][conf][textarea]' value='1' /><span></span></label></td>";
 		trHtml  +=	"<td align='center'><a href='javascript:;' onclick=\"delTr('ntr"+ addnum +"')\"><?php echo L('delete');?></a></td>";
