@@ -670,20 +670,23 @@ class member extends admin {
 		$sitelist =getcache('sitelist', 'commons');
 
 		$this->db->set_model($modelid);
-		$member_modelinfo = $this->db->get_one(array('userid'=>$userid));
+		$member_modelinfo_arr = $this->db->get_one(array('userid'=>$userid));
 		//模型字段名称
 		$model_fieldinfo = getcache('model_field_'.$modelid, 'model');
 	
 		//图片字段显示图片
 		foreach($model_fieldinfo as $k=>$v) {
+			if($v['formtype'] == 'omnipotent') continue;
 			if($v['formtype'] == 'image') {
-				$member_modelinfo[$k] = "<a href='".$member_modelinfo[$k]."' target='_blank'><img src='".$member_modelinfo[$k]."' height='40' widht='40' onerror=\"this.src='".IMG_PATH."member/nophoto.gif'\"></a>";
+				$member_modelinfo[$v['name']] = "<a href='".$member_modelinfo_arr[$k]."' target='_blank'><img src='".$member_modelinfo_arr[$k]."' height='40' widht='40' onerror=\"this.src='".IMG_PATH."member/nophoto.gif'\"></a>";
+			} elseif($v['formtype'] == 'datetime' && $v['fieldtype'] == 'int') {	//如果为日期字段
+				$member_modelinfo[$v['name']] = format::date($member_modelinfo_arr[$k], $v['format']);
 			} elseif($v['formtype'] == 'images') {
-				$tmp = string2array($member_modelinfo[$k]);
-				$member_modelinfo[$k] = '';
+				$tmp = string2array($member_modelinfo_arr[$k]);
+				$member_modelinfo[$v['name']] = '';
 				if(is_array($tmp)) {
 					foreach ($tmp as $tv) {
-						$member_modelinfo[$k] .= " <a href='".$tv['url']."' target='_blank'><img src='".$tv['url']."' height='40' widht='40' onerror=\"this.src='".IMG_PATH."member/nophoto.gif'\"></a>";
+						$member_modelinfo[$v['name']] .= " <a href='".$tv['url']."' target='_blank'><img src='".$tv['url']."' height='40' widht='40' onerror=\"this.src='".IMG_PATH."member/nophoto.gif'\"></a>";
 					}
 					unset($tmp);
 				}
@@ -694,39 +697,26 @@ class member extends admin {
 						$box_tmp_arr = explode('|', trim($boxv));
 						if(is_array($box_tmp_arr) && isset($box_tmp_arr[1]) && isset($box_tmp_arr[0])) {
 							$box_tmp[$box_tmp_arr[1]] = $box_tmp_arr[0];
-							$tmp_key = intval($member_modelinfo[$k]);
+							$tmp_key = intval($member_modelinfo_arr[$k]);
 						}
 					}
 				}
 				if(isset($box_tmp[$tmp_key])) {
-					$member_modelinfo[$k] = $box_tmp[$tmp_key];
+					$member_modelinfo[$v['name']] = $box_tmp[$tmp_key];
 				} else {
-					$member_modelinfo[$k] = $member_modelinfo_arr[$k];
+					$member_modelinfo[$v['name']] = $member_modelinfo_arr[$k];
 				}
 				unset($tmp, $tmp_key, $box_tmp, $box_tmp_arr);
 			} elseif($v['formtype'] == 'linkage') {	//如果为联动菜单
 				$tmp = string2array($v['setting']);
-				$tmpid = $tmp['linageid'];
+				$tmpid = $tmp['linkageid'];
 				$linkagelist = getcache($tmpid, 'linkage');
-				$fullname = $this->_get_linkage_fullname($member_modelinfo[$k], $linkagelist);
-				
+				$fullname = $this->_get_linkage_fullname($member_modelinfo_arr[$k], $linkagelist);
+
 				$member_modelinfo[$v['name']] = substr($fullname, 0, -1);
 				unset($tmp, $tmpid, $linkagelist, $fullname);
 			} else {
-				$member_modelinfo[$k] = $member_modelinfo[$k];
-			}
-		}
-
-		$member_fieldinfo = array();
-		//交换数组key值
-		foreach($model_fieldinfo as $v) {
-			if(!empty($member_modelinfo) && array_key_exists($v['field'], $member_modelinfo)) {
-				$tmp = $member_modelinfo[$v['field']];
-				unset($member_modelinfo[$v['field']]);
-				$member_fieldinfo[$v['name']] = $tmp;
-				unset($tmp);
-			} else {
-				$member_fieldinfo[$v['name']] = '';
+				$member_modelinfo[$v['name']] = $member_modelinfo_arr[$k];
 			}
 		}
 

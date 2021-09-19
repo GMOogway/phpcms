@@ -11,7 +11,7 @@ class backup {
     private $name = '';
     private $pass = '';
     private $port = '';
-    private $tables = ['*'];
+    private $tables = [];
     private $ignoreTables = [];
     private $db;
     private $ds = "\n";
@@ -71,7 +71,18 @@ class backup {
     }
 
     private function _init() {
+        # COUNT
+        $ct = 0;
+        # CONTENT
+        $sqldump = '';
+        # COPYRIGHT & OPTIONS
+        $sqldump .= "-- SQL Dump by Erik Edgren\n";
+        $sqldump .= "-- version 1.0\n";
+        $sqldump .= "--\n";
+        $sqldump .= "-- SQL Dump created: " . date('F jS, Y \@ g:i a') . "\n\n";
+        $sqldump .= "SET SQL_MODE=\"NO_AUTO_VALUE_ON_ZERO\";\n";
         if ($this->tables) {
+            # LOOP: Get the tables
             foreach ($this->tables AS $table) {
                 # COUNT
                 $ct++;
@@ -123,7 +134,7 @@ class backup {
                         $rows = Array();
                         # LOOP: Get the tables
                         foreach ($this->db->query("DESCRIBE " . $table) AS $row) {
-                            $rows[] = "`" . $row . "`";
+                            $rows[] = "`" . $row[0] . "`";
                         }
                         $sqldump .= implode(', ', $rows);
                         $sqldump .= ") VALUES(";*/
@@ -145,16 +156,6 @@ class backup {
                 }
             }
         } else {
-            # COUNT
-            $ct = 0;
-            # CONTENT
-            $sqldump = '';
-            # COPYRIGHT & OPTIONS
-            $sqldump .= "-- SQL Dump by Erik Edgren\n";
-            $sqldump .= "-- version 1.0\n";
-            $sqldump .= "--\n";
-            $sqldump .= "-- SQL Dump created: " . date('F jS, Y \@ g:i a') . "\n\n";
-            $sqldump .= "SET SQL_MODE=\"NO_AUTO_VALUE_ON_ZERO\";\n";
             $tables = $this->db->query("SHOW FULL TABLES WHERE Table_Type != 'VIEW'");
             # LOOP: Get the tables
             foreach ($tables AS $table) {

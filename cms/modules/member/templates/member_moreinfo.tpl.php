@@ -97,7 +97,7 @@
 <fieldset>
 	<legend><?php echo L('more_configuration')?></legend>
 	<table width="100%" class="table_form">
-	<?php foreach($member_fieldinfo as $k=>$v) {?>
+	<?php foreach($member_modelinfo as $k=>$v) {?>
 		<tr>
 			<td width="120"><?php echo $k?></td> 
 			<td><?php echo $v?></td>
@@ -106,8 +106,6 @@
 	</table>
 </fieldset>
 </div>
-<div class="bk15"></div>
-<input type="button" class="dialog" name="dosubmit" id="dosubmit" onclick="ownerDialog.close();"/>
 </div>
 </div>
 </body>

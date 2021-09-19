@@ -172,7 +172,7 @@ function checkuid() {
 }
 
 function member_infomation(userid, modelid, name) {
-	artdialog('modelinfo','?m=member&c=member&a=memberinfo&userid='+userid+'&modelid='+modelid,'<?php echo L('memberinfo')?>',700,500);
+	omnipotent('modelinfo','?m=member&c=member&a=memberinfo&userid='+userid+'&modelid='+modelid,'<?php echo L('memberinfo')?>',1,700,500);
 }
 
 //-->
