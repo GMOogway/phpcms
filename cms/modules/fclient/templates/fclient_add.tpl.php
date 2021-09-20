@@ -2,11 +2,6 @@
 defined('IN_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');
 ?>
-<link rel="stylesheet" type="text/css" href="<?php echo JS_PATH?>calendar/jscal2.css"/>
-<link rel="stylesheet" type="text/css" href="<?php echo JS_PATH?>calendar/border-radius.css"/>
-<link rel="stylesheet" type="text/css" href="<?php echo JS_PATH?>calendar/win2k.css"/>
-<script type="text/javascript" src="<?php echo JS_PATH?>calendar/calendar.js"></script>
-<script type="text/javascript" src="<?php echo JS_PATH?>calendar/lang/en.js"></script>
 <script type="text/javascript">
 <!--
 	$(function(){
@@ -88,32 +83,12 @@ include $this->admin_tpl('header','admin');
 	
 	<tr>
 		<th width="100"><?php echo L('inputtime')?>：</th>
-		<td><input type="text" name="fclient[inputtime]" id="fclient_inputtime" size="30" class="date"><button class="button" type="button" onclick="dr_to_clear('fclient_inputtime')"><?php echo L('clear')?></button><script type="text/javascript">
-			Calendar.setup({
-			weekNumbers: true,
-		    inputField : "fclient_inputtime",
-		    trigger    : "fclient_inputtime",
-		    dateFormat: "%Y-%m-%d",
-		    showTime: false,
-		    minuteStep: 1,
-		    onSelect   : function() {this.hide();}
-			});
-        </script></td>
+		<td><?php echo form::date('fclient[inputtime]','',0,0,'true',0,0,1);?></td>
 	</tr>
 	
 	<tr>
 		<th width="100"><?php echo L('endtime')?>：</th>
-		<td><input type="text" name="fclient[endtime]" id="fclient_endtime" size="30" class="date"><button class="button" type="button" onclick="dr_to_clear('fclient_endtime')"><?php echo L('clear')?></button><script type="text/javascript">
-			Calendar.setup({
-			weekNumbers: true,
-		    inputField : "fclient_endtime",
-		    trigger    : "fclient_endtime",
-		    dateFormat: "%Y-%m-%d",
-		    showTime: false,
-		    minuteStep: 1,
-		    onSelect   : function() {this.hide();}
-			});
-        </script></td>
+		<td><?php echo form::date('fclient[endtime]','',0,0,'true',0,0,1);?></td>
 	</tr>
 
 <tr>

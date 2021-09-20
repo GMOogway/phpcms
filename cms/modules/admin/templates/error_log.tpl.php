@@ -45,7 +45,8 @@ jQuery(document).ready(function() {
             <tr>
             <th width="80" align="left"><?php echo L('编号');?></th>
             <th width="160" align="left"><?php echo L('时间');?></th>
-            <th align="left"><?php echo L('错误');?></th>
+            <th width="80" style="text-align: center;"><?php echo L('类型');?></th>
+            <th align="left"><?php echo L('日志');?></th>
             </tr>
         </thead>
     <tbody>
@@ -56,6 +57,7 @@ if(is_array($list)){
 	<tr>
 	<td><?php echo $t['id'];?></td>
 	<td><?php echo $t['time'];?></td>
+	<td style="text-align: center"><?php echo $t['type'];?></td>
 	<td><a href="javascript:show_file_code()" style="color:#ff0000;"><?php echo $t['message'];?></a></td>
 	</tr>
 <?php 

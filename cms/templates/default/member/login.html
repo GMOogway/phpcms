@@ -13,6 +13,7 @@
     <div class="title">{L('member').L('login')}</div>
     <div class="form">
         <form action="" method="post">
+        {dr_form_hidden()}
         <input type="hidden" name="forward" id="forward" value="{$forward}">
             <ul>
                 <li><input type="text" class="input" name="username" id="username" placeholder="请输入{L('username')}" required value=""></li>                 

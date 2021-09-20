@@ -360,32 +360,57 @@ class index extends admin {
 		$total = 0;
 		$file = CACHE_PATH.'caches_error/caches_data/log-'.date('Y-m-d',$time).'.php';
 		if (is_file($file)) {
-			$c = file_get_contents($file);
-			$data = explode(PHP_EOL, trim(str_replace('<?php defined(\'IN_CMS\') OR exit(\'No direct script access allowed\'); ?>'.PHP_EOL.PHP_EOL, '', str_replace(array(chr(13), chr(10)), PHP_EOL, $c)), PHP_EOL));
-			$data && $data = array_reverse($data);
-			//$total = max(0, count($data));$total = $data ? max(0, count($data) - 1) : 0;
-			$total = max(0, substr_count($c, '- '.date('Y-m-d', $time).' '));
-			$limit = ($page - 1) * 10;
-			$i = $j = 0;
-			foreach ($data as $t) {
-				if ($t && $i >= $limit && $j < 10) {
-					$v = explode(' --> ', $t);
-					$time2 = $v ? explode(' - ', $v[0]) : [1=>''];
-					if ($time2[1]) {
-						$value = array(
-							'time' => $time2[1] ? $time2[1] : '',
-						);
-						$value['id'] = $i + 1;
-						$value['message'] = str_replace([PHP_EOL, chr(13), chr(10)], ' ', htmlentities($v[1]));
-						if (preg_match('/'.$value['time'].' \-\->(.*)\{main\}/sU', $c, $mt)) {
-							$value['info'] = str_replace("'", '\\\'', str_replace([PHP_EOL, chr(13), chr(10)], '<br>', $mt[1]));
+			$config = getcache('common','commons');
+			if (isset($config['errorlog_size']) && $config['errorlog_size']) {
+				$errorlog_size = $config['errorlog_size'];
+			} else {
+				$errorlog_size = 2;
+			}
+			if (filesize($file) > 1024*1024*$errorlog_size) {
+				$list[] = [
+					'id' => 1,
+					'time' => date('Y-m-d', $time),
+					'type' => '<span class="label label-warning"> '.L('提醒').' </span>',
+					'message' => '此日志文件大于'.$errorlog_size.'MB，请使用Ftp等工具查看此文件：'.$file,
+				];
+			} else {
+				$c = file_get_contents($file);
+				$data = explode(PHP_EOL, trim(str_replace('<?php defined(\'IN_CMS\') OR exit(\'No direct script access allowed\'); ?>'.PHP_EOL.PHP_EOL, '', str_replace(array(chr(13), chr(10)), PHP_EOL, $c)), PHP_EOL));
+				$data && $data = array_reverse($data);
+				//$total = max(0, count($data));$total = $data ? max(0, count($data) - 1) : 0;
+				$total = max(0, substr_count($c, '- '.date('Y-m-d', $time).' '));
+				$limit = ($page - 1) * 10;
+				$i = $j = 0;
+				foreach ($data as $t) {
+					if ($t && $i >= $limit && $j < 10) {
+						$v = explode(' --> ', $t);
+						$time2 = $v ? explode(' - ', $v[0]) : [1=>''];
+						if ($time2[1]) {
+							$value = array(
+								'time' => $time2[1] ? $time2[1] : '',
+								'type' => '',
+							);
+							if ($time2[0] == 'DEBUG') {
+								$value['type'] = '<span class="label label-success"> '.L('调试').' </span>';
+							} elseif ($time2[0] == 'INFO') {
+								$value['type'] = '<span class="label label-default"> '.L('信息').' </span>';
+							} elseif ($time2[0] == 'WARNING') {
+								$value['type'] = '<span class="label label-warning"> '.L('提醒').' </span>';
+							} else {
+								$value['type'] = '<span class="label label-danger"> '.L('错误').' </span>';
+							}
+							$value['id'] = $i + 1;
+							$value['message'] = str_replace([PHP_EOL, chr(13), chr(10)], ' ', htmlentities($v[1]));
+							if (preg_match('/'.$value['time'].' \-\->(.*)\{main\}/sU', $c, $mt)) {
+								$value['info'] = str_replace("'", '\\\'', str_replace([PHP_EOL, chr(13), chr(10)], '<br>', $mt[1]));
+							}
+							$value['message'] = str_replace("'", '\\\'', $value['message']);
+							$list[] = $value;
+							$j ++;
 						}
-						$value['message'] = str_replace("'", '\\\'', $value['message']);
-						$list[] = $value;
-						$j ++;
 					}
+					$i ++;
 				}
-				$i ++;
 			}
 		}
 		$time = date('Y-m-d', $time);
@@ -398,6 +423,15 @@ class index extends admin {
 		$file = CACHE_PATH.'caches_error/caches_data/log-'.date('Y-m-d',$time).'.php';
 		if (!is_file($file)) {
 			showmessage(L('文件不存在：'.$file),'','','edit');
+		}
+		$config = getcache('common','commons');
+		if (isset($config['errorlog_size']) && $config['errorlog_size']) {
+			$errorlog_size = $config['errorlog_size'];
+		} else {
+			$errorlog_size = 2;
+		}
+		if (filesize($file) > 1024*1024*$errorlog_size) {
+			exit('此日志文件大于'.$errorlog_size.'MB，请使用Ftp等工具查看此文件：'.$file);
 		}
 		$code = file_get_contents($file);
 		

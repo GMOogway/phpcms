@@ -135,7 +135,7 @@ class cache {
                     $st = SYS_TIME - $ft;
                     if ($st > $time) {
                         unlink($code_file);
-                        log_message('error', '缓存（'.$name.'）自动失效（'.FC_NOW_URL.'）超时: '.$st.'秒');
+                        log_message('debug', '缓存（'.$name.'）自动失效（'.FC_NOW_URL.'）超时: '.$st.'秒');
                         return ''; // 超出了指定的时间时
                     }
                 }

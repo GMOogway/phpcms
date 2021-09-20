@@ -169,6 +169,8 @@ define('MOBILE_IMG_PATH', pc_base::load_config('system','mobile_img_path'));
 define('APP_PATH', pc_base::load_config('system','app_path'));
 //动态程序手机路径
 define('MOBILE_PATH', pc_base::load_config('system','mobile_path'));
+// 调试器开关
+define('SYS_DEBUG', 1);
 //编辑器模式
 define('SYS_EDITOR', pc_base::load_config('system','sys_editor') ? pc_base::load_config('system','sys_editor') : 0);
 //Cookie前缀
@@ -203,7 +205,7 @@ define('SYS_ATTACHMENT_URL', pc_base::load_config('system','sys_attachment_url')
 define('SYS_ATTACHMENT_SAVE_TYPE', pc_base::load_config('system','sys_attachment_save_type'));
 define('SYS_ATTACHMENT_SAVE_DIR', pc_base::load_config('system','sys_attachment_save_dir'));
 
-define('CI_DEBUG', IS_DEV ? 1 : IS_ADMIN && pc_base::load_config('system','errorlog'));
+define('CI_DEBUG', IS_DEV ? 1 : IS_ADMIN && SYS_DEBUG);
 
 // 显示错误提示
 IS_ADMIN || IS_DEV ? error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING ^ E_STRICT ^ E_DEPRECATED) : error_reporting(0);
@@ -335,7 +337,6 @@ if (defined('SYS_CSRF') && SYS_CSRF && defined('IS_API') && !IS_API && !in_array
 			dr_json(0, '跨站验证禁止此操作', 'CSRFVerify');
 		}
 		unset($_POST['csrf_test_name']);
-		is_file(CACHE_PATH.'caches_file/caches_data/'.md5(SYS_KEY.SITE_ID.'csrf_token')) && unlink(CACHE_PATH.'caches_file/caches_data/'.md5(SYS_KEY.SITE_ID.'csrf_token'));
 	}
 }
 

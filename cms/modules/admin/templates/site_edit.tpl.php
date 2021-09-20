@@ -401,7 +401,7 @@ function default_list() {
   <tr>
     <th width="130" valign="top"><?php echo L('site_att_watermark_pos')?></th>
     <td>
-      <div class="btn-group fc-3x3" data-toggle="buttons">
+      <div class="btn-group c-3x3" data-toggle="buttons">
         <?php foreach ($locate as $i=>$t) {?>
         <label class="btn btn-default<?php if ($setting['locate'] == $i) {?> active<?php }?><?php if (strpos($i, 'bottom')!==false) {?> btn2<?php }?>"><input type="radio" name="setting[locate]" value="<?php echo $i?>"<?php if ($setting['locate'] == $i) {?> checked<?php }?> class="toggle"><?php echo L($t)?></label>
         <?php }?>

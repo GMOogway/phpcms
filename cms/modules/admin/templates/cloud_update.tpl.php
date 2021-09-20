@@ -52,7 +52,7 @@ table td[class*=col-],table th[class*=col-] {position: static;float: none;displa
 .table-checkable tr>td:first-child,.table-checkable tr>th:first-child {text-align: center;max-width: 50px;min-width: 40px;padding-left: 0;padding-right: 0;}
 .table td,.table th {white-space: nowrap;text-overflow: ellipsis;overflow: hidden;}
 .table>tbody>tr>td,.table>tbody>tr>th,.table>tfoot>tr>td,.table>tfoot>tr>th,.table>thead>tr>td,.table>thead>tr>th {vertical-align: middle;}
-.fc-head-table thead th {background-color: #edf2f7;}
+.head-table thead th {background-color: #edf2f7;}
 .table-striped>tbody>tr:nth-of-type(odd) {background-color: #fff!important;}
 .label-success {background-color: #3ea9e2;color: #fff!important;}
 .label-success[href]:focus, .label-success[href]:hover {background-color: #27a4b0;}

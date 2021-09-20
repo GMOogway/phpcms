@@ -226,6 +226,7 @@ function show_protocol() {
 
 {if !isset($_GET['t'])}
 <form method="post" action="" id="myform">
+{dr_form_hidden()}
 	<input type="hidden" name="siteid" value="{$siteid}" />
 
 	<div class="col-left form-login form-reg">

@@ -14,6 +14,7 @@
     <div class="title">{L('member').L('register')}</div>
     <div class="form">
         <form method="post" action="" id="myform" onsubmit="return checkall()">
+        {dr_form_hidden()}
             <ul>
                 <li><input type="text" class="input" name="username" id="username" placeholder="请输入{L('username')}" value=""></li>
                 <li><input type="password" class="input" name="password" id="password" placeholder="请输入{L('password')}" value=""></li>

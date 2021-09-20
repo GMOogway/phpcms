@@ -122,6 +122,7 @@
 
 {if !isset($_GET['t'])}
 <form method="post" action="index.php?m=member&c=index&a=register" id="myform">
+{dr_form_hidden()}
 	<input type="hidden" name="siteid" value="{$siteid}" />
 	<input type="hidden" name="modelid" value="10" />
 	<div class="col-left form-login form-reg">
@@ -176,6 +177,7 @@
         <h5><a href="javascript:;" onclick="show();" class="blue">与我的账号绑定 </a></h5>
         <div id="e-login" style="display:none">
         <form method="post" action="index.php?m=member&c=index&a=login">
+        {dr_form_hidden()}
             <div class="input">
                 <label>{L('username')}：</label><input type="text" id="username" name="username" size="22" class="input-text">
             </div>
