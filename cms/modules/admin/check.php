@@ -574,6 +574,7 @@ class check extends admin {
 \'mobile_path\' => \''.(pc_base::load_config('system','mobile_path') ? pc_base::load_config('system','mobile_path') : pc_base::load_config('system','app_path').'mobile/').'\', //动态手机域名配置地址
 \'bdmap_api\' => \''.pc_base::load_config('system','bdmap_api').'\', //百度地图API
 \'sys_editor\' => \''.(pc_base::load_config('system','sys_editor') ? pc_base::load_config('system','sys_editor') : 0).'\', //编辑器模式    0 UEditor 1 CKEditor
+\'sys_max_category\' => \''.(pc_base::load_config('system','sys_max_category') ? pc_base::load_config('system','sys_max_category') : 100).'\', //最大栏目数量限制category
 
 \'charset\' => \''.pc_base::load_config('system','charset').'\', //网站字符集
 \'timezone\' => \''.(pc_base::load_config('system','timezone')=='Etc/GMT-8' ? 8 : (pc_base::load_config('system','timezone') ? pc_base::load_config('system','timezone') : 8)).'\', //网站时区（只对php 5.1以上版本有效），Etc/GMT-8 实际表示的是 GMT+8

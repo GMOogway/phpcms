@@ -106,7 +106,12 @@ class form {
 				$toolbar .= "" . $toolvalue . "],['Maximize'],\r\n";
 			}
 			$str .= "<script type=\"text/javascript\">\r\n";
-			$str .= "var editor = CKEDITOR.replace( '$textareaid',{";
+			$str .= "var editor = CKEDITOR.replace('$textareaid', {";
+			$str .= "on:{";
+			$str .= "change:function(evt){";
+			$str .= "$('#".$textareaid."').html(evt.editor.getData());";
+			$str .= "}";
+			$str .= "},";
 			$str .= "height:{$height},";
 			$str .="textareaid:'".$textareaid."',module:'".$module."',catid:'".$catid."',\r\n";
 			if($allowupload) $str .= "filebrowserUploadUrl : 'index.php?m=attachment&c=attachments&a=upload&module=".$module."&catid=".$catid."&dosubmit=1&args=".$p."&authkey=".$authkey."',\r\n";
@@ -117,7 +122,6 @@ class form {
 			$str .= "[\r\n";
 			$str .= $toolbar;
 			$str .= "]\r\n";
-			//$str .= "fullPage : true";
 			$str .= "});\r\n";
 			$str .= '</script>';
 		} else {

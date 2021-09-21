@@ -34,6 +34,7 @@ class database extends admin {
 	 * 备份与还原
 	 */
 	public function import() {
+		$admin_founders = explode(',',pc_base::load_config('system','admin_founders'));
 		$database = pc_base::load_config('database');
 		$backupDir = CACHE_PATH.'bakup/default/';
 		if(IS_POST) {
@@ -41,11 +42,10 @@ class database extends admin {
 			$file = $this->input->post('file');
 			$tables = $this->input->post('tables') ? $this->input->post('tables') : trim($this->input->get('tables'));
 			if ($action == 'backup') {
-				pc_base::load_sys_class('backup','',0);
-				$admin_founders = explode(',',pc_base::load_config('system','admin_founders'));
 				if(!in_array($this->userid,$admin_founders)) {
 					dr_json(0, L('only_fonder_operation'));
 				}
+				pc_base::load_sys_class('backup','',0);
 				if (!class_exists('ZipArchive')) {
 					dr_json(0, L('服务器缺少php-zip组件，无法进行备份操作'));
 				}
@@ -58,6 +58,9 @@ class database extends admin {
 				}
 				dr_json(1, L('bakup_succ'));
 			} elseif ($action == 'restore') {
+				if(!in_array($this->userid,$admin_founders)) {
+					dr_json(0, L('only_fonder_operation'));
+				}
 				if (!preg_match("/^backup\-([a-z0-9\-]+)\.zip$/i", $file)) {
 					dr_json(0, L('参数不正确'));
 				}
@@ -110,6 +113,9 @@ class database extends admin {
 				}
 				dr_json(1, L('还原成功'));
 			} elseif ($action == 'delete') {
+				if(!in_array($this->userid,$admin_founders)) {
+					dr_json(0, L('only_fonder_operation'));
+				}
 				if (!preg_match("/^backup\-([a-z0-9\-]+)\.zip$/i", $file)) {
 					dr_json(0, L('参数不正确'));
 				}
@@ -117,12 +123,11 @@ class database extends admin {
 				unlink($file);
 				dr_json(1, L('删除成功'));
 			} else {
-				if(!isset($tables) || !is_array($tables)) dr_json(0, L('select_tbl'));
-				pc_base::load_sys_class('backup','',0);
-				$admin_founders = explode(',',pc_base::load_config('system','admin_founders'));
 				if(!in_array($this->userid,$admin_founders)) {
 					dr_json(0, L('only_fonder_operation'));
 				}
+				if(!isset($tables) || !is_array($tables)) dr_json(0, L('select_tbl'));
+				pc_base::load_sys_class('backup','',0);
 				if (!class_exists('ZipArchive')) {
 					dr_json(0, L('服务器缺少php-zip组件，无法进行备份操作'));
 				}
@@ -137,14 +142,16 @@ class database extends admin {
 			}
 		} else {
 			$infos = array();
-			foreach (glob($backupDir . "*.zip") as $filename) {
-				$time = filemtime($filename);
-				$infos[] =
-					[
-						'file' => str_replace($backupDir, '', $filename),
-						'date' => dr_date($time, "Y-m-d H:i:s", 'red'),
-						'size' => format_file_size(filesize($filename))
-					];
+			if(in_array($this->userid,$admin_founders)) {
+				foreach (glob($backupDir . "*.zip") as $filename) {
+					$time = filemtime($filename);
+					$infos[] =
+						[
+							'file' => str_replace($backupDir, '', $filename),
+							'date' => dr_date($time, "Y-m-d H:i:s", 'red'),
+							'size' => format_file_size(filesize($filename))
+						];
+				}
 			}
 			$show_validator = true;
 			include $this->admin_tpl('database_import');

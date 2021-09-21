@@ -205,6 +205,9 @@ $LANG['setting_attachment_file_desc'] = '<font color="gray">默认为关闭，�
 $LANG['setting_attachment_stat_desc'] = '<font color="gray">记录附件使用状态 ，删除文章时同步删除附件。注意: 本功能会加重服务器负担</font>';
 $LANG['editormode'] = '编辑器模式';
 $LANG['setting_category_ajax_desc'] = '<font color="gray">默认为0,即直接显示栏目列表。当栏目层级较多时，可设置首次加载层级，其余使用异步加载，一般设置为2-3</font>';
+$LANG['setting_max_category'] = '最大栏目数量限制';
+$LANG['setting_admin_founders'] = '网站创始人ID';
+$LANG['setting_admin_founders_desc'] = '网站创始人ID，多个ID逗号“,”分隔';
 
 $LANG['setting_admin_log'] = '启用后台管理操作日志';
 $LANG['setting_csrf'] = '跨站验证';

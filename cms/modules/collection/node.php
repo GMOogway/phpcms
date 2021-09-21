@@ -288,7 +288,7 @@ class node extends admin {
 				$url = collection::get_url_lists($url_list, $data);
 				$history_db = pc_base::load_model('collection_history_model');
 				$content_db = pc_base::load_model('collection_content_model');
-				$total = count($url);
+				$total = dr_count($url);
 				$re = 0;
 				if (is_array($url) && !empty($url)) foreach ($url as $v) {
 					if (empty($v['url']) || empty($v['title'])) continue;

@@ -45,6 +45,7 @@ return array(
 'mobile_path' => 'http://localhost/mobile/', //动态手机域名配置地址
 'bdmap_api' => '', //百度地图API
 'sys_editor' => '0', //编辑器模式    0 UEditor 1 CKEditor
+'sys_max_category' => '100', //最大栏目数量限制category
 
 'charset' => 'utf-8', //网站字符集
 'timezone' => '8', //网站时区（只对php 5.1以上版本有效），Etc/GMT-8 实际表示的是 GMT+8

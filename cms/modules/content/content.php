@@ -1610,8 +1610,11 @@ class content extends admin {
 	 * 一键清理演示数据
 	 */
 	public function clear_data() {
+		$admin_founders = explode(',',pc_base::load_config('system','admin_founders'));
+		if(!in_array($_SESSION['userid'],$admin_founders)) {
+			showmessage(L('only_fonder_operation'), 'close');
+		}
 		//清理数据涉及到的数据表
-		
 		if ($this->input->post('dosubmit')) {
 			set_time_limit(0);
 			$models = array('category', 'content', 'hits', 'search', 'position_data', 'comment');

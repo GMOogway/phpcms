@@ -32,6 +32,8 @@ $LANG['thumb_list'] = 'includes thumbnail image';
 $LANG['block_site_index'] = 'Homepage';
 $LANG['checkall_content'] = 'Verify contents';
 $LANG['publish_to_othor_category'] = 'Publish to other columns';
+$LANG['clear_data_message'] = 'A, initialization data has been cleared, do "update cache" and "update cache" operation! <br />2, initialization data have backup to caches/bakup/default/below';
+$LANG['only_fonder_operation'] = 'Creator is able to run this operation only';
 //内容添加表单部分
 $LANG['check_title'] = 'check duplicates';
 $LANG['title_repeat'] = 'Repeat title ';

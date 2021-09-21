@@ -204,6 +204,9 @@ $LANG['setting_attachment_file_desc'] = '<font color="gray">The default is close
 $LANG['setting_attachment_stat_desc'] = '<font color="gray"> to record attachment status. You will remove an attachment once you remove post. NOTE: This function may increase the burden on the server.</font>';
 $LANG['editormode'] = 'Editor mode';
 $LANG['setting_category_ajax_desc'] = '<font color="gray">The default is 0, namely direct display item list. When the column level is large, can be set up for the first time loading level, the remaining use asynchronous loading, generally set to 2 to 3</font>';
+$LANG['setting_max_category'] = 'The largest column limit';
+$LANG['setting_admin_founders'] = 'Founder ID';
+$LANG['setting_admin_founders_desc'] = 'Founder ID, multiple ID comma "," space';
 
 $LANG['setting_admin_log'] = 'Enable backend operation logs';
 $LANG['setting_csrf'] = 'Cross validation';

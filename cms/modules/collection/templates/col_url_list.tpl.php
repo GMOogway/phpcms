@@ -20,7 +20,7 @@
 	<script type="text/javascript">
 	var diag = new Dialog({
 		id:'test',
-		html:'<h2><?php echo L('collection_success')?></h2><span style="fotn-size:16px;"><?php echo L('following_operation')?></span><br /><ul style="fotn-size:14px;"><li><a href="?m=collection&c=node&a=col_content&nodeid=<?php echo $nodeid?>&pc_hash=<?php echo dr_get_csrf_token()?>" target="right" onclick="this.close()"><?php echo L('following_operation_1')?></a></li><li><a href="?m=collection&c=node&a=manage&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token()?>" target="right" onclick="this.close()"><?php echo L('following_operation_2')?></a></li></ul>',
+		html:'<h2><?php echo L('collection_success')?></h2><span style="fotn-size:16px;"><?php echo L('following_operation')?></span><br /><ul style="fotn-size:14px;"><li><a href="javascript:;" onclick="dr_content_go(\'?m=collection&c=node&a=col_content&nodeid=<?php echo $nodeid?>&pc_hash=<?php echo dr_get_csrf_token()?>\');ownerDialog.close();"><?php echo L('following_operation_1')?></a></li><li><a href="javascript:;" onclick="dr_content_go(\'?m=collection&c=node&a=manage&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token()?>\');ownerDialog.close();"><?php echo L('following_operation_2')?></a></li></ul>',
 		width:400,
 		height:200,
 		modal:true

@@ -305,8 +305,8 @@ class index {
 		$arrchild_arr = explode(',',$arrchild_arr);
 		array_shift($arrchild_arr);
 		foreach ($arrchild_arr as $mcatid => $cache) {
-			$setting = string2array($CATEGORYS[$cache]['setting']);
-			if (!$setting['isleft'] || $setting['disabled']) {
+			$arrchild_setting = string2array($CATEGORYS[$cache]['setting']);
+			if (!$arrchild_setting['isleft'] || $arrchild_setting['disabled']) {
 				unset($arrchild_arr[$mcatid]);
 				continue;
 			}

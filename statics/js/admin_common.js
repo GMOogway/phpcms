@@ -115,6 +115,9 @@ function confirmurl(url,message) {
 function redirect(url) {
 	location.href = url;
 }
+function dr_content_go(url) {
+	window.top.$(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.location = url;
+}
 function topinyin(name, from, url) {
 	var val = $("#" + from).val();
 	if ($("#" + name).val()) {

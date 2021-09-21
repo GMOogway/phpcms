@@ -115,6 +115,19 @@ include $this->admin_tpl('header');?>
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('setting_max_category')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control input-large" type="text" id="sys_max_category" name="setconfig[sys_max_category]" value="<?php echo $sys_max_category;?>" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('setting_admin_founders')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control input-large" type="text" id="admin_founders" name="setconfig[admin_founders]" value="<?php echo $admin_founders;?>" >
+                            <span class="help-block"><?php echo L('setting_admin_founders_desc')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('setting_gzip')?></label>
                         <div class="col-md-9">
                             <div class="mt-radio-inline">

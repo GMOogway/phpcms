@@ -32,6 +32,8 @@ $LANG['thumb_list'] = '包含缩略图';
 $LANG['block_site_index'] = '站点首页';
 $LANG['checkall_content'] = '审核内容';
 $LANG['publish_to_othor_category'] = '同时发布到其他栏目';
+$LANG['clear_data_message'] = '一、初始化数据已经清理完毕，请执行“更新栏目缓存”及“更新缓存”操作！<br />二、初始化数据已经备份到caches/bakup/default/下面';
+$LANG['only_fonder_operation'] = '只有创始人才能执行该操作';
 //内容添加表单部分
 $LANG['check_title'] = '检测重复';
 $LANG['title_repeat'] = '标题重复';
@@ -333,7 +335,6 @@ $LANG['videoes_num'] = '考虑网络因素，请每次添加、修改时新加�
 $LANG['other_template_setting'] = '其他模板设置';
 $LANG['admin_content_list'] = '后台信息管理模板：';
 $LANG['member_content_add'] = '会员中心信息添加模板：';
-$LANG['clear_data_message'] = '一、初始化数据已经清理完毕，请执行“更新栏目缓存”及“更新缓存”操作！<br />二、初始化数据已经备份到caches/bakup/default/下面';
 $LANG['please_choose_talbes'] = '请选择需要清理的数据';
 $LANG['models'] = '模型';
 $LANG['video_library'] = '视频库';

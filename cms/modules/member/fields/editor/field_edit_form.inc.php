@@ -21,7 +21,7 @@
     </tr>
 	<tr<?php if (!SYS_EDITOR) {?> style="display: none;"<?php }?>> 
       <td>编辑器颜色：</td>
-      <td><input type="text" id="style_color" name="setting[color]" value="<?php echo $setting['color'];?>" size="6" autocomplete="off" class="input-text" style="height: 30px;"><script type="text/javascript">
+      <td><input type="text" id="style_color" name="setting[color]" value="<?php echo $setting['color'];?>" size="6" autocomplete="off" class="input-text"><script type="text/javascript">
       $(function(){
           $("#style_color").minicolors({
               control: $("#style_color").attr("data-control") || "hue",

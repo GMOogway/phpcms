@@ -139,7 +139,7 @@ define('CHARSET', pc_base::load_config('system','charset'));
 header('Content-Type: text/html; charset='.CHARSET);
 
 // 最大栏目数量限制category
-!defined('MAX_CATEGORY') && define('MAX_CATEGORY', 100);
+!defined('MAX_CATEGORY') && define('MAX_CATEGORY', intval(pc_base::load_config('system','sys_max_category')));
 //temp目录
 define('TEMPPATH', PC_PATH.'temp/');
 //是否来自ajax提交

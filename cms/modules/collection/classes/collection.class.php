@@ -236,7 +236,7 @@ class collection {
 	 * @param string $end     结束
 	 */
 	protected static function cut_html($html, $start, $end) {
-		if (empty($html)) return false;
+		if (empty($html) || empty($start) || empty($end)) return false;
 		$html = str_replace(array("\r", "\n"), "", $html);
 		$start = str_replace(array("\r", "\n"), "", $start);
 		$end = str_replace(array("\r", "\n"), "", $end);
