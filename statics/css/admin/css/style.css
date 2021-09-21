@@ -673,6 +673,7 @@ label {display: inline-block;margin-bottom: 5px;}
 .label:empty {display: none;}
 a.label:focus,a.label:hover {color: #fff;text-decoration: none;cursor: pointer;}
 .label {text-shadow: none!important;font-size: 14px;font-weight: 300;padding: 3px 6px;color: #fff;}
+.badge-default,.label-default {background-color: #bac3d0}
 .label-default[href]:focus,.label-default[href]:hover {background-color: #9ca8bb;}
 .label-primary {background-color: #337ab7;}
 .label-primary[href]:focus,.label-primary[href]:hover {background-color: #286090;}

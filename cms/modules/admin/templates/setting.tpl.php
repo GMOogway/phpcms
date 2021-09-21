@@ -121,13 +121,6 @@ include $this->admin_tpl('header');?>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-2 control-label"><?php echo L('setting_admin_founders')?></label>
-                        <div class="col-md-9">
-                            <input class="form-control input-large" type="text" id="admin_founders" name="setconfig[admin_founders]" value="<?php echo $admin_founders;?>" >
-                            <span class="help-block"><?php echo L('setting_admin_founders_desc')?></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('setting_gzip')?></label>
                         <div class="col-md-9">
                             <div class="mt-radio-inline">
@@ -252,6 +245,15 @@ include $this->admin_tpl('header');?>
                             </div>
                         </div>
                     </div>
+                    <?php if($_SESSION['roleid']==1 && in_array($_SESSION['userid'], $setting_admin_founders)) {?>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('setting_admin_founders')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control input-large" type="text" id="admin_founders" name="setconfig[admin_founders]" value="<?php echo $admin_founders;?>" >
+                            <span class="help-block"><?php echo L('setting_admin_founders_desc')?></span>
+                        </div>
+                    </div>
+                    <?php }?>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('setting_admin_log')?></label>
                         <div class="col-md-9">
