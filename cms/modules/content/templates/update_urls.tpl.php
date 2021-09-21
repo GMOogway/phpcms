@@ -43,7 +43,7 @@ include $this->admin_tpl('header','admin');?>
             <li class="active">
                 <a data-toggle="tab_0"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('according_model').'\',this,{tips: [1, \'#000\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-th-large"></i> <?php if (!is_mobile(0)) {echo L('according_model');}?> </a>
             </li>
-            <?php if ($_SESSION['roleid']==1) {?>
+            <?php if(in_array($_SESSION['userid'], $admin_founders)) {?>
             <li>
                 <a data-toggle="tab_1"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('内容批量替换').'\',this,{tips: [1, \'#000\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-database"></i> <?php if (!is_mobile(0)) {echo L('内容批量替换');}?> </a>
             </li>
@@ -81,6 +81,8 @@ include $this->admin_tpl('header','admin');?>
                                 <button type="button" onclick="dr_iframe_show_html('desc',<?php echo $_v['modelid'];?>)" class="btn drak btn-xs"> <i class="fa fa-th-large"></i> <?php echo L('批量提取描述字段')?> </button>
                                 <button type="button" onclick="dr_iframe_show_html('thumb',<?php echo $_v['modelid'];?>)" class="btn green btn-xs"> <i class="fa fa-photo"></i> <?php echo L('批量提取缩略图')?> </button>
                                 <button type="button" onclick="dr_iframe_show_html('tag',<?php echo $_v['modelid'];?>)" class="btn yellow btn-xs"> <i class="fa fa-tag"></i> <?php echo L('批量提取关键词')?> </button>
+                                <?php }?>
+                                <?php if(in_array($_SESSION['userid'], $admin_founders)) {?>
                                 <button type="button" onclick="dr_iframe_show_html('del',<?php echo $_v['modelid'];?>)" class="btn red btn-xs"> <i class="fa fa-trash"></i> <?php echo L('批量彻底删除内容')?> </button>
                                 <button type="button" onclick="dr_iframe_show_html('cat',<?php echo $_v['modelid'];?>)" class="btn green btn-xs"> <i class="fa fa-reorder"></i> <?php echo L('批量变更栏目')?> </button>
                                 <?php }?>
