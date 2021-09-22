@@ -95,8 +95,43 @@ $(function() {
             btn: ['确定', '取消'],
             skin: 'layui-layer-dialog layui-layer-fast'
         }, function (index) {
-            $('#file').val($(that).attr('data-file'));
-            dr_db_submit('<?php echo L('还原')?>', 'myform', '<?php echo SELF;?>?m=admin&c=database&a=import&pc_hash='+pc_hash+'');
+            //$('#file').val($(that).attr('data-file'));
+            //dr_db_submit('<?php echo L('还原')?>', 'myform', '<?php echo SELF;?>?m=admin&c=database&a=import&pc_hash='+pc_hash+'');
+            // 延迟加载
+            var loading = layer.load(2, {
+                shade: [0.3,'#fff'], //0.1透明度的白色背景
+                time: 100000000
+            });
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: '?m=admin&c=database&a=import&pc_hash='+pc_hash,
+                data: {action: 'restore', file: $(that).data('file'), csrf_test_name: csrf_hash},
+                success: function(json) {
+                    if (json.code == 1) {
+                        layer.close(loading);
+                        layer.confirm("确定要刷新整个后台吗？", {
+                            icon: 3,
+                            shade: 0,
+                            title: '提示',
+                            btn: ['确定', '取消']
+                        }, function(index) {
+                            layer.close(index);
+                            parent.location.href = '<?php echo SELF;?>';
+                        }, function(index) {
+                            layer.close(index);
+                            window.location.reload(true);
+                        });
+                        return false;
+                    } else {
+                        dr_tips(0, json.msg);
+                    }
+                    return false;
+                },
+                error: function(HttpRequest, ajaxOptions, thrownError) {
+                    dr_ajax_alert_error(HttpRequest, ajaxOptions, thrownError)
+                }
+            });
         });
     });
     $(document).on("click", ".btn-delete", function () {

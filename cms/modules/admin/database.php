@@ -88,7 +88,13 @@ class database extends admin {
 						dr_json(0, L('未找到SQL文件'));
 					}
 					$sql = file_get_contents($sqlFile);
-					$sqls = $this->sql_split($sql);
+					$this->db = db_factory::get_instance($database)->get_database('default');
+					$database = $database['default'];
+					$this->db_charset = $database['charset'];
+					$this->db_tablepre = $database['tablepre'];
+					$this->query($sql);
+					dr_dir_delete($dir, true);
+					/*$sqls = $this->sql_split($sql);
 					$cache = array();
 					$count = count($sqls);
 					if ($count > 100) {
@@ -105,7 +111,7 @@ class database extends admin {
 					$this->cache->del_auth_data('db-todo-'.$action);
 					$this->cache->set_auth_data('db-todo-'.$action, $cache);
 					dr_dir_delete($dir, true);
-					dr_json(1, 'ok', array('url' => '?m=admin&c=database&a=public_import_index&action='.$action));
+					dr_json(1, 'ok', array('url' => '?m=admin&c=database&a=public_import_index&action='.$action));*/
 				} catch (Exception $e) {
 					dr_json(0, L($e->getMessage()));
 				} catch (PDOException $e) {
@@ -374,6 +380,10 @@ class database extends admin {
 	// 数据执行
 	private function query($sql) {
 		$database = pc_base::load_config('database');
+		$database = $database['default'];
+		$db_tablepre = $database['tablepre'];
+		$sql = str_replace('phpcms_', 'cms_', $sql);
+		if($db_tablepre != "cms_") $sql = str_replace("`cms_", '`'.$db_tablepre, $sql);
 		$this->db = db_factory::get_instance($database)->get_database('default');
 
 		if (!$sql) {
