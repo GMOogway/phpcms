@@ -24,7 +24,7 @@ include $this->admin_tpl('header');?>
 		<td align="center"><?php echo $r['ishtml'] ? L('icon_unlock') : L('icon_locked');?></td>
 		<td><?php echo $r['example'];?></td>
 		<td><?php echo $r['urlrule'];?></td>
-		<td align='center' ><a href="javascript:edit('<?php echo $r['urlruleid']?>')"><?php echo L('edit');?></a> | <a href="javascript:confirmurl('?m=admin&c=urlrule&a=delete&urlruleid=<?php echo $r['urlruleid'];?>&menuid=<?php echo $this->input->get('menuid');?>','<?php echo L('confirm',array('message'=>$r['urlruleid']));?>')"><?php echo L('delete');?></a> </td>
+		<td align='center' ><a class="btn btn-xs green" href="javascript:edit('<?php echo $r['urlruleid']?>')"><?php echo L('edit');?></a><a class="btn btn-xs red" href="javascript:confirmurl('?m=admin&c=urlrule&a=delete&urlruleid=<?php echo $r['urlruleid'];?>&menuid=<?php echo $this->input->get('menuid');?>','<?php echo L('confirm',array('message'=>$r['urlruleid']));?>')"><?php echo L('delete');?></a> </td>
 	</tr>
 	<?php } ?>
 	</tbody>

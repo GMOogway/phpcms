@@ -22,7 +22,7 @@
 			<th width="100">ID</th>
 			<th width="280"><?php echo L('model_name')?></th>
 			<th width="180"><?php echo L('table_name')?></th>
-			<th width="300"><?php echo L('model_description')?></th>
+			<th><?php echo L('model_description')?></th>
 			<th width="100"><?php echo L('status')?></th>
 			<th><?php echo L('operation')?></th>
 		</tr>
@@ -44,7 +44,7 @@
 		<td><?php echo $v['description']?></td>
 		<td align="center"><?php echo $v['disabled'] ? L('icon_locked') : L('icon_unlock')?></td>
 		<td align="center">
-		<a href="?m=member&c=member_modelfield&a=manage&modelid=<?php echo $v['modelid']?>&menuid=<?php echo $this->input->get('menuid');?>"><?php echo L('field').L('manage')?></a> | <a href="javascript:edit(<?php echo $v['modelid']?>, '<?php echo $v['name']?>')"><?php echo L('edit')?></a> | <a href="?m=member&c=member_model&a=export&modelid=<?php echo $v['modelid']?>"><?php echo L('export')?></a> | <a href="javascript:move(<?php echo $v['modelid']?>, '<?php echo $v['name']?>')"><?php echo L('move')?></a>
+		<a class="btn btn-xs blue" href="?m=member&c=member_modelfield&a=manage&modelid=<?php echo $v['modelid']?>&menuid=<?php echo $this->input->get('menuid');?>"><?php echo L('field').L('manage')?></a><a class="btn btn-xs green" href="javascript:edit(<?php echo $v['modelid']?>, '<?php echo $v['name']?>')"><?php echo L('edit')?></a><a class="btn btn-xs yellow" href="?m=member&c=member_model&a=export&modelid=<?php echo $v['modelid']?>"><?php echo L('export')?></a><a class="btn btn-xs dark" href="javascript:move(<?php echo $v['modelid']?>, '<?php echo $v['name']?>')"><?php echo L('move')?></a>
 		</td>
     </tr>
 <?php

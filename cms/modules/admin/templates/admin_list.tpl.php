@@ -7,14 +7,14 @@ include $this->admin_tpl('header');?>
     <table width="100%" cellspacing="0">
         <thead>
 		<tr>
-		<th width="10%"><?php echo L('userid')?></th>
-		<th width="10%" align="left" ><?php echo L('username')?></th>
-		<th width="10%" align="left" ><?php echo L('userinrole')?></th>
-		<th width="10%"  align="left" ><?php echo L('lastloginip')?></th>
-		<th width="20%"  align="left" ><?php echo L('lastlogintime')?></th>
-		<th width="15%"  align="left" ><?php echo L('email')?></th>
-		<th width="10%"><?php echo L('realname')?></th>
-		<th width="15%" ><?php echo L('operations_manage')?></th>
+		<th width="80"><?php echo L('userid')?></th>
+		<th width="180"><?php echo L('username')?></th>
+		<th width="150"><?php echo L('userinrole')?></th>
+		<th width="180"><?php echo L('lastloginip')?></th>
+		<th width="180"  ><?php echo L('lastlogintime')?></th>
+		<th width="200"  ><?php echo L('email')?></th>
+		<th width="100"><?php echo L('realname')?></th>
+		<th><?php echo L('operations_manage')?></th>
 		</tr>
         </thead>
         <tbody>
@@ -24,14 +24,14 @@ if(is_array($infos)){
 	foreach($infos as $info){
 ?>
 <tr>
-<td width="10%" align="center"><?php echo $info['userid']?></td>
-<td width="10%" ><?php echo $info['username']?></td>
-<td width="10%" ><?php echo $roles[$info['roleid']]?></td>
-<td width="10%" ><?php echo $info['lastloginip']?></td>
-<td width="20%"  ><?php echo $info['lastlogintime'] ? date('Y-m-d H:i:s',$info['lastlogintime']) : ''?></td>
-<td width="15%"><?php echo $info['email']?></td>
-<td width="10%"  align="center"><?php echo $info['realname']?></td>
-<td width="15%"  align="center">
+<td><?php echo $info['userid']?></td>
+<td><?php echo $info['username']?></td>
+<td><?php echo $roles[$info['roleid']]?></td>
+<td><?php echo $info['lastloginip']?></td>
+<td><?php echo $info['lastlogintime'] ? date('Y-m-d H:i:s',$info['lastlogintime']) : ''?></td>
+<td><?php echo $info['email']?></td>
+<td><?php echo $info['realname']?></td>
+<td>
 <a href="javascript:edit(<?php echo $info['userid']?>, '<?php echo new_addslashes($info['username'])?>')"><?php echo L('edit')?></a> | 
 <?php if(!in_array($info['userid'],$admin_founders)) {?>
 <a href="javascript:confirmurl('?m=admin&c=admin_manage&a=delete&userid=<?php echo $info['userid']?>', '<?php echo L('admin_del_cofirm')?>')"><?php echo L('delete')?></a>

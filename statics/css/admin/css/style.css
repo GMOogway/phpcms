@@ -200,6 +200,7 @@ body .table-list table tbody>tr.active:hover>td,body .table-list table tbody>tr.
 body .table-list table tbody>tr>td,body .table-list table tbody>tr>th,body .table-list table tfoot>tr>td,body .table-list table tfoot>tr>th,body .table-list table thead>tr>td,body .table-list table thead>tr>th {vertical-align: middle;}
 body .table-list table td,body .table-list table th {font-size: 14px;}
 body .table-list table td,body .table-list table th {white-space: nowrap;text-overflow: ellipsis;overflow: hidden;}
+body .table-list table .btn {margin-left: 0;margin-right: 5px;}
 .table-list .button {margin-bottom: 4px;}
 body .y-bg .radio-label tr td{border-bottom:1px solid #e4e2e2;}
 .text-c{text-align: center;}
@@ -756,6 +757,9 @@ form .portlet.light .portlet-body {padding-top: 20px;padding-bottom: 20px;}
 .open>.dropdown-menu {display: block;}
 .open>a {outline: 0;}
 .bootstrap-select .dropdown-menu {z-index: 9999!important;}
+.minicolors-input {width: 120px!important;}
+.layui-layer-tips .layui-layer-content {word-wrap: break-word;word-break: break-all;overflow: hidden;}
+.layui-layer-tips .layui-layer-content .btn{margin-right:10px;}
 @media (min-width:992px) {
 	.col-md-1,.col-md-10,.col-md-11,.col-md-12,.col-md-2,.col-md-3,.col-md-4,.col-md-5,.col-md-6,.col-md-7,.col-md-8,.col-md-9 {
 		float: left;

@@ -51,7 +51,7 @@
 		<td align="center"><?php echo $v['allowsearch'] ? L('icon_unlock') : L('icon_locked')?></td>
 		<td align="center"><?php echo $v['allowupgrade'] ? L('icon_unlock') : L('icon_locked')?></td>
 		<td align="center"><?php echo $v['allowsendmessage'] ? L('icon_unlock') : L('icon_locked')?></td>
-		<td align="center"><a href="javascript:edit(<?php echo $v['groupid']?>, '<?php echo $v['name']?>')">[<?php echo L('edit')?>]</a></td>
+		<td align="center"><a class="btn btn-xs green" href="javascript:edit(<?php echo $v['groupid']?>, '<?php echo $v['name']?>')"><?php echo L('edit')?></a></td>
     </tr>
 <?php
 	}

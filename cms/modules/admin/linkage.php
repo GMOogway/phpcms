@@ -133,13 +133,13 @@ class linkage extends admin {
 
 		foreach($result as $areaid => $area){
 			$areas[$area['linkageid']] = array('id'=>$area['linkageid'],'parentid'=>$area['parentid'],'name'=>$area['name'],'listorder'=>$area['listorder'],'style'=>$area['style'],'mod'=>$mod,'file'=>$file,'keyid'=>$keyid,'description'=>$area['description']);
-			$areas[$area['linkageid']]['str_manage'] = ($sum > 40 && $this->_is_last_node($area['keyid'],$area['linkageid'])) ? '<a href="?m=admin&c=linkage&a=public_manage_submenu&keyid='.$area['keyid'].'&parentid='.$area['linkageid'].'">'.L('linkage_manage_submenu').'</a> | ' : '';
-			$areas[$area['linkageid']]['str_manage'] .= '<a href="javascript:void(0);" onclick="add(\''.$keyid.'\',\''.new_addslashes($area['name']).'\',\''.$area['linkageid'].'\')">'.L('linkage_add_submenu').'</a> | <a href="javascript:void(0);" onclick="edit(\''.$area['linkageid'].'\',\''.$area['name'].'\',\''.$area['parentid'].'\')">'.L('edit').'</a> | <a href="javascript:confirmurl(\'?m=admin&c=linkage&a=delete&linkageid='.$area['linkageid'].'&keyid='.$area['keyid'].'\', \''.L('linkage_is_del').'\')">'.L('delete').'</a> ';
+			$areas[$area['linkageid']]['str_manage'] = ($sum > 40 && $this->_is_last_node($area['keyid'],$area['linkageid'])) ? '<a class="btn btn-xs blue" href="?m=admin&c=linkage&a=public_manage_submenu&keyid='.$area['keyid'].'&parentid='.$area['linkageid'].'">'.L('linkage_manage_submenu').'</a>' : '';
+			$areas[$area['linkageid']]['str_manage'] .= '<a class="btn btn-xs yellow" href="javascript:void(0);" onclick="add(\''.$keyid.'\',\''.new_addslashes($area['name']).'\',\''.$area['linkageid'].'\')">'.L('linkage_add_submenu').'</a><a class="btn btn-xs green" href="javascript:void(0);" onclick="edit(\''.$area['linkageid'].'\',\''.$area['name'].'\',\''.$area['parentid'].'\')">'.L('edit').'</a><a class="btn btn-xs red" href="javascript:confirmurl(\'?m=admin&c=linkage&a=delete&linkageid='.$area['linkageid'].'&keyid='.$area['keyid'].'\', \''.L('linkage_is_del').'\')">'.L('delete').'</a> ';
 		}
 		
 		$str  = "<tr>
-					<td align='center' width='80'><input name='listorders[\$id]' type='text' size='3' value='\$listorder' class='input-text-c'></td>
-					<td align='center' width='100'>\$id</td>
+					<td align='center'><input name='listorders[\$id]' type='text' size='3' value='\$listorder' class='input-text-c'></td>
+					<td align='center'>\$id</td>
 					<td>\$spacer\$name</td>
 					<td >\$description</td>
 					<td align='center'>\$str_manage</td>

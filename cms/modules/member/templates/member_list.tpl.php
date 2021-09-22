@@ -83,14 +83,14 @@ jQuery(document).ready(function() {
                         <span></span>
                     </label></th>
 			<th width="80"><?php echo L('uid')?></th>
-			<th width="200"><?php echo L('username')?></th>
-			<th width="120"><?php echo L('nickname')?></th>
+			<th><?php echo L('username')?></th>
+			<th width="100"><?php echo L('nickname')?></th>
 			<th width="200"><?php echo L('email')?></th>
 			<th width="100"><?php echo L('member_group')?></th>
 			<th width="150"><?php echo L('regip')?></th>
-			<th width="180"><?php echo L('lastlogintime')?></th>
-			<th width="120"><?php echo L('amount')?></th>
-			<th width="120"><?php echo L('point')?></th>
+			<th width="160"><?php echo L('lastlogintime')?></th>
+			<th width="100"><?php echo L('amount')?></th>
+			<th width="100"><?php echo L('point')?></th>
 			<th><?php echo L('operation')?></th>
 		</tr>
 	</thead>
@@ -115,8 +115,8 @@ jQuery(document).ready(function() {
 		<td><?php echo $v['amount']?></td>
 		<td><?php echo $v['point']?></td>
 		<td>
-			<a href="javascript:edit(<?php echo $v['userid']?>, '<?php echo $v['username']?>')">[<?php echo L('edit')?>]</a>
-			<a href="?m=member&c=member&a=alogin_index&id=<?php echo $v['userid']?>" target="_blank">[<?php echo L('login')?>]</a>
+			<a href="javascript:edit(<?php echo $v['userid']?>, '<?php echo $v['username']?>')" class="btn btn-xs green">[<?php echo L('edit')?>]</a>
+			<a href="?m=member&c=member&a=alogin_index&id=<?php echo $v['userid']?>" target="_blank" class="btn btn-xs red">[<?php echo L('login')?>]</a>
 		</td>
     </tr>
 <?php

@@ -43,13 +43,13 @@
 		<td width="50" align='center'>
 			<?php echo $r['disabled'] ? L('icon_unlock') : L('icon_locked')?></td>
 		<td align='center'>
-			<a href="javascript:edit(<?php echo $r['modelid']?>, <?php echo $r['fieldid']?>, '<?php echo $r['name']?>')"><?php echo L('modify')?></a> | 
+			<a class="btn btn-xs green" href="javascript:edit(<?php echo $r['modelid']?>, <?php echo $r['fieldid']?>, '<?php echo $r['name']?>')"><?php echo L('modify')?></a>
 			<?php if(!$r['disabled']) {?>
-			<a href="?m=member&c=member_modelfield&a=disable&disabled=1&fieldid=<?php echo $r['fieldid']?>&menuid=<?php echo $_GET['menuid']?>"><?php echo L('disable')?></a>
+			<a class="btn btn-xs dark" href="?m=member&c=member_modelfield&a=disable&disabled=1&fieldid=<?php echo $r['fieldid']?>&menuid=<?php echo $_GET['menuid']?>"><?php echo L('disable')?></a>
 			<?php } else {?>
-			<a href="?m=member&c=member_modelfield&a=disable&disabled=0&fieldid=<?php echo $r['fieldid']?>&menuid=<?php echo $_GET['menuid']?>"><?php echo L('enable')?></a>
-			<?php }?> | 
-			<a href="javascript:confirmurl('?m=member&c=member_modelfield&a=delete&fieldid=<?php echo $r['fieldid']?>&menuid=<?php echo $_GET['menuid']?>','<?php echo L('sure_delete')?>')"><?php echo L('delete')?></a>
+			<a class="btn btn-xs dark" href="?m=member&c=member_modelfield&a=disable&disabled=0&fieldid=<?php echo $r['fieldid']?>&menuid=<?php echo $_GET['menuid']?>"><?php echo L('enable')?></a>
+			<?php }?>
+			<a class="btn btn-xs red" href="javascript:confirmurl('?m=member&c=member_modelfield&a=delete&fieldid=<?php echo $r['fieldid']?>&menuid=<?php echo $_GET['menuid']?>','<?php echo L('sure_delete')?>')"><?php echo L('delete')?></a>
 		</td>
 	</tr>
 	<?php } ?>

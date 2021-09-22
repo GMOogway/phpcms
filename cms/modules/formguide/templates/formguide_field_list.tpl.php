@@ -40,11 +40,11 @@ include $this->admin_tpl('header','admin');?>
 		<td width="50" align='center'><?php echo $r['issearch'] ? L('icon_unlock') : L('icon_locked')?></td>
 		<td width="50" align='center'><?php echo $r['isorder'] ? L('icon_unlock') : L('icon_locked')?></td>
 		<td width="50" align='center'><?php echo $r['isadd'] ? L('icon_unlock') : L('icon_locked')?></td>
-		<td align='center'> <a href="?m=formguide&c=formguide_field&a=edit&formid=<?php echo $r['modelid']?>&fieldid=<?php echo $r['fieldid']?>&field=<?php echo $r['field']?>&menuid=<?php echo $this->input->get('menuid')?>"><?php echo L('edit');?></a> | 
+		<td align='center'> <a class="btn btn-xs green" href="?m=formguide&c=formguide_field&a=edit&formid=<?php echo $r['modelid']?>&fieldid=<?php echo $r['fieldid']?>&field=<?php echo $r['field']?>&menuid=<?php echo $this->input->get('menuid')?>"><?php echo L('edit');?></a>
 		<?php if ($formid) { if(!in_array($r['field'],$forbid_fields)) { ?>
-		<a href="?m=formguide&c=formguide_field&a=disabled&disabled=<?php echo $r['disabled'];?>&modelid=<?php echo $r['modelid']?>&fieldid=<?php echo $r['fieldid']?>&fieldid=<?php echo $r['fieldid']?>&menuid=<?php echo $this->input->get('menuid')?>"><?php echo $r['disabled'] ? L('field_enabled') : L('field_disabled');?></a>
-		<?php } else { ?><font color="#BEBEBE"> <?php echo L('field_disabled');?> </font><?php } ?>|<?php } ?> 
-		<a href="javascript:confirmurl('?m=formguide&c=formguide_field&a=delete&formid=<?php echo $r['modelid']?>&fieldid=<?php echo $r['fieldid']?>&field=<?php echo $r['field']?>&menuid=<?php echo $this->input->get('menuid')?>','<?php echo L('confirm',array('message'=>$r['name']))?>')"><?php echo L('delete')?></a>  </td>
+		<a class="btn btn-xs dark" href="?m=formguide&c=formguide_field&a=disabled&disabled=<?php echo $r['disabled'];?>&modelid=<?php echo $r['modelid']?>&fieldid=<?php echo $r['fieldid']?>&fieldid=<?php echo $r['fieldid']?>&menuid=<?php echo $this->input->get('menuid')?>"><?php echo $r['disabled'] ? L('field_enabled') : L('field_disabled');?></a>
+		<?php } else { ?><font color="#BEBEBE"> <?php echo L('field_disabled');?> </font><?php } ?><?php } ?> 
+		<a class="btn btn-xs red" href="javascript:confirmurl('?m=formguide&c=formguide_field&a=delete&formid=<?php echo $r['modelid']?>&fieldid=<?php echo $r['fieldid']?>&field=<?php echo $r['field']?>&menuid=<?php echo $this->input->get('menuid')?>','<?php echo L('confirm',array('message'=>$r['name']))?>')"><?php echo L('delete')?></a>  </td>
 	</tr>
 	<?php } ?>
     </tbody>

@@ -40,7 +40,7 @@ if(is_array($list)):
  	if (substr($filename,-4,4) == 'html') {
  		echo '<td align="left"><img src="'.IMG_PATH.'file.gif" /> '.$filename.'</td><td align="left"><input type="text" name="file_explan['.$encode_local.']['.$filename.']" value="'.(isset($file_explan[$encode_local][$filename]) ? $file_explan[$encode_local][$filename] : "").'"></td>';
 		if($tpl_edit=='1'){
-			echo '<td> <a href="?m=template&c=file&a=edit_file&style='.$this->style.'&dir='.urlencode(stripslashes($dir)).'&file='.$filename.'">['.L('edit').']</a> <a href="?m=template&c=file&a=visualization&style='.$this->style.'&dir='.urlencode(stripslashes($dir)).'&file='.$filename.'" target="_blank">['.L('visualization').']</a> <a href="javascript:history_file(\''.$filename.'\')">['.L('histroy').']</a></td>';
+			echo '<td> <a class="btn btn-xs green" href="?m=template&c=file&a=edit_file&style='.$this->style.'&dir='.urlencode(stripslashes($dir)).'&file='.$filename.'">'.L('edit').'</a> <a class="btn btn-xs blue" href="?m=template&c=file&a=visualization&style='.$this->style.'&dir='.urlencode(stripslashes($dir)).'&file='.$filename.'" target="_blank">'.L('visualization').'</a> <a class="btn btn-xs dark" href="javascript:history_file(\''.$filename.'\')">'.L('histroy').'</a></td>';
 		}else{
 			echo '<td></td>';
 		}

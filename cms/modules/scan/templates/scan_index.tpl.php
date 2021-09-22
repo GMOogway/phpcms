@@ -8,7 +8,7 @@ include $this->admin_tpl('header','admin');
 <form name="myform" action="?m=scan&c=index&a=public_update_config" method="post" id="myform" onsubmit="return check_form()">
 	<table width="100%" class="table_form">
 		<tr>
-			<td width="80"><?php echo L('ravsingle')?>:</td> 
+			<td width="120"><?php echo L('ravsingle')?>:</td> 
 			<td><ul id="file" style="list-style:none; height:200px;overflow:auto;width:300px;">
 			<?php $dir = $file= ''; foreach ($list as $v){
 				$filename = basename($v);

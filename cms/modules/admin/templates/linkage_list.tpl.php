@@ -11,11 +11,11 @@ include $this->admin_tpl('header');?>
     <table width="100%" cellspacing="0">
         <thead>
 		<tr>
-		<th width="10%">ID</th>
-		<th width="20%" align="left" ><?php echo L('linkage_name')?></th>
-		<th width="30%" align="left" ><?php echo L('linkage_desc')?></th>
-		<th width="20%" ><?php echo L('linkage_calling_code')?></th>
-		<th width="20%" ><?php echo L('operations_manage')?></th>
+		<th width="80">ID</th>
+		<th width="120"><?php echo L('linkage_name')?></th>
+		<th ><?php echo L('linkage_desc')?></th>
+		<th width="260"><?php echo L('linkage_calling_code')?></th>
+		<th><?php echo L('operations_manage')?></th>
 		</tr>
         </thead>
         <tbody>
@@ -24,11 +24,11 @@ include $this->admin_tpl('header');?>
 			foreach($infos as $info){
 		?>
 		<tr>
-		<td width="10%" align="center"><?php echo $info['linkageid']?></td>
-		<td width="20%" ><?php echo $info['name']?></td>
-		<td width="30%" ><?php echo $info['description']?></td>
-		<td width="20%"  class="text-c"><input type="text" value="{menu_linkage(<?php echo $info['linkageid']?>,'L_<?php echo $info['linkageid']?>')}" style="width:200px;"></td>
-		<td width="20%" class="text-c"><a href="?m=admin&c=linkage&a=public_manage_submenu&keyid=<?php echo $info['linkageid']?>"><?php echo L('linkage_manage_submenu')?></a> | <a href="javascript:void(0);" onclick="edit('<?php echo $info['linkageid']?>','<?php echo new_addslashes($info['name'])?>')"><?php echo L('edit')?></a> | <a href="javascript:confirmurl('?m=admin&c=linkage&a=delete&linkageid=<?php echo $info['linkageid']?>', '<?php echo L('linkage_is_del')?>')"><?php echo L('delete')?></a> | <a href="?m=admin&c=linkage&a=public_cache&linkageid=<?php echo $info['linkageid']?>"><?php echo L('update_backup')?></a></td>
+		<td><?php echo $info['linkageid']?></td>
+		<td><?php echo $info['name']?></td>
+		<td><?php echo $info['description']?></td>
+		<td><input type="text" value="{menu_linkage(<?php echo $info['linkageid']?>,'L_<?php echo $info['linkageid']?>')}" style="width:200px;"></td>
+		<td><a class="btn btn-xs blue" href="?m=admin&c=linkage&a=public_manage_submenu&keyid=<?php echo $info['linkageid']?>"><?php echo L('linkage_manage_submenu')?></a><a class="btn btn-xs green" href="javascript:void(0);" onclick="edit('<?php echo $info['linkageid']?>','<?php echo new_addslashes($info['name'])?>')"><?php echo L('edit')?></a><a class="btn btn-xs red" href="javascript:confirmurl('?m=admin&c=linkage&a=delete&linkageid=<?php echo $info['linkageid']?>', '<?php echo L('linkage_is_del')?>')"><?php echo L('delete')?></a><a class="btn btn-xs dark" href="?m=admin&c=linkage&a=public_cache&linkageid=<?php echo $info['linkageid']?>"><?php echo L('update_backup')?></a></td>
 		</tr>
 		<?php 
 			}

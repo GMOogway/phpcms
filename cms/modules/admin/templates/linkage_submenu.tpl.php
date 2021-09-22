@@ -8,11 +8,11 @@ include $this->admin_tpl('header');?>
     <table width="100%" cellspacing="0">
         <thead>
 		<tr>
-		<th width="10%"><?php echo L('listorder')?></th>
-		<th width="10%">ID</th>
-		<th width="10%" align="left" ><?php echo L('linkage_name')?></th>
-		<th width="20%"><?php echo L('linkage_desc')?></th>
-		<th width="15%"><?php echo L('operations_manage')?></th>
+		<th width="80"><?php echo L('listorder')?></th>
+		<th width="80">ID</th>
+		<th width="120" align="left" ><?php echo L('linkage_name')?></th>
+		<th><?php echo L('linkage_desc')?></th>
+		<th><?php echo L('operations_manage')?></th>
 		</tr>
         </thead>
         <tbody>

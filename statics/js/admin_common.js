@@ -37,21 +37,6 @@ $(function(){
 		});
 	}
 	// 当存在隐藏时单击显示区域
-	$(".table td,.table th").click(function() {
-		var e = $(this);
-		if (1 == dr_isEllipsis(e[0])) {
-			var t = e.html();
-			if (t.indexOf("checkbox") != -1) return;
-			if (t.indexOf("<input") != -1) return;
-			if (t.indexOf('class="btn') != -1);
-			else if (t.indexOf('href="') != -1) return;
-			layer.tips(t, e, {
-				tips: [1, "#fff"],
-				time: 5e3
-			})
-		}
-	});
-	// 当存在隐藏时单击显示区域
 	$(".table-list table td,.table-list table th").click(function() {
 		var e = $(this);
 		if (1 == dr_isEllipsis(e[0])) {
