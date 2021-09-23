@@ -15,9 +15,9 @@ include $this->admin_tpl('header','admin');
                         <input type="checkbox" class="group-checkable" value="" id="check_box" onclick="selectall('keylinkid[]');" />
                         <span></span>
                     </label></th>
-             <th width="30%"><?php echo L('keyword_name')?></th>
-            <th ><?php echo L('link_url')?></th> 
-             <th width="120"><?php echo L('operations_manage')?></th>
+            <th width="200"><?php echo L('keyword_name')?></th>
+            <th><?php echo L('link_url')?></th> 
+            <th><?php echo L('operations_manage')?></th>
             </tr>
         </thead>
     <tbody>
@@ -31,9 +31,9 @@ if(is_array($infos)){
                         <input type="checkbox" class="checkboxes" name="keylinkid[]" value="<?php echo $info['keylinkid']?>" />
                         <span></span>
                     </label></td>
-        <td width="30%" align="left"><span  class="<?php echo $info['style']?>"><?php echo $info['word']?></span> </td>
+        <td align="left"><span  class="<?php echo $info['style']?>"><?php echo $info['word']?></span> </td>
         <td align="center"><?php echo $info['url']?></td>
-         <td align="center"><a href="javascript:edit(<?php echo $info['keylinkid']?>, '<?php echo new_addslashes($info['word'])?>')"><?php echo L('edit')?></a> | <a href="javascript:confirmurl('?m=admin&c=keylink&a=delete&keylinkid=<?php echo $info['keylinkid']?>', '<?php echo L('keylink_confirm_del')?>')"><?php echo L('delete')?></a> </td>
+         <td align="center"><a class="btn btn-xs green" href="javascript:edit(<?php echo $info['keylinkid']?>, '<?php echo new_addslashes($info['word'])?>')"><?php echo L('edit')?></a> <a class="btn btn-xs red" href="javascript:confirmurl('?m=admin&c=keylink&a=delete&keylinkid=<?php echo $info['keylinkid']?>', '<?php echo L('keylink_confirm_del')?>')"><?php echo L('delete')?></a> </td>
     </tr>
 <?php
 	}

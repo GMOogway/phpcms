@@ -2,8 +2,7 @@
 defined('IN_ADMIN') or exit('No permission resources.'); 
 include $this->admin_tpl('header', 'admin');
 ?>
-<div class="pad-lr-10">
-
+<div class="pad-10">
 <div class="comment_button"><a href="?m=comment&c=comment_admin&a=lists&show_center_id=1&commentid=<?php echo $commentid?>&hot=0"<?php if (empty($hot)) {?> class="on"<?php }?>>最新</a> <a href="?m=comment&c=comment_admin&a=lists&show_center_id=1&commentid=<?php echo $commentid?>&hot=1"<?php if ($hot==1) {?> class="on"<?php }?>>最热</a></div> 	
 <label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" onclick="selectall('id[]');" id="check_box" style="width:0px;height: 0px;" /><span></span></label>
  <form id="myform" name="myform" action="?" method="get">

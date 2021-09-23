@@ -24,7 +24,7 @@ class slider extends admin {
  		foreach($types as $typeid=>$type){
 			$type_arr[$type['typeid']] = $type['name'];
 		}
-		$big_menu = array('javascript:artdialog(\'add\',\'?m=slider&c=slider&a=add&typeid='.$_GET['typeid'].'\',\''.L('slider_add').'\',700,330);void(0);', L('add_slider'));
+		$big_menu = array('javascript:artdialog(\'add\',\'?m=slider&c=slider&a=add&typeid='.$_GET['typeid'].'\',\''.L('slider_add').'\',700,450);void(0);', L('add_slider'));
 		include $this->admin_tpl('slider_list');
 	}
 

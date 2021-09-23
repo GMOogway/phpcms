@@ -341,9 +341,9 @@ class special_api {
 			if ($ishtml) {	
 				pc_base::load_app_func('global', 'special');
 				$siteid = $siteid ? intval($siteid) : get_siteid();
+				$site = pc_base::load_app_class('sites', 'admin');
+				$site_info = $site->get_by_id($siteid);
 				if ($siteid>1) {
-					$site = pc_base::load_app_class('sites', 'admin');
-					$site_info = $site->get_by_id($siteid);
 					$queue = pc_base::load_model('queue_model');
 					
 					for ($i = 1; $i>0; $i++) {
@@ -357,7 +357,7 @@ class special_api {
 					}
 				} else {
 					for ($i = 1; $i>0; $i++) {
-						$file = content_url($cid, $i, $info['inputtime']);
+						$file = content_url($cid, $i, $info['inputtime'], 'html', $site_info);
 						if (!file_exists(CMS_PATH.$file[1])) {
 							break;
 						} else {

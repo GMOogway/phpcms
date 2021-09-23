@@ -24,17 +24,17 @@ include $this->admin_tpl('header', 'admin');
 <table width="100%" cellspacing="0">
 	<thead>
 		<tr>
-			<th width="35" align="center" class="myselect">
+			<th class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="group-checkable" value="" id="check_box" onclick="selectall('importid[]');" />
                         <span></span>
                     </label></th>
- 			<th width="30%"><?php echo L('import_name')?></th>
-			<th width="23%" align="center"><?php echo L('import_desc')?></th>
-			<th width="15%" align="center"><?php echo L('add_time')?></th>
-			<th width='15%' align="center"><?php echo L('import_time')?></th>
-  			<th width="8%" align="center"><?php echo L('import_type')?></th>
-			<th width="12%" align="center"><?php echo L('operations_manage')?></th>
+ 			<th><?php echo L('import_name')?></th>
+			<th align="center"><?php echo L('import_desc')?></th>
+			<th width="160" align="center"><?php echo L('add_time')?></th>
+			<th width='160' align="center"><?php echo L('import_time')?></th>
+  			<th width="100" align="center"><?php echo L('import_type')?></th>
+			<th align="center"><?php echo L('operations_manage')?></th>
 		</tr>
 	</thead>
 <tbody>
@@ -43,19 +43,19 @@ if(is_array($infos)){
 	foreach($infos as $info){
 		?>
 	<tr>
-		<td align="center" width="35" class="myselect">
+		<td class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="checkboxes" name="importid[]" value="<?php echo $info['id']?>" />
                         <span></span>
                     </label></td>
  		<td><?php echo $info['import_name']?></td>
-		<td align="center" width="23%"><?php echo $info['desc'];?> </td>
-		<td align="center" width="10%"><?php echo date("Y-m-d H:i:s",$info['addtime']);?></td>
-		<td width='15%' align="center"><?php if($info['lastinputtime']){echo date("Y-m-d H:i:s",$info['lastinputtime']);}else {echo '<font color=red>未执行</font>';}?></td>
+		<td align="center"><?php echo $info['desc'];?> </td>
+		<td align="center"><?php echo dr_date($info['addtime'], null, 'red');?></td>
+		<td align="center"><?php if($info['lastinputtime']){echo dr_date($info['lastinputtime'], null, 'red');}else {echo '<font color=red>未执行</font>';}?></td>
  	 
-		<td width="8%" align="center"><?php echo $info['type'];?></td>
-		<td align="center" width="12%">
-		<a href="?m=import&c=import&a=choice&importid=<?php echo $info['id'];?>&type=<?php echo $info['type']?>" title="<?php echo L('edit')?>"><?php echo L('edit')?></a> |  <a href="?m=import&c=import&a=do_import&importid=<?php echo $info['id'];?>&type=<?php echo $info['type']?>" title="<?php echo L('edit')?>"><?php echo L('do_import');?></a>
+		<td align="center"><?php echo $info['type'];?></td>
+		<td align="center">
+		<a class="btn btn-xs green" href="?m=import&c=import&a=choice&importid=<?php echo $info['id'];?>&type=<?php echo $info['type']?>" title="<?php echo L('edit')?>"><?php echo L('edit')?></a> <a class="btn btn-xs yellow" href="?m=import&c=import&a=do_import&importid=<?php echo $info['id'];?>&type=<?php echo $info['type']?>" title="<?php echo L('edit')?>"><?php echo L('do_import');?></a>
 		</td>
 	</tr>
 	<?php

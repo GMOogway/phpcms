@@ -24,14 +24,14 @@ include $this->admin_tpl('header','admin');
  <table width="100%" cellspacing="0">
         <thead>
             <tr>
-            <th width="35" align="center" class="myselect">
+            <th align="center" class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="group-checkable" value="" id="check_box" onclick="selectall('ipbannedid[]');" />
                         <span></span>
                     </label></th>
-             <th width="30%">IP</th>
-            <th ><?php echo L('deblocking_time')?></th> 
-             <th width="120"><?php echo L('operations_manage')?></th>
+            <th width="200">IP</th>
+            <th><?php echo L('deblocking_time')?></th> 
+            <th><?php echo L('operations_manage')?></th>
             </tr>
         </thead>
     <tbody>
@@ -45,9 +45,9 @@ if(is_array($infos)){
                         <input type="checkbox" class="checkboxes" name="ipbannedid[]" value="<?php echo $info['ipbannedid']?>" />
                         <span></span>
                     </label></td>
-        <td width="30%" align="left"><span  class="<?php echo $info['style']?>"><?php echo $info['ip']?></span> </td>
-        <td align="center"><?php echo date('Y-m-d H:i', $info['expires']);?></td>
-         <td align="center"><a href="javascript:confirmurl('?m=admin&c=ipbanned&a=delete&ipbannedid=<?php echo $info['ipbannedid']?>', "<?php echo L('confirm_del_ip')?>")"><?php echo L('delete')?></a> </td>
+        <td align="left"><span  class="<?php echo $info['style']?>"><?php echo $info['ip']?></span> </td>
+        <td align="center"><?php echo dr_date($info['expires'], 'Y-m-d', 'red');?></td>
+         <td align="center"><a class="btn btn-xs red" href="javascript:confirmurl('?m=admin&c=ipbanned&a=delete&ipbannedid=<?php echo $info['ipbannedid']?>', "<?php echo L('confirm_del_ip')?>")"><?php echo L('delete')?></a> </td>
     </tr>
 <?php
 	}

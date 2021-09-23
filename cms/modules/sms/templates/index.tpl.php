@@ -12,12 +12,12 @@
 <?php echo get_smsnotice();?>
 </div>
 </form>
-<div class="btn text-l">
+<div class="text-l">
 <?php if(!empty($this->smsapi->userid)) {?>
 <span class="font-fixh green"><?php echo L('account')?></span> ： <span class="font-fixh"><?php echo $this->smsapi->userid?></span> ， <span class="font-fixh green"><?php echo L('smsnumber')?></span> ： </span><span class="font-fixh"><?php echo $smsinfo_arr['surplus']?></span> <span class="font-fixh green"><?php echo L('item')?></span>
 
 <?php } else {?>
-<span class="font-fixh green">未绑定平台账户，请点击<a href="index.php?m=sms&c=sms&a=sms_setting&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo $_GET['pc_hash'];?>"><span class="font-fixh">平台设置</span></a>绑定。</span>
+未绑定平台账户，请点击<a class="btn btn-xs blue" href="index.php?m=sms&c=sms&a=sms_setting&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo $_GET['pc_hash'];?>">平台设置</a>绑定。
 <?php }?>
 </div><br>
 

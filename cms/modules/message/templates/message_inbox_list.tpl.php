@@ -10,16 +10,16 @@ include $this->admin_tpl('header','admin');
 <table width="100%" cellspacing="0">
 	<thead>
 		<tr>
-			<th width="35" align="center" class="myselect">
+			<th align="center" class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="group-checkable" value="" id="check_box" onclick="selectall('messageid[]');" />
                         <span></span>
                     </label></th>
 			<th><?php echo L('subject')?></th>
-			<th width="35%" align="center"><?php echo L('content')?></th>
-			<th width="10%" align="center"><?php echo L('message_sender')?></th>
-			<th width='15%' align="center"><?php echo L('send_time')?></th>
-			<th width="15%" align="center"><?php echo L('operations_manage')?></th>
+			<th width="300" align="center"><?php echo L('content')?></th>
+			<th width="120" align="center"><?php echo L('message_sender')?></th>
+			<th width='160' align="center"><?php echo L('send_time')?></th>
+			<th align="center"><?php echo L('operations_manage')?></th>
 		</tr>
 	</thead>
 <tbody>
@@ -28,16 +28,16 @@ if(is_array($infos)){
 	foreach($infos as $info){
 		?>
 	<tr>
-		<td align="center" width="35" class="myselect">
+		<td align="center" class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="checkboxes" name="messageid[]" value="<?php echo $info['messageid']?>" />
                         <span></span>
                     </label></td>
 		<td><?php echo $info['subject']?></td>
-		<td align="" widht="35%"><?php echo $info['content'];?></td>
-		<td align="center" width="10%"><?php echo $info['send_from_id'];?></td>
-		<td align="center" width="15%"><?php echo date("Y-m-d H:i:s",$info['message_time']);?></td>
-		<td align="center" width="15%"><a
+		<td><?php echo $info['content'];?></td>
+		<td align="center"><?php echo $info['send_from_id'];?></td>
+		<td align="center"><?php echo dr_date($info['message_time'], null, 'red');?></td>
+		<td align="center"><a class="btn btn-xs red"
 			href='###'
 			onClick="Dialog.confirm('<?php echo L('confirm', array('message' => new_addslashes($info['subject'])))?>',function(){redirect('?m=message&c=message&a=delete&messageid=<?php echo $info['messageid']?>&pc_hash='+pc_hash);});"><?php echo L('delete')?></a>
 		</td>

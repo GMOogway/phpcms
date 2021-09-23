@@ -8,9 +8,9 @@ include $this->admin_tpl('header', 'admin');
         <thead>
 		<tr>
 		<th width="80">Siteid</th>
-		<th><?php echo L('dbsource_name')?></th>
-		<th><?php echo L('server_address')?></th>
-		<th width="150"><?php echo L('operations_manage')?></th>
+		<th width="180"><?php echo L('dbsource_name')?></th>
+		<th width="300"><?php echo L('server_address')?></th>
+		<th><?php echo L('operations_manage')?></th>
 		</tr>
         </thead>
         <tbody>
@@ -19,10 +19,10 @@ if(is_array($list)):
 	foreach($list as $v):
 ?>
 <tr>
-<td width="80" align="center"><?php echo $v['id']?></td>
+<td align="center"><?php echo $v['id']?></td>
 <td align="center"><?php echo $v['name']?></td>
 <td align="center"><?php echo $v['host']?></td>
-<td align="center"><a href="javascript:edit(<?php echo $v['id']?>, '<?php echo new_html_special_chars(new_addslashes($v['name']))?>')"><?php echo L('edit')?></a> | <a href="###" onclick="Dialog.confirm('<?php echo new_html_special_chars(new_addslashes(L('confirm', array('message'=>$v['name']))))?>',function(){redirect('?m=dbsource&c=dbsource_admin&a=del&id=<?php echo $v['id']?>&pc_hash='+pc_hash);});"><?php echo L('delete')?></a></td>
+<td align="center"><a class="btn btn-xs green" href="javascript:edit(<?php echo $v['id']?>, '<?php echo new_html_special_chars(new_addslashes($v['name']))?>')"><?php echo L('edit')?></a><a class="btn btn-xs red" href="###" onclick="Dialog.confirm('<?php echo new_html_special_chars(new_addslashes(L('confirm', array('message'=>$v['name']))))?>',function(){redirect('?m=dbsource&c=dbsource_admin&a=del&id=<?php echo $v['id']?>&pc_hash='+pc_hash);});"><?php echo L('delete')?></a></td>
 </tr>
 <?php 
 	endforeach;

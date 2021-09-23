@@ -8,16 +8,16 @@
 <table width="100%" cellspacing="0">
 	<thead>
 		<tr>
-			<th  align="left" width="20" class="myselect">
+			<th class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="group-checkable" value="" id="check_box" onclick="selectall('nodeid[]');" />
                         <span></span>
                     </label></th>
-			<th align="left">ID</th>
-			<th align="left"><?php echo L('nodename')?></th>
-			<th align="left"><?php echo L('lastdate')?></th>
-			<th align="left"><?php echo L('content').L('operation')?></th>
-			<th align="left"><?php echo L('operation')?></th>
+			<th width="80">ID</th>
+			<th><?php echo L('nodename')?></th>
+			<th width="180"><?php echo L('lastdate')?></th>
+			<th width="300"><?php echo L('content').L('operation')?></th>
+			<th><?php echo L('operation')?></th>
 		</tr>
 	</thead>
 <tbody>
@@ -25,24 +25,23 @@
 	foreach($nodelist as $k=>$v) {
 ?>
     <tr>
-		<td align="left" class="myselect">
+		<td class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="checkboxes" value="<?php echo $v['nodeid']?>" name="nodeid[]" />
                         <span></span>
                     </label></td>
-		<td align="left"><?php echo $v['nodeid']?></td>
-		<td align="left"><?php echo $v['name']?></td>
-		<td align="left"><?php echo format::date($v['lastdate'], 1)?></td>
-		<td align="left"><a href="?m=collection&c=node&a=col_url_list&nodeid=<?php echo $v['nodeid']?>">[<?php echo L('collection_web_site')?>]</a> 
-		<a href="?m=collection&c=node&a=col_content&nodeid=<?php echo $v['nodeid']?>">[<?php echo L('collection_content')?>]</a>
-		 <a href="?m=collection&c=node&a=publist&nodeid=<?php echo $v['nodeid']?>&status=2" style="color:red">[<?php echo L('public_content')?>]</a>
+		<td><?php echo $v['nodeid']?></td>
+		<td><?php echo $v['name']?></td>
+		<td><?php echo dr_date($v['lastdate'], null, 'red')?></td>
+		<td><a class="btn btn-xs yellow" href="?m=collection&c=node&a=col_url_list&nodeid=<?php echo $v['nodeid']?>"><?php echo L('collection_web_site')?></a> 
+		<a class="btn btn-xs green" href="?m=collection&c=node&a=col_content&nodeid=<?php echo $v['nodeid']?>"><?php echo L('collection_content')?></a>
+		<a class="btn btn-xs red" href="?m=collection&c=node&a=publist&nodeid=<?php echo $v['nodeid']?>&status=2"><?php echo L('public_content')?></a>
 		</td>
-		<td align="left">
-		<a href="javascript:void(0)" onclick="test_spider(<?php echo $v['nodeid']?>)">[<?php echo L('test')?>]</a>
-		
-		<a href="?m=collection&c=node&a=edit&nodeid=<?php echo $v['nodeid']?>&menuid=<?php echo $this->input->get('menuid');?>">[<?php echo L('edit')?>]</a>
-		 <a href="javascript:void(0)"  onclick="copy_spider(<?php echo $v['nodeid']?>)">[<?php echo L('copy')?>]</a>
-		 <a href="?m=collection&c=node&a=export&nodeid=<?php echo $v['nodeid']?>">[<?php echo L('export')?>]</a>
+		<td>
+		<a class="btn btn-xs blue" href="javascript:void(0)" onclick="test_spider(<?php echo $v['nodeid']?>)"><?php echo L('test')?></a>
+		<a class="btn btn-xs green" href="?m=collection&c=node&a=edit&nodeid=<?php echo $v['nodeid']?>&menuid=<?php echo $this->input->get('menuid');?>"><?php echo L('edit')?></a>
+		<a class="btn btn-xs dark" href="javascript:void(0)"  onclick="copy_spider(<?php echo $v['nodeid']?>)"><?php echo L('copy')?></a>
+		<a class="btn btn-xs yellow" href="?m=collection&c=node&a=export&nodeid=<?php echo $v['nodeid']?>"><?php echo L('export')?></a>
 		
 		 </td>
     </tr>

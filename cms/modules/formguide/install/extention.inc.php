@@ -1,8 +1,6 @@
 <?php
-error_reporting(E_ALL);
 defined('IN_CMS') or exit('Access Denied');
 defined('INSTALL') or exit('Access Denied');
-
 $parentid = $menu_db->insert(array('name'=>'formguide', 'parentid'=>42, 'm'=>'formguide', 'c'=>'formguide', 'a'=>'init', 'data'=>'', 'icon'=>'fa fa-table', 'listorder'=>0, 'display'=>'1'), true);
 $menu_db->insert(array('name'=>'formguide_add', 'parentid'=>$parentid, 'm'=>'formguide', 'c'=>'formguide', 'a'=>'add', 'data'=>'', 'icon'=>'fa fa-plus', 'listorder'=>0, 'display'=>'0'));
 $menu_db->insert(array('name'=>'formguide_edit', 'parentid'=>$parentid, 'm'=>'formguide', 'c'=>'formguide', 'a'=>'edit', 'data'=>'', 'icon'=>'fa fa-edit', 'listorder'=>0, 'display'=>'0'));

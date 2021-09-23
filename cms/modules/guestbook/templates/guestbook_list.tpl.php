@@ -25,12 +25,12 @@ include $this->admin_tpl('header', 'admin');
       <table width="100%" cellspacing="0">
         <thead>
           <tr>
-            <th width="35" align="center" class="myselect">
+            <th align="center" class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="group-checkable" value="" id="check_box" onclick="selectall('guestid[]');" />
                         <span></span>
                     </label></th>
-            <th width="35" align="center"><?php echo L('listorder')?></th>
+            <th width="80" align="center"><?php echo L('listorder')?></th>
             <th align="center"><?php echo L('guestbook_name')?></th>
             <th align="center"><?php echo L('sex')?></th>
             <th align="center"><?php echo L('lxqq')?></th>
@@ -38,9 +38,9 @@ include $this->admin_tpl('header', 'admin');
             <th align="center"><?php echo L('shouji')?></th>
             <th align="center"><?php echo L('web_description')?></th>
             <th align="center"><?php echo L('typeid')?></th>
-            <th align="center"><?php echo L('lytime')?></th>
-            <th width="8%" align="center"><?php echo L('status')?></th>
-            <th width="12%" align="center"><?php echo L('operations_manage')?></th>
+            <th width="160" align="center"><?php echo L('lytime')?></th>
+            <th width="100" align="center"><?php echo L('status')?></th>
+            <th align="center"><?php echo L('operations_manage')?></th>
           </tr>
         </thead>
         <tbody>
@@ -49,12 +49,12 @@ if(is_array($infos)){
 	foreach($infos as $info){
 		?>
           <tr>
-            <td align="center" width="35" class="myselect">
+            <td align="center" class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="checkboxes" name="guestid[]" value="<?php echo $info['guestid']?>" />
                         <span></span>
                     </label></td>
-            <td align="center" width="35"><input name='listorders[<?php echo $info['guestid']?>]' type='text' size='3' value='<?php echo $info['listorder']?>' class="input-text-c"></td>
+            <td align="center"><input name='listorders[<?php echo $info['guestid']?>]' type='text' size='3' value='<?php echo $info['listorder']?>' class="input-text-c"></td>
             <td align="center"><?php echo $info['name']?></td>
             <td align="center"><?php echo $info['sex']?></td>
             <td align="center"><?php echo $info['lxqq'];?></td>
@@ -62,8 +62,8 @@ if(is_array($infos)){
             <td align="center"><?php echo $info['shouji'];?></td>
             <td align="center" style="color:#004499"><?php echo str_cut($info['introduce'] ,'50');?></td>
             <td align="center"><?php if($info['typeid']==0){echo "默认分类";}else{echo $type_arr[$info['typeid']];}?></td>
-            <td align="center"><?php echo date('Y-m-d H:i:s',$info['addtime']);?></td>
-            <td width="8%" align="center"><?php if($info['passed']=='0'){?>
+            <td align="center"><?php echo dr_date($info['addtime'], null, 'red');?></td>
+            <td align="center"><?php if($info['passed']=='0'){?>
               <a
 			href='?m=guestbook&c=guestbook&a=check&guestid=<?php echo $info['guestid']?>'
 			onClick="return confirm('<?php echo L('pass_or_not')?>')"><font color=red><?php echo L('audit')?></font></a>
@@ -71,9 +71,9 @@ if(is_array($infos)){
               <br>
               <?php if($info['reply']==''){ echo "<font color=red>【未回复】</font>";}else{echo "<font color=green>【已回复】</font>";}?>
               </td>
-            <td align="center" width="12%"><a href="###"
+            <td align="center"><a class="btn btn-xs blue" href="###"
 			onclick="show(<?php echo $info['guestid']?>, '<?php echo new_addslashes($info['name'])?>')"
-			title="<?php echo L('reply')?>"><?php echo L('reply')?></a> | <a
+			title="<?php echo L('reply')?>"><?php echo L('reply')?></a> <a class="btn btn-xs red"
 			href='###'
 			onClick="Dialog.confirm('<?php echo L('confirm', array('message' => new_addslashes($info['name'])))?>',function(){redirect('?m=guestbook&c=guestbook&a=delete&guestid=<?php echo $info['guestid']?>&pc_hash='+pc_hash);});"><?php echo L('delete')?></a></td>
           </tr>

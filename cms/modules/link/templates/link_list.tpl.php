@@ -25,18 +25,18 @@ include $this->admin_tpl('header', 'admin');
 <table width="100%" cellspacing="0">
 	<thead>
 		<tr>
-			<th width="35" align="center" class="myselect">
+			<th align="center" class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="group-checkable" value="" id="check_box" onclick="selectall('linkid[]');" />
                         <span></span>
                     </label></th>
-			<th width="35" align="center"><?php echo L('listorder')?></th>
+			<th width="80" align="center"><?php echo L('listorder')?></th>
 			<th><?php echo L('link_name')?></th>
-			<th width="12%" align="center"><?php echo L('logo')?></th>
-			<th width="10%" align="center"><?php echo L('typeid')?></th>
-			<th width='10%' align="center"><?php echo L('link_type')?></th>
-			<th width="8%" align="center"><?php echo L('status')?></th>
-			<th width="12%" align="center"><?php echo L('operations_manage')?></th>
+			<th width="120" align="center"><?php echo L('logo')?></th>
+			<th width="120" align="center"><?php echo L('typeid')?></th>
+			<th width='120' align="center"><?php echo L('link_type')?></th>
+			<th width="80" align="center"><?php echo L('status')?></th>
+			<th align="center"><?php echo L('operations_manage')?></th>
 		</tr>
 	</thead>
 <tbody>
@@ -45,22 +45,22 @@ if(is_array($infos)){
 	foreach($infos as $info){
 		?>
 	<tr>
-		<td align="center" width="35" class="myselect">
+		<td align="center" class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="checkboxes" name="linkid[]" value="<?php echo $info['linkid']?>" />
                         <span></span>
                     </label></td>
-		<td align="center" width="35"><input name='listorders[<?php echo $info['linkid']?>]' type='text' size='3' value='<?php echo $info['listorder']?>' class="input-text-c"></td>
+		<td align="center"><input name='listorders[<?php echo $info['linkid']?>]' type='text' size='3' value='<?php echo $info['listorder']?>' class="input-text-c"></td>
 		<td><a href="<?php echo $info['url'];?>" title="<?php echo L('go_website')?>" target="_blank"><?php echo new_html_special_chars($info['name'])?></a> </td>
-		<td align="center" width="12%"><?php if($info['linktype']==1){?><?php if($info['passed']=='1'){?><?php if($info['logo']){?><img src="<?php echo $info['logo'];?>" width="83" height="31"><?php }}}?></td>
-		<td align="center" width="10%"><?php echo $type_arr[$info['typeid']];?></td>
-		<td align="center" width="10%"><?php if($info['linktype']==0){echo L('word_link');}else{echo L('logo_link');}?></td>
-		<td width="8%" align="center"><?php if($info['passed']=='0'){?><a
+		<td align="center"><?php if($info['linktype']==1){?><?php if($info['passed']=='1'){?><?php if($info['logo']){?><img src="<?php echo $info['logo'];?>" width="83" height="31"><?php }}}?></td>
+		<td align="center"><?php echo $type_arr[$info['typeid']];?></td>
+		<td align="center"><?php if($info['linktype']==0){echo L('word_link');}else{echo L('logo_link');}?></td>
+		<td align="center"><?php if($info['passed']=='0'){?><a
 			href='###'
 			onClick="Dialog.confirm('<?php echo L('pass_or_not')?>',function(){redirect('?m=link&c=link&a=check&linkid=<?php echo $info['linkid']?>&pc_hash='+pc_hash);});"><font color=red><?php echo L('audit')?></font></a><?php }else{echo L('passed');}?></td>
-		<td align="center" width="12%"><a href="###"
+		<td align="center"><a class="btn btn-xs green" href="###"
 			onclick="edit(<?php echo $info['linkid']?>, '<?php echo new_addslashes(new_html_special_chars($info['name']))?>')"
-			title="<?php echo L('edit')?>"><?php echo L('edit')?></a> |  <a
+			title="<?php echo L('edit')?>"><?php echo L('edit')?></a> <a class="btn btn-xs red"
 			href='###'
 			onClick="Dialog.confirm('<?php echo L('confirm', array('message' => new_addslashes(new_html_special_chars($info['name']))))?>',function(){redirect('?m=link&c=link&a=delete&linkid=<?php echo $info['linkid']?>&pc_hash='+pc_hash);});"><?php echo L('delete')?></a> 
 		</td>

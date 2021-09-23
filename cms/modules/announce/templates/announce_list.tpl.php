@@ -9,18 +9,18 @@ include $this->admin_tpl('header', 'admin');
     <table width="100%" cellspacing="0">
         <thead>
             <tr>
-            <th width="35" align="center" class="myselect">
+            <th align="center" class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="group-checkable" value="" id="check_box" onclick="selectall('aid[]');" />
                         <span></span>
                     </label></th>
 			<th align="center"><?php echo L('title')?></th>
-			<th width="68" align="center"><?php echo L('startdate')?></th>
-			<th width='68' align="center"><?php echo L('enddate')?></th>
-			<th width='68' align="center"><?php echo L('inputer')?></th>
-			<th width="50" align="center"><?php echo L('hits')?></th>
-			<th width="120" align="center"><?php echo L('inputtime')?></th>
-			<th width="69" align="center"><?php echo L('operations_manage')?></th>
+			<th width="180" align="center"><?php echo L('startdate')?></th>
+			<th width='180' align="center"><?php echo L('enddate')?></th>
+			<th width='100' align="center"><?php echo L('inputer')?></th>
+			<th width="100" align="center"><?php echo L('hits')?></th>
+			<th width="160" align="center"><?php echo L('inputtime')?></th>
+			<th align="center"><?php echo L('operations_manage')?></th>
             </tr>
         </thead>
     <tbody>
@@ -39,10 +39,10 @@ if(is_array($data)){
 	<td align="center"><?php echo $announce['endtime']?></td>
 	<td align="center"><?php echo $announce['username']?></td>
 	<td align="center"><?php echo $announce['hits']?></td>
-	<td align="center"><?php echo date('Y-m-d H:i:s', $announce['addtime'])?></td>
+	<td align="center"><?php echo dr_date($announce['addtime'], null, 'red')?></td>
 	<td align="center">
-	<?php if ($this->input->get('s')==1) {?><a href="?m=announce&c=index&a=show&aid=<?php echo $announce['aid']?>" title="<?php echo L('preview')?>"  target="_blank"><?php }?><?php echo L('index')?><?php if ($this->input->get('s')==1) {?></a><?php }?> | 
-	<a href="javascript:edit('<?php echo $announce['aid']?>', '<?php echo safe_replace($announce['title'])?>');void(0);"><?php echo L('edit')?></a>
+	<?php if ($this->input->get('s')==1) {?><a class="btn btn-xs blue" href="?m=announce&c=index&a=show&aid=<?php echo $announce['aid']?>" title="<?php echo L('preview')?>"  target="_blank"><?php echo L('index')?></a><?php }?> 
+	<a class="btn btn-xs green" href="javascript:edit('<?php echo $announce['aid']?>', '<?php echo safe_replace($announce['title'])?>');void(0);"><?php echo L('edit')?></a>
 	</td>
 	</tr>
 <?php 

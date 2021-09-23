@@ -12,11 +12,11 @@ include $this->admin_tpl('header', 'admin');
 	</tr>
 	<tr>
 		<th><?php echo L('startdate')?>：</th>
-		<td><?php echo form::date('announce[starttime]', $an_info['starttime'], 1)?></td>
+		<td><?php echo form::date('announce[starttime]', $an_info['starttime'], 0)?></td>
 	</tr>
 	<tr>
 		<th><?php echo L('enddate')?>：</th>
-		<td><?php $an_info['endtime'] = $an_info['endtime']=='0000-00-00' ? '' : $an_info['endtime']; echo form::date('announce[endtime]', $an_info['endtime'], 1);?></td>
+		<td><?php $an_info['endtime'] = $an_info['endtime']=='0000-00-00' ? '' : $an_info['endtime']; echo form::date('announce[endtime]', $an_info['endtime'], 0);?></td>
 	</tr>
 	<tr>
 		<th><?php echo L('announce_content')?></th>
@@ -35,7 +35,10 @@ include $this->admin_tpl('header', 'admin');
 	</tr>
 	<tr>
 		<th><?php echo L('announce_status')?></th>
-		<td><input name="announce[passed]" type="radio" value="1" <?php if($an_info['passed']==1) {?>checked<?php }?>></input>&nbsp;<?php echo L('pass')?>&nbsp;&nbsp;<input name="announce[passed]" type="radio" value="0" <?php if($an_info['passed']==0) {?>checked<?php }?>>&nbsp;<?php echo L('unpass')?></td>
+		<td><div class="mt-radio-inline">
+          <label class="mt-radio mt-radio-outline"><input name="announce[passed]" type="radio" value="1" <?php if($an_info['passed']==1) {?>checked<?php }?>>&nbsp;<?php echo L('pass')?><span></span></label>
+          <label class="mt-radio mt-radio-outline"><input name="announce[passed]" type="radio" value="0" <?php if($an_info['passed']==0) {?>checked<?php }?>>&nbsp;<?php echo L('unpass')?><span></span></label>
+        </div></td>
 	</tr>
     </tbody>
 </table>

@@ -10,11 +10,11 @@ include $this->admin_tpl('header','admin');
  <table width="100%" cellspacing="0">
         <thead>
             <tr>
-            <th width="55" align="center"><?php echo L('listorder');?></th>
-            <th><?php echo L('copyfrom_name');?></th>
-            <th ><?php echo L('copyfrom_url')?></th> 
-            <th ><?php echo L('copyfrom_logo')?></th> 
-             <th width="120"><?php echo L('operations_manage')?></th>
+            <th width="80" align="center"><?php echo L('listorder');?></th>
+            <th width="200"><?php echo L('copyfrom_name');?></th>
+            <th><?php echo L('copyfrom_url')?></th> 
+            <th><?php echo L('copyfrom_logo')?></th> 
+             <th><?php echo L('operations_manage')?></th>
             </tr>
         </thead>
     <tbody>
@@ -26,7 +26,7 @@ foreach($datas as $r) {
 <td align="center"><?php echo $r['sitename']?></td>
 <td align="center"><?php echo $r['siteurl']?></td>
 <td align="center"><?php if($r['thumb']) {?><img src="<?php echo $r['thumb']?>"><?php }?></td>
-<td align="center"><a href="javascript:edit('<?php echo $r['id']?>','<?php echo new_addslashes($r['sitename'])?>')"><?php echo L('edit');?></a> | <a href="javascript:;" onclick="data_delete(this,'<?php echo $r['id']?>','<?php echo L('confirm',array('message'=>new_addslashes($r['sitename'])));?>')"><?php echo L('delete')?></a> </td>
+<td align="center"><a class="btn btn-xs green" href="javascript:edit('<?php echo $r['id']?>','<?php echo new_addslashes($r['sitename'])?>')"><?php echo L('edit');?></a> <a class="btn btn-xs red" href="javascript:;" onclick="data_delete(this,'<?php echo $r['id']?>','<?php echo L('confirm',array('message'=>new_addslashes($r['sitename'])));?>')"><?php echo L('delete')?></a> </td>
 </tr>
 <?php } ?>
 </tbody>

@@ -9,16 +9,16 @@ include $this->admin_tpl('header', 'admin');
 <table width="100%" cellspacing="0">
 	<thead>
 		<tr>
-			<th width="35" align="center" class="myselect">
+			<th align="center" class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="group-checkable" value="" id="check_box" onclick="selectall('id[]');" />
                         <span></span>
                     </label></th>
-			<th width="20">ID</th> 
-			<th width="150">关键字</th> 
-			<th width="300">拼音</th>
-			<th width="200" align="center">关联数</th>
-			<th width="100" align="center"><?php echo L('operations_manage')?></th>
+			<th width="80">ID</th> 
+			<th>关键字</th> 
+			<th width="200">拼音</th>
+			<th width="100" align="center">关联数</th>
+			<th align="center"><?php echo L('operations_manage')?></th>
 		</tr>
 	</thead>
 <tbody>
@@ -27,18 +27,18 @@ if(is_array($datas)){
 	foreach($datas as $v){
 ?>
 	<tr>
-		<td align="center" width="35" class="myselect">
+		<td align="center" class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="checkboxes" name="id[]" value="<?php echo $v['id']?>" />
                         <span></span>
                     </label></td>
 		<td align="center"><?php echo $v['id']?></td> 
-		<td align="center" width="150"><?php echo $v['keyword'];;?></td>
-		<td align="center" width="180"><?php echo $v['pinyin']; ?></td>
-		<td align="center" width="90"><?php echo $v['videonum']; ?></td>
-		 <td align="center" width="190"><a href="###"
+		<td align="center"><?php echo $v['keyword'];;?></td>
+		<td align="center"><?php echo $v['pinyin']; ?></td>
+		<td align="center"><?php echo $v['videonum']; ?></td>
+		 <td align="center"><a class="btn btn-xs green" href="###"
 			onclick="edit(<?php echo $v['id']?>, '<?php echo new_addslashes($v['keyword'])?>')"
-			title="<?php echo L('edit')?>"><?php echo L('edit')?></a> |  <a
+			title="<?php echo L('edit')?>"><?php echo L('edit')?></a> <a class="btn btn-xs red"
 			href='###'
 			onClick="Dialog.confirm('<?php echo L('confirm', array('message' => new_addslashes($v['keyword'])))?>',function(){redirect('?m=taglist&c=taglist&a=delete&id=<?php echo $v['id']?>&pc_hash='+pc_hash);});"><?php echo L('delete')?></a>
 		</td>

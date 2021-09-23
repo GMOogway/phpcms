@@ -76,7 +76,7 @@ foreach($root as $k => $r){ ?>
 		<td align="center"><input name="postdata[<?php echo $j ?>][description]" type='text' value='<?php echo $f['description']?>' class="input-text" style="width:auto!important;" /></td>
 		<td align="center"><label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="postdata[<?php echo $j ?>][conf][status]" value="1" <?php if($f['conf']['status'] == 1) echo " checked='checked'"; ?>  /><span></span></label></td>
 		<td align="center"><label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="postdata[<?php echo $j ?>][conf][textarea]" value="1" <?php if($f['conf']['textarea'] == 1) echo " checked='checked'"; ?>  /><span></span></label></td>
-		<td align="center"><a href="javascript:;" onclick="delTr('tr<?php echo $j ?>')"><?php echo L('delete');?></a></td>
+		<td align="center"><a class="btn btn-xs red" href="javascript:;" onclick="delTr('tr<?php echo $j ?>')"><?php echo L('delete');?></a></td>
 	</tr>
 <?php $j++;}} ?>
 <tr><td colspan="7" align="center"><input type="button" value=" <?php echo L('cm_add')?> " class="button" onclick="addTr(<?php echo $r['id'] ?>)" /></td></tr>
@@ -108,7 +108,7 @@ foreach($root as $k => $r){ ?>
 		trHtml  +=	"<td align='center'><input name='postdata[" + addnum + "][description]' type='text' value='' class='input-text' style='width:auto!important;' /></td>";
 		trHtml  +=	"<td align='center'><label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' name='postdata[" + addnum + "][conf][status]' value='1' checked='checked' /><span></span></label></td>";
 		trHtml  +=	"<td align='center'><label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' name='postdata[" + addnum + "][conf][textarea]' value='1' /><span></span></label></td>";
-		trHtml  +=	"<td align='center'><a href='javascript:;' onclick=\"delTr('ntr"+ addnum +"')\"><?php echo L('delete');?></a></td>";
+		trHtml  +=	"<td align='center'><a class=\"btn btn-xs red\" href='javascript:;' onclick=\"delTr('ntr"+ addnum +"')\"><?php echo L('delete');?></a></td>";
 		trHtml  +=	"</tr>";
 	addnum++;
 	var $tr=$("#listtable"+ pid +" tr").eq(-2);

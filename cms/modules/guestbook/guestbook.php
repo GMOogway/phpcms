@@ -170,9 +170,9 @@ class guestbook extends admin {
  			$show_validator = $show_scroll = $show_header = true;
 			//解出分类内容
 			$info = $this->db2->get_one(array('typeid'=>$this->input->get('typeid')));
-			if(!$info) showmessage(L('linktype_exit'));
+			if(!$info) showmessage(L('guesttype_exit'));
 			extract($info);
-			include $this->admin_tpl('link_type_edit');
+			include $this->admin_tpl('guestbook_type_edit');
 		}
 
 	}

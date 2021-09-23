@@ -12,13 +12,13 @@ include $this->admin_tpl('header','admin');?>
     <table width="100%" cellspacing="0" >
         <thead>
 			<tr>
-			<th width="55"><?php echo L('sort')?></td>
-			<th width="35">ID</th>
-			<th width="120"><?php echo L('catname')?></th>
-			<th width="80"><?php echo L('modulename')?></th>
-			<th width="80"><?php echo L('modlename')?></th>
-			<th width="*"><?php echo L('catdescription')?></th>
-			<th width="80"><?php echo L('opreration')?></th>
+			<th width="80"><?php echo L('sort')?></td>
+			<th width="80">ID</th>
+			<th width="180"><?php echo L('catname')?></th>
+			<th width="180"><?php echo L('modulename')?></th>
+			<th width="180"><?php echo L('modlename')?></th>
+			<th><?php echo L('catdescription')?></th>
+			<th><?php echo L('opreration')?></th>
 			</tr>
         </thead>
     <tbody>
@@ -28,13 +28,13 @@ include $this->admin_tpl('header','admin');?>
 foreach($datas as $r) {
 ?>
 <tr>
-<td align="center"><input type="text" name="listorders[<?php echo $r['typeid']?>]" value="<?php echo $r['listorder']?>" size="3" class='input-text-c'></td>
-<td align="center"><?php echo $r['typeid']?></td>
-<td align="center"><?php echo $r['name']?></td>
-<td align="center"><?php echo $r['modelid'] && $r['typedir'] !='yp' ? L('content_module') : $r['typedir'];?></td>
-<td align="center"><?php echo $this->model[$r['modelid']]['name'] ? $this->model[$r['modelid']]['name'] : $this->yp_model[$r['modelid']]['name']?></td>
+<td><input type="text" name="listorders[<?php echo $r['typeid']?>]" value="<?php echo $r['listorder']?>" size="3" class='input-text-c'></td>
+<td><?php echo $r['typeid']?></td>
+<td><?php echo $r['name']?></td>
+<td><?php echo $r['modelid'] && $r['typedir'] !='yp' ? L('content_module') : $r['typedir'];?></td>
+<td><?php echo $this->model[$r['modelid']]['name'] ? $this->model[$r['modelid']]['name'] : $this->yp_model[$r['modelid']]['name']?></td>
 <td ><?php echo $r['description']?></td>
-<td align="center"><a href="javascript:edit('<?php echo $r['typeid']?>','<?php echo $r['name']?>')"><?php echo L('modify')?></a> | <a href="###" onclick="Dialog.confirm('<?php echo L('sure_delete', '', 'member')?>',function(){redirect('?m=search&c=search_type&a=delete&typeid=<?php echo $r['typeid']?>&pc_hash='+pc_hash);});"><?php echo L('delete')?></a> </td>
+<td><a class="btn btn-xs green" href="javascript:edit('<?php echo $r['typeid']?>','<?php echo $r['name']?>')"> <i class="fa fa-edit"></i> <?php echo L('modify')?></a><a class="btn btn-xs red" href="###" onclick="Dialog.confirm('<?php echo L('sure_delete', '', 'member')?>',function(){redirect('?m=search&c=search_type&a=delete&typeid=<?php echo $r['typeid']?>&pc_hash='+pc_hash);});"> <i class="fa fa-trash"></i> <?php echo L('delete')?></a> </td>
 </tr>
 <?php } ?>
 	</tbody>

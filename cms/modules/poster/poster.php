@@ -11,18 +11,22 @@ class poster extends admin {
 		$this->s_db = pc_base::load_model('poster_space_model');
 		$this->db = pc_base::load_model('poster_model');
 		$setting = new_html_special_chars(getcache('poster', 'commons'));
-		$this->setting = $setting[$this->get_siteid()];
+		if ($this->setting) {
+			$this->setting = $setting[$this->get_siteid()];
+		} else {
+			$this->setting = array();
+		}
 	}
 	
 	/**
 	 * 广告列表
 	 */
 	public function init() {
-		$spaceid = $this->input->get('spaceid') ? intval($_GET['spaceid']) : 0;
+		$spaceid = $this->input->get('spaceid') ? intval($this->input->get('spaceid')) : 0;
 		if (!isset($spaceid) || empty($spaceid)) {
 			showmessage(L('illegal_action'), HTTP_REFERER);
 		}
-		$page = max($_GET['page'], 1);
+		$page = max($this->input->get('page'), 1);
 		$infos = $this->db->listinfo(array('spaceid'=>$spaceid, 'siteid'=>$this->get_siteid()), '`listorder` ASC, `id` DESC', $page);
 		pc_base::load_sys_class('format', '', 0);
 		$types = array('images'=>L('photo'), 'flash'=>L('flash'), 'text'=>L('title'));
@@ -35,9 +39,9 @@ class poster extends admin {
 	 * 添加广告
 	 */
 	public function add() {
-		if (isset($_POST['dosubmit'])) {
-			$poster = $this->check($_POST['poster']);
-			$setting = $this->check_setting($_POST['setting'], $poster['type']);
+		if ($this->input->post('dosubmit')) {
+			$poster = $this->check($this->input->post('poster'));
+			$setting = $this->check_setting($this->input->post('setting'), $poster['type']);
 			$poster['siteid'] = $this->get_siteid();
 			$poster['setting'] = array2string($setting);
 			$poster['addtime'] = SYS_TIME;
@@ -59,7 +63,7 @@ class poster extends admin {
 				showmessage(L('operation_failure'), 'index.php?m=poster&c=space&a=init');
 			}
 		} else {
-			$spaceid = intval($_GET['spaceid']);
+			$spaceid = intval($this->input->get('spaceid'));
 			$sinfo = $this->s_db->get_one(array('spaceid' => $spaceid, 'siteid'=>$this->get_siteid()), 'name, type');
 			$setting = $this->get_setting($sinfo['type']);
 			$TYPES = get_types();
@@ -74,25 +78,24 @@ class poster extends admin {
 	 * 广告修改
 	 */
 	public function edit() {
-		$_GET['id'] = intval($_GET['id']);
-		if (!$_GET['id']) showmessage(L('illegal_action'), HTTP_REFERER);
-		if (isset($_POST['dosubmit'])) {
-			$poster = $this->check($_POST['poster']);
-			$setting = $this->check_setting($_POST['setting'], $poster['type']);
+		if (!intval($this->input->get('id'))) showmessage(L('illegal_action'), HTTP_REFERER);
+		if ($this->input->post('dosubmit')) {
+			$poster = $this->check($this->input->post('poster'));
+			$setting = $this->check_setting($this->input->post('setting'), $poster['type']);
 			$poster['setting'] = array2string($setting);
-			$this->db->update($poster, array('id'=>$_GET['id'], 'siteid'=>$this->get_siteid()));
-			$this->create_js(intval($_GET['spaceid']));
+			$this->db->update($poster, array('id'=>$this->input->get('id'), 'siteid'=>$this->get_siteid()));
+			$this->create_js(intval($this->input->get('spaceid')));
 			foreach ($setting as $im) {
 				$imgs[] = $im['imageurl'];
 			}
 			if(SYS_ATTACHMENT_STAT) {
 				$this->attachment_db = pc_base::load_model('attachment_model');
-				$this->attachment_db->api_update($imgs, 'poster-'.$_GET['id'], 1);
+				$this->attachment_db->api_update($imgs, 'poster-'.$this->input->get('id'), 1);
 			}
-			showmessage(L('edit_ads_success'), 'index.php?m=poster&c=poster&a=init&spaceid='.$_GET['spaceid']);
+			showmessage(L('edit_ads_success'), 'index.php?m=poster&c=poster&a=init&spaceid='.$this->input->get('spaceid'));
 		} else {
 			
-			$info = $this->db->get_one(array('id'=>$_GET['id'], 'siteid'=>$this->get_siteid()));
+			$info = $this->db->get_one(array('id'=>$this->input->get('id'), 'siteid'=>$this->get_siteid()));
 			$sinfo = $this->s_db->get_one(array('spaceid' => $info['spaceid'], 'siteid'=>$this->get_siteid()), 'name, type');
 			$setting = $this->get_setting($sinfo['type']);
 			$TYPES = get_types();
@@ -110,7 +113,7 @@ class poster extends admin {
 	 * 广告排序
 	 */
 	public function listorder() {
-		if (isset($_POST['listorder']) && is_array($_POST['listorder'])) {
+		if ($this->input->post('listorder') && is_array($this->input->post('listorder'))) {
 			$listorder = $this->input->post('listorder');
 			foreach ($listorder as $k => $v) {
 				
@@ -137,10 +140,13 @@ class poster extends admin {
 	 * @param intval $id 广告ID
 	 */
 	public function public_approval() {
-		if (!isset($_POST['id']) || !is_array($_POST['id'])) {
+		if (!$this->input->post('id') || !is_array($this->input->post('id'))) {
 			showmessage(L('illegal_parameters'), HTTP_REFERER);
 		} else {
-			array_map(array($this, _approval), $_POST['id']);
+			$ids = $this->input->post('id');
+			foreach($ids as $id) {
+				$this->_approval($id);
+			}
 		}
 		showmessage(L('operation_success'), HTTP_REFERER);
 	}
@@ -148,8 +154,7 @@ class poster extends admin {
 	private function _approval($id = 0) {
 		$id = intval($id);
 		if (!$id) return false;
-		$_GET['passed'] = intval($_GET['passed']);
-		$this->db->update(array('disabled'=>$_GET['passed'] ), array('id'=>$id, 'siteid'=>$this->get_siteid()));
+		$this->db->update(array('disabled'=>intval($this->input->get('passed'))), array('id'=>$id, 'siteid'=>$this->get_siteid()));
 		return true;
 	}
 	
@@ -158,10 +163,13 @@ class poster extends admin {
 	 * @param invtal $id 广告ID
 	 */
 	public function delete() {
-		if (!isset($_POST['id']) || !is_array($_POST['id'])) {
+		if (!$this->input->post('id') || !is_array($this->input->post('id'))) {
 			showmessage(L('illegal_parameters'), HTTP_REFERER);
 		} else {
-			array_map(array($this, _del), $_POST['id']);
+			$ids = $this->input->post('id');
+			foreach($ids as $id) {
+				$this->_del($id);
+			}
 		}
 		showmessage(L('operation_success'), HTTP_REFERER);
 	}
@@ -187,10 +195,8 @@ class poster extends admin {
 	 * 广告统计
 	 */
 	public function stat() {
-		
-		$_GET['id'] = intval($_GET['id']);
-		$info = $this->db->get_one(array('id'=>$_GET['id']), 'spaceid');
-		if (!$_GET['id']) showmessage(L('illegal_operation'));
+		if (!$this->input->get('id')) showmessage(L('illegal_operation'));
+		$info = $this->db->get_one(array('id'=>intval($this->input->get('id'))), 'spaceid');
 		/** 
 		 *如果设置了日期查询，设置查询的开始时间和结束时间
 		 */
@@ -200,41 +206,39 @@ class poster extends admin {
         $day = date('d', SYS_TIME);
         $where = $group = $order = '';
         $fields = '*';
-        $where = "`pid`='".$_GET['id']."' AND `siteid`='".$this->get_siteid()."'";
-		if ($_GET['range'] == 2) { //昨天的统计
+        $where = "`pid`='".$this->input->get('id')."' AND `siteid`='".$this->get_siteid()."'";
+		if ($this->input->get('range') == 2) { //昨天的统计
             $fromtime = mktime(0, 0, 0, $month, $day-2, $year);
             $totime = mktime(0, 0, 0, $month, $day-1, $year);
             $where .= " AND `clicktime`>='".$fromtime."'";
             $where .= " AND `clicktime`<='".$totime."'";
-        } elseif(is_numeric($_GET['range'])) { //如果设置了查询的天数
-            $fromtime = mktime(0, 0, 0, $month, $day-$_GET['range'], $year);
+        } elseif(is_numeric($this->input->get('range'))) { //如果设置了查询的天数
+            $fromtime = mktime(0, 0, 0, $month, $day-$this->input->get('range'), $year);
             $where .= " AND `clicktime`>='".$fromtime."'";
         }
         $order = '`clicktime` DESC';
         
         //如果设置了按点击、展示统计
-        $_GET['click'] = isset($_GET['click']) ? intval($_GET['click']) : 0;
-        if (is_numeric($_GET['click'])) {
-        	$_GET['click'] = intval($_GET['click']);
-        	$where .= " AND `type`='".$_GET['click']."'";
+        $click = $this->input->get('click') ? intval($this->input->get('click')) : 0;
+        if (is_numeric($click)) {
+        	$where .= " AND `type`='".$click."'";
         	
         	//如果设置了按地区或者按ip分类
-	        if ($_GET['group']) {
-				$_GET['group'] = preg_replace('#`#', '', $_GET['group']);
-	        	$group = " `".$_GET['group']."`";
-	        	$fields = "*, COUNT(".$_GET['group'].") AS num";
+	        if ($this->input->get('group')) {
+	        	$group = " `".preg_replace('#`#', '', $this->input->get('group'))."`";
+	        	$fields = "*, COUNT(".$group.") AS num";
 	        	$order = " `num` DESC";
 	        } 
 	        $r = $sdb->get_one($where, 'COUNT(*) AS num', '', $group); //取得总数
         } else {
         	$r = $sdb->get_one($where, 'COUNT(*) AS num');
         }
-		$page = max(intval($_GET['page']), 1);
+		$page = max(intval($this->input->get('page')), 1);
 		$curr_page = 20;
 		$limit = ($page-1)*$curr_page.','.$curr_page;
 		$pages = pages($r['num'], $page, 20); //生成分页
 		$data = $sdb->select($where, $fields, $limit, $order, $group);
-		$selectstr = $sdb->get_list($_GET['year']); //取得历史查询下拉框，有历史数据查询时，会自动换表
+		$selectstr = $sdb->get_list($this->input->get('year')); //取得历史查询下拉框，有历史数据查询时，会自动换表
 		pc_base::load_sys_class('format', '', 0);
 		$show_header = true;
 		unset($r);
@@ -362,18 +366,19 @@ class poster extends admin {
 	 * ajax检查广告名的合法性
 	 */
 	public function public_check_poster() {
-		if (!$_GET['name']) exit(0);
+		if (!$this->input->get('name')) exit(0);
+		$name = $this->input->get('name');
 		if (CHARSET=='gbk') {
-			$_GET['name'] = safe_replace(iconv('UTF-8', 'GBK', $_GET['name']));
+			$name = safe_replace(iconv('UTF-8', 'GBK', $name));
 		}
-		if ($_GET['id']) {
-			$spaceid = intval($_GET['spaceid']);
+		if ($this->input->get('id')) {
+			$spaceid = intval($this->input->get('spaceid'));
 			$r = $this->db->get_one(array('id' => $id));
-			if($r['name'] == $this->input->get('name')) {
+			if($r['name'] == $name) {
 				exit('1');
 			}
 		} 
-		$r = $this->db->get_one(array('siteid' => $this->get_siteid(), 'name' => $_GET['name']), 'id');
+		$r = $this->db->get_one(array('siteid' => $this->get_siteid(), 'name' => $this->input->get('name')), 'id');
 		if ($r['id']) {
 			exit('0');
 		} else {

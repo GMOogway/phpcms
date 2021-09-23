@@ -8,28 +8,30 @@ include $this->admin_tpl('header', 'admin');
     <table width="100%" cellspacing="0">
         <thead>
             <tr>
-            <th width="220" align="center"><?php echo L('modulename')?></th>
-			<th width='220' align="center"><?php echo L('modulepath')?></th>
-			<th width="14%" align="center"><?php echo L('versions')?></th>
-			<th width='10%' align="center"><?php echo L('installdate')?></th>
-			<th width="10%" align="center"><?php echo L('updatetime')?></th>
-			<th width="12%" align="center"><?php echo L('operations_manage')?></th>
+            <th width="60"></th>
+            <th width="330"><?php echo L('modulename')?></th>
+			<th><?php echo L('modulepath')?></th>
+			<th width="80"><?php echo L('versions')?></th>
+			<th width='150'><?php echo L('installdate')?></th>
+			<th width="150"><?php echo L('updatetime')?></th>
+			<th><?php echo L('operations_manage')?></th>
             </tr>
         </thead>
     <tbody>
  <?php 
 if (is_array($directory)){
-	foreach ($directory as $d){
+	foreach ($directory as $i=>$d){
 		if (array_key_exists($d, $modules)) {
 ?>   
 	<tr>
-	<td align="center" width="220"><?php echo $modules[$d]['name']?></td>
-	<td width="220" align="center"><?php echo $d?></td>
-	<td align="center"><?php echo $modules[$d]['version']?></td>
-	<td align="center"><?php echo $modules[$d]['installdate']?></td>
-	<td align="center"><?php echo $modules[$d]['updatedate']?></td>
-	<td align="center">
-	<?php if ($modules[$d]['iscore']) {?><span style="color: #999"><?php echo L('ban')?></span><?php } else {?><a href="javascript:void(0);" onclick="dr_install_uninstall('uninstall','<?php echo L('confirm', array('message'=>$modules[$d]['name']))?>','<?php echo L('module_unistall', '', 'admin')?>','?m=admin&c=module&a=uninstall','<?php echo $d?>');"><font color="red"><?php echo L('unload')?></font></a><?php }?>
+	<td><span class="badge badge-success"> <?php echo $i+1;?> </span></td>
+	<td><?php echo $modules[$d]['name']?></td>
+	<td><?php echo $d?></td>
+	<td><?php echo $modules[$d]['version']?></td>
+	<td><?php echo $modules[$d]['installdate']?></td>
+	<td><?php echo $modules[$d]['updatedate']?></td>
+	<td>
+	<?php if ($modules[$d]['iscore']) {?><span class="btn btn-xs dark"> <i class="fa fa-ban"></i> <?php echo L('ban')?></span><?php } else {?><a class="btn btn-xs red" href="javascript:void(0);" onclick="dr_install_uninstall('uninstall','<?php echo L('confirm', array('message'=>$modules[$d]['name']))?>','<?php echo L('module_unistall', '', 'admin')?>','?m=admin&c=module&a=uninstall','<?php echo $d?>');"> <i class="fa fa-trash"></i> <?php echo L('unload')?></a><?php }?>
 	</td>
 	</tr>
 <?php 
@@ -44,13 +46,14 @@ if (is_array($directory)){
 		}
 ?>
 	<tr class="on">
-	<td align="center" width="220"><?php echo $modulename?></td>
-	<td width="220" align="center"><?php echo $d?></td>
-	<td align="center"><?php echo $version?></td>
-	<td align="center"><?php echo L('unknown')?></td>
-	<td align="center"><?php echo L('uninstall_now')?></td>
-	<td align="center">
-	<?php if ($isinstall!=L('no_install')) {?> <a href="javascript:dr_install_uninstall('install','<?php echo L('install_desc')?>','<?php echo L('module_istall')?>','?m=admin&c=module&a=install','<?php echo $d?>');"><font color="#009933"><?php echo $isinstall?></font><?php } else {?><font color="#009933"><?php echo $isinstall?></font><?php }?></a>
+	<td><span class="badge badge-success"> <?php echo $i+1;?> </span></td>
+	<td><?php echo $modulename?></td>
+	<td><?php echo $d?></td>
+	<td><?php echo $version?></td>
+	<td><?php echo L('unknown')?></td>
+	<td><?php echo L('uninstall_now')?></td>
+	<td>
+	<?php if ($isinstall!=L('no_install')) {?> <a class="btn btn-xs blue" href="javascript:dr_install_uninstall('install','<?php echo L('install_desc')?>','<?php echo L('module_istall')?>','?m=admin&c=module&a=install','<?php echo $d?>');"> <i class="fa fa-plus"></i> <?php echo $isinstall?></a><?php } else {?><?php echo $isinstall?><?php }?>
 	</td>
 	</tr>
 <?php 

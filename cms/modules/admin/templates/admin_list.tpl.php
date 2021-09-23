@@ -8,11 +8,11 @@ include $this->admin_tpl('header');?>
         <thead>
 		<tr>
 		<th width="80"><?php echo L('userid')?></th>
-		<th width="180"><?php echo L('username')?></th>
+		<th><?php echo L('username')?></th>
 		<th width="150"><?php echo L('userinrole')?></th>
 		<th width="180"><?php echo L('lastloginip')?></th>
-		<th width="180"  ><?php echo L('lastlogintime')?></th>
-		<th width="200"  ><?php echo L('email')?></th>
+		<th width="180"><?php echo L('lastlogintime')?></th>
+		<th width="200"><?php echo L('email')?></th>
 		<th width="100"><?php echo L('realname')?></th>
 		<th><?php echo L('operations_manage')?></th>
 		</tr>
@@ -32,9 +32,9 @@ if(is_array($infos)){
 <td><?php echo $info['email']?></td>
 <td><?php echo $info['realname']?></td>
 <td>
-<a href="javascript:edit(<?php echo $info['userid']?>, '<?php echo new_addslashes($info['username'])?>')"><?php echo L('edit')?></a> | 
+<a class="btn btn-xs green" href="javascript:edit(<?php echo $info['userid']?>, '<?php echo new_addslashes($info['username'])?>')"><?php echo L('edit')?></a>
 <?php if(!in_array($info['userid'],$admin_founders)) {?>
-<a href="javascript:confirmurl('?m=admin&c=admin_manage&a=delete&userid=<?php echo $info['userid']?>', '<?php echo L('admin_del_cofirm')?>')"><?php echo L('delete')?></a>
+<a class="btn btn-xs red" href="javascript:confirmurl('?m=admin&c=admin_manage&a=delete&userid=<?php echo $info['userid']?>', '<?php echo L('admin_del_cofirm')?>')"><?php echo L('delete')?></a>
 <?php } else {?>
 <font color="#cccccc"><?php echo L('delete')?></font>
 <?php } ?>

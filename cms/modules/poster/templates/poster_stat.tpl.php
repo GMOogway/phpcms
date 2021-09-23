@@ -28,9 +28,9 @@ include $this->admin_tpl('header','admin');
         <thead>
             <tr>
             <?php if($_GET['group']=='ip') {?>
-            <th width="30%" align="center"><?php echo L('browse_ip')?></th><?php }?>
-			<th width="30%" align="center"><?php echo L('for_area')?></th>
-			<th width="30%" align="center"><?php echo L('show_times')?></th>
+            <th align="center"><?php echo L('browse_ip')?></th><?php }?>
+			<th align="center"><?php echo L('for_area')?></th>
+			<th align="center"><?php echo L('show_times')?></th>
             </tr>
         </thead>
     </table>
@@ -41,11 +41,11 @@ if(is_array($data)){
 ?>   
 	<tr>
 	<?php if($_GET['group']=='ip') {?>
-	<td align="center" width="30%"><?php echo $info['ip']?></td><?php }?>
-	<td align="center" width="30%">
+	<td align="center"><?php echo $info['ip']?></td><?php }?>
+	<td align="center">
 	<?php echo $info['area']?>
 	</td>
-	<td align="center" width="30%"><?php echo $info['num']?></td>
+	<td align="center"><?php echo $info['num']?></td>
 	</tr>
 <?php 
 	}

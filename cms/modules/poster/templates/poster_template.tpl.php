@@ -14,8 +14,8 @@ include $this->admin_tpl('header', 'admin');
     <table width="100%" cellspacing="0">
         <thead>
             <tr>
-            <th width="50" align="center"><?php echo L('template_name')?></th>
-			<th width="24%" align="center"><?php echo L('operations_manage')?></th>
+            <th width="200" align="center"><?php echo L('template_name')?></th>
+			<th align="center"><?php echo L('operations_manage')?></th>
             </tr>
         </thead>
     <tbody>
@@ -26,7 +26,7 @@ if(is_array($templates)){
 	<tr>
 	<td><?php if ($poster_template[$info]['name']) { echo $poster_template[$info]['name'].' ('.$info.')'; } else { echo $info; }?></td>
 	<td align="center">
-	<a href="javascript:<?php if ($poster_template[$info]['iscore']) {?>check<?php } else {?>edit<?php }?>('<?php echo addslashes(new_html_special_chars($info))?>', '<?php echo addslashes(new_html_special_chars($poster_template[$info]['name']))?>');void(0);"><?php if ($poster_template[$info]['iscore']) { echo L('check_template'); } else { echo '<font color="#009933">'.L('setting_template').'</font>'; }?></a> | <a href="?m=poster&c=space&a=public_tempate_del&id=<?php echo $info?>"><?php echo L('delete')?></a>
+	<a class="btn btn-xs green" href="javascript:<?php if ($poster_template[$info]['iscore']) {?>check<?php } else {?>edit<?php }?>('<?php echo addslashes(new_html_special_chars($info))?>', '<?php echo addslashes(new_html_special_chars($poster_template[$info]['name']))?>');void(0);"><?php if ($poster_template[$info]['iscore']) { echo L('check_template'); } else { echo L('setting_template'); }?></a> <a class="btn btn-xs red" href="?m=poster&c=space&a=public_tempate_del&id=<?php echo $info?>"><?php echo L('delete')?></a>
 	</td>
 	</tr>
 <?php 

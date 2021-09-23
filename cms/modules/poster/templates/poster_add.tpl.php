@@ -30,7 +30,7 @@ $p = dr_authcode(array(
 <table class="table_form" width="100%" cellspacing="0">
 <tbody>
 	<tr>
-		<th width="100"><?php echo L('poster_title')?>：</th>
+		<th width="120"><?php echo L('poster_title')?>：</th>
 		<td><input name="poster[name]" id="name" class="input-text" type="text" size="25"></td>
 	</tr>
 	<tr>

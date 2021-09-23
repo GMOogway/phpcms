@@ -16,17 +16,17 @@ include $this->admin_tpl('header', 'admin');
     <table width="100%" cellspacing="0">
         <thead>
             <tr>
-            <th width="6%" align="center" class="myselect">
+            <th align="center" class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="group-checkable" value="" id="check_box" onclick="selectall('spaceid[]');" />
                         <span></span>
                     </label></th>
 			<th><?php echo L('boardtype')?></th>
-			<th width="12%" align="center"><?php echo L('ads_type')?></th>
-			<th width='10%' align="center"><?php echo L('size_format')?></th>
-			<th width="10%" align="center"><?php echo L('ads_num')?></th>
-			<th align="center" width="13%"><?php echo L('description')?></th>
-			<th width="28%" align="center"><?php echo L('operations_manage')?></th>
+			<th width="100" align="center"><?php echo L('ads_type')?></th>
+			<th width='120' align="center"><?php echo L('size_format')?></th>
+			<th width="80" align="center"><?php echo L('ads_num')?></th>
+			<th align="center"><?php echo L('description')?></th>
+			<th align="center"><?php echo L('operations_manage')?></th>
             </tr>
         </thead>
     <tbody>
@@ -46,10 +46,10 @@ if(is_array($infos)){
 	<td align="center"><?php echo $info['items']?></td>
 	<td align="center"><?php echo $info['description']?></td>
 	<td align="center">
-	<a href="?m=poster&c=space&a=public_preview&spaceid=<?php echo $info['spaceid']?>" target="_blank"><?php echo L('preview')?></a> | <a href="javascript:call(<?php echo $info['spaceid']?>);void(0);"><?php echo L('get_code')?></a> | <a href='?m=poster&c=poster&a=init&spaceid=<?php echo $info['spaceid']?>&menuid=<?php echo $_GET['menuid']?>' ><?php echo L('ad_list')?></a> | 
-	<a href="###" onclick="edit(<?php echo $info['spaceid']?>, '<?php echo addslashes(new_html_special_chars($info['name']))?>')" title="<?php echo L('edit')?>" ><?php echo L('edit')?></a> | 
-	<a href='###' onClick="Dialog.confirm('<?php echo L('confirm', array('message' => addslashes(new_html_special_chars($info['name']))))?>',function(){redirect('?m=poster&c=space&a=delete&spaceid=<?php echo $info['spaceid']?>&pc_hash='+pc_hash);});"><?php echo L('delete')?></a>
-	| <a href="index.php?m=poster&c=poster&a=add&spaceid=<?php echo $info['spaceid']?>&menuid=<?php echo $_GET['menuid']?>&pc_hash=<?php echo dr_get_csrf_token()?>">添加广告</a>
+	<a class="btn btn-xs blue" href="?m=poster&c=space&a=public_preview&spaceid=<?php echo $info['spaceid']?>" target="_blank"><?php echo L('preview')?></a> <a class="btn btn-xs dark" href="javascript:call(<?php echo $info['spaceid']?>);void(0);"><?php echo L('get_code')?></a> <a class="btn btn-xs yellow" href='?m=poster&c=poster&a=init&spaceid=<?php echo $info['spaceid']?>&menuid=<?php echo $_GET['menuid']?>' ><?php echo L('ad_list')?></a> 
+	<a class="btn btn-xs green" href="###" onclick="edit(<?php echo $info['spaceid']?>, '<?php echo addslashes(new_html_special_chars($info['name']))?>')" title="<?php echo L('edit')?>" ><?php echo L('edit')?></a>
+	<a class="btn btn-xs red" href='###' onClick="Dialog.confirm('<?php echo L('confirm', array('message' => addslashes(new_html_special_chars($info['name']))))?>',function(){redirect('?m=poster&c=space&a=delete&spaceid=<?php echo $info['spaceid']?>&pc_hash='+pc_hash);});"><?php echo L('delete')?></a>
+	<a class="btn btn-xs blue" href="index.php?m=poster&c=poster&a=add&spaceid=<?php echo $info['spaceid']?>&menuid=<?php echo $_GET['menuid']?>&pc_hash=<?php echo dr_get_csrf_token()?>">添加广告</a>
 	</td>
 	</tr>
 <?php 

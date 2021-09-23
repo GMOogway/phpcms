@@ -158,7 +158,7 @@ class foreground {
 						if (ROUTE_M =='member' && ROUTE_C == 'index' && in_array(ROUTE_A, array('account_manage_password','public_checkemail_ajax','logout'))) {
 							return true; // 本身控制器不判断
 						}
-						showmessage(L('您需要定期修改密码'), '?m=member&c=member_manage&a=account_manage_password&t=1');
+						showmessage(L('您需要定期修改密码'), '?m=member&c=index&a=account_manage_password&t=1');
 					}
 				}
 			}

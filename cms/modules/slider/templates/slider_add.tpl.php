@@ -61,15 +61,9 @@ include $this->admin_tpl('header','admin');
           <label class="mt-radio mt-radio-outline"><input name="slider[isshow]" type="radio" value="0">&nbsp;<?php echo L('notshow')?> <span></span></label>
         </div></td>
 	</tr>
-
-<tr>
-		<th></th>
-		<td><input type="hidden" name="forward" value="?m=slider&c=slider&a=add"> <input
-		type="submit" name="dosubmit" id="dosubmit" class="dialog"
-		value=" <?php echo L('submit')?> "></td>
-	</tr>
-
 </table>
+<input type="hidden" name="forward" value="?m=slider&c=slider&a=add">
+<input type="submit" name="dosubmit" id="dosubmit" class="dialog" value=" <?php echo L('submit')?> ">
 </form>
 </div>
 </body>

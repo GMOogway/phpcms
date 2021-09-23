@@ -54,7 +54,7 @@ class check extends admin {
 			$r = $this->comment_data_db->get_one(array('id'=>$comment_check_data['comment_data_id'], 'siteid'=>$this->get_siteid()));
 			pc_base::load_sys_class('format','', 0);
 			$r['creat_at'] = format::date($r['creat_at'], 1);
-			if (pc_base::load_config('system','charset')=='gbk') {
+			if (CHARSET=='gbk') {
 				foreach ($r as $k=>$v) {
 					$r[$k] = iconv('gbk', 'utf-8', $v);
 				}

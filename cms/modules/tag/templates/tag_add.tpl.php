@@ -98,7 +98,7 @@ include $this->admin_tpl('header', 'admin');
 </table>
 </fieldset>
 <div class="bk15"></div>
-    <input type="submit" class="dialog" id="dosubmit" name="dosubmit" value="" />
+    <input type="submit" class="dialog" id="dosubmit" name="dosubmit" value="<?php echo L('submit')?>" />
 </div>
 </div>
 </form>

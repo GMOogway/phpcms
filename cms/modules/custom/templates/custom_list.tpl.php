@@ -4,24 +4,23 @@ $show_dialog = 1;
 include $this->admin_tpl('header', 'admin');
 ?>
 <div class="pad-lr-10">
-
 <form name="myform" id="myform" action="?m=custom&c=custom&a=delete" method="post" onsubmit="checkuid();return false;">
 <input name="dosubmit" type="hidden" value="1">
 <div class="table-list">
 <table width="100%" cellspacing="0">
 	<thead>
 		<tr>
-			<th width="35" align="center" class="myselect">
+			<th align="center" class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="group-checkable" value="" id="check_box" onclick="selectall('id[]');" />
                         <span></span>
                     </label></th>
-			<th>ID</th>
-			<th align="LEFT"><?php echo L('custom_title')?></th>
-			<th width="25%" align="center"><?php echo L('custom_content_view')?></th>
-			<th width="25%" align="center"><?php echo L('custom_get')?></th>
-			<th width="13%" align="center"><?php echo L('custom_inputtime')?></th>
-			<th width="12%" align="center"><?php echo L('operations_manage')?></th>
+			<th width="80">ID</th>
+			<th><?php echo L('custom_title')?></th>
+			<th width="100" align="center"><?php echo L('custom_content_view')?></th>
+			<th width="100" align="center"><?php echo L('custom_get')?></th>
+			<th width="160" align="center"><?php echo L('custom_inputtime')?></th>
+			<th><?php echo L('operations_manage')?></th>
 		</tr>
 	</thead>
 <tbody>
@@ -30,25 +29,25 @@ if(is_array($infos)){
 	foreach($infos as $info){
 		?>
 	<tr>
-		<td align="center" width="35" class="myselect">
+		<td align="center" class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="checkboxes" name="id[]" value="<?php echo $info['id']?>" />
                         <span></span>
                     </label></td>
-		<td align="center" width="35"><?php echo $info['id']?></td>
+		<td align="center"><?php echo $info['id']?></td>
 		<td><a href="###"
 			onclick="edit(<?php echo $info['id']?>, '<?php echo new_addslashes($info['title'])?>')"
 			title="<?php echo L('edit')?>"><?php echo $info['title'];?></a></td>
-		<td align="center" width="10%"><a href="###"
+		<td align="center"><a class="btn btn-xs blue" href="###"
 			onclick="view(<?php echo $info['id']?>, '<?php echo new_addslashes($info['title'])?>','content')"
 			><?php echo L('custom_click_view')?></a></td>
-		<td align="center" width="10%"><a href="###"
+		<td align="center"><a class="btn btn-xs yellow" href="###"
 			onclick="view(<?php echo $info['id']?>, '<?php echo new_addslashes($info['title'])?>','lable')"
 			><?php echo L('custom_click_view')?></a></td>
 		<td  align="center"><?php echo dr_date($info['inputtime'], null, 'red');?></td>
-		<td align="center" width="12%"><a href="###"
+		<td align="center"><a class="btn btn-xs green" href="###"
 			onclick="edit(<?php echo $info['id']?>, '<?php echo new_addslashes($info['title'])?>')"
-			title="<?php echo L('edit')?>"><?php echo L('edit')?></a> |  <a
+			title="<?php echo L('edit')?>"><?php echo L('edit')?></a> <a class="btn btn-xs red"
 			href='###'
 			onClick="Dialog.confirm('<?php echo L('confirm', array('message' => new_addslashes($info['title'])))?>',function(){redirect('?m=custom&c=custom&a=delete&id=<?php echo $info['id']?>&pc_hash='+pc_hash);});"><?php echo L('delete')?></a> 
 		</td>

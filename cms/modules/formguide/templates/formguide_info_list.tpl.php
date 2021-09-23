@@ -13,15 +13,15 @@ include $this->admin_tpl('header', 'admin');
     <table width="100%" cellspacing="0">
         <thead>
             <tr>
-            <th width="35" align="center" class="myselect">
+            <th align="center" class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="group-checkable" value="" id="check_box" onclick="selectall('did[]');" />
                         <span></span>
                     </label></th>
 			<th align="center"><?php echo L('username')?></th>
-			<th width='250' align="center"><?php echo L('userip')?></th>
-			<th width='250' align="center"><?php echo L('times')?></th>
-			<th width="250" align="center"><?php echo L('operation')?></th>
+			<th width='200' align="center"><?php echo L('userip')?></th>
+			<th width='180' align="center"><?php echo L('times')?></th>
+			<th align="center"><?php echo L('operation')?></th>
             </tr>
         </thead>
     <tbody>
@@ -37,8 +37,8 @@ if(is_array($datas)){
                     </label></td>
 	<td><?php if ($d['username']) {echo $d['username'];} else {echo '<font color="red">无</font>';}?></td>
 	<td align="center"><?php echo $d['ip']?></td>
-	<td align="center"><?php echo date('Y-m-d', $d['datetime'])?></td>
-	<td align="center"><a href="javascript:check('<?php echo $formid?>', '<?php echo $d['dataid']?>', '<?php echo safe_replace($d['username'])?>');void(0);"><?php echo L('check')?></a> | <a href="###" onClick="Dialog.confirm('<?php echo L('confirm', array('message' => L('delete')))?>',function(){redirect('?m=formguide&c=formguide_info&a=public_delete&formid=<?php echo $formid?>&did=<?php echo $d['dataid']?>&pc_hash='+pc_hash);});"><?php echo L('del')?></a></td>
+	<td align="center"><?php echo dr_date($d['datetime'], null, 'red')?></td>
+	<td align="center"><a class="btn btn-xs blue" href="javascript:check('<?php echo $formid?>', '<?php echo $d['dataid']?>', '<?php echo safe_replace($d['username'])?>');void(0);"><?php echo L('check')?></a><a class="btn btn-xs red" href="###" onClick="Dialog.confirm('<?php echo L('confirm', array('message' => L('delete')))?>',function(){redirect('?m=formguide&c=formguide_info&a=public_delete&formid=<?php echo $formid?>&did=<?php echo $d['dataid']?>&pc_hash='+pc_hash);});"><?php echo L('del')?></a></td>
 	</tr>
 <?php 
 	}

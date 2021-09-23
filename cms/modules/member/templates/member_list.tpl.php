@@ -115,8 +115,8 @@ jQuery(document).ready(function() {
 		<td><?php echo $v['amount']?></td>
 		<td><?php echo $v['point']?></td>
 		<td>
-			<a href="javascript:edit(<?php echo $v['userid']?>, '<?php echo $v['username']?>')" class="btn btn-xs green">[<?php echo L('edit')?>]</a>
-			<a href="?m=member&c=member&a=alogin_index&id=<?php echo $v['userid']?>" target="_blank" class="btn btn-xs red">[<?php echo L('login')?>]</a>
+			<a href="javascript:edit(<?php echo $v['userid']?>, '<?php echo $v['username']?>')" class="btn btn-xs green"><?php echo L('edit')?></a>
+			<a href="?m=member&c=member&a=alogin_index&id=<?php echo $v['userid']?>" target="_blank" class="btn btn-xs red"><?php echo L('login')?></a>
 		</td>
     </tr>
 <?php

@@ -19,7 +19,7 @@ include $this->admin_tpl('header', 'admin');
 			<th><?php echo L('slider_name')?></th>
 			<th width="100" align="center"><?php echo L('type_id')?></th> 
 			<th width="100" align="center"><?php echo L('slider_lable')?></th> 
-			<th width="120" align="center"><?php echo L('operations_manage')?></th>
+			<th align="center"><?php echo L('operations_manage')?></th>
 		</tr>
 	</thead>
 <tbody>
@@ -40,9 +40,9 @@ if(is_array($infos)){
 		<td align="center"><a href="###"
 			onclick="view(<?php echo $info['typeid']?>, '<?php echo new_addslashes($info['name'])?>','content')"
 			><?php echo L('slider_click_view')?></a></td>
-		 <td align="center"><a href="###"
+		 <td align="center"><a class="btn btn-xs green" href="###"
 			onclick="edit(<?php echo $info['typeid']?>, '<?php echo new_addslashes($info['name'])?>')"
-			title="<?php echo L('edit')?>"><?php echo L('edit')?></a> |  <a
+			title="<?php echo L('edit')?>"><?php echo L('edit')?></a> <a class="btn btn-xs red"
 			href='###'
 			onClick="Dialog.confirm('<?php echo L('confirm', array('message' => new_addslashes($info['name'])))?>',function(){redirect('?m=slider&c=slider&a=delete_type&typeid=<?php echo $info['typeid']?>&pc_hash='+pc_hash);});"><?php echo L('delete')?></a>
 		</td>

@@ -23,10 +23,10 @@ include $this->admin_tpl('header', 'admin');
                     </label></th>
 			<th><?php echo L('name_items')?></th>
 			<th width='180'><?php echo L('tablename')?></th>
-			<th width='300'><?php echo L('introduction')?></th>
+			<th><?php echo L('introduction')?></th>
 			<th width="180"><?php echo L('create_time')?></th>
 			<th width="220"><?php echo L('call')?></th>
-			<th width="220"><?php echo L('operations_manage')?></th>
+			<th><?php echo L('operations_manage')?></th>
             </tr>
         </thead>
     <tbody>
@@ -45,7 +45,7 @@ if(is_array($data)){
 	<td align="center"><?php echo $form['introduce']?></td>
 	<td align="center"><?php echo date('Y-m-d H:i:s', $form['addtime'])?></td>
 	<td align="center"><input type="text" value="<script language='javascript' src='{APP_PATH}index.php?m=formguide&c=index&a=show&formid=<?php echo $form['modelid']?>&action=js&siteid=<?php echo $form['siteid']?>'></script>"></td>
-	<td align="center"><a href="?m=formguide&c=formguide_info&a=init&formid=<?php echo $form['modelid']?>&menuid=<?php echo $_GET['menuid']?>"><?php echo L('info_list')?></a> | <a href="?m=formguide&c=formguide_field&a=add&formid=<?php echo $form['modelid']?>"><?php echo L('field_add')?></a> | <a href="?m=formguide&c=formguide_field&a=init&formid=<?php echo $form['modelid']?>"><?php echo L('field_manage')?></a> <br /><a href="?m=formguide&c=formguide&a=public_preview&formid=<?php echo $form['modelid']?>"><?php echo L('preview')?></a> | <a href="javascript:edit('<?php echo $form['modelid']?>', '<?php echo safe_replace($form['name'])?>');void(0);"><?php echo L('modify')?></a> | <a href="?m=formguide&c=formguide&a=disabled&formid=<?php echo $form['modelid']?>&val=<?php echo $form['disabled'] ? 0 : 1;?>"><?php if ($form['disabled']==0) { echo L('field_disabled'); } else { echo L('field_enabled'); }?></a> | <a href="###" onClick="Dialog.confirm('<?php echo L('confirm', array('message' => addslashes(new_html_special_chars($form['name']))))?>',function(){redirect('?m=formguide&c=formguide&a=delete&formid=<?php echo $form['modelid']?>&pc_hash='+pc_hash);});"><?php echo L('del')?></a> | <a href="javascript:stat('<?php echo $form['modelid']?>', '<?php echo safe_replace($form['name'])?>');void(0);"><?php echo L('stat')?></a></td>
+	<td align="center"><a class="btn btn-xs blue" href="?m=formguide&c=formguide_info&a=init&formid=<?php echo $form['modelid']?>&menuid=<?php echo $_GET['menuid']?>"><?php echo L('info_list')?></a><a class="btn btn-xs green" href="?m=formguide&c=formguide_field&a=add&formid=<?php echo $form['modelid']?>"><?php echo L('field_add')?></a> <a class="btn btn-xs blue" href="?m=formguide&c=formguide_field&a=init&formid=<?php echo $form['modelid']?>"><?php echo L('field_manage')?></a> <br /><a class="btn btn-xs blue" href="?m=formguide&c=formguide&a=public_preview&formid=<?php echo $form['modelid']?>"><?php echo L('preview')?></a> <a class="btn btn-xs green" href="javascript:edit('<?php echo $form['modelid']?>', '<?php echo safe_replace($form['name'])?>');void(0);"><?php echo L('modify')?></a> <a class="btn btn-xs dark" href="?m=formguide&c=formguide&a=disabled&formid=<?php echo $form['modelid']?>&val=<?php echo $form['disabled'] ? 0 : 1;?>"><?php if ($form['disabled']==0) { echo L('field_disabled'); } else { echo L('field_enabled'); }?></a> <a class="btn btn-xs red" href="###" onClick="Dialog.confirm('<?php echo L('confirm', array('message' => addslashes(new_html_special_chars($form['name']))))?>',function(){redirect('?m=formguide&c=formguide&a=delete&formid=<?php echo $form['modelid']?>&pc_hash='+pc_hash);});"><?php echo L('del')?></a> <a class="btn btn-xs yellow" href="javascript:stat('<?php echo $form['modelid']?>', '<?php echo safe_replace($form['name'])?>');void(0);"><?php echo L('stat')?></a></td>
 	</tr>
 <?php 
 	}

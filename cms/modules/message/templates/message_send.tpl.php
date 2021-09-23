@@ -6,8 +6,8 @@ include $this->admin_tpl('header','admin');
 <!--
 	$(function(){
 	$.formValidator.initConfig({formid:"myform",autotip:true,onerror:function(msg,obj){Dialog.alert(msg,function(){$(obj).focus();})}});
-	$("#subject").formValidator({onshow:"<?php echo L('input','',admin).L('subject')?>",onfocus:"<?php echo L('input','',admin).L('subject')?>"}).inputValidator({min:1,onerror:"<?php echo L('input','',admin).L('subject')?>"});
-	$("#content").formValidator({onshow:"<?php echo L('input','',admin).L('content')?>",onfocus:"<?php echo L('input','',admin).L('content')?>"}).inputValidator({min:1,onerror:"<?php echo L('input','',admin).L('content')?>"});
+	$("#subject").formValidator({onshow:"<?php echo L('subject')?>",onfocus:"<?php echo L('subject')?>"}).inputValidator({min:1,onerror:"<?php echo L('subject')?>"});
+	$("#content").formValidator({onshow:"<?php echo L('content')?>",onfocus:"<?php echo L('content')?>"}).inputValidator({min:1,onerror:"<?php echo L('content')?>"});
 	 
 	})
 //-->

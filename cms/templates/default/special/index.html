@@ -45,7 +45,7 @@
     <div class="bk10"></div>
     <div class="box">
         		<h5>{$t['name']}<a href="{$t['url']}" class="more">更多>></a></h5>
-			{pc:special action="content_list" specialid="$id" typeid="$t[typeid]" listorder="3" num="10"}
+			{pc:special action="content_list" specialid="$id" typeid="$t['typeid']" listorder="3" num="10"}
 				<ul class="list f14 lh26 ">
 				{loop $data $r}
                 <li>·<a href="{$r['url']}" target="_blank">{str_cut($r['title'], 36)}</a></li>
@@ -87,7 +87,7 @@
     <div class="bk10"></div>
     <div class="box">
         		<h5>{$t['name']}<a href="{$t['url']}" class="more">更多>></a></h5>
-				{pc:special action="content_list" specialid="$id" typeid="$t[typeid]" thumb="1" listorder="3" num="6"}
+				{pc:special action="content_list" specialid="$id" typeid="$t['typeid']" thumb="1" listorder="3" num="6"}
             <ul class="content news-photo picbig">
 			{loop $data $r}
             	<li>
@@ -100,7 +100,7 @@
             </ul>
 			{/pc}
 			<div class="hr bk15"></div>
-			{pc:special action="content_list" specialid="$id" typeid="$t[typeid]" listorder="3" num="10"}
+			{pc:special action="content_list" specialid="$id" typeid="$t['typeid']" listorder="3" num="10"}
 				<ul class="list f14 lh26 row-2">
 				{loop $data $r}
                 <li>·<a href="{$r['url']}" target="_blank">{str_cut($r['title'], 36)}</a></li>

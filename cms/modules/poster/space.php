@@ -9,13 +9,17 @@ class space extends admin {
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
 		$setting = new_html_special_chars(getcache('poster', 'commons'));
-		$this->setting = $setting[$this->get_siteid()];
+		if ($this->setting) {
+			$this->setting = $setting[$this->get_siteid()];
+		} else {
+			$this->setting = array();
+		}
 		$this->db = pc_base::load_model('poster_space_model');
 	}
 	
 	public function init() {
 		$TYPES = $this->template_type();
-		$page = max(intval($_GET['page']), 1);
+		$page = max(intval($this->input->get('page')), 1);
 		$infos = $this->db->listinfo(array('siteid'=>$this->get_siteid()), '`spaceid`', $page);
 		$pages = $this->db->pages;
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=poster&c=space&a=add\',\''.L('add_space').'\',540,320);void(0);', L('add_space'));
@@ -26,9 +30,9 @@ class space extends admin {
 	 * 添加广告版块
 	 */
 	public function add() {
-		if (isset($_POST['dosubmit'])) {
-			$space = $this->check($_POST['space']);
-			$space['setting'] = array2string($_POST['setting']);
+		if ($this->input->post('dosubmit')) {
+			$space = $this->check($this->input->post('space'));
+			$space['setting'] = array2string($this->input->post('setting'));
 			$space['siteid'] = $this->get_siteid();
 			$spaceid = $this->db->insert($space, true);
 			if ($spaceid) {
@@ -52,24 +56,24 @@ class space extends admin {
 	 * 编辑广告版位
 	 */
 	public function edit() {
-		$_GET['spaceid'] = intval($_GET['spaceid']);
-		if (!$_GET['spaceid']) showmessage(L('illegal_operation'), HTTP_REFERER);
-		if (isset($_POST['dosubmit'])) {
-			$space = $this->check($_POST['space']);
-			$space['setting'] = array2string($_POST['setting']);
+		$spaceid = intval($this->input->get('spaceid'));
+		if (!$spaceid) showmessage(L('illegal_operation'), HTTP_REFERER);
+		if ($this->input->post('dosubmit')) {
+			$space = $this->check($this->input->post('space'));
+			$space['setting'] = array2string($this->input->post('setting'));
 			if ($space['type']=='code') {
-				$space['path'] = '{show_ad('.$this->get_siteid().', '.$_GET['spaceid'].')}';
+				$space['path'] = '{show_ad('.$this->get_siteid().', '.$spaceid.')}';
 			} else {
-				$space['path'] = 'poster_js/'.$_GET['spaceid'].'.js';
+				$space['path'] = 'poster_js/'.$spaceid.'.js';
 			}
-			if (isset($_POST['old_type']) && $_POST['old_type']!=$space['type']) {
+			if ($this->input->post('old_type') && $this->input->post('old_type')!=$space['type']) {
 				$poster_db = pc_base::load_model('poster_model');
-				$poster_db->delete(array('spaceid'=>$_GET['spaceid']));
+				$poster_db->delete(array('spaceid'=>$spaceid));
 				$space['items'] = 0;
 			}
-			if ($this->db->update($space, array('spaceid'=>$_GET['spaceid']))) showmessage(L('edited_successful'), '?m=poster&c=space', '', 'testIframe'.$_GET['spaceid']);
+			if ($this->db->update($space, array('spaceid'=>$spaceid))) showmessage(L('edited_successful'), '?m=poster&c=space', '', 'testIframe'.$spaceid);
 		} else {
-			$info = $this->db->get_one(array('spaceid' => $_GET['spaceid']));
+			$info = $this->db->get_one(array('spaceid' => $spaceid));
 			$setting = string2array($info['setting']);
 			$TYPES = $this->template_type();
 			$poster_template = getcache('poster_template_'.$this->get_siteid(), 'commons');
@@ -82,9 +86,9 @@ class space extends admin {
 	 * 广告版位调用代码
 	 */
 	public function public_call() {
-		$_GET['sid'] = intval($_GET['sid']);
-		if (!$_GET['sid']) showmessage(L('illegal_action'), HTTP_REFERER, '', 'call');
-		$r = $this->db->get_one(array('spaceid'=>$_GET['sid'], 'siteid'=>$this->get_siteid()));
+		$sid = intval($this->input->get('sid'));
+		if (!$sid) showmessage(L('illegal_action'), HTTP_REFERER, '', 'call');
+		$r = $this->db->get_one(array('spaceid'=>$sid, 'siteid'=>$this->get_siteid()));
 		include $this->admin_tpl('space_call');
 	}
 	
@@ -92,9 +96,9 @@ class space extends admin {
 	 * 广告预览
 	 */
 	public function public_preview() {
-		if (is_numeric($_GET['spaceid'])) {
-			$_GET['spaceid'] = intval($_GET['spaceid']);
-			$r = $this->db->get_one(array('spaceid'=>$_GET['spaceid'], 'siteid'=>$this->get_siteid()));
+		$spaceid = intval($this->input->get('spaceid'));
+		if (is_numeric($spaceid)) {
+			$r = $this->db->get_one(array('spaceid'=>$spaceid, 'siteid'=>$this->get_siteid()));
 			$scheme = isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == '443' || isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 1 && $_SERVER['HTTPS'] == 'on' || isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https' || isset($_SERVER['HTTP_FRONT_END_HTTPS']) && strtolower($_SERVER['HTTP_FRONT_END_HTTPS']) == 'on' ? 'https://' : 'http://';
 			if ($r['type']=='code') {
 				$db = pc_base::load_model('poster_model');
@@ -120,16 +124,19 @@ class space extends admin {
 	 * @param	intval	$sid	广告版位的ID，当批量删除时系统会递归删除
 	 */
 	public function delete() {
-		if ((!isset($_GET['spaceid']) || empty($_GET['spaceid'])) && (!isset($_POST['spaceid']) || empty($_POST['spaceid']))) {
+		if ((!$this->input->get('spaceid') || empty($this->input->get('spaceid'))) && (!$this->input->post('spaceid') || empty($this->input->post('spaceid')))) {
 			showmessage(L('illegal_parameters'), HTTP_REFERER);
 		} else {
-			if (is_array($_POST['spaceid'])) {
-				array_map(array($this, _del), $_POST['spaceid']); //如果是批量操作，则递归数组
-			} elseif($_GET['spaceid']) {
-				$_GET['spaceid'] = intval($_GET['spaceid']);
+			if (is_array($this->input->post('spaceid'))) {
+				$ids = $this->input->post('spaceid');
+				foreach($ids as $id) {
+					$this->_del($id); //如果是批量操作，则递归数组
+				}
+			} elseif($this->input->get('spaceid')) {
+				$spaceid = intval($this->input->get('spaceid'));
 				$db = pc_base::load_model('poster_model');
-				$db->delete(array('siteid'=>$this->get_siteid(), 'spaceid'=>$_GET['spaceid']));
-				$this->db->delete(array('siteid'=>$this->get_siteid(), 'spaceid' => $_GET['spaceid']));
+				$db->delete(array('siteid'=>$this->get_siteid(), 'spaceid'=>$spaceid));
+				$this->db->delete(array('siteid'=>$this->get_siteid(), 'spaceid' => $spaceid));
 			}
 			showmessage(L('operation_success'), HTTP_REFERER);
 		}
@@ -152,12 +159,12 @@ class space extends admin {
 	 * 广告模块配置
 	 */
 	public function setting() {
-		if (isset($_POST['dosubmit'])) {
+		if ($this->input->post('dosubmit')) {
 			$setting = getcache('poster', 'commons');
 			$setting[$this->get_siteid()] = $this->input->post('setting');
 			setcache('poster', $setting, 'commons'); //设置缓存
 			$m_db = pc_base::load_model('module_model'); //调用模块数据模型
-			$setting = array2string($_POST['setting']);  
+			$setting = array2string($this->input->post('setting'));  
 			
 			$m_db->update(array('setting'=>$setting), array('module'=>ROUTE_M)); //将配置信息存入数据表中
 			
@@ -189,11 +196,11 @@ class space extends admin {
 	 * 删除模板配置
 	 */
 	public function public_tempate_del() {
-		if (!isset($_GET['id'])) showmessage(L('illegal_parameters'), HTTP_REFERER);
+		if (!$this->input->get('id')) showmessage(L('illegal_parameters'), HTTP_REFERER);
 		$siteid = $this->get_siteid();
 		$poster_template = getcache('poster_template_'.$siteid, 'commons');
-		if ($poster_template[$_GET['id']]) {
-			unset($poster_template[$_GET['id']]);
+		if ($poster_template[$this->input->get('id')]) {
+			unset($poster_template[$this->input->get('id')]);
 		}
 		setcache('poster_template_'.$siteid, $poster_template, 'commons');
 		showmessage(L('operation_success'), HTTP_REFERER);
@@ -205,11 +212,12 @@ class space extends admin {
 	public function public_tempate_setting() {
 		$siteid = $this->get_siteid();
 		$poster_template = getcache('poster_template_'.$siteid, 'commons');
-		if (isset($_POST['dosubmit'])) {
-			if (is_array($_POST['info']['type']) && !empty($_POST['info']['type'])) {
+		if ($this->input->post('dosubmit')) {
+			$info = $this->input->post('info');
+			if (is_array($info['type']) && !empty($info['type'])) {
 				$type2name = array('images'=>L('photo'), 'flash'=>L('flash'), 'text'=>L('title'));
 				$type = array();
-				foreach ($_POST['info']['type'] as $t) {
+				foreach ($info['type'] as $t) {
 					if (in_array($t, array('images', 'flash', 'text'))) {
 						$type[$t] = $type2name[$t];
 					} else {
@@ -217,13 +225,13 @@ class space extends admin {
 					}
 				}
 			}
-			unset($_POST['info']['type']);
-			$_POST['info']['type'] = $type;
-			$poster_template[$_POST['template']] = $this->input->post('info');
+			unset($info['type']);
+			$info['type'] = $type;
+			$poster_template[$this->input->post('template')] = $info;
 			setcache('poster_template_'.$siteid, $poster_template, 'commons');
 			showmessage(L('setting_success'), '', '', 'testIframe');
 		} else {
-			if (!isset($_GET['template'])) {
+			if (!$this->input->get('template')) {
 			showmessage(L('illegal_parameters'));
 			} else {
 				$template = $this->input->get('template');
@@ -245,7 +253,7 @@ class space extends admin {
 	 * 更新js
 	 */
 	public function create_js($page = 0) {
-		$page = max(intval($_GET['page']), 1);
+		$page = max(intval($this->input->get('page')), 1);
 		if ($page==1) {
 			$result = $this->db->get_one(array('disabled'=>0, 'siteid'=>get_siteid()), 'COUNT(*) AS num');
 			if ($result['num']) {
@@ -253,7 +261,7 @@ class space extends admin {
 				$pages = ceil($total/20);
 			}
 		} else {
-			$pages = $this->input->get('pages') ? intval($_GET['pages']) : 0;
+			$pages = $this->input->get('pages') ? intval($this->input->get('pages')) : 0;
 		}
 		$offset = ($page-1)*20;
 		$data = $this->db->listinfo(array('disabled'=>0, 'siteid'=>get_siteid()), 'spaceid ASC', $page);
@@ -277,13 +285,13 @@ class space extends admin {
 	 * 检测版位名称是否存在
 	 */
 	public function public_check_space() {
-		if (!$_GET['name']) exit(0);
-		if (pc_base::load_config('system', 'charset')=='gbk') {
-			$_GET['name'] = iconv('UTF-8', 'GBK', $_GET['name']);
-		}
+		if (!$this->input->get('name')) exit(0);
 		$name = $this->input->get('name');
-		if ($_GET['spaceid']) {
-			$spaceid = intval($_GET['spaceid']);
+		if (CHARSET=='gbk') {
+			$name = iconv('UTF-8', 'GBK', $name);
+		}
+		if ($this->input->get('spaceid')) {
+			$spaceid = intval($this->input->get('spaceid'));
 			$r = $this->db->get_one(array('spaceid' => $spaceid, 'siteid'=>$this->get_siteid()));
 			if ($r['name'] == $name) {
 				exit('1');
@@ -305,7 +313,7 @@ class space extends admin {
 	private function check($data = array()) {
 		if ($data['name'] == '') showmessage(L('name_plates_not_empty'));
 		$info = $this->db->get_one(array('name'=>$data['name'], 'siteid'=>$this->get_siteid()), 'spaceid');
-		if (($info['spaceid'] && $info['spaceid']!=$this->input->get('spaceid')) || ($info['spaceid'] && !isset($_GET['spaceid']))) {
+		if (($info['spaceid'] && $info['spaceid']!=$this->input->get('spaceid')) || ($info['spaceid'] && !$this->input->get('spaceid'))) {
 			showmessage(L('space_exist'), HTTP_REFERER);
 		}
 		if ((!isset($data['width']) || $data['width']==0) && in_array($data['type'], array('banner', 'fixure', 'float', 'couplet', 'imagechange', 'imagelist'))) {

@@ -19,7 +19,7 @@ include $this->admin_tpl('header', 'admin');
 			<th width="80"><?php echo L('vote_num')?></th>
 			<th width="100"><?php echo L('startdate')?></th>
 			<th width="100"><?php echo L('enddate')?></th>
-			<th width='100'><?php echo L('inputtime')?></th>
+			<th width='160'><?php echo L('inputtime')?></th>
 			<th><?php echo L('operations_manage')?></th>
 		</tr>
 	</thead>
@@ -38,12 +38,12 @@ if(is_array($infos)){
 		<td><font color=blue><?php echo $info['votenumber']?></font> </td>
 		<td><?php echo dr_date(strtotime($info['fromdate']), 'Y-m-d', 'red');?></td>
 		<td><?php echo dr_date(strtotime($info['todate']), 'Y-m-d', 'red');?></td>
-		<td><?php echo dr_date($info['addtime'], 'Y-m-d', 'red');?></td>
-		<td><a href='###'
+		<td><?php echo dr_date($info['addtime'], null, 'red');?></td>
+		<td><a class="btn btn-xs blue" href='###'
 			onclick="statistics(<?php echo $info['subjectid']?>, '<?php echo new_addslashes($info['subject'])?>')"> <?php echo L('statistics')?></a>
-		| <a href="###"
+		<a class="btn btn-xs green" href="###"
 			onclick="edit(<?php echo $info['subjectid']?>, '<?php echo new_addslashes($info['subject'])?>')"
-			title="<?php echo L('edit')?>"><?php echo L('edit')?></a> | <a href="javascript:call(<?php echo new_addslashes($info['subjectid'])?>);void(0);"><?php echo L('call_js_code')?></a> | <a
+			title="<?php echo L('edit')?>"><?php echo L('edit')?></a> <a class="btn btn-xs yellow" href="javascript:call(<?php echo new_addslashes($info['subjectid'])?>);void(0);"><?php echo L('call_js_code')?></a> <a class="btn btn-xs red"
 			href='###'
 			onClick="Dialog.confirm('<?php echo L('vote_confirm_del')?>',function(){redirect('?m=vote&c=vote&a=delete&subjectid=<?php echo new_addslashes($info['subjectid'])?>&pc_hash='+pc_hash);});"><?php echo L('delete')?></a>
 		</td>

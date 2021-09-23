@@ -32,12 +32,12 @@ include $this->admin_tpl('header', 'admin');
                     </label></th>
 			<th width="80"><?php echo L('listorder')?></th>
 			<th><?php echo L('slider_name')?></th>
-			<th width="300"><?php echo L('image')?></th>
+			<th width="100"><?php echo L('image')?></th>
 			<th width="100"><?php echo L('url')?></th>
 			<th width='100'><?php echo L('typeid')?></th>
 			<th width="100"><?php echo L('status')?></th>
-			<th width="100"><?php echo L('slider_adddate')?></th>
-			<th width="120"><?php echo L('operations_manage')?></th>
+			<th width="160"><?php echo L('slider_adddate')?></th>
+			<th><?php echo L('operations_manage')?></th>
 		</tr>
 	</thead>
 <tbody>
@@ -53,14 +53,14 @@ if(is_array($infos)){
                     </label></td>
 		<td><input name='listorders[<?php echo $info['id']?>]' type='text' size='3' value='<?php echo $info['listorder']?>' class="input-text-c"></td>
 		<td><?php if ($info['url']!="#" && $info['url']){?><a href="<?php echo $info['url'];?>" title="<?php echo $info['name']?>" target="_blank"><?php }?><?php echo $info['name']?><?php if ($info['url']!="#" && $info['url']){?></a><?php }?></td>
-		<td><a href="javascript:preview(<?php echo $info['id']?>, '<?php echo $info['name']?>','<?php echo $info['image']?>')" title="<?php echo $info['description'];?>"><img src="<?php echo $info['image'];?>" height=60></a></td>
+		<td><a href="javascript:preview('<?php echo $info['image']?>')" title="<?php echo $info['description'];?>"><img src="<?php echo $info['image'];?>" height=60></a></td>
 		<td><?php if ($info['url']!="#" && $info['url']){?><a href="<?php echo $info['url'];?>" target="_blank">点击查看</a><?php }else{?>无<?php }?></td>
 		<td><?php echo $type_arr[$info['typeid']];?></td>
 		<td><?php if($info['isshow']=='0'){ echo "不显示";}else{echo "显示";}?></td>
-		<td ><?php echo date("Y-m-d",$info['addtime']);?></td>
-		<td><a href="###"
+		<td ><?php echo dr_date($info['addtime'], null, 'red');?></td>
+		<td><a class="btn btn-xs green" href="###"
 			onclick="edit(<?php echo $info['id']?>, '<?php echo new_addslashes($info['name'])?>')"
-			title="<?php echo L('edit')?>"><?php echo L('edit')?></a> |  <a
+			title="<?php echo L('edit')?>"><?php echo L('edit')?></a> <a class="btn btn-xs red"
 			href='###'
 			onClick="Dialog.confirm('<?php echo L('confirm', array('message' => new_addslashes($info['name'])))?>',function(){redirect('?m=slider&c=slider&a=delete&id=<?php echo $info['id']?>&pc_hash='+pc_hash);});"><?php echo L('delete')?></a> 
 		</td>
@@ -88,7 +88,7 @@ if(is_array($infos)){
 <script type="text/javascript">
 
 function edit(id, name) {
-	artdialog('edit','?m=slider&c=slider&a=edit&id='+id,'<?php echo L('edit')?> '+name+' ',700,330);
+	artdialog('edit','?m=slider&c=slider&a=edit&id='+id,'<?php echo L('edit')?> '+name+' ',700,450);
 }
 function checkuid() {
 	var ids='';
@@ -115,22 +115,29 @@ function listorder_up(id) {
 } 
 
 window.top.$('#display_center_id').css('display','none');
-function preview(id, name,filepath) {
-	if(IsImg(filepath)) {
-		var diag = new Dialog({
-			title:name+'对应的幻灯图片',
-			html:'<img src="'+filepath+'" onload="$(this).LoadImage(true, 500, 500,\'<?php echo IMG_PATH?>s_nopic.gif\');"/>',
-			modal:true,
-			autoClose:5
-		});
+function preview(file) {
+	if(IsImg(file)) {
+        var width = 400;
+        var height = 300;
+        var att = 'height: 260px;';
+        if (is_mobile()) {
+            width = height = '90%';
+            var att = 'height: 90%;';
+        }
+        var diag = new Dialog({
+            title:'<?php echo L('预览')?>',
+            html:'<style type="text/css">a,a:hover{color: #337ab7; text-decoration:none;}</style><div style="'+att+'line-height: 24px;word-break: break-all;overflow: hidden auto;"><p style="word-break: break-all;text-align: center;margin-bottom: 20px;"><a href="'+file+'" target="_blank">'+file+'</a></p><p style="text-align: center;"><a href="'+file+'" target="_blank"><img style="max-width:100%" src="'+file+'"></a></p></div>',
+            width:width,
+            height:height,
+            modal:true
+        });
 		diag.show();
 	} else {
-		var diag = new Dialog({
-			title:'<?php echo L('preview')?>',
-			html:'<a href="'+filepath+'" target="_blank"><img src="<?php echo IMG_PATH?>admin_img/down.gif"><?php echo L('click_open')?></a>',
-			modal:true,
-			autoClose:5
-		});
+        var diag = new Dialog({
+            title:'<?php echo L('预览')?>',
+            html:'<style type="text/css">a,a:hover{color: #337ab7; text-decoration:none;}</style><p style="text-align: center;word-break: break-all;margin-bottom: 20px;"><a href="'+file+'" target="_blank">'+file+'</a></p><p style="text-align: center;"><a href="'+file+'" target="_blank"><img src="<?php echo IMG_PATH?>admin_img/down.gif"><?php echo L('click_open')?></a></p>',
+            modal:true
+        });
 		diag.show();
 	}
 }

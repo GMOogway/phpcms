@@ -54,24 +54,24 @@ jQuery(document).ready(function() {
     <table width="100%">
         <thead>
             <tr>
-			<th width="40" class="myselect">
+			<th class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="group-checkable" value="" id="check_box" onclick="selectall('ids[]');" />
                         <span></span>
                     </label></th>
-            <th width="43"><?php echo L('listorder')?></th>
+            <th width="80"><?php echo L('listorder')?></th>
 			<th><?php echo L('content_title')?></th>
             </tr>
         </thead>
 <tbody>
     <?php if(is_array($data)) { foreach ($data as $r) {?>
         <tr>
-		<td align="center" width="40" class="myselect">
+		<td align="center" class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="checkboxes" name='ids[]' value="<?php echo $r['id'];?>" />
                         <span></span>
                     </label></td>
-        <td align='center' width='43'><input name='listorders[<?php echo $r['id'];?>]' type='text' size='3' value='<?php echo $r['listorder'];?>' class='input-text-c'></td>
+        <td align='center'><input name='listorders[<?php echo $r['id'];?>]' type='text' size='3' value='<?php echo $r['listorder'];?>' class='input-text-c'></td>
 		<td><?php echo $r['title'];?></td>
 	</tr>
      <?php } }?>

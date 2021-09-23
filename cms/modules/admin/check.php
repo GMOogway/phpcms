@@ -576,7 +576,7 @@ class check extends admin {
 \'sys_editor\' => \''.(pc_base::load_config('system','sys_editor') ? pc_base::load_config('system','sys_editor') : 0).'\', //编辑器模式    0 UEditor 1 CKEditor
 \'sys_max_category\' => \''.(pc_base::load_config('system','sys_max_category') ? pc_base::load_config('system','sys_max_category') : 100).'\', //最大栏目数量限制category
 
-\'charset\' => \''.pc_base::load_config('system','charset').'\', //网站字符集
+\'charset\' => \''.(pc_base::load_config('system','charset') ? pc_base::load_config('system','charset') : 'utf-8').'\', //网站字符集
 \'timezone\' => \''.(pc_base::load_config('system','timezone')=='Etc/GMT-8' ? 8 : (pc_base::load_config('system','timezone') ? pc_base::load_config('system','timezone') : 8)).'\', //网站时区（只对php 5.1以上版本有效），Etc/GMT-8 实际表示的是 GMT+8
 \'debug\' => '.pc_base::load_config('system','debug').', //是否显示调试信息
 \'sys_csrf\' => \''.(pc_base::load_config('system','sys_csrf') ? pc_base::load_config('system','sys_csrf') : 1).'\', //是否跨站验证，1为启用，0为禁用

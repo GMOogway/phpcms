@@ -9,45 +9,45 @@ include $this->admin_tpl('header', 'admin');
 <table width="100%" cellspacing="0">
 	<thead>
 		<tr>
-			<th width="35" align="center" class="myselect">
+			<th align="center" class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="group-checkable" value="" id="check_box" onclick="selectall('typeid[]');" />
                         <span></span>
                     </label></th>
 			<th width="80"><?php echo L('link_type_listorder')?></th> 
 			<th><?php echo L('type_name')?></th>
-			<th width="12%" align="center"><?php echo L('type_id')?></th> 
-			<th width="20%" align="center"><?php echo L('operations_manage')?></th>
+			<th width="80" align="center"><?php echo L('type_id')?></th> 
+			<th align="center"><?php echo L('operations_manage')?></th>
 		</tr>
 	</thead>
 <tbody>
 <tr>
-		<td align="center" width="35" class="myselect">
+		<td align="center" class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="checkboxes" name="typeid[]" value="0" disabled />
                         <span></span>
                     </label></td>
-		<td align="center"><input name='listorders[0]' type='text' size='3' value='0' class="input-text-c input-text"></td>
+		<td align="center"><input name='listorders[0]' type='text' size='3' value='0' class="input-text-c"></td>
 		<td>默认分类</td>
-		<td align="center" width="12%"> 0</td>
-		 <td align="center" width="20%" style="color: #999">修改 | 删除</td>
+		<td align="center"> 0</td>
+		 <td align="center" style="color: #999">修改 删除</td>
 	</tr>
 <?php
 if(is_array($infos)){
 	foreach($infos as $info){
 ?>
 	<tr>
-		<td align="center" width="35" class="myselect">
+		<td align="center" class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="checkboxes" name="typeid[]" value="<?php echo $info['typeid']?>" />
                         <span></span>
                     </label></td>
-		<td align="center"><input name='listorders[<?php echo $info['typeid']?>]' type='text' size='3' value='<?php echo $info['listorder']?>' class="input-text-c input-text"></td> 
+		<td align="center"><input name='listorders[<?php echo $info['typeid']?>]' type='text' size='3' value='<?php echo $info['listorder']?>' class="input-text-c"></td> 
 		<td><?php echo $info['name']?></td>
-		<td align="center" width="12%"> <?php echo $info['typeid'];?></td>
-		 <td align="center" width="20%"><a href="###"
+		<td align="center"> <?php echo $info['typeid'];?></td>
+		 <td align="center"><a class="btn btn-xs green" href="###"
 			onclick="edit(<?php echo $info['typeid']?>, '<?php echo new_addslashes($info['name'])?>')"
-			title="<?php echo L('edit')?>"><?php echo L('edit')?></a> |  <a
+			title="<?php echo L('edit')?>"><?php echo L('edit')?></a> <a class="btn btn-xs red"
 			href='###'
 			onClick="Dialog.confirm('<?php echo L('confirm', array('message' => new_addslashes($info['name'])))?>',function(){redirect('?m=link&c=link&a=delete_type&typeid=<?php echo $info['typeid']?>&pc_hash='+pc_hash);});"><?php echo L('delete')?></a>
 		</td
@@ -74,7 +74,7 @@ if(is_array($infos)){
 </html>
 <script type="text/javascript">
 function edit(id, name) {
-	artdialog('edit','?m=link&c=link&a=edit_type&typeid='+id,'<?php echo L('edit')?> '+name+' ',450,280);
+	artdialog('edit','?m=link&c=link&a=edit_type&typeid='+id,'<?php echo L('edit')?> '+name+' ',500,280);
 }
 function checkuid() {
 	var ids='';

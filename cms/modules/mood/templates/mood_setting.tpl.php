@@ -7,8 +7,8 @@
 <table width="100%" cellspacing="0">
 	<thead>
 		<tr>
-			<th  align="left" width="40"><?php echo L('on_hand')?></th>
-			<th align="left" width="200"><?php echo L('name')?></th>
+			<th align="left" width="80"><?php echo L('on_hand')?></th>
+			<th align="left" width="220"><?php echo L('name')?></th>
 			<th align="left"><?php echo L('pic')?></th>
 		</tr>
 	</thead>

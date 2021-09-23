@@ -213,7 +213,7 @@ class content extends admin {
 		$page = max(intval($_GET['page']), 1);
 		$datas = $this->db->listinfo(array('specialid'=>$_GET['specialid']), '`listorder` ASC , `id` DESC', $page);
 		$pages = $this->db->pages;
-		$big_menu = array(array('javascript:contentopen(\'?m=special&c=content&a=add&specialid='.$_GET['specialid'].'\',\'\');void(0);', L('add_content')), array('javascript:artdialog(\'import\',\'?m=special&c=special&a=import&specialid='.$_GET['specialid'].'\',\''.L('import_content').'\',700,500);void(0);', L('import_content')));
+		$big_menu = array(array('javascript:contentopen(\'?m=special&c=content&a=add&specialid='.$_GET['specialid'].'\',\'\');void(0);', L('add_content')), array('javascript:omnipotent(\'import\',\'?m=special&c=special&a=import&specialid='.$_GET['specialid'].'\',\''.L('import_content').'\',1,700,500);void(0);', L('import_content')));
 		include $this->admin_tpl('content_list');
 	}
 	

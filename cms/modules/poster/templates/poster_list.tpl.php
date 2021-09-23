@@ -17,20 +17,20 @@ include $this->admin_tpl('header', 'admin');
     <table width="100%" cellspacing="0" class="contentWrap">
         <thead>
             <tr>
-            <th width="30" align="center" class="myselect">
+            <th align="center" class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="group-checkable" value="" id="check_box" onclick="selectall('id[]');" />
                         <span></span>
                     </label></th>
-			<th width="35">ID</th>
-			<th width="70"><?php echo L('listorder')?></th>
+			<th width="60">ID</th>
+			<th width="80"><?php echo L('listorder')?></th>
 			<th align="center"><?php echo L('poster_title')?></th>
-			<th width="70" align="center"><?php echo L('poster_type')?></th>
-			<th width='200' align="center"><?php echo L('for_postion')?></th>
-			<th width="50" align="center"><?php echo L('status')?></th>
-			<th width='50' align="center"><?php echo L('hits')?></th>
-			<th width="130" align="center"><?php echo L('addtime')?></th>
-			<th width="110" align="center"><?php echo L('operations_manage')?></th>
+			<th width="80" align="center"><?php echo L('poster_type')?></th>
+			<th align="center"><?php echo L('for_postion')?></th>
+			<th width="100" align="center"><?php echo L('status')?></th>
+			<th width='100' align="center"><?php echo L('hits')?></th>
+			<th width="160" align="center"><?php echo L('addtime')?></th>
+			<th align="center"><?php echo L('operations_manage')?></th>
             </tr>
         </thead>
         <tbody>
@@ -46,14 +46,14 @@ if(is_array($infos)){
                         <span></span>
                     </label></td>
 	<td align="center"><?php echo $info['id']?></td>
-	<th width="70"><input type="text" size="5" name="listorder[<?php echo $info['id']?>]" value="<?php echo $info['listorder']?>" id="listorder"></th>
+	<th><input type="text" size="5" name="listorder[<?php echo $info['id']?>]" value="<?php echo $info['listorder']?>" id="listorder" class="input-text-c"></th>
 	<td><?php echo $info['name']?></td>
 	<td align="center"><?php echo $types[$info['type']]?></td>
 	<td align="center"><?php echo $space['name']?></td>
 	<td align="center"><?php if($info['disabled']) { echo L('stop'); } elseif((strtotime($info['enddate'])<SYS_TIME) && (strtotime($info['enddate'])>0)) { echo L('past'); } else { echo L('start'); }?></td>
 	<td align="center"><?php echo $info['clicks']?></td>
-	<td align="center"><?php echo format::date($info['addtime'], 1);?></td>
-	<td align="center"><a href="index.php?m=poster&c=poster&a=edit&id=<?php echo $info['id'];?>&pc_hash=<?php echo dr_get_csrf_token();?>&menuid=<?php echo $_GET['menuid']?>" ><?php echo L('edit')?></a>|<a href="?m=poster&c=poster&a=stat&id=<?php echo $info['id']?>&spaceid=<?php echo $_GET['spaceid'];?>"><?php echo L('stat')?></a></td>
+	<td align="center"><?php echo dr_date($info['addtime'], null, 'red');?></td>
+	<td align="center"><a class="btn btn-xs green" href="index.php?m=poster&c=poster&a=edit&id=<?php echo $info['id'];?>&pc_hash=<?php echo dr_get_csrf_token();?>&menuid=<?php echo $_GET['menuid']?>" ><?php echo L('edit')?></a><a class="btn btn-xs blue" href="?m=poster&c=poster&a=stat&id=<?php echo $info['id']?>&spaceid=<?php echo $_GET['spaceid'];?>"><?php echo L('stat')?></a></td>
 	</tr>
 <?php 
 	}

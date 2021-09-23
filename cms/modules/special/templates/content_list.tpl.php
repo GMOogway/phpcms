@@ -25,8 +25,8 @@ include $this->admin_tpl('header','admin');
 			<th><?php echo L('content_title')?></th>
 			<th width="120"><?php echo L('for_type')?></th>
             <th width="100"><?php echo L('inputman')?></th>
-            <th width="180"><?php echo L('update_time')?></th>
-			<th width="120"><?php echo L('operations_manage')?></th>
+            <th width="160"><?php echo L('update_time')?></th>
+			<th><?php echo L('operations_manage')?></th>
             </tr>
         </thead>
 <tbody>
@@ -48,7 +48,7 @@ include $this->admin_tpl('header','admin');
 		<td align='center'><?php echo $types[$r['typeid']]['name'];?></td>
 		<td align='center'><?php echo $r['username'];?></td>
 		<td align='center'><?php echo dr_date($r['updatetime'], null, 'red');?></td>
-		<td align='center'><a href="javascript:;" onclick="javascript:contentopen('?m=special&c=content&a=edit&specialid=<?php echo $r['specialid']?>&id=<?php echo $r['id']?>','')"><?php echo L('content_edit')?></a> </td>
+		<td align='center'><a class="btn btn-xs green" href="javascript:;" onclick="javascript:contentopen('?m=special&c=content&a=edit&specialid=<?php echo $r['specialid']?>&id=<?php echo $r['id']?>','')"><?php echo L('content_edit')?></a> </td>
 	</tr>
      <?php }?>
 </tbody>
