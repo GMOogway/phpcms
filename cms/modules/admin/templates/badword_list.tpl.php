@@ -10,16 +10,16 @@ include $this->admin_tpl('header','admin');
  <table width="100%" cellspacing="0">
         <thead>
             <tr>
-            <th width="35" align="center" class="myselect">
+            <th align="center" class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="group-checkable" value="" id="check_box" onclick="selectall('badid[]');" />
                         <span></span>
                     </label></th>
-             <th ><?php echo L('badword_name')?></th>
-            <th ><?php echo L('badword_replacename')?></th>
+            <th><?php echo L('badword_name')?></th>
+            <th><?php echo L('badword_replacename')?></th>
             <th width="80"><?php echo L('badword_level')?></th>
-            <th width="120"><?php echo L('inputtime')?></th>
-             <th width="120"><?php echo L('operations_manage')?></th>
+            <th width="160"><?php echo L('inputtime')?></th>
+            <th><?php echo L('operations_manage')?></th>
             </tr>
         </thead>
     <tbody>
@@ -36,8 +36,8 @@ foreach($infos as $info){
          <td align="center"><span  class="<?php echo $info['style']?>"><?php echo $info['badword']?></span> </td>
         <td align="center"><?php echo $info['replaceword']?></td>
         <td align="center"><?php echo $level[$info['level']]?></td>
-        <td align="center"><?php echo $info['lastusetime'] ? date('Y-m-d H:i', $info['lastusetime']):''?></td>
-         <td align="center"><a href="javascript:edit(<?php echo $info['badid']?>, '<?php echo new_addslashes($info['badword'])?>')"><?php echo L('edit')?></a> | <a href="javascript:confirmurl('?m=admin&c=badword&a=delete&badid=<?php echo $info['badid']?>', '<?php echo L('badword_confirm_del')?>')"><?php echo L('delete')?></a> </td>
+        <td align="center"><?php echo $info['lastusetime'] ? dr_date($info['lastusetime'], null, 'red'):''?></td>
+         <td align="center"><a class="btn btn-xs green" href="javascript:edit(<?php echo $info['badid']?>, '<?php echo new_addslashes($info['badword'])?>')"><?php echo L('edit')?></a> <a class="btn btn-xs red" href="javascript:confirmurl('?m=admin&c=badword&a=delete&badid=<?php echo $info['badid']?>', '<?php echo L('badword_confirm_del')?>')"><?php echo L('delete')?></a> </td>
     </tr>
 <?php
 	}

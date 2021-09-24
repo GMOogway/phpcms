@@ -23,7 +23,7 @@ class search_admin extends admin {
 			$setting = array2string($search_setting);
 			setcache('search', $search_setting);
 			$this->module_db->update(array('setting'=>$setting),array('module'=>'search'));
-			showmessage(L('operation_success'),HTTP_REFERER);
+			dr_json(1, L('operation_success'), array('url' => HTTP_REFERER));
 		} else {
 			$r = $this->module_db->get_one(array('module'=>'search'));
 			$setting = string2array($r['setting']);

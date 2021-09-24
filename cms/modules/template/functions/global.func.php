@@ -179,7 +179,7 @@ function visualization($html, $style = '', $dir = '', $file = '') {
 		$('.admin_block').click(function(){
 			var diag = new Dialog({id:'edit',title:'".L('pc_tag','' ,'template')."',url:'".SELF."?m=block&c=block_admin&a=block_update&id='+$(this).attr('blockid')+'&pc_hash='+pc_hash,width:700,height:500,modal:true});diag.onOk = function(){var form = \$DW.$('#dosubmit');form.click();return false;};diag.onCancel=function() {\$DW.close();};diag.show();;
 		});
-	})</script><div id=\"PC__contentHeight\" style=\"display:none\">80</div>";
+	})</script>";
 		$html = str_replace('</body>', $change.'</body>', $html, $num);
 		if (!$num) $html .= $change;
 		

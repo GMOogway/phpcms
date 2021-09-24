@@ -62,8 +62,8 @@ include $this->admin_tpl('header','admin');?>
 		<td align='center'> <a class="btn btn-xs green" href="?m=content&c=sitemodel_field&a=edit&modelid=<?php echo $r['modelid']?>&fieldid=<?php echo $r['fieldid']?>&menuid=<?php echo $this->input->get('menuid')?>"><?php echo L('edit');?></a>
 		<?php if(!in_array($r['field'],$forbid_fields)) { ?>
 		<a class="btn btn-xs dark" href="?m=content&c=sitemodel_field&a=disabled&disabled=<?php echo $r['disabled'];?>&modelid=<?php echo $r['modelid']?>&fieldid=<?php echo $r['fieldid']?>&fieldid=<?php echo $r['fieldid']?>&menuid=<?php echo $this->input->get('menuid')?>"><?php echo $r['disabled'] ? L('field_enabled') : L('field_disabled');?></a>
-		<?php } else { ?><font color="#BEBEBE"> <?php echo L('field_disabled');?> </font><?php } ?><?php if(!in_array($r['field'],$forbid_delete)) {?> 
-		<a class="btn btn-xs red" href="javascript:confirmurl('?m=content&c=sitemodel_field&a=delete&modelid=<?php echo $r['modelid']?>&fieldid=<?php echo $r['fieldid']?>&menuid=<?php echo $this->input->get('menuid')?>','<?php echo L('confirm',array('message'=>$r['name']))?>')"><?php echo L('delete')?></a><?php } else {?><font color="#BEBEBE"> <?php echo L('delete');?></font><?php }?> </td>
+		<?php } ?><?php if(!in_array($r['field'],$forbid_delete)) {?> 
+		<a class="btn btn-xs red" href="javascript:confirmurl('?m=content&c=sitemodel_field&a=delete&modelid=<?php echo $r['modelid']?>&fieldid=<?php echo $r['fieldid']?>&menuid=<?php echo $this->input->get('menuid')?>','<?php echo L('confirm',array('message'=>$r['name']))?>')"><?php echo L('delete')?></a><?php }?> </td>
 	</tr>
 	<?php } ?>
     </tbody>

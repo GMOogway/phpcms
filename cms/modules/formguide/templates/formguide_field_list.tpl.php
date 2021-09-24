@@ -31,15 +31,15 @@ include $this->admin_tpl('header','admin');?>
 		$tablename = L($r['tablename']);
 	?>
     <tr>
-		<td align='center' width='70'><input name='listorders[<?php echo $r['fieldid'] ? $r['fieldid'] : $r['field']?>]' type='text' size='3' value='<?php echo $r['listorder']?>' class='input-text-c'></td>
-		<td width='90'><?php echo $r['field']?></td>
-		<td width="100"><?php echo $r['name']?></td>
-		<td width="100" align='center'><?php echo $r['formtype']?></td>
-		<td width="50" align='center'><?php echo $r['issystem'] ? L('icon_unlock') : L('icon_locked')?></td>
-		<td width="50" align='center'><?php echo $r['minlength'] ? L('icon_unlock') : L('icon_locked')?></td>
-		<td width="50" align='center'><?php echo $r['issearch'] ? L('icon_unlock') : L('icon_locked')?></td>
-		<td width="50" align='center'><?php echo $r['isorder'] ? L('icon_unlock') : L('icon_locked')?></td>
-		<td width="50" align='center'><?php echo $r['isadd'] ? L('icon_unlock') : L('icon_locked')?></td>
+		<td align='center'><input name='listorders[<?php echo $r['fieldid'] ? $r['fieldid'] : $r['field']?>]' type='text' size='3' value='<?php echo $r['listorder']?>' class='input-text-c'></td>
+		<td><?php echo $r['field']?></td>
+		<td><?php echo $r['name']?></td>
+		<td align='center'><?php echo $r['formtype']?></td>
+		<td align='center'><?php echo $r['issystem'] ? L('icon_unlock') : L('icon_locked')?></td>
+		<td align='center'><?php echo $r['minlength'] ? L('icon_unlock') : L('icon_locked')?></td>
+		<td align='center'><?php echo $r['issearch'] ? L('icon_unlock') : L('icon_locked')?></td>
+		<td align='center'><?php echo $r['isorder'] ? L('icon_unlock') : L('icon_locked')?></td>
+		<td align='center'><?php echo $r['isadd'] ? L('icon_unlock') : L('icon_locked')?></td>
 		<td align='center'> <a class="btn btn-xs green" href="?m=formguide&c=formguide_field&a=edit&formid=<?php echo $r['modelid']?>&fieldid=<?php echo $r['fieldid']?>&field=<?php echo $r['field']?>&menuid=<?php echo $this->input->get('menuid')?>"><?php echo L('edit');?></a>
 		<?php if ($formid) { if(!in_array($r['field'],$forbid_fields)) { ?>
 		<a class="btn btn-xs dark" href="?m=formguide&c=formguide_field&a=disabled&disabled=<?php echo $r['disabled'];?>&modelid=<?php echo $r['modelid']?>&fieldid=<?php echo $r['fieldid']?>&fieldid=<?php echo $r['fieldid']?>&menuid=<?php echo $this->input->get('menuid')?>"><?php echo $r['disabled'] ? L('field_enabled') : L('field_disabled');?></a>

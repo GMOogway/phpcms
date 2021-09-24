@@ -37,7 +37,7 @@ if(is_array($infos)){
 		<td align="center"><input name='listorders[<?php echo $info['typeid']?>]' type='text' size='3' value='<?php echo $info['listorder']?>' class="input_center"></td> 
 		<td><?php echo $info['name']?></td>
 		<td align="center"> <?php echo $info['typeid'];?></td>
-		<td align="center"><a href="###"
+		<td align="center"><a class="btn btn-xs yellow" href="###"
 			onclick="view(<?php echo $info['typeid']?>, '<?php echo new_addslashes($info['name'])?>','content')"
 			><?php echo L('slider_click_view')?></a></td>
 		 <td align="center"><a class="btn btn-xs green" href="###"

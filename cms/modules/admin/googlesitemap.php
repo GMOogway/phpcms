@@ -139,7 +139,7 @@ class googlesitemap extends admin {
 				//生成百度新闻
 				if($this->input->post('mark')) {
  					$baidunum = $this->input->post('baidunum') ? intval($this->input->post('baidunum')) : 20;
-  					if($this->input->post('catids')=="")showmessage(L('choose_category'), HTTP_REFERER);
+  					if($this->input->post('catids')=="") dr_json(0, L('choose_category'));
   					$catids = $this->input->post('catids');
  					$catid_cache = $this->categorys;//栏目缓存
 					$this->content_db = pc_base::load_model('content_model');
@@ -216,9 +216,10 @@ class googlesitemap extends admin {
 				
 			     $sm_file = $dir.'sitemaps.xml';
 				 if($this->build($sm_file)){
-					showmessage(L('create_success'), HTTP_REFERER);
+					dr_json(1, L('create_success'), array('url' => HTTP_REFERER));
 			     } 
-			} else { 
+			} else {
+				$show_header = $show_dialog = '';
 				$tree = pc_base::load_sys_class('tree');
 				$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
 				$tree->nbsp = '&nbsp;&nbsp;&nbsp;';
@@ -235,6 +236,7 @@ class googlesitemap extends admin {
 				$str  = "<option value='\$catid' \$selected \$disabled>\$spacer \$catname</option>";
 				$tree->init($categorys);
 				$string .= $tree->get_tree(0, $str);
+				$page = intval($this->input->get('page'));
  				include $this->admin_tpl('googlesitemap');
 			}
 	}

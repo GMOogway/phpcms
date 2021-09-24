@@ -136,7 +136,7 @@ class position extends admin {
 	 */
 	public function public_item() {	
 		if($this->input->post('dosubmit')) {
-			$items = count($this->input->post('items')) > 0  ? $this->input->post('items') : showmessage(L('posid_select_to_remove'),HTTP_REFERER);
+			$items = dr_count($this->input->post('items')) > 0  ? $this->input->post('items') : showmessage(L('posid_select_to_remove'),HTTP_REFERER);
 			if(is_array($items)) {
 				$sql = array();
 				foreach ($items as $item) {

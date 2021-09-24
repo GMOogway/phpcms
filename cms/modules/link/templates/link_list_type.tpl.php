@@ -30,7 +30,7 @@ include $this->admin_tpl('header', 'admin');
 		<td align="center"><input name='listorders[0]' type='text' size='3' value='0' class="input-text-c"></td>
 		<td>默认分类</td>
 		<td align="center"> 0</td>
-		 <td align="center" style="color: #999">修改 删除</td>
+		<td align="center"></td>
 	</tr>
 <?php
 if(is_array($infos)){

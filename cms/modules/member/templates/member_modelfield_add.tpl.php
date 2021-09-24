@@ -124,7 +124,6 @@ $(function(){
     <input name="info[modelid]" type="hidden" value="<?php echo $modelid?>">
     <input name="dosubmit" id="dosubmit" type="submit" value="<?php echo L('submit')?>" class="dialog">
 	</form>
-<div id="PC__contentHeight" style="display:none">90</div>
 <script type="text/javascript">
 <!--
 function field_setting(fieldtype) {

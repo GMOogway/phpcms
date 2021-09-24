@@ -10,17 +10,17 @@ include $this->admin_tpl('header');
     <table width="100%" cellspacing="0">
         <thead>
             <tr>
-            <th width="10%" align="left" class="myselect">
+            <th class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="group-checkable" value="" id="check_box" onclick="selectall('items[]');" />
                         <span></span>
                     </label></th>
-            <th width="10%" align="left"><?php echo L('listorder');?></th>
-            <th width="10%" align="left">ID</th>
-            <th width="" align="left"><?php echo L('title');?></th>
-            <th width="15%"><?php echo L('catname');?></th>
-            <th width="15%"><?php echo L('inputtime')?></th>
-            <th width="15%"><?php echo L('posid_operation');?></th>
+            <th width="80" align="left"><?php echo L('listorder');?></th>
+            <th width="80" align="left">ID</th>
+            <th><?php echo L('title');?></th>
+            <th width="200"><?php echo L('catname');?></th>
+            <th width="160"><?php echo L('inputtime')?></th>
+            <th><?php echo L('posid_operation');?></th>
             </tr>
         </thead>
     <tbody>
@@ -29,19 +29,19 @@ if(is_array($infos)){
 	foreach($infos as $info){
 ?>   
 	<tr>
-	<td width="10%" class="myselect">
+	<td class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="checkboxes" name="items[]" value="<?php echo $info['id'],'-',$info['modelid']?>" id="items" boxid="items" />
                         <span></span>
                     </label></td>	
-	<td width="10%">
+	<td>
 	<input name='listorders[<?php echo $info['catid'],'-',$info['id']?>]' type='text' size='3' value='<?php echo $info['listorder']?>' class="input-text-c">
 	</td>	
-	<td width="10%"  align="left"><?php echo $info['id']?></td>
-	<td width=""  align="left"><?php echo $info['title']?> <?php if($info['thumb']!='') {echo '<img src="'.IMG_PATH.'icon/small_img.gif">'; }?></td>
-	<td  width="15%" align="center"><?php echo $info['catname']?></td>
-	<td width="15%" align="center"><?php echo date('Y-m-d H:i:s',$info['inputtime'])?></td>
-	<td width="15%" align="center"><a href="<?php echo $info['url']?>" target="_blank"><?php echo L('posid_item_view')?></a> | <a onclick="javascript:contentopen('?m=content&c=content&a=edit&catid=<?php echo $info['catid']?>&id=<?php echo $info['id']?>','<?php echo L('posid_item_edit');?>')" href="javascript:;"><?php echo L('posid_item_edit');?></a> | <a href="javascript:item_manage(<?php echo $info['id']?>,<?php echo $info['posid']?>, <?php echo $info['modelid']?>,'<?php echo $info['title']?>')"><?php echo L('posid_item_manage')?></a>
+	<td><?php echo $info['id']?></td>
+	<td><?php echo $info['title']?> <?php if($info['thumb']!='') {echo '<img src="'.IMG_PATH.'icon/small_img.gif">'; }?></td>
+	<td align="center"><?php echo $info['catname']?></td>
+	<td align="center"><?php echo dr_date($info['inputtime'], null, 'red')?></td>
+	<td align="center"><a class="btn btn-xs blue" href="<?php echo $info['url']?>" target="_blank"><?php echo L('posid_item_view')?></a> <a class="btn btn-xs green" onclick="javascript:contentopen('?m=content&c=content&a=edit&catid=<?php echo $info['catid']?>&id=<?php echo $info['id']?>','<?php echo L('posid_item_edit');?>')" href="javascript:;"><?php echo L('posid_item_edit');?></a> <a class="btn btn-xs yellow" href="javascript:item_manage(<?php echo $info['id']?>,<?php echo $info['posid']?>, <?php echo $info['modelid']?>,'<?php echo $info['title']?>')"><?php echo L('posid_item_manage')?></a>
 	</td>
 	</tr>
 <?php 

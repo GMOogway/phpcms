@@ -8,11 +8,11 @@ include $this->admin_tpl('header','admin');?>
     <table width="100%" cellspacing="0" >
         <thead>
 	<tr>
-	<th width="5%"><?php echo L('listorder');?></td>
-	<th width="5%">ID</th>
-	<th width="20%"><?php echo L('type_name');?></th>
-	<th width="*"><?php echo L('description');?></th>
-	<th width="30%"><?php echo L('operations_manage');?></th>
+	<th width="80"><?php echo L('listorder');?></td>
+	<th width="80">ID</th>
+	<th width="200"><?php echo L('type_name');?></th>
+	<th><?php echo L('description');?></th>
+	<th><?php echo L('operations_manage');?></th>
 	</tr>
         </thead>
     <tbody>
@@ -26,7 +26,7 @@ foreach($datas as $r) {
 <td align="center"><?php echo $r['typeid']?></td>
 <td align="center"><?php echo $r['name']?></td>
 <td ><?php echo $r['description']?></td>
-<td align="center"><a href="javascript:edit('<?php echo $r['typeid']?>','<?php echo trim(new_addslashes($r['name']))?>')"><?php echo L('edit');?></a> | <a href="javascript:;" onclick="data_delete(this,'<?php echo $r['typeid']?>','<?php echo trim(new_addslashes($r['name']));?>')"><?php echo L('delete')?></a> </td>
+<td align="center"><a class="btn btn-xs green" href="javascript:edit('<?php echo $r['typeid']?>','<?php echo trim(new_addslashes($r['name']))?>')"><?php echo L('edit');?></a> <a class="btn btn-xs red" href="javascript:;" onclick="data_delete(this,'<?php echo $r['typeid']?>','<?php echo trim(new_addslashes($r['name']));?>')"><?php echo L('delete')?></a> </td>
 </tr>
 <?php } ?>
 	</tbody>

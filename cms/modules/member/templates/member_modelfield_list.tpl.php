@@ -28,19 +28,19 @@
 	foreach($datas as $r) {
 	?>
     <tr>
-		<td align='center' width='70'>
+		<td align='center'>
 			<input name='listorders[<?php echo $r['fieldid']?>]' type='text' size='3' value='<?php echo $r['listorder']?>' class='input-text-c'>
 		</td>
-		<td width='90'><?php echo $r['field']?></td>
-		<td width="100"><?php echo $r['name']?></td>
-		<td width="100" align='center'><?php echo $r['formtype']?></td>
-		<td width="50" align='center'>
+		<td><?php echo $r['field']?></td>
+		<td><?php echo $r['name']?></td>
+		<td align='center'><?php echo $r['formtype']?></td>
+		<td align='center'>
 			<?php echo $r['isbase'] ? L('icon_unlock') : L('icon_locked')?></td>
-		<td width="50" align='center'>
+		<td align='center'>
 			<?php echo $r['issearch'] ? L('icon_unlock') : L('icon_locked')?></td>
-		<td width="50" align='center'>
+		<td align='center'>
 			<?php echo $r['isorder'] ? L('icon_unlock') : L('icon_locked')?></td>
-		<td width="50" align='center'>
+		<td align='center'>
 			<?php echo $r['disabled'] ? L('icon_unlock') : L('icon_locked')?></td>
 		<td align='center'>
 			<a class="btn btn-xs green" href="javascript:edit(<?php echo $r['modelid']?>, <?php echo $r['fieldid']?>, '<?php echo $r['name']?>')"><?php echo L('modify')?></a>
@@ -64,7 +64,6 @@
 </div>
 </div>
 </form>
-<div id="PC__contentHeight" style="display:none">160</div>
 <script language="JavaScript">
 <!--
 function edit(modelid, fieldid, name) {

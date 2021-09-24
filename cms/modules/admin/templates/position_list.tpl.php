@@ -8,12 +8,12 @@ include $this->admin_tpl('header');?>
     <table width="100%" cellspacing="0">
         <thead>
             <tr>
-            <th width="10%"  align="left"><?php echo L('listorder');?></th>
-             <th width="5%"  align="left">ID</th>
-            <th width="15%"><?php echo L('posid_name');?></th>
-            <th width="15%"><?php echo L('posid_catid');?></th>
-            <th width="15%"><?php echo L('posid_modelid');?></th>
-            <th width="20%"><?php echo L('posid_operation');?></th>
+            <th width="80"><?php echo L('listorder');?></th>
+            <th width="80">ID</th>
+            <th><?php echo L('posid_name');?></th>
+            <th width="120"><?php echo L('posid_catid');?></th>
+            <th width="120"><?php echo L('posid_modelid');?></th>
+            <th><?php echo L('posid_operation');?></th>
             </tr>
         </thead>
     <tbody>
@@ -22,25 +22,23 @@ if(is_array($infos)){
 	foreach($infos as $info){
 ?>   
 	<tr>
-	<td width="10%">
+	<td>
 	<input name='listorders[<?php echo $info['posid']?>]' type='text' size='2' value='<?php echo $info['listorder']?>' class="input-text-c">
 	</td>
-	<td width="5%"  align="left"><?php echo $info['posid']?></td>
-	<td  width="15%" align="center"><?php echo $info['name']?></td>
-	<td width="15%" align="center"><?php echo $info['catid'] ? $category[$info['catid']]['catname'] : L('posid_all')?></td>
-	<td width="15%" align="center"><?php echo $info['modelid'] ? $model[$info['modelid']]['name'] : L('posid_all')?></td>
-	<td width="20%" align="center">
-	<a href="?m=admin&c=position&a=public_item&posid=<?php echo $info['posid']?>&menuid=<?php echo $this->input->get('menuid')?>"><?php echo L('posid_item_manage')?></a> |
-	<a href="javascript:edit(<?php echo $info['posid']?>, '<?php echo new_addslashes($info['name'])?>')"><?php echo L('edit')?></a> | 
+	<td><?php echo $info['posid']?></td>
+	<td align="center"><?php echo $info['name']?></td>
+	<td align="center"><?php echo $info['catid'] ? $category[$info['catid']]['catname'] : L('posid_all')?></td>
+	<td align="center"><?php echo $info['modelid'] ? $model[$info['modelid']]['name'] : L('posid_all')?></td>
+	<td align="center">
+	<a class="btn btn-xs blue" href="?m=admin&c=position&a=public_item&posid=<?php echo $info['posid']?>&menuid=<?php echo $this->input->get('menuid')?>"><?php echo L('posid_item_manage')?></a>
+	<a class="btn btn-xs green" href="javascript:edit(<?php echo $info['posid']?>, '<?php echo new_addslashes($info['name'])?>')"><?php echo L('edit')?></a>
 	<?php if($info['siteid']=='0' && $_SESSION['roleid'] != 1) {?>
-	<font color="#ccc"><?php echo L('delete')?></font>
 	<?php } else {?>
-	<a href="javascript:confirmurl('?m=admin&c=position&a=delete&posid=<?php echo $info['posid']?>', '<?php echo L('posid_del_cofirm')?>')"><?php echo L('delete')?></a>	
+	<a class="btn btn-xs red" href="javascript:confirmurl('?m=admin&c=position&a=delete&posid=<?php echo $info['posid']?>', '<?php echo L('posid_del_cofirm')?>')"><?php echo L('delete')?></a>	
 	<?php } ?>
-	| 
 	<?php if($info['thumb']!=""){?>
-	<a href="javascript:preview('<?php echo $info['thumb'];?>','<?php echo $info['name'];?>')"><font color="green"><?php echo L('priview')?></font></a>
-	<?php }else{?> <?php echo L('no_priview')?><?php } ?>
+	<a class="btn btn-xs yellow" href="javascript:preview('<?php echo $info['thumb'];?>','<?php echo $info['name'];?>')"><?php echo L('priview')?></a>
+	<?php } ?>
 	
 	</td>
 	</tr>

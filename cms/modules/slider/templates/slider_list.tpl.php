@@ -54,10 +54,10 @@ if(is_array($infos)){
 		<td><input name='listorders[<?php echo $info['id']?>]' type='text' size='3' value='<?php echo $info['listorder']?>' class="input-text-c"></td>
 		<td><?php if ($info['url']!="#" && $info['url']){?><a href="<?php echo $info['url'];?>" title="<?php echo $info['name']?>" target="_blank"><?php }?><?php echo $info['name']?><?php if ($info['url']!="#" && $info['url']){?></a><?php }?></td>
 		<td><a href="javascript:preview('<?php echo $info['image']?>')" title="<?php echo $info['description'];?>"><img src="<?php echo $info['image'];?>" height=60></a></td>
-		<td><?php if ($info['url']!="#" && $info['url']){?><a href="<?php echo $info['url'];?>" target="_blank">点击查看</a><?php }else{?>无<?php }?></td>
-		<td><?php echo $type_arr[$info['typeid']];?></td>
-		<td><?php if($info['isshow']=='0'){ echo "不显示";}else{echo "显示";}?></td>
-		<td ><?php echo dr_date($info['addtime'], null, 'red');?></td>
+		<td align="center"><?php if ($info['url']!="#" && $info['url']){?><a class="btn btn-xs yellow" href="<?php echo $info['url'];?>" target="_blank">点击查看</a><?php }else{?>无<?php }?></td>
+		<td align="center"><?php echo $type_arr[$info['typeid']];?></td>
+		<td align="center"><?php if($info['isshow']=='0'){ echo "不显示";}else{echo "显示";}?></td>
+		<td align="center"><?php echo dr_date($info['addtime'], null, 'red');?></td>
 		<td><a class="btn btn-xs green" href="###"
 			onclick="edit(<?php echo $info['id']?>, '<?php echo new_addslashes($info['name'])?>')"
 			title="<?php echo L('edit')?>"><?php echo L('edit')?></a> <a class="btn btn-xs red"

@@ -83,14 +83,13 @@ jQuery(document).ready(function() {
                         <span></span>
                     </label></th>
 			<th width="80"><?php echo L('uid')?></th>
+			<th width="60"><?php echo L('头像')?></th>
 			<th><?php echo L('username')?></th>
-			<th width="100"><?php echo L('nickname')?></th>
-			<th width="200"><?php echo L('email')?></th>
-			<th width="100"><?php echo L('member_group')?></th>
-			<th width="150"><?php echo L('regip')?></th>
+			<th width="120"><?php echo L('nickname')?></th>
+			<th><?php echo L('regip')?></th>
 			<th width="160"><?php echo L('lastlogintime')?></th>
-			<th width="100"><?php echo L('amount')?></th>
-			<th width="100"><?php echo L('point')?></th>
+			<th><?php echo L('amount')?></th>
+			<th><?php echo L('point')?></th>
 			<th><?php echo L('operation')?></th>
 		</tr>
 	</thead>
@@ -106,10 +105,9 @@ jQuery(document).ready(function() {
                         <span></span>
                     </label></td>
 		<td><?php echo $v['userid']?></td>
-		<td><img src="<?php echo $v['avatar']?>" height="18" width="18" onerror="this.src='<?php echo IMG_PATH?>member/nophoto.gif'"><?php if($v['vip']) {?><img title="<?php echo L('vip')?>" src="<?php echo IMG_PATH?>icon/vip.gif"><?php }?><?php echo $v['username']?><a href="javascript:member_infomation(<?php echo $v['userid']?>, '<?php echo $v['modelid']?>', '')"><?php echo $member_model[$v['modelid']]['name']?><img src="<?php echo IMG_PATH?>admin_img/detail.png"></a><?php if($v['islock']) {?><img onmouseover="layer.tips('<?php echo L('lock')?>',this,{tips: [1, '#000']});" onmouseout="layer.closeAll();" src="<?php echo IMG_PATH?>icon/icon_padlock.gif"><?php }?></td>
+		<td><a href="javascript:member_infomation(<?php echo $v['userid']?>, '<?php echo $v['modelid']?>', '')"><img src="<?php echo $v['avatar']?>" height="30" width="30" onerror="this.src='<?php echo IMG_PATH?>member/nophoto.gif'"></a></td>
+		<td><?php if($v['vip']) {?><img title="<?php echo L('vip')?>" src="<?php echo IMG_PATH?>icon/vip.gif"><?php }?><?php echo $v['username']?><?php echo $member_model[$v['modelid']]['name']?><?php if($v['islock']) {?><img onmouseover="layer.tips('<?php echo L('lock')?>',this,{tips: [1, '#000']});" onmouseout="layer.closeAll();" src="<?php echo IMG_PATH?>icon/icon_padlock.gif"><?php }?></td>
 		<td><?php echo new_html_special_chars($v['nickname'])?></td>
-		<td><?php echo $v['email']?></td>
-		<td><?php echo $grouplist[$v['groupid']]?></td>
 		<td><?php echo $v['regip']?></td>
 		<td><?php echo dr_date($v['lastdate'], null, 'red');?></td>
 		<td><?php echo $v['amount']?></td>

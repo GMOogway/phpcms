@@ -66,8 +66,6 @@
 </div>
 </div>
 </form>
-<div id="PC__contentHeight" style="display:none">160</div>
-
 <script language="JavaScript">
 <!--
 function edit(id, name) {

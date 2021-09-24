@@ -35,8 +35,6 @@ if(is_array($infos)){
 <a class="btn btn-xs green" href="javascript:edit(<?php echo $info['userid']?>, '<?php echo new_addslashes($info['username'])?>')"><?php echo L('edit')?></a>
 <?php if(!in_array($info['userid'],$admin_founders)) {?>
 <a class="btn btn-xs red" href="javascript:confirmurl('?m=admin&c=admin_manage&a=delete&userid=<?php echo $info['userid']?>', '<?php echo L('admin_del_cofirm')?>')"><?php echo L('delete')?></a>
-<?php } else {?>
-<font color="#cccccc"><?php echo L('delete')?></font>
 <?php } ?>
 </td>
 </tr>

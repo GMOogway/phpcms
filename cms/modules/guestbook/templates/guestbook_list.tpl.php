@@ -58,15 +58,15 @@ if(is_array($infos)){
             <td align="center"><?php echo $info['name']?></td>
             <td align="center"><?php echo $info['sex']?></td>
             <td align="center"><?php echo $info['lxqq'];?></td>
-            <td align="center" style="color:#004499"><?php echo $info['email'];?></td>
+            <td align="center"><?php echo $info['email'];?></td>
             <td align="center"><?php echo $info['shouji'];?></td>
-            <td align="center" style="color:#004499"><?php echo str_cut($info['introduce'] ,'50');?></td>
+            <td align="center"><?php echo str_cut($info['introduce'] ,'50');?></td>
             <td align="center"><?php if($info['typeid']==0){echo "默认分类";}else{echo $type_arr[$info['typeid']];}?></td>
             <td align="center"><?php echo dr_date($info['addtime'], null, 'red');?></td>
             <td align="center"><?php if($info['passed']=='0'){?>
-              <a
+              <a class="btn btn-xs yellow"
 			href='?m=guestbook&c=guestbook&a=check&guestid=<?php echo $info['guestid']?>'
-			onClick="return confirm('<?php echo L('pass_or_not')?>')"><font color=red><?php echo L('audit')?></font></a>
+			onClick="return confirm('<?php echo L('pass_or_not')?>')"><?php echo L('audit')?></a>
               <?php }else{echo L('passed');}?>
               <br>
               <?php if($info['reply']==''){ echo "<font color=red>【未回复】</font>";}else{echo "<font color=green>【已回复】</font>";}?>

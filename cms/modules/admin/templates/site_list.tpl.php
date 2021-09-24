@@ -27,7 +27,7 @@ if(is_array($list)):
 <td align="center"><?php echo $v['domain']?></td>
 <td align="center"><?php if ($v['siteid']!=1){?><?php echo pc_base::load_config('system', 'html_root')?>/<?php echo $v['dirname'];} else{echo '/';}?></td>
 <td><a class="btn btn-xs green" href="javascript:edit(<?php echo $v['siteid']?>, '<?php echo  new_addslashes(new_html_special_chars($v['name']))?>')"><?php echo L('edit')?></a>
-<?php if($v['siteid']!=1) { ?><a class="btn btn-xs red" href="###" onclick="Dialog.confirm('<?php echo new_addslashes(new_html_special_chars(L('confirm', array('message'=>$v['name']))))?>',function(){redirect('?m=admin&c=site&a=del&siteid=<?php echo $v['siteid']?>&pc_hash='+pc_hash);});"><?php echo L('delete')?></a><?php } else { ?><font color="#cccccc"><?php echo L('delete')?></font><?php } ?></td>
+<?php if($v['siteid']!=1) { ?><a class="btn btn-xs red" href="###" onclick="Dialog.confirm('<?php echo new_addslashes(new_html_special_chars(L('confirm', array('message'=>$v['name']))))?>',function(){redirect('?m=admin&c=site&a=del&siteid=<?php echo $v['siteid']?>&pc_hash='+pc_hash);});"><?php echo L('delete')?></a><?php } ?></td>
 </tr>
 <?php 
 	endforeach;

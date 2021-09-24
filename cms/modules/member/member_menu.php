@@ -24,7 +24,7 @@ class member_menu extends admin {
 
 		foreach($result as $r) {
 			$r['cname'] = L($r['name'], '', 'member_menu');
-			$r['str_manage'] = '<a href="?m=member&c=member_menu&a=edit&id='.$r['id'].'&menuid='.$_GET['menuid'].'">'.L('edit').'</a> | <a href="javascript:confirmurl(\'?m=member&c=member_menu&a=delete&id='.$r['id'].'&menuid='.$_GET['menuid'].'\',\''.L('confirm',array('message'=>$r['cname'])).'\')">'.L('delete').'</a> ';
+			$r['str_manage'] = '<a class="btn btn-xs green" href="?m=member&c=member_menu&a=edit&id='.$r['id'].'&menuid='.$_GET['menuid'].'">'.L('edit').'</a><a class="btn btn-xs red" href="javascript:confirmurl(\'?m=member&c=member_menu&a=delete&id='.$r['id'].'&menuid='.$_GET['menuid'].'\',\''.L('confirm',array('message'=>$r['cname'])).'\')">'.L('delete').'</a> ';
 			$array[] = $r;
 		}
 
