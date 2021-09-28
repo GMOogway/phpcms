@@ -210,6 +210,11 @@ class cache {
         return $this->cachefile->delete(md5(SYS_KEY.SITE_ID.$name));
     }
 
+    // 删除缓存
+    public function clear($name) {
+        $this->del_data($name);
+    }
+
     // 使用框架
     public function get() {
 
@@ -245,18 +250,6 @@ class cache {
         eval('$return = $result'.$var.';');
 
         return $return;
-    }
-
-
-    // 删除缓存
-    public function clear($name) {
-
-        $name = strtolower($name);
-        $this->del_data(dr_safe_filename($name));
-
-        // 重置Zend OPcache
-        function_exists('opcache_reset') && opcache_reset();
-
     }
 }
 ?>
