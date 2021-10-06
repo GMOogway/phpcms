@@ -14,7 +14,7 @@ class attachments {
 		$this->cache = pc_base::load_sys_class('cache');
 		pc_base::load_app_func('global');
 		$this->upload = pc_base::load_sys_class('upload');
-		$this->imgext = array('jpg','gif','png','bmp','jpeg');
+		$this->imgext = array('jpg','gif','png','bmp','jpeg','webp');
 		$this->userid = $_SESSION['userid'] ? $_SESSION['userid'] : (param::get_cookie('_userid') ? param::get_cookie('_userid') : param::get_cookie('userid'));
 		$this->isadmin = $this->admin_username = $_SESSION['roleid'] ? 1 : 0;
 		$this->groupid = param::get_cookie('_groupid') ? param::get_cookie('_groupid') : 8;
@@ -389,7 +389,7 @@ class attachments {
 						$att[$n]['width']='64';
 						$att[$n]['filename']=urldecode($v['filename']);
 					}
-					$this->cookie_att .=	'|'.$v['src'];
+					$this->cookie_att .= '|'.$v['src'];
 				}
 			}			
 		}

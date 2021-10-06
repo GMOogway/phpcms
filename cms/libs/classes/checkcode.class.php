@@ -50,7 +50,7 @@ class checkcode {
 		} else {
 			$this->font = PC_PATH.'libs'.DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'font'.DIRECTORY_SEPARATOR.'Vineta.ttf';
 		}
-		if (!is_file($this->font)) log_message('error', '验证码字体文件不存在！');
+		if (!is_file($this->font)) log_message('error', '验证码字体文件（'.$this->font.'）不存在，可能无法生成验证码！');
 		if (!$this->check_gd()) log_message('error', 'PHP扩展GD库未开启！');
 	}
 

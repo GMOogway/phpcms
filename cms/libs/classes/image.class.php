@@ -1546,7 +1546,7 @@ class image {
         if (!$attach) {
             CI_DEBUG && log_message('debug', '图片[id#'.$img.']不存在，thumb函数无法调用');
             return IMG_PATH.'nopic.gif';
-        } elseif (!in_array($attach['fileext'], array('gif', 'png', 'jpeg', 'jpg'))) {
+        } elseif (!in_array($attach['fileext'], array('gif', 'png', 'jpeg', 'jpg', 'webp'))) {
             CI_DEBUG && log_message('debug', '图片[id#'.$img.']扩展名不符合条件，thumb函数无法调用');
             return IMG_PATH.'nopic.gif';
         }
@@ -1557,7 +1557,7 @@ class image {
         if ($attach['remote'] && $attach['url']) {
             if($webimg) {
                 list($cache_path, $cache_url) = array(SYS_THUMB_PATH, SYS_THUMB_URL);
-                $cache_file = md5($attach['aid']).'/'.$width.'x'.$height.($water ? '_water' : '').($mode ? '_'.$mode : '').'.jpg';
+                $cache_file = md5($attach['aid']).'/'.$width.'x'.$height.($water ? '_water' : '').($mode ? '_'.$mode : '').'.'.$attach['fileext'];
                 // 创建缓存目录
                 create_folder($cache_path.dirname($cache_file));
             } else {

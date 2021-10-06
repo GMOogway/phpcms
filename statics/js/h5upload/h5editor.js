@@ -157,7 +157,7 @@ function h5upload(uploadid, name, textareaid, funcName, args, module, catid, aut
 function IsImg(url){
 	var sTemp;
 	var b=false;
-	var opt="jpg|gif|png|bmp|jpeg";
+	var opt="jpg|gif|png|bmp|jpeg|webp";
 	var s=opt.toUpperCase().split("|");
 	for (var i=0;i<s.length ;i++ ){
 		sTemp=url.substr(url.length-s[i].length-1);
