@@ -1254,6 +1254,9 @@ function L($language = 'no_language',$pars = array(), $modules = '') {
 function template($module = 'content', $template = 'index', $style = '') {
 	!defined('ISMOBILE') && define('ISMOBILE', 0);
 	!defined('IS_HTML') && define('IS_HTML', 0);
+	if(strpos($template, '..') !== false){
+		showmessage('Template filename illegality.');
+	}
 	if(strpos($module, 'plugin/')!== false) {
 		$plugin = str_replace('plugin/', '', $module);
 		return p_template($plugin, $template,$style);
@@ -1288,7 +1291,7 @@ function template($module = 'content', $template = 'index', $style = '') {
 		if(!file_exists($compiledtplfile) || (file_exists(PC_PATH.'templates'.DIRECTORY_SEPARATOR.'default'.DIRECTORY_SEPARATOR.$module.DIRECTORY_SEPARATOR.$template.'.html') && filemtime(PC_PATH.'templates'.DIRECTORY_SEPARATOR.'default'.DIRECTORY_SEPARATOR.$module.DIRECTORY_SEPARATOR.$template.'.html') > filemtime($compiledtplfile))) {
 			$template_cache->template_compile($module, $template, 'default');
 		} elseif (!file_exists(PC_PATH.'templates'.DIRECTORY_SEPARATOR.'default'.DIRECTORY_SEPARATOR.$module.DIRECTORY_SEPARATOR.$template.'.html')) {
-			dr_show_error('Template does not exist.'.DIRECTORY_SEPARATOR.$style.DIRECTORY_SEPARATOR.$module.DIRECTORY_SEPARATOR.$template.'.html');
+			showmessage('Template does not exist.'.DIRECTORY_SEPARATOR.$style.DIRECTORY_SEPARATOR.$module.DIRECTORY_SEPARATOR.$template.'.html');
 		}
 	}
 	return $compiledtplfile;
@@ -1357,7 +1360,7 @@ function showmessage($msg, $url_forward = 'goback', $ms = 1250, $dialog = '', $r
 	if(defined('IN_ADMIN')) {
 		include(admin::admin_tpl('showmessage', 'admin'));
 	} else {
-		include(template('content', 'message'));
+		dr_show_error($msg);
 	}
 	exit;
 }
@@ -2889,7 +2892,7 @@ function p_template($plugin = 'content', $template = 'index',$style='default') {
 	if(!file_exists($compiledtplfile) || (file_exists(PC_PATH.'plugin'.DIRECTORY_SEPARATOR.$plugin.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$template.'.html') && filemtime(PC_PATH.'plugin'.DIRECTORY_SEPARATOR.$plugin.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$template.'.html') > filemtime($compiledtplfile))) {
 		$template_cache->template_compile('plugin/'.$plugin, $template, 'default');
 	} elseif (!file_exists(PC_PATH.'plugin'.DIRECTORY_SEPARATOR.$plugin.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$template.'.html')) {
-		dr_show_error('Template does not exist.'.DIRECTORY_SEPARATOR.'plugin'.DIRECTORY_SEPARATOR.$plugin.DIRECTORY_SEPARATOR.$template.'.html');
+		showmessage('Template does not exist.'.DIRECTORY_SEPARATOR.'plugin'.DIRECTORY_SEPARATOR.$plugin.DIRECTORY_SEPARATOR.$template.'.html');
 	}
 
 	return $compiledtplfile;
