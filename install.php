@@ -32,9 +32,6 @@ if (!extension_loaded('mbstring')) {
 if (!extension_loaded('xml')) {
     $rt[] = echo_msg('PHP扩展库：xml未安装');
 }
-if (!function_exists('chmod')) {
-    $rt[] = echo_msg('PHP函数chmod被禁用，需要开启');
-}
 
 $mysqli = function_exists('mysqli_init') ? mysqli_init() : 0;
 if (!$mysqli) {
