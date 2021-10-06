@@ -30,7 +30,7 @@ class formguide_input {
 				$errortips = $field['errortips'];
 				$value = $data[$field['field']];
 				if(empty($errortips)) $errortips = $name.' '.L('not_meet_the_conditions');
-				$length = is_array($value) ? (empty($value) ? 0 : 1) : strlen($value);
+				$length = is_array($value) ? (empty($value) ? 0 : 1) : mb_strlen($value);
 
 				if($minlength && $length < $minlength) {
 					if($isimport) {

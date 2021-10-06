@@ -144,11 +144,6 @@ function remove_id(id) {
 
 function strlen_verify(obj, checklen, maxlen) {
 	var v = obj.value, charlen = 0, maxlen = !maxlen ? 200 : maxlen, curlen = maxlen, len = strlen(v);
-	for(var i = 0; i < v.length; i++) {
-		if(v.charCodeAt(i) < 0 || v.charCodeAt(i) > 255) {
-			curlen -= charset == 'utf-8' ? 2 : 1;
-		}
-	}
 	if(curlen >= len) {
 		$('#'+checklen).html(curlen - len);
 	} else {
@@ -161,7 +156,7 @@ function mb_cutstr(str, maxlen, dot) {
 	var dot = !dot ? '...' : '';
 	maxlen = maxlen - dot.length;
 	for(var i = 0; i < str.length; i++) {
-		len += str.charCodeAt(i) < 0 || str.charCodeAt(i) > 255 ? (charset == 'utf-8' ? 3 : 2) : 1;
+		len += str.charCodeAt(i) < 0 || 1;
 		if(len > maxlen) {
 			ret += dot;
 			break;
