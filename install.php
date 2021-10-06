@@ -32,6 +32,9 @@ if (!extension_loaded('mbstring')) {
 if (!extension_loaded('xml')) {
     $rt[] = echo_msg('PHP扩展库：xml未安装');
 }
+if (!function_exists('chmod')) {
+    $rt[] = echo_msg('PHP函数chmod被禁用，需要开启');
+}
 
 $mysqli = function_exists('mysqli_init') ? mysqli_init() : 0;
 if (!$mysqli) {
@@ -107,6 +110,14 @@ foreach (array(
          ) as $t) {
     if (!dr_check_put_path($t)) {
         $rt[] = echo_msg('目录（'.$t.'）不可写');
+    }
+}
+// 判断支持函数
+foreach (array(
+             'chmod',
+         ) as $t) {
+    if ($t && !function_exists($t)) {
+        $rt[] = echo_msg('PHP自带的函数（'.$t.'）被服务器禁用了，需要联系服务商开启');
     }
 }
 if ($rt) {
