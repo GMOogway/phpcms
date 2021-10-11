@@ -62,7 +62,7 @@ switch($step)
 		}
         $PHP_DNS = preg_match("/^[0-9.]{7,15}$/", @gethostbyname('www.baidu.com')) ? 1 : 0;
 		//是否满足cms安装需求
-		$is_right = (phpversion() >= '7.0.0' && extension_loaded('mysqli') && $PHP_JSON && $PHP_GD && $PHP_FSOCKOPEN) ? 1 : 0;		
+		$is_right = (phpversion() >= '7.1.0' && extension_loaded('mysqli') && $PHP_JSON && $PHP_GD && $PHP_FSOCKOPEN) ? 1 : 0;		
 		include CMS_PATH."install/step/step".$step.".tpl.php";
 		break;
 	
