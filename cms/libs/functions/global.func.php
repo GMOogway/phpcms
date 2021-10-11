@@ -174,10 +174,10 @@ function dr_get_keywords($kw) {
 			)
 		))), true);
 		if (!$rt) {
-			//showmessage('讯飞接口访问失败');
+			log_message('error', '讯飞接口访问失败');
 			return '';
 		} elseif ($rt['code']) {
-			//showmessage('讯飞接口: '.$rt['desc']);
+			log_message('error', '讯飞接口: '.$rt['desc']);
 			return '';
 		} else {
 			$n = 0;
@@ -1291,7 +1291,10 @@ function template($module = 'content', $template = 'index', $style = '') {
 		if(!file_exists($compiledtplfile) || (file_exists(PC_PATH.'templates'.DIRECTORY_SEPARATOR.'default'.DIRECTORY_SEPARATOR.$module.DIRECTORY_SEPARATOR.$template.'.html') && filemtime(PC_PATH.'templates'.DIRECTORY_SEPARATOR.'default'.DIRECTORY_SEPARATOR.$module.DIRECTORY_SEPARATOR.$template.'.html') > filemtime($compiledtplfile))) {
 			$template_cache->template_compile($module, $template, 'default');
 		} elseif (!file_exists(PC_PATH.'templates'.DIRECTORY_SEPARATOR.'default'.DIRECTORY_SEPARATOR.$module.DIRECTORY_SEPARATOR.$template.'.html')) {
-			showmessage('Template does not exist.'.DIRECTORY_SEPARATOR.$style.DIRECTORY_SEPARATOR.$module.DIRECTORY_SEPARATOR.$template.'.html');
+			if (IS_DEV) {
+				log_message('error', '模板文件['.PC_PATH.'templates'.DIRECTORY_SEPARATOR.'default'.DIRECTORY_SEPARATOR.$module.DIRECTORY_SEPARATOR.$template.'.html]不存在');
+			}
+			show_error('模板文件不存在', PC_PATH.'templates'.DIRECTORY_SEPARATOR.$style.DIRECTORY_SEPARATOR.$module.DIRECTORY_SEPARATOR.$template.'.html');
 		}
 	}
 	return $compiledtplfile;
@@ -1360,7 +1363,7 @@ function showmessage($msg, $url_forward = 'goback', $ms = 1250, $dialog = '', $r
 	if(defined('IN_ADMIN')) {
 		include(admin::admin_tpl('showmessage', 'admin'));
 	} else {
-		dr_show_error($msg);
+		include(template('content', 'message'));
 	}
 	exit;
 }
@@ -2744,6 +2747,17 @@ function dr_show_error($msg) {
 	}
 	exit("<!DOCTYPE html><html lang=\"zh-cn\"><head><meta charset=\"utf-8\"><title>系统错误</title><style>        div.logo {            height: 200px;            width: 155px;            display: inline-block;            opacity: 0.08;            position: absolute;            top: 2rem;            left: 50%;            margin-left: -73px;        }        body {            height: 100%;            background: #fafafa;            font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;            color: #777;            font-weight: 300;        }        h1 {            font-weight: lighter;            letter-spacing: 0.8;            font-size: 3rem;            margin-top: 0;            margin-bottom: 0;            color: #222;        }        .wrap {            max-width: 1024px;            margin: 5rem auto;            padding: 2rem;            background: #fff;            text-align: center;            border: 1px solid #efefef;            border-radius: 0.5rem;            position: relative;            word-wrap:break-word;            word-break:normal;        }        pre {            white-space: normal;            margin-top: 1.5rem;        }        code {            background: #fafafa;            border: 1px solid #efefef;            padding: 0.5rem 1rem;            border-radius: 5px;            display: block;        }        p {            margin-top: 1.5rem;        }        .footer {            margin-top: 2rem;            border-top: 1px solid #efefef;            padding: 1em 2em 0 2em;            font-size: 85%;            color: #999;        }        a:active,        a:link,        a:visited {            color: #dd4814;        }</style></head><body><div class=\"wrap\"><p>{$msg}</p>    {$url}</div></body></html>");
 }
+// 错误提示
+function show_error($msg, $file = '') {
+	if (CI_DEBUG) {
+		// 开发者模式下，静态生成模式下，显示详细错误
+		if ($file) {
+			$msg.= '（'.$file.'）';
+		}
+		log_message('error', FC_NOW_URL.'：'.$msg);
+	}
+	dr_show_error($msg);
+}
 /**
  * 提交表单默认隐藏域
  */
@@ -2892,7 +2906,10 @@ function p_template($plugin = 'content', $template = 'index',$style='default') {
 	if(!file_exists($compiledtplfile) || (file_exists(PC_PATH.'plugin'.DIRECTORY_SEPARATOR.$plugin.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$template.'.html') && filemtime(PC_PATH.'plugin'.DIRECTORY_SEPARATOR.$plugin.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$template.'.html') > filemtime($compiledtplfile))) {
 		$template_cache->template_compile('plugin/'.$plugin, $template, 'default');
 	} elseif (!file_exists(PC_PATH.'plugin'.DIRECTORY_SEPARATOR.$plugin.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$template.'.html')) {
-		showmessage('Template does not exist.'.DIRECTORY_SEPARATOR.'plugin'.DIRECTORY_SEPARATOR.$plugin.DIRECTORY_SEPARATOR.$template.'.html');
+		if (IS_DEV) {
+			log_message('error', '模板文件['.PC_PATH.'templates'.DIRECTORY_SEPARATOR.'plugin'.DIRECTORY_SEPARATOR.$plugin.DIRECTORY_SEPARATOR.$template.'.html]不存在');
+		}
+		show_error('模板文件不存在', PC_PATH.'templates'.DIRECTORY_SEPARATOR.'plugin'.DIRECTORY_SEPARATOR.$plugin.DIRECTORY_SEPARATOR.$template.'.html');
 	}
 
 	return $compiledtplfile;
