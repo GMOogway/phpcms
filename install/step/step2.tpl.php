@@ -60,8 +60,8 @@
                             <tr>
                                 <td>PHP 版本</td>
                                 <td>PHP <?php echo phpversion();?></td>
-                                <td>PHP 7.0.0 及以上</td>
-                                <td><?php if(phpversion() >= '7.0.0'){ ?><span><img src="images/correct.png" /></span><?php }else{ ?><font class="red"><img src="images/error.png" />&nbsp;无法安装</font><?php }?></font></td>
+                                <td>PHP 7.1.0 及以上</td>
+                                <td><?php if(phpversion() >= '7.1.0'){ ?><span><img src="images/correct.png" /></span><?php }else{ ?><font class="red"><img src="images/error.png" />&nbsp;无法安装</font><?php }?></font></td>
                             </tr>
                             <tr>
                                 <td>MYSQLI 扩展</td>
