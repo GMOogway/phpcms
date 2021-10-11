@@ -2750,7 +2750,7 @@ function dr_show_error($msg) {
 // 错误提示
 function show_error($msg, $file = '') {
 	if (CI_DEBUG) {
-		// 开发者模式下，静态生成模式下，显示详细错误
+		// 开发者模式下，显示详细错误
 		if ($file) {
 			$msg.= '（'.$file.'）';
 		}
