@@ -48,9 +48,9 @@
 	 	 			<h2>热门标签</h2>
 	 	 		</div>
 			    <ul class="tag-list">
-				{pc:content action="tag" field="id,keyword,videonum,searchnums" limit="30"}
+				{pc:content action="tag" field="id,siteid,keyword,videonum,searchnums" limit="30"}
 				{loop $data $r}
-					<li><a href="{tag_url($r['keyword'])}">{$r['keyword']}({$r['videonum']})</a></li>	
+					<li><a href="{tag_url($r['keyword'],$r['siteid'])}">{$r['keyword']}({$r['videonum']})</a></li>	
 				{/loop}
 				{/pc}
 				</ul>

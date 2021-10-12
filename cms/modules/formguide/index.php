@@ -24,8 +24,7 @@ class index {
 		$siteid = $this->siteid;
 		$SEO = seo($this->siteid, '', L('formguide_list'));
 		$page = max(intval($_GET['page']), 1);
-		$r = $this->db->get_one(array('siteid'=>$this->siteid, 'type'=>3, 'disabled'=>0), 'COUNT(`modelid`) AS sum');
-		$total = $r['sum'];
+		$total = $this->db->count(array('siteid'=>$this->siteid, 'type'=>3, 'disabled'=>0));
 		$pages = pages($total, $page, 20);
 		$offset = ($page-1)*20;
 		$datas = $this->db->select(array('siteid'=>$this->siteid, 'type'=>3, 'disabled'=>0), 'modelid, name, addtime', $offset.',20', '`modelid` DESC');
@@ -51,16 +50,17 @@ class index {
 				$_GET['action'] ? exit : showmessage(L('form_expired'), APP_PATH.'index.php?m=formguide&c=index&a=index');
 			}
 		}
-		$userid = param::get_cookie('_userid');
+		$userid = intval(param::get_cookie('_userid'));
 		if ($setting['allowunreg']==0 && !$userid && $_GET['action']!='js') showmessage(L('please_login_in'), APP_PATH.'index.php?m=member&c=index&a=login&forward='.urlencode(HTTP_REFERER));
 		if (isset($_POST['dosubmit'])) {
 			$tablename = 'form_'.$r['tablename'];
 			$this->m_db->change_table($tablename);
 			
-			if ($userid) $where = array('userid'=>$userid);
-			else $where = array('ip'=>ip());
-			$re = $this->m_db->get_one($where, 'datetime');
-			if (($setting['allowmultisubmit']==0 && $re['datetime']) || ((SYS_TIME-$re['datetime'])<intval($this->setting['interval'])*60)) {
+			$where = array();
+			$where[] = 'userid="'.$userid.'"';
+			$where[] = 'ip="'.ip().'"';
+			$re = $this->m_db->get_one(implode(' AND ', $where), 'datetime', '`dataid` DESC');
+			if (!$setting['allowmultisubmit'] || ($setting['allowmultisubmit'] && $re['datetime']) && ((SYS_TIME-$re['datetime'])<intval($this->setting['interval'])*60)) {
 				$_GET['action'] ? exit : showmessage(L('had_participate'), APP_PATH.'index.php?m=formguide&c=index&a=index');
 			}
 			$data = array();
@@ -98,11 +98,11 @@ class index {
 			$this->m_db->change_table($tablename);
 			$ip = ip();
 			$where = array();
-			if ($userid) $where = array('userid'=>$userid);
-			else $where = array('ip'=>$ip);
-			$re = $this->m_db->get_one($where, 'datetime');
+			$where[] = 'userid="'.$userid.'"';
+			$where[] = 'ip="'.ip().'"';
+			$re = $this->m_db->get_one(implode(' AND ', $where), 'datetime', '`dataid` DESC');
 			$setting = string2array($setting);
-			if (($setting['allowmultisubmit']==0 && $re['datetime']) || ((SYS_TIME-$re['datetime'])<intval($this->setting['interval'])*60)) {
+			if (!$setting['allowmultisubmit'] || ($setting['allowmultisubmit'] && $re['datetime']) && ((SYS_TIME-$re['datetime'])<intval($this->setting['interval'])*60)) {
 				$_GET['action'] ? exit : showmessage(L('had_participate'), APP_PATH.'index.php?m=formguide&c=index&a=index');
 			}
 			
