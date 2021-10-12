@@ -867,7 +867,7 @@ function ip_address_info() {
 }
 
 function get_cost_time() {
-	$microtime = microtime ( TRUE );
+	$microtime = microtime(true);
 	return $microtime - SYS_START_TIME;
 }
 /**
@@ -876,9 +876,9 @@ function get_cost_time() {
  * @return	int	单位ms
  */
 function execute_time() {
-	$stime = explode ( ' ', SYS_START_TIME );
-	$etime = explode ( ' ', microtime () );
-	return number_format ( ($etime [1] + $etime [0] - $stime [1] - $stime [0]), 6 );
+	$stime = explode(' ', SYS_START_TIME);
+	$etime = explode(' ', microtime());
+	return number_format(($etime [1] + $etime [0] - $stime [1] - $stime [0]), 6);
 }
 
 /**
@@ -1312,10 +1312,10 @@ function template($module = 'content', $template = 'index', $style = '') {
 function my_error_handler($errno, $errstr, $errfile, $errline) {
 	if($errno==8) return '';
 	$errfile = str_replace(CMS_PATH,'',$errfile);
-	if(pc_base::load_config('system','errorlog')) {
+	if(SYS_ERRORLOG) {
 		error_log('<?php exit;?>'.date('Y-m-d H:i:s',SYS_TIME).' | '.$errno.' | '.str_pad($errstr,30).' | '.$errfile.' | '.$errline."\r\n", 3, CACHE_PATH.'error_log.php');
 	} else {
-		$str = '<div style="font-size:12px;text-align:left; border-bottom:1px solid #9cc9e0; border-right:1px solid #9cc9e0;padding:1px 4px;color:#000000;font-family:Arial, Helvetica,sans-serif;"><span>errorno:' . $errno . ',str:' . $errstr . ',file:<font color="blue">' . $errfile . '</font>,line' . $errline .'<br /><a href="http://faq.cms.cn/?type=file&errno='.$errno.'&errstr='.urlencode($errstr).'&errfile='.urlencode($errfile).'&errline='.$errline.'" target="_blank" style="color:red">Need Help?</a></span></div>';
+		$str = '<div style="font-size:12px;text-align:left; border-bottom:1px solid #9cc9e0; border-right:1px solid #9cc9e0;padding:1px 4px;color:#000000;font-family:Arial, Helvetica,sans-serif;"><span>errorno:' . $errno . ',str:' . $errstr . ',file:<font color="blue">' . $errfile . '</font>,line' . $errline .'</span></div>';
 		echo $str;
 	}
 }
@@ -1610,6 +1610,7 @@ function pages($num, $curr_page, $perpage = 20, $urlrule = '', $array = array(),
 	} elseif($urlrule == '') {
 		$urlrule = url_par('page={$page}');
 	}
+	$first_url = '';
 	if(strpos($urlrule, '~')) {
 		$urlrules = explode('~', $urlrule);
 		$first_url = $urlrules[0];
@@ -1663,6 +1664,7 @@ function mobilepages($num, $curr_page, $perpage = 20, $urlrule = '', $array = ar
 			//$mobile_root = pc_base::load_config('system','mobile_root');
 		//}
 	}
+	$first_url = '';
 	if(strpos($urlrule, '~')) {
 		$urlrules = explode('~', $urlrule);
 		$first_url = $mobile_root.$urlrules[0];

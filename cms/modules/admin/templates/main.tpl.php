@@ -86,9 +86,6 @@ padding-right: 70px !important;text-overflow:ellipsis!important;overflow:hidden!
                                         <?php if($pc_writeable) {?>
                                         <p><?php echo L('main_safety_permissions')?></p>
                                         <?php } ?>
-                                        <?php if(pc_base::load_config('system','debug')) {?>
-                                        <p><?php echo L('main_safety_debug')?></p>
-                                        <?php } ?>
                                         <?php if(!pc_base::load_config('system','errorlog')) {?>
                                         <p><?php echo L('main_safety_errlog')?></p>
                                         <?php } ?>

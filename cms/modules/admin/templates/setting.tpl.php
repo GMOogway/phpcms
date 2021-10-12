@@ -255,6 +255,16 @@ include $this->admin_tpl('header');?>
                     </div>
                     <?php }?>
                     <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('setting_admin_debug')?></label>
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input name="setconfig[debug]" value="1" type="radio" <?php echo ($debug=='1') ? ' checked' : ''?>> <?php echo L('setting_yes')?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input name="setconfig[debug]" value="0" type="radio" <?php echo ($debug=='0') ? ' checked' : ''?>> <?php echo L('setting_no')?> <span></span></label>
+                            </div>
+                            <span class="help-block"><?php echo L('setting_admin_debug_desc')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('setting_admin_log')?></label>
                         <div class="col-md-9">
                             <div class="mt-radio-inline">

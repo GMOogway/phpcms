@@ -46,7 +46,7 @@ $LANG['main_last_logintime'] = 'Last logged in: ';
 $LANG['main_last_loginip'] = 'Last logged-in IP: ';
 $LANG['main_safety_tips'] = 'Safety Reminder';
 $LANG['main_safety_permissions'] = '* To set CMS directory to 644 permission (Linux or Unix) or Read-Only (NT) is strongly recommended.';
-$LANG['main_safety_debug'] = '* You are adviced to stop debugging (frontend SQL error messages) after your site goes online.';
+$LANG['main_safety_debug'] = '* You are adviced to stop debugging after your site goes online.';
 $LANG['main_safety_errlog'] = '* We strongly recommend that you keep error logs enabled.';
 $LANG['main_safety_sql'] = '* We strongly recommend that you keep execution_sql disabled.';
 $LANG['main_safety_log'] = '* Your error messages have exceeded the maximum number of allowed logs ({size}). Higher performance of the system is advanced by clearing error logs promotly.';
@@ -208,6 +208,8 @@ $LANG['setting_max_category'] = 'The largest column limit';
 $LANG['setting_admin_founders'] = 'Founder ID';
 $LANG['setting_admin_founders_desc'] = 'Founder ID, multiple ID comma "," space';
 
+$LANG['setting_admin_debug'] = 'The debugger';
+$LANG['setting_admin_debug_desc'] = 'Used for the background to enable DebugBar tool to check program and SQL execution details';
 $LANG['setting_admin_log'] = 'Enable backend operation logs';
 $LANG['setting_csrf'] = 'Cross validation';
 $LANG['setting_csrf_desc'] = 'Open cross-site after verification will ban the external site data submitted to the site';

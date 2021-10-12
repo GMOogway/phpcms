@@ -49,7 +49,7 @@ return array(
 
 'charset' => 'utf-8', //网站字符集
 'timezone' => '8', //网站时区（只对php 5.1以上版本有效），Etc/GMT-8 实际表示的是 GMT+8
-'debug' => 0, //是否显示调试信息
+'debug' => 1, //是否显示调试信息
 'sys_csrf' => '1', //是否跨站验证，1为启用，0为禁用
 'needcheckcomeurl' => '1', //是否需要检查外部访问，1为启用，0为禁用
 'admin_log' => 1, //是否记录后台操作日志

@@ -33,7 +33,7 @@ define('SITE_HURL', (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : ''))
 define('HTTP_REFERER', isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '');
 
 //系统开始时间
-define('SYS_START_TIME', microtime());
+define('SYS_START_TIME', microtime(true));
 
 //加载公用函数库
 pc_base::load_sys_func('global');
@@ -83,7 +83,7 @@ define('ROOT_URL', siteurl(1).'/');
 	'SYS_EDITOR' => '0',
 	'CHARSET' => 'utf-8',
 	'TIMEZONE' => '8',
-	'DEBUG' => 0,
+	'DEBUG' => 1,
 	'SYS_CSRF' => 0,
 	'NEEDCHECKCOMEURL' => 1,
 	'ADMIN_LOG' => 1,
@@ -128,7 +128,6 @@ foreach ($system as $var => $value) {
 }
 unset($my, $system);*/
 
-//pc_base::load_config('system','errorlog') ? set_error_handler('my_error_handler') : error_reporting(E_ERROR | E_WARNING | E_PARSE);
 // 设置时区
 if (is_numeric(pc_base::load_config('system','timezone')) && strlen(pc_base::load_config('system','timezone')) > 0) {
 	function_exists('date_default_timezone_set') && date_default_timezone_set('Etc/GMT'.(pc_base::load_config('system','timezone') > 0 ? '-' : '+').abs(pc_base::load_config('system','timezone'))); // 设置时区
@@ -170,7 +169,7 @@ define('APP_PATH', pc_base::load_config('system','app_path'));
 //动态程序手机路径
 define('MOBILE_PATH', pc_base::load_config('system','mobile_path'));
 // 调试器开关
-define('SYS_DEBUG', 1);
+define('SYS_DEBUG', pc_base::load_config('system','debug'));
 //编辑器模式
 define('SYS_EDITOR', pc_base::load_config('system','sys_editor') ? pc_base::load_config('system','sys_editor') : 0);
 //Cookie前缀
@@ -187,6 +186,8 @@ define('NeedCheckComeUrl', pc_base::load_config('system','needcheckcomeurl'));
 define('SYS_KEY', pc_base::load_config('system','auth_key'));
 //跨站验证
 define('SYS_CSRF', pc_base::load_config('system','sys_csrf'));
+//是否保存错误日志
+define('SYS_ERRORLOG', pc_base::load_config('system','errorlog'));
 //站点id
 !defined('SITE_ID') && define('SITE_ID', 1);
 define('SITE_URL', siteurl(SITE_ID));

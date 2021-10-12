@@ -76,6 +76,8 @@ final class db_mysqli {
 		}
 		$this->lastqueryid = $this->link->query($sql) or $this->halt($this->link->error, $sql);
 		$this->querycount++;
+		pc_base::load_sys_class('debug');
+		debug::addmsg($sql, 1);
 		return $this->lastqueryid;
 	}
 

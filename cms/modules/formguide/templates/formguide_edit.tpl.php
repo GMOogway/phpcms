@@ -8,11 +8,11 @@ include $this->admin_tpl('header', 'admin');
 <tbody>
 	<tr>
 		<th width="150"><strong><?php echo L('name')?>：</strong></th>
-		<td><input name="info[name]" id="name" class="input-text" type="text" value="<?php echo new_html_special_chars($data['name'])?>" size="30" ></td>
+		<td><input name="info[name]" id="name" class="input-text" type="text" value="<?php echo new_html_special_chars($data['name'])?>" size="30"></td>
 	</tr>
 	<tr>
 		<th><strong><?php echo L('tablename')?>：</strong></th>
-		<td><input name="info[tablename]" id="tablename" class="input-text" type="text" value="<?php echo $data['tablename']?>" readonly size="25" ></td>
+		<td><input name="info[tablename]" id="tablename" class="input-text" type="text" value="<?php echo $data['tablename']?>" readonly size="25"></td>
 	</tr>
 	<tr>
 		<th><strong><?php echo L('introduction')?>：</strong></th>
@@ -60,6 +60,14 @@ include $this->admin_tpl('header', 'admin');
         </div></td>
 	</tr>
 	<tr>
+		<th><strong><?php echo L('提交成功提示文字')?>：</strong></th>
+		<td><input name="setting[rt_text]" id="rt_text" class="input-text" type="text" value="<?php echo $data['setting']['rt_text']?>" size="50"><br>当用户提交表单成功之后显示的文字，默认为：感谢您的参与！</td>
+	</tr>
+	<tr>
+		<th><strong><?php echo L('提交成功跳转URL')?>：</strong></th>
+		<td><input name="setting[rt_url]" id="rt_url" class="input-text" type="text" value="<?php echo $data['setting']['rt_url']?>" size="50"><br>当用户提交表单成功之后跳转的链接，{APP_PATH}表示当前站点URL，{formid}表示当前表单的id号，{siteid}表示当前站点的id号</td>
+	</tr>
+	<tr>
 		<th><strong><?php echo L('optional_style')?>：</strong></th>
 		<td>
 		<?php echo form::select($template_list, $data['default_style'], 'name="info[default_style]" id="style" onchange="load_file_list(this.value)"', L('please_select'))?> 
@@ -70,7 +78,7 @@ include $this->admin_tpl('header', 'admin');
 		<td id="show_template"><script type="text/javascript">$.getJSON('?m=admin&c=category&a=public_tpl_file_list&style=<?php echo $data['default_style']?>&id=<?php echo $data['show_template']?>&module=formguide&templates=show&name=info&pc_hash='+pc_hash, function(data){$('#show_template').html(data.show_template);});</script></td>
 	</tr>
 	<tr>
-		<th><strong>js调用使用的模板：</strong></th>
+		<th><strong><?php echo L('js调用使用的模板')?>：</strong></th>
 		<td id="show_js_template"><script type="text/javascript">$.getJSON('?m=admin&c=category&a=public_tpl_file_list&style=<?php echo $data['default_style']?>&id=<?php echo $data['js_template']?>&module=formguide&templates=show_js&name=info&pc_hash='+pc_hash, function(data){$('#show_js_template').html(data.show_js_template);});</script></td>
 	</tr>
 	</tbody>

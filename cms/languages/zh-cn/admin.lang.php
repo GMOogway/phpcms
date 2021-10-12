@@ -46,7 +46,7 @@ $LANG['main_last_logintime'] = '上次登录时间：';
 $LANG['main_last_loginip'] = '上次登录IP：';
 $LANG['main_safety_tips'] = '安全提示';
 $LANG['main_safety_permissions'] = '※ 建议您将cms目录设置为755（linux）或只读（windows）';
-$LANG['main_safety_debug'] = '※ 强烈建议您网站上线后，建议关闭 DEBUG （前台SQL错误提示）';
+$LANG['main_safety_debug'] = '※ 强烈建议您网站上线后，建议关闭 DEBUG';
 $LANG['main_safety_errlog'] = '※ 强烈建议您网站开启错误日志(errorlog) ';
 $LANG['main_safety_sql'] = '※ 强烈建议您关闭 execution_sql （执行SQL）';
 $LANG['main_safety_log'] = '※ 您的错误日志记录超过警戒设置（{size}），为避免影响性能，建议您及时清理';
@@ -209,6 +209,8 @@ $LANG['setting_max_category'] = '最大栏目数量限制';
 $LANG['setting_admin_founders'] = '网站创始人ID';
 $LANG['setting_admin_founders_desc'] = '网站创始人ID，多个ID逗号“,”分隔';
 
+$LANG['setting_admin_debug'] = '调试器';
+$LANG['setting_admin_debug_desc'] = '用于后台启用DebugBar工具查看程序和SQL执行详情';
 $LANG['setting_admin_log'] = '启用后台管理操作日志';
 $LANG['setting_csrf'] = '跨站验证';
 $LANG['setting_csrf_desc'] = '开启跨站验证后将禁止外部站点向本站提交数据';

@@ -85,6 +85,8 @@ final class mysql {
 		$this->lastqueryid = mysql_query($sql, $this->link) or $this->halt(mysql_error(), $sql);
 
 		$this->querycount++;
+		pc_base::load_sys_class('debug');
+		debug::addmsg($sql, 1);
 		return $this->lastqueryid;
 	}
 

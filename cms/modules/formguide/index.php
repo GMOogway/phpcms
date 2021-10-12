@@ -57,6 +57,12 @@ class index {
 			$tablename = 'form_'.$r['tablename'];
 			$this->m_db->change_table($tablename);
 			
+			if ($userid) $where = array('userid'=>$userid);
+			else $where = array('ip'=>ip());
+			$re = $this->m_db->get_one($where, 'datetime');
+			if (($setting['allowmultisubmit']==0 && $re['datetime']) || ((SYS_TIME-$re['datetime'])<intval($this->setting['interval'])*60)) {
+				$_GET['action'] ? exit : showmessage(L('had_participate'), APP_PATH.'index.php?m=formguide&c=index&a=index');
+			}
 			$data = array();
 			require CACHE_MODEL_PATH.'formguide_input.class.php';
 			$formguide_input = new formguide_input($formid);
@@ -80,7 +86,7 @@ class index {
 				}
 				$this->db->update(array('items'=>'+=1'), array('modelid'=>$formid, 'siteid'=>$this->siteid));
 			}
-			showmessage(L('thanks'), APP_PATH);
+			showmessage($setting['rt_text'] && isset($setting['rt_text']) ? $setting['rt_text'] : L('thanks'), $setting['rt_url'] && isset($setting['rt_url']) ? str_replace(array('{APP_PATH}', '{formid}', '{siteid}'), array(APP_PATH, $formid, $this->siteid), $setting['rt_url']) : APP_PATH);
 		} else {
 			if ($setting['allowunreg']==0 && !$userid && $_GET['action']=='js') {
 				$no_allowed = 1;
