@@ -298,7 +298,7 @@ class cloud extends admin {
             }
             dr_json($jd, '<p><label class="rleft">需下载文件大小：'.format_file_size($cache['size']).'，已下载：'.format_file_size($now).'</label><label class="rright"><span class="ok">'.$jd.'%</span></label></p>');
         } else {
-            dr_json(0, '本站：文件还没有被下载');
+            dr_json(0, '本站：文件下载失败，建议尝试离线方式');
         }
     }
 
@@ -445,7 +445,7 @@ class cloud extends admin {
                     if (!$rt) {
                         // 验证目标是不是空文件
                         if (filesize($src . '/' . $file) > 1) {
-                            $this->_error_msg($dst . '/' . $file, '移动失败');
+                            $this->_error_msg($dst . '/' . $file, '移动失败，检查文件目录权限');
                         }
 
                     }

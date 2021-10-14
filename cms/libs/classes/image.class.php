@@ -1689,7 +1689,7 @@ class image {
     }
 
     public function check($image) {
-        return extension_loaded('gd') && preg_match("/\.(jpg|jpeg|gif|png)/i", $image, $m) && file_exists($image) && function_exists('imagecreatefrom'.($m[1] == 'jpg' ? 'jpeg' : $m[1]));
+        return extension_loaded('gd') && preg_match("/\.(jpg|jpeg|gif|png|webp)/i", $image, $m) && file_exists($image) && function_exists('imagecreatefrom'.($m[1] == 'jpg' ? 'jpeg' : $m[1]));
     }
 
     /**
