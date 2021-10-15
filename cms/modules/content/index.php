@@ -372,7 +372,7 @@ class index {
 			if($r) extract($r);
 			$template = $setting['page_template'] ? $setting['page_template'] : 'page';
 			$keywords = $keywords ? $keywords : $setting['meta_keywords'];
-			$SEO = seo($siteid, 0, $title,$setting['meta_description'],$keywords);
+			$SEO = seo($siteid, 0, $setting['meta_title'] ? $setting['meta_title'] : $title,$setting['meta_description'],$keywords);
 			if (is_mobile($siteid) && $sitelist[$siteid]['mobileauto'] || defined('IS_MOBILE') && IS_MOBILE) {
 				if (!file_exists(PC_PATH.'templates'.DIRECTORY_SEPARATOR.$style.DIRECTORY_SEPARATOR.'mobile'.DIRECTORY_SEPARATOR.$template.'.html')) {
 					define('ISMOBILE', 0);

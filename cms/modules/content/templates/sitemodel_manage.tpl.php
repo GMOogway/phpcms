@@ -3,14 +3,14 @@ defined('IN_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');?>
 <div class="pad-lr-10">
 <div class="table-list">
-    <table width="100%" cellspacing="0" >
+    <table width="100%" cellspacing="0">
         <thead>
-            <tr>
-            <th width="100">modelid</th>
-            <th width="180"><?php echo L('model_name');?></th>
-            <th width="180"><?php echo L('tablename');?></th>
-            <th><?php echo L('description');?></th>
-            <th width="100"><?php echo L('status');?></th>
+            <tr class="heading">
+            <th width="100" class="<?php echo dr_sorting('modelid')?>" name="modelid">modelid</th>
+            <th width="180" class="<?php echo dr_sorting('name')?>" name="name"><?php echo L('model_name');?></th>
+            <th width="180" class="<?php echo dr_sorting('tablename')?>" name="tablename"><?php echo L('tablename');?></th>
+            <th class="<?php echo dr_sorting('description')?>" name="description"><?php echo L('description');?></th>
+            <th width="100" class="<?php echo dr_sorting('disabled')?>" name="disabled"><?php echo L('status');?></th>
             <th width="150"><?php echo L('items');?></th>
             <th><?php echo L('operations_manage');?></th>
             </tr>

@@ -19,6 +19,32 @@ function dr_isEllipsis(dom) {
 	return flag;
 };
 $(function(){
+	/*if ($(document).width() < 600) {
+		$('.table-list table').attr('style', 'table-layout: inherit!important;');
+	}*/
+	// 排序操作
+	$('.table-list table .heading th').click(function(e) {
+		var _class = $(this).attr("class");
+		if (_class == '' || _class == undefined) {
+			return;
+		}
+		var _name = $(this).attr("name");
+		if (_name == '' || _name == undefined) {
+			return;
+		}
+		var _order = '';
+		if (_class == "order_sorting") {
+			_order = 'desc';
+		} else if (_class == "order_sorting_desc") {
+			_order = 'asc';
+		} else {
+			_order = 'desc';
+		}
+		var url = decodeURI(window.location.href);
+		url = url.replace("&order=", "&");
+		url+= "&order="+_name+" "+_order;
+		window.location.href=url;
+	});
 	// tabl
 	if ($('.table-checkable')) {
 		var table = $('.table-checkable');

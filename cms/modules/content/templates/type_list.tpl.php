@@ -7,11 +7,11 @@ include $this->admin_tpl('header','admin');?>
 <div class="table-list">
     <table width="100%" cellspacing="0" >
         <thead>
-	<tr>
-	<th width="80"><?php echo L('listorder');?></td>
-	<th width="80">ID</th>
-	<th width="200"><?php echo L('type_name');?></th>
-	<th><?php echo L('description');?></th>
+	<tr class="heading">
+	<th width="80" class="<?php echo dr_sorting('listorder')?>" name="listorder"><?php echo L('listorder');?></td>
+	<th width="80" class="<?php echo dr_sorting('typeid')?>" name="typeid">ID</th>
+	<th width="200" class="<?php echo dr_sorting('name')?>" name="name"><?php echo L('type_name');?></th>
+	<th class="<?php echo dr_sorting('description')?>" name="description"><?php echo L('description');?></th>
 	<th><?php echo L('operations_manage');?></th>
 	</tr>
         </thead>

@@ -760,6 +760,9 @@ form .portlet.light .portlet-body {padding-top: 20px;padding-bottom: 20px;}
 .minicolors-input {width: 120px!important;}
 .layui-layer-tips .layui-layer-content {word-wrap: break-word;word-break: break-all;overflow: hidden;}
 .layui-layer-tips .layui-layer-content .btn{margin-right:10px;}
+.order_sorting {background: url(../../../images/admin_img/sort_both.png) right center no-repeat!important;}
+.order_sorting_asc {background: url(../../../images/admin_img/sort_asc.png) right center no-repeat!important;}
+.order_sorting_desc {background: url(../../../images/admin_img/sort_desc.png) right center no-repeat!important;}
 @media (min-width:992px) {
 	.col-md-1,.col-md-10,.col-md-11,.col-md-12,.col-md-2,.col-md-3,.col-md-4,.col-md-5,.col-md-6,.col-md-7,.col-md-8,.col-md-9 {
 		float: left;

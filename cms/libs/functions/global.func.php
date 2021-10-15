@@ -725,6 +725,22 @@ function now_url($url, $siteid = 1, $ismobile = 1, $ishtml = 1) {
 		return FC_NOW_URL;
 	}
 }
+/**
+ * 排序操作
+ */
+function dr_sorting($name) {
+	$input = pc_base::load_sys_class('input');
+	$value = $input->get('order') ? $input->get('order') : '';
+	if (!$value || !$name) {
+		return 'order_sorting';
+	}
+	if (strpos($value, $name) === 0 && strpos($value, 'asc') !== FALSE) {
+		return 'order_sorting_asc';
+	} elseif (strpos($value, $name) === 0 && strpos($value, 'desc') !== FALSE) {
+		return 'order_sorting_desc';
+	}
+	return 'order_sorting';
+}
 // 动态加载js
 function load_js($js) {
 	if (!defined($js)) {
@@ -1031,7 +1047,7 @@ function get_attachment($id) {
 			'remote' => 'webimg',
 			'fileext' => trim(strtolower(strrchr($id, '.')), '.'),
 		);
-		$data['filepath'] = date('Y/md/', SYS_TIME).md5($data['aid']).'.'.$data['fileext'];
+		$data['filepath'] = dr_date(SYS_TIME, 'Y/md/').md5($data['aid']).'.'.$data['fileext'];
 		return $data;
 	}
 
@@ -1315,7 +1331,7 @@ function my_error_handler($errno, $errstr, $errfile, $errline) {
 	if($errno==8) return '';
 	$errfile = str_replace(CMS_PATH,'',$errfile);
 	if(SYS_ERRORLOG) {
-		error_log('<?php exit;?>'.date('Y-m-d H:i:s',SYS_TIME).' | '.$errno.' | '.str_pad($errstr,30).' | '.$errfile.' | '.$errline."\r\n", 3, CACHE_PATH.'error_log.php');
+		error_log('<?php exit;?>'.dr_date(SYS_TIME, 'Y-m-d H:i:s').' | '.$errno.' | '.str_pad($errstr,30).' | '.$errfile.' | '.$errline."\r\n", 3, CACHE_PATH.'error_log.php');
 	} else {
 		$str = '<div style="font-size:12px;text-align:left; border-bottom:1px solid #9cc9e0; border-right:1px solid #9cc9e0;padding:1px 4px;color:#000000;font-family:Arial, Helvetica,sans-serif;"><span>errorno:' . $errno . ',str:' . $errstr . ',file:<font color="blue">' . $errfile . '</font>,line' . $errline .'</span></div>';
 		echo $str;
@@ -1328,7 +1344,7 @@ function my_error_handler($errno, $errstr, $errfile, $errline) {
 function log_message($level, $message) {
 	$path = CACHE_PATH.'caches_error/caches_data/';
 	create_folder($path);
-	$filepath = $path.'log-'.date('Y-m-d',SYS_TIME).'.php';
+	$filepath = $path.'log-'.dr_date(SYS_TIME, 'Y-m-d').'.php';
 	$msg = '';
 	if (! is_file($filepath)) {
 		$newfile = true;
@@ -1337,7 +1353,7 @@ function log_message($level, $message) {
 	if (! $fp = @fopen($filepath, 'ab')) {
 		return false;
 	}
-	$date = date('Y-m-d H:i:s',SYS_TIME);
+	$date = dr_date(SYS_TIME, 'Y-m-d H:i:s');
 	$msg .= strtoupper($level) . ' - ' . $date . ' --> ' . $message . "\n";
 	flock($fp, LOCK_EX);
 	$result = null;
@@ -2720,16 +2736,17 @@ function sitemobileurl($siteid) {
  * 全局返回消息
  */
 function dr_exit_msg($code, $msg, $data = []) {
+	$input = pc_base::load_sys_class('input');
 	ob_end_clean();
 	$rt = array(
 		'code' => $code,
 		'msg' => $msg,
 		'data' => $data,
 	);
-	if (isset($_GET['callback'])) {
+	if ($input->get('callback')) {
 		// jsonp
 		header('HTTP/1.1 200 OK');
-		echo ($_GET['callback'] ? $_GET['callback'] : 'callback').'('.json_encode($rt, JSON_UNESCAPED_UNICODE).')';
+		echo ($input->get('callback') ? $input->get('callback') : 'callback').'('.json_encode($rt, JSON_UNESCAPED_UNICODE).')';
 	} else if (($_GET['is_ajax'] || IS_AJAX)) {
 		// json
 		header('HTTP/1.1 200 OK');
@@ -3176,9 +3193,9 @@ function formattime($date = 0, $type = 1) { //$type = 1为时间戳格式，$typ
             break;
     }
     if (isset($year)) {
-        return date('Y年m月d日',$date);
+        return dr_date($date, 'Y年m月d日');
     } elseif (isset($month)) {
-        return date('m月d日',$date);
+        return dr_date($date, 'm月d日');
     } elseif (isset($day)) {
         return $day . '天前';
     } elseif (isset($hour)) {
@@ -3229,50 +3246,44 @@ function wordtime($time) {
 	}elseif ($int < 409968000){
 		$str = sprintf('%d年前', floor($int / 31536000));
 	}else{
-		$str = date('Y-m-d H:i:s', $time);
+		$str = dr_date($time, 'Y-m-d H:i:s');
 	}
 	return $str;
 }
 
 function mtime($time){
-    //date_default_timezone_set('PRC'); //设置成中国的时区
-    $now=SYS_TIME;
-    $day=date('Y-m-d',$time);
-    $today=date('Y-m-d');
+	//date_default_timezone_set('PRC'); //设置成中国的时区
+	$now=SYS_TIME;
+	$day=dr_date($time, 'Y-m-d');
+	$today=dr_date($now, 'Y-m-d');
 
-    $dayArr=explode('-',$day);
-    $todayArr=explode('-',$today);
+	$dayArr=explode('-',$day);
+	$todayArr=explode('-',$today);
 
-    //距离的天数，这种方法超过30天则不一定准确，但是30天内是准确的，因为一个月可能是30天也可能是31天
-    $days=($todayArr[0]-$dayArr[0])*365+(($todayArr[1]-$dayArr[1])*30)+($todayArr[2]-$dayArr[2]);
-    //距离的秒数
-    $secs=$now-$time;
+	//距离的天数，这种方法超过30天则不一定准确，但是30天内是准确的，因为一个月可能是30天也可能是31天
+	$days=($todayArr[0]-$dayArr[0])*365+(($todayArr[1]-$dayArr[1])*30)+($todayArr[2]-$dayArr[2]);
+	//距离的秒数
+	$secs=$now-$time;
 
-    if($todayArr[0]-$dayArr[0]>0 && $days>3){//跨年且超过3天
-        return date('Y-m-d H:i:s',$time);
-    }else{
-        if($days<1){//今天
-            //if($secs<60)return $secs.'秒前';
-            //elseif($secs<3600)return floor($secs/60)."分钟前";
-            //else return floor($secs/3600)."小时前";
-            $hour=date('H',$time);
-            $minutes=date('i',$time);
-            $seconds=date('s',$time);
-            return "今天".$hour.':'.$minutes;
-        }else if($days<2){//昨天
-            $hour=date('H',$time);
-            $minutes=date('i',$time);
-            $seconds=date('s',$time);
-            return "昨天".$hour.':'.$minutes;
-        }elseif($days<3){//前天
-            $hour=date('H',$time);
-            $minutes=date('i',$time);
-            $seconds=date('s',$time);
-            return "前天".$hour.':'.$minutes;
-        }else{//三天前
-            return date('m-d H:i',$time);
-        }
-    }
+	if($todayArr[0]-$dayArr[0]>0 && $days>3){//跨年且超过3天
+		return dr_date($time, 'Y-m-d H:i:s');
+	}else{
+		$hour=dr_date($time, 'H');
+		$minutes=dr_date($time, 'i');
+		$seconds=dr_date($time, 's');
+		if($days<1){//今天
+			//if($secs<60)return $secs.'秒前';
+			//elseif($secs<3600)return floor($secs/60)."分钟前";
+			//else return floor($secs/3600)."小时前";
+			return "今天".$hour.':'.$minutes;
+		}else if($days<2){//昨天
+			return "昨天".$hour.':'.$minutes;
+		}elseif($days<3){//前天
+			return "前天".$hour.':'.$minutes;
+		}else{//三天前
+			return dr_date('m-d H:i',$time);
+		}
+	}
 }
 
 function mdate($time = NULL) {
@@ -3280,7 +3291,7 @@ function mdate($time = NULL) {
     $text = '';
     $time = $time === NULL || $time > SYS_TIME ? SYS_TIME : intval($time);
     $t = SYS_TIME - $time; //时间差 （秒）
-    $y = date('Y', $time)-date('Y', SYS_TIME);//是否跨年
+    $y = dr_date($time, 'Y')-dr_date(SYS_TIME, 'Y');//是否跨年
     switch($t){
         case $t == 0:
             $text = '刚刚';
@@ -3298,13 +3309,13 @@ function mdate($time = NULL) {
             $text = floor($time/(60*60*24)) ==1 ?'昨天' : '前天' ; //昨天和前天
             break;
         case $t < 60 * 60 * 24 * 30:
-            $text = date('m月d日', $time); //一个月内
+            $text = dr_date($time, 'm月d日'); //一个月内
             break;
         case $t < 60 * 60 * 24 * 365&&$y==0:
-            $text = date('m月d日', $time); //一年内
+            $text = dr_date($time, 'm月d日'); //一年内
             break;
         default:
-            $text = date('Y年m月d日', $time); //一年以前
+            $text = dr_date($time, 'Y年m月d日'); //一年以前
             break; 
     }
     return $text;
@@ -3357,36 +3368,36 @@ function dr_fdate($sTime, $formt = 'Y-m-d') {
 		return '';
 	}
 	//sTime=源时间，cTime=当前时间，dTime=时间差
-	$cTime = SYS_TIME;
+	$cTime = time();
 	$dTime = $cTime - $sTime;
-	$dDay = intval(date('z',$cTime)) - intval(date('z',$sTime));
-	$dYear = intval(date('Y',$cTime)) - intval(date('Y',$sTime));
+	$dDay = intval(dr_date($cTime, 'z')) - intval(dr_date($sTime, 'z'));
+	$dYear = intval(dr_date($cTime, 'Y')) - intval(dr_date($sTime, 'Y'));
 	if ($dYear > 0) {
-		return date($formt, $sTime);
+		return dr_date($sTime, $formt);
 	}
 	//n秒前，n分钟前，n小时前，日期
 	if ($dTime < 60 ) {
 		if ($dTime < 10) {
-			return '刚刚';
+			return L('刚刚');
 		} else {
-			return intval(floor($dTime / 10) * 10).'秒前';
+			return L(intval(floor($dTime / 10) * 10).'秒前');
 		}
 	} elseif ($dTime < 3600 ) {
-		return intval($dTime/60).'分钟前';
+		return L(intval($dTime/60).'分钟前');
 	} elseif( $dTime >= 3600 && $dDay == 0  ){
-		return intval($dTime/3600).'小时前';
+		return L(intval($dTime/3600).'小时前');
 	} elseif( $dDay > 0 && $dDay<=7 ){
-		return intval($dDay).'天前';
+		return L(intval($dDay).'天前');
 	} elseif( $dDay > 7 &&  $dDay <= 30 ){
-		return intval($dDay/7).'周前';
+		return L(intval($dDay/7).'周前');
 	} elseif( $dDay > 30 && $dDay < 180){
-		return intval($dDay/30).'个月前';
+		return L(intval($dDay/30).'个月前');
 	} elseif( $dDay >= 180 && $dDay < 360){
-		return '半年前';
-	} elseif ($dYear==0) {
-		return date('m月d日', $sTime);
+		return L('半年前');
+	} elseif ($dYear == 0) {
+		return dr_date($sTime);
 	} else {
-		return date($formt, $sTime);
+		return dr_date($sTime, $formt);
 	}
 }
 
@@ -3398,11 +3409,12 @@ function dr_fdate($sTime, $formt = 'Y-m-d') {
  * @param	string	$color	当天显示颜色
  * @return	string
  */
-function dr_date($time = NULL, $format = 'Y-m-d H:i:s', $color = NULL) {
+function dr_date($time = NULL, $format = SYS_TIME_FORMAT, $color = NULL) {
 	$time = (int)$time;
 	if (!$time) {
 		return '';
 	}
+	!$format && $format = SYS_TIME_FORMAT;
 	!$format && $format = 'Y-m-d H:i:s';
 	$string = date($format, $time);
 	return $color && $time >= strtotime(date('Y-m-d 00:00:00')) && $time <= strtotime(date('Y-m-d 23:59:59')) ? '<font color="' . $color . '">' . $string . '</font>' : $string;

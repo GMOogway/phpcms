@@ -83,6 +83,7 @@ define('ROOT_URL', siteurl(1).'/');
 	'SYS_EDITOR' => '0',
 	'CHARSET' => 'utf-8',
 	'TIMEZONE' => '8',
+	'SYS_TIME_FORMAT' => '',
 	'DEBUG' => 1,
 	'SYS_CSRF' => 0,
 	'NEEDCHECKCOMEURL' => 1,
@@ -137,6 +138,8 @@ define('CHARSET', pc_base::load_config('system','charset'));
 //输出页面字符集
 header('Content-Type: text/html; charset='.CHARSET);
 
+//网站时间显示格式与date函数一致，默认Y-m-d H:i:s
+define('SYS_TIME_FORMAT', pc_base::load_config('system','sys_time_format'));
 // 最大栏目数量限制category
 !defined('MAX_CATEGORY') && define('MAX_CATEGORY', intval(pc_base::load_config('system','sys_max_category')));
 //temp目录

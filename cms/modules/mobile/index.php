@@ -137,7 +137,7 @@ class index {
 			if($r) extract($r);
 			$template = $setting['page_template'] ? $setting['page_template'] : 'page';
 			$keywords = $keywords ? $keywords : $setting['meta_keywords'];
-			$SEO = seo($siteid, 0, $title,$setting['meta_description'],$keywords);
+			$SEO = seo($siteid, 0, $setting['meta_title'] ? $setting['meta_title'] : $title,$setting['meta_description'],$keywords);
 			include template('mobile',$template);
 		}
 	}	

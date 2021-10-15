@@ -20,7 +20,7 @@ class sitemodel_field extends admin {
 		$show_header = '';
 		$modelid = $this->input->get('modelid');
 		$this->cache_field($modelid);
-		$datas = $this->db->select(array('modelid'=>$modelid),'*',100,'listorder ASC');
+		$datas = $this->db->select(array('modelid'=>$modelid),'*',100,$this->input->get('order') ? $this->input->get('order') : 'listorder ASC');
 		$r = $this->model_db->get_one(array('modelid'=>$modelid));
 		require MODEL_PATH.'fields.inc.php';
 		include $this->admin_tpl('sitemodel_field_manage');

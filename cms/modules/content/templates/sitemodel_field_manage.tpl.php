@@ -31,11 +31,11 @@ include $this->admin_tpl('header','admin');?>
 <div class="table-list">
     <table width="100%" cellspacing="0" >
         <thead>
-            <tr>
-			<th width="70"><?php echo L('listorder')?></th>
-            <th><?php echo L('fieldname')?></th>
-			<th width="150"><?php echo L('cnames');?></th>
-			<th width="150"><?php echo L('type');?></th>
+            <tr class="heading">
+			<th width="70" class="<?php echo dr_sorting('listorder')?>" name="listorder"><?php echo L('listorder')?></th>
+            <th class="<?php echo dr_sorting('field')?>" name="field"><?php echo L('fieldname')?></th>
+			<th width="150" class="<?php echo dr_sorting('name')?>" name="name"><?php echo L('cnames');?></th>
+			<th width="150" class="<?php echo dr_sorting('formtype')?>" name="formtype"><?php echo L('type');?></th>
 			<th width="50"><?php echo L('system');?></th> 
             <th width="50"><?php echo L('must_input');?></th>
             <th width="50"<?php if(!$modelid || $modelid==-1) {echo ' style="display: none;"';}?>><?php echo L('search');?></th>
