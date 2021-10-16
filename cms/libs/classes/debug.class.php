@@ -162,10 +162,10 @@ class debug {
 		self::getRequrieFile();
 		self::getBaseInfo();
 		$page_trace = self::get_debug();
-		if (IS_ADMIN && CI_DEBUG) {
-			include(admin::admin_tpl('debug', 'admin'));
+		if (IS_ADMIN) {
+			include(admin_template('debug', 'admin'));
 		} else {
-			include(template('debug', 'debug'));
+			include(template('debug'));
 		}
 	}
 	/**

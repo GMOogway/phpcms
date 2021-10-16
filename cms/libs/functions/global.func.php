@@ -1319,6 +1319,17 @@ function template($module = 'content', $template = 'index', $style = '') {
 }
 
 /**
+ * 加载后台模板
+ * @param string $file 文件名
+ * @param string $m 模型名
+ */
+function admin_template($file, $m = '') {
+	$m = empty($m) ? ROUTE_M : $m;
+	if(empty($m)) return false;
+	return PC_PATH.'modules'.DIRECTORY_SEPARATOR.$m.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$file.'.tpl.php';
+}
+
+/**
  * 输出自定义错误
  *
  * @param $errno 错误号
@@ -1379,7 +1390,7 @@ function log_message($level, $message) {
  */
 function showmessage($msg, $url_forward = 'goback', $ms = 1250, $dialog = '', $returnjs = '') {
 	if(defined('IN_ADMIN')) {
-		include(admin::admin_tpl('showmessage', 'admin'));
+		include(admin_template('showmessage', 'admin'));
 	} else {
 		include(template('content', 'message'));
 	}
