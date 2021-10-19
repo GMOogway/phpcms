@@ -763,6 +763,16 @@ form .portlet.light .portlet-body {padding-top: 20px;padding-bottom: 20px;}
 .order_sorting {background: url(../../../images/admin_img/sort_both.png) right center no-repeat!important;}
 .order_sorting_asc {background: url(../../../images/admin_img/sort_asc.png) right center no-repeat!important;}
 .order_sorting_desc {background: url(../../../images/admin_img/sort_desc.png) right center no-repeat!important;}
+.user_group {border-top: 1px solid #e7ecf1;border-left: 1px solid #e7ecf1;border-right: 1px solid #e7ecf1;border-bottom: 0px;background-color: #fff;width: 100%!important;}
+.user_group dl {margin:0px!important;}
+.user_group dt {line-height:36px;height:36px;padding:0 10px;font-weight:700;color:#000;background-color: #fbfcfd;border-bottom: 1px solid #e7ecf1;}
+.user_group dd {line-height:26px;padding:5px 5px;border-bottom: 1px solid #e7ecf1;}
+.user_group dd:nth-of-type(odd), .user_group dt:nth-of-type(odd) {background-color: #fff!important;}
+.user_group dd:hover, .user_group dt:hover {background-color: #eef1f5;}
+.user_group dd:after {content:'\20';display:block;height:0;clear:both;visibility: hidden;}
+.user_group dd label {display:inline;margin-bottom:1px;float:left;width:113px;margin-left:5px;}
+.user_group dt span {margin-top:8px;}
+.user_group dd span {margin-top:5px;}
 @media (min-width:992px) {
 	.col-md-1,.col-md-10,.col-md-11,.col-md-12,.col-md-2,.col-md-3,.col-md-4,.col-md-5,.col-md-6,.col-md-7,.col-md-8,.col-md-9 {
 		float: left;

@@ -69,7 +69,15 @@ if(is_array($infos)){
 }
 ?>
     </blockquote>
-    <div class="demoTable" id="searchid" style="display:none;">
+    <div class="demoTable" id="searchid"<?php if (!$this->input->get('search')) {?> style="display:none;"<?php }?>>
+        <form name="searchform" action="" method="get" >
+        <input type="hidden" value="content" name="m">
+        <input type="hidden" value="content" name="c">
+        <input type="hidden" value="initall" name="a">
+        <input type="hidden" value="<?php echo $modelid;?>" name="modelid">
+        <input type="hidden" value="<?php echo $steps;?>" name="steps">
+        <input type="hidden" value="1" name="search">
+        <input type="hidden" value="<?php echo $pc_hash;?>" name="pc_hash">
         <?php echo L('addtime');?>：
         <div class="formdate">
             <div class="input-group input-medium date-picker input-daterange">
@@ -89,10 +97,11 @@ if(is_array($infos)){
             <option value='3' <?php if($this->input->get('searchtype')==3) echo 'selected';?>>ID</option>
         </select>
         <div class="layui-inline">
-            <input class="input-text" name="keyword" id="keyword" <?php if(isset($keyword)) echo $keyword;?> placeholder="请输入关键字">
+            <input class="input-text" name="keyword" id="keyword" value="<?php if($this->input->get('keyword')) echo $this->input->get('keyword');?>" placeholder="请输入关键字">
         </div>
-        <button class="layui-btn" id="search" data-type="reload"><i class="fa fa-search"></i> <?php echo L('search');?></button>
+        <button type="submit" class="layui-btn" id="search" data-type="reload"><i class="fa fa-search"></i> <?php echo L('search');?></button>
         <div style="clear: both;"></div>
+        </form>
     </div>
     <table class="layui-table" id="list" lay-filter="list"></table>
 </div>
@@ -130,7 +139,7 @@ layui.use(['table'], function(){
         elem: '#list',
         url:'?m=content&c=content&a=initall&modelid=<?php echo $modelid;?>&steps=<?php echo $steps;?>&pc_hash='+pc_hash,
         method: 'post',
-        where: {csrf_test_name:csrf_hash},
+        where: {keyword: '<?php echo $this->input->get('keyword');?>',start_time: '<?php echo $this->input->get('start_time');?>',end_time: '<?php echo $this->input->get('end_time');?>',posids: '<?php echo $this->input->get('posids');?>',searchtype: '<?php echo $this->input->get('searchtype');?>',csrf_test_name: csrf_hash},
         cellMinWidth: 80,
         page: true,
         cols: [[
@@ -145,18 +154,18 @@ layui.use(['table'], function(){
         limit: 10
     });
     //搜索
-    $('#search').on('click', function () {
+    /*$('#search').on('click', function () {
         var keyword = $('#keyword').val();
         var start_time = $('#start_time').val();
         var end_time = $('#end_time').val();
         var posids = $('#posids').val();
         var searchtype = $('#searchtype').val();
-        /*if ($.trim(keyword) === '') {
+        if ($.trim(keyword) === '') {
             layer.msg('请输入关键字！', {icon: 0});
             return;
-        }*/
+        }
         tableIn.reload({ page: {page: 1}, where: {keyword: keyword,start_time: start_time,end_time: end_time,posids: posids,searchtype: searchtype} });
-    });
+    });*/
     //监听单元格编辑
     table.on('edit(list)',function(obj) {
         var value = obj.value, data = obj.data, field = obj.field;

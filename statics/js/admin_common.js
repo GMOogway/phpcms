@@ -77,6 +77,53 @@ $(function(){
 			})
 		}
 	});
+	/*复选框全选(支持多个，纵横双控全选)。
+	 *实例：版块编辑-权限相关（双控），验证机制-验证策略（单控）
+	 *说明：
+	 *	"J_check"的"data-xid"对应其左侧"J_check_all"的"data-checklist"；
+	 *	"J_check"的"data-yid"对应其上方"J_check_all"的"data-checklist"；
+	 *	全选框的"data-direction"代表其控制的全选方向(x或y)；
+	 *	"J_check_wrap"同一块全选操作区域的父标签class，多个调用考虑
+	 */
+	if ($('.J_check_wrap').length) {
+		var total_check_all = $('input.J_check_all');
+		//遍历所有全选框
+		$.each(total_check_all, function () {
+			var check_all = $(this), check_items;
+			//分组各纵横项
+			var check_all_direction = check_all.data('direction');
+			check_items = $('input.J_check[data-' + check_all_direction + 'id="' + check_all.data('checklist') + '"]');
+			//点击全选框
+			check_all.change(function (e) {
+				var check_wrap = check_all.parents('.J_check_wrap'); //当前操作区域所有复选框的父标签（重用考虑）
+				if ($(this).attr('checked')) {
+					//全选状态
+					check_items.attr('checked', true);
+					//所有项都被选中
+					if (check_wrap.find('input.J_check').length === check_wrap.find('input.J_check:checked').length) {
+						check_wrap.find(total_check_all).attr('checked', true);
+					}
+				} else {
+					//非全选状态
+					check_items.removeAttr('checked');
+					//另一方向的全选框取消全选状态
+					var direction_invert = check_all_direction === 'x' ? 'y' : 'x';
+					check_wrap.find($('input.J_check_all[data-direction="' + direction_invert + '"]')).removeAttr('checked');
+				}
+			});
+			//点击非全选时判断是否全部勾选
+			check_items.change(function () {
+				if ($(this).attr('checked')) {
+					if (check_items.filter(':checked').length === check_items.length) {
+						//已选择和未选择的复选框数相等
+						check_all.attr('checked', true);
+					}
+				} else {
+					check_all.removeAttr('checked');
+				}
+			});
+		});
+	}
 });
 function geturlpathname() {
 	var url = document.location.toString();

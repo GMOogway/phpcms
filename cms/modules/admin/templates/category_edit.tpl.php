@@ -350,33 +350,28 @@ include $this->admin_tpl('header');?>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('role_private')?></label>
                         <div class="col-md-9">
-                            <div class="table-list"><table width="100%">
-			  <thead>
-				<tr>
-				  <th align="left"><?php echo L('role_name');?></th><th><?php echo L('view');?></th><th><?php echo L('add');?></th><th><?php echo L('edit');?></th><th><?php echo L('delete');?></th><th><?php echo L('listorder');?></th><th><?php echo L('push');?></th><th><?php echo L('move');?></th>
-			  </tr>
-			    </thead>
-				 <tbody>
-				<?php
-				$roles = getcache('role','commons');
-				foreach($roles as $roleid=> $rolrname) {
-				$disabled = $roleid==1 ? 'disabled' : '';
-				
-				?>
-		  		<tr>
-				  <td><?php echo $rolrname?></td>
-				  <td align="center"><label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="priv_roleid[]" <?php echo $disabled;?> <?php echo $this->check_category_priv('init',$roleid);?> value="init,<?php echo $roleid;?>" ><span></span></label></td>
-				  <td align="center"><label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="priv_roleid[]" <?php echo $disabled;?> <?php echo $this->check_category_priv('add',$roleid);?> value="add,<?php echo $roleid;?>" ><span></span></label></td>
-				  <td align="center"><label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="priv_roleid[]" <?php echo $disabled;?> <?php echo $this->check_category_priv('edit',$roleid);?> value="edit,<?php echo $roleid;?>" ><span></span></label></td>
-				  <td align="center"><label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="priv_roleid[]" <?php echo $disabled;?> <?php echo $this->check_category_priv('delete',$roleid);?> value="delete,<?php echo $roleid;?>" ><span></span></label></td>
-				  <td align="center"><label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="priv_roleid[]" <?php echo $disabled;?> <?php echo $this->check_category_priv('listorder',$roleid);?> value="listorder,<?php echo $roleid;?>" ><span></span></label></td>
-				  <td align="center"><label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="priv_roleid[]" <?php echo $disabled;?> <?php echo $this->check_category_priv('push',$roleid);?> value="push,<?php echo $roleid;?>" ><span></span></label></td>
-				  <td align="center"><label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="priv_roleid[]" <?php echo $disabled;?> <?php echo $this->check_category_priv('move',$roleid);?> value="move,<?php echo $roleid;?>" ><span></span></label></td>
-			  </tr>
-			  <?php }?>
-	
-			 </tbody>
-			</table></div>
+                            <div class="user_group J_check_wrap">
+                                <dl>
+                                    <?php
+                                    $roles = getcache('role','commons');
+                                    foreach($roles as $roleid=> $rolrname) {
+                                    $disabled = $roleid==1 ? 'disabled' : '';
+                                    ?>
+                                    <dt>
+                                        <label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" data-direction="y" data-checklist="J_check_priv_roleid<?php echo $roleid;?>" class="checkbox J_check_all" <?php echo $disabled;?>/><?php echo $rolrname?><span></span></label>
+                                    </dt>
+                                    <dd>
+                                        <label class="mt-checkbox mt-checkbox-outline"><input class="J_check" type="checkbox" data-yid="J_check_priv_roleid<?php echo $roleid;?>" name="priv_roleid[]" <?php echo $disabled;?> <?php echo $this->check_category_priv('init',$roleid);?> value="init,<?php echo $roleid;?>" ><?php echo L('view');?><span></span></label>
+                                        <label class="mt-checkbox mt-checkbox-outline"><input class="J_check" type="checkbox" data-yid="J_check_priv_roleid<?php echo $roleid;?>" name="priv_roleid[]" <?php echo $disabled;?> <?php echo $this->check_category_priv('add',$roleid);?> value="add,<?php echo $roleid;?>" ><?php echo L('add');?><span></span></label>
+                                        <label class="mt-checkbox mt-checkbox-outline"><input class="J_check" type="checkbox" data-yid="J_check_priv_roleid<?php echo $roleid;?>" name="priv_roleid[]" <?php echo $disabled;?> <?php echo $this->check_category_priv('edit',$roleid);?> value="edit,<?php echo $roleid;?>" ><?php echo L('edit');?><span></span></label>
+                                        <label class="mt-checkbox mt-checkbox-outline"><input class="J_check" type="checkbox" data-yid="J_check_priv_roleid<?php echo $roleid;?>" name="priv_roleid[]" <?php echo $disabled;?> <?php echo $this->check_category_priv('delete',$roleid);?> value="delete,<?php echo $roleid;?>" ><?php echo L('delete');?><span></span></label>
+                                        <label class="mt-checkbox mt-checkbox-outline"><input class="J_check" type="checkbox" data-yid="J_check_priv_roleid<?php echo $roleid;?>" name="priv_roleid[]" <?php echo $disabled;?> <?php echo $this->check_category_priv('listorder',$roleid);?> value="listorder,<?php echo $roleid;?>" ><?php echo L('listorder');?><span></span></label>
+                                        <label class="mt-checkbox mt-checkbox-outline"><input class="J_check" type="checkbox" data-yid="J_check_priv_roleid<?php echo $roleid;?>" name="priv_roleid[]" <?php echo $disabled;?> <?php echo $this->check_category_priv('push',$roleid);?> value="push,<?php echo $roleid;?>" ><?php echo L('push');?><span></span></label>
+                                        <label class="mt-checkbox mt-checkbox-outline"><input class="J_check" type="checkbox" data-yid="J_check_priv_roleid<?php echo $roleid;?>" name="priv_roleid[]" <?php echo $disabled;?> <?php echo $this->check_category_priv('move',$roleid);?> value="move,<?php echo $roleid;?>" ><?php echo L('move');?><span></span></label>
+                                    </dd>
+                                    <?php }?>
+                                </dl>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -385,7 +380,7 @@ include $this->admin_tpl('header');?>
                             <div class="table-list"><table width="100%">
 			  <thead>
 				<tr>
-				  <th align="left"><?php echo L('group_name');?></th><th><?php echo L('allow_vistor');?></th><th><?php echo L('allow_contribute');?></th>
+				  <th><?php echo L('group_name');?></th><th><?php echo L('allow_vistor');?></th><th><?php echo L('allow_contribute');?></th>
 			  </tr>
 			    </thead>
 				 <tbody>
@@ -396,8 +391,8 @@ include $this->admin_tpl('header');?>
 			?>
 		  		<tr>
 				  <td><?php echo $_value['name'];?></td>
-				  <td align="center"><label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="priv_groupid[]"  <?php echo $this->check_category_priv('visit',$_value['groupid'],0);?> value="visit,<?php echo $_value['groupid'];?>" ><span></span></label></td>
-				  <td align="center"><label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="priv_groupid[]"  <?php echo $this->check_category_priv('add',$_value['groupid'],0);?> value="add,<?php echo $_value['groupid'];?>" ><span></span></label></td>
+				  <td><label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="priv_groupid[]"  <?php echo $this->check_category_priv('visit',$_value['groupid'],0);?> value="visit,<?php echo $_value['groupid'];?>" ><span></span></label></td>
+				  <td><label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="priv_groupid[]"  <?php echo $this->check_category_priv('add',$_value['groupid'],0);?> value="add,<?php echo $_value['groupid'];?>" ><span></span></label></td>
 			  </tr>
 			<?php }?>
 			 </tbody>
