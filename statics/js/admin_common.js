@@ -42,7 +42,7 @@ $(function(){
 		}
 		var url = decodeURI(window.location.href);
 		url = url.replace("&order=", "&");
-		url+= "&order="+_name+" "+_order;
+		url+= "&order="+_name+"+"+_order;
 		window.location.href=url;
 	});
 	// tabl
