@@ -322,6 +322,8 @@ class content extends admin {
 			}
 			$datas2[$k]['items'] = $items[$r['modelid']];
 		}
+		$modelid = intval($this->input->get('modelid'));
+		if (!$modelid) {$one = reset($datas2);$modelid = $one['modelid'];}
 		$this->db = pc_base::load_model('content_model');
 		$this->siteid = $this->get_siteid();
 		$this->categorys = getcache('category_content_'.$this->siteid,'commons');
@@ -333,8 +335,6 @@ class content extends admin {
 			$priv_datas = $this->priv_db->get_one(array('catid'=>$catid,'is_admin'=>1,'action'=>$action));
 			if(!$priv_datas) showmessage(L('permission_to_operate'),'blank');
 		}
-		$modelid = intval($this->input->get('modelid'));
-		if (!$modelid) {include $this->admin_tpl('sitemodel_manage_all');exit();}
 		$admin_username = param::get_cookie('admin_username');
 		//查询当前的工作流
 		$setting = string2array($category['setting']);

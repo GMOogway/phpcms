@@ -248,6 +248,8 @@ body .showMsg .bottom{padding: 10px;text-align: center;border-top: 1px solid #E9
 .page-404 .details,.page-500 .details {margin-left: 40px;display: inline-block;}
 .page-404 .details h4 {font-size: 18px;}
 .page-404 .details .alert_btnleft {margin: 10px 0;}
+.page-404 .details .alert_btnleft a {text-shadow: none;color: #337ab7;font-size: 14px;}
+.page-404 .details .alert_btnleft a:hover {text-decoration: underline;cursor: pointer;color: #23527c;}
 
 /*下拉*/
 .btn-group{position: relative;display: inline-block;vertical-align: middle;}

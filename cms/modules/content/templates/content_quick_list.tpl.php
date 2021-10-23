@@ -30,9 +30,9 @@ $().ready(function(){
 					var str = '';
 					$.each(data, function(i,n){
 						if(n.type=='0') {
-							str += '<li><a href="?m=content&c=content&a=init&menuid=822&catid='+n.catid+'&pc_hash='+pc_hash+'">'+n.catname+'</a></li>';
+							str += '<li><a href="?m=content&c=content&a=init&menuid=72&catid='+n.catid+'&pc_hash='+pc_hash+'">'+n.catname+'</a></li>';
 						} else {
-							str += '<li><a href="?m=content&c=content&a=add&menuid=822&catid='+n.catid+'&pc_hash='+pc_hash+'">'+n.catname+'</a></li>';
+							str += '<li><a href="?m=content&c=content&a=add&menuid=72&catid='+n.catid+'&pc_hash='+pc_hash+'">'+n.catname+'</a></li>';
 						}
 					});
 					$('#search_div').html(str);
