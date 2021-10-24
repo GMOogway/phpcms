@@ -531,23 +531,23 @@ class check extends admin {
                 $system_data = '<?php'.PHP_EOL.'if (!defined(\'IN_CMS\')) exit(\'No direct script access allowed\');'.PHP_EOL;
                 $system_data .= 'return array('.PHP_EOL;
                 $system_data .= '//网站路径
-\'web_path\' => \''.pc_base::load_config('system','web_path').'\',
+\'web_path\' => \''.(pc_base::load_config('system','web_path') ? pc_base::load_config('system','web_path') : '/').'\',
 //Session配置
 \'session_storage\' => \'mysqli\',
-\'session_ttl\' => '.pc_base::load_config('system','session_ttl').',
+\'session_ttl\' => '.(pc_base::load_config('system','session_ttl') ? pc_base::load_config('system','session_ttl') : 1800).',
 \'session_savepath\' => '.str_replace(CACHE_PATH, 'CACHE_PATH.\'' ,pc_base::load_config('system','session_savepath')).'\',
-\'session_n\' => '.pc_base::load_config('system','session_n').',
+\'session_n\' => '.(pc_base::load_config('system','session_n') ? pc_base::load_config('system','session_n') : 0).',
 //Cookie配置
 \'cookie_domain\' => \''.pc_base::load_config('system','cookie_domain').'\', //Cookie 作用域
 \'cookie_path\' => \''.pc_base::load_config('system','cookie_path').'\', //Cookie 作用路径
 \'cookie_pre\' => \''.pc_base::load_config('system','cookie_pre').'\', //Cookie 前缀，同一域名下安装多套系统时，请修改Cookie前缀
-\'cookie_ttl\' => '.pc_base::load_config('system','cookie_ttl').', //Cookie 生命周期，0 表示随浏览器进程
+\'cookie_ttl\' => '.(pc_base::load_config('system','cookie_ttl') ? pc_base::load_config('system','cookie_ttl') : 0).', //Cookie 生命周期，0 表示随浏览器进程
 //模板相关配置
 \'tpl_root\' => \''.pc_base::load_config('system','tpl_root').'\', //模板保存物理路径
 \'tpl_name\' => \''.pc_base::load_config('system','tpl_name').'\', //当前模板方案目录
 \'tpl_css\' => \''.pc_base::load_config('system','tpl_css').'\', //当前样式目录
-\'tpl_referesh\' => '.pc_base::load_config('system','tpl_referesh').',
-\'tpl_edit\'=> '.pc_base::load_config('system','tpl_edit').', //是否允许在线编辑模板
+\'tpl_referesh\' => '.(pc_base::load_config('system','tpl_referesh') ? pc_base::load_config('system','tpl_referesh') : 1).',
+\'tpl_edit\'=> '.(pc_base::load_config('system','tpl_edit') ? pc_base::load_config('system','tpl_edit') : 0).', //是否允许在线编辑模板
 
 //附件相关配置
 \'attachment_stat\' => \''.pc_base::load_config('system','attachment_stat').'\', //是否记录附件使用状态 0 统计 1 统计， 注意: 本功能会加重服务器负担
@@ -578,13 +578,13 @@ class check extends admin {
 
 \'charset\' => \''.(pc_base::load_config('system','charset') ? pc_base::load_config('system','charset') : 'utf-8').'\', //网站字符集
 \'timezone\' => \''.(pc_base::load_config('system','timezone')=='Etc/GMT-8' ? 8 : (pc_base::load_config('system','timezone') ? pc_base::load_config('system','timezone') : 8)).'\', //网站时区（只对php 5.1以上版本有效），Etc/GMT-8 实际表示的是 GMT+8
-\'sys_time_format\' => '.pc_base::load_config('system','sys_time_format').', //网站时间显示格式与date函数一致，默认Y-m-d H:i:s
-\'debug\' => '.pc_base::load_config('system','debug').', //是否显示调试信息
-\'sys_csrf\' => \''.(pc_base::load_config('system','sys_csrf') ? pc_base::load_config('system','sys_csrf') : 1).'\', //是否跨站验证，1为启用，0为禁用
+\'sys_time_format\' => \''.pc_base::load_config('system','sys_time_format').'\', //网站时间显示格式与date函数一致，默认Y-m-d H:i:s
+\'debug\' => '.(pc_base::load_config('system','debug') ? pc_base::load_config('system','debug') : 1).', //是否显示调试信息
+\'sys_csrf\' => \''.(pc_base::load_config('system','sys_csrf') ? pc_base::load_config('system','sys_csrf') : 0).'\', //是否跨站验证，1为启用，0为禁用
 \'needcheckcomeurl\' => \''.(pc_base::load_config('system','needcheckcomeurl') ? pc_base::load_config('system','needcheckcomeurl') : 1).'\', //是否需要检查外部访问，1为启用，0为禁用
-\'admin_log\' => '.pc_base::load_config('system','admin_log').', //是否记录后台操作日志
-\'errorlog\' => '.pc_base::load_config('system','errorlog').', //1、保存错误日志到 cache/error_log.php | 0、在页面直接显示
-\'gzip\' => '.pc_base::load_config('system','gzip').', //是否Gzip压缩后输出
+\'admin_log\' => '.(pc_base::load_config('system','admin_log') ? pc_base::load_config('system','admin_log') : 1).', //是否记录后台操作日志
+\'errorlog\' => '.(pc_base::load_config('system','errorlog') ? pc_base::load_config('system','errorlog') : 1).', //1、保存错误日志到 cache/error_log.php | 0、在页面直接显示
+\'gzip\' => '.(pc_base::load_config('system','gzip') ? pc_base::load_config('system','gzip') : 1).', //是否Gzip压缩后输出
 \'auth_key\' => \''.pc_base::load_config('system','auth_key').'\', //安全密匙
 \'lang\' => \''.pc_base::load_config('system','lang').'\', //网站语言包
 \'lock_ex\' => \''.pc_base::load_config('system','lock_ex').'\', //写入缓存时是否建立文件互斥锁定（如果使用nfs建议关闭）
