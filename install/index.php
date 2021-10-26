@@ -3,7 +3,7 @@
 !defined('SELF') && define('SELF', pathinfo(__FILE__, PATHINFO_BASENAME));
 
 define('IS_INSTALL', TRUE);
-@set_time_limit(1000);
+set_time_limit(0);
 if (version_compare(PHP_VERSION, '7.1.0') < 0) exit('<font color=red>PHP版本必须在7.1以上</font>');
 include '../cms/base.php';
 define('INSTALL_MODULE',true);
@@ -177,39 +177,45 @@ switch($step)
 			set_config($sys_config,'system');			
 			set_config($db_config,'database');
 			
-			$link = mysqli_connect($dbhost, $dbuser, $dbpw, null, $dbport) or die ('Not connected : ' . mysqli_connect_error());
-			$version = mysqli_get_server_info($link);
+			$mysqli = function_exists('mysqli_init') ? mysqli_init() : 0;
+			if (!$mysqli) {
+				exit('PHP环境必须启用Mysqli扩展！');
+			} elseif (!mysqli_real_connect($mysqli, $dbhost, $dbuser, $dbpw, null, $dbport)) {
+				exit('['.mysqli_connect_errno().'] - 无法连接到数据库服务器（'.$dbhost.'），请检查端口（'.$dbport.'）和用户名（'.$dbuser.'）和密码（'.$dbpw.'）是否正确！');
+			} elseif (!mysqli_select_db($mysqli, $dbname)) {
+				if (!mysqli_query($mysqli, 'CREATE DATABASE '.$dbname.' CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci')) {
+					exit('指定的数据库（'.$dbname.'）不存在，系统尝试创建失败，请先通过其他方式建立好数据库！');
+				}
+			}
+			if (!mysqli_set_charset($mysqli, "utf8mb4")) {
+				exit('当前MySQL不支持utf8mb4编码（'.mysqli_error($mysqli).'）！');
+			}
+			if (mysqli_get_server_info($mysqli) < '5.0') {
+				exit('数据库版本低于Mysql 5.0，无法安装CMS，请升级数据库版本！');
+			}
+			$version = mysqli_get_server_info($mysqli);
 
 			if($version > '4.1' && $dbcharset) {
-				mysqli_query($link, "SET NAMES '$dbcharset'");
+				mysqli_query($mysqli, "SET NAMES '$dbcharset'");
 			}
 			
 			if($version > '5.0') {
-				mysqli_query($link, "SET sql_mode=''");
-			}
-												
-			if(!@mysqli_select_db($link, $dbname)){
-				@mysqli_query($link, "CREATE DATABASE $dbname CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
-				if(@mysqli_error($link)) {
-					echo 1;exit;
-				} else {
-					mysqli_select_db($link, $dbname);
-				}
+				mysqli_query($mysqli, "SET sql_mode=''");
 			}
 			$dbfile =  'cms_db.sql';	
 			if(file_exists(CMS_PATH."install/main/".$dbfile)) {
 				$sql = file_get_contents(CMS_PATH."install/main/".$dbfile);
 				$sql = str_replace('CMS演示站', $name , $sql);
 				$sql = str_replace('http://www.kaixin100.cn/', $siteurl , $sql);
-				_sql_execute($link,$sql);
+				_sql_execute($mysqli,$sql);
 				//创建网站创始人
 				$password_arr = password($password);
 				$password = $password_arr['password'];
 				$encrypt = $password_arr['encrypt'];
 				$email = trim($email);
-				_sql_execute($link,"INSERT INTO ".$tablepre."admin (`userid`,`username`,`password`,`roleid`,`encrypt`,`lastloginip`,`lastlogintime`,`email`,`realname`) VALUES ('1','$username','$password',1,'$encrypt','','','$email','创始人')");
+				_sql_execute($mysqli,"INSERT INTO ".$tablepre."admin (`userid`,`username`,`password`,`roleid`,`encrypt`,`lastloginip`,`lastlogintime`,`email`,`realname`) VALUES ('1','$username','$password',1,'$encrypt','','','$email','创始人')");
 				//设置默认站点1域名
-				_sql_execute($link,"update ".$tablepre."site set `domain`='$siteurl', `mobile_domain`='".$siteurl."mobile/' where `siteid`='1'");
+				_sql_execute($mysqli,"update ".$tablepre."site set `domain`='$siteurl', `mobile_domain`='".$siteurl."mobile/' where `siteid`='1'");
 				if ($adminpath) {
 					//设置后台登录地址
 					$adminpath = trim($adminpath);
@@ -241,7 +247,7 @@ switch($step)
 					set_config($sys_config,'system');
 				}
 			} else {
-				echo '2';//数据库文件不存在
+				exit('2');//数据库文件不存在
 			}							
 		} else {
 			//安装可选模块
@@ -258,31 +264,36 @@ switch($step)
 		extract($_POST);
 		$adminpath = trim($adminpath);
 		if($adminpath && (is_numeric($adminpath) || preg_match('/^[0-9]+$/', $adminpath[0]) || !preg_match('/^[A-Za-z0-9]+$/', $adminpath))) {
-			exit('7');
+			exit('2');
 		}
 		$noname_arr = array('admin','api','caches','cms','html','login','mobile','statics','uploadfile');
 		if(in_array($adminpath,$noname_arr)) {
-			exit('8');
+			exit('3');
 		}
-		$link = @mysqli_connect($dbhost, $dbuser, $dbpw,null,$dbport);
-		if(!$link) {
-			exit('2');
+		$mysqli = function_exists('mysqli_init') ? mysqli_init() : 0;
+		if (!$mysqli) {
+			exit('PHP环境必须启用Mysqli扩展！');
+		} elseif (!mysqli_real_connect($mysqli, $dbhost, $dbuser, $dbpw, null, $dbport)) {
+			exit('['.mysqli_connect_errno().'] - 无法连接到数据库服务器（'.$dbhost.'），请检查端口（'.$dbport.'）和用户名（'.$dbuser.'）和密码（'.$dbpw.'）是否正确！');
+		} elseif (!mysqli_select_db($mysqli, $dbname)) {
+			if (!mysqli_query($mysqli, 'CREATE DATABASE '.$dbname.' CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci')) {
+				exit('指定的数据库（'.$dbname.'）不存在，系统尝试创建失败，请先通过其他方式建立好数据库！');
+			}
 		}
-		$server_info = mysqli_get_server_info($link);
-		if($server_info < '4.0') exit('6');
-		if(!mysqli_select_db($link,$dbname)) {
-			if(!@mysqli_query($link,"CREATE DATABASE `$dbname` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci")) exit('3');
-			mysqli_select_db($link,$dbname);
+		if (!mysqli_set_charset($mysqli, "utf8mb4")) {
+			exit('当前MySQL不支持utf8mb4编码（'.mysqli_error($mysqli).'）！');
+		}
+		if (mysqli_get_server_info($mysqli) < '5.0') {
+			exit('数据库版本低于Mysql 5.0，无法安装CMS，请升级数据库版本！');
 		}
 		$tables = array();
-		$query = mysqli_query($link,"SHOW TABLES FROM `$dbname`");
+		$query = mysqli_query($mysqli,"SHOW TABLES FROM `$dbname`");
 		while($r = mysqli_fetch_row($query)) {
 			$tables[] = $r[0];
 		}
 		if($tables && in_array($tablepre.'module', $tables)) {
 			exit('0');
-		}
-		else {
+		} else {
 			exit('1');
 		}
 		break;
@@ -327,29 +338,29 @@ function format_textarea($string) {
 	return nl2br(str_replace(' ', '&nbsp;', htmlspecialchars($string,ENT_COMPAT,$chars)));
 }
 
-function _sql_execute($link,$sql,$r_tablepre = '',$s_tablepre = 'cms_') {
-    $sqls = _sql_split($link,$sql,$r_tablepre,$s_tablepre);
+function _sql_execute($mysqli,$sql,$r_tablepre = '',$s_tablepre = 'cms_') {
+    $sqls = _sql_split($mysqli,$sql,$r_tablepre,$s_tablepre);
 	if(is_array($sqls))
     {
 		foreach($sqls as $sql)
 		{
 			if(trim($sql) != '')
 			{
-				mysqli_query($link,$sql);
+				mysqli_query($mysqli,$sql);
 			}
 		}
 	}
 	else
 	{
-		mysqli_query($link,$sqls);
+		mysqli_query($mysqli,$sqls);
 	}
 	return true;
 }
 
-function _sql_split($link,$sql,$r_tablepre = '',$s_tablepre='cms_') {
+function _sql_split($mysqli,$sql,$r_tablepre = '',$s_tablepre='cms_') {
 	global $dbcharset,$tablepre;
 	$r_tablepre = $r_tablepre ? $r_tablepre : $tablepre;
-	if(mysqli_get_server_info($link) > '4.1' && $dbcharset)
+	if(mysqli_get_server_info($mysqli) > '4.1' && $dbcharset)
 	{
 		$sql = preg_replace("/TYPE=(InnoDB|MyISAM|MEMORY)( DEFAULT CHARSET=[^; ]+)?/", "ENGINE=\\1 DEFAULT CHARSET=".$dbcharset,$sql);
 	}

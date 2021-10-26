@@ -154,11 +154,8 @@
 <!--
 var errmsg = new Array();
 errmsg[0] = '您已经安装过CMS，系统会自动删除老数据！是否继续？';
-errmsg[2] = '无法连接数据库服务器，请检查配置！';
-errmsg[3] = '成功连接数据库，但是指定的数据库不存在并且无法自动创建，请先通过其他方式建立数据库！';
-errmsg[6] = '数据库版本低于Mysql 4.0，无法安装CMS，请升级数据库版本！';
-errmsg[7] = '后台登录口地址不能是数字开头或不能包含中文和特殊字符！';
-errmsg[8] = '后台登录口地址不能使用CMS默认目录名（admin，api，caches，cms，login，html，mobile，statics，uploadfile），请重新设置！';
+errmsg[2] = '后台登录口地址不能是数字开头或不能包含中文和特殊字符！';
+errmsg[3] = '后台登录口地址不能使用CMS默认目录名（admin，api，caches，cms，login，html，mobile，statics，uploadfile），请重新设置！';
 function checkdb() {
     if($('#dbhost').val()==''){
         Dialog.alert('数据库主机不能为空！',function(){$('#dbhost').focus();})
@@ -166,6 +163,10 @@ function checkdb() {
     }
     if($('#dbport').val()==''){
         Dialog.alert('数据库端口不能为空！',function(){$('#dbport').focus();})
+        return false;
+    }
+    if($('#dbuser').val()==''){
+        Dialog.alert('数据库帐号不能为空！',function(){$('#dbuser').focus();})
         return false;
     }
     if($('#dbpw').val()==''){
@@ -224,7 +225,10 @@ function checkdb() {
         url: '<?php echo SELF;?>',
         data: 'step=dbtest&adminpath='+$('#adminpath').val()+'&dbhost='+$('#dbhost').val()+'&dbport='+$('#dbport').val()+'&dbuser='+$('#dbuser').val()+'&dbpw='+$('#dbpw').val()+'&dbname='+$('#dbname').val()+'&tablepre='+$('#tablepre').val()+'&sid='+Math.random()*5,
         success: function(data){
-            if(data > 1) {
+            if(data.length > 20) {
+                Dialog.alert(data);
+                return false;
+            } else if(data > 1) {
                 Dialog.alert(errmsg[data]);
                 return false;
             } else if(data == 0) {

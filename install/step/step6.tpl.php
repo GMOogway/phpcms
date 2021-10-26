@@ -71,7 +71,6 @@ setting['mood'] = '心情指数模块安装成功......';
 setting['message'] = '短消息模块安装成功......';
 setting['formguide'] = '表单向导模块安装成功......';
 setting['mobile'] = '手机门户模块安装成功......';
-setting['upgrade'] = '自动升级模块安装成功......';
 setting['tag'] = '标签模块安装成功......';
 setting['sms'] = '短信模块安装成功......';
 var dbhost = '<?php echo $dbhost?>';
@@ -98,9 +97,7 @@ function reloads() {
         data: "step=installmodule&module="+m_d[n]+"&dbhost="+dbhost+"&dbport="+dbport+"&dbuser="+dbuser+"&dbpw="+dbpw+"&dbname="+dbname+"&tablepre="+tablepre+"&dbcharset="+dbcharset+"&pconnect="+pconnect+"&name="+name+"&adminpath="+adminpath+"&username="+username+"&password="+password+"&email="+email+"&ftp_user="+ftp_user+"&password_key="+password_key+"&sid="+Math.random()*5,
         success: function(msg){
             if(msg==1) {
-                Dialog.alert('指定的数据库不存在，系统也无法创建，请先通过其他方式建立好数据库！');
-            } else if(msg==2) {
-                $('#installmessage').append("<font color='#ff0000'>"+m_d[n]+"/install/mysql.sql 数据库文件不存在</font>");
+                Dialog.alert('指定的数据库不存在，系统尝试创建失败，请通过其他方式建立数据库！');
             } else if(msg.length>20) {
                 $('#installmessage').append("<font color='#ff0000'>错误信息：</font>"+msg);
             } else {
