@@ -360,7 +360,7 @@ class check extends admin {
                 }
 
                 $this->db->table_name = $prefix.'module';
-                $this->db->update(array('version'=>'1.0'),array('module'=>'dbsource'));
+                $this->db->update(array('version'=>'1.0'),array('module'=>'dbsource', 'version'=>''));
                 $this->db->update(array('iscore'=>1),array('module'=>'digg', 'iscore'=>0));
                 $this->db->update(array('iscore'=>1),array('module'=>'special', 'iscore'=>0));
                 $this->db->update(array('iscore'=>1),array('module'=>'search', 'iscore'=>0));

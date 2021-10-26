@@ -378,7 +378,7 @@ class security {
 	 *
 	 * Generates the XSS hash if needed and returns it.
 	 *
-	 * @see		CI_Security::$_xss_hash
+	 * @see		$_xss_hash
 	 * @return	string	XSS hash
 	 */
 	public function xss_hash()
@@ -648,7 +648,7 @@ class security {
 	 * Callback method for xss_clean() to remove whitespace from
 	 * things like 'j a v a s c r i p t'.
 	 *
-	 * @used-by	CI_Security::xss_clean()
+	 * @used-by	xss_clean()
 	 * @param	array	$matches
 	 * @return	string
 	 */
@@ -664,7 +664,7 @@ class security {
 	 *
 	 * Callback method for xss_clean() to remove naughty HTML elements.
 	 *
-	 * @used-by	CI_Security::xss_clean()
+	 * @used-by	xss_clean()
 	 * @param	array	$matches
 	 * @return	string
 	 */
@@ -755,7 +755,7 @@ class security {
 	 * and prevents PREG_BACKTRACK_LIMIT_ERROR from being triggered in
 	 * PHP 5.2+ on link-heavy strings.
 	 *
-	 * @used-by	CI_Security::xss_clean()
+	 * @used-by	xss_clean()
 	 * @param	array	$match
 	 * @return	string
 	 */
@@ -783,7 +783,7 @@ class security {
 	 * and prevents PREG_BACKTRACK_LIMIT_ERROR from being triggered in
 	 * PHP 5.2+ on image tag heavy strings.
 	 *
-	 * @used-by	CI_Security::xss_clean()
+	 * @used-by	xss_clean()
 	 * @param	array	$match
 	 * @return	string
 	 */
@@ -805,7 +805,7 @@ class security {
 	/**
 	 * Attribute Conversion
 	 *
-	 * @used-by	CI_Security::xss_clean()
+	 * @used-by	xss_clean()
 	 * @param	array	$match
 	 * @return	string
 	 */
@@ -821,8 +821,8 @@ class security {
 	 *
 	 * Filters tag attributes for consistency and safety.
 	 *
-	 * @used-by	CI_Security::_js_img_removal()
-	 * @used-by	CI_Security::_js_link_removal()
+	 * @used-by	_js_img_removal()
+	 * @used-by	_js_link_removal()
 	 * @param	string	$str
 	 * @return	string
 	 */
@@ -845,7 +845,7 @@ class security {
 	/**
 	 * HTML Entity Decode Callback
 	 *
-	 * @used-by	CI_Security::xss_clean()
+	 * @used-by	xss_clean()
 	 * @param	array	$match
 	 * @return	string
 	 */
@@ -868,7 +868,7 @@ class security {
 	/**
 	 * Do Never Allowed
 	 *
-	 * @used-by	CI_Security::xss_clean()
+	 * @used-by	xss_clean()
 	 * @param 	string
 	 * @return 	string
 	 */

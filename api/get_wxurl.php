@@ -31,7 +31,7 @@ if (preg_match('/'.$preg.'(.+)<\/div>/sU', $html, $mt)) {
 	// 下载远程图片
 	if (intval($input->get('is_esi')) && preg_match_all("/(src)=([\"|']?)([^ \"'>]+)\\2/i", $body, $imgs)) {
 		foreach ($imgs[3] as $img) {
-			$ext = get_file_ext($img);
+			$ext = get_image_ext($img);
 			if (!$ext) {
 				continue;
 			}

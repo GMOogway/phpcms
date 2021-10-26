@@ -928,6 +928,11 @@ class image {
 
         $this->source_image = $config['source_image'];
 
+        if (in_array(fileext($this->source_image), array('bmp', 'webp'))) {
+            CI_DEBUG && log_message('debug', 'bmp和webp不满足水印条件：'.$data['source_image']);
+            return '';
+        }
+
         // 判断水印尺寸
         if (!$is_test) {
             list($nw, $nh) = $this->image_info ? $this->image_info : getimagesize($this->source_image);

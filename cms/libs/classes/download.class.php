@@ -34,7 +34,7 @@ class download {
         $temp = preg_replace('/<code(.*)<\/code>/siU', '', $temp);
         if(!preg_match_all("/(src)=([\"|']?)([^ \"'>]+)\\2/i", $temp, $imgs)) return $value;
         foreach ($imgs[3] as $img) {
-            $ext = get_file_ext($img);
+            $ext = get_image_ext($img);
             if (!$ext) {
                 continue;
             }
@@ -111,7 +111,7 @@ class download {
         $temp = preg_replace('/<code(.*)<\/code>/siU', '', $temp);
         if(!preg_match_all("/(src)=([\"|']?)([^ \"'>]+)\\2/i", $temp, $imgs)) return $value;
         foreach ($imgs[3] as $img) {
-            $ext = get_file_ext($img);
+            $ext = get_image_ext($img);
             if (!$ext) {
                 continue;
             }

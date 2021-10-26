@@ -659,6 +659,30 @@ if (!function_exists('is_php')) {
 		return $_is_php[$version];
 	}
 }
+// html文字提取 cn是否纯中文
+function dr_html2text($str, $cn = false) {
+	$str = clearhtml($str);
+	if ($cn && preg_match_all('/[\x{4e00}-\x{9fff}]+/u', $str, $mt)) {
+		return join('', $mt[0]);
+	}
+
+	$text = "";
+	$start = 1;
+	for ($i=0;$i<strlen($str);$i++) {
+		if ($start==0 && $str[$i]==">") {
+			$start = 1;
+		} elseif($start==1) {
+			if ($str[$i]=="<") {
+				$start = 0;
+				$text.= " ";
+			} elseif(ord($str[$i])>31) {
+				$text.= $str[$i];
+			}
+		}
+	}
+
+	return $text;
+}
 if (! function_exists('clearhtml')) {
 	/**
 	 * 清除HTML标记
@@ -673,7 +697,7 @@ if (! function_exists('clearhtml')) {
 		}
 
 		$str = code2html($str);
-		$srt = str_replace(
+		$str = str_replace(
 			array('&nbsp;', '&amp;', '&quot;', '&#039;', '&ldquo;', '&rdquo;', '&mdash;', '&lt;', '&gt;', '&middot;', '&hellip;'),
 			array(' ', '&', '"', "'", '“', '”', '—', '<', '>', '·', '…'), $str
 		);
@@ -1415,7 +1439,7 @@ function str_exists($haystack, $needle)
  * @return 扩展名
  */
 function fileext($filename) {
-	return strtolower(trim(substr(strrchr($filename, '.'), 1, 10)));
+	return str_replace('.', '', trim(strtolower(strrchr($filename, '.')), '.'));
 }
 
 /**
@@ -2991,7 +3015,10 @@ function file_name($name) {
 	return substr($name, 0, strrpos($name, '.'));
 }
 // 获取远程附件扩展名
-function get_file_ext($url) {
+function get_image_ext($url) {
+	if (strlen($url) > 300) {
+		return '';
+	}
 
 	$arr = array('gif', 'jpg', 'jpeg', 'png', 'webp');
 	$ext = str_replace('.', '', trim(strtolower(strrchr($url, '.')), '.'));
