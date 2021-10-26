@@ -98,6 +98,8 @@ function reloads() {
         success: function(msg){
             if(msg==1) {
                 Dialog.alert('指定的数据库不存在，系统尝试创建失败，请通过其他方式建立数据库！');
+            } else if(msg==2) {
+                $('#installmessage').append("<font color='#ff0000'>"+m_d[n]+"/install/main/cms_db.sql 数据库文件不存在</font>");
             } else if(msg.length>20) {
                 $('#installmessage').append("<font color='#ff0000'>错误信息：</font>"+msg);
             } else {
