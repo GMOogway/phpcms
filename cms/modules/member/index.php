@@ -295,7 +295,7 @@ class index extends foreground {
 			if($v['formtype'] == 'image') {
 				$member_modelinfo[$v['name']] = "<a href='".$member_modelinfo_arr[$k]."' target='_blank'><img src='".$member_modelinfo_arr[$k]."' height='40' widht='40' onerror=\"this.src='".IMG_PATH."member/nophoto.gif'\"></a>";
 			} elseif($v['formtype'] == 'datetime' && $v['fieldtype'] == 'int') {	//如果为日期字段
-				$member_modelinfo[$v['name']] = format::date($member_modelinfo_arr[$k], $v['format']);
+				$member_modelinfo[$v['name']] = $member_modelinfo_arr[$k] ? format::date($member_modelinfo_arr[$k], $v['format']) : '';
 			} elseif($v['formtype'] == 'images') {
 				$tmp = string2array($member_modelinfo_arr[$k]);
 				$member_modelinfo[$v['name']] = '';
