@@ -370,9 +370,9 @@ class check extends admin {
                 $this->db->update(array('iscore'=>1),array('module'=>'scan', 'iscore'=>0));
 
                 $this->db->table_name = $prefix.'model';
-				$model = $this->db->get_one(array('modelid' => 11, 'siteid' => 1, 'name' => '视频模型', 'tablename' => 'video'));
-				if ($model) {
-					$this->db->delete(array('modelid' => 11, 'siteid' => 1, 'name' => '视频模型', 'tablename' => 'video'));
+                $model = $this->db->get_one(array('modelid' => 11, 'siteid' => 1, 'name' => '视频模型', 'tablename' => 'video'));
+                if ($model) {
+                    $this->db->delete(array('modelid' => 11, 'siteid' => 1, 'name' => '视频模型', 'tablename' => 'video'));
                     $this->db->query('DROP TABLE IF EXISTS `'.$prefix.'video`');
                     $this->db->query('DROP TABLE IF EXISTS `'.$prefix.'video_data`');
                     $this->db->table_name = $prefix.'model_field';
