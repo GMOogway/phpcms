@@ -15,7 +15,7 @@ class setting extends admin {
 	 */
 	public function init() {
 		$show_header = $show_validator = true;
-		$setting_admin_founders = explode(',',pc_base::load_config('system','admin_founders'));
+		$setting_admin_founders = explode(',', ADMIN_FOUNDERS);
 		if(IS_AJAX_POST) {
 			$setconfig = $this->input->post('setconfig');
 			$setting = $this->input->post('setting');

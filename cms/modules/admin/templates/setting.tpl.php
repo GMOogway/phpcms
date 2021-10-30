@@ -332,6 +332,73 @@ include $this->admin_tpl('header');?>
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('setting_maxloginfailedtimes')?></label>
+                        <div class="col-md-9">
+                            <div class="input-inline input-medium">
+                                <div class="input-group">
+                                    <input type="text" name="setting[maxloginfailedtimes]" id="maxloginfailedtimes" value="<?php echo intval($maxloginfailedtimes);?>" class="form-control">
+                                    <span class="input-group-addon">
+                                        <?php echo L('login_ci')?>
+                                    </span>
+                                </div>
+                            </div>
+                            <span class="help-block"><?php echo L('setting_maxloginfailedtimes_desc')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('setting_time_limit')?></label>
+                        <div class="col-md-9">
+                            <div class="input-inline input-medium">
+                                <div class="input-group">
+                                    <input type="text" name="setting[sysadminlogintimes]" id="sysadminlogintimes" value="<?php echo intval($sysadminlogintimes);?>" class="form-control">
+                                    <span class="input-group-addon">
+                                        <?php echo L('minutes')?>
+                                    </span>
+                                </div>
+                            </div>
+                            <span class="help-block"><?php echo L('setting_time_limit_desc')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('setting_cookie')?></label>
+                        <div class="col-md-9">
+                            <label><input class="form-control input-large" type="text" id="cookie_pre" name="setconfig[cookie_pre]" value="<?php echo $cookie_pre ? '************' : '';?>" ></label>
+                            <label><button class="button" type="button" name="button" onclick="to_cookie()"> <?php echo L('setting_regenerate')?> </button></label>
+                            <span class="help-block"><?php echo L('setting_cookie_desc')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('setting_keys')?></label>
+                        <div class="col-md-9">
+                            <label><input class="form-control input-large" type="text" id="auth_key" name="setconfig[auth_key]" value="<?php echo $auth_key ? '************' : '';?>" ></label>
+                            <label><button class="button" type="button" name="button" onclick="to_key()"> <?php echo L('setting_regenerate')?> </button></label>
+                            <span class="help-block"><?php echo L('setting_keys_desc')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('setting_minrefreshtime')?></label>
+                        <div class="col-md-9">
+                            <div class="input-inline input-medium">
+                                <div class="input-group">
+                                    <input type="text" name="setting[minrefreshtime]" id="minrefreshtime" value="<?php echo intval($minrefreshtime);?>" class="form-control">
+                                    <span class="input-group-addon">
+                                        <?php echo L('miao')?>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('setting_pwd_safe')?></label>
+                        <div class="col-md-9">
+                            <div class="mt-checkbox-inline">
+                                <label class="mt-checkbox mt-checkbox-outline"><input name="setting[pwd_use][]" value="admin" type="checkbox" <?php if (dr_in_array('admin', $pwd_use)) {echo ' checked';}?>> <?php echo L('setting_admin')?> <span></span></label>
+                                <label class="mt-checkbox mt-checkbox-outline"><input name="setting[pwd_use][]" value="member" type="checkbox" <?php if (dr_in_array('member', $pwd_use)) {echo ' checked';}?>> <?php echo L('setting_member')?> <span></span></label>
+                            </div>
+                            <span class="help-block"><?php echo L('setting_safe_desc')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('pwd_is_edit')?></label>
                         <div class="col-md-9">
                             <div class="mt-radio-inline">
@@ -363,31 +430,13 @@ include $this->admin_tpl('header');?>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-2 control-label"><?php echo L('setting_maxloginfailedtimes')?></label>
+                        <label class="col-md-2 control-label"><?php echo L('setting_login_safe')?></label>
                         <div class="col-md-9">
-                            <div class="input-inline input-medium">
-                                <div class="input-group">
-                                    <input type="text" name="setting[maxloginfailedtimes]" id="maxloginfailedtimes" value="<?php echo intval($maxloginfailedtimes);?>" class="form-control">
-                                    <span class="input-group-addon">
-                                        <?php echo L('login_ci')?>
-                                    </span>
-                                </div>
+                            <div class="mt-checkbox-inline">
+                                <label class="mt-checkbox mt-checkbox-outline"><input name="setting[login_use][]" value="admin" type="checkbox" <?php if (dr_in_array('admin', $login_use)) {echo ' checked';}?>> <?php echo L('setting_admin')?> <span></span></label>
+                                <label class="mt-checkbox mt-checkbox-outline"><input name="setting[login_use][]" value="member" type="checkbox" <?php if (dr_in_array('member', $login_use)) {echo ' checked';}?>> <?php echo L('setting_member')?> <span></span></label>
                             </div>
-                            <span class="help-block"><?php echo L('setting_maxloginfailedtimes_desc')?></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-2 control-label"><?php echo L('setting_time_limit')?></label>
-                        <div class="col-md-9">
-                            <div class="input-inline input-medium">
-                                <div class="input-group">
-                                    <input type="text" name="setting[sysadminlogintimes]" id="sysadminlogintimes" value="<?php echo intval($sysadminlogintimes);?>" class="form-control">
-                                    <span class="input-group-addon">
-                                        <?php echo L('minutes')?>
-                                    </span>
-                                </div>
-                            </div>
-                            <span class="help-block"><?php echo L('setting_time_limit_desc')?></span>
+                            <span class="help-block"><?php echo L('setting_safe_desc')?></span>
                         </div>
                     </div>
                     <div class="form-group">
@@ -413,6 +462,16 @@ include $this->admin_tpl('header');?>
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('setting_safe')?></label>
+                        <div class="col-md-9">
+                            <div class="mt-checkbox-inline">
+                                <label class="mt-checkbox mt-checkbox-outline"><input name="setting[safe_use][]" value="admin" type="checkbox" <?php if (dr_in_array('admin', $safe_use)) {echo ' checked';}?>> <?php echo L('setting_admin')?> <span></span></label>
+                                <label class="mt-checkbox mt-checkbox-outline"><input name="setting[safe_use][]" value="member" type="checkbox" <?php if (dr_in_array('member', $safe_use)) {echo ' checked';}?>> <?php echo L('setting_member')?> <span></span></label>
+                            </div>
+                            <span class="help-block"><?php echo L('setting_safe_desc')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('long_time_lock')?></label>
                         <div class="col-md-9">
                             <div class="input-inline input-medium">
@@ -424,35 +483,6 @@ include $this->admin_tpl('header');?>
                                 </div>
                             </div>
                             <span class="help-block"><?php echo L('long_time_lock_desc')?></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-2 control-label"><?php echo L('setting_cookie')?></label>
-                        <div class="col-md-9">
-                            <label><input class="form-control input-large" type="text" id="cookie_pre" name="setconfig[cookie_pre]" value="<?php echo $cookie_pre ? '************' : '';?>" ></label>
-                            <label><button class="button" type="button" name="button" onclick="to_cookie()"> <?php echo L('setting_regenerate')?> </button></label>
-                            <span class="help-block"><?php echo L('setting_cookie_desc')?></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-2 control-label"><?php echo L('setting_keys')?></label>
-                        <div class="col-md-9">
-                            <label><input class="form-control input-large" type="text" id="auth_key" name="setconfig[auth_key]" value="<?php echo $auth_key ? '************' : '';?>" ></label>
-                            <label><button class="button" type="button" name="button" onclick="to_key()"> <?php echo L('setting_regenerate')?> </button></label>
-                            <span class="help-block"><?php echo L('setting_keys_desc')?></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-2 control-label"><?php echo L('setting_minrefreshtime')?></label>
-                        <div class="col-md-9">
-                            <div class="input-inline input-medium">
-                                <div class="input-group">
-                                    <input type="text" name="setting[minrefreshtime]" id="minrefreshtime" value="<?php echo intval($minrefreshtime);?>" class="form-control">
-                                    <span class="input-group-addon">
-                                        <?php echo L('miao')?>
-                                    </span>
-                                </div>
-                            </div>
                         </div>
                     </div>
 

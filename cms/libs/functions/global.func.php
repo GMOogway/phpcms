@@ -2840,12 +2840,12 @@ function csrf_hash($key = 'csrf_token') {
 // 验证字符串
 function dr_get_csrf_token($key = 'pc_hash') {
 	$cache = pc_base::load_sys_class('cache');
-	$code = $cache->get_data(COOKIE_PRE.$key);
+	$code = $cache->get_data(COOKIE_PRE.ip().$key);
 	if (!$code) {
 		$code = bin2hex(random_bytes(16));
-		$cache->set_data(COOKIE_PRE.$key, $code, 3600);
+		$cache->set_data(COOKIE_PRE.ip().$key, $code, 3600);
 	}
-	return $cache->get_data(COOKIE_PRE.$key);
+	return $cache->get_data(COOKIE_PRE.ip().$key);
 }
 /**
  * 生成上传附件验证

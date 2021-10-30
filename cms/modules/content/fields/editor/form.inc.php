@@ -7,7 +7,7 @@
 		$disabled_page = isset($disabled_page) ? $disabled_page : 0;
 		if(!$height) $height = 300;
 		$allowupload = defined('IN_ADMIN') ? 1 : ($grouplist['allowattachment'] ? 1: 0);
-		if(!$value) $value = $defaultvalue;
+		$value = code2html(strlen($value) ? $value : $defaultvalue);
 		//if(!$toolvalue) $toolvalue = '\'Source\',\'Bold\', \'Italic\', \'Underline\'';
 		if($minlength || $pattern) $allow_empty = '';
 		if (SYS_EDITOR) {

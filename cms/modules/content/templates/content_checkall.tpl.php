@@ -25,11 +25,11 @@ for ($j=0;$j<5;$j++) {
 			<th><?php echo L('title');?></th>
             <th><?php echo L('select_model_name');?></th>
             <th width="90"><?php echo L('current_steps');?></th>
-            <th width="50"><?php echo L('steps');?></th>
+            <th width="80"><?php echo L('steps');?></th>
             <th width="90"><?php echo L('belong_category');?></th>
-            <th width="120"><?php echo L('contribute_time');?></th>
-            <th width="130"><?php echo L('username');?></th>
-			<th width="50"><?php echo L('operations_manage');?></th>
+            <th width="180"><?php echo L('contribute_time');?></th>
+            <th><?php echo L('username');?></th>
+			<th><?php echo L('operations_manage');?></th>
             </tr>
         </thead>
 <tbody>
@@ -54,7 +54,7 @@ for ($j=0;$j<5;$j++) {
 		<td align='center' ><?php echo $flowname;?></td>
 		<td align='center' ><?php echo $stepname;?></td>
 		<td align='center' ><a href="?m=content&c=content&a=init&menuid=<?php echo $this->input->get('menuid');?>&catid=<?php echo $r['catid'];?>"><?php echo $this->categorys[$r['catid']]['catname'];?></a></td>
-		<td align='center' ><?php echo format::date($r['inputtime'],1);?></td>
+		<td align='center' ><?php echo dr_date($r['inputtime'], null, 'red');?></td>
 		<td align='center'>
 		<?php
 		if($r['sysadd']==0) {
@@ -64,7 +64,7 @@ for ($j=0;$j<5;$j++) {
 			echo $r['username'];
 		}
 		?></td>
-		<td align='center' ><a href="javascript:;" onclick='change_color(this);window.open("?m=content&c=content&a=public_preview&steps=<?php echo $r['status']?>&catid=<?php echo $r['catid'];?>&id=<?php echo $arr_checkid[1];?>&pc_hash=<?php echo dr_get_csrf_token();?>","manage")'><?php echo L('c_check');?></a></td>
+		<td align='center'><a href="javascript:;" onclick='change_color(this);window.open("?m=content&c=content&a=public_preview&steps=<?php echo $r['status']?>&catid=<?php echo $r['catid'];?>&id=<?php echo $arr_checkid[1];?>&pc_hash=<?php echo dr_get_csrf_token();?>","manage")'><?php echo L('c_check');?></a></td>
 	</tr>
      <?php }?>
 </tbody>

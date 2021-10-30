@@ -12,6 +12,7 @@ CREATE TABLE `cms_admin` (
   `lastloginip` varchar(15) DEFAULT NULL,
   `lastlogintime` int(10) unsigned DEFAULT '0',
   `email` varchar(40) DEFAULT NULL,
+  `islock` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '账号锁定标识',
   `realname` varchar(50) NOT NULL DEFAULT '',
   `lang` VARCHAR(6) NOT NULL,
   PRIMARY KEY (`userid`),

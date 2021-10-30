@@ -67,6 +67,7 @@ class content extends foreground {
 			$post_fields = array_keys($_POST['info']);
 			$post_fields = array_intersect_assoc($fields,$post_fields);
 			$setting = string2array($category['setting']);
+			if (!$setting['presentpoint']) $setting['presentpoint'] = 0;
 			if($setting['presentpoint'] < 0 && $memberinfo['point'] < abs($setting['presentpoint']))
 			showmessage(L('points_less_than',array('point'=>$memberinfo['point'],'need_point'=>abs($setting['presentpoint']))),APP_PATH.'index.php?m=pay&c=deposit&a=pay&exchange=point',3000);
 			
@@ -135,7 +136,7 @@ class content extends foreground {
 			$category = $CATEGORYS[$catid];
 			if($category['siteid']!=$siteid) showmessage(L('site_no_category'),'?m=member&c=content&a=publish');
 			$setting = string2array($category['setting']);
-
+			if (!$setting['presentpoint']) $setting['presentpoint'] = 0;
 			if($setting['presentpoint'] < 0 && $memberinfo['point'] < abs($setting['presentpoint']))
 			showmessage(L('points_less_than',array('point'=>$memberinfo['point'],'need_point'=>abs($setting['presentpoint']))),APP_PATH.'index.php?m=pay&c=deposit&a=pay&exchange=point',3000);
 			if($category['type']!=0) showmessage(L('illegal_operation'));
@@ -230,7 +231,7 @@ class content extends foreground {
 				foreach($_POST['info'] as $_k=>$_v) {
 					if($_k == 'content') {
 						$_POST['info'][$_k] = strip_tags($_v, '<p><a><br><img><ul><li><div>');
-					} elseif(in_array($_k, $fields)) {
+					} elseif($fields && in_array($_k, $fields)) {
 						$_POST['info'][$_k] = new_html_special_chars(trim_script($_v));
 					}
 				}
@@ -324,7 +325,7 @@ class content extends foreground {
 			$content_db = pc_base::load_model('content_model');
 			$content_db->set_model($modelid);
 			$table_name = $content_db->table_name;
- 			$content_db->delete_content($id); //删除文章
+ 			$content_db->delete_content($id, '', $catid); //删除文章
  			$check_pushed_db->delete(array('checkid'=>$checkid));//删除对应投稿表
 			showmessage(L('operation_success'), HTTP_REFERER); 
 		}
@@ -373,6 +374,7 @@ class content extends foreground {
 			$post_fields = array_keys($_POST['info']);
 			$post_fields = array_intersect_assoc($fields,$post_fields);
 			$setting = string2array($category['setting']);
+			if (!$setting['presentpoint']) $setting['presentpoint'] = 0;
 			if($setting['presentpoint'] < 0 && $memberinfo['point'] < abs($setting['presentpoint']))
 			showmessage(L('points_less_than',array('point'=>$memberinfo['point'],'need_point'=>abs($setting['presentpoint']))),APP_PATH.'index.php?m=pay&c=deposit&a=pay&exchange=point',3000);
 			
@@ -450,6 +452,7 @@ class content extends foreground {
 			$category = $CATEGORYS[$catid];
 			if($category['siteid']!=$siteid) showmessage(L('site_no_category'),'?m=member&c=content&a=info_publish');
 			$setting = string2array($category['setting']);
+			if (!$setting['presentpoint']) $setting['presentpoint'] = 0;
 			if($zone == 0 && !isset($_GET['catid'])) {
 				$step = 1;
 				include template('member', 'info_content_publish_select');

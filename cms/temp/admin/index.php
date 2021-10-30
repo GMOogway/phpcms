@@ -92,12 +92,16 @@ class index extends admin {
 				}
 			}
 			$this->times_db->delete(array('username'=>$username));
+			//如果账号被锁定
+			if($r['islock']) {
+				dr_json(3, L('管理员已经被锁定'));
+			}
 			
 			$this->db->update(array('lastloginip'=>ip(),'lastlogintime'=>SYS_TIME),array('userid'=>$r['userid']));
 			$_SESSION['userid'] = $r['userid'];
 			$_SESSION['roleid'] = $r['roleid'];
 			$_SESSION['lock_screen'] = 0;
-			$this->cache->set_data(COOKIE_PRE.'pc_hash', bin2hex(random_bytes(16)), 3600);
+			$this->cache->set_data(COOKIE_PRE.ip().'pc_hash', bin2hex(random_bytes(16)), 3600);
 			$site = pc_base::load_app_class('sites');
 			$sitelist = $site->get_list_login($_SESSION['roleid']);
 			$default_siteid = self::return_siteid_login();
@@ -125,7 +129,9 @@ class index extends admin {
 				);
 				$this->admin_login_db->update($row, array('uid'=>$r['userid']));
 			}
-			$this->cache->set_auth_data('admin_option_'.$r['userid'], SYS_TIME);
+			if (isset($setting['login_use']) && dr_in_array('admin', $setting['login_use'])) {
+				$this->cache->set_auth_data('admin_option_'.$r['userid'], SYS_TIME);
+			}
 			dr_json(1, L('login_success'), array('url' => '?m=admin&c=index&pc_hash='.dr_get_csrf_token()));
 		} else {
 			pc_base::load_sys_class('form', '', 0);
@@ -159,7 +165,7 @@ class index extends admin {
 		$_SESSION['userid'] = $member['userid'];
 		$_SESSION['roleid'] = $member['roleid'];
 		$_SESSION['lock_screen'] = 0;
-		$this->cache->set_data(COOKIE_PRE.'pc_hash', bin2hex(random_bytes(16)), 3600);
+		$this->cache->set_data(COOKIE_PRE.ip().'pc_hash', bin2hex(random_bytes(16)), 3600);
 		$default_siteid = self::return_siteid();
 		$cookie_time = SYS_TIME+86400*30;
 		if(!$member['lang']) $member['lang'] = 'zh-cn';
@@ -169,16 +175,40 @@ class index extends admin {
 		param::set_cookie('admin_email', $member['email'],$cookie_time);
 		param::set_cookie('sys_lang', $member['lang'],$cookie_time);
 
+		$this->admin_login_db = pc_base::load_model('admin_login_model');
+		$row = $this->admin_login_db->get_one(array('uid'=>$member['userid']));
+		if (!$row) {
+			$row = array(
+				'uid' => $member['userid'],
+				'is_login' => 0,
+				'is_repwd' => 0,
+				'updatetime' => 0,
+				'logintime' => SYS_TIME,
+			);
+			$this->admin_login_db->insert($row);
+		} else {
+			$row = array(
+				'logintime' => SYS_TIME,
+			);
+			$this->admin_login_db->update($row, array('uid'=>$member['userid']));
+		}
+		$config = getcache('common','commons');
+		if (isset($config['login_use']) && dr_in_array('admin', $config['login_use'])) {
+			$this->cache->set_auth_data('admin_option_'.$member['userid'], SYS_TIME);
+		}
 		showmessage(L('fclient_sn_succ'),'?m=admin&c=index');
 	}
 	
 	public function public_logout() {
-		$this->cache->del_auth_data('admin_option_'.$_SESSION['userid']);
+		$config = getcache('common','commons');
+		if (isset($config['login_use']) && dr_in_array('admin', $config['login_use'])) {
+			$this->cache->del_auth_data('admin_option_'.$_SESSION['userid']);
+		}
 		$_SESSION['userid'] = 0;
 		$_SESSION['roleid'] = 0;
 		param::set_cookie('admin_username','');
 		param::set_cookie('userid',0);
-		$this->cache->clear(COOKIE_PRE.'pc_hash');
+		$this->cache->clear(COOKIE_PRE.ip().'pc_hash');
 
 		showmessage(L('logout_success'),'?m=admin&c=index&a='.SYS_ADMIN_PATH);
 	}

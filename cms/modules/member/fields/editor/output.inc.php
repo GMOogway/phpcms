@@ -1,9 +1,10 @@
 	function editor($field, $value) {
+		$value = code2html($value);
 		$setting = string2array($this->fields[$field]['setting']);
 		if($setting['enablekeylink']) {
 			$value = $this->_keylinks($value, $setting['replacenum'],$setting['link_mode']);
 		}
-		return htmlspecialchars_decode($value);
+		return $value;
 	}
 	function _base64_encode($t,$str) {
 		return $t."\"".base64_encode($str)."\"";

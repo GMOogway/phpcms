@@ -3,7 +3,7 @@
 		extract($fieldinfo);
 		extract(string2array($setting));
 		$allowupload = defined('IN_ADMIN') || $allowupload ? 1 : 0;
-		if(!$value) $value = $defaultvalue;
+		$value = code2html(strlen($value) ? $value : $defaultvalue);
 		//if(!$toolvalue) $toolvalue = '\'Source\',\'Bold\', \'Italic\', \'Underline\'';
 		if($minlength || $pattern) $allow_empty = '';
 		if (SYS_EDITOR) {

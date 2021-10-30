@@ -462,7 +462,4 @@ $LANG['complete_info'] = '填写资料';
 $LANG['clear_data'] = '一键清理';
 $LANG['player_manage'] = '播放器管理';
 $LANG['video_upload'] = '视频上传';
-$LANG['setting_keyword_enable'] = '关键词提取API';
-$LANG['restore'] = '还原';
-$LANG['recycle'] = '回收站';
 ?>

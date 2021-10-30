@@ -3,7 +3,7 @@
 		extract($fieldinfo);
 		extract(string2array($setting));
 		$allowupload = defined('IN_ADMIN') ? 1 : 0;
-		if(!$value) $value = $defaultvalue;
+		$value = code2html(strlen($value) ? $value : $defaultvalue);
 		if($minlength || $pattern) $allow_empty = '';
 		if (SYS_EDITOR) {
 			if($minlength) $this->checkall .= 'if(CKEDITOR.instances.'.$field.'.getData()==""){

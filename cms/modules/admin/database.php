@@ -34,7 +34,7 @@ class database extends admin {
 	 * 备份与还原
 	 */
 	public function import() {
-		$admin_founders = explode(',',pc_base::load_config('system','admin_founders'));
+		$admin_founders = explode(',', ADMIN_FOUNDERS);
 		$database = pc_base::load_config('database');
 		$backupDir = CACHE_PATH.'bakup/default/';
 		if(IS_POST) {
@@ -203,7 +203,7 @@ class database extends admin {
 	 * 备份文件下载
 	 */
 	public function public_down() {
-		$admin_founders = explode(',',pc_base::load_config('system','admin_founders'));
+		$admin_founders = explode(',', ADMIN_FOUNDERS);
 		if(!in_array($this->userid,$admin_founders)) {
 			showmessage(L('only_fonder_operation'));
 		}	

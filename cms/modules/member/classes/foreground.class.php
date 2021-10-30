@@ -115,14 +115,16 @@ class foreground {
 		$userid = $this->memberinfo['userid'];
 		$config = getcache('common','commons');
 		if ($config) {
-			// 长时间未登录的用户就锁定起来
-			if (isset($config['safe_wdl']) && $config['safe_wdl']) {
-				$time = $config['safe_wdl'] * 3600 * 24;
-				$where = 'logintime < '.(SYS_TIME - $time);
-				$log_lock = $member_login_db->select($where);
-				if ($log_lock) {
-					foreach ($log_lock as $t) {
-						$this->db->update(array('islock'=>1), array('userid'=>$t['uid']));
+			if (isset($config['safe_use']) && dr_in_array('member', $config['safe_use'])) {
+				// 长时间未登录的用户就锁定起来
+				if (isset($config['safe_wdl']) && $config['safe_wdl']) {
+					$time = $config['safe_wdl'] * 3600 * 24;
+					$where = 'logintime < '.(SYS_TIME - $time);
+					$log_lock = $member_login_db->select($where);
+					if ($log_lock) {
+						foreach ($log_lock as $t) {
+							$this->db->update(array('islock'=>1), array('userid'=>$t['uid']));
+						}
 					}
 				}
 			}
@@ -139,27 +141,44 @@ class foreground {
 				);
 				$member_login_db->insert($log);
 			}
-			// 首次登录是否强制修改密码
-			if (!$log['is_login'] && isset($config['pwd_is_login_edit']) && $config['pwd_is_login_edit']) {
-				// 该改密码了
-				if (ROUTE_M =='member' && ROUTE_C == 'index' && in_array(ROUTE_A, array('account_manage_password','public_checkemail_ajax','logout'))) {
-					return true; // 本身控制器不判断
-				}
-				showmessage(L('首次登录需要强制修改密码'), '?m=member&c=index&a=account_manage_password&t=1');
-			}
-			// 判断定期修改密码
-			if (isset($config['pwd_is_edit']) && $config['pwd_is_edit']
-				&& isset($config['pwd_day_edit']) && $config['pwd_day_edit']) {
-				if ($log['updatetime']) {
-					// 存在修改过密码才判断
-					$time = $config['pwd_day_edit'] * 3600 * 24;
-					if (SYS_TIME - $log['updatetime'] > $time) {
-						// 该改密码了
-						if (ROUTE_M =='member' && ROUTE_C == 'index' && in_array(ROUTE_A, array('account_manage_password','public_checkemail_ajax','logout'))) {
-							return true; // 本身控制器不判断
-						}
-						showmessage(L('您需要定期修改密码'), '?m=member&c=index&a=account_manage_password&t=1');
+			if (isset($config['pwd_use']) && dr_in_array('member', $config['pwd_use'])) {
+				// 首次登录是否强制修改密码
+				if (!$log['is_login'] && isset($config['pwd_is_login_edit']) && $config['pwd_is_login_edit']) {
+					// 该改密码了
+					if (ROUTE_M =='member' && ROUTE_C == 'index' && in_array(ROUTE_A, array('account_manage_password','public_checkemail_ajax','logout'))) {
+						return true; // 本身控制器不判断
 					}
+					showmessage(L('首次登录需要强制修改密码'), '?m=member&c=index&a=account_manage_password&t=1');
+				}
+				// 判断定期修改密码
+				if (isset($config['pwd_is_edit']) && $config['pwd_is_edit']
+					&& isset($config['pwd_day_edit']) && $config['pwd_day_edit']) {
+					if ($log['updatetime']) {
+						// 存在修改过密码才判断
+						$time = $config['pwd_day_edit'] * 3600 * 24;
+						if (SYS_TIME - $log['updatetime'] > $time) {
+							// 该改密码了
+							if (ROUTE_M =='member' && ROUTE_C == 'index' && in_array(ROUTE_A, array('account_manage_password','public_checkemail_ajax','logout'))) {
+								return true; // 本身控制器不判断
+							}
+							showmessage(L('您需要定期修改密码'), '?m=member&c=index&a=account_manage_password&t=1');
+						}
+					}
+				}
+			}
+			if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
+				// 操作标记
+				if (ROUTE_M =='member' && ROUTE_C == 'index' && in_array(ROUTE_A, array('login','logout'))) {
+					return; // 本身控制器不判断
+				}
+				if (isset($config['login_is_option']) && $config['login_is_option'] && $config['login_exit_time']) {
+					$time = (int)$cache->get_auth_data('member_option_'.$userid);
+					if ($time && SYS_TIME - $time > $config['login_exit_time'] * 60) {
+						// 长时间不动作退出
+						$cache->del_auth_data('member_option_'.$userid);
+						showmessage(L('长时间（'.ceil($config['login_exit_time']).'分钟）未操作，当前账号自动退出'),'?m=member&c=index&a=logout');
+					}
+					$cache->set_auth_data('member_option_'.$userid, SYS_TIME);
 				}
 			}
 		}

@@ -641,7 +641,6 @@ class content extends admin {
 			$r2 = $this->db->get_one(array('id'=>$id));
 			if(!$r2) showmessage(L('subsidiary_table_datalost'),'blank');
 			$data = array_merge($r,$r2);
-			$data = array_map('htmlspecialchars_decode',$data);
 			require CACHE_MODEL_PATH.'content_form.class.php';
 			$content_form = new content_form($modelid,$catid,$this->categorys);
 
@@ -1610,7 +1609,7 @@ class content extends admin {
 	 * 一键清理演示数据
 	 */
 	public function clear_data() {
-		$admin_founders = explode(',',pc_base::load_config('system','admin_founders'));
+		$admin_founders = explode(',', ADMIN_FOUNDERS);
 		if(!in_array($_SESSION['userid'],$admin_founders)) {
 			showmessage(L('only_fonder_operation'), 'close');
 		}

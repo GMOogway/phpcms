@@ -196,6 +196,9 @@ class check extends admin {
                 if ($this->db->field_exists('card')) {
                     $this->db->query('ALTER TABLE `'.$this->db->table_name.'` DROP `card`');
                 }
+                if (!$this->db->field_exists('islock')) {
+                    $this->db->query('ALTER TABLE `'.$this->db->table_name.'` ADD `islock` tinyint(1) UNSIGNED NOT NULL DEFAULT \'0\' COMMENT \'账号锁定标识\' AFTER `email`');
+                }
 
                 $table = $prefix.'admin_login';
                 if (!$this->db->table_exists('admin_login')) {
@@ -367,7 +370,9 @@ class check extends admin {
                 $this->db->update(array('iscore'=>1),array('module'=>'scan', 'iscore'=>0));
 
                 $this->db->table_name = $prefix.'model';
-                if ($this->db->delete(array('modelid' => 11, 'siteid' => 1, 'name' => '视频模型', 'tablename' => 'video'))) {
+				$model = $this->db->get_one(array('modelid' => 11, 'siteid' => 1, 'name' => '视频模型', 'tablename' => 'video'));
+				if ($model) {
+					$this->db->delete(array('modelid' => 11, 'siteid' => 1, 'name' => '视频模型', 'tablename' => 'video'));
                     $this->db->query('DROP TABLE IF EXISTS `'.$prefix.'video`');
                     $this->db->query('DROP TABLE IF EXISTS `'.$prefix.'video_data`');
                     $this->db->table_name = $prefix.'model_field';

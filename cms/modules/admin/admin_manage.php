@@ -134,15 +134,42 @@ class admin_manage extends admin {
 		$this->db->delete(array('userid'=>$userid));
 		showmessage(L('admin_cancel_succ'));
 	}
+
+	/**
+	 * 锁定管理员
+	 */
+	function lock() {
+		$userid = intval($this->input->get('userid'));
+		if(!$userid) {
+			showmessage(L('illegal_parameters'), HTTP_REFERER);
+		} else {
+			$this->db->update(array('islock'=>1), array('userid'=>$userid));
+			showmessage(L('operation_success'), HTTP_REFERER);
+		}
+	}
 	
 	/**
-	 * 更新管理员状态
+	 * 解锁管理员
 	 */
-	public function lock(){
+	function unlock() {
 		$userid = intval($this->input->get('userid'));
-		$disabled = intval($this->input->get('disabled'));
-		$this->db->update(array('disabled'=>$disabled),array('userid'=>$userid));
-		showmessage(L('operation_success'),'?m=admin&c=admin_manage');
+		if(!$userid) {
+			showmessage(L('illegal_parameters'), HTTP_REFERER);
+		} else {
+			if($this->db->update(array('islock'=>0), array('userid'=>$userid))) {
+				$config = getcache('common','commons');
+				if ($config) {
+					if (isset($config['safe_wdl']) && $config['safe_wdl']) {
+						$admin_login_db = pc_base::load_model('admin_login_model');
+						$time = $config['safe_wdl'] * 3600 * 24;
+						$login_where[] = 'logintime < '.(SYS_TIME - $time);
+						$login_where[] = 'uid = '.$userid;
+						$admin_login_db->update(array('logintime'=>SYS_TIME), implode(' AND ', $login_where));
+					}
+				}
+			}
+			showmessage(L('operation_success'), HTTP_REFERER);
+		}
 	}
 	
 	/**

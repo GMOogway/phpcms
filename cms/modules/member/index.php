@@ -15,6 +15,7 @@ class index extends foreground {
 	function __construct() {
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
+		$this->cache = pc_base::load_sys_class('cache');
 		$this->http_user_agent = $_SERVER['HTTP_USER_AGENT'];
 	}
 
@@ -734,6 +735,10 @@ class index extends foreground {
 				);
 				$this->member_login_db->update($row, array('uid'=>$userid));
 			}
+			$config = getcache('common', 'commons');
+			if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
+				$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME);
+			}
 			$forward = isset($_POST['forward']) && !empty($_POST['forward']) ? urldecode($_POST['forward']) : 'index.php?m=member&c=index';
 			showmessage(L('login_success'), $forward);
 		} else {
@@ -751,8 +756,7 @@ class index extends foreground {
 	 * 授权登录用户中心跳转
 	 */
 	public function alogin() {
-		$cache_class = pc_base::load_sys_class('cache');
-		$code = $cache_class->get_auth_data('admin_login_member', 1);
+		$code = $this->cache->get_auth_data('admin_login_member', 1);
 		if (!$code) {
 			showmessage(L('没有获取到会话信息'));
 		}
@@ -780,8 +784,29 @@ class index extends foreground {
 			param::set_cookie('_groupid', $groupid, $cookietime);
 			param::set_cookie('_nickname', $nickname, $cookietime);
 			//param::set_cookie('cookietime', $_cookietime, $cookietime);
+			$this->member_login_db = pc_base::load_model('member_login_model');
+			$row = $this->member_login_db->get_one(array('uid'=>$userid));
+			if (!$row) {
+				$row = array(
+					'uid' => $userid,
+					'is_login' => 0,
+					'is_repwd' => 0,
+					'updatetime' => 0,
+					'logintime' => SYS_TIME,
+				);
+				$this->member_login_db->insert($row);
+			} else {
+				$row = array(
+					'logintime' => SYS_TIME,
+				);
+				$this->member_login_db->update($row, array('uid'=>$userid));
+			}
+			$config = getcache('common', 'commons');
+			if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
+				$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME);
+			}
 		}
-		$cache_class->del_auth_data('admin_login_member', 1);
+		$this->cache->del_auth_data('admin_login_member', 1);
 		redirect('index.php?m=member&c=index');
 	}
   	
@@ -794,12 +819,17 @@ class index extends foreground {
 			$logouturl = 'https://cas.sdo.com/cas/logout?url='.urlencode(APP_PATH.'index.php?m=member&c=index&a=logout&forward='.$forward);
 			header('Location: '.$logouturl);
 		} else {
+			$config = getcache('common', 'commons');
+			if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
+				$this->cache->del_auth_data('member_option_'.param::get_cookie('_userid'));
+			}
 			param::set_cookie('auth', '');
 			param::set_cookie('_userid', '');
 			param::set_cookie('_username', '');
 			param::set_cookie('_groupid', '');
 			param::set_cookie('_nickname', '');
 			param::set_cookie('cookietime', '');
+			
 			$forward = isset($_GET['forward']) && trim($_GET['forward']) ? $_GET['forward'] : 'index.php?m=member&c=index&a=login';
 			showmessage(L('logout_success'), $forward);
 		}
