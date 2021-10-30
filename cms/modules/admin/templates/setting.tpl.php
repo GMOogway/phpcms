@@ -217,7 +217,7 @@ include $this->admin_tpl('header');?>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('setting_time_format')?></label>
                         <div class="col-md-9">
-                            <input class="form-control" type="text" id="sys_time_format" name="setconfig[sys_time_format]" value="<?php echo $sys_time_format;?>" >
+                            <input class="form-control input-large input-text" type="text" id="sys_time_format" name="setconfig[sys_time_format]" value="<?php echo $sys_time_format;?>" >
                             <span class="help-block"><?php echo L('setting_time_format_desc')?></span>
                         </div>
                     </div>
