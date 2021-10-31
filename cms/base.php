@@ -192,7 +192,7 @@ define('SYS_CSRF', pc_base::load_config('system','sys_csrf'));
 //是否保存错误日志
 define('SYS_ERRORLOG', pc_base::load_config('system','errorlog'));
 //网站创始人ID
-define('ADMIN_FOUNDERS', pc_base::load_config('system','admin_founders'));
+define('ADMIN_FOUNDERS', explode(',', pc_base::load_config('system','admin_founders')));
 //站点id
 !defined('SITE_ID') && define('SITE_ID', 1);
 define('SITE_URL', siteurl(SITE_ID));

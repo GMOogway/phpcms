@@ -15,7 +15,6 @@ class setting extends admin {
 	 */
 	public function init() {
 		$show_header = $show_validator = true;
-		$setting_admin_founders = explode(',', ADMIN_FOUNDERS);
 		if(IS_AJAX_POST) {
 			$setconfig = $this->input->post('setconfig');
 			$setting = $this->input->post('setting');
@@ -86,12 +85,12 @@ class setting extends admin {
 					$setconfig['snda_enable'] = 0;
 				}
 			}
-			if($_SESSION['roleid']==1 && in_array($_SESSION['userid'], $setting_admin_founders)) {
+			if($_SESSION['roleid']==1 && dr_in_array($_SESSION['userid'], ADMIN_FOUNDERS)) {
 				if(!$setconfig['admin_founders']) {
 					$setconfig['admin_founders'] = 1;
 				}
 				$setconfig_admin_founders = explode(',',$setconfig['admin_founders']);
-				if(!in_array(1, $setconfig_admin_founders)) {
+				if(!dr_in_array(1, $setconfig_admin_founders)) {
 					$setconfig['admin_founders'] = '1,'.$setconfig['admin_founders'];
 				}
 			}

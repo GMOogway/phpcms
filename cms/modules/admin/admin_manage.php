@@ -143,8 +143,12 @@ class admin_manage extends admin {
 		if(!$userid) {
 			showmessage(L('illegal_parameters'), HTTP_REFERER);
 		} else {
-			$this->db->update(array('islock'=>1), array('userid'=>$userid));
-			showmessage(L('operation_success'), HTTP_REFERER);
+			if(ADMIN_FOUNDERS && !dr_in_array($userid, ADMIN_FOUNDERS)) {
+				$this->db->update(array('islock'=>1), array('userid'=>$userid));
+				showmessage(L('operation_success'), HTTP_REFERER);
+			} else {
+				showmessage(L('founder_cannot_locked'), HTTP_REFERER);
+			}
 		}
 	}
 	

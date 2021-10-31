@@ -1609,9 +1609,8 @@ class content extends admin {
 	 * 一键清理演示数据
 	 */
 	public function clear_data() {
-		$admin_founders = explode(',', ADMIN_FOUNDERS);
-		if(!in_array($_SESSION['userid'],$admin_founders)) {
-			showmessage(L('only_fonder_operation'), 'close');
+		if($_SESSION['roleid']!=1 && !dr_in_array($_SESSION['userid'], ADMIN_FOUNDERS)) {
+			showmessage(L('only_fonder_admin_operation'), 'close');
 		}
 		//清理数据涉及到的数据表
 		if ($this->input->post('dosubmit')) {

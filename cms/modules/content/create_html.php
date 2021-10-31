@@ -22,7 +22,6 @@ class create_html extends admin {
 	public function update_urls() {
 		$show_header = $show_dialog  = '';
 		$admin_username = param::get_cookie('admin_username');
-		$admin_founders = explode(',', ADMIN_FOUNDERS);
 		$this->model_db = pc_base::load_model('sitemodel_model');
 		$module = $this->model_db->get_one(array('siteid'=>$this->siteid,'type'=>0,'disabled'=>0),'modelid','modelid');
 		$modelid = $this->input->get('modelid') ? intval($this->input->get('modelid')) : $module['modelid'];

@@ -252,7 +252,7 @@ include $this->admin_tpl('header');?>
                             </div>
                         </div>
                     </div>
-                    <?php if($_SESSION['roleid']==1 && in_array($_SESSION['userid'], $setting_admin_founders)) {?>
+                    <?php if($_SESSION['roleid']==1 && dr_in_array($_SESSION['userid'], ADMIN_FOUNDERS)) {?>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('setting_admin_founders')?></label>
                         <div class="col-md-9">

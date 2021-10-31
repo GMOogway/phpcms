@@ -18,7 +18,6 @@ include $this->admin_tpl('header');?>
 		</tr>
         </thead>
         <tbody>
-<?php $admin_founders = explode(',', ADMIN_FOUNDERS);?>
 <?php 
 if(is_array($infos)){
 	foreach($infos as $info){
@@ -33,7 +32,7 @@ if(is_array($infos)){
 <td><?php echo $info['realname']?></td>
 <td>
 <a class="btn btn-xs green" href="javascript:edit(<?php echo $info['userid']?>, '<?php echo new_addslashes($info['username'])?>')"><?php echo L('edit')?></a>
-<?php if(!in_array($info['userid'],$admin_founders)) {?>
+<?php if(!dr_in_array($info['userid'], ADMIN_FOUNDERS)) {?>
 <?php if($info['islock']) {?>
 <a class="btn btn-xs yellow" href="?m=admin&c=admin_manage&a=unlock&userid=<?php echo $info['userid']?>"><?php echo L('unlock')?></a>
 <?php } else { ?>

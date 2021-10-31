@@ -317,14 +317,13 @@ class admin {
 		if ($config) {
 			if (isset($config['safe_use']) && dr_in_array('admin', $config['safe_use'])) {
 				// 长时间未登录的用户就锁定起来
-				$admin_founders = explode(',', ADMIN_FOUNDERS);
 				if (isset($config['safe_wdl']) && $config['safe_wdl']) {
 					$time = $config['safe_wdl'] * 3600 * 24;
 					$where = 'logintime < '.(SYS_TIME - $time);
 					$log_lock = $admin_login_db->select($where);
 					if ($log_lock) {
 						foreach ($log_lock as $t) {
-							if (isset($admin_founders) && !dr_in_array($t['uid'], $admin_founders)) {
+							if (ADMIN_FOUNDERS && !dr_in_array($t['uid'], ADMIN_FOUNDERS)) {
 								$admin_db->update(array('islock'=>1), array('userid'=>$t['uid']));
 							}
 						}

@@ -46,6 +46,7 @@ include $this->admin_tpl('header');?>
                 <td><?php echo $info['date'];?></td>
                 <td>
                     <label><a href="javascript:;" class="btn btn-xs dark btn-restore" data-file="<?php echo $info['file'];?>"><i class="fa fa-reply"></i> <?php echo L('还原');?></a></label>
+                    <label><a href="javascript:;" class="btn btn-xs yellow btn-download" data-file="<?php echo $info['file'];?>"><i class="fa fa-download"></i> <?php echo L('下载');?></a></label>
                     <label><a href="javascript:;" class="btn btn-xs red btn-delete" data-file="<?php echo $info['file'];?>"><i class="fa fa-trash"></i> <?php echo L('删除');?></a></label>
                 </td>
             </tr>
@@ -84,6 +85,40 @@ $(function() {
             error: function(HttpRequest, ajaxOptions, thrownError) {
                 dr_ajax_alert_error(HttpRequest, ajaxOptions, thrownError)
             }
+        });
+    });
+    $(document).on("click", ".btn-download", function () {
+        var that = this;
+        layer.confirm('确定下载备份？',{
+            icon: 3,
+            shade: 0,
+            title: '提示',
+            btn: ['确定', '取消']
+        }, function(index){
+            layer.close(index);
+            var loading = layer.load(2, {
+                shade: [0.3,'#fff'], //0.1透明度的白色背景
+                time: 5000
+            });
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: '?m=admin&c=database&a=import&pc_hash='+pc_hash,
+                data: {action: 'download', file: $(that).data('file'), csrf_test_name: csrf_hash},
+                success: function(json) {
+                    layer.close(loading);
+                    if (json.code == 1) {
+                        layer.close(loading);
+                        location.href = json.data.url;
+                    } else {
+                        dr_tips(0, json.msg);
+                    }
+                    return false;
+                },
+                error: function(HttpRequest, ajaxOptions, thrownError) {
+                    dr_ajax_alert_error(HttpRequest, ajaxOptions, thrownError)
+                }
+            });
         });
     });
     $(document).on("click", ".btn-restore", function () {
