@@ -67,12 +67,17 @@ endif;
 <!--
 
 function history_file(name) {
+	var w = 700;
+	var h = 520;
+	if (is_mobile()) {
+		w = h = '100%';
+	}
 	var diag = new Dialog({
 		id:'history',
 		title:'《'+name+'》<?php echo L("histroy")?>',
 		url:'<?php echo SELF;?>?m=template&c=template_bak&a=init&style=<?php echo $this->style;?>&dir=<?php echo urlencode(stripslashes($dir))?>&filename='+name+'&pc_hash='+pc_hash,
-		width:700,
-		height:520,
+		width:w,
+		height:h,
 		modal:true
 	});
 	diag.onOk = function(){

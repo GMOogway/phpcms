@@ -20,10 +20,11 @@ class form {
 	 * @param string $attachment
 	 * @param string $image_reduce
 	 * @param string $div2p
+	 * @param string $enter
 	 * @param string $enablesaveimage
 	 * @param string $allowuploadnum
 	 */
-	public static function editor($textareaid = 'content', $toolbar = 'basic', $toolvalue = '', $module = '', $catid = '', $color = '', $allowupload = 0, $allowbrowser = 1,$alowuploadexts = '',$height = 200,$disabled_page = 0, $autofloat = 0, $autoheight = 0, $theme = '', $watermark = 1, $attachment = 0, $image_reduce = '', $div2p = 0, $enablesaveimage = 1, $allowuploadnum = '10') {
+	public static function editor($textareaid = 'content', $toolbar = 'basic', $toolvalue = '', $module = '', $catid = '', $color = '', $allowupload = 0, $allowbrowser = 1,$alowuploadexts = '',$height = 200,$disabled_page = 0, $autofloat = 0, $autoheight = 0, $theme = '', $watermark = 1, $attachment = 0, $image_reduce = '', $div2p = 0, $enter = 0, $simpleupload = 0, $enablesaveimage = 1, $allowuploadnum = '10') {
 		$input = pc_base::load_sys_class('input');
 		$siteid = $input->get('siteid') ? $input->get('siteid') : param::get_cookie('siteid');
 		if(!$siteid) $siteid = get_siteid() ? get_siteid() : 1 ;
@@ -175,6 +176,17 @@ class form {
 				}
 				$toolbar .= "'Fullscreen', '|', " . $toolvalue . "]";
 			}
+			// 低版本浏览器关闭单图上传
+			if (preg_match('/Chrome\/([0-9]+)\./iU', $_SERVER['HTTP_USER_AGENT'], $mt)) {
+				$chrome = intval($mt[1]);
+				if ($chrome && $chrome < 78) {
+					$toolbar = str_replace(['"Simpleupload", ', ', "Simpleupload"',"'Simpleupload', ", ", 'Simpleupload'", '"Simpleupload",', ',"Simpleupload"',"'Simpleupload',", ",'Simpleupload'"], '', $toolbar);
+				}
+			}
+			// 后台设置的关闭单图上传
+			if (isset($simpleupload) && $simpleupload) {
+				$toolbar = str_replace(['"Simpleupload", ', ', "Simpleupload"',"'Simpleupload', ", ", 'Simpleupload'", '"Simpleupload",', ',"Simpleupload"',"'Simpleupload',", ",'Simpleupload'"], '', $toolbar);
+			}
 			$str .= "<script type=\"text/javascript\">\r\n";
 			$opt = array();
 			if($toolbar) {$opt[] = "toolbars:[".$toolbar."]";}
@@ -183,6 +195,7 @@ class form {
 			$opt[] = "autoHeightEnabled:".$autoHeightEnabled;
 			$opt[] = "autoFloatEnabled:".$autoFloatEnabled;
 			$opt[] = "allowDivTransToP:".($div2p ? 'true' : 'false');
+			$enter ? $opt[] = "enterTag:'br'" : '';
 			$str .= "var editor = new baidu.editor.ui.Editor({UEDITOR_HOME_URL:'".WEB_PATH."statics/js/ueditor/',serverUrl:'".WEB_PATH."api.php?op=controller&module=".$module."&catid=".$catid."&is_wm=".intval($watermark)."&is_esi=".intval($enablesaveimage)."&attachment=".intval($attachment)."&image_reduce=".intval($image_reduce)."&siteid=".intval($siteid)."',".join(",",$opt)."});editor.render('$textareaid');\n";
 			$str .= '</script>';
 		}

@@ -74,12 +74,17 @@ function edit(id, title) {
 }
 
 function stat(id, title) {
+	var w = 700;
+	var h = 500;
+	if (is_mobile()) {
+		w = h = '100%';
+	}
 	var diag = new Dialog({
 		id:'stat',
 		title:'<?php echo L('stat_formguide')?>--'+title,
 		url:'<?php echo SELF;?>?m=formguide&c=formguide&a=stat&formid='+id+'&pc_hash='+pc_hash,
-		width:700,
-		height:500,
+		width:w,
+		height:h,
 		modal:true
 	});
 	diag.onCancel=function() {

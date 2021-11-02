@@ -40,7 +40,7 @@ $LANG['pdo_select'] 					=	'选择数据表';
 $LANG['into_tables'] 					=	'已经选择数据表';
 
 $LANG['field_dy'] 						=	'数据表字段对应关系';
-$LANG['field_name'] 					=	'字段名';
+$LANG['field_name'] 					=	'字段名称';
 $LANG['field_pdo_name'] 				=	'对应源数据表字段';
 $LANG['field_values'] 					=	'默认值';
 $LANG['field_func'] 				     	=	'处理函数';

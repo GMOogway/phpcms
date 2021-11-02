@@ -196,12 +196,17 @@ layui.use(['table'], function(){
 <script type="text/javascript"> 
 <!--
 function view_comment(id, name) {
+	var w = 800;
+	var h = 500;
+	if (is_mobile()) {
+		w = h = '100%';
+	}
     var diag = new Dialog({
         id:'view_comment',
         title:'<?php echo L('view_comment');?>：'+name,
         url:'<?php echo SELF;?>?m=comment&c=comment_admin&a=lists&show_center_id=1&commentid='+id+'&pc_hash='+pc_hash,
-        width:800,
-        height:500,
+        width:w,
+        height:h,
         modal:true
     });
     diag.onCancel=function() {

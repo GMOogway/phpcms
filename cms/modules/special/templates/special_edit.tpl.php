@@ -98,12 +98,17 @@ include $this->admin_tpl('header', 'admin');
 
 function import_info(url, title, msgID, htmlID, valID) {
 	if (typeof pc_hash == 'string') url += (url.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
+	var w = 600;
+	var h = 400;
+	if (is_mobile()) {
+		w = h = '100%';
+	}
 	var diag = new Dialog({
 		id:'selectid',
 		title:title,
 		url:'<?php echo SELF;?>'+url,
-		width:600,
-		height:400,
+		width:w,
+		height:h,
 		modal:true
 	});
 	diag.onOk = function(){

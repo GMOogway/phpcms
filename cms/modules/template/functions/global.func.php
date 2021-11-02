@@ -175,9 +175,12 @@ function visualization($html, $style = '', $dir = '', $file = '') {
 		$('.admin_piao_edit').click(function(){
 		var url = '".SELF."?m=template&c=file&a=edit_pc_tag';
 		if($(this).parent('.admin_piao').attr('pc_action') == 'block') url = '".SELF."?m=block&c=block_admin&a=add';
-		var diag = new Dialog({id:'edit',title:'".L('pc_tag','' ,'template')."',url:url+'&style=$style&dir=$dir&file=$file&pc_hash='+pc_hash+'&'+$(this).parent('.admin_piao').attr('data'),width:700,height:500,modal:true});diag.onOk = function(){var form = \$DW.$('#dosubmit');form.click();return false;};diag.onCancel=function() {\$DW.close();};diag.show();;})
+		var w = 700;
+		var h = 500;
+		if (is_mobile()) {w = h = '100%';}
+		var diag = new Dialog({id:'edit',title:'".L('pc_tag','' ,'template')."',url:url+'&style=$style&dir=$dir&file=$file&pc_hash='+pc_hash+'&'+$(this).parent('.admin_piao').attr('data'),width:w,height:h,modal:true});diag.onOk = function(){var form = \$DW.$('#dosubmit');form.click();return false;};diag.onCancel=function() {\$DW.close();};diag.show();;})
 		$('.admin_block').click(function(){
-			var diag = new Dialog({id:'edit',title:'".L('pc_tag','' ,'template')."',url:'".SELF."?m=block&c=block_admin&a=block_update&id='+$(this).attr('blockid')+'&pc_hash='+pc_hash,width:700,height:500,modal:true});diag.onOk = function(){var form = \$DW.$('#dosubmit');form.click();return false;};diag.onCancel=function() {\$DW.close();};diag.show();;
+			var diag = new Dialog({id:'edit',title:'".L('pc_tag','' ,'template')."',url:'".SELF."?m=block&c=block_admin&a=block_update&id='+$(this).attr('blockid')+'&pc_hash='+pc_hash,width:w,height:h,modal:true});diag.onOk = function(){var form = \$DW.$('#dosubmit');form.click();return false;};diag.onCancel=function() {\$DW.close();};diag.show();;
 		});
 	})</script>";
 		$html = str_replace('</body>', $change.'</body>', $html, $num);

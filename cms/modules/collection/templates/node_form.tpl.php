@@ -311,12 +311,17 @@ function show_div(id) {
 
 function show_url() {
 	var type = $("input[type='radio'][name='data[sourcetype]']:checked").val();
+	var w = 700;
+	var h = 450;
+	if (is_mobile()) {
+		w = h = '100%';
+	}
 	var diag = new Dialog({
 		id:'test_url',
 		title:'<?php echo L('testpageurl')?>',
 		url:'<?php echo SELF;?>?m=collection&c=node&a=public_url&sourcetype='+type+'&urlpage='+$('#urlpage_'+type).val()+'&pagesize_start='+$("input[name='data[pagesize_start]']").val()+'&pagesize_end='+$("input[name='data[pagesize_end]']").val()+'&par_num='+$("input[name='data[par_num]']").val()+'&pc_hash='+pc_hash,
-		width:700,
-		height:450,
+		width:w,
+		height:h,
 		modal:true
 	});
 	diag.onCancel=function() {
@@ -350,12 +355,17 @@ function add_caiji() {
 }
 
 function html_role(id, type) {
+	var w = 500;
+	var h = 260;
+	if (is_mobile()) {
+		w = h = '100%';
+	}
 	var diag = new Dialog({
 		id:'test_url',
 		title:'过滤选项',
 		url:'<?php echo SELF;?>?m=collection&c=node&a=html_rule&pc_hash='+pc_hash,
-		width:500,
-		height:260,
+		width:w,
+		height:h,
 		modal:true
 	});
 	diag.onOk = function(){

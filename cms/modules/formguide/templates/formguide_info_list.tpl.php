@@ -63,12 +63,17 @@ if(is_array($datas)){
 </html>
 <script type="text/javascript">
 function check(id, did, title) {
+	var w = 700;
+	var h = 500;
+	if (is_mobile()) {
+		w = h = '100%';
+	}
 	var diag = new Dialog({
 		id:'check',
 		title:'<?php echo L('check')?>--'+title+'<?php echo L('submit_info')?>',
 		url:'<?php echo SELF;?>?m=formguide&c=formguide_info&a=public_view&formid='+id+'&did='+did+'&pc_hash='+pc_hash,
-		width:700,
-		height:500,
+		width:w,
+		height:h,
 		modal:true
 	});
 	diag.onCancel=function() {

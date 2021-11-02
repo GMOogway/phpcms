@@ -68,12 +68,17 @@
 <script type="text/javascript">
 <!--
 function test_spider(id) {
+	var w = 700;
+	var h = 500;
+	if (is_mobile()) {
+		w = h = '100%';
+	}
 	var diag = new Dialog({
 		id:'test',
 		title:'<?php echo L('data_acquisition_testdat')?>',
 		url:'<?php echo SELF;?>?m=collection&c=node&a=public_test&nodeid='+id+'&pc_hash='+pc_hash,
-		width:700,
-		height:500,
+		width:w,
+		height:h,
 		modal:true
 	});
 	diag.onCancel=function() {

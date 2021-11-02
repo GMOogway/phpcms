@@ -511,7 +511,7 @@
             //编辑器不能为空内容
 
             if (domUtils.isEmptyNode(me.body)) {
-                me.body.innerHTML = '<p>' + (browser.ie ? '' : '<br/>') + '</p>';
+                this.body.innerHTML = '' + this.body.innerHTML;
             }
             //如果要求focus, 就把光标定位到内容开始
             if (options.focus) {
@@ -855,7 +855,7 @@
                         domUtils.isCustomeNode(child)
                         )
                     && child === this.body.lastChild) {
-                    this.body.innerHTML = '<p>' + (browser.ie ? '&nbsp;' : '<br/>') + '</p>' + this.body.innerHTML;
+                    this.body.innerHTML = '' + this.body.innerHTML;
 
                 } else {
                     var p = me.document.createElement('p');
@@ -1310,7 +1310,7 @@
             function clear() {
                 var me = this;
                 if (me.document.getElementById('initContent')) {
-                    me.body.innerHTML = '<p>' + (ie ? '' : '<br/>') + '</p>';
+                    me.body.innerHTML = '';
                     me.removeListener('firstBeforeExecCommand focus', clear);
                     setTimeout(function () {
                         me.focus();

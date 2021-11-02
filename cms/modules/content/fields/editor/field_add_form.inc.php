@@ -3,7 +3,7 @@
 <script src="<?php echo JS_PATH?>jquery-minicolors/jquery.minicolors.min.js" type="text/javascript"></script>
 <table cellpadding="2" cellspacing="1" width="98%">
     <tr> 
-      <td width="220">编辑器样式：</td>
+      <td width="150">编辑器样式：</td>
       <td><div class="mt-radio-inline">
           <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[toolbar]" value="basic" onclick="$('#bjqms').hide()" checked> 简洁型 <span></span></label>
           <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[toolbar]" value="standard" onclick="$('#bjqms').hide()"> 标准型 <span></span></label>
@@ -62,8 +62,15 @@
     <tr<?php if (SYS_EDITOR) {?> style="display: none;"<?php }?>> 
       <td>固定编辑器图标栏：</td>
       <td><div class="mt-radio-inline">
-          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[autofloat]" value="1" checked> 是 <span></span></label>
-          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[autofloat]" value="0"> 否 <span></span></label>
+          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[autofloat]" value="1"> 是 <span></span></label>
+          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[autofloat]" value="0" checked> 否 <span></span></label>
+        </div></td>
+    </tr>
+    <tr<?php if (SYS_EDITOR) {?> style="display: none;"<?php }?>> 
+      <td>将div标签转换为p标签：</td>
+      <td><div class="mt-radio-inline">
+          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[div2p]" value="1" checked> 开启 <span></span></label>
+          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[div2p]" value="0"> 关闭 <span></span></label>
         </div></td>
     </tr>
     <tr<?php if (SYS_EDITOR) {?> style="display: none;"<?php }?>> 
@@ -72,6 +79,20 @@
           <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[autoheight]" value="1"> 是 <span></span></label>
           <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[autoheight]" value="0" checked> 否 <span></span></label>
         </div></td>
+    </tr>
+    <tr<?php if (SYS_EDITOR) {?> style="display: none;"<?php }?>> 
+      <td>回车换行符号：</td>
+      <td><div class="mt-radio-inline">
+          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[enter]" value="1"> br标签 <span></span></label>
+          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[enter]" value="0" checked> p标签 <span></span></label>
+        </div> 选择回车换行的符号，默认是p标签换行</td>
+    </tr>
+    <tr<?php if (SYS_EDITOR) {?> style="display: none;"<?php }?>> 
+      <td>是否取消单图上传按钮：</td>
+      <td><div class="mt-radio-inline">
+          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[simpleupload]" value="1"> 开启 <span></span></label>
+          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[simpleupload]" value="0" checked> 关闭 <span></span></label>
+        </div> 单图上传按钮对某些浏览器不被支持，兼容性较差</td>
     </tr>
     <?php if ($config['ueditor']) {?>
     <tr> 
@@ -87,13 +108,6 @@
         </div></td>
     </tr>
     <?php }?>
-    <tr<?php if (SYS_EDITOR) {?> style="display: none;"<?php }?>> 
-      <td>将div标签转换为p标签：</td>
-      <td><div class="mt-radio-inline">
-          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[div2p]" value="1" checked> 开启 <span></span></label>
-          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[div2p]" value="0"> 关闭 <span></span></label>
-        </div></td>
-    </tr>
     <tr> 
       <td>附件存储策略：</td>
       <td><select class="form-control" name="setting[attachment]">
@@ -154,14 +168,14 @@
     </tr>
     <?php if(!$this->input->get('modelid') || $this->input->get('modelid')==-1 || $this->input->get('modelid')==-2) {?>
     <tr style="display: none;">
-      <td>禁止显示编辑器下方的分页符与子标题：</td>
+      <td>显示分页符与子标题：</td>
       <td><div class="mt-radio-inline">
           <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[disabled_page]" value="1" checked> 禁止<span></span></label>
         </div></td>
     </tr>
     <?php } else {?>
     <tr>
-      <td>禁止显示编辑器下方的分页符与子标题：</td>
+      <td>显示分页符与子标题：</td>
       <td><div class="mt-radio-inline">
           <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[disabled_page]" value="1"> 禁止 <span></span></label>
           <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[disabled_page]" value="0" checked> 显示 <span></span></label>

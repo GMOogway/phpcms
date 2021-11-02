@@ -1,1 +1,1 @@
-INSERT INTO `cms_module` VALUES ('bdts', '百度主动推送', '', '0', '3.0', '', ' ', '0', '0', '2020-08-27', '2020-08-27');
+INSERT INTO `cms_module` VALUES ('bdts', '百度主动推送', '', '0', '3.0', '', ' ', '0', '0', CURDATE(), CURDATE());

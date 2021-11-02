@@ -105,7 +105,7 @@ UE.plugins['paste'] = function () {
                 for (var i = 0, bi; bi = brs[i++];) {
                     var pN = bi.parentNode;
                     if (pN.tagName == 'DIV' && pN.childNodes.length == 1) {
-                        pN.innerHTML = '<p><br/></p>';
+                        pN.innerHTML = '';
                         domUtils.remove(pN);
                     }
                 }

@@ -73,12 +73,17 @@ function edit(id, name) {
 	artdialog('edit','?m=vote&c=vote&a=edit&subjectid='+id,'<?php echo L('edit')?> '+name+' ',700,450);
 }
 function statistics(id, name) {
+	var w = 700;
+	var h = 350;
+	if (is_mobile()) {
+		w = h = '100%';
+	}
 	var diag = new Dialog({
 		id:'statistics',
 		title:'<?php echo L('statistics')?> '+name+' ',
 		url:'<?php echo SELF;?>?m=vote&c=vote&a=statistics&subjectid='+id+'&pc_hash='+pc_hash,
-		width:700,
-		height:350,
+		width:w,
+		height:h,
 		modal:true
 	});
 	diag.onCancel=function() {
@@ -88,12 +93,17 @@ function statistics(id, name) {
 }
 
 function call(id) {
+	var w = 600;
+	var h = 470;
+	if (is_mobile()) {
+		w = h = '100%';
+	}
 	var diag = new Dialog({
 		id:'call',
 		title:'<?php echo L('vote')?><?php echo L('linkage_calling_code','','admin');?>',
 		url:'<?php echo SELF;?>?m=vote&c=vote&a=public_call&subjectid='+id+'&pc_hash='+pc_hash,
-		width:600,
-		height:470,
+		width:w,
+		height:h,
 		modal:true
 	});
 	diag.onCancel=function() {

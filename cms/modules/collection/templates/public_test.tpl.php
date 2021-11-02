@@ -18,8 +18,11 @@
 <!--
 function show_content(url) {
 	Dialog.tips('<?php echo L('loading')?>',1);
+	var w = 700;
+	var h = 550;
+	if (is_mobile()) {w = h = '100%';}
 	$.get("?m=collection&c=node&a=public_test_content&nodeid=<?php echo $nodeid?>&url="+url+'&pc_hash=<?php echo dr_get_csrf_token()?>', function(data){
-	var diag = new Dialog({id:'test_view',title:'<?php echo L('content_view')?>',html:'<textarea rows="26" cols="90">'+data+'</textarea>',width:700,height:550,modal:true});diag.show();;});
+	var diag = new Dialog({id:'test_view',title:'<?php echo L('content_view')?>',html:'<textarea rows="26" cols="90">'+data+'</textarea>',width:w,height:h,modal:true});diag.show();;});
 }
 window.top.$('#display_center_id').css('display','none');
 //-->

@@ -58,12 +58,17 @@
 <script type="text/javascript">
 <!--
 function view(url) {
+	var w = 700;
+	var h = 500;
+	if (is_mobile()) {
+		w = h = '100%';
+	}
 	var diag = new Dialog({
 		id:'edit',
 		title:'<?php echo L('view_code')?>',
 		url:'<?php echo SELF;?>?m=scan&c=index&a=view&url='+url+'&pc_hash='+pc_hash,
-		width:700,
-		height:500,
+		width:w,
+		height:h,
 		modal:true
 	});
 	diag.onCancel=function() {

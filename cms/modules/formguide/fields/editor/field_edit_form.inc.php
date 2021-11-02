@@ -53,11 +53,32 @@
         </div></td>
     </tr>
     <tr<?php if (SYS_EDITOR) {?> style="display: none;"<?php }?>> 
+      <td>将div标签转换为p标签：</td>
+      <td><div class="mt-radio-inline">
+          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[div2p]" value="1" <?php if($setting['div2p']==1) echo 'checked';?>> 开启 <span></span></label>
+          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[div2p]" value="0" <?php if($setting['div2p']==0) echo 'checked';?>> 关闭 <span></span></label>
+        </div></td>
+    </tr>
+    <tr<?php if (SYS_EDITOR) {?> style="display: none;"<?php }?>> 
       <td>自动伸长高度：</td>
       <td><div class="mt-radio-inline">
           <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[autoheight]" value="1" <?php if($setting['autoheight']==1) echo 'checked';?>> 是 <span></span></label>
           <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[autoheight]" value="0" <?php if($setting['autoheight']==0) echo 'checked';?>> 否 <span></span></label>
         </div></td>
+    </tr>
+    <tr<?php if (SYS_EDITOR) {?> style="display: none;"<?php }?>> 
+      <td>回车换行符号：</td>
+      <td><div class="mt-radio-inline">
+          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[enter]" value="1" <?php if($setting['enter']==1) echo 'checked';?>> br标签 <span></span></label>
+          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[enter]" value="0" <?php if($setting['enter']==0) echo 'checked';?>> p标签 <span></span></label>
+        </div> 选择回车换行的符号，默认是p标签换行</td>
+    </tr>
+    <tr<?php if (SYS_EDITOR) {?> style="display: none;"<?php }?>> 
+      <td>是否取消单图上传按钮：</td>
+      <td><div class="mt-radio-inline">
+          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[simpleupload]" value="1" <?php if($setting['simpleupload']==1) echo 'checked';?>> 开启 <span></span></label>
+          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[simpleupload]" value="0" <?php if($setting['simpleupload']==0) echo 'checked';?>> 关闭 <span></span></label>
+        </div> 单图上传按钮对某些浏览器不被支持，兼容性较差</td>
     </tr>
     <?php if ($config['ueditor']) {?>
     <tr> 
@@ -73,13 +94,6 @@
         </div></td>
     </tr>
     <?php }?>
-    <tr<?php if (SYS_EDITOR) {?> style="display: none;"<?php }?>> 
-      <td>将div标签转换为p标签：</td>
-      <td><div class="mt-radio-inline">
-          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[div2p]" value="1" <?php if($setting['div2p']==1) echo 'checked';?>> 开启 <span></span></label>
-          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[div2p]" value="0" <?php if($setting['div2p']==0) echo 'checked';?>> 关闭 <span></span></label>
-        </div></td>
-    </tr>
     <tr> 
       <td>附件存储策略：</td>
       <td><select class="form-control" name="setting[attachment]">
