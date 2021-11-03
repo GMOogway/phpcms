@@ -173,10 +173,11 @@ class foreground {
 				}
 				if (isset($config['login_is_option']) && $config['login_is_option'] && $config['login_exit_time']) {
 					$time = (int)$cache->get_auth_data('member_option_'.$userid);
+					$ctime = SYS_TIME - $time;
 					if ($time && SYS_TIME - $time > $config['login_exit_time'] * 60) {
 						// 长时间不动作退出
 						$cache->del_auth_data('member_option_'.$userid);
-						showmessage(L('长时间（'.ceil($config['login_exit_time']).'分钟）未操作，当前账号自动退出'),'?m=member&c=index&a=logout');
+						showmessage(L('长时间（'.ceil($ctime/60).'分钟）未操作，当前账号自动退出'),'?m=member&c=index&a=logout');
 					}
 					$cache->set_auth_data('member_option_'.$userid, SYS_TIME);
 				}

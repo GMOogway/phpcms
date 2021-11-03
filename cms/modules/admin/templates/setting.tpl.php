@@ -2,6 +2,8 @@
 defined('IN_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header');?>
 <link rel="stylesheet" href="<?php echo CSS_PATH;?>bootstrap/css/bootstrap.min.css" media="all" />
+<link href="<?php echo JS_PATH?>bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css" />
+<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>bootstrap-switch/js/bootstrap-switch.min.js"></script>
 <style type="text/css">
 .page-content {margin-left: 0px;margin-top: 0;padding: 25px 20px 10px;}
 .main-content {background: #f5f6f8;}
@@ -123,10 +125,7 @@ include $this->admin_tpl('header');?>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('setting_gzip')?></label>
                         <div class="col-md-9">
-                            <div class="mt-radio-inline">
-                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setconfig[gzip]" value="1"<?php echo ($gzip=='1') ? ' checked' : ''?>> <?php echo L('setting_yes');?> <span></span></label>
-                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setconfig[gzip]" value="0"<?php echo ($gzip=='0') ? ' checked' : ''?>> <?php echo L('setting_no');?> <span></span></label>
-                            </div>
+                            <input type="checkbox" name="setconfig[gzip]" value="1" <?php echo $gzip ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
                         </div>
                     </div>
                     <div class="form-group">
@@ -217,7 +216,7 @@ include $this->admin_tpl('header');?>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('setting_time_format')?></label>
                         <div class="col-md-9">
-                            <input class="form-control input-large input-text" type="text" id="sys_time_format" name="setconfig[sys_time_format]" value="<?php echo $sys_time_format;?>" >
+                            <input class="form-control input-large" type="text" id="sys_time_format" name="setconfig[sys_time_format]" value="<?php echo $sys_time_format;?>" >
                             <span class="help-block"><?php echo L('setting_time_format_desc')?></span>
                         </div>
                     </div>
@@ -236,20 +235,14 @@ include $this->admin_tpl('header');?>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('setting_csrf')?></label>
                         <div class="col-md-9">
-                            <div class="mt-radio-inline">
-                                <label class="mt-radio mt-radio-outline"><input name="setconfig[sys_csrf]" value="1" type="radio" <?php echo ($sys_csrf=='1') ? ' checked' : ''?>> <?php echo L('setting_yes')?> <span></span></label>
-                                <label class="mt-radio mt-radio-outline"><input name="setconfig[sys_csrf]" value="0" type="radio" <?php echo ($sys_csrf=='0') ? ' checked' : ''?>> <?php echo L('setting_no')?> <span></span></label>
-                            </div>
+                            <input type="checkbox" name="setconfig[sys_csrf]" value="1" <?php echo ($sys_csrf=='1') ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
                             <span class="help-block"><?php echo L('setting_csrf_desc')?></span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('need_check_come_url')?></label>
                         <div class="col-md-9">
-                            <div class="mt-radio-inline">
-                                <label class="mt-radio mt-radio-outline"><input name="setconfig[needcheckcomeurl]" value="1" type="radio" <?php echo ($needcheckcomeurl=='1') ? ' checked' : ''?>> <?php echo L('setting_yes')?> <span></span></label>
-                                <label class="mt-radio mt-radio-outline"><input name="setconfig[needcheckcomeurl]" value="0" type="radio" <?php echo ($needcheckcomeurl=='0') ? ' checked' : ''?>> <?php echo L('setting_no')?> <span></span></label>
-                            </div>
+                            <input type="checkbox" name="setconfig[needcheckcomeurl]" value="1" <?php echo ($needcheckcomeurl=='1') ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
                         </div>
                     </div>
                     <?php if($_SESSION['roleid']==1 && dr_in_array($_SESSION['userid'], ADMIN_FOUNDERS)) {?>
@@ -264,29 +257,20 @@ include $this->admin_tpl('header');?>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('setting_admin_debug')?></label>
                         <div class="col-md-9">
-                            <div class="mt-radio-inline">
-                                <label class="mt-radio mt-radio-outline"><input name="setconfig[debug]" value="1" type="radio" <?php echo ($debug=='1') ? ' checked' : ''?>> <?php echo L('setting_yes')?> <span></span></label>
-                                <label class="mt-radio mt-radio-outline"><input name="setconfig[debug]" value="0" type="radio" <?php echo ($debug=='0') ? ' checked' : ''?>> <?php echo L('setting_no')?> <span></span></label>
-                            </div>
+                            <input type="checkbox" name="setconfig[debug]" value="1" <?php echo ($debug=='1') ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
                             <span class="help-block"><?php echo L('setting_admin_debug_desc')?></span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('setting_admin_log')?></label>
                         <div class="col-md-9">
-                            <div class="mt-radio-inline">
-                                <label class="mt-radio mt-radio-outline"><input name="setconfig[admin_log]" value="1" type="radio" <?php echo ($admin_log=='1') ? ' checked' : ''?>> <?php echo L('setting_yes')?> <span></span></label>
-                                <label class="mt-radio mt-radio-outline"><input name="setconfig[admin_log]" value="0" type="radio" <?php echo ($admin_log=='0') ? ' checked' : ''?>> <?php echo L('setting_no')?> <span></span></label>
-                            </div>
+                            <input type="checkbox" name="setconfig[admin_log]" value="1" <?php echo ($admin_log=='1') ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('setting_error_log')?></label>
                         <div class="col-md-9">
-                            <div class="mt-radio-inline">
-                                <label class="mt-radio mt-radio-outline"><input name="setconfig[errorlog]" value="1" type="radio" <?php echo ($errorlog=='1') ? ' checked' : ''?>> <?php echo L('setting_yes')?> <span></span></label>
-                                <label class="mt-radio mt-radio-outline"><input name="setconfig[errorlog]" value="0" type="radio" <?php echo ($errorlog=='0') ? ' checked' : ''?>> <?php echo L('setting_no')?> <span></span></label>
-                            </div>
+                            <input type="checkbox" name="setconfig[errorlog]" value="1" <?php echo ($errorlog=='1') ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
                         </div>
                     </div>
                     <div class="form-group" id="dr_row_errorlog_size">
@@ -299,8 +283,8 @@ include $this->admin_tpl('header');?>
                         <label class="col-md-2 control-label"><?php echo L('setting_admin_code')?></label>
                         <div class="col-md-9">
                             <div class="mt-radio-inline">
-                                <label class="mt-radio mt-radio-outline"><input name="setting[sysadmincode]" value="0" type="radio" <?php echo (!$sysadmincode) ? ' checked' : ''?> onclick="$('#sysadmincodemodel').removeClass('hidden');"> <?php echo L('setting_yes')?> <span></span></label>
-                                <label class="mt-radio mt-radio-outline"><input name="setting[sysadmincode]" value="1" type="radio" <?php echo ($sysadmincode) ? ' checked' : ''?> onclick="$('#sysadmincodemodel').addClass('hidden');$('#captcha_charset').addClass('hidden');$('#sysadmincodevoicemodel').addClass('hidden');"> <?php echo L('setting_no')?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input name="setting[sysadmincode]" value="0" type="radio" <?php echo (!$sysadmincode) ? ' checked' : ''?> onclick="$('#sysadmincodemodel').removeClass('hidden');"> <?php echo L('open')?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input name="setting[sysadmincode]" value="1" type="radio" <?php echo ($sysadmincode) ? ' checked' : ''?> onclick="$('#sysadmincodemodel').addClass('hidden');$('#captcha_charset').addClass('hidden');$('#sysadmincodevoicemodel').addClass('hidden');"> <?php echo L('close')?> <span></span></label>
                             </div>
                         </div>
                     </div>
@@ -318,7 +302,7 @@ include $this->admin_tpl('header');?>
                     <div class="form-group<?php echo ($sysadmincode || $sysadmincodemodel=='0' || $sysadmincodemodel=='1' || $sysadmincodemodel=='2') ? ' hidden' : ''?>" id="captcha_charset">
                         <label class="col-md-2 control-label"><?php echo L('setting_code_character')?></label>
                         <div class="col-md-9">
-                            <input class="form-control" type="text" id="captcha_charset" name="setting[captcha_charset]" value="<?php echo $captcha_charset;?>" >
+                            <input class="form-control input-large" type="text" id="captcha_charset" name="setting[captcha_charset]" value="<?php echo $captcha_charset;?>" >
                         </div>
                     </div>
                     <div class="form-group<?php echo ($sysadmincode || $sysadmincodemodel=='0' || $sysadmincodemodel=='1' || $sysadmincodemodel=='3') ? ' hidden' : ''?>" id="sysadmincodevoicemodel">
@@ -363,7 +347,7 @@ include $this->admin_tpl('header');?>
                         <label class="col-md-2 control-label"><?php echo L('setting_cookie')?></label>
                         <div class="col-md-9">
                             <label><input class="form-control input-large" type="text" id="cookie_pre" name="setconfig[cookie_pre]" value="<?php echo $cookie_pre ? '************' : '';?>" ></label>
-                            <label><button class="button" type="button" name="button" onclick="to_cookie()"> <?php echo L('setting_regenerate')?> </button></label>
+                            <label><button class="btn btn-sm blue" type="button" name="button" onclick="to_cookie()"> <i class="fa fa-refresh"></i> <?php echo L('setting_regenerate')?> </button></label>
                             <span class="help-block"><?php echo L('setting_cookie_desc')?></span>
                         </div>
                     </div>
@@ -371,7 +355,7 @@ include $this->admin_tpl('header');?>
                         <label class="col-md-2 control-label"><?php echo L('setting_keys')?></label>
                         <div class="col-md-9">
                             <label><input class="form-control input-large" type="text" id="auth_key" name="setconfig[auth_key]" value="<?php echo $auth_key ? '************' : '';?>" ></label>
-                            <label><button class="button" type="button" name="button" onclick="to_key()"> <?php echo L('setting_regenerate')?> </button></label>
+                            <label><button class="btn btn-sm blue" type="button" name="button" onclick="to_key()"> <i class="fa fa-refresh"></i> <?php echo L('setting_regenerate')?> </button></label>
                             <span class="help-block"><?php echo L('setting_keys_desc')?></span>
                         </div>
                     </div>
@@ -401,10 +385,7 @@ include $this->admin_tpl('header');?>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('pwd_is_edit')?></label>
                         <div class="col-md-9">
-                            <div class="mt-radio-inline">
-                                <label class="mt-radio mt-radio-outline"><input name="setting[pwd_is_edit]" value="1" type="radio" <?php echo ($pwd_is_edit) ? ' checked' : ''?>> <?php echo L('setting_yes')?> <span></span></label>
-                                <label class="mt-radio mt-radio-outline"><input name="setting[pwd_is_edit]" value="0" type="radio" <?php echo (!$pwd_is_edit) ? ' checked' : ''?>> <?php echo L('setting_no')?> <span></span></label>
-                            </div>
+                            <input type="checkbox" name="setting[pwd_is_edit]" value="1" <?php echo $pwd_is_edit ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
                         </div>
                     </div>
                     <div class="form-group">
@@ -423,10 +404,7 @@ include $this->admin_tpl('header');?>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('pwd_is_login_edit')?></label>
                         <div class="col-md-9">
-                            <div class="mt-radio-inline">
-                                <label class="mt-radio mt-radio-outline"><input name="setting[pwd_is_login_edit]" value="1" type="radio" <?php echo ($pwd_is_login_edit) ? ' checked' : ''?>> <?php echo L('setting_yes')?> <span></span></label>
-                                <label class="mt-radio mt-radio-outline"><input name="setting[pwd_is_login_edit]" value="0" type="radio" <?php echo (!$pwd_is_login_edit) ? ' checked' : ''?>> <?php echo L('setting_no')?> <span></span></label>
-                            </div>
+                            <input type="checkbox" name="setting[pwd_is_login_edit]" value="1" <?php echo $pwd_is_login_edit ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
                         </div>
                     </div>
                     <div class="form-group">
@@ -442,10 +420,7 @@ include $this->admin_tpl('header');?>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('login_is_option')?></label>
                         <div class="col-md-9">
-                            <div class="mt-radio-inline">
-                                <label class="mt-radio mt-radio-outline"><input name="setting[login_is_option]" value="1" type="radio" <?php echo ($login_is_option) ? ' checked' : ''?>> <?php echo L('setting_yes')?> <span></span></label>
-                                <label class="mt-radio mt-radio-outline"><input name="setting[login_is_option]" value="0" type="radio" <?php echo (!$login_is_option) ? ' checked' : ''?>> <?php echo L('setting_no')?> <span></span></label>
-                            </div>
+                            <input type="checkbox" name="setting[login_is_option]" value="1" <?php echo $login_is_option ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
                         </div>
                     </div>
                     <div class="form-group">
@@ -503,47 +478,44 @@ include $this->admin_tpl('header');?>
                     <div class="form-group<?php if($mail_type == 0) echo ' hidden'?>" id="smtpcfg">
                         <label class="col-md-2 control-label"><?php echo L('mail_server')?></label>
                         <div class="col-md-9">
-                            <input class="form-control" type="text" id="mail_server" name="setting[mail_server]" value="<?php echo $mail_server;?>" >
+                            <input class="form-control input-large" type="text" id="mail_server" name="setting[mail_server]" value="<?php echo $mail_server;?>" >
                         </div>
                     </div>
                     <div class="form-group<?php if($mail_type == 0) echo ' hidden'?>" id="smtpcfg">
                         <label class="col-md-2 control-label"><?php echo L('mail_port')?></label>
                         <div class="col-md-9">
-                            <input class="form-control" type="text" id="mail_port" name="setting[mail_port]" value="<?php echo $mail_port;?>" >
+                            <input class="form-control input-large" type="text" id="mail_port" name="setting[mail_port]" value="<?php echo $mail_port;?>" >
                         </div>
                     </div>
                     <div class="form-group<?php if($mail_type == 0) echo ' hidden'?>" id="smtpcfg">
                         <label class="col-md-2 control-label"><?php echo L('mail_from')?></label>
                         <div class="col-md-9">
-                            <input class="form-control" type="text" id="mail_from" name="setting[mail_from]" value="<?php echo $mail_from;?>" >
+                            <input class="form-control input-large" type="text" id="mail_from" name="setting[mail_from]" value="<?php echo $mail_from;?>" >
                         </div>
                     </div>
                     <div class="form-group<?php if($mail_type == 0) echo ' hidden'?>" id="smtpcfg">
                         <label class="col-md-2 control-label"><?php echo L('mail_auth')?></label>
                         <div class="col-md-9">
-                            <div class="mt-radio-inline">
-                                <label class="mt-radio mt-radio-outline"><input name="setting[mail_auth]" checkbox="mail_auth" value="1" type="radio" <?php echo $mail_auth==1 ? ' checked' : ''?>> <?php echo L('mail_auth_open')?> <span></span></label>
-                                <label class="mt-radio mt-radio-outline"><input name="setting[mail_auth]" checkbox="mail_auth" value="0" type="radio" <?php echo $mail_auth==0 ? ' checked' : ''?>> <?php echo L('mail_auth_close')?> <span></span></label>
-                            </div>
+                            <input type="checkbox" name="setting[mail_auth]" value="1" <?php echo $mail_auth ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
                         </div>
                     </div>
                     <div class="form-group<?php if($mail_type == 0) echo ' hidden'?>" id="smtpcfg">
                         <label class="col-md-2 control-label"><?php echo L('mail_user')?></label>
                         <div class="col-md-9">
-                            <input class="form-control" type="text" id="mail_user" name="setting[mail_user]" value="<?php echo $mail_user;?>" >
+                            <input class="form-control input-large" type="text" id="mail_user" name="setting[mail_user]" value="<?php echo $mail_user;?>" >
                         </div>
                     </div>
                     <div class="form-group<?php if($mail_type == 0) echo ' hidden'?>" id="smtpcfg">
                         <label class="col-md-2 control-label"><?php echo L('mail_password')?></label>
                         <div class="col-md-9">
-                            <input class="form-control" type="text" id="mail_password" name="setting[mail_password]" value="<?php echo $mail_password;?>" >
+                            <input class="form-control input-large" type="text" id="mail_password" name="setting[mail_password]" value="<?php echo $mail_password;?>" >
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('mail_test')?></label>
                         <div class="col-md-9">
                             <label><input class="form-control input-large" type="text" id="mail_to" name="mail_to" value="" ></label>
-                            <label><button class="btn green" type="button" name="button" onclick="test_mail()"> <i class="fa fa-send"></i> <?php echo L('mail_test_send')?> </button></label>
+                            <label><button class="btn btn-sm blue" type="button" name="button" onclick="test_mail()"> <i class="fa fa-send"></i> <?php echo L('mail_test_send')?> </button></label>
                         </div>
                     </div>
 
@@ -745,6 +717,7 @@ function to_cookie() {
 	});
 }
 $(function() {
+	$(".make-switch").bootstrapSwitch();
 	setInterval(dr_site_time, 1000);
 });
 function dr_site_time() {

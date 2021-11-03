@@ -65,7 +65,7 @@ class setting extends admin {
 			$setting['mail_type'] = intval($setting['mail_type']);		
 			$setting['mail_server'] = trim($setting['mail_server']);	
 			$setting['mail_port'] = intval($setting['mail_port']);	
-			$setting['category_ajax'] = intval(abs($setting['category_ajax']));	
+			$setting['category_ajax'] = intval(abs($setting['category_ajax']));
 			$setting['mail_user'] = trim($setting['mail_user']);
 			$setting['mail_auth'] = intval($setting['mail_auth']);		
 			$setting['mail_from'] = trim($setting['mail_from']);		
@@ -76,6 +76,12 @@ class setting extends admin {
 			
 			//如果开始盛大通行证接入，判断服务器是否支持curl
 			$snda_error = '';
+			$setconfig['debug'] = intval($setconfig['debug']);
+			$setconfig['sys_csrf'] = intval($setconfig['sys_csrf']);
+			$setconfig['needcheckcomeurl'] = intval($setconfig['needcheckcomeurl']);
+			$setconfig['admin_log'] = intval($setconfig['admin_log']);
+			$setconfig['errorlog'] = intval($setconfig['errorlog']);
+			$setconfig['gzip'] = intval($setconfig['gzip']);
 			if(!$setconfig['baidu_skey'] || !$setconfig['baidu_arcretkey']) {
 				delcache('baidu_api_access_token','commons');
 			}
