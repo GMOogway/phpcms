@@ -37,6 +37,11 @@ class input {
         return $in;
     }
 
+    // inputip存储信息
+    public function ip_info() {
+        return $this->ip_address().'-'.(int)$_SERVER['REMOTE_PORT'];
+    }
+
     // 获取访客ip地址
     public function ip_address() {
 
@@ -59,7 +64,7 @@ class input {
             $client_ip = '';
         }
 
-        $this->ip_address = $client_ip ? $client_ip : '';
+        $this->ip_address = $client_ip ? $client_ip : $_SERVER['REMOTE_ADDR'];
         $this->ip_address = str_replace(array(",", '(', ')', ',', chr(13), PHP_EOL), '', $this->ip_address);
         $this->ip_address = trim($this->ip_address);
 

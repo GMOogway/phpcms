@@ -70,7 +70,7 @@ class index extends foreground {
 			$userinfo['email'] = (isset($_POST['email']) && is_email($_POST['email'])) ? $_POST['email'] : exit('0');
 
 			$userinfo['modelid'] = isset($_POST['modelid']) ? intval($_POST['modelid']) : 10;
-			$userinfo['regip'] = ip();
+			$userinfo['regip'] = ip_info();
 			$userinfo['point'] = $member_setting['defualtpoint'] ? $member_setting['defualtpoint'] : 0;
 			$userinfo['amount'] = $member_setting['defualtamount'] ? $member_setting['defualtamount'] : 0;
 			$userinfo['regdate'] = $userinfo['lastdate'] = SYS_TIME;

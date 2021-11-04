@@ -319,7 +319,7 @@ class member extends admin {
 			if(!$this->_checkpasswd($_POST['info']['password'])){
 				showmessage(L('password_format_incorrect'));
 			}
-			$info['regip'] = ip();
+			$info['regip'] = ip_info();
 			$info['overduedate'] = strtotime($_POST['info']['overduedate']);
 
 			$_POST['info']['encrypt'] = create_randomstr(10);

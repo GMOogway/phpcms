@@ -890,6 +890,12 @@ function str_cut($string, $length, $dot = '...') {
 	return $strcut . $dot;
 }
 
+// ip存储信息
+function ip_info() {
+	$input = pc_base::load_sys_class('input');
+	return $input->ip_info();
+}
+
 // 获取访客ip地址
 function ip() {
 	$input = pc_base::load_sys_class('input');
