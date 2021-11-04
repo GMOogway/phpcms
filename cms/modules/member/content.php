@@ -14,11 +14,11 @@ class content extends foreground {
 	function __construct() {
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
+		$this->priv_db = pc_base::load_model('category_priv_model'); //加载栏目权限表数据模型
 	}
 	public function publish() {
 		$memberinfo = $this->memberinfo;
 		$grouplist = getcache('grouplist');
-		$priv_db = pc_base::load_model('category_priv_model'); //加载栏目权限表数据模型
 		
 		//判断会员组是否允许投稿
 		if(!$grouplist[$memberinfo['groupid']]['allowpost']) {
@@ -38,8 +38,7 @@ class content extends foreground {
 			
 			$catid = intval($_POST['info']['catid']);
 			//判断此类型用户是否有权限在此栏目下提交投稿
-			if (!$priv_db->get_one(array('catid'=>$catid, 'roleid'=>$memberinfo['groupid'], 'is_admin'=>0, 'action'=>'add'))) showmessage(L('category').L('publish_deny'), APP_PATH.'index.php?m=member'); 
-			
+			if (!$this->priv_db->get_one(array('catid'=>$catid, 'roleid'=>$memberinfo['groupid'], 'is_admin'=>0, 'action'=>'add'))) showmessage(L('category').L('publish_deny'), APP_PATH.'index.php?m=member');
 			
 			$siteid = $siteids[$catid];
 			$CATEGORYS = getcache('category_content_'.$siteid, 'commons');
@@ -111,8 +110,7 @@ class content extends foreground {
 			} else {
 				showmessage(L('contributors_checked'), APP_PATH.'index.php?m=member&c=content&a=published');
 			}
-			
-		} else {		
+		} else {
 			$show_header = $show_dialog = $show_validator = '';
 			$temp_language = L('news','','content');
 			$sitelist = getcache('sitelist','commons');
@@ -126,13 +124,13 @@ class content extends foreground {
 			if(!$siteid) $siteid = 1;
 			$CATEGORYS = getcache('category_content_'.$siteid, 'commons'); 
 			foreach ($CATEGORYS as $catid=>$cat) {
-				if($cat['siteid']==$siteid && $cat['child']==0 && $cat['type']==0 && $priv_db->get_one(array('catid'=>$catid, 'roleid'=>$memberinfo['groupid'], 'is_admin'=>0, 'action'=>'add'))) break;
+				if($cat['siteid']==$siteid && $cat['child']==0 && $cat['type']==0 && $this->priv_db->get_one(array('catid'=>$catid, 'roleid'=>$memberinfo['groupid'], 'is_admin'=>0, 'action'=>'add'))) break;
 			}
 			$catid = $this->input->get('catid') ? intval($_GET['catid']) : $catid;
 			if (!$catid) showmessage(L('category').L('publish_deny'), APP_PATH.'index.php?m=member');
 
 			//判断本栏目是否允许投稿
-			if (!$priv_db->get_one(array('catid'=>$catid, 'roleid'=>$memberinfo['groupid'], 'is_admin'=>0, 'action'=>'add'))) showmessage(L('category').L('publish_deny'), APP_PATH.'index.php?m=member');
+			if (!$this->priv_db->get_one(array('catid'=>$catid, 'roleid'=>$memberinfo['groupid'], 'is_admin'=>0, 'action'=>'add'))) showmessage(L('category').L('publish_deny'), APP_PATH.'index.php?m=member');
 			$category = $CATEGORYS[$catid];
 			if($category['siteid']!=$siteid) showmessage(L('site_no_category'),'?m=member&c=content&a=publish');
 			$setting = string2array($category['setting']);
@@ -214,6 +212,8 @@ class content extends foreground {
 			$siteid = $siteids[$catid];
 			$CATEGORYS = getcache('category_content_'.$siteid, 'commons');
 			$category = $CATEGORYS[$catid];
+			//判断此类型用户是否有权限在此栏目下提交投稿
+			if (!$this->priv_db->get_one(array('catid'=>$catid, 'roleid'=>$this->memberinfo['groupid'], 'is_admin'=>0, 'action'=>'edit'))) showmessage(L('当前栏目['.$category['catname'].']没有修改权限'), APP_PATH.'index.php?m=member&c=content&a=published');
 			if($category['type']==0) {
 				$id = intval($_POST['id']);
 				$catid = intval($this->input->post('info')['catid']);
@@ -224,7 +224,9 @@ class content extends foreground {
 				$memberinfo = $this->memberinfo;
 				$grouplist = getcache('grouplist');
 				$setting = string2array($category['setting']);
-				if(!$grouplist[$memberinfo['groupid']]['allowpostverify'] || $setting['workflowid']) {
+				if($grouplist[$memberinfo['groupid']]['allowpostverify'] || !$setting['workflowid']) {
+					$_POST['info']['status'] = 99;
+				} else {
 					$_POST['info']['status'] = 1;
 				}
 				$info = array();
@@ -253,6 +255,8 @@ class content extends foreground {
 				$siteid = $siteids[$catid];
 				$CATEGORYS = getcache('category_content_'.$siteid, 'commons');
 				$category = $CATEGORYS[$catid];
+				//判断此类型用户是否有权限在此栏目下提交投稿
+				if (!$this->priv_db->get_one(array('catid'=>$catid, 'roleid'=>$this->memberinfo['groupid'], 'is_admin'=>0, 'action'=>'edit'))) showmessage(L('当前栏目['.$category['catname'].']没有修改权限'), APP_PATH.'index.php?m=member&c=content&a=published');
 				if($category['type']==0) {
 					$modelid = $category['modelid'];
 					$this->model = getcache('model', 'commons');
@@ -263,7 +267,6 @@ class content extends foreground {
 					$r = $this->content_db->get_one(array('id'=>$id,'username'=>$_username,'sysadd'=>0));
 		
 					if(!$r) showmessage(L('illegal_operation'));
-					if($r['status']==99) showmessage(L('has_been_verified'));
 					$this->content_db->table_name = $this->content_db->table_name.'_data';
 					$r2 = $this->content_db->get_one(array('id'=>$id));
 					$data = array_merge($r,$r2);
@@ -311,12 +314,14 @@ class content extends foreground {
 		$siteid = $siteids[$catid];
 		$CATEGORYS = getcache('category_content_'.$siteid, 'commons');
 		$category = $CATEGORYS[$catid];
+		//判断此类型用户是否有权限在此栏目下提交投稿
+		if (!$this->priv_db->get_one(array('catid'=>$catid, 'roleid'=>$this->memberinfo['groupid'], 'is_admin'=>0, 'action'=>'delete'))) showmessage(L('当前栏目['.$category['catname'].']没有删除权限'), APP_PATH.'index.php?m=member&c=content&a=published');
 		if(!$category){
 			showmessage(L('operation_failure'), HTTP_REFERER); 
  		}
 		$modelid = $category['modelid'];
 		$checkid = 'c-'.$id.'-'.$modelid;
- 		$where = " checkid='$checkid' and username='$username' and status!=99 ";
+ 		$where = " checkid='$checkid' and username='$username' ";
 		$check_pushed_db = pc_base::load_model('content_check_model');
  		$array = $check_pushed_db->get_one($where);
 		if(!$array){
@@ -440,15 +445,14 @@ class content extends foreground {
 			
 			if(!$siteid) $siteid = 1;
 			$CATEGORYS = getcache('category_content_'.$siteid, 'commons');
-			$priv_db = pc_base::load_model('category_priv_model'); //加载栏目权限表数据模型
 			foreach ($CATEGORYS as $catid=>$cat) {
-				if($cat['siteid']==$siteid && $cat['child']==0 && $cat['type']==0 && $priv_db->get_one(array('catid'=>$catid, 'roleid'=>$memberinfo['groupid'], 'is_admin'=>0, 'action'=>'add'))) break;
+				if($cat['siteid']==$siteid && $cat['child']==0 && $cat['type']==0 && $this->priv_db->get_one(array('catid'=>$catid, 'roleid'=>$memberinfo['groupid'], 'is_admin'=>0, 'action'=>'add'))) break;
 			}
 			$catid = $this->input->get('catid') ? intval($_GET['catid']) : $catid;
 			if (!$catid) showmessage(L('category').L('publish_deny'), APP_PATH.'index.php?m=member');
 
 			//判断本栏目是否允许投稿
-			if (!$priv_db->get_one(array('catid'=>$catid, 'roleid'=>$memberinfo['groupid'], 'is_admin'=>0, 'action'=>'add'))) showmessage(L('category').L('publish_deny'), APP_PATH.'index.php?m=member');
+			if (!$this->priv_db->get_one(array('catid'=>$catid, 'roleid'=>$memberinfo['groupid'], 'is_admin'=>0, 'action'=>'add'))) showmessage(L('category').L('publish_deny'), APP_PATH.'index.php?m=member');
 			$category = $CATEGORYS[$catid];
 			if($category['siteid']!=$siteid) showmessage(L('site_no_category'),'?m=member&c=content&a=info_publish');
 			$setting = string2array($category['setting']);

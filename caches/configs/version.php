@@ -5,8 +5,8 @@ return array(
 'pc_release' => '20170515', //更新日期
 'cms_version' => 'V9.6.6', //cms 版本号
 'cms_release' => '20210606', //cms 更新日期
-'cms_updatetime' => '2021-11-03', // 服务端最近更新时间
-'cms_downtime' => '2021-11-03 16:06:06', // 本网站程序下载时间
+'cms_updatetime' => '2021-11-04', // 服务端最近更新时间
+'cms_downtime' => '2021-11-04 16:06:06', // 本网站程序下载时间
 'update' => '0', //cms 更新
 );
 ?>

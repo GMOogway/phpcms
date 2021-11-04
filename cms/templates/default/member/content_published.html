@@ -29,7 +29,14 @@
                         <td><a href="{if strpos($CATEGORYS[$info['catid']]['url'],'http://')===false}{$siteurl}{/if}{$CATEGORYS[$info['catid']]['url']}" target="_blank">{$CATEGORYS[$info['catid']]['catname']}</a></td>
                         <td>{date('Y-m-d',$info['inputtime'])}</td>
                         <td>{if $info['status']==99}<font color="green">{L('pass')}</font>{elseif $info['status']!='99'}<font color="#1D94C7">待审中</font>{/if}</td>
-                        <td>{if $info['status']==99}<font color="green">{L('pass')}</font>{elseif !$info['flag']}<a href="index.php?m=member&c=content&a=delete&catid={$info['catid']}&id={$info['id']}">删除</a>{else}<a href="index.php?m=member&c=content&a=edit&catid={$info['catid']}&id={$info['id']}" class="xs-btn"><font color="red">{L('edit')}</font></a> | <a href="index.php?m=member&c=content&a=delete&catid={$info['catid']}&id={$info['id']}">删除</a>{/if}</td>
+                        <td>
+                            {if check_member_auth($memberinfo['groupid'], $info['catid'], 'edit')}
+                            <a href="index.php?m=member&c=content&a=edit&catid={$info['catid']}&id={$info['id']}"><i class="fa fa-edit"></i></a>
+                            {/if}
+                            {if check_member_auth($memberinfo['groupid'], $info['catid'], 'delete')}
+                            <a href="index.php?m=member&c=content&a=delete&catid={$info['catid']}&id={$info['id']}"><i class="fa fa-trash"></i></a>
+                            {/if}
+                        </td>
                     </tr>
                     {/loop}
                 </tbody>

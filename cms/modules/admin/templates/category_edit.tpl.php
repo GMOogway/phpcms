@@ -381,26 +381,25 @@ include $this->admin_tpl('header');?>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('group_private')?></label>
                         <div class="col-md-9">
-                            <div class="table-list"><table width="100%">
-			  <thead>
-				<tr>
-				  <th><?php echo L('group_name');?></th><th><?php echo L('allow_vistor');?></th><th><?php echo L('allow_contribute');?></th>
-			  </tr>
-			    </thead>
-				 <tbody>
-			<?php
-			$group_cache = getcache('grouplist','member');
-			foreach($group_cache as $_key=>$_value) {
-			if($_value['groupid']==1) continue;
-			?>
-		  		<tr>
-				  <td><?php echo $_value['name'];?></td>
-				  <td><label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="priv_groupid[]"  <?php echo $this->check_category_priv('visit',$_value['groupid'],0);?> value="visit,<?php echo $_value['groupid'];?>" ><span></span></label></td>
-				  <td><label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="priv_groupid[]"  <?php echo $this->check_category_priv('add',$_value['groupid'],0);?> value="add,<?php echo $_value['groupid'];?>" ><span></span></label></td>
-			  </tr>
-			<?php }?>
-			 </tbody>
-			</table></div>
+                            <div class="user_group J_check_wrap">
+                                <dl>
+                                    <?php
+                                    $group_cache = getcache('grouplist','member');
+                                    foreach($group_cache as $_key=>$_value) {
+                                    if($_value['groupid']==1) continue;
+                                    ?>
+                                    <dt>
+                                        <label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" data-direction="y" data-checklist="J_check_priv_groupid<?php echo $_value['groupid'];?>" class="checkbox J_check_all"/><?php echo $_value['name'];?><span></span></label>
+                                    </dt>
+                                    <dd>
+                                        <label class="mt-checkbox mt-checkbox-outline"><input class="J_check" type="checkbox" data-yid="J_check_priv_groupid<?php echo $_value['groupid'];?>" name="priv_groupid[]" <?php echo $this->check_category_priv('visit',$_value['groupid'],0);?> value="visit,<?php echo $_value['groupid'];?>" ><?php echo L('allow_vistor');?><span></span></label>
+                                        <label class="mt-checkbox mt-checkbox-outline"><input class="J_check" type="checkbox" data-yid="J_check_priv_groupid<?php echo $_value['groupid'];?>" name="priv_groupid[]" <?php echo $this->check_category_priv('add',$_value['groupid'],0);?> value="add,<?php echo $_value['groupid'];?>" ><?php echo L('allow_contribute');?><span></span></label>
+                                        <label class="mt-checkbox mt-checkbox-outline"><input class="J_check" type="checkbox" data-yid="J_check_priv_groupid<?php echo $_value['groupid'];?>" name="priv_groupid[]" <?php echo $this->check_category_priv('edit',$_value['groupid'],0);?> value="edit,<?php echo $_value['groupid'];?>" ><?php echo L('edit');?><span></span></label>
+                                        <label class="mt-checkbox mt-checkbox-outline"><input class="J_check" type="checkbox" data-yid="J_check_priv_groupid<?php echo $_value['groupid'];?>" name="priv_groupid[]" <?php echo $this->check_category_priv('delete',$_value['groupid'],0);?> value="delete,<?php echo $_value['groupid'];?>" ><?php echo L('delete');?><span></span></label>
+                                    </dd>
+                                    <?php }?>
+                                </dl>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">

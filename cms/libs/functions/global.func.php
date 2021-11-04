@@ -500,6 +500,14 @@ function dr_html_auth($ip = 0) {
 		}
 	}
 }
+// 判断用户前端权限
+function check_member_auth($groupid, $catid, $action) {
+	$priv_db = pc_base::load_model('category_priv_model');
+	if (!$priv_db->get_one(array('catid'=>$catid, 'roleid'=>$groupid, 'is_admin'=>0, 'action'=>$action))) {
+		return 0;
+	}
+	return 1;
+}
 /**
  * 删除目录及目录下面的所有文件
  *
