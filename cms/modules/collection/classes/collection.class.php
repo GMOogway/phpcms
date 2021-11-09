@@ -166,9 +166,6 @@ class collection {
 			if ($config['sourcetype'] == 4) { //RSS
 				$xml = pc_base::load_sys_class('xml');
 				$html = $xml->xml_unserialize($html);
-				if (pc_base::load_config('system', 'charset') == 'gbk') {
-					$html = array_iconv($html, 'utf-8', 'gbk');
-				}
 				$data = array();
 				if (is_array($html['rss']['channel']['item']))foreach ($html['rss']['channel']['item'] as $k=>$v) {
 					$data[$k]['url'] = $v['link'];
@@ -218,7 +215,7 @@ class collection {
 	 * @param array $config  配置
 	 */
 	protected static function get_html($url, &$config) {
-		if (!empty($url) && $html = @file_get_contents($url)) {
+		if (!empty($url) && $html = dr_catcher_data($url)) {
 			if ($syscharset != $config['sourcecharset'] && $config['sourcetype'] != 4) {
 				$html = iconv($config['sourcecharset'], CHARSET.'//TRANSLIT//IGNORE', $html);
 			}

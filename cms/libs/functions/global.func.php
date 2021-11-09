@@ -3016,9 +3016,8 @@ function cache_page($ttl = 360, $isjs = 0) {
  * @param $url 接口url地址
  * @param $timeout 超时时间
  */
-function pc_file_get_contents($url, $timeout=30) {
-	$stream = stream_context_create(array('http' => array('timeout' => $timeout)));
-	return @file_get_contents($url, 0, $stream);
+function pc_file_get_contents($url, $timeout = 30) {
+	return dr_catcher_data($url, $timeout);
 }
 
 /**

@@ -12,8 +12,8 @@ $errorCorrectionLevel = dr_safe_replace($input->get('level'));
 if ($value) {
 	//生成二维码图片
 	pc_base::load_sys_class('phpqrcode');
-	create_folder(CACHE_PATH.'caches_attach/caches_data/');
-	$file = CACHE_PATH.'caches_attach/caches_data/qrcode-'.md5($value.$thumb.$matrixPointSize.$errorCorrectionLevel).'-qrcode.png';
+	create_folder(CACHE_PATH.'caches_qrcode/caches_data/');
+	$file = CACHE_PATH.'caches_qrcode/caches_data/qrcode-'.md5($value.$thumb.$matrixPointSize.$errorCorrectionLevel).'-qrcode.png';
 	if (is_file($file)) {
 		$QR = imagecreatefrompng($file);
 	} else {
