@@ -1,25 +1,8 @@
 <?php defined('IN_ADMIN') or exit('No permission resources.');?>
 <?php include $this->admin_tpl('header', 'admin');?>
-<style>
-<!--
-#show_funcs_div{position:absolute ;background-color:#fff;border:#D0D0D0 solid 1px; border-top-style:none;display:none}
-.show_funcs_div{height:200px;overflow-y:scroll;}
-#show_funcs_div ul li{padding:3px 0 3px 5px;}
-#show_funcs_div ul li:hover{background-color:#EEEEEE;cursor:hand;}
-.funcs_div{background:#fff; width:160px; border:solid #D0D0D0 1px;}
-.funcs{border:none;background:none}
--->
-</style>
-
-<div id="show_funcs_div" onmouseover="clearh()" onmouseout="hidden_funcs_div_1()">
-<ul>
-<?php if (isset($spider_funs) && is_array($spider_funs)) foreach ($spider_funs as $k=>$v):?>
-<li onclick="insert_txt('<?php echo $k;?>')"><?php echo $v?>(<?php echo $k;?>)</li>
-<?php endforeach;?>
-</ul>
-</div>
 <div class="pad-lr-10">
 <form name="myform" action="?m=collection&c=node&a=import_program_add&nodeid=<?php if(isset($nodeid)) echo $nodeid?>&type=<?php echo $type?>&ids=<?php echo $ids?>&catid=<?php echo $catid?>" method="post" id="myform">
+<input name="dosubmit" type="hidden" value="1">
 <fieldset>
 	<legend><?php echo L('the_new_publication_solutions')?></legend>
 	
@@ -73,7 +56,7 @@
 		<td align="left"><?php echo $v['field']?></td>
 		<td align="left"><?php echo $v['name']?></td>
 		<td align="left"><input type="hidden" name="model_field[]" value="<?php echo $v['field']?>"><?php echo form::select($node_field, (in_array($v['field'], array('inputtime', 'updatetime')) ? 'time' : $v['field']), 'name="node_field[]"')?></td>
-		<td align="left"><div class="funcs_div"><input type="text" name="funcs[]" class="funcs"><a href="javascript:void(0)" onclick="clearh();show_funcs(this);" onmouseout="hidden_funcs_div_1()"><img src="<?php echo IMG_PATH?>admin_img/toggle-collapse-dark.png"></a></div></td>
+		<td align="left"><input type="text" id="funcs" name="funcs[]" class="funcs"><?php echo form::select($spider_funs, '', 'name="" onchange="$(\'#funcs\').val(this.value);"', '请选择')?></td>
     </tr>
 <?php
 	}
@@ -91,40 +74,5 @@
 </div>
 </form>
 </div>
-
-
-<script type="text/javascript">
-<!--
-var div_obj;
-function show_funcs(obj) {
-	div_obj = $(obj).parent('div');
-	var pos = $(obj).parent('div').offset();
-	$('#show_funcs_div').css('left',pos.left+'px').css('top',(pos.top+24)+'px').width($(obj).parent().width()).show();
-}
-
-var s = 0;
-var h;
-function hidden_funcs_div_2() {
-	s++;
-	if(s>=5) {
-		$('#show_funcs_div').hide().css('left','0px').css('top','0px');
-		clearInterval(h);
-		s = 0;
-	}
-}
-function clearh(){
-	if(h)clearInterval(h);
-}
-
-function hidden_funcs_div_1() {
-	h = setInterval("hidden_funcs_div_2()", 1);
-}
-
-function insert_txt(obj) {
-	$(div_obj).children('input').val(obj);
-}
-//-->
-</script>
-
 </body>
 </html>
