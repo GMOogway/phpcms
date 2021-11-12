@@ -652,5 +652,38 @@ class content extends foreground {
 			echo $amount;
 		}
 	}
+	/**
+	 * 检查标题是否存在
+	 */
+	public function public_check_title() {
+		$this->content_db = pc_base::load_model('content_model');
+		$siteids = getcache('category_content', 'commons');
+		if($this->input->get('data')=='' || (!$this->input->get('catid'))) return '';
+		$is_ajax = intval($this->input->get('is_ajax'));
+		$catid = intval($this->input->get('catid'));
+		$id = intval($this->input->get('id'));
+		$siteid = $siteids[$catid];
+		$this->categorys = getcache('category_content_'.$siteid, 'commons');
+		$modelid = $this->categorys[$catid]['modelid'];
+		$this->content_db->set_model($modelid);
+		$title = $this->input->get('data');
+		if(CHARSET=='gbk') $title = iconv('utf-8','gbk',$title);
+		$where = "title='".$title."'";
+		if ($id) {
+			$where .= ' AND id<>'.$id;
+		}
+		$r = $this->content_db->get_one($where);
+		if ($is_ajax) {
+			if($r) {
+				exit(L('已经有相同的存在'));
+			}
+		} else {
+			if($r) {
+				exit('1');
+			} else {
+				exit('0');
+			}
+		}
+	}
 }
 ?>

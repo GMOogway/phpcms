@@ -275,6 +275,20 @@ function dr_ajax_alert_error(HttpRequest, ajaxOptions, thrownError) {
 	}
 }
 
+function check_title(linkurl,title) {
+	if (linkurl.toLowerCase().indexOf("http://") != -1 || linkurl.toLowerCase().indexOf("https://") != -1) {
+	} else {
+		linkurl = geturlpathname()+linkurl;
+	}
+	var val = $('#'+title).val();
+	$.get(linkurl+"&data=" + val + "&is_ajax=1",
+	function(data) {
+		if (data) {
+			dr_tips(0, data);
+		}
+	});
+}
+
 function get_wxurl(syseditor, field, linkurl, formname, titlename, keywordname, contentname) {
 	var index = layer.load(2, {
 		shade: [0.3,'#fff'], //0.1透明度的白色背景
