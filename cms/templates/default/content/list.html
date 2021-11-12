@@ -48,7 +48,7 @@
 		 	    <ul class="ranking">
 				{pc:content action="hits" catid="$catid" num="10" order="views DESC"}
 				{loop $data $r}
-		 			<li><em>{$n}</em><span class="date">{date('m-d',$r['inputtime'])}</span><a href="{$r['url']}" title="{$r['title']}"><span class="title_color"{title_style($r['style'])}>{str_cut($r['title'], 60, '')}</span></a></li>
+		 			<li><em>{$n}</em><span class="date">{date('m-d',$r['inputtime'])}</span><a href="{$r['url']}" title="{$r['title']}"><span class="title_color"{title_style($r['style'], 1)}>{str_cut($r['title'], 60, '')}</span></a></li>
 				{/loop}
 				{/pc}
 		 		</ul>		 		
@@ -61,7 +61,7 @@
  				<ul class="comment-list">		
 				{pc:content action="hits" catid="$catid" num="10" order="monthviews DESC"}
 				{loop $data $r}
- 					<li><a href="{$r['url']}" title="{$r['title']}">{str_cut($r['title'], 60, '')}</a></li>
+ 					<li><a href="{$r['url']}" title="{$r['title']}"><span class="title_color"{title_style($r['style'], 1)}>{str_cut($r['title'], 60, '')}</span></a></li>
 				{/loop}
 				{/pc}
  				</ul>		 		

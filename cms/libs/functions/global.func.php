@@ -841,20 +841,27 @@ function dr_authcode($string, $operation = 'DECODE') {
 /**
  * 字符截取
  *
- * @param	string	$str
- * @param	intval	$length
- * @param	string	$dot
- * @return	string
+ * @param   string  $str
+ * @param   string  $limit
+ * @param   string  $dot
+ * @return  string
  */
-function str_cut($string, $length, $dot = '...') {
+function str_cut($string, $limit = '100', $dot = '...') {
+	$a = 0;
+	if (strpos($limit, ',')) {
+		list($a, $length) = explode(',', $limit);
+	} else {
+		$length = $limit;
+	}
+	$length = (int)$length;
 	if (!$string || strlen($string) <= $length || !$length) {
 		return $string;
 	}
 	if (function_exists('mb_substr')) {
-		$strcut = mb_substr($string, 0, $length);
+		$strcut = mb_substr($string, $a, $length);
 	} else {
 		$n = $tn = $noc = 0;
-		$string = str_replace(array('&amp;', '&quot;', '&lt;', '&gt;'), array('&', '"', '<', '>'), $string);
+		$string = str_replace(['&amp;', '&quot;', '&lt;', '&gt;'], ['&', '"', '<', '>'], $string);
 		while ($n < strlen($string)) {
 			$t = ord($string[$n]);
 			if ($t == 9 || $t == 10 || (32 <= $t && $t <= 126)) {
@@ -891,11 +898,40 @@ function str_cut($string, $length, $dot = '...') {
 		if ($noc > $length) {
 			$n -= $tn;
 		}
+
 		$strcut = substr($string, 0, $n);
 		$strcut = str_replace(array('&', '"', '<', '>'), array('&amp;', '&quot;', '&lt;', '&gt;'), $strcut);
 	}
 	$strcut == $string && $dot = '';
 	return $strcut . $dot;
+}
+
+/**
+ * 随机颜色
+ *
+ * @return  string
+ */
+function dr_random_color() {
+	$str = '#';
+	for ($i = 0; $i < 6; $i++) {
+		$randNum = rand(0, 15);
+		switch ($randNum) {
+			case 10: $randNum = 'A';
+				break;
+			case 11: $randNum = 'B';
+				break;
+			case 12: $randNum = 'C';
+				break;
+			case 13: $randNum = 'D';
+				break;
+			case 14: $randNum = 'E';
+				break;
+			case 15: $randNum = 'F';
+				break;
+		}
+		$str.= $randNum;
+	}
+	return $str;
 }
 
 // ip存储信息
@@ -967,7 +1003,7 @@ function string2array($data) {
 		@eval("\$array = $data;");
 	}else{
 		if(strpos($data, '{\\')===0) $data = stripslashes($data);
-		$array=json_decode($data,true);
+		$array=dr_string2array($data);
 		if(strtolower(CHARSET)=='gbk'){
 			$array = mult_iconv("UTF-8", "GBK//IGNORE", $array);
 		}
@@ -988,7 +1024,7 @@ function array2string($data, $isformdata = 1) {
 	if(strtolower(CHARSET)=='gbk'){
 		$data = mult_iconv("GBK", "UTF-8", $data);
 	}
-	return addslashes(json_encode($data,JSON_FORCE_OBJECT));
+	return addslashes(dr_array2string($data));
 }
 /**
  * 根据文件扩展名获取文件预览信息
@@ -1041,22 +1077,46 @@ function dr_array2string($data) {
 	return $data ? json_encode($data, JSON_UNESCAPED_UNICODE) : '';
 }
 /**
+ * 数组截取
+ */
+function dr_arraycut($arr, $limit) {
+	if (!$arr) {
+		return array();
+	} elseif (!is_array($arr)) {
+		return array();
+	}
+	if (strpos($limit, ',')) {
+		list($a, $b) = explode(',', $limit);
+	} else {
+		$a = 0;
+		$b = $limit;
+	}
+	return array_slice($arr, $a, $b);
+}
+/**
  * 将字符串转换为数组
  *
  * @param   string  $data   字符串
  * @return  array
  */
-function dr_string2array($data) {
-	if (is_array($data)) {
-		return $data;
-	} elseif (!$data) {
+function dr_string2array($data, $limit = '') {
+	if (!$data) {
 		return array();
+	} elseif (is_array($data)) {
+		$rt = $data;
+	} else {
+		$rt = json_decode($data, true);
+		if (!$rt) {
+			$rt = unserialize(stripslashes($data));
+		}
 	}
-	$rt = json_decode($data, true);
-	if ($rt) {
+	if (is_array($rt)) {
+		if ($limit) {
+			return dr_arraycut($rt, $limit);
+		}
 		return $rt;
 	}
-	return unserialize(stripslashes($data));
+	return array();
 }
 /**
  * 附件信息
@@ -2391,9 +2451,11 @@ function array_iconv($data, $input = 'gbk', $output = 'utf-8') {
  * @param  $mode 图片模式
  * @param  $webimg 剪切网络图片
  */
-function thumb($img, $width = 100, $height = 100 ,$water = 0, $mode = 'auto', $webimg = 0) {
+function thumb($img, $width = 0, $height = 0, $water = 0, $mode = 'auto', $webimg = 0) {
 	if (!$img) {
 		return IMG_PATH.'nopic.gif';
+	} elseif (!$width || !$height) {
+		return dr_get_file($img);
 	}
 	if ($img || $webimg) {
 		// 强制缩略图水印
@@ -2734,14 +2796,19 @@ function tjcode() {
 /**
  * 生成标题样式
  * @param $style   样式
+ * @param $color   是否随机颜色
  * @param $html    是否显示完整的STYLE
  */
-function title_style($style, $html = 1) {
-	if(!$style) return "";
+function title_style($style, $color = 0, $html = 1) {
+	if(!$style) return $color ? ' style="color:'.dr_random_color().';"' : '';
 	$str = '';
 	if ($html) $str = ' style="';
 	$style_arr = explode(';',$style);
-	if (!empty($style_arr[0])) $str .= 'color:'.$style_arr[0].';';
+	if (!empty($style_arr[0])) {
+		$str .= 'color:'.$style_arr[0].';';
+	} else {
+		$color ? $str .= 'color:'.dr_random_color().';' : '';
+	}
 	if (!empty($style_arr[1])) $str .= 'font-weight:'.$style_arr[1].';';
 	if ($html) $str .= '" ';
 	return $str;
