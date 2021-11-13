@@ -10,6 +10,7 @@ class manage extends admin {
 		$this->input = pc_base::load_sys_class('input');
 		$this->imgext = array('jpg','gif','png','bmp','jpeg');
 		$this->db = pc_base::load_model('attachment_model');
+		$this->remote_db = pc_base::load_model('attachment_remote_model');
 		$this->upload = pc_base::load_sys_class('upload');
 		$this->admin_username = param::get_cookie('admin_username');
 		$this->siteid = $this->get_siteid();
@@ -21,10 +22,12 @@ class manage extends admin {
 		pc_base::load_sys_class('form');
 		$modules = getcache('modules','commons');
 		$category = getcache('category_content_'.$this->siteid,'commons');
+		$remote = $this->remote_db->select();
 		if (IS_POST) {
 			$pagesize = $this->input->post('limit') ? $this->input->post('limit') : 10;
 			$page = $this->input->post('page') ? $this->input->post('page') : '1';
 			$where = '';
+			if($this->input->post('remote')) $where = "AND `remote` = '".$this->input->post('remote')."' ";
 			if($this->input->post('keyword')) $where = "AND `filename` LIKE '%".$this->input->post('keyword')."%' ";
 			if($this->input->post('start_uploadtime') && $this->input->post('end_uploadtime')) {
 				$start = strtotime($this->input->post('start_uploadtime').' 00:00:00');
@@ -47,16 +50,17 @@ class manage extends admin {
 				foreach($datas as $r) {
 					$thumb = glob(dirname(SYS_UPLOAD_PATH.$r['filepath']).'/thumb_*'.basename($r['filepath']));
 					$rs['aid'] = $r['aid'];
+					$rs['type'] = '<label>'.(!$r['remote'] ? '<span class="label label-sm label-danger">'.L('默认').'</span>' : '<span class="label label-sm label-warning">'.L('自定义').'</span>').'</label>';
 					$rs['module'] = $modules[$r['module']]['name'];
 					if ($r['module']=='member' && $r['catid']==0) {
 						$rs['catname'] = '头像';
-						$rs['filepath'] = dr_file(SYS_AVATAR_URL.$r['filepath']);
+						$rs['filepath'] = SYS_ATTACHMENT_SAVE_ID ? dr_get_file_url($r) : dr_file(SYS_AVATAR_URL.$r['filepath']);
 					} else if ($r['module']=='cloud' && $r['catid']==0) {
 						$rs['catname'] = '云服务';
-						$rs['filepath'] = dr_file($r['filepath']);
+						$rs['filepath'] = dr_get_file_url($r);
 					} else {
 						$rs['catname'] = $category[$r['catid']]['catname'];
-						$rs['filepath'] = dr_file($r['filepath']);
+						$rs['filepath'] = dr_get_file_url($r);
 					}
 					$rs['filename'] = $r['filename'];
 					$rs['fileext'] = $r['fileext'].'<img src="'.file_icon('.'.$r['fileext'],'gif').'" />'.($thumb ? '<img title="'.L('att_thumb_manage').'" src="'.IMG_PATH.'admin_img/havthumb.png" onclick="showthumb('.$r['aid'].', \''.new_addslashes($r['filename']).'\')"/>':'').($r['status'] ? ' <img src="'.IMG_PATH.'admin_img/link.png"':'');
@@ -121,30 +125,33 @@ class manage extends admin {
 	 */
 	public function delete() {
 		$aid = $this->input->post('aid');
-		$attachment_index = pc_base::load_model('attachment_index_model');
-		if($this->upload->delete(array('aid'=>$aid))) {
-			$attachment_index->delete(array('aid'=>$aid));
-			dr_json(1, L('operation_success'));
-		} else {
-			dr_json(0, L('operation_failure'));
+		$data = $this->db->get_one(array('aid'=>$aid));
+		if (!$data) {
+			dr_json(0, L('所选附件不存在'));
 		}
+		$rt = $this->upload->_delete_file($data);
+		if (!$rt['code']) {
+			return dr_return_data(0, $rt['msg']);
+		}
+		dr_json(1, L('delete').L('success'));
 	}
 	
 	/**
 	 * 批量删除附件
 	 */
 	public function public_delete_all() {
-		$del_arr = array();
 		$del_arr = $this->input->get_post_ids() ? $this->input->get_post_ids() : dr_json(0, L('illegal_parameters'));
-		$attachment_index = pc_base::load_model('attachment_index_model');
-		if(is_array($del_arr)){
-			foreach($del_arr as $v){
-				$aid = intval($v);
-				$this->upload->delete(array('aid'=>$aid));
-				$attachment_index->delete(array('aid'=>$aid));
-			}
-			dr_json(1, L('delete').L('success'));
+		$data = $this->db->select('aid in ('.implode(',', $del_arr).')');
+		if (!$data) {
+			dr_json(0, L('所选附件不存在'));
 		}
+		foreach($data as $t){
+			$rt = $this->upload->_delete_file($t);
+			if (!$rt['code']) {
+				return dr_return_data(0, $rt['msg']);
+			}
+		}
+		dr_json(1, L('delete').L('success'));
 	}
 	
 	public function pullic_showthumbs() {

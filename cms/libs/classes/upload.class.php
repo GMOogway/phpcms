@@ -299,16 +299,6 @@ class upload {
 
         // 入库索引表
         $att_db = pc_base::load_model('attachment_model');
-        $tablename = $att_db->db_tablepre.'attachment';
-        if (!$att_db->field_exists('filemd5')) {
-            $att_db->query('ALTER TABLE `'.$tablename.'` ADD `filemd5` varchar(50) NOT NULL COMMENT \'文件md5值\' AFTER `authcode`');
-        }
-        if (!$att_db->field_exists('remote')) {
-            $att_db->query('ALTER TABLE `'.$tablename.'` ADD `remote` tinyint(2) unsigned NOT NULL DEFAULT \'0\' COMMENT \'远程附件id\' AFTER `filemd5`');
-        }
-        if (!$att_db->field_exists('attachinfo')) {
-            $att_db->query('ALTER TABLE `'.$tablename.'` ADD `attachinfo` text NOT NULL COMMENT \'附件信息\' AFTER `remote`');
-        }
         $uploadedfile['module'] = $this->module;
         $uploadedfile['catid'] = $this->catid;
         $uploadedfile['siteid'] = $this->siteid;
@@ -333,10 +323,6 @@ class upload {
         if (!$aid) {
             // 删除附件索引
             unlink($data['path']);
-            $attachment_index = pc_base::load_model('attachment_index_model');
-            if($this->delete(array('aid'=>$aid))) {
-                $attachment_index->delete(array('aid'=>$aid));
-            }
             return dr_return_data(0, '附件归档存储失败');
         }
 
@@ -395,33 +381,52 @@ class upload {
         );
     }
 
-    /**
-     * 附件删除方法
-     * @param $where 删除sql语句
-     */
-    public function delete($where) {
+    // 开始删除文件
+    public function _delete_file($index) {
         $cache = pc_base::load_sys_class('cache');
         $this->att_db = pc_base::load_model('attachment_model');
-        $result = $this->att_db->select($where);
-        foreach($result as $r) {
-            // 开始删除文件
-            $storage = new storage($this->module, $this->catid, $this->siteid);
-            if ($r['module']=='member' && !$r['catid']) {
-                $images = SYS_AVATAR_PATH.$r['filepath'];
-                $storage->delete($this->get_attach_member($r['remote']), $r['filepath']);
-            } else {
-                $images = SYS_UPLOAD_PATH.$r['filepath'];
-                $storage->delete($this->get_attach_info($r['remote']), $r['filepath']);
-            }
-            //@unlink($images);
-            //if (dr_is_image($r['fileext'])) {
-                $thumbs = glob(dirname($images).'/*'.basename($images));
-                if($thumbs) foreach($thumbs as $thumb) @unlink($thumb);
-            //}
-            // 删除缓存
-            $cache->del_file('attach-info-'.$r['aid'], 'attach');
+        $this->att_index_db = pc_base::load_model('attachment_index_model');
+
+        // 获取文件信息
+        $info = $this->att_db->get_one(array('aid'=>$index['aid']));
+        if (!$info) {
+            return dr_return_data(0, L('文件数据不存在'));
         }
-        return $this->att_db->delete($where);
+
+        $rt = $this->att_db->delete(array('aid'=>$index['aid']));
+
+        // 删除记录
+        $this->att_index_db->delete(array('aid'=>$index['aid']));
+
+        // 开始删除文件
+        $storage = new storage($this->module, $this->catid, $this->siteid);
+        if ($info['module']=='member' && !$info['catid']) {
+            $images = SYS_AVATAR_PATH.$info['filepath'];
+            $storage->delete($this->get_attach_member($info['remote']), $info['filepath']);
+        } else {
+            $images = SYS_UPLOAD_PATH.$info['filepath'];
+            $storage->delete($this->get_attach_info($info['remote']), $info['filepath']);
+        }
+
+        // 删除缩略图的缓存
+        if (!$info['remote']) {
+            $thumbs = glob(dirname($images).'/*'.basename($images));
+            if($thumbs) foreach($thumbs as $thumb) @unlink($thumb);
+        } else {
+            if (in_array($info['fileext'], array('png', 'jpeg', 'jpg', 'gif'))) {
+                dr_dir_delete(SYS_THUMB_PATH.md5($index['aid']).'/', true);
+            }
+        }
+
+        // 删除附件进行记录
+        if (CI_DEBUG) {
+            log_message('debug', '删除附件（#'.$index['aid'].'）'.dr_get_file_url($info));
+        }
+
+        // 删除缓存
+        $cache->del_file('attach-info-'.$index['aid'], 'attach');
+
+        return dr_return_data(1, L('删除成功'));
     }
 
     /**
@@ -546,7 +551,7 @@ class storage {
                 if (is_file($path.$dir.'/app.php')) {
                     $cfg = require $path.$dir.'/app.php';
                     if ($cfg['id'] && $cfg['id'] == $attachment['type']) {
-                        require $path.$dir.'.php';
+                        require_once $path.$dir.'.php';
                         $this->object = new $dir($this->module, $this->catid, $this->siteid);
                     }
                 }

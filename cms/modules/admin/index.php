@@ -43,11 +43,9 @@ class index extends admin {
 				$code = $this->input->post('code') && trim($this->input->post('code')) ? trim($this->input->post('code')) : dr_json(0, L('input_code'));
 				if ($_SESSION['code'] != strtolower($code)) {
 					$_SESSION['code'] = '';
-					param::set_cookie('code','');
 					dr_json(4, L('code_error'));
 				}
 				$_SESSION['code'] = '';
-				param::set_cookie('code','');
 			}
 			if(!is_username($username)){
 				dr_json(2, L('username_illegal'));

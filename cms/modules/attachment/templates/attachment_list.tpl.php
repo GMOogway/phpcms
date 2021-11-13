@@ -36,6 +36,17 @@ jQuery(document).ready(function() {
         </a>
     </blockquote>
     <div class="demoTable" id="searchid" style="display:none;">
+        <?php if ($remote) {?>
+        <select name="remote" id="remote" class="form-control">
+            <option value=""> - </option>
+            <?php 
+            if (is_array($remote)) {
+            foreach ($remote as $t) {
+            ?>
+            <option value="<?php echo $t['id'];?>"<?php if ($this->input->get('remote')==$t['id']) {?> selected<?php }?>><?php echo $t['name'];?></option>
+            <?php }} ?>
+        </select>
+        <?php }?>
         <?php echo L('time');?>：
         <div class="formdate">
             <div class="input-group input-medium date-picker input-daterange">
@@ -98,10 +109,11 @@ layui.use(['table'], function(){
         cols: [[
             {type: "checkbox", fixed: 'left'},
             {field: 'aid', title: '<?php echo L('number');?>', width: 80, sort: true},
+            {field: 'type', title: '<?php echo L('类型');?>', width: 80, align: 'center', sort: true},
             {field: 'module', title: '<?php echo L('moudle');?>', width:120, sort: true},
             {field: 'catname', title: '<?php echo L('catname');?>', width:120, sort: true},
             {field: 'filename', title: '<?php echo L('filename');?>', minWidth:340, sort: true, edit: 'text'},
-            {field: 'fileext', title: '<?php echo L('fileext');?>', width:120, sort: true},
+            {field: 'fileext', title: '<?php echo L('fileext');?>', width:120, align: 'center', sort: true},
             {field: 'filesize', title: '<?php echo L('filesize');?>', width:120, sort: true},
             {field: 'uploadtime', title: '<?php echo L('uploadtime');?>', width:180, sort: true},
             {width: 160, align: 'center', toolbar: '#action',title:'<?php echo L('operations_manage');?>'<?php if(!is_mobile(0)) {?>, fixed: 'right'<?php }?>}
@@ -110,6 +122,7 @@ layui.use(['table'], function(){
     });
     //搜索
     $('#search').on('click', function () {
+        var remote = $('#remote').val();
         var keyword = $('#keyword').val();
         var start_uploadtime = $('#start_uploadtime').val();
         var end_uploadtime = $('#end_uploadtime').val();
@@ -118,7 +131,7 @@ layui.use(['table'], function(){
             layer.msg('请输入<?php echo L('name')?>！', {icon: 0});
             return;
         }*/
-        tableIn.reload({ page: {page: 1}, where: {keyword: keyword,start_uploadtime: start_uploadtime,end_uploadtime: end_uploadtime,fileext: fileext} });
+        tableIn.reload({ page: {page: 1}, where: {remote: remote,keyword: keyword,start_uploadtime: start_uploadtime,end_uploadtime: end_uploadtime,fileext: fileext} });
     });
     //监听单元格编辑
     table.on('edit(list)',function(obj) {

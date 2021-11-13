@@ -125,8 +125,15 @@ function readWordToHtml($source) {
 							'watermark' => intval($input->get('watermark')),
 							'attachment' => $upload->get_attach_info(intval($input->get('attachment')), intval($input->get('image_reduce'))),
 						));
-						upload_json($data['code'],$rt['data']['url'],$rt['data']['name'],format_file_size($rt['data']['size']));
-						$html .= '<img src="'.$rt['data']['url'].'" title="'.$rt['data']['name'].'" alt="'.$rt['data']['name'].'"/>';
+						if ($rt['code']) {
+							$att = $upload->save_data($rt['data']);
+							if ($att['code']) {
+								// 归档成功
+								$html .= '<img src="'.$rt['data']['url'].'" title="'.$rt['data']['name'].'" alt="'.$rt['data']['name'].'"/>';
+								// 标记附件
+								upload_json($att['code'],$rt['data']['url'],$rt['data']['name'],format_file_size($rt['data']['size']));
+							}
+						}
 					}
 				}
 			}

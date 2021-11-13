@@ -54,7 +54,7 @@ jQuery(document).ready(function() {
 	<div class="files_row" onmouseover="layer.tips('<?php echo $r['filename']?>&nbsp;&nbsp;<?php echo format_file_size($r['filesize'])?>',this,{tips: [1, '#000']});" onmouseout="layer.closeAll();">
 		<span class="checkbox"></span>
 		<input type="checkbox" class="checkboxes" name="ids[]" value="<?php echo $r['aid']?>" />
-		<a><img src="<?php echo $r['src']?>" id="<?php echo $r['aid']?>" width="<?php echo $r['width']?>" path="<?php echo SYS_UPLOAD_URL.$r['filepath']?>" size="<?php echo format_file_size($r['filesize'])?>" filename="<?php echo $r['filename']?>"/></a>
+		<a><img src="<?php echo $r['src']?>" id="<?php echo $r['aid']?>" width="<?php echo $r['width']?>" path="<?php echo dr_get_file_url($r)?>" size="<?php echo format_file_size($r['filesize'])?>" filename="<?php echo $r['filename']?>"/></a>
 		<i class="size"> <?php echo format_file_size($r['filesize'])?> </i>
 		<i class="name" title="<?php echo $r['filename']?>"><?php echo $r['filename']?></i>
 	</div>

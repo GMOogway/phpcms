@@ -229,7 +229,6 @@ function dr_get_merge($code) {
 			$str .= fread(fopen($file, 'r'), $size);
 		}
 	}
-	param::set_cookie('code');
 	return $str;
 }
 
@@ -309,7 +308,7 @@ function dr_get_file_url($data, $w = 0, $h = 0) {
 		$att_commons = getcache('attachment', 'commons');
 		$remote = $att_commons[$data['remote']];
 		if ($remote) {
-			return $remote['url'].$data['attachment'];
+			return $remote['url'].$data['filepath'];
 		} else {
 			return IS_DEV ? '自定义附件（'.$data['remote'].'）的配置已经不存在' : '';
 		}
@@ -2086,9 +2085,9 @@ function get_memberavatar($uid, $size = '') {
 	$image = new image();
 	if ($avatar_db) {
 		if ($size) {
-			$avatar = $image->thumb(SYS_AVATAR_URL.$avatar_db['filepath'], $size, $size, 0, 'auto', 1);
+			$avatar = $image->thumb((SYS_ATTACHMENT_SAVE_ID ? dr_get_file_url($avatar_db) : dr_file(SYS_AVATAR_URL.$avatar_db['filepath'])), $size, $size, 0, 'auto', 1);
 		} else {
-			$avatar = SYS_AVATAR_URL.$avatar_db['filepath'];
+			$avatar = (SYS_ATTACHMENT_SAVE_ID ? dr_get_file_url($avatar_db) : dr_file(SYS_AVATAR_URL.$avatar_db['filepath']));
 		}
 	} else {
 		$avatar = dr_letter_avatar($memberinfo['nickname'] ? $memberinfo['nickname'] : $memberinfo['username']);

@@ -532,13 +532,12 @@ class member extends admin {
 		}
 		$upload = pc_base::load_sys_class('upload');
 		$memberinfo = $this->db->get_one(array('userid'=>$uid));
-		if ($memberinfo) {
-			$attachment_index = pc_base::load_model('attachment_index_model');
-			if($upload->delete(array('aid'=>$memberinfo['avatar']))) {
-				$attachment_index->delete(array('aid'=>$memberinfo['avatar']));
+		if ($memberinfo && $memberinfo['avatar']) {
+			$attachment_db = pc_base::load_model('attachment_model');
+			$data = $attachment_db->get_one(array('aid'=>$memberinfo['avatar']));
+			if ($data) {
+				$rt = $upload->_delete_file($data);
 				$this->db->update(array('avatar'=>''), array('userid'=>$uid));
-			} else {
-				exit('1');
 			}
 		}
 	}

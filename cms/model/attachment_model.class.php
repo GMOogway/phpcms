@@ -97,6 +97,7 @@ class attachment_model extends model {
 		if(!SYS_ATTACHMENT_STAT && !SYS_ATTACHMENT_DEL) return false;
 		$keyid = trim($keyid);
 		if($keyid=='') return false;
+		$attachment_db = pc_base::load_model('attachment_model');
 		$att_index_db = pc_base::load_model('attachment_index_model');
 		$upload = pc_base::load_sys_class('upload');
 		$info = $att_index_db->select(array('keyid'=>$keyid),'aid');
@@ -104,7 +105,10 @@ class attachment_model extends model {
 			$att_index_db->delete(array('keyid'=>$keyid));
 			foreach ($info as $_v) {
 				if(!$att_index_db->get_one(array('aid'=>$_v['aid']))) {
-					$upload->delete(array('aid'=>$_v['aid']));
+					$data = $attachment_db->get_one(array('aid'=>$_v['aid']));
+					if ($data) {
+						$rt = $upload->_delete_file($data);
+					}
 				}
 			}
 			return true;

@@ -11,20 +11,25 @@ if ($userid) {
     if ($aid) {
         /* 删除数据 */
         $upload = pc_base::load_sys_class('upload');
-        $thisdb= pc_base::load_model('attachment_model');
-        $attachment_index = pc_base::load_model('attachment_index_model');
-        if($upload->delete(array('aid'=>$aid))) {
-            $attachment_index->delete(array('aid'=>$aid));
-            $result = json_encode(array(
-                'code'=> '1',
-                'state'=> '删除成功。'
-            ), JSON_UNESCAPED_UNICODE);
-        } else {
+        $attachment_db = pc_base::load_model('attachment_model');
+        $data = $attachment_db->get_one(array('aid'=>$aid));
+        if (!$data) {
             $result = json_encode(array(
                 'code'=> '0',
-                'state'=> '文件数据不存在。'
+                'state'=> '文件数据不存在'
             ), JSON_UNESCAPED_UNICODE);
         }
+        $rt = $upload->_delete_file($data);
+        if (!$rt['code']) {
+            $result = json_encode(array(
+                'code'=> '0',
+                'state'=> $rt['msg']
+            ), JSON_UNESCAPED_UNICODE);
+        }
+        $result = json_encode(array(
+            'code'=> '1',
+            'state'=> '删除成功。'
+        ), JSON_UNESCAPED_UNICODE);
     } else {
         $result = json_encode(array(
             'code'=> '0',

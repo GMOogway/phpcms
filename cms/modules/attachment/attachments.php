@@ -84,7 +84,7 @@ class attachments {
 				)
 			);
 		}else{
-			$result = array("uploaded"=>false,"error"=>array("message"=>"上传错误"));
+			$result = array('uploaded'=>false,'error'=>array('message'=>L('上传错误')));
 		}
 		exit(json_encode($result,JSON_UNESCAPED_UNICODE));
 		//exit(dr_array2string(array('code' => 1, 'msg' => L('上传成功'), 'id' => $data['code'], 'info' => $rt['data'])));
@@ -276,7 +276,7 @@ class attachments {
 		foreach($infos as $n=>$v){
 			$ext = fileext($v['filepath']);
 			if(in_array($ext,$this->imgext)) {
-				$infos[$n]['src']=SYS_UPLOAD_URL.$v['filepath'];
+				$infos[$n]['src']=dr_get_file_url($v);
 				$infos[$n]['width']='80';
 			} else {
 				$infos[$n]['src']=file_icon($v['filepath']);

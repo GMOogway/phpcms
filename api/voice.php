@@ -5,5 +5,7 @@
 defined('IN_CMS') or exit('No permission resources.');
 
 //生成语音验证码
-echo dr_get_merge(param::get_cookie('code'));
+$cache = pc_base::load_sys_class('cache');
+echo dr_get_merge($cache->get_file('code'));
+$cache->del_file('code');
 ?>

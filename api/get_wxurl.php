@@ -82,9 +82,8 @@ if (preg_match('/'.$preg.'(.+)<\/div>/sU', $html, $mt)) {
 								if ($att['code']) {
 									// 归档成功
 									$body = str_replace($img, $rt['data']['url'], $body);
-									$img = $att['code'];
 									// 标记附件
-									upload_json($data['code'],$rt['data']['url'],$rt['data']['name'],format_file_size($rt['data']['size']));
+									upload_json($att['code'],$rt['data']['url'],$rt['data']['name'],format_file_size($rt['data']['size']));
 								}
 							}
 						}
