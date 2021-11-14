@@ -5,6 +5,8 @@
  * @copyright			(C) 2005-2010
  * @lastmodify			2021-06-06
  */
+// 入口文件名称
+define('SELF', pathinfo(__FILE__, PATHINFO_BASENAME));
 define('CMS_PATH', dirname(__FILE__).DIRECTORY_SEPARATOR);
 include CMS_PATH.'cms/base.php';
 $param = pc_base::load_sys_class('param');
