@@ -204,7 +204,6 @@ class formguide_field extends admin {
 				pc_base::load_sys_class('form','',0);
 				require MODEL_PATH.'fields.inc.php';
 			}
-			$remote = getcache('attachment', 'commons');
 			$setting = string2array($setting);
 			ob_start();
 			include MODEL_PATH.$formtype.DIRECTORY_SEPARATOR.'field_edit_form.inc.php';
@@ -318,7 +317,6 @@ class formguide_field extends admin {
 	 * 字段属性设置
 	 */
 	public function public_field_setting() {
-		$remote = getcache('attachment', 'commons');
 		$fieldtype = $this->input->get('fieldtype');
 		require MODEL_PATH.$fieldtype.DIRECTORY_SEPARATOR.'config.inc.php';
 		ob_start();

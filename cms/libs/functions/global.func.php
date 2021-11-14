@@ -558,8 +558,119 @@ $(function(){
 	});
 });
 </script>';
-
 	return $str;
+}
+/**
+ * 附件存储策略
+ * @return  string
+ */
+function attachment($option, $table = 0) {
+
+	$id = isset($option['attachment']) ? $option['attachment'] : 0;
+	$remote = getcache('attachment', 'commons');
+
+	$html = '<label><select class="form-control" name="setting[attachment]">';
+	if (SYS_ATTACHMENT_SAVE_ID && isset($remote[SYS_ATTACHMENT_SAVE_ID])) {
+		$html.= '<option value="0"> '.L($remote[SYS_ATTACHMENT_SAVE_ID]['name']).' </option>';
+	} else {
+		$html.= '<option value="0"> '.L('默认存储').' </option>';
+	}
+
+	if ($remote) {
+		foreach ($remote as $i => $t) {
+			if (SYS_ATTACHMENT_SAVE_ID && $t['id'] == SYS_ATTACHMENT_SAVE_ID) {
+				continue;
+			}
+			$html.= '<option value="'.$i.'" '.($i == $id ? 'selected' : '').'> '.L($t['name']).' </option>';
+		}
+	}
+
+	$html.= '</select></label>';
+	if ($table) {
+		return '<tr>
+    <td>'.L('附件存储策略').' </td>
+    <td>
+        '.$html.'
+        <span class="help-block">'.L('远程附件存储建议设置小文件存储，推荐10MB内，大文件会导致数据传输失败').'</span>
+    </td>
+</tr><tr>
+    <td>'.L('图片压缩大小').' </td>
+    <td>
+        <label><input type="text" class="form-control" value="'.$option['image_reduce'].'" name="setting[image_reduce]"></label>
+        <span class="help-block">'.L('填写图片宽度，例如1000，表示图片大于1000px时进行压缩图片').'</span>
+    </td>
+</tr>';
+	} else {
+		return '<div class="form-group">
+    <label class="col-md-2 control-label">'.L('附件存储策略').' </label>
+    <div class="col-md-9">
+        '.$html.'
+        <span class="help-block">'.L('远程附件存储建议设置小文件存储，推荐10MB内，大文件会导致数据传输失败').'</span>
+    </div>
+</div><div class="form-group">
+    <label class="col-md-2 control-label">'.L('图片压缩大小').' </label>
+    <div class="col-md-9">
+        <label><input type="text" class="form-control" value="'.$option['image_reduce'].'" name="setting[image_reduce]"></label>
+        <span class="help-block">'.L('填写图片宽度，例如1000，表示图片大于1000px时进行压缩图片').'</span>
+    </div>
+</div>';
+	}
+}
+/**
+ * 附件存储策略
+ * @return  string
+ */
+function local_attachment($option, $table = 0) {
+
+	$id = isset($option['local_attachment']) ? $option['local_attachment'] : 0;
+	$remote = getcache('attachment', 'commons');
+
+	$html = '<label><select class="form-control" name="setting[local_attachment]">';
+	if (SYS_ATTACHMENT_SAVE_ID && isset($remote[SYS_ATTACHMENT_SAVE_ID])) {
+		$html.= '<option value="0"> '.L($remote[SYS_ATTACHMENT_SAVE_ID]['name']).' </option>';
+	} else {
+		$html.= '<option value="0"> '.L('默认存储').' </option>';
+	}
+
+	if ($remote) {
+		foreach ($remote as $i => $t) {
+			if (SYS_ATTACHMENT_SAVE_ID && $t['id'] == SYS_ATTACHMENT_SAVE_ID) {
+				continue;
+			}
+			$html.= '<option value="'.$i.'" '.($i == $id ? 'selected' : '').'> '.L($t['name']).' </option>';
+		}
+	}
+
+	$html.= '</select></label>';
+	if ($table) {
+		return '<tr>
+    <td>'.L('本地附件存储策略').' </td>
+    <td>
+        '.$html.'
+        <span class="help-block">'.L('远程附件存储建议设置小文件存储，推荐10MB内，大文件会导致数据传输失败').'</span>
+    </td>
+</tr><tr>
+    <td>'.L('本地图片压缩大小').' </td>
+    <td>
+        <label><input type="text" class="form-control" value="'.$option['local_attachment'].'" name="setting[local_attachment]"></label>
+        <span class="help-block">'.L('填写图片宽度，例如1000，表示图片大于1000px时进行压缩图片').'</span>
+    </td>
+</tr>';
+	} else {
+		return '<div class="form-group">
+    <label class="col-md-2 control-label">'.L('本地附件存储策略').' </label>
+    <div class="col-md-9">
+        '.$html.'
+        <span class="help-block">'.L('远程附件存储建议设置小文件存储，推荐10MB内，大文件会导致数据传输失败').'</span>
+    </div>
+</div><div class="form-group">
+    <label class="col-md-2 control-label">'.L('本地图片压缩大小').' </label>
+    <div class="col-md-9">
+        <label><input type="text" class="form-control" value="'.$option['local_attachment'].'" name="setting[local_attachment]"></label>
+        <span class="help-block">'.L('填写图片宽度，例如1000，表示图片大于1000px时进行压缩图片').'</span>
+    </div>
+</div>';
+	}
 }
 /**
  * xss过滤函数

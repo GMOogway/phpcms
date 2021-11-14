@@ -73,7 +73,7 @@ layui.use(['table'], function(){
     table.on('tool(list)', function(obj) {
         var data = obj.data;
         if(obj.event === 'delete'){
-            Dialog.confirm('<?php echo L('del_confirm')?>', function() {
+            Dialog.confirm('<?php echo L('删除后，已关联的附件都会失效，确定要删除吗？')?>', function() {
                 var loading = layer.load(1, {shade: [0.1, '#fff']});
                 $.ajax({
                     type: 'post',
@@ -103,7 +103,7 @@ layui.use(['table'], function(){
         if (ids.toString()=='') {
             layer.msg('\u81f3\u5c11\u9009\u62e9\u4e00\u6761\u4fe1\u606f',{time:1000,icon:2});
         } else {
-            Dialog.confirm('<?php echo L('del_confirm')?>', function() {
+            Dialog.confirm('<?php echo L('删除后，已关联的附件都会失效，确定要删除吗？')?>', function() {
                 var loading = layer.load(1, {shade: [0.1, '#fff']});
                 $.ajax({
                     type: 'post',

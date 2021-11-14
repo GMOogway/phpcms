@@ -91,10 +91,10 @@ include $this->admin_tpl('header', 'admin');?>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-md-2 control-label"><?php echo L('附件存储策略');?></label>
+                        <label class="col-md-2 control-label"><?php echo L('全局存储策略');?></label>
                         <div class="col-md-9">
                             <label><select class="form-control" name="data[sys_attachment_save_id]">
-                                <option value="0"<?php echo ($sys_attachment_save_id=='0') ? ' selected' : ''?>><?php echo L('本地存储');?></option>
+                                <option value="0"<?php echo ($sys_attachment_save_id=='0') ? ' selected' : ''?>><?php echo L('本地存储（按字段分别设置）');?></option>
                                 <?php foreach ($remote as $i=>$t) {?>
                                 <option value="<?php echo $i;?>"<?php echo ($i == $sys_attachment_save_id ? ' selected' : '');?>> <?php echo L($t['name']);?> </option>
                                 <?php }?>

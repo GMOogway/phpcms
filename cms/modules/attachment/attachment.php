@@ -51,6 +51,8 @@ class attachment extends admin {
 					dr_json(0, L('头像存储目录不能与缩略图存储目录相同'));
 				}
 			}
+			$post['sys_attachment_save_id'] = intval($post['sys_attachment_save_id']);
+			$post['sys_attachment_save_type'] = intval($post['sys_attachment_save_type']);
 			$post['sys_attachment_path'] = addslashes($post['sys_attachment_path']);
 			$post['sys_avatar_path'] = addslashes($post['sys_avatar_path']);
 			$post['sys_thumb_path'] = addslashes($post['sys_thumb_path']);

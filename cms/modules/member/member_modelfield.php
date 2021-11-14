@@ -123,7 +123,6 @@ class member_modelfield extends admin {
 		} else {
 			$show_header = $show_validator= $show_dialog ='';
 			pc_base::load_sys_class('form','',0);
-			$remote = getcache('attachment', 'commons');
 			require MODEL_PATH.'fields.inc.php'; 
 			$modelid = intval($_GET['modelid']);
 			$fieldid = intval($_GET['fieldid']);
@@ -220,7 +219,6 @@ class member_modelfield extends admin {
 	 * 字段属性设置
 	 */
 	public function public_field_setting() {
-		$remote = getcache('attachment', 'commons');
 		$fieldtype = $this->input->get('fieldtype');
 		require MODEL_PATH.$fieldtype.DIRECTORY_SEPARATOR.'config.inc.php';
 		ob_start();
