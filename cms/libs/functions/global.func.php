@@ -1210,23 +1210,19 @@ function dr_arraycut($arr, $limit) {
  * @return  array
  */
 function dr_string2array($data, $limit = '') {
-	if (!$data) {
-		return array();
-	} elseif (is_array($data)) {
-		$rt = $data;
-	} else {
-		$rt = json_decode($data, true);
-		if (!$rt) {
-			$rt = unserialize(stripslashes($data));
-		}
-	}
-	if (is_array($rt)) {
+	if (is_array($data)) {
 		if ($limit) {
-			return dr_arraycut($rt, $limit);
+			return dr_arraycut($data, $limit);
 		}
+		return $data;
+	} elseif (!$data) {
+		return array();
+	}
+	$rt = json_decode($data, true);
+	if ($rt) {
 		return $rt;
 	}
-	return array();
+	return unserialize(stripslashes($data));
 }
 /**
  * 附件信息

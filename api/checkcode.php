@@ -17,4 +17,4 @@ if($checkcode->code_len > 8 || $checkcode->code_len < 2) $checkcode->code_len = 
 if($checkcode->font_size > 50 || $checkcode->font_size < 14) $checkcode->font_size = 20;
 $checkcode->show_code();
 $_SESSION['code'] = $checkcode->get_code();
-$cache->set_file('code', $_SESSION['code']);
+$cache->set_auth_data('code', $_SESSION['code'], 1);
