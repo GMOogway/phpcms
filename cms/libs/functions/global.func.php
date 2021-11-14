@@ -652,7 +652,7 @@ function local_attachment($option, $table = 0) {
 </tr><tr>
     <td>'.L('本地图片压缩大小').' </td>
     <td>
-        <label><input type="text" class="form-control" value="'.$option['local_attachment'].'" name="setting[local_attachment]"></label>
+        <label><input type="text" class="form-control" value="'.$option['local_image_reduce'].'" name="setting[local_image_reduce]"></label>
         <span class="help-block">'.L('填写图片宽度，例如1000，表示图片大于1000px时进行压缩图片').'</span>
     </td>
 </tr>';
@@ -666,7 +666,7 @@ function local_attachment($option, $table = 0) {
 </div><div class="form-group">
     <label class="col-md-2 control-label">'.L('本地图片压缩大小').' </label>
     <div class="col-md-9">
-        <label><input type="text" class="form-control" value="'.$option['local_attachment'].'" name="setting[local_attachment]"></label>
+        <label><input type="text" class="form-control" value="'.$option['local_image_reduce'].'" name="setting[local_image_reduce]"></label>
         <span class="help-block">'.L('填写图片宽度，例如1000，表示图片大于1000px时进行压缩图片').'</span>
     </div>
 </div>';
