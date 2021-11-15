@@ -135,7 +135,7 @@ include $this->admin_tpl('header');?>
                                 layer.msg(res.msg,{time:1000,icon:1});
                                 obj.del();
                             }else{
-                                layer.msg(res.msg,{time:1000,icon:2});
+                                dr_tips(0, res.msg);
                             }
                         }
                     });
@@ -158,7 +158,7 @@ include $this->admin_tpl('header');?>
                             location.reload(true);
                         });
                     }else{
-                        layer.msg(res.msg,{time:1000,icon:2});
+                        dr_tips(0, res.msg);
                         treeGrid.render;
                         return false;
                     }
@@ -181,7 +181,7 @@ include $this->admin_tpl('header');?>
                             location.reload(true);
                         });
                     }else{
-                        layer.msg(res.msg,{time:1000,icon:2});
+                        dr_tips(0, res.msg);
                         treeGrid.render;
                         return false;
                     }
@@ -204,7 +204,7 @@ include $this->admin_tpl('header');?>
                             location.reload(true);
                         });
                     }else{
-                        layer.msg(res.msg,{time:1000,icon:2});
+                        dr_tips(0, res.msg);
                         treeGrid.render;
                         return false;
                     }
@@ -227,7 +227,7 @@ include $this->admin_tpl('header');?>
                             location.reload(true);
                         });
                     }else{
-                        layer.msg(res.msg,{time:1000,icon:2});
+                        dr_tips(0, res.msg);
                         treeGrid.render;
                         return false;
                     }
@@ -250,7 +250,7 @@ include $this->admin_tpl('header');?>
                             location.reload(true);
                         });
                     }else{
-                        layer.msg(res.msg,{time:1000,icon:2});
+                        dr_tips(0, res.msg);
                         treeGrid.render;
                     }
                 }

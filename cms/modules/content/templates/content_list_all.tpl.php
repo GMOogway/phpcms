@@ -161,7 +161,7 @@ layui.use(['table'], function(){
         var posids = $('#posids').val();
         var searchtype = $('#searchtype').val();
         if ($.trim(keyword) === '') {
-            layer.msg('请输入关键字！', {icon: 0});
+            dr_tips(0, '<?php echo L('请输入关键字！')?>');
             return;
         }
         tableIn.reload({ page: {page: 1}, where: {keyword: keyword,start_time: start_time,end_time: end_time,posids: posids,searchtype: searchtype} });
@@ -184,7 +184,7 @@ layui.use(['table'], function(){
                             tableIn.reload();
                         });
                     }else{
-                        layer.msg(res.msg,{time:1000,icon:2});
+                        dr_tips(0, res.msg);
                     }
                 }
             });

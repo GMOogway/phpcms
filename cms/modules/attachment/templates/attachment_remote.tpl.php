@@ -64,7 +64,7 @@ layui.use(['table'], function(){
                             tableIn.reload();
                         });
                     }else{
-                        layer.msg(res.msg,{time:1000,icon:2});
+                        dr_tips(0, res.msg);
                     }
                 }
             });
@@ -87,7 +87,7 @@ layui.use(['table'], function(){
                                 tableIn.reload();
                             });
                         }else{
-                            layer.msg(res.msg,{time:1000,icon:2});
+                            dr_tips(0, res.msg);
                         }
                     }
                 });
@@ -117,7 +117,7 @@ layui.use(['table'], function(){
                                 tableIn.reload();
                             });
                         }else{
-                            layer.msg(res.msg,{time:1000,icon:2});
+                            dr_tips(0, res.msg);
                         }
                     }
                 });

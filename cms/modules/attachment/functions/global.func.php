@@ -73,7 +73,7 @@
 							return delete files[index];
 						}
 						element.progress('progress', '0%');
-						layer.msg('上传中', {icon: 16, time: 0});
+						dr_tips(1, '上传中……', 999999);
 					},
 					done: function(json){
 						if(json.code == 1){

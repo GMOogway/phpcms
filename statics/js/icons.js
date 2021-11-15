@@ -20,6 +20,6 @@
         copyText.innerText = 'fa '+$(this).text();
         copyText.select();
         document.execCommand("copy");
-        layer.msg("复制成功",{anim: 2});
+        dr_tips(1, '复制成功');
     })
 })

@@ -3,12 +3,11 @@ defined('IN_ADMIN') or exit('No permission resources.');
 $show_dialog = 1;
 include $this->admin_tpl('header', 'admin');
 ?>
-<script type="text/javascript" src="<?php echo JS_PATH?>layer/layer.js"></script>
 <script type="text/javascript">
 var syncing = 0;
 function sync_web(id) {
 	if (syncing == 1) {
-		layer.msg('<i class="fa fa-times-circle"></i>&nbsp;&nbsp;<?php echo L('sync_server')?>', {time: 3000});
+		dr_tips(0, '<?php echo L('sync_server')?>');
 		return;
 	}
 	syncing = 1;
