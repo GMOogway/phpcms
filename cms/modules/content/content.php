@@ -1093,7 +1093,7 @@ class content extends admin {
 				$uploadedfile['filemd5'] = md5_file(SYS_UPLOAD_PATH.$filename.'.'.$filetype);
 				$uploadedfile['remote'] = 0;
 				$uploadedfile['attachinfo'] = dr_array2string($info);
-				$uploadedfile['isimage'] = in_array($filetype, array('gif', 'jpg', 'jpeg', 'png', 'bmp')) ? 1 : 0;
+				$uploadedfile['isimage'] = in_array($filetype, array('gif', 'jpg', 'jpeg', 'png', 'bmp', 'webp')) ? 1 : 0;
 				$uploadedfile['filepath'] = $filename.'.'.$filetype;
 				$uploadedfile['filename'] = file_name($this->input->post('filepath'));
 				$uploadedfile['filesize'] = $fileinfo['size'];

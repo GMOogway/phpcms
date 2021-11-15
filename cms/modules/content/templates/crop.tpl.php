@@ -27,13 +27,27 @@ include $this->admin_tpl('header','admin');
             <span title="自由裁剪" onclick="toggle(this, NaN)">自由</span>
         </div>
 
+        <div class="toggles">
+            <span title="放大" class="plus"><i class="fa fa-search-plus"></i></span>
+            <span title="缩小" class="minus"><i class="fa fa-search-minus"></i></span>
+            <span title="操作" class="crop"><i class="fa fa-check"></i></span>
+            <span title="清除" class="clear"><i class="fa fa-times"></i></span>
+            <span title="重置" class="reset"><i class="fa fa-refresh"></i></span>
+        </div>
+
         <!--<div class="toggles">
-            <span title="逆时针旋转45度" class="rotate1"><i class="iconfont">&#xe66b;</i></span>
-            <span title="顺时针旋转45度" class="rotate2"><i class="iconfont">&#xe66c;</i></span>
-            <span title="左右旋转" class="about"><i class="iconfont">&#xe6fd;</i></span>
-            <span title="上下旋转" class="updown"><i class="iconfont">&#xe6fc;</i></span>
-            <span title="重置" class="reset"><i class="iconfont">&#xe68f;</i></span>
+            <span title="逆时针旋转45度" class="rotatex" style="width:25%;"><i class="fa fa-rotate-left"></i></span>
+            <span title="顺时针旋转45度" class="rotatey" style="width:25%;"><i class="fa fa-rotate-right"></i></span>
+            <span title="左右旋转" class="scalex" style="width:25%;"><i class="fa fa-arrows-h"></i></span>
+            <span title="上下旋转" class="scaley" style="width:25%;"><i class="fa fa-arrows-v"></i></span>
         </div>-->
+
+        <div class="toggles">
+            <span title="左移" class="left" style="width:25%;"><i class="fa fa-arrow-left"></i></span>
+            <span title="右移" class="right" style="width:25%;"><i class="fa fa-arrow-right"></i></span>
+            <span title="上移" class="up" style="width:25%;"><i class="fa fa-arrow-up"></i></span>
+            <span title="下移" class="down" style="width:25%;"><i class="fa fa-arrow-down"></i></span>
+        </div>
     </div>
 
     <div class="clearfix"></div>
@@ -64,7 +78,7 @@ include $this->admin_tpl('header','admin');
     }
 
     function dosbumit(){
-		layer.msg('正在处理中……', {icon:16,shade:0.21,shadeClose:true,time:999999});
+		dr_tips('', '正在处理中……', 999999);
         $.ajax({
             type: 'POST',
             url: '<?php echo SELF;?>?m=content&c=content&a=public_crop&module=<?php echo $module;?>&catid=<?php echo $catid;?>', 
@@ -73,10 +87,10 @@ include $this->admin_tpl('header','admin');
             success: function (res) {
                 if(res.code == 1){
                     $("#new_filename").val(res.data.filepath);
-                    layer.msg(res.msg, {icon: 6,time:1000});
+                    dr_tips(1, res.msg);
                     setTimeout(cropper_close, 1500);
                 }else{
-                    layer.alert(res.msg);
+                    dr_tips(0, res.msg);
                 }
             }
         })
@@ -95,20 +109,44 @@ include $this->admin_tpl('header','admin');
         $('#image').cropper('setAspectRatio', n);
     }
 
-    $('.rotate1').on('click', function(){
-        $('#image').cropper('rotate', -45);
+    $('.plus').on('click', function(){
+        $('#image').cropper("zoom", 0.1);
     });
-    $('.rotate2').on('click', function(){
-        $('#image').cropper('rotate', 45);
+    $('.minus').on('click', function(){
+        $('#image').cropper("zoom", -0.1);
     });
-    $('.about').on('click', function(){
-        $('#image').cropper("scaleX", -1);
+    $('.crop').on('click', function(){
+        $('#image').cropper("crop");
     });
-    $('.updown').on('click', function(){
-        $('#image').cropper("scaleY", -1);
+    $('.clear').on('click', function(){
+        $('#image').cropper("clear");
     });
     $('.reset').on('click', function(){
         $('#image').cropper('reset');
+    });
+    $('.rotatex').on('click', function(){
+        $('#image').cropper('rotate', -45);
+    });
+    $('.rotatey').on('click', function(){
+        $('#image').cropper('rotate', 45);
+    });
+    $('.scalex').on('click', function(){
+        $('#image').cropper("scaleX", -1);
+    });
+    $('.scaley').on('click', function(){
+        $('#image').cropper("scaleY", -1);
+    });
+    $('.left').on('click', function(){
+        $('#image').cropper("move", -10, 0);
+    });
+    $('.right').on('click', function(){
+        $('#image').cropper("move", 10, 0);
+    });
+    $('.up').on('click', function(){
+        $('#image').cropper("move", 0, -10);
+    });
+    $('.down').on('click', function(){
+        $('#image').cropper("move", 0, 10);
     });
 </script>
 </body>

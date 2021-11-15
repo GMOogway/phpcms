@@ -901,6 +901,12 @@ class image {
     public function watermark($data = array(), $is_test = 0)
     {
 
+        if (!in_array(str_replace('.', '', trim(strtolower(strrchr($data['source_image'], '.')), '.')), array(
+            'jpg', 'jpeg', 'png', 'webp'
+        ))) {
+            return false;
+        }
+
         $config = array();
         $config['source_image'] = $data['source_image'];
         $config['dynamic_output'] = $data['dynamic_output'];
@@ -908,30 +914,25 @@ class image {
             // 文字水印
             $config['wm_text'] = $data['wm_text'] ? $data['wm_text'] : 'cms';
             $config['wm_type'] = 'text';
-            $config['wm_font_path'] = CMS_PATH.'statics/images/water/font/'.$data['wm_font_path'];
+            $config['wm_font_path'] = CMS_PATH.'statics/images/water/font/'.dr_safe_filename($data['wm_font_path']);
             $config['wm_font_size'] = $data['wm_font_size'];
             $config['wm_font_color'] = $data['wm_font_color'];
         } else {
             // 图片水印
             $config['wm_type'] = 'overlay';
-            $config['wm_overlay_path'] = CMS_PATH.'statics/images/water/'.$data['wm_overlay_path'];
+            $config['wm_overlay_path'] = CMS_PATH.'statics/images/water/'.dr_safe_filename($data['wm_overlay_path']);
             $config['wm_opacity'] = isset($data['wm_opacity']) && $data['wm_opacity'] ? min(100, max($data['wm_opacity'], 1)) : 100;
         }
 
         list($config['wm_hor_alignment'], $config['wm_vrt_alignment']) = explode('-', $data['locate']);
 
         $config['quality'] = $data['quality'].'%';
-        $config['wm_padding'] = $data['wm_padding'] ? $data['wm_padding'] : 0;
-        $config['wm_hor_offset'] = $data['wm_hor_offset'] ? $data['wm_hor_offset'] : 0;
-        $config['wm_vrt_offset'] = $data['wm_vrt_offset'] ? $data['wm_vrt_offset'] : 0;
+        $config['wm_padding'] = (int)$data['wm_padding'];
+        $config['wm_hor_offset'] = (int)$data['wm_hor_offset'];
+        $config['wm_vrt_offset'] = (int)$data['wm_vrt_offset'];
         $this->initialize($config);
 
         $this->source_image = $config['source_image'];
-
-        if (in_array(fileext($this->source_image), array('bmp', 'webp'))) {
-            CI_DEBUG && log_message('debug', 'bmp和webp不满足水印条件：'.$data['source_image']);
-            return '';
-        }
 
         // 判断水印尺寸
         if (!$is_test) {
@@ -1551,12 +1552,10 @@ class image {
         if (!$attach) {
             CI_DEBUG && log_message('debug', '图片[id#'.$img.']不存在，thumb函数无法调用');
             return IMG_PATH.'nopic.gif';
-        } elseif (!in_array($attach['fileext'], array('gif', 'png', 'jpeg', 'jpg', 'webp'))) {
+        } elseif (!in_array($attach['fileext'], array('png', 'jpeg', 'jpg', 'webp'))) {
             CI_DEBUG && log_message('debug', '图片[id#'.$img.']扩展名不符合条件，thumb函数无法调用');
-            return IMG_PATH.'nopic.gif';
+            return $attach['url'];
         }
-
-        //list($cache_path, $cache_url) = array(SYS_UPLOAD_PATH, SYS_UPLOAD_URL);
 
         // 图片缩略图文件
         if ($attach['remote'] && $attach['url']) {
@@ -1707,7 +1706,7 @@ class image {
      * @param   integer   $y           裁剪区域y坐标
      */
     public function crops($image, $filename = '', $w, $h, $x = 0, $y = 0 ){
-        if(!$this->check($image)) return false;
+        if(!$this->check($image)) dr_json(0, L('只支持jpg|jpeg|gif|png|webp裁切'));
         $filename = $filename ? $filename : $image;
         $filepath = rtrim(dirname($filename), '/').'/';
         if(!is_dir($filepath)){
