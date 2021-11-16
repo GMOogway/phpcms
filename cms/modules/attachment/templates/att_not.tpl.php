@@ -42,7 +42,7 @@ var ds = new DragSelect({
 			//Dialog.alert('不能选择超过'+file_upload_limit+'个附件');
 		}else{
 			$(element).children("a").addClass("on");
-			$.get('index.php?m=attachment&c=attachments&a=h5upload_json_del&aid='+id+'&src='+src+'&filename='+filename+'&size='+size);
+			$.get('<?php echo SELF;?>?m=attachment&c=attachments&a=h5upload_json_del&aid='+id+'&src='+src+'&filename='+filename+'&size='+size);
 			parent.window.$('#att-status').append('|'+src);
 			parent.window.$('#att-name').append('|'+filename);
 			$(element).addClass('on').find('input[type="checkbox"]').prop('checked', true);
@@ -58,7 +58,7 @@ var ds = new DragSelect({
 		var imgstr = parent.window.$("#att-status").html();
 		var length = $("a[class='on']").children("img").length;
 		var strs = filenames = '';
-		$.get('index.php?m=attachment&c=attachments&a=h5upload_json&aid='+id+'&src='+src+'&filename='+filename+'&size='+size);
+		$.get('<?php echo SELF;?>?m=attachment&c=attachments&a=h5upload_json&aid='+id+'&src='+src+'&filename='+filename+'&size='+size);
 		for(var i=0;i<length;i++){
 			strs += '|'+$("a[class='on']").children("img").eq(i).attr('path');
 			filenames += '|'+$("a[class='on']").children("img").eq(i).attr('filename');

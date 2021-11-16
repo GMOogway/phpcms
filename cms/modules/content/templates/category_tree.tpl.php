@@ -14,7 +14,7 @@ include $this->admin_tpl('header','admin');?>
 $(document).ready(function(){
     $("#category_tree").treeview({
 			control: "#treecontrol",
-			url: "index.php?m=content&c=content&a=public_sub_categorys&menuid=<?php echo $_GET['menuid']?>",
+			url: "<?php echo SELF;?>?m=content&c=content&a=public_sub_categorys&menuid=<?php echo $_GET['menuid']?>",
 			ajax: {
 				data: {
 					"additional": function() {

@@ -20,7 +20,7 @@
 		<?php if(empty($iframe)) {?>
         <a href="<?php echo $downurl?>" title="<?php echo $appname?>"><?php echo L('plugin_click_download','','plugin')?></a>
 		<?php }?>
-		<a href="index.php?m=admin&c=plugin&a=install_online&id=<?php echo $id?>"><?php echo L('install_online','','plugin')?></a></td>
+		<a href="<?php echo SELF;?>?m=admin&c=plugin&a=install_online&id=<?php echo $id?>"><?php echo L('install_online','','plugin')?></a></td>
 
       <td align="left" width="50%"><strong><?php echo L('plugin_reg_time','','plugin')?></strong><?php echo date('Y-m-d H:i:s',$inputtime)?><br />
         <strong><?php echo L('plugin_copyright','','plugin')?></strong><?php echo $username?> </td>

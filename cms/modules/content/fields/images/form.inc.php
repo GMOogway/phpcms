@@ -48,9 +48,9 @@
 			'image_reduce' => $image_reduce,
 		), 'ENCODE');
 		if($show_type && defined('IN_ADMIN')) {
-			$string .= $str."<input type='button' class='button' onclick=\"javascript:h5upload('{$field}_images', '".L('attachment_upload')."','{$field}','change_thumbs','{$p}','content','$this->catid','{$authkey}',".SYS_EDITOR.")\"/ value='".L('select_pic')."'>";
+			$string .= $str."<input type='button' class='button' onclick=\"javascript:h5upload('".SELF."', '{$field}_images', '".L('attachment_upload')."','{$field}','change_thumbs','{$p}','content','$this->catid','{$authkey}',".SYS_EDITOR.")\"/ value='".L('select_pic')."'>";
 		} else {
-			$string .= $str."<input type='button' class='button' onclick=\"javascript:h5upload('{$field}_images', '".L('attachment_upload')."','{$field}','change_images','{$p}','content','$this->catid','{$authkey}',".SYS_EDITOR.")\"/ value='".L('select_pic')."'>";
+			$string .= $str."<input type='button' class='button' onclick=\"javascript:h5upload('".SELF."', '{$field}_images', '".L('attachment_upload')."','{$field}','change_images','{$p}','content','$this->catid','{$authkey}',".SYS_EDITOR.")\"/ value='".L('select_pic')."'>";
 		}
 		return $string;
 	}

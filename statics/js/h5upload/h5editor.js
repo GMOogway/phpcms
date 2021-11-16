@@ -1,4 +1,4 @@
-function h5upload(uploadid, name, textareaid, funcName, args, module, catid, authkey, syseditor) {
+function h5upload(sysfilename, uploadid, name, textareaid, funcName, args, module, catid, authkey, syseditor) {
 	var w = '76%';
 	var h = '68%';
 	if (is_mobile()) {
@@ -6,7 +6,7 @@ function h5upload(uploadid, name, textareaid, funcName, args, module, catid, aut
 	}
 	var args = args ? '&args='+args : '';
 	var setting = '&module='+module+'&catid='+catid+'&authkey='+authkey;
-	var url = 'index.php?m=attachment&c=attachments&a=h5upload'+args+setting;
+	var url = sysfilename+'?m=attachment&c=attachments&a=h5upload'+args+setting;
 	if (typeof pc_hash == 'string') url += (url.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
 	var diag = new Dialog({
 		id:uploadid,
@@ -139,7 +139,7 @@ function h5upload(uploadid, name, textareaid, funcName, args, module, catid, aut
 				var filename = filenames[n];
 				img += IsImg(data[n]) ? '<img src="'+data[n]+'" alt="'+filename+'" /><br />' : (IsSwf(data[n]) ? '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0"><param name="quality" value="high" /><param name="movie" value="'+data[n]+'" /><embed pluginspage="http://www.macromedia.com/go/getflashplayer" quality="high" src="'+data[n]+'" type="application/x-shockwave-flash" width="460"></embed></object>' :'<a href="'+data[n]+'" title="'+filename+'" />'+data[n]+'</a><br />') ;
 			}
-			$.get("index.php?m=attachment&c=attachments&a=h5delete",{data: del_content},function(data){});
+			$.get(sysfilename+"?m=attachment&c=attachments&a=h5delete",{data: del_content},function(data){});
 			if (syseditor==1) {
 				CKEDITOR.instances[textareaid].insertHtml(img);
 			} else {

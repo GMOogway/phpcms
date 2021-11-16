@@ -13,11 +13,11 @@
             <li id="tab_h5_1"<?php echo $tab_status?> onclick="SwapTab('h5','on','',5,1);"><?php echo L('upload_attachment')?></li>
             <li id="tab_h5_2" onclick="SwapTab('h5','on','',5,2);"><?php echo L('net_file')?></li>
             <?php if($allowupload && $this->admin_username && $_SESSION['userid']) {?>
-            <li id="tab_h5_3" onclick="SwapTab('h5','on','',5,3);set_iframe('album_list','index.php?m=attachment&c=attachments&a=album_load&args=<?php echo $args?>&authkey=<?php echo $authkey;?>');"><?php echo L('gallery')?></li>
-            <li id="tab_h5_4" onclick="SwapTab('h5','on','',5,4);set_iframe('album_dir','index.php?m=attachment&c=attachments&a=album_dir&args=<?php echo $args?>&authkey=<?php echo $authkey;?>');"><?php echo L('directory_browse')?></li>
+            <li id="tab_h5_3" onclick="SwapTab('h5','on','',5,3);set_iframe('album_list','<?php echo SELF;?>?m=attachment&c=attachments&a=album_load&args=<?php echo $args?>&authkey=<?php echo $authkey;?>');"><?php echo L('gallery')?></li>
+            <li id="tab_h5_4" onclick="SwapTab('h5','on','',5,4);set_iframe('album_dir','<?php echo SELF;?>?m=attachment&c=attachments&a=album_dir&args=<?php echo $args?>&authkey=<?php echo $authkey;?>');"><?php echo L('directory_browse')?></li>
             <?php }?>
             <?php if($att_not_used!='') {?>
-            <li id="tab_h5_5" class="on icon" onclick="SwapTab('h5','on','',5,5);set_iframe('att_not','index.php?m=attachment&c=attachments&a=att_not&args=<?php echo $args?>&authkey=<?php echo $authkey;?>');"><?php echo L('att_not_used')?></li>
+            <li id="tab_h5_5" class="on icon" onclick="SwapTab('h5','on','',5,5);set_iframe('att_not','<?php echo SELF;?>?m=attachment&c=attachments&a=att_not&args=<?php echo $args?>&authkey=<?php echo $authkey;?>');"><?php echo L('att_not_used')?></li>
             <?php }?>
         </ul>
         <div id="div_h5_1" class="content pad-10<?php echo $div_status?>">
@@ -61,7 +61,7 @@
         <div role="presentation" id="div_h5_5" class="contentList pad-10">
             <script type="text/javascript">
             $(document).ready(function(){
-                set_iframe('att_not','index.php?m=attachment&c=attachments&a=att_not&args=<?php echo $args?>&authkey=<?php echo $authkey;?>');
+                set_iframe('att_not','<?php echo SELF;?>?m=attachment&c=attachments&a=att_not&args=<?php echo $args?>&authkey=<?php echo $authkey;?>');
             })
             </script>
             <ul class="attachment-list">
@@ -110,7 +110,7 @@ function dr_download(obj) {
     $.ajax({
         type: 'POST',
         dataType: 'json',
-        url: '<?php echo APP_PATH;?>index.php?m=attachment&c=attachments&a=download',
+        url: '<?php echo APP_PATH.SELF;?>?m=attachment&c=attachments&a=download',
         data: {module:'<?php echo $this->input->get('module');?>',catid:'<?php echo $this->input->get('catid');?>',args:'<?php echo $args;?>',authkey:'<?php echo $authkey;?>',filename:$('#dr_'+obj).val()},
         success: function(json) {
             if (json.code) {

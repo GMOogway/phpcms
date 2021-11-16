@@ -115,7 +115,7 @@ class form {
 			$str .= "},";
 			$str .= "height:{$height},";
 			$str .="textareaid:'".$textareaid."',module:'".$module."',catid:'".$catid."',\r\n";
-			if($allowupload) $str .= "filebrowserUploadUrl : 'index.php?m=attachment&c=attachments&a=upload&module=".$module."&catid=".$catid."&dosubmit=1&args=".$p."&authkey=".$authkey."',\r\n";
+			if($allowupload) $str .= "filebrowserUploadUrl : '".SELF."?m=attachment&c=attachments&a=upload&module=".$module."&catid=".$catid."&dosubmit=1&args=".$p."&authkey=".$authkey."',\r\n";
 			if($color) {
 				$str .= "uiColor: '$color',";
 			}
@@ -209,7 +209,7 @@ class form {
 			$ext_str .= "<a href='javascript:insert_page(\"$textareaid\")'>".L('pagebreak')."</a><a href='javascript:insert_page_title(\"$textareaid\")'>".L('subtitle')."</a>";
 		}
 		if($allowupload) {
-			$ext_str.="<a onclick=\"h5upload('h5upload', '".L('attachmentupload')."','{$textareaid}','','{$p}','{$module}','{$catid}','{$authkey}',".SYS_EDITOR.");return false;\" href=\"javascript:void(0);\">".L('attachmentupload')."</a>";
+			$ext_str.="<a onclick=\"h5upload('".SELF."', 'h5upload', '".L('attachmentupload')."','{$textareaid}','','{$p}','{$module}','{$catid}','{$authkey}',".SYS_EDITOR.");return false;\" href=\"javascript:void(0);\">".L('attachmentupload')."</a>";
 		}
 		$ext_str .= "</div>";
 		if ($show_page=="true") {
@@ -263,7 +263,7 @@ class form {
 			'attachment' => $attachment,
 			'image_reduce' => $image_reduce,
 		), 'ENCODE');
-		return $str."<input type=\"text\" name=\"$name\" id=\"$id\" value=\"$value\" size=\"$size\" class=\"$class\" $ext/>  <input type=\"button\" class=\"button\" onclick=\"javascript:h5upload('{$id}_images', '".L('attachmentupload')."','{$id}','submit_images','{$p}','{$moudle}','{$catid}','{$authkey}',".SYS_EDITOR.")\"/ value=\"".L('imagesupload')."\">";
+		return $str."<input type=\"text\" name=\"$name\" id=\"$id\" value=\"$value\" size=\"$size\" class=\"$class\" $ext/>  <input type=\"button\" class=\"button\" onclick=\"javascript:h5upload('".SELF."', '{$id}_images', '".L('attachmentupload')."','{$id}','submit_images','{$p}','{$moudle}','{$catid}','{$authkey}',".SYS_EDITOR.")\"/ value=\"".L('imagesupload')."\">";
 	}
 
 	/**
@@ -306,7 +306,7 @@ class form {
 			'attachment' => $attachment,
 			'image_reduce' => $image_reduce,
 		), 'ENCODE');
-		return $str."<input type=\"text\" name=\"$name\" id=\"$id\" value=\"$value\" size=\"$size\" class=\"$class\" $ext/>  <input type=\"button\" class=\"button\" onclick=\"javascript:h5upload('{$id}_files', '".L('attachmentupload')."','{$id}','submit_attachment','{$p}','{$moudle}','{$catid}','{$authkey}',".SYS_EDITOR.")\"/ value=\"".L('filesupload')."\">";
+		return $str."<input type=\"text\" name=\"$name\" id=\"$id\" value=\"$value\" size=\"$size\" class=\"$class\" $ext/>  <input type=\"button\" class=\"button\" onclick=\"javascript:h5upload('".SELF."', '{$id}_files', '".L('attachmentupload')."','{$id}','submit_attachment','{$p}','{$moudle}','{$catid}','{$authkey}',".SYS_EDITOR.")\"/ value=\"".L('filesupload')."\">";
 	}
 	
 	/**

@@ -102,7 +102,7 @@ include $this->admin_tpl('header','admin');
 </div>
 <script type="text/javascript">
 function dr_to_aeskey() {
-	$.get("index.php?m=fclient&c=fclient&a=public_asckey&pc_hash="+pc_hash, function(data){
+	$.get("<?php echo SELF;?>?m=fclient&c=fclient&a=public_asckey&pc_hash="+pc_hash, function(data){
 		$("#fclient_sn").val(data);
 	});
 }

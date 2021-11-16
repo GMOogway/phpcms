@@ -15,7 +15,7 @@ function sync_web(id) {
 	$.ajax({
 		type: "GET",
 		dataType: "json",
-		url: "<?php echo APP_PATH?>index.php?m=fclient&c=fclient&a=sync_web&id="+id+"&pc_hash="+pc_hash,
+		url: "<?php echo APP_PATH.SELF;?>?m=fclient&c=fclient&a=sync_web&id="+id+"&pc_hash="+pc_hash,
 		success: function(json) {
 			if (json.code) {
 				$('#sync_html_'+id).html('<font color="green">'+json.msg+'</font>');

@@ -1282,7 +1282,7 @@ class content extends admin {
 					$pagenumber--;
 				}
 				for($i=1; $i<=$pagenumber; $i++) {
-					$pageurls[$i][0] = 'index.php?m=content&c=content&a=public_preview&steps='.intval($this->input->get('steps')).'&catid='.$catid.'&id='.$id.'&page='.$i;
+					$pageurls[$i][0] = SELF.'?m=content&c=content&a=public_preview&steps='.intval($this->input->get('steps')).'&catid='.$catid.'&id='.$id.'&page='.$i;
 				}
 				$END_POS = strpos($content, '[/page]');
 				if($END_POS !== false) {

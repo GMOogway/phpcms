@@ -58,9 +58,9 @@ class poster extends admin {
 					$this->attachment_db = pc_base::load_model('attachment_model');
 					$this->attachment_db->api_update($imgs, 'poster-'.$id, 1);
 				}
-				showmessage(L('add_ads_success'), 'index.php?m=poster&c=space&a=init');
+				showmessage(L('add_ads_success'), SELF.'?m=poster&c=space&a=init');
 			} else {
-				showmessage(L('operation_failure'), 'index.php?m=poster&c=space&a=init');
+				showmessage(L('operation_failure'), SELF.'?m=poster&c=space&a=init');
 			}
 		} else {
 			$spaceid = intval($this->input->get('spaceid'));
@@ -92,7 +92,7 @@ class poster extends admin {
 				$this->attachment_db = pc_base::load_model('attachment_model');
 				$this->attachment_db->api_update($imgs, 'poster-'.$this->input->get('id'), 1);
 			}
-			showmessage(L('edit_ads_success'), 'index.php?m=poster&c=poster&a=init&spaceid='.$this->input->get('spaceid'));
+			showmessage(L('edit_ads_success'), SELF.'?m=poster&c=poster&a=init&spaceid='.$this->input->get('spaceid'));
 		} else {
 			
 			$info = $this->db->get_one(array('id'=>$this->input->get('id'), 'siteid'=>$this->get_siteid()));

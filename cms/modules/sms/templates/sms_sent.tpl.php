@@ -27,7 +27,7 @@ jQuery(document).ready(function() {
 </script>
 <div class="pad-10">
 
-<form name="smsform" action="index.php?m=sms&c=sms&a=exportmobile" method="post" >
+<form name="smsform" action="<?php echo SELF;?>?m=sms&c=sms&a=exportmobile" method="post" >
 <table width="100%" cellspacing="0" class="search-form">
     <tbody>
 		<tr>

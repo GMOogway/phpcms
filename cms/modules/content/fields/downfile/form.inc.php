@@ -42,6 +42,6 @@
 			'attachment' => $attachment,
 			'image_reduce' => $image_reduce,
 		), 'ENCODE');
-		$string .= $str."<input type='text' name='info[$field]' id='$field' value='$value' class='input-text' style='width:80%'/>  <input type='button' class='button' onclick=\"javascript:h5upload('{$field}_downfield', '".L('attachment_upload')."','{$field}','submit_files','{$p}','content','$this->catid','{$authkey}',".SYS_EDITOR.")\"/ value='".L('upload_soft')."'>";
+		$string .= $str."<input type='text' name='info[$field]' id='$field' value='$value' class='input-text' style='width:80%'/>  <input type='button' class='button' onclick=\"javascript:h5upload('".SELF."', '{$field}_downfield', '".L('attachment_upload')."','{$field}','submit_files','{$p}','content','$this->catid','{$authkey}',".SYS_EDITOR.")\"/ value='".L('upload_soft')."'>";
 		return $string;
 	}

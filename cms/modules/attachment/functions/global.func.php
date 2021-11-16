@@ -61,7 +61,7 @@
 					accept:'file',
 					field:'file_upload',
 					data: {H5UPLOADSESSID : '".$sess_id."',module:'".$module."',catid:'".$catid."',userid:'".$userid."',siteid:'".$siteid."',dosubmit:'1',thumb_width:'".$thumb_width."',thumb_height:'".$thumb_height."',watermark_enable:'".$watermark_enable."',attachment:'".$attachment."',image_reduce:'".$image_reduce."',filetype_post:'".$file_types_post."',h5_auth_key:'".$h5_auth_key."',isadmin:'".$isadmin."',groupid:'".$groupid."'},
-					url: '".APP_PATH."index.php?m=attachment&c=attachments&a=h5upload',
+					url: '".APP_PATH.SELF."?m=attachment&c=attachments&a=h5upload',
 					exts: '".$file_types_post."',
 					size: ".$file_size_limit.",
 					multiple: ".$multi.",
@@ -88,7 +88,7 @@
 							} else {
 								var img = '<div onmouseover=\"layer.tips(\''+data.name+'&nbsp;&nbsp;'+data.size+'\',this,{tips: [1, \'#000\']});\" onmouseout=\"layer.closeAll();\"><span class=\"checkbox\"></span><input type=\"checkbox\" class=\"checkboxes\" name=\"ids[]\" value=\"'+data.id+'\" /><a href=\"javascript:;\" onclick=\"javascript:att_cancel(this,'+data.id+',\'upload\')\" class=\"on\"><div class=\"icon\"></div><img src=\"".IMG_PATH."ext/'+data.ext+'.png\" width=\"80\" id=\"'+data.id+'\" path=\"'+data.url+'\" filename=\"'+data.name+'\"/><i class=\"size\">'+data.size+'</i><i class=\"name\" title=\"'+data.name+'\">'+data.name+'</i></a></div>';
 							}
-							$.get('index.php?m=attachment&c=attachments&a=h5upload_json&aid='+data.id+'&src='+data.url+'&filename='+data.name+'&size='+data.size);
+							$.get('".SELF."?m=attachment&c=attachments&a=h5upload_json&aid='+data.id+'&src='+data.url+'&filename='+data.name+'&size='+data.size);
 							$('#fsUpload').append('<div id=\"attachment_'+data.id+'\" class=\"files_row on\"></div>');
 							$('#attachment_'+data.id).html(img);
 							$('#att-status').append('|'+data.url);
