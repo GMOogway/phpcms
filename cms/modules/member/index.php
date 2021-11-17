@@ -16,7 +16,6 @@ class index extends foreground {
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
 		$this->cache = pc_base::load_sys_class('cache');
-		$this->http_user_agent = $_SERVER['HTTP_USER_AGENT'];
 	}
 
 	public function init() {
