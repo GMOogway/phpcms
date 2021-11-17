@@ -132,8 +132,8 @@ include $this->admin_tpl('header');?>
                         <label class="col-md-2 control-label"><?php echo L('editormode')?></label>
                         <div class="col-md-9">
                             <div class="mt-radio-inline">
-                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setconfig[sys_editor]" value="0"<?php echo ($sys_editor=='0') ? ' checked' : ''?>> <?php echo L('UEditor');?> <span></span></label>
-                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setconfig[sys_editor]" value="1"<?php echo ($sys_editor=='1') ? ' checked' : ''?>> <?php echo L('CKEditor');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setconfig[sys_editor]" value="0"<?php echo (!$sys_editor) ? ' checked' : ''?>> <?php echo L('UEditor');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setconfig[sys_editor]" value="1"<?php echo ($sys_editor) ? ' checked' : ''?>> <?php echo L('CKEditor');?> <span></span></label>
                             </div>
                         </div>
                     </div>
@@ -235,14 +235,14 @@ include $this->admin_tpl('header');?>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('setting_csrf')?></label>
                         <div class="col-md-9">
-                            <input type="checkbox" name="setconfig[sys_csrf]" value="1" <?php echo ($sys_csrf=='1') ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+                            <input type="checkbox" name="setconfig[sys_csrf]" value="1" <?php echo $sys_csrf ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
                             <span class="help-block"><?php echo L('setting_csrf_desc')?></span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('need_check_come_url')?></label>
                         <div class="col-md-9">
-                            <input type="checkbox" name="setconfig[needcheckcomeurl]" value="1" <?php echo ($needcheckcomeurl=='1') ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+                            <input type="checkbox" name="setconfig[needcheckcomeurl]" value="1" <?php echo $needcheckcomeurl ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
                         </div>
                     </div>
                     <?php if($_SESSION['roleid']==1 && dr_in_array($_SESSION['userid'], ADMIN_FOUNDERS)) {?>
@@ -257,20 +257,20 @@ include $this->admin_tpl('header');?>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('setting_admin_debug')?></label>
                         <div class="col-md-9">
-                            <input type="checkbox" name="setconfig[debug]" value="1" <?php echo ($debug=='1') ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+                            <input type="checkbox" name="setconfig[debug]" value="1" <?php echo $debug ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
                             <span class="help-block"><?php echo L('setting_admin_debug_desc')?></span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('setting_admin_log')?></label>
                         <div class="col-md-9">
-                            <input type="checkbox" name="setconfig[admin_log]" value="1" <?php echo ($admin_log=='1') ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+                            <input type="checkbox" name="setconfig[admin_log]" value="1" <?php echo $admin_log ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('setting_error_log')?></label>
                         <div class="col-md-9">
-                            <input type="checkbox" name="setconfig[errorlog]" value="1" <?php echo ($errorlog=='1') ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+                            <input type="checkbox" name="setconfig[errorlog]" value="1" <?php echo $errorlog ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
                         </div>
                     </div>
                     <div class="form-group" id="dr_row_errorlog_size">
@@ -437,6 +437,26 @@ include $this->admin_tpl('header');?>
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('login_city')?></label>
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[login_city]" value="0"<?php echo (!$login_city) ? ' checked' : ''?>> <?php echo L('yes_city');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[login_city]" value="1"<?php echo ($login_city) ? ' checked' : ''?>> <?php echo L('no_city');?> <span></span></label>
+                            </div>
+                            <span class="help-block"><?php echo L('login_city_desc')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('login_llq')?></label>
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[login_llq]" value="0"<?php echo (!$login_llq) ? ' checked' : ''?>> <?php echo L('yes_llq');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[login_llq]" value="1"<?php echo ($login_llq) ? ' checked' : ''?>> <?php echo L('no_llq');?> <span></span></label>
+                            </div>
+                            <span class="help-block"><?php echo L('login_llq_desc')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('setting_safe')?></label>
                         <div class="col-md-9">
                             <div class="mt-checkbox-inline">
@@ -470,8 +490,8 @@ include $this->admin_tpl('header');?>
                         <label class="col-md-2 control-label"><?php echo L('mail_type')?></label>
                         <div class="col-md-9">
                             <div class="mt-radio-inline">
-                                <label class="mt-radio mt-radio-outline"><input name="setting[mail_type]" checkbox="mail_type" value="1" onclick="showsmtp(this)" type="radio" <?php echo $mail_type==1 ? ' checked' : ''?>> <?php echo L('mail_type_smtp')?> <span></span></label>
-                                <label class="mt-radio mt-radio-outline"><input name="setting[mail_type]" checkbox="mail_type" value="0" onclick="showsmtp(this)" type="radio" <?php echo $mail_type==0 ? ' checked' : ''?> <?php if(substr(strtolower(PHP_OS), 0, 3) == 'win') echo 'disabled'; ?>/> <?php echo L('mail_type_mail')?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input name="setting[mail_type]" checkbox="mail_type" value="1" onclick="showsmtp(this)" type="radio" <?php echo $mail_type ? ' checked' : ''?>> <?php echo L('mail_type_smtp')?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input name="setting[mail_type]" checkbox="mail_type" value="0" onclick="showsmtp(this)" type="radio" <?php echo !$mail_type ? ' checked' : ''?> <?php if(substr(strtolower(PHP_OS), 0, 3) == 'win') echo 'disabled'; ?>/> <?php echo L('mail_type_mail')?> <span></span></label>
                             </div>
                         </div>
                     </div>

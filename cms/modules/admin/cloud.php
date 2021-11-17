@@ -32,8 +32,20 @@ class cloud extends admin {
         $this->service_url = 'http://ceshi.kaixin100.cn/index.php?m=cloud&c=index&a=cloud&domain='.dr_get_domain_name(ROOT_URL).'&admin='.urlencode($this->admin_url).'&version='.CMS_VERSION.'&cms='.CMS_ID.'&license='.CMS_LICENSE.'&updatetime='.strtotime(CMS_UPDATETIME).'&downtime='.strtotime(CMS_DOWNTIME).'&sitename='.base64_encode($this->sitename).'&siteurl='.urlencode($this->siteurl).'&php='.PHP_VERSION.'&mysql='.$this->db->version().'&os='.PHP_OS;
     }
 
-    // 程序升级
+    // 我的网站
     public function init() {
+        $show_header = '';
+        include $this->admin_tpl('cloud_index');exit;
+    }
+
+	// 常用配置
+    public function config() {
+        $show_header = '';
+        include $this->admin_tpl('cloud_config');exit;
+    }
+
+    // 程序升级
+    public function upgrade() {
         $show_header = '';
 
         if (CMS_LICENSE == 'dev') {

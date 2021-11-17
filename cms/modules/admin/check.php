@@ -196,6 +196,9 @@ class check extends admin {
                 if ($this->db->field_exists('card')) {
                     $this->db->query('ALTER TABLE `'.$this->db->table_name.'` DROP `card`');
                 }
+                if (!$this->db->field_exists('login_attr')) {
+                    $this->db->query('ALTER TABLE `'.$this->db->table_name.'` ADD `login_attr` varchar(100) NOT NULL DEFAULT \'\' COMMENT \'登录附加验证字符\' AFTER `password`');
+                }
                 if (!$this->db->field_exists('islock')) {
                     $this->db->query('ALTER TABLE `'.$this->db->table_name.'` ADD `islock` tinyint(1) UNSIGNED NOT NULL DEFAULT \'0\' COMMENT \'账号锁定标识\' AFTER `email`');
                 }
@@ -214,6 +217,11 @@ class check extends admin {
                     KEY `logintime` (`logintime`),
                     KEY `updatetime` (`updatetime`)
                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT=\'账号记录\''));
+                }
+
+                $this->db->table_name = $prefix.'member';
+                if (!$this->db->field_exists('login_attr')) {
+                    $this->db->query('ALTER TABLE `'.$this->db->table_name.'` ADD `login_attr` varchar(100) NOT NULL DEFAULT \'\' COMMENT \'登录附加验证字符\' AFTER `password`');
                 }
 
                 $table = $prefix.'member_login';

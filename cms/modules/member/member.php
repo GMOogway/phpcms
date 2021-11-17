@@ -20,6 +20,7 @@ class member extends admin {
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
 		$this->db = pc_base::load_model('member_model');
+		$this->member_login_db = pc_base::load_model('member_login_model');
 	}
 
 	/**
@@ -596,11 +597,10 @@ class member extends admin {
 				$config = getcache('common','commons');
 				if ($config) {
 					if (isset($config['safe_wdl']) && $config['safe_wdl']) {
-						$member_login_db = pc_base::load_model('member_login_model');
 						$time = $config['safe_wdl'] * 3600 * 24;
 						$login_where[] = 'logintime < '.(SYS_TIME - $time);
 						$login_where[] = to_sqls($uidarr, '', 'uid');
-						$member_login_db->update(array('logintime'=>SYS_TIME), implode(' AND ', $login_where));
+						$this->member_login_db->update(array('logintime'=>SYS_TIME), implode(' AND ', $login_where));
 					}
 				}
 			}

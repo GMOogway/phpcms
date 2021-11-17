@@ -681,7 +681,7 @@ function dr_iframe(type, url, width, height, rt) {
 		var drag = true;
 	}
 	var diag = new Dialog({
-		id:'save_id',
+		id:'iframe',
 		title:title,
 		url:url,
 		width:width,
@@ -720,6 +720,50 @@ function dr_iframe(type, url, width, height, rt) {
 		});
 		return false;
 	};
+	diag.onCancel=function(){
+		$DW.close();
+	};
+	diag.show();
+}
+// ajax 显示内容
+function dr_iframe_show(type, url, width, height) {
+	if (typeof pc_hash == 'string') url += (url.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
+	if (url.toLowerCase().indexOf("http://") != -1 || url.toLowerCase().indexOf("https://") != -1) {
+	} else {
+		url = geturlpathname()+url;
+	}
+	var title = '';
+	if (type == 'show') {
+		title = '<i class="fa fa-search"></i> 查看';
+	} else if (type == 'edit') {
+		title = '<i class="fa fa-edit"></i> 修改';
+	} else if (type == 'code') {
+		title = '<i class="fa fa-code"></i> 代码';
+	} else if (type == 'cart') {
+		title = '<i class="fa fa-shopping-cart"></i> 交易记录';
+	} else {
+		title = type;
+	}
+	if (!width) {
+		width = '60%';
+	}
+	if (!height) {
+		height = '70%';
+	}
+	if (is_mobile()) {
+		width = '95%';
+		height = '90%';
+	}
+	var diag = new Dialog({
+		id:'iframe_show',
+		title:title,
+		url:url,
+		width:width,
+		height:height,
+		modal:true,
+		draggable:true
+	});
+	diag.cancelText = '关闭(X)';
 	diag.onCancel=function(){
 		$DW.close();
 	};

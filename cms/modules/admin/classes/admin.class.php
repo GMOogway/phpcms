@@ -33,7 +33,22 @@ class admin {
 		if(ROUTE_M =='admin' && ROUTE_C =='index' && in_array(ROUTE_A, array(SYS_ADMIN_PATH, 'fclient'))) {
 			return true;
 		} else {
+			$cache = pc_base::load_sys_class('cache');
+			$config = getcache('common','commons');
+			$admin_db = pc_base::load_model('admin_model');
 			$userid = param::get_cookie('userid');
+			$login_attr = param::get_cookie('login_attr');
+			$user = $admin_db->get_one(array('userid'=>$userid));
+			if ($user && $login_attr!=md5(SYS_KEY.$user['password'].(isset($user['login_attr']) ? $user['login_attr'] : ''))) {
+				$_SESSION['userid'] = 0;
+				$_SESSION['login_attr'] = '';
+				$_SESSION['roleid'] = 0;
+				param::set_cookie('admin_username','');
+				param::set_cookie('userid',0);
+				param::set_cookie('login_attr', '');
+				$cache->clear(COOKIE_PRE.ip().'pc_hash');
+				redirect('?m=admin&c=index&a='.SYS_ADMIN_PATH);
+			}
 			if(!isset($_SESSION['userid']) || !isset($_SESSION['roleid']) || !$_SESSION['userid'] || !$_SESSION['roleid'] || $userid != $_SESSION['userid']) showmessage(L('admin_login'),'?m=admin&c=index&a='.SYS_ADMIN_PATH);
 		}
 	}
@@ -215,6 +230,60 @@ class admin {
 	}
 
 	/**
+	 * 获取登陆信息
+	 */
+	final public static function admin_get_log($uid) {
+		$admin_login_db = pc_base::load_model('admin_login_model');
+		if ($uid) {
+			$row = $admin_login_db->get_one(array('uid'=>$uid));
+			if (!$row) {
+				$row = array(
+					'uid' => $uid,
+					'is_login' => 0,
+					'is_repwd' => 0,
+					'updatetime' => 0,
+				);
+				$id = $admin_login_db->insert($row, true);
+				$row['id'] = $id;
+			}
+			$loguid = $row;
+		}
+		return $loguid;
+	}
+
+	/**
+ 	 * 登录之前更新ip
+ 	 */
+	final public static function admin_login_before($username) {
+		if (!$username) {
+			return;
+		}
+		$cache = pc_base::load_sys_class('cache');
+		$input = pc_base::load_sys_class('input');
+		$admin_db = pc_base::load_model('admin_model');
+		$config = getcache('common','commons');
+		$user = $admin_db->get_one(array('username'=>$username));
+		if (!$user) {
+			return;
+		}
+		if ($config) {
+			$log = self::admin_get_log($user['userid']);
+			if (isset($config['login_use']) && dr_in_array('admin', $config['login_use'])) {
+				$attr = '';
+				if ((isset($config['login_city']) && $config['login_city'])) {
+					$attr.= $input->ip_address();
+				}
+				if ((isset($config['login_llq']) && $config['login_llq'])) {
+					$attr.= $input->get_user_agent();
+				}
+				if ($attr) {
+					$admin_db->update(array('login_attr'=>md5($attr)), array('userid'=>$log['uid']));
+				}
+			}
+		}
+	}
+
+	/**
 	 * 
 	 * 记录日志 
 	 */
@@ -277,41 +346,11 @@ class admin {
  	 * 登录验证
  	 */
 	private function login_before() {
+		$cache = pc_base::load_sys_class('cache');
 		$admin_db = pc_base::load_model('admin_model');
 		$admin_login_db = pc_base::load_model('admin_login_model');
 		$member_db = pc_base::load_model('member_lock_model');
 		$member_login_db = pc_base::load_model('member_login_model');
-		$table = $admin_login_db->db_tablepre.'admin_login';
-		if (!$admin_login_db->table_exists('admin_login')) {
-			$admin_login_db->query(format_create_sql('CREATE TABLE `'.$table.'` (
-			`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-			`uid` mediumint(8) unsigned DEFAULT NULL COMMENT \'会员uid\',
-			`is_login` int(10) unsigned DEFAULT NULL COMMENT \'是否首次登录\',
-			`is_repwd` int(10) unsigned DEFAULT NULL COMMENT \'是否重置密码\',
-			`updatetime` int(10) unsigned NOT NULL COMMENT \'修改密码时间\',
-			`logintime` int(10) unsigned NOT NULL COMMENT \'最近登录时间\',
-			PRIMARY KEY (`id`),
-			KEY `uid` (`uid`),
-			KEY `logintime` (`logintime`),
-			KEY `updatetime` (`updatetime`)
-			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT=\'账号记录\''));
-		}
-		$member_table = $member_login_db->db_tablepre.'member_login';
-		if (!$member_login_db->table_exists('member_login')) {
-			$member_login_db->query(format_create_sql('CREATE TABLE `'.$member_table.'` (
-			`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-			`uid` mediumint(8) unsigned DEFAULT NULL COMMENT \'会员uid\',
-			`is_login` int(10) unsigned DEFAULT NULL COMMENT \'是否首次登录\',
-			`is_repwd` int(10) unsigned DEFAULT NULL COMMENT \'是否重置密码\',
-			`updatetime` int(10) unsigned NOT NULL COMMENT \'修改密码时间\',
-			`logintime` int(10) unsigned NOT NULL COMMENT \'最近登录时间\',
-			PRIMARY KEY (`id`),
-			KEY `uid` (`uid`),
-			KEY `logintime` (`logintime`),
-			KEY `updatetime` (`updatetime`)
-			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT=\'账号记录\''));
-		}
-		$cache = pc_base::load_sys_class('cache');
 		$userid = $_SESSION['userid'];
 		$config = getcache('common','commons');
 		if ($config) {
@@ -345,17 +384,7 @@ class admin {
 			}
 		}
 		if ($config && $userid) {
-			$log = $admin_login_db->get_one(array('uid'=>$userid));
-			if (!$log) {
-				$log = array(
-					'uid' => $userid,
-					'is_login' => 0,
-					'is_repwd' => 0,
-					'updatetime' => 0,
-					'logintime' => SYS_TIME,
-				);
-				$admin_login_db->insert($log);
-			}
+			$log = self::admin_get_log($userid);
 			if (isset($config['pwd_use']) && dr_in_array('admin', $config['pwd_use'])) {
 				// 首次登录是否强制修改密码
 				if (!$log['is_login'] && isset($config['pwd_is_login_edit']) && $config['pwd_is_login_edit']) {
@@ -391,6 +420,7 @@ class admin {
 					$ctime = SYS_TIME - $time;
 					if ($time && SYS_TIME - $time > $config['login_exit_time'] * 60) {
 						// 长时间不动作退出
+						$admin_db->update(array('login_attr'=>rand(0, 99999)), array('userid'=>$log['uid']));
 						$cache->del_auth_data('admin_option_'.$userid);
 						showmessage(L('长时间（'.ceil($ctime/60).'分钟）未操作，当前账号自动退出'),'?m=admin&c=index&a=public_logout');
 					}

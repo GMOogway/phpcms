@@ -25,6 +25,8 @@ define('IN_PHPCMS', IN_CMS);
 
 //缓存文件夹地址
 !defined('CACHE_PATH') && define('CACHE_PATH', CMS_PATH.'caches'.DIRECTORY_SEPARATOR);
+// 定义模板目录
+!defined('TPLPATH') && define('TPLPATH', CMS_PATH.pc_base::load_config('system','tpl_root'));
 //主机协议
 define('SITE_PROTOCOL', isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == '443' ? 'https://' : 'http://');
 //当前访问的主机名

@@ -8,6 +8,7 @@ class admin_manage extends admin {
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
 		$this->db = pc_base::load_model('admin_model');
+		$this->admin_login_db = pc_base::load_model('admin_login_model');
 		$this->role_db = pc_base::load_model('admin_role_model');
 		$this->op = pc_base::load_app_class('admin_op');
 	}
@@ -164,11 +165,10 @@ class admin_manage extends admin {
 				$config = getcache('common','commons');
 				if ($config) {
 					if (isset($config['safe_wdl']) && $config['safe_wdl']) {
-						$admin_login_db = pc_base::load_model('admin_login_model');
 						$time = $config['safe_wdl'] * 3600 * 24;
 						$login_where[] = 'logintime < '.(SYS_TIME - $time);
 						$login_where[] = 'uid = '.$userid;
-						$admin_login_db->update(array('logintime'=>SYS_TIME), implode(' AND ', $login_where));
+						$this->admin_login_db->update(array('logintime'=>SYS_TIME), implode(' AND ', $login_where));
 					}
 				}
 			}
@@ -186,24 +186,7 @@ class admin_manage extends admin {
 			if (password($this->input->post('old_password'),$r['encrypt']) !== $r['password']) showmessage(L('old_password_wrong'),HTTP_REFERER);
 			if($this->input->post('new_password') && !empty($this->input->post('new_password'))) {
 				if($this->op->edit_password($userid, $this->input->post('new_password'))) {
-					$this->admin_login_db = pc_base::load_model('admin_login_model');
-					$row = $this->admin_login_db->get_one(array('uid'=>$userid));
-					if (!$row) {
-						$row = array(
-							'uid' => $userid,
-							'is_login' => SYS_TIME,
-							'is_repwd' => SYS_TIME,
-							'updatetime' => SYS_TIME,
-						);
-						$this->admin_login_db->insert($row);
-					} else {
-						$row = array(
-							'is_login' => SYS_TIME,
-							'is_repwd' => SYS_TIME,
-							'updatetime' => SYS_TIME,
-						);
-						$this->admin_login_db->update($row, array('uid'=>$userid));
-					}
+					$this->admin_login_db->update(array('is_login' => SYS_TIME, 'is_repwd' => SYS_TIME, 'updatetime' => SYS_TIME), array('uid'=>$userid));
 				}
 			}
 			showmessage(L('password_edit_succ_logout'),'?m=admin&c=index&a=public_logout');

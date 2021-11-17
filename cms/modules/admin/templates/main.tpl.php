@@ -169,7 +169,7 @@ padding-right: 70px !important;text-overflow:ellipsis!important;overflow:hidden!
                             <tbody>
                             <tr>
                                 <td>系统版本</td>
-                                <td>Cms <?php echo CMS_VERSION?> [<?php echo CMS_RELEASE?>]&nbsp;&nbsp;<a id="dr_cms_update" href="javascript:;" layuimini-content-href="?m=admin&c=cloud&a=init&menuid=276&pc_hash=<?php echo dr_get_csrf_token()?>" data-title="版本升级" data-icon="fa fa-refresh" style="display: none" class="badge badge-danger badge-roundless ml10">  </a></td>
+                                <td>Cms <?php echo CMS_VERSION?> [<?php echo CMS_RELEASE?>]&nbsp;&nbsp;<a id="dr_cms_update" href="javascript:;" layuimini-content-href="?m=admin&c=cloud&a=upgrade&menuid=277&pc_hash=<?php echo dr_get_csrf_token()?>" data-title="版本升级" data-icon="fa fa-refresh" style="display: none" class="badge badge-danger badge-roundless ml10">  </a></td>
                             </tr>
                             <script>
                             $(function () {

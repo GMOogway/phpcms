@@ -130,12 +130,15 @@ class index extends foreground {
 			if($member_setting['choosemodel']) {
 				require_once CACHE_MODEL_PATH.'member_input.class.php';
 		        require_once CACHE_MODEL_PATH.'member_update.class.php';
-				$member_input = new member_input($userinfo['modelid']);		
-				$_POST['info'] = array_map('new_html_special_chars',$_POST['info']);
+				$member_input = new member_input($userinfo['modelid']);
+				if ($_POST['info']) {
+					$_POST['info'] = array_map('new_html_special_chars',$_POST['info']);
+				}
 				$user_model_info = $member_input->get($_POST['info']);				        				
 			}
 			$password = $userinfo['password'];
 			$userinfo['password'] = password($userinfo['password'], $userinfo['encrypt']);
+			$login_attr = md5(SYS_KEY.$userinfo['password'].(isset($userinfo['login_attr']) ? $userinfo['login_attr'] : ''));
 			$userid = $this->db->insert($userinfo, 1);
 			if($member_setting['choosemodel']) {	//如果开启选择模型
 				$user_model_info['userid'] = $userid;
@@ -155,13 +158,19 @@ class index extends foreground {
 					param::set_cookie('email', $userinfo['email'], $cookietime);							
 				} else {
 					$cms_auth = sys_auth($userid."\t".$userinfo['password'], 'ENCODE', get_auth_key('login'));
-					
 					param::set_cookie('auth', $cms_auth, $cookietime);
 					param::set_cookie('_userid', $userid, $cookietime);
+					param::set_cookie('_login_attr', $login_attr, $cookietime);
 					param::set_cookie('_username', $userinfo['username'], $cookietime);
 					param::set_cookie('_nickname', $userinfo['nickname'], $cookietime);
 					param::set_cookie('_groupid', $userinfo['groupid'], $cookietime);
 					param::set_cookie('cookietime', $_cookietime, $cookietime);
+					$log = foreground::member_get_log($userid);
+					$this->member_login_db->update(array('logintime' => SYS_TIME,), array('uid'=>$userid));
+					$config = getcache('common', 'commons');
+					if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
+						$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME);
+					}
 				}
 			}
 			//如果需要邮箱认证
@@ -490,24 +499,7 @@ class index extends foreground {
 			$updateinfo['password'] = $newpassword;
 			
 			if($this->db->update($updateinfo, array('userid'=>$this->memberinfo['userid']))) {
-				$this->member_login_db = pc_base::load_model('member_login_model');
-				$row = $this->member_login_db->get_one(array('uid'=>$this->memberinfo['userid']));
-				if (!$row) {
-					$row = array(
-						'uid' => $this->memberinfo['userid'],
-						'is_login' => SYS_TIME,
-						'is_repwd' => SYS_TIME,
-						'updatetime' => SYS_TIME,
-					);
-					$this->member_login_db->insert($row);
-				} else {
-					$row = array(
-						'is_login' => SYS_TIME,
-						'is_repwd' => SYS_TIME,
-						'updatetime' => SYS_TIME,
-					);
-					$this->member_login_db->update($row, array('uid'=>$this->memberinfo['userid']));
-				}
+				$this->member_login_db->update(array('is_login' => SYS_TIME, 'is_repwd' => SYS_TIME, 'updatetime' => SYS_TIME), array('uid'=>$this->memberinfo['userid']));
 			}
 
 			showmessage(L('operation_success'), HTTP_REFERER);
@@ -633,6 +625,7 @@ class index extends foreground {
 			}
 			
 			$username = isset($_POST['username']) && is_username($_POST['username']) ? trim($_POST['username']) : showmessage(L('username_empty'), HTTP_REFERER);
+			foreground::member_login_before($username);
 			$password = isset($_POST['password']) && trim($_POST['password']) ? addslashes(urldecode(trim($_POST['password']))) : showmessage(L('password_empty'), HTTP_REFERER);
 			is_password($_POST['password']) && is_badword($_POST['password'])==false ? trim($_POST['password']) : showmessage(L('password_format_incorrect'), HTTP_REFERER);
 			$cookietime = intval($_POST['cookietime']);
@@ -674,6 +667,7 @@ class index extends foreground {
 			$groupid = $r['groupid'];
 			$username = $r['username'];
 			$nickname = empty($r['nickname']) ? $username : $r['nickname'];
+			$login_attr = md5(SYS_KEY.$r['password'].(isset($r['login_attr']) ? $r['login_attr'] : ''));
 			
 			$updatearr = array('lastip'=>ip(), 'lastdate'=>SYS_TIME, 'loginnum'=>$r['loginnum']+1);
 			//vip过期，更新vip和会员组
@@ -714,27 +708,13 @@ class index extends foreground {
 			
 			param::set_cookie('auth', $cms_auth, $cookietime);
 			param::set_cookie('_userid', $userid, $cookietime);
+			param::set_cookie('_login_attr', $login_attr, $cookietime);
 			param::set_cookie('_username', $username, $cookietime);
 			param::set_cookie('_groupid', $groupid, $cookietime);
 			param::set_cookie('_nickname', $nickname, $cookietime);
 			//param::set_cookie('cookietime', $_cookietime, $cookietime);
-			$this->member_login_db = pc_base::load_model('member_login_model');
-			$row = $this->member_login_db->get_one(array('uid'=>$userid));
-			if (!$row) {
-				$row = array(
-					'uid' => $userid,
-					'is_login' => 0,
-					'is_repwd' => 0,
-					'updatetime' => 0,
-					'logintime' => SYS_TIME,
-				);
-				$this->member_login_db->insert($row);
-			} else {
-				$row = array(
-					'logintime' => SYS_TIME,
-				);
-				$this->member_login_db->update($row, array('uid'=>$userid));
-			}
+			$log = foreground::member_get_log($userid);
+			$this->member_login_db->update(array('logintime' => SYS_TIME,), array('uid'=>$userid));
 			$config = getcache('common', 'commons');
 			if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
 				$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME);
@@ -771,36 +751,24 @@ class index extends foreground {
 			if($code['islock']) {
 				showmessage(L('user_is_lock'));
 			}
+			foreground::member_login_before($code['username']);
 			$userid = $code['userid'];
 			$groupid = $code['groupid'];
 			$username = $code['username'];
 			$password = $code['password'];
 			$nickname = empty($code['nickname']) ? $username : $code['nickname'];
+			$login_attr = md5(SYS_KEY.$code['password'].(isset($code['login_attr']) ? $code['login_attr'] : ''));
 			$cookietime = 0;
 			$cms_auth = sys_auth($userid."\t".$password, 'ENCODE', get_auth_key('login'));
 			param::set_cookie('auth', $cms_auth, $cookietime);
 			param::set_cookie('_userid', $userid, $cookietime);
+			param::set_cookie('_login_attr', $login_attr, $cookietime);
 			param::set_cookie('_username', $username, $cookietime);
 			param::set_cookie('_groupid', $groupid, $cookietime);
 			param::set_cookie('_nickname', $nickname, $cookietime);
 			//param::set_cookie('cookietime', $_cookietime, $cookietime);
-			$this->member_login_db = pc_base::load_model('member_login_model');
-			$row = $this->member_login_db->get_one(array('uid'=>$userid));
-			if (!$row) {
-				$row = array(
-					'uid' => $userid,
-					'is_login' => 0,
-					'is_repwd' => 0,
-					'updatetime' => 0,
-					'logintime' => SYS_TIME,
-				);
-				$this->member_login_db->insert($row);
-			} else {
-				$row = array(
-					'logintime' => SYS_TIME,
-				);
-				$this->member_login_db->update($row, array('uid'=>$userid));
-			}
+			$log = foreground::member_get_log($userid);
+			$this->member_login_db->update(array('logintime' => SYS_TIME,), array('uid'=>$userid));
 			$config = getcache('common', 'commons');
 			if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
 				$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME);
@@ -825,6 +793,7 @@ class index extends foreground {
 			}
 			param::set_cookie('auth', '');
 			param::set_cookie('_userid', '');
+			param::set_cookie('_login_attr', '');
 			param::set_cookie('_username', '');
 			param::set_cookie('_groupid', '');
 			param::set_cookie('_nickname', '');
@@ -1123,6 +1092,7 @@ class index extends foreground {
 					$groupid = $r['groupid'];
 					$username = $r['username'];
 					$nickname = empty($r['nickname']) ? $username : $r['nickname'];
+					$login_attr = md5(SYS_KEY.$r['password'].(isset($r['login_attr']) ? $r['login_attr'] : ''));
 					$this->db->update(array('lastip'=>ip(), 'lastdate'=>SYS_TIME, 'nickname'=>$me['name']), array('userid'=>$userid));
 					
 					if(!$cookietime) $get_cookietime = param::get_cookie('cookietime');
@@ -1133,10 +1103,17 @@ class index extends foreground {
 					
 					param::set_cookie('auth', $cms_auth, $cookietime);
 					param::set_cookie('_userid', $userid, $cookietime);
+					param::set_cookie('_login_attr', $login_attr, $cookietime);
 					param::set_cookie('_username', $username, $cookietime);
 					param::set_cookie('_groupid', $groupid, $cookietime);
 					param::set_cookie('cookietime', $_cookietime, $cookietime);
 					param::set_cookie('_nickname', $nickname, $cookietime);
+					$log = foreground::member_get_log($userid);
+					$this->member_login_db->update(array('logintime' => SYS_TIME,), array('uid'=>$userid));
+					$config = getcache('common', 'commons');
+					if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
+						$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME);
+					}
 					$forward = isset($_GET['forward']) && !empty($_GET['forward']) ? $_GET['forward'] : 'index.php?m=member&c=index';
 					showmessage(L('login_success'), $forward);
 					
@@ -1240,6 +1217,7 @@ class index extends foreground {
 					$groupid = $r['groupid'];
 					$username = $r['username'];
 					$nickname = empty($r['nickname']) ? $username : $r['nickname'];
+					$login_attr = md5(SYS_KEY.$r['password'].(isset($r['login_attr']) ? $r['login_attr'] : ''));
 					$this->db->update(array('lastip'=>ip(), 'lastdate'=>SYS_TIME, 'nickname'=>$me['name']), array('userid'=>$userid));
 					if(!$cookietime) $get_cookietime = param::get_cookie('cookietime');
 					$_cookietime = $cookietime ? intval($cookietime) : ($get_cookietime ? $get_cookietime : 0);
@@ -1249,10 +1227,17 @@ class index extends foreground {
 					
 					param::set_cookie('auth', $cms_auth, $cookietime);
 					param::set_cookie('_userid', $userid, $cookietime);
+					param::set_cookie('_login_attr', $login_attr, $cookietime);
 					param::set_cookie('_username', $username, $cookietime);
 					param::set_cookie('_groupid', $groupid, $cookietime);
 					param::set_cookie('cookietime', $_cookietime, $cookietime);
 					param::set_cookie('_nickname', $nickname, $cookietime);
+					$log = foreground::member_get_log($userid);
+					$this->member_login_db->update(array('logintime' => SYS_TIME,), array('uid'=>$userid));
+					$config = getcache('common', 'commons');
+					if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
+						$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME);
+					}
 					param::set_cookie('_from', 'snda');
 					$forward = isset($_GET['forward']) && !empty($_GET['forward']) ? $_GET['forward'] : 'index.php?m=member&c=index';
 					showmessage(L('login_success'), $forward);
@@ -1302,6 +1287,7 @@ class index extends foreground {
 								$groupid = $r['groupid'];
 								$username = $r['username'];
 								$nickname = empty($r['nickname']) ? $username : $r['nickname'];
+								$login_attr = md5(SYS_KEY.$r['password'].(isset($r['login_attr']) ? $r['login_attr'] : ''));
 								$this->db->update(array('lastip'=>ip(), 'lastdate'=>SYS_TIME, 'nickname'=>$me['name']), array('userid'=>$userid));
 								if(!$cookietime) $get_cookietime = param::get_cookie('cookietime');
 								$_cookietime = $cookietime ? intval($cookietime) : ($get_cookietime ? $get_cookietime : 0);
@@ -1309,10 +1295,17 @@ class index extends foreground {
 								$cms_auth = sys_auth($userid."\t".$password, 'ENCODE', get_auth_key('login'));
 								param::set_cookie('auth', $cms_auth, $cookietime);
 								param::set_cookie('_userid', $userid, $cookietime);
+								param::set_cookie('_login_attr', $login_attr, $cookietime);
 								param::set_cookie('_username', $username, $cookietime);
 								param::set_cookie('_groupid', $groupid, $cookietime);
 								param::set_cookie('cookietime', $_cookietime, $cookietime);
 								param::set_cookie('_nickname', $nickname, $cookietime);
+								$log = foreground::member_get_log($userid);
+								$this->member_login_db->update(array('logintime' => SYS_TIME,), array('uid'=>$userid));
+								$config = getcache('common', 'commons');
+								if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
+									$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME);
+								}
 								$forward = isset($_GET['forward']) && !empty($_GET['forward']) ? $_GET['forward'] : 'index.php?m=member&c=index';
 								showmessage(L('login_success'), $forward);
 						}else{	
@@ -1356,6 +1349,7 @@ class index extends foreground {
 					$groupid = $r['groupid'];
 					$username = $r['username'];
 					$nickname = empty($r['nickname']) ? $username : $r['nickname'];
+					$login_attr = md5(SYS_KEY.$r['password'].(isset($r['login_attr']) ? $r['login_attr'] : ''));
 					$this->db->update(array('lastip'=>ip(), 'lastdate'=>SYS_TIME, 'nickname'=>$me['name']), array('userid'=>$userid));
 					if(!$cookietime) $get_cookietime = param::get_cookie('cookietime');
 					$_cookietime = $cookietime ? intval($cookietime) : ($get_cookietime ? $get_cookietime : 0);
@@ -1365,10 +1359,17 @@ class index extends foreground {
 					
 					param::set_cookie('auth', $cms_auth, $cookietime);
 					param::set_cookie('_userid', $userid, $cookietime);
+					param::set_cookie('_login_attr', $login_attr, $cookietime);
 					param::set_cookie('_username', $username, $cookietime);
 					param::set_cookie('_groupid', $groupid, $cookietime);
 					param::set_cookie('cookietime', $_cookietime, $cookietime);
 					param::set_cookie('_nickname', $nickname, $cookietime);
+					$log = foreground::member_get_log($userid);
+					$this->member_login_db->update(array('logintime' => SYS_TIME,), array('uid'=>$userid));
+					$config = getcache('common', 'commons');
+					if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
+						$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME);
+					}
 					param::set_cookie('_from', 'snda');
 					$forward = isset($_GET['forward']) && !empty($_GET['forward']) ? $_GET['forward'] : 'index.php?m=member&c=index';
 					showmessage(L('login_success'), $forward);

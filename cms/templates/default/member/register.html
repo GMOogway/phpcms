@@ -3,6 +3,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>{L('member').L('register')}</title>
+<link href="{CSS_PATH}font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="{CSS_PATH}bootstrap/css/bootstrap.min.css" media="all" />
 <meta name="description" content="{L('member').L('register')}" />
 <link href="{CSS_PATH}member-login.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="{JS_PATH}jquery.min.js"></script>
@@ -21,6 +23,11 @@
                 <li><input type="password" class="input" name="pwdconfirm" id="pwdconfirm" placeholder="请输入{L('cofirmpwd')}" value=""></li>
                 <li><input type="text" class="input" name="email" id="email" placeholder="请输入{L('email')}" value=""></li>
                 <li><input type="text" class="input" name="nickname" id="nickname" placeholder="请输入{L('nickname')}" value=""></li>
+                {if $member_setting['choosemodel']}
+                {loop $forminfos $k $v}
+                <li>{$v['form']}</li>
+                {/loop}
+                {/if}
                 {if $member_setting['enablcodecheck']=='1' && $sms_setting['sms_enable']!='1'}
                 <li><input type="text" class="input code" name="code" id="code" placeholder="请输入{L('checkcode')}">{form::checkcode('code_img', '5', '20', 126, 40)}</li>
                 {/if}

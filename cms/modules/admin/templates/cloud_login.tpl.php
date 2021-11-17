@@ -46,7 +46,7 @@ include $this->admin_tpl('header', 'admin');?>
 
                             <label class="col-xs-3 control-label "></label>
                             <div class="col-xs-7">
-                            <button type="button" onclick="dr_post_submit('?m=admin&c=cloud&a=license&menuid=<?php echo $this->input->get('menuid')?>', 'myform', 3000, '?m=admin&c=cloud&a=init&menuid=<?php echo $this->input->get('menuid')?>&pc_hash=<?php echo dr_get_csrf_token()?>');" class="btn red " style="margin-right: 20px;"> 绑定账号 </button>
+                            <button type="button" onclick="dr_post_submit('?m=admin&c=cloud&a=license&menuid=<?php echo $this->input->get('menuid')?>', 'myform', 3000, '?m=admin&c=cloud&a=upgrade&menuid=<?php echo $this->input->get('menuid')?>&pc_hash=<?php echo dr_get_csrf_token()?>');" class="btn red " style="margin-right: 20px;"> 绑定账号 </button>
                                 <a href="http://ceshi.kaixin100.cn/index.php?m=member&c=index&a=register&siteid=1" target="_blank">免费注册账号</a>
                         </div>
                         </div>

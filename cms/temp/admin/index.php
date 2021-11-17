@@ -9,6 +9,7 @@ class index extends admin {
 		$this->cache = pc_base::load_sys_class('cache');
 		pc_base::load_sys_class('form');
 		$this->db = pc_base::load_model('admin_model');
+		$this->admin_login_db = pc_base::load_model('admin_login_model');
 		$this->menu_db = pc_base::load_model('menu_model');
 		$this->panel_db = pc_base::load_model('admin_panel_model');
 	}
@@ -39,6 +40,7 @@ class index extends admin {
 		$sysadminlogintimes = isset($setting['sysadminlogintimes']) ? (int)$setting['sysadminlogintimes'] : 10;
 		if($this->input->post('dosubmit')) {
 			$username = $this->input->post('username') && trim($this->input->post('username')) ? trim($this->input->post('username')) : dr_json(0, L('nameerror'));
+			admin::admin_login_before($username);
 			if (!$sysadmincode) {
 				$code = $this->input->post('code') && trim($this->input->post('code')) ? trim($this->input->post('code')) : dr_json(0, L('input_code'));
 				if ($_SESSION['code'] != strtolower($code)) {
@@ -96,7 +98,9 @@ class index extends admin {
 			}
 			
 			$this->db->update(array('lastloginip'=>ip(),'lastlogintime'=>SYS_TIME),array('userid'=>$r['userid']));
+			$login_attr = md5(SYS_KEY.$r['password'].(isset($r['login_attr']) ? $r['login_attr'] : ''));
 			$_SESSION['userid'] = $r['userid'];
+			$_SESSION['login_attr'] = $login_attr;
 			$_SESSION['roleid'] = $r['roleid'];
 			$_SESSION['lock_screen'] = 0;
 			$this->cache->set_data(COOKIE_PRE.ip().'pc_hash', bin2hex(random_bytes(16)), 3600);
@@ -108,25 +112,11 @@ class index extends admin {
 			param::set_cookie('admin_username',$username,$cookie_time);
 			param::set_cookie('siteid', $default_siteid,$cookie_time);
 			param::set_cookie('userid', $r['userid'],$cookie_time);
+			param::set_cookie('login_attr',$login_attr,$cookie_time);
 			param::set_cookie('admin_email', $r['email'],$cookie_time);
 			param::set_cookie('sys_lang', $r['lang'],$cookie_time);
-			$this->admin_login_db = pc_base::load_model('admin_login_model');
-			$row = $this->admin_login_db->get_one(array('uid'=>$r['userid']));
-			if (!$row) {
-				$row = array(
-					'uid' => $r['userid'],
-					'is_login' => 0,
-					'is_repwd' => 0,
-					'updatetime' => 0,
-					'logintime' => SYS_TIME,
-				);
-				$this->admin_login_db->insert($row);
-			} else {
-				$row = array(
-					'logintime' => SYS_TIME,
-				);
-				$this->admin_login_db->update($row, array('uid'=>$r['userid']));
-			}
+			$log = admin::admin_get_log($r['userid']);
+			$this->admin_login_db->update(array('logintime' => SYS_TIME,), array('uid'=>$r['userid']));
 			if (isset($setting['login_use']) && dr_in_array('admin', $setting['login_use'])) {
 				$this->cache->set_auth_data('admin_option_'.$r['userid'], SYS_TIME);
 			}
@@ -159,8 +149,11 @@ class index extends admin {
 		if (!$member) {
 			showmessage(L('fclient_user_not_role'));
 		}
+		admin::admin_login_before($member['username']);
 
+		$login_attr = md5(SYS_KEY.$member['password'].(isset($member['login_attr']) ? $member['login_attr'] : ''));
 		$_SESSION['userid'] = $member['userid'];
+		$_SESSION['login_attr'] = $login_attr;
 		$_SESSION['roleid'] = $member['roleid'];
 		$_SESSION['lock_screen'] = 0;
 		$this->cache->set_data(COOKIE_PRE.ip().'pc_hash', bin2hex(random_bytes(16)), 3600);
@@ -170,26 +163,11 @@ class index extends admin {
 		param::set_cookie('admin_username',$member['username'],$cookie_time);
 		param::set_cookie('siteid', $default_siteid,$cookie_time);
 		param::set_cookie('userid', $member['userid'],$cookie_time);
+		param::set_cookie('login_attr',$login_attr,$cookie_time);
 		param::set_cookie('admin_email', $member['email'],$cookie_time);
 		param::set_cookie('sys_lang', $member['lang'],$cookie_time);
-
-		$this->admin_login_db = pc_base::load_model('admin_login_model');
-		$row = $this->admin_login_db->get_one(array('uid'=>$member['userid']));
-		if (!$row) {
-			$row = array(
-				'uid' => $member['userid'],
-				'is_login' => 0,
-				'is_repwd' => 0,
-				'updatetime' => 0,
-				'logintime' => SYS_TIME,
-			);
-			$this->admin_login_db->insert($row);
-		} else {
-			$row = array(
-				'logintime' => SYS_TIME,
-			);
-			$this->admin_login_db->update($row, array('uid'=>$member['userid']));
-		}
+		$log = admin::admin_get_log($member['userid']);
+		$this->admin_login_db->update(array('logintime' => SYS_TIME,), array('uid'=>$member['userid']));
 		$config = getcache('common','commons');
 		if (isset($config['login_use']) && dr_in_array('admin', $config['login_use'])) {
 			$this->cache->set_auth_data('admin_option_'.$member['userid'], SYS_TIME);
