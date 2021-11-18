@@ -104,7 +104,7 @@ class special_api {
 	 * @param intval $page 分页
 	 * @return array 返回调取的数据 
 	 */
-	public function _get_import_data($modelid = 0, $where = '', $page) {
+	public function _get_import_data($modelid = 0, $where = '', $page = 0) {
 		$c = pc_base::load_model('content_model');
 		if(!$modelid) return '';
 		$c->set_model($modelid);
@@ -389,7 +389,7 @@ class special_api {
 	 * @param string $title 标题
 	 * @param string $action 动作
 	 */
-	private function search_api($id = 0, $data = array(), $title, $action = 'update') {
+	private function search_api($id = 0, $data = array(), $title = '', $action = 'update') {
 		$this->search_db = pc_base::load_model('search_model');
 		$siteid = get_siteid();
 		$type_arr = getcache('type_module_'.$siteid,'search');

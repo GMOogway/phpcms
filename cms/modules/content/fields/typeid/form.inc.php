@@ -6,7 +6,7 @@
 			$errortips = $this->fields[$field]['errortips'];
 			$this->formValidator .= '$("#'.$field.'").formValidator({onshow:"",onfocus:"'.$errortips.'"}).inputValidator({min:1,onerror:"'.$errortips.'"});';
 		}
-		$usable_type = $this->categorys[$this->catid]['usable_type'];
+		$usable_type = isset($this->categorys[$this->catid]['usable_type']) && $this->categorys[$this->catid]['usable_type'] ? $this->categorys[$this->catid]['usable_type'] : '';
 		$usable_array = array();
 		if($usable_type) $usable_array = explode(',',$usable_type);
 		
@@ -17,6 +17,7 @@
 			$siteid = $this->siteid;
 		}
 		$type_data = getcache('type_content_'.$siteid,'commons');
+		$data = array();
 		if($type_data) {
 			foreach($type_data as $_key=>$_value) {
 				if(in_array($_key,$usable_array)) $data[$_key] = $_value['name'];

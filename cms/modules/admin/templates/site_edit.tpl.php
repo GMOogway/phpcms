@@ -137,7 +137,7 @@ label {font-weight: 400;}
 	<legend><?php echo L('field_manage')?></legend>
 	<table width="100%"  class="table_form">
 <?php
-if(is_array($forminfos['base'])) {
+if($forminfos && is_array($forminfos['base'])) {
  foreach($forminfos['base'] as $field=>$info) {
 	 if($info['isomnipotent']) continue;
 	 if($info['formtype']=='omnipotent') {

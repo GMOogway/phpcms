@@ -30,7 +30,7 @@ jQuery(document).ready(function() {
         <legend><?php echo L('list');?></legend>
     </fieldset>-->
     <blockquote class="layui-elem-quote">
-        <a href="?m=content&c=content&a=init&catid=<?php echo $catid;?>&pc_hash=<?php echo $pc_hash;?>" class="layui-btn layui-btn-sm<?php if($steps==0 && !$this->input->get('reject')) echo ' on';?>">
+        <a href="?m=content&c=content&a=init&catid=<?php echo $catid;?>&pc_hash=<?php echo $pc_hash;?>" class="layui-btn layui-btn-sm<?php if(!$this->input->get('reject')) echo ' on';?>">
             <i class="fa fa-check  "></i> <?php echo L('check_passed');?>
         </a>
         <a href="javascript:;" onclick="javascript:$('#searchid').toggle();" class="layui-btn layui-btn-sm layui-btn-normal">
@@ -43,7 +43,6 @@ jQuery(document).ready(function() {
         <input type="hidden" value="content" name="c">
         <input type="hidden" value="recycle_init" name="a">
         <input type="hidden" value="<?php echo $catid;?>" name="catid">
-        <input type="hidden" value="<?php echo $steps;?>" name="steps">
         <input type="hidden" value="1" name="search">
         <input type="hidden" value="<?php echo $pc_hash;?>" name="pc_hash">
         <?php echo L('addtime');?>：
@@ -119,7 +118,7 @@ layui.use(['table'], function(){
     var tableIn = table.render({
         id: 'content',
         elem: '#list',
-        url:'?m=content&c=content&a=recycle_init&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&pc_hash='+pc_hash,
+        url:'?m=content&c=content&a=recycle_init&catid=<?php echo $catid;?>&steps=0&pc_hash='+pc_hash,
         method: 'post',
         where: {keyword: '<?php echo $this->input->get('keyword');?>',start_time: '<?php echo $this->input->get('start_time');?>',end_time: '<?php echo $this->input->get('end_time');?>',posids: '<?php echo $this->input->get('posids');?>',searchtype: '<?php echo $this->input->get('searchtype');?>',csrf_test_name:csrf_hash},
         toolbar: '#topBtn',
@@ -158,7 +157,7 @@ layui.use(['table'], function(){
                 var loading = layer.load(1, {shade: [0.1, '#fff']});
                 $.ajax({
                     type: 'post',
-                    url: '?m=content&c=content&a=recycle&recycle=0&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&pc_hash='+pc_hash,
+                    url: '?m=content&c=content&a=recycle&recycle=0&catid=<?php echo $catid;?>&steps=0&pc_hash='+pc_hash,
                     data: {id:data.id,dosubmit:1,csrf_test_name:csrf_hash},
                     dataType: 'json',
                     success: function(res) {
@@ -184,7 +183,7 @@ layui.use(['table'], function(){
         }else{
             $.ajax({
                 type: 'post',
-                url: '?m=content&c=content&a=update&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&pc_hash='+pc_hash,
+                url: '?m=content&c=content&a=update&catid=<?php echo $catid;?>&steps=0&pc_hash='+pc_hash,
                 data: {id:data.id,field:field,value:value,dosubmit:1,csrf_test_name:csrf_hash},
                 dataType: 'json',
                 success: function(res) {
@@ -205,7 +204,7 @@ layui.use(['table'], function(){
         var loading = layer.load(1, {shade: [0.1, '#fff']});
         $.ajax({
             type: 'post',
-            url: '?m=content&c=content&a=listorder&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&pc_hash='+pc_hash,
+            url: '?m=content&c=content&a=listorder&catid=<?php echo $catid;?>&steps=0&pc_hash='+pc_hash,
             data: {id:id,listorder:listorder,dosubmit:1,csrf_test_name:csrf_hash},
             dataType: 'json',
             success: function(res) {
@@ -233,7 +232,7 @@ layui.use(['table'], function(){
                 var loading = layer.load(1, {shade: [0.1, '#fff']});
                 $.ajax({
                     type: 'post',
-                    url: '?m=content&c=content&a=delete&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&pc_hash='+pc_hash,
+                    url: '?m=content&c=content&a=delete&catid=<?php echo $catid;?>&steps=0&pc_hash='+pc_hash,
                     data: {ids: ids,dosubmit:1,csrf_test_name:csrf_hash},
                     dataType: 'json',
                     success: function(res) {
@@ -263,7 +262,7 @@ layui.use(['table'], function(){
                 var loading = layer.load(1, {shade: [0.1, '#fff']});
                 $.ajax({
                     type: 'post',
-                    url: '?m=content&c=content&a=recycle&recycle=0&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&pc_hash=<?php echo $pc_hash;?>',
+                    url: '?m=content&c=content&a=recycle&recycle=0&catid=<?php echo $catid;?>&steps=0&pc_hash=<?php echo $pc_hash;?>',
                     data: {ids: ids,dosubmit:1,csrf_test_name:csrf_hash},
                     dataType: 'json',
                     success: function(res) {

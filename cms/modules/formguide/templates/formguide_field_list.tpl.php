@@ -20,7 +20,6 @@ include $this->admin_tpl('header','admin');?>
 			<th width="50"><?php echo L('system');?></th> 
             <th width="50"><?php echo L('must_input');?></th>
             <th width="50"><?php echo L('search');?></th>
-            <th width="50"><?php echo L('listorder');?></th>
             <th width="50"><?php echo L('contribute');?></th>
 			<th width="150"><?php echo L('operations_manage');?></th>
             </tr>
@@ -38,7 +37,6 @@ include $this->admin_tpl('header','admin');?>
 		<td align='center'><?php echo $r['issystem'] ? L('icon_unlock') : L('icon_locked')?></td>
 		<td align='center'><?php echo $r['minlength'] ? L('icon_unlock') : L('icon_locked')?></td>
 		<td align='center'><?php echo $r['issearch'] ? L('icon_unlock') : L('icon_locked')?></td>
-		<td align='center'><?php echo $r['isorder'] ? L('icon_unlock') : L('icon_locked')?></td>
 		<td align='center'><?php echo $r['isadd'] ? L('icon_unlock') : L('icon_locked')?></td>
 		<td align='center'> <a class="btn btn-xs green" href="?m=formguide&c=formguide_field&a=edit&formid=<?php echo $r['modelid']?>&fieldid=<?php echo $r['fieldid']?>&field=<?php echo $r['field']?>&menuid=<?php echo $this->input->get('menuid')?>"><?php echo L('edit');?></a>
 		<?php if ($formid) { if(!in_array($r['field'],$forbid_fields)) { ?>

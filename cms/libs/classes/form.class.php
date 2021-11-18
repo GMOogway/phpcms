@@ -257,8 +257,8 @@ class form {
 			'file_upload_limit' => 1,
 			'file_types_post' => $alowexts,
 			'allowupload' => 1,
-			'thumb_width' => $thumb_setting[0],
-			'thumb_height' => $thumb_setting[1],
+			'thumb_width' => isset($thumb_setting[0]) && $thumb_setting[0] ? $thumb_setting[0] : '',
+			'thumb_height' => isset($thumb_setting[1]) && $thumb_setting[1] ? $thumb_setting[1] : '',
 			'watermark_enable' => $watermark_setting,
 			'attachment' => $attachment,
 			'image_reduce' => $image_reduce,
@@ -300,8 +300,8 @@ class form {
 			'file_upload_limit' => 1,
 			'file_types_post' => $alowexts,
 			'allowupload' => 1,
-			'thumb_width' => $file_setting[0],
-			'thumb_height' => $file_setting[1],
+			'thumb_width' => isset($file_setting[0]) && $file_setting[0] ? $file_setting[0] : '',
+			'thumb_height' => isset($file_setting[1]) && $file_setting[1] ? $file_setting[1] : '',
 			'watermark_enable' => '',
 			'attachment' => $attachment,
 			'image_reduce' => $image_reduce,
@@ -328,7 +328,9 @@ class form {
 			// 风格
 			$style = 'style="width:'.$width.(is_numeric($width) ? 'px' : '').';"';
 			if($loadjs || !defined('CALENDAR_INIT')) {
-				define('CALENDAR_INIT', 1);
+				if(!defined('CALENDAR_INIT')) {
+					define('CALENDAR_INIT', 1);
+				}
 				$str .= '<link href="'.JS_PATH.'bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
 				<link href="'.JS_PATH.'bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css" />
 				<script src="'.JS_PATH.'bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
@@ -337,7 +339,7 @@ class form {
 			$model_db = pc_base::load_model('sitemodel_model');
 			$model = $model_db->get_one(array('modelid'=>$modelid));
 			$module_setting = dr_string2array($model['setting']);
-			$updatetime_select = $module_setting['updatetime_select'];
+			$updatetime_select = isset($module_setting['updatetime_select']) && $module_setting['updatetime_select'] ? $module_setting['updatetime_select'] : '';
 			defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $id == 'updatetime' && $str .= '<input type="hidden" name="old_'.$id.'" value="'.$value.'">';
 			// 字段默认值
 			//!$value && $value = SYS_TIME;
@@ -404,7 +406,9 @@ class form {
 				$value = dr_date(SYS_TIME, $format);
 			}
 			if($loadjs || !defined('CALENDAR_INIT')) {
-				define('CALENDAR_INIT', 1);
+				if(!defined('CALENDAR_INIT')) {
+					define('CALENDAR_INIT', 1);
+				}
 				$str .= '<link href="'.JS_PATH.'bootstrap-timepicker/css/bootstrap-timepicker.min.css" rel="stylesheet" type="text/css" />
 				<script src="'.JS_PATH.'bootstrap-timepicker/js/bootstrap-timepicker.min.js" type="text/javascript"></script>';
 			}

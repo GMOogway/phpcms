@@ -28,7 +28,7 @@ class sitemodel extends admin {
 					if(intval($cat['modelid']) == intval($r['modelid'])) {
 						$items[$r['modelid']] += intval($cat['items']);
 					} else {
-						$items[$r['modelid']] += 0;
+						$items[$r['modelid']] = 0;
 					}
 				}
 			}

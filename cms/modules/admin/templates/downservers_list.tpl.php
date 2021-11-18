@@ -6,7 +6,7 @@ include $this->admin_tpl('header');?>
 <table width="100%" cellspacing="0" class="search-form">
     <tbody>
 		<tr>
-		<td><div class="explain-col"><?php echo L('downserver_name')?>  <input type="text" value="<?php echo $sitename?>" class="input-text" name="info[sitename]">    <?php echo L('downserver_url')?>   <input type="text" value="<?php echo $siteurl?>" class="input-text" name="info[siteurl]" size="50">  <?php echo L('downserver_site');?> <?php echo form::select($sitelist,self::get_siteid(),'name="info[siteid]"',$default)?> <input type="submit" value="<?php echo L('add');?>" class="button" name="dosubmit">
+		<td><div class="explain-col"><?php echo L('downserver_name')?>  <input type="text" value="" class="input-text" name="info[sitename]">    <?php echo L('downserver_url')?>   <input type="text" value="" class="input-text" name="info[siteurl]" size="50">  <?php echo L('downserver_site');?> <?php echo form::select($sitelist,self::get_siteid(),'name="info[siteid]"',$default)?> <input type="submit" value="<?php echo L('add');?>" class="button" name="dosubmit">
 		</div>
 		</td>
 		</tr>
@@ -61,12 +61,11 @@ if(is_array($infos)){
 </form>
 </div>
 </body>
-<a href="javascript:edit(<?php echo $v['siteid']?>, '<?php echo $v['name']?>')">
 </html>
 <script type="text/javascript">
 <!--
 function edit(id, name) {
-	artdialog('edit','?m=admin&c=downservers&a=edit&id='+id,'<?php echo L('edit')?>--'+name,520,150);
+	artdialog('edit','?m=admin&c=downservers&a=edit&id='+id,'<?php echo L('edit')?>--'+name,520,200);
 }
 //-->
 </script>

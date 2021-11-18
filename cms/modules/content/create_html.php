@@ -51,7 +51,7 @@ class create_html extends admin {
 		$str  = "<option value='\$catid' \$selected>\$spacer \$catname</option>";
 
 		$tree->init($categorys);
-		$string .= $tree->get_tree(0, $str);
+		$string = $tree->get_tree(0, $str);
 		
 		$tree = pc_base::load_sys_class('tree');
 		$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
@@ -70,7 +70,7 @@ class create_html extends admin {
 		$str_post  = "<option value='\$catid' \$selected \$disabled>\$spacer \$catname</option>";
 
 		$tree->init($categorys_post);
-		$select_post .= $tree->get_tree(0, $str_post);
+		$select_post = $tree->get_tree(0, $str_post);
 		include $this->admin_tpl('update_urls');
 	}
 
@@ -129,7 +129,7 @@ class create_html extends admin {
 			$str  = "<option value='\$catid' \$selected>\$spacer \$catname</option>";
 
 			$tree->init($categorys);
-			$string .= $tree->get_tree(0, $str);
+			$string = $tree->get_tree(0, $str);
 			include $this->admin_tpl('create_html_show');
 		}
 
@@ -227,7 +227,7 @@ class create_html extends admin {
 			$str  = "<option value='\$catid'>\$spacer \$catname</option>";
 
 			$tree->init($categorys);
-			$string .= $tree->get_tree(0, $str);
+			$string = $tree->get_tree(0, $str);
 			include $this->admin_tpl('create_html_category');
 		}
 

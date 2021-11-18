@@ -305,7 +305,7 @@ include $this->admin_tpl('header');?>
                 <div class="form-body">
 
 <?php
-if(is_array($forminfos['base'])) {
+if($forminfos && is_array($forminfos['base'])) {
  foreach($forminfos['base'] as $field=>$info) {
      if($info['isomnipotent']) continue;
      if($info['formtype']=='omnipotent') {

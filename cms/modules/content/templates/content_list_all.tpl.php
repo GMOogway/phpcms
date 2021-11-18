@@ -31,11 +31,11 @@ jQuery(document).ready(function() {
             echo "<a href=\"?m=content&c=content&a=initall&modelid=".$r['modelid']."&menuid=".$this->input->get('menuid')."&pc_hash=".$pc_hash."\" class=\"layui-btn layui-btn-sm";
             if($r['modelid']==$modelid) echo " layui-btn-danger";
             if ($r['modelid']==2) {
-                echo "\"><i class=\"fa fa-download\"></i> ".$r['name']."</a>";
+                echo "\"><i class=\"fa fa-download\"></i> ".$r['name']."(".$r['items'].")</a>";
             } else if ($r['modelid']==3) {
-                echo "\"><i class=\"fa fa-image\"></i> ".$r['name']."</a>";
+                echo "\"><i class=\"fa fa-image\"></i> ".$r['name']."(".$r['items'].")</a>";
             } else {
-                echo "\"><i class=\"fa fa-list\"></i> ".$r['name']."</a>";
+                echo "\"><i class=\"fa fa-list\"></i> ".$r['name']."(".$r['items'].")</a>";
             }
         }
         ?>
@@ -49,7 +49,7 @@ if(is_array($infos)){
     foreach($infos as $info){
         $r = $this->db->get_one(array('status'=>$status,'username'=>$info['username']), "COUNT(*) AS num");
         echo "<a class=\"layui-btn layui-btn-sm";
-        if($info['username']==$keyword) echo ' layui-btn-danger';
+        if($info['username']==$this->input->get('keyword')) echo ' layui-btn-danger';
         echo "\">";
         echo $info['realname'] ? $info['realname'] : $info['username'];
         echo "(总".$r['num'].")</a>";
@@ -61,7 +61,7 @@ if(is_array($infos)){
     foreach($infos as $info){
         $r2 = $this->db->get_one("status=".$status." and username='".$info['username']."' and `inputtime` > '".strtotime(date("Ymd", time()))."' and `inputtime` < '".strtotime(date("Ymd", strtotime('+1 day',time())))."'", "COUNT(*) AS num");
         echo "<a class=\"layui-btn layui-btn-sm";
-        if($info['username']==$keyword) echo ' layui-btn-danger';
+        if($info['username']==$this->input->get('keyword')) echo ' layui-btn-danger';
         echo "\">";
         echo $info['realname'] ? $info['realname'] : $info['username'];
         echo "(今".$r2['num'].")</a>";

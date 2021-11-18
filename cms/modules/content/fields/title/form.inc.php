@@ -1,11 +1,11 @@
 	function title($field, $value, $fieldinfo) {
 		extract($fieldinfo);
-		$style_arr = explode(';',$this->data['style']);
-		$style_color = $style_arr[0];
-		$style_font_weight = $style_arr[1] ? $style_arr[1] : '';
+		$style_arr = explode(';',isset($this->data['style']) && $this->data['style'] ? $this->data['style'] : '');
+		$style_color = isset($style_arr[0]) && $style_arr[0] ? $style_arr[0] : '';
+		$style_font_weight = isset($style_arr[1]) && $style_arr[1] ? $style_arr[1] : '';
 
-		$style = 'color:'.$this->data['style'];
-		if(!$value) $value = $defaultvalue;
+		$style = 'color:'.(isset($this->data['style']) && $this->data['style'] ? $this->data['style'] : '');
+		if(!$value) $value = '';
 		$errortips = $this->fields[$field]['errortips'];
 		$errortips_max = L('title_is_empty');
 		if($errortips) $this->formValidator .= '$("#'.$field.'").formValidator({onshow:"",onfocus:"'.$errortips.'"}).inputValidator({min:'.$minlength.',max:'.$maxlength.',onerror:"'.$errortips_max.'"});';

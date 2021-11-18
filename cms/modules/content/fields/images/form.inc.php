@@ -19,6 +19,8 @@
 			$string = '<link rel="stylesheet" href="'.JS_PATH.'jquery-ui/jquery-ui.min.css">
 			<script type="text/javascript" src="'.JS_PATH.'jquery-ui/jquery-ui.min.js"></script>';
 			define('JQUERYUI_INIT', 1);
+		} else {
+			$string = '';
 		}
 		$string .= '<input name="info['.$field.']" type="hidden" value="1">
 		<fieldset class="blue pad-10">
@@ -34,6 +36,8 @@
 		if(!defined('IMAGES_INIT')) {
 			$str = '<script type="text/javascript" src="'.JS_PATH.'h5upload/h5editor.js"></script>';
 			define('IMAGES_INIT', 1);
+		} else {
+			$str = '';
 		}
 		$authkey = upload_key($this->input->get('siteid').",$upload_number,$upload_allowext,$isselectimage,,,,$attachment,$image_reduce");
 		$p = dr_authcode(array(

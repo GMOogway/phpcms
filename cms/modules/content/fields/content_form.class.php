@@ -20,7 +20,7 @@ class content_form {
 		$this->data = $data;
 		if(isset($data['id'])) $this->id = $data['id'];
 		$info = array();
-		$this->content_url = $data['url'];
+		if(isset($data['url'])) $this->content_url = $data['url'];
 		if (is_array($this->fields)) {
 			foreach($this->fields as $field=>$v) {
 				if(defined('IN_ADMIN')) {

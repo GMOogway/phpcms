@@ -14,13 +14,13 @@ include $this->admin_tpl('header','admin');
 		<td align="center">
 		<div class="explain-col">
 				<select name="field">
-					<option value='title' <?php if($_GET['field']=='title') echo 'selected';?>><?php echo L('title');?></option>
-					<option value='keywords' <?php if($_GET['field']=='keywords') echo 'selected';?> ><?php echo L('keywords');?></option>
-					<option value='description' <?php if($_GET['field']=='description') echo 'selected';?>><?php echo L('description');?></option>
-					<option value='id' <?php if($_GET['field']=='id') echo 'selected';?>>ID</option>
+					<option value='title' <?php if($this->input->get('field')=='title') echo 'selected';?>><?php echo L('title');?></option>
+					<option value='keywords' <?php if($this->input->get('field')=='keywords') echo 'selected';?> ><?php echo L('keywords');?></option>
+					<option value='description' <?php if($this->input->get('field')=='description') echo 'selected';?>><?php echo L('description');?></option>
+					<option value='id' <?php if($this->input->get('field')=='id') echo 'selected';?>>ID</option>
 				</select>
-				<?php echo form::select_category('',$catid,'name="catid"',L('please_select_category'),$modelid,0,1);?>
-				<input name="keywords" type="text" value="<?php echo stripslashes($_GET['keywords'])?>" style="width:330px;" class="input-text" />
+				<?php echo form::select_category('',(isset($catid) && $catid ? $catid : 0),'name="catid"',L('please_select_category'),$modelid,0,1);?>
+				<input name="keywords" type="text" value="<?php echo stripslashes($this->input->get('keywords'))?>" style="width:330px;" class="input-text" />
 				<input type="submit" name="dosubmit" class="button" value="<?php echo L('search');?>" />
 	</div>
 		</td>

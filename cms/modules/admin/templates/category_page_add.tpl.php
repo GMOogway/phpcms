@@ -214,7 +214,7 @@ include $this->admin_tpl('header');?>
                     <div class="form-group" id="dr_row_template_list">
                         <label class="col-md-2 control-label"><?php echo L('available_styles')?></label>
                         <div class="col-md-9">
-                            <label><?php echo form::select($template_list, 'default', 'name="setting[template_list]" id="template_list" onchange="load_file_list(this.value)"', L('please_select'))?></label>
+                            <label><?php echo form::select($template_list, $setting['template_list'], 'name="setting[template_list]" id="template_list" onchange="load_file_list(this.value)"', L('please_select'))?></label>
                         </div>
                     </div>
                     <div class="form-group">
@@ -312,7 +312,7 @@ include $this->admin_tpl('header');?>
                 <div class="form-body">
 
 <?php
-if(is_array($forminfos['base'])) {
+if($forminfos && is_array($forminfos['base'])) {
  foreach($forminfos['base'] as $field=>$info) {
      if($info['isomnipotent']) continue;
      if($info['formtype']=='omnipotent') {
@@ -358,7 +358,7 @@ function load_file_list(id) {
     if(id=='') return false;
     $.getJSON('?m=admin&c=category&a=public_tpl_file_list&style='+id+'&catid=<?php echo $parentid?>&type=1', function(data){$('#page_template').html(data.page_template);});
 }
-<?php echo "load_file_list('default')"?>
+<?php if(isset($setting['template_list']) && !empty($setting['template_list'])) echo "load_file_list('".$setting['template_list']."')";?>
 </script>
 </body>
 </html>

@@ -13,7 +13,7 @@
 			$result = $this->position_data_db->select(array('id'=>$this->id,'modelid'=>$this->modelid),'*','','','','posid');
 			$posids = implode(',', array_keys($result));
 		} else {
-			$posids = $setting['defaultvalue'];
+			$posids = isset($setting['defaultvalue']) && $setting['defaultvalue'] ? $setting['defaultvalue'] : '';
 		}
 		return "<input type='hidden' name='info[$field][]' value='-1'>".form::checkbox($array,$posids,"name='info[$field][]'",'',$setting['width']);
 	}

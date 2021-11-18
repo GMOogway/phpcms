@@ -112,7 +112,7 @@ if(is_array($forminfos['senior'])) {
             </div>
         </div>
     </div>
-<input value="<?php if($r['upgrade']) echo $r['url'];?>" type="hidden" name="upgrade">
+<input value="<?php if(isset($r['upgrade']) && $r['upgrade']) echo $r['url'];?>" type="hidden" name="upgrade">
 <input value="<?php echo $id;?>" type="hidden" name="id">
 </form>
 </div>

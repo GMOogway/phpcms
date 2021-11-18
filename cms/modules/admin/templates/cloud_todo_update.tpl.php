@@ -196,7 +196,11 @@ a:hover {text-decoration: underline;}
 
                 if (json.code == 1) {
                     // 升级完成
+                    <?php if (SYS_ADMIN_PATH=='login') {?>
                     $('#dr_check_button').html('<button type="button" onclick="parent.parent.location.reload()" class="btn green"> <i class="fa fa-refresh"></i> 刷新后台 </button>');
+                    <?php } else {?>
+                    $('#dr_check_button').html('<button type="button" onclick="parent.location.href=\'?m=admin&c=check&a=init&menuid=248&pc_hash='+pc_hash+'\'" class="btn green"> <i class="fa fa-wrench"></i> 系统体检 </button>');
+                    <?php }?>
                     $('#dr_check_html').html('<p>恭喜你，升级完成，请刷新后台之后再更新后台缓存</p>');
                 } else {
                     $('#dr_check_button_ing').html('<i class="fa fa-times-circle"></i> 升级失败');

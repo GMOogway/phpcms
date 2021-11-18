@@ -181,20 +181,29 @@ class category extends admin {
 			dr_json(1, L('add_success'), array('tourl' => '?m=admin&c=category&a=public_cache&module=admin&menuid=141&pc_hash='.dr_get_csrf_token()));
 		} else {
 			$show_header = $show_dialog = '';
+			$catid = 0;
+			$parentid = intval($this->input->get('parentid'));
+			$image = '';
 			//获取站点模板信息
 			pc_base::load_app_func('global');
+			$page = max(0, intval($this->input->get('page')));
 
+			$sitelist = siteinfo($this->siteid);
+			if($this->input->get('s')==0) {
+				$sitelist['default_style'] = '';
+			}
 			$template_list = template_list($this->siteid, 0);
 			foreach ($template_list as $k=>$v) {
 				$template_list[$v['dirname']] = $v['name'] ? $v['name'] : $v['dirname'];
 				unset($template_list[$k]);
 			}
 			$show_validator = '';
-			if($this->input->get('parentid')) {
-				$parentid = $this->input->get('parentid');
+			if($parentid) {
 				$r = $this->db->get_one(array('catid'=>$parentid));
 				if($r) extract($r,EXTR_SKIP);
 				$setting = string2array($setting);
+			} else {
+				$setting = array('ishtml'=>'', 'category_ruleid'=>'', 'content_ishtml'=>'', 'create_to_html_root'=>'', 'template_list'=>$sitelist['default_style']);
 			}
 			
 			pc_base::load_sys_class('form','',0);
@@ -342,6 +351,7 @@ class category extends admin {
 			$show_header = $show_dialog = '';
 			//获取站点模板信息
 			pc_base::load_app_func('global');
+			$page = max(0, intval($this->input->get('page')));
 			$template_list = template_list($this->siteid, 0);
 			foreach ($template_list as $k=>$v) {
 				$template_list[$v['dirname']] = $v['name'] ? $v['name'] : $v['dirname'];

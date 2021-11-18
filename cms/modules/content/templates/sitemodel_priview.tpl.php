@@ -110,7 +110,7 @@ if(is_array($forminfos['senior'])) {
     <label class="control-label col-md-2"><?php echo L('c_status');?></label>
     <div class="col-md-10">
 		<div class="mt-radio-inline"><label class="mt-radio mt-radio-outline"><input type="radio" name="status" value="99" checked/> <?php echo L('c_publish');?> <span></span></label>
-<?php if($workflowid) { ?><label class="mt-radio mt-radio-outline"><input type="radio" name="status" value="1" > <?php echo L('c_check');?> <span></span></label><?php }?>
+<?php if(isset($workflowid) && $workflowid) { ?><label class="mt-radio mt-radio-outline"><input type="radio" name="status" value="1" > <?php echo L('c_check');?> <span></span></label><?php }?>
 </div>
 	</div>
 </div>
@@ -136,7 +136,7 @@ $(function(){
 		check_content(boxid);
 	}
 	})}});
-	<?php echo $formValidator;?>
+	<?php echo isset($formValidator) && $formValidator ? $formValidator : '';?>
 	
 /*
  * 加载禁用外边链接

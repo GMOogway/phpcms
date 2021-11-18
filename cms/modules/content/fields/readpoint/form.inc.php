@@ -1,5 +1,5 @@
 	function readpoint($field, $value, $fieldinfo) {
-		$paytype = $this->data['paytype'];
+		$paytype = isset($this->data['paytype']) && $this->data['paytype'] ? $this->data['paytype'] : '';
 		if($paytype) {
 			$checked1 = '';
 			$checked2 = 'checked';

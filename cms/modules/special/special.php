@@ -17,7 +17,7 @@ class special extends admin {
 	 * 专题列表
 	 */
 	public function init() {
-		$page = max(intval($_GET['page']), 1);
+		$page = max(intval($this->input->get('page')), 1);
 		$infos = $this->db->listinfo(array('siteid'=>$this->get_siteid()), '`listorder` DESC, `id` DESC', $page, 6);
 		pc_base::load_sys_class('format', '', 0);
 		include $this->admin_tpl('special_list');

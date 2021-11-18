@@ -77,9 +77,10 @@ jQuery(document).ready(function() {
     <div class="btn-group">
         <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="dropdown" data-toggle="dropdown"><i class="fa fa-files-o"></i> <?php echo L('moudle')?></button>
         <div class="dropdown dropdown-bottom-left">
-            <?php foreach ($modules as $module) {
+            <?php $i = 0;
+            foreach ($modules as $module) {
             if(in_array($module['module'], array('pay','digg','search','scan','attachment','block','dbsource','template','release','cnzz','comment','mood'))) continue;
-            if ($i) echo '<div class="dropdown-line"></div>';
+            if (isset($i) && $i) echo '<div class="dropdown-line"></div>';
             echo '<a href='.url_par('module='.$module['module']).' class="dropdown-item" id="link"><i class="fa fa-chain"></i> '.$module['name'].'</a>';
             $i++;
             }?>

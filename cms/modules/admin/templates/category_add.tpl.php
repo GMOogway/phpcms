@@ -73,7 +73,7 @@ include $this->admin_tpl('header');?>
 </div>
 <form action="?m=admin&c=category&a=add" class="form-horizontal" method="post" name="myform" id="myform" onsubmit="return checkall()">
 <input name="dosubmit" type="hidden" value="1">
-<input name="catid" type="hidden" value="<?php echo $catid;?>">
+<input name="catid" type="hidden" value="<?php echo isset($catid) && $catid ? $catid : 0;?>">
 <input name="page" id="dr_page" type="hidden" value="<?php echo $page;?>">
 <div class="portlet light bordered">
     <div class="portlet-title tabbable-line">
@@ -125,7 +125,7 @@ include $this->admin_tpl('header');?>
                                 if($_v['siteid']!=$this->siteid) continue;
                                 $model_datas[$_v['modelid']] = $_v['name'];
                             }
-                            echo form::select($model_datas,$modelid,'name="info[modelid]" id="modelid" onchange="change_tpl(this.value)"',L('select_model'));
+                            echo form::select($model_datas,isset($modelid) && $modelid ? $modelid : '','name="info[modelid]" id="modelid" onchange="change_tpl(this.value)"',L('select_model'));
                             ?></label>
                         </div>
                     </div>
@@ -433,7 +433,7 @@ include $this->admin_tpl('header');?>
                 <div class="form-body">
 
 <?php
-if(is_array($forminfos['base'])) {
+if($forminfos && is_array($forminfos['base'])) {
  foreach($forminfos['base'] as $field=>$info) {
      if($info['isomnipotent']) continue;
      if($info['formtype']=='omnipotent') {
@@ -484,7 +484,7 @@ function load_file_list(id) {
     if(id=='') return false;
     $.getJSON('?m=admin&c=category&a=public_tpl_file_list&style='+id+'&catid=<?php echo $parentid?>', function(data){$('#category_template').html(data.category_template);$('#list_template').html(data.list_template);$('#show_template').html(data.show_template);});
 }
-<?php if($modelid) echo "change_tpl($modelid)";?>
+<?php if(isset($modelid) && $modelid) echo "change_tpl($modelid)";?>
 </script>
 </body>
 </html>

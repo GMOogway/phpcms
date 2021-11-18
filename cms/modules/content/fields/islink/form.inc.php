@@ -8,6 +8,6 @@
 			$url = $checked = '';
 			$info['islink'] = 0;
 		}
-		$size = $fieldinfo['size'] ? $fieldinfo['size'] : 25;
+		$size = isset($fieldinfo['size']) && $fieldinfo['size'] ? $fieldinfo['size'] : 25;
 		return '<input type="hidden" name="info[islink]" value="0"><input type="text" name="linkurl" id="linkurl" value="'.$url.'" size="'.$size.'" maxlength="255" '.$disabled.' class="input-text"> <div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="info[islink]" type="checkbox" id="islink" value="1" onclick="ruselinkurl();" '.$checked.'> <font color="red">'.L('islink_url').'</font><span></span></label></div>';
 	}

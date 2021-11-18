@@ -4,6 +4,8 @@
 		if(!defined('IMAGES_INIT')) {
 			$str = '<script type="text/javascript" src="'.JS_PATH.'h5upload/h5editor.js"></script>';
 			define('IMAGES_INIT', 1);
+		} else {
+			$str = '';
 		}
 		$html = '';
 		if (defined('IN_ADMIN')) {

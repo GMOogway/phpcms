@@ -1894,6 +1894,7 @@ function mobilepages($num, $curr_page, $perpage = 20, $urlrule = '', $array = ar
 	}
 	if (!$siteid) $siteid = 1;
 	$sitelist = siteinfo($siteid);
+	$mobile_root = '';
 	if ($sitelist['mobilehtml']==1 && defined('ISHTML')) {
 		//if (substr($sitelist['mobile_domain'],0,-1)) {
 			$mobile_root = substr($sitelist['mobile_domain'],0,-1);

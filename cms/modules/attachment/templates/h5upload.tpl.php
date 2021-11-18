@@ -20,7 +20,7 @@
             <li id="tab_h5_5" class="on icon" onclick="SwapTab('h5','on','',5,5);set_iframe('att_not','<?php echo SELF;?>?m=attachment&c=attachments&a=att_not&args=<?php echo $args?>&authkey=<?php echo $authkey;?>');"><?php echo L('att_not_used')?></li>
             <?php }?>
         </ul>
-        <div id="div_h5_1" class="content pad-10<?php echo $div_status?>">
+        <div id="div_h5_1" class="content pad-10<?php echo isset($div_status) && $div_status ? $div_status : ''?>">
             <div>
                 <div id="queue"></div>
                 <button type="button" class="layui-btn" id="file_upload"><i class="layui-icon">&#xe67c;</i><?php echo L('select_file')?></button>

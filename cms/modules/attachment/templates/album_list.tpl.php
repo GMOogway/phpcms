@@ -29,7 +29,7 @@ jQuery(document).ready(function() {
 <input type="hidden" value="<?php echo $file_upload_limit?>" name="info[file_upload_limit]">
 <div class="lh26" style="padding:0 0 10px">
 <label><?php echo L('name')?></label>
-<input type="text" value="<?php echo $filename?>" class="input-text" name="info[filename]"> 
+<input type="text" value="<?php echo isset($filename) && $filename ? $filename : '';?>" class="input-text" name="info[filename]"> 
 <label><?php echo L('date')?></label>
 <div class="formdate">
 <div class="form-date input-group">

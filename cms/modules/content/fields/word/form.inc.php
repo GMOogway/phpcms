@@ -2,7 +2,7 @@
 		extract($fieldinfo);
 		$setting = string2array($setting);
 		if(!defined('LAYUI_INIT')) {
-			$str .= '<script type="text/javascript" src="'.JS_PATH.'layui/layui.js"></script>';
+			$str = '<script type="text/javascript" src="'.JS_PATH.'layui/layui.js"></script>';
 			define('LAYUI_INIT', 1);
 		}
 		$str .= '<script>';
@@ -36,7 +36,7 @@
 		$str .= '	});';
 		$str .= '});';
 		$str .= '</script>';
-		if(!$value) $value = $defaultvalue;
+		if(!$value) $value = '';
 		$errortips = $this->fields[$field]['errortips'];
 		if($errortips || $minlength) $this->formValidator .= '$("#'.$field.'_word").formValidator({onshow:"",onfocus:"'.$errortips.'"}).inputValidator({min:1,onerror:"'.$errortips.'"});';
 		//if (defined('IN_ADMIN')) {

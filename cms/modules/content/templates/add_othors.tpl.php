@@ -6,13 +6,13 @@ include $this->admin_tpl('header','admin');
 <input type="hidden" value="content" name="m">
 <input type="hidden" value="content" name="c">
 <input type="hidden" value="public_relationlist" name="a">
-<input type="hidden" value="<?php echo $modelid;?>" name="modelid">
+<input type="hidden" value="<?php echo isset($modelid) && $modelid ? $modelid : 0;?>" name="modelid">
 <fieldset>
 	<legend><?php echo L('select_sitelist');?></legend>
 <?php
 	foreach($sitelist as $_k=>$_v) {
 		$checked = $_k==$siteid ? 'checked' : '';
-		echo "<label class='ib' style='width:128px'><input type='radio' name='select_siteid' $checked onclick='change_siteid($_k)'> " .$_v['name']."</label>";
+		echo "<label class='mt-radio mt-radio-outline' style='width:128px'><input type='radio' name='select_siteid' $checked onclick='change_siteid($_k)'> " .$_v['name']."<span></span></label>";
 
 	}
 ?>
@@ -27,7 +27,7 @@ include $this->admin_tpl('header','admin');
                 </tr>
             </thead>
         <tbody id="load_catgory">
-        <?php echo $categorys;?>
+        <?php echo isset($categorys) && $categorys ? $categorys : '';?>
         </tbody>
         </table></div>
     </div>

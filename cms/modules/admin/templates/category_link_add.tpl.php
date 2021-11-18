@@ -71,7 +71,7 @@ include $this->admin_tpl('header');?>
 </div>
 <form action="?m=admin&c=category&a=<?php echo ROUTE_A;?>" class="form-horizontal" method="post" name="myform" id="myform" onsubmit="return checkall()">
 <input name="dosubmit" type="hidden" value="1">
-<input name="catid" type="hidden" value="<?php echo $catid;?>">
+<input name="catid" type="hidden" value="<?php echo isset($catid) && $catid ? $catid : '';?>">
 <input name="type" type="hidden" value="<?php echo $type;?>">
 <input name="page" id="dr_page" type="hidden" value="<?php echo $page;?>">
 <div class="portlet light bordered">
@@ -94,7 +94,7 @@ include $this->admin_tpl('header');?>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('parent_category')?></label>
                         <div class="col-md-9">
-                            <label><?php echo form::select_category('category_content_'.$this->siteid,$parentid,'name="info[parentid]" id="parentid"',L('please_select_parent_category'),0,-1);?></label>
+                            <label><?php echo form::select_category('category_content_'.$this->siteid,isset($parentid) && $parentid ? $parentid : '','name="info[parentid]" id="parentid"',L('please_select_parent_category'),0,-1);?></label>
                         </div>
                     </div>
                     <div class="form-group" id="dr_row_catname">
@@ -106,7 +106,7 @@ include $this->admin_tpl('header');?>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('catgory_img')?></label>
                         <div class="col-md-9">
-                            <label><?php echo form::images('info[image]', 'image', $image, 'content');?></label>
+                            <label><?php echo form::images('info[image]', 'image', isset($image) && $image ? $image : '', 'content');?></label>
                         </div>
                     </div>
                     <div class="form-group">
@@ -161,7 +161,7 @@ include $this->admin_tpl('header');?>
                 <div class="form-body">
 
 <?php
-if(is_array($forminfos['base'])) {
+if($forminfos && is_array($forminfos['base'])) {
  foreach($forminfos['base'] as $field=>$info) {
      if($info['isomnipotent']) continue;
      if($info['formtype']=='omnipotent') {

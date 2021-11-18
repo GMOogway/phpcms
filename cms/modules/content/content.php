@@ -46,8 +46,12 @@ class content extends admin {
 			$setting = string2array($category['setting']);
 			$workflowid = $setting['workflowid'];
 			$workflows = getcache('workflow_'.$this->siteid,'commons');
-			$workflows = $workflows[$workflowid];
-			$workflows_setting = string2array($workflows['setting']);
+			if ($workflowid) {
+				$workflows = $workflows[$workflowid];
+				$workflows_setting = string2array($workflows['setting']);
+			} else{
+				$workflows_setting = array();
+			}
 
 			//将有权限的级别放到新数组中
 			$admin_privs = array();
@@ -58,7 +62,11 @@ class content extends admin {
 				}
 			}
 			//工作流审核级别
-			$workflow_steps = $workflows['steps'];
+			if ($workflowid) {
+				$workflow_steps = $workflows['steps'];
+			} else{
+				$workflow_steps = '';
+			}
 			$workflow_menu = '';
 			$steps = $this->input->get('steps') ? intval($this->input->get('steps')) : 0;
 			//工作流权限判断
@@ -192,8 +200,12 @@ class content extends admin {
 			$setting = string2array($category['setting']);
 			$workflowid = $setting['workflowid'];
 			$workflows = getcache('workflow_'.$this->siteid,'commons');
-			$workflows = $workflows[$workflowid];
-			$workflows_setting = string2array($workflows['setting']);
+			if ($workflowid) {
+				$workflows = $workflows[$workflowid];
+				$workflows_setting = string2array($workflows['setting']);
+			} else{
+				$workflows_setting = array();
+			}
 
 			//将有权限的级别放到新数组中
 			$admin_privs = array();
@@ -275,7 +287,7 @@ class content extends admin {
 								$rs['url'] = $release_siteurl.$r['url'];
 							}
 						} else {
-							$rs['url'] = '?m=content&c=content&a=public_preview&steps='.$steps.'&catid='.$r['catid'].'&id='.$r['id'].'';
+							$rs['url'] = '?m=content&c=content&a=public_preview&steps=0&catid='.$r['catid'].'&id='.$r['id'].'';
 						}
 						$rs['dayviews'] = $hits_r['dayviews'];
 						$rs['yesterdayviews'] = $hits_r['yesterdayviews'];
@@ -317,7 +329,7 @@ class content extends admin {
 				if(intval($cat['modelid']) == intval($r['modelid'])) {
 					$items[$r['modelid']] += intval($cat['items']);
 				} else {
-					$items[$r['modelid']] += 0;
+					$items[$r['modelid']] = 0;
 				}
 			}
 			$datas2[$k]['items'] = $items[$r['modelid']];
@@ -337,11 +349,16 @@ class content extends admin {
 		}
 		$admin_username = param::get_cookie('admin_username');
 		//查询当前的工作流
+		$category = $this->categorys[$catid];
 		$setting = string2array($category['setting']);
 		$workflowid = $setting['workflowid'];
 		$workflows = getcache('workflow_'.$this->siteid,'commons');
-		$workflows = $workflows[$workflowid];
-		$workflows_setting = string2array($workflows['setting']);
+		if ($workflowid) {
+			$workflows = $workflows[$workflowid];
+			$workflows_setting = string2array($workflows['setting']);
+		} else{
+			$workflows_setting = array();
+		}
 
 		//将有权限的级别放到新数组中
 		$admin_privs = array();
@@ -352,7 +369,11 @@ class content extends admin {
 			}
 		}
 		//工作流审核级别
-		$workflow_steps = $workflows['steps'];
+		if ($workflowid) {
+			$workflow_steps = $workflows['steps'];
+		} else{
+			$workflow_steps = '';
+		}
 		$steps = $this->input->get('steps') ? intval($this->input->get('steps')) : 0;
 		//工作流权限判断
 		if($_SESSION['roleid']!=1 && $steps && !in_array($steps,$admin_privs)) showmessage(L('permission_to_operate'));
@@ -448,7 +469,6 @@ class content extends admin {
 		$setting = string2array($model_fields['thumb']['setting']);
 		$args = '1,'.$setting['upload_allowext'].','.$setting['isselectimage'].','.$setting['images_width'].','.$setting['images_height'].','.$setting['watermark'];
 		$authkey = upload_key($args);
-		$template = $MODEL['admin_list_template'] ? $MODEL['admin_list_template'] : 'content_list_all';
 		include $this->admin_tpl('content_list_all');
 	}
 	public function add() {
@@ -544,9 +564,14 @@ class content extends admin {
 					$setting = string2array($category['setting']);
 					$workflowid = $setting['workflowid'];
 					$workflows = getcache('workflow_'.$this->siteid,'commons');
-					$workflows = $workflows[$workflowid];
-					$workflows_setting = string2array($workflows['setting']);
-					$nocheck_users = $workflows_setting['nocheck_users'];
+					if ($workflowid) {
+						$workflows = $workflows[$workflowid];
+						$workflows_setting = string2array($workflows['setting']);
+						$nocheck_users = $workflows_setting['nocheck_users'];
+					} else{
+						$workflows_setting = array();
+						$nocheck_users = array();
+					}
 					$admin_username = param::get_cookie('admin_username');
 					if(!empty($nocheck_users) && in_array($admin_username, $nocheck_users)) {
 						$priv_status = true;

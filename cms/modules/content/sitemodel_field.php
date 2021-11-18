@@ -289,7 +289,7 @@ class sitemodel_field extends admin {
 	 */
 	public function cache_field($modelid = 0) {
 		$field_array = array();
-		$fields = $this->db->select(array('modelid'=>$modelid,'disabled'=>$disabled),'*',100,'listorder ASC');
+		$fields = $this->db->select(array('modelid'=>$modelid,'disabled'=>0),'*',100,'listorder ASC');
 		foreach($fields as $_value) {
 			$setting = string2array($_value['setting']);
 			$_value = array_merge($_value,$setting);

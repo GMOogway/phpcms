@@ -255,6 +255,7 @@ class attachments {
 		$site_allowext = ($file_types_post!='') ? $file_types_post : ($this->input->get('site_allowext') ? $this->input->get('site_allowext') : $upload_allowext);
 		$array_test = explode('|',$site_allowext);
 		$length = sizeof($array_test);
+		$s_str = '';
 		for($i=0;$i<$length;$i++){
 			$s_str .= "'".$array_test[$i]."',";
 		}

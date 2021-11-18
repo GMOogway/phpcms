@@ -18,7 +18,6 @@
 			<th width="150"><?php echo L('type');?></th>
             <th width="50"><?php echo L('must_input');?></th>
             <th width="50"><?php echo L('search');?></th>
-            <th width="50"><?php echo L('listorder');?></th>
 			<th width="100"><?php echo L('disabled');?></th>
 			<th width="150"><?php echo L('operations_manage');?></th>
             </tr>
@@ -34,14 +33,9 @@
 		<td><?php echo $r['field']?></td>
 		<td><?php echo $r['name']?></td>
 		<td align='center'><?php echo $r['formtype']?></td>
-		<td align='center'>
-			<?php echo $r['isbase'] ? L('icon_unlock') : L('icon_locked')?></td>
-		<td align='center'>
-			<?php echo $r['issearch'] ? L('icon_unlock') : L('icon_locked')?></td>
-		<td align='center'>
-			<?php echo $r['isorder'] ? L('icon_unlock') : L('icon_locked')?></td>
-		<td align='center'>
-			<?php echo $r['disabled'] ? L('icon_unlock') : L('icon_locked')?></td>
+		<td align='center'><?php echo $r['isbase'] ? L('icon_unlock') : L('icon_locked')?></td>
+		<td align='center'><?php echo $r['issearch'] ? L('icon_unlock') : L('icon_locked')?></td>
+		<td align='center'><?php echo $r['disabled'] ? L('icon_unlock') : L('icon_locked')?></td>
 		<td align='center'>
 			<a class="btn btn-xs green" href="javascript:edit(<?php echo $r['modelid']?>, <?php echo $r['fieldid']?>, '<?php echo $r['name']?>')"><?php echo L('modify')?></a>
 			<?php if(!$r['disabled']) {?>

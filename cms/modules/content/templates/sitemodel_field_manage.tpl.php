@@ -39,16 +39,12 @@ include $this->admin_tpl('header','admin');?>
 			<th width="50"><?php echo L('system');?></th> 
             <th width="50"><?php echo L('must_input');?></th>
             <th width="50"<?php if(!$modelid || $modelid==-1) {echo ' style="display: none;"';}?>><?php echo L('search');?></th>
-            <th width="50"<?php if(!$modelid || $modelid==-1) {echo ' style="display: none;"';}?>><?php echo L('listorder');?></th>
             <th width="50"<?php if(!$modelid || $modelid==-1) {echo ' style="display: none;"';}?>><?php echo L('contribute');?></th>
 			<th width="150"><?php echo L('operations_manage');?></th>
             </tr>
         </thead>
     <tbody class="td-line">
-	<?php
-	foreach($datas as $r) {
-		$tablename = L($r['tablename']);
-	?>
+	<?php foreach($datas as $r) {?>
     <tr>
 		<td align='center'><input name='listorders[<?php echo $r['fieldid']?>]' type='text' size='3' value='<?php echo $r['listorder']?>' class='input-text-c'></td>
 		<td><?php echo $r['field']?></td>
@@ -57,7 +53,6 @@ include $this->admin_tpl('header','admin');?>
 		<td align='center'><?php echo $r['issystem'] ? L('icon_unlock') : L('icon_locked')?></td>
 		<td align='center'><?php echo $r['minlength'] ? L('icon_unlock') : L('icon_locked')?></td>
 		<td align='center'<?php if(!$modelid || $modelid==-1) {echo ' style="display: none;"';}?>><?php echo $r['issearch'] ? L('icon_unlock') : L('icon_locked')?></td>
-		<td align='center'<?php if(!$modelid || $modelid==-1) {echo ' style="display: none;"';}?>><?php echo $r['isorder'] ? L('icon_unlock') : L('icon_locked')?></td>
 		<td align='center'<?php if(!$modelid || $modelid==-1) {echo ' style="display: none;"';}?>><?php echo $r['isadd'] ? L('icon_unlock') : L('icon_locked')?></td>
 		<td align='center'> <a class="btn btn-xs green" href="?m=content&c=sitemodel_field&a=edit&modelid=<?php echo $r['modelid']?>&fieldid=<?php echo $r['fieldid']?>&menuid=<?php echo $this->input->get('menuid')?>"><?php echo L('edit');?></a>
 		<?php if(!in_array($r['field'],$forbid_fields)) { ?>
