@@ -3,8 +3,6 @@ defined('IN_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header', 'admin');?>
 <link rel="stylesheet" href="<?php echo CSS_PATH;?>bootstrap/css/bootstrap.min.css" media="all" />
 <style type="text/css">
-a, a:link, a:visited {text-shadow: none;color: #337ab7;text-decoration: none;}
-a:hover {cursor: pointer;color: #23527c;}
 .page-content {margin-left: 0;margin-top: 0;padding: 25px 20px 10px;}
 .page-content3 {margin-left: 0px !important;border-left: 0 !important;}
 .main-content {background: #f5f6f8;}

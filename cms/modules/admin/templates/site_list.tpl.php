@@ -11,6 +11,7 @@ include $this->admin_tpl('header');
 		<th><?php echo L('site_name')?></th>
 		<th><?php echo L('site_dirname')?></th>
 		<th><?php echo L('site_domain')?></th>
+		<th><?php echo L('mobile_domain')?></th>
 		<th><?php echo L('godaddy')?></th>
 		<th><?php echo L('operations_manage')?></th>
 		</tr>
@@ -21,13 +22,14 @@ if(is_array($list)):
 	foreach($list as $v):
 ?>
 <tr>
-<td><?php echo $v['siteid']?></td>
-<td align="center"><?php echo $v['name']?></td>
-<td align="center"><?php echo $v['dirname']?></td>
-<td align="center"><?php echo $v['domain']?></td>
+<td><?php echo $v['siteid'];?></td>
+<td align="center"><?php echo $v['name'];?></td>
+<td align="center"><?php echo $v['dirname'];?></td>
+<td align="center"><a href="<?php echo $v['domain'];?>" target="_blank"><?php echo $v['domain'];?></a></td>
+<td align="center"><a href="<?php echo $v['mobile_domain'];?>" target="_blank"><?php echo $v['mobile_domain'];?></a></td>
 <td align="center"><?php if ($v['siteid']!=1){?><?php echo pc_base::load_config('system', 'html_root')?>/<?php echo $v['dirname'];} else{echo '/';}?></td>
-<td><a class="btn btn-xs green" href="javascript:edit(<?php echo $v['siteid']?>, '<?php echo  new_addslashes(new_html_special_chars($v['name']))?>')"><?php echo L('edit')?></a>
-<?php if($v['siteid']!=1) { ?><a class="btn btn-xs red" href="###" onclick="Dialog.confirm('<?php echo new_addslashes(new_html_special_chars(L('confirm', array('message'=>$v['name']))))?>',function(){redirect('?m=admin&c=site&a=del&siteid=<?php echo $v['siteid']?>&pc_hash='+pc_hash);});"><?php echo L('delete')?></a><?php } ?></td>
+<td><a class="btn btn-xs green" href="javascript:edit(<?php echo $v['siteid'];?>, '<?php echo new_addslashes(new_html_special_chars($v['name']));?>')"><?php echo L('edit');?></a>
+<?php if($v['siteid']!=1) { ?><a class="btn btn-xs red" href="###" onclick="Dialog.confirm('<?php echo new_addslashes(new_html_special_chars(L('confirm', array('message'=>$v['name']))));?>',function(){redirect('?m=admin&c=site&a=del&siteid=<?php echo $v['siteid'];?>&pc_hash='+pc_hash);});"><?php echo L('delete');?></a><?php } ?></td>
 </tr>
 <?php 
 	endforeach;

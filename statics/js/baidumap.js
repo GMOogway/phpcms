@@ -64,7 +64,7 @@ function baiduSearchAddress(mapObj, name, level, point){
         // 创建标注对象并添加到地图
         var center = mapObj.getCenter();
         var point = new BMap.Point(lngX,latY);
-        var marker = new BMap.Marker(point, {icon: myIcon});
+        //var marker = new BMap.Marker(point, {icon: myIcon});
         marker.enableDragging();
         mapObj.addOverlay(marker);
         var ZoomLevel = mapObj.getZoom();

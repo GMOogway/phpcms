@@ -3,7 +3,6 @@ defined('IN_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');?>
 <style type="text/css">
 body {background-color: #f5f6f8;font-size: 14px;}
-a:hover {text-decoration: underline;}
 .page-container {margin: 0;padding: 0;position: relative;}
 .page-content-wrapper {float: left;width: 100%;}
 .page-content-wrapper .page-content {margin-top: 0;padding: 25px 20px 10px;}

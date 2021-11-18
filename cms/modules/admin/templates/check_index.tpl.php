@@ -4,7 +4,6 @@ include $this->admin_tpl('header','admin');?>
 <link rel="stylesheet" href="<?php echo CSS_PATH?>bootstrap/css/bootstrap.min.css" media="all" />
 <style type="text/css">
 body {background-color: #f5f6f8;font-size: 14px;}
-a:hover {text-decoration: underline;}
 .page-container {margin: 0;padding: 0;position: relative;}
 .page-content-wrapper {float: left;width: 100%;}
 .page-content-wrapper .page-content {margin-top: 0;padding: 25px 20px 10px;}
