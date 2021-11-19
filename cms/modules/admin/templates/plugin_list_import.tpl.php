@@ -42,7 +42,6 @@ if(is_array($pluginfo)){
 </div>
 </form>
 </body>
-<a href="javascript:edit(<?php echo $v['siteid']?>, '<?php echo $v['name']?>')">
 </html>
 <script type="text/javascript">
 <!--

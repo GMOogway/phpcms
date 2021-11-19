@@ -19,6 +19,7 @@ include $this->admin_tpl('header','admin');?>
     
 
 <?php
+if (is_array($datas)) {
 foreach($datas as $r) {
 ?>
 <tr>
@@ -28,7 +29,7 @@ foreach($datas as $r) {
 <td ><?php echo $r['description']?></td>
 <td align="center"><a class="btn btn-xs green" href="javascript:edit('<?php echo $r['typeid']?>','<?php echo trim(new_addslashes($r['name']))?>')"><?php echo L('edit');?></a> <a class="btn btn-xs red" href="javascript:;" onclick="data_delete(this,'<?php echo $r['typeid']?>','<?php echo trim(new_addslashes($r['name']));?>')"><?php echo L('delete')?></a> </td>
 </tr>
-<?php } ?>
+<?php }} ?>
 	</tbody>
     </table>
 </div>

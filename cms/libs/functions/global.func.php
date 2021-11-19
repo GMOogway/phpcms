@@ -54,6 +54,10 @@ function new_htmlentities($string) {
 }
 
 // html实体字符转换
+function html2code($value) {
+    return htmlspecialchars($value);
+}
+// html实体字符转换
 function code2html($value, $fk = false, $flags = null) {
 	return html_code($value, $fk, $flags);
 }
@@ -230,6 +234,21 @@ function dr_get_merge($code) {
 		}
 	}
 	return $str;
+}
+
+/**
+ * 安全url过滤
+ */
+function dr_safe_url($url, $is_html = false) {
+	$security = pc_base::load_sys_class('security');
+	if (!$url) {
+		return '';
+	}
+	$url = trim($security->xss_clean($url, true));
+	if ($is_html) {
+		$url = htmlspecialchars($url);
+	}
+	return $url;
 }
 
 /**
@@ -828,6 +847,23 @@ if (! function_exists('clearhtml')) {
 		return trim($str);
 	}
 }
+if (! function_exists('dr_redirect')) {
+	// 执行跳转动作
+	function dr_redirect($url) {
+		// 跳转
+		if ($url != FC_NOW_URL) {
+			if (IS_DEV) {
+				if (IS_ADMIN) {
+					dr_admin_msg(0, '开发者模式：<br>当前URL['.FC_NOW_URL.']<br>与其本身地址['.$url.']不符<br>正在自动跳转本身地址（关闭开发者模式时即可自动跳转）', $url, 9);
+				} else {
+					dr_msg(0, '开发者模式：<br>当前URL['.FC_NOW_URL.']<br>与其本身地址['.$url.']不符<br>正在自动跳转本身地址（关闭开发者模式时即可自动跳转）', $url, 9);
+				}
+			} else {
+				redirect($url, 'location', '301');
+			}
+		}
+	}
+}
 /**
  * 跳转地址
  */
@@ -841,6 +877,65 @@ function redirect($url = '', $method = 'auto', $code = NULL) {
 			break;
 	}
 	exit;
+}
+if (! function_exists('dr_redirect_safe_check')) {
+	/**
+	 * 跳转地址安全检测
+	 */
+	function dr_redirect_safe_check($url) {
+		return $url;
+	}
+}
+function dr_admin_msg($code, $msg, $url = '', $time = 3) {
+	$input = pc_base::load_sys_class('input');
+	if ($input->get('callback')) {
+		dr_jsonp($code, $msg, $url);
+	} elseif (($input->get('is_ajax') || IS_AJAX)) {
+		dr_json($code, $msg, $url);
+	}
+
+	$url = dr_safe_url($url, true);
+	$backurl = $url ? $url : dr_safe_url($_SERVER['HTTP_REFERER'], true);
+
+	if ($backurl) {
+		strpos(FC_NOW_URL, $backurl) === 0 && $backurl = '';
+	} else {
+		$backurl = 'javascript:history.go(-1);';
+	}
+
+	$mark = $code;
+	$meta_title = clearhtml($msg);
+	$is_msg_page = 1;
+	include(admin_template('msg', 'admin'));
+	exit;
+}
+/**
+ * 前台提示信息
+ */
+function dr_msg($code, $msg, $url = '', $time = 3) {
+	$input = pc_base::load_sys_class('input');
+	if ($input->get('is_show_msg')) {
+		// 强制显示提交信息而不采用ajax返回
+	} else {
+		if ($input->get('callback')) {
+			dr_jsonp($code, $msg, $url);
+		} elseif (($input->get('is_ajax') || IS_AJAX)) {
+			dr_json($code, $msg, $url);
+		}
+	}
+
+	if (!$url) {
+		$backurl = dr_safe_url($_SERVER['HTTP_REFERER'], true);
+		(!$backurl || $backurl == FC_NOW_URL ) && $backurl = SITE_URL;
+	} else {
+		$backurl = dr_safe_url($url, true);
+	}
+
+	$mark = $code;
+	$SEO['title'] = clearhtml($msg);
+
+	include(template('content', 'msg'));
+	exit();
 }
 /**
  * 获取当前页面完整URL地址
@@ -910,7 +1005,7 @@ function dr_baidu_map($value, $zoom = 15, $width = 600, $height = 400, $ak = SYS
 	var mapObj=null;
 	lngX = "' . $lngX . '";
 	latY = "' . $latY . '";
-	zoom = "' . $zoom . '";     
+	zoom = "' . $zoom . '"; 
 	var mapObj = new BMap.Map("'.$id.'");
 	var ctrl_nav = new BMap.NavigationControl({anchor:BMAP_ANCHOR_TOP_LEFT,type:BMAP_NAVIGATION_CONTROL_LARGE});
 	mapObj.addControl(ctrl_nav);
@@ -1175,7 +1270,40 @@ function dr_file_list_preview_html($t) {
 * 统一返回json格式并退出程序
 */
 function dr_json($code, $msg, $data = array()){
-	echo dr_array2string(dr_return_data($code, $msg, $data));exit;
+	$input = pc_base::load_sys_class('input');
+	// 强制显示提交信息而不采用ajax返回
+	if ($input->get('is_show_msg')) {
+		$url = '';
+		if ($code) {
+			$url = dr_redirect_safe_check(isset($data['url']) ? $data['url'] : '');
+		}
+		dr_msg($code, $msg, $url);
+	}
+	$rt = dr_return_data($code, $msg, $data);
+	// 按格式返回数据
+	$format = $input->get('format');
+	if (isset($format) && $format) {
+		switch ($format) {
+			case 'jsonp':
+				dr_jsonp(1, $msg, $data);exit;
+				break;
+			case 'text':
+				echo $msg;exit;
+				break;
+		}
+	}
+	echo dr_array2string($rt);exit;
+}
+
+/**
+ * 统一返回jsonp格式并退出程序
+ */
+function dr_jsonp($code, $msg, $data = array()){
+	$input = pc_base::load_sys_class('input');
+	$callback = dr_safe_replace($input->get('callback'));
+	!$callback && $callback = 'callback';
+	$rt = dr_return_data($code, $msg, $data);
+	echo $callback.'('.dr_array2string($rt).')';exit;
 }
 /**
  * 将数组转换为字符串

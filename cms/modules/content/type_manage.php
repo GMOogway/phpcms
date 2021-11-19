@@ -212,12 +212,12 @@ class type_manage extends admin {
 		foreach($this->categorys as $r) {
 			unset($r['module']);
 			$setting = string2array($r['setting']);
-			$r['create_to_html_root'] = $setting['create_to_html_root'];
-			$r['ishtml'] = $setting['ishtml'];
-			$r['content_ishtml'] = $setting['content_ishtml'];
-			$r['category_ruleid'] = $setting['category_ruleid'];
-			$r['show_ruleid'] = $setting['show_ruleid'];
-			$r['workflowid'] = $setting['workflowid'];
+			$r['create_to_html_root'] = isset($setting['create_to_html_root']) && $setting['create_to_html_root'] ? $setting['create_to_html_root'] : '';
+			$r['ishtml'] = isset($setting['ishtml']) && $setting['ishtml'] ? $setting['ishtml'] : '';
+			$r['content_ishtml'] = isset($setting['content_ishtml']) && $setting['content_ishtml'] ? $setting['content_ishtml'] : '';
+			$r['category_ruleid'] = isset($setting['category_ruleid']) && $setting['category_ruleid'] ? $setting['category_ruleid'] : '';;
+			$r['show_ruleid'] = isset($setting['show_ruleid']) && $setting['show_ruleid'] ? $setting['show_ruleid'] : '';;
+			$r['workflowid'] = isset($setting['workflowid']) && $setting['workflowid'] ? $setting['workflowid'] : '';;
 			$r['isdomain'] = '0';
 			if(strpos($r['url'], 'http://') === false && strpos($r['url'], 'https://') === false) {
 				$r['url'] = siteurl($r['siteid']).$r['url'];

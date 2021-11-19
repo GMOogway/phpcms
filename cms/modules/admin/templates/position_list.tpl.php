@@ -59,7 +59,6 @@ if(is_array($infos)){
 </div>
 </form>
 </body>
-<a href="javascript:edit(<?php echo $v['siteid']?>, '<?php echo $v['name']?>')">
 </html>
 <script type="text/javascript">
 <!--

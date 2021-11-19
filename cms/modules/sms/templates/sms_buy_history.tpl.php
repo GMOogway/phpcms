@@ -45,5 +45,4 @@ if(is_array($payinfo_arr)) foreach($payinfo_arr as $info){
 </div>
 </form>
 </body>
-<a href="javascript:edit(<?php echo $v['siteid']?>, '<?php echo $v['name']?>')">
 </html>
