@@ -769,6 +769,51 @@ function dr_iframe_show(type, url, width, height) {
 	};
 	diag.show();
 }
+// ajax 显示内容
+function iframe_show(type, url, width, height) {
+	var title = '';
+	if (type == 'show') {
+		title = '<i class="fa fa-search"></i> 查看';
+	} else if (type == 'edit') {
+		title = '<i class="fa fa-edit"></i> 修改';
+	} else if (type == 'code') {
+		title = '<i class="fa fa-code"></i> 代码';
+	} else if (type == 'cart') {
+		title = '<i class="fa fa-shopping-cart"></i> 交易记录';
+	} else {
+		title = type;
+	}
+	if (!width) {
+		width = '60%';
+	}
+	if (!height) {
+		height = '70%';
+	}
+	if (is_mobile()) {
+		width = '95%';
+		height = '90%';
+	}
+	layer.open({
+		type: 2,
+		title: title,
+		fix:true,
+		scrollbar: false,
+		shadeClose: true,
+		shade: 0,
+		area: [width, height],
+		success: function(layero, index){
+			// 主要用于后台权限验证
+			var body = layer.getChildFrame('body', index);
+			var json = $(body).html();
+			if (json.indexOf('"code":0') > 0 && json.length < 500){
+				var obj = JSON.parse(json);
+				layer.close(index);
+				dr_tips(0, obj.msg);
+			}
+		},
+		content: url+'&is_ajax=1'
+	});
+}
 // ajax提交
 function dr_ajax_submit(url, form, time, go) {
 	var flen = $('[id='+form+']').length;

@@ -40,8 +40,8 @@ class customfield extends admin {
 			$caches[$post['name']] = $post['val'];
 		}
 		//更新缓存
-		if($this->setFieldCache())	showmessage(L('operation_success'), HTTP_REFERER);
-		else {showmessage(L('cm_errmsg_permissions'), HTTP_REFERER);}
+		if($this->setFieldCache()) dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
+		else {dr_admin_msg(0,L('cm_errmsg_permissions'), HTTP_REFERER);}
 	}
 
 	//管理列表（超级管理员）
@@ -68,8 +68,8 @@ class customfield extends admin {
 	/* 管理保存（超级管理员） */
 	public function manage_save() {
 		foreach($_POST['postdata'] as $key => $post){
-			if($post['name'] == "") showmessage(L('cm_errmsg_value'), HTTP_REFERER);
-			if($post['description'] == "") showmessage(L('cm_errmsg_description'), HTTP_REFERER);
+			if($post['name'] == "") dr_admin_msg(0,L('cm_errmsg_value'), HTTP_REFERER);
+			if($post['description'] == "") dr_admin_msg(0,L('cm_errmsg_description'), HTTP_REFERER);
 			$id = intval($post['id']);
 			$options = intval($post['options']);
 			unset($post['id']);
@@ -97,8 +97,8 @@ class customfield extends admin {
 		$caches[$post['name']] = $post['val'];
 		}
 		//更新缓存
-		if($this->setFieldCache())	showmessage(L('operation_success'), HTTP_REFERER);
-		else {showmessage(L('cm_errmsg_permissions'), HTTP_REFERER);}
+		if($this->setFieldCache()) dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
+		else {dr_admin_msg(0,L('cm_errmsg_permissions'), HTTP_REFERER);}
 	}
 
 	/* 分类管理（超级管理员） */
@@ -118,7 +118,7 @@ class customfield extends admin {
 	/* 分类保存（超级管理员） */
 	public function category_save() {
 		foreach($_POST['postdata'] as $key => $post){
-			if($post['description'] == "") showmessage(L('cm_errmsg_name'), HTTP_REFERER);
+			if($post['description'] == "") dr_admin_msg(0,L('cm_errmsg_name'), HTTP_REFERER);
 			$id = intval($post['id']);
 			$options = intval($post['options']);
 			unset($post['id']); 	 //卸载id字段，防止更新覆盖
@@ -137,14 +137,14 @@ class customfield extends admin {
 					break;
 				case 3: //删除
 					$vo = $this->db->count('pid = '.$id);
-					if($vo > 0){showmessage(L('cm_errmsg_delete'), HTTP_REFERER);}
+					if($vo > 0){dr_admin_msg(0,L('cm_errmsg_delete'), HTTP_REFERER);}
 					else{$this->db->delete(array('id'=>$id));}
 					break;
 				default:
 					break;
 			}
 		}
-		showmessage(L('operation_success'), HTTP_REFERER);
+		dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 	}
 
 	/* 重写缓存 */

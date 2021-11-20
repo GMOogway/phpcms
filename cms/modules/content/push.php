@@ -15,13 +15,13 @@ class push extends admin {
 			$catid = $this->input->get('catid') ? intval($this->input->get('catid')) : intval($this->input->post('catid'));
 			$this->priv_db = pc_base::load_model('category_priv_model');
 			$priv_datas = $this->priv_db->get_one(array('catid'=>$catid,'is_admin'=>1,'action'=>'copy'));
-			if(!$priv_datas['catid']) showmessage(L('permission_to_operate'),'blank');
+			if(!$priv_datas['catid']) dr_admin_msg(0,L('permission_to_operate'));
 		}
 		$module = ($this->input->get('module') && !empty($this->input->get('module'))) ? $this->input->get('module') : 'admin';
 		if (in_array($module, array('admin', 'special','content'))) {
 			$this->push = push_factory::get_instance()->get_api($module);
 		} else {
-			showmessage(L('not_exists_push'), 'blank');
+			dr_admin_msg(0,L('not_exists_push'));
 		}
 	}
 	
@@ -42,7 +42,7 @@ class push extends admin {
 			}
 			$add_action = $this->input->get('add_action') ? $this->input->get('add_action') : $this->input->get('action'); 
 			$this->push->{$add_action}($info, $_POST);
-			showmessage(L('success'), '', '', 'push');
+			dr_admin_msg(1,L('success'), '', '', 'push');
 		} else {
 			pc_base::load_app_func('global', 'template');
 			if (method_exists($this->push, $this->input->get('action'))) {
@@ -50,7 +50,7 @@ class push extends admin {
 				$tpl = $this->input->get('tpl') ? 'push_to_category' : 'push_list';
 				include $this->admin_tpl($tpl);
 			} else {
-				showmessage('CLASS METHOD NO EXISTS!', 'blank');
+				dr_admin_msg(0,'CLASS METHOD NO EXISTS!');
 			}
 		}
 	}

@@ -28,18 +28,18 @@ class tag extends admin {
 	public function add() {
 		pc_base::load_app_func('global', 'dbsource');
 		if ($this->input->post('dosubmit')) {
-			$name = $this->input->post('name') && trim($this->input->post('name')) ? trim($this->input->post('name')) : showmessage(L('name').L('empty'));
+			$name = $this->input->post('name') && trim($this->input->post('name')) ? trim($this->input->post('name')) : dr_admin_msg(0,L('name').L('empty'));
 			$cache = $this->input->post('cache') && intval($this->input->post('cache')) ? intval($this->input->post('cache')) : 0;
 			$num = $this->input->post('num') && intval($this->input->post('num')) ? intval($this->input->post('num')) : 0;
 			$type = $this->input->post('type') && intval($this->input->post('type')) ? intval($this->input->post('type')) : 0;
 			$ac = $this->input->get('ac') && !empty($this->input->get('ac')) ? trim($this->input->get('ac')) : '';
 			//检查名称是否已经存在
 			if ($this->db->get_one(array('name'=>$name)))  {
-				showmessage(L('name').L('exists'));
+				dr_admin_msg(0,L('name').L('exists'));
 			}
 			$siteid = $this->get_siteid();
 			if ($type == '1') { //自定义SQL
-				$sql = $this->input->post('data') && trim($this->input->post('data')) ? trim($this->input->post('data')) : showmessage(L('custom_sql').L('empty'));
+				$sql = $this->input->post('data') && trim($this->input->post('data')) ? trim($this->input->post('data')) : dr_admin_msg(0,L('custom_sql').L('empty'));
 				$data['sql'] = $sql;
 				$tag = '{pc:get sql="'.$sql.'" ';
 				if ($cache) {
@@ -57,8 +57,8 @@ class tag extends admin {
 				}
 				$tag .= '}';
 			} elseif ($type == 0) { //模型配置
-				$module = $this->input->post('module') && trim($this->input->post('module')) ? trim($this->input->post('module')) : showmessage(L('please_select_model'));
-				$action = $this->input->post('action') && trim($this->input->post('action')) ? trim($this->input->post('action')) : showmessage(L('please_select_action'));
+				$module = $this->input->post('module') && trim($this->input->post('module')) ? trim($this->input->post('module')) : dr_admin_msg(0,L('please_select_model'));
+				$action = $this->input->post('action') && trim($this->input->post('action')) ? trim($this->input->post('action')) : dr_admin_msg(0,L('please_select_action'));
 				$html = pc_tag_class($module);
 				$data = array();
 				$tag = '{pc:'.$module.' action="'.$action.'" ';
@@ -68,13 +68,13 @@ class tag extends admin {
 						$$key = $this->input->post($key) && trim($this->input->post($key)) ? trim($this->input->post($key)) : '';
 						if (!empty($val['validator'])) {
 							if (isset($val['validator']['min']) && strlen($$key) < $val['validator']['min']) {
-								showmessage($val['name'].L('should').L('is_greater_than').$val['validator']['min'].L('lambda'));
+								dr_admin_msg(0,$val['name'].L('should').L('is_greater_than').$val['validator']['min'].L('lambda'));
 							} 
 							if (isset($val['validator']['max']) && strlen($$key) > $val['validator']['max']) {
-								showmessage($val['name'].L('should').L('less_than').$val['validator']['max'].L('lambda'));
+								dr_admin_msg(0,$val['name'].L('should').L('less_than').$val['validator']['max'].L('lambda'));
 							} 
 							if (!preg_match('/'.$val['validator']['reg'].'/'.$val['validator']['reg_param'], $$key)) {
-								showmessage($val['name'].$val['validator']['reg_msg']);
+								dr_admin_msg(0,$val['name'].$val['validator']['reg_msg']);
 							}
 						}
 						$tag .= $key.'="'.$$key.'" ';
@@ -95,7 +95,7 @@ class tag extends admin {
 				}
 				$tag .= '}';
 			} else { //碎片
-				$data = $this->input->post('block') && trim($this->input->post('block')) ? trim($this->input->post('block')) : showmessage(L('block_name_not_empty'));
+				$data = $this->input->post('block') && trim($this->input->post('block')) ? trim($this->input->post('block')) : dr_admin_msg(0,L('block_name_not_empty'));
 				$tag = '{pc:block pos="'.$data.'"}';
 			}
 			$tag .= "\n".'{loop $data $n $r}'."\n".'<li><a href="{$r[\'url\']}" title="{$r[\'title\']}">{$r[\'title\']}</a></li>'."\n".'{/loop}'."\n".'{/pc}';
@@ -105,7 +105,7 @@ class tag extends admin {
 			if ($ac=='js') {
 				include $this->admin_tpl('tag_show');
 			} else {
-				showmessage('', '', '', 'add');
+				dr_admin_msg(1,'', '', '', 'add');
 			}
 		} else {
 			pc_base::load_sys_class('form','',0);
@@ -132,25 +132,25 @@ class tag extends admin {
 	 * 修改标签向导
 	 */
 	public function edit() {
-		$id = $this->input->get('id') && intval($this->input->get('id')) ? intval($this->input->get('id')) :  showmessage(L('illegal_parameters'), HTTP_REFERER);
+		$id = $this->input->get('id') && intval($this->input->get('id')) ? intval($this->input->get('id')) :  dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		if (!$edit_data = $this->db->get_one(array('id'=>$id))) {
-			showmessage(L('notfound'));
+			dr_admin_msg(0,L('notfound'));
 		}
 		pc_base::load_app_func('global', 'dbsource');
 		if ($this->input->post('dosubmit')) {
-			$name = $this->input->post('name') && trim($this->input->post('name')) ? trim($this->input->post('name')) : showmessage(L('name').L('empty'));
+			$name = $this->input->post('name') && trim($this->input->post('name')) ? trim($this->input->post('name')) : dr_admin_msg(0,L('name').L('empty'));
 			$cache = $this->input->post('cache') && intval($this->input->post('cache')) ? intval($this->input->post('cache')) : 0;
 			$num = $this->input->post('num') && intval($this->input->post('num')) ? intval($this->input->post('num')) : 0;
 			$type = $this->input->post('type') && intval($this->input->post('type')) ? intval($this->input->post('type')) : 0;
 			//检查名称是否已经存在
 			if ($edit_data['name'] != $name) {
 				if ($this->db->get_one(array('name'=>$name), 'id'))  {
-					showmessage(L('name').L('exists'));
+					dr_admin_msg(0,L('name').L('exists'));
 				}
 			}
 			$siteid = $this->get_siteid();
 			if ($type == '1') { //自定义SQL
-				$sql = $this->input->post('data') && trim($this->input->post('data')) ? trim($this->input->post('data')) : showmessage(L('custom_sql').L('empty'));
+				$sql = $this->input->post('data') && trim($this->input->post('data')) ? trim($this->input->post('data')) : dr_admin_msg(0,L('custom_sql').L('empty'));
 				$data['sql'] = $sql;
 				$tag = '{pc:get sql="'.$sql.'" ';
 				if ($cache) {
@@ -168,8 +168,8 @@ class tag extends admin {
 				}
 				$tag .= '}';
 			} elseif ($type == 0) { //模型配置
-				$module = $this->input->post('module') && trim($this->input->post('module')) ? trim($this->input->post('module')) : showmessage(L('please_select_model'));
-				$action = $this->input->post('action') && trim($this->input->post('action')) ? trim($this->input->post('action')) : showmessage(L('please_select_action'));
+				$module = $this->input->post('module') && trim($this->input->post('module')) ? trim($this->input->post('module')) : dr_admin_msg(0,L('please_select_model'));
+				$action = $this->input->post('action') && trim($this->input->post('action')) ? trim($this->input->post('action')) : dr_admin_msg(0,L('please_select_action'));
 				$html = pc_tag_class($module);
 				$data = array();
 				$tag = '{pc:'.$module.' action="'.$action.'" ';
@@ -179,13 +179,13 @@ class tag extends admin {
 						$$key = $this->input->post($key) && trim($this->input->post($key)) ? trim($this->input->post($key)) : '';
 						if (!empty($val['validator'])) {
 							if (isset($val['validator']['min']) && strlen($$key) < $val['validator']['min']) {
-								showmessage($val['name'].L('should').L('is_greater_than').$val['validator']['min'].L('lambda'));
+								dr_admin_msg(0,$val['name'].L('should').L('is_greater_than').$val['validator']['min'].L('lambda'));
 							} 
 							if (isset($val['validator']['max']) && strlen($$key) > $val['validator']['max']) {
-								showmessage($val['name'].L('should').L('less_than').$val['validator']['max'].L('lambda'));
+								dr_admin_msg(0,$val['name'].L('should').L('less_than').$val['validator']['max'].L('lambda'));
 							} 
 							if (!preg_match('/'.$val['validator']['reg'].'/'.$val['validator']['reg_param'], $$key)) {
-								showmessage($val['name'].$val['validator']['reg_msg']);
+								dr_admin_msg(0,$val['name'].$val['validator']['reg_msg']);
 							}
 						}
 						$tag .= $key.'="'.$$key.'" ';
@@ -206,14 +206,14 @@ class tag extends admin {
 				}
 				$tag .= '}';
 			} else { //碎片
-				$data = $this->input->post('block') && trim($this->input->post('block')) ? trim($this->input->post('block')) : showmessage(L('block_name_not_empty'));
+				$data = $this->input->post('block') && trim($this->input->post('block')) ? trim($this->input->post('block')) : dr_admin_msg(0,L('block_name_not_empty'));
 				$tag = '{pc:block pos="'.$data.'"}';
 			}
 			$tag .= "\n".'{loop $data $n $r}'."\n".'<li><a href="{$r[\'url\']}" title="{$r[\'title\']}">{$r[\'title\']}</a></li>'."\n".'{/loop}'."\n".'{/pc}';
 			$tag = new_addslashes($tag);
 			$data = is_array($data) ? array2string($data) : $data;
 			$this->db->update(array('siteid'=>$siteid, 'tag'=>$tag, 'name'=>$name, 'type'=>$type, 'module'=>$module, 'action'=>$action, 'data'=>$data, 'page'=>$this->input->post('page'), 'return'=>$this->input->post('return'), 'cache'=>$cache, 'num'=>$num), array('id'=>$id));
-			showmessage('', '', '', 'edit');
+			dr_admin_msg(1,'', '', '', 'edit');
 		} else {
 			pc_base::load_sys_class('form','',0);
 			$modules = array_merge(array(''=>L('please_select')),pc_base::load_config('modules'));
@@ -260,14 +260,14 @@ class tag extends admin {
 			}
 			$sql = implode('\',\'', $id);
 			$this->db->delete("id in ('$sql')");
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		} else {
 			$id = intval($id);
-			if(empty($id)) showmessage(L('illegal_parameters'), HTTP_REFERER);
+			if(empty($id)) dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			if ($this->db->delete(array('id'=>$id))) {
-				showmessage(L('operation_success'), HTTP_REFERER);
+				dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 			} else {
-				showmessage(L('operation_failure'), HTTP_REFERER);
+				dr_admin_msg(0,L('operation_failure'), HTTP_REFERER);
 			}
 		}
 	}

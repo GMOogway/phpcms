@@ -58,7 +58,7 @@ class special extends admin {
 				}
 				$this->special_cache();
 			}
-			showmessage(L('add_special_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('add_special_success'), HTTP_REFERER);
 		} else {
 			//获取站点模板信息
 			pc_base::load_app_func('global', 'admin');
@@ -79,7 +79,7 @@ class special extends admin {
 	 */
 	public function edit() {
 		if (!isset($_GET['specialid']) || empty($_GET['specialid'])) {
-			showmessage(L('illegal_action'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_action'), HTTP_REFERER);
 		}
 		$_GET['specialid'] = intval($_GET['specialid']);
 		if (isset($_POST['dosubmit']) && !empty($_POST['dosubmit'])) {
@@ -115,7 +115,7 @@ class special extends admin {
 				$this->attachment_db->api_update(array($special['thumb'], $special['banner']),'special-'.$_GET['specialid'], 1);
 			}
 			$this->special_cache();
-			showmessage(L('edit_special_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('edit_special_success'), HTTP_REFERER);
 		} else {
 			$info = $this->db->get_one(array('id'=>$_GET['specialid'], 'siteid'=>$this->get_siteid()));
 			//获取站点模板信息
@@ -142,16 +142,16 @@ class special extends admin {
 	 */
 	public function import() {
 		if(isset($_POST['dosubmit']) || isset($_GET['dosubmit'])) {
-			if(!is_array($_POST['ids']) || empty($_POST['ids']) || !$_GET['modelid']) showmessage(L('illegal_action'), HTTP_REFERER);
-			if(!isset($_POST['typeid']) || empty($_POST['typeid'])) showmessage(L('select_type'), HTTP_REFERER);
+			if(!is_array($_POST['ids']) || empty($_POST['ids']) || !$_GET['modelid']) dr_admin_msg(0,L('illegal_action'), HTTP_REFERER);
+			if(!isset($_POST['typeid']) || empty($_POST['typeid'])) dr_admin_msg(0,L('select_type'), HTTP_REFERER);
 			foreach($_POST['ids'] as $id) {
 				$this->special_api->_import($_GET['modelid'], $_GET['specialid'], $id, $_POST['typeid'], $_POST['listorder'][$id]);
 			}
 			$html = pc_base::load_app_class('html', 'special'); 
 			$html->_index($_GET['specialid'], 20, 5);
-			showmessage(L('import_success'), 'blank', '', 'import');
+			dr_admin_msg(1,L('import_success'), '', '', 'import');
 		} else {
-			if(!$_GET['specialid']) showmessage(L('illegal_action'), HTTP_REFERER);
+			if(!$_GET['specialid']) dr_admin_msg(0,L('illegal_action'), HTTP_REFERER);
 			$_GET['modelid'] = $this->input->get('modelid') ? intval($_GET['modelid']) : 0;
 			$_GET['catid'] = $this->input->get('catid') ? intval($_GET['catid']) : 0;
 			$_GET['page'] = max(intval($_GET['page']), 1);
@@ -233,7 +233,7 @@ class special extends admin {
 		for ( $i=1; $i <= $pages ; $i++ ){ 
 			$size = $html->create_list($i);
 		}
-		showmessage(L('index_create_finish',array('size'=>format_file_size($size))));
+		dr_admin_msg(1,L('index_create_finish',array('size'=>format_file_size($size))));
 	}
 	
 	/**
@@ -249,9 +249,9 @@ class special extends admin {
 				}
 			}
 			$this->special_cache();
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		} else {
-			showmessage(L('please_in_admin'), HTTP_REFERER);
+			dr_admin_msg(0,L('please_in_admin'), HTTP_REFERER);
 		}
 	}
 	
@@ -265,7 +265,7 @@ class special extends admin {
 			$this->create_index($specialid);
 		} else {
 			delcache('create_specials', 'commons');
-			showmessage(L('update_special_success'), '?m=special&c=special&a=init');
+			dr_admin_msg(1,L('update_special_success'), '?m=special&c=special&a=init');
 		}
 	}
 	
@@ -273,17 +273,17 @@ class special extends admin {
 	private function create_index($specialid) {
 		$info = $this->db->get_one(array('id'=>$specialid));
 		if (!$info['ishtml']) {
-			showmessage($info['title'].L('update_success'), '?m=special&c=special&a=public_create_html');
+			dr_admin_msg(0,$info['title'].L('update_success'), '?m=special&c=special&a=public_create_html');
 		}
 		$html = pc_base::load_app_class('html');
 		$html->_index($specialid);
-		showmessage($info['title'].L('index_update_success'), '?m=special&c=special&a=public_create_type&specialid='.$specialid);
+		dr_admin_msg(1,$info['title'].L('index_update_success'), '?m=special&c=special&a=public_create_type&specialid='.$specialid);
 	}
 	
 	//生成专题里列表页
 	public function public_create_type() {
 		$specialid = $this->input->get('specialid') ? intval($_GET['specialid']) : 0;
-		if (!$specialid) showmessage(L('illegal_action'));
+		if (!$specialid) dr_admin_msg(0,L('illegal_action'));
 		$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
 		$pages = isset($_GET['pages']) ? intval($_GET['pages']) : 0;
 		$types = getcache('create_types', 'commons');
@@ -315,26 +315,26 @@ class special extends admin {
 			}
 			if (empty($types) && $pages==$maxpage) {
 				delcache('create_types', 'commons');
-				showmessage($typename.L('type_update_success'), '?m=special&c=special&a=public_create_content&specialid='.$specialid);
+				dr_admin_msg(1,$typename.L('type_update_success'), '?m=special&c=special&a=public_create_content&specialid='.$specialid);
 			}
 			if ($pages<=$maxpage) {
-				showmessage($typename.L('update_success'), '?m=special&c=special&a=public_create_type&specialid='.$specialid);
+				dr_admin_msg(1,$typename.L('update_success'), '?m=special&c=special&a=public_create_type&specialid='.$specialid);
 			} else {
-				showmessage($typename.L('type_from').($_GET['page'] ? $_GET['page'] : 1).L('type_end').$maxpage.'</font> '.L('update_success'), '?m=special&c=special&a=public_create_type&typeid='.$typeid.'&typename='.$typename.'&page='.$page.'&pages='.$pages.'&specialid='.$specialid);
+				dr_admin_msg(1,$typename.L('type_from').($_GET['page'] ? $_GET['page'] : 1).L('type_end').$maxpage.'</font> '.L('update_success'), '?m=special&c=special&a=public_create_type&typeid='.$typeid.'&typename='.$typename.'&page='.$page.'&pages='.$pages.'&specialid='.$specialid);
 			}
 			
 		} else {
 			$special_api = pc_base::load_app_class('special_api');
 			$types = $special_api->_get_types($specialid);
 			setcache('create_types', $types, 'commons');
-			showmessage(L('start_update_type'), '?m=special&c=special&a=public_create_type&specialid='.$specialid);
+			dr_admin_msg(1,L('start_update_type'), '?m=special&c=special&a=public_create_type&specialid='.$specialid);
 		}
 	}
 	
 	//生成内容页
 	public function public_create_content() {
 		$specialid = $this->input->get('specialid') ? intval($_GET['specialid']) : 0;
-		if (!$specialid) showmessage(L('illegal_action'));
+		if (!$specialid) dr_admin_msg(0,L('illegal_action'));
 		$pages = $this->input->get('pages') ? intval($_GET['pages']) : 0;
 		$page = $this->input->get('page') ? intval($_GET['page']) : 1;
 		$c = pc_base::load_model('special_content_model');
@@ -351,10 +351,10 @@ class special extends admin {
 			$c->update(array('url'=>$urls[0]), array('id'=>$r['id']));
 		}
 		if ($page>=$pages) {
-			showmessage(L('content_update_success'), '?m=special&c=special&a=public_create_html&specialid='.$specialid);
+			dr_admin_msg(1,L('content_update_success'), '?m=special&c=special&a=public_create_html&specialid='.$specialid);
 		} else {
 			$page++;
-			showmessage(L('content_from').' <font color="red">'.intval($offset+1).L('type_end').intval($offset+10).'</font> '.L('update_success'), '?m=special&c=special&a=public_create_content&specialid='.$specialid.'&page='.$page.'&pages='.$pages);
+			dr_admin_msg(1,L('content_from').' <font color="red">'.intval($offset+1).L('type_end').intval($offset+10).'</font> '.L('update_success'), '?m=special&c=special&a=public_create_content&specialid='.$specialid.'&page='.$page.'&pages='.$pages);
 		}
 	}
 	
@@ -363,11 +363,11 @@ class special extends admin {
 	 */
 	public function elite() {
 		if(!isset($_GET['id']) || empty($_GET['id'])) {
-			showmessage(L('illegal_action'));
+			dr_admin_msg(0,L('illegal_action'));
 		}
 		$_GET['value'] = $this->input->get('value') ? intval($_GET['value']) : 0;
 		$this->db->update(array('elite'=>$_GET['value']), array('id'=>$_GET['id'], 'siteid'=>get_siteid()));
-		showmessage(L('operation_success'), HTTP_REFERER);
+		dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 	}
 	
 	/**
@@ -375,14 +375,14 @@ class special extends admin {
 	 */
 	public function delete($id = 0) {
 		if((!isset($_GET['id']) || empty($_GET['id'])) && (!isset($_POST['id']) || empty($_POST['id'])) && !$id) {
-			showmessage(L('illegal_action'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_action'), HTTP_REFERER);
 		}
 		if(is_array($_POST['id']) && !$id) {
 			foreach($_POST['id'] as $sid) {
 				$this->special_api->_del_special($sid);
 			}
 			$this->special_cache();
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		} elseif(is_numeric($id) && $id) {
 			$id = $this->input->get('id') ? intval($_GET['id']) : intval($id);
 			$this->special_api->_del_special($id);
@@ -390,7 +390,7 @@ class special extends admin {
 		} else {
 			$id = $this->input->get('id') ? intval($_GET['id']) : intval($id);
 			$this->special_api->_del_special($id);
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		}
 	}
 	
@@ -479,9 +479,9 @@ class special extends admin {
 	 * @param string $a add/edit添加操作时，自动加上默认值
 	 */
 	private function check($data, $a = 'add') {
-		if(!$data['title']) showmessage(L('title_cannot_empty'), HTTP_REFERER);
-		if(!$data['banner']) showmessage(L('banner_no_empty'), HTTP_REFERER);
-		if(!$data['thumb']) showmessage(L('thumb_no_empty'), HTTP_REFERER);
+		if(!$data['title']) dr_admin_msg(0,L('title_cannot_empty'), HTTP_REFERER);
+		if(!$data['banner']) dr_admin_msg(0,L('banner_no_empty'), HTTP_REFERER);
+		if(!$data['thumb']) dr_admin_msg(0,L('thumb_no_empty'), HTTP_REFERER);
 		if(is_array($data['catids']) && !empty($data['catids'])) {
 			$data['catids'] = ','.implode(',', $data['catids']).',';
 		}

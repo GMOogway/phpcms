@@ -255,7 +255,7 @@ $(document).ready(function() {
 });
 $('body').keydown(function(e){
     if (e.keyCode == 13) {
-        $('#my_submit').trigger('click') ;
+        $('#my_submit').trigger('click');
     }
 })
 $('.nav-tabs a').click(function (e) {

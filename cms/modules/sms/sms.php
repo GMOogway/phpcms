@@ -89,7 +89,7 @@ class sms extends admin {
 			$setting = array2string($this->sms_setting);
 			setcache('sms', $this->sms_setting_arr);
 			$this->module_db->update(array('setting'=>$setting),array('module'=>'sms'));
-			showmessage(L('operation_success'),HTTP_REFERER);			
+			dr_admin_msg(1,L('operation_success'),HTTP_REFERER);			
 		} else {
 			$show_pc_hash = '';
 			include $this->admin_tpl('sms_setting');
@@ -103,9 +103,9 @@ class sms extends admin {
 	}
 	
 	public function sms_sent() {
-		if(!$this->sms_setting['sms_enable']) showmessage(L('please_open_sms_platform_status'));
+		if(!$this->sms_setting['sms_enable']) dr_admin_msg(0,L('please_open_sms_platform_status'));
 		if(empty($this->smsapi->userid)) {
-			showmessage(L('need_band'), SELF.'?m=sms&c=sms&a=sms_setting&menuid='.$this->input->get('menuid').'&pc_hash='.dr_get_csrf_token());
+			dr_admin_msg(0,L('need_band'), SELF.'?m=sms&c=sms&a=sms_setting&menuid='.$this->input->get('menuid').'&pc_hash='.dr_get_csrf_token());
 		}
 		//检查短信余额
 		if($this->sms_setting['sms_key']) {
@@ -137,17 +137,17 @@ class sms extends admin {
 			
 			//短信余额不足
 			if($smsinfo['surplus'] < count($mobile)) {
-				showmessage(L('need_more_surplus'));
+				dr_admin_msg(0,L('need_more_surplus'));
 			}
 			
 			//发送短信
 			$return = $this->smsapi->send_sms($mobile, $content, $_POST['sendtime'], CHARSET,'',$tplid);
 			
-			showmessage($return, HTTP_REFERER,6000);
+			dr_admin_msg(0,$return, HTTP_REFERER,6);
 		} else {
 			$smsinfo_arr = $this->smsapi->get_smsinfo();
 			if(!empty($smsinfo_arr['allow_send_ip']) &&!in_array($_SERVER["SERVER_ADDR"],$smsinfo_arr['allow_send_ip'])) {
-				showmessage(L('this_server_does_not_allow_send_sms'));
+				dr_admin_msg(0,L('this_server_does_not_allow_send_sms'));
 			}
 			$start_time = date('Y-m-d', SYS_TIME-date('t', SYS_TIME)*86400);
 			$end_time = date('Y-m-d', SYS_TIME);

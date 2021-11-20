@@ -56,7 +56,7 @@ class menu extends admin {
 				file_put_contents($file,$data);
 			}
 			//结束
-			showmessage(L('add_success'), '?m=admin&c=menu&a=init');
+			dr_admin_msg(1,L('add_success'), '?m=admin&c=menu&a=init');
 		} else {
 			$show_validator = '';
 			$tree = pc_base::load_sys_class('tree');
@@ -121,7 +121,7 @@ class menu extends admin {
 			$this->update_menu_models($id, $r, $this->input->post('info'));
 			
 			//结束语言文件修改
-			showmessage(L('operation_success'), '?m=admin&c=menu&a=init');
+			dr_admin_msg(1,L('operation_success'), '?m=admin&c=menu&a=init');
 		} else {
 			$show_validator = '';
 			$tree = pc_base::load_sys_class('tree');

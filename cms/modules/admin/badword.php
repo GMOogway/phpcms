@@ -31,12 +31,12 @@ class badword extends admin {
 			$info['replaceword'] = str_replace("　","",trim($this->input->post('replaceword')));
 			$info['badword'] = str_replace("　","",trim($this->input->post('badword')));
 			if(empty($info['badword'])) {
-				showmessage(L('enter_word'),'?m=admin&c=badword&a=add');
-				}
+				dr_admin_msg(0,L('enter_word'),'?m=admin&c=badword&a=add');
+			}
 			$this->db->insert($info);
 			$this->public_cache_file();//更新缓存
-			showmessage(L('operation_success'),'?m=admin&c=badword&a=add','', 'add');
-			}else{
+			dr_admin_msg(1,L('operation_success'),'?m=admin&c=badword&a=add','', 'add');
+		}else{
 			$show_validator = $show_scroll = $show_header = true; 
 			include $this->admin_tpl('badword_add');
 		}
@@ -68,7 +68,7 @@ class badword extends admin {
 					$this->db->update(array('listorder'=>$listorder),array('badid'=>$badid));
 			}
 		}
-		showmessage(L('operation_success'),'?m=admin&c=badword');
+		dr_admin_msg(1,L('operation_success'),'?m=admin&c=badword');
 	}
 	
 	/**
@@ -82,12 +82,12 @@ class badword extends admin {
 			$info['badword'] = str_replace("　","",trim($this->input->post('badword')));
 			$this->db->update($info,array('badid'=>$badid));
 			$this->public_cache_file();//更新缓存
-			showmessage(L('operation_success'),'?m=admin&c=badword&a=edit','', 'edit');
+			dr_admin_msg(1,L('operation_success'),'?m=admin&c=badword&a=edit','', 'edit');
 		}else{
 			$show_validator = $show_scroll = $show_header = true;
 			$info = array();
 			$info = $this->db->get_one(array('badid'=>$this->input->get('badid')));
-			if(!$info) showmessage(L('keywords_no_exist'));
+			if(!$info) dr_admin_msg(0,L('keywords_no_exist'));
 			extract($info);
 			include $this->admin_tpl('badword_edit');
 		}	 
@@ -101,16 +101,16 @@ class badword extends admin {
 					$this->db->delete(array('badid'=>$badid_arr));
 				}
 				$this->public_cache_file();//更新缓存
-				showmessage(L('operation_success'),'?m=admin&c=badword');	
+				dr_admin_msg(1,L('operation_success'),'?m=admin&c=badword');	
 			}else{
 				$badid = intval($this->input->get('badid'));
 				if($badid < 1) return false;
 				$result = $this->db->delete(array('badid'=>$badid));
 				if($result){
 					$this->public_cache_file();//更新缓存
-					showmessage(L('operation_success'),'?m=admin&c=badword');
+					dr_admin_msg(1,L('operation_success'),'?m=admin&c=badword');
 					}else {
-					showmessage(L("operation_failure"),'?m=admin&c=badword');
+					dr_admin_msg(0,L("operation_failure"),'?m=admin&c=badword');
 				}
 		}
 	}
@@ -122,7 +122,7 @@ class badword extends admin {
 		$result = $s = '';
 		$result = $this->db->select($where = '', $data = '*', $limit = '', $order = 'badid DESC', $group = '');
 		if(!is_array($result) || empty($result)){
-			showmessage('暂无敏感词设置，正在返回！','?m=admin&c=badword');
+			dr_admin_msg(0,'暂无敏感词设置，正在返回！','?m=admin&c=badword');
 		}
   		foreach($result as $s){
  			extract($s);
@@ -151,7 +151,7 @@ class badword extends admin {
 		if($this->input->post('dosubmit')){
 				$arr = $s = $str = $level_arr = '';
 				$s = trim($this->input->post('info'));
-			    if(empty($s)) showmessage(L('not_information'),'?m=admin&c=badword&a=import');
+			    if(empty($s)) dr_admin_msg(0,L('not_information'),'?m=admin&c=badword&a=import');
 	 			$arr = explode("\n",$s); 
 	 			if(!is_array($arr) || empty($arr)) return false; 
 	 			foreach($arr as $s){
@@ -175,8 +175,8 @@ class badword extends admin {
 					
 					unset($sql_str,$check_badword);
 	 			}
-				showmessage(L('operation_success'),'?m=admin&c=badword');
- 			}else{
+				dr_admin_msg(1,L('operation_success'),'?m=admin&c=badword');
+ 		}else{
 			include $this->admin_tpl('badword_import');
 		}
 	} 

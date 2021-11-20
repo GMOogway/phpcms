@@ -75,7 +75,7 @@ class sitemodel extends admin {
 			$cache_api = pc_base::load_app_class('cache_api','admin');
 			$cache_api->cache('type');
 			$cache_api->search_type();
-			showmessage(L('add_success'), '', '', 'add');
+			dr_admin_msg(1,L('add_success'), '', '', 'add');
 		} else {
 			pc_base::load_sys_class('form','',0);
 			$show_header = $show_validator = '';
@@ -106,7 +106,7 @@ class sitemodel extends admin {
 			}
 			
 			$this->db->update($info,array('modelid'=>$modelid,'siteid'=>$this->siteid));
-			showmessage(L('update_success'), '', '', 'edit');
+			dr_admin_msg(1,L('update_success'), '', '', 'edit');
 		} else {
 			pc_base::load_sys_class('form','',0);
 			$show_header = $show_validator = '';
@@ -149,7 +149,7 @@ class sitemodel extends admin {
 		
 		$status = $r['disabled'] == '1' ? '0' : '1';
 		$this->db->update(array('disabled'=>$status),array('modelid'=>$modelid,'siteid'=>$this->siteid));
-		showmessage(L('update_success'), HTTP_REFERER);
+		dr_admin_msg(1,L('update_success'), HTTP_REFERER);
 	}
 	/**
 	 * 更新模型缓存
@@ -183,7 +183,7 @@ class sitemodel extends admin {
 	 * 导出模型
 	 */
 	function export() {
-		$modelid = $this->input->get('modelid') ? $this->input->get('modelid') : showmessage(L('illegal_parameters'), HTTP_REFERER);
+		$modelid = $this->input->get('modelid') ? $this->input->get('modelid') : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		$modelarr = getcache('model', 'commons');
 		//定义系统字段排除
 		//$system_field = array('id','title','style','catid','url','listorder','status','userid','username','inputtime','updatetime','pages','readpoint','template','groupids_view','posids','content','keywords','description','thumb','typeid','relation','islink','allow_comment');
@@ -228,7 +228,7 @@ class sitemodel extends admin {
 				}
 			}
 			$is_exists = $this->db->table_exists($basic_table);
-			if($is_exists) showmessage(L('operation_failure'),'?m=content&c=sitemodel&a=init');
+			if($is_exists) dr_admin_msg(0,L('operation_failure'),'?m=content&c=sitemodel&a=init');
 			$modelid = $this->db->insert($info, 1);
 			if($modelid){
 				$tablepre = $this->db->db_tablepre;
@@ -278,7 +278,7 @@ class sitemodel extends admin {
 					}
 				}
 				$this->public_cache();
-				showmessage(L('operation_success'),'?m=content&c=sitemodel&a=init');
+				dr_admin_msg(1,L('operation_success'),'?m=content&c=sitemodel&a=init');
 			}
 		} else {
 			pc_base::load_sys_class('form','',0);

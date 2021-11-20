@@ -146,7 +146,7 @@ if(is_array($forminfos['base'])) {
 <script type="text/javascript">
 $('body').keydown(function(e){
     if (e.keyCode == 13) {
-        $('#my_submit').trigger('click') ;
+        $('#my_submit').trigger('click');
     }
 })
 $(document).ready(function() {

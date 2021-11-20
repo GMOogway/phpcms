@@ -279,7 +279,6 @@ class push_api {
 						$linkurl = siteurl($category['siteid']).'/'.$linkurl;
 						// 站长工具
 						if (module_exists('bdts')) {
-							//showmessage(L('系统内已存在该模块，请先卸载后再执行该安装程序！'));
 							$this->bdts = pc_base::load_app_class('admin_bdts','bdts');
 							$sitemodel_model_db = pc_base::load_model('sitemodel_model');
 							$sitemodel = $sitemodel_model_db->get_one(array('modelid'=>$modelid));

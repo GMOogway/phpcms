@@ -13,7 +13,7 @@ class cache_api {
 	public function __construct() {
 		$this->input = pc_base::load_sys_class('input');
 		$this->db = '';
-		$this->siteid = get_siteid();
+		$this->siteid = get_siteid() ? get_siteid() : 1 ;
 	}
 	
 	/**
@@ -549,7 +549,7 @@ class cache_api {
 			return true;
 		} else {
 			echo '<script type="text/javascript">window.parent.addtext("<li>'.L('part_cache_success').($currpage-1).'/'.$pages.'..........</li>");</script>';
-			showmessage(L('part_cache_success'), '?m=admin&c=cache_all&a=init&page='.$this->input->get('page').'&currpage='.$currpage.'&pages='.$pages.'&dosubmit=1',0);
+			dr_admin_msg(1,L('part_cache_success'), '?m=admin&c=cache_all&a=init&page='.$this->input->get('page').'&currpage='.$currpage.'&pages='.$pages.'&dosubmit=1',0);
 		}
 	}
 	

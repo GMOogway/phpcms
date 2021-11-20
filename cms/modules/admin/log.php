@@ -37,7 +37,7 @@ class log extends admin {
 			//$where .= "AND `message_time` >= '$start' AND `message_time` <= '$end' ";
 			$where .= "`time` <= '$d'";
 			$this->db->delete($where);
-			showmessage(L('operation_success'),'?m=admin&c=log');
+			dr_admin_msg(1,L('operation_success'),'?m=admin&c=log');
 		} else {
 			return false;
 		}

@@ -19,9 +19,9 @@ class style extends admin {
 	}
 	
 	public function disable() {
-		$style = isset($_GET['style']) && trim($_GET['style']) ? trim($_GET['style']) : showmessage(L('illegal_operation'), HTTP_REFERER);
+		$style = isset($_GET['style']) && trim($_GET['style']) ? trim($_GET['style']) : dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
 		if (!preg_match('/([a-z0-9_\-]+)/i',$style)) {
-			showmessage(L('illegal_parameters'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		}
 		$filepath = $this->filepath.$style.DIRECTORY_SEPARATOR.'config.php';
 		if (file_exists($filepath)) {
@@ -38,19 +38,19 @@ class style extends admin {
 			if (is_writable($filepath)) {
 				file_put_contents($filepath, '<?php return '.var_export($arr, true).';?>');
 			} else {
-				showmessage(L('file_does_not_writable'), HTTP_REFERER);
+				dr_admin_msg(0,L('file_does_not_writable'), HTTP_REFERER);
 			}
 		} else {
 			$arr = array('name'=>$style,'disable'=>1, 'dirname'=>$style);
 			file_put_contents($filepath, '<?php return '.var_export($arr, true).';?>');
 		}
-		showmessage(L('operation_success'), HTTP_REFERER);
+		dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 	}
 	
 	public function export() {
-		$style = isset($_GET['style']) && trim($_GET['style']) ? trim($_GET['style']) : showmessage(L('illegal_operation'), HTTP_REFERER);
+		$style = isset($_GET['style']) && trim($_GET['style']) ? trim($_GET['style']) : dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
 		if (!preg_match('/([a-z0-9_\-]+)/i',$style)) {
-			showmessage(L('illegal_parameters'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		}
 		$filepath = $this->filepath.$style.DIRECTORY_SEPARATOR.'config.php';
 		if (file_exists($filepath)) {
@@ -63,27 +63,27 @@ class style extends admin {
 		    header("Content-Disposition: attachment; filename=pc_template_".$style.'.txt');
 		    echo $data;
 		} else {
-			showmessage(L('file_does_not_exists'), HTTP_REFERER);
+			dr_admin_msg(0,L('file_does_not_exists'), HTTP_REFERER);
 		}
 	}
 	
 	public function import() {
 		if (isset($_POST['dosubmit'])) {
-			$type = isset($_POST['type']) && trim($_POST['type']) ? trim($_POST['type']) : showmessage(L('illegal_operation'), HTTP_REFERER);
+			$type = isset($_POST['type']) && trim($_POST['type']) ? trim($_POST['type']) : dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
 			if ($type == 1) {
 				$filename = $_FILES['file']['tmp_name'];
 				if (strtolower(substr($_FILES['file']['name'], -3, 3)) != 'txt') {
-					showmessage(L('only_allowed_to_upload_txt_files'), HTTP_REFERER);
+					dr_admin_msg(0,L('only_allowed_to_upload_txt_files'), HTTP_REFERER);
 				}
 				$code = json_decode(base64_decode(file_get_contents($filename)), true);
 				if (!preg_match('/([a-z0-9_\-]+)/i',$code['dirname'])) {
-					showmessage(L('illegal_parameters'), HTTP_REFERER);
+					dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 				}
 				@unlink($filename);
 			} elseif ($type == 2) {
-				$code = isset($_POST['code']) && trim($_POST['code']) ? json_decode(base64_decode(trim($_POST['code'])),true) : showmessage(L('illegal_operation'), HTTP_REFERER);
+				$code = isset($_POST['code']) && trim($_POST['code']) ? json_decode(base64_decode(trim($_POST['code'])),true) : dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
 				if (!isset($code['dirname']) && !preg_match('/([a-z0-9_\-]+)/i',$code['dirname'])) {
-					showmessage(L('illegal_parameters'), HTTP_REFERER);
+					dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 				}
 			}
 			if (pc_base::load_config('system', 'charset') == 'gbk') {
@@ -94,12 +94,12 @@ class style extends admin {
 				@mkdir($this->filepath.$code['dirname'].DIRECTORY_SEPARATOR, 0755, true);
 				if (@is_writable($this->filepath.$code['dirname'].DIRECTORY_SEPARATOR)) {
 					@file_put_contents($this->filepath.$code['dirname'].DIRECTORY_SEPARATOR.'config.php', '<?php return '.var_export($code, true).';?>');
-					showmessage(L('operation_success'), HTTP_REFERER, '', 'import');
+					dr_admin_msg(1,L('operation_success'), HTTP_REFERER, '', 'import');
 				} else {
-					showmessage(L('template_directory_not_write'), HTTP_REFERER);
+					dr_admin_msg(0,L('template_directory_not_write'), HTTP_REFERER);
 				}
 			} else {
-				showmessage(L('file_exists'), HTTP_REFERER);
+				dr_admin_msg(0,L('file_exists'), HTTP_REFERER);
 			}
 		} else {
 			$show_header = true;
@@ -108,7 +108,7 @@ class style extends admin {
 	}
 	
 	public function updatename() {
-		$name = isset($_POST['name']) ? $_POST['name'] : showmessage(L('illegal_operation'), HTTP_REFERER);
+		$name = isset($_POST['name']) ? $_POST['name'] : dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
 		if (is_array($name)) {
 			foreach ($name as $key=>$val) {
 				$filepath = $this->filepath.$key.DIRECTORY_SEPARATOR.'config.php';
@@ -120,9 +120,9 @@ class style extends admin {
 				}
 				@file_put_contents($filepath, '<?php return '.var_export($arr, true).';?>');
 			}
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		} else {
-			showmessage(L('illegal_parameters'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		}
 	}
 }

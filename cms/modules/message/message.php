@@ -64,7 +64,7 @@ class message extends admin {
 	 */
 	public function delete() {
 		if((!isset($_GET['messageid']) || empty($_GET['messageid'])) && (!isset($_POST['messageid']) || empty($_POST['messageid']))) {
-			showmessage(L('illegal_parameters'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		} else {
 				
 			if(is_array($_POST['messageid'])){
@@ -72,7 +72,7 @@ class message extends admin {
 					//批量删除友情链接
 					$this->db->delete(array('messageid'=>$messageid_arr));
 				}
-				showmessage(L('operation_success'),'?m=message&c=message');
+				dr_admin_msg(1,L('operation_success'),'?m=message&c=message');
 			}else{
 				$messageid = intval($_GET['messageid']);
 				if($messageid < 1) return false;
@@ -80,12 +80,12 @@ class message extends admin {
 				$result = $this->db->delete(array('messageid'=>$messageid));
 				if($result)
 				{
-					showmessage(L('operation_success'),'?m=message&c=message');
+					dr_admin_msg(1,L('operation_success'),'?m=message&c=message');
 				}else {
-					showmessage(L("operation_failure"),'?m=message&c=message');
+					dr_admin_msg(0,L("operation_failure"),'?m=message&c=message');
 				}
 			}
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		}
 	}
 	
@@ -95,7 +95,7 @@ class message extends admin {
 	 */
 	public function delete_group() {
 		if((!isset($_GET['message_group_id']) || empty($_GET['message_group_id'])) && (!isset($_POST['message_group_id']) || empty($_POST['message_group_id']))) {
-			showmessage(L('illegal_parameters'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		} else {
 				
 			if(is_array($_POST['message_group_id'])){
@@ -103,19 +103,19 @@ class message extends admin {
 					//批量删除系统消息
 					$this->group_db->delete(array('id'=>$messageid_arr));
 				}
-				showmessage(L('operation_success'),'?m=message&c=message&a=message_group_manage');
+				dr_admin_msg(1,L('operation_success'),'?m=message&c=message&a=message_group_manage');
 			}else{
 				$group_id = intval($_GET['message_group_id']);
 				if($group_id < 1) return false;
 				//删除短消息
 				$result = $this->group_db->delete(array('id'=>$group_id));
 				if($result){
-					showmessage(L('operation_success'),'?m=message&c=message&a=message_group_manage');
+					dr_admin_msg(1,L('operation_success'),'?m=message&c=message&a=message_group_manage');
 				} else {
-					showmessage(L("operation_failure"),'?m=message&c=message&a=message_group_manage');
+					dr_admin_msg(0,L("operation_failure"),'?m=message&c=message&a=message_group_manage');
 				}
 			}
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		}
 	}
 	
@@ -138,9 +138,9 @@ class message extends admin {
 			}
  			$result_id = $this->group_db->insert($group_message,true);
  			if(!$result_id){
- 				showmessage(L('mass_failure'),HTTP_REFERER);
+ 				dr_admin_msg(0,L('mass_failure'),HTTP_REFERER);
  			}
-  			showmessage(L('operation_success'),HTTP_REFERER,'', 'add');
+  			dr_admin_msg(1,L('operation_success'),HTTP_REFERER,'', 'add');
  		} else {
 			$show_validator = $show_scroll = $show_header = true;
 			//LOAD 会员组模型
@@ -164,7 +164,7 @@ class message extends admin {
 			$subject = $this->input->post('info')['subject'];
 			$content = $this->input->post('info')['content'];
 			$this->db->add_message($tousername,$username,$subject,$content,true);
-			showmessage(L('operation_success'),HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'),HTTP_REFERER);
 		} else {
 			$show_validator = $show_scroll =  true;
 			$big_menu = array('javascript:artdialog(\'add\',\'?m=message&c=message&a=message_send\',\''.L('all_send_message').'\',550,300);void(0);', L('all_send_message'));
@@ -192,7 +192,7 @@ class message extends admin {
 	 */
 	public function delete_inbox() {
 		if((!isset($_GET['messageid']) || empty($_GET['messageid'])) && (!isset($_POST['messageid']) || empty($_POST['messageid']))) {
-			showmessage(L('illegal_parameters'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		} else {
 				
 			if(is_array($_POST['messageid'])){
@@ -200,13 +200,13 @@ class message extends admin {
 					//批量删除短消息
 					$this->db->update(array('folder'=>'outbox'),array('messageid'=>$messageid_arr,'send_to_id'=>$this->_username));
 				}
-				showmessage(L('operation_success'), HTTP_REFERER);
+				dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 			}else{
 				$messageid = intval($_GET['messageid']);
 				if($messageid < 1) return false;
 				//删除单个短消息
 				$result = $this->db->update(array('folder'=>'outbox'),array('messageid'=>$messageid,'send_to_id'=>$this->_username));
-				showmessage(L('operation_success'), HTTP_REFERER);
+				dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 			}
 			
 		}
@@ -232,7 +232,7 @@ class message extends admin {
 	 */
 	public function delete_outbox() {
 		if((!isset($_GET['messageid']) || empty($_GET['messageid'])) && (!isset($_POST['messageid']) || empty($_POST['messageid']))) {
-			showmessage(L('illegal_parameters'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		} else {
 				
 			if(is_array($_POST['messageid'])){
@@ -240,13 +240,13 @@ class message extends admin {
 					//批量删除短消息
 					$this->db->update(array('del_type'=>'1'),array('messageid'=>$messageid_arr,'send_from_id'=>$this->_username));
 				}
-				showmessage(L('operation_success'), HTTP_REFERER);
+				dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 			}else{
 				$messageid = intval($_GET['messageid']);
 				if($messageid < 1) return false;
 				//删除单个短消息
 				$result = $this->db->update(array('del_type'=>'1'),array('messageid'=>$messageid,'send_from_id'=>$this->_username));
-				showmessage(L('operation_success'), HTTP_REFERER);
+				dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 			}
 			
 		}

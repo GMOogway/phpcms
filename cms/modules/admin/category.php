@@ -222,7 +222,7 @@ class category extends admin {
 						break;
 					}
 				}
-				if(!$exists_model) showmessage(L('please_add_model'),'?m=content&c=sitemodel&a=init&menuid=151',5000);
+				if(!$exists_model) dr_admin_msg(0,L('please_add_model'),'?m=content&c=sitemodel&a=init&menuid=151',5);
 				include $this->admin_tpl('category_add');
 			} elseif ($type==1) {
 				include $this->admin_tpl('category_page_add');
@@ -492,7 +492,7 @@ class category extends admin {
 			$sitelist = getcache('sitelist','commons');
 			$modelid = $categorys[$catid]['modelid'];
 			$items = getcache('category_items_'.$modelid,'commons');
-			//if($items[$catid]) showmessage(L('category_does_not_allow_delete'));
+			//if($items[$catid]) dr_admin_msg(0,L('category_does_not_allow_delete'));
 			if($ishtml) {
 				pc_base::load_sys_func('dir');
 				$fileurl = $html_root.'/'.$this->url->category_url($catid, 1);
@@ -698,7 +698,7 @@ class category extends admin {
 	public function public_cache() {
 		$this->repair();
 		$this->cache();
-		showmessage(L('operation_success'),'?m=admin&c=category&a=init&module=admin&menuid='.$this->input->get('menuid'));
+		dr_admin_msg(1,L('operation_success'),'?m=admin&c=category&a=init&module=admin&menuid='.$this->input->get('menuid'));
 	}
 	/**
 	* 修复栏目数据
@@ -960,7 +960,7 @@ class category extends admin {
 				$this->db->update(array('items'=>$number),array('catid'=>$r['catid']));
 			}
 		}
-		showmessage(L('operation_success'),HTTP_REFERER);
+		dr_admin_msg(1,L('operation_success'),HTTP_REFERER);
 	}
 	/**
 	 * json方式加载模板
@@ -1060,7 +1060,7 @@ class category extends admin {
 			//栏目生成静态配置
 			$infos = $info = array();
 			$infos = $this->input->post('info');
-			if(empty($infos)) showmessage(L('operation_success'));
+			if(empty($infos)) dr_admin_msg(0,L('operation_success'));
 			$this->attachment_db = pc_base::load_model('attachment_model');
 			foreach ($infos as $catid=>$info) {
 				$setting = string2array($categorys[$catid]['setting']);
@@ -1092,7 +1092,7 @@ class category extends admin {
 					$result = $this->content_db->fetch_array($rs);
 					$total = $result[0]['count'];
 					if ($total && $setting['disabled']) {
-						showmessage(L('当前栏目存在内容数据，无法禁用'), HTTP_REFERER);
+						dr_admin_msg(0,L('当前栏目存在内容数据，无法禁用'), HTTP_REFERER);
 					}
 				}
 				$info['sethtml'] = $post_setting[$catid]['create_to_html_root'];
@@ -1110,7 +1110,7 @@ class category extends admin {
 				}
 			}
 			$this->public_cache();
-			showmessage(L('operation_success'),'?m=admin&c=category&a=init&module=admin&menuid='.$this->input->get('menuid'));
+			dr_admin_msg(1,L('operation_success'),'?m=admin&c=category&a=init&module=admin&menuid='.$this->input->get('menuid'));
 		} else {
 			if($this->input->post('catids')) {
 				//获取站点模板信息
@@ -1126,14 +1126,14 @@ class category extends admin {
 				$type = $this->input->post('type') ? intval($this->input->post('type')) : 0;
 				pc_base::load_sys_class('form','',0);
 				
-				if(empty($this->input->post('catids'))) showmessage(L('illegal_parameters'));
+				if(empty($this->input->post('catids'))) dr_admin_msg(0,L('illegal_parameters'));
 				$batch_array = $workflows = array();
 				foreach ($categorys as $catid=>$cat) {
 					if($cat['type']==$type && in_array($catid, $this->input->post('catids'))) {
 						$batch_array[$catid] = $cat;
 					}
 				}
-				if(empty($batch_array)) showmessage(L('please_select_category')); 
+				if(empty($batch_array)) dr_admin_msg(0,L('please_select_category')); 
 				$workflows = getcache('workflow_'.$this->siteid,'commons');
 				if($workflows) {
 					$workflows_datas = array();
@@ -1175,16 +1175,16 @@ class category extends admin {
 		$this->content_db = pc_base::load_model('content_model');
 		if($this->input->post('dosubmit')) {
 			$this->content_check_db = pc_base::load_model('content_check_model'); 
-			if(!$this->input->post('fromid')) showmessage(L('please_input_move_source','','content'));
-			if(!$this->input->post('tocatid')) showmessage(L('please_select_target_category','','content'));
+			if(!$this->input->post('fromid')) dr_admin_msg(0,L('please_input_move_source','','content'));
+			if(!$this->input->post('tocatid')) dr_admin_msg(0,L('please_select_target_category','','content'));
 			$tocatid = intval($this->input->post('tocatid'));
 			$modelid = $this->categorys[$tocatid]['modelid'];
-			if(!$modelid) showmessage(L('illegal_operation','','content'));
+			if(!$modelid) dr_admin_msg(0,L('illegal_operation','','content'));
 			$fromid = array_filter($this->input->post('fromid'),"is_numeric");
 			$fromid = implode(',', $fromid);
 			$this->content_db->set_model($modelid);
 			$this->content_db->update(array('catid'=>$tocatid),"catid IN($fromid)");
- 			showmessage(L('operation_success'),HTTP_REFERER);
+ 			dr_admin_msg(1,L('operation_success'),HTTP_REFERER);
  		} else {
 			$show_header = '';
 			$catid = intval($this->input->get('catid'));

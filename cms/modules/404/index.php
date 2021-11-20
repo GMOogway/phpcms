@@ -25,7 +25,6 @@ class index {
 		$SEO = seo($siteid);
 		$sitelist  = getcache('sitelist','commons');
 		$default_style = $sitelist[$siteid]['default_style'];
-		$CATEGORYS = getcache('category_content_'.$siteid,'commons');
 		include template('404','index',$default_style);
 	}
 }

@@ -52,7 +52,7 @@ class member_model extends admin {
 			}
 
 			$is_exists = $this->db->table_exists($info['tablename']);
-			if($is_exists) showmessage(L('operation_failure'),'?m=member&c=member_model&a=manage', '', 'add');
+			if($is_exists) dr_admin_msg(0,L('operation_failure'),'?m=member&c=member_model&a=manage', '', 'add');
 
 			$modelid = $this->db->insert($info, 1);
 			if($modelid) {
@@ -87,9 +87,9 @@ class member_model extends admin {
 				//更新模型缓存
 				pc_base::load_app_class('member_cache','','');
 				member_cache::update_cache_model();
-				showmessage(L('operation_success'),'?m=member&c=member_model&a=manage', '', 'add');
+				dr_admin_msg(1,L('operation_success'),'?m=member&c=member_model&a=manage', '', 'add');
 			} else {
-				showmessage(L('operation_failue'),'?m=member&c=member_model&a=manage', '', 'add');
+				dr_admin_msg(0,L('operation_failue'),'?m=member&c=member_model&a=manage', '', 'add');
 			}
 		} else {
 			$show_header = $show_scroll = true;
@@ -103,7 +103,7 @@ class member_model extends admin {
 	 */
 	function edit() {
 		if(isset($_POST['dosubmit'])) {
-			$modelid = isset($_POST['info']['modelid']) ? $_POST['info']['modelid'] :showmessage(L('operation_success'),'?m=member&c=member_model&a=manage', '', 'edit');
+			$modelid = isset($_POST['info']['modelid']) ? $_POST['info']['modelid'] :dr_admin_msg(0,L('operation_success'),'?m=member&c=member_model&a=manage', '', 'edit');
 			$info['name'] = $this->input->post('info')['modelname'];
 			$info['disabled'] = $this->input->post('info')['disabled'] ? 1 : 0;
 			$info['description'] = $this->input->post('info')['description'];
@@ -113,7 +113,7 @@ class member_model extends admin {
 			//更新模型缓存
 			pc_base::load_app_class('member_cache','','');
 			member_cache::update_cache_model();
-			showmessage(L('operation_success'),'?m=member&c=member_model&a=manage', '', 'edit');
+			dr_admin_msg(1,L('operation_success'),'?m=member&c=member_model&a=manage', '', 'edit');
 		} else {					
 			$show_header = $show_scroll = true;
 			$modelinfo = $this->db->get_one(array('modelid'=>$_GET['modelid']));
@@ -125,7 +125,7 @@ class member_model extends admin {
 	 * 删除会员模型
 	 */
 	function delete() {
-		$modelidarr = isset($_POST['modelid']) ? $_POST['modelid'] : showmessage(L('illegal_parameters'), HTTP_REFERER);
+		$modelidarr = isset($_POST['modelid']) ? $_POST['modelid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		foreach($_POST['modelid'] as $id) {
 			$v = $this->db->get_one(array('modelid'=>$id));
 			$this->db->drop_table($v['tablename']);
@@ -142,9 +142,9 @@ class member_model extends admin {
 				pc_base::load_app_class('member_cache','','');
 				member_cache::update_cache_model();
 				
-				showmessage(L('operation_success'), HTTP_REFERER);
+				dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 			} else {
-				showmessage(L('operation_failure'), HTTP_REFERER);
+				dr_admin_msg(0,L('operation_failure'), HTTP_REFERER);
 			}
 		}
 	}
@@ -160,7 +160,7 @@ class member_model extends admin {
 	 * 导出会员模型
 	 */
 	function export() {
-		$modelid = isset($_GET['modelid']) ? $_GET['modelid'] : showmessage(L('illegal_parameters'), HTTP_REFERER);
+		$modelid = isset($_GET['modelid']) ? $_GET['modelid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		$modelarr = getcache('member_model', 'commons');
 		
 		$this->sitemodel_field_db = pc_base::load_model('sitemodel_field_model');
@@ -180,13 +180,13 @@ class member_model extends admin {
 	 */
 	function move() {
 		if(isset($_POST['dosubmit'])) {
-			$from_modelid = isset($_POST['from_modelid']) ? $_POST['from_modelid'] : showmessage(L('illegal_parameters'), HTTP_REFERER);
-			$to_modelid = !empty($_POST['to_modelid']) && $_POST['to_modelid'] != $from_modelid ? $_POST['to_modelid'] : showmessage(L('illegal_parameters'), HTTP_REFERER);
+			$from_modelid = isset($_POST['from_modelid']) ? $_POST['from_modelid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
+			$to_modelid = !empty($_POST['to_modelid']) && $_POST['to_modelid'] != $from_modelid ? $_POST['to_modelid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			
 			//更新会员表modelid
 			$this->db->change_member_modelid($from_modelid, $to_modelid);
 			
-			showmessage(L('member_move').L('operation_success'), HTTP_REFERER, '', 'move');
+			dr_admin_msg(1,L('member_move').L('operation_success'), HTTP_REFERER, '', 'move');
 		} else {
 			$show_header = $show_scroll = true;
 			$modelarr = $this->db->select(array('type'=>2));
@@ -211,9 +211,9 @@ class member_model extends admin {
 			pc_base::load_app_class('member_cache','','');
 			member_cache::update_cache_model();
 			
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		} else {
-			showmessage(L('operation_failure'), HTTP_REFERER);
+			dr_admin_msg(0,L('operation_failure'), HTTP_REFERER);
 		}
 	}
 	

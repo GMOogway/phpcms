@@ -13,7 +13,7 @@ defined('IN_ADMIN') or exit('No permission resources.');
 <link rel="stylesheet" href="<?php echo JS_PATH?>layui/css/layui.css" media="all">
 <link rel="stylesheet" href="<?php echo CSS_PATH?>font-awesome/css/font-awesome.min.css" media="all">
 <link rel="stylesheet" href="<?php echo CSS_PATH?>layuimini/css/public.css" media="all">
-<?php if(!$this->get_siteid()) showmessage(L('admin_login'),'?m=admin&c=index&a=login');?>
+<?php if(!$this->get_siteid()) dr_admin_msg(0,L('admin_login'),'?m=admin&c=index&a='.SYS_ADMIN_PATH);?>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>jquery-3.5.1.min.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>Dialog/main.js"></script>
 <script src='<?php echo JS_PATH?>bootstrap-tagsinput.min.js' type='text/javascript'></script>
@@ -45,6 +45,21 @@ padding-right: 70px !important;text-overflow:ellipsis!important;overflow:hidden!
 .layuimini-notice-title {line-height:28px;font-size:14px;}
 .layuimini-notice-extra {position:absolute;top:50%;margin-top:-8px;right:16px;display:inline-block;height:16px;color:#999;}
 </style>
+<?php $sitelist_ccache = getcache('sitelist', 'commons');
+$ccache = getcache('category_content_1','commons');
+if(!module_exists('member') && (!is_array($sitelist_ccache) || !is_array($ccache))) { ?>
+<script type="text/javascript">
+$(function () {
+    $.ajax({type: "GET",dataType:"json", url: "?m=admin&c=cache_all&a=init&pc_hash=<?php echo dr_get_csrf_token();?>&is_ajax=1",
+        success: function(json) {
+            if (json.code) {
+                dr_tips(json.code, json.msg)
+            }
+        }
+    });
+});
+</script>
+<?php }?>
 </head>
 <body>
 <div class="layuimini-container">
@@ -104,9 +119,6 @@ padding-right: 70px !important;text-overflow:ellipsis!important;overflow:hidden!
                         </div>
                     </div>
                     <div class="layui-col-md12">
-                        <?php
-                        $ccache = getcache('category_content_1','commons');
-                        if(module_exists('member') && is_array($ccache)) { ?>
                         <div class="layui-card">
                             <div class="layui-card-header"><i class="fa fa-credit-card icon icon-blue"></i>快捷入口</div>
                             <div class="layui-card-body">
@@ -130,28 +142,6 @@ padding-right: 70px !important;text-overflow:ellipsis!important;overflow:hidden!
                                 </div>
                             </div>
                         </div>
-                        <?php } else { ?>
-                        <div class="layui-card">
-                            <div class="layui-card-header"><i class="fa fa-credit-card icon icon-blue"></i>更新缓存</div>
-                            <div class="layui-card-body">
-                                <div class="welcome-module" id="update_tips" style="height:280px;overflow-x:hidden;overflow-y:auto;">
-                                    <div id="file" class="layui-row layui-col-space10 layuimini-qiuck">
-                                        <form action="?m=admin&c=cache_all&a=init&pc_hash=<?php echo dr_get_csrf_token();?>" target="cache_if" method="post" id="myform" name="myform">
-                                            <input type="hidden" name="dosubmit" value="1">
-                                        </form>
-                                        <iframe id="cache_if" name="cache_if" class="ifm" width="0" height="0" style="display:none;"></iframe>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <script type="text/javascript">
-                        document.myform.submit();
-                        function addtext(data) {
-                            $('#file').append(data);
-                            document.getElementById('update_tips').scrollTop = document.getElementById('update_tips').scrollHeight;
-                        }
-                        </script>
-                        <?php }?>
                     </div>
                 </div>
             </div>

@@ -15,8 +15,8 @@ class address extends admin {
 	
 	public function update() {
 		set_time_limit(120);
-		$old_attachment_path = $this->input->post('old_attachment_path') && trim($this->input->post('old_attachment_path')) ? trim($this->input->post('old_attachment_path')) : showmessage(L('old_attachment_address_empty'));
-		$new_attachment_path = $this->input->post('new_attachment_path') && trim($this->input->post('new_attachment_path')) ? trim($this->input->post('new_attachment_path')) : showmessage(L('new_attachment_address_empty'));
+		$old_attachment_path = $this->input->post('old_attachment_path') && trim($this->input->post('old_attachment_path')) ? trim($this->input->post('old_attachment_path')) : dr_admin_msg(0,L('old_attachment_address_empty'));
+		$new_attachment_path = $this->input->post('new_attachment_path') && trim($this->input->post('new_attachment_path')) ? trim($this->input->post('new_attachment_path')) : dr_admin_msg(0,L('new_attachment_address_empty'));
 		//获取数据表列表
 		$db = pc_base::load_model('site_model');
 		$r = $db->query("show tables");
@@ -41,7 +41,7 @@ class address extends admin {
 				if (!empty($sql)) $modle_table_db->query("UPDATE ".$db->db_tablepre.$table_name." SET $sql");
 			}
 		}
-		showmessage(L('operation_success'));
+		dr_admin_msg(1,L('operation_success'));
 		
 	}
 }

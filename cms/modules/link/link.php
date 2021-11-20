@@ -77,7 +77,7 @@ class link extends admin {
 			$_POST['link']['addtime'] = SYS_TIME;
 			$_POST['link']['siteid'] = $this->get_siteid();
 			if(empty($_POST['link']['name'])) {
-				showmessage(L('sitename_noempty'),HTTP_REFERER);
+				dr_admin_msg(0,L('sitename_noempty'),HTTP_REFERER);
 			} else {
 				$_POST['link']['name'] = safe_replace($_POST['link']['name']);
 			}
@@ -93,7 +93,7 @@ class link extends admin {
 				$this->attachment_db = pc_base::load_model('attachment_model');
 				$this->attachment_db->api_update($_POST['link']['logo'],'link-'.$linkid,1);
 			}
-			showmessage(L('operation_success'),HTTP_REFERER,'', 'add');
+			dr_admin_msg(1,L('operation_success'),HTTP_REFERER,'', 'add');
 		} else {
 			$show_validator = $show_scroll = $show_header = true;
 			pc_base::load_sys_class('form', '', 0);
@@ -128,7 +128,7 @@ class link extends admin {
 					$this->db->update(array('listorder'=>$listorder),array('linkid'=>$linkid));
 				}
 			}
-			showmessage(L('operation_success'),HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'),HTTP_REFERER);
 		} 
 	}
 	
@@ -136,14 +136,14 @@ class link extends admin {
  	public function add_type() {
 		if(isset($_POST['dosubmit'])) {
 			if(empty($_POST['type']['name'])) {
-				showmessage(L('typename_noempty'),HTTP_REFERER);
+				dr_admin_msg(0,L('typename_noempty'),HTTP_REFERER);
 			}
 			$_POST['type']['siteid'] = $this->get_siteid(); 
 			$_POST['type']['module'] = ROUTE_M;
  			$this->db2 = pc_base::load_model('type_model');
 			$typeid = $this->db2->insert($_POST['type'],true);
 			if(!$typeid) return FALSE;
-			showmessage(L('operation_success'),HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'),HTTP_REFERER);
 		} else {
 			$show_validator = $show_scroll = true;
 			$big_menu = array('javascript:artdialog(\'add\',\'?m=link&c=link&a=add\',\''.L('link_add').'\',700,450);void(0);', L('link_add'));
@@ -157,22 +157,21 @@ class link extends admin {
 	 */
 	public function delete_type() {
 		if((!isset($_GET['typeid']) || empty($_GET['typeid'])) && (!isset($_POST['typeid']) || empty($_POST['typeid']))) {
-			showmessage(L('illegal_parameters'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		} else {
 			if(is_array($_POST['typeid'])){
 				foreach($_POST['typeid'] as $typeid_arr) {
  					$this->db2->delete(array('typeid'=>$typeid_arr));
 				}
-				showmessage(L('operation_success'),HTTP_REFERER);
+				dr_admin_msg(1,L('operation_success'),HTTP_REFERER);
 			}else{
 				$typeid = intval($_GET['typeid']);
 				if($typeid < 1) return false;
 				$result = $this->db2->delete(array('typeid'=>$typeid));
-				if($result)
-				{
-					showmessage(L('operation_success'),HTTP_REFERER);
+				if($result){
+					dr_admin_msg(1,L('operation_success'),HTTP_REFERER);
 				}else {
-					showmessage(L("operation_failure"),HTTP_REFERER);
+					dr_admin_msg(0,L("operation_failure"),HTTP_REFERER);
 				}
 			}
 		}
@@ -200,7 +199,7 @@ class link extends admin {
 				$this->attachment_db = pc_base::load_model('attachment_model');
 				$this->attachment_db->api_update($_POST['link']['logo'],'link-'.$linkid,1);
 			}
-			showmessage(L('operation_success'),'?m=link&c=link&a=edit','', 'edit');
+			dr_admin_msg(1,L('operation_success'),'?m=link&c=link&a=edit','', 'edit');
 			
 		}else{
  			$show_validator = $show_scroll = $show_header = true;
@@ -212,7 +211,7 @@ class link extends admin {
 			}
 			//解出链接内容
 			$info = $this->db->get_one(array('linkid'=>$_GET['linkid']));
-			if(!$info) showmessage(L('link_exit'));
+			if(!$info) dr_admin_msg(0,L('link_exit'));
 			extract($info); 
  			include $this->admin_tpl('link_edit');
 		}
@@ -229,13 +228,13 @@ class link extends admin {
 			if(!is_array($_POST['type']) || empty($_POST['type'])) return false;
 			if((!$_POST['type']['name']) || empty($_POST['type']['name'])) return false;
 			$this->db2->update($_POST['type'],array('typeid'=>$typeid));
-			showmessage(L('operation_success'),'?m=link&c=link&a=list_type','', 'edit');
+			dr_admin_msg(1,L('operation_success'),'?m=link&c=link&a=list_type','', 'edit');
 			
 		}else{
  			$show_validator = $show_scroll = $show_header = true;
 			//解出分类内容
 			$info = $this->db2->get_one(array('typeid'=>$_GET['typeid']));
-			if(!$info) showmessage(L('linktype_exit'));
+			if(!$info) dr_admin_msg(0,L('linktype_exit'));
 			extract($info);
 			include $this->admin_tpl('link_type_edit');
 		}
@@ -248,7 +247,7 @@ class link extends admin {
 	 */
 	public function delete() {
   		if((!isset($_GET['linkid']) || empty($_GET['linkid'])) && (!isset($_POST['linkid']) || empty($_POST['linkid']))) {
-			showmessage(L('illegal_parameters'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		} else {
 			if(is_array($_POST['linkid'])){
 				foreach($_POST['linkid'] as $linkid_arr) {
@@ -260,7 +259,7 @@ class link extends admin {
 						$this->attachment_db->api_delete('link-'.$linkid_arr);
 					}
 				}
-				showmessage(L('operation_success'),'?m=link&c=link');
+				dr_admin_msg(1,L('operation_success'),'?m=link&c=link');
 			}else{
 				$linkid = intval($_GET['linkid']);
 				if($linkid < 1) return false;
@@ -272,12 +271,12 @@ class link extends admin {
 					$this->attachment_db->api_delete('link-'.$linkid);
 				}
 				if($result){
-					showmessage(L('operation_success'),'?m=link&c=link');
+					dr_admin_msg(1,L('operation_success'),'?m=link&c=link');
 				}else {
-					showmessage(L("operation_failure"),'?m=link&c=link');
+					dr_admin_msg(0,L("operation_failure"),'?m=link&c=link');
 				}
 			}
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		}
 	}
 	 
@@ -301,7 +300,7 @@ class link extends admin {
   			$m_db = pc_base::load_model('module_model'); //调用模块数据模型
 			$set = array2string($setting);
 			$m_db->update(array('setting'=>$set), array('module'=>ROUTE_M));
-			showmessage(L('setting_updates_successful'), '?m=link&c=link&a=init');
+			dr_admin_msg(1,L('setting_updates_successful'), '?m=link&c=link&a=init');
 		} else {
 			@extract($now_seting);
 			$big_menu = array('javascript:artdialog(\'add\',\'?m=link&c=link&a=add\',\''.L('link_add').'\',700,450);void(0);', L('link_add'));
@@ -313,21 +312,21 @@ class link extends admin {
  	public function check_register(){
 		if(isset($_POST['dosubmit'])) {
 			if((!isset($_GET['linkid']) || empty($_GET['linkid'])) && (!isset($_POST['linkid']) || empty($_POST['linkid']))) {
-				showmessage(L('illegal_parameters'), HTTP_REFERER);
+				dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			} else {
 				if(is_array($_POST['linkid'])){//批量审核
 					foreach($_POST['linkid'] as $linkid_arr) {
 						$this->db->update(array('passed'=>1),array('linkid'=>$linkid_arr));
 					}
-					showmessage(L('operation_success'),'?m=link&c=link');
+					dr_admin_msg(1,L('operation_success'),'?m=link&c=link');
 				}else{//单个审核
 					$linkid = intval($_GET['linkid']);
 					if($linkid < 1) return false;
 					$result = $this->db->update(array('passed'=>1),array('linkid'=>$linkid));
 					if($result){
-						showmessage(L('operation_success'),'?m=link&c=link');
+						dr_admin_msg(1,L('operation_success'),'?m=link&c=link');
 					}else {
-						showmessage(L("operation_failure"),'?m=link&c=link');
+						dr_admin_msg(0,L("operation_failure"),'?m=link&c=link');
 					}
 				}
 			}
@@ -345,16 +344,16 @@ class link extends admin {
  	//单个审核申请
  	public function check(){
 		if((!isset($_GET['linkid']) || empty($_GET['linkid'])) && (!isset($_POST['linkid']) || empty($_POST['linkid']))) {
-			showmessage(L('illegal_parameters'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		} else { 
 			$linkid = intval($_GET['linkid']);
 			if($linkid < 1) return false;
 			//删除友情链接
 			$result = $this->db->update(array('passed'=>1),array('linkid'=>$linkid));
 			if($result){
-				showmessage(L('operation_success'),'?m=link&c=link');
+				dr_admin_msg(1,L('operation_success'),'?m=link&c=link');
 			}else {
-				showmessage(L("operation_failure"),'?m=link&c=link');
+				dr_admin_msg(0,L("operation_failure"),'?m=link&c=link');
 			}
 			 
 		}

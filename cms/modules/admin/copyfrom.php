@@ -32,7 +32,7 @@ class copyfrom extends admin {
 		if($this->input->post('dosubmit')) {
 			$info = $this->check($this->input->post('info'));
 			$this->db->insert($info);
-			showmessage(L('add_success'), '', '', 'add');
+			dr_admin_msg(1, L('add_success'), '', '', 'add');
 		} else {
 			$show_header = $show_validator = '';
 			
@@ -48,13 +48,13 @@ class copyfrom extends admin {
 			$id = intval($this->input->post('id'));
 			$info = $this->check($this->input->post('info'));
 			$this->db->update($info,array('id'=>$id));
-			showmessage(L('update_success'), '', '', 'edit');
+			dr_admin_msg(1, L('update_success'), '', '', 'edit');
 		} else {
 			$show_header = $show_validator = '';
 			$id = intval($this->input->get('id'));
-			if (!$id) showmessage(L('illegal_action'));
+			if (!$id) dr_admin_msg(0, L('illegal_action'));
 			$r = $this->db->get_one(array('id'=>$id, 'siteid'=>$this->siteid));
-			if (empty($r)) showmessage(L('illegal_action'));
+			if (empty($r)) dr_admin_msg(0, L('illegal_action'));
 			extract($r);
 			include $this->admin_tpl('copyfrom_edit');
 		}
@@ -65,7 +65,7 @@ class copyfrom extends admin {
 	 */
 	public function delete() {
 		$id = intval($this->input->get('id'));
-		if (!$id) showmessage(L('illegal_action'));
+		if (!$id) dr_admin_msg(0, L('illegal_action'));
 		$this->db->delete(array('id'=>$id, 'siteid'=>$this->siteid));
 		exit('1');
 	}
@@ -77,9 +77,9 @@ class copyfrom extends admin {
 	 */
 	private function check($data = array()) {
 		if (!is_array($data) || empty($data)) return array();
-		if (!preg_match('/^((http|https):\/\/)?([^\/]+)/i', $data['siteurl'])) showmessage(L('input').L('copyfrom_url'));
-		if (empty($data['sitename'])) showmessage(L('input').L('copyfrom_name'));
-		if ($data['thumb'] && !preg_match('/^((http|https):\/\/)?([^\/]+)/i', $data['thumb'])) showmessage(L('copyfrom_logo').L('format_incorrect'));
+		if (!preg_match('/^((http|https):\/\/)?([^\/]+)/i', $data['siteurl'])) dr_admin_msg(0, L('input').L('copyfrom_url'));
+		if (empty($data['sitename'])) dr_admin_msg(0, L('input').L('copyfrom_name'));
+		if ($data['thumb'] && !preg_match('/^((http|https):\/\/)?([^\/]+)/i', $data['thumb'])) dr_admin_msg(0, L('copyfrom_logo').L('format_incorrect'));
 		$data['siteid'] = $this->siteid;
 		return $data;
 	}
@@ -94,9 +94,9 @@ class copyfrom extends admin {
 					$this->db->update(array('listorder'=>$listorder),array('id'=>$id));
 				}
 			}
-			showmessage(L('operation_success'),HTTP_REFERER);
+			dr_admin_msg(1, L('operation_success'),HTTP_REFERER);
 		} else {
-			showmessage(L('operation_failure'));
+			dr_admin_msg(0, L('operation_failure'));
 		}
 	}
 

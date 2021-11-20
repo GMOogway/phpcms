@@ -10,7 +10,7 @@
 <link href='<?php echo CSS_PATH?>bootstrap-tagsinput.css' rel='stylesheet' type='text/css' />
 <link href="<?php echo CSS_PATH?>table_form.css" rel="stylesheet" type="text/css" />
 <?php
-if(!$this->get_siteid()) showmessage(L('admin_login'),'?m=admin&c=index&a=<?php echo SYS_ADMIN_PATH;?>');
+if(!$this->get_siteid()) dr_admin_msg(0,L('admin_login'),'?m=admin&c=index&a='.SYS_ADMIN_PATH);
 if(isset($show_dialog)) {?>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>dialog.js"></script>
 <?php } ?>

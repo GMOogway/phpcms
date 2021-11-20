@@ -34,27 +34,6 @@ class sites {
 	}
 	
 	/**
-	 * 获取站点列表
-	 * @param string $roleid 角色ID 留空为获取所有站点列表
-	 */
-	public function get_list_login($roleid='') {
-		$roleid = intval($roleid);
-		if(empty($roleid)) {
-			if ($data = getcache('sitelist', 'commons')) {
-				return $data;
-			} else {
-				$this->set_cache();
-				return $this->db->select();
-			}			
-		} else {
-			$site_arr = $this->get_role_siteid_login($roleid);
-			$sql = "`siteid` in($site_arr)";
-			return $this->db->select($sql);
-		}
-
-	}
-	
-	/**
 	 * 按ID获取站点信息
 	 * @param integer $siteid 站点ID号
 	 */
@@ -166,32 +145,7 @@ class sites {
 			$siteid = implode(',',array_unique($sitelist));
 			return $siteid;			
 		} else {
-			showmessage(L('no_site_permissions'),'?m=admin&c=index&a=login');
-		}
-	}
-	
-	/**
-	 * 按角色ID获取站点列表
-	 * @param string $roleid 角色ID
-	 */	
-	
-	public function get_role_siteid_login($roleid) {
-		$roleid = intval($roleid);
-		if($roleid == 1) {
-			$sitelists = $this->get_list_login();
-			foreach($sitelists as $v) {
-				$sitelist[] = $v['siteid'];
-			}
-		} else {
-			$sitelist = getcache('role_siteid', 'commons');
-			$sitelist = $sitelist[$roleid];
-		}
-		if(is_array($sitelist)) 
-		{
-			$siteid = implode(',',array_unique($sitelist));
-			return $siteid;			
-		} else {
-			dr_json(0, L('no_site_permissions'));
+			dr_admin_msg(0, L('no_site_permissions'), '?m=admin&c=index&a=login');
 		}
 	}
 }

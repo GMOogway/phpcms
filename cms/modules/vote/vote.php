@@ -65,7 +65,7 @@ class vote extends admin {
 			$subject['addtime'] = SYS_TIME;
 			$subject['siteid'] = $this->get_siteid();
 			if(empty($subject['subject'])) {
-				showmessage(L('vote_title_noempty'),'?m=vote&c=vote&a=add');
+				dr_admin_msg(0,L('vote_title_noempty'),'?m=vote&c=vote&a=add');
 			}
  			//记录选项条数 optionnumber 
 			$subject['optionnumber'] = count($this->input->post('option'));
@@ -78,9 +78,9 @@ class vote extends admin {
 			//生成JS文件
 			$this->update_votejs($subjectid);
 			if($this->input->post('from_api')) {
-				showmessage(L('operation_success'),'?m=vote&c=vote&a=add','100', '',"$(function(){dialogOpener.$('#voteid').val('".$subjectid."');ownerDialog.close();})");
+				dr_admin_msg(1,L('operation_success'),'?m=vote&c=vote&a=add','', '',"$(function(){dialogOpener.$('#voteid').val('".$subjectid."');ownerDialog.close();})");
 			} else {
-				showmessage(L('operation_success'),'?m=vote&c=vote','','add');
+				dr_admin_msg(1,L('operation_success'),'?m=vote&c=vote','','add');
  			}
 		} else {
 			$show_validator = $show_scroll = $show_header = true;
@@ -125,14 +125,14 @@ class vote extends admin {
 				}
 	 			$this->db->update($subject,array('subjectid'=>$subjectid));//更新投票选项总数
 				$this->update_votejs($subjectid);//生成JS文件
-				showmessage(L('operation_success'),'?m=vote&c=vote&a=edit','', 'edit');
+				dr_admin_msg(1,L('operation_success'),'?m=vote&c=vote&a=edit','', 'edit');
 			}else{
 				$show_validator = $show_scroll = $show_header = true;
 				pc_base::load_sys_class('form', '', 0);
 				
 				//解出投票内容
 				$info = $this->db->get_one(array('subjectid'=>$this->input->get('subjectid')));
-				if(!$info) showmessage(L('operation_success'));
+				if(!$info) dr_admin_msg(0,L('operation_success'));
 				extract($info);
 					
 				//解出投票选项
@@ -161,7 +161,7 @@ class vote extends admin {
 	 */
 	public function delete() {
 		if((!$this->input->get('subjectid') || empty($this->input->get('subjectid'))) && (!$this->input->post('subjectid') || empty($this->input->post('subjectid')))) {
-			showmessage(L('illegal_parameters'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		} else {
 				
 			if(is_array($this->input->post('subjectid'))){
@@ -171,7 +171,7 @@ class vote extends admin {
 					$this->db2->del_options($subjectid_arr);
 					$this->db->delete(array('subjectid'=>$subjectid_arr));
 				}
-				showmessage(L('operation_success'),'?m=vote&c=vote');
+				dr_admin_msg(1,L('operation_success'),'?m=vote&c=vote');
 			}else{
 				$subjectid = intval($this->input->get('subjectid'));
 				if($subjectid < 1) return false;
@@ -184,13 +184,13 @@ class vote extends admin {
 				$result = $this->db->delete(array('subjectid'=>$subjectid));
 				if($result)
 				{
-					showmessage(L('operation_success'),'?m=vote&c=vote');
+					dr_admin_msg(1,L('operation_success'),'?m=vote&c=vote');
 				}else {
-					showmessage(L("operation_failure"),'?m=vote&c=vote');
+					dr_admin_msg(0,L("operation_failure"),'?m=vote&c=vote');
 				}
 			}
 				
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		}
 	}
 	/**
@@ -227,7 +227,7 @@ class vote extends admin {
 			//更新模型数据库,重设setting 数据. 
  			$set = array2string($setting);
 			$m_db->update(array('setting'=>$set), array('module'=>ROUTE_M));
-			showmessage(L('setting_updates_successful'), '?m=vote&c=vote&a=init');
+			dr_admin_msg(1,L('setting_updates_successful'), '?m=vote&c=vote&a=init');
 		} else {
 			@extract($now_seting);
 			pc_base::load_sys_class('form', '', 0);
@@ -252,14 +252,14 @@ class vote extends admin {
 	 * @return Array	检查后的数组
 	 */
 	private function check($data = array()) {
-		if($data['name'] == '') showmessage(L('name_plates_not_empty'));
+		if($data['name'] == '') dr_admin_msg(0,L('name_plates_not_empty'));
 		if(!isset($data['width']) || $data['width']==0) {
-			showmessage(L('plate_width_not_empty'), HTTP_REFERER);
+			dr_admin_msg(0,L('plate_width_not_empty'), HTTP_REFERER);
 		} else {
 			$data['width'] = intval($data['width']);
 		}
 		if(!isset($data['height']) || $data['height']==0) {
-			showmessage(L('plate_height_not_empty'), HTTP_REFERER);
+			dr_admin_msg(0,L('plate_height_not_empty'), HTTP_REFERER);
 		} else {
 			$data['height'] = intval($data['height']);
 		}
@@ -272,7 +272,7 @@ class vote extends admin {
 	public function statistics() {
 			$subjectid = intval($this->input->get('subjectid'));
 			if(!$subjectid){
-				showmessage(L('illegal_operation'));
+				dr_admin_msg(0,L('illegal_operation'));
 			}
 			$show_validator = $show_scroll = $show_header = true;
  			//获取投票信息
@@ -322,7 +322,7 @@ class vote extends admin {
  			if(!isset($subjectid)||intval($subjectid) < 1) return false;
 			//解出投票内容
 			$info = $this->db->get_subject($subjectid);
-			if(!$info) showmessage(L('not_vote'));
+			if(!$info) dr_admin_msg(0,L('not_vote'));
 			extract($info);
  			//解出投票选项
 			$options = $this->db2->get_options($subjectid);
@@ -344,7 +344,7 @@ class vote extends admin {
 				$this->update_votejs($subjectid_arr['subjectid']);
 			}
 		}
-		showmessage(L('operation_success'),'?m=vote&c=vote');
+		dr_admin_msg(1,L('operation_success'),'?m=vote&c=vote');
 	}
 	
 	/**
@@ -363,7 +363,7 @@ class vote extends admin {
 	 */ 
  	public function public_call() {
  		$subjectid = intval($this->input->get('subjectid'));
-		if(!$subjectid) showmessage(L('illegal_action'), HTTP_REFERER, '', 'call');
+		if(!$subjectid) dr_admin_msg(0,L('illegal_action'), HTTP_REFERER, '', 'call');
 		$r = $this->db->get_one(array('subjectid'=>$subjectid));
 		include $this->admin_tpl('vote_call');
 	}

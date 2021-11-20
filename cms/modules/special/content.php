@@ -19,7 +19,7 @@ class content extends admin {
 	 */
 	public function add() {
 		$_GET['specialid'] = intval($_GET['specialid']);
-		if (!$_GET['specialid']) showmessage(L('illegal_action'), HTTP_REFERER);
+		if (!$_GET['specialid']) dr_admin_msg(0,L('illegal_action'), HTTP_REFERER);
 		if ($_POST['dosubmit'] || $_POST['dosubmit_continue']) {
 			$info = $this->check($_POST['info'], 'info', 'add', $_POST['data']['content']); //验证数据的合法性
 			//处理外部链接情况
@@ -79,7 +79,7 @@ class content extends admin {
 			}
 			$special_db = pc_base::load_model('special_model');
 			$info = $special_db->get_one(array('id'=>$_GET['specialid']));
-			if (!$info) showmessage(L('illegal_action'));
+			if (!$info) dr_admin_msg(0,L('illegal_action'));
 			@extract($info);
 			include $this->admin_tpl('content_add');
 		}
@@ -91,7 +91,7 @@ class content extends admin {
 	public function edit() {
 		$_GET['specialid'] = intval($_GET['specialid']);
 		$_GET['id'] = intval($_GET['id']);
-		if (!$_GET['specialid'] || !$_GET['id']) showmessage(L('illegal_action'), HTTP_REFERER);
+		if (!$_GET['specialid'] || !$_GET['id']) dr_admin_msg(0,L('illegal_action'), HTTP_REFERER);
 		if (isset($_POST['dosubmit']) || isset($_POST['dosubmit_continue'])) {
 			$info = $this->check($_POST['info'], 'info', 'edit', $_POST['data']['content']); //验证数据的合法性
 			//处理外部链接更换情况
@@ -208,7 +208,7 @@ class content extends admin {
 	 */
 	public function init() {
 		$_GET['specialid'] = intval($_GET['specialid']);
-		if(!$_GET['specialid']) showmessage(L('illegal_action'), HTTP_REFERER);
+		if(!$_GET['specialid']) dr_admin_msg(0,L('illegal_action'), HTTP_REFERER);
 		$types = $this->type_db->select(array('module'=>'special', 'parentid'=>$_GET['specialid']), 'name, typeid', '', '`listorder` ASC, `typeid` ASC', '', 'typeid');
 		$page = max(intval($_GET['page']), 1);
 		$datas = $this->db->listinfo(array('specialid'=>$_GET['specialid']), '`listorder` ASC , `id` DESC', $page);
@@ -222,13 +222,13 @@ class content extends admin {
 	 */
 	public function listorder() {
 		$_GET['specialid'] = intval($_GET['specialid']);
-		if (!$_GET['specialid']) showmessage(L('illegal_action'), HTTP_REFERER);
+		if (!$_GET['specialid']) dr_admin_msg(0,L('illegal_action'), HTTP_REFERER);
 		if (isset($_POST['listorders']) && is_array($_POST['listorders'])) {
 			foreach ($_POST['listorders'] as $id => $v) {
 				$this->db->update(array('listorder'=>$v), array('id'=>$id, 'specialid'=>$_GET['specialid']));
 			}
 		}
-		showmessage(L('operation_success'), HTTP_REFERER);
+		dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 	}
 	
 	/**
@@ -236,7 +236,7 @@ class content extends admin {
 	 */
 	public function delete() {
 		if (!isset($_POST['id']) || empty($_POST['id']) || !$_GET['specialid']) {
-			showmessage(L('illegal_action'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_action'), HTTP_REFERER);
 		}
 		$specialid = $this->input->get('specialid');
 		$special = pc_base::load_model('special_model');
@@ -261,7 +261,7 @@ class content extends admin {
 				$this->attachment_db->api_delete($keyid);
 			}
 		}
-		showmessage(L('operation_success'), HTTP_REFERER);
+		dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 	}
 	
 	/**
@@ -293,8 +293,8 @@ class content extends admin {
 	 */
 	private function check($data = array(), $type = 'info', $action = 'add', $content = '') {
 		if ($type == 'info') {
-			if (!$data['title']) showmessage(L('title_no_empty'), HTTP_REFERER);
-			if (!$data['typeid']) showmessage(L('no_select_type'), HTTP_REFERER);
+			if (!$data['title']) dr_admin_msg(0,L('title_no_empty'), HTTP_REFERER);
+			if (!$data['typeid']) dr_admin_msg(0,L('no_select_type'), HTTP_REFERER);
 			$data['inputtime'] = $data['inputtime'] ? strtotime($data['inputtime']) : SYS_TIME;
 			$data['islink'] = $data['islink'] ? intval($data['islink']) : 0;
 			$data['style'] = '';
@@ -327,7 +327,7 @@ class content extends admin {
 				$data['userid'] = $_SESSION['userid'];
 			}
 		} elseif ($type == 'data') {
-			if (!$data['content']) showmessage(L('content_no_empty'), HTTP_REFERER);
+			if (!$data['content']) dr_admin_msg(0,L('content_no_empty'), HTTP_REFERER);
 		}
 		return $data;
 	}

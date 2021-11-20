@@ -31,7 +31,7 @@ class type_manage extends admin {
 			$info = $this->input->post('info');
 			$info['siteid'] = $this->siteid;
 			$info['module'] = 'content';
-			if(empty($info['name'])) showmessage(L("input").L('type_name'));
+			if(empty($info['name'])) dr_admin_msg(0,L("input").L('type_name'));
 			$names = explode("\n", trim($info['name']));
 			$ids = $this->input->get_post_ids();
 
@@ -51,7 +51,7 @@ class type_manage extends admin {
 				}
 			}
 			$this->cache();//更新类别缓存，按站点
-			showmessage(L('add_success'), '', '', 'add');
+			dr_admin_msg(1,L('add_success'), '', '', 'add');
 		} else {
 			$show_header = $show_validator = '';
 			$categorys = $this->public_getsite_categorys();
@@ -103,7 +103,7 @@ class type_manage extends admin {
 			}
 			$this->category_cache();
 			$this->cache();//更新类别缓存，按站点
-			showmessage(L('update_success'), '', '', 'edit');
+			dr_admin_msg(1,L('update_success'), '', '', 'edit');
 		} else {
 			$show_header = $show_validator = '';
 			$typeid = intval($this->input->get('typeid'));
@@ -149,9 +149,9 @@ class type_manage extends admin {
 				}
 			}
 			$this->cache();//更新类别缓存，按站点
-			showmessage(L('operation_success'),HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'),HTTP_REFERER);
 		} else {
-			showmessage(L('operation_failure'));
+			dr_admin_msg(0,L('operation_failure'));
 		}
 	}
 	

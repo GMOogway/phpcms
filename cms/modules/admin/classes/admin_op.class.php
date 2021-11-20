@@ -16,7 +16,7 @@ class admin_op {
 		if($userid < 1) return false;
 		if(!is_password($password))
 		{
-			showmessage(L('pwd_incorrect'));
+			dr_admin_msg(0,L('pwd_incorrect'));
 			return false;
 		}
 		$passwordinfo = password($password);

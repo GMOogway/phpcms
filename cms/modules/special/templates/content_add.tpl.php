@@ -51,16 +51,16 @@ $p = dr_authcode(array(
                     </div>
                     <div class="portlet-body">
                         <div class="form-body clear">
-                            <div class="form-group">
+                            <div class="form-group" id="dr_row_typeid">
                                 <label class="control-label col-md-2"><font color="red">*</font> <?php echo L('for_type')?></label>
                                 <div class="col-md-10">
-                                    <?php echo form::select($types, '', 'name="info[typeid]" id="typeid"', L('please_choose_type'))?>
+                                    <?php echo form::select($types, '', 'name="info[typeid]" id="typeid" class="input-text"', L('please_choose_type'))?>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" id="dr_row_title">
                                 <label class="control-label col-md-2"><font color="red">*</font> <?php echo L('content_title')?></label>
                                 <div class="col-md-10">
-                                    <input type="text" style="width:350px;" name="info[title]" id="title" class="measure-input " onBlur="check_title('?m=special&c=content&a=public_check_title&specialid=<?php echo intval($_GET['specialid'])?>&id=<?php echo intval($_GET['id'])?>','title');$.post('<?php echo WEB_PATH;?>api.php?op=get_keywords&sid='+Math.random()*5, {data:$('#title').val()}, function(data){if(data && $('#keywords').val()=='') {$('#keywords').val(data); $('#keywords').tagsinput('add', data);}});"/>
+                                    <input type="text" style="width:350px;" name="info[title]" id="title" class="measure-input" onBlur="check_title('?m=special&c=content&a=public_check_title&specialid=<?php echo intval($_GET['specialid'])?>&id=<?php echo intval($_GET['id'])?>','title');$.post('<?php echo WEB_PATH;?>api.php?op=get_keywords&sid='+Math.random()*5, {data:$('#title').val()}, function(data){if(data && $('#keywords').val()=='') {$('#keywords').val(data); $('#keywords').tagsinput('add', data);}});"/>
 		<input type="hidden" name="style_font_weight" id="style_font_weight" value="">
 		<input type="button" class="button" id="check_title_alt" value="<?php echo L('check_exist')?>" onclick="$.get('?m=special&c=content&a=public_check_title&sid='+Math.random()*5, {data:$('#title').val(), specialid:'<?php echo $_GET['specialid']?>'}, function(data){ if(data=='1') {$('#check_title_alt').val('<?php echo L('title_exist')?>');$('#check_title_alt').css('background-color','#E7505A');} else if(data=='0') {$('#check_title_alt').val('<?php echo L('title_no_exist')?>');$('#check_title_alt').css('background-color','#1E9FFF')}})"/> <input type="hidden" name="style_color" id="style_color" value=""> <script type="text/javascript">$(function(){$("#style_color").minicolors({control:$("#style_color").attr("data-control")||"hue",defaultValue:$("#style_color").attr("data-defaultValue")||"",inline:"true"===$("#style_color").attr("data-inline"),letterCase:$("#style_color").attr("data-letterCase")||"lowercase",opacity:$("#style_color").attr("data-opacity"),position:$("#style_color").attr("data-position")||"bottom left",change:function(t,o){t&&(o&&(t+=", "+o),"object"==typeof console&&console.log(t));$("#title").css("color",$("#style_color").val())},theme:"bootstrap"})});</script>
 		<a href="javascript:;" onclick="set_title_color('');$('.minicolors-swatch-color').css('background','');"><?php echo L('清空');?></a>
@@ -80,10 +80,10 @@ $p = dr_authcode(array(
                                     <textarea name="info[description]" id="description" style='width:98%;height:46px;' onkeyup="strlen_verify(this, 'description_len', 255)"></textarea> 还可输入<B><span id="description_len">255</span></B> 个字符
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" id="dr_row_content">
                                 <label class="control-label col-md-2"><font color="red">*</font> <?php echo L('content')?></label>
                                 <div class="col-md-10">
-                                    <div id='content_tip'></div><textarea name="data[content]" id="content" boxid="content"></textarea><?php echo form::editor('content', 'full', '', 'content', '', '', 1, '', '')?><span class="help-block"><div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="add_introduce" type="checkbox"  value="1" checked><?php echo L('iscutcontent')?><span></span></label><input type="text" name="introcude_length" value="200" size="3"><?php echo L('characters_to_contents')?><label class="mt-checkbox mt-checkbox-outline"><input type='checkbox' name='auto_thumb' value="1" checked><?php echo L('iscutcotent_pic')?><span></span></label><input type="text" name="auto_thumb_no" value="1" size="2" class=""><?php echo L('picture2thumb')?></div></span>
+                                    <div id='content_tip'></div><textarea class="dr_ueditor" name="data[content]" id="content"></textarea><?php echo form::editor('content', 'full', '', 'content', '', '', 1, '', '')?><span class="help-block"><div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="add_introduce" type="checkbox"  value="1" checked><?php echo L('iscutcontent')?><span></span></label><input type="text" name="introcude_length" value="200" size="3"><?php echo L('characters_to_contents')?><label class="mt-checkbox mt-checkbox-outline"><input type='checkbox' name='auto_thumb' value="1" checked><?php echo L('iscutcotent_pic')?><span></span></label><input type="text" name="auto_thumb_no" value="1" size="2" class=""><?php echo L('picture2thumb')?></div></span>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -166,36 +166,30 @@ $p = dr_authcode(array(
 function load_file_list(id) {
 	$.getJSON('?m=admin&c=category&a=public_tpl_file_list&style='+id+'&module=special&templates=show&name=data', function(data){$('#show_template').html(data.show_template);});
 }
-
-//只能放到最下面
-$(function(){
-	$.formValidator.initConfig({formid:"myform",autotip:true,onerror:function(msg,obj){Dialog.alert(msg,function(){$(obj).focus();
-	boxid = $(obj).attr('id');
-	if($('#'+boxid).attr('boxid')!=undefined) {
-		check_content(boxid);
-	}
-	})}});
-	$("#typeid").formValidator({autotip:true,onshow:"<?php echo L('please_choose_type')?>",onfocus:"<?php echo L('please_choose_type')?>"}).inputValidator({min:1,onerror:"<?php echo L('please_choose_type')?>"});
-	$("#title").formValidator({autotip:true,onshow:"<?php echo L('please_input_title')?>",onfocus:"<?php echo L('please_input_title')?>"}).inputValidator({min:1,onerror:"<?php echo L('please_input_title')?>"});
-/*
- * 加载禁用外边链接
- */
-	$('#linkurl').attr('disabled',true);
-	$('#islink').attr('checked',false);
-	$('.edit_content').hide();
-});
 self.moveTo(0, 0);
 function refersh_window() {
 	setcookie('refersh_time', 1);
 }
 function checkall(){
+	if(!$("#typeid").val()){
+		$('#dr_row_typeid').addClass('has-error');
+		Dialog.alert("<?php echo L('please_choose_type')?>",function(){$("#typeid").focus();})
+		return false;
+	}
+	if(!$("#title").val()){
+		$('#dr_row_title').addClass('has-error');
+		Dialog.alert("<?php echo L('please_input_title')?>",function(){$("#title").focus();})
+		return false;
+	}
 <?php if (SYS_EDITOR) {?>
 	if(CKEDITOR.instances.content.getData()==""){
+		$('#dr_row_content').addClass('has-error');
 		Dialog.alert("<?php echo L('content_empty')?>",function(){editor.focus();})
 		return false;
 	}
 <?php } else {?>
 	if(UE.getEditor("content").getContent()==""){
+		$('#dr_row_content').addClass('has-error');
 		Dialog.alert("<?php echo L('content_empty')?>",function(){UE.getEditor("content").focus();})
 		return false;
 	}

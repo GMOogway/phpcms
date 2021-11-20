@@ -53,7 +53,7 @@ class import extends admin {
  				$modelid = 'other';
  			}
  			$url = "?m=import&c=import&a=import_setting&type=".$this->input->post('info')['type']."&modelid=".$modelid."&pc_hash=".dr_get_csrf_token();
- 			showmessage('进入下一步',$url,'0');
+ 			dr_admin_msg(1,'进入下一步',$url,'0');
   		}else {
  			$models = getcache('model','commons');
 	 		$members = getcache('member_model','commons');
@@ -70,7 +70,7 @@ class import extends admin {
  			$forward = "?m=import&c=import&a=init";
  			$setting = $this->input->post('setting');
   			if(empty($setting['import_name'])){
-				showmessage('请输入配置名称');
+				dr_admin_msg(0,'请输入配置名称');
 			}
   			setcache($setting['import_name'], $setting, 'import'); 
    			//写入数据库,分添加/修改配置
@@ -87,7 +87,7 @@ class import extends admin {
    			}else {
    				$importid = $this->import->insert($into_array,true);
     		}
-  			showmessage('操作成功', $forward);
+  			dr_admin_msg(1,'操作成功', $forward);
    		} else {
   			$show_validator = $show_scroll = $show_header = true;
  			pc_base::load_sys_class('form', '', 0);
@@ -148,7 +148,7 @@ class import extends admin {
     		}else {
     			//other类型，没有modelid，所以把modelid值的判断，移到这里面
     			if (empty($type) || empty($modelid)){
-				showmessage('请选择模型！');
+				dr_admin_msg(0,'请选择模型！');
 				}
  			
     			/*只有指定模型才用得着获取模型对应字段*/
@@ -372,7 +372,7 @@ class import extends admin {
 				$modelid = $this->input->post('info')['membermodelid'];
 			}
 			$url = "?m=import&c=import&a=import_setting&type=".$type."&importid=".$importid."&modelid=".$modelid."&pc_hash=".dr_get_csrf_token();
- 			showmessage('进入下一步',$url,'0');
+ 			dr_admin_msg(1,'进入下一步',$url,'0');
 		}else {
 			$importid = intval($this->input->get('importid'));
 			if($importid < 1) return false;
@@ -399,7 +399,7 @@ class import extends admin {
 		if($this->input->post('dosubmit')){
 			$setting = $this->input->post('setting');
   			if(empty($setting['name'])){
-				showmessage('请输入配置名称');
+				dr_admin_msg(0,'请输入配置名称');
 			}
   			setcache($setting['name'], $setting, 'import'); 
    			//写入数据库
@@ -409,7 +409,7 @@ class import extends admin {
 			$into_array['type'] = $this->input->post('type');
  			$into_array['import_name'] = $setting['name'];
 			$this->import->update($into_array,array('id'=>$importid));
-  			showmessage('修改操作成功');
+  			dr_admin_msg(1,'修改操作成功');
  		}else{
  			//判断参数正确
 			$importid = intval($this->input->get('importid'));
@@ -459,7 +459,7 @@ class import extends admin {
 	 */
 	public function delete() {
   		if((!$this->input->get('importid') || empty($this->input->get('importid'))) && (!$this->input->post('importid') || empty($this->input->post('importid')))) {
-			showmessage(L('illegal_parameters'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		} else {
 			if(is_array($this->input->post('importid'))){
 				foreach($this->input->post('importid') as $importid_arr) {
@@ -470,19 +470,19 @@ class import extends admin {
  					//删除数据库信息
 					$this->import->delete(array('id'=>$importid_arr));
 				}
-				showmessage(L('operation_success'),'?m=import&c=import');
+				dr_admin_msg(1,L('operation_success'),'?m=import&c=import');
 			}else{
 				$importid = intval($this->input->get('importid'));
 				if($importid < 1) return false;
 				//删除记录
 				$result = $this->import->delete(array('id'=>$importid));
 				if($result){
-					showmessage(L('operation_success'),'?m=import&c=import');
+					dr_admin_msg(1,L('operation_success'),'?m=import&c=import');
 				}else {
-					showmessage(L("operation_failure"),'?m=import&c=import');
+					dr_admin_msg(0,L("operation_failure"),'?m=import&c=import');
 				}
 			}
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		}
 	} 
 	
@@ -530,7 +530,7 @@ class import extends admin {
 			$result = $do_import->add_other($import_info, $offset,$importid); //通过不同的offset来循环取数据并入库。
 		}
    		if(!$result){
-			showmessage('返回数据有问题，请查看!');
+			dr_admin_msg(0,'返回数据有问题，请查看!');
 		}
  		//从返回的信息中，分解成数组，来判断是否结束 
  		list($finished, $total) = explode('-', $result);
@@ -540,7 +540,7 @@ class import extends admin {
  		$start = $this->input->get('start') ? $this->input->get('start') : 0;
 		$end_start = $start + $number;
    		$forward = $finished ? "?m=import&c=import&a=init" : "?m=import&c=import&a=do_import&type=".$type."&importid=".$importid."&offset=$offset&start=$end_start&total=$total";//结束跳至管理列表，未结束继续进行
-   		showmessage('正在进行数据导入<br>'.$start.' - '.$end_start, $forward);
+   		dr_admin_msg(1,'正在进行数据导入<br>'.$start.' - '.$end_start, $forward);
    	}
    
 }

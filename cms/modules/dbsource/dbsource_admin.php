@@ -20,28 +20,28 @@ class dbsource_admin extends admin {
 	
 	public function add() {
 		if (isset($_POST['dosubmit'])) {
-			$name = isset($_POST['name']) && trim($_POST['name']) ? trim($_POST['name']) : showmessage(L('dbsource_name').L('empty'));
-			$host = isset($_POST['host']) && trim($_POST['host']) ? trim($_POST['host']) : showmessage(L('server_address').L('empty'));
-			$port = isset($_POST['port']) && intval($_POST['port']) ? intval($_POST['port']) : showmessage(L('server_port').L('empty'));
-			$username = isset($_POST['username']) && trim($_POST['username']) ? trim($_POST['username']) : showmessage(L('username').L('empty'));
-			$password = isset($_POST['password']) && trim($_POST['password']) ? trim($_POST['password']) : showmessage(L('password').L('empty'));
-			$dbname = isset($_POST['dbname']) && trim($_POST['dbname']) ? trim($_POST['dbname']) : showmessage(L('database').L('empty'));
+			$name = isset($_POST['name']) && trim($_POST['name']) ? trim($_POST['name']) : dr_admin_msg(0,L('dbsource_name').L('empty'));
+			$host = isset($_POST['host']) && trim($_POST['host']) ? trim($_POST['host']) : dr_admin_msg(0,L('server_address').L('empty'));
+			$port = isset($_POST['port']) && intval($_POST['port']) ? intval($_POST['port']) : dr_admin_msg(0,L('server_port').L('empty'));
+			$username = isset($_POST['username']) && trim($_POST['username']) ? trim($_POST['username']) : dr_admin_msg(0,L('username').L('empty'));
+			$password = isset($_POST['password']) && trim($_POST['password']) ? trim($_POST['password']) : dr_admin_msg(0,L('password').L('empty'));
+			$dbname = isset($_POST['dbname']) && trim($_POST['dbname']) ? trim($_POST['dbname']) : dr_admin_msg(0,L('database').L('empty'));
 			$dbtablepre = isset($_POST['dbtablepre']) && trim($_POST['dbtablepre']) ? trim($_POST['dbtablepre']) : '';
-			$charset = isset($_POST['charset']) && in_array(trim($_POST['charset']), array('gbk','utf8', 'gb2312', 'latin1')) ? trim($_POST['charset']) : showmessage(L('charset').L('illegal_parameters'));
+			$charset = isset($_POST['charset']) && in_array(trim($_POST['charset']), array('gbk','utf8', 'gb2312', 'latin1')) ? trim($_POST['charset']) : dr_admin_msg(0,L('charset').L('illegal_parameters'));
 			$siteid = $this->get_siteid();
 			if (!preg_match('/^\\w+$/i', $name)) {
-				showmessage(L('data_source_of_the_letters_and_figures'));
+				dr_admin_msg(0,L('data_source_of_the_letters_and_figures'));
 			}
 			//检察数据源名是否已经存在
 			if ($this->db->get_one(array('siteid'=>$siteid, 'name'=>$name), 'id')) {
-				showmessage(L('dbsource_name').L('exists'));
+				dr_admin_msg(0,L('dbsource_name').L('exists'));
 			}
 			
 			if ($this->db->insert(array('siteid'=>$siteid, 'name'=>$name,'host'=>$host,'port'=>$port,'username'=>$username,'password'=>$password,'dbname'=>$dbname,'dbtablepre'=>$dbtablepre,'charset'=>$charset))) {
 				dbsource_cache();
-				showmessage('', '', '', 'add');
+				dr_admin_msg(1,'', '', '', 'add');
 			} else {
-				showmessage(L('operation_failure'));
+				dr_admin_msg(0,L('operation_failure'));
 			}
 			
 		} else {
@@ -52,27 +52,27 @@ class dbsource_admin extends admin {
 	}
 	
 	public function edit() {
-		$id = isset($_GET['id']) && intval($_GET['id']) ? intval($_GET['id']) : showmessage('ID'.L('empty'));
+		$id = isset($_GET['id']) && intval($_GET['id']) ? intval($_GET['id']) : dr_admin_msg(0,'ID'.L('empty'));
 		$data = $this->db->get_one(array('id'=>$id));
 		if (!$data) {
-			showmessage(L('notfound'));
+			dr_admin_msg(0,L('notfound'));
 		}
 		if (isset($_POST['dosubmit'])) {
-			$host = isset($_POST['host']) && trim($_POST['host']) ? trim($_POST['host']) : showmessage(L('server_address').L('empty'));
-			$port = isset($_POST['port']) && intval($_POST['port']) ? intval($_POST['port']) : showmessage(L('server_port').L('empty'));
-			$username = isset($_POST['username']) && trim($_POST['username']) ? trim($_POST['username']) : showmessage(L('username').L('empty'));
-			$password = isset($_POST['password']) && trim($_POST['password']) ? trim($_POST['password']) : showmessage(L('password').L('empty'));
-			$dbname = isset($_POST['dbname']) && trim($_POST['dbname']) ? trim($_POST['dbname']) : showmessage(L('database').L('empty'));
+			$host = isset($_POST['host']) && trim($_POST['host']) ? trim($_POST['host']) : dr_admin_msg(0,L('server_address').L('empty'));
+			$port = isset($_POST['port']) && intval($_POST['port']) ? intval($_POST['port']) : dr_admin_msg(0,L('server_port').L('empty'));
+			$username = isset($_POST['username']) && trim($_POST['username']) ? trim($_POST['username']) : dr_admin_msg(0,L('username').L('empty'));
+			$password = isset($_POST['password']) && trim($_POST['password']) ? trim($_POST['password']) : dr_admin_msg(0,L('password').L('empty'));
+			$dbname = isset($_POST['dbname']) && trim($_POST['dbname']) ? trim($_POST['dbname']) : dr_admin_msg(0,L('database').L('empty'));
 			$dbtablepre = isset($_POST['dbtablepre']) && trim($_POST['dbtablepre']) ? trim($_POST['dbtablepre']) : '';
-			$charset = isset($_POST['charset']) && in_array(trim($_POST['charset']), array('gbk','utf8', 'gb2312', 'latin1')) ? trim($_POST['charset']) : showmessage(L('charset').L('illegal_parameters'));
+			$charset = isset($_POST['charset']) && in_array(trim($_POST['charset']), array('gbk','utf8', 'gb2312', 'latin1')) ? trim($_POST['charset']) : dr_admin_msg(0,L('charset').L('illegal_parameters'));
 			$siteid = $this->get_siteid();
 			$sql = array('siteid'=>$siteid, 'host'=>$host,'port'=>$port,'username'=>$username,'password'=>$password,'dbname'=>$dbname, 'dbtablepre'=>$dbtablepre, 'charset'=>$charset);
 			
 			if ($this->db->update($sql, array('id'=>$id))) {
 				dbsource_cache();
-				showmessage('', '', '', 'edit');
+				dr_admin_msg(1,'', '', '', 'edit');
 			} else {
-				showmessage(L('operation_failure'));
+				dr_admin_msg(0,L('operation_failure'));
 			}
 			
 		} else {
@@ -88,12 +88,12 @@ class dbsource_admin extends admin {
 		if ($this->db->get_one(array('id'=>$id))) {
 			if ($this->db->delete(array('id'=>$id))) {
 				dbsource_cache();
-				showmessage(L('operation_success'), '?m=dbsource&c=dbsource_admin&a=init');
+				dr_admin_msg(1,L('operation_success'), '?m=dbsource&c=dbsource_admin&a=init');
 			} else {
-				showmessage(L('operation_failure'),  '?m=dbsource&c=dbsource_admin&a=init');
+				dr_admin_msg(0,L('operation_failure'),  '?m=dbsource&c=dbsource_admin&a=init');
 			}
 		} else {
-			showmessage(L('notfound'),   '?m=dbsource&c=dbsource_admin&a=init');
+			dr_admin_msg(0,L('notfound'), '?m=dbsource&c=dbsource_admin&a=init');
 		}
 	}
 	

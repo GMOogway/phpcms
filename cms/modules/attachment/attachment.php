@@ -147,7 +147,7 @@ class attachment extends admin {
 			$this->db->insert($data);
 			// 自动更新缓存
 			$this->public_cache_remote();
-			showmessage(L('operation_success'),'?m=attachment&c=attachment&a=remote&menuid='.$this->input->get('menuid'));
+			dr_admin_msg(1,L('operation_success'),'?m=attachment&c=attachment&a=remote&menuid='.$this->input->get('menuid'));
 		}
 		include $this->admin_tpl('remote_add');
 	}
@@ -163,12 +163,12 @@ class attachment extends admin {
 			$this->db->update($data,array('id'=>$id));
 			// 自动更新缓存
 			$this->public_cache_remote();
-			showmessage(L('operation_success'),'?m=attachment&c=attachment&a=remote&menuid='.$this->input->get('menuid'));
+			dr_admin_msg(1,L('operation_success'),'?m=attachment&c=attachment&a=remote&menuid='.$this->input->get('menuid'));
 		}
 		$data = $this->db->get_one(array('id'=>$this->input->get('id')));
 		$data['value'] = dr_string2array($data['value']);
 		$data['value'] = $data['value'][intval($data['type'])];
-		if(!$data) showmessage(L('数据id不存在'));
+		if(!$data) dr_admin_msg(0,L('数据id不存在'));
 		include $this->admin_tpl('remote_edit');
 	}
 	

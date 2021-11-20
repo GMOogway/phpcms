@@ -51,13 +51,13 @@ class block_admin extends admin {
 	}
 	
 	public function add() {
-		$pos = isset($_GET['pos']) && trim($_GET['pos']) ? trim($_GET['pos']) : showmessage(L('illegal_operation'));
+		$pos = isset($_GET['pos']) && trim($_GET['pos']) ? trim($_GET['pos']) : dr_admin_msg(0,L('illegal_operation'));
 		if (isset($_POST['dosubmit'])) {
-			$name = isset($_POST['name']) && trim($_POST['name']) ? trim($_POST['name']) : showmessage(L('illegal_operation'), HTTP_REFERER);
+			$name = isset($_POST['name']) && trim($_POST['name']) ? trim($_POST['name']) : dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
 			$type = isset($_POST['type']) && intval($_POST['type']) ? intval($_POST['type']) : 1;
 			//判断名称是否已经存在
 			if ($this->db->get_one(array('name'=>$name))) {
-				showmessage(L('name').L('exists'), HTTP_REFERER);
+				dr_admin_msg(0,L('name').L('exists'), HTTP_REFERER);
 			}
 			if ($id = $this->db->insert(array('name'=>$name, 'pos'=>$pos, 'type'=>$type, 'siteid'=>$this->siteid), true)) {
 				//设置权限
@@ -68,9 +68,9 @@ class block_admin extends admin {
 						$this->priv_db->insert(array('roleid'=>$v, 'blockid'=>$id, 'siteid'=>$this->siteid));
 					}
 				}
-				showmessage(L('operation_success'), '?m=block&c=block_admin&a=block_update&id='.$id);
+				dr_admin_msg(1,L('operation_success'), '?m=block&c=block_admin&a=block_update&id='.$id);
 			} else {
-				showmessage(L('operation_failure'), HTTP_REFERER);
+				dr_admin_msg(0,L('operation_failure'), HTTP_REFERER);
 			}
 		} else {
 			$show_header = $show_validator = true;
@@ -82,15 +82,15 @@ class block_admin extends admin {
 	}
 	
 	public function edit() {
-		$id = isset($_GET['id']) && intval($_GET['id']) ? intval($_GET['id']) :  showmessage(L('illegal_operation'));
+		$id = isset($_GET['id']) && intval($_GET['id']) ? intval($_GET['id']) :  dr_admin_msg(0,L('illegal_operation'));
 		if (!$data = $this->db->get_one(array('id'=>$id))) {
-			showmessage(L('nofound'));
+			dr_admin_msg(0,L('nofound'));
 		}
 		if (isset($_POST['dosubmit'])) {
-			$name = isset($_POST['name']) && trim($_POST['name']) ? trim($_POST['name']) : showmessage(L('illegal_operation'), HTTP_REFERER);
+			$name = isset($_POST['name']) && trim($_POST['name']) ? trim($_POST['name']) : dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
 			if ($data['name'] != $name) {
 				if ($this->db->get_one(array('name'=>$name))) {
-					showmessage(L('name').L('exists'), HTTP_REFERER);
+					dr_admin_msg(0,L('name').L('exists'), HTTP_REFERER);
 				}
 			}
 			if ($this->db->update(array('name'=>$name, 'siteid'=>$this->siteid), array('id'=>$id))) {
@@ -103,9 +103,9 @@ class block_admin extends admin {
 						$this->priv_db->insert(array('roleid'=>$v, 'blockid'=>$id, 'siteid'=>$this->siteid));
 					}
 				}
-				showmessage(L('operation_success'), '', '' ,'edit');
+				dr_admin_msg(1,L('operation_success'), '', '' ,'edit');
 			} else {
-				showmessage(L('operation_failure'), HTTP_REFERER);
+				dr_admin_msg(0,L('operation_failure'), HTTP_REFERER);
 			}
 		}
 		$show_header = $show_validator = true;
@@ -121,9 +121,9 @@ class block_admin extends admin {
 	}
 	
 	public function del() {
-		$id = isset($_GET['id']) && intval($_GET['id']) ? intval($_GET['id']) :  showmessage(L('illegal_operation'));
+		$id = isset($_GET['id']) && intval($_GET['id']) ? intval($_GET['id']) :  dr_admin_msg(0,L('illegal_operation'));
 		if (!$data = $this->db->get_one(array('id'=>$id))) {
-			showmessage(L('nofound'));
+			dr_admin_msg(0,L('nofound'));
 		}
 		if ($this->db->delete(array('id'=>$id)) && $this->history_db->delete(array('blockid'=>$id)) && $this->priv_db->delete(array('blockid'=>$id))) {
 			if (SYS_ATTACHMENT_STAT && SYS_ATTACHMENT_DEL) {
@@ -131,22 +131,22 @@ class block_admin extends admin {
 				$keyid = 'block-'.$id;
 				$this->attachment_db->api_delete($keyid);
 			}
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		} else {
-			showmessage(L('operation_failure'), HTTP_REFERER);
+			dr_admin_msg(0,L('operation_failure'), HTTP_REFERER);
 		}
 	}
 	
 	public function block_update() {
-		$id = isset($_GET['id']) && intval($_GET['id']) ? intval($_GET['id']) :  showmessage(L('illegal_operation'), HTTP_REFERER);
+		$id = isset($_GET['id']) && intval($_GET['id']) ? intval($_GET['id']) :  dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
 		//进行权限判断
 		if ($this->roleid != 1) {
 			if (!$this->priv_db->get_one(array('blockid'=>$id, 'roleid'=>$this->roleid, 'siteid'=>$this->siteid))) {
-				showmessage(L('not_have_permissions'));
+				dr_admin_msg(0,L('not_have_permissions'));
 			}
 		}
 		if (!$data = $this->db->get_one(array('id'=>$id))) {
-			showmessage(L('nofound'));
+			dr_admin_msg(0,L('nofound'));
 		}
 		if (isset($_POST['dosubmit'])) {
 			$sql = array();
@@ -179,9 +179,9 @@ class block_admin extends admin {
 			if ($this->db->update($sql, array('id'=>$id))) {
 				//添加历史记录
 				$this->history_db->insert(array('blockid'=>$data['id'], 'data'=>array2string($data), 'creat_at'=>SYS_TIME, 'userid'=>param::get_cookie('userid'), 'username'=>param::get_cookie('admin_username')));
-				showmessage(L('operation_success').'<script style="text/javascript">if(!parent.right){parent.location.reload(true);}ownerDialog.close();</script>', '','','edit');
+				dr_admin_msg(1,L('operation_success').'<script style="text/javascript">if(!parent.right){parent.location.reload(true);}ownerDialog.close();</script>', '','','edit');
 			} else {
-				showmessage(L('operation_failure'), HTTP_REFERER);
+				dr_admin_msg(0,L('operation_failure'), HTTP_REFERER);
 			}
 		} else {
 			if (!empty($data['data'])) {
@@ -206,12 +206,12 @@ class block_admin extends admin {
 		if (!empty($catid)) {
 			$CATEGORY = getcache('category_content_'.$siteid, 'commons');
 			if (!isset($CATEGORY[$catid])) {
-				showmessage(L('notfound'));
+				dr_admin_msg(0,L('notfound'));
 			}
 			$cat = $CATEGORY[$catid];
 			$cat['setting'] = string2array($cat['setting']);
 		}
-		if($cat['type']==2) showmessage(L('link_visualization_not_exists'));
+		if($cat['type']==2) dr_admin_msg(0,L('link_visualization_not_exists'));
 		$file = '';
 		$style = $cat['setting']['template_list'];
 		switch ($type) {
@@ -258,7 +258,7 @@ class block_admin extends admin {
 	public function public_view() {
 		$id = isset($_GET['id']) && intval($_GET['id']) ? intval($_GET['id']) :  exit('0');
 		if (!$data = $this->db->get_one(array('id'=>$id))) {
-			showmessage(L('nofound'));
+			dr_admin_msg(0,L('nofound'));
 		}
 		if ($data['type'] == 1) {
 			exit('<script type="text/javascript">parent.showblock('.$id.', \''.str_replace("\r\n", '', $_POST['data']).'\')</script>');
@@ -313,9 +313,9 @@ class block_admin extends admin {
 	}
 	
 	public function history_restore() {
-		$id = isset($_GET['id']) && intval($_GET['id']) ? intval($_GET['id']) :  showmessage(L('illegal_operation'), HTTP_REFERER);
+		$id = isset($_GET['id']) && intval($_GET['id']) ? intval($_GET['id']) :  dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
 		if (!$data = $this->history_db->get_one(array('id'=>$id))) {
-			showmessage(L('nofound'), HTTP_REFERER);
+			dr_admin_msg(0,L('nofound'), HTTP_REFERER);
 		}
 		$data['data'] = string2array($data['data']);
 		$this->db->update(array('data'=>new_addslashes($data['data']['data']), 'template'=>new_addslashes($data['data']['template'])), array('id'=>$data['blockid']));
@@ -323,16 +323,16 @@ class block_admin extends admin {
 			$block = pc_base::load_app_class('block_tag');
 			$block->template_url($data['blockid'], $data['data']['template']);
 		}
-		showmessage(L('operation_success'), HTTP_REFERER);
+		dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 	}
 	
 	public function history_del() {
-		$id = isset($_GET['id']) && intval($_GET['id']) ? intval($_GET['id']) :  showmessage(L('illegal_operation'), HTTP_REFERER);
+		$id = isset($_GET['id']) && intval($_GET['id']) ? intval($_GET['id']) :  dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
 		if (!$data = $this->history_db->get_one(array('id'=>$id))) {
-			showmessage(L('nofound'), HTTP_REFERER);
+			dr_admin_msg(0,L('nofound'), HTTP_REFERER);
 		}
 		$this->history_db->delete(array('id'=>$id));
-		showmessage(L('operation_success'), HTTP_REFERER);
+		dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 	}
 	
 	public function public_search_content() {
@@ -348,10 +348,10 @@ class block_admin extends admin {
 				$end_time = SYS_TIME;
 			}
 			if ($end_time < $start_time) {
-				showmessage(L('end_of_time_to_time_to_less_than'));
+				dr_admin_msg(0,L('end_of_time_to_time_to_less_than'));
 			}
 			if (!empty($end_time) && empty($start_time)) {
-				showmessage(L('please_set_the_starting_time'));
+				dr_admin_msg(0,L('please_set_the_starting_time'));
 			}
 			$sql = "`catid` = '$catid' AND `posids` = '$posids'";
 			if (!empty($start_time) && !empty($end_time)) $sql .= " AND `inputtime` BETWEEN '$start_time' AND '$end_time' ";

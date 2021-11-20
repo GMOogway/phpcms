@@ -7,7 +7,7 @@ class admin_announce extends admin {
 	private $db; public $username;
 	public function __construct() {
 		parent::__construct();
-		//if (!module_exists(ROUTE_M)) showmessage(L('module_not_exists'));
+		//if (!module_exists(ROUTE_M)) dr_admin_msg(0,L('module_not_exists'));
 		$this->input = pc_base::load_sys_class('input');
 		$this->username = param::get_cookie('admin_username');
 		$this->db = pc_base::load_model('announce_model');
@@ -35,7 +35,7 @@ class admin_announce extends admin {
 	public function add() {
 		if($this->input->post('dosubmit')) {
 			$announce = $this->check($this->input->post('announce'));
-			if($this->db->insert($announce)) showmessage(L('announcement_successful_added'), HTTP_REFERER, '', 'add');
+			if($this->db->insert($announce)) dr_admin_msg(1,L('announcement_successful_added'), HTTP_REFERER, '', 'add');
 		} else {
 			//获取站点模板信息
 			pc_base::load_app_func('global', 'admin');
@@ -58,10 +58,10 @@ class admin_announce extends admin {
 	 */
 	public function edit() {
 		$aid = intval($this->input->get('aid'));
-		if(!$aid) showmessage(L('illegal_operation'));
+		if(!$aid) dr_admin_msg(0,L('illegal_operation'));
 		if($this->input->post('dosubmit')) {
 			$announce = $this->check($this->input->post('announce'), 'edit');
-			if($this->db->update($announce, array('aid' => $aid))) showmessage(L('announced_a'), HTTP_REFERER, '', 'edit');
+			if($this->db->update($announce, array('aid' => $aid))) dr_admin_msg(1,L('announced_a'), HTTP_REFERER, '', 'edit');
 		} else {
 			$where = array('aid' => $this->input->get('aid'));
 			$an_info = $this->db->get_one($where);
@@ -106,11 +106,11 @@ class admin_announce extends admin {
 	 */
 	public function public_approval($aid = 0) {
 		if((!$this->input->post('aid') || empty($this->input->post('aid'))) && !$aid) {
-			showmessage(L('illegal_operation'));
+			dr_admin_msg(0,L('illegal_operation'));
 		} else {
 			if(is_array($this->input->post('aid')) && !$aid) {
 				array_map(array($this, 'public_approval'), $this->input->post('aid'));
-				showmessage(L('announce_passed'), HTTP_REFERER);
+				dr_admin_msg(1,L('announce_passed'), HTTP_REFERER);
 			} elseif($aid) {
 				$aid = intval($aid);
 				$this->db->update(array('passed' => $this->input->get('passed')), array('aid' => $aid));
@@ -124,11 +124,11 @@ class admin_announce extends admin {
 	 */
 	public function delete($aid = 0) {
 		if((!$this->input->post('aid') || empty($this->input->post('aid'))) && !$aid) {
-			showmessage(L('illegal_operation'));
+			dr_admin_msg(0,L('illegal_operation'));
 		} else {
 			if(is_array($this->input->post('aid')) && !$aid) {
 				array_map(array($this, 'delete'), $this->input->post('aid'));
-				showmessage(L('announce_deleted'), HTTP_REFERER);
+				dr_admin_msg(1,L('announce_deleted'), HTTP_REFERER);
 			} elseif($aid) {
 				$aid = intval($aid);
 				$this->db->delete(array('aid' => $aid));
@@ -143,15 +143,15 @@ class admin_announce extends admin {
 	 * @return 		array 		验证后的数据
 	 */
 	private function check($data = array(), $a = 'add') {
-		if($data['title']=='') showmessage(L('title_cannot_empty'));
-		if($data['content']=='') showmessage(L('announcements_cannot_be_empty'));
+		if($data['title']=='') dr_admin_msg(0,L('title_cannot_empty'));
+		if($data['content']=='') dr_admin_msg(0,L('announcements_cannot_be_empty'));
 		$r = $this->db->get_one(array('title' => $data['title']));
 		if (strtotime($data['endtime'])<strtotime($data['starttime'])) {
 			$data['endtime'] = '';
 		}
 		if ($a=='add') {
 			if (is_array($r) && !empty($r)) {
-				showmessage(L('announce_exist'), HTTP_REFERER);
+				dr_admin_msg(0,L('announce_exist'), HTTP_REFERER);
 			}
 			$data['siteid'] = $this->get_siteid();
 			$data['addtime'] = SYS_TIME;
@@ -159,7 +159,7 @@ class admin_announce extends admin {
 			if ($data['starttime'] == '') $announce['starttime'] = date('Y-m-d');
 		} else {
 			if ($r['aid'] && ($r['aid']!=$this->input->get('aid'))) {
-				showmessage(L('announce_exist'), HTTP_REFERER);
+				dr_admin_msg(0,L('announce_exist'), HTTP_REFERER);
 			}
 		}
 		return $data;

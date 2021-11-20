@@ -217,15 +217,15 @@ class database extends admin {
 	 */
 	public function public_down() {
 		if(ADMIN_FOUNDERS && !dr_in_array($this->userid, ADMIN_FOUNDERS)) {
-			showmessage(L('only_fonder_operation'));
+			dr_admin_msg(0,L('only_fonder_operation'));
 		}
 		$filename = $this->input->get('filename');
 		if (!is_file(CACHE_PATH.'bakup'.DIRECTORY_SEPARATOR.'default'.DIRECTORY_SEPARATOR.$filename)) {
-			showmessage(L('database_backup_not_exist'));
+			dr_admin_msg(0,L('database_backup_not_exist'));
 		}
 		$fileext = fileext($filename);
 		if($fileext != 'zip') {
-			showmessage(L('only_zip_down'));
+			dr_admin_msg(0,L('only_zip_down'));
 		}
 		file_down(CACHE_PATH.'bakup'.DIRECTORY_SEPARATOR.'default'.DIRECTORY_SEPARATOR.$filename);
 	}
@@ -241,7 +241,7 @@ class database extends admin {
 		$tables = is_array($tables) ? implode(',',$tables) : $tables;
 		if($tables && in_array($operation,array('repair','optimize','flush'))) {
 			$this->db->query("$operation TABLE $tables");
-			showmessage(L('operation_success'),'?m=admin&c=database&a=export&menuid='.$this->input->get('menuid'));
+			dr_admin_msg(1,L('operation_success'),'?m=admin&c=database&a=export&menuid='.$this->input->get('menuid'));
 		} elseif ($tables && $operation == 'showcreat') {
 			$this->db->query("SHOW CREATE TABLE $tables");
 			$structure = $this->db->fetch_next();
@@ -256,16 +256,16 @@ class database extends admin {
 			foreach ($this->input->post('tables') as $table) {
 				$this->db->query('ALTER TABLE `'.$table.'` DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;');
 			}
-			showmessage(L('operation_success'),'?m=admin&c=database&a=export&menuid='.$this->input->get('menuid'));
+			dr_admin_msg(1,L('operation_success'),'?m=admin&c=database&a=export&menuid='.$this->input->get('menuid'));
 		} elseif ($tables && $operation == 'jc') {
 			$data = $this->db->query("CHECK TABLE $tables");
 			if (!$data) {
-				showmessage(L('database_table'),'?m=admin&c=database&a=export&menuid='.$this->input->get('menuid'));
+				dr_admin_msg(0,L('database_table'),'?m=admin&c=database&a=export&menuid='.$this->input->get('menuid'));
 			} else {
-				showmessage(L('operation_success'),'?m=admin&c=database&a=export&menuid='.$this->input->get('menuid'));
+				dr_admin_msg(1,L('operation_success'),'?m=admin&c=database&a=export&menuid='.$this->input->get('menuid'));
 			}
 		} else {
-			showmessage(L('select_tbl'),'?m=admin&c=database&a=export&menuid='.$this->input->get('menuid'));
+			dr_admin_msg(0,L('select_tbl'),'?m=admin&c=database&a=export&menuid='.$this->input->get('menuid'));
 		}
 	}
 	/**

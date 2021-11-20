@@ -24,7 +24,7 @@ class poster extends admin {
 	public function init() {
 		$spaceid = $this->input->get('spaceid') ? intval($this->input->get('spaceid')) : 0;
 		if (!isset($spaceid) || empty($spaceid)) {
-			showmessage(L('illegal_action'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_action'), HTTP_REFERER);
 		}
 		$page = max($this->input->get('page'), 1);
 		$infos = $this->db->listinfo(array('spaceid'=>$spaceid, 'siteid'=>$this->get_siteid()), '`listorder` ASC, `id` DESC', $page);
@@ -58,9 +58,9 @@ class poster extends admin {
 					$this->attachment_db = pc_base::load_model('attachment_model');
 					$this->attachment_db->api_update($imgs, 'poster-'.$id, 1);
 				}
-				showmessage(L('add_ads_success'), SELF.'?m=poster&c=space&a=init');
+				dr_admin_msg(1,L('add_ads_success'), SELF.'?m=poster&c=space&a=init');
 			} else {
-				showmessage(L('operation_failure'), SELF.'?m=poster&c=space&a=init');
+				dr_admin_msg(0,L('operation_failure'), SELF.'?m=poster&c=space&a=init');
 			}
 		} else {
 			$spaceid = intval($this->input->get('spaceid'));
@@ -78,7 +78,7 @@ class poster extends admin {
 	 * 广告修改
 	 */
 	public function edit() {
-		if (!intval($this->input->get('id'))) showmessage(L('illegal_action'), HTTP_REFERER);
+		if (!intval($this->input->get('id'))) dr_admin_msg(0,L('illegal_action'), HTTP_REFERER);
 		if ($this->input->post('dosubmit')) {
 			$poster = $this->check($this->input->post('poster'));
 			$setting = $this->check_setting($this->input->post('setting'), $poster['type']);
@@ -92,7 +92,7 @@ class poster extends admin {
 				$this->attachment_db = pc_base::load_model('attachment_model');
 				$this->attachment_db->api_update($imgs, 'poster-'.$this->input->get('id'), 1);
 			}
-			showmessage(L('edit_ads_success'), SELF.'?m=poster&c=poster&a=init&spaceid='.$this->input->get('spaceid'));
+			dr_admin_msg(1,L('edit_ads_success'), SELF.'?m=poster&c=poster&a=init&spaceid='.$this->input->get('spaceid'));
 		} else {
 			
 			$info = $this->db->get_one(array('id'=>$this->input->get('id'), 'siteid'=>$this->get_siteid()));
@@ -120,7 +120,7 @@ class poster extends admin {
 				$this->db->update(array('listorder'=>$v), array('id'=>$k));
 			}
 		}
-		showmessage(L('operation_success'), HTTP_REFERER);
+		dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 	}
 	
 	/**
@@ -141,14 +141,14 @@ class poster extends admin {
 	 */
 	public function public_approval() {
 		if (!$this->input->post('id') || !is_array($this->input->post('id'))) {
-			showmessage(L('illegal_parameters'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		} else {
 			$ids = $this->input->post('id');
 			foreach($ids as $id) {
 				$this->_approval($id);
 			}
 		}
-		showmessage(L('operation_success'), HTTP_REFERER);
+		dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 	}
 	
 	private function _approval($id = 0) {
@@ -164,14 +164,14 @@ class poster extends admin {
 	 */
 	public function delete() {
 		if (!$this->input->post('id') || !is_array($this->input->post('id'))) {
-			showmessage(L('illegal_parameters'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		} else {
 			$ids = $this->input->post('id');
 			foreach($ids as $id) {
 				$this->_del($id);
 			}
 		}
-		showmessage(L('operation_success'), HTTP_REFERER);
+		dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 	}
 	
 	/***
@@ -195,7 +195,7 @@ class poster extends admin {
 	 * 广告统计
 	 */
 	public function stat() {
-		if (!$this->input->get('id')) showmessage(L('illegal_operation'));
+		if (!$this->input->get('id')) dr_admin_msg(0,L('illegal_operation'));
 		$info = $this->db->get_one(array('id'=>intval($this->input->get('id'))), 'spaceid');
 		/** 
 		 *如果设置了日期查询，设置查询的开始时间和结束时间
@@ -309,8 +309,8 @@ class poster extends admin {
 	 * return array
 	 */
 	private function check($data) {
-		if (!isset($data['name']) || empty($data['name'])) showmessage(L('adsname_no_empty'), HTTP_REFERER);
-		if (!isset($data['type']) || empty($data['type'])) showmessage(L('no_ads_type'), HTTP_REFERER);
+		if (!isset($data['name']) || empty($data['name'])) dr_admin_msg(0,L('adsname_no_empty'), HTTP_REFERER);
+		if (!isset($data['type']) || empty($data['type'])) dr_admin_msg(0,L('no_ads_type'), HTTP_REFERER);
 		$data['startdate'] = $data['startdate'] ? strtotime($data['startdate']) : SYS_TIME;
 		$data['enddate'] = $data['enddate'] ? strtotime($data['enddate']) : strtotime('next month', $data['startdate']);
 		if($data['startdate']>=$data['enddate']) $data['enddate'] = strtotime('next month', $data['startdate']);
@@ -336,7 +336,7 @@ class poster extends admin {
 						if (!$s['imageurl']) unset($setting['images'][$k]);
 						else $tag = 1;
 					}
-					if (!$tag) showmessage(L('no_setting_photo'), HTTP_REFERER);
+					if (!$tag) dr_admin_msg(0,L('no_setting_photo'), HTTP_REFERER);
 				}
 				break;
 				
@@ -348,14 +348,14 @@ class poster extends admin {
 						if (!$s['flashurl']) unset($setting['flash'][$k]);
 						else $tag = 1;
 					}
-					if (!$tag) showmessage(L('no_flash_path'), HTTP_REFERER);
+					if (!$tag) dr_admin_msg(0,L('no_flash_path'), HTTP_REFERER);
 				}
 				break;
 			
 			case 'text':
 				unset($setting['images'], $setting['flash']);
 				if ((!isset($setting['text'][1]['title']) || empty($setting['text'][1]['title'])) && (!isset($setting['text']['code']) || empty($setting['text']['code']))) {
-					showmessage(L('no_title_info'), HTTP_REFERER);
+					dr_admin_msg(0,L('no_title_info'), HTTP_REFERER);
 				}
 				break;
 		}

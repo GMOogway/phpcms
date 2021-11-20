@@ -97,7 +97,7 @@ class plugin extends admin {
 			if(file_exists($filename)) {
 				@include_once $filename;
 			} else {
-				showmessage(L('plugin_lacks_uninstall_file','','plugin'),HTTP_REFERER);
+				dr_admin_msg(0,L('plugin_lacks_uninstall_file','','plugin'),HTTP_REFERER);
 			}
 			if($op_status) {
 				$this->db->delete(array('pluginid'=>$pluginid));
@@ -108,12 +108,12 @@ class plugin extends admin {
 				if($plugin_data['plugin']['iframe']) {
 					pc_base::load_sys_func('dir');
 					if(!dir_delete(PC_PATH.'plugin'.DIRECTORY_SEPARATOR.$dir)) {
-						showmessage(L('plugin_uninstall_success_no_delete','','plugin'),'?m=admin&c=plugin');
+						dr_admin_msg(0,L('plugin_uninstall_success_no_delete','','plugin'),'?m=admin&c=plugin');
 					}
 				}
-				showmessage(L('plugin_uninstall_success','','plugin'),'?m=admin&c=plugin');
+				dr_admin_msg(1,L('plugin_uninstall_success','','plugin'),'?m=admin&c=plugin');
 			} else {
-				showmessage(L('plugin_uninstall_fail','','plugin'),'?m=admin&c=plugin');
+				dr_admin_msg(0,L('plugin_uninstall_fail','','plugin'),'?m=admin&c=plugin');
 			}	
 		} else {
 			$show_header = 0;
@@ -134,33 +134,33 @@ class plugin extends admin {
 		if(file_exists($config_file)) {
 			$plugin_data = @require($config_file);
 		} else {
-			showmessage(L('plugin_config_not_exist','','plugin'));
+			dr_admin_msg(0,L('plugin_config_not_exist','','plugin'));
 		}
 		$app_status  = app_validity_check($plugin_data['appid']);
 		if($app_status != 2){
 			$app_msg = $app_status == '' ? L('plugin_not_exist_or_pending','','plugin') : ($app_status == 0 || $app_status == 1 ? L('plugin_developing','','plugin') : L('plugin_be_locked','','plugin'));
-			showmessage($app_msg);
+			dr_admin_msg(0,$app_msg);
 		}
 		if($plugin_data['version'] && $plugin_data['version']!=pc_base::load_config('version', 'pc_version')) {
-			showmessage(L('plugin_incompatible','','plugin'));
+			dr_admin_msg(0,L('plugin_incompatible','','plugin'));
 		}
 		
 		if($plugin_data['dir'] == '' || $plugin_data['identification'] == '' || $plugin_data['identification']!=$plugin_data['dir']) {
-			showmessage(L('plugin_lack_of_necessary_configuration_items','','plugin'));
+			dr_admin_msg(0,L('plugin_lack_of_necessary_configuration_items','','plugin'));
 		}
 		
 		if(!pluginkey_check($plugin_data['identification'])) {
-			showmessage(L('plugin_illegal_id','','plugin'));
+			dr_admin_msg(0,L('plugin_illegal_id','','plugin'));
 		}
 		if(is_array($plugin_data['plugin_var'])) {
 			foreach($plugin_data['plugin_var'] as $config) {
 				if(!pluginkey_check($config['fieldname'])) {
-					showmessage(L('plugin_illegal_variable','','plugin'));
+					dr_admin_msg(0,L('plugin_illegal_variable','','plugin'));
 				}
 			}
 		}
 		if($this->db->get_one(array('identification'=>$plugin_data['identification']))) {
-			showmessage(L('plugin_duplication_name','','plugin'));
+			dr_admin_msg(0,L('plugin_duplication_name','','plugin'));
 		};				
 		$filename = PC_PATH.'plugin'.DIRECTORY_SEPARATOR.$dir.DIRECTORY_SEPARATOR.$plugin_data['plugin']['installfile'];
 		
@@ -191,9 +191,9 @@ class plugin extends admin {
 			plugin_install_stat($plugin_data['appid']);
 			setcache($plugin_data['identification'], $plugin,'plugins');
 			$this->set_var_cache($pluginid);
-			showmessage(L('plugin_install_success','','plugin'),'?m=admin&c=plugin');
+			dr_admin_msg(1,L('plugin_install_success','','plugin'),'?m=admin&c=plugin');
 		} else {
-			showmessage(L('plugin_install_fail','','plugin'),'?m=admin&c=plugin');
+			dr_admin_msg(0,L('plugin_install_fail','','plugin'),'?m=admin&c=plugin');
 		}
 	}	
 	
@@ -215,9 +215,9 @@ class plugin extends admin {
 				}
 			}
 			$this->set_hook_cache();
-			showmessage(L('operation_success'),'?m=admin&c=plugin');
+			dr_admin_msg(1,L('operation_success'),'?m=admin&c=plugin');
 		} else {
-			showmessage(L('operation_failure'),'?m=admin&c=plugin');
+			dr_admin_msg(0,L('operation_failure'),'?m=admin&c=plugin');
 		}
 	}
 	
@@ -290,7 +290,7 @@ class plugin extends admin {
 		if($appname) {
 			include $this->admin_tpl('plugin_appcenter_detail');
 		} else {
-			showmessage(L('plugin_not_exist_or_pending','','plugin'));
+			dr_admin_msg(0,L('plugin_not_exist_or_pending','','plugin'));
 		}
 	}
 	
@@ -308,7 +308,7 @@ class plugin extends admin {
 			$appdirname = PC_PATH.'plugin'.DIRECTORY_SEPARATOR.$data['appenname'];
 			if(!file_exists($appdirname)) {
 				if(!mkdir($appdirname)) {
-					showmessage(L('plugin_mkdir_fail', '', 'plugin'));
+					dr_admin_msg(0,L('plugin_mkdir_fail', '', 'plugin'));
 				} else {
 					//创建安装、配置文件
 					$installdata = <<<EOF
@@ -344,19 +344,19 @@ EOF;
 					
 					//检查配置文件是否写入成功
 					if($installres*$uninstallres*$cfgres > 0) {
-						showmessage(L('plugin_configure_success', '', 'plugin'), 'index.php?m=admin&c=plugin&a=import&dir='.$data['appenname']);
+						dr_admin_msg(1,L('plugin_configure_success', '', 'plugin'), 'index.php?m=admin&c=plugin&a=import&dir='.$data['appenname']);
 					} else {
-						showmessage(L('plugin_install_fail', '', 'plugin'));
+						dr_admin_msg(0,L('plugin_install_fail', '', 'plugin'));
 					}
 				}
 			} else {
-				showmessage(L('plugin_allready_exists', '', 'plugin'));
+				dr_admin_msg(0,L('plugin_allready_exists', '', 'plugin'));
 			}
 		} else {	
 			//远程压缩包地址
 			$upgradezip_url = $data['downurl'];
 			if(empty($upgradezip_url)) {
-				showmessage(L('download_fail', '', 'plugin'), 'index.php?m=admin&c=plugin&a=appcenter');
+				dr_admin_msg(0,L('download_fail', '', 'plugin'), 'index.php?m=admin&c=plugin&a=appcenter');
 			}
 			
 			//创建缓存文件夹
@@ -396,9 +396,9 @@ EOF;
 			$this->deletedir($copy_from);
 			//检查文件操作权限，是否复制成功
 			if($this->copyfailnum > 0) {
-				showmessage(L('download_fail', '', 'plugin'), 'index.php?m=admin&c=plugin&a=appcenter');	
+				dr_admin_msg(0,L('download_fail', '', 'plugin'), 'index.php?m=admin&c=plugin&a=appcenter');	
 			} else {
-				showmessage(L('download_success', '', 'plugin'), 'index.php?m=admin&c=plugin&a=import&dir='.$appdirname);	
+				dr_admin_msg(1,L('download_success', '', 'plugin'), 'index.php?m=admin&c=plugin&a=import&dir='.$appdirname);	
 			}
 		}
 	}
@@ -425,7 +425,7 @@ EOF;
 				 $this->db_var->update(array('value'=>$_v),array('pluginid'=>$pluginid,'fieldname'=>$_k));
 			}
 			$this->set_var_cache($pluginid);
-			showmessage(L('operation_success'),HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'),HTTP_REFERER);
 		} else {
 			$pluginid = intval($this->input->get('pluginid'));
 			$plugin_menus = array();
@@ -469,7 +469,7 @@ EOF;
 		$pluginid = intval($this->input->get('pluginid'));
 		$this->db->update(array('disable'=>$disable),array('pluginid'=>$pluginid));
 		$this->set_cache($pluginid);
-		showmessage(L('operation_success'),HTTP_REFERER);
+		dr_admin_msg(1,L('operation_success'),HTTP_REFERER);
 	}
 	
 	/**

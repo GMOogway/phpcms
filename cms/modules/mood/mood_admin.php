@@ -85,7 +85,7 @@ class mood_admin extends admin {
 			}
 			$mood_program[$this->get_siteid()] = $data;
 			setcache('mood_program', $mood_program, 'commons');
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		} else {
 			$mood_program = isset($mood_program[$this->get_siteid()]) ? $mood_program[$this->get_siteid()] : array();
 			include $this->admin_tpl('mood_setting');

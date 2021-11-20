@@ -18,7 +18,7 @@ class admin {
 		self::check_admin();
 		self::check_priv();
 		pc_base::load_app_func('global','admin');
-		if (!module_exists(ROUTE_M)) showmessage(L('module_not_exists'));
+		if (!module_exists(ROUTE_M)) dr_admin_msg(0,L('module_not_exists'));
 		self::manage_log();
 		self::check_ip();
 		self::lock_screen();
@@ -49,7 +49,7 @@ class admin {
 				$cache->clear(COOKIE_PRE.ip().'pc_hash');
 				redirect('?m=admin&c=index&a='.SYS_ADMIN_PATH);
 			}
-			if(!isset($_SESSION['userid']) || !isset($_SESSION['roleid']) || !$_SESSION['userid'] || !$_SESSION['roleid'] || $userid != $_SESSION['userid']) showmessage(L('admin_login'),'?m=admin&c=index&a='.SYS_ADMIN_PATH);
+			if(!isset($_SESSION['userid']) || !isset($_SESSION['roleid']) || !$_SESSION['userid'] || !$_SESSION['roleid'] || $userid != $_SESSION['userid']) dr_admin_msg(0,L('admin_login'),'?m=admin&c=index&a='.SYS_ADMIN_PATH);
 		}
 	}
 
@@ -206,12 +206,6 @@ class admin {
 		$siteid = explode(',',$sites->get_role_siteid($_SESSION['roleid']));
 		return current($siteid);
 	}
-	
-	final public static function return_siteid_login() {
-		$sites = pc_base::load_app_class('sites', 'admin');
-		$siteid = explode(',',$sites->get_role_siteid_login($_SESSION['roleid']));
-		return current($siteid);
-	}
 	/**
 	 * 权限判断
 	 */
@@ -226,7 +220,7 @@ class admin {
 			$action = $_match[1];
 		}
 		$r =$privdb->get_one(array('m'=>ROUTE_M,'c'=>ROUTE_C,'a'=>$action,'roleid'=>$_SESSION['roleid'],'siteid'=>$siteid));
-		if(!$r) showmessage('您没有权限操作该项','blank');
+		if(!$r) dr_admin_msg(0,'您没有权限操作该项');
 	}
 
 	/**
@@ -321,7 +315,7 @@ class admin {
 	private function lock_screen() {
 		if(isset($_SESSION['lock_screen']) && $_SESSION['lock_screen']==1) {
 			if(preg_match('/^public_/', ROUTE_A) || (ROUTE_M == 'content' && ROUTE_C == 'create_html') || (ROUTE_M == 'release') || (ROUTE_A == SYS_ADMIN_PATH) || (ROUTE_M == 'search' && ROUTE_C == 'search_admin' && ROUTE_A=='createindex')) return true;
-			showmessage(L('admin_login'),'?m=admin&c=index&a='.SYS_ADMIN_PATH);
+			dr_admin_msg(0,L('admin_login'),'?m=admin&c=index&a='.SYS_ADMIN_PATH);
 		}
 	}
 
@@ -338,7 +332,7 @@ class admin {
 		} elseif($input->post('pc_hash') && dr_get_csrf_token() != '' && (dr_get_csrf_token() == $input->post('pc_hash'))) {
 			return true;
 		} else {
-			showmessage(L('hash_check_false'),HTTP_REFERER);
+			dr_admin_msg(0,L('hash_check_false'),HTTP_REFERER);
 		}
 	}
 
@@ -392,7 +386,7 @@ class admin {
 					if (ROUTE_M =='admin' && in_array(ROUTE_C, array('index','admin_manage')) && in_array(ROUTE_A, array(SYS_ADMIN_PATH,'public_edit_pwd','public_password_ajx'))) {
 						return true; // 本身控制器不判断
 					}
-					showmessage(L('首次登录需要强制修改密码'), '?m=admin&c=admin_manage&a=public_edit_pwd');
+					dr_admin_msg(0,L('首次登录需要强制修改密码'), '?m=admin&c=admin_manage&a=public_edit_pwd');
 				}
 				// 判断定期修改密码
 				if (isset($config['pwd_is_edit']) && $config['pwd_is_edit']
@@ -405,7 +399,7 @@ class admin {
 							if (ROUTE_M =='admin' && in_array(ROUTE_C, array('index','admin_manage')) && in_array(ROUTE_A, array(SYS_ADMIN_PATH,'public_edit_pwd','public_password_ajx'))) {
 								return true; // 本身控制器不判断
 							}
-							showmessage(L('您需要定期修改密码'), '?m=admin&c=admin_manage&a=public_edit_pwd');
+							dr_admin_msg(0,L('您需要定期修改密码'), '?m=admin&c=admin_manage&a=public_edit_pwd');
 						}
 					}
 				}
@@ -422,7 +416,7 @@ class admin {
 						// 长时间不动作退出
 						$admin_db->update(array('login_attr'=>rand(0, 99999)), array('userid'=>$log['uid']));
 						$cache->del_auth_data('admin_option_'.$userid);
-						showmessage(L('长时间（'.ceil($ctime/60).'分钟）未操作，当前账号自动退出'),'?m=admin&c=index&a=public_logout');
+						dr_admin_msg(0,L('长时间（'.ceil($ctime/60).'分钟）未操作，当前账号自动退出'),'?m=admin&c=index&a=public_logout');
 					}
 					$cache->set_auth_data('admin_option_'.$userid, SYS_TIME);
 				}

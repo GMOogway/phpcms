@@ -7,7 +7,7 @@ pc_base::load_app_func('global');
 class payment extends admin {
 	private $db, $account_db, $member_db;
 	function __construct() {
-		if (!module_exists(ROUTE_M)) showmessage(L('module_not_exists')); 
+		if (!module_exists(ROUTE_M)) dr_admin_msg(0,L('module_not_exists')); 
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
 		$this->db = pc_base::load_model('pay_payment_model');
@@ -53,7 +53,7 @@ class payment extends admin {
 			$info['version'] = $infos['version'];
 			$this->db->insert($info);
 			if($this->db->insert_id()){
-				showmessage(L('operation_success'), '', '', 'add');
+				dr_admin_msg(1,L('operation_success'), '', '', 'add');
 			}		
 		} else {
 			$infos = $this->method->get_payment($_GET['code']);
@@ -89,7 +89,7 @@ class payment extends admin {
 			$info['website'] = $infos['website'];
 			$info['version'] = $infos['version'];
 			$infos = $this->db->update($info,array('pay_id'=>$info['pay_id']));
-			showmessage(L('edit').L('succ'), '', '', 'edit');						
+			dr_admin_msg(1,L('edit').L('succ'), '', '', 'edit');						
 		} else {
 			$pay_id = intval($_GET['id']);
 			$infos = $this->db->get_one(array('pay_id'=>$pay_id));
@@ -107,7 +107,7 @@ class payment extends admin {
 	public function delete() {
 		$pay_id = intval($_GET['id']);
 		$this->db->delete(array('pay_id'=>$pay_id));
-		showmessage(L('delete_succ'),'?m=pay&c=payment');
+		dr_admin_msg(1,L('delete_succ'),'?m=pay&c=payment');
 	}
 	
 	/**
@@ -196,7 +196,7 @@ class payment extends admin {
 			$discount = floatval($_POST['discount']);
 			$id = intval($_POST['id']);
 			$infos = $this->account_db->update(array('discount'=>$discount),array('id'=>$id));
-			showmessage(L('public_discount_succ'), '', '', 'discount');			
+			dr_admin_msg(1,L('public_discount_succ'), '', '', 'discount');			
 		} else {
 			$show_header = true;
 			$show_validator = true;
@@ -213,8 +213,8 @@ class payment extends admin {
 	 */
 	public function modify_deposit() {
 		if(isset($_POST['dosubmit'])) {
-			$username = isset($_POST['username']) && trim($_POST['username']) ? trim($_POST['username']) : showmessage(L('username').L('error'));
-			$usernote = isset($_POST['usernote']) && trim($_POST['usernote']) ? addslashes(trim($_POST['usernote'])) : showmessage(L('usernote').L('error'));	
+			$username = isset($_POST['username']) && trim($_POST['username']) ? trim($_POST['username']) : dr_admin_msg(0,L('username').L('error'));
+			$usernote = isset($_POST['usernote']) && trim($_POST['usernote']) ? addslashes(trim($_POST['usernote'])) : dr_admin_msg(0,L('usernote').L('error'));	
 			$userinfo = $this->get_useid($username);
 			if($userinfo) {	
 				//如果增加金钱或点数，想pay_account 中记录数据
@@ -239,7 +239,7 @@ class payment extends admin {
 					$msg = L('account_changes_notice_tips',array('username'=>$username,'time'=>date('Y-m-d H:i:s',SYS_TIME),'op'=>$op,'note'=>$usernote,'amount'=>$userinfo['amount'],'point'=>$userinfo['point']));
 					sendmail($userinfo['email'],L('send_account_changes_notice'),$msg);
 				}
-				showmessage(L('public_discount_succ'),HTTP_REFERER);	
+				dr_admin_msg(1,L('public_discount_succ'),HTTP_REFERER);	
 			}
 		} else {
 			$show_validator = true;
@@ -254,7 +254,7 @@ class payment extends admin {
 	public function pay_del() {
 		$id = intval($_GET['id']);
 		$this->account_db->delete(array('id'=>$id));
-		showmessage(L('delete_succ'),'?m=pay&c=payment&a=pay_list&menuid='.$_GET['menuid']);
+		dr_admin_msg(1,L('delete_succ'),'?m=pay&c=payment&a=pay_list&menuid='.$_GET['menuid']);
 	}
 	
 	/*
@@ -263,7 +263,7 @@ class payment extends admin {
 	public function pay_cancel() {
 		$id = intval($_GET['id']);
 		$this->account_db->update(array('status'=>'cancel'),array('id'=>$id));
-		showmessage(L('state_change_succ'),HTTP_REFERER);
+		dr_admin_msg(1,L('state_change_succ'),HTTP_REFERER);
 	}
 	/*
 	 * 支付详情
@@ -283,7 +283,7 @@ class payment extends admin {
 		$amount = $userinfo['amount'] + $infos['money'];
 		$this->account_db->update(array('status'=>'succ','adminnote'=>param::get_cookie('admin_username')),array('id'=>$id));
 		$this->member_db->update(array('amount'=>$amount),array('userid'=>$infos['userid']));
-		showmessage(L('check_passed'),'?m=pay&c=payment&a=pay_list');
+		dr_admin_msg(1,L('check_passed'),'?m=pay&c=payment&a=pay_list');
 	}
 		
 	private function get_useid($username) {

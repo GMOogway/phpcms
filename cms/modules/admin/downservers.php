@@ -16,12 +16,12 @@ class downservers extends admin {
 			$info['siteurl'] = trim($this->input->post('info')['siteurl']);
 			$info['sitename'] = trim($this->input->post('info')['sitename']);
 			$info['siteid'] = intval($this->input->post('info')['siteid']);
-			if(empty($info['sitename'])) showmessage(L('downserver_not_empty'), HTTP_REFERER);	
-			if(empty($info['siteurl']) || !preg_match('/(\w+):\/\/(.+)[^\/]$/i', $info['siteurl'])) showmessage(L('downserver_error'), HTTP_REFERER);
+			if(empty($info['sitename'])) dr_admin_msg(0,L('downserver_not_empty'), HTTP_REFERER);	
+			if(empty($info['siteurl']) || !preg_match('/(\w+):\/\/(.+)[^\/]$/i', $info['siteurl'])) dr_admin_msg(0,L('downserver_error'), HTTP_REFERER);
 			$insert_id = $this->db->insert($info,true);
 			if($insert_id){
 				$this->_set_cache();
-				showmessage(L('operation_success'), HTTP_REFERER);
+				dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 			}
 		} else {
 			$infos =  $sitelist = array();
@@ -47,12 +47,12 @@ class downservers extends admin {
 			$info['siteurl'] = trim($this->input->post('info')['siteurl']);
 			$info['sitename'] = trim($this->input->post('info')['sitename']);
 			$info['siteid'] = intval($this->input->post('info')['siteid']);
-			if(empty($info['sitename'])) showmessage(L('downserver_not_empty'), HTTP_REFERER);	
-			if(empty($info['siteurl']) || !preg_match('/(\w+):\/\/(.+)[^\/]$/i', $info['siteurl'])) showmessage(L('downserver_error'), HTTP_REFERER);
+			if(empty($info['sitename'])) dr_admin_msg(0,L('downserver_not_empty'), HTTP_REFERER);	
+			if(empty($info['siteurl']) || !preg_match('/(\w+):\/\/(.+)[^\/]$/i', $info['siteurl'])) dr_admin_msg(0,L('downserver_error'), HTTP_REFERER);
 			$id = intval(trim($this->input->post('id')));
 			$this->_set_cache();
 			$this->db->update($info,array('id'=>$id));
-			showmessage(L('operation_success'), '', '', 'edit');
+			dr_admin_msg(1,L('operation_success'), '', '', 'edit');
 		} else {
 			$info =  $sitelist = array();
 			$default = '';
@@ -77,7 +77,7 @@ class downservers extends admin {
 		$id = intval($this->input->get('id'));
 		$this->db->delete(array('id'=>$id));
 		$this->_set_cache();
-		showmessage(L('downserver_del_success'), HTTP_REFERER);
+		dr_admin_msg(1,L('downserver_del_success'), HTTP_REFERER);
 	}	
 	
 	/**
@@ -90,9 +90,9 @@ class downservers extends admin {
 					$this->db->update(array('listorder'=>$listorder),array('id'=>$id));
 				}
 			}
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		} else {
-			showmessage(L('operation_failure'), HTTP_REFERER);
+			dr_admin_msg(0,L('operation_failure'), HTTP_REFERER);
 		}
 	}	
 	

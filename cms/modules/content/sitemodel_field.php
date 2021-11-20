@@ -47,7 +47,7 @@ class sitemodel_field extends admin {
 			$field = $info['field'];
 			$where = 'modelid='.$modelid.' AND field=\''.$field.'\' AND siteid='.$this->siteid.'';
 			$model_field = $this->db->get_one($where);
-			if ($model_field) showmessage(L('fieldname').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
+			if ($model_field) dr_admin_msg(0,L('fieldname').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
 			$minlength = $info['minlength'] ? $info['minlength'] : 0;
 			$maxlength = $info['maxlength'] ? $info['maxlength'] : 0;
 			$field_type = $info['formtype'];
@@ -65,7 +65,7 @@ class sitemodel_field extends admin {
 			$info['unsetroleids'] = $this->input->post('unsetroleids') ? implode(',',$this->input->post('unsetroleids')) : '';
 			$this->db->insert($info);
 			$this->cache_field($modelid);
-			showmessage(L('add_success'),'?m=content&c=sitemodel_field&a=init&modelid='.$modelid.'&menuid='.$this->input->get('menuid'));
+			dr_admin_msg(1,L('add_success'),'?m=content&c=sitemodel_field&a=init&modelid='.$modelid.'&menuid='.$this->input->get('menuid'));
 		} else {
 			$show_header = $show_validator = $show_dialog = '';
 			pc_base::load_sys_class('form','',0);
@@ -130,7 +130,7 @@ class sitemodel_field extends admin {
 				$where .= ' AND fieldid<>'.$fieldid;
 			}
 			$model_field = $this->db->get_one($where);
-			if ($model_field) showmessage(L('fieldname').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
+			if ($model_field) dr_admin_msg(0,L('fieldname').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
 			
 			require MODEL_PATH.$field_type.DIRECTORY_SEPARATOR.'config.inc.php';
 			
@@ -146,7 +146,7 @@ class sitemodel_field extends admin {
 			$info['unsetroleids'] = $this->input->post('unsetroleids') ? implode(',',$this->input->post('unsetroleids')) : '';
 			$this->db->update($info,array('fieldid'=>$fieldid,'siteid'=>$this->siteid));
 			$this->cache_field($modelid);
-			showmessage(L('update_success'),'?m=content&c=sitemodel_field&a=init&modelid='.$modelid.'&menuid='.$this->input->get('menuid'));
+			dr_admin_msg(1,L('update_success'),'?m=content&c=sitemodel_field&a=init&modelid='.$modelid.'&menuid='.$this->input->get('menuid'));
 		} else {
 			$show_header = $show_validator = $show_dialog = '';
 			pc_base::load_sys_class('form','',0);
@@ -183,7 +183,7 @@ class sitemodel_field extends admin {
 		$this->db->update(array('disabled'=>$disabled),array('fieldid'=>$fieldid,'siteid'=>$this->siteid));
 		$modelid = $this->input->get('modelid');
 		$this->cache_field($modelid);
-		showmessage(L('operation_success'),HTTP_REFERER);
+		dr_admin_msg(1,L('operation_success'),HTTP_REFERER);
 	}
 	public function delete() {
 		$fieldid = intval($this->input->get('fieldid'));
@@ -204,7 +204,7 @@ class sitemodel_field extends admin {
 			$tablename = 'site';
 		}
 		$this->db->drop_field($tablename,$r['field']);
-		showmessage(L('operation_success'),HTTP_REFERER);
+		dr_admin_msg(1,L('operation_success'),HTTP_REFERER);
 	}
 	/**
 	 * 排序
@@ -216,9 +216,9 @@ class sitemodel_field extends admin {
 					$this->db->update(array('listorder'=>$listorder),array('fieldid'=>$id));
 				}
 			}
-			showmessage(L('operation_success'),HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'),HTTP_REFERER);
 		} else {
-			showmessage(L('operation_failure'));
+			dr_admin_msg(0,L('operation_failure'));
 		}
 	}
 	/**

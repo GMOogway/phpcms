@@ -56,7 +56,7 @@ class cache_all extends admin {
 			}
 		}
 		$this->cache2database();
-		if ($this->input->get('is_ajax')) {
+		if ($this->input->get('is_ajax') || IS_AJAX) {
 			dr_json(1, L('全站缓存更新完成'));
 		} else {
 			showmessage(L('全站缓存更新完成'), 'close');

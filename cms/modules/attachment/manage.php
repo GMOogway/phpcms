@@ -108,7 +108,7 @@ class manage extends admin {
 		$tmpdirs = explode('/',$tmpdir);
 		$tmpdir = CMS_PATH.$tmpdirs[0].'/';
 		if($tmpdir!=SYS_UPLOAD_PATH) {
-			showmessage(L('illegal_operation'));
+			dr_admin_msg(0,L('illegal_operation'));
 		}
 		$file = CMS_PATH.$dir.DIRECTORY_SEPARATOR.$filename;
 		$file = str_replace(array('/','\\'), DIRECTORY_SEPARATOR, $file);

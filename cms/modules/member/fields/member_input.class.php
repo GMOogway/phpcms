@@ -36,15 +36,15 @@ class member_input {
 				$errortips = $this->fields[$field]['errortips'];
 				if(empty($errortips)) $errortips = "$name 不符合要求！";
 				$length = empty($value) ? 0 : mb_strlen($value);
-				if($minlength && $length < $minlength && !$isimport) showmessage("$name 不得少于 $minlength 个字符！");
-				if (!array_key_exists($field, $this->fields)) showmessage('模型中不存在'.$field.'字段');
+				if($minlength && $length < $minlength && !$isimport) dr_admin_msg(0, "$name 不得少于 $minlength 个字符！");
+				if (!array_key_exists($field, $this->fields)) dr_admin_msg(0, '模型中不存在'.$field.'字段');
 				if($maxlength && $length > $maxlength && !$isimport) {
-					showmessage("$name 不得超过 $maxlength 个字符！");
+					dr_admin_msg(0, "$name 不得超过 $maxlength 个字符！");
 				} else {
 					str_cut($value, $maxlength);
 				}
-				if($pattern && $length && !preg_match($pattern, $value) && !$isimport) showmessage($errortips);
-	            if($this->fields[$field]['isunique'] && $this->db->get_one(array($field=>$value),$field) && ROUTE_A != 'edit') showmessage("$name 的值不得重复！");
+				if($pattern && $length && !preg_match($pattern, $value) && !$isimport) dr_admin_msg(0, $errortips);
+	            if($this->fields[$field]['isunique'] && $this->db->get_one(array($field=>$value),$field) && ROUTE_A != 'edit') dr_admin_msg(0, "$name 的值不得重复！");
 				$func = $this->fields[$field]['formtype'];
 				if(method_exists($this, $func)) $value = $this->$func($field, $value);
 	

@@ -135,13 +135,13 @@ class index extends admin {
 			$this -> db_tablepre = $database[$pdo_name]['tablepre'];
 			$this -> db = db_factory :: get_instance($database) -> get_database($pdo_name);
 			if (!strlen($this->input->post('search_rule'))) {
-				showmessage(L('select_where'), HTTP_REFERER);
+				dr_admin_msg(0,L('select_where'), HTTP_REFERER);
 			} 
 			if (!$this->input->post('db_table') || !preg_match('/^[\w]+$/', $this->input->post('db_table'))) {
-				showmessage(L('select_table'), HTTP_REFERER);
+				dr_admin_msg(0,L('select_table'), HTTP_REFERER);
 			} 
 			if (!$this->input->post('db_field') || !preg_match('/^[\w]+$/', $this->input->post('db_field'))) {
-				showmessage(L('select_field'), HTTP_REFERER);
+				dr_admin_msg(0,L('select_field'), HTTP_REFERER);
 			} 
 			if ($this->input->post('sql_where')) {
 				$_sql = ' AND ' . new_stripslashes($this->input->post('sql_where'));
@@ -153,17 +153,17 @@ class index extends admin {
 
 				$handle = $this -> _sql_execute($sql);
 				if ($handle) {
-					showmessage(L('replace_success'), HTTP_REFERER);
+					dr_admin_msg(1,L('replace_success'), HTTP_REFERER);
 				} else {
-					showmessage(L('replace_failure'), HTTP_REFERER);
+					dr_admin_msg(0,L('replace_failure'), HTTP_REFERER);
 				} 
 			} else {
 				if (!$this->input->post('db_pr_field') || !preg_match('/^[\w]+$/', $this->input->post('db_pr_field'))) {
-					showmessage(L('select_pr_field'), HTTP_REFERER);
+					dr_admin_msg(0,L('select_pr_field'), HTTP_REFERER);
 				} 
 				$ck_pr = $this -> db -> get_primary($this->input->post('db_table'));
 				if ($ck_pr && $ck_pr != $this->input->post('db_pr_field')) {
-					showmessage(L('select_is_fieldfield') . $ck_pr . L('pleasereselect'), HTTP_REFERER);
+					dr_admin_msg(0,L('select_is_fieldfield') . $ck_pr . L('pleasereselect'), HTTP_REFERER);
 				} 
 				if ($this->input->post('replace_type') == 1) {
 					$search_rule = str_replace(array('\\\\%', '\\\\_'), array('\\%', '\\_'),$this->input->post('search_rule'));
@@ -198,7 +198,7 @@ class index extends admin {
 						$this -> db -> lastqueryid = $handle;
 					} 
 				} 
-				showmessage(L('replacefinished') . $success . L('replace_successmonths') . $failse . L('months'), HTTP_REFERER);
+				dr_admin_msg(1,L('replacefinished') . $success . L('replace_successmonths') . $failse . L('months'), HTTP_REFERER);
 			} 
 		} else {
 			foreach($database as $name => $value) {
@@ -228,7 +228,7 @@ class index extends admin {
 				$modelid = intval($this->input->post('modelid'));
 				$dbtp_range = intval($this->input->post('dbtp_range'));
 				$dbtp_num = intval($this->input->post('dbtp_num'));
-				if(!isset($model[$modelid]))showmessage(L('modelnotexist'), HTTP_REFERER);
+				if(!isset($model[$modelid]))dr_admin_msg(0,L('modelnotexist'), HTTP_REFERER);
 				$m	=&	$model[$modelid];
 				$db =	new sqltoolplus($m['tablename']);
 				
@@ -243,7 +243,7 @@ class index extends admin {
 						}
 					}
 				}
-				if(!$enabled)showmessage(L('unfortunately'), HTTP_REFERER);
+				if(!$enabled)dr_admin_msg(0,L('unfortunately'), HTTP_REFERER);
 				if(!$db->is_patitioned()){
 					if($dbtp_num<1){
 						$r	=	$db -> get_one('', 'MAX(`id`) AS max');
@@ -268,7 +268,7 @@ class index extends admin {
 					//var_dump($r);var_dump($pt['partitions']);exit($number);
 					
 					if($r['partitions']!='pmax'){
-						showmessage(L('createanew'), HTTP_REFERER,6000);
+						dr_admin_msg(0,L('createanew'), HTTP_REFERER,6);
 					}
 
 					$sql="ALTER TABLE `{$db->db_tablepre}{$m['tablename']}` REORGANIZE PARTITION pmax INTO (";
@@ -284,9 +284,9 @@ class index extends admin {
 				}
 				//exit;
 				if($db -> query($sql.$_sql) && $db -> query($sql2.$_sql)){
-					showmessage(L('success'), HTTP_REFERER);
+					dr_admin_msg(1,L('success'), HTTP_REFERER);
 				}else{
-					showmessage(L('failure'), HTTP_REFERER);
+					dr_admin_msg(0,L('failure'), HTTP_REFERER);
 				}
 			}
 		} else {

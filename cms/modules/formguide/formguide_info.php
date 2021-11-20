@@ -23,7 +23,7 @@ class formguide_info extends admin {
 	 */
 	public function init() {
 		if (!isset($_GET['formid']) || empty($_GET['formid'])) {
-			showmessage(L('illegal_operation'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
 		}
 		$formid = intval($_GET['formid']);
 		if (!$this->tablename) {
@@ -46,7 +46,7 @@ class formguide_info extends admin {
 	 * 查看
 	 */
 	public function public_view() {
-		if (!$this->tablename || !isset($_GET['did']) || empty($_GET['did'])) showmessage(L('illegal_operation'), HTTP_REFERER);
+		if (!$this->tablename || !isset($_GET['did']) || empty($_GET['did'])) dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
 		$did = intval($_GET['did']);
 		$formid = intval($_GET['formid']);
 		$info = $this->db->get_one(array('dataid'=>$did));
@@ -68,16 +68,16 @@ class formguide_info extends admin {
 			$did = intval($_GET['did']);
 			$this->db->delete(array('dataid'=>$did));
 			$this->f_db->update(array('items'=>'-=1'), array('modelid'=>$formid));
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		} else if(is_array($_POST['did']) && !empty($_POST['did'])) {
 			foreach ($_POST['did'] as $did) {
 				$did = intval($did);
 				$this->db->delete(array('dataid'=>$did));
 				$this->f_db->update(array('items'=>'-=1'), array('modelid'=>$formid));
 			}
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		} else {
-			showmessage(L('illegal_operation'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
 		}
 	}
 }

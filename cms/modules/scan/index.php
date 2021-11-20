@@ -34,14 +34,14 @@ class index extends admin {
 	
 	//进行配置文件更新
 	public function public_update_config() {
-		$info = $this->input->post('info') ? $this->input->post('info') : showmessage(L('illegal_action'), HTTP_REFERER);
+		$info = $this->input->post('info') ? $this->input->post('info') : dr_admin_msg(0,L('illegal_action'), HTTP_REFERER);
 		$dir = $this->input->post('dir') ? new_stripslashes($this->input->post('dir')) : '';
 		if (empty($dir)) { 
-			showmessage(L('please_select_the_content'), '?m=scan&c=index&a=init');
+			dr_admin_msg(0,L('please_select_the_content'), '?m=scan&c=index&a=init');
 		}
 		$info['dir'] = var_export($dir, true);
 		setcache('scan_config', $info, 'scan');
-		showmessage(L('configuration_file_save_to_the'), '?m=scan&c=index&a=public_file_count');
+		dr_admin_msg(1,L('configuration_file_save_to_the'), '?m=scan&c=index&a=public_file_count');
 	}
 	
 	//对要进行扫描的文件进行统计
@@ -62,7 +62,7 @@ class index extends admin {
 			}
 		}
 		setcache('scan_list', $list, 'scan');
-		showmessage(L('documents_to_file_the_statistics'), '?m=scan&c=index&a=public_file_filter');
+		dr_admin_msg(1,L('documents_to_file_the_statistics'), '?m=scan&c=index&a=public_file_filter');
 	}
 	
 	//对文件进行筛选
@@ -78,7 +78,7 @@ class index extends admin {
 			}
 		}
 		setcache('scan_list', $scan_list, 'scan');
-		showmessage(L('file_through_a_feature_the_function_is'), '?m=scan&c=index&a=public_file_func');
+		dr_admin_msg(1,L('file_through_a_feature_the_function_is'), '?m=scan&c=index&a=public_file_func');
 	}
 	
 	//进行特征函数过滤
@@ -96,7 +96,7 @@ class index extends admin {
 		}
 		if(!isset($badfiles)) $badfiles = array();
 		setcache('scan_bad_file', $badfiles, 'scan');
-		showmessage(L('feature_function_complete_a_code_used_by_filtration'), '?m=scan&c=index&a=public_file_code');
+		dr_admin_msg(1,L('feature_function_complete_a_code_used_by_filtration'), '?m=scan&c=index&a=public_file_code');
 	}
 	
 	//进行特征代码过滤
@@ -117,30 +117,30 @@ class index extends admin {
 			}
 		}
 		setcache('scan_bad_file', $badfiles, 'scan');
-		showmessage(L('scan_completed'), '?m=scan&c=index&a=scan_report&menuid='.$this->input->get('menuid'));
+		dr_admin_msg(1,L('scan_completed'), '?m=scan&c=index&a=scan_report&menuid='.$this->input->get('menuid'));
 	}
 	
 	public function scan_report() {
 		$badfiles = getcache('scan_bad_file', 'scan');
 		if (empty($badfiles)) {
-			showmessage(L('scan_to_find_a_result_please_to_scan'), '?m=scan&c=index&a=init');
+			dr_admin_msg(0,L('scan_to_find_a_result_please_to_scan'), '?m=scan&c=index&a=init');
 		}
 		include $this->admin_tpl('scan_report');
 	}
 	
 	public function view() {
-		$url = $this->input->get('url') && trim($this->input->get('url')) ? new_stripslashes(urldecode(trim($this->input->get('url')))) : showmessage(L('illegal_action'), HTTP_REFERER);
+		$url = $this->input->get('url') && trim($this->input->get('url')) ? new_stripslashes(urldecode(trim($this->input->get('url')))) : dr_admin_msg(0,L('illegal_action'), HTTP_REFERER);
 		$url = str_replace("..","",$url);
 		
 		if (!file_exists(CMS_PATH.$url)) {
-			showmessage(L('file_not_exists'));
+			dr_admin_msg(0,L('file_not_exists'));
 		}
 		$html = file_get_contents(CMS_PATH.$url);
 		//判断文件名，如果是database.php 对里面的关键字符进行替换
 		$basename = basename($url);
 		if($basename == "database.php" || $basename == "system.php"){
 			//$html = str_replace();
-			showmessage(L('重要文件，不允许在线查看！'));
+			dr_admin_msg(0,L('重要文件，不允许在线查看！'));
 		}
 		$file_list = getcache('scan_bad_file', 'scan');
 		if (isset($file_list[$url]['func']) && is_array($file_list[$url]['func']) && !empty($file_list[$url]['func'])) foreach ($file_list[$url]['func'] as $key=>$val)
@@ -174,7 +174,7 @@ class index extends admin {
 				break;
 				
 			case '2':
-				showmessage(L('viewreporttrue'),'?m=scan&c=index&a=init');
+				dr_admin_msg(1,L('viewreporttrue'),'?m=scan&c=index&a=init');
 				break;
 		}
 	}

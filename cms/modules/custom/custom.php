@@ -23,10 +23,10 @@ class custom extends admin {
  		if($this->input->post('dosubmit')) {
 			$custom = $this->input->post('custom');
 	 		if(empty($custom['title'])){
-				showmessage(L('custom_title_no_input'));
+				dr_admin_msg(0,L('custom_title_no_input'));
 	 		}
 	 		if(empty($custom['content'])){
-				showmessage(L('custom_content_no_input'));
+				dr_admin_msg(0,L('custom_content_no_input'));
 	 		}
 			$custom['inputtime'] = SYS_TIME;
 			$custom['siteid'] = $this->get_siteid();
@@ -34,7 +34,7 @@ class custom extends admin {
 			$customid = $this->db->insert($custom,true);
 			if(!$customid) return FALSE; 
  			$siteid = $this->get_siteid();
-			showmessage(L('operation_success'),HTTP_REFERER,'', 'edit');
+			dr_admin_msg(1,L('operation_success'),HTTP_REFERER,'', 'edit');
 		} else {
 			$show_validator = $show_scroll = $show_header = true;
 			pc_base::load_sys_class('form', '', 0);
@@ -52,7 +52,7 @@ class custom extends admin {
 			if(!is_array($custom) || empty($custom)) return false;
 			if((!$custom['title']) || empty($custom['content'])) return false;
 			$this->db->update($custom,array('id'=>$id));
-			showmessage(L('operation_success'),'?m=custom&c=custom&a=edit','', 'edit');
+			dr_admin_msg(1,L('operation_success'),'?m=custom&c=custom&a=edit','', 'edit');
 			
 		}else{
  			$show_validator = $show_scroll = $show_header = true;
@@ -60,7 +60,7 @@ class custom extends admin {
 			
 			//解出链接内容
 			$info = $this->db->get_one(array('id'=>$this->input->get('id')));
-			if(!$info) showmessage(L('custom_exit'));
+			if(!$info) dr_admin_msg(0,L('custom_exit'));
 			extract($info); 
  			include $this->admin_tpl('custom_edit');
 		}
@@ -73,7 +73,7 @@ class custom extends admin {
 	 */
 	public function delete() {
   		if((!$this->input->get('id') || empty($this->input->get('id'))) && (!$this->input->post('id') || empty($this->input->post('id')))) {
-			showmessage(L('illegal_parameters'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		} else {
 			if(is_array($this->input->post('id'))){
 				foreach($this->input->post('id') as $id_arr) {
@@ -85,7 +85,7 @@ class custom extends admin {
 						$this->attachment_db->api_delete('custom-'.$id_arr);
 					}
 				}
-				showmessage(L('operation_success'),'?m=custom&c=custom');
+				dr_admin_msg(1,L('operation_success'),'?m=custom&c=custom');
 			}else{
 				$id = intval($this->input->get('id'));
 				if($id < 1) return false;
@@ -93,12 +93,12 @@ class custom extends admin {
 				$result = $this->db->delete(array('id'=>$id));
 				
 				if($result){
-					showmessage(L('operation_success'),'?m=custom&c=custom');
+					dr_admin_msg(1,L('operation_success'),'?m=custom&c=custom');
 				}else {
-					showmessage(L("operation_failure"),'?m=custom&c=custom');
+					dr_admin_msg(0,L("operation_failure"),'?m=custom&c=custom');
 				}
 			}
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		}
 	}
 
@@ -106,7 +106,7 @@ class custom extends admin {
 		$show_header = $show_dialog = $show_pc_hash = '';
 		$id=intval($this->input->get('id'));
 		$info = $this->db->get_one(array('id'=>$id));
-		if(!$info) showmessage(L('custom_exit'));
+		if(!$info) dr_admin_msg(0,L('custom_exit'));
 		$content=$info['content'];
  		include $this->admin_tpl('custom_content');
 	}
@@ -115,7 +115,7 @@ class custom extends admin {
 		$show_header = $show_dialog = $show_pc_hash = '';
 		$id=intval($this->input->get('id'));
 		$info = $this->db->get_one(array('id'=>$id));
-		if(!$info) showmessage(L('custom_exit'));
+		if(!$info) dr_admin_msg(0,L('custom_exit'));
 		extract($info); 
  		include $this->admin_tpl('custom_get_lable');
 	}

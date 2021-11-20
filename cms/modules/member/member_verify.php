@@ -39,8 +39,8 @@ class member_verify extends admin {
 	}
 	
 	function modelinfo() {
-		$userid = !empty($_GET['userid']) ? intval($_GET['userid']) : showmessage(L('illegal_parameters'), HTTP_REFERER);
-		$modelid = !empty($_GET['modelid']) ? intval($_GET['modelid']) : showmessage(L('illegal_parameters'), HTTP_REFERER);
+		$userid = !empty($_GET['userid']) ? intval($_GET['userid']) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
+		$modelid = !empty($_GET['modelid']) ? intval($_GET['modelid']) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		
 		$memberinfo = $this->db->get_one(array('userid'=>$userid));
 		//模型字段名称
@@ -68,7 +68,7 @@ class member_verify extends admin {
 	function pass() {
 		if (isset($_POST['userid'])) {
 			$this->member_db = pc_base::load_model('member_model');
-			$uidarr = isset($_POST['userid']) ? $_POST['userid'] : showmessage(L('illegal_parameters'), HTTP_REFERER);
+			$uidarr = isset($_POST['userid']) ? $_POST['userid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			$where = to_sqls($uidarr, '', 'userid');
 			$userarr = $this->db->listinfo($where);
 			$success_uids = $info = array();
@@ -112,9 +112,9 @@ class member_verify extends admin {
 				}
 			}
 			
-			showmessage(L('pass').L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('pass').L('operation_success'), HTTP_REFERER);
 		} else {
-			showmessage(L('operation_failure'), HTTP_REFERER);
+			dr_admin_msg(0,L('operation_failure'), HTTP_REFERER);
 		}
 	}
 	
@@ -123,14 +123,14 @@ class member_verify extends admin {
 	 */
 	function delete() {
 		if(isset($_POST['userid'])) {
-			$uidarr = isset($_POST['userid']) ? $_POST['userid'] : showmessage(L('illegal_parameters'), HTTP_REFERER);
+			$uidarr = isset($_POST['userid']) ? $_POST['userid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			$message = stripslashes($_POST['message']);
 			$where = to_sqls($uidarr, '', 'userid');
 			$this->db->delete($where);
 						
-			showmessage(L('delete').L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('delete').L('operation_success'), HTTP_REFERER);
 		} else {
-			showmessage(L('operation_failure'), HTTP_REFERER);
+			dr_admin_msg(0,L('operation_failure'), HTTP_REFERER);
 		}
 	}
 
@@ -139,7 +139,7 @@ class member_verify extends admin {
 	 */
 	function reject() {
 		if(isset($_POST['userid'])) {
-			$uidarr = isset($_POST['userid']) ? $_POST['userid'] : showmessage(L('illegal_parameters'), HTTP_REFERER);
+			$uidarr = isset($_POST['userid']) ? $_POST['userid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			$where = to_sqls($uidarr, '', 'userid');
 			$res = $this->db->update(array('status'=>4, 'message'=>$_POST['message']), $where);
 			//发送 email通知
@@ -153,9 +153,9 @@ class member_verify extends admin {
 				}
 			}
 			
-			showmessage(L('reject').L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('reject').L('operation_success'), HTTP_REFERER);
 		} else {
-			showmessage(L('operation_failure'), HTTP_REFERER);
+			dr_admin_msg(0,L('operation_failure'), HTTP_REFERER);
 		}
 	}
 
@@ -164,7 +164,7 @@ class member_verify extends admin {
 	 */
 	function ignore() {
 		if(isset($_POST['userid'])) {		
-			$uidarr = isset($_POST['userid']) ? $_POST['userid'] : showmessage(L('illegal_parameters'), HTTP_REFERER);
+			$uidarr = isset($_POST['userid']) ? $_POST['userid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			$where = to_sqls($uidarr, '', 'userid');
 			$res = $this->db->update(array('status'=>2, 'message'=>$_POST['message']), $where);
 			//发送 email通知
@@ -177,9 +177,9 @@ class member_verify extends admin {
 					}
 				}
 			}
-			showmessage(L('ignore').L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('ignore').L('operation_success'), HTTP_REFERER);
 		} else {
-			showmessage(L('operation_failure'), HTTP_REFERER);
+			dr_admin_msg(0,L('operation_failure'), HTTP_REFERER);
 		}
 	}
 		
@@ -189,9 +189,8 @@ class member_verify extends admin {
 	function _edit_password($userid, $password){
 		$userid = intval($userid);
 		if($userid < 1) return false;
-		if(!is_password($password))
-		{
-			showmessage(L('password_format_incorrect'));
+		if(!is_password($password)) {
+			dr_admin_msg(0,L('password_format_incorrect'));
 			return false;
 		}
 		$passwordinfo = password($password);
@@ -200,13 +199,13 @@ class member_verify extends admin {
 	
 	private function _checkuserinfo($data, $is_edit=0) {
 		if(!is_array($data)){
-			showmessage(L('need_more_param'));return false;
+			dr_admin_msg(0,L('need_more_param'));return false;
 		} elseif (!is_username($data['username']) && !$is_edit){
-			showmessage(L('username_format_incorrect'));return false;
+			dr_admin_msg(0,L('username_format_incorrect'));return false;
 		} elseif (!isset($data['userid']) && $is_edit) {
-			showmessage(L('username_format_incorrect'));return false;
+			dr_admin_msg(0,L('username_format_incorrect'));return false;
 		}  elseif (empty($data['email']) || !is_email($data['email'])){
-			showmessage(L('email_format_incorrect'));return false;
+			dr_admin_msg(0,L('email_format_incorrect'));return false;
 		}
 		return $data;
 	}

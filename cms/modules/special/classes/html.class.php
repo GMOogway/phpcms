@@ -169,9 +169,9 @@ class html {
 		$r = $this->db->get_one(array('id'=>$specialid, 'siteid'=>get_siteid()));
 		if (!$r['ishtml'] || $r['disabled'] != 0 ) return true;
 		
-		if (!$specialid) showmessage(L('illegal_action'));
+		if (!$specialid) dr_admin_msg(0,L('illegal_action'));
 		$info = $this->db->get_one(array('id'=>$specialid));
-		if(!$info) showmessage(L('special_not_exist'), 'back');
+		if(!$info) dr_admin_msg(0,L('special_not_exist'));
 		extract($info);
 		if ($pics) {
 			$pic_data = get_pic_content($pics);

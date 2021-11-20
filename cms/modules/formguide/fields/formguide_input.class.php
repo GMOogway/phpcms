@@ -36,19 +36,19 @@ class formguide_input {
 					if($isimport) {
 						return false;
 					} else {
-						showmessage($name.' '.L('not_less_than').' '.$minlength.L('characters'));
+						dr_admin_msg(0, $name.' '.L('not_less_than').' '.$minlength.L('characters'));
 					}
 				}
 				if($maxlength && $length > $maxlength) {
 					if($isimport) {
 						$value = str_cut($value,$maxlength,'');
 					} else {
-						showmessage($name.' '.L('not_more_than').' '.$maxlength.L('characters'));
+						dr_admin_msg(0, $name.' '.L('not_more_than').' '.$maxlength.L('characters'));
 					}
 				} elseif($maxlength) {
 					$value = str_cut($value,$maxlength,'');
 				}
-				if($pattern && $length && !preg_match($pattern, $value) && !$isimport) showmessage($errortips);
+				if($pattern && $length && !preg_match($pattern, $value) && !$isimport) dr_admin_msg(0, $errortips);
 				$func = $field['formtype'];
 				if(method_exists($this, $func)) $value = $this->$func($field['field'], $value);
 				$info[$field['field']] = $value;

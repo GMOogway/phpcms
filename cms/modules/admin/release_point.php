@@ -21,21 +21,21 @@ class release_point extends admin {
 	
 	public function add() {
 		if ($this->input->post('dosubmit')) {
-			$name = $this->input->post('name') && trim($this->input->post('name')) ? trim($this->input->post('name')) : showmessage(L('release_point_name').L('empty'));
-			$host = $this->input->post('host') && trim($this->input->post('host')) ? trim($this->input->post('host')) : showmessage(L('server_address').L('empty'));
-			$port = $this->input->post('port') && intval($this->input->post('port')) ? intval($this->input->post('port')) : showmessage(L('server_port').L('empty'));
-			$username = $this->input->post('username') && trim($this->input->post('username')) ? trim($this->input->post('username')) : showmessage(L('username').L('empty'));
-			$password = $this->input->post('password') && trim($this->input->post('password')) ? trim($this->input->post('password')) : showmessage(L('password').L('empty'));
-			$path = $this->input->post('path') && trim($this->input->post('path')) ? trim($this->input->post('path')) : showmessage(L('path').L('empty'));
+			$name = $this->input->post('name') && trim($this->input->post('name')) ? trim($this->input->post('name')) : dr_admin_msg(0,L('release_point_name').L('empty'));
+			$host = $this->input->post('host') && trim($this->input->post('host')) ? trim($this->input->post('host')) : dr_admin_msg(0,L('server_address').L('empty'));
+			$port = $this->input->post('port') && intval($this->input->post('port')) ? intval($this->input->post('port')) : dr_admin_msg(0,L('server_port').L('empty'));
+			$username = $this->input->post('username') && trim($this->input->post('username')) ? trim($this->input->post('username')) : dr_admin_msg(0,L('username').L('empty'));
+			$password = $this->input->post('password') && trim($this->input->post('password')) ? trim($this->input->post('password')) : dr_admin_msg(0,L('password').L('empty'));
+			$path = $this->input->post('path') && trim($this->input->post('path')) ? trim($this->input->post('path')) : dr_admin_msg(0,L('path').L('empty'));
 			$pasv = $this->input->post('pasv') && trim($this->input->post('pasv')) ? trim($this->input->post('pasv')) : 0;
 			$ssl = $this->input->post('ssl') && trim($this->input->post('ssl')) ? trim($this->input->post('ssl')) : 0;
 			if ($this->db->get_one(array("name"=>$name))) {
-				showmessage(L('release_point_name').L('exists'));
+				dr_admin_msg(0,L('release_point_name').L('exists'));
 			}
 			if ($this->db->insert(array('name'=>$name,'host'=>$host,'port'=>$port,'username'=>$username, 'password'=>$password, 'path'=>$path, 'pasv'=>$pasv, 'ssl'=>$ssl))) {
-				showmessage(L('operation_success'), '', '', 'add');
+				dr_admin_msg(1,L('operation_success'), '', '', 'add');
 			} else {
-				showmessage(L('operation_failure'));
+				dr_admin_msg(0,L('operation_failure'));
 			}
 		}
 		$show_header = $show_validator = true;
@@ -43,30 +43,30 @@ class release_point extends admin {
 	}
 	
 	public function edit() {
-		$id = $this->input->get('id') && intval($this->input->get('id')) ? intval($this->input->get('id')) : showmessage(L('illegal_parameters'), HTTP_REFERER);
+		$id = $this->input->get('id') && intval($this->input->get('id')) ? intval($this->input->get('id')) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		if ($data = $this->db->get_one(array('id'=>$id))) {
 			if ($this->input->post('dosubmit')) {
-				$name = $this->input->post('name') && trim($this->input->post('name')) ? trim($this->input->post('name')) : showmessage(L('release_point_name').L('empty'));
-				$host = $this->input->post('host') && trim($this->input->post('host')) ? trim($this->input->post('host')) : showmessage(L('server_address').L('empty'));
-				$port = $this->input->post('port') && intval($this->input->post('port')) ? intval($this->input->post('port')) : showmessage(L('server_port').L('empty'));
-				$username = $this->input->post('username') && trim($this->input->post('username')) ? trim($this->input->post('username')) : showmessage(L('username').L('empty'));
-				$password = $this->input->post('password') && trim($this->input->post('password')) ? trim($this->input->post('password')) : showmessage(L('password').L('empty'));
-				$path = $this->input->post('path') && trim($this->input->post('path')) ? trim($this->input->post('path')) : showmessage(L('path').L('empty'));
+				$name = $this->input->post('name') && trim($this->input->post('name')) ? trim($this->input->post('name')) : dr_admin_msg(0,L('release_point_name').L('empty'));
+				$host = $this->input->post('host') && trim($this->input->post('host')) ? trim($this->input->post('host')) : dr_admin_msg(0,L('server_address').L('empty'));
+				$port = $this->input->post('port') && intval($this->input->post('port')) ? intval($this->input->post('port')) : dr_admin_msg(0,L('server_port').L('empty'));
+				$username = $this->input->post('username') && trim($this->input->post('username')) ? trim($this->input->post('username')) : dr_admin_msg(0,L('username').L('empty'));
+				$password = $this->input->post('password') && trim($this->input->post('password')) ? trim($this->input->post('password')) : dr_admin_msg(0,L('password').L('empty'));
+				$path = $this->input->post('path') && trim($this->input->post('path')) ? trim($this->input->post('path')) : dr_admin_msg(0,L('path').L('empty'));
 				$pasv = $this->input->post('pasv') && trim($this->input->post('pasv')) ? trim($this->input->post('pasv')) : 0;
 				$ssl = $this->input->post('ssl') && trim($this->input->post('ssl')) ? trim($this->input->post('ssl')) : 0;
 				if ($data['name'] != $name && $this->db->get_one(array("name"=>$name))) {
-					showmessage(L('release_point_name').L('exists'));
+					dr_admin_msg(0,L('release_point_name').L('exists'));
 				}
 				if ($this->db->update(array('name'=>$name,'host'=>$host,'port'=>$port,'username'=>$username, 'password'=>$password, 'path'=>$path, 'pasv'=>$pasv, 'ssl'=>$ssl), array('id'=>$id))) {
-					showmessage(L('operation_success'), '', '', 'edit');
+					dr_admin_msg(1,L('operation_success'), '', '', 'edit');
 				} else {
-					showmessage(L('operation_failure'));
+					dr_admin_msg(0,L('operation_failure'));
 				}
 			}
 			$show_header = $show_validator = true;
 			include $this->admin_tpl('release_point_edit');
 		} else {
-			showmessage(L('notfound'), HTTP_REFERER);
+			dr_admin_msg(0,L('notfound'), HTTP_REFERER);
 		}
 
 	}
@@ -89,15 +89,15 @@ class release_point extends admin {
 	}
 	
 	public function del() {
-		$id = $this->input->get('id') && intval($this->input->get('id')) ? intval($this->input->get('id')) : showmessage(L('illegal_parameters'), HTTP_REFERER);
+		$id = $this->input->get('id') && intval($this->input->get('id')) ? intval($this->input->get('id')) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		if ($this->db->get_one(array('id'=>$id))) {
 			if ($this->db->delete(array('id'=>$id))) {
-				showmessage(L('operation_success'), HTTP_REFERER);
+				dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 			} else {
-				showmessage(L('operation_failure'), HTTP_REFERER);
+				dr_admin_msg(0,L('operation_failure'), HTTP_REFERER);
 			}
 		} else {
-			showmessage(L('notfound'), HTTP_REFERER);
+			dr_admin_msg(0,L('notfound'), HTTP_REFERER);
 		}
 	}
 	

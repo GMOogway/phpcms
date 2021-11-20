@@ -314,11 +314,11 @@ class member extends admin {
 		if(isset($_POST['dosubmit'])) {
 			$info = array();
 			if(!$this->_checkname($_POST['info']['username'])){
-				showmessage(L('member_exist'));
+				dr_admin_msg(0,L('member_exist'));
 			}
 			$info['username'] = $this->input->post('info')['username'];
 			if(!$this->_checkpasswd($_POST['info']['password'])){
-				showmessage(L('password_format_incorrect'));
+				dr_admin_msg(0,L('password_format_incorrect'));
 			}
 			$info['regip'] = ip_info();
 			$info['overduedate'] = strtotime($_POST['info']['overduedate']);
@@ -337,7 +337,7 @@ class member extends admin {
 			
 			$this->db->insert($info);
 			if($this->db->insert_id()){
-				showmessage(L('operation_success'),'?m=member&c=member&a=add', '', 'add');
+				dr_admin_msg(1,L('operation_success'),'?m=member&c=member&a=add', '', 'add');
 			}
 		} else {
 			$show_header = $show_scroll = true;
@@ -400,7 +400,7 @@ class member extends admin {
 		
 			$userinfo = $this->db->get_one($where);
 			if(empty($userinfo)) {
-				showmessage(L('user_not_exist').L('or').L('no_permission'), HTTP_REFERER);
+				dr_admin_msg(0,L('user_not_exist').L('or').L('no_permission'), HTTP_REFERER);
 			}
 			
 			//删除用户头像
@@ -435,11 +435,11 @@ class member extends admin {
 				$this->db->insert($modelinfo);
 			}
 			
-			showmessage(L('operation_success'), '?m=member&c=member&a=manage', '', 'edit');
+			dr_admin_msg(1,L('operation_success'), '?m=member&c=member&a=manage', '', 'edit');
 		} else {
 			$show_header = $show_scroll = true;
 			$siteid = get_siteid();
-			$userid = isset($_GET['userid']) ? $_GET['userid'] : showmessage(L('illegal_parameters'), HTTP_REFERER);
+			$userid = isset($_GET['userid']) ? $_GET['userid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			
 			//会员组缓存
 			$group_cache = getcache('grouplist', 'member');
@@ -465,7 +465,7 @@ class member extends admin {
 			$memberinfo = $this->db->get_one($where);
 			
 			if(empty($memberinfo)) {
-				showmessage(L('user_not_exist').L('or').L('no_permission'), HTTP_REFERER);
+				dr_admin_msg(0,L('user_not_exist').L('or').L('no_permission'), HTTP_REFERER);
 			}
 			
 			$memberinfo['avatar'] = get_memberavatar($memberinfo['userid']);
@@ -508,16 +508,16 @@ class member extends admin {
 		$cache_class = pc_base::load_sys_class('cache');
 		$uid = intval($this->input->get('id'));
 		if (!$this->cleck_edit_member($uid)) {
-			showmessage(L('无权限操作其他管理员账号'));
+			dr_admin_msg(0,L('无权限操作其他管理员账号'));
 		}
 		// 当不具备用户操作权限时，只能授权登录当前账号
 		/*if (!$this->is_admin_auth() && $uid != $this->uid) {
-			showmessage(L('无权限操作其他账号'));
+			dr_admin_msg(0,L('无权限操作其他账号'));
 		}*/
 		$admin = $this->db->get_one(array('userid'=>$uid));
 		$cache_class->set_auth_data('admin_login_member', $admin, 1);
 
-		showmessage(L('正在授权登录此用户...'), WEB_PATH.'index.php?m=member&c=index&a=alogin');exit;
+		dr_admin_msg(1,L('正在授权登录此用户...'), WEB_PATH.'index.php?m=member&c=index&a=alogin');exit;
 	}
 	
 	/**
@@ -547,7 +547,7 @@ class member extends admin {
 	 * delete member
 	 */
 	function delete() {
-		$uidarr = isset($_POST['userid']) ? $_POST['userid'] : showmessage(L('illegal_parameters'), HTTP_REFERER);
+		$uidarr = isset($_POST['userid']) ? $_POST['userid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		$uidarr = array_map('intval',$uidarr);
 		$where = to_sqls($uidarr, '', 'userid');
 		//查询用户信息
@@ -566,9 +566,9 @@ class member extends admin {
 					$this->db->delete(array('userid'=>$v));
 				}
 			}
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		} else {
-			showmessage(L('operation_failure'), HTTP_REFERER);
+			dr_admin_msg(0,L('operation_failure'), HTTP_REFERER);
 		}
 	}
 
@@ -577,12 +577,12 @@ class member extends admin {
 	 */
 	function lock() {
 		if(isset($_POST['userid'])) {
-			$uidarr = isset($_POST['userid']) ? $_POST['userid'] : showmessage(L('illegal_parameters'), HTTP_REFERER);
+			$uidarr = isset($_POST['userid']) ? $_POST['userid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			$where = to_sqls($uidarr, '', 'userid');
 			$this->db->update(array('islock'=>1), $where);
-			showmessage(L('member_lock').L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('member_lock').L('operation_success'), HTTP_REFERER);
 		} else {
-			showmessage(L('operation_failure'), HTTP_REFERER);
+			dr_admin_msg(0,L('operation_failure'), HTTP_REFERER);
 		}
 	}
 	
@@ -591,7 +591,7 @@ class member extends admin {
 	 */
 	function unlock() {
 		if(isset($_POST['userid'])) {
-			$uidarr = isset($_POST['userid']) ? $_POST['userid'] : showmessage(L('illegal_parameters'), HTTP_REFERER);
+			$uidarr = isset($_POST['userid']) ? $_POST['userid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			$where = to_sqls($uidarr, '', 'userid');
 			if($this->db->update(array('islock'=>0), $where)) {
 				$config = getcache('common','commons');
@@ -604,9 +604,9 @@ class member extends admin {
 					}
 				}
 			}
-			showmessage(L('member_unlock').L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('member_unlock').L('operation_success'), HTTP_REFERER);
 		} else {
-			showmessage(L('operation_failure'), HTTP_REFERER);
+			dr_admin_msg(0,L('operation_failure'), HTTP_REFERER);
 		}
 	}
 
@@ -615,12 +615,12 @@ class member extends admin {
 	 */
 	function move() {
 		if(isset($_POST['dosubmit'])) {
-			$uidarr = isset($_POST['userid']) ? $_POST['userid'] : showmessage(L('illegal_parameters'), HTTP_REFERER);
-			$groupid = isset($_POST['groupid']) && !empty($_POST['groupid']) ? $_POST['groupid'] : showmessage(L('illegal_parameters'), HTTP_REFERER);
+			$uidarr = isset($_POST['userid']) ? $_POST['userid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
+			$groupid = isset($_POST['groupid']) && !empty($_POST['groupid']) ? $_POST['groupid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			
 			$where = to_sqls($uidarr, '', 'userid');
 			$this->db->update(array('groupid'=>$groupid), $where);
-			showmessage(L('member_move').L('operation_success'), HTTP_REFERER, '', 'move');
+			dr_admin_msg(1,L('member_move').L('operation_success'), HTTP_REFERER, '', 'move');
 		} else {
 			$show_header = $show_scroll = true;
 			$grouplist = getcache('grouplist');
@@ -628,13 +628,13 @@ class member extends admin {
 				$grouplist[$k] = $v['name'];
 			}
 			
-			$ids = isset($_GET['ids']) ? explode(',', $_GET['ids']): showmessage(L('illegal_parameters'), HTTP_REFERER);
+			$ids = isset($_GET['ids']) ? explode(',', $_GET['ids']): dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			array_pop($ids);
 			if(!empty($ids)) {
 				$where = to_sqls($ids, '', 'userid');
 				$userarr = $this->db->listinfo($where);
 			} else {
-				showmessage(L('illegal_parameters'), HTTP_REFERER, '', 'move');
+				dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER, '', 'move');
 			}
 			
 			include $this->admin_tpl('member_move');
@@ -651,11 +651,11 @@ class member extends admin {
 		} elseif(!empty($username)) {
 			$memberinfo = $this->db->get_one(array('username'=>$username));
 		} else {
-			showmessage(L('illegal_parameters'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		}
 		
 		if(empty($memberinfo)) {
-			showmessage(L('user').L('not_exists'), HTTP_REFERER);
+			dr_admin_msg(0,L('user').L('not_exists'), HTTP_REFERER);
 		}
 		
 		$memberinfo['avatar'] = get_memberavatar($memberinfo['userid']);
@@ -737,13 +737,13 @@ class member extends admin {
 	
 	private function _checkuserinfo($data, $is_edit=0) {
 		if(!is_array($data)){
-			showmessage(L('need_more_param'));return false;
+			dr_admin_msg(0,L('need_more_param'));return false;
 		} elseif (!is_username($data['username']) && !$is_edit){
-			showmessage(L('username_format_incorrect'));return false;
+			dr_admin_msg(0,L('username_format_incorrect'));return false;
 		} elseif (!isset($data['userid']) && $is_edit) {
-			showmessage(L('username_format_incorrect'));return false;
+			dr_admin_msg(0,L('username_format_incorrect'));return false;
 		}  elseif (empty($data['email']) || !is_email($data['email'])){
-			showmessage(L('email_format_incorrect'));return false;
+			dr_admin_msg(0,L('email_format_incorrect'));return false;
 		}
 		return $data;
 	}

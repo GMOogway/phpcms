@@ -704,7 +704,7 @@ include $this->admin_tpl('header');?>
 <script type="text/javascript">
 $('body').keydown(function(e){
     if (e.keyCode == 13) {
-        $('#my_submit').trigger('click') ;
+        $('#my_submit').trigger('click');
     }
 })
 $('.nav-tabs a').click(function (e) {

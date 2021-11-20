@@ -105,8 +105,8 @@ class index extends admin {
 			$_SESSION['lock_screen'] = 0;
 			$this->cache->set_data(COOKIE_PRE.ip().'pc_hash', bin2hex(random_bytes(16)), 3600);
 			$site = pc_base::load_app_class('sites');
-			$sitelist = $site->get_list_login($_SESSION['roleid']);
-			$default_siteid = self::return_siteid_login();
+			$sitelist = $site->get_list($_SESSION['roleid']);
+			$default_siteid = self::return_siteid();
 			$cookie_time = SYS_TIME+86400*30;
 			if(!$r['lang']) $r['lang'] = 'zh-cn';
 			param::set_cookie('admin_username',$username,$cookie_time);
@@ -131,23 +131,23 @@ class index extends admin {
 	public function fclient() {
 
 		if (!is_file(CMS_PATH.'api/fclient/sync.php')) {
-			showmessage(L('fclient_not_exist'));
+			dr_admin_msg(0,L('fclient_not_exist'));
 		}
 
 		$sync = require CMS_PATH.'api/fclient/sync.php';
 		if (!$this->input->get('id') || !$this->input->get('sync')) {
-			showmessage(L('fclient_not_sn'));
+			dr_admin_msg(0,L('fclient_not_sn'));
 		} elseif ($this->input->get('id') != md5($sync['id'])) {
-			showmessage(L('fclient_not_id'));
+			dr_admin_msg(0,L('fclient_not_id'));
 		} elseif ($this->input->get('sync') != $sync['sn']) {
-			showmessage(L('fclient_sn_exist'));
+			dr_admin_msg(0,L('fclient_sn_exist'));
 		}
 
 		$this->role_db = pc_base::load_model('admin_role_model');
 		$role = $this->role_db->get_one(array('disabled'=>0),'roleid','roleid asc');
 		$member = $this->db->get_one(array('roleid'=>$role['roleid']),'*','roleid asc');
 		if (!$member) {
-			showmessage(L('fclient_user_not_role'));
+			dr_admin_msg(0,L('fclient_user_not_role'));
 		}
 		admin::admin_login_before($member['username']);
 
@@ -172,7 +172,7 @@ class index extends admin {
 		if (isset($config['login_use']) && dr_in_array('admin', $config['login_use'])) {
 			$this->cache->set_auth_data('admin_option_'.$member['userid'], SYS_TIME);
 		}
-		showmessage(L('fclient_sn_succ'),'?m=admin&c=index');
+		dr_admin_msg(1,L('fclient_sn_succ'),'?m=admin&c=index');
 	}
 	
 	public function public_logout() {
@@ -186,7 +186,7 @@ class index extends admin {
 		param::set_cookie('userid',0);
 		$this->cache->clear(COOKIE_PRE.ip().'pc_hash');
 
-		showmessage(L('logout_success'),'?m=admin&c=index&a='.SYS_ADMIN_PATH);
+		dr_admin_msg(1,L('logout_success'),'?m=admin&c=index&a='.SYS_ADMIN_PATH);
 	}
 	
 	//左侧菜单
@@ -428,7 +428,7 @@ class index extends admin {
 		$time = (int)strtotime($this->input->get('time'));
 		$file = CACHE_PATH.'caches_error/caches_data/log-'.date('Y-m-d',$time).'.php';
 		if (!is_file($file)) {
-			showmessage(L('文件不存在：'.$file),'','','edit');
+			dr_admin_msg(0,L('文件不存在：'.$file),'','','edit');
 		}
 		$config = getcache('common','commons');
 		if (isset($config['errorlog_size']) && $config['errorlog_size']) {
@@ -448,10 +448,10 @@ class index extends admin {
 		$time = (int)strtotime($this->input->get('time'));
 		$file = CACHE_PATH.'caches_error/caches_data/log-'.date('Y-m-d',$time).'.php';
 		if (!is_file($file)) {
-			showmessage(L('文件不存在：'.$file),'?m=admin&c=index&a=public_error_log');
+			dr_admin_msg(0,L('文件不存在：'.$file),'?m=admin&c=index&a=public_error_log');
 		}
 		unlink($file);
-		showmessage(L('operation_success'),'?m=admin&c=index&a=public_error_log');
+		dr_admin_msg(1,L('operation_success'),'?m=admin&c=index&a=public_error_log');
 	}
 	public function public_email_log() {
 		$show_header = $show_pc_hash = 1;
@@ -480,10 +480,10 @@ class index extends admin {
 		$show_header = $show_pc_hash = 1;
 		$file = CACHE_PATH.'email_log.php';
 		if (!is_file($file)) {
-			showmessage(L('文件不存在：'.$file),'?m=admin&c=index&a=public_email_log');
+			dr_admin_msg(0,L('文件不存在：'.$file),'?m=admin&c=index&a=public_email_log');
 		}
 		unlink($file);
-		showmessage(L('operation_success'),'?m=admin&c=index&a=public_email_log');
+		dr_admin_msg(1,L('operation_success'),'?m=admin&c=index&a=public_email_log');
 	}
 	public function public_error() {
 		$show_header = $show_pc_hash = 1;
@@ -525,7 +525,7 @@ class index extends admin {
 		$show_header = $show_pc_hash = 1;
 		$file = CACHE_PATH.'error_log.php';
 		if (!is_file($file)) {
-			showmessage(L('文件不存在：'.$file),'','','edit');
+			dr_admin_msg(0,L('文件不存在：'.$file),'','','edit');
 		}
 		$code = file_get_contents($file);
 		
@@ -535,10 +535,10 @@ class index extends admin {
 		$show_header = $show_pc_hash = 1;
 		$file = CACHE_PATH.'error_log.php';
 		if (!is_file($file)) {
-			showmessage(L('文件不存在：'.$file),'?m=admin&c=index&a=public_error');
+			dr_admin_msg(0,L('文件不存在：'.$file),'?m=admin&c=index&a=public_error');
 		}
 		unlink($file);
-		showmessage(L('operation_success'),'?m=admin&c=index&a=public_error');
+		dr_admin_msg(1,L('operation_success'),'?m=admin&c=index&a=public_error');
 	}
 	/**
 	 * 维持 session 登陆状态
@@ -554,7 +554,7 @@ class index extends admin {
 		$_SESSION['lock_screen'] = 1;
 	}
 	public function public_login_screenlock() {
-		if(empty($this->input->get('lock_password'))) showmessage(L('password_can_not_be_empty'));
+		if(empty($this->input->get('lock_password'))) dr_admin_msg(0,L('password_can_not_be_empty'));
 		//密码错误剩余重试次数
 		$this->times_db = pc_base::load_model('times_model');
 		$username = param::get_cookie('admin_username');

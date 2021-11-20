@@ -189,6 +189,8 @@ define('SYS_ADMIN_PATH', pc_base::load_config('system','admin_login_path') ? pc_
 define('NeedCheckComeUrl', pc_base::load_config('system','needcheckcomeurl'));
 //安全密匙
 define('SYS_KEY', pc_base::load_config('system','auth_key'));
+//网站语言包
+define('SYS_LANGUAGE', pc_base::load_config('system','lang'));
 //跨站验证
 define('SYS_CSRF', pc_base::load_config('system','sys_csrf'));
 //是否保存错误日志

@@ -76,7 +76,7 @@ class create_all_html extends admin {
 				if(count($catids)==1 && $catids[0]==0) {
 					$message = L('create_update_success');
 					$forward = '?m=content&c=create_all_html&a=show';
-					showmessage($message,$forward);
+					dr_admin_msg(1,$message,$forward,1);
 				}
 				if($type == 'lastinput' && $number) {
 					$offset = 0;
@@ -135,7 +135,7 @@ class create_all_html extends admin {
 					$message = L('create_update_success');
 					$forward = '?m=content&c=create_all_html&a=show';
 				}
-				showmessage($message,$forward,200);
+				dr_admin_msg(1,$message,$forward,1);
 			} else {
 				//当没有选择模型时，需要按照栏目来更新
 				if(!isset($set_catid)) {
@@ -154,18 +154,18 @@ class create_all_html extends admin {
 					setcache('update_all_html_catid'.'-'.$this->siteid.'-'.$_SESSION['userid'],$update_url_catids,'content');
 					$message = L('start_update');
 					$forward = "?m=content&c=create_all_html&a=show&set_catid=1&pagesize=$pagesize&dosubmit=1";
-					showmessage($message,$forward,200);
+					dr_admin_msg(1,$message,$forward,1);
 				}
 				if(is_array($catids)) {
 					if(count($catids)==1 && $catids[0]==0) {
 						$message = L('create_update_success');
 						$forward = '?m=content&c=create_all_html&a=show';
-						showmessage($message,$forward,200);
+						dr_admin_msg(1,$message,$forward,1);
 					}
 				}
 				$catid_arr = getcache('update_all_html_catid'.'-'.$this->siteid.'-'.$_SESSION['userid'],'content');
 				$autoid = $autoid ? intval($autoid) : 0;
-				//if(!isset($catid_arr[$autoid])) showmessage(L('create_update_success'),'?m=content&c=create_all_html&a=show',200);
+				//if(!isset($catid_arr[$autoid])) dr_admin_msg(1,L('create_update_success'),'?m=content&c=create_all_html&a=show',1);
 				if(!isset($catid_arr[$autoid])){showmessage(L('create_all').L('create_update_success'),'close');}
 
 				$catid = $catid_arr[$autoid];
@@ -216,7 +216,7 @@ class create_all_html extends admin {
 					$message = L('start_update').$this->categorys[$catid]['catname']." ...";
 					$forward = "?m=content&c=create_all_html&a=show&set_catid=1&pagesize=$pagesize&dosubmit=1&autoid=$autoid";
 				}
-				showmessage($message,$forward,200);
+				dr_admin_msg(1,$message,$forward,1);
 			}
 
 		} else {
@@ -276,7 +276,7 @@ class create_all_html extends admin {
 				$message = L('start_update_category');
 				$forward = "?m=content&c=create_all_html&a=category&set_catid=1&pagesize=$pagesize&dosubmit=1&modelid=$modelid&referer=$referer";
 				
-				showmessage($message,$forward);
+				dr_admin_msg(1,$message,$forward,1);
 			}
 			
 			$catid_arr = getcache('update_all_html_catid'.'-'.$this->siteid.'-'.$_SESSION['userid'],'content');
@@ -285,16 +285,16 @@ class create_all_html extends admin {
 			
 			/*if(!isset($catid_arr[$autoid])) {
 				if(!empty($referer) && $this->categorys[$catid_arr[0]]['type']!=1) {
-					showmessage(L('create_update_success'),'?m=content&c=content&a=init&catid='.$catid_arr[0],200);
+					dr_admin_msg(1,L('create_update_success'),'?m=content&c=content&a=init&catid='.$catid_arr[0],1);
 				} else {
-					showmessage(L('create_update_success'),'?m=content&c=create_all_html&a=category',200);
+					dr_admin_msg(1,L('create_update_success'),'?m=content&c=create_all_html&a=category',1);
 				}
 			}*/
 			if(!isset($catid_arr[$autoid])) {
 				if(!empty($referer) && $this->categorys[$catid_arr[0]]['type']!=1) {
-					showmessage(L('create_update_success'),'?m=content&c=content&a=init&catid='.$catid_arr[0],200);
+					dr_admin_msg(1,L('create_update_success'),'?m=content&c=content&a=init&catid='.$catid_arr[0],1);
 				} else {
-					showmessage(L('create_update_success'),'?m=content&c=create_all_html&a=show&dosubmit=1&type=all&pagesize=50',200);
+					dr_admin_msg(1,L('create_update_success'),'?m=content&c=create_all_html&a=show&dosubmit=1&type=all&pagesize=50',1);
 				}
 			}
 			$catid = $catid_arr[$autoid];
@@ -315,7 +315,7 @@ class create_all_html extends admin {
 				$message = $this->categorys[$catid]['catname'].L('create_update_success');
 				$forward = "?m=content&c=create_all_html&a=category&set_catid=1&pagesize=$pagesize&dosubmit=1&autoid=$autoid&modelid=$modelid&referer=$referer";
 			}
-			showmessage($message,$forward,200);
+			dr_admin_msg(1,$message,$forward,1);
 		} else {
 			$show_header = $show_dialog  = '';
 			$admin_username = param::get_cookie('admin_username');
@@ -344,18 +344,6 @@ class create_all_html extends admin {
 			include $this->admin_tpl('create_html_category');
 		}
 
-	}
-	//生成首页
-	public function public_index() {
-		$this->html = pc_base::load_app_class('html');
-		$this->db = pc_base::load_model('site_model');
-		$data = $this->db->get_one(array('siteid'=>$this->siteid));
-		if($data['ishtml']==1) {
-			$size = $this->html->index();
-			showmessage(L('index_create_finish',array('size'=>format_file_size($size))));
-		} else {
-			showmessage(L('index_create_close'));
-		}
 	}
 	/**
 	* 一键生成全站
@@ -388,7 +376,7 @@ class create_all_html extends admin {
 			setcache('update_all_html_catid-'.$this->siteid.'-'.$_SESSION['userid'],$update_url_catids,'content');
 			$message = L('start_update_category');
 			$forward = "?m=content&c=create_all_html&a=category&set_catid=1&pagesize=$pagesize&dosubmit=1&modelid=$modelid&referer=$referer";
-			showmessage($message,$forward);
+			dr_admin_msg(1,$message,$forward,1);
 		}
 		
 		$catid_arr = getcache('update_all_html_catid-'.$this->siteid.'-'.$_SESSION['userid'],'content');
@@ -397,9 +385,9 @@ class create_all_html extends admin {
 		
 		if(!isset($catid_arr[$autoid])) {
 			if(!empty($referer) && $this->categorys[$catid_arr[0]]['type']!=1) {
-				showmessage(L('create_update_success'),'?m=content&c=content&a=init&catid='.$catid_arr[0],200);
+				dr_admin_msg(1,L('create_update_success'),'?m=content&c=content&a=init&catid='.$catid_arr[0],1);
 			} else {
-				showmessage(L('create_update_success'),'?m=content&c=create_all_html&a=category',200);
+				dr_admin_msg(1,L('create_update_success'),'?m=content&c=create_all_html&a=category',1);
 			}
 		}
 		$catid = $catid_arr[$autoid];
@@ -420,7 +408,7 @@ class create_all_html extends admin {
 			$message = $this->categorys[$catid]['catname'].L('create_update_success');
 			$forward = "?m=content&c=create_all_html&a=category&set_catid=1&pagesize=$pagesize&dosubmit=1&autoid=$autoid&modelid=$modelid&referer=$referer";
 		}
-		showmessage($message,$forward,200);
+		dr_admin_msg(1,$message,$forward,1);
 	}
 }
 ?>

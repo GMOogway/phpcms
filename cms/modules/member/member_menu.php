@@ -56,7 +56,7 @@ class member_menu extends admin {
 				file_put_contents($file,$data);
 			}
 			//结束
-			showmessage(L('add_success'));
+			dr_admin_msg(1,L('add_success'));
 		} else {
 			$show_validator = '';
 			$tree = pc_base::load_sys_class('tree');
@@ -76,7 +76,7 @@ class member_menu extends admin {
 	function delete() {
 		$_GET['id'] = intval($_GET['id']);
 		$menu = $this->db->get_one(array("id"=>$_GET['id']));
-		if(!$menu)showmessage('菜单不存在！请返回！',HTTP_REFERER);
+		if(!$menu)dr_admin_msg(0,'菜单不存在！请返回！',HTTP_REFERER);
 		$this->db->delete(array('id'=>$_GET['id']));
 		//删除member_menu语言包
 		$file = PC_PATH.'languages'.DIRECTORY_SEPARATOR.'zh-cn'.DIRECTORY_SEPARATOR.'member_menu.lang.php';
@@ -86,7 +86,7 @@ class member_menu extends admin {
  		$content = str_replace($str,'',$content);
 		file_put_contents($file,$content);
 		
- 		showmessage(L('operation_success'));
+ 		dr_admin_msg(1,L('operation_success'));
 	}
 	
 	function edit() {
@@ -110,7 +110,7 @@ class member_menu extends admin {
 			}
 			
 			//结束语言文件修改
-			showmessage(L('operation_success'));
+			dr_admin_msg(1,L('operation_success'));
 		} else {
 			$show_validator = '';
 			$tree = pc_base::load_sys_class('tree');
@@ -140,9 +140,9 @@ class member_menu extends admin {
 					$this->db->update(array('listorder'=>$listorder),array('id'=>$id));
 				}
 			}
-			showmessage(L('operation_success'));
+			dr_admin_msg(1,L('operation_success'));
 		} else {
-			showmessage(L('operation_failure'));
+			dr_admin_msg(0,L('operation_failure'));
 		}
 	}
 }

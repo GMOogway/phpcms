@@ -1,10 +1,6 @@
 <?php
 defined('IN_CMS') or exit('Access Denied');
 defined('INSTALL') or exit('Access Denied');
-//file_put_contents(PC_PATH.'modules/bdts/install.lock', SYS_TIME);
-//if (is_file(PC_PATH.'modules/bdts/install.lock')) {
-	//showmessage(L('此程序已经安装'));
-//}
 $parentid = $menu_db->insert(array('name'=>'bdts_config', 'parentid'=>42, 'm'=>'bdts', 'c'=>'bdts', 'a'=>'config', 'data'=>'', 'icon'=>'fa fa-internet-explorer', 'listorder'=>0, 'display'=>'1'), true);
 $menu_db->insert(array('name'=>'url_add', 'parentid'=>$parentid, 'm'=>'bdts', 'c'=>'bdts', 'a'=>'url_add', 'data'=>'', 'icon'=>'fa fa-plus', 'listorder'=>0, 'display'=>'1'));
 $menu_db->insert(array('name'=>'log_index', 'parentid'=>$parentid, 'm'=>'bdts', 'c'=>'bdts', 'a'=>'log_index', 'data'=>'', 'icon'=>'fa fa-calendar', 'listorder'=>0, 'display'=>'1'));

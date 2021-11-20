@@ -16,7 +16,7 @@ class cloud extends admin {
         $this->db = pc_base::load_model('site_model');
         // 不是超级管理员
         if ($_SESSION['roleid']!=1) {
-            showmessage(L('需要超级管理员账号操作'));
+            dr_admin_msg(0,L('需要超级管理员账号操作'));
         }
         define('CMS_VERSION', pc_base::load_config('version','cms_version'));
         define('CMS_RELEASE', pc_base::load_config('version','cms_release'));

@@ -29,7 +29,7 @@ class spend extends admin {
 			}
 			
 			if (!empty($starttime) && !empty($endtime) && $endtime < $starttime) {
-				showmessage(L('wrong_time_over_time_to_time_less_than'));
+				dr_admin_msg(0,L('wrong_time_over_time_to_time_less_than'));
 			}
 			
 			

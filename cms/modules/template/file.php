@@ -15,9 +15,9 @@ class file extends admin {
 	private $tpl_edit;
 	
 	public function __construct() {
-		$this->style = isset($_GET['style']) && trim($_GET['style']) ? str_replace(array('..\\', '../', './', '.\\', '/', '\\'), '', trim($_GET['style'])) : showmessage(L('illegal_operation'), HTTP_REFERER);
+		$this->style = isset($_GET['style']) && trim($_GET['style']) ? str_replace(array('..\\', '../', './', '.\\', '/', '\\'), '', trim($_GET['style'])) : dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
 		if (empty($this->style)) {
-			showmessage(L('illegal_operation'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
 		}
 		$this->filepath = PC_PATH.'templates'.DIRECTORY_SEPARATOR.$this->style.DIRECTORY_SEPARATOR;
 		if (file_exists($this->filepath.'config.php')) {
@@ -50,12 +50,12 @@ class file extends admin {
 		if (!isset($this->style_info['file_explan'])) $this->style_info['file_explan'] = array();
 		$this->style_info['file_explan'] = array_merge($this->style_info['file_explan'], $file_explan);
 		@file_put_contents($this->filepath.'config.php', '<?php return '.var_export($this->style_info, true).';?>');
-		showmessage(L('operation_success'), HTTP_REFERER);
+		dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 	}
 	
 	public function edit_file() {
 		if (empty($this->tpl_edit)) {
-			showmessage(L('tpl_edit'));
+			dr_admin_msg(0,L('tpl_edit'));
 		}
 		$dir = isset($_GET['dir']) && trim($_GET['dir']) ? str_replace(array('..\\', '../', './', '.\\'), '', urldecode(trim($_GET['dir']))) : '';
 		$file = isset($_GET['file']) && trim($_GET['file']) ? trim($_GET['file']) : '';
@@ -64,28 +64,28 @@ class file extends admin {
 			$file_t = $file_t[0];
 			$file_t_v = array('header'=>array('{$SEO[\\\'title\\\']}'=>L('seo_title'), '{$SEO[\\\'site_title\\\']}'=>L('site_title'), '{$SEO[\\\'keyword\\\']}'=>L('seo_keyword'), '{$SEO[\\\'description\\\']}'=>L('seo_des')), 'category'=>array('{$catid}'=>L('cat_id'), '{$catname}'=>L('cat_name'), '{$url}'=>L('cat_url'), '{$r[catname]}'=>L('cat_name'), '{$r[url]}'=>'URL', '{$CATEGORYS}'=>L('cats')), 'list'=>array('{$catid}'=>L('cat_id'), '{$catname}'=>L('cat_name'), '{$url}'=>L('cat_url'), '{$CATEGORYS}'=>L('cats')), 'show'=> array('{$title}'=>L('title'), '{$inputtime}'=>L('inputtime'), '{$copyfrom}'=>L('comeform'), '{$content}'=>L('content'), '{$previous_page[url]}'=>L('pre_url'), '{$previous_page[title]}'=>L('pre_title'), '{$next_page[url]}'=>L('next_url'), '{$next_page[title]}'=>L('next_title')), 'page'=>array('{$CATEGORYS}'=>L('cats'), '{$content}'=>L('content')));
 		}
-		if (substr($file, -4, 4) != 'html') showmessage(L("can_edit_html_files"));
+		if (substr($file, -4, 4) != 'html') dr_admin_msg(0,L("can_edit_html_files"));
 		$filepath = $this->filepath.$dir.DIRECTORY_SEPARATOR.$file;
 		$is_write = 0;
 		if (is_writable($filepath)) {
 			$is_write = 1;
 		}
 		if ($_POST['dosubmit']) {
-			$code = isset($_POST['code']) ? stripslashes($_POST['code']) : showmessage(L('illegal_operation'), HTTP_REFERER);
+			$code = isset($_POST['code']) ? stripslashes($_POST['code']) : dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
 			$code = str_replace(array('<?','{php'),array('<？','{ php'),$code);
 			if ($is_write == 1) {
 				pc_base::load_app_func('global');
 				creat_template_bak($filepath, $this->style, $dir);
 				file_put_contents($filepath,htmlspecialchars_decode($code));
-				showmessage(L('operation_success'), HTTP_REFERER);
+				dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 			} else{
-				showmessage(L("file_does_not_writable"), HTTP_REFERER);
+				dr_admin_msg(0,L("file_does_not_writable"), HTTP_REFERER);
 			}
 		} else {
 			if (file_exists($filepath)) {
 				$data = new_html_special_chars(file_get_contents($filepath));
 			} else {
-				showmessage(L('file_does_not_exists'));
+				dr_admin_msg(0,L('file_does_not_exists'));
 			}
 		}
 		$show_header = true;
@@ -94,7 +94,7 @@ class file extends admin {
 	
 	public function add_file() {
 		if (empty($this->tpl_edit)) {
-			showmessage(L('tpl_edit'));
+			dr_admin_msg(0,L('tpl_edit'));
 		}
 		$dir = isset($_GET['dir']) && trim($_GET['dir']) ? str_replace(array('..\\', '../', './', '.\\'), '', urldecode(trim($_GET['dir']))) : '';
 		$filepath = $this->filepath.$dir.DIRECTORY_SEPARATOR;
@@ -103,18 +103,18 @@ class file extends admin {
 			$is_write = 1;
 		}
 		if (!$is_write) {
-			showmessage('dir_not_writable');
+			dr_admin_msg(0,'dir_not_writable');
 		}
 		if ($_POST['dosubmit']) {
-			$name = isset($_POST['name']) && trim($_POST['name']) ? trim($_POST['name']) : showmessage('');
+			$name = isset($_POST['name']) && trim($_POST['name']) ? trim($_POST['name']) : dr_admin_msg(0,'');
 			if (!preg_match('/^[\w]+$/i', $name)) {
-				showmessage(L('name_datatype_error'), HTTP_REFERER);
+				dr_admin_msg(0,L('name_datatype_error'), HTTP_REFERER);
 			}
 			if ($is_write == 1) {
 				@file_put_contents($filepath.$name.'.html','');
-				showmessage('','','', 'add_file');
+				dr_admin_msg(1,'','','', 'add_file');
 			} else {
-				showmessage(L("dir_not_writable"), HTTP_REFERER);
+				dr_admin_msg(0,L("dir_not_writable"), HTTP_REFERER);
 			}
 		}
 		$show_header = $show_validator = true;
@@ -133,8 +133,8 @@ class file extends admin {
 	}
 	
 	public function visualization() {
-		$dir = isset($_GET['dir']) && trim($_GET['dir']) ? str_replace(array('..\\', '../', './', '.\\'), '', urldecode(trim($_GET['dir']))) : showmessage(L('illegal_operation'), HTTP_REFERER);
-		$file = isset($_GET['file']) && trim($_GET['file']) ? trim($_GET['file']) : showmessage(L('illegal_operation'), HTTP_REFERER);
+		$dir = isset($_GET['dir']) && trim($_GET['dir']) ? str_replace(array('..\\', '../', './', '.\\'), '', urldecode(trim($_GET['dir']))) : dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
+		$file = isset($_GET['file']) && trim($_GET['file']) ? trim($_GET['file']) : dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
 		ob_start();
 		//include $this->admin_tpl('base_tool');
 		include template($dir,basename($file, '.html'),$this->style);
@@ -153,12 +153,12 @@ class file extends admin {
 	
 	public function edit_pc_tag() {
 		if (empty($this->tpl_edit)) {
-			showmessage(L('tpl_edit'));
+			dr_admin_msg(0,L('tpl_edit'));
 		}
-		$dir = isset($_GET['dir']) && trim($_GET['dir']) ? str_replace(array('..\\', '../', './', '.\\'), '', urldecode(trim($_GET['dir']))) : showmessage(L('illegal_operation'));
-		$file = isset($_GET['file']) && trim($_GET['file']) ? urldecode(trim($_GET['file'])) : showmessage(L('illegal_operation'));
-		$op = isset($_GET['op']) && trim($_GET['op']) ? trim($_GET['op']) : showmessage(L('illegal_operation'));
-		$tag_md5 = isset($_GET['tag_md5']) && trim($_GET['tag_md5']) ? trim($_GET['tag_md5']) : showmessage(L('illegal_operation'));
+		$dir = isset($_GET['dir']) && trim($_GET['dir']) ? str_replace(array('..\\', '../', './', '.\\'), '', urldecode(trim($_GET['dir']))) : dr_admin_msg(0,L('illegal_operation'));
+		$file = isset($_GET['file']) && trim($_GET['file']) ? urldecode(trim($_GET['file'])) : dr_admin_msg(0,L('illegal_operation'));
+		$op = isset($_GET['op']) && trim($_GET['op']) ? trim($_GET['op']) : dr_admin_msg(0,L('illegal_operation'));
+		$tag_md5 = isset($_GET['tag_md5']) && trim($_GET['tag_md5']) ? trim($_GET['tag_md5']) : dr_admin_msg(0,L('illegal_operation'));
 		$show_header = $show_scroll = $show_validator = true;
 		pc_base::load_app_func('global');
 		pc_base::load_sys_class('form', '', 0);
@@ -167,11 +167,11 @@ class file extends admin {
 			case 'xml':			
 			case 'json':
 				if ($_POST['dosubmit']) {
-					$url = isset($_POST['url']) && trim($_POST['url']) ? trim($_POST['url']) : showmessage(L('data_address').L('empty'));
+					$url = isset($_POST['url']) && trim($_POST['url']) ? trim($_POST['url']) : dr_admin_msg(0,L('data_address').L('empty'));
 					$cache = isset($_POST['cache']) && trim($_POST['cache']) ? trim($_POST['cache']) : 0;
 					$return = isset($_POST['return']) && trim($_POST['return']) ? trim($_POST['return']) : '';
 					if (!preg_match('/http:\/\//i', $url)) {
-						showmessage(L('data_address_reg_sg'), HTTP_REFERER);
+						dr_admin_msg(0,L('data_address_reg_sg'), HTTP_REFERER);
 					}
 					$tag_md5_list = tag_md5($filepath);
 					$pc_tag = creat_pc_tag($op, array('url'=>$url, 'cache'=>$cache, 'return'=>$return));
@@ -179,9 +179,9 @@ class file extends admin {
 						$old_pc_tag = $tag_md5_list[1][$tag_md5];
 					}
 					if (replace_pc_tag($filepath, $old_pc_tag, $pc_tag, $this->style, $dir)) {
-						showmessage('<script style="text/javascript">if(!window.top.right){parent.location.reload(true);}ownerDialog.close();</script>', '', '', 'edit');
+						dr_admin_msg(1,'<script style="text/javascript">if(!window.top.right){parent.location.reload(true);}ownerDialog.close();</script>', '', '', 'edit');
 					} else {
-						showmessage(L('failure_the_document_may_not_to_write'));
+						dr_admin_msg(0,L('failure_the_document_may_not_to_write'));
 					}
 				}
 				include $this->admin_tpl('pc_tag_tools_json_xml');
@@ -189,7 +189,7 @@ class file extends admin {
 				
 			case 'get':
 				if ($_POST['dosubmit']) {
-					$sql = isset($_POST['sql']) && trim($_POST['sql']) ? trim($_POST['sql']) : showmessage('SQL'.L('empty'));
+					$sql = isset($_POST['sql']) && trim($_POST['sql']) ? trim($_POST['sql']) : dr_admin_msg(0,'SQL'.L('empty'));
 					$dbsource = isset($_POST['dbsource']) && trim($_POST['dbsource']) ? trim($_POST['dbsource']) : '';
 					$cache = isset($_POST['cache']) && intval($_POST['cache']) ? intval($_POST['cache']) : 0;
 					$return = isset($_POST['return']) && trim($_POST['return']) ? trim($_POST['return']) : '';
@@ -199,9 +199,9 @@ class file extends admin {
 						$old_pc_tag = $tag_md5_list[1][$tag_md5];
 					}
 					if (replace_pc_tag($filepath, $old_pc_tag, $pc_tag, $this->style, $dir)) {
-						showmessage('<script style="text/javascript">if(!window.top.right){parent.location.reload(true);}ownerDialog.close();</script>', '', '', 'edit');
+						dr_admin_msg(1,'<script style="text/javascript">if(!window.top.right){parent.location.reload(true);}ownerDialog.close();</script>', '', '', 'edit');
 					} else {
-						showmessage(L('failure_the_document_may_not_to_write'));
+						dr_admin_msg(0,L('failure_the_document_may_not_to_write'));
 					}
 				}
 				$dbsource_db = pc_base::load_model('dbsource_model');
@@ -215,11 +215,11 @@ class file extends admin {
 				
 			default:
 				if (!file_exists(PC_PATH.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.$op.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.$op.'_tag.class.php')) {
-					showmessage(L('the_module_will_not_support_the_operation'));
+					dr_admin_msg(0,L('the_module_will_not_support_the_operation'));
 				}
 				$op_tag = pc_base::load_app_class($op."_tag", $op);
 				if (!method_exists($op_tag, 'pc_tag')) {
-					showmessage(L('the_module_will_not_support_the_operation'));
+					dr_admin_msg(0,L('the_module_will_not_support_the_operation'));
 				}
 				$html  = $op_tag->pc_tag();
 				if ($_POST['dosubmit']) {
@@ -238,13 +238,13 @@ class file extends admin {
 								}
 								if (!empty($val['validator'])) {
 									if (isset($val['validator']['min']) && strlen($$key) < $val['validator']['min']) {
-										showmessage($val['name'].L('should').L('is_greater_than').$val['validator']['min'].L('lambda'));
+										dr_admin_msg(0,$val['name'].L('should').L('is_greater_than').$val['validator']['min'].L('lambda'));
 									} 
 									if (isset($val['validator']['max']) && strlen($$key) > $val['validator']['max']) {
-										showmessage($val['name'].L('should').L('less_than').$val['validator']['max'].L('lambda'));
+										dr_admin_msg(0,$val['name'].L('should').L('less_than').$val['validator']['max'].L('lambda'));
 									} 
 									if (!preg_match('/'.$val['validator']['reg'].'/'.$val['validator']['reg_param'], $$key)) {
-										showmessage($val['name'].$val['validator']['reg_msg']);
+										dr_admin_msg(0,$val['name'].$val['validator']['reg_msg']);
 									}
 								}
 								$data[$key] = $$key;
@@ -265,11 +265,11 @@ class file extends admin {
 						if (in_array($tag_md5, $tag_md5_list[0])) {
 							$old_pc_tag = $tag_md5_list[1][$tag_md5];
 						}
-						if(!file_exists($filepath)) showmessage($filepath.L('file_does_not_exists'));
+						if(!file_exists($filepath)) dr_admin_msg(0,$filepath.L('file_does_not_exists'));
 						if (replace_pc_tag($filepath, $old_pc_tag, $pc_tag, $this->style, $dir)) {
-							showmessage(L('operation_success').'<script style="text/javascript">ownerDialog.close();</script>', '', '', 'edit');
+							dr_admin_msg(1,L('operation_success').'<script style="text/javascript">ownerDialog.close();</script>', '', '', 'edit');
 						} else {
-							showmessage(L('failure_the_document_may_not_to_write'));
+							dr_admin_msg(0,L('failure_the_document_may_not_to_write'));
 						}
 						
 				}

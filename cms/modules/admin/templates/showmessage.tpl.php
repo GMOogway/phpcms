@@ -18,7 +18,13 @@
 <div class="page-404-full-page">
     <div class="row">
         <div class="col-xs-12 page-404">
-            <div class="admin_msg number font-green-turquoise"> <i class="fa fa-exclamation-circle"></i> </div>
+            <?php if ($code==1) {?>
+            <div class="admin_msg number font-green"> <i class="fa fa-check-circle-o"></i> </div>
+            <?php } else if ($code==2) {?>
+            <div class="admin_msg number font-blue"> <i class="fa fa-info-circle"></i> </div>
+            <?php } else {?>
+            <div class="admin_msg number font-red"> <i class="fa fa-times-circle-o"></i> </div>
+            <?php }?>
             <div class="details">
                 <h4><?php echo $msg?></h4>
                 <p class="alert_btnleft"><?php if($url_forward=='goback' || $url_forward=='') {?>

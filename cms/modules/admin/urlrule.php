@@ -25,11 +25,11 @@ class urlrule extends admin {
 			$info['urlrule'] = rtrim(trim($info['urlrule']),'.php');
 			$info['urlrule'] = $this->url_replace($info['urlrule']);
 			if($this->url_ifok($info)==false){
-				showmessage('url规则里含有非法php字符');
+				dr_admin_msg(0,'url规则里含有非法php字符');
 			}
 			$this->db->insert($info);
 			$this->public_cache_urlrule();
-			showmessage(L('add_success'),'','','add');
+			dr_admin_msg(1,L('add_success'),'','','add');
 		} else {
 			$show_validator = $show_header = '';
 			$modules_arr = $this->module_db->select('','module,name');
@@ -46,7 +46,7 @@ class urlrule extends admin {
 		$urlruleid = intval($this->input->get('urlruleid'));
 		$this->db->delete(array('urlruleid'=>$urlruleid));
 		$this->public_cache_urlrule();
-		showmessage(L('operation_success'),HTTP_REFERER);
+		dr_admin_msg(1,L('operation_success'),HTTP_REFERER);
 	}
 	
 	function edit() {
@@ -56,11 +56,11 @@ class urlrule extends admin {
 			$info['urlrule'] = rtrim(trim($info['urlrule']),'.php');
 			$info['urlrule'] = $this->url_replace($info['urlrule']);
 			if($this->url_ifok($info['urlrule'])==false){
-				showmessage('url规则里含有非法php字符');
+				dr_admin_msg(0,'url规则里含有非法php字符');
 			}			
 			$this->db->update($info,array('urlruleid'=>$urlruleid));
 			$this->public_cache_urlrule();
-			showmessage(L('update_success'),'','','edit');
+			dr_admin_msg(1,L('update_success'),'','','edit');
 		} else {
 			$show_validator = $show_header = '';
 			$urlruleid = $this->input->get('urlruleid');

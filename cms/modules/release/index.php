@@ -17,7 +17,7 @@ class index extends admin {
 	
 	public function init() {
 		if (empty($this->point[0])) {
-			showmessage(L("the_site_not_release").'<script type="text/javascript">window.top.$(\'#display_center_id\').css(\'display\',\'none\');</script>');
+			dr_admin_msg(0,L("the_site_not_release").'<script type="text/javascript">window.top.$(\'#display_center_id\').css(\'display\',\'none\');</script>');
 		}
 		$ids = isset($_GET['ids']) && trim($_GET['ids']) ? trim($_GET['ids']) : 0;
 		$statuses = isset($_GET['statuses']) && intval($_GET['statuses']) ? intval($_GET['statuses']) : 0;
@@ -80,7 +80,7 @@ class index extends admin {
 	
 	public function failed() {
 		if (empty($this->point[0])) {
-			showmessage(L("the_site_not_release").'<script type="text/javascript">window.top.$(\'#display_center_id\').css(\'display\',\'none\');</script>');
+			dr_admin_msg(0,L("the_site_not_release").'<script type="text/javascript">window.top.$(\'#display_center_id\').css(\'display\',\'none\');</script>');
 		}
 		
 		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
@@ -99,10 +99,10 @@ class index extends admin {
 	}
 	
 	public function del() {
-		$ids = isset($_POST['ids']) ? $_POST['ids'] : showmessage(L('illegal_operation'), HTTP_REFERER);
+		$ids = isset($_POST['ids']) ? $_POST['ids'] : dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
 		if (is_array($ids))$ids = implode('\',\'', $ids);
 		$queue = pc_base::load_model('queue_model');
 		$queue->delete("id in ('$ids')");
-		showmessage(L('operation_success'), HTTP_REFERER);
+		dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 	}
 }

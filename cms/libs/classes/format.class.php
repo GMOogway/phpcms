@@ -9,8 +9,7 @@ class format {
 	public static function date($timestamp, $showtime = 0) {
 		$times = intval($timestamp);
 		if(!$times) return true;
-		$lang = pc_base::load_config('system','lang');
-		if($lang == 'zh-cn') {
+		if(SYS_LANGUAGE == 'zh-cn') {
 			$str = $showtime ? dr_date($times, 'Y-m-d H:i:s') : dr_date($times, 'Y-m-d');
 		} else {
 			$str = $showtime ? dr_date($times, 'm/d/Y H:i:s') : dr_date($times, 'm/d/Y');

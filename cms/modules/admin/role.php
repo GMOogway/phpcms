@@ -27,15 +27,15 @@ class role extends admin {
 	public function add() {
 		if($this->input->post('dosubmit')) {
 			if(!is_array($this->input->post('info')) || empty($this->input->post('info')['rolename'])){
-				showmessage(L('operation_failure'));
+				dr_admin_msg(0,L('operation_failure'));
 			}
 			if($this->op->checkname($this->input->post('info')['rolename'])){
-				showmessage(L('role_duplicate'));
+				dr_admin_msg(0,L('role_duplicate'));
 			}
 			$insert_id = $this->db->insert($this->input->post('info'),true);
 			$this->_cache();
 			if($insert_id){
-				showmessage(L('operation_success'),'?m=admin&c=role&a=init');
+				dr_admin_msg(1,L('operation_success'),'?m=admin&c=role&a=init');
 			}
 		} else {
 			include $this->admin_tpl('role_add');
@@ -50,11 +50,11 @@ class role extends admin {
 		if($this->input->post('dosubmit')) {
 			$roleid = intval($this->input->post('roleid'));
 			if(!is_array($this->input->post('info')) || empty($this->input->post('info')['rolename'])){
-				showmessage(L('operation_failure'));
+				dr_admin_msg(0,L('operation_failure'));
 			}
 			$this->db->update($this->input->post('info'),array('roleid'=>$roleid));
 			$this->_cache();
-			showmessage(L('operation_success'),'?m=admin&c=role');
+			dr_admin_msg(1,L('operation_success'),'?m=admin&c=role');
 		} else {					
 			$info = $this->db->get_one(array('roleid'=>$this->input->get('roleid')));
 			extract($info);		
@@ -67,11 +67,11 @@ class role extends admin {
 	 */
 	public function delete() {
 		$roleid = intval($this->input->get('roleid'));
-		if($roleid == '1') showmessage(L('this_object_not_del'), HTTP_REFERER);
+		if($roleid == '1') dr_admin_msg(0,L('this_object_not_del'), HTTP_REFERER);
 		$this->db->delete(array('roleid'=>$roleid));
 		$this->priv_db->delete(array('roleid'=>$roleid));
 		$this->_cache();
-		showmessage(L('role_del_success'));
+		dr_admin_msg(1,L('role_del_success'));
 	}
 	/**
 	 * 更新角色排序
@@ -83,9 +83,9 @@ class role extends admin {
 					$this->db->update(array('listorder'=>$listorder),array('roleid'=>$roleid));
 				}
 			}
-			showmessage(L('operation_success'));
+			dr_admin_msg(1,L('operation_success'));
 		} else {
-			showmessage(L('operation_failure'));
+			dr_admin_msg(0,L('operation_failure'));
 		}
 	}
 	
@@ -112,7 +112,7 @@ class role extends admin {
 				$this->priv_db->delete(array('roleid'=>$this->input->post('roleid'),'siteid'=>$this->input->post('siteid')));
 			}
 			$this->_cache();	
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 
 		} else {
 			$siteid = intval($this->input->get('siteid'));
@@ -159,7 +159,7 @@ class role extends admin {
 		$disabled = intval($this->input->get('disabled'));
 		$this->db->update(array('disabled'=>$disabled),array('roleid'=>$roleid));
 		$this->_cache();
-		showmessage(L('operation_success'),'?m=admin&c=role');
+		dr_admin_msg(1,L('operation_success'),'?m=admin&c=role');
 	}
 	/**
 	 * 成员管理
@@ -176,11 +176,11 @@ class role extends admin {
 	 * 设置栏目权限
 	 */
 	public function setting_cat_priv() {
-		$roleid = $this->input->get('roleid') && intval($this->input->get('roleid')) ? intval($this->input->get('roleid')) : showmessage(L('illegal_parameters'), HTTP_REFERER);
+		$roleid = $this->input->get('roleid') && intval($this->input->get('roleid')) ? intval($this->input->get('roleid')) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		$op = $this->input->get('op') && intval($this->input->get('op')) ? intval($this->input->get('op')) : '';
 		switch ($op) {
 			case 1:
-			$siteid = $this->input->get('siteid') && intval($this->input->get('siteid')) ? intval($this->input->get('siteid')) : showmessage(L('illegal_parameters'), HTTP_REFERER);
+			$siteid = $this->input->get('siteid') && intval($this->input->get('siteid')) ? intval($this->input->get('siteid')) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			pc_base::load_app_class('role_cat', '', 0);
 			$category = role_cat::get_category($siteid);
 			//获取角色当前权限设置
@@ -241,10 +241,10 @@ class role extends admin {
 		break;
 		
 		case 2:
-			$siteid = $this->input->get('siteid') && intval($this->input->get('siteid')) ? intval($this->input->get('siteid')) : showmessage(L('illegal_parameters'), HTTP_REFERER);
+			$siteid = $this->input->get('siteid') && intval($this->input->get('siteid')) ? intval($this->input->get('siteid')) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			pc_base::load_app_class('role_cat', '', 0);
 			role_cat::updata_priv($roleid, $siteid, $this->input->post('priv'));
-			showmessage(L('operation_success'),'?m=admin&c=role&a=init', '', 'edit');
+			dr_admin_msg(1,L('operation_success'),'?m=admin&c=role&a=init', '', 'edit');
 			break;
 		
 		default:

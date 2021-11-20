@@ -26,7 +26,7 @@ class member_setting extends admin {
 			
 			$this->db->update(array('module'=>'member', 'setting'=>$member_setting), array('module'=>'member'));
 			setcache('member_setting', $this->input->post('info'));
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		} else {
 			$show_scroll = true;
 			$member_setting = $this->db->get_one(array('module'=>'member'), 'setting');

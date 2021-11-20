@@ -20,22 +20,22 @@ class data extends admin {
 	public function add() {
 		pc_base::load_app_func('global');
 		if (isset($_POST['dosubmit'])) {
-			$name = isset($_POST['name']) && trim($_POST['name']) ? trim($_POST['name']) : showmessage(L('name').L('empty'));
+			$name = isset($_POST['name']) && trim($_POST['name']) ? trim($_POST['name']) : dr_admin_msg(0,L('name').L('empty'));
 			$dis_type = isset($_POST['dis_type']) && intval($_POST['dis_type']) ? intval($_POST['dis_type']) : 1;
 			$cache = isset($_POST['cache']) && intval($_POST['cache']) ? intval($_POST['cache']) : 0;
 			$num = isset($_POST['num']) && intval($_POST['num']) ? intval($_POST['num']) : 0;
 			$type = isset($_POST['type']) && intval($_POST['type']) ? intval($_POST['type']) : 0;
 			//检查名称是否已经存在
 			if ($this->db->get_one(array('name'=>$name)))  {
-				showmessage(L('name').L('exists'));
+				dr_admin_msg(0,L('name').L('exists'));
 			}
 			$sql = array();
 			if ($type == '1') { //自定义SQL
-				$data = isset($_POST['data']) && trim($_POST['data']) ? trim($_POST['data']) : showmessage(L('custom_sql').L('empty'));
+				$data = isset($_POST['data']) && trim($_POST['data']) ? trim($_POST['data']) : dr_admin_msg(0,L('custom_sql').L('empty'));
 				$sql = array('data'=>$data);
 			} else { //模型配置方式
-				$module = isset($_POST['module']) && trim($_POST['module']) ? trim($_POST['module']) : showmessage(L('please_select_model'));
-				$action = isset($_POST['action']) && trim($_POST['action']) ? trim($_POST['action']) : showmessage(L('please_select_action'));
+				$module = isset($_POST['module']) && trim($_POST['module']) ? trim($_POST['module']) : dr_admin_msg(0,L('please_select_model'));
+				$action = isset($_POST['action']) && trim($_POST['action']) ? trim($_POST['action']) : dr_admin_msg(0,L('please_select_action'));
 				$html = pc_tag_class($module);
 				$data = array();
 				if (isset($html[$action]) && is_array($html[$action])) {
@@ -44,13 +44,13 @@ class data extends admin {
 						$$key = isset($_POST[$key]) && trim($_POST[$key]) ? trim($_POST[$key]) : '';
 						if (!empty($val['validator'])) {
 							if (isset($val['validator']['min']) && strlen($$key) < $val['validator']['min']) {
-								showmessage($val['name'].L('should').L('is_greater_than').$val['validator']['min'].L('lambda'));
+								dr_admin_msg(0,$val['name'].L('should').L('is_greater_than').$val['validator']['min'].L('lambda'));
 							} 
 							if (isset($val['validator']['max']) && strlen($$key) > $val['validator']['max']) {
-								showmessage($val['name'].L('should').L('less_than').$val['validator']['max'].L('lambda'));
+								dr_admin_msg(0,$val['name'].L('should').L('less_than').$val['validator']['max'].L('lambda'));
 							} 
 							if (!preg_match('/'.$val['validator']['reg'].'/'.$val['validator']['reg_param'], $$key)) {
-								showmessage($val['name'].$val['validator']['reg_msg']);
+								dr_admin_msg(0,$val['name'].$val['validator']['reg_msg']);
 							}
 						}
 						$data[$key] = $$key;
@@ -81,9 +81,9 @@ class data extends admin {
 					@file_put_contents($filepath.$id.'.php', $str);
 				}
 				
-				showmessage('', '', '', 'add');
+				dr_admin_msg(1,'', '', '', 'add');
 			} else {
-				showmessage(L('operation_failure'));
+				dr_admin_msg(0,L('operation_failure'));
 			}
 		} else {
 			pc_base::load_sys_class('form','',0);
@@ -99,13 +99,13 @@ class data extends admin {
 	}
 	
 	public function edit() {
-		$id = isset($_GET['id']) && intval($_GET['id']) ? intval($_GET['id']) :  showmessage(L('illegal_parameters'), HTTP_REFERER);
+		$id = isset($_GET['id']) && intval($_GET['id']) ? intval($_GET['id']) :  dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		if (!$edit_data = $this->db->get_one(array('id'=>$id))) {
-			showmessage(L('notfound'));
+			dr_admin_msg(0,L('notfound'));
 		}
 		pc_base::load_app_func('global');
 		if (isset($_POST['dosubmit'])) {
-			$name = isset($_POST['name']) && trim($_POST['name']) ? trim($_POST['name']) : showmessage(L('name').L('empty'));
+			$name = isset($_POST['name']) && trim($_POST['name']) ? trim($_POST['name']) : dr_admin_msg(0,L('name').L('empty'));
 			$dis_type = isset($_POST['dis_type']) && intval($_POST['dis_type']) ? intval($_POST['dis_type']) : 1;
 			$cache = isset($_POST['cache']) && intval($_POST['cache']) ? intval($_POST['cache']) : 0;
 			$num = isset($_POST['num']) && intval($_POST['num']) ? intval($_POST['num']) : 0;
@@ -113,16 +113,16 @@ class data extends admin {
 			//检查名称是否已经存在
 		if ($edit_data['name'] != $name) {
 				if ($this->db->get_one(array('name'=>$name), 'id'))  {
-					showmessage(L('name').L('exists'));
+					dr_admin_msg(0,L('name').L('exists'));
 				}
 			}
 			$sql = array();
 			if ($type == '1') { //自定义SQL
-				$data = isset($_POST['data']) && trim($_POST['data']) ? trim($_POST['data']) : showmessage(L('custom_sql').L('empty'));
+				$data = isset($_POST['data']) && trim($_POST['data']) ? trim($_POST['data']) : dr_admin_msg(0,L('custom_sql').L('empty'));
 				$sql = array('data'=>$data);
 			} else { //模型配置方式
-				$module = isset($_POST['module']) && trim($_POST['module']) ? trim($_POST['module']) : showmessage(L('please_select_model'));
-				$action = isset($_POST['action']) && trim($_POST['action']) ? trim($_POST['action']) : showmessage(L('please_select_action'));
+				$module = isset($_POST['module']) && trim($_POST['module']) ? trim($_POST['module']) : dr_admin_msg(0,L('please_select_model'));
+				$action = isset($_POST['action']) && trim($_POST['action']) ? trim($_POST['action']) : dr_admin_msg(0,L('please_select_action'));
 				$html = pc_tag_class($module);
 				$data = array();
 				if (isset($html[$action]) && is_array($html[$action])) {
@@ -131,13 +131,13 @@ class data extends admin {
 						$$key = isset($_POST[$key]) && trim($_POST[$key]) ? trim($_POST[$key]) : '';
 					if (!empty($val['validator'])) {
 							if (isset($val['validator']['min']) && strlen($$key) < $val['validator']['min']) {
-								showmessage($val['name'].L('should').L('is_greater_than').$val['validator']['min'].L('lambda'));
+								dr_admin_msg(0,$val['name'].L('should').L('is_greater_than').$val['validator']['min'].L('lambda'));
 							} 
 							if (isset($val['validator']['max']) && strlen($$key) > $val['validator']['max']) {
-								showmessage($val['name'].L('should').L('less_than').$val['validator']['max'].L('lambda'));
+								dr_admin_msg(0,$val['name'].L('should').L('less_than').$val['validator']['max'].L('lambda'));
 							} 
 							if (!preg_match('/'.$val['validator']['reg'].'/'.$val['validator']['reg_param'], $$key)) {
-								showmessage($val['name'].$val['validator']['reg_msg']);
+								dr_admin_msg(0,$val['name'].$val['validator']['reg_msg']);
 							}
 						}
 						$data[$key] = $$key;
@@ -168,9 +168,9 @@ class data extends admin {
 					@file_put_contents($filepath.$id.'.php', $str);
 				}
 				
-				showmessage('', '', '', 'edit');
+				dr_admin_msg(1,'', '', '', 'edit');
 			} else {
-				showmessage(L('operation_failure'));
+				dr_admin_msg(0,L('operation_failure'));
 			}
 		} else {
 			pc_base::load_sys_class('form','',0);
@@ -198,14 +198,14 @@ class data extends admin {
 			}
 			$sql = implode('\',\'', $id);
 			$this->db->delete("id in ('$sql')");
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		} else {
 			$id = intval($id);
-			if(empty($id)) showmessage(L('illegal_parameters'), HTTP_REFERER);
+			if(empty($id)) dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			if ($this->db->delete(array('id'=>$id))) {
-				showmessage(L('operation_success'), HTTP_REFERER);
+				dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 			} else {
-				showmessage(L('operation_failure'), HTTP_REFERER);
+				dr_admin_msg(0,L('operation_failure'), HTTP_REFERER);
 			}
 		}
 	}

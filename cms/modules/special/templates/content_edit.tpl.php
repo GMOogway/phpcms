@@ -51,13 +51,13 @@ $p = dr_authcode(array(
                     </div>
                     <div class="portlet-body">
                         <div class="form-body clear">
-                            <div class="form-group">
+                            <div class="form-group" id="dr_row_typeid">
                                 <label class="control-label col-md-2"><font color="red">*</font> <?php echo L('for_type')?></label>
                                 <div class="col-md-10">
-                                    <?php echo form::select($types, $info['typeid'], 'name="info[typeid]" id="typeid"', L('please_choose_type'))?>
+                                    <?php echo form::select($types, $info['typeid'], 'name="info[typeid]" id="typeid" class="input-text"', L('please_choose_type'))?>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" id="dr_row_title">
                                 <label class="control-label col-md-2"><font color="red">*</font> <?php echo L('content_title')?></label>
                                 <div class="col-md-10">
                                     <input type="text" style="width:350px;<?php echo ($style_color ? 'color:'.$style_color.';' : '').($style_font_weight ? 'font-weight:'.$style_font_weight.';' : '');?>" name="info[title]" id="title" value="<?php echo new_html_special_chars($info['title'])?>" class="measure-input " onBlur="check_title('?m=special&c=content&a=public_check_title&specialid=<?php echo intval($_GET['specialid'])?>&id=<?php echo intval($_GET['id'])?>','title');$.post('<?php echo WEB_PATH;?>api.php?op=get_keywords&sid='+Math.random()*5, {data:$('#title').val()}, function(data){if(data && $('#keywords').val()=='') {$('#keywords').val(data); $('#keywords').tagsinput('add', data);}});" />
@@ -80,10 +80,10 @@ $p = dr_authcode(array(
                                     <textarea name="info[description]" id="description" style='width:98%;height:46px;' onkeyup="strlen_verify(this, 'description_len', 255)"><?php echo $info['description']?></textarea> 还可输入<B><span id="description_len"><?php echo 255-strlen($info['description'])?></span></B> 个字符
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" id="dr_row_content">
                                 <label class="control-label col-md-2"><font color="red">*</font> <?php echo L('content')?></label>
                                 <div class="col-md-10">
-                                    <div id='content_tip'></div><textarea name="data[content]" id="content" boxid="content"><?php echo $data['content']?></textarea><?php echo form::editor('content', 'full', '', 'content', '', '', 1)?><span class="help-block"><div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="add_introduce" type="checkbox"  value="1" checked><?php echo L('iscutcontent')?><span></span></label><input type="text" name="introcude_length" value="200" size="3"><?php echo L('characters_to_contents')?><label class="mt-checkbox mt-checkbox-outline"><input type='checkbox' name='auto_thumb' value="1" checked><?php echo L('iscutcotent_pic')?><span></span></label><input type="text" name="auto_thumb_no" value="1" size="2" class=""><?php echo L('picture2thumb')?></div></span>
+                                    <div id='content_tip'></div><textarea class="dr_ueditor" name="data[content]" id="content" boxid="content"><?php echo $data['content']?></textarea><?php echo form::editor('content', 'full', '', 'content', '', '', 1)?><span class="help-block"><div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="add_introduce" type="checkbox"  value="1" checked><?php echo L('iscutcontent')?><span></span></label><input type="text" name="introcude_length" value="200" size="3"><?php echo L('characters_to_contents')?><label class="mt-checkbox mt-checkbox-outline"><input type='checkbox' name='auto_thumb' value="1" checked><?php echo L('iscutcotent_pic')?><span></span></label><input type="text" name="auto_thumb_no" value="1" size="2" class=""><?php echo L('picture2thumb')?></div></span>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -167,39 +167,31 @@ function load_file_list(id) {
 </body>
 </html>
 <script type="text/javascript"> 
-<!--
-//只能放到最下面
-$(function(){
-	$.formValidator.initConfig({formid:"myform",autotip:true,onerror:function(msg,obj){Dialog.alert(msg,function(){$(obj).focus();
-	boxid = $(obj).attr('id');
-	if($('#'+boxid).attr('boxid')!=undefined) {
-		check_content(boxid);
-	}
-	})}});
-	$("#typeid").formValidator({autotip:true,onshow:"<?php echo L('please_choose_type')?>",onfocus:"<?php echo L('please_choose_type')?>"}).inputValidator({min:1,onerror:"<?php echo L('please_choose_type')?>"}).defaultPassed();
-	$("#title").formValidator({autotip:true,onshow:"<?php echo L('please_input_title')?>",onfocus:"<?php echo L('please_input_title')?>"}).inputValidator({min:1,onerror:"<?php echo L('please_input_title')?>"}).defaultPassed();
-/*
- * 加载禁用外边链接
- */
-<?php if($info['islink']==0) {?>
-	$('#linkurl').attr('disabled',true);
-	$('#islink').attr('checked',false);
-	<?php }?>
-	$('.edit_content').hide();
-});
 document.title='编辑：<?php echo $info['title']?>';
 self.moveTo(0, 0);
 function refersh_window() {
 	setcookie('refersh_time', 1);
 }
 function checkall(){
+	if(!$("#typeid").val()){
+		$('#dr_row_typeid').addClass('has-error');
+		Dialog.alert("<?php echo L('please_choose_type')?>",function(){$("#typeid").focus();})
+		return false;
+	}
+	if(!$("#title").val()){
+		$('#dr_row_title').addClass('has-error');
+		Dialog.alert("<?php echo L('please_input_title')?>",function(){$("#title").focus();})
+		return false;
+	}
 <?php if (SYS_EDITOR) {?>
 	if(CKEDITOR.instances.content.getData()==""){
+		$('#dr_row_content').addClass('has-error');
 		Dialog.alert("<?php echo L('content_empty')?>",function(){editor.focus();})
 		return false;
 	}
 <?php } else {?>
 	if(UE.getEditor("content").getContent()==""){
+		$('#dr_row_content').addClass('has-error');
 		Dialog.alert("<?php echo L('content_empty')?>",function(){UE.getEditor("content").focus();})
 		return false;
 	}

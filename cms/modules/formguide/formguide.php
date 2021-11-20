@@ -61,7 +61,7 @@ class formguide extends admin {
 					$this->m_db->query($sql);
 				}
 			}
-			showmessage(L('add_success'), '?m=formguide&c=formguide_field&a=init&formid='.$formid, '', 'add');
+			dr_admin_msg(1,L('add_success'), '?m=formguide&c=formguide_field&a=init&formid='.$formid, '', 'add');
 		} else {
 			$siteid = $this->get_siteid();
 			$template_list = template_list($siteid, 0);
@@ -83,7 +83,7 @@ class formguide extends admin {
 	 */
 	public function edit() {
 		if (!$this->input->get('formid') || empty($this->input->get('formid'))) {
-			showmessage(L('illegal_operation'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
 		}
 		$formid = intval($this->input->get('formid'));
 		$setting = $this->input->post('setting');
@@ -99,7 +99,7 @@ class formguide extends admin {
 			$info['js_template'] = $info['show_js_template'];
 			unset($info['show_js_template']);
 			$this->db->update($info, array('modelid'=>$formid));
-			showmessage(L('update_success'), '?m=formguide&c=formguide&a=init&formid='.$formid, '', 'edit');
+			dr_admin_msg(1,L('update_success'), '?m=formguide&c=formguide&a=init&formid='.$formid, '', 'edit');
 		} else {
 			$siteid = $this->get_siteid();
 			$template_list = template_list($siteid, 0);
@@ -122,12 +122,12 @@ class formguide extends admin {
 	 */
 	public function disabled() {
 		if (!$this->input->get('formid') || empty($this->input->get('formid'))) {
-			showmessage(L('illegal_operation'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
 		}
 		$formid = intval($this->input->get('formid'));
 		$val = $this->input->get('val') ? intval($this->input->get('val')) : 0;
 		$this->db->update(array('disabled'=>$val), array('modelid'=>$formid, 'siteid'=>$this->get_siteid()));
-		showmessage(L('operation_success'), HTTP_REFERER);
+		dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 	}
 	
 	/**
@@ -135,7 +135,7 @@ class formguide extends admin {
 	 */
 	public function public_preview() {
 		if (!$this->input->get('formid') || empty($this->input->get('formid'))) {
-			showmessage(L('illegal_operation'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
 		}
 		$formid = intval($this->input->get('formid'));
 		$f_info = $this->db->get_one(array('modelid'=>$formid, 'siteid'=>$this->get_siteid()), 'name');
@@ -171,14 +171,14 @@ class formguide extends admin {
 	 */
 	private function check_info($data = array(), $formid = 0) {
 		if (empty($data) || $data['name']=='') {
-			showmessage(L('input_form_title'), HTTP_REFERER);
+			dr_admin_msg(0,L('input_form_title'), HTTP_REFERER);
 		}
 		if ($data['tablename']=='') {
-			showmessage(L('please_input_tallename'), HTTP_REFERER);
+			dr_admin_msg(0,L('please_input_tallename'), HTTP_REFERER);
 		}
 		$r = $this->db->get_one(array('tablename'=>$data['tablename']), 'tablename, modelid');
 		if ($r['modelid'] && (($r['modelid']!=$formid) || !$formid)) {
-			showmessage(L('tablename_existed'), HTTP_REFERER);
+			dr_admin_msg(0,L('tablename_existed'), HTTP_REFERER);
 		}
 		return $data;
 	}
@@ -196,7 +196,7 @@ class formguide extends admin {
 			$tablename = $m_db->db_tablepre.'form_'.$m_info['tablename'];
 			$m_db->query("DROP TABLE `$tablename`");
 			$this->db->delete(array('modelid'=>$formid, 'siteid'=>$siteid));
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		} elseif ($this->input->post('formid') && !empty($this->input->post('formid'))) {
 			$m_db = pc_base::load_model('sitemodel_field_model');
 			$m_db->delete(array('modelid'=>$formid, 'siteid'=>$siteid));
@@ -208,9 +208,9 @@ class formguide extends admin {
 					$this->db->delete(array('modelid'=>$fid, 'siteid'=>$siteid));
 				}
 			}
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		} else {
-			showmessage(L('illegal_operation'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
 		}
 	}
 	
@@ -219,7 +219,7 @@ class formguide extends admin {
 	 */
 	public function stat() {
 		if (!$this->input->get('formid') || empty($this->input->get('formid'))) {
-			showmessage(L('illegal_operation'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
 		}
 		$formid = intval($this->input->get('formid'));
 		$fields = getcache('formguide_field_'.$formid, 'model');
@@ -245,7 +245,7 @@ class formguide extends admin {
 			$setting = array2string($this->input->post('setting'));  
 			$m_db->update(array('setting'=>$setting), array('module'=>ROUTE_M)); //将配置信息存入数据表中
 			
-			showmessage(L('setting_updates_successful'), HTTP_REFERER, '', 'setting');
+			dr_admin_msg(1,L('setting_updates_successful'), HTTP_REFERER, '', 'setting');
 		} else {
 			if ($this->setting) {
 				@extract($this->setting); 

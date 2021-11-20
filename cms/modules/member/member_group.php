@@ -49,7 +49,7 @@ class member_group extends admin {
 		if(isset($_POST['dosubmit'])) {
 			$info = array();
 			if(!$this->_checkname($_POST['info']['name'])){
-				showmessage('会员组名称已经存在');
+				dr_admin_msg(0,'会员组名称已经存在');
 			}
 			$info = $this->input->post('info');
 			$info['allowpost'] = $info['allowpost'] ? 1 : 0;
@@ -63,7 +63,7 @@ class member_group extends admin {
 			$this->db->insert($info);
 			if($this->db->insert_id()){
 				$this->_updatecache();
-				showmessage(L('operation_success'),'?m=member&c=member_group&a=manage', '', 'add');
+				dr_admin_msg(1,L('operation_success'),'?m=member&c=member_group&a=manage', '', 'add');
 			}
 		} else {
 			$show_header = $show_scroll = true;
@@ -91,10 +91,10 @@ class member_group extends admin {
 			$this->db->update($info, array('groupid'=>$info['groupid']));
 			
 			$this->_updatecache();
-			showmessage(L('operation_success'), '?m=member&c=member_group&a=manage', '', 'edit');
+			dr_admin_msg(1,L('operation_success'), '?m=member&c=member_group&a=manage', '', 'edit');
 		} else {					
 			$show_header = $show_scroll = true;
-			$groupid = isset($_GET['groupid']) ? $_GET['groupid'] : showmessage(L('illegal_parameters'), HTTP_REFERER);
+			$groupid = isset($_GET['groupid']) ? $_GET['groupid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			
 			$groupinfo = $this->db->get_one(array('groupid'=>$groupid));
 			include $this->admin_tpl('member_group_edit');		
@@ -111,22 +111,22 @@ class member_group extends admin {
 			}
 			
 			$this->_updatecache();
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		} else {
-			showmessage(L('operation_failure'), HTTP_REFERER);
+			dr_admin_msg(0,L('operation_failure'), HTTP_REFERER);
 		}
 	}
 	/**
 	 * 删除会员组
 	 */
 	function delete() {	
-		$groupidarr = isset($_POST['groupid']) ? $_POST['groupid'] : showmessage(L('illegal_parameters'), HTTP_REFERER);
+		$groupidarr = isset($_POST['groupid']) ? $_POST['groupid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		$where = to_sqls($groupidarr, '', 'groupid');
 		if ($this->db->delete($where)) {
 			$this->_updatecache();
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		} else {
-			showmessage(L('operation_failure'), HTTP_REFERER);
+			dr_admin_msg(0,L('operation_failure'), HTTP_REFERER);
 		}
 	}
 

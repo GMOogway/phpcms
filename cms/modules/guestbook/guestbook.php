@@ -70,7 +70,7 @@ class guestbook extends admin {
 					$this->db->update(array('listorder'=>$listorder),array('guestid'=>$guestid));
 				}
 			}
-			showmessage(L('operation_success'),HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'),HTTP_REFERER);
 		} 
 	}
 	
@@ -79,14 +79,14 @@ class guestbook extends admin {
 		if($this->input->post('dosubmit')) {
 			$type = $this->input->post('type');
 			if(empty($type['name'])) {
-				showmessage(L('typename_noempty'),HTTP_REFERER);
+				dr_admin_msg(0,L('typename_noempty'),HTTP_REFERER);
 			}
 			$type['siteid'] = $this->get_siteid(); 
 			$type['module'] = ROUTE_M;
  			$this->db2 = pc_base::load_model('type_model');
 			$typeid = $this->db2->insert($type,true);
 			if(!$typeid) return FALSE;
-			showmessage(L('operation_success'),HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'),HTTP_REFERER);
 		} else {
 			$show_validator = $show_scroll = true; 
  			include $this->admin_tpl('guestbook_type_add');
@@ -99,22 +99,22 @@ class guestbook extends admin {
 	 */
 	public function delete_type() {
 		if((!$this->input->get('typeid') || empty($this->input->get('typeid'))) && (!$this->input->post('typeid') || empty($this->input->post('typeid')))) {
-			showmessage(L('illegal_parameters'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		} else {
 			if(is_array($this->input->post('typeid'))){
 				foreach($this->input->post('typeid') as $typeid_arr) {
  					$this->db2->delete(array('typeid'=>$typeid_arr));
 				}
-				showmessage(L('operation_success'),HTTP_REFERER);
+				dr_admin_msg(1,L('operation_success'),HTTP_REFERER);
 			}else{
 				$typeid = intval($this->input->get('typeid'));
 				if($typeid < 1) return false;
 				$result = $this->db2->delete(array('typeid'=>$typeid));
 				if($result)
 				{
-					showmessage(L('operation_success'),HTTP_REFERER);
+					dr_admin_msg(1,L('operation_success'),HTTP_REFERER);
 				}else {
-					showmessage(L("operation_failure"),HTTP_REFERER);
+					dr_admin_msg(0,L("operation_failure"),HTTP_REFERER);
 				}
 			}
 		}
@@ -134,7 +134,7 @@ class guestbook extends admin {
 			
 			$this->db->update($this->input->post('guestbook'),array('guestid'=>$guestid));
 			
-			showmessage(L('operation_success'),'?m=guestbook&c=guestbook&a=show','', 'show');
+			dr_admin_msg(1,L('operation_success'),'?m=guestbook&c=guestbook&a=show','', 'show');
 			
 		}else{
  			$show_validator = $show_scroll = $show_header = true;
@@ -146,7 +146,7 @@ class guestbook extends admin {
 			}
 			//解出链接内容
 			$info = $this->db->get_one(array('guestid'=>$this->input->get('guestid')));
-			if(!$info) showmessage(L('guestbook_exit'));
+			if(!$info) dr_admin_msg(0,L('guestbook_exit'));
 			extract($info); 
  			include $this->admin_tpl('guestbook_show');
 		}
@@ -164,13 +164,13 @@ class guestbook extends admin {
 			if(!is_array($type) || empty($type)) return false;
 			if((!$type['name']) || empty($type['name'])) return false;
 			$this->db2->update($type,array('typeid'=>$typeid));
-			showmessage(L('operation_success'),'?m=guestbook&c=guestbook&a=list_type','', 'edit');
+			dr_admin_msg(1,L('operation_success'),'?m=guestbook&c=guestbook&a=list_type','', 'edit');
 			
 		}else{
  			$show_validator = $show_scroll = $show_header = true;
 			//解出分类内容
 			$info = $this->db2->get_one(array('typeid'=>$this->input->get('typeid')));
-			if(!$info) showmessage(L('guesttype_exit'));
+			if(!$info) dr_admin_msg(0,L('guesttype_exit'));
 			extract($info);
 			include $this->admin_tpl('guestbook_type_edit');
 		}
@@ -183,7 +183,7 @@ class guestbook extends admin {
 	 */
 	public function delete() {
   		if((!$this->input->get('guestid') || empty($this->input->get('guestid'))) && (!$this->input->post('guestid') || empty($this->input->post('guestid')))) {
-			showmessage(L('illegal_parameters'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		} else {
 			if(is_array($this->input->post('guestid'))){
 				foreach($this->input->post('guestid') as $guestid_arr) {
@@ -191,7 +191,7 @@ class guestbook extends admin {
 					$this->db->delete(array('guestid'=>$guestid_arr));
 					 
 				}
-				showmessage(L('operation_success'),'?m=guestbook&c=guestbook');
+				dr_admin_msg(1,L('operation_success'),'?m=guestbook&c=guestbook');
 			}else{
 				$guestid = intval($this->input->get('guestid'));
 				if($guestid < 1) return false;
@@ -199,12 +199,12 @@ class guestbook extends admin {
 				$result = $this->db->delete(array('guestid'=>$guestid));
 				 
 				if($result){
-					showmessage(L('operation_success'),'?m=guestbook&c=guestbook');
+					dr_admin_msg(1,L('operation_success'),'?m=guestbook&c=guestbook');
 				}else {
-					showmessage(L("operation_failure"),'?m=guestbook&c=guestbook');
+					dr_admin_msg(0,L("operation_failure"),'?m=guestbook&c=guestbook');
 				}
 			}
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		}
 	}
 	 
@@ -228,7 +228,7 @@ class guestbook extends admin {
   			$m_db = pc_base::load_model('module_model'); //调用模块数据模型
 			$set = array2string($setting);
 			$m_db->update(array('setting'=>$set), array('module'=>ROUTE_M));
-			showmessage(L('setting_updates_successful'), '?m=guestbook&c=guestbook&a=init');
+			dr_admin_msg(1,L('setting_updates_successful'), '?m=guestbook&c=guestbook&a=init');
 		} else {
 			@extract($now_seting);
  			include $this->admin_tpl('setting');
@@ -239,21 +239,21 @@ class guestbook extends admin {
  	public function check_register(){
 		if($this->input->post('dosubmit')) {
 			if((!$this->input->get('guestid') || empty($this->input->get('guestid'))) && (!$this->input->post('guestid') || empty($this->input->post('guestid')))) {
-				showmessage(L('illegal_parameters'), HTTP_REFERER);
+				dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			} else {
 				if(is_array($this->input->post('guestid'))){//批量审核
 					foreach($this->input->post('guestid') as $guestid_arr) {
 						$this->db->update(array('passed'=>1),array('guestid'=>$guestid_arr));
 					}
-					showmessage(L('operation_success'),'?m=guestbook&c=guestbook');
+					dr_admin_msg(1,L('operation_success'),'?m=guestbook&c=guestbook');
 				}else{//单个审核
 					$guestid = intval($this->input->get('guestid'));
 					if($guestid < 1) return false;
 					$result = $this->db->update(array('passed'=>1),array('guestid'=>$guestid));
 					if($result){
-						showmessage(L('operation_success'),'?m=guestbook&c=guestbook');
+						dr_admin_msg(1,L('operation_success'),'?m=guestbook&c=guestbook');
 					}else {
-						showmessage(L("operation_failure"),'?m=guestbook&c=guestbook');
+						dr_admin_msg(0,L("operation_failure"),'?m=guestbook&c=guestbook');
 					}
 				}
 			}
@@ -270,16 +270,16 @@ class guestbook extends admin {
  	//单个审核申请
  	public function check(){
 		if((!$this->input->get('guestid') || empty($this->input->get('guestid'))) && (!$this->input->post('guestid') || empty($this->input->post('guestid')))) {
-			showmessage(L('illegal_parameters'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		} else { 
 			$guestid = intval($this->input->get('guestid'));
 			if($guestid < 1) return false;
 			//删除留言板
 			$result = $this->db->update(array('passed'=>1),array('guestid'=>$guestid));
 			if($result){
-				showmessage(L('operation_success'),'?m=guestbook&c=guestbook');
+				dr_admin_msg(1,L('operation_success'),'?m=guestbook&c=guestbook');
 			}else {
-				showmessage(L("operation_failure"),'?m=guestbook&c=guestbook');
+				dr_admin_msg(0,L("operation_failure"),'?m=guestbook&c=guestbook');
 			}
 			 
 		}

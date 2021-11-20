@@ -1,6 +1,6 @@
 <?php
 defined('IN_CMS') or exit('No permission resources.');
-if (!module_exists(ROUTE_M)) showmessage(L('module_not_exists'));
+if (!module_exists(ROUTE_M)) dr_admin_msg(0,L('module_not_exists'));
 pc_base::load_app_class('admin', 'admin', 0);
 pc_base::load_sys_class('format', '', 0);
 pc_base::load_sys_class('form', '', 0);
@@ -49,12 +49,12 @@ class bdts extends admin {
 				foreach ($post['bdts'] as $i => $t) {
 					if (isset($t['site'])) {
 						if (!$t['site']) {
-							showmessage(L('域名必须填写'));
+							dr_admin_msg(0,L('域名必须填写'));
 						}
 						$bdts[$i]['site'] = $t['site'];
 					} else {
 						if (!$t['token']) {
-							showmessage(L('token必须填写'));
+							dr_admin_msg(0,L('token必须填写'));
 						}
 						$bdts[$i-1]['token'] = $t['token'];
 					}
@@ -62,7 +62,7 @@ class bdts extends admin {
 				$post['bdts'] = $bdts;
 			}
 			$this->bdts->setConfig($post);
-			showmessage(L('操作成功'), '?m=bdts&c=bdts&a=config&menuid='.$this->input->get('menuid'));
+			dr_admin_msg(1,L('操作成功'), '?m=bdts&c=bdts&a=config&menuid='.$this->input->get('menuid'));
 		}else{
 			$this->siteid = $this->get_siteid();
 			if(!$this->siteid) $this->siteid = 1;
@@ -78,7 +78,7 @@ class bdts extends admin {
 
 		@unlink(CACHE_PATH.'caches_bdts/bdts_log.php');
 
-		showmessage(L('操作成功'), '?m=bdts&c=bdts&a=log_index&menuid='.$this->input->get('menuid'));
+		dr_admin_msg(1,L('操作成功'), '?m=bdts&c=bdts&a=log_index&menuid='.$this->input->get('menuid'));
 	}
 	
 	//手动推送
@@ -87,18 +87,18 @@ class bdts extends admin {
         if (IS_POST) {
             $url = $this->input->post('url');
             if (!$url) {
-                showmessage(L('URL不能为空'));
+                dr_admin_msg(0,L('URL不能为空'));
             }
 
             $config = $this->bdts->getConfig();
             if (!$config) {
-                showmessage(L('百度推送配置为空，不能推送'));
+                dr_admin_msg(0,L('百度推送配置为空，不能推送'));
             }
 
             $uri = parse_url($url);
             $site = $uri['host'];
             if (!$site) {
-                showmessage(L('百度推送没有获取到内容url（'.$url.'）的host值，不能推送'));
+                dr_admin_msg(0,L('百度推送没有获取到内容url（'.$url.'）的host值，不能推送'));
             }
 
             $token = '';
@@ -108,7 +108,7 @@ class bdts extends admin {
                 }
             }
             if (!$token) {
-                showmessage(L('百度推送没有获取到内容url的Token，不能推送'));
+                dr_admin_msg(0,L('百度推送没有获取到内容url的Token，不能推送'));
             }
 
             $api = 'http://data.zz.baidu.com/urls?site='.$site.'&token='.$token;
@@ -131,7 +131,7 @@ class bdts extends admin {
                 @file_put_contents(CACHE_PATH.'caches_bdts/bdts_log.php', date('Y-m-d H:i:s').' 手动['.$url.'] - 成功'.PHP_EOL, FILE_APPEND);
             }
 
-            showmessage(L('操作成功'), '?m=bdts&c=bdts&a=url_add&menuid='.$this->input->get('menuid'));
+            dr_admin_msg(1,L('操作成功'), '?m=bdts&c=bdts&a=url_add&menuid='.$this->input->get('menuid'));
         }
 
         include $this->admin_tpl('url_add');
@@ -192,16 +192,16 @@ class bdts extends admin {
 		$id = $this->input->get('id');
 		$url = $this->apiurl();
 		if (empty($url)) {
-			showmessage(L('bdts_config_url'), '?m=bdts&c=bdts&a=config&menuid='.$this->input->get('menuid'));
+			dr_admin_msg(0,L('bdts_config_url'), '?m=bdts&c=bdts&a=config&menuid='.$this->input->get('menuid'));
 		}
 		$modelid = intval($this->input->get('modelid'));
 		if(!$modelid) $modelid = 1;
 		$this->db->set_model($modelid);
-		if($this->db->table_name==$this->db->db_tablepre) showmessage(L('model_table_not_exists'));
+		if($this->db->table_name==$this->db->db_tablepre) dr_admin_msg(0,L('model_table_not_exists'));
 		$rs = $this->db->get_one(array('id'=>$id));
 		$bdts_r = $this->db->get_one(array('modelid'=>$modelid,'contentid'=>$rs['id']));
 		if ($bdts_r) {
-			showmessage(L('have_to_bdts'), HTTP_REFERER);
+			dr_admin_msg(0,L('have_to_bdts'), HTTP_REFERER);
 		}
 		if ($rs) {
 			$data = $rs['url'];
@@ -210,15 +210,15 @@ class bdts extends admin {
 			if (isset($arr['success'])) {
 				if ($arr['success'] != '0') {
 					$this->db->insert(array('modelid'=>$modelid,'contentid'=>$id));
-					showmessage(L('bdts_success'), HTTP_REFERER);
+					dr_admin_msg(1,L('bdts_success'), HTTP_REFERER);
 				} else {
-					showmessage(L('bdts_error').$result, HTTP_REFERER);
+					dr_admin_msg(0,L('bdts_error').$result, HTTP_REFERER);
 				}
 			} else {
-				showmessage(L('bdts_error').$result['message'], HTTP_REFERER);
+				dr_admin_msg(0,L('bdts_error').$result['message'], HTTP_REFERER);
 			}
 		} else {
-			showmessage(L('parameter_error'), HTTP_REFERER);
+			dr_admin_msg(0,L('parameter_error'), HTTP_REFERER);
 		}
 		
 	}

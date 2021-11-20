@@ -5,6 +5,8 @@ Add a new file(.lang.php) with your module name at /cms/languages/
 translation save at the array:$LANG
 */
 
+$LANG['only_fonder_operation'] = '只有创始人才能执行该操作';
+$LANG['only_fonder_admin_operation'] = '只有创始人和超级管理员才能执行该操作';
 $LANG['only_allowed_to_upload_txt_files'] = '只允许上传txt类型文件。';
 $LANG['no_language'] = '缺少语言包';
 $LANG['website_manage'] = '后台管理中心';

@@ -87,7 +87,7 @@ class slider extends admin {
 				$this->attachment_db = pc_base::load_model('attachment_model');
 				$this->attachment_db->api_update($_POST['slider']['image'],'slider-'.$id,1);
 			}
-			showmessage(L('operation_success'),HTTP_REFERER,'', 'edit');
+			dr_admin_msg(1,L('operation_success'),HTTP_REFERER,'', 'edit');
 		} else {
 			$show_validator = $show_scroll = $show_header = true;
 			pc_base::load_sys_class('form', '', 0);
@@ -122,7 +122,7 @@ class slider extends admin {
 					$this->db->update(array('listorder'=>$listorder),array('id'=>$id));
 				}
 			}
-			showmessage(L('operation_success'),HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'),HTTP_REFERER);
 		} 
 	}
 	
@@ -133,22 +133,21 @@ class slider extends admin {
 	 */
 	public function delete_type() {
 		if((!isset($_GET['typeid']) || empty($_GET['typeid'])) && (!isset($_POST['typeid']) || empty($_POST['typeid']))) {
-			showmessage(L('illegal_parameters'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		} else {
 			if(is_array($_POST['typeid'])){
 				foreach($_POST['typeid'] as $typeid_arr) {
  					$this->db2->delete(array('typeid'=>$typeid_arr));
 				}
-				showmessage(L('operation_success'),HTTP_REFERER);
+				dr_admin_msg(1,L('operation_success'),HTTP_REFERER);
 			}else{
 				$typeid = intval($_GET['typeid']);
 				if($typeid < 1) return false;
 				$result = $this->db2->delete(array('typeid'=>$typeid));
-				if($result)
-				{
-					showmessage(L('operation_success'),HTTP_REFERER);
+				if($result){
+					dr_admin_msg(1,L('operation_success'),HTTP_REFERER);
 				}else {
-					showmessage(L("operation_failure"),HTTP_REFERER);
+					dr_admin_msg(0,L("operation_failure"),HTTP_REFERER);
 				}
 			}
 		}
@@ -176,7 +175,7 @@ class slider extends admin {
 				$this->attachment_db = pc_base::load_model('attachment_model');
 				$this->attachment_db->api_update($_POST['slider']['image'],'slider-'.$id,1);
 			}
-			showmessage(L('operation_success'),'?m=slider&c=slider&a=edit','', 'edit');
+			dr_admin_msg(1,L('operation_success'),'?m=slider&c=slider&a=edit','', 'edit');
 			
 		}else{
  			$show_validator = $show_scroll = $show_header = true;
@@ -188,7 +187,7 @@ class slider extends admin {
 			}
 			//解出链接内容
 			$info = $this->db->get_one(array('id'=>$_GET['id']));
-			if(!$info) showmessage(L('slider_exit'));
+			if(!$info) dr_admin_msg(0,L('slider_exit'));
 			extract($info); 
  			include $this->admin_tpl('slider_edit');
 		}
@@ -205,13 +204,13 @@ class slider extends admin {
 			if(!is_array($_POST['type']) || empty($_POST['type'])) return false;
 			if((!$_POST['type']['name']) || empty($_POST['type']['name'])) return false;
 			$this->db2->update($_POST['type'],array('typeid'=>$typeid));
-			showmessage(L('operation_success'),'?m=slider&c=slider&a=list_type','', 'edit');
+			dr_admin_msg(1,L('operation_success'),'?m=slider&c=slider&a=list_type','', 'edit');
 			
 		}else{
  			$show_validator = $show_scroll = $show_header = true;
 			//解出分类内容
 			$info = $this->db2->get_one(array('typeid'=>$_GET['typeid']));
-			if(!$info) showmessage(L('slider_exit'));
+			if(!$info) dr_admin_msg(0,L('slider_exit'));
 			extract($info);
 			include $this->admin_tpl('slider_type_edit');
 		}
@@ -224,7 +223,7 @@ class slider extends admin {
 	 */
 	public function delete() {
   		if((!isset($_GET['id']) || empty($_GET['id'])) && (!isset($_POST['id']) || empty($_POST['id']))) {
-			showmessage(L('illegal_parameters'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		} else {
 			if(is_array($_POST['id'])){
 				foreach($_POST['id'] as $id_arr) {
@@ -236,7 +235,7 @@ class slider extends admin {
 						$this->attachment_db->api_delete('slider-'.$id_arr);
 					}
 				}
-				showmessage(L('operation_success'),'?m=slider&c=slider');
+				dr_admin_msg(1,L('operation_success'),'?m=slider&c=slider');
 			}else{
 				$id = intval($_GET['id']);
 				if($id < 1) return false;
@@ -248,12 +247,12 @@ class slider extends admin {
 					$this->attachment_db->api_delete('slider-'.$id);
 				}
 				if($result){
-					showmessage(L('operation_success'),'?m=slider&c=slider');
+					dr_admin_msg(1,L('operation_success'),'?m=slider&c=slider');
 				}else {
-					showmessage(L("operation_failure"),'?m=slider&c=slider');
+					dr_admin_msg(0,L("operation_failure"),'?m=slider&c=slider');
 				}
 			}
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		}
 	}
 	 
@@ -262,14 +261,14 @@ class slider extends admin {
  	public function add_type() {
 		if(isset($_POST['dosubmit'])) {
 			if(empty($_POST['type']['name'])) {
-				showmessage(L('slider_postion_noempty'),HTTP_REFERER);
+				dr_admin_msg(0,L('slider_postion_noempty'),HTTP_REFERER);
 			}
 			$_POST['type']['siteid'] = $this->get_siteid(); 
 			$_POST['type']['module'] = ROUTE_M;
  			$this->db2 = pc_base::load_model('type_model');
 			$typeid = $this->db2->insert($_POST['type'],true);
 			if(!$typeid) return FALSE;
-			showmessage(L('operation_success'),HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'),HTTP_REFERER);
 		} else {
 			$show_validator = $show_scroll = true;
 			$big_menu = array('javascript:artdialog(\'add\',\'?m=slider&c=slider&a=add\',\''.L('slider_add').'\',700,450);void(0);', L('slider_add'));

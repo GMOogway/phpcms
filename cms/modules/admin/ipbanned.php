@@ -40,7 +40,7 @@ class ipbanned extends admin {
   			$info['expires']=strtotime($info['expires']);
 			$this->db->insert($info);
 			$this->public_cache_file();//更新缓存 
-			showmessage(L('operation_success'),'?m=admin&c=ipbanned&a=add','', 'add');
+			dr_admin_msg(1,L('operation_success'),'?m=admin&c=ipbanned&a=add','', 'add');
 		}else{
 			$show_validator = $show_scroll = $show_header = true;
 	 		include $this->admin_tpl('ipbanned_add');
@@ -56,16 +56,16 @@ class ipbanned extends admin {
 				$this->db->delete(array('ipbannedid'=>$ipbannedid_arr));
 			}
 			$this->public_cache_file();//更新缓存 
-			showmessage(L('operation_success'),'?m=admin&c=ipbanned');	
+			dr_admin_msg(1,L('operation_success'),'?m=admin&c=ipbanned');	
 		} else {
 			$ipbannedid = intval($this->input->get('ipbannedid'));
 			if($ipbannedid < 1) return false;
 			$result = $this->db->delete(array('ipbannedid'=>$ipbannedid));
 			$this->public_cache_file();//更新缓存 
 			if($result){
-				showmessage(L('operation_success'),'?m=admin&c=ipbanned');
+				dr_admin_msg(1,L('operation_success'),'?m=admin&c=ipbanned');
 			} else {
-				showmessage(L("operation_failure"),'?m=admin&c=ipbanned');
+				dr_admin_msg(0,L("operation_failure"),'?m=admin&c=ipbanned');
 			}
 		}
 	}

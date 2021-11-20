@@ -15,11 +15,12 @@ class create_html extends admin {
 		$this->categorys = getcache('category_content_'.$this->siteid,'commons');
 		// 不是超级管理员
 		/*if ($_SESSION['roleid']!=1) {
-			showmessage(L('需要超级管理员账号操作'));
+			dr_admin_msg(0,L('需要超级管理员账号操作'));
 		}*/
 	}
 	
 	public function update_urls() {
+		$page = max(0, intval($this->input->get('page')));
 		$show_header = $show_dialog  = '';
 		$admin_username = param::get_cookie('admin_username');
 		$this->model_db = pc_base::load_model('sitemodel_model');
@@ -89,7 +90,7 @@ class create_html extends admin {
 	public function show() {
 		// 生成权限文件
 		if (!dr_html_auth(1)) {
-			showmessage(L('/cache/html/ 无法写入文件'));
+			dr_admin_msg(0,L('/cache/html/ 无法写入文件'));
 		}
 		if($this->input->get('dosubmit')) {
 			$modelid = intval($this->input->get('modelid'));
@@ -194,7 +195,7 @@ class create_html extends admin {
 	public function category() {
 		// 生成权限文件
 		if (!dr_html_auth(1)) {
-			showmessage(L('/cache/html/ 无法写入文件'));
+			dr_admin_msg(0,L('/cache/html/ 无法写入文件'));
 		}
 		if($this->input->get('dosubmit')) {
 			$catids = $this->input->get('catids');
@@ -1087,6 +1088,117 @@ class create_html extends admin {
 		}
 
 		dr_json(1, L('本次替换'.$count.'条数据'));
+	}
+	// 全库
+	public function public_dball_edit() {
+		$cache_class = pc_base::load_sys_class('cache');
+		$page = (int)$this->input->get('page');
+		$tpage = (int)$this->input->get('tpage');
+		$prefix = $this->db->db_tablepre;
+		$name = 'dball_edit';
+
+		$url = '?m=content&c=create_html&a=public_dball_edit';
+
+		if (!$page) {
+			// 计算数量
+			$t1 = $this->input->get('t1');
+			$t2 = $this->input->get('t2');
+			if (!$t1) {
+				dr_json(0, L('替换内容不能为空'));
+			}
+			$data = [];
+			$module = getcache('model', 'commons');
+			if ($module) {
+				foreach ($module as $m) {
+					if($m['siteid']!=$this->siteid) continue;
+					$mod = getcache('model_field_'.$m['modelid'], 'model');
+					if ($mod) {
+						$table = $prefix.$m['tablename'];
+						foreach ($mod as $t) {
+							if ($t['issystem']) {
+								$this->_is_rp_field($t, $table) && $data[] = [ $table, $t['field'] ];
+							} else {
+								$this->_is_rp_field($t, $table.'_data') && $data[] = [ $table.'_data', $t['field'] ];
+							}
+						}
+					}
+				}
+			}
+			$mod = getcache('model_field_0', 'model');
+			if ($mod) {
+				$table = $prefix.'site';
+				foreach ($mod as $t) {
+					if ($t['issystem']) {
+						$this->_is_rp_field($t, $table) && $data[] = [ $table, $t['fieldname'] ];
+					}
+				}
+			}
+			$mod = getcache('model_field_-1', 'model');
+			if ($mod) {
+				$table = $prefix.'category';
+				foreach ($mod as $t) {
+					if ($t['issystem']) {
+						$this->_is_rp_field($t, $table) && $data[] = [ $table, $t['fieldname'] ];
+					}
+				}
+			}
+			$mod = getcache('model_field_-2', 'model');
+			if ($mod) {
+				$table = $prefix.'page';
+				foreach ($mod as $t) {
+					if ($t['issystem']) {
+						$this->_is_rp_field($t, $table) && $data[] = [ $table, $t['fieldname'] ];
+					}
+				}
+			}
+
+			$cache = array_chunk($data, 30);
+			foreach ($cache as $i => $t) {
+				$cache_class->set_auth_data($name.'-'.($i+1), $t);
+			}
+
+			$cache_class->set_auth_data($name, [$t1, $t2]);
+
+			$this->html_msg(1, L('正在执行中...'), $url.'&cache='.$name.'&page=1&tpage='.dr_count($cache));
+		}
+
+		$value = $cache_class->get_auth_data($name);
+		$replace = $cache_class->get_auth_data($name.'-'.$page);
+		if (!$value) {
+			$this->html_msg(0, L('临时数据读取失败'));
+		} elseif (!isset($replace[$page+1])) {
+			$this->html_msg(0, L('替换完成'));
+		}
+
+		// 更新完成
+		if ($page > $tpage) {
+			$this->html_msg(1, L('替换完成'));
+		}
+
+		foreach ($replace as $t) {
+			$sql = 'update `'.$t[0].'` set `'.$t[1].'`=REPLACE(`'.$t[1].'`, \''.addslashes($value[0]).'\', \''.addslashes($value[1]).'\')';
+			$this->db->query($sql);
+		}
+
+		$this->html_msg(1, L('正在执行中【%s】...', "$tpage/$page"), $url.'&tpage='.$tpage.'&page='.($page+1));
+	}
+	// 检测字段是否存在
+	private function _is_rp_field($f, $table) {
+		$this->db->table_name = $table;
+		if (in_array($f['formtype'], array(
+			'image',
+			'images',
+			'file',
+			'downfile',
+			'downfiles',
+			'editor'
+			))) {
+			if ($this->db->field_exists($f['field'])) {
+				return 1;
+			}
+		}
+
+		return 0;
 	}
 	// 联动加载字段
 	public function public_field_index() {

@@ -29,14 +29,14 @@ class linkage extends admin {
 	function add() {
 		if($this->input->post('dosubmit')) {
 			$info = array();
-			$info['name'] = $this->input->post('info')['name'] && trim($this->input->post('info')['name']) ? trim($this->input->post('info')['name']) : showmessage(L('linkage_not_empty'));
+			$info['name'] = $this->input->post('info')['name'] && trim($this->input->post('info')['name']) ? trim($this->input->post('info')['name']) : dr_admin_msg(0,L('linkage_not_empty'));
 			$info['description'] = trim($this->input->post('info')['description']);
 			$info['style'] = trim(intval($this->input->post('info')['style']));
 			$info['siteid'] = trim(intval($this->input->post('info')['siteid']));
 			$this->db->insert($info);
 			$insert_id = $this->db->insert_id();
 			if($insert_id){
-				showmessage(L('operation_success'), '', '', 'add');
+				dr_admin_msg(1,L('operation_success'), '', '', 'add');
 			}
 		} else {
 			$show_header = true;
@@ -56,7 +56,7 @@ class linkage extends admin {
 		if($this->input->post('dosubmit')) {
 			$info = array();
 			$linkageid = intval($this->input->post('linkageid'));
-			$info['name'] = $this->input->post('info')['name'] && trim($this->input->post('info')['name']) ? trim($this->input->post('info')['name']) : showmessage(L('linkage_not_empty'));
+			$info['name'] = $this->input->post('info')['name'] && trim($this->input->post('info')['name']) ? trim($this->input->post('info')['name']) : dr_admin_msg(0,L('linkage_not_empty'));
 			$info['description'] = trim($this->input->post('info')['description']);
 			$info['style'] = trim(intval($this->input->post('info')['style']));
 			$info['siteid'] = trim(intval($this->input->post('info')['siteid']));
@@ -65,7 +65,7 @@ class linkage extends admin {
 			if($this->input->post('info')['parentid']) $info['parentid'] = trim($this->input->post('info')['parentid']);
 			$this->db->update($info,array('linkageid'=>$linkageid));
 			$id = $info['keyid'] ? $info['keyid'] : $linkageid;
-			showmessage(L('operation_success'), '', '', 'edit');			
+			dr_admin_msg(1,L('operation_success'), '', '', 'edit');			
 		} else {
 			$linkageid = intval($this->input->get('linkageid'));
 			$info = $this->db->get_one(array('linkageid'=>$linkageid));
@@ -96,13 +96,13 @@ class linkage extends admin {
 		$this->db->delete(array('keyid' => $linkageid));
 		$id = $keyid ? $keyid : $linkageid;
 		if(!$keyid)$this->_dlecache($linkageid);
-		showmessage(L('operation_success'));	
+		dr_admin_msg(1,L('operation_success'));	
 	}
 	
 	public function public_cache() {
 		$linkageid = intval($this->input->get('linkageid'));
 		$this->_cache($linkageid);
-		showmessage(L('operation_success'));
+		dr_admin_msg(1,L('operation_success'));
 	}
 	/**
 	 * 菜单排序
@@ -115,14 +115,14 @@ class linkage extends admin {
 			}
 		}
 		$id = intval($this->input->post('keyid'));
-		showmessage(L('operation_success'),'?m=admin&c=linkage&a=init');
+		dr_admin_msg(1,L('operation_success'),'?m=admin&c=linkage&a=init');
 	}
 
 	/**
 	 * 管理联动菜单子菜单
 	 */
 	public function public_manage_submenu() {
-		$keyid = $this->input->get('keyid') && trim($this->input->get('keyid')) ? trim($this->input->get('keyid')) : showmessage(L('linkage_parameter_error'));
+		$keyid = $this->input->get('keyid') && trim($this->input->get('keyid')) ? trim($this->input->get('keyid')) : dr_admin_msg(0,L('linkage_parameter_error'));
 		$tree = pc_base::load_sys_class('tree');
 		$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
 		$tree->nbsp = '&nbsp;&nbsp;&nbsp;';
@@ -156,8 +156,8 @@ class linkage extends admin {
 	public function public_sub_add() {		
 		if($this->input->post('dosubmit')) {
 			$info = array();
-			$info['keyid'] = $this->input->post('keyid') && trim($this->input->post('keyid')) ? trim(intval($this->input->post('keyid'))) : showmessage(L('linkage_parameter_error'));
-			$name = $this->input->post('info')['name'] && trim($this->input->post('info')['name']) ? trim($this->input->post('info')['name']) : showmessage(L('linkage_parameter_error'));
+			$info['keyid'] = $this->input->post('keyid') && trim($this->input->post('keyid')) ? trim(intval($this->input->post('keyid'))) : dr_admin_msg(0,L('linkage_parameter_error'));
+			$name = $this->input->post('info')['name'] && trim($this->input->post('info')['name']) ? trim($this->input->post('info')['name']) : dr_admin_msg(0,L('linkage_parameter_error'));
 			$info['description'] = trim($this->input->post('info')['description']);
 			$info['style'] = trim($this->input->post('info')['style']);
 			$info['parentid'] = trim($this->input->post('info')['parentid']);
@@ -169,7 +169,7 @@ class linkage extends admin {
 				$this->db->insert($info);
 			}		
 			if($this->db->insert_id()){
-				showmessage(L('operation_success'), '', '', 'add');
+				dr_admin_msg(1,L('operation_success'), '', '', 'add');
 			}
 		} else {
 			$keyid = $this->input->get('keyid');

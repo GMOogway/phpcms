@@ -42,7 +42,7 @@ class member_modelfield extends admin {
 			$field_type = $this->input->post('info')['formtype'];
 			$where = 'modelid='.$modelid.' AND field=\''.$field.'\' AND siteid='.$this->siteid.'';
 			$model_field = $this->db->get_one($where);
-			if ($model_field) showmessage(L('fieldname').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
+			if ($model_field) dr_admin_msg(0,L('fieldname').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
 			
 			require MODEL_PATH.$field_type.DIRECTORY_SEPARATOR.'config.inc.php';
 			
@@ -58,7 +58,7 @@ class member_modelfield extends admin {
 
 			$this->db->insert($_POST['info']);
 			$this->cache_field($modelid);
-			showmessage(L('operation_success'), '?m=member&c=member_model&a=manage', '', 'add');
+			dr_admin_msg(1,L('operation_success'), '?m=member&c=member_model&a=manage', '', 'add');
 		} else {
 			$show_header = $show_validator= $show_dialog ='';
 			pc_base::load_sys_class('form', '', 0);
@@ -99,7 +99,7 @@ class member_modelfield extends admin {
 				$where .= ' AND fieldid<>'.$fieldid;
 			}
 			$model_field = $this->db->get_one($where);
-			if ($model_field) showmessage(L('fieldname').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
+			if ($model_field) dr_admin_msg(0,L('fieldname').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
 			
 			require MODEL_PATH.$field_type.DIRECTORY_SEPARATOR.'config.inc.php';
 			
@@ -119,7 +119,7 @@ class member_modelfield extends admin {
 			pc_base::load_app_class('member_cache','','');
 			member_cache::update_cache_model();
 			
-			showmessage(L('operation_success'), HTTP_REFERER, '', 'edit');
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER, '', 'edit');
 		} else {
 			$show_header = $show_validator= $show_dialog ='';
 			pc_base::load_sys_class('form','',0);
@@ -160,7 +160,7 @@ class member_modelfield extends admin {
 
 		$this->db->drop_field($model_table, $r['field']);
 		
-		showmessage(L('operation_success'), HTTP_REFERER);
+		dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 	}
 	
 	/**
@@ -170,7 +170,7 @@ class member_modelfield extends admin {
 		$fieldid = intval($_GET['fieldid']);
 		$disabled = intval($_GET['disabled']);
 		$this->db->update(array('disabled'=>$disabled), array('fieldid'=>$fieldid));
-		showmessage(L('operation_success'), HTTP_REFERER);
+		dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 	}
 	
 	/**
@@ -181,9 +181,9 @@ class member_modelfield extends admin {
 			foreach($_POST['listorders'] as $id => $listorder) {
 				$this->db->update(array('listorder'=>$listorder),array('fieldid'=>$id));
 			}
-			showmessage(L('operation_success'));
+			dr_admin_msg(1,L('operation_success'));
 		} else {
-			showmessage(L('operation_failure'));
+			dr_admin_msg(0,L('operation_failure'));
 		}
 	}
 	

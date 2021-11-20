@@ -46,7 +46,7 @@ class keylink extends admin {
 				if(empty($this->input->post('info')['word']) || empty($this->input->post('info')['url']))return false;
 				$this->db->insert($this->input->post('info'));
 				$this->public_cache_file();//更新缓存 
-				showmessage(L('operation_success'),'?m=admin&c=keylink&a=add','', 'add');
+				dr_admin_msg(1,L('operation_success'),'?m=admin&c=keylink&a=add','', 'add');
 			}else{
 				$show_validator = $show_scroll = $show_header = true;
 				include $this->admin_tpl('keylink_add');
@@ -62,11 +62,11 @@ class keylink extends admin {
 			if(empty($this->input->post('info')['word']) || empty($this->input->post('info')['url']))return false;
  			$this->db->update($this->input->post('info'),array('keylinkid'=>$keylinkid));
 			$this->public_cache_file();//更新缓存
-			showmessage(L('operation_success'),'?m=admin&c=keylink&a=edit','', 'edit');
+			dr_admin_msg(1,L('operation_success'),'?m=admin&c=keylink&a=edit','', 'edit');
 		}else{
 			$show_validator = $show_scroll = $show_header = true;
 			$info = $this->db->get_one(array('keylinkid'=>$this->input->get('keylinkid')));
-			if(!$info) showmessage(L('specified_word_not_exist'));
+			if(!$info) dr_admin_msg(0,L('specified_word_not_exist'));
  			extract($info);
 			include $this->admin_tpl('keylink_edit');
 		}	 
@@ -80,16 +80,16 @@ class keylink extends admin {
 				$this->db->delete(array('keylinkid'=>$keylinkid_arr));
 			}
 			$this->public_cache_file();//更新缓存
-			showmessage(L('operation_success'),'?m=admin&c=keylink');	
+			dr_admin_msg(1,L('operation_success'),'?m=admin&c=keylink');	
 		} else {
 			$keylinkid = intval($this->input->get('keylinkid'));
 			if($keylinkid < 1) return false;
 			$result = $this->db->delete(array('keylinkid'=>$keylinkid));
 			$this->public_cache_file();//更新缓存
 			if($result){
-				showmessage(L('operation_success'),'?m=admin&c=keylink');
+				dr_admin_msg(1,L('operation_success'),'?m=admin&c=keylink');
 			}else {
-				showmessage(L("operation_failure"),'?m=admin&c=keylink');
+				dr_admin_msg(0,L("operation_failure"),'?m=admin&c=keylink');
 			}
 		}
 	}

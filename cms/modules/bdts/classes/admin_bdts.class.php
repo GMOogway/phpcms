@@ -64,12 +64,12 @@ class admin_bdts {
         $config = $this->getConfig();
         if (!$config) {
             if ($code) {
-                exit(json_encode(array('code' => 0, 'msg' => L('百度推送配置为空，不能推送'))));
+                dr_json(0, L('百度推送配置为空，不能推送'));
             }
             return;
         } elseif (!in_array($mid, $config['use'])) {
             if ($code) {
-                exit(json_encode(array('code' => 0, 'msg' => L('模块【'.$mid.'】百度推送配置没有开启，不能推送'))));
+                dr_json(0, L('模块【'.$mid.'】百度推送配置没有开启，不能推送'));
             }
             return;
         }
@@ -80,7 +80,7 @@ class admin_bdts {
         $site = $uri['host'];
         if (!$site) {
             if ($code) {
-                exit(json_encode(array('code' => 0, 'msg' => L('百度推送没有获取到内容url（'.$purl.'）的host值，不能推送'))));
+                dr_json(0, L('百度推送没有获取到内容url（'.$purl.'）的host值，不能推送'));
             }
             return;
         }

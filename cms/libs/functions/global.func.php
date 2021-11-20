@@ -886,7 +886,7 @@ if (! function_exists('dr_redirect_safe_check')) {
 		return $url;
 	}
 }
-function dr_admin_msg($code, $msg, $url = '', $time = 3) {
+function dr_admin_msg($code, $msg, $url = '', $time = 3, $dialog = '') {
 	$input = pc_base::load_sys_class('input');
 	if ($input->get('callback')) {
 		dr_jsonp($code, $msg, $url);
@@ -900,7 +900,7 @@ function dr_admin_msg($code, $msg, $url = '', $time = 3) {
 	if ($backurl) {
 		strpos(FC_NOW_URL, $backurl) === 0 && $backurl = '';
 	} else {
-		$backurl = 'javascript:history.go(-1);';
+		$backurl = 'javascript:history.back();';
 	}
 
 	$mark = $code;
@@ -912,7 +912,7 @@ function dr_admin_msg($code, $msg, $url = '', $time = 3) {
 /**
  * 前台提示信息
  */
-function dr_msg($code, $msg, $url = '', $time = 3) {
+function dr_msg($code, $msg, $url = '', $time = 3, $dialog = '') {
 	$input = pc_base::load_sys_class('input');
 	if ($input->get('is_show_msg')) {
 		// 强制显示提交信息而不采用ajax返回
@@ -1571,7 +1571,7 @@ function L($language = 'no_language',$pars = array(), $modules = '') {
 	if(defined('IN_ADMIN')) {
 		$lang = SYS_STYLE ? SYS_STYLE : 'zh-cn';
 	} else {
-		$lang = pc_base::load_config('system','lang');
+		$lang = SYS_LANGUAGE;
 	}
 	if(!$LANG) {
 		require_once PC_PATH.'languages'.DIRECTORY_SEPARATOR.$lang.DIRECTORY_SEPARATOR.'system.lang.php';
@@ -1724,7 +1724,7 @@ function log_message($level, $message) {
  * @param mixed(string/array) $url_forward 跳转地址
  * @param int $ms 跳转等待时间
  */
-function showmessage($msg, $url_forward = 'goback', $ms = 1250, $dialog = '', $returnjs = '') {
+function showmessage($msg, $url_forward = 'goback', $ms = 1250, $dialog = '', $returnjs = '', $code = 2) {
 	if(defined('IN_ADMIN')) {
 		include(admin_template('showmessage', 'admin'));
 	} else {

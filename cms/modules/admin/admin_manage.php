@@ -61,15 +61,15 @@ class admin_manage extends admin {
 	public function add() {
 		if($this->input->post('dosubmit')) {
 			if($this->check_admin_manage_code()==false){
-				showmessage("error auth code");
+				dr_admin_msg(0,"error auth code");
 			}
 			$info = array();
 			if(!$this->op->checkname($this->input->post('info')['username'])){
-				showmessage(L('admin_already_exists'));
+				dr_admin_msg(0,L('admin_already_exists'));
 			}
 			$info = checkuserinfo($this->input->post('info'));		
 			if(!checkpasswd($info['password'])){
-				showmessage(L('pwd_incorrect'));
+				dr_admin_msg(0,L('pwd_incorrect'));
 			}
 			$passwordinfo = password($info['password']);
 			$info['password'] = $passwordinfo['password'];
@@ -83,7 +83,7 @@ class admin_manage extends admin {
 			}
 			$this->db->insert($info);
 			if($this->db->insert_id()){
-				showmessage(L('operation_success'),'?m=admin&c=admin_manage');
+				dr_admin_msg(1,L('operation_success'),'?m=admin&c=admin_manage');
 			}
 		} else {
 			$roles = $this->role_db->select(array('disabled'=>'0'));
@@ -99,7 +99,7 @@ class admin_manage extends admin {
 	public function edit() {
 		if($this->input->post('dosubmit')) {
 			if($this->check_admin_manage_code()==false){
-				showmessage("error auth code");
+				dr_admin_msg(0,"error auth code");
 			}
 			$memberinfo = $info = array();			
 			$info = checkuserinfo($this->input->post('info'));
@@ -115,7 +115,7 @@ class admin_manage extends admin {
 				}
 			}
 			$this->db->update($info,array('userid'=>$userid));
-			showmessage(L('operation_success'),'','','edit');
+			dr_admin_msg(1,L('operation_success'),'','','edit');
 		} else {
 			$info = $this->db->get_one(array('userid'=>$this->input->get('userid')));
 			extract($info);	
@@ -131,9 +131,9 @@ class admin_manage extends admin {
 	 */
 	public function delete() {
 		$userid = intval($this->input->get('userid'));
-		if($userid == '1') showmessage(L('this_object_not_del'), HTTP_REFERER);
+		if($userid == '1') dr_admin_msg(0,L('this_object_not_del'), HTTP_REFERER);
 		$this->db->delete(array('userid'=>$userid));
-		showmessage(L('admin_cancel_succ'));
+		dr_admin_msg(1,L('admin_cancel_succ'));
 	}
 
 	/**
@@ -142,13 +142,13 @@ class admin_manage extends admin {
 	function lock() {
 		$userid = intval($this->input->get('userid'));
 		if(!$userid) {
-			showmessage(L('illegal_parameters'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		} else {
 			if(ADMIN_FOUNDERS && !dr_in_array($userid, ADMIN_FOUNDERS)) {
 				$this->db->update(array('islock'=>1), array('userid'=>$userid));
-				showmessage(L('operation_success'), HTTP_REFERER);
+				dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 			} else {
-				showmessage(L('founder_cannot_locked'), HTTP_REFERER);
+				dr_admin_msg(0,L('founder_cannot_locked'), HTTP_REFERER);
 			}
 		}
 	}
@@ -159,7 +159,7 @@ class admin_manage extends admin {
 	function unlock() {
 		$userid = intval($this->input->get('userid'));
 		if(!$userid) {
-			showmessage(L('illegal_parameters'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		} else {
 			if($this->db->update(array('islock'=>0), array('userid'=>$userid))) {
 				$config = getcache('common','commons');
@@ -172,7 +172,7 @@ class admin_manage extends admin {
 					}
 				}
 			}
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		}
 	}
 	
@@ -183,13 +183,13 @@ class admin_manage extends admin {
 		$userid = $_SESSION['userid'];
 		if($this->input->post('dosubmit')) {
 			$r = $this->db->get_one(array('userid'=>$userid),'password,encrypt');
-			if (password($this->input->post('old_password'),$r['encrypt']) !== $r['password']) showmessage(L('old_password_wrong'),HTTP_REFERER);
+			if (password($this->input->post('old_password'),$r['encrypt']) !== $r['password']) dr_admin_msg(0,L('old_password_wrong'),HTTP_REFERER);
 			if($this->input->post('new_password') && !empty($this->input->post('new_password'))) {
 				if($this->op->edit_password($userid, $this->input->post('new_password'))) {
 					$this->admin_login_db->update(array('is_login' => SYS_TIME, 'is_repwd' => SYS_TIME, 'updatetime' => SYS_TIME), array('uid'=>$userid));
 				}
 			}
-			showmessage(L('password_edit_succ_logout'),'?m=admin&c=index&a=public_logout');
+			dr_admin_msg(1,L('password_edit_succ_logout'),'?m=admin&c=index&a=public_logout');
 		} else {
 			$info = $this->db->get_one(array('userid'=>$userid));
 			extract($info);
@@ -214,7 +214,7 @@ class admin_manage extends admin {
 			}
 			$this->db->update($info,array('userid'=>$userid));
 			param::set_cookie('sys_lang', $info['lang'],SYS_TIME+86400*30);
-			showmessage(L('operation_success'),HTTP_REFERER);			
+			dr_admin_msg(1,L('operation_success'),HTTP_REFERER);			
 		} else {
 			$info = $this->db->get_one(array('userid'=>$userid));
 			extract($info);

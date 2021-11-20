@@ -40,22 +40,25 @@ include $this->admin_tpl('header','admin');?>
 <div class="portlet light bordered">
     <div class="portlet-title tabbable-line">
         <ul class="nav nav-tabs" style="float:left;">
-            <li class="active">
+            <li<?php if ($page==0) {?> class="active"<?php }?>>
                 <a data-toggle="tab_0"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('according_model').'\',this,{tips: [1, \'#000\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-th-large"></i> <?php if (!is_mobile(0)) {echo L('according_model');}?> </a>
             </li>
             <?php if($_SESSION['roleid']==1 && ADMIN_FOUNDERS && dr_in_array($_SESSION['userid'], ADMIN_FOUNDERS)) {?>
-            <li>
-                <a data-toggle="tab_1"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('内容批量替换').'\',this,{tips: [1, \'#000\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-database"></i> <?php if (!is_mobile(0)) {echo L('内容批量替换');}?> </a>
+            <li<?php if ($page==1) {?> class="active"<?php }?>>
+                <a data-toggle="tab_1"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('按字段批量替换').'\',this,{tips: [1, \'#000\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-database"></i> <?php if (!is_mobile(0)) {echo L('按字段批量替换');}?> </a>
             </li>
-            <li>
-                <a data-toggle="tab_2"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('内容批量设置').'\',this,{tips: [1, \'#000\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-edit"></i> <?php if (!is_mobile(0)) {echo L('内容批量设置');}?> </a>
+            <li<?php if ($page==2) {?> class="active"<?php }?>>
+                <a data-toggle="tab_2"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('按字段批量设置').'\',this,{tips: [1, \'#000\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-edit"></i> <?php if (!is_mobile(0)) {echo L('按字段批量设置');}?> </a>
+            </li>
+            <li<?php if ($page==3) {?> class="active"<?php }?>>
+                <a data-toggle="tab_3"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('全模型替换').'\',this,{tips: [1, \'#000\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-edit"></i> <?php if (!is_mobile(0)) {echo L('全模型替换');}?> </a>
             </li>
             <?php }?>
         </ul>
     </div>
     <div class="portlet-body form">
         <div class="tab-content">
-            <div class="tab-pane active" id="tab_0">
+            <div class="tab-pane<?php if ($page==0) {?> active<?php }?>" id="tab_0">
                 <div class="table-list">
                     <table style="margin-top: 30px;" class="table table-striped table-bordered table-hover table-checkable dataTable">
                         <thead>
@@ -95,7 +98,7 @@ include $this->admin_tpl('header','admin');?>
                     </table>
                 </div>
             </div>
-            <div class="tab-pane" id="tab_1">
+            <div class="tab-pane<?php if ($page==1) {?> active<?php }?>" id="tab_1">
                 <form action="" class="form-horizontal" method="post" id="replaceform">
                     <div class="form-body">
 
@@ -143,7 +146,7 @@ include $this->admin_tpl('header','admin');?>
                     </div>
                 </form>
             </div>
-            <div class="tab-pane" id="tab_2">
+            <div class="tab-pane<?php if ($page==2) {?> active<?php }?>" id="tab_2">
                 <form action="" class="form-horizontal" method="post" id="editform">
                     <div class="form-body">
 
@@ -199,6 +202,53 @@ include $this->admin_tpl('header','admin');?>
                         </div>
                     </div>
                 </form>
+            </div>
+
+            <div class="tab-pane<?php if ($page==3) {?> active<?php }?>" id="tab_3">
+                <form action="" class="form-horizontal" method="post" id="allform">
+                    <div class="form-body">
+
+                        <div class="form-group row">
+                            <label class="col-md-2 control-label"> </label>
+                            <div class="col-md-9">
+                                <div class="well well2">
+                                    <?php echo L('当网站域名变更时可以在这里进行全模块替换')?>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-md-2 control-label"><?php echo L('被替换内容')?></label>
+                            <div class="col-md-9">
+                                <textarea class="form-control" style="height:100px" id="alldb_t1"></textarea>
+                                <p style="padding-top:9px;" class="help-block"> <?php echo L('设置被替换的字符内容')?> </p>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 control-label"><?php echo L('替换后的内容')?></label>
+                            <div class="col-md-9">
+                                <textarea class="form-control" style="height:100px" id="alldb_t2"></textarea>
+                                <p style="padding-top:9px;" class="help-block"> <?php echo L('将上面设置的被替换的字符替换成新的字符')?> </p>
+
+                            </div>
+                        </div>
+
+                        <script>
+                        function dr_alldb_edit() {
+                            var url = '?m=content&c=create_html&a=public_dball_edit&t1='+$('#alldb_t1').val()+'&t2='+$('#alldb_t2').val();
+                            iframe_show('<?php echo L('批量操作')?>', url);
+                        }
+                        </script>
+
+                        <div class="form-actions row">
+                            <label class="col-md-2 control-label">&nbsp;</label>
+                            <div class="col-md-9" style="padding-left: 5px;">
+                                <button type="button" onclick="dr_alldb_edit();" class="btn blue"> <i class="fa fa-database"></i> <?php echo L('立即执行')?></button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
             </div>
         </div>
     </div>

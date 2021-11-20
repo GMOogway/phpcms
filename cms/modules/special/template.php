@@ -17,11 +17,11 @@ class template extends admin {
 	 */
 	public function init() {
 		echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
-		$specialid = isset($_GET['specialid']) && intval($_GET['specialid']) ? intval($_GET['specialid']) : showmessage(L('illegal_action'), HTTP_REFERER);;
-		if (!$specialid) showmessage(L('illegal_action'), HTTP_REFERER);
+		$specialid = isset($_GET['specialid']) && intval($_GET['specialid']) ? intval($_GET['specialid']) : dr_admin_msg(0,L('illegal_action'), HTTP_REFERER);;
+		if (!$specialid) dr_admin_msg(0,L('illegal_action'), HTTP_REFERER);
 		
 		$info = $this->db->get_one(array('id'=>$specialid, 'disabled'=>'0', 'siteid'=>$this->get_siteid()));
-		if (!$info['id']) showmessage(L('illegal_parameters'), HTTP_REFERER);
+		if (!$info['id']) dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		$id = $specialid;
 		if($info['css']) $css_param = unserialize($info['css']);
 		if(!$info['ispage']) {
@@ -45,9 +45,9 @@ class template extends admin {
 	 */
 	public function preview() {
 		define('HTML', true);
-		if (!$_GET['specialid']) showmessage(L('illegal_action'), HTTP_REFERER);
+		if (!$_GET['specialid']) dr_admin_msg(0,L('illegal_action'), HTTP_REFERER);
 		$info = $this->db->get_one(array('id'=>$_GET['specialid'], 'disabled'=>'0', 'siteid'=>$this->get_siteid()));
-		if (!$info['id']) showmessage(L('illegal_parameters'), HTTP_REFERER);
+		if (!$info['id']) dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		$css = get_css($_POST['info']);
 		$template = $info['index_template'] ? $info['index_template'] : 'index';
 		include template('special', $template);
@@ -57,12 +57,12 @@ class template extends admin {
 	 * css添加
 	 */
 	public function add() {
-		if (!$_GET['specialid']) showmessage(L('illegal_action'), HTTP_REFERER);
+		if (!$_GET['specialid']) dr_admin_msg(0,L('illegal_action'), HTTP_REFERER);
 		$info = $this->db->get_one(array('id'=>$_GET['specialid'], 'disabled'=>'0', 'siteid'=>$this->get_siteid()));
-		if (!$info['id']) showmessage(L('illegal_parameters'), HTTP_REFERER);
+		if (!$info['id']) dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		$data = serialize($_POST['info']);
 		$this->db->update(array('css'=>$data), array('id'=>$info['id']));
-		showmessage(L('operation_success'), HTTP_REFERER);
+		dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 	}
 }
 ?>

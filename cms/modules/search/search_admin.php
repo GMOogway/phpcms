@@ -87,13 +87,13 @@ class search_admin extends admin {
 						$this->db->update_search($typeid ,$id, $r['fulltextcontent'],$r['title'],$r['adddate'], 1);
 					}
 					$page++;
-					if($pages>=$page) showmessage("正在更新 <span style='color:#ff0000;font-size:14px;text-decoration:underline;' >{$_v['name']}</span> - 总数：{$total} - 当前第 <font color='red'>{$page}</font> 页","?m=search&c=search_admin&a=createindex&menuid={$this->input->get('menuid')}&page={$page}&total={$total}&key={$key}&pagesize={$pagesize}&have_truncate=1&dosubmit=1");
+					if($pages>=$page) dr_admin_msg(1,"正在更新 <span style='color:#ff0000;font-size:14px;text-decoration:underline;' >{$_v['name']}</span> - 总数：{$total} - 当前第 <font color='red'>{$page}</font> 页","?m=search&c=search_admin&a=createindex&menuid={$this->input->get('menuid')}&page={$page}&total={$total}&key={$key}&pagesize={$pagesize}&have_truncate=1&dosubmit=1");
 					$key++;
-					showmessage("开始更新： <span style='color:#ff0000;font-size:14px;text-decoration:underline;' >{$_v['name']}</span> - 总数：{$total}条","?m=search&c=search_admin&a=createindex&menuid={$this->input->get('menuid')}&page=1&key={$key}&pagesize={$pagesize}&have_truncate=1&dosubmit=1");
+					dr_admin_msg(1,"开始更新： <span style='color:#ff0000;font-size:14px;text-decoration:underline;' >{$_v['name']}</span> - 总数：{$total}条","?m=search&c=search_admin&a=createindex&menuid={$this->input->get('menuid')}&page=1&key={$key}&pagesize={$pagesize}&have_truncate=1&dosubmit=1");
 				
 				}
 			}
-			showmessage('全站索引更新完成','blank');
+			dr_admin_msg(1,'全站索引更新完成','?m=search&c=search_admin&a=createindex&menuid='.$this->input->get('menuid'));
 		} else {
 			$big_menu = array('javascript:artdialog(\'add\',iframe:\'?m=search&c=search_type&a=add\',\''.L('add_search_type').'\',580,240);void(0);', L('add_search_type'));
 			include $this->admin_tpl('createindex');

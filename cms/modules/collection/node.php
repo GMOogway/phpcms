@@ -42,15 +42,15 @@ class node extends admin {
 	public function add() {
 		header("Cache-control: private");
 		if(isset($_POST['dosubmit'])) {
-			$data = isset($_POST['data']) ? $_POST['data'] :  showmessage(L('illegal_parameters'), HTTP_REFERER);
+			$data = isset($_POST['data']) ? $_POST['data'] :  dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			$customize_config = isset($_POST['customize_config']) ? $_POST['customize_config'] :  '';
 			if (!$data['name'] = trim($data['name'])) {
-				showmessage(L('nodename').L('empty'), HTTP_REFERER);
+				dr_admin_msg(0,L('nodename').L('empty'), HTTP_REFERER);
 			}
 			if ($this->db->get_one(array('name'=>$data['name']))) {
-				showmessage(L('nodename').L('exists'), HTTP_REFERER);
+				dr_admin_msg(0,L('nodename').L('exists'), HTTP_REFERER);
 			}
-			$data['urlpage'] = isset($_POST['urlpage'.$data['sourcetype']]) ? $_POST['urlpage'.$data['sourcetype']] : showmessage(L('illegal_parameters'), HTTP_REFERER);
+			$data['urlpage'] = isset($_POST['urlpage'.$data['sourcetype']]) ? $_POST['urlpage'.$data['sourcetype']] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			$data['siteid']= $this->get_siteid();
 			$data['customize_config'] = array();
 			if (is_array($customize_config)) foreach ($customize_config['en_name'] as $k => $v) {
@@ -59,9 +59,9 @@ class node extends admin {
 			}
 			$data['customize_config'] = array2string($data['customize_config']);
 			if ($this->db->insert($data)) {
-				showmessage(L('operation_success'), '?m=collection&c=node&a=manage');
+				dr_admin_msg(1,L('operation_success'), '?m=collection&c=node&a=manage');
 			} else {
-				showmessage(L('operation_failure'), HTTP_REFERER);
+				dr_admin_msg(0,L('operation_failure'), HTTP_REFERER);
 			}
 		} else {
 			$show_dialog = $show_validator = true;
@@ -72,24 +72,24 @@ class node extends admin {
 
 	//修改采集配置
 	public function edit() {
-		$nodeid = isset($_GET['nodeid']) ? intval($_GET['nodeid']) : showmessage(L('illegal_parameters'), HTTP_REFERER);
+		$nodeid = isset($_GET['nodeid']) ? intval($_GET['nodeid']) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		$data = $this->db->get_one(array('nodeid'=>$nodeid));
 		if(isset($_POST['dosubmit'])) {
 			$datas = $data;
 			unset($data);
-			$data = isset($_POST['data']) ? $_POST['data'] :  showmessage(L('illegal_parameters'), HTTP_REFERER);
+			$data = isset($_POST['data']) ? $_POST['data'] :  dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			$customize_config = isset($_POST['customize_config']) ? $_POST['customize_config'] :  '';
 			if (!$data['name'] = trim($data['name'])) {
-				showmessage(L('nodename').L('empty'), HTTP_REFERER);
+				dr_admin_msg(0,L('nodename').L('empty'), HTTP_REFERER);
 			}
 			
 			if ($datas['name'] != $data['name']) {
 				if ($this->db->get_one(array('name'=>$data['name']))) {
-					showmessage(L('nodename').L('exists'), HTTP_REFERER);
+					dr_admin_msg(0,L('nodename').L('exists'), HTTP_REFERER);
 				}
 			}
 			
-			$data['urlpage'] = isset($_POST['urlpage'.$data['sourcetype']]) ? $_POST['urlpage'.$data['sourcetype']] : showmessage(L('illegal_parameters'), HTTP_REFERER);
+			$data['urlpage'] = isset($_POST['urlpage'.$data['sourcetype']]) ? $_POST['urlpage'.$data['sourcetype']] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			$data['customize_config'] = array();
 			if (is_array($customize_config)) foreach ($customize_config['en_name'] as $k => $v) {
 				if (empty($v) || empty($customize_config['name'][$k])) continue;
@@ -97,9 +97,9 @@ class node extends admin {
 			}
 			$data['customize_config'] = array2string($data['customize_config']);
 			if ($this->db->update($data, array('nodeid'=>$nodeid))) {
-				showmessage(L('operation_success'), '?m=collection&c=node&a=manage');
+				dr_admin_msg(1,L('operation_success'), '?m=collection&c=node&a=manage');
 			} else {
-				showmessage(L('operation_failure'), HTTP_REFERER);
+				dr_admin_msg(0,L('operation_failure'), HTTP_REFERER);
 			}
 		} else {
 			$model_cache = getcache('model', 'commons');
@@ -127,27 +127,27 @@ class node extends admin {
 	
 	//复制采集
 	public function copy() {
-		$nodeid = isset($_GET['nodeid']) ? intval($_GET['nodeid']) : showmessage(L('illegal_parameters'), HTTP_REFERER);
+		$nodeid = isset($_GET['nodeid']) ? intval($_GET['nodeid']) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		if ($data = $this->db->get_one(array('nodeid'=>$nodeid))) {
 			if (isset($_POST['dosubmit'])) {
 				unset($data['nodeid']);
-				$name = isset($_POST['name']) && trim($_POST['name']) ? trim($_POST['name']) : showmessage(L('illegal_parameters'), HTTP_REFERER);
+				$name = isset($_POST['name']) && trim($_POST['name']) ? trim($_POST['name']) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 				if ($this->db->get_one(array('name'=>$name), 'nodeid')) {
-					showmessage(L('nodename').L('exists'), HTTP_REFERER);
+					dr_admin_msg(0,L('nodename').L('exists'), HTTP_REFERER);
 				}
 				$data['name'] = $name;
 				$data = new_addslashes($data);
 				if ($this->db->insert($data)) {
-					showmessage(L('operation_success'), '', '', 'test');
+					dr_admin_msg(1,L('operation_success'), '', '', 'test');
 				} else {
-					showmessage(L('operation_failure'));
+					dr_admin_msg(0,L('operation_failure'));
 				}
 			} else {
 				$show_validator = $show_header = true;
 				include $this->admin_tpl('node_copy');
 			}
 		} else {
-			showmessage(L('notfound'));
+			dr_admin_msg(0,L('notfound'));
 		}
 	}
 	
@@ -156,24 +156,24 @@ class node extends admin {
 		if (isset($_POST['dosubmit'])) {
 			$filename = $_FILES['file']['tmp_name'];
 			if (strtolower(substr($_FILES['file']['name'], -3, 3)) != 'txt') {
-				showmessage(L('only_allowed_to_upload_txt_files'), HTTP_REFERER);
+				dr_admin_msg(0,L('only_allowed_to_upload_txt_files'), HTTP_REFERER);
 			}
 			$data = json_decode(base64_decode(file_get_contents($filename)), true);
 			if (pc_base::load_config('system', 'charset') == 'gbk') {
 				$data = array_iconv($data, 'utf-8', 'gbk');
 			}
 			@unlink($filename);
-			$name = isset($_POST['name']) && trim($_POST['name']) ? trim($_POST['name']) : showmessage(L('illegal_parameters'), HTTP_REFERER);
+			$name = isset($_POST['name']) && trim($_POST['name']) ? trim($_POST['name']) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			if ($this->db->get_one(array('name'=>$name), 'nodeid')) {
-				showmessage(L('nodename').L('exists'), HTTP_REFERER);
+				dr_admin_msg(0,L('nodename').L('exists'), HTTP_REFERER);
 			}
 			$data['name'] = $name;
 			$data['siteid'] = $this->get_siteid();
 			$data = new_addslashes($data);
 			if ($this->db->insert($data)) {
-				showmessage(L('operation_success'), '', '', 'test');
+				dr_admin_msg(1,L('operation_success'), '', '', 'test');
 			} else {
-				showmessage(L('operation_failure'));
+				dr_admin_msg(0,L('operation_failure'));
 			}
 		} else {
 			$show_header = $show_validator = true;
@@ -183,7 +183,7 @@ class node extends admin {
 	
 	//导出采集配置
 	public function export() {
-		$nodeid = isset($_GET['nodeid']) ? intval($_GET['nodeid']) : showmessage(L('illegal_parameters'), HTTP_REFERER);
+		$nodeid = isset($_GET['nodeid']) ? intval($_GET['nodeid']) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		if ($data = $this->db->get_one(array('nodeid'=>$nodeid))) {
 			unset($data['nodeid'], $data['name'], $data['siteid']);
 			if (pc_base::load_config('system', 'charset') == 'gbk') {
@@ -193,24 +193,24 @@ class node extends admin {
 		    header("Content-Disposition: attachment; filename=pc_collection_".$nodeid.'.txt');
 		    echo base64_encode(json_encode($data));
 		} else {
-			showmessage(L('notfound'));
+			dr_admin_msg(0,L('notfound'));
 		}
 	}
 	
 	//URL配置显示结果
 	public function public_url() {
-		$sourcetype = isset($_GET['sourcetype']) && intval($_GET['sourcetype']) ? intval($_GET['sourcetype']) : showmessage(L('illegal_parameters'));
+		$sourcetype = isset($_GET['sourcetype']) && intval($_GET['sourcetype']) ? intval($_GET['sourcetype']) : dr_admin_msg(0,L('illegal_parameters'));
 		$pagesize_start = isset($_GET['pagesize_start']) && intval($_GET['pagesize_start']) ? intval($_GET['pagesize_start']) : 1;
 		$pagesize_end = isset($_GET['pagesize_end']) && intval($_GET['pagesize_end']) ? intval($_GET['pagesize_end']) : 10;
 		$par_num = isset($_GET['par_num']) && intval($_GET['par_num']) ? intval($_GET['par_num']) : 1;
-		$urlpage = isset($_GET['urlpage']) && trim($_GET['urlpage']) ? trim($_GET['urlpage']) : showmessage(L('illegal_parameters'));
+		$urlpage = isset($_GET['urlpage']) && trim($_GET['urlpage']) ? trim($_GET['urlpage']) : dr_admin_msg(0,L('illegal_parameters'));
 		$show_header = true;
 		include $this->admin_tpl('node_public_url');
 	}
 	
 	//删除采集节点
 	public function del() {
-		$nodeid = isset($_POST['nodeid']) ? $_POST['nodeid'] : showmessage(L('illegal_parameters'), HTTP_REFERER);
+		$nodeid = isset($_POST['nodeid']) ? $_POST['nodeid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		foreach ($nodeid as $k=>$v) {
 			if(intval($v)) {
 				$nodeid[$k] = intval($v);
@@ -222,12 +222,12 @@ class node extends admin {
 		$this->db->delete("nodeid in ('$nodeid')");
 		$content_db = pc_base::load_model('collection_content_model');
 		$content_db->delete("nodeid in ('$nodeid')");
-		showmessage(L('operation_success'), '?m=collection&c=node&a=manage');
+		dr_admin_msg(1,L('operation_success'), '?m=collection&c=node&a=manage');
 	}
 	
 	//测试文章URL采集
 	public function public_test() {
-		$nodeid = isset($_GET['nodeid']) ? intval($_GET['nodeid']) : showmessage(L('illegal_parameters'), HTTP_REFERER);
+		$nodeid = isset($_GET['nodeid']) ? intval($_GET['nodeid']) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		pc_base::load_app_class('collection', '', 0);
 		if ($data = $this->db->get_one(array('nodeid'=>$nodeid))) {
 			$urls = collection::url_list($data, 1);
@@ -237,14 +237,14 @@ class node extends admin {
 			$show_header = $show_dialog = true;
 			include $this->admin_tpl('public_test');
 		} else {
-			showmessage(L('notfound'));
+			dr_admin_msg(0,L('notfound'));
 		}
 	}
 	
 	//测试文章内容采集
 	public function public_test_content() {
 		$url = isset($_GET['url']) ? urldecode($_GET['url']) : exit('0');
-		$nodeid = isset($_GET['nodeid']) ? intval($_GET['nodeid']) : showmessage(L('illegal_parameters'), HTTP_REFERER);
+		$nodeid = isset($_GET['nodeid']) ? intval($_GET['nodeid']) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		pc_base::load_app_class('collection', '', 0);
 		if ($data = $this->db->get_one(array('nodeid'=>$nodeid))) {
 			$contents = collection::get_content($url, $data);
@@ -253,7 +253,7 @@ class node extends admin {
 			}
 			print_r($contents);
 		} else {
-			showmessage(L('notfound'));
+			dr_admin_msg(0,L('notfound'));
 		}
 	}
 	
@@ -277,7 +277,7 @@ class node extends admin {
 	
 	//采集网址
 	public function col_url_list() {
-		$nodeid = isset($_GET['nodeid']) ? intval($_GET['nodeid']) : showmessage(L('illegal_parameters'), HTTP_REFERER);
+		$nodeid = isset($_GET['nodeid']) ? intval($_GET['nodeid']) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		if ($data = $this->db->get_one(array('nodeid'=>$nodeid))) {
 			pc_base::load_app_class('collection', '', 0);
 			$urls = collection::url_list($data);
@@ -308,16 +308,16 @@ class node extends admin {
 				}
 				include $this->admin_tpl('col_url_list');
 			} else {
-				showmessage(L('not_to_collect'));
+				dr_admin_msg(0,L('not_to_collect'));
 			}
 		} else {
-			showmessage(L('notfound'));
+			dr_admin_msg(0,L('notfound'));
 		}
 	}
 	
 	//采集文章
 	public function col_content() {
-		$nodeid = isset($_GET['nodeid']) ? intval($_GET['nodeid']) : showmessage(L('illegal_parameters'), HTTP_REFERER);
+		$nodeid = isset($_GET['nodeid']) ? intval($_GET['nodeid']) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		if ($data = $this->db->get_one(array('nodeid'=>$nodeid))) {
 			$content_db = pc_base::load_model('collection_content_model');
 			//更新附件状态
@@ -345,21 +345,21 @@ class node extends admin {
 					$i++;
 				}
 			} else {
-				showmessage(L('url_collect_msg'), '?m=collection&c=node&a=manage');
+				dr_admin_msg(0,L('url_collect_msg'), '?m=collection&c=node&a=manage');
 			}
 			
 			if ($total_page > $page) {
-				showmessage(L('collectioning').($i+($page-1)*2).'/'.$total.'<script type="text/javascript">location.href="?m=collection&c=node&a=col_content&page='.($page+1).'&nodeid='.$nodeid.'&total='.$total.'&pc_hash='.dr_get_csrf_token().'"</script>', '?m=collection&c=node&a=col_content&page='.($page+1).'&nodeid='.$nodeid.'&total='.$total);
+				dr_admin_msg(1,L('collectioning').($i+($page-1)*2).'/'.$total.'<script type="text/javascript">location.href="?m=collection&c=node&a=col_content&page='.($page+1).'&nodeid='.$nodeid.'&total='.$total.'&pc_hash='.dr_get_csrf_token().'"</script>', '?m=collection&c=node&a=col_content&page='.($page+1).'&nodeid='.$nodeid.'&total='.$total);
 			} else {
 				$this->db->update(array('lastdate'=>SYS_TIME), array('nodeid'=>$nodeid));
-				showmessage(L('collection_success'), '?m=collection&c=node&a=manage');
+				dr_admin_msg(1,L('collection_success'), '?m=collection&c=node&a=manage');
 			}
 		}
 	}
 	
 	//文章列表
 	public function publist() {
-		$nodeid = isset($_GET['nodeid']) ? intval($_GET['nodeid']) : showmessage(L('illegal_parameters'), HTTP_REFERER);
+		$nodeid = isset($_GET['nodeid']) ? intval($_GET['nodeid']) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		$node = $this->db->get_one(array('nodeid'=>$nodeid), 'name');
 		$content_db = pc_base::load_model('collection_content_model');
 		$status = isset($_GET['status']) ? intval($_GET['status']) : '';
@@ -376,7 +376,7 @@ class node extends admin {
 	
 	//导入文章
 	public function import() {
-		$nodeid = isset($_GET['nodeid']) ? intval($_GET['nodeid']) : showmessage(L('illegal_parameters'), HTTP_REFERER);
+		$nodeid = isset($_GET['nodeid']) ? intval($_GET['nodeid']) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		$id = isset($_GET['id']) ? $_GET['id'] : '';
 		$type = isset($_GET['type']) ? trim($_GET['type']) : '';
 		if ($type == 'all') {
@@ -415,15 +415,15 @@ class node extends admin {
 					$attachment->api_delete('cj-'.$id);
 				}
 			}
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		}
 	}
 	
 	//添加导入方案
 	public function import_program_add() {
-		$nodeid = isset($_GET['nodeid']) ? intval($_GET['nodeid']) : showmessage(L('illegal_parameters'), HTTP_REFERER);
+		$nodeid = isset($_GET['nodeid']) ? intval($_GET['nodeid']) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		$ids = isset($_GET['ids']) ? $_GET['ids'] : '';
-		$catid = isset($_GET['catid']) && intval($_GET['catid']) ? intval($_GET['catid']) : showmessage(L('please_select_cat'), HTTP_REFERER);
+		$catid = isset($_GET['catid']) && intval($_GET['catid']) ? intval($_GET['catid']) : dr_admin_msg(0,L('please_select_cat'), HTTP_REFERER);
 		$type = isset($_GET['type']) ? trim($_GET['type']) : '';
 		
 		include dirname(__FILE__).DIRECTORY_SEPARATOR.'spider_funs'.DIRECTORY_SEPARATOR.'config.php';
@@ -432,12 +432,12 @@ class node extends admin {
 		$catlist = getcache('category_content_'.$this->siteid, 'commons');
 		$cat = $catlist[$catid];
 		$cat['setting'] = string2array($cat['setting']);
-		if ($cat['siteid'] != $this->get_siteid() || $cat['type'] != 0) showmessage(L('illegal_section_parameter'), HTTP_REFERER);
+		if ($cat['siteid'] != $this->get_siteid() || $cat['type'] != 0) dr_admin_msg(0,L('illegal_section_parameter'), HTTP_REFERER);
 		
 		if (isset($_POST['dosubmit'])) {
 			$config = array();
-			$model_field = isset($_POST['model_field']) ? $_POST['model_field'] :  showmessage(L('illegal_parameters'), HTTP_REFERER);
-			$node_field = isset($_POST['node_field']) ? $_POST['node_field'] : showmessage(L('illegal_parameters'), HTTP_REFERER);
+			$model_field = isset($_POST['model_field']) ? $_POST['model_field'] :  dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
+			$node_field = isset($_POST['node_field']) ? $_POST['node_field'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			$funcs = isset($_POST['funcs']) ? $_POST['funcs'] : array();
 			
 			$config['add_introduce'] = isset($_POST['add_introduce']) && intval($_POST['add_introduce']) ? intval($_POST['add_introduce']) : 0;
@@ -459,16 +459,16 @@ class node extends admin {
 			$data = array('config'=>array2string($config), 'siteid'=>$this->get_siteid(), 'nodeid'=>$nodeid, 'modelid'=>$cat['modelid'], 'catid'=>$catid);
 			$program_db = pc_base::load_model('collection_program_model');
 			if ($id = $program_db->insert($data, true)) {
-				showmessage(L('program_add_operation_success'), '?m=collection&c=node&a=import_content&programid='.$id.'&nodeid='.$nodeid.'&ids='.$ids.'&type='.$type);
+				dr_admin_msg(1,L('program_add_operation_success'), '?m=collection&c=node&a=import_content&programid='.$id.'&nodeid='.$nodeid.'&ids='.$ids.'&type='.$type);
 			} else {
-				showmessage(L('illegal_parameters'));
+				dr_admin_msg(0,L('illegal_parameters'));
 			}
 		}
 		
 		
 		//读取数据模型缓存
 		$model = getcache('model_field_'.$cat['modelid'], 'model');
-		if (empty($model)) showmessage(L('model_does_not_exist_please_update_the_cache_model'));
+		if (empty($model)) dr_admin_msg(0,L('model_does_not_exist_please_update_the_cache_model'));
 		$node_data = $this->db->get_one(array('nodeid'=>$nodeid), "customize_config");
 		$node_data['customize_config'] = string2array($node_data['customize_config']);
 		$node_field = array(''=>L('please_choose'),'title'=>L('title'), 'author'=>L('author'), 'comeform'=>L('comeform'), 'time'=>L('time'), 'content'=>L('content'));
@@ -481,23 +481,23 @@ class node extends admin {
 	}
 	
 	public function import_program_del() {
-		$id = isset($_GET['id']) ? intval($_GET['id']) : showmessage(L('illegal_parameters'), HTTP_REFERER);
+		$id = isset($_GET['id']) ? intval($_GET['id']) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		$program_db = pc_base::load_model('collection_program_model');
 		if ($program_db->delete(array('id'=>$id))) {
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		} else {
-			showmessage(L('illegal_parameters'));
+			dr_admin_msg(0,L('illegal_parameters'));
 		}
 	}
 	
 	//导入文章到模型
 	public function import_content() {
-		$nodeid = isset($_GET['nodeid']) ? intval($_GET['nodeid']) : showmessage(L('illegal_parameters'), HTTP_REFERER);
-		$programid = isset($_GET['programid']) ? intval($_GET['programid']) : showmessage(L('illegal_parameters'), HTTP_REFERER);
+		$nodeid = isset($_GET['nodeid']) ? intval($_GET['nodeid']) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
+		$programid = isset($_GET['programid']) ? intval($_GET['programid']) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		$ids = isset($_GET['ids']) ? $_GET['ids'] : '';
 		$type = isset($_GET['type']) ? trim($_GET['type']) : '';
 		if (!$node = $this->db->get_one(array('nodeid'=>$nodeid), 'coll_order,content_page')) {
-			showmessage(L('node_not_found'), '?m=collection&c=node&a=manage');
+			dr_admin_msg(0,L('node_not_found'), '?m=collection&c=node&a=manage');
 		}
 		$program_db = pc_base::load_model('collection_program_model');
 		$collection_content_db = pc_base::load_model('collection_content_model');
@@ -580,7 +580,7 @@ class node extends admin {
 			$str = L('are_imported_the_import_process').(($page-1)*20+$i).'/'.$total.'<script type="text/javascript">location.href="?m=collection&c=node&a=import_content&nodeid='.$nodeid.'&programid='.$programid.'&type=all&page='.($page+1).'&total='.$total.'&pc_hash='.dr_get_csrf_token().'"</script>';
 			$url = '';
 		}
-		showmessage($str, $url);
+		dr_admin_msg(1,$str, $url);
 	}
 }
 ?>

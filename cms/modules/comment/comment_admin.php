@@ -27,7 +27,7 @@ class comment_admin extends admin {
 				$sql['siteid'] = $this->siteid;
 				$this->comment_setting_db->insert($sql);
 			}
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		} else {
 			$show_header = true;
 			include $this->admin_tpl('comment_setting');
@@ -36,12 +36,12 @@ class comment_admin extends admin {
 	
 	public function lists() {
 		$show_header = true;
-		$commentid =  isset($_GET['commentid']) && trim($_GET['commentid']) ? trim($_GET['commentid']) : showmessage(L('illegal_parameters'), HTTP_REFERER);
+		$commentid =  isset($_GET['commentid']) && trim($_GET['commentid']) ? trim($_GET['commentid']) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		$hot =  isset($_GET['hot']) && intval($_GET['hot']) ? intval($_GET['hot']) : 0;
 		$comment = $this->comment_db->get_one(array('commentid'=>$commentid, 'siteid'=>$this->siteid));
 		if (empty($comment)) {
-			$forward = isset($_GET['show_center_id']) ? 'blank' : HTTP_REFERER;
-			showmessage(L('no_comment'), $forward);
+			$forward = isset($_GET['show_center_id']) ? '' : HTTP_REFERER;
+			dr_admin_msg(0,L('no_comment'), $forward);
 		}
 		pc_base::load_app_func('global');
 		pc_base::load_sys_class('format','', 0);
@@ -65,7 +65,7 @@ class comment_admin extends admin {
 		if (!$max_table) {
 			$r = $this->comment_db->get_one(array(), 'MAX(tableid) AS tableid');
 			if (!$r['tableid']) {
-				showmessage(L('no_comment'));
+				dr_admin_msg(0,L('no_comment'));
 			}
 			$max_table = $r['tableid'];
 		}
@@ -143,7 +143,7 @@ class comment_admin extends admin {
 			$tableid = isset($_GET['tableid']) ? intval($_GET['tableid']) : 0;
 			$r = $this->comment_db->get_one(array(), 'MAX(tableid) AS tableid');
 			$max_table = $r['tableid'];
-			if (!$tableid || $max_table<$tableid) showmessage(L('illegal_operation'));
+			if (!$tableid || $max_table<$tableid) dr_admin_msg(0,L('illegal_operation'));
 			$this->comment_data_db->table_name($tableid);
 			$site = $this->comment_setting_db->site($this->siteid);
 			if (is_array($ids)) {
@@ -152,7 +152,7 @@ class comment_admin extends admin {
 					//判断总数是否为0 
  					$comment_allinfo = $this->comment_db->get_one(array('commentid'=>$comment_info['commentid']),'*');
 					if($comment_allinfo['total']<=0){
-						showmessage('评论统计不正常，请返回检查！', HTTP_REFERER);
+						dr_admin_msg(0,'评论统计不正常，请返回检查！', HTTP_REFERER);
 					}
 					$this->comment_db->update(array('total'=>'-=1'), array('commentid'=>$comment_info['commentid']));
 					$this->comment_data_db->delete(array('id'=>$id));
@@ -172,7 +172,7 @@ class comment_admin extends admin {
 				//判断总数是否为0 
 				$comment_allinfo = $this->comment_db->get_one(array('commentid'=>$comment_info['commentid']),'*');
 				if($comment_allinfo['total']<=0){
-					showmessage('评论统计不正常，请返回检查！', HTTP_REFERER);
+					dr_admin_msg(0,'评论统计不正常，请返回检查！', HTTP_REFERER);
 				}
 				$this->comment_db->update(array('total'=>'-=1'), array('commentid'=>$comment_info['commentid']));
 				$this->comment_data_db->delete(array('id'=>$id));
@@ -185,9 +185,9 @@ class comment_admin extends admin {
 					spend::point($site['del_point'], L('comment_point_del', '', 'comment'), $comment_info['userid'], $comment_info['username'], $op_userid, $op_username);
 				}
 			} else {
-				showmessage(L('illegal_operation'));
+				dr_admin_msg(0,L('illegal_operation'));
 			}
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		}
 	}
 }

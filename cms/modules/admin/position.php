@@ -34,7 +34,7 @@ class position extends admin {
 	public function add() {
 		if($this->input->post('dosubmit')) {
 			if(!is_array($this->input->post('info')) || empty($this->input->post('info')['name'])){
-				showmessage(L('operation_failure'));
+				dr_admin_msg(0,L('operation_failure'));
 			}
 			$info = $this->input->post('info');
 			$info['siteid'] = intval($info['modelid']) ? get_siteid() : 0;
@@ -44,7 +44,7 @@ class position extends admin {
 			$insert_id = $this->db->insert($info,true);
 			$this->_set_cache();
 			if($insert_id){
-				showmessage(L('operation_success'), '', '', 'add');
+				dr_admin_msg(1,L('operation_success'), '', '', 'add');
 			}
 		} else {
 			pc_base::load_sys_class('form');
@@ -67,7 +67,7 @@ class position extends admin {
 		if($this->input->post('dosubmit')) {
 			$posid = intval($this->input->post('posid'));
 			if(!is_array($this->input->post('info')) || empty($this->input->post('info')['name'])){
-				showmessage(L('operation_failure'));
+				dr_admin_msg(1,L('operation_failure'));
 			}
 			$info = $this->input->post('info');
 			$info['siteid'] = intval($info['modelid']) ? get_siteid() : 0;
@@ -76,7 +76,7 @@ class position extends admin {
 			$info['thumb'] = $info['thumb'];			
 			$this->db->update($info,array('posid'=>$posid));
 			$this->_set_cache();
-			showmessage(L('operation_success'), '', '', 'edit');
+			dr_admin_msg(1,L('operation_success'), '', '', 'edit');
 		} else {
 			$info = $this->db->get_one(array('posid'=>intval($this->input->get('posid'))));
 			extract($info);
@@ -100,7 +100,7 @@ class position extends admin {
 		$posid = intval($this->input->get('posid'));
 		$this->db->delete(array('posid'=>$posid));
 		$this->_set_cache();
-		showmessage(L('posid_del_success'),'?m=admin&c=position');
+		dr_admin_msg(1,L('posid_del_success'),'?m=admin&c=position');
 	}
 	
 	/**
@@ -114,9 +114,9 @@ class position extends admin {
 				}
 			}
 			$this->_set_cache();
-			showmessage(L('operation_success'),'?m=admin&c=position');
+			dr_admin_msg(1,L('operation_success'),'?m=admin&c=position');
 		} else {
-			showmessage(L('operation_failure'),'?m=admin&c=position');
+			dr_admin_msg(0,L('operation_failure'),'?m=admin&c=position');
 		}
 	}
 	
@@ -136,7 +136,7 @@ class position extends admin {
 	 */
 	public function public_item() {	
 		if($this->input->post('dosubmit')) {
-			$items = dr_count($this->input->post('items')) > 0  ? $this->input->post('items') : showmessage(L('posid_select_to_remove'),HTTP_REFERER);
+			$items = dr_count($this->input->post('items')) > 0  ? $this->input->post('items') : dr_admin_msg(0,L('posid_select_to_remove'),HTTP_REFERER);
 			if(is_array($items)) {
 				$sql = array();
 				foreach ($items as $item) {
@@ -148,7 +148,7 @@ class position extends admin {
 					$this->content_pos($sql['id'],$sql['modelid']);		
 				}
 			}
-			showmessage(L('operation_success'),HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'),HTTP_REFERER);
 		} else {
 			$posid = intval($this->input->get('posid'));
 			$MODEL = getcache('model','commons');
@@ -192,12 +192,12 @@ class position extends admin {
 			$thumb = $this->input->post('info')['thumb'] ? 1 : 0;
 			$array = array('data'=>array2string($array),'synedit'=>intval($this->input->post('synedit')),'thumb'=>$thumb);
 			$this->db_data->update($array,array('id'=>$id,'posid'=>$posid,'modelid'=>$modelid));
-			showmessage(L('operation_success'),'','','edit');
+			dr_admin_msg(1,L('operation_success'),'','','edit');
 		} else {
 			$posid = intval($this->input->get('posid'));
 			$modelid = intval($this->input->get('modelid'));	
 			$id = intval($this->input->get('id'));		
-			if($posid == 0 || $modelid == 0) showmessage(L('linkage_parameter_error'), HTTP_REFERER);
+			if($posid == 0 || $modelid == 0) dr_admin_msg(0,L('linkage_parameter_error'), HTTP_REFERER);
 			$pos_arr = $this->db_data->get_one(array('id'=>$id,'posid'=>$posid,'modelid'=>$modelid));
 			extract(string2array($pos_arr['data']));
 			$synedit = $pos_arr['synedit'];
@@ -217,10 +217,10 @@ class position extends admin {
 				$pos = explode('-', $_k);
 				$this->db_data->update(array('listorder'=>$listorder),array('id'=>$pos[1],'catid'=>$pos[0],'posid'=>$this->input->post('posid')));
 			}
-			showmessage(L('operation_success'),HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'),HTTP_REFERER);
 			
 		} else {
-			showmessage(L('operation_failure'),HTTP_REFERER);
+			dr_admin_msg(0,L('operation_failure'),HTTP_REFERER);
 		}
 	}
 	/**

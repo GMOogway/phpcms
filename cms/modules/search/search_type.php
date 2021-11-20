@@ -45,7 +45,7 @@ class search_type extends admin {
 			unset($_POST['info']['yp_modelid']);
 
 			$this->db->insert($_POST['info']);
-			showmessage(L('add_success'), '', '', 'add');
+			dr_admin_msg(1,L('add_success'), '', '', 'add');
 		} else {
 			$show_header = $show_validator = '';
 			
@@ -84,7 +84,7 @@ class search_type extends admin {
 			unset($_POST['info']['yp_modelid']);
 	
 			$this->db->update($_POST['info'],array('typeid'=>$typeid));
-			showmessage(L('update_success'), '', '', 'edit');
+			dr_admin_msg(1,L('update_success'), '', '', 'edit');
 		} else {
 			$show_header = $show_validator = '';
 			$typeid = intval($_GET['typeid']);
@@ -107,7 +107,7 @@ class search_type extends admin {
 	public function delete() {
 		$_GET['typeid'] = intval($_GET['typeid']);
 		$this->db->delete(array('typeid'=>$_GET['typeid']));
-		showmessage(L('operation_success'), HTTP_REFERER);
+		dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 	}
 	
 	/**
@@ -120,9 +120,9 @@ class search_type extends admin {
 					$this->db->update(array('listorder'=>$listorder),array('typeid'=>intval($id)));
 				}
 			}
-			showmessage(L('operation_success'));
+			dr_admin_msg(1,L('operation_success'));
 		} else {
-			showmessage(L('operation_failure'));
+			dr_admin_msg(0,L('operation_failure'));
 		}
 	}
 	

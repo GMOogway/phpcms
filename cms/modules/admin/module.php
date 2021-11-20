@@ -45,17 +45,6 @@ class module extends admin {
 		} else {
 			dr_json(0, $module_api->error_msg);
 		}
-		/*if ($this->input->post('dosubmit')) {
-			if ($module_api->install()) {
-				$this->cache();
-				showmessage(L('success_module_install'),'blank','','','dr_install_confirm();');
-			} else {
-				showmesage($module_api->error_msg, HTTP_REFERER);
-			}
-		} else {
-			include PC_PATH.'modules'.DIRECTORY_SEPARATOR.$this->module.DIRECTORY_SEPARATOR.'install'.DIRECTORY_SEPARATOR.'config.inc.php';
-			include $this->admin_tpl('module_config');
-		}*/
 	}
 	
 	/**

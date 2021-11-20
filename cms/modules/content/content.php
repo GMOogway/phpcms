@@ -28,7 +28,7 @@ class content extends admin {
 			$this->priv_db = pc_base::load_model('category_priv_model');
 			$action = $this->categorys[$catid]['type']==0 ? ROUTE_A : 'init';
 			$priv_datas = $this->priv_db->get_one(array('catid'=>$catid,'is_admin'=>1,'action'=>$action));
-			if(!$priv_datas) showmessage(L('permission_to_operate'),'blank');
+			if(!$priv_datas) dr_admin_msg(0,L('permission_to_operate'));
 		}
 	}
 	
@@ -70,9 +70,9 @@ class content extends admin {
 			$workflow_menu = '';
 			$steps = $this->input->get('steps') ? intval($this->input->get('steps')) : 0;
 			//工作流权限判断
-			if($_SESSION['roleid']!=1 && $steps && !in_array($steps,$admin_privs)) showmessage(L('permission_to_operate'));
+			if($_SESSION['roleid']!=1 && $steps && !in_array($steps,$admin_privs)) dr_admin_msg(0,L('permission_to_operate'));
 			$this->db->set_model($modelid);
-			if($this->db->table_name==$this->db->db_tablepre) showmessage(L('model_table_not_exists'));
+			if($this->db->table_name==$this->db->db_tablepre) dr_admin_msg(0,L('model_table_not_exists'));
 			$status = $steps ? $steps : 99;
 			if($this->input->get('reject')) $status = 0;
 			$where = 'catid='.$catid.' AND status='.$status;
@@ -216,7 +216,7 @@ class content extends admin {
 				}
 			}
 			$this->db->set_model($modelid);
-			if($this->db->table_name==$this->db->db_tablepre) showmessage(L('model_table_not_exists'));
+			if($this->db->table_name==$this->db->db_tablepre) dr_admin_msg(0,L('model_table_not_exists'));
 			$status = 100;
 			$where = 'catid='.$catid.' AND status='.$status;
 			if (IS_POST) {
@@ -345,7 +345,7 @@ class content extends admin {
 			$this->priv_db = pc_base::load_model('category_priv_model');
 			$action = $this->categorys[$catid]['type']==0 ? ROUTE_A : 'initall';
 			$priv_datas = $this->priv_db->get_one(array('catid'=>$catid,'is_admin'=>1,'action'=>$action));
-			if(!$priv_datas) showmessage(L('permission_to_operate'),'blank');
+			if(!$priv_datas) dr_admin_msg(0,L('permission_to_operate'));
 		}
 		$admin_username = param::get_cookie('admin_username');
 		//查询当前的工作流
@@ -376,9 +376,9 @@ class content extends admin {
 		}
 		$steps = $this->input->get('steps') ? intval($this->input->get('steps')) : 0;
 		//工作流权限判断
-		if($_SESSION['roleid']!=1 && $steps && !in_array($steps,$admin_privs)) showmessage(L('permission_to_operate'));
+		if($_SESSION['roleid']!=1 && $steps && !in_array($steps,$admin_privs)) dr_admin_msg(0,L('permission_to_operate'));
 		$this->db->set_model($modelid);
-		if($this->db->table_name==$this->db->db_tablepre) showmessage(L('model_table_not_exists'));
+		if($this->db->table_name==$this->db->db_tablepre) dr_admin_msg(0,L('model_table_not_exists'));
 		$status = $steps ? $steps : 99;
 		if($this->input->get('reject')) $status = 0;
 		$where = 'status='.$status;
@@ -652,7 +652,7 @@ class content extends admin {
 			$show_header = $show_dialog = $show_validator = '';
 			//从数据库获取内容
 			$id = intval($this->input->get('id'));
-			if(!$this->input->get('catid') || !$this->input->get('catid')) showmessage(L('missing_part_parameters'));
+			if(!$this->input->get('catid') || !$this->input->get('catid')) dr_admin_msg(0,L('missing_part_parameters'));
 			$catid = intval($this->input->get('catid'));
 			
 			$this->model = getcache('model', 'commons');
@@ -664,7 +664,7 @@ class content extends admin {
 			$r = $this->db->get_one(array('id'=>$id));
 			$this->db->table_name = $this->db->table_name.'_data';
 			$r2 = $this->db->get_one(array('id'=>$id));
-			if(!$r2) showmessage(L('subsidiary_table_datalost'),'blank');
+			if(!$r2) dr_admin_msg(0,L('subsidiary_table_datalost'));
 			$data = array_merge($r,$r2);
 			require CACHE_MODEL_PATH.'content_form.class.php';
 			$content_form = new content_form($modelid,$catid,$this->categorys);
@@ -1138,9 +1138,9 @@ class content extends admin {
 				$module = $this->input->get('module');
 			}
 			$show_header =  '';
-			$filepath = $this->input->get('picurl') ? base64_decode($this->input->get('picurl')) : showmessage(L('lose_parameters'));
+			$filepath = $this->input->get('picurl') ? base64_decode($this->input->get('picurl')) : dr_admin_msg(0,L('lose_parameters'));
 			if(strpos($filepath, '://')) $filepath = strstr($filepath, SYS_ATTACHMENT_PATH ? SYS_ATTACHMENT_PATH : 'uploadfile');
-			if(!is_file(CMS_PATH.$filepath)) showmessage(L('请选择本地已存在的图像！'));
+			if(!is_file(CMS_PATH.$filepath)) dr_admin_msg(0,L('请选择本地已存在的图像！'));
 			$spec = $this->input->get('spec') ? intval($this->input->get('spec')) : 1; 
 			$catid = intval($this->input->get('catid'));
 			$input = $this->input->get('input') ? $this->input->get('input') : 'thumb';
@@ -1191,7 +1191,7 @@ class content extends admin {
 		$show_header = '';
 		$model_cache = getcache('model','commons');
 		if(!$this->input->get('modelid')) {
-			showmessage(L('please_select_modelid'));
+			dr_admin_msg(0,L('please_select_modelid'));
 		} else {
 			$page = intval($this->input->get('page'));
 			
@@ -1249,12 +1249,12 @@ class content extends admin {
 		$catid = intval($this->input->get('catid'));
 		$id = intval($this->input->get('id'));
 		
-		if(!$catid || !$id) showmessage(L('missing_part_parameters'),'blank');
+		if(!$catid || !$id) dr_admin_msg(0,L('missing_part_parameters'));
 		$page = intval($this->input->get('page'));
 		$page = max($page,1);
 		$CATEGORYS = getcache('category_content_'.$this->get_siteid(),'commons');
 		
-		if(!isset($CATEGORYS[$catid]) || $CATEGORYS[$catid]['type']!=0) showmessage(L('missing_part_parameters'),'blank');
+		if(!isset($CATEGORYS[$catid]) || $CATEGORYS[$catid]['type']!=0) dr_admin_msg(0,L('missing_part_parameters'));
 		define('HTML', true);
 		$CAT = $CATEGORYS[$catid];
 		
@@ -1264,7 +1264,7 @@ class content extends admin {
 
 		$this->db->table_name = $this->db->db_tablepre.$MODEL[$modelid]['tablename'];
 		$r = $this->db->get_one(array('id'=>$id));
-		if(!$r) showmessage(L('information_does_not_exist'));
+		if(!$r) dr_admin_msg(0,L('information_does_not_exist'));
 		$this->db->table_name = $this->db->table_name.'_data';
 		$r2 = $this->db->get_one(array('id'=>$id));
 		$rs = $r2 ? array_merge($r,$r2) : $r;
@@ -1472,11 +1472,11 @@ class content extends admin {
 			$this->content_check_db = pc_base::load_model('content_check_model');
 			$this->hits_db = pc_base::load_model('hits_model');
 			if($this->input->post('fromtype')==0) {
-				if($this->input->post('ids')=='') showmessage(L('please_input_move_source'));
-				if(!$this->input->post('tocatid')) showmessage(L('please_select_target_category'));
+				if($this->input->post('ids')=='') dr_admin_msg(0,L('please_input_move_source'));
+				if(!$this->input->post('tocatid')) dr_admin_msg(0,L('please_select_target_category'));
 				$tocatid = intval($this->input->post('tocatid'));
 				$modelid = $this->categorys[$tocatid]['modelid'];
-				if(!$modelid) showmessage(L('illegal_operation'));
+				if(!$modelid) dr_admin_msg(0,L('illegal_operation'));
 				$ids = array_filter(explode(',', $this->input->post('ids')),"is_numeric");
 				foreach ($ids as $id) {
 					$checkid = 'c-'.$id.'-'.$this->siteid;
@@ -1488,18 +1488,18 @@ class content extends admin {
 				$this->db->set_model($modelid);
 				$this->db->update(array('catid'=>$tocatid),"id IN($ids)");
 			} else {
-				if(!$this->input->post('fromid')) showmessage(L('please_input_move_source'));
-				if(!$this->input->post('tocatid')) showmessage(L('please_select_target_category'));
+				if(!$this->input->post('fromid')) dr_admin_msg(0,L('please_input_move_source'));
+				if(!$this->input->post('tocatid')) dr_admin_msg(0,L('please_select_target_category'));
 				$tocatid = intval($this->input->post('tocatid'));
 				$modelid = $this->categorys[$tocatid]['modelid'];
-				if(!$modelid) showmessage(L('illegal_operation'));
+				if(!$modelid) dr_admin_msg(0,L('illegal_operation'));
 				$fromid = array_filter($this->input->post('fromid'),"is_numeric");
 				$fromid = implode(',', $fromid);
 				$this->db->set_model($modelid);
 				$this->db->update(array('catid'=>$tocatid),"catid IN($fromid)");
 				$this->hits_db->update(array('catid'=>$tocatid),"catid IN($fromid)");
 			}
-			showmessage(L('operation_success'), '', '', 'remove');
+			dr_admin_msg(1,L('operation_success'), '', '', 'remove');
 			//ids
 		} else {
 			$show_header = '';
@@ -1734,7 +1734,7 @@ class content extends admin {
 					}
 				}
 			}
-			showmessage(L('clear_data_message'));
+			dr_admin_msg(1,L('clear_data_message'));
 		} else {
 			//读取网站的所有模型
 			$model_arr = getcache('model', 'commons');

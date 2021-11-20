@@ -42,7 +42,7 @@ class space extends admin {
 					$path = 'poster_js/'.$spaceid.'.js';
 				}
 				$this->db->update(array('path'=>$path), array('siteid'=>$this->get_siteid(), 'spaceid'=>$spaceid));
-				showmessage(L('added_successful'), '?m=poster&c=space', '', 'add');
+				dr_admin_msg(1,L('added_successful'), '?m=poster&c=space', '', 'add');
 			}
 		} else {
 			$TYPES = $this->template_type();
@@ -57,7 +57,7 @@ class space extends admin {
 	 */
 	public function edit() {
 		$spaceid = intval($this->input->get('spaceid'));
-		if (!$spaceid) showmessage(L('illegal_operation'), HTTP_REFERER);
+		if (!$spaceid) dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
 		if ($this->input->post('dosubmit')) {
 			$space = $this->check($this->input->post('space'));
 			$space['setting'] = array2string($this->input->post('setting'));
@@ -71,7 +71,7 @@ class space extends admin {
 				$poster_db->delete(array('spaceid'=>$spaceid));
 				$space['items'] = 0;
 			}
-			if ($this->db->update($space, array('spaceid'=>$spaceid))) showmessage(L('edited_successful'), '?m=poster&c=space', '', 'testIframe'.$spaceid);
+			if ($this->db->update($space, array('spaceid'=>$spaceid))) dr_admin_msg(1,L('edited_successful'), '?m=poster&c=space', '', 'testIframe'.$spaceid);
 		} else {
 			$info = $this->db->get_one(array('spaceid' => $spaceid));
 			$setting = string2array($info['setting']);
@@ -87,7 +87,7 @@ class space extends admin {
 	 */
 	public function public_call() {
 		$sid = intval($this->input->get('sid'));
-		if (!$sid) showmessage(L('illegal_action'), HTTP_REFERER, '', 'call');
+		if (!$sid) dr_admin_msg(0,L('illegal_action'), HTTP_REFERER, '', 'call');
 		$r = $this->db->get_one(array('spaceid'=>$sid, 'siteid'=>$this->get_siteid()));
 		include $this->admin_tpl('space_call');
 	}
@@ -125,7 +125,7 @@ class space extends admin {
 	 */
 	public function delete() {
 		if ((!$this->input->get('spaceid') || empty($this->input->get('spaceid'))) && (!$this->input->post('spaceid') || empty($this->input->post('spaceid')))) {
-			showmessage(L('illegal_parameters'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		} else {
 			if (is_array($this->input->post('spaceid'))) {
 				$ids = $this->input->post('spaceid');
@@ -138,7 +138,7 @@ class space extends admin {
 				$db->delete(array('siteid'=>$this->get_siteid(), 'spaceid'=>$spaceid));
 				$this->db->delete(array('siteid'=>$this->get_siteid(), 'spaceid' => $spaceid));
 			}
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		}
 	}
 	
@@ -168,7 +168,7 @@ class space extends admin {
 			
 			$m_db->update(array('setting'=>$setting), array('module'=>ROUTE_M)); //将配置信息存入数据表中
 			
-			showmessage(L('setting_updates_successful'), HTTP_REFERER, '', 'setting');
+			dr_admin_msg(1,L('setting_updates_successful'), HTTP_REFERER, '', 'setting');
 		} else {
 			@extract($this->setting); 
     		include $this->admin_tpl('setting');
@@ -196,14 +196,14 @@ class space extends admin {
 	 * 删除模板配置
 	 */
 	public function public_tempate_del() {
-		if (!$this->input->get('id')) showmessage(L('illegal_parameters'), HTTP_REFERER);
+		if (!$this->input->get('id')) dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		$siteid = $this->get_siteid();
 		$poster_template = getcache('poster_template_'.$siteid, 'commons');
 		if ($poster_template[$this->input->get('id')]) {
 			unset($poster_template[$this->input->get('id')]);
 		}
 		setcache('poster_template_'.$siteid, $poster_template, 'commons');
-		showmessage(L('operation_success'), HTTP_REFERER);
+		dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 	}
 	
 	/**
@@ -229,10 +229,10 @@ class space extends admin {
 			$info['type'] = $type;
 			$poster_template[$this->input->post('template')] = $info;
 			setcache('poster_template_'.$siteid, $poster_template, 'commons');
-			showmessage(L('setting_success'), '', '', 'testIframe');
+			dr_admin_msg(1,L('setting_success'), '', '', 'testIframe');
 		} else {
 			if (!$this->input->get('template')) {
-			showmessage(L('illegal_parameters'));
+			dr_admin_msg(0,L('illegal_parameters'));
 			} else {
 				$template = $this->input->get('template');
 			}
@@ -275,9 +275,9 @@ class space extends admin {
 		}
 		$page++;
 		if ($page>$pages) {
-			showmessage(L('update_js_success'), '?m=poster&c=space&a=init');
+			dr_admin_msg(1,L('update_js_success'), '?m=poster&c=space&a=init');
 		} else {
-			showmessage(L('update_js').'<font style="color:red">'.($page-1).'/'.$pages.'</font>', '?m=poster&c=space&a=create_js&page='.$page.'&pages='.$pages);
+			dr_admin_msg(1,L('update_js').'<font style="color:red">'.($page-1).'/'.$pages.'</font>', '?m=poster&c=space&a=create_js&page='.$page.'&pages='.$pages);
 		}
 	}
 	
@@ -311,18 +311,18 @@ class space extends admin {
 	 * @return Array	检查后的数组
 	 */
 	private function check($data = array()) {
-		if ($data['name'] == '') showmessage(L('name_plates_not_empty'));
+		if ($data['name'] == '') dr_admin_msg(0,L('name_plates_not_empty'));
 		$info = $this->db->get_one(array('name'=>$data['name'], 'siteid'=>$this->get_siteid()), 'spaceid');
 		if (($info['spaceid'] && $info['spaceid']!=$this->input->get('spaceid')) || ($info['spaceid'] && !$this->input->get('spaceid'))) {
-			showmessage(L('space_exist'), HTTP_REFERER);
+			dr_admin_msg(0,L('space_exist'), HTTP_REFERER);
 		}
 		if ((!isset($data['width']) || $data['width']==0) && in_array($data['type'], array('banner', 'fixure', 'float', 'couplet', 'imagechange', 'imagelist'))) {
-			showmessage(L('plate_width_not_empty'), HTTP_REFERER);
+			dr_admin_msg(0,L('plate_width_not_empty'), HTTP_REFERER);
 		} else {
 			$data['width'] = intval($data['width']);
 		}
 		if ((!isset($data['height']) || $data['height']==0) && in_array($data['type'], array('banner', 'fixure', 'float', 'couplet', 'imagechange', 'imagelist'))) {
-			showmessage(L('plate_height_not_empty'), HTTP_REFERER);
+			dr_admin_msg(0,L('plate_height_not_empty'), HTTP_REFERER);
 		} else {
 			$data['height'] = intval($data['height']);
 		}

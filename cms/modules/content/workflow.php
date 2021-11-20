@@ -37,7 +37,7 @@ class workflow extends admin {
 			
 			$this->db->insert($info);
 			$this->cache();
-			showmessage(L('add_success'), '?m=content&c=workflow&a=init&menuid='.$this->input->get('menuid'));
+			dr_admin_msg(1,L('add_success'), '?m=content&c=workflow&a=init&menuid='.$this->input->get('menuid'));
 		} else {
 			$show_validator = '';
 			$admin_data = array();
@@ -63,7 +63,7 @@ class workflow extends admin {
 			$info['setting'] = $setting;
 			$this->db->update($info,array('workflowid'=>$workflowid));
 			$this->cache();
-			showmessage(L('update_success'), '', '', 'edit');
+			dr_admin_msg(1,L('update_success'), '', '', 'edit');
 		} else {
 			$show_header = $show_validator = '';
 			$workflowid = intval($this->input->get('workflowid'));

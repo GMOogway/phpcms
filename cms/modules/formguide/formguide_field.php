@@ -50,7 +50,7 @@ class formguide_field extends admin {
 			$info['unsetgroupids'] = $this->input->post('unsetgroupids') ? implode(',',$this->input->post('unsetgroupids')) : '';
 			$info['unsetroleids'] = $this->input->post('unsetroleids') ? implode(',',$this->input->post('unsetroleids')) : '';
 			if (in_array($field, array('dataid', 'userid', 'username', 'datetime', 'ip'))) {
-				showmessage(L('fieldname').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
+				dr_admin_msg(0,L('fieldname').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
 			}
 			
 			require MODEL_PATH.$field_type.DIRECTORY_SEPARATOR.'config.inc.php';
@@ -62,7 +62,7 @@ class formguide_field extends admin {
 				$formid = intval($info['modelid']);
 				$where = 'modelid='.$formid.' AND field=\''.$field.'\' AND siteid='.$this->siteid.'';
 				$model_field = $this->db->get_one($where);
-				if ($model_field) showmessage(L('fields').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
+				if ($model_field) dr_admin_msg(0,L('fields').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
 				$forminfo = $this->model_db->get_one(array('modelid'=>$formid, 'siteid'=>$this->siteid), 'tablename');
 				$tablename = $this->db->db_tablepre.'form_'.$forminfo['tablename'];
 				require MODEL_PATH.'add.sql.php';
@@ -76,13 +76,13 @@ class formguide_field extends admin {
 				
 				$form_public_field_array = getcache('form_public_field_array', 'model');
 				if (is_array($form_public_field_array) && array_key_exists($info['field'], $form_public_field_array)) {
-					showmessage(L('fields').L('already_exist'), HTTP_REFERER);
+					dr_admin_msg(0,L('fields').L('already_exist'), HTTP_REFERER);
 				} else {
 					$form_public_field_array[$info['field']] = array('info'=>$info, 'sql'=>$sql); 
 					setcache('form_public_field_array', $form_public_field_array, 'model');	
 				}
 			}
-			showmessage(L('add_success'),'?m=formguide&c=formguide_field&a=init&formid='.$formid);
+			dr_admin_msg(1,L('add_success'),'?m=formguide&c=formguide_field&a=init&formid='.$formid);
 		} else {
 			$show_header = $show_validator = $show_dialog = '';
 			pc_base::load_sys_class('form','',0);
@@ -124,7 +124,7 @@ class formguide_field extends admin {
 			$info['unsetgroupids'] = $this->input->post('unsetgroupids') ? implode(',',$this->input->post('unsetgroupids')) : '';
 			$info['unsetroleids'] = $this->input->post('unsetroleids') ? implode(',',$this->input->post('unsetroleids')) : '';
 			if (in_array($field, array('dataid', 'userid', 'username', 'datetime', 'ip'))) {
-				showmessage(L('fieldname').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
+				dr_admin_msg(0,L('fieldname').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
 			}
 			
 			require MODEL_PATH.$field_type.DIRECTORY_SEPARATOR.'config.inc.php';
@@ -141,7 +141,7 @@ class formguide_field extends admin {
 					$where .= ' AND fieldid<>'.$fieldid;
 				}
 				$model_field = $this->db->get_one($where);
-				if ($model_field) showmessage(L('fields').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
+				if ($model_field) dr_admin_msg(0,L('fields').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
 				$forminfo = $this->model_db->get_one(array('modelid'=>$formid, 'siteid'=>$this->siteid), 'tablename');
 				$tablename = $this->db->db_tablepre.'form_'.$forminfo['tablename'];
 				
@@ -161,7 +161,7 @@ class formguide_field extends admin {
 						$form_public_field_array[$info['field']] = array('info'=>$info, 'sql'=>$sql);
 					} else {
 						if (is_array($form_public_field_array) && array_key_exists($info['field'], $form_public_field_array)) {
-							showmessage(L('fields').L('already_exist'), HTTP_REFERER);
+							dr_admin_msg(0,L('fields').L('already_exist'), HTTP_REFERER);
 						}
 						$new_form_field = $form_public_field_array;
 						$form_public_field_array = array();
@@ -176,7 +176,7 @@ class formguide_field extends admin {
 				}
 				setcache('form_public_field_array', $form_public_field_array, 'model');	
 			}
-			showmessage(L('update_success'),'?m=formguide&c=formguide_field&a=init&formid='.$formid);
+			dr_admin_msg(1,L('update_success'),'?m=formguide&c=formguide_field&a=init&formid='.$formid);
 		} else {
 			if ($this->input->get('formid') && !empty($this->input->get('formid'))) {
 				pc_base::load_sys_class('form','',0);
@@ -190,12 +190,12 @@ class formguide_field extends admin {
 				require MODEL_PATH.$formtype.DIRECTORY_SEPARATOR.'config.inc.php';
 			} else {
 				if (!$this->input->get('field') || empty($this->input->get('field'))) {
-					showmessage(L('illegal_operation'), HTTP_REFERER);
+					dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
 				}
 				
 				$form_public_field_array = getcache('form_public_field_array', 'model');
 				if (!array_key_exists($this->input->get('field'), $form_public_field_array)) {
-					showmessage(L('illegal_operation'), HTTP_REFERER);
+					dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
 				}
 				extract($form_public_field_array[$this->input->get('field')]);
 				extract($info);
@@ -226,7 +226,7 @@ class formguide_field extends admin {
 		$fieldid = intval($this->input->get('fieldid'));
 		$disabled = $this->input->get('disabled') ? 0 : 1;
 		$this->db->update(array('disabled'=>$disabled),array('fieldid'=>$fieldid,'siteid'=>$this->siteid));
-		showmessage(L('operation_success'),HTTP_REFERER);
+		dr_admin_msg(1,L('operation_success'),HTTP_REFERER);
 	}
 	
 	/**
@@ -245,7 +245,7 @@ class formguide_field extends admin {
 				require MODEL_PATH.'delete.sql.php';
 			}
 		} else {
-			if (!$this->input->get('field') || empty($this->input->get('field'))) showmessage(L('illegal_operation'), HTTP_REFERER);
+			if (!$this->input->get('field') || empty($this->input->get('field'))) dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
 			$field = $this->input->get('field');
 			$form_public_field_array = getcache('form_public_field_array', 'model');
 			if (array_key_exists($field, $form_public_field_array)) {
@@ -253,7 +253,7 @@ class formguide_field extends admin {
 			}
 			setcache('form_public_field_array', $form_public_field_array, 'model');
 		}
-		showmessage(L('update_success'), '?m=formguide&c=formguide_field&a=init&formid='.$formid);
+		dr_admin_msg(1,L('update_success'), '?m=formguide&c=formguide_field&a=init&formid='.$formid);
 	}
 	
 	/**
@@ -280,9 +280,9 @@ class formguide_field extends admin {
 				unset($form_public_field_array);
 				setcache('form_public_field_array', $new_form_field, 'model');
 			}
-			showmessage(L('operation_success'),HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'),HTTP_REFERER);
 		} else {
-			showmessage(L('operation_failure'));
+			dr_admin_msg(0,L('operation_failure'));
 		}
 	}
 	

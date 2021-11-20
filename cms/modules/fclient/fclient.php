@@ -59,20 +59,20 @@ class fclient extends admin {
  		if($this->input->post('dosubmit')) {
 			$fclient = $this->input->post('fclient');
 			if(empty($fclient['name'])) {
-				showmessage(L('sitename_noempty'));
+				dr_admin_msg(0,L('sitename_noempty'));
 			} else {
 				$fclient['name'] = safe_replace($fclient['name']);
 			}
-			if (!$fclient['username']) showmessage(L('username_noempty'));
-			if (!$fclient['domain']) showmessage(L('domain_noempty'));
-			if (strpos($fclient['domain'], 'http') !== 0) showmessage(L('domain_http'));
-			if (substr_count(trim($fclient['domain'], '/'), '/') > 2) showmessage(L('domain_contains'));
+			if (!$fclient['username']) dr_admin_msg(0,L('username_noempty'));
+			if (!$fclient['domain']) dr_admin_msg(0,L('domain_noempty'));
+			if (strpos($fclient['domain'], 'http') !== 0) dr_admin_msg(0,L('domain_http'));
+			if (substr_count(trim($fclient['domain'], '/'), '/') > 2) dr_admin_msg(0,L('domain_contains'));
 			$data = $this->db2->get_one(array('username'=>$fclient['username']));
 			if (!$data) {
-				showmessage(L('uid_noempty'));
+				dr_admin_msg(0,L('uid_noempty'));
 			}
 			$fclient['uid'] = $data['userid'];
-			if((!$fclient['sn']) || empty($fclient['sn'])) showmessage(L('sn_noempty'));
+			if((!$fclient['sn']) || empty($fclient['sn'])) dr_admin_msg(0,L('sn_noempty'));
 			$fclient['setting'] = dr_array2string($fclient['setting']);
 			if ($fclient['inputtime']) {
 				$fclient['inputtime'] = strtotime($fclient['inputtime']);
@@ -83,7 +83,7 @@ class fclient extends admin {
 			$data = new_addslashes($fclient);
 			$id = $this->db->insert($data,true);
 			if(!$id) return FALSE;
-			showmessage(L('operation_success'),HTTP_REFERER,'', 'add');
+			dr_admin_msg(1,L('operation_success'),HTTP_REFERER,'', 'add');
 		} else {
 			$show_validator = $show_scroll = $show_header = true;
 			pc_base::load_sys_class('form', '', 0);
@@ -99,16 +99,16 @@ class fclient extends admin {
 			$fclient = $this->input->post('fclient');
 			if($id < 1) return false;
 			if(!is_array($fclient) || empty($fclient)) return false;
-			if((!$fclient['name']) || empty($fclient['name'])) showmessage(L('sitename_noempty'));
-			if((!$fclient['username']) || empty($fclient['username'])) showmessage(L('username_noempty'));
-			if (!$fclient['domain']) showmessage(L('domain_noempty'));
-			if (strpos($fclient['domain'], 'http') !== 0) showmessage(L('domain_http'));
-			if (substr_count(trim($fclient['domain'], '/'), '/') > 2) showmessage(L('domain_contains'));
+			if((!$fclient['name']) || empty($fclient['name'])) dr_admin_msg(0,L('sitename_noempty'));
+			if((!$fclient['username']) || empty($fclient['username'])) dr_admin_msg(0,L('username_noempty'));
+			if (!$fclient['domain']) dr_admin_msg(0,L('domain_noempty'));
+			if (strpos($fclient['domain'], 'http') !== 0) dr_admin_msg(0,L('domain_http'));
+			if (substr_count(trim($fclient['domain'], '/'), '/') > 2) dr_admin_msg(0,L('domain_contains'));
 			$data = $this->db2->get_one(array('username'=>$fclient['username']));
 			if (!$data) {
-				showmessage(L('uid_noempty'));
+				dr_admin_msg(0,L('uid_noempty'));
 			}
-			if((!$fclient['sn']) || empty($fclient['sn'])) showmessage(L('sn_noempty'));
+			if((!$fclient['sn']) || empty($fclient['sn'])) dr_admin_msg(0,L('sn_noempty'));
 			$fclient['uid'] = $data['userid'];
 			$fclient['setting'] = dr_array2string($fclient['setting']);
 			if ($fclient['inputtime']) {
@@ -118,7 +118,7 @@ class fclient extends admin {
 				$fclient['endtime'] = strtotime($fclient['endtime']);
 			}
 			$this->db->update($fclient,array('id'=>$id));
-			showmessage(L('operation_success'),'?m=fclient&c=fclient&a=edit','', 'edit');
+			dr_admin_msg(1,L('operation_success'),'?m=fclient&c=fclient&a=edit','', 'edit');
 			
 		}else{
  			$show_validator = $show_scroll = $show_header = true;
@@ -138,26 +138,26 @@ class fclient extends admin {
 	 */
 	public function delete() {
   		if((!$this->input->get('id') || empty($this->input->get('id'))) && (!$this->input->post('id') || empty($this->input->post('id')))) {
-			showmessage(L('illegal_parameters'), HTTP_REFERER);
+			dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		} else {
 			if(is_array($this->input->post('id'))){
 				foreach($this->input->post('id') as $id_arr) {
  					//批量删除客户站群
 					$this->db->delete(array('id'=>$id_arr));
 				}
-				showmessage(L('operation_success'),'?m=fclient&c=fclient');
+				dr_admin_msg(1,L('operation_success'),'?m=fclient&c=fclient');
 			}else{
 				$id = intval($this->input->get('id'));
 				if($id < 1) return false;
 				//删除客户站群
 				$result = $this->db->delete(array('id'=>$id));
 				if($result){
-					showmessage(L('operation_success'),'?m=fclient&c=fclient');
+					dr_admin_msg(1,L('operation_success'),'?m=fclient&c=fclient');
 				}else {
-					showmessage(L("operation_failure"),'?m=fclient&c=fclient');
+					dr_admin_msg(0,L("operation_failure"),'?m=fclient&c=fclient');
 				}
 			}
-			showmessage(L('operation_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		}
 	}
 	 
@@ -182,7 +182,7 @@ class fclient extends admin {
   			$m_db = pc_base::load_model('module_model'); //调用模块数据模型
 			$set = array2string($setting);
 			$m_db->update(array('setting'=>$set), array('module'=>ROUTE_M));
-			showmessage(L('setting_updates_successful'), '?m=fclient&c=fclient&a=init');
+			dr_admin_msg(1,L('setting_updates_successful'), '?m=fclient&c=fclient&a=init');
 		} else {
 			if ($now_seting) {
 				@extract($now_seting);
@@ -210,14 +210,14 @@ class fclient extends admin {
 		$id = intval($this->input->get('id'));
 		$data = $this->_Data($id);
 		if (!$data) {
-			showmessage(L('no_site'));
+			dr_admin_msg(0,L('no_site'));
 		} elseif (in_array($data['status'], [1])) {
-			showmessage(L('no_site_check'));
+			dr_admin_msg(0,L('no_site_check'));
 		}
 
 		$url = $this->sync->sync_admin_url($data);
 
-		showmessage(L('admin_check'),$url,'3000');
+		dr_admin_msg(1,L('admin_check'),$url);
 	}
 	
 	// 下载安装包
@@ -225,9 +225,9 @@ class fclient extends admin {
 		$id = intval($this->input->get('id'));
 		$data = $this->_Data($id);
 		if (!$data) {
-			showmessage(L('no_site'));
+			dr_admin_msg(0,L('no_site'));
 		} elseif (in_array($data['status'], [1])) {
-			showmessage(L('no_site_check'));
+			dr_admin_msg(0,L('no_site_check'));
 		}
 
 		$rt = $this->sync->down_zip($data);
@@ -240,26 +240,26 @@ class fclient extends admin {
         $id = intval($this->input->get('id'));
 		$data = $this->_Data($id);
         if (!$data) {
-            showmessage(L('no_site'));
+            dr_admin_msg(0,L('no_site'));
         } elseif (!$data['setting']['mode']) {
-            showmessage(L('not_local_site'));
+            dr_admin_msg(0,L('not_local_site'));
         } elseif (!$data['setting']['webpath']) {
-            showmessage(L('not_web_path'));
+            dr_admin_msg(0,L('not_web_path'));
         }
 
         $path = $this->sync->get_dir_path($data['setting']['webpath']);
         if (is_dir($path)) {
             if (is_file($path.'index.php')) {
                 if (!is_file(CACHE_PATH.'cms.zip')) {
-                    showmessage(L('not_web_path_cms'));
+                    dr_admin_msg(0,L('not_web_path_cms'));
                 }
                 $this->sync->unzip(CACHE_PATH.'cms.zip', $path);
-                showmessage(L('not_web_path_cms_ok'));
+                dr_admin_msg(0,L('not_web_path_cms_ok'));
             } else {
-                showmessage(L('not_web_path_not_cms'));
+                dr_admin_msg(0,L('not_web_path_not_cms'));
             }
         } else {
-            showmessage(str_replace('{path}',$path,L('not_path')));
+            dr_admin_msg(0,str_replace('{path}',$path,L('not_path')));
         }
     }
 	

@@ -187,8 +187,8 @@ class site extends admin {
 	}
 	
 	public function del() {
-		$siteid = $this->input->get('siteid') && intval($this->input->get('siteid')) ? intval($this->input->get('siteid')) : showmessage(L('illegal_parameters'), HTTP_REFERER);
-		if($siteid==1) showmessage(L('operation_failure'), HTTP_REFERER);
+		$siteid = $this->input->get('siteid') && intval($this->input->get('siteid')) ? intval($this->input->get('siteid')) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
+		if($siteid==1) dr_admin_msg(0,L('operation_failure'), HTTP_REFERER);
 		$sitelist = getcache('sitelist','commons');
 		if ($sitelist[$siteid]['dirname']) {
 			dir_delete(CMS_PATH.$sitelist[$siteid]['dirname']);
@@ -224,17 +224,17 @@ class site extends admin {
 				$class_site->set_cache();
 				$cache_api = pc_base::load_app_class('cache_api', 'admin');
 				$cache_api->cache('category');
-				showmessage(L('operation_success'), HTTP_REFERER);
+				dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 			} else {
-				showmessage(L('operation_failure'), HTTP_REFERER);
+				dr_admin_msg(0,L('operation_failure'), HTTP_REFERER);
 			}
 		} else {
-			showmessage(L('notfound'), HTTP_REFERER);
+			dr_admin_msg(0,L('notfound'), HTTP_REFERER);
 		}
 	}
 	
 	public function edit() {
-		$siteid = $this->input->get('siteid') && intval($this->input->get('siteid')) ? intval($this->input->get('siteid')) : showmessage(L('illegal_parameters'), HTTP_REFERER);
+		$siteid = $this->input->get('siteid') && intval($this->input->get('siteid')) ? intval($this->input->get('siteid')) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		$sitelist = getcache('sitelist','commons');
 		if ($data = $this->db->get_one(array('siteid'=>$siteid))) {
 			if ($this->input->post('dosubmit')) {
@@ -335,7 +335,7 @@ class site extends admin {
 				include $this->admin_tpl('site_edit');
 			}
 		} else {
-			showmessage(L('notfound'), HTTP_REFERER);
+			dr_admin_msg(0,L('notfound'), HTTP_REFERER);
 		}
 	}
 	
