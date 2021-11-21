@@ -359,17 +359,16 @@ class category extends admin {
 			}
 			
 			
-			$show_validator = $catid = $r = '';
+			$show_validator = $catid = '';
 			$catid = intval($this->input->get('catid'));
 			pc_base::load_sys_class('form','',0);
-			$r = $this->db->get_one(array('catid'=>$catid));
-			if($r) extract($r);
+			$data = $this->db->get_one(array('catid'=>$catid));
+			if($data) extract($data);
 			$setting = string2array($setting);
 			
 			$this->priv_db = pc_base::load_model('category_priv_model');
 			$this->privs = $this->priv_db->select(array('catid'=>$catid));
 			
-			$data = array_map('htmlspecialchars_decode',$r);
 			require CACHE_MODEL_PATH.'content_form.class.php';
 			$content_form = new content_form(-1);
 			$forminfos = $content_form->get($data);

@@ -2,6 +2,10 @@
 		//是否允许用户上传附件 ，后台管理员开启此功能
 		extract($fieldinfo);
 		extract(string2array($setting));
+		// 表单宽度设置
+		$width = is_mobile(0) ? '100%' : ($width ? $width : '100%');
+		// 表单高度设置
+		if(!$height) $height = 300;
 		$allowupload = defined('IN_ADMIN') || $allowupload ? 1 : 0;
 		$value = code2html(strlen($value) ? $value : $defaultvalue);
 		//if(!$toolvalue) $toolvalue = '\'Source\',\'Bold\', \'Italic\', \'Underline\'';
@@ -17,5 +21,5 @@
 				return false;
 			}';
 		}
-		return "<div id='{$field}_tip'></div>".'<textarea class="dr_ueditor" name="info['.$field.']" id="'.$field.'" boxid="'.$field.'">'.$value.'</textarea>'.form::editor($field,$toolbar,$toolvalue,'member','',$color,$allowupload,1,'',$height,'',$autofloat,$autoheight,$theme,$watermark,$attachment,$image_reduce,$div2p,$enter,$simpleupload,$enablesaveimage);
+		return "<div id='{$field}_tip'></div>".'<textarea class="dr_ueditor" name="info['.$field.']" id="'.$field.'" boxid="'.$field.'">'.$value.'</textarea>'.form::editor($field,$toolbar,$toolvalue,'member','',$color,$allowupload,1,'',$height,'',$autofloat,$autoheight,$theme,$watermark,$attachment,$image_reduce,$div2p,$enter,$simpleupload,$enablesaveimage,$width);
 	}

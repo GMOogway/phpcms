@@ -14,7 +14,7 @@ class fclient extends admin {
 	public function init() {
  		$page = $this->input->get('page') && intval($this->input->get('page')) ? intval($this->input->get('page')) : 1;
 		$field = $this->input->get('field');
-		$keyword = strip_tags(trim($this->input->get('keyword')));
+		$keyword = clearhtml(trim($this->input->get('keyword')));
 		$where = '';
 		if($field=='name' && $keyword!=''){
 			$where = " `$field` like '%$keyword%'";

@@ -199,7 +199,7 @@ if (intval($userid)) {
 /* 输出结果 */
 if ($input->get("callback")) {
     if (preg_match("/^[\w_]+$/", $input->get("callback"))) {
-        echo htmlspecialchars($input->get("callback")) . '(' . $result . ')';
+        echo html2code($input->get("callback")) . '(' . $result . ')';
     } else {
         echo json_encode(array(
             'state'=> 'callback参数不合法'

@@ -7,6 +7,9 @@
 		extract($fieldinfo);
 		extract(string2array($setting));
 		$disabled_page = isset($disabled_page) ? $disabled_page : 0;
+		// 表单宽度设置
+		$width = is_mobile(0) ? '100%' : ($width ? $width : '100%');
+		// 表单高度设置
 		if(!$height) $height = 300;
 		$allowupload = defined('IN_ADMIN') ? 1 : (isset($grouplist['allowattachment']) && $grouplist['allowattachment'] ? 1: 0);
 		$value = code2html(strlen($value) ? $value : $defaultvalue);
@@ -23,5 +26,5 @@
 				return false;
 			}';
 		}
-		return "<div id='{$field}_tip'></div>".'<textarea class="dr_ueditor" name="info['.$field.']" id="'.$field.'" boxid="'.$field.'">'.$value.'</textarea>'.form::editor($field,$toolbar,$toolvalue,'content',$this->catid,$color,$allowupload,1,'',$height,$disabled_page,$autofloat,$autoheight,$theme,$watermark,$attachment,$image_reduce,$div2p,$enter,$simpleupload,$enablesaveimage);
+		return "<div id='{$field}_tip'></div>".'<textarea class="dr_ueditor" name="info['.$field.']" id="'.$field.'" boxid="'.$field.'">'.$value.'</textarea>'.form::editor($field,$toolbar,$toolvalue,'content',$this->catid,$color,$allowupload,1,'',$height,$disabled_page,$autofloat,$autoheight,$theme,$watermark,$attachment,$image_reduce,$div2p,$enter,$simpleupload,$enablesaveimage,$width);
 	}

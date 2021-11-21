@@ -24,7 +24,7 @@ class form {
 	 * @param string $enablesaveimage
 	 * @param string $allowuploadnum
 	 */
-	public static function editor($textareaid = 'content', $toolbar = 'basic', $toolvalue = '', $module = '', $catid = '', $color = '', $allowupload = 0, $allowbrowser = 1,$alowuploadexts = '',$height = 200,$disabled_page = 0, $autofloat = 0, $autoheight = 0, $theme = '', $watermark = 1, $attachment = 0, $image_reduce = '', $div2p = 0, $enter = 0, $simpleupload = 0, $enablesaveimage = 1, $allowuploadnum = '10') {
+	public static function editor($textareaid = 'content', $toolbar = 'basic', $toolvalue = '', $module = '', $catid = '', $color = '', $allowupload = 0, $allowbrowser = 1,$alowuploadexts = '',$height = 300,$disabled_page = 0, $autofloat = 0, $autoheight = 0, $theme = '', $watermark = 1, $attachment = 0, $image_reduce = '', $div2p = 0, $enter = 0, $simpleupload = 0, $enablesaveimage = 1, $width = '100%', $allowuploadnum = '10') {
 		$input = pc_base::load_sys_class('input');
 		$siteid = $input->get('siteid') ? $input->get('siteid') : param::get_cookie('siteid');
 		if(!$siteid) $siteid = get_siteid() ? get_siteid() : 1 ;
@@ -113,6 +113,7 @@ class form {
 			$str .= "$('#".$textareaid."').html(evt.editor.getData());";
 			$str .= "}";
 			$str .= "},";
+			$str .= "width:\"".$width."\",";
 			$str .= "height:{$height},";
 			$str .="textareaid:'".$textareaid."',module:'".$module."',catid:'".$catid."',\r\n";
 			if($allowupload) $str .= "filebrowserUploadUrl : '".SELF."?m=attachment&c=attachments&a=upload&module=".$module."&catid=".$catid."&dosubmit=1&args=".$p."&authkey=".$authkey."',\r\n";
@@ -191,6 +192,7 @@ class form {
 			$opt = array();
 			if($toolbar) {$opt[] = "toolbars:[".$toolbar."]";}
 			if($theme && $theme!='default') {$opt[] = "theme:'".$theme."'";}
+			$opt[] = "initialFrameWidth:\"".$width."\"";
 			$opt[] = "initialFrameHeight:".$height;
 			$opt[] = "autoHeightEnabled:".$autoHeightEnabled;
 			$opt[] = "autoFloatEnabled:".$autoFloatEnabled;

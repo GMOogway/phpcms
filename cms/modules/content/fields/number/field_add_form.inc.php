@@ -1,6 +1,6 @@
 <table cellpadding="2" cellspacing="1" width="98%">
 	<tr> 
-      <td width="100">取值范围</td>
+      <td width="120">取值范围</td>
       <td><input type="text" name="setting[minnumber]" value="1" size="5" class="input-text"> - <input type="text" name="setting[maxnumber]" value="" size="5" class="input-text"></td>
     </tr>
 	<tr> 
@@ -18,8 +18,12 @@
     </td>
     </tr>
 	<tr> 
+      <td>输入框长度</td>
+      <td><input type="text" name="setting[size]" value="" size="3" class="input-text"> px</td>
+    </tr>
+	<tr> 
       <td>默认值</td>
-      <td><input type="text" name="setting[defaultvalue]" value="<?php echo $defaultvalue?>" size="40" class="input-text"></td>
+      <td><input type="text" name="setting[defaultvalue]" value="" size="40" class="input-text"></td>
     </tr>
 
 	<tr> 

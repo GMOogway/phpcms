@@ -32,7 +32,7 @@ class html {
 		unset($arr_content);
 		$arr_content = $this->data_db->get_one(array('id'=>$contentid));
 		@extract($r);
-		$title = strip_tags($title);
+		$title = clearhtml($title);
 		if ($arr_content['paginationtype']) {			//文章使用分页时
 			if($arr_content['paginationtype']==1) {
 				if (strpos($arr_content['content'], '[/page]')!==false) {
@@ -77,7 +77,7 @@ class html {
 				if (preg_match_all("|\[page\](.*)\[/page\]|U", $arr_content['content'], $m, PREG_PATTERN_ORDER)) {
 					foreach ($m[1] as $k=>$v) {
 						$p = $k+1;
-						$titles[$p]['title'] = strip_tags($v);
+						$titles[$p]['title'] = clearhtml($v);
 						$titles[$p]['url'] = $pageurls[$p][1];
 					}
 				}
@@ -122,7 +122,7 @@ class html {
 			}
 		} else {
 			$page = 1;
-			$title = strip_tags($title);
+			$title = clearhtml($title);
 			$SEO = seo($s_info['siteid'], '', $title);
 			$content = $arr_content['content'];
 			$urls = content_url($contentid, $page, $inputtime, 'html', $site_info);

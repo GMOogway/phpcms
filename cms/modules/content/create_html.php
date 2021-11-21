@@ -677,7 +677,7 @@ class create_html extends admin {
 		foreach ($data as $row) {
 			$content = get_content($modelid, $row['id']);
 			$this->db->set_model($modelid);
-			if ($row && $content && preg_match("/(src)=([\"|']?)([^ \"'>]+\.(gif|jpg|jpeg|png))\\2/i", htmlspecialchars_decode($content), $m)) {
+			if ($row && $content && preg_match("/(src)=([\"|']?)([^ \"'>]+\.(gif|jpg|jpeg|png))\\2/i", code2html($content), $m)) {
 				$this->db->update(array('thumb' => str_replace(array('"', '\''), '', $m[3])), array('id' => $row['id']));
 			}
 		}

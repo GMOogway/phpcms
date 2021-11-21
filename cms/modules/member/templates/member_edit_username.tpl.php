@@ -28,7 +28,7 @@ include $this->admin_tpl('header', 'admin');?>
         <div class="form-group">
             <label class="col-xs-3 control-label ajax_name"><?php echo L('新账号');?></label>
             <div class="col-xs-7">
-                <input type="text" id="dr_name" class="form-control" value="<?php echo htmlspecialchars($member['username']);?>" name="name">
+                <input type="text" id="dr_name" class="form-control" value="<?php echo html2code($member['username']);?>" name="name">
             </div>
         </div>
 

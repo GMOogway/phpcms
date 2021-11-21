@@ -5,17 +5,17 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `cms_admin`;
 CREATE TABLE `cms_admin` (
   `userid` mediumint(6) unsigned NOT NULL AUTO_INCREMENT,
-  `username` varchar(20) DEFAULT NULL,
-  `password` varchar(32) DEFAULT NULL,
+  `username` varchar(50) DEFAULT NULL COMMENT '用户名',
+  `password` varchar(50) DEFAULT NULL COMMENT '加密密码',
   `login_attr` varchar(100) NOT NULL DEFAULT '' COMMENT '登录附加验证字符',
-  `roleid` smallint(5) DEFAULT '0',
-  `encrypt` varchar(50) NOT NULL,
-  `lastloginip` varchar(15) DEFAULT NULL,
-  `lastlogintime` int(10) unsigned DEFAULT '0',
-  `email` varchar(40) DEFAULT NULL,
+  `roleid` smallint(5) DEFAULT '0' COMMENT '权限id',
+  `encrypt` varchar(50) NOT NULL COMMENT '随机加密码',
+  `lastloginip` varchar(200) DEFAULT NULL COMMENT '最后登录Ip',
+  `lastlogintime` int(10) unsigned DEFAULT '0' COMMENT '最后登录时间',
+  `email` varchar(50) DEFAULT NULL COMMENT '邮箱地址',
   `islock` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '账号锁定标识',
-  `realname` varchar(50) NOT NULL DEFAULT '',
-  `lang` VARCHAR(6) NOT NULL,
+  `realname` varchar(50) NOT NULL DEFAULT '' COMMENT '姓名',
+  `lang` VARCHAR(6) NOT NULL COMMENT '语言',
   PRIMARY KEY (`userid`),
   KEY `username` (`username`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -43,11 +43,11 @@ CREATE TABLE `cms_admin_login` (
 DROP TABLE IF EXISTS `cms_admin_panel`;
 CREATE TABLE `cms_admin_panel` (
   `menuid` mediumint(8) unsigned NOT NULL,
-  `userid` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `name` char(32) DEFAULT NULL,
+  `userid` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '管理员userid',
+  `name` char(32) DEFAULT NULL COMMENT '名称',
   `icon` varchar(255) NULL DEFAULT NULL COMMENT '图标标示',
-  `url` char(255) DEFAULT NULL,
-  `datetime` int(10) unsigned DEFAULT '0',
+  `url` char(255) DEFAULT NULL COMMENT '外链地址',
+  `datetime` int(10) unsigned DEFAULT '0' COMMENT '时间',
   UNIQUE KEY `userid` (`menuid`,`userid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -57,10 +57,10 @@ CREATE TABLE `cms_admin_panel` (
 DROP TABLE IF EXISTS `cms_admin_role`;
 CREATE TABLE `cms_admin_role` (
   `roleid` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
-  `rolename` varchar(50) NOT NULL,
-  `description` text NOT NULL,
-  `listorder` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `disabled` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `rolename` varchar(50) NOT NULL COMMENT '角色名称',
+  `description` text NOT NULL COMMENT '角色描述',
+  `listorder` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
+  `disabled` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '状态',
   PRIMARY KEY (`roleid`),
   KEY `listorder` (`listorder`),
   KEY `disabled` (`disabled`)
@@ -97,7 +97,7 @@ CREATE TABLE `cms_attachment` (
   `downloads` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `userid` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `uploadtime` int(10) unsigned NOT NULL DEFAULT '0',
-  `uploadip` char(15) NOT NULL,
+  `uploadip` char(200) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0',
   `authcode` char(32) NOT NULL,
   `filemd5` varchar(50) NOT NULL COMMENT '文件md5值',
@@ -176,7 +176,7 @@ CREATE TABLE `cms_block_history` (
   `data` text,
   `creat_at` int(10) unsigned DEFAULT '0',
   `userid` mediumint(8) unsigned DEFAULT '0',
-  `username` char(20) DEFAULT NULL,
+  `username` char(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -345,7 +345,7 @@ CREATE TABLE `cms_content_check` (
   `catid` smallint(5) unsigned NOT NULL DEFAULT '0',
   `siteid` smallint(5) unsigned NOT NULL DEFAULT '0',
   `title` char(80) NOT NULL,
-  `username` char(20) NOT NULL,
+  `username` char(50) NOT NULL,
   `inputtime` int(10) unsigned NOT NULL DEFAULT '0',
   `status` tinyint(1) unsigned NOT NULL DEFAULT '0',
   KEY `username` (`username`),
@@ -440,7 +440,7 @@ CREATE TABLE `cms_hits` (
 DROP TABLE IF EXISTS `cms_ipbanned`;
 CREATE TABLE `cms_ipbanned` (
   `ipbannedid` smallint(5) NOT NULL auto_increment,
-  `ip` char(15) NOT NULL,
+  `ip` char(200) NOT NULL,
   `expires` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`ipbannedid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -520,8 +520,8 @@ CREATE TABLE `cms_log` (
   `querystring` varchar(255) NOT NULL,
   `data` mediumtext NOT NULL,
   `userid` mediumint(8) unsigned NOT NULL default '0',
-  `username` varchar(20) NOT NULL,
-  `ip` varchar(15) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `ip` varchar(200) NOT NULL,
   `time` datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`logid`),
   KEY `module` (`module`,`file`,`action`),
@@ -534,34 +534,34 @@ CREATE TABLE `cms_log` (
 DROP TABLE IF EXISTS `cms_member`;
 CREATE TABLE `cms_member` (
   `userid` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `username` char(20) NOT NULL DEFAULT '',
-  `password` char(32) NOT NULL DEFAULT '',
+  `username` char(50) NOT NULL DEFAULT '' COMMENT '用户名',
+  `password` char(50) NOT NULL DEFAULT '' COMMENT '加密密码',
   `login_attr` varchar(100) NOT NULL DEFAULT '' COMMENT '登录附加验证字符',
-  `encrypt` varchar(50) NOT NULL,
-  `nickname` char(20) NOT NULL,
-  `avatar` char(255) NOT NULL,
-  `regdate` int(10) unsigned NOT NULL DEFAULT '0',
-  `lastdate` int(10) unsigned NOT NULL DEFAULT '0',
-  `regip` char(15) NOT NULL DEFAULT '',
-  `lastip` char(15) NOT NULL DEFAULT '',
-  `loginnum` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `email` char(32) NOT NULL DEFAULT '',
-  `groupid` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `areaid` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `amount` decimal(8,2) unsigned NOT NULL DEFAULT '0.00',
-  `point` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `modelid` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `encrypt` varchar(50) NOT NULL COMMENT '随机加密码',
+  `nickname` char(50) NOT NULL  COMMENT '昵称',
+  `avatar` char(255) NOT NULL COMMENT '头像',
+  `regdate` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '注册时间',
+  `lastdate` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后登陆时间',
+  `regip` char(200) NOT NULL DEFAULT '' COMMENT '注册Ip',
+  `lastip` char(200) NOT NULL DEFAULT '' COMMENT '最后登录Ip',
+  `loginnum` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '登陆次数',
+  `email` char(50) NOT NULL DEFAULT '' COMMENT '邮箱地址',
+  `groupid` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '会员组id',
+  `areaid` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '地区id',
+  `amount` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '金钱RMB',
+  `point` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '积分',
+  `modelid` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '模型id',
   `message` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `islock` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `vip` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `islock` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '账号锁定标识',
+  `vip` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否是VIP',
   `overduedate` int(10) unsigned NOT NULL DEFAULT '0',
-  `siteid` smallint(5) unsigned NOT NULL DEFAULT '1',
+  `siteid` smallint(5) unsigned NOT NULL DEFAULT '1' COMMENT '站点id',
   `connectid` char(40) NOT NULL DEFAULT '',
   `from` char(10) NOT NULL DEFAULT '',
-  `mobile` char(11) NOT NULL DEFAULT '',
+  `mobile` char(11) NOT NULL DEFAULT '' COMMENT '手机号码',
   PRIMARY KEY (`userid`),
   UNIQUE KEY `username` (`username`),
-  KEY `email` (`email`(20))
+  KEY `email` (`email`(50))
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 
@@ -632,13 +632,13 @@ CREATE TABLE `cms_member_login` (
 DROP TABLE IF EXISTS `cms_member_verify`;
 CREATE TABLE `cms_member_verify` (
   `userid` mediumint(8) unsigned NOT NULL auto_increment,
-  `username` char(20) NOT NULL,
-  `password` char(32) NOT NULL,
+  `username` char(50) NOT NULL,
+  `password` char(50) NOT NULL,
   `encrypt` varchar(50) NOT NULL,
-  `nickname` char(20) NOT NULL,
+  `nickname` char(50) NOT NULL,
   `regdate` int(10) unsigned NOT NULL,
-  `regip` char(15) NOT NULL,
-  `email` char(32) NOT NULL,
+  `regip` char(200) NOT NULL,
+  `email` char(50) NOT NULL,
   `modelid` tinyint(3) unsigned NOT NULL default '0',
   `point` smallint(5) unsigned NOT NULL default '0',
   `amount` decimal(8,2) unsigned NOT NULL default '0.00',
@@ -649,7 +649,7 @@ CREATE TABLE `cms_member_verify` (
   `mobile` char(11) NOT NULL DEFAULT '',
   PRIMARY KEY  (`userid`),
   UNIQUE KEY `username` (`username`),
-  KEY `email` (`email`(20))
+  KEY `email` (`email`(50))
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- ----------------------------
@@ -817,9 +817,9 @@ CREATE TABLE `cms_pay_account` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `trade_sn` char(50) NOT NULL,
   `userid` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `username` char(20) NOT NULL,
+  `username` char(50) NOT NULL,
   `contactname` char(50) NOT NULL,
-  `email` char(40) NOT NULL,
+  `email` char(50) NOT NULL,
   `telephone` char(20) NOT NULL,
   `discount` float(8,2) NOT NULL DEFAULT '0.00',
   `money` char(8) NOT NULL,
@@ -831,7 +831,7 @@ CREATE TABLE `cms_pay_account` (
   `pay_type` enum('offline','recharge','selfincome','online') NOT NULL DEFAULT 'recharge',
   `payment` char(90) NOT NULL,
   `type` tinyint(3) NOT NULL DEFAULT '1',
-  `ip` char(15) NOT NULL DEFAULT '0.0.0.0',
+  `ip` char(200) NOT NULL DEFAULT '0.0.0.0',
   `status` enum('succ','failed','error','progress','timeout','cancel','waitting','unpay') NOT NULL DEFAULT 'unpay',
   `adminnote` char(20) NOT NULL,
   PRIMARY KEY (`id`),
@@ -872,7 +872,7 @@ CREATE TABLE `cms_pay_spend` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `creat_at` int(10) unsigned NOT NULL default '0',
   `userid` int(10) unsigned NOT NULL default '0',
-  `username` varchar(20) NOT NULL,
+  `username` varchar(50) NOT NULL,
   `type` tinyint(1) unsigned NOT NULL default '0',
   `logo` varchar(20) NOT NULL,
   `value` int(5) NOT NULL,
@@ -1014,7 +1014,7 @@ DROP TABLE IF EXISTS `cms_session`;
 CREATE TABLE `cms_session` (
   `sessionid` char(32) NOT NULL,
   `userid` mediumint(8) unsigned NOT NULL default '0',
-  `ip` char(15) NOT NULL,
+  `ip` char(200) NOT NULL,
   `lastvisit` int(10) unsigned NOT NULL default '0',
   `roleid` tinyint(3) unsigned default '0',
   `groupid` tinyint(3) unsigned NOT NULL default '0',
@@ -1075,7 +1075,7 @@ CREATE TABLE IF NOT EXISTS `cms_special` (
   `list_template` char(40) NOT NULL,
   `show_template` char(60) NOT NULL,
   `css` text NOT NULL,
-  `username` char(40) NOT NULL,
+  `username` char(50) NOT NULL,
   `userid` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `createtime` int(10) unsigned NOT NULL DEFAULT '0',
   `listorder` smallint(5) unsigned NOT NULL,
@@ -1118,7 +1118,7 @@ CREATE TABLE IF NOT EXISTS `cms_special_content` (
   `curl` char(15) NOT NULL,
   `listorder` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `userid` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `username` char(20) NOT NULL,
+  `username` char(50) NOT NULL,
   `inputtime` int(10) unsigned NOT NULL DEFAULT '0',
   `updatetime` int(10) unsigned NOT NULL DEFAULT '0',
   `searchid` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -1149,7 +1149,7 @@ CREATE TABLE `cms_template_bak` (
   `creat_at` int(10) unsigned DEFAULT '0',
   `fileid` char(50) DEFAULT NULL,
   `userid` mediumint(8) DEFAULT NULL,
-  `username` char(20) DEFAULT NULL,
+  `username` char(50) DEFAULT NULL,
   `template` text,
   PRIMARY KEY (`id`),
   KEY `fileid` (`fileid`)
@@ -1162,8 +1162,8 @@ CREATE TABLE `cms_template_bak` (
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_times`;
 CREATE TABLE `cms_times` (
-  `username` char(40) NOT NULL,
-  `ip` char(15) NOT NULL,
+  `username` char(50) NOT NULL,
+  `ip` char(200) NOT NULL,
   `logintime` int(10) unsigned NOT NULL default '0',
   `isadmin` tinyint(1) NOT NULL default '0',
   `times` tinyint(1) unsigned NOT NULL default '0',
@@ -1251,7 +1251,7 @@ CREATE TABLE IF NOT EXISTS `cms_download` (
   `status` tinyint(2) unsigned NOT NULL DEFAULT '1',
   `sysadd` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `islink` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `username` char(20) NOT NULL,
+  `username` char(50) NOT NULL,
   `inputtime` int(10) unsigned NOT NULL DEFAULT '0',
   `updatetime` int(10) unsigned NOT NULL DEFAULT '0',
   `systems` varchar(100) NOT NULL DEFAULT 'Win2000/WinXP/Win2003',
@@ -1322,7 +1322,7 @@ CREATE TABLE IF NOT EXISTS `cms_news` (
   `status` tinyint(2) unsigned NOT NULL DEFAULT '1',
   `sysadd` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `islink` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `username` char(20) NOT NULL,
+  `username` char(50) NOT NULL,
   `inputtime` int(10) unsigned NOT NULL DEFAULT '0',
   `updatetime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
@@ -1386,7 +1386,7 @@ CREATE TABLE IF NOT EXISTS `cms_picture` (
   `status` tinyint(2) unsigned NOT NULL DEFAULT '1',
   `sysadd` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `islink` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `username` char(20) NOT NULL,
+  `username` char(50) NOT NULL,
   `inputtime` int(10) unsigned NOT NULL DEFAULT '0',
   `updatetime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
@@ -5077,7 +5077,7 @@ INSERT INTO `cms_model_field` (`fieldid`, `modelid`, `siteid`, `field`, `name`, 
 INSERT INTO `cms_model_field` (`fieldid`, `modelid`, `siteid`, `field`, `name`, `tips`, `css`, `minlength`, `maxlength`, `pattern`, `errortips`, `formtype`, `setting`, `formattribute`, `unsetgroupids`, `unsetroleids`, `iscore`, `issystem`, `isunique`, `isbase`, `issearch`, `isadd`, `isfulltext`, `isposition`, `listorder`, `disabled`, `isomnipotent`) VALUES(3, 1, 1, 'title', '标题', '', 'inputtitle', 1, 80, '', '请输入标题', 'title', '', '', '', '', 0, 1, 0, 1, 1, 1, 1, 1, 4, 0, 0);
 INSERT INTO `cms_model_field` (`fieldid`, `modelid`, `siteid`, `field`, `name`, `tips`, `css`, `minlength`, `maxlength`, `pattern`, `errortips`, `formtype`, `setting`, `formattribute`, `unsetgroupids`, `unsetroleids`, `iscore`, `issystem`, `isunique`, `isbase`, `issearch`, `isadd`, `isfulltext`, `isposition`, `listorder`, `disabled`, `isomnipotent`) VALUES(4, 1, 1, 'thumb', '缩略图', '', '', 0, 100, '', '', 'image', 'array (\n  ''size'' => ''50'',\n  ''defaultvalue'' => '''',\n  ''show_type'' => ''1'',\n  ''upload_maxsize'' => ''1024'',\n  ''upload_allowext'' => ''jpg|jpeg|gif|png|bmp'',\n  ''watermark'' => ''1'',\n  ''isselectimage'' => ''1'',\n  ''images_width'' => '''',\n  ''images_height'' => '''',\n)', '', '', '', 0, 1, 0, 0, 0, 1, 0, 1, 14, 0, 0);
 INSERT INTO `cms_model_field` (`fieldid`, `modelid`, `siteid`, `field`, `name`, `tips`, `css`, `minlength`, `maxlength`, `pattern`, `errortips`, `formtype`, `setting`, `formattribute`, `unsetgroupids`, `unsetroleids`, `iscore`, `issystem`, `isunique`, `isbase`, `issearch`, `isadd`, `isfulltext`, `isposition`, `listorder`, `disabled`, `isomnipotent`) VALUES(5, 1, 1, 'keywords', '关键词', '多关键词之间用“,”隔开', '', 0, 40, '', '', 'keyword', 'array (\r\n  ''size'' => ''100'',\r\n  ''defaultvalue'' => '''',\r\n)', 'data-role=\'tagsinput\'', '-99', '-99', 0, 1, 0, 1, 1, 1, 1, 0, 7, 0, 0);
-INSERT INTO `cms_model_field` (`fieldid`, `modelid`, `siteid`, `field`, `name`, `tips`, `css`, `minlength`, `maxlength`, `pattern`, `errortips`, `formtype`, `setting`, `formattribute`, `unsetgroupids`, `unsetroleids`, `iscore`, `issystem`, `isunique`, `isbase`, `issearch`, `isadd`, `isfulltext`, `isposition`, `listorder`, `disabled`, `isomnipotent`) VALUES(6, 1, 1, 'description', '摘要', '', '', 0, 255, '', '', 'textarea', 'array (\r\n  ''width'' => ''98'',\r\n  ''height'' => ''46'',\r\n  ''defaultvalue'' => '''',\r\n  ''enablehtml'' => ''0'',\r\n)', '', '', '', 0, 1, 0, 1, 0, 1, 1, 1, 10, 0, 0);
+INSERT INTO `cms_model_field` (`fieldid`, `modelid`, `siteid`, `field`, `name`, `tips`, `css`, `minlength`, `maxlength`, `pattern`, `errortips`, `formtype`, `setting`, `formattribute`, `unsetgroupids`, `unsetroleids`, `iscore`, `issystem`, `isunique`, `isbase`, `issearch`, `isadd`, `isfulltext`, `isposition`, `listorder`, `disabled`, `isomnipotent`) VALUES(6, 1, 1, 'description', '摘要', '', '', 0, 255, '', '', 'textarea', 'array (\r\n  ''width'' => '''',\r\n  ''height'' => '''',\r\n  ''defaultvalue'' => '''',\r\n  ''enablehtml'' => ''0'',\r\n)', '', '', '', 0, 1, 0, 1, 0, 1, 1, 1, 10, 0, 0);
 INSERT INTO `cms_model_field` (`fieldid`, `modelid`, `siteid`, `field`, `name`, `tips`, `css`, `minlength`, `maxlength`, `pattern`, `errortips`, `formtype`, `setting`, `formattribute`, `unsetgroupids`, `unsetroleids`, `iscore`, `issystem`, `isunique`, `isbase`, `issearch`, `isadd`, `isfulltext`, `isposition`, `listorder`, `disabled`, `isomnipotent`) VALUES(7, 1, 1, 'content', '内容', '<div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="add_introduce" type="checkbox"  value="1" checked>是否截取内容<span></span></label><input type="text" name="introcude_length" value="200" size="3">字符至内容摘要\r\n<label class="mt-checkbox mt-checkbox-outline"><input type=''checkbox'' name=''auto_thumb'' value="1" checked>是否获取内容第<span></span></label><input type="text" name="auto_thumb_no" value="1" size="2" class="">张图片作为标题图片\r\n<label class="mt-checkbox mt-checkbox-outline"><input type=''checkbox'' name=''is_remove_a'' value="1" checked>去除站外链接<span></span></label>\r\n</div>', '', 1, 999999, '', '内容不能为空', 'editor', 'array (\n  ''toolbar'' => ''full'',\n  ''toolvalue'' => "\'Bold\', \'Italic\', \'Underline\'",\n  ''defaultvalue'' => '''',\n  ''enablekeylink'' => ''1'',\n  ''replacenum'' => ''2'',\n  ''link_mode'' => ''0'',\n  ''color'' => '''',\n  ''theme'' => ''default'',\n  ''autofloat'' => ''0'',\n  ''div2p'' => ''1'',\n  ''autoheight'' => ''0'',\n  ''enter'' => ''0'',\n  ''simpleupload'' => ''0'',\n  ''watermark'' => ''1'',\n  ''attachment'' => ''0'',\n  ''image_reduce'' => '''',\n  ''enablesaveimage'' => ''1'',\n  ''height'' => '''',\n  ''local_img'' => ''1'',\n  ''local_watermark'' => ''1'',\n  ''local_attachment'' => ''0'',\n  ''local_image_reduce'' => '''',\n  ''disabled_page'' => ''0'',\n)', '', '', '', 0, 0, 0, 1, 0, 1, 1, 0, 13, 0, 0);
 INSERT INTO `cms_model_field` (`fieldid`, `modelid`, `siteid`, `field`, `name`, `tips`, `css`, `minlength`, `maxlength`, `pattern`, `errortips`, `formtype`, `setting`, `formattribute`, `unsetgroupids`, `unsetroleids`, `iscore`, `issystem`, `isunique`, `isbase`, `issearch`, `isadd`, `isfulltext`, `isposition`, `listorder`, `disabled`, `isomnipotent`) VALUES(8, 1, 1, 'voteid', '添加投票', '', '', 0, 0, '', '', 'omnipotent', 'array (\n  ''formtext'' => ''<input type=\\''text\\'' name=\\''info[voteid]\\'' id=\\''voteid\\'' value=\\''{FIELD_VALUE}\\'' size=\\''3\\''> \r\n<input type=\\''button\\'' value="选择已有投票" onclick="omnipotent(\\''selectid\\'',\\''?m=vote&c=vote&a=public_get_votelist&from_api=1\\'',\\''选择已有投票\\'',1)" class="button">\r\n<input type=\\''button\\'' value="新增投票" onclick="omnipotent(\\''addvote\\'',\\''?m=vote&c=vote&a=add&from_api=1\\'',\\''添加投票\\'',0)" class="button">'',\n  ''fieldtype'' => ''mediumint'',\n  ''minnumber'' => ''1'',\n)', '', '', '', 0, 0, 0, 1, 0, 0, 1, 0, 21, 0, 0);
 INSERT INTO `cms_model_field` (`fieldid`, `modelid`, `siteid`, `field`, `name`, `tips`, `css`, `minlength`, `maxlength`, `pattern`, `errortips`, `formtype`, `setting`, `formattribute`, `unsetgroupids`, `unsetroleids`, `iscore`, `issystem`, `isunique`, `isbase`, `issearch`, `isadd`, `isfulltext`, `isposition`, `listorder`, `disabled`, `isomnipotent`) VALUES(9, 1, 1, 'pages', '分页方式', '', '', 0, 0, '', '', 'pages', '', '', '-99', '-99', 0, 0, 0, 1, 0, 0, 0, 0, 16, 0, 0);
@@ -5100,7 +5100,7 @@ INSERT INTO `cms_model_field` (`fieldid`, `modelid`, `siteid`, `field`, `name`, 
 INSERT INTO `cms_model_field` (`fieldid`, `modelid`, `siteid`, `field`, `name`, `tips`, `css`, `minlength`, `maxlength`, `pattern`, `errortips`, `formtype`, `setting`, `formattribute`, `unsetgroupids`, `unsetroleids`, `iscore`, `issystem`, `isunique`, `isbase`, `issearch`, `isadd`, `isfulltext`, `isposition`, `listorder`, `disabled`, `isomnipotent`) VALUES(25, 2, 1, 'typeid', '类别', '', '', 0, 0, '', '', 'typeid', 'array (\n  ''minnumber'' => '''',\n  ''defaultvalue'' => '''',\n)', '', '', '', 0, 1, 0, 1, 1, 1, 0, 0, 2, 1, 0);
 INSERT INTO `cms_model_field` (`fieldid`, `modelid`, `siteid`, `field`, `name`, `tips`, `css`, `minlength`, `maxlength`, `pattern`, `errortips`, `formtype`, `setting`, `formattribute`, `unsetgroupids`, `unsetroleids`, `iscore`, `issystem`, `isunique`, `isbase`, `issearch`, `isadd`, `isfulltext`, `isposition`, `listorder`, `disabled`, `isomnipotent`) VALUES(26, 2, 1, 'title', '标题', '', 'inputtitle', 1, 80, '', '请输入标题', 'title', '', '', '', '', 0, 1, 0, 1, 1, 1, 1, 1, 4, 0, 0);
 INSERT INTO `cms_model_field` (`fieldid`, `modelid`, `siteid`, `field`, `name`, `tips`, `css`, `minlength`, `maxlength`, `pattern`, `errortips`, `formtype`, `setting`, `formattribute`, `unsetgroupids`, `unsetroleids`, `iscore`, `issystem`, `isunique`, `isbase`, `issearch`, `isadd`, `isfulltext`, `isposition`, `listorder`, `disabled`, `isomnipotent`) VALUES(27, 2, 1, 'keywords', '关键词', '多关键词之间用“,”隔开', '', 0, 40, '', '', 'keyword', 'array (\r\n  ''size'' => ''100'',\r\n  ''defaultvalue'' => '''',\r\n)', 'data-role=\'tagsinput\'', '-99', '-99', 0, 1, 0, 1, 1, 1, 1, 0, 7, 0, 0);
-INSERT INTO `cms_model_field` (`fieldid`, `modelid`, `siteid`, `field`, `name`, `tips`, `css`, `minlength`, `maxlength`, `pattern`, `errortips`, `formtype`, `setting`, `formattribute`, `unsetgroupids`, `unsetroleids`, `iscore`, `issystem`, `isunique`, `isbase`, `issearch`, `isadd`, `isfulltext`, `isposition`, `listorder`, `disabled`, `isomnipotent`) VALUES(28, 2, 1, 'description', '摘要', '', '', 0, 255, '', '', 'textarea', 'array (\r\n  ''width'' => ''98'',\r\n  ''height'' => ''46'',\r\n  ''defaultvalue'' => '''',\r\n  ''enablehtml'' => ''0'',\r\n)', '', '', '', 0, 1, 0, 1, 0, 1, 1, 1, 10, 0, 0);
+INSERT INTO `cms_model_field` (`fieldid`, `modelid`, `siteid`, `field`, `name`, `tips`, `css`, `minlength`, `maxlength`, `pattern`, `errortips`, `formtype`, `setting`, `formattribute`, `unsetgroupids`, `unsetroleids`, `iscore`, `issystem`, `isunique`, `isbase`, `issearch`, `isadd`, `isfulltext`, `isposition`, `listorder`, `disabled`, `isomnipotent`) VALUES(28, 2, 1, 'description', '摘要', '', '', 0, 255, '', '', 'textarea', 'array (\r\n  ''width'' => '''',\r\n  ''height'' => '''',\r\n  ''defaultvalue'' => '''',\r\n  ''enablehtml'' => ''0'',\r\n)', '', '', '', 0, 1, 0, 1, 0, 1, 1, 1, 10, 0, 0);
 INSERT INTO `cms_model_field` (`fieldid`, `modelid`, `siteid`, `field`, `name`, `tips`, `css`, `minlength`, `maxlength`, `pattern`, `errortips`, `formtype`, `setting`, `formattribute`, `unsetgroupids`, `unsetroleids`, `iscore`, `issystem`, `isunique`, `isbase`, `issearch`, `isadd`, `isfulltext`, `isposition`, `listorder`, `disabled`, `isomnipotent`) VALUES(29, 2, 1, 'content', '内容', '<div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="add_introduce" type="checkbox"  value="1" checked>是否截取内容<span></span></label><input type="text" name="introcude_length" value="200" size="3">字符至内容摘要\r\n<label class="mt-checkbox mt-checkbox-outline"><input type=''checkbox'' name=''auto_thumb'' value="1" checked>是否获取内容第<span></span></label><input type="text" name="auto_thumb_no" value="1" size="2" class="">张图片作为标题图片\r\n<label class="mt-checkbox mt-checkbox-outline"><input type=''checkbox'' name=''is_remove_a'' value="1" checked>去除站外链接<span></span></label>\r\n</div>', '', 1, 999999, '', '内容不能为空', 'editor', 'array (\n  ''toolbar'' => ''full'',\n  ''toolvalue'' => "\'Bold\', \'Italic\', \'Underline\'",\n  ''defaultvalue'' => '''',\n  ''enablekeylink'' => ''1'',\n  ''replacenum'' => ''2'',\n  ''link_mode'' => ''0'',\n  ''color'' => '''',\n  ''theme'' => ''default'',\n  ''autofloat'' => ''0'',\n  ''div2p'' => ''1'',\n  ''autoheight'' => ''0'',\n  ''enter'' => ''0'',\n  ''simpleupload'' => ''0'',\n  ''watermark'' => ''1'',\n  ''attachment'' => ''0'',\n  ''image_reduce'' => '''',\n  ''enablesaveimage'' => ''1'',\n  ''height'' => '''',\n  ''local_img'' => ''1'',\n  ''local_watermark'' => ''1'',\n  ''local_attachment'' => ''0'',\n  ''local_image_reduce'' => '''',\n  ''disabled_page'' => ''0'',\n)', '', '', '', 0, 0, 0, 1, 0, 1, 1, 0, 13, 0, 0);
 INSERT INTO `cms_model_field` (`fieldid`, `modelid`, `siteid`, `field`, `name`, `tips`, `css`, `minlength`, `maxlength`, `pattern`, `errortips`, `formtype`, `setting`, `formattribute`, `unsetgroupids`, `unsetroleids`, `iscore`, `issystem`, `isunique`, `isbase`, `issearch`, `isadd`, `isfulltext`, `isposition`, `listorder`, `disabled`, `isomnipotent`) VALUES(30, 2, 1, 'thumb', '缩略图', '', '', 0, 100, '', '', 'image', 'array (\n  ''size'' => ''50'',\n  ''defaultvalue'' => '''',\n  ''show_type'' => ''1'',\n  ''upload_maxsize'' => ''1024'',\n  ''upload_allowext'' => ''jpg|jpeg|gif|png|bmp'',\n  ''watermark'' => ''1'',\n  ''isselectimage'' => ''1'',\n  ''images_width'' => '''',\n  ''images_height'' => '''',\n)', '', '', '', 0, 1, 0, 0, 0, 1, 0, 1, 14, 0, 0);
 INSERT INTO `cms_model_field` (`fieldid`, `modelid`, `siteid`, `field`, `name`, `tips`, `css`, `minlength`, `maxlength`, `pattern`, `errortips`, `formtype`, `setting`, `formattribute`, `unsetgroupids`, `unsetroleids`, `iscore`, `issystem`, `isunique`, `isbase`, `issearch`, `isadd`, `isfulltext`, `isposition`, `listorder`, `disabled`, `isomnipotent`) VALUES(31, 2, 1, 'relation', '相关文章', '', '', 0, 0, '', '', 'omnipotent', 'array (\n  ''formtext'' => ''<input type=\\''hidden\\'' name=\\''info[relation]\\'' id=\\''relation\\'' value=\\''{FIELD_VALUE}\\'' style=\\''50\\'' >\r\n<ul class="list-dot" id="relation_text"></ul>\r\n<div>\r\n<input type=\\''button\\'' value="添加相关" onclick="omnipotent(\\''selectid\\'',\\''?m=content&c=content&a=public_relationlist&modelid={MODELID}\\'',\\''添加相关文章\\'',1)" class="button" style="width:66px;">\r\n<span class="edit_content">\r\n<input type=\\''button\\'' value="显示已有" onclick="show_relation({MODELID},{ID})" class="button" style="width:66px;">\r\n</span>\r\n</div>'',\n  ''fieldtype'' => ''varchar'',\n  ''minnumber'' => ''1'',\n)', '', '2,6,4,5,1,17,18,7', '', 0, 0, 0, 0, 0, 0, 1, 0, 15, 0, 0);
@@ -5139,7 +5139,7 @@ INSERT INTO `cms_model_field` (`fieldid`, `modelid`, `siteid`, `field`, `name`, 
 INSERT INTO `cms_model_field` (`fieldid`, `modelid`, `siteid`, `field`, `name`, `tips`, `css`, `minlength`, `maxlength`, `pattern`, `errortips`, `formtype`, `setting`, `formattribute`, `unsetgroupids`, `unsetroleids`, `iscore`, `issystem`, `isunique`, `isbase`, `issearch`, `isadd`, `isfulltext`, `isposition`, `listorder`, `disabled`, `isomnipotent`) VALUES(63, 3, 1, 'relation', '相关组图', '', '', 0, 0, '', '', 'omnipotent', 'array (\n  ''formtext'' => ''<input type=\\''hidden\\'' name=\\''info[relation]\\'' id=\\''relation\\'' value=\\''{FIELD_VALUE}\\'' style=\\''50\\'' >\r\n<ul class="list-dot" id="relation_text"></ul>\r\n<div>\r\n<input type=\\''button\\'' value="添加相关" onclick="omnipotent(\\''selectid\\'',\\''?m=content&c=content&a=public_relationlist&modelid={MODELID}\\'',\\''添加相关文章\\'',1)" class="button" style="width:66px;">\r\n<span class="edit_content">\r\n<input type=\\''button\\'' value="显示已有" onclick="show_relation({MODELID},{ID})" class="button" style="width:66px;">\r\n</span>\r\n</div>'',\n  ''fieldtype'' => ''varchar'',\n  ''minnumber'' => ''1'',\n)', '', '2,6,4,5,1,17,18,7', '', 0, 0, 0, 0, 0, 0, 1, 0, 15, 0, 0);
 INSERT INTO `cms_model_field` (`fieldid`, `modelid`, `siteid`, `field`, `name`, `tips`, `css`, `minlength`, `maxlength`, `pattern`, `errortips`, `formtype`, `setting`, `formattribute`, `unsetgroupids`, `unsetroleids`, `iscore`, `issystem`, `isunique`, `isbase`, `issearch`, `isadd`, `isfulltext`, `isposition`, `listorder`, `disabled`, `isomnipotent`) VALUES(64, 3, 1, 'thumb', '缩略图', '', '', 0, 100, '', '', 'image', 'array (\n  ''size'' => ''50'',\n  ''defaultvalue'' => '''',\n  ''show_type'' => ''1'',\n  ''upload_maxsize'' => ''1024'',\n  ''upload_allowext'' => ''jpg|jpeg|gif|png|bmp'',\n  ''watermark'' => ''1'',\n  ''isselectimage'' => ''1'',\n  ''images_width'' => '''',\n  ''images_height'' => '''',\n)', '', '', '', 0, 1, 0, 0, 0, 1, 0, 1, 14, 0, 0);
 INSERT INTO `cms_model_field` (`fieldid`, `modelid`, `siteid`, `field`, `name`, `tips`, `css`, `minlength`, `maxlength`, `pattern`, `errortips`, `formtype`, `setting`, `formattribute`, `unsetgroupids`, `unsetroleids`, `iscore`, `issystem`, `isunique`, `isbase`, `issearch`, `isadd`, `isfulltext`, `isposition`, `listorder`, `disabled`, `isomnipotent`) VALUES(65, 3, 1, 'content', '内容', '<div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="add_introduce" type="checkbox"  value="1" checked>是否截取内容<span></span></label><input type="text" name="introcude_length" value="200" size="3">字符至内容摘要\r\n<label class="mt-checkbox mt-checkbox-outline"><input type=''checkbox'' name=''auto_thumb'' value="1" checked>是否获取内容第<span></span></label><input type="text" name="auto_thumb_no" value="1" size="2" class="">张图片作为标题图片\r\n<label class="mt-checkbox mt-checkbox-outline"><input type=''checkbox'' name=''is_remove_a'' value="1" checked>去除站外链接<span></span></label>\r\n</div>', '', 0, 999999, '', '', 'editor', 'array (\n  ''toolbar'' => ''full'',\n  ''toolvalue'' => "\'Bold\', \'Italic\', \'Underline\'",\n  ''defaultvalue'' => '''',\n  ''enablekeylink'' => ''1'',\n  ''replacenum'' => ''2'',\n  ''link_mode'' => ''0'',\n  ''color'' => '''',\n  ''theme'' => ''default'',\n  ''autofloat'' => ''0'',\n  ''div2p'' => ''1'',\n  ''autoheight'' => ''0'',\n  ''enter'' => ''0'',\n  ''simpleupload'' => ''0'',\n  ''watermark'' => ''1'',\n  ''attachment'' => ''0'',\n  ''image_reduce'' => '''',\n  ''enablesaveimage'' => ''1'',\n  ''height'' => '''',\n  ''local_img'' => ''1'',\n  ''local_watermark'' => ''1'',\n  ''local_attachment'' => ''0'',\n  ''local_image_reduce'' => '''',\n  ''disabled_page'' => ''0'',\n)', '', '', '', 0, 0, 0, 1, 0, 1, 1, 0, 13, 0, 0);
-INSERT INTO `cms_model_field` (`fieldid`, `modelid`, `siteid`, `field`, `name`, `tips`, `css`, `minlength`, `maxlength`, `pattern`, `errortips`, `formtype`, `setting`, `formattribute`, `unsetgroupids`, `unsetroleids`, `iscore`, `issystem`, `isunique`, `isbase`, `issearch`, `isadd`, `isfulltext`, `isposition`, `listorder`, `disabled`, `isomnipotent`) VALUES(66, 3, 1, 'description', '摘要', '', '', 0, 255, '', '', 'textarea', 'array (\r\n  ''width'' => ''98'',\r\n  ''height'' => ''46'',\r\n  ''defaultvalue'' => '''',\r\n  ''enablehtml'' => ''0'',\r\n)', '', '', '', 0, 1, 0, 1, 0, 1, 1, 1, 10, 0, 0);
+INSERT INTO `cms_model_field` (`fieldid`, `modelid`, `siteid`, `field`, `name`, `tips`, `css`, `minlength`, `maxlength`, `pattern`, `errortips`, `formtype`, `setting`, `formattribute`, `unsetgroupids`, `unsetroleids`, `iscore`, `issystem`, `isunique`, `isbase`, `issearch`, `isadd`, `isfulltext`, `isposition`, `listorder`, `disabled`, `isomnipotent`) VALUES(66, 3, 1, 'description', '摘要', '', '', 0, 255, '', '', 'textarea', 'array (\r\n  ''width'' => '''',\r\n  ''height'' => '''',\r\n  ''defaultvalue'' => '''',\r\n  ''enablehtml'' => ''0'',\r\n)', '', '', '', 0, 1, 0, 1, 0, 1, 1, 1, 10, 0, 0);
 INSERT INTO `cms_model_field` (`fieldid`, `modelid`, `siteid`, `field`, `name`, `tips`, `css`, `minlength`, `maxlength`, `pattern`, `errortips`, `formtype`, `setting`, `formattribute`, `unsetgroupids`, `unsetroleids`, `iscore`, `issystem`, `isunique`, `isbase`, `issearch`, `isadd`, `isfulltext`, `isposition`, `listorder`, `disabled`, `isomnipotent`) VALUES(67, 3, 1, 'title', '标题', '', 'inputtitle', 1, 80, '', '请输入标题', 'title', '', '', '', '', 0, 1, 0, 1, 1, 1, 1, 1, 4, 0, 0);
 INSERT INTO `cms_model_field` (`fieldid`, `modelid`, `siteid`, `field`, `name`, `tips`, `css`, `minlength`, `maxlength`, `pattern`, `errortips`, `formtype`, `setting`, `formattribute`, `unsetgroupids`, `unsetroleids`, `iscore`, `issystem`, `isunique`, `isbase`, `issearch`, `isadd`, `isfulltext`, `isposition`, `listorder`, `disabled`, `isomnipotent`) VALUES(68, 3, 1, 'keywords', '关键词', '多关键词之间用“,”隔开', '', 0, 40, '', '', 'keyword', 'array (\r\n  ''size'' => ''100'',\r\n  ''defaultvalue'' => '''',\r\n)', 'data-role=\'tagsinput\'', '-99', '-99', 0, 1, 0, 1, 1, 1, 1, 0, 7, 0, 0);
 INSERT INTO `cms_model_field` (`fieldid`, `modelid`, `siteid`, `field`, `name`, `tips`, `css`, `minlength`, `maxlength`, `pattern`, `errortips`, `formtype`, `setting`, `formattribute`, `unsetgroupids`, `unsetroleids`, `iscore`, `issystem`, `isunique`, `isbase`, `issearch`, `isadd`, `isfulltext`, `isposition`, `listorder`, `disabled`, `isomnipotent`) VALUES(69, 3, 1, 'typeid', '类别', '', '', 0, 0, '', '', 'typeid', 'array (\n  ''minnumber'' => '''',\n  ''defaultvalue'' => '''',\n)', '', '', '', 0, 1, 0, 1, 1, 1, 0, 0, 2, 0, 0);

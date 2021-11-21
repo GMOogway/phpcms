@@ -30,7 +30,7 @@ class content extends admin {
 				$info['isdata'] = 1;
 			}
 			$info['style'] = $this->input->post('style_color') && preg_match('/^#([0-9a-z]+)/i', $this->input->post('style_color')) ? $this->input->post('style_color') : '';
-			if($this->input->post('style_font_weight')=='bold') $info['style'] = $info['style'].';'.strip_tags($this->input->post('style_font_weight'));
+			if($this->input->post('style_font_weight')=='bold') $info['style'] = $info['style'].';'.clearhtml($this->input->post('style_font_weight'));
 			$info['specialid'] = $this->input->get('specialid');
 			//将基础数据添加到基础表，并返回ID
 			$contentid = $this->db->insert($info, true);
@@ -121,7 +121,7 @@ class content extends admin {
 				$info['isdata'] = 1;
 			}
 			$info['style'] = $this->input->post('style_color') && preg_match('/^#([0-9a-z]+)/i', $this->input->post('style_color')) ? $this->input->post('style_color') : '';
-			if($this->input->post('style_font_weight')=='bold') $info['style'] = $info['style'].';'.strip_tags($this->input->post('style_font_weight'));
+			if($this->input->post('style_font_weight')=='bold') $info['style'] = $info['style'].';'.clearhtml($this->input->post('style_font_weight'));
 			$html = pc_base::load_app_class('html', 'special');
 			if ($info['isdata']) {
 				$data = $this->check($_POST['data'], 'data');
@@ -181,7 +181,7 @@ class content extends admin {
 	 */
 	public function public_check_title() {
 		if($this->input->get('data')=='' || (!$this->input->get('specialid'))) return '';
-		$title = dr_safe_replace(htmlspecialchars($this->input->get('data')));
+		$title = dr_safe_replace(html2code($this->input->get('data')));
 		$is_ajax = intval($this->input->get('is_ajax'));
 		$specialid = intval($this->input->get('specialid'));
 		$id = intval($this->input->get('id'));
@@ -309,7 +309,7 @@ class content extends admin {
 			if ($_POST['add_introduce'] && $data['description']=='' && !empty($content)) {
 				$content = stripslashes($content);
 				$introcude_length = intval($_POST['introcude_length']);
-				$data['description'] = str_cut(str_replace(array("\r\n","\t"), '', strip_tags($content)),$introcude_length);
+				$data['description'] = str_cut(str_replace(array("\r\n","\t"), '', clearhtml($content)),$introcude_length);
 			}
 			
 			//自动提取缩略图

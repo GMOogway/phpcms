@@ -41,9 +41,9 @@ if (intval($CONFIG['is_esi'])) {
             "state" => $info["state"],
             "url" => $info["url"],
             "size" => $info["size"],
-            "title" => htmlspecialchars($info["title"]),
-            "original" => htmlspecialchars($info["original"]),
-            "source" => htmlspecialchars($imgUrl)
+            "title" => html2code($info["title"]),
+            "original" => html2code($info["original"]),
+            "source" => html2code($imgUrl)
         ));
     }
 

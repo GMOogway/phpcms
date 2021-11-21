@@ -88,8 +88,8 @@ for($i=0;$i<$length;$i++){
 $s_str = substr($s_str, 0, strlen($s_str) - 1);
 
 /* 获取参数 */
-$size = $input->get('size') ? htmlspecialchars($input->get('size')) : $listSize;
-$start = $input->get('start') ? htmlspecialchars($input->get('start')) : 0;
+$size = $input->get('size') ? html2code($input->get('size')) : $listSize;
+$start = $input->get('start') ? html2code($input->get('start')) : 0;
 $end = $start + $size;
 
 /* 获取文件列表 */

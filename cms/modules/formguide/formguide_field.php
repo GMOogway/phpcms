@@ -40,12 +40,14 @@ class formguide_field extends admin {
 	public function add() {
 		if($this->input->post('dosubmit')) {
 			$info = $this->input->post('info');
+			$setting = $this->input->post('setting');
 			$field = $info['field'];
+			$cname = $info['name'];
 			$minlength = $info['minlength'] ? $info['minlength'] : 0;
 			$maxlength = $info['maxlength'] ? $info['maxlength'] : 0;
 			$field_type = $info['formtype'];
 			//附加属性值
-			$info['setting'] = array2string($this->input->post('setting'));
+			$info['setting'] = array2string($setting);
 			$info['siteid'] = $this->siteid;
 			$info['unsetgroupids'] = $this->input->post('unsetgroupids') ? implode(',',$this->input->post('unsetgroupids')) : '';
 			$info['unsetroleids'] = $this->input->post('unsetroleids') ? implode(',',$this->input->post('unsetroleids')) : '';
@@ -55,8 +57,8 @@ class formguide_field extends admin {
 			
 			require MODEL_PATH.$field_type.DIRECTORY_SEPARATOR.'config.inc.php';
 				
-			if(isset($this->input->post('setting')['fieldtype'])) {
-				$field_type = $this->input->post('setting')['fieldtype'];
+			if(isset($setting['fieldtype'])) {
+				$field_type = $setting['fieldtype'];
 			}
 			if (isset($info['modelid']) && !empty($info['modelid'])) {
 				$formid = intval($info['modelid']);
@@ -113,13 +115,15 @@ class formguide_field extends admin {
 	public function edit() {
 		if ($this->input->post('dosubmit')) {
 			$info = $this->input->post('info');
+			$setting = $this->input->post('setting');
 			$field = $info['field'];
+			$cname = $info['name'];
 			$minlength = $info['minlength'] ? $info['minlength'] : 0;
 			$maxlength = $info['maxlength'] ? $info['maxlength'] : 0;
 			$field_type = $info['formtype'];
 			
 			//附加属性值
-			$info['setting'] = array2string($this->input->post('setting'));
+			$info['setting'] = array2string($setting);
 			$info['siteid'] = $this->siteid;
 			$info['unsetgroupids'] = $this->input->post('unsetgroupids') ? implode(',',$this->input->post('unsetgroupids')) : '';
 			$info['unsetroleids'] = $this->input->post('unsetroleids') ? implode(',',$this->input->post('unsetroleids')) : '';
@@ -129,8 +133,8 @@ class formguide_field extends admin {
 			
 			require MODEL_PATH.$field_type.DIRECTORY_SEPARATOR.'config.inc.php';
 			
-			if(isset($this->input->post('setting')['fieldtype'])) {
-				$field_type = $this->input->post('setting')['fieldtype'];
+			if(isset($setting['fieldtype'])) {
+				$field_type = $setting['fieldtype'];
 			}
 			$oldfield = $this->input->post('oldfield');
 			if (isset($info['modelid']) && !empty($info['modelid'])) {

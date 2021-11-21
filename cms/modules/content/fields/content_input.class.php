@@ -70,7 +70,7 @@ class content_input {
 			}
 			//颜色选择为隐藏域 在这里进行取值
 			$info['system']['style'] = $this->input->post('style_color') && preg_match('/^#([0-9a-z]+)/i', $this->input->post('style_color')) ? $this->input->post('style_color') : '';
-			if($this->input->post('style_font_weight')=='bold') $info['system']['style'] = $info['system']['style'].';'.strip_tags($this->input->post('style_font_weight'));
+			if($this->input->post('style_font_weight')=='bold') $info['system']['style'] = $info['system']['style'].';'.clearhtml($this->input->post('style_font_weight'));
 		}
 		return $info;
 	}

@@ -92,7 +92,7 @@ class content extends admin {
 					$searchtype = intval($this->input->post('searchtype'));
 					if($searchtype < 3) {
 						$searchtype = $type_array[$searchtype];
-						$keyword = strip_tags(trim($this->input->post('keyword')));
+						$keyword = clearhtml(trim($this->input->post('keyword')));
 						$where .= " AND `$searchtype` like '%$keyword%'";
 					} elseif($searchtype==3) {
 						$keyword = intval($this->input->post('keyword'));
@@ -235,7 +235,7 @@ class content extends admin {
 					$searchtype = intval($this->input->post('searchtype'));
 					if($searchtype < 3) {
 						$searchtype = $type_array[$searchtype];
-						$keyword = strip_tags(trim($this->input->post('keyword')));
+						$keyword = clearhtml(trim($this->input->post('keyword')));
 						$where .= " AND `$searchtype` like '%$keyword%'";
 					} elseif($searchtype==3) {
 						$keyword = intval($this->input->post('keyword'));
@@ -398,7 +398,7 @@ class content extends admin {
 				$searchtype = intval($this->input->post('searchtype'));
 				if($searchtype < 3) {
 					$searchtype = $type_array[$searchtype];
-					$keyword = strip_tags(trim($this->input->post('keyword')));
+					$keyword = clearhtml(trim($this->input->post('keyword')));
 					$where .= " AND `$searchtype` like '%$keyword%'";
 				} elseif($searchtype==3) {
 					$keyword = intval($this->input->post('keyword'));
@@ -526,8 +526,8 @@ class content extends admin {
 				if(!trim($info['title'])) dr_json(0, L('title_is_empty'), array('field' => 'title'));
 				if(!$info['content']) dr_json(0, L('content').L('empty'), array('field' => 'content'));
 				$this->page_db = pc_base::load_model('page_model');
-				$style_font_weight = $this->input->post('style_font_weight') ? 'font-weight:'.strip_tags($this->input->post('style_font_weight')) : '';
-				$info['style'] = strip_tags($this->input->post('style_color')).';'.$style_font_weight;
+				$style_font_weight = $this->input->post('style_font_weight') ? 'font-weight:'.clearhtml($this->input->post('style_font_weight')) : '';
+				$info['style'] = clearhtml($this->input->post('style_color')).';'.$style_font_weight;
 				$modelid = $this->categorys[$catid]['modelid'];
 				require_once CACHE_MODEL_PATH.'content_input.class.php';
 				require_once CACHE_MODEL_PATH.'content_update.class.php';
@@ -1317,7 +1317,7 @@ class content extends admin {
 					if(preg_match_all("|\[page\](.*)\[/page\]|U", $content, $m, PREG_PATTERN_ORDER)) {
 						foreach($m[1] as $k=>$v) {
 							$p = $k+1;
-							$titles[$p]['title'] = strip_tags($v);
+							$titles[$p]['title'] = clearhtml($v);
 							$titles[$p]['url'] = $pageurls[$p][0];
 						}
 					}

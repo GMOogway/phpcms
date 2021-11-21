@@ -29,34 +29,37 @@ class member_modelfield extends admin {
 	}
 	
 	public function add() {
-		if(isset($_POST['dosubmit'])) {
+		if($this->input->post('dosubmit')) {
 			$model_cache = getcache('member_model', 'commons');
+			$info = $this->input->post('info');
+			$setting = $this->input->post('setting');
 			
-			$modelid = $this->input->post('info')['modelid'] = intval($_POST['info']['modelid']);
+			$modelid = intval($info['modelid']);
 			$model_table = $model_cache[$modelid]['tablename'];
 			$tablename = $this->db->db_tablepre.$model_table;
 
-			$field = $this->input->post('info')['field'];
-			$minlength = $this->input->post('info')['minlength'] ? $_POST['info']['minlength'] : 0;
-			$maxlength = $this->input->post('info')['maxlength'] ? $_POST['info']['maxlength'] : 0;
-			$field_type = $this->input->post('info')['formtype'];
+			$field = $info['field'];
+			$cname = $info['name'];
+			$minlength = $info['minlength'] ? $info['minlength'] : 0;
+			$maxlength = $info['maxlength'] ? $info['maxlength'] : 0;
+			$field_type = $info['formtype'];
 			$where = 'modelid='.$modelid.' AND field=\''.$field.'\' AND siteid='.$this->siteid.'';
 			$model_field = $this->db->get_one($where);
 			if ($model_field) dr_admin_msg(0,L('fieldname').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
 			
 			require MODEL_PATH.$field_type.DIRECTORY_SEPARATOR.'config.inc.php';
 			
-			if(isset($_POST['setting']['fieldtype'])) {
-				$field_type = $this->input->post('setting')['fieldtype'];
+			if(isset($setting['fieldtype'])) {
+				$field_type = $setting['fieldtype'];
 			}
 			
 			require MODEL_PATH.'add.sql.php';
 			//附加属性值
-			$_POST['info']['setting'] = array2string($_POST['setting']);
-			$_POST['info']['unsetgroupids'] = isset($_POST['unsetgroupids']) ? implode(',',$_POST['unsetgroupids']) : '';
-			$_POST['info']['unsetroleids'] = isset($_POST['unsetroleids']) ? implode(',',$_POST['unsetroleids']) : '';
+			$info['setting'] = array2string($setting);
+			$info['unsetgroupids'] = $this->input->post('unsetgroupids') ? implode(',',$this->input->post('unsetgroupids')) : '';
+			$info['unsetroleids'] = $this->input->post('unsetroleids') ? implode(',',$this->input->post('unsetroleids')) : '';
 
-			$this->db->insert($_POST['info']);
+			$this->db->insert($info);
 			$this->cache_field($modelid);
 			dr_admin_msg(1,L('operation_success'), '?m=member&c=member_model&a=manage', '', 'add');
 		} else {
@@ -82,18 +85,21 @@ class member_modelfield extends admin {
 	 * 修改
 	 */
 	public function edit() {
-		if(isset($_POST['dosubmit'])) {
+		if($this->input->post('dosubmit')) {
 			$model_cache = getcache('member_model','commons');
-			$fieldid = intval($_POST['fieldid']);
-			$modelid = $this->input->post('info')['modelid'] = intval($_POST['info']['modelid']);
+			$info = $this->input->post('info');
+			$setting = $this->input->post('setting');
+			$fieldid = intval($this->input->post('fieldid'));
+			$modelid = intval($info['modelid']);
 			$model_table = $model_cache[$modelid]['tablename'];
 
 			$tablename = $this->db->db_tablepre.$model_table;
 
-			$field = $this->input->post('info')['field'];
-			$minlength = $this->input->post('info')['minlength'] ? $_POST['info']['minlength'] : 0;
-			$maxlength = $this->input->post('info')['maxlength'] ? $_POST['info']['maxlength'] : 0;
-			$field_type = $this->input->post('info')['formtype'];
+			$field = $info['field'];
+			$cname = $info['name'];
+			$minlength = $info['minlength'] ? $info['minlength'] : 0;
+			$maxlength = $info['maxlength'] ? $info['maxlength'] : 0;
+			$field_type = $info['formtype'];
 			$where = 'modelid='.$modelid.' AND field=\''.$field.'\' AND siteid='.$this->siteid.'';
 			if ($fieldid) {
 				$where .= ' AND fieldid<>'.$fieldid;
@@ -103,16 +109,16 @@ class member_modelfield extends admin {
 			
 			require MODEL_PATH.$field_type.DIRECTORY_SEPARATOR.'config.inc.php';
 			
-			if(isset($_POST['setting']['fieldtype'])) {
-				$field_type = $this->input->post('setting')['fieldtype'];
+			if(isset($setting['fieldtype'])) {
+				$field_type = $setting['fieldtype'];
 			}
 			$oldfield = $this->input->post('oldfield');
 			require MODEL_PATH.'edit.sql.php';
 			//附加属性值
-			$_POST['info']['setting'] = array2string($_POST['setting']);
-			$_POST['info']['unsetgroupids'] = isset($_POST['unsetgroupids']) ? implode(',',$_POST['unsetgroupids']) : '';
-			$_POST['info']['unsetroleids'] = isset($_POST['unsetroleids']) ? implode(',',$_POST['unsetroleids']) : '';
-			$this->db->update($_POST['info'],array('fieldid'=>$fieldid));
+			$info['setting'] = array2string($setting);
+			$info['unsetgroupids'] = $this->input->post('unsetgroupids') ? implode(',',$this->input->post('unsetgroupids')) : '';
+			$info['unsetroleids'] = $this->input->post('unsetroleids') ? implode(',',$this->input->post('unsetroleids')) : '';
+			$this->db->update($info,array('fieldid'=>$fieldid));
 			$this->cache_field($modelid);
 			
 			//更新模型缓存
@@ -177,8 +183,8 @@ class member_modelfield extends admin {
 	 * 排序
 	 */
 	public function sort() {
-		if (isset($_POST['listorders']) && is_array($_POST['listorders'])) {
-			foreach($_POST['listorders'] as $id => $listorder) {
+		if ($this->input->get('listorders') && is_array($this->input->get('listorders'))) {
+			foreach($this->input->get('listorders') as $id => $listorder) {
 				$this->db->update(array('listorder'=>$listorder),array('fieldid'=>$id));
 			}
 			dr_admin_msg(1,L('operation_success'));

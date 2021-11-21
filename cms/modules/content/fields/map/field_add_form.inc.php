@@ -4,10 +4,11 @@
       <td><input type="text" name="setting[level]" value="" size="30" class="input-text"> 值越大地图显示越详细</td>
     </tr>
 	<tr> 
-      <td>地图尺寸</td>
-      <td>
-	  宽度: <input type="text" name="setting[width]" value="" size="10" class="input-text">
-	  高度: <input type="text" name="setting[height]" value="" size="10" class="input-text">px
-	  </td>
-    </tr>	
+      <td>宽度</td>
+      <td><input type="text" name="setting[width]" value="" size="10" class="input-text"> [整数]表示固定宽度；[整数%]表示百分比</td>
+    </tr>
+	<tr> 
+      <td>高度</td>
+      <td><input type="text" name="setting[height]" value="" size="10" class="input-text">px</td>
+    </tr>
 </table>

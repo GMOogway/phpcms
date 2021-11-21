@@ -49,12 +49,12 @@ class search_api extends admin {
 			$fulltextcontent = '';
 			foreach($r as $field=>$_r) {
 				if($field=='id') continue;
-				$fulltextcontent .= strip_tags($_r).' ';
+				$fulltextcontent .= clearhtml($_r).' ';
 			}
 			if(!empty($result_data[$r['id']])) {
 				foreach($result_data[$r['id']] as $_r) {
 					if($field=='id') continue;
-					$fulltextcontent .= strip_tags($_r).' ';
+					$fulltextcontent .= clearhtml($_r).' ';
 				}
 			}
 			$temp['fulltextcontent'] = str_replace("'",'',$fulltextcontent);

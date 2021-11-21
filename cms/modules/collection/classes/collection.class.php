@@ -196,7 +196,7 @@ class collection {
 						$url2 = self::url_check($url2, $url, $config);
 						
 						$data[$k]['url'] = $url2;
-						$data[$k]['title'] = strip_tags($out[2][$k]);
+						$data[$k]['title'] = clearhtml($out[2][$k]);
 					} else {
 						continue;
 					}

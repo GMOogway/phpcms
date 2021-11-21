@@ -57,7 +57,7 @@ include $this->admin_tpl('header', 'admin');?>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('名称');?></label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control input-large" value="<?php echo htmlspecialchars($data['name']);?>" name="data[name]" />
+                            <input type="text" class="form-control input-large" value="<?php echo html2code($data['name']);?>" name="data[name]" />
                             <span class="help-block"><?php echo L('给它一个描述名称');?></span>
                         </div>
                     </div>
@@ -80,7 +80,7 @@ include $this->admin_tpl('header', 'admin');?>
                     <div class="form-group r r0">
                         <label class="col-md-2 control-label"><?php echo L('本地存储路径');?></label>
                         <div class="col-md-7">
-                            <input class="form-control" type="text" name="data[value][0][path]" value="<?php echo htmlspecialchars($data['value']['path']);?>" />
+                            <input class="form-control" type="text" name="data[value][0][path]" value="<?php echo html2code($data['value']['path']);?>" />
                             <span class="help-block"><?php echo L('填写磁盘绝对路径或者相当于附件目录的目录路径，一定要以“/”结尾');?></span>
                         </div>
                     </div>
@@ -92,7 +92,7 @@ include $this->admin_tpl('header', 'admin');?>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('附件远程访问URL');?></label>
                         <div class="col-md-7">
-                            <input type="text" class="form-control" value="<?php echo htmlspecialchars($data['url']);?>" name="data[url]" />
+                            <input type="text" class="form-control" value="<?php echo html2code($data['url']);?>" name="data[url]" />
                             <span class="help-block"><?php echo L('浏览器可访问的URL地址，必须以http://或https://开头，要以“/”结尾');?></span>
                         </div>
                     </div>

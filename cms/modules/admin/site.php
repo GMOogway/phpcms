@@ -318,8 +318,7 @@ class site extends admin {
 				$locate = $this->locate;
 				$waterfont = $this->waterfont;
 				$waterfile = $this->waterfile;
-				$r = $this->db->get_one(array('siteid'=>$siteid));
-				$data = array_map('htmlspecialchars_decode',$r);
+				$data = $this->db->get_one(array('siteid'=>$siteid));
 				require CACHE_MODEL_PATH.'content_form.class.php';
 				$content_form = new content_form(0);
 				$forminfos = $content_form->get($data);

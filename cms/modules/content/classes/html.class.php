@@ -90,7 +90,7 @@ class html {
 			$next_page = array('title'=>L('last_page','','content'), 'thumb'=>IMG_PATH.'nopic_small.gif', 'url'=>'javascript:alert(\''.L('last_page','','content').'\');');
 		}
 	
-		$title = strip_tags($title);
+		$title = clearhtml($title);
 		//SEO
 		$seo_keywords = '';
 		if(!empty($keywords)) $seo_keywords = implode(',',$keywords);
@@ -133,7 +133,7 @@ class html {
 					if(preg_match_all("|\[page\](.*)\[/page\]|U", $content, $m, PREG_PATTERN_ORDER)) {
 						foreach($m[1] as $k=>$v) {
 							$p = $k+1;
-							$titles[$p]['title'] = strip_tags($v);
+							$titles[$p]['title'] = clearhtml($v);
 							$titles[$p]['url'] = $pageurls[$p][0];
 						}
 					}

@@ -1,7 +1,13 @@
 <?php $siteinfo = getcache('sitelist', 'commons');$config = string2array($siteinfo[$this->siteid]['setting']);?>
-<link href="<?php echo JS_PATH?>jquery-minicolors/jquery.minicolors.css" rel="stylesheet" type="text/css" />
-<script src="<?php echo JS_PATH?>jquery-minicolors/jquery.minicolors.min.js" type="text/javascript"></script>
 <table cellpadding="2" cellspacing="1" width="98%">
+    <tr> 
+      <td>编辑器默认宽度：</td>
+      <td><input type="text" name="setting[width]" value="" size="20" class="input-text"> [整数]表示固定宽度；[整数%]表示百分比</td>
+    </tr>
+	<tr> 
+      <td>编辑器默认高度：</td>
+      <td><input type="text" name="setting[height]" value="" size="20" class="input-text"> px</td>
+    </tr>
 	<tr> 
       <td width="140">编辑器样式：</td>
       <td><div class="mt-radio-inline">
@@ -21,22 +27,7 @@
     </tr>
 	<tr<?php if (!SYS_EDITOR) {?> style="display: none;"<?php }?>> 
       <td>编辑器颜色：</td>
-      <td><input type="text" id="style_color" name="setting[color]" value="" size="6" autocomplete="off" class="input-text"><script type="text/javascript">
-      $(function(){
-          $("#style_color").minicolors({
-              control: $("#style_color").attr("data-control") || "hue",
-              defaultValue: $("#style_color").attr("data-defaultValue") || "",
-              inline: "true" === $("#style_color").attr("data-inline"),
-              letterCase: $("#style_color").attr("data-letterCase") || "lowercase",
-              opacity: $("#style_color").attr("data-opacity"),
-              position: $("#style_color").attr("data-position") || "bottom left",
-              change: function(t, o) {
-                  t && (o && (t += ", " + o), "object" == typeof console && console.log(t));
-              },
-              theme: "bootstrap"
-          });
-      });
-      </script></td>
+      <td><?php echo color_select('setting[color]', '');?></td>
     </tr>
 	<tr<?php if (SYS_EDITOR) {?> style="display: none;"<?php }?>> 
       <td>编辑器样式：</td>
@@ -108,10 +99,6 @@
           <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[enablesaveimage]" value="1" checked> 是 <span></span></label>
           <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[enablesaveimage]" value="0"> 否 <span></span></label>
         </div></td>
-    </tr>	
-	<tr> 
-      <td>编辑器默认高度：</td>
-      <td><input type="text" name="setting[height]" value="200" size="4" class="input-text"> px</td>
     </tr>
     <tr> 
       <td>本地图片自动上传：</td>

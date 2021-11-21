@@ -9,7 +9,6 @@ CKEDITOR.editorConfig = function( config ) {
 	// config.uiColor = '#AADC6E';
 	// config.skin = 'moono';
 	// config.uiColor = '#f7f5f4';
-	config.width = '';
 	//config.removePlugins = 'elementspath,scayt';
 	config.disableNativeSpellChecker = false;
 	config.resize_dir = 'vertical';

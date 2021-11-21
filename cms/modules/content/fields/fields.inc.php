@@ -29,6 +29,7 @@ $fields = array('text'=>'单行文本',
 	'tabletexts'=>'信息表格',
 	'wxurl'=>'导入微信文章',
 	'word'=>'Word导入编辑器',
+	'touchspin'=>'增减量',
 );
 //不允许删除的字段，这些字段讲不会在字段添加处显示
 $not_allow_fields = array('catid','typeid','title','keyword','posid','template','username');

@@ -80,7 +80,7 @@ class content_model extends model {
 		
 		//自动提取摘要
 		if($this->input->post('add_introduce') && $systeminfo['description'] == '' && isset($modelinfo['content'])) {
-			$content = htmlspecialchars_decode(stripslashes($modelinfo['content']));
+			$content = code2html(stripslashes($modelinfo['content']));
 			$introcude_length = intval($this->input->post('introcude_length'));
 			$systeminfo['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]','&ldquo;','&rdquo;','&nbsp;',' ','　','	'), '', $content), $introcude_length);
 			$inputinfo['system']['description'] = $systeminfo['description'] = addslashes($systeminfo['description']);
@@ -89,7 +89,7 @@ class content_model extends model {
 		if($this->input->post('auto_thumb') && $systeminfo['thumb'] == '' && isset($modelinfo['content'])) {
 			$content = $content ? $content : stripslashes($modelinfo['content']);
 			$auto_thumb_no = intval($this->input->post('auto_thumb_no'))-1;
-			if(preg_match_all("/(src)=([\"|']?)([^ \"'>]+\.(gif|jpg|jpeg|bmp|png))\\2/i", htmlspecialchars_decode($content), $matches)) {
+			if(preg_match_all("/(src)=([\"|']?)([^ \"'>]+\.(gif|jpg|jpeg|bmp|png))\\2/i", code2html($content), $matches)) {
 				$systeminfo['thumb'] = $matches[3][$auto_thumb_no];
 			}
 		}
@@ -293,7 +293,7 @@ class content_model extends model {
 		}
 		//自动提取摘要
 		if($this->input->post('add_introduce') && $systeminfo['description'] == '' && isset($modelinfo['content'])) {
-			$content = htmlspecialchars_decode(stripslashes($modelinfo['content']));
+			$content = code2html(stripslashes($modelinfo['content']));
 			$introcude_length = intval($this->input->post('introcude_length'));
 			$systeminfo['description'] = dr_get_description(str_replace(array("\r\n","\t",'[page]','[/page]','&ldquo;','&rdquo;','&nbsp;',' ','　','	'), '', $content), $introcude_length);
 			$inputinfo['system']['description'] = $systeminfo['description'] = addslashes($systeminfo['description']);
@@ -302,7 +302,7 @@ class content_model extends model {
 		if($this->input->post('auto_thumb') && $systeminfo['thumb'] == '' && isset($modelinfo['content'])) {
 			$content = $content ? $content : stripslashes($modelinfo['content']);
 			$auto_thumb_no = intval($this->input->post('auto_thumb_no'))-1;
-			if(preg_match_all("/(src)=([\"|']?)([^ \"'>]+\.(gif|jpg|jpeg|bmp|png))\\2/i", htmlspecialchars_decode($content), $matches)) {
+			if(preg_match_all("/(src)=([\"|']?)([^ \"'>]+\.(gif|jpg|jpeg|bmp|png))\\2/i", code2html($content), $matches)) {
 				$systeminfo['thumb'] = $matches[3][$auto_thumb_no];
 			}
 		}

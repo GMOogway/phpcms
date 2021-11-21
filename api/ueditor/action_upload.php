@@ -8,7 +8,7 @@ include "Uploader.class.php";
 
 /* 上传配置 */
 $base64 = "upload";
-switch (htmlspecialchars($input->get('action'))) {
+switch (html2code($input->get('action'))) {
     case 'uploadimage':
         $config = array(
             'siteid'=>$CONFIG['siteid'],

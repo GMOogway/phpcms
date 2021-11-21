@@ -173,7 +173,7 @@ class index {
 			
 			case 'jsonp':
 				$msg = pc_base::load_config('system', 'charset') == 'gbk' ? iconv('gbk', 'utf-8', $msg) : $msg;
-				echo strip_tags($this->callback).'('.json_encode(array('msg'=>$msg, 'status'=>$status)).')';
+				echo clearhtml($this->callback).'('.json_encode(array('msg'=>$msg, 'status'=>$status)).')';
 				exit;
 			break;
 			

@@ -49,12 +49,12 @@ class index {
  			$link_db = pc_base::load_model('link_model');
  			$_POST['logo'] =new_html_special_chars($_POST['logo']);
 
-			$logo = safe_replace(strip_tags($_POST['logo']));
+			$logo = safe_replace(clearhtml($_POST['logo']));
 			if(!preg_match('/^http[s]?:\/\/(.*)/i', $logo)){
 				$logo = '';
 			}
-			$name = safe_replace(strip_tags($_POST['name']));
-			$url = safe_replace(strip_tags($_POST['url']));
+			$name = safe_replace(clearhtml($_POST['name']));
+			$url = safe_replace(clearhtml($_POST['url']));
 			$url = trim_script($url);
  			if($_POST['linktype']=='0'){
  				$sql = array('siteid'=>$siteid,'typeid'=>intval($_POST['typeid']),'linktype'=>intval($_POST['linktype']),'name'=>$name,'url'=>$url);

@@ -293,7 +293,7 @@ class node extends admin {
 				if (is_array($url) && !empty($url)) foreach ($url as $v) {
 					if (empty($v['url']) || empty($v['title'])) continue;
 					$v = new_addslashes($v);
-					$v['title'] = strip_tags($v['title']);
+					$v['title'] = clearhtml($v['title']);
 					$md5 = md5($v['url']);
 					if (!$history_db->get_one(array('md5'=>$md5, 'siteid'=>$this->get_siteid()))) {
 						$history_db->insert(array('md5'=>$md5, 'siteid'=>$this->get_siteid()));

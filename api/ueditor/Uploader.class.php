@@ -218,7 +218,7 @@ class Uploader
      */
     private function saveRemote()
     {
-        $imgUrl = htmlspecialchars($this->fileField);
+        $imgUrl = html2code($this->fileField);
         $imgUrl = str_replace("&amp;", "&", $imgUrl);
 
         //http开头验证

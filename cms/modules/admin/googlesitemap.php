@@ -162,10 +162,10 @@ class googlesitemap extends admin {
 							}
 							//取当前新闻模型 附属表 取 新闻正文
 							$url = new_html_special_chars($url);
-							$description = new_html_special_chars(strip_tags($description));
+							$description = new_html_special_chars(clearhtml($description));
 							//根据本条ID,从对应tablename_data取出正文内容
    							$content_arr = $this->content_db->get_one(array('id'=>$id),'content');
-   							$content = new_html_special_chars(strip_tags($content_arr['content']));
+   							$content = new_html_special_chars(clearhtml($content_arr['content']));
    							//组合数据
    	 						$smi = $this->baidunews_item($title,$url,$description,$content,$thumb, $keywords,$category,$author,$source,date('Y-m-d', $inputtime));//推荐文件
 							$this->add_baidunews_item($smi);
@@ -203,9 +203,9 @@ class googlesitemap extends admin {
 					$result = $this->content_db->select(array('status'=>99), '*', $limit = "0,$num", $order = 'inputtime desc');
 					foreach ($result as $arr){
 						if(substr($arr['url'],0,1)=='/'){
-							$url = new_html_special_chars(strip_tags($domain.$arr['url']));
+							$url = new_html_special_chars(clearhtml($domain.$arr['url']));
 						}else {
-							$url = new_html_special_chars(strip_tags($arr['url']));
+							$url = new_html_special_chars(clearhtml($arr['url']));
 						}
 						$hit_r = $hits_db->get_one(array('hitsid'=>'c-'.$modelid.'-'.$arr['id']));
 						if($hit_r['views']>1000) $content_priority = 0.9;

@@ -176,9 +176,21 @@ class check extends admin {
 
                 // 增加长度
                 $this->db->query('ALTER TABLE `'.$prefix.'admin` CHANGE `encrypt` `encrypt` VARCHAR(50) NOT NULL COMMENT \'随机加密码\';');
+                $this->db->query('ALTER TABLE `'.$prefix.'admin` CHANGE `email` `email` VARCHAR(50) NOT NULL COMMENT \'邮箱地址\';');
+                $this->db->query('ALTER TABLE `'.$prefix.'admin` CHANGE `lastloginip` `lastloginip` VARCHAR(200) NOT NULL COMMENT \'最后登录Ip\';');
                 $this->db->query('ALTER TABLE `'.$prefix.'member` CHANGE `encrypt` `encrypt` VARCHAR(50) NOT NULL COMMENT \'随机加密码\';');
+                $this->db->query('ALTER TABLE `'.$prefix.'member` CHANGE `email` `email` char(50) NOT NULL COMMENT \'邮箱地址\';');
+                $this->db->query('ALTER TABLE `'.$prefix.'member` CHANGE `regip` `regip` char(200) NOT NULL COMMENT \'注册Ip\';');
+                $this->db->query('ALTER TABLE `'.$prefix.'member` CHANGE `lastip` `lastip` char(200) NOT NULL COMMENT \'登录Ip\';');
                 $this->db->query('ALTER TABLE `'.$prefix.'member_verify` CHANGE `encrypt` `encrypt` VARCHAR(50) NOT NULL COMMENT \'随机加密码\';');
-                $this->db->query('ALTER TABLE `'.$prefix.'attachment` CHANGE `filename` `filename` VARCHAR(255) NOT NULL DEFAULT \'\' COMMENT \'原文件名\';');
+                $this->db->query('ALTER TABLE `'.$prefix.'member_verify` CHANGE `regip` `regip` char(200) NOT NULL COMMENT \'注册Ip\';');
+                $this->db->query('ALTER TABLE `'.$prefix.'attachment` CHANGE `filename` `filename` VARCHAR(255) NOT NULL COMMENT \'原文件名\';');
+                $this->db->query('ALTER TABLE `'.$prefix.'attachment` CHANGE `uploadip` `uploadip` char(200) NOT NULL COMMENT \'上传Ip\';');
+                $this->db->query('ALTER TABLE `'.$prefix.'ipbanned` CHANGE `ip` `ip` char(200) NOT NULL COMMENT \'Ip\';');
+                $this->db->query('ALTER TABLE `'.$prefix.'log` CHANGE `ip` `ip` VARCHAR(200) NOT NULL COMMENT \'Ip\';');
+                $this->db->query('ALTER TABLE `'.$prefix.'pay_account` CHANGE `ip` `ip` char(200) NOT NULL DEFAULT \'0.0.0.0\' COMMENT \'Ip\';');
+                $this->db->query('ALTER TABLE `'.$prefix.'session` CHANGE `ip` `ip` char(200) NOT NULL COMMENT \'Ip\';');
+                $this->db->query('ALTER TABLE `'.$prefix.'times` CHANGE `ip` `ip` char(200) NOT NULL COMMENT \'Ip\';');
 
                 $table = $prefix.'attachment_remote';
                 if (!$this->db->table_exists('attachment_remote')) {

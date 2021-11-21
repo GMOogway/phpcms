@@ -36,7 +36,7 @@ class index {
             $page = $this->input->get('page') ? intval($this->input->get('page')) : 1;
             $pagesize = 10;
             $q = safe_replace(trim($this->input->get('q')));
-            $q = new_html_special_chars(strip_tags($q));
+            $q = new_html_special_chars(clearhtml($q));
             $q = str_replace('%', '', $q);	//过滤'%'，用户全文搜索
             $search_q = $q;	//搜索原内容
             $sql_time = $sql_tid = '';

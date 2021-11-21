@@ -556,10 +556,15 @@ function dr_dir_delete($path, $del_dir = FALSE, $htdocs = FALSE, $_level = 0) {
 // 颜色选取
 function color_select($name, $color) {
 	$id = preg_match("/\[(.*)\]/", $name, $m) ? $m[1] : $name;
-	$str = '<link href="'.JS_PATH.'jquery-minicolors/jquery.minicolors.css" rel="stylesheet" type="text/css" />';
-	$str.= '<script type="text/javascript" src="'.JS_PATH.'jquery-minicolors/jquery.minicolors.min.js"></script>';
+	if(!defined('MINICOLORS_INIT')) {
+		$str = '<link href="'.JS_PATH.'jquery-minicolors/jquery.minicolors.css" rel="stylesheet" type="text/css" />';
+		$str.= '<script type="text/javascript" src="'.JS_PATH.'jquery-minicolors/jquery.minicolors.min.js"></script>';
+		define('MINICOLORS_INIT', 1);
+	} else {
+		$str = '';
+	}
 	$str.= '
-	<input type="text" class="form-control color input-text" name="'.$name.'" id="dr_'.$id.'" value="'.$color.'" >';
+	<input type="text" class="form-control color input-text" name="'.$name.'" id="dr_'.$id.'" value="'.$color.'">';
 	$str.= '
 <script type="text/javascript">
 $(function(){
@@ -2933,9 +2938,9 @@ function module_exists($m = '') {
  * @param $keyword      关键词
  */
 function seo($siteid, $catid = '', $title = '', $description = '', $keyword = '') {
-	if (!empty($title))$title = strip_tags($title);
-	if (!empty($description)) $description = strip_tags($description);
-	if (!empty($keyword)) $keyword = str_replace(' ', ',', strip_tags($keyword));
+	if (!empty($title))$title = clearhtml($title);
+	if (!empty($description)) $description = clearhtml($description);
+	if (!empty($keyword)) $keyword = str_replace(' ', ',', clearhtml($keyword));
 	$sites = siteinfo($siteid);
 	$site = $sites;
 	$cat = array();

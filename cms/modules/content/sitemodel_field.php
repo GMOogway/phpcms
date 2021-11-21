@@ -29,6 +29,7 @@ class sitemodel_field extends admin {
 		if($this->input->post('dosubmit')) {
 			$model_cache = getcache('model','commons');
 			$info = $this->input->post('info');
+			$setting = $this->input->post('setting');
 			$modelid = $info['modelid'];
 			if($modelid==-1) {
 				$tablename = $this->db->db_tablepre.'category';
@@ -45,6 +46,7 @@ class sitemodel_field extends admin {
 			}
 
 			$field = $info['field'];
+			$cname = $info['name'];
 			$where = 'modelid='.$modelid.' AND field=\''.$field.'\' AND siteid='.$this->siteid.'';
 			$model_field = $this->db->get_one($where);
 			if ($model_field) dr_admin_msg(0,L('fieldname').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
@@ -54,12 +56,12 @@ class sitemodel_field extends admin {
 			
 			require MODEL_PATH.$field_type.DIRECTORY_SEPARATOR.'config.inc.php';
 			
-			if(isset($this->input->post('setting')['fieldtype'])) {
-				$field_type = $this->input->post('setting')['fieldtype'];
+			if(isset($setting['fieldtype'])) {
+				$field_type = $setting['fieldtype'];
 			}
 			require MODEL_PATH.'add.sql.php';
 			//附加属性值
-			$info['setting'] = array2string($this->input->post('setting'));
+			$info['setting'] = array2string($setting);
 			$info['siteid'] = $this->siteid;
 			$info['unsetgroupids'] = $this->input->post('unsetgroupids') ? implode(',',$this->input->post('unsetgroupids')) : '';
 			$info['unsetroleids'] = $this->input->post('unsetroleids') ? implode(',',$this->input->post('unsetroleids')) : '';
@@ -109,6 +111,7 @@ class sitemodel_field extends admin {
 			$model_cache = getcache('model','commons');
 			$fieldid = intval($this->input->post('fieldid'));
 			$info = $this->input->post('info');
+			$setting = $this->input->post('setting');
 			$modelid = $info['modelid'];
 			if($modelid==-1) {
 				$tablename = $this->db->db_tablepre.'category';
@@ -122,6 +125,7 @@ class sitemodel_field extends admin {
 			}
 
 			$field = $info['field'];
+			$cname = $info['name'];
 			$minlength = $info['minlength'] ? $info['minlength'] : 0;
 			$maxlength = $info['maxlength'] ? $info['maxlength'] : 0;
 			$field_type = $info['formtype'];
@@ -134,13 +138,13 @@ class sitemodel_field extends admin {
 			
 			require MODEL_PATH.$field_type.DIRECTORY_SEPARATOR.'config.inc.php';
 			
-			if(isset($this->input->post('setting')['fieldtype'])) {
-				$field_type = $this->input->post('setting')['fieldtype'];
+			if(isset($setting['fieldtype'])) {
+				$field_type = $setting['fieldtype'];
 			}
 			$oldfield = $this->input->post('oldfield');
 			require MODEL_PATH.'edit.sql.php';
 			//附加属性值
-			$info['setting'] = array2string($this->input->post('setting'));
+			$info['setting'] = array2string($setting);
 			
 			$info['unsetgroupids'] = $this->input->post('unsetgroupids') ? implode(',',$this->input->post('unsetgroupids')) : '';
 			$info['unsetroleids'] = $this->input->post('unsetroleids') ? implode(',',$this->input->post('unsetroleids')) : '';

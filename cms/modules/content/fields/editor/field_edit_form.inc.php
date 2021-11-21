@@ -1,9 +1,15 @@
 <?php defined('IN_CMS') or exit('No permission resources.');$siteinfo = getcache('sitelist', 'commons');$config = string2array($siteinfo[$this->siteid]['setting']);?>
-<link href="<?php echo JS_PATH?>jquery-minicolors/jquery.minicolors.css" rel="stylesheet" type="text/css" />
-<script src="<?php echo JS_PATH?>jquery-minicolors/jquery.minicolors.min.js" type="text/javascript"></script>
 <table cellpadding="2" cellspacing="1" width="98%">
     <tr> 
-      <td width="150">编辑器样式：</td>
+      <td>编辑器默认宽度：</td>
+      <td><input type="text" name="setting[width]" value="<?php echo $setting['width'];?>" size="20" class="input-text"> [整数]表示固定宽度；[整数%]表示百分比</td>
+    </tr>
+	<tr> 
+      <td>编辑器默认高度：</td>
+      <td><input type="text" name="setting[height]" value="<?php echo $setting['height'];?>" size="20" class="input-text"> px</td>
+    </tr>
+    <tr> 
+      <td width="140">编辑器样式：</td>
       <td><div class="mt-radio-inline">
           <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[toolbar]" value="basic" onclick="$('#bjqms').hide()" <?php if($setting['toolbar']=='basic') echo 'checked';?>>简洁型 <span></span></label>
           <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[toolbar]" value="standard" onclick="$('#bjqms').hide()" <?php if($setting['toolbar']=='standard') echo 'checked';?>> 标准型 <span></span></label>
@@ -12,7 +18,7 @@
         </div></td>
     </tr>
     <tr id="bjqms"<?php if($setting['toolbar']!='modetool') echo ' style="display:none;"';?>>
-      <td width="225">工具栏：</td>
+      <td>工具栏：</td>
       <td><textarea name="setting[toolvalue]" rows="2" cols="20" id="toolvalue" style="height:100px;width:250px;"><?php echo $setting['toolvalue'];?></textarea><br><?php if (SYS_EDITOR) {?>必须严格按照CKEditor工具栏格式：'Maximize', 'Source', '-', 'Undo', 'Redo'<?php } else {?>必须严格按照Ueditor工具栏格式：'Fullscreen', 'Source', '|', 'Undo', 'Redo'<?php }?></td>
     </tr>
     <tr> 
@@ -35,23 +41,7 @@
     </tr>
     <tr<?php if (!SYS_EDITOR) {?> style="display: none;"<?php }?>> 
       <td>编辑器颜色：</td>
-      <td><input type="text" id="style_color" name="setting[color]" value="<?php echo $setting['color'];?>" size="6" autocomplete="off" class="input-text">
-      <script type="text/javascript">
-      $(function(){
-          $("#style_color").minicolors({
-              control: $("#style_color").attr("data-control") || "hue",
-              defaultValue: $("#style_color").attr("data-defaultValue") || "",
-              inline: "true" === $("#style_color").attr("data-inline"),
-              letterCase: $("#style_color").attr("data-letterCase") || "lowercase",
-              opacity: $("#style_color").attr("data-opacity"),
-              position: $("#style_color").attr("data-position") || "bottom left",
-              change: function(t, o) {
-                  t && (o && (t += ", " + o), "object" == typeof console && console.log(t));
-              },
-              theme: "bootstrap"
-          });
-      });
-      </script></td>
+      <td><?php echo color_select('setting[color]', $setting['color']);?></td>
     </tr>
     <tr<?php if (SYS_EDITOR) {?> style="display: none;"<?php }?>> 
       <td>编辑器样式：</td>
@@ -116,10 +106,6 @@
           <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[enablesaveimage]" value="1" <?php if($setting['enablesaveimage']==1) echo 'checked';?>> 是 <span></span></label>
           <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[enablesaveimage]" value="0"  <?php if($setting['enablesaveimage']==0) echo 'checked';?>> 否 <span></span></label>
         </div></td>
-    </tr>
-    <tr> 
-      <td>编辑器默认高度：</td>
-      <td><input type="text" name="setting[height]" value="<?php echo $setting['height'];?>" size="4" class="input-text"> px</td>
     </tr>
     <tr> 
       <td>本地图片自动上传：</td>

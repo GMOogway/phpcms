@@ -54,7 +54,7 @@ class formguide_input {
 				$info[$field['field']] = $value;
 				//颜色选择为隐藏域 在这里进行取值
 				if ($this->input->post('style_color')) $info['style'] = $this->input->post('style_color');
-				if($this->input->post('style_font_weight')) $info['style'] = $info['style'].';'.strip_tags($this->input->post('style_font_weight'));
+				if($this->input->post('style_font_weight')) $info['style'] = $info['style'].';'.clearhtml($this->input->post('style_font_weight'));
 			}
 		}
 		return $info;

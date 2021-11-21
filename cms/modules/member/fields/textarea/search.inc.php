@@ -1,4 +1,3 @@
-	function text($field, $value)
-	{
+	function text($field, $value) {
 		return $value === '' ? '' : " `$field` LIKE '%$value%' ";
 	}

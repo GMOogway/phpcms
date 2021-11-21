@@ -31,9 +31,9 @@
 					}
 				}
 				//颜色选择为隐藏域 在这里进行取值
-				$textcontent['style'] = $this->input->post('style_color') ? strip_tags($this->input->post('style_color')) : '';
+				$textcontent['style'] = $this->input->post('style_color') ? clearhtml($this->input->post('style_color')) : '';
 				$textcontent['inputtime'] = strtotime($textcontent['inputtime']);
-				if($this->input->post('style_font_weight')) $textcontent['style'] = $textcontent['style'].';'.strip_tags($this->input->post('style_font_weight'));
+				if($this->input->post('style_font_weight')) $textcontent['style'] = $textcontent['style'].';'.clearhtml($this->input->post('style_font_weight'));
 				$push_api->position_update($this->id, $this->modelid, $catid, $posids, $textcontent,0);
 			}
 		}

@@ -22,5 +22,5 @@
 			$value = $this->download->upload_local($value, $local_watermark, $local_attachment, $local_image_reduce, $this->input->post('info')['catid']);
 		}
 		$value = str_replace(array('&lt;iframe', '&gt;&lt;/iframe&gt;'), array('<iframe', '></iframe>'), $value);
-		return htmlspecialchars($value);
+		return html2code($value);
 	}

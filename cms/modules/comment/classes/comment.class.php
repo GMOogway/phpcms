@@ -74,7 +74,7 @@ class comment {
 		$data['status'] = 1;
 		$data['creat_at'] = SYS_TIME;
 		//对评论的内容进行关键词过滤。
-		$data['content'] = strip_tags($data['content']);
+		$data['content'] = clearhtml($data['content']);
 		$badword = pc_base::load_model('badword_model');
 		$data['content'] = $badword->replace_badword($data['content']);
 		if ($id) {

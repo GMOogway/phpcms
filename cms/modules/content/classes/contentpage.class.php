@@ -75,7 +75,7 @@ class contentpage {
 							$tag = '<'.$c;
 						}
 						if ($this->surplus >= 0) {
-							$this->surplus = $this->surplus-strlen(strip_tags($tag));
+							$this->surplus = $this->surplus-strlen(clearhtml($tag));
 							if ($this->surplus<0) {
 								$this->surplus = 0;
 							}
@@ -99,7 +99,7 @@ class contentpage {
 	 * @param intval $max 每页的最大字符
 	 */	
 	private function separate_text($str = '', $max){
-		$str = strip_tags($str);
+		$str = clearhtml($str);
 		$total = ceil(strlen($str)/$max);
 		$encoding = 'utf-8';
 		if(strtolower(CHARSET)=='gbk') $encoding = 'gbk';
@@ -125,7 +125,7 @@ class contentpage {
 	 */
 	private function separate_content($str = '', $max, $tag = '', $t = 0, $n = 1, $total = 0) {
 		$html = $str;
-		$str = strip_tags($str);
+		$str = clearhtml($str);
 		if ($str) $str = @str_replace(array('　'), '', $str);
 		if ($str) {
 			if ($n == 1) {
@@ -181,7 +181,7 @@ class contentpage {
 		}
 		if ($t==($this->total-1)) {
 			$pop_arr = array_pop($this->data);
-			if ($pop = strip_tags($pop_arr)) {
+			if ($pop = clearhtml($pop_arr)) {
 				$this->data[] = $pop_arr;
 			}
 		}

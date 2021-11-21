@@ -1,7 +1,7 @@
 <?php defined('IN_CMS') or exit('No permission resources.');?>
 <table cellpadding="2" cellspacing="1" width="98%">
 	<tr> 
-      <td width="100">取值范围</td>
+      <td width="120">取值范围</td>
       <td><input type="text" name="setting[minnumber]" value="<?php echo $setting['minnumber'];?>" size="5" class="input-text"> - <input type="text" name="setting[maxnumber]" value="<?php echo $setting['maxnumber'];?>" size="5" class="input-text"></td>
     </tr>
 	<tr> 

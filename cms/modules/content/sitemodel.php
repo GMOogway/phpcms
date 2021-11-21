@@ -296,7 +296,7 @@ class sitemodel extends admin {
 	 * 检查表是否存在
 	 */
 	public function public_check_tablename() {
-		$r = $this->db->table_exists(strip_tags($this->input->get('tablename')));
+		$r = $this->db->table_exists(clearhtml($this->input->get('tablename')));
 		if(!$r) echo '1';
 	}
 	/**
