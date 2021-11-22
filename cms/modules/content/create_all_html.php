@@ -13,402 +13,228 @@ class create_all_html extends admin {
 		$this->db = pc_base::load_model('content_model');
 		$this->siteid = $this->get_siteid();
 		$this->categorys = getcache('category_content_'.$this->siteid,'commons');
-		foreach($_GET as $k=>$v) {
-			$_POST[$k] = $v;
-		}
+		// 不是超级管理员
+		/*if ($_SESSION['roleid']!=1) {
+			dr_admin_msg(0,L('需要超级管理员账号操作'));
+		}*/
 	}
 
-	private function urls($id, $catid= 0, $inputtime = 0, $prefix = ''){
-		$urls = $this->url->show($id, 0, $catid, $inputtime, $prefix,'','edit');
-		//更新到数据库
-		$url = $urls[0];
-		$this->db->update(array('url'=>$url),array('id'=>$id));
-		//echo $id; echo "|";
-		return $urls;
+	/**
+	* 一键生成全站
+	*/
+	public function all_update(){
+		include $this->admin_tpl('create_html_all');
 	}
 	/**
 	* 生成内容页
 	*/
 	public function show() {
-		if($this->input->post('dosubmit')) {
-			extract($_POST,EXTR_SKIP);
-			$this->html = pc_base::load_app_class('html');
-
-			$modelid = intval($this->input->post('modelid'));
-			if($modelid) {
-				//设置模型数据表名
-				$this->db->set_model($modelid);
-				$table_name = $this->db->table_name;
-
-				if($type == 'lastinput') {
-					$offset = 0;
-				} else {
-					$page = max(intval($page), 1);
-					$offset = $pagesize*($page-1);
-				}
-				$where = ' WHERE status=99 ';
-				$order = 'ASC';
-				
-				if(!isset($first) && is_array($catids) && $catids[0] > 0)  {
-					setcache('html_show_'.$_SESSION['userid'], $catids,'content');
-					$catids = implode(',',$catids);
-					$where .= " AND catid IN($catids) ";
-					$first = 1;
-				} elseif(count($catids)==1 && $catids[0] == 0) {
-					$catids = array();
-					foreach($this->categorys as $catid=>$cat) {
-						if($cat['child'] || $cat['siteid'] != $this->siteid || $cat['type']!=0) continue;
-							$setting = string2array($cat['setting']);
-							if(!$setting['content_ishtml']) continue;
-						$catids[] = $catid;
+		$modelid = $this->input->get('modelid');
+		$ids = $this->input->get('catids');
+		if ($ids && is_array($ids)) {
+			$ids = implode(',', $ids);
+		}
+		$nmid = ''; // 下一个模块
+		$module = getcache('model', 'commons');
+		if ($module) {
+			$is_find = 0;
+			foreach ($module as $t) {
+				if ($t['siteid']==$this->siteid && $t['modelid']) {
+					if ($is_find) {
+						$nmid = $t['modelid'];
+						break;
 					}
-					setcache('html_show_'.$_SESSION['userid'], $catids,'content');
-					$catids = implode(',',$catids);
-					$where .= " AND catid IN($catids) ";
-					$first = 1;
-				} elseif($first) {
-					$catids = getcache('html_show_'.$_SESSION['userid'],'content');
-					$catids = implode(',',$catids);
-					$where .= " AND catid IN($catids) ";
-				} else {
-					$first = 0;
-				}
-				if(count($catids)==1 && $catids[0]==0) {
-					$message = L('create_update_success');
-					$forward = '?m=content&c=create_all_html&a=show';
-					dr_admin_msg(1,$message,$forward,1);
-				}
-				if($type == 'lastinput' && $number) {
-					$offset = 0;
-					$pagesize = $number;
-					$order = 'DESC';
-				} elseif($type == 'date') {
-					if($fromdate) {
-						$fromtime = strtotime($fromdate.' 00:00:00');
-						$where .= " AND `inputtime`>=$fromtime ";
+					if ($t['modelid'] == $modelid) {
+						$is_find = 1;
 					}
-					if($todate) {
-						$totime = strtotime($todate.' 23:59:59');
-						$where .= " AND `inputtime`<=$totime ";
-					}
-				} elseif($type == 'id') {
-					$fromid = intval($fromid);
-					$toid = intval($toid);
-					if($fromid) $where .= " AND `id`>=$fromid ";
-					if($toid) $where .= " AND `id`<=$toid ";
-				}
-				if(!isset($total) && $type != 'lastinput') {
-					$rs = $this->db->query("SELECT COUNT(*) AS `count` FROM `$table_name` $where");
-					$result = $this->db->fetch_array($rs);
-					
-					$total = $result[0]['count']; 
-					$pages = ceil($total/$pagesize);
-					$start = 1;
-				}
-				$rs = $this->db->query("SELECT * FROM `$table_name` $where ORDER BY `id` $order LIMIT $offset,$pagesize");
-				$data = $this->db->fetch_array($rs);
-				$tablename = $this->db->table_name.'_data';
-				$this->url = pc_base::load_app_class('url');
-				foreach($data as $r) {
-					if($r['islink']) continue;
-					$this->db->table_name = $tablename;
-					$r2 = $this->db->get_one(array('id'=>$r['id']));
-					if($r) $r = array_merge($r,$r2);
-					if($r['upgrade']) {
-						$urls[1] = $r['url'];
-					} else {
-						$urls = $this->url->show($r['id'], '', $r['catid'],$r['inputtime']);
-					}
-					$this->html->show($urls[1],$r,0,'edit',$r['upgrade']);
-				}
-
-				if($pages > $page) {
-					$page++;
-					$http_url = get_url();
-					$creatednum = $offset + count($data);
-					$percent = round($creatednum/$total, 2)*100;
-
-					$message = L('need_update_items',array('total'=>$total,'creatednum'=>$creatednum,'percent'=>$percent));
-					$forward = $start ? "?m=content&c=create_all_html&a=show&type=$type&dosubmit=1&first=$first&fromid=$fromid&toid=$toid&fromdate=$fromdate&todate=$todate&pagesize=$pagesize&page=$page&pages=$pages&total=$total&modelid=$modelid" : preg_replace("/&page=([0-9]+)&pages=([0-9]+)&total=([0-9]+)/", "&page=$page&pages=$pages&total=$total", $http_url);
-				} else {
-					delcache('html_show_'.$_SESSION['userid'],'content');
-					$message = L('create_update_success');
-					$forward = '?m=content&c=create_all_html&a=show';
-				}
-				dr_admin_msg(1,$message,$forward,1);
-			} else {
-				//当没有选择模型时，需要按照栏目来更新
-				if(!isset($set_catid)) {
-					if($catids[0] != 0) {
-						$update_url_catids = $catids;
-					} else {
-						foreach($this->categorys as $catid=>$cat) {
-							$setting = string2array($cat['setting']);
-							if ($setting['disabled']) continue;
-							if($cat['child'] || $cat['siteid'] != $this->siteid || $cat['type']!=0) continue;
-								$setting = string2array($cat['setting']);
-								if(!$setting['content_ishtml']) continue;
-							$update_url_catids[] = $catid;
-						}
-					}
-					setcache('update_all_html_catid'.'-'.$this->siteid.'-'.$_SESSION['userid'],$update_url_catids,'content');
-					$message = L('start_update');
-					$forward = "?m=content&c=create_all_html&a=show&set_catid=1&pagesize=$pagesize&dosubmit=1";
-					dr_admin_msg(1,$message,$forward,1);
-				}
-				if(is_array($catids)) {
-					if(count($catids)==1 && $catids[0]==0) {
-						$message = L('create_update_success');
-						$forward = '?m=content&c=create_all_html&a=show';
-						dr_admin_msg(1,$message,$forward,1);
-					}
-				}
-				$catid_arr = getcache('update_all_html_catid'.'-'.$this->siteid.'-'.$_SESSION['userid'],'content');
-				$autoid = $autoid ? intval($autoid) : 0;
-				//if(!isset($catid_arr[$autoid])) dr_admin_msg(1,L('create_update_success'),'?m=content&c=create_all_html&a=show',1);
-				if(!isset($catid_arr[$autoid])){showmessage(L('create_all').L('create_update_success'),'close');}
-
-				$catid = $catid_arr[$autoid];
-				
-				$modelid = $this->categorys[$catid]['modelid'];
-				//设置模型数据表名
-				$this->db->set_model($modelid);
-				$table_name = $this->db->table_name;
-
-				$page = max(intval($page), 1);
-				$offset = $pagesize*($page-1);
-				$where = " WHERE status=99 AND catid='$catid'";
-				$order = 'ASC';
-				
-				if(!isset($total)) {
-					$rs = $this->db->query("SELECT COUNT(*) AS `count` FROM `$table_name` $where");
-					$result = $this->db->fetch_array($rs);
-					$total = $result[0]['count']; 
-					$pages = ceil($total/$pagesize);
-					$start = 1;
-				}
-				$rs = $this->db->query("SELECT * FROM `$table_name` $where ORDER BY `id` $order LIMIT $offset,$pagesize");
-				$data = $this->db->fetch_array($rs);
-				$tablename = $this->db->table_name.'_data';
-				$this->url = pc_base::load_app_class('url');
-				foreach($data as $r) {
-					if($r['islink']) continue;
-					//写入文件
-					$this->db->table_name = $tablename;
-					$r2 = $this->db->get_one(array('id'=>$r['id']));
-					if($r2) $r = array_merge($r,$r2);
-					if($r['upgrade']) {
-						$urls[1] = $r['url'];
-					} else {
-						$urls = $this->url->show($r['id'], '', $r['catid'],$r['inputtime']);
-					}
-					$this->html->show($urls[1],$r,0,'edit',$r['upgrade']);
-				}
-				if($pages > $page) {
-					$page++;
-					$http_url = get_url();
-					$creatednum = $offset + count($data);
-					$percent = round($creatednum/$total, 2)*100;
-					$message = '【'.$this->categorys[$catid]['catname'].'】 '.L('have_update_items',array('total'=>$total,'creatednum'=>$creatednum,'percent'=>$percent));
-					$forward = $start ? "?m=content&c=create_all_html&a=show&type=$type&dosubmit=1&first=$first&fromid=$fromid&toid=$toid&fromdate=$fromdate&todate=$todate&pagesize=$pagesize&page=$page&pages=$pages&total=$total&autoid=$autoid&set_catid=1" : preg_replace("/&page=([0-9]+)&pages=([0-9]+)&total=([0-9]+)/", "&page=$page&pages=$pages&total=$total", $http_url);
-				} else {
-					$autoid++;
-					$message = L('start_update').$this->categorys[$catid]['catname']." ...";
-					$forward = "?m=content&c=create_all_html&a=show&set_catid=1&pagesize=$pagesize&dosubmit=1&autoid=$autoid";
-				}
-				dr_admin_msg(1,$message,$forward,1);
-			}
-
-		} else {
-			$show_header = $show_dialog  = '';
-			$admin_username = param::get_cookie('admin_username');
-			$modelid = $this->input->get('modelid') ? intval($this->input->get('modelid')) : 0;
-			
-			$tree = pc_base::load_sys_class('tree');
-			$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
-			$tree->nbsp = '&nbsp;&nbsp;&nbsp;';
-			$categorys = array();
-			if(!empty($this->categorys)) {
-				foreach($this->categorys as $catid=>$r) {
-					$setting = string2array($r['setting']);
-					if ($setting['disabled']) continue;
-					if($this->siteid != $r['siteid'] || ($r['type']!=0 && $r['child']==0)) continue;
-					if($modelid && $modelid != $r['modelid']) continue;
-					if($r['child']==0) {
-						$setting = string2array($r['setting']);
-						if(!$setting['content_ishtml']) continue;
-					}
-					$r['disabled'] = $r['child'] ? 'disabled' : '';
-					$categorys[$catid] = $r;
 				}
 			}
-			$str  = "<option value='\$catid' \$selected \$disabled>\$spacer \$catname</option>";
-
-			$tree->init($categorys);
-			$string .= $tree->get_tree(0, $str);
-			include $this->admin_tpl('create_html_show');
+		}
+		$this->db->set_model(intval($nmid));
+		$total = $this->db->count();
+		$go_url = $this->input->get('go_url');
+		$go_url = $go_url ? trim('?m=content&c=create_all_html&a=show&modelid='.$nmid.'&go_url=1&pc_hash='.$this->input->get('pc_hash')) : '';
+		if (!$total || !$nmid) $go_url = '';
+		$name = $module[$modelid]['name'];
+		$count_url = '?m=content&c=create_html&a=public_show_count&pagesize='.intval($this->input->get('pagesize')).'&modelid='.intval($this->input->get('modelid')).'&catids='.$ids.'&fromdate='.$this->input->get('fromdate').'&todate='.$this->input->get('todate').'&fromid='.intval($this->input->get('fromid')).'&toid='.intval($this->input->get('toid')).'&number='.intval($this->input->get('number'));
+		$todo_url = '?m=content&c=create_all_html&a=public_show_add&pagesize='.intval($this->input->get('pagesize')).'&modelid='.intval($this->input->get('modelid')).'&catids='.$ids.'&fromdate='.$this->input->get('fromdate').'&todate='.$this->input->get('todate').'&fromid='.intval($this->input->get('fromid')).'&toid='.intval($this->input->get('toid')).'&number='.intval($this->input->get('number'));
+		include $this->admin_tpl('show_html');
+	}
+	// 内容数量统计
+	public function public_show_count() {
+		$html = pc_base::load_sys_class('html');
+		$html->get_show_data($this->input->get('modelid'), array(
+			'catids' => $this->input->get('catids'),
+			'todate' => $this->input->get('todate'),
+			'fromdate' => $this->input->get('fromdate'),
+			'toid' => $this->input->get('toid'),
+			'fromid' => $this->input->get('fromid'),
+			'pagesize' => $this->input->get('pagesize'),
+			'siteid' => $this->siteid,
+			'number' => $this->input->get('number')
+		));
+	}
+	/**
+	* 批量生成内容页
+	*/
+	public function public_show_add() {
+		// 判断权限
+		if (!dr_html_auth()) {
+			dr_json(0, '权限验证超时，请重新执行生成');
+		}
+		$cache_class = pc_base::load_sys_class('cache');
+		$this->html = pc_base::load_app_class('html');
+		$this->url = pc_base::load_app_class('url');
+		$modelid = intval($this->input->get('modelid'));
+		$page = max(1, intval($this->input->get('pp')));
+		$name2 = 'show-'.$modelid.'-html-file';
+		$pcount = $cache_class->get_auth_data($name2);
+		if (!$pcount) {
+			dr_json(0, '临时缓存数据不存在：'.$name2);
+		} elseif ($page > $pcount) {
+			// 完成
+			$cache_class->del_auth_data($name2);
+			dr_json(-1, '');
 		}
 
+		$name = 'show-'.$modelid.'-html-file-'.$page;
+		$cache = $cache_class->get_auth_data($name);
+		if (!$cache) {
+			dr_json(0, '临时缓存数据不存在：'.$name);
+		}
+		
+		if ($cache) {
+			$html = '';
+			foreach ($cache as $t) {
+				$ok = '完成';
+				$class = '';
+				//设置模型数据表名
+				$this->db->set_model(intval($this->categorys[$t['catid']]['modelid']));
+				$setting = string2array($this->categorys[$t['catid']]['setting']);
+				$content_ishtml = $setting['content_ishtml'];
+				if($content_ishtml) {
+					$r = $this->db->get_one(array('id'=>$t['id']));
+					if($t['islink']) {
+						$class = 'p_error';
+						$ok = '<a class="error" href="'.$t['url'].'" target="_blank">转向链接</a>';
+					} else {
+						//写入文件
+						$this->db->table_name = $this->db->table_name.'_data';
+						$r2 = $this->db->get_one(array('id'=>$t['id']));
+						if($r2) $r = array_merge($r, $r2);
+						//判断是否为升级或转换过来的数据
+						if($r['upgrade']) {
+							$urls[1] = $t['url'];
+						} else {
+							$urls = $this->url->show($t['id'], '', $t['catid'], $t['inputtime']);
+						}
+						$this->html->show($urls[1],$r,0,'edit',$t['upgrade']);
+						$cache_class->set_auth_data($name2.'-error', $page); // 设置断点
+						$class = 'ok';
+						$ok = '<a class="ok" href="'.$t['url'].'" target="_blank">生成成功</a>';
+					}
+				} else {
+					$class = 'p_error';
+					$ok = '<a class="error" href="'.$t['url'].'" target="_blank">它是动态模式</a>';
+				}
+				$html.= '<p class="todo_p '.$class.'"><label class="rleft">(#'.$t['id'].')'.$t['title'].'</label><label class="rright">'.$ok.'</label></p>';
+			}
+			// 完成
+			//$cache_class->del_auth_data($name);
+			dr_json($page + 1, $html, array('pcount' => $pcount + 1));
+		}
 	}
 	/**
 	* 生成栏目页
 	*/
 	public function category() {
-		if($this->input->post('dosubmit')) {
-			extract($_POST,EXTR_SKIP);
-			$this->html = pc_base::load_app_class('html');
-			$referer = isset($referer) ? urlencode($referer) : '';
-
-			$modelid = intval($this->input->post('modelid'));
-			if(!isset($set_catid)) {
-				if($catids[0] != 0) {
-					$update_url_catids = $catids;
-				} else {
-					foreach($this->categorys as $catid=>$cat) {
-						$setting = string2array($cat['setting']);
-						if ($setting['disabled']) continue;
-						if($cat['siteid'] != $this->siteid || $cat['type']==2 || !$cat['ishtml']) continue;
-						if($modelid && ($modelid != $cat['modelid'])) continue;
-						$update_url_catids[] = $catid;
-					}
-				}
-				setcache('update_all_html_catid'.'-'.$this->siteid.'-'.$_SESSION['userid'],$update_url_catids,'content');
-				$message = L('start_update_category');
-				$forward = "?m=content&c=create_all_html&a=category&set_catid=1&pagesize=$pagesize&dosubmit=1&modelid=$modelid&referer=$referer";
-				
-				dr_admin_msg(1,$message,$forward,1);
-			}
-			
-			$catid_arr = getcache('update_all_html_catid'.'-'.$this->siteid.'-'.$_SESSION['userid'],'content');
-			
-			$autoid = $autoid ? intval($autoid) : 0;
-			
-			/*if(!isset($catid_arr[$autoid])) {
-				if(!empty($referer) && $this->categorys[$catid_arr[0]]['type']!=1) {
-					dr_admin_msg(1,L('create_update_success'),'?m=content&c=content&a=init&catid='.$catid_arr[0],1);
-				} else {
-					dr_admin_msg(1,L('create_update_success'),'?m=content&c=create_all_html&a=category',1);
-				}
-			}*/
-			if(!isset($catid_arr[$autoid])) {
-				if(!empty($referer) && $this->categorys[$catid_arr[0]]['type']!=1) {
-					dr_admin_msg(1,L('create_update_success'),'?m=content&c=content&a=init&catid='.$catid_arr[0],1);
-				} else {
-					dr_admin_msg(1,L('create_update_success'),'?m=content&c=create_all_html&a=show&dosubmit=1&type=all&pagesize=50',1);
-				}
-			}
-			$catid = $catid_arr[$autoid];
-			$page = $page ? $page : 1;
-			$j = 1;
-			do {
-				$this->html->category($catid,$page);
-				$page++;
-				$j++;
-				$total_number = isset($total_number) ? $total_number : PAGES;
-			} while ($j <= $total_number && $j < $pagesize);
-			if($page <= $total_number) {
-				$endpage = intval($page)+intval($pagesize);
-				$message = L('updating').$this->categorys[$catid]['catname'].L('start_to_end_id',array('page'=>$page,'endpage'=>$endpage));
-				$forward = "?m=content&c=create_all_html&a=category&set_catid=1&pagesize=$pagesize&dosubmit=1&autoid=$autoid&page=$page&total_number=$total_number&modelid=$modelid&referer=$referer";
-			} else {
-				$autoid++;
-				$message = $this->categorys[$catid]['catname'].L('create_update_success');
-				$forward = "?m=content&c=create_all_html&a=category&set_catid=1&pagesize=$pagesize&dosubmit=1&autoid=$autoid&modelid=$modelid&referer=$referer";
-			}
-			dr_admin_msg(1,$message,$forward,1);
-		} else {
-			$show_header = $show_dialog  = '';
-			$admin_username = param::get_cookie('admin_username');
-			$modelid = $this->input->get('modelid') ? intval($this->input->get('modelid')) : 0;
-			
-			$tree = pc_base::load_sys_class('tree');
-			$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
-			$tree->nbsp = '&nbsp;&nbsp;&nbsp;';
-			$categorys = array();
-			if(!empty($this->categorys)) {
-				foreach($this->categorys as $catid=>$r) {
-					$setting = string2array($r['setting']);
-					if ($setting['disabled']) continue;
-					if($this->siteid != $r['siteid'] || ($r['type']==2 && $r['child']==0)) continue;
-					if($modelid && $modelid != $r['modelid']) continue;
-					if($r['child']==0) {
-						if(!$r['ishtml']) continue;
-					}
-					$categorys[$catid] = $r;
-				}
-			}
-			$str  = "<option value='\$catid' \$selected>\$spacer \$catname</option>";
-
-			$tree->init($categorys);
-			$string .= $tree->get_tree(0, $str);
-			include $this->admin_tpl('create_html_category');
+		$cache_class = pc_base::load_sys_class('cache');
+		$modelid = $this->input->get('modelid');
+		$ids = $this->input->get('ids');
+		if ($ids && is_array($ids)) {
+			$ids = implode(',', $ids);
 		}
+		$fmid = ''; // 第一个模块
+		$module = getcache('model', 'commons');
+		if ($module) {
+			foreach ($module as $t) {
+				if ($t['siteid']==$this->siteid && $t['modelid']) {
+					$fmid = $t['modelid'];
+					break;
+				}
+			}
+		}
+		
+		$this->db->set_model(intval($fmid));
+		$total = $this->db->count();
+		$maxsize = $this->input->get('maxsize');
+		$is_mobile = (int)$this->input->get('is_mobile');
+		$go_url = $this->input->get('go_url');
+		$go_url = $go_url ? trim('?m=content&c=create_all_html&a=show&modelid='.$fmid.'&go_url=1&pc_hash='.$this->input->get('pc_hash')) : '';
+		if (!$total || !$fmid) $go_url = '';
+		$name = '栏目';
+		$count_url = '?m=content&c=create_html&a=public_category_count&ids='.$ids.'&maxsize='.$maxsize;
+		$todo_url = '?m=content&c=create_all_html&a=public_category_add&modelid='.$modelid.'&ids='.$ids.'&go_url='.urlencode($go_url).'&maxsize='.$maxsize;
+		include $this->admin_tpl('show_html');
+	}
+	// 栏目的数量统计
+	public function public_category_count() {
+		$modelid = $this->input->get('modelid');
+		$pagesize = (int)$this->input->get('pagesize');
+		$maxsize = (int)$this->input->get('maxsize');
 
+		$cat = getcache('category_content_'.$this->siteid,'commons');
+		$html = pc_base::load_sys_class('html');
+		$html->get_category_data($cat, $pagesize, $maxsize);
 	}
 	/**
-	* 一键生成全站
+	* 批量生成栏目页
 	*/
-	public function all_update(){
-		//首页更新
+	public function public_category_add() {
+		// 判断权限
+		if (!dr_html_auth()) {
+			dr_json(0, '权限验证超时，请重新执行生成');
+		}
+		$cache_class = pc_base::load_sys_class('cache');
 		$this->html = pc_base::load_app_class('html');
-		$this->db = pc_base::load_model('site_model');
-		$data = $this->db->get_one(array('siteid'=>$this->siteid));
-		if($data['ishtml']==1) {
-			$html = $this->html->index();
+		$modelid = $this->input->get('modelid');
+		$page = max(1, intval($this->input->get('pp')));
+		$name2 = 'category-html-file';
+		$pcount = $cache_class->get_auth_data($name2);
+		if (!$pcount) {
+			dr_json(0, '临时缓存数据不存在：'.$name2);
+		} elseif ($page > $pcount) {
+			// 完成
+			$cache_class->del_auth_data($name2);
+			dr_json(-1, '');
 		}
-		
-		//栏目页更新
-		$referer = isset($referer) ? urlencode($referer) : '';
-		
-		$modelid = intval($this->input->get('modelid'));
-		if(!isset($set_catid)) {
-			if($catids[0] != 0) {
-				$update_url_catids = $catids;
-			} else {
-				foreach($this->categorys as $catid=>$cat) {
-					$setting = string2array($cat['setting']);
-					if ($setting['disabled']) continue;
-					if($cat['siteid'] != $this->siteid || $cat['type']==2 || !$cat['ishtml']) continue;
-					if($modelid && ($modelid != $cat['modelid'])) continue;
-					$update_url_catids[] = $catid;
+
+		$name = 'category-html-file-'.$page;
+		$cache = $cache_class->get_auth_data($name);
+		if (!$cache) {
+			dr_json(0, '临时缓存数据不存在：'.$name);
+		}
+
+		if ($cache) {
+			$html = '';
+			foreach ($cache as $t) {
+				$ok = '完成';
+				$class = '';
+				if (!$t['ishtml']) {
+					$class = 'p_error';
+					$ok = '<a class="error" href="'.$t['url'].'" target="_blank">它是动态模式</a>';
+				} else {
+					$this->html->category($t['catid'],$t['page']);
+					$cache_class->set_auth_data($name2.'-error', $page); // 设置断点
+					$class = 'ok';
+					$ok = '<a class="ok" href="'.$t['url'].'" target="_blank">生成成功</a>';
 				}
+				$html.= '<p class="todo_p '.$class.'"><label class="rleft">(#'.$t['catid'].')'.$t['catname'].'</label><label class="rright">'.$ok.'</label></p>';
 			}
-			setcache('update_all_html_catid-'.$this->siteid.'-'.$_SESSION['userid'],$update_url_catids,'content');
-			$message = L('start_update_category');
-			$forward = "?m=content&c=create_all_html&a=category&set_catid=1&pagesize=$pagesize&dosubmit=1&modelid=$modelid&referer=$referer";
-			dr_admin_msg(1,$message,$forward,1);
+			// 完成
+			//$cache_class->del_auth_data($name);
+			dr_json($page + 1, $html, array('pcount' => $pcount + 1));
 		}
-		
-		$catid_arr = getcache('update_all_html_catid-'.$this->siteid.'-'.$_SESSION['userid'],'content');
-		
-		$autoid = $autoid ? intval($autoid) : 0;
-		
-		if(!isset($catid_arr[$autoid])) {
-			if(!empty($referer) && $this->categorys[$catid_arr[0]]['type']!=1) {
-				dr_admin_msg(1,L('create_update_success'),'?m=content&c=content&a=init&catid='.$catid_arr[0],1);
-			} else {
-				dr_admin_msg(1,L('create_update_success'),'?m=content&c=create_all_html&a=category',1);
-			}
-		}
-		$catid = $catid_arr[$autoid];
-		$page = $page ? $page : 1;
-		$j = 1;
-		do {
-			$this->html->category($catid,$page);
-			$page++;
-			$j++;
-			$total_number = isset($total_number) ? $total_number : PAGES;
-		} while ($j <= $total_number && $j < $pagesize);
-		if($page <= $total_number) {
-			$endpage = intval($page+$pagesize);
-			$message = L('updating').$this->categorys[$catid]['catname'].L('start_to_end_id',array('page'=>$page,'endpage'=>$endpage));
-			$forward = "?m=content&c=create_all_html&a=category&set_catid=1&pagesize=$pagesize&dosubmit=1&autoid=$autoid&page=$page&total_number=$total_number&modelid=$modelid&referer=$referer";
-		} else {
-			$autoid++;
-			$message = $this->categorys[$catid]['catname'].L('create_update_success');
-			$forward = "?m=content&c=create_all_html&a=category&set_catid=1&pagesize=$pagesize&dosubmit=1&autoid=$autoid&modelid=$modelid&referer=$referer";
-		}
-		dr_admin_msg(1,$message,$forward,1);
 	}
 }
 ?>

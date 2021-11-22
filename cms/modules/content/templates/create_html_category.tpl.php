@@ -29,7 +29,13 @@ $(function(){
             <div class="form-group">
                 <label class="col-md-2 control-label"><?php echo L('网站首页');?></label>
                 <div class="col-md-9">
-                    <label><button type="button" onclick="dr_admin_menu_ajax('?m=content&c=create_html&a=public_index_ajax', 1)" class="btn blue"> <i class="fa fa-file-o"></i> <?php echo L('生成首页');?> </button></label>
+                    <label><button type="button" onclick="dr_admin_menu_ajax('?m=content&c=create_html&a=public_index_ajax', 1)" class="btn blue"> <i class="fa fa-file-o"></i> <?php echo L('生成首页静态文件');?> </button></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label"><?php echo L('快捷配置');?></label>
+                <div class="col-md-9">
+                    <label><a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=init&pc_hash='+pc_hash+'&is_ajax=1',1);" class="btn default"> <?php echo L('一键更新栏目URL');?> </a></label>
                 </div>
             </div>
 

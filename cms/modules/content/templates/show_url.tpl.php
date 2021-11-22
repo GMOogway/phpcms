@@ -19,6 +19,11 @@ body {background-color: #f5f6f8;font-size: 14px;}
 <div class="text-center">
     <button type="button" id="dr_check_button" onclick="dr_checking();" class="btn blue"> <i class="fa fa-refresh"></i> 开始执行</button>
 </div>
+<div class="note note-danger margin-top-30">
+    <p>技巧提示：模板代码写法是否合理，对生成速度有着极大的影响</p>
+    <p>在生成静态的时候出错，最大可能性是模板的问题</p>
+    <p style="color: red">如果网站没有上线，请不要生成静态；开发中的网站使用动态地址才能方便开发调试；开发完毕后上线之前再开启和生成静态功能。</p>
+</div>
 <div id="dr_check_result" class="margin-top-20" style="display: none">
     <div class="progress progress-striped">
         <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">

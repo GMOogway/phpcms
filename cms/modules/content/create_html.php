@@ -105,7 +105,7 @@ class create_html extends admin {
 				$catids = implode(',', $catids);
 			}
 			$count_url = '?m=content&c=create_html&a=public_show_count&pagesize='.$pagesize.'&modelid='.$modelid.'&catids='.$catids.'&fromdate='.$fromdate.'&todate='.$todate.'&fromid='.$fromid.'&toid='.$toid.'&number='.$number;
-			$todo_url = '?m=content&c=create_html&a=public_show_add&set_catid=1&pagesize='.$pagesize.'&modelid='.$modelid.'&catids='.$catids.'&fromdate='.$fromdate.'&todate='.$todate.'&fromid='.$fromid.'&toid='.$toid.'&number='.$number;
+			$todo_url = '?m=content&c=create_html&a=public_show_add&pagesize='.$pagesize.'&modelid='.$modelid.'&catids='.$catids.'&fromdate='.$fromdate.'&todate='.$todate.'&fromid='.$fromid.'&toid='.$toid.'&number='.$number;
 			include $this->admin_tpl('show_html');
 		} else {
 			$show_header = $show_dialog  = '';
@@ -294,15 +294,7 @@ class create_html extends admin {
 	}
 	//生成首页
 	public function public_index() {
-		$this->html = pc_base::load_app_class('html');
-		$this->db = pc_base::load_model('site_model');
-		$data = $this->db->get_one(array('siteid'=>$this->siteid));
-		if($data['ishtml']==1) {
-			$html = $this->html->index();
-			showmessage(L('首页更新成功！').$html, 'close');
-		} else {
-			showmessage(L('index_create_close'), 'close');
-		}
+		include $this->admin_tpl('create_html_index');
 	}
 	//生成首页
 	public function public_index_ajax() {

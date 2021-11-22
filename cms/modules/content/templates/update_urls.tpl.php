@@ -79,7 +79,7 @@ include $this->admin_tpl('header','admin');?>
                             <td><?php echo $i;?></td>
                             <td><?php echo $_v['name'];?></td>
                             <td>
-                                <button type="button" onclick="dr_submit_todo('thumbform', '?m=content&c=create_html&a=public_show_url&modelid=<?php echo $_v['modelid'];?>')" class="btn blue btn-xs"> <i class="fa fa-refresh"></i> <?php echo L('批量更新内容URL地址')?> </button>
+                                <button type="button" onclick="dr_submit_todo('', '?m=content&c=create_html&a=public_show_url&modelid=<?php echo $_v['modelid'];?>')" class="btn blue btn-xs"> <i class="fa fa-refresh"></i> <?php echo L('批量更新内容URL地址')?> </button>
                                 <?php if (ADMIN_FOUNDERS && dr_in_array($_SESSION['userid'], ADMIN_FOUNDERS)) {?>
                                 <button type="button" onclick="dr_iframe_show_html('desc',<?php echo $_v['modelid'];?>)" class="btn drak btn-xs"> <i class="fa fa-th-large"></i> <?php echo L('批量提取描述字段')?> </button>
                                 <button type="button" onclick="dr_iframe_show_html('thumb',<?php echo $_v['modelid'];?>)" class="btn green btn-xs"> <i class="fa fa-photo"></i> <?php echo L('批量提取缩略图')?> </button>

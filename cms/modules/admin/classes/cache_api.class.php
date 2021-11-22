@@ -292,6 +292,20 @@ class cache_api {
 		//更新模型数据缓存
 		$model_array = array();
 		$datas = $this->db->select(array('type'=>0,'disabled'=>0));
+		$categorys = getcache('category_content_'.$this->siteid,'commons');
+		$items = array();
+		foreach ($datas as $k=>$r) {
+			if (isset($categorys) && is_array($categorys)) {
+				foreach ($categorys as $catid=>$cat) {
+					if(intval($cat['modelid']) == intval($r['modelid'])) {
+						$items[$r['modelid']] += intval($cat['items']);
+					} else {
+						$items[$r['modelid']] = 0;
+					}
+				}
+			}
+			$datas[$k]['items'] = $items[$r['modelid']];
+		}
 		foreach ($datas as $r) {
 			$model_array[$r['modelid']] = $r;
 			$this->sitemodel_field($r['modelid']);
