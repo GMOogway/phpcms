@@ -25,6 +25,20 @@ if(isset($show_dialog)) {?>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>formvalidatorregex.js" charset="UTF-8"></script>
 <?php } ?>
 <script type="text/javascript">
+	handlegotop = function() {
+		navigator.userAgent.match(/iPhone|iPad|iPod/i) ? $(window).bind("touchend touchcancel touchleave", function(a) {
+			100 < $(this).scrollTop() ? $(".scroll-to-top").fadeIn(500) : $(".scroll-to-top").fadeOut(500)
+		}) : $(window).scroll(function() {
+			100 < $(this).scrollTop() ? $(".scroll-to-top").fadeIn(500) : $(".scroll-to-top").fadeOut(500)
+		});
+		$(".scroll-to-top").click(function(a) {
+			a.preventDefault();
+			$("html, body").animate({
+				scrollTop: 0
+			}, 500);
+			return !1
+		})
+	}
 	window.focus();
 	var pc_hash = '<?php echo dr_get_csrf_token();?>';
 	var csrf_hash = '<?php echo csrf_hash();?>';
@@ -55,6 +69,7 @@ if(isset($show_dialog)) {?>
 	}
 <?php } ?>
 $(function(){
+	handlegotop();
 	var html_form2 = document.forms;
 	var num2 = html_form2.length;
 	for(var i=0;i<num2;i++) {
@@ -78,4 +93,11 @@ $(function(){
 <?php } ?>
 <style type="text/css">
 	html{_overflow-y:scroll}
+	.scroll-to-top{padding:1px;text-align:center;position:fixed;bottom:32px;z-index:10002;display:none;right:20px}
+	.scroll-to-top>i{display:inline-block;color:#687991;font-size:30px;opacity:.6;filter:alpha(opacity=60)}
+	.scroll-to-top:hover{cursor:pointer}
+	.scroll-to-top:hover>i{opacity:1;filter:alpha(opacity=100)}
 </style>
+<div class="scroll-to-top">
+    <i class="bi bi-arrow-up-circle-fill"></i>
+</div>

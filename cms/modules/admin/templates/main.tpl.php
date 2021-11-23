@@ -44,12 +44,31 @@ defined('IN_ADMIN') or exit('No permission resources.');
 padding-right: 70px !important;text-overflow:ellipsis!important;overflow:hidden!important;white-space:nowrap!important;}
 .layuimini-notice-title {line-height:28px;font-size:14px;}
 .layuimini-notice-extra {position:absolute;top:50%;margin-top:-8px;right:16px;display:inline-block;height:16px;color:#999;}
+.scroll-to-top{padding:1px;text-align:center;position:fixed;bottom:32px;z-index:10002;display:none;right:20px}
+.scroll-to-top>i{display:inline-block;color:#687991;font-size:30px;opacity:.6;filter:alpha(opacity=60)}
+.scroll-to-top:hover{cursor:pointer}
+.scroll-to-top:hover>i{opacity:1;filter:alpha(opacity=100)}
 </style>
-<?php $sitelist_ccache = getcache('sitelist', 'commons');
-$ccache = getcache('category_content_1','commons');
-if(!module_exists('member') && (!is_array($sitelist_ccache) || !is_array($ccache))) { ?>
 <script type="text/javascript">
+handlegotop = function() {
+	navigator.userAgent.match(/iPhone|iPad|iPod/i) ? $(window).bind("touchend touchcancel touchleave", function(a) {
+		100 < $(this).scrollTop() ? $(".scroll-to-top").fadeIn(500) : $(".scroll-to-top").fadeOut(500)
+	}) : $(window).scroll(function() {
+		100 < $(this).scrollTop() ? $(".scroll-to-top").fadeIn(500) : $(".scroll-to-top").fadeOut(500)
+	});
+	$(".scroll-to-top").click(function(a) {
+		a.preventDefault();
+		$("html, body").animate({
+			scrollTop: 0
+		}, 500);
+		return !1
+	})
+}
 $(function () {
+	handlegotop();
+	<?php $sitelist_ccache = getcache('sitelist', 'commons');
+	$ccache = getcache('category_content_1','commons');
+	if(!module_exists('member') && (!is_array($sitelist_ccache) || !is_array($ccache))) { ?>
     $.ajax({type: "GET",dataType:"json", url: "?m=admin&c=cache_all&a=init&pc_hash=<?php echo dr_get_csrf_token();?>&is_ajax=1",
         success: function(json) {
             if (json.code) {
@@ -57,9 +76,9 @@ $(function () {
             }
         }
     });
+	<?php }?>
 });
 </script>
-<?php }?>
 </head>
 <body>
 <div class="layuimini-container">
@@ -234,6 +253,9 @@ $(function () {
             </div>
         </div>
     </div>
+</div>
+<div class="scroll-to-top">
+    <i class="bi bi-arrow-up-circle-fill"></i>
 </div>
 <script src="<?php echo JS_PATH?>layui/layui.js" charset="utf-8"></script>
 <script src="<?php echo CSS_PATH?>layuimini/js/lay-config.js?v=2.0.0" charset="utf-8"></script>

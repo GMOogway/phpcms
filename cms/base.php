@@ -65,6 +65,7 @@ define('ROOT_URL', siteurl(1).'/');
 	'ATTACHMENT_FILE' => '0',
 	'ATTACHMENT_DEL' => '1',
 	'SYS_ATTACHMENT_SAVE_ID' => 0,
+	'SYS_ATTACHMENT_CF' => 0,
 	'SYS_ATTACHMENT_SAFE' => 0,
 	'SYS_ATTACHMENT_PATH' => '',
 	'SYS_ATTACHMENT_SAVE_TYPE' => 0,
@@ -209,6 +210,7 @@ define('SYS_ATTACHMENT_FILE', pc_base::load_config('system','attachment_file'));
 define('SYS_ATTACHMENT_DEL', pc_base::load_config('system','attachment_del'));
 // 本地附件上传目录和地址
 define('SYS_ATTACHMENT_SAVE_ID', pc_base::load_config('system','sys_attachment_save_id'));
+define('SYS_ATTACHMENT_CF', pc_base::load_config('system','sys_attachment_cf'));
 define('SYS_ATTACHMENT_SAFE', pc_base::load_config('system','sys_attachment_safe'));
 define('SYS_ATTACHMENT_PATH', pc_base::load_config('system','sys_attachment_path'));
 define('SYS_ATTACHMENT_URL', pc_base::load_config('system','sys_attachment_url'));

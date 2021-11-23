@@ -1364,15 +1364,17 @@ function dr_string2array($data, $limit = '') {
 /**
  * 附件信息
  */
-function get_attachment($id) {
+function get_attachment($id, $update = 0) {
 	$cache = pc_base::load_sys_class('cache');
 	$att_db = pc_base::load_model('attachment_model');
 	if (!$id) {
 		return null;
 	}
-	$data = $cache->get_file('attach-info-'.$id, 'attach');
-	if ($data) {
-		return $data;
+	if (!$update) {
+		$data = $cache->get_file('attach-info-'.$id, 'attach');
+		if ($data) {
+			return $data;
+		}
 	}
 	if (is_numeric($id)) {
 		$id = (int)$id;

@@ -25,6 +25,7 @@ return array(
 'attachment_file' => '0', //附件是否使用分站 0 否 1 是
 'attachment_del' => '1', //是否同步删除附件 0 否 1 是
 'sys_attachment_save_id' => 0, //附件存储策略
+'sys_attachment_cf' => 0, //重复上传控制
 'sys_attachment_safe' => 0, //附件上传安全模式
 'sys_attachment_path' => '', //附件上传路径
 'sys_attachment_save_type' => 0, //附件存储方式

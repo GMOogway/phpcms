@@ -59,6 +59,8 @@ class attachment extends admin {
 			$post['attachment_stat'] = (int)$post['attachment_stat'];
 			$post['attachment_file'] = (int)$post['attachment_file'];
 			$post['attachment_del'] = (int)$post['attachment_del'];
+			$post['sys_attachment_cf'] = (int)$post['sys_attachment_cf'];
+			$post['sys_attachment_safe'] = (int)$post['sys_attachment_safe'];
 			$this->set_config($post);	 //保存进config文件
 			$this->setcache();
 			dr_json(1, L('修改成功'), array('url' => '?m=attachment&c=attachment&a=init&page='.(int)$this->input->post('page').'&pc_hash='.dr_get_csrf_token()));
@@ -80,7 +82,7 @@ class attachment extends admin {
 		if(!is_writable($configfile)) dr_json(0, 'Please chmod '.$configfile.' to 0777 !');
 		$pattern = $replacement = array();
 		foreach($config as $k=>$v) {
-			if(in_array($k,array('sys_attachment_save_id','sys_attachment_safe','sys_attachment_path','sys_attachment_save_type','sys_attachment_save_dir','sys_attachment_url','sys_avatar_path','sys_avatar_url','sys_thumb_path','sys_thumb_url','attachment_stat','attachment_file','attachment_del'))) {
+			if(in_array($k,array('sys_attachment_save_id','sys_attachment_cf','sys_attachment_safe','sys_attachment_path','sys_attachment_save_type','sys_attachment_save_dir','sys_attachment_url','sys_avatar_path','sys_avatar_url','sys_thumb_path','sys_thumb_url','attachment_stat','attachment_file','attachment_del'))) {
 				$v = trim($v);
 				$configs[$k] = $v;
 				$pattern[$k] = "/'".$k."'\s*=>\s*([']?)[^']*([']?)(\s*),/is";

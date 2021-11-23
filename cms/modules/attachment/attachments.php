@@ -97,6 +97,11 @@ class attachments {
 		if($this->input->post('dosubmit')){
 			if($this->input->post('h5_auth_key') != md5(SYS_KEY.$this->input->post('H5UPLOADSESSID')) || ($this->input->post('isadmin')==0 && !$grouplist[$this->input->post('groupid')]['allowattachment'])) exit();
 			pc_base::load_sys_class('upload','',0);
+			$args = $this->input->post('args');
+			$p = dr_string2array(dr_authcode($args, 'DECODE'));
+			if (!$p) {
+				dr_json(0, L('attachment_parameter_error'));
+			}
 			$upload = new upload($this->input->post('module'),$this->input->post('catid'),$this->input->post('siteid'));
 			$upload->set_userid($this->input->post('userid'));
 			$site_setting = get_site_setting($this->input->post('siteid'));
@@ -118,11 +123,26 @@ class attachments {
 			if (!$rt['code']) {
 				exit(dr_array2string($rt));
 			}
-			
+			$data = [];
+			if (defined('SYS_ATTACHMENT_CF') && SYS_ATTACHMENT_CF && $rt['data']['md5']) {
+				$att_db = pc_base::load_model('attachment_model');
+				$att = $att_db->get_one(array('userid'=>intval($this->input->post('userid')),'filemd5'=>$rt['data']['md5'],'fileext'=>$rt['data']['ext'],'filesize'=>$rt['data']['size']));
+				if ($att) {
+					$data = dr_return_data($att['aid'], 'ok');
+					// 删除现有附件
+					// 开始删除文件
+					$storage = new storage($this->input->post('module'),$this->input->post('catid'),$this->input->post('siteid'));
+					$storage->delete($upload->get_attach_info((int)$p['attachment']), $rt['data']['file']);
+					$rt['data'] = get_attachment($att['aid']);
+				}
+			}
+
 			// 附件归档
-			$data = $upload->save_data($rt['data']);
-			if (!$data['code']) {
-				exit(dr_array2string($data));
+			if (!$data) {
+				$data = $upload->save_data($rt['data']);
+				if (!$data['code']) {
+					exit(dr_array2string($data));
+				}
 			}
 			
 			//exit(dr_array2string(array('code' => 1, 'msg' => L('上传成功'), 'id' => $data['code'], 'info' => $rt['data'])));
@@ -133,11 +153,12 @@ class attachments {
 			}
 			
 			if($rt && $data) {
-				if($upload->uploadedfiles[0]['isimage']) {
+				if($upload->uploadedfiles[0]['isimage'] || $rt['data']['isimage']) {
 					$rt['data']['ext'] = 1;
 				}
-				$rt['data']['id'] = $data['code'];
-				$rt['data']['size'] = format_file_size($rt['data']['size']);
+				$rt['data']['id'] = $data['code'] ? $data['code'] : $data['aid'];
+				$rt['data']['filename'] && $rt['data']['name'] = $rt['data']['filename'];
+				$rt['data']['size'] = $rt['data']['size'] ? format_file_size($rt['data']['size']) : format_file_size($rt['data']['filesize']);
 				dr_json(1, L('att_upload_succ'), $rt['data']);
 			} else {
 				dr_json(0, $rt['msg']);

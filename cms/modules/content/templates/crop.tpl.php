@@ -2,7 +2,6 @@
 defined('IN_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');
 ?>
-<link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH;?>iconfont/iconfont.min.css" />
 <link rel="stylesheet" type="text/css" href="<?php echo JS_PATH;?>cropper/cropper.min.css">
 <script type="text/javascript" src="<?php echo JS_PATH;?>cropper/cropper.min.js"></script>
 </head>

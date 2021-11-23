@@ -1,4 +1,4 @@
-<div id="think_page_trace" style="position: fixed;bottom:0;right:0;font-size:14px;width:100%;z-index: 2147483647; color: #000;text-align:left;font-family:'微软雅黑';">
+<div id="think_page_trace" style="position: fixed;bottom:0;right:0;font-size:14px;width:100%;z-index: 10001; color: #000;text-align:left;font-family:'微软雅黑';">
     <div id="think_page_trace_tab" style="display: none;background:white;margin:0;height: 250px;">
         
 
@@ -29,7 +29,7 @@
     </div>
     <div id="think_page_trace_close" style="display:none;text-align:right;height:15px;position:absolute;top:10px;right:12px;cursor:pointer;"> <b style="font-size:28px; line-height: 14px; ">×</b> </div>
 </div>
-<div id="think_page_trace_open" style="height:30px;float:right;text-align:right;overflow:hidden;position:fixed;bottom:0;right:0;z-index: 2147483647; color:#000;line-height:30px;cursor:pointer;">
+<div id="think_page_trace_open" style="height:30px;float:right;text-align:right;overflow:hidden;position:fixed;bottom:0;right:0;z-index: 10001; color:#000;line-height:30px;cursor:pointer;">
     <div style="background:#232323;color:#FFF;padding:0 6px;float:right;line-height:30px;font-size:14px"><?php echo self::spent();?>s </div> 
      
 </div>
