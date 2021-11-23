@@ -400,7 +400,7 @@ class Uploader
         ));
         if ($rt['code']) {
             $this->aid = $rt['code'];
-            $this->upload_json($this->aid,$this->fileUrl,$this->upload->uploadedfiles[0]['filename'],format_file_size($this->upload->uploadedfiles[0]['filesize']));
+            $this->upload_json($this->aid,$this->fileUrl,strstr($this->oriName, '.', true),format_file_size($this->fileSize));
         } else {
             $this->stateInfo = $rt['msg'];
         }

@@ -90,10 +90,9 @@ class attachments {
 		
 		if($rt && $data){
 			$fn = intval($this->input->get('CKEditorFuncNum'));
-			$rt['data']['id'] = $data['code'] ? $data['code'] : $data['aid'];
 			$rt['data']['filename'] && $rt['data']['name'] = $rt['data']['filename'];
 			$rt['data']['size'] = $rt['data']['size'] ? format_file_size($rt['data']['size']) : format_file_size($rt['data']['filesize']);
-			$this->upload_json($data['code'],$rt['data']['url'],$rt['data']['name'],format_file_size($rt['data']['size']));
+			$this->upload_json($data['code'] ? $data['code'] : $data['aid'],$rt['data']['url'],$rt['data']['name'],$rt['data']['size']);
 			$result = array("uploaded"=>true,
 				"fileName"=>$rt['data']['name'],
 				"url"=>$rt['data']['url'],
