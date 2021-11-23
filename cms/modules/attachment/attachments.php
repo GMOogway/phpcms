@@ -64,17 +64,35 @@ class attachments {
 			exit(json_encode($result,JSON_UNESCAPED_UNICODE));
 			//exit(dr_array2string($rt));
 		}
+		$data = array();
+		if (defined('SYS_ATTACHMENT_CF') && SYS_ATTACHMENT_CF && $rt['data']['md5']) {
+			$att_db = pc_base::load_model('attachment_model');
+			$att = $att_db->get_one(array('userid'=>intval($this->userid),'filemd5'=>$rt['data']['md5'],'fileext'=>$rt['data']['ext'],'filesize'=>$rt['data']['size']));
+			if ($att) {
+				$data = dr_return_data($att['aid'], 'ok');
+				// 删除现有附件
+				// 开始删除文件
+				$storage = new storage($module,$catid,$siteid);
+				$storage->delete($upload->get_attach_info((int)$p['attachment']), $rt['data']['file']);
+				$rt['data'] = get_attachment($att['aid']);
+			}
+		}
 		
 		// 附件归档
-		$data = $upload->save_data($rt['data']);
-		if (!$data['code']) {
-			$result = array("uploaded"=>false,"error"=>array("message"=>$data['msg']));
-			exit(json_encode($result,JSON_UNESCAPED_UNICODE));
-			//exit(dr_array2string($data));
+		if (!$data) {
+			$data = $upload->save_data($rt['data']);
+			if (!$data['code']) {
+				$result = array("uploaded"=>false,"error"=>array("message"=>$data['msg']));
+				exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+				//exit(dr_array2string($data));
+			}
 		}
 		
 		if($rt && $data){
 			$fn = intval($this->input->get('CKEditorFuncNum'));
+			$rt['data']['id'] = $data['code'] ? $data['code'] : $data['aid'];
+			$rt['data']['filename'] && $rt['data']['name'] = $rt['data']['filename'];
+			$rt['data']['size'] = $rt['data']['size'] ? format_file_size($rt['data']['size']) : format_file_size($rt['data']['filesize']);
 			$this->upload_json($data['code'],$rt['data']['url'],$rt['data']['name'],format_file_size($rt['data']['size']));
 			$result = array("uploaded"=>true,
 				"fileName"=>$rt['data']['name'],
@@ -123,7 +141,7 @@ class attachments {
 			if (!$rt['code']) {
 				exit(dr_array2string($rt));
 			}
-			$data = [];
+			$data = array();
 			if (defined('SYS_ATTACHMENT_CF') && SYS_ATTACHMENT_CF && $rt['data']['md5']) {
 				$att_db = pc_base::load_model('attachment_model');
 				$att = $att_db->get_one(array('userid'=>intval($this->input->post('userid')),'filemd5'=>$rt['data']['md5'],'fileext'=>$rt['data']['ext'],'filesize'=>$rt['data']['size']));
@@ -221,15 +239,32 @@ class attachments {
 		if (!$rt['code']) {
 			exit(dr_array2string($rt));
 		}
-		
-		// 附件归档
-		$data = $upload->save_data($rt['data']);
-		if (!$data['code']) {
-			exit(dr_array2string($data));
+		$data = array();
+		if (defined('SYS_ATTACHMENT_CF') && SYS_ATTACHMENT_CF && $rt['data']['md5']) {
+			$att_db = pc_base::load_model('attachment_model');
+			$att = $att_db->get_one(array('userid'=>intval($this->userid),'filemd5'=>$rt['data']['md5'],'fileext'=>$rt['data']['ext'],'filesize'=>$rt['data']['size']));
+			if ($att) {
+				$data = dr_return_data($att['aid'], 'ok');
+				// 删除现有附件
+				// 开始删除文件
+				$storage = new storage($this->input->post('module'),$this->input->post('catid'),$siteid);
+				$storage->delete($upload->get_attach_info((int)$p['attachment']), $rt['data']['file']);
+				$rt['data'] = get_attachment($att['aid']);
+			}
 		}
 		
-		$this->upload_json($data['code'],$rt['data']['url'],$rt['data']['name'],format_file_size($rt['data']['size']));
-		exit(dr_array2string(array('code' => 1, 'msg' => L('上传成功'), 'id' => $data['code'], 'info' => $rt['data'])));
+		// 附件归档
+		if (!$data) {
+			$data = $upload->save_data($rt['data']);
+			if (!$data['code']) {
+				exit(dr_array2string($data));
+			}
+		}
+		
+		$rt['data']['filename'] && $rt['data']['name'] = $rt['data']['filename'];
+		$rt['data']['size'] = $rt['data']['size'] ? format_file_size($rt['data']['size']) : format_file_size($rt['data']['filesize']);
+		$this->upload_json($data['code'] ? $data['code'] : $data['aid'],$rt['data']['url'],$rt['data']['name'],$rt['data']['size']);
+		exit(dr_array2string(array('code' => 1, 'msg' => L('上传成功'), 'id' => $data['code'] ? $data['code'] : $data['aid'], 'info' => $rt['data'])));
 	}
 	/**
 	 * 获取临时未处理文件列表
