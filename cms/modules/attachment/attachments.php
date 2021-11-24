@@ -462,9 +462,7 @@ class attachments {
 	}
 	
 	final public static function admin_tpl($file, $m = '') {
-		$m = empty($m) ? ROUTE_M : $m;
-		if(empty($m)) return false;
-		return PC_PATH.'modules'.DIRECTORY_SEPARATOR.$m.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$file.'.tpl.php';
+		return admin_template($file, $m);
 	}
 	final public static function get_siteid() {
 		return get_siteid();

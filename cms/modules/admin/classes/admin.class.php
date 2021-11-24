@@ -41,7 +41,7 @@ class admin {
 			$user = $admin_db->get_one(array('userid'=>$userid));
 			if ($user && $login_attr!=md5(SYS_KEY.$user['password'].(isset($user['login_attr']) ? $user['login_attr'] : ''))) {
 				if (isset($config['login_use']) && dr_in_array('admin', $config['login_use'])) {
-					$this->cache->del_auth_data('admin_option_'.$_SESSION['userid']);
+					$cache->del_auth_data('admin_option_'.$_SESSION['userid']);
 				}
 				$_SESSION['userid'] = 0;
 				$_SESSION['login_attr'] = '';
@@ -62,9 +62,7 @@ class admin {
 	 * @param string $m 模型名
 	 */
 	final public static function admin_tpl($file, $m = '') {
-		$m = empty($m) ? ROUTE_M : $m;
-		if(empty($m)) return false;
-		return PC_PATH.'modules'.DIRECTORY_SEPARATOR.$m.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$file.'.tpl.php';
+		return admin_template($file, $m);
 	}
 	
 	/**
