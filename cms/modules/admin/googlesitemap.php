@@ -122,8 +122,7 @@ class googlesitemap extends admin {
 		$siteid = $this->siteid;
 		$sitecache = getcache('sitelist','commons');
 		//根据当前站点,取得文件存放路径
-  		$systemconfig = pc_base::load_config('system');
- 		$html_root = substr($systemconfig['html_root'], 1);
+ 		$html_root = substr(SYS_HTML_ROOT, 1);
  		//判断当前站点目录,是CMS则把文件写到根目录下, 不是则写到分站目录下.(分站目录用由静态文件路经html_root和分站目录dirname组成)
  		if($siteid==1){
  			$dir = CMS_PATH;

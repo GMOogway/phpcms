@@ -15,6 +15,7 @@ include $this->admin_tpl('header','admin');
 	<p>描述：{$r[name]}</p>
 	<p>链接地址：{$r[url]}</p>
 	<p>图片：{$r[image]}</p>
+	<p>图标标示：{$r[icon]}</p>
 	<p>描述：{$r[description]}</p>
     {/loop}
 {/pc}</textarea>

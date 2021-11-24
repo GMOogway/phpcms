@@ -179,8 +179,8 @@ class space extends admin {
 	 * 配置模板
 	 */
 	public function poster_template() {
-		$tpl_root = pc_base::load_config('system', 'tpl_root');
-		$templatedir = PC_PATH.$tpl_root.pc_base::load_config('system', 'tpl_name').DIRECTORY_SEPARATOR.'poster'.DIRECTORY_SEPARATOR;
+		$tpl_root = SYS_TPL_ROOT;
+		$templatedir = PC_PATH.$tpl_root.SYS_TPL_NAME.DIRECTORY_SEPARATOR.'poster'.DIRECTORY_SEPARATOR;
 		$poster_template = getcache('poster_template_'.get_siteid(), 'commons');
 		$templates = glob($templatedir.'*.html');
 		if (is_array($templates) && !empty($templates)) {

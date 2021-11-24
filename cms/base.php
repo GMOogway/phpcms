@@ -26,7 +26,8 @@ define('IN_PHPCMS', IN_CMS);
 //缓存文件夹地址
 !defined('CACHE_PATH') && define('CACHE_PATH', CMS_PATH.'caches'.DIRECTORY_SEPARATOR);
 // 定义模板目录
-!defined('TPLPATH') && define('TPLPATH', CMS_PATH.pc_base::load_config('system','tpl_root'));
+define('SYS_TPL_ROOT', CMS_PATH.pc_base::load_config('system','tpl_root'));
+!defined('TPLPATH') && define('TPLPATH', CMS_PATH.SYS_TPL_ROOT);
 //主机协议
 define('SITE_PROTOCOL', isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == '443' ? 'https://' : 'http://');
 //当前访问的主机名
@@ -133,8 +134,9 @@ foreach ($system as $var => $value) {
 unset($my, $system);*/
 
 // 设置时区
-if (is_numeric(pc_base::load_config('system','timezone')) && strlen(pc_base::load_config('system','timezone')) > 0) {
-	function_exists('date_default_timezone_set') && date_default_timezone_set('Etc/GMT'.(pc_base::load_config('system','timezone') > 0 ? '-' : '+').abs(pc_base::load_config('system','timezone'))); // 设置时区
+define('SYS_TIMEZONE', pc_base::load_config('system','timezone'));
+if (is_numeric(SYS_TIMEZONE) && strlen(SYS_TIMEZONE) > 0) {
+	function_exists('date_default_timezone_set') && date_default_timezone_set('Etc/GMT'.(SYS_TIMEZONE > 0 ? '-' : '+').abs(SYS_TIMEZONE)); // 设置时区
 }
 
 define('CHARSET', pc_base::load_config('system','charset'));
@@ -194,10 +196,22 @@ define('SYS_KEY', pc_base::load_config('system','auth_key'));
 define('SYS_LANGUAGE', pc_base::load_config('system','lang'));
 //跨站验证
 define('SYS_CSRF', pc_base::load_config('system','sys_csrf'));
+//当前模板方案目录
+define('SYS_TPL_NAME', pc_base::load_config('system','tpl_name'));
+//是否允许在线编辑模板
+define('IS_EDIT_TPL', pc_base::load_config('system','tpl_edit'));
+//是否记录后台操作日志
+define('SYS_ADMIN_LOG', pc_base::load_config('system','admin_log'));
 //是否保存错误日志
 define('SYS_ERRORLOG', pc_base::load_config('system','errorlog'));
+//EXECUTION_SQL
+define('SYS_EXECUTION_SQL', pc_base::load_config('system','execution_sql'));
 //网站创始人ID
 define('ADMIN_FOUNDERS', explode(',', pc_base::load_config('system','admin_founders')));
+//生成静态文件路径
+define('SYS_HTML_ROOT', explode(',', pc_base::load_config('system','html_root')));
+//生成手机静态文件路径
+define('SYS_MOBILE_ROOT', explode(',', pc_base::load_config('system','mobile_root')));
 //站点id
 !defined('SITE_ID') && define('SITE_ID', 1);
 define('SITE_URL', siteurl(SITE_ID));

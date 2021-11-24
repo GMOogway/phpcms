@@ -7,7 +7,7 @@ class url{
 		$this->urlrules = getcache('urlrules','commons');
 		self::set_siteid();
 		$this->categorys = getcache('category_content_'.$this->siteid,'commons');
-		$this->html_root = pc_base::load_config('system','html_root');
+		$this->html_root = SYS_HTML_ROOT;
 	}
 
 	/**

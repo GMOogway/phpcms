@@ -15,6 +15,7 @@ class admin {
 	
 	public function __construct() {
 		if (NeedCheckComeUrl) self::check_url();
+		self::login_before();
 		self::check_admin();
 		self::check_priv();
 		pc_base::load_app_func('global','admin');
@@ -23,7 +24,6 @@ class admin {
 		self::check_ip();
 		self::lock_screen();
 		self::check_hash();
-		self::login_before();
 	}
 	
 	/**
@@ -40,6 +40,9 @@ class admin {
 			$login_attr = param::get_cookie('login_attr');
 			$user = $admin_db->get_one(array('userid'=>$userid));
 			if ($user && $login_attr!=md5(SYS_KEY.$user['password'].(isset($user['login_attr']) ? $user['login_attr'] : ''))) {
+				if (isset($config['login_use']) && dr_in_array('admin', $config['login_use'])) {
+					$this->cache->del_auth_data('admin_option_'.$_SESSION['userid']);
+				}
 				$_SESSION['userid'] = 0;
 				$_SESSION['login_attr'] = '';
 				$_SESSION['roleid'] = 0;
@@ -283,9 +286,7 @@ class admin {
 	 */
 	private function manage_log() {
 		//判断是否记录
-		$setconfig = pc_base::load_config('system');
-		extract($setconfig);
- 		if($admin_log==1){
+ 		if(SYS_ADMIN_LOG){
  			$action = ROUTE_A;
  			if($action == '' || strchr($action,'public') || $action == 'init' || $action=='public_current_pos') {
 				return false;
@@ -406,7 +407,7 @@ class admin {
 			}
 			if (isset($config['login_use']) && dr_in_array('admin', $config['login_use'])) {
 				// 操作标记
-				if (ROUTE_M =='admin' && ROUTE_C == 'index' && in_array(ROUTE_A, array(SYS_ADMIN_PATH,'public_logout'))) {
+				if (ROUTE_M =='admin' && ROUTE_C == 'index' && in_array(ROUTE_A, array(SYS_ADMIN_PATH))) {
 					return; // 本身控制器不判断
 				}
 				if (isset($config['login_is_option']) && $config['login_is_option'] && $config['login_exit_time']) {
@@ -416,7 +417,7 @@ class admin {
 						// 长时间不动作退出
 						$admin_db->update(array('login_attr'=>rand(0, 99999)), array('userid'=>$log['uid']));
 						$cache->del_auth_data('admin_option_'.$userid);
-						dr_admin_msg(0,L('长时间（'.ceil($ctime/60).'分钟）未操作，当前账号自动退出'),'?m=admin&c=index&a=public_logout');
+						dr_admin_msg(0,L('长时间（'.ceil($ctime/60).'分钟）未操作，当前账号自动退出'),'?m=admin&c=index&a='.SYS_ADMIN_PATH);
 					}
 					$cache->set_auth_data('admin_option_'.$userid, SYS_TIME);
 				}

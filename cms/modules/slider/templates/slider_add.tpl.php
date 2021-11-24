@@ -33,12 +33,17 @@ include $this->admin_tpl('header','admin');
 	<tr>
 		<th width="100"><?php echo L('url')?>：</th>
 		<td><input type="text" name="slider[url]" id="slider_url"
-			size="30" class="input-text">(若不想输入地址，请输入 # )</td>
+			size="30" class="input-text"><?php echo L('choose_url')?></td>
 	</tr>
 	
 	<tr>
 		<th width="100"><?php echo L('image')?>：</th>
 		<td><?php echo form::images('slider[image]', 'image', '', 'slider')?></td>
+	</tr>
+	
+	<tr>
+		<th width="100"><?php echo L('icon')?>：</th>
+		<td><input type="text" id="menu_icon" name="slider[icon]" class="input-text" ><input type="button" name="icon" id="icon" value="<?php echo L('choose_icon')?>" class="button" onclick="menuicon('icons','?m=admin&c=menu&a=public_icon&value='+$('#menu_icon').val(),'<?php echo L('choose_icon')?>','80%','80%')"></td>
 	</tr>
 
 	<tr>

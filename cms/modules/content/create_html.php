@@ -807,7 +807,7 @@ class create_html extends admin {
 		$this->db->set_model($modelid);
 		$this->hits_db = pc_base::load_model('hits_model');
 		$this->queue = pc_base::load_model('queue_model');
-		$html_root = pc_base::load_config('system','html_root');
+		$html_root = SYS_HTML_ROOT;
 		//附件初始化
 		$attachment = pc_base::load_model('attachment_model');
 		$this->content_check_db = pc_base::load_model('content_check_model');
@@ -897,7 +897,7 @@ class create_html extends admin {
 					if($this->siteid != 1) {
 						$fileurl = $html_root.'/'.$sitelist[$this->siteid]['dirname'].$fileurl;
 					}
-					$mobilefileurl = pc_base::load_config('system','mobile_root').$fileurl;
+					$mobilefileurl = SYS_MOBILE_ROOT.$fileurl;
 					//删除静态文件，排除htm/html/shtml外的文件
 					$lasttext = strrchr($fileurl,'.');
 					$len = -strlen($lasttext);

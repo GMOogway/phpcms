@@ -42,7 +42,7 @@ class special extends admin {
 						$url = $site_info['domain'].'index.php?m=special&c=index&id='.$id;
 					}
 				} else {
-					$url = $special['ishtml'] ? APP_PATH.substr(pc_base::load_config('system', 'html_root'), 1).'/special/'.$special['filename'].'/' : APP_PATH.'index.php?m=special&c=index&id='.$id;
+					$url = $special['ishtml'] ? APP_PATH.substr(SYS_HTML_ROOT, 1).'/special/'.$special['filename'].'/' : APP_PATH.'index.php?m=special&c=index&id='.$id;
 				}
 				$this->db->update(array('url'=>$url), array('id'=>$id, 'siteid'=>$this->get_siteid()));
 				
@@ -92,7 +92,7 @@ class special extends admin {
 				if ($siteid>1) {
 					$special['url'] =  $site_info['domain'].'special/'.$special['filename'].'/';
 				} else {
-					$special['url'] = APP_PATH.substr(pc_base::load_config('system', 'html_root'), 1).'/special/'.$special['filename'].'/';
+					$special['url'] = APP_PATH.substr(SYS_HTML_ROOT, 1).'/special/'.$special['filename'].'/';
 				}
 			} elseif ($special['ishtml']=='0') {
 				if ($siteid>1) {

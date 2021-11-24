@@ -6,6 +6,7 @@ CREATE TABLE `cms_slider` (
   `name` varchar(50) NOT NULL DEFAULT '',
   `url` varchar(255) NOT NULL DEFAULT '',
   `image` varchar(255) NOT NULL DEFAULT '',
+  `icon` varchar(255) NULL DEFAULT NULL COMMENT '图标标示',
   `listorder` smallint(5) unsigned NOT NULL DEFAULT '0',
   `isshow` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `addtime` int(10) unsigned NOT NULL DEFAULT '0',

@@ -28,7 +28,7 @@ class category extends admin {
 			$array = array();
 			//读取缓存
 			$result = getcache('category_content_'.$this->siteid,'commons');
-			$html_root = pc_base::load_config('system','html_root');
+			$html_root = SYS_HTML_ROOT;
 			if(!empty($result)) {
 				foreach($result as $r) {
 					$rs['id'] = $r['catid'];
@@ -483,7 +483,7 @@ class category extends admin {
 			$catid = intval($this->input->post('catid'));
 			$categorys = getcache('category_content_'.$this->siteid,'commons');
 			$sethtml = $categorys[$catid]['sethtml'];
-			$html_root = pc_base::load_config('system','html_root');
+			$html_root = SYS_HTML_ROOT;
 			if($sethtml) $html_root = '';
 			$setting = string2array($categorys[$catid]['setting']);
 			$ishtml = $setting['ishtml'];
@@ -500,7 +500,7 @@ class category extends admin {
 				}
 				dir_delete(CMS_PATH.$fileurl);
 				if($sitelist[$this->siteid]['mobilehtml']==1) {
-					$mobilefileurl = pc_base::load_config('system','mobile_root').$fileurl;
+					$mobilefileurl = SYS_MOBILE_ROOT.$fileurl;
 					dir_delete(CMS_PATH.$mobilefileurl);	
 				}
 			}
@@ -524,7 +524,7 @@ class category extends admin {
 		if (empty($catid)) return false;
 		$categorys = getcache('category_content_'.$this->siteid,'commons');
 		$sethtml = $categorys[$catid]['sethtml'];
-		$html_root = pc_base::load_config('system','html_root');
+		$html_root = SYS_HTML_ROOT;
 		if($sethtml) $html_root = '';
 		$setting = string2array($categorys[$catid]['setting']);
 		$ishtml = $setting['ishtml'];
@@ -540,7 +540,7 @@ class category extends admin {
 				}
 				dir_delete(CMS_PATH.$fileurl);
 				if($sitelist[$this->siteid]['mobilehtml']==1) {
-					$mobilefileurl = pc_base::load_config('system','mobile_root').$fileurl;
+					$mobilefileurl = SYS_MOBILE_ROOT.$fileurl;
 					dir_delete(CMS_PATH.$mobilefileurl);	
 				}
 			}
@@ -560,7 +560,7 @@ class category extends admin {
 		$content_model = pc_base::load_model('content_model');
 		$categorys = getcache('category_content_'.$this->siteid,'commons');
 		$sethtml = $categorys[$catid]['sethtml'];
-		$html_root = pc_base::load_config('system','html_root');
+		$html_root = SYS_HTML_ROOT;
 		if($sethtml) $html_root = '';
 		$setting = string2array($categorys[$catid]['setting']);
 		$content_ishtml = $setting['content_ishtml'];
@@ -586,7 +586,7 @@ class category extends admin {
 					if($this->siteid != 1) {
 						$fileurl = $html_root.'/'.$sitelist[$this->siteid]['dirname'].$fileurl;
 					}
-					$mobilefileurl = pc_base::load_config('system','mobile_root').$fileurl;
+					$mobilefileurl = SYS_MOBILE_ROOT.$fileurl;
 					//删除静态文件，排除htm/html/shtml外的文件
 					$lasttext = strrchr($fileurl,'.');
 					$len = -strlen($lasttext);
@@ -705,7 +705,7 @@ class category extends admin {
 	private function repair() {
 		pc_base::load_sys_func('iconv');
 		@set_time_limit(600);
-		$html_root = pc_base::load_config('system','html_root');
+		$html_root = SYS_HTML_ROOT;
 		$this->categorys = $categorys = array();
 		$this->categorys = $categorys = $this->db->select(array('siteid'=>$this->siteid,'module'=>'content'), '*', '', 'listorder ASC, catid ASC', '', 'catid');
 		

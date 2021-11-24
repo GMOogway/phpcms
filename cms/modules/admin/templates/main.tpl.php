@@ -44,7 +44,7 @@ defined('IN_ADMIN') or exit('No permission resources.');
 padding-right: 70px !important;text-overflow:ellipsis!important;overflow:hidden!important;white-space:nowrap!important;}
 .layuimini-notice-title {line-height:28px;font-size:14px;}
 .layuimini-notice-extra {position:absolute;top:50%;margin-top:-8px;right:16px;display:inline-block;height:16px;color:#999;}
-.scroll-to-top{padding:1px;text-align:center;position:fixed;bottom:32px;z-index:10002;display:none;right:20px}
+.scroll-to-top{padding:1px;text-align:center;position:fixed;bottom:60px;z-index:10002;display:none;right:20px}
 .scroll-to-top>i{display:inline-block;color:#687991;font-size:30px;opacity:.6;filter:alpha(opacity=60)}
 .scroll-to-top:hover{cursor:pointer}
 .scroll-to-top:hover>i{opacity:1;filter:alpha(opacity=100)}
@@ -120,16 +120,16 @@ $(function () {
                                         <?php if($pc_writeable) {?>
                                         <p><?php echo L('main_safety_permissions')?></p>
                                         <?php } ?>
-                                        <?php if(!pc_base::load_config('system','errorlog')) {?>
+                                        <?php if(!SYS_ERRORLOG) {?>
                                         <p><?php echo L('main_safety_errlog')?></p>
                                         <?php } ?>
-                                        <?php if(pc_base::load_config('system','execution_sql')) {?>
+                                        <?php if(SYS_EXECUTION_SQL) {?>
                                         <p><?php echo L('main_safety_sql')?></p>
                                         <?php } ?>
                                         <?php if($logsize_warning) {?>
                                         <p><?php echo L('main_safety_log',array('size'=>$common_cache['errorlog_size'].'MB'))?></p>
                                         <?php } ?>
-                                        <?php if(pc_base::load_config('system','tpl_edit')) {?>
+                                        <?php if(IS_EDIT_TPL) {?>
                                         <p><?php echo L('main_safety_tpledit')?></p>
                                         <?php } ?>
                                     </div>

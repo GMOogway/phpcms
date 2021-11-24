@@ -13,8 +13,8 @@ class html {
 		self::set_siteid();
 		$this->categorys = getcache('category_content_'.$this->siteid,'commons');
 		$this->url = pc_base::load_app_class('url', 'content');
-		$this->html_root = pc_base::load_config('system','html_root');
-		$this->mobile_root = pc_base::load_config('system','mobile_root');
+		$this->html_root = SYS_HTML_ROOT;
+		$this->mobile_root = SYS_MOBILE_ROOT;
 		$this->sitelist = getcache('sitelist','commons');
 	}
 

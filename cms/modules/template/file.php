@@ -24,7 +24,7 @@ class file extends admin {
 			$this->style_info = include $this->filepath.'config.php';
 			if (!isset($this->style_info['name'])) $this->style_info['name'] = $this->style;
 		}
-		$this->tpl_edit = pc_base::load_config('system', 'tpl_edit');
+		$this->tpl_edit = IS_EDIT_TPL;
 		$this->input = pc_base::load_sys_class('input');
 		parent::__construct();
 	}

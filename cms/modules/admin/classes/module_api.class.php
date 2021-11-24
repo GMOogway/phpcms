@@ -47,7 +47,7 @@ class module_api {
 			$menu_db = pc_base::load_model('menu_model');
 			@include ($this->installdir.'extention.inc.php');
 			if(!defined('INSTALL_MODULE')) {
-				$file = PC_PATH.'languages'.DIRECTORY_SEPARATOR.pc_base::load_config('system', 'lang').DIRECTORY_SEPARATOR.'system_menu.lang.php';
+				$file = PC_PATH.'languages'.DIRECTORY_SEPARATOR.SYS_LANGUAGE.DIRECTORY_SEPARATOR.'system_menu.lang.php';
 				if(file_exists($file)) {
 					$content = file_get_contents($file);
 					$content = substr($content,0,-2);
@@ -76,17 +76,17 @@ class module_api {
 				dir_copy($this->installdir.'languages'.DIRECTORY_SEPARATOR, PC_PATH.'languages'.DIRECTORY_SEPARATOR);
 			}
 			if(file_exists($this->installdir.'templates'.DIRECTORY_SEPARATOR)) {
-				dir_copy($this->installdir.'templates'.DIRECTORY_SEPARATOR, PC_PATH.'templates'.DIRECTORY_SEPARATOR.pc_base::load_config('system', 'tpl_name').DIRECTORY_SEPARATOR.$this->module.DIRECTORY_SEPARATOR);
+				dir_copy($this->installdir.'templates'.DIRECTORY_SEPARATOR, PC_PATH.'templates'.DIRECTORY_SEPARATOR.SYS_TPL_NAME.DIRECTORY_SEPARATOR.$this->module.DIRECTORY_SEPARATOR);
 				if (file_exists($this->installdir.'templates'.DIRECTORY_SEPARATOR.'name.inc.php')) {
-					$keyid = 'templates|'.pc_base::load_config('system', 'tpl_name').'|'.$this->module;
+					$keyid = 'templates|'.SYS_TPL_NAME.'|'.$this->module;
 					$file_explan[$keyid] = include $this->installdir.'templates'.DIRECTORY_SEPARATOR.'name.inc.php';
-					$templatepath = PC_PATH.'templates'.DIRECTORY_SEPARATOR.pc_base::load_config('system', 'tpl_name').DIRECTORY_SEPARATOR;
+					$templatepath = PC_PATH.'templates'.DIRECTORY_SEPARATOR.SYS_TPL_NAME.DIRECTORY_SEPARATOR;
 					if (file_exists($templatepath.'config.php')) {
 						$style_info = include $templatepath.'config.php';
 						$style_info['file_explan'] = array_merge($style_info['file_explan'], $file_explan);
 						@file_put_contents($templatepath.'config.php', '<?php return '.var_export($style_info, true).';?>');
 					}
-					unlink(PC_PATH.'templates'.DIRECTORY_SEPARATOR.pc_base::load_config('system', 'tpl_name').DIRECTORY_SEPARATOR.$this->module.DIRECTORY_SEPARATOR.'name.inc.php');
+					unlink(PC_PATH.'templates'.DIRECTORY_SEPARATOR.SYS_TPL_NAME.DIRECTORY_SEPARATOR.$this->module.DIRECTORY_SEPARATOR.'name.inc.php');
 				}
 			}
 		}
@@ -105,9 +105,9 @@ class module_api {
 			return false;
 		}
 		if(!defined('INSTALL_MODULE')) {
-			if (dir_create(PC_PATH.'languages'.DIRECTORY_SEPARATOR.pc_base::load_config('system', 'lang').DIRECTORY_SEPARATOR.'test_create_dir')) {
+			if (dir_create(PC_PATH.'languages'.DIRECTORY_SEPARATOR.SYS_LANGUAGE.DIRECTORY_SEPARATOR.'test_create_dir')) {
 				sleep(1);
-				dir_delete(PC_PATH.'languages'.DIRECTORY_SEPARATOR.pc_base::load_config('system', 'lang').DIRECTORY_SEPARATOR.'test_create_dir');
+				dir_delete(PC_PATH.'languages'.DIRECTORY_SEPARATOR.SYS_LANGUAGE.DIRECTORY_SEPARATOR.'test_create_dir');
 				
 			} else {
 				$this->error_msg = L('lang_dir_no_write');
@@ -183,15 +183,15 @@ class module_api {
 		if (file_exists($this->uninstalldir.'extention.inc.php')) {
 			@include ($this->uninstalldir.'extention.inc.php');
 		}
-		if (file_exists(PC_PATH.'languages'.DIRECTORY_SEPARATOR.pc_base::load_config('system', 'lang').DIRECTORY_SEPARATOR.$this->module.'.lang.php')) {
-			@unlink(PC_PATH.'languages'.DIRECTORY_SEPARATOR.pc_base::load_config('system', 'lang').DIRECTORY_SEPARATOR.$this->module.'.lang.php');
+		if (file_exists(PC_PATH.'languages'.DIRECTORY_SEPARATOR.SYS_LANGUAGE.DIRECTORY_SEPARATOR.$this->module.'.lang.php')) {
+			@unlink(PC_PATH.'languages'.DIRECTORY_SEPARATOR.SYS_LANGUAGE.DIRECTORY_SEPARATOR.$this->module.'.lang.php');
 		}
-		if (is_dir(PC_PATH.'templates'.DIRECTORY_SEPARATOR.pc_base::load_config('system', 'tpl_name').DIRECTORY_SEPARATOR.$this->module)) {
-			@dir_delete(PC_PATH.'templates'.DIRECTORY_SEPARATOR.pc_base::load_config('system', 'tpl_name').DIRECTORY_SEPARATOR.$this->module);
+		if (is_dir(PC_PATH.'templates'.DIRECTORY_SEPARATOR.SYS_TPL_NAME.DIRECTORY_SEPARATOR.$this->module)) {
+			@dir_delete(PC_PATH.'templates'.DIRECTORY_SEPARATOR.SYS_TPL_NAME.DIRECTORY_SEPARATOR.$this->module);
 		}
-		$templatepath = PC_PATH.'templates'.DIRECTORY_SEPARATOR.pc_base::load_config('system', 'tpl_name').DIRECTORY_SEPARATOR;
+		$templatepath = PC_PATH.'templates'.DIRECTORY_SEPARATOR.SYS_TPL_NAME.DIRECTORY_SEPARATOR;
 		if (file_exists($templatepath.'config.php')) {
-			$keyid = 'templates|'.pc_base::load_config('system', 'tpl_name').'|'.$this->module;
+			$keyid = 'templates|'.SYS_TPL_NAME.'|'.$this->module;
 			$style_info = include $templatepath.'config.php';
 			unset($style_info['file_explan'][$keyid]);
 			@file_put_contents($templatepath.'config.php', '<?php return '.var_export($style_info, true).';?>');

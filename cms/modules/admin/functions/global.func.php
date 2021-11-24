@@ -91,7 +91,7 @@
 	function errorlog_size() {
 		$logfile = CACHE_PATH.'error_log.php';
 		if(file_exists($logfile)) {
-			return $logsize = pc_base::load_config('system','errorlog') ? round(filesize($logfile) / 1048576 * 100) / 100 : 0;
+			return $logsize = SYS_ERRORLOG ? round(filesize($logfile) / 1048576 * 100) / 100 : 0;
 		} 
 		return 0;
 	}

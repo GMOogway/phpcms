@@ -618,7 +618,7 @@ class form {
 	 * @param $pre 模板前缀
 	 */
 	public static function select_template($style, $module, $id = '', $str = '', $pre = '') {
-		$tpl_root = pc_base::load_config('system', 'tpl_root');
+		$tpl_root = SYS_TPL_ROOT;
 		$templatedir = PC_PATH.$tpl_root.DIRECTORY_SEPARATOR.$style.DIRECTORY_SEPARATOR.$module.DIRECTORY_SEPARATOR;
 		$confing_path = PC_PATH.$tpl_root.DIRECTORY_SEPARATOR.$style.DIRECTORY_SEPARATOR.'config.php';
 		$localdir = str_replace(array('/', '\\'), '', $tpl_root).'|'.$style.'|'.$module;

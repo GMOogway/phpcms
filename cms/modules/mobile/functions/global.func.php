@@ -134,7 +134,7 @@ function mobile_content_pages($num, $curr_page, $pageurls, $showurls, $siteid = 
 		//if (substr($sitelist[$siteid]['mobile_domain'],0,-1)) {
 			$mobile_root = substr($sitelist[$siteid]['mobile_domain'],0,-1);
 		//} else {
-			//$mobile_root = pc_base::load_config('system','mobile_root');
+			//$mobile_root = SYS_MOBILE_ROOT;
 		//}
 	}
 	$multipage = '';

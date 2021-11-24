@@ -687,7 +687,7 @@ class content extends admin {
 			$sethtml = $this->categorys[$catid]['sethtml'];
 			$siteid = $this->categorys[$catid]['siteid'];
 			
-			$html_root = pc_base::load_config('system','html_root');
+			$html_root = SYS_HTML_ROOT;
 			if($sethtml) $html_root = '';
 			
 			$setting = string2array($this->categorys[$catid]['setting']);
@@ -720,7 +720,7 @@ class content extends admin {
 					if($this->siteid != 1) {
 						$fileurl = $html_root.'/'.$sitelist[$this->siteid]['dirname'].$fileurl;
 					}
-					$mobilefileurl = pc_base::load_config('system','mobile_root').$fileurl;
+					$mobilefileurl = SYS_MOBILE_ROOT.$fileurl;
 					//删除静态文件，排除htm/html/shtml外的文件
 					$lasttext = strrchr($fileurl,'.');
 					$len = -strlen($lasttext);

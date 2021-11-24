@@ -7,8 +7,8 @@ class mobile_url{
 		$this->urlrules = getcache('urlrules','commons');
 		self::set_siteid();
 		$this->categorys = getcache('category_content_'.$this->siteid,'commons');
-		$this->html_root = pc_base::load_config('system','html_root');
-		$this->mobile_root = pc_base::load_config('system','mobile_root');
+		$this->html_root = SYS_HTML_ROOT;
+		$this->mobile_root = SYS_MOBILE_ROOT;
 	}
 	/**
 	* WAP内容页链接

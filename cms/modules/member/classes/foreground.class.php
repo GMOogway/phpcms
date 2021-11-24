@@ -10,11 +10,11 @@ class foreground {
 		self::check_ip();
 		$this->db = pc_base::load_model('member_model');
 		$this->member_login_db = pc_base::load_model('member_login_model');
+		self::login_before();
 		//ajax验证信息不需要登录
 		if(substr(ROUTE_A, 0, 7) != 'public_') {
 			self::check_member();
 		}
-		self::login_before();
 	}
 	
 	/**
@@ -31,7 +31,7 @@ class foreground {
 		} else {
 			//判断是否存在auth cookie
 			if ($cms_auth) {
-				$auth_key = $auth_key = get_auth_key('login');
+				$auth_key = get_auth_key('login');
 				$login_attr = param::get_cookie('_login_attr');
 				list($userid, $password) = explode("\t", sys_auth($cms_auth, 'DECODE', $auth_key));
 				$userid = intval($userid);
@@ -50,17 +50,21 @@ class foreground {
 				
 				if($this->memberinfo && $this->memberinfo['password'] === $password) {
 					
-					if (!defined('SITEID')) {
-					   define('SITEID', $this->memberinfo['siteid']);
-					}
-					
 					if ($login_attr!=md5(SYS_KEY.$this->memberinfo['password'].(isset($this->memberinfo['login_attr']) ? $this->memberinfo['login_attr'] : ''))) {
+						$config = getcache('common', 'commons');
+						if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
+							$this->cache->del_auth_data('member_option_'.$userid);
+						}
 						param::set_cookie('auth', '');
 						param::set_cookie('_userid', '');
 						param::set_cookie('_login_attr', '');
 						param::set_cookie('_username', '');
 						param::set_cookie('_groupid', '');
 						redirect('index.php?m=member&c=index&a=login');
+					}
+					
+					if (!defined('SITEID')) {
+					   define('SITEID', $this->memberinfo['siteid']);
 					}
 					
 					if($this->memberinfo['groupid'] == 1) {
@@ -160,7 +164,6 @@ class foreground {
  	 * 登录验证
  	 */
 	private function login_before() {
-		$userid = $this->memberinfo['userid'];
 		$config = getcache('common','commons');
 		if ($config) {
 			if (isset($config['safe_use']) && dr_in_array('member', $config['safe_use'])) {
@@ -177,50 +180,61 @@ class foreground {
 				}
 			}
 		}
-		if ($config && $userid) {
-			$log = self::member_get_log($userid);
-			if (isset($config['pwd_use']) && dr_in_array('member', $config['pwd_use'])) {
-				// 首次登录是否强制修改密码
-				if (!$log['is_login'] && isset($config['pwd_is_login_edit']) && $config['pwd_is_login_edit']) {
-					// 该改密码了
-					if (ROUTE_M =='member' && ROUTE_C == 'index' && in_array(ROUTE_A, array('account_manage_password','public_checkemail_ajax','logout'))) {
-						return true; // 本身控制器不判断
+		$cms_auth = param::get_cookie('auth');
+		if ($cms_auth) {
+			list($userid) = explode("\t", sys_auth($cms_auth, 'DECODE', get_auth_key('login')));
+			$userid = intval($userid);
+			if ($config && $userid) {
+				$log = self::member_get_log($userid);
+				if (isset($config['pwd_use']) && dr_in_array('member', $config['pwd_use'])) {
+					// 首次登录是否强制修改密码
+					if (!$log['is_login'] && isset($config['pwd_is_login_edit']) && $config['pwd_is_login_edit']) {
+						// 该改密码了
+						if (ROUTE_M =='member' && ROUTE_C == 'index' && in_array(ROUTE_A, array('account_manage_password','public_checkemail_ajax','logout'))) {
+							return true; // 本身控制器不判断
+						}
+						showmessage(L('首次登录需要强制修改密码'), '?m=member&c=index&a=account_manage_password&t=1');
 					}
-					showmessage(L('首次登录需要强制修改密码'), '?m=member&c=index&a=account_manage_password&t=1');
-				}
-				// 判断定期修改密码
-				if (isset($config['pwd_is_edit']) && $config['pwd_is_edit']
-					&& isset($config['pwd_day_edit']) && $config['pwd_day_edit']) {
-					if ($log['updatetime']) {
-						// 存在修改过密码才判断
-						$time = $config['pwd_day_edit'] * 3600 * 24;
-						if (SYS_TIME - $log['updatetime'] > $time) {
-							// 该改密码了
-							if (ROUTE_M =='member' && ROUTE_C == 'index' && in_array(ROUTE_A, array('account_manage_password','public_checkemail_ajax','logout'))) {
-								return true; // 本身控制器不判断
+					// 判断定期修改密码
+					if (isset($config['pwd_is_edit']) && $config['pwd_is_edit']
+						&& isset($config['pwd_day_edit']) && $config['pwd_day_edit']) {
+						if ($log['updatetime']) {
+							// 存在修改过密码才判断
+							$time = $config['pwd_day_edit'] * 3600 * 24;
+							if (SYS_TIME - $log['updatetime'] > $time) {
+								// 该改密码了
+								if (ROUTE_M =='member' && ROUTE_C == 'index' && in_array(ROUTE_A, array('account_manage_password','public_checkemail_ajax','logout'))) {
+									return true; // 本身控制器不判断
+								}
+								showmessage(L('您需要定期修改密码'), '?m=member&c=index&a=account_manage_password&t=1');
 							}
-							showmessage(L('您需要定期修改密码'), '?m=member&c=index&a=account_manage_password&t=1');
 						}
 					}
 				}
-			}
-			if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
-				// 操作标记
-				if (ROUTE_M =='member' && ROUTE_C == 'index' && in_array(ROUTE_A, array('login','logout'))) {
-					return; // 本身控制器不判断
-				}
-				if (isset($config['login_is_option']) && $config['login_is_option'] && $config['login_exit_time']) {
-					$time = (int)$this->cache->get_auth_data('member_option_'.$userid);
-					$ctime = SYS_TIME - $time;
-					if ($time && SYS_TIME - $time > $config['login_exit_time'] * 60) {
-						// 长时间不动作退出
-						$this->db->update(array('login_attr'=>rand(0, 99999)), array('userid'=>$log['uid']));
-						$this->cache->del_auth_data('member_option_'.$userid);
-						showmessage(L('长时间（'.ceil($ctime/60).'分钟）未操作，当前账号自动退出'),'?m=member&c=index&a=logout');
+				if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
+					// 操作标记
+					if (ROUTE_M =='member' && ROUTE_C == 'index' && in_array(ROUTE_A, array('login'))) {
+						return; // 本身控制器不判断
 					}
-					$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME);
+					if (isset($config['login_is_option']) && $config['login_is_option'] && $config['login_exit_time']) {
+						$time = (int)$this->cache->get_auth_data('member_option_'.$userid);
+						$ctime = SYS_TIME - $time;
+						if ($time && SYS_TIME - $time > $config['login_exit_time'] * 60) {
+							// 长时间不动作退出
+							$this->db->update(array('login_attr'=>rand(0, 99999)), array('userid'=>$log['uid']));
+							$this->cache->del_auth_data('member_option_'.$userid);
+							param::set_cookie('auth', '');
+							param::set_cookie('_userid', '');
+							param::set_cookie('_login_attr', '');
+							param::set_cookie('_username', '');
+							param::set_cookie('_groupid', '');
+							showmessage(L('长时间（'.ceil($ctime/60).'分钟）未操作，当前账号自动退出'),'?m=member&c=index&a=login');
+						}
+						$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME);
+					}
 				}
 			}
+			unset($userid, $cms_auth);
 		}
 	}
 }

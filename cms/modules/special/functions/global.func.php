@@ -39,17 +39,17 @@ function content_url($contentid = 0, $page = 1, $addtime, $type = 'html', $site_
 			if ($site_info['dirname']) {
 				if ($page==1) {
 					$url[0] = $site_info['domain'].'special/'.date('Y', $addtime).'/'.date('md', $addtime).'/'.$contentid.'.html';
-					$url[1] = pc_base::load_config('system', 'html_root').'/'.$site_info['dirname'].'/special/'.date('Y', $addtime).'/'.date('md', $addtime).'/'.$contentid.'.html';
+					$url[1] = SYS_HTML_ROOT.'/'.$site_info['dirname'].'/special/'.date('Y', $addtime).'/'.date('md', $addtime).'/'.$contentid.'.html';
 				} else {
 					$url[0] = $site_info['domain'].'special/'.date('Y', $addtime).'/'.date('md', $addtime).'/'.$contentid.'-'.$page.'.html';
-					$url[1] = pc_base::load_config('system', 'html_root').'/'.$site_info['dirname'].'/special/'.date('Y', $addtime).'/'.date('md', $addtime).'/'.$contentid.'-'.$page.'.html';
+					$url[1] = SYS_HTML_ROOT.'/'.$site_info['dirname'].'/special/'.date('Y', $addtime).'/'.date('md', $addtime).'/'.$contentid.'-'.$page.'.html';
 				}
 			} else {
 				if ($page==1) {
-					$url[0] = $url[1] = pc_base::load_config('system', 'html_root').'/special/'.date('Y', $addtime).'/'.date('md', $addtime).'/'.$contentid.'.html';
+					$url[0] = $url[1] = SYS_HTML_ROOT.'/special/'.date('Y', $addtime).'/'.date('md', $addtime).'/'.$contentid.'.html';
 					$url[0] = $app_path.$url[0];
 				} else {
-					$url[0] = $url[1] = pc_base::load_config('system', 'html_root').'/special/'.date('Y', $addtime).'/'.date('md', $addtime).'/'.$contentid.'-'.$page.'.html';
+					$url[0] = $url[1] = SYS_HTML_ROOT.'/special/'.date('Y', $addtime).'/'.date('md', $addtime).'/'.$contentid.'-'.$page.'.html';
 					$url[0] = $app_path.$url[0];
 				}
 			}

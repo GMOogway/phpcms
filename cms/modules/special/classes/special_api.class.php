@@ -48,7 +48,7 @@ class special_api {
 						$url = $site_info['domain'].'index.php?m=special&c=index&a=type&specialid='.$specialid.'&typeid='.$typeid;
 					}
 				} else {
-					if($special_info['ishtml']) $url = addslashes($app_path.pc_base::load_config('system', 'html_root').'/special/'.$special_info['filename'].'/'.$v['typedir'].'/'.'type-'.$typeid.'.html');
+					if($special_info['ishtml']) $url = addslashes($app_path.SYS_HTML_ROOT.'/special/'.$special_info['filename'].'/'.$v['typedir'].'/'.'type-'.$typeid.'.html');
 					else $url = APP_PATH.'index.php?m=special&c=index&a=type&specialid='.$specialid.'&typeid='.$typeid;
 				}
 				$this->type_db->update(array('url'=>$url), array('typeid'=>$typeid));
@@ -64,7 +64,7 @@ class special_api {
 							$url = $site_info['domain'].'index.php?m=special&c=index&a=type&specialid='.$specialid.'&typeid='.$typeid;
 						}
 					} else {
-						if($special_info['ishtml']) $url = addslashes($app_path.pc_base::load_config('system', 'html_root').'/special/'.$special_info['filename'].'/'.$v['typedir'].'/'.'type-'.$typeid.'.html');
+						if($special_info['ishtml']) $url = addslashes($app_path.SYS_HTML_ROOT.'/special/'.$special_info['filename'].'/'.$v['typedir'].'/'.'type-'.$typeid.'.html');
 						else $url = APP_PATH.'index.php?m=special&c=index&a=type&specialid='.$specialid.'&typeid='.$typeid;
 					}
 					$v['url'] = $url;
@@ -81,7 +81,7 @@ class special_api {
 							$url = $site_info['domain'].'index.php?m=special&c=index&a=type&specialid='.$specialid.'&typeid='.$v['typeid'];
 						}
 					} else {
-						if($special_info['ishtml']) $url = addslashes($app_path.pc_base::load_config('system', 'html_root').'/special/'.$special_info['filename'].'/'.$v['typedir'].'/'.'type-'.$v['typeid'].'.html');
+						if($special_info['ishtml']) $url = addslashes($app_path.SYS_HTML_ROOT.'/special/'.$special_info['filename'].'/'.$v['typedir'].'/'.'type-'.$v['typeid'].'.html');
 						else $url = APP_PATH.'index.php?m=special&c=index&a=type&specialid='.$specialid.'&typeid='.$v['typeid'];
 					}
 					$v['url'] = $url;
@@ -223,7 +223,7 @@ class special_api {
 				$queue = pc_base::load_model('queue_model');
 				$site = pc_base::load_app_class('sites', 'admin');
 				$site_info = $site->get_by_id($info['siteid']);
-				$file = pc_base::load_config('system', 'html_root').'/'.$site_info['dirname'].'/special/'.$info['filename'].'/index.html';
+				$file = SYS_HTML_ROOT.'/'.$site_info['dirname'].'/special/'.$info['filename'].'/index.html';
 				if ($info['ispage']) {
 					for ($i==1; $i>0; $i++) {
 						if ($i>1) {
@@ -240,12 +240,12 @@ class special_api {
 					$queue->add_queue('del', $file, $info['siteid']);
 					unlink(CMS_PATH.$file);
 				}
-				$queue->add_queue('del', pc_base::load_config('system', 'html_root').'/'.$site_info['dirname'].'/special/'.$info['filename'].'/', $info['siteid']);
-				dir_delete(pc_base::load_config('system', 'html_root').'/'.$site_info['dirname'].'/special/'.$info['filename']);
+				$queue->add_queue('del', SYS_HTML_ROOT.'/'.$site_info['dirname'].'/special/'.$info['filename'].'/', $info['siteid']);
+				dir_delete(SYS_HTML_ROOT.'/'.$site_info['dirname'].'/special/'.$info['filename']);
 			}
 		} else {
 			if ($info['ishtml']) {
-				dir_delete(CMS_PATH.pc_base::load_config('system', 'html_root').DIRECTORY_SEPARATOR.'special'.DIRECTORY_SEPARATOR.$info['filename']); //删除专题目录
+				dir_delete(CMS_PATH.SYS_HTML_ROOT.DIRECTORY_SEPARATOR.'special'.DIRECTORY_SEPARATOR.$info['filename']); //删除专题目录
 			}
 		}
 		if(SYS_ATTACHMENT_STAT && SYS_ATTACHMENT_DEL) {
@@ -303,8 +303,8 @@ class special_api {
 				$site_info = $site->get_by_id($siteid);
 				$queue = pc_base::load_model('queue_model');
 				for ($i = 1; $i>0; $i++) {
-					if ($i==1) $file = str_replace($site_info['domain'], pc_base::load_config('system', 'html_root').'/'.$site_info['dirname'].'/', $info['url']);
-					else $file = str_replace(array($site_info['domain'], '.html'), array(pc_base::load_config('system', 'html_root').'/'.$site_info['dirname'].'/', '-'.$i.'.html'), $info['url']);
+					if ($i==1) $file = str_replace($site_info['domain'], SYS_HTML_ROOT.'/'.$site_info['dirname'].'/', $info['url']);
+					else $file = str_replace(array($site_info['domain'], '.html'), array(SYS_HTML_ROOT.'/'.$site_info['dirname'].'/', '-'.$i.'.html'), $info['url']);
 					if (!file_exists(CMS_PATH.$file)) {
 						break;
 					} else {

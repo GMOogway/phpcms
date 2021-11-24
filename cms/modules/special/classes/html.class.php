@@ -185,9 +185,9 @@ class html {
 		//分站时计算路径
 		if ($siteid>1) {
 			$site_info = $this->site->get_by_id($siteid);
-			$file = pc_base::load_config('system', 'html_root').'/'.$site_info['dirname'].'/special/'.$filename.'/index.html';
+			$file = SYS_HTML_ROOT.'/'.$site_info['dirname'].'/special/'.$filename.'/index.html';
 		} else {
-			$file = pc_base::load_config('system', 'html_root').'/special/'.$filename.'/index.html';
+			$file = SYS_HTML_ROOT.'/special/'.$filename.'/index.html';
 		}
 		if(!$ispage) {
 			$type_db = pc_base::load_model('type_model');
@@ -227,14 +227,14 @@ class html {
 	public function create_list($page = 1) {
 		$siteid = get_siteid();
 		$site_info = $this->site->get_by_id($siteid);
-		define('URLRULE', $site_info['domain'].substr(pc_base::load_config('system', 'html_root'), 1).'/special/index.html~'.$site_info['domain'].substr(pc_base::load_config('system', 'html_root'), 1).'/special/index-{$page}.html');
+		define('URLRULE', $site_info['domain'].substr(SYS_HTML_ROOT, 1).'/special/index.html~'.$site_info['domain'].substr(SYS_HTML_ROOT, 1).'/special/index-{$page}.html');
 		//分站时计算路径
 		if ($siteid>1) {
-			if ($page==1) $file = pc_base::load_config('system', 'html_root').'/'.$site_info['dirname'].'/special/index.html';
-			else $file = pc_base::load_config('system', 'html_root').'/'.$site_info['dirname'].'/special/index-'.$page.'.html';
+			if ($page==1) $file = SYS_HTML_ROOT.'/'.$site_info['dirname'].'/special/index.html';
+			else $file = SYS_HTML_ROOT.'/'.$site_info['dirname'].'/special/index-'.$page.'.html';
 		} else {
-			if ($page==1)  $file = pc_base::load_config('system', 'html_root').'/special/index.html';
-			else $file = pc_base::load_config('system', 'html_root').'/special/index-'.$page.'.html';
+			if ($page==1)  $file = SYS_HTML_ROOT.'/special/index.html';
+			else $file = SYS_HTML_ROOT.'/special/index-'.$page.'.html';
 		}
 		$this->queue->add_queue('add', $file, $siteid);
 		$file  = CMS_PATH.$file;
@@ -254,17 +254,17 @@ class html {
 		$s_info = $this->db->get_one(array('id'=>$info['parentid']));
 		extract($s_info);
 		$site_info = $this->site->get_by_id($siteid);
-		define('URLRULE', $site_info['domain'].substr(pc_base::load_config('system', 'html_root'), 1).'/special/{$specialdir}/{$typedir}/type-{$typeid}.html~'.$site_info['domain'].substr(pc_base::load_config('system', 'html_root'), 1).'/special/{$specialdir}/{$typedir}/type-{$typeid}-{$page}.html');
+		define('URLRULE', $site_info['domain'].substr(SYS_HTML_ROOT, 1).'/special/{$specialdir}/{$typedir}/type-{$typeid}.html~'.$site_info['domain'].substr(SYS_HTML_ROOT, 1).'/special/{$specialdir}/{$typedir}/type-{$typeid}-{$page}.html');
 		$GLOBALS['URL_ARRAY'] = array('specialdir'=>$filename, 'typedir'=>$info['typedir'], 'typeid'=>$typeid);
 		$SEO = seo($siteid, '', $info['typename'], '');
 		$template = $list_template ? $list_template : 'list';
 		
 		if ($siteid>1) {
-			if ($page==1) $file = pc_base::load_config('system', 'html_root').'/'.$site_info['dirname'].'/special/'.$filename.'/'.$info['typedir'].'/type-'.$typeid.'.html';
-			else $file = pc_base::load_config('system', 'html_root').'/'.$site_info['dirname'].'/special/'.$filename.'/'.$info['typedir'].'/type-'.$typeid.'-'.$page.'.html';
+			if ($page==1) $file = SYS_HTML_ROOT.'/'.$site_info['dirname'].'/special/'.$filename.'/'.$info['typedir'].'/type-'.$typeid.'.html';
+			else $file = SYS_HTML_ROOT.'/'.$site_info['dirname'].'/special/'.$filename.'/'.$info['typedir'].'/type-'.$typeid.'-'.$page.'.html';
 		} else {
-			if ($page==1) $file = pc_base::load_config('system', 'html_root').'/special/'.$filename.'/'.$info['typedir'].'/type-'.$typeid.'.html';
-			else $file = pc_base::load_config('system', 'html_root').'/special/'.$filename.'/'.$info['typedir'].'/type-'.$typeid.'-'.$page.'.html';
+			if ($page==1) $file = SYS_HTML_ROOT.'/special/'.$filename.'/'.$info['typedir'].'/type-'.$typeid.'.html';
+			else $file = SYS_HTML_ROOT.'/special/'.$filename.'/'.$info['typedir'].'/type-'.$typeid.'-'.$page.'.html';
 		}
 		$this->queue->add_queue('add', $file, $siteid);
 		$file = CMS_PATH.$file;
