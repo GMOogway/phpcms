@@ -1777,6 +1777,14 @@ function tpl_cache($name,$times = 0) {
 }
 
 /**
+ * 读取缓存
+ */
+function get_cache(...$params) {
+	$cache = pc_base::load_sys_class('cache');
+	return $cache->get(...$params);
+}
+
+/**
  * 写入缓存，默认为文件缓存，不加载缓存配置。
  * @param $name 缓存名称
  * @param $data 缓存数据
@@ -2972,6 +2980,16 @@ function siteinfo($siteid) {
 	if (empty($sitelist)) $sitelist = getcache('sitelist', 'commons');
 	if (!$sitelist) return '';
 	return isset($sitelist[$siteid]) ? $sitelist[$siteid] : '';
+}
+
+// 站点信息输出
+function dr_site_info($name, $siteid = SITE_ID) {
+	return get_cache('site', $siteid, 'config', $name);
+}
+
+// 站点设置信息输出
+function dr_site_value($name, $siteid = SITE_ID) {
+	return get_cache('site', $siteid, 'param', $name);
 }
 
 // 判断是否是移动端终端

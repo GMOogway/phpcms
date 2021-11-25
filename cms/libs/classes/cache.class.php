@@ -188,6 +188,15 @@ class cache {
         return '';
     }
 
+    //------------------------------------------------
+
+    // 调用缓存
+    public function clean() {
+        return $this->cachefile->clean();
+    }
+
+    //------------------------------------------------
+
     // 存储内容
     public function set_data($name, $value, $time = 3600) {
 

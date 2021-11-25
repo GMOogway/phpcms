@@ -9,7 +9,10 @@ class sites {
 	private $db;
 	public function __construct() {
 		$this->input = pc_base::load_sys_class('input');
+		$this->config = pc_base::load_sys_class('config');
+		$this->cache = pc_base::load_sys_class('cache');
 		$this->db = pc_base::load_model('site_model');
+		$this->cache->clean();
 	}
 	
 	/**
@@ -48,41 +51,15 @@ class sites {
 		$list = $this->db->select();
 		$data = array();
 		foreach ($list as $key=>$val) {
+			$val['setting'] = dr_string2array($val['setting']);
 			$data[$val['siteid']] = $val;
-			$data[$val['siteid']]['url'] = $val['domain'] ? $val['domain'] : pc_base::load_config('system', 'web_path').$val['dirname'].'/';
+			$data[$val['siteid']]['url'] = $val['domain'] ? $val['domain'] : WEB_PATH.$val['dirname'].'/';
+			$cache[$val['siteid']]['config'] = $val;
+			$cache[$val['siteid']]['param'] = $val['setting'];
 		}
 		setcache('sitelist', $data, 'commons');
-		$sites = array();
-		foreach ($list as $t) {
-			$domain = parse_url($t['domain']);
-			if ($domain['port']) {
-				$sites[$domain['host'].':'.$domain['port']] = $t['siteid'];
-			} else {
-				$sites[$domain['host']] = $t['siteid'];
-			}
-		}
-		$body = '<?php'.PHP_EOL.PHP_EOL.
-            '/**'.PHP_EOL.
-            ' * 站点域名配置文件'.PHP_EOL.
-            ' */'.PHP_EOL.PHP_EOL
-        ;
-		$body .= 'return array('.PHP_EOL.PHP_EOL;
-		foreach ($sites as $name => $val) {
-			if (is_array($val)) {
-				continue;
-			}
-			$name = $this->_safe_replace($name);
-			$body.= '	\''.$name.'\''.$this->_space($name).'=> '.$this->_format_value($val).','.PHP_EOL;
-		}
-		$body.= PHP_EOL.');';
-		$body.= PHP_EOL.'?>';
-		$file = CACHE_PATH.'caches_commons/caches_data/domain_site.cache.php';
-		!is_dir(dirname($file)) && dr_mkdirs(dirname($file));
-
-		// 重置Zend OPcache
-		function_exists('opcache_reset') && opcache_reset();
-		
-		//return @file_put_contents($file, $body, LOCK_EX);
+		$this->cache->set_file('site', $cache);
+		//$this->config->file(CACHE_PATH.'caches_commons/caches_data/site.php', '站点配置文件', 32)->to_require($data);
 	}
 	
 	/**
