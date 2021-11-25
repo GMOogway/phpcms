@@ -267,7 +267,7 @@ class formguide_field extends admin {
 		if($this->input->post('dosubmit')) {
 			if ($this->input->get('formid') && !empty($this->input->get('formid'))) {
 				if ($this->input->post('listorders') && is_array($this->input->post('listorders'))) {
-					foreach($this->input->formguide('listorders') as $id => $listorder) {
+					foreach($this->input->post('listorders') as $id => $listorder) {
 						$this->db->update(array('listorder'=>$listorder),array('fieldid'=>$id));
 					}
 				}

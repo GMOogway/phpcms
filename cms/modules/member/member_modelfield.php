@@ -183,8 +183,8 @@ class member_modelfield extends admin {
 	 * 排序
 	 */
 	public function sort() {
-		if ($this->input->get('listorders') && is_array($this->input->get('listorders'))) {
-			foreach($this->input->get('listorders') as $id => $listorder) {
+		if ($this->input->post('listorders') && is_array($this->input->post('listorders'))) {
+			foreach($this->input->post('listorders') as $id => $listorder) {
 				$this->db->update(array('listorder'=>$listorder),array('fieldid'=>$id));
 			}
 			dr_admin_msg(1,L('operation_success'));
