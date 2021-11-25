@@ -373,13 +373,16 @@ class check extends admin {
 
                 $this->db->table_name = $prefix.'attachment';
                 if (!$this->db->field_exists('filemd5')) {
-                    $this->db->query('ALTER TABLE `'.$this->db->table_name.'` ADD `filemd5` varchar(50) NULL DEFAULT NULL COMMENT \'文件md5值\' AFTER `authcode`');
+                    $this->db->query('ALTER TABLE `'.$this->db->table_name.'` ADD `filemd5` varchar(50) NOT NULL COMMENT \'文件md5值\' AFTER `authcode`');
                 }
                 if (!$this->db->field_exists('remote')) {
                     $this->db->query('ALTER TABLE `'.$this->db->table_name.'` ADD `remote` tinyint(2) unsigned NOT NULL DEFAULT \'0\' COMMENT \'远程附件id\' AFTER `filemd5`');
                 }
                 if (!$this->db->field_exists('attachinfo')) {
                     $this->db->query('ALTER TABLE `'.$this->db->table_name.'` ADD `attachinfo` text NOT NULL COMMENT \'附件信息\' AFTER `remote`');
+                }
+                if (!$this->db->field_exists('related')) {
+                    $this->db->query('ALTER TABLE `'.$this->db->table_name.'` ADD `related` varchar(50) NOT NULL COMMENT \'相关表标识\' AFTER `attachinfo`');
                 }
 
                 $this->db->table_name = $prefix.'module';

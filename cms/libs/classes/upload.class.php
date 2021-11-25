@@ -294,7 +294,8 @@ class upload {
     }
 
     // 附件归档存储
-    public function save_data($data) {
+    public function save_data($data, $related = '') {
+        $related = $related ? $related : 'rand';
         $data['name'] = dr_safe_filename($data['name']);
 
         // 入库索引表
@@ -310,6 +311,7 @@ class upload {
         $uploadedfile['filemd5'] = $data['md5'] ? $data['md5'] : 0;
         $uploadedfile['remote'] = $data['remote'];
         $uploadedfile['attachinfo'] = dr_array2string($data['info']);
+        $uploadedfile['related'] = $related;
         $uploadedfile['filename'] = $data['name'];
         $uploadedfile['filepath'] = $data['file'];
         $uploadedfile['filesize'] = $data['size'];

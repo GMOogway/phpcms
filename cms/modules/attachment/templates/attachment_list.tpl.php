@@ -113,8 +113,9 @@ layui.use(['table'], function(){
             {field: 'type', title: '<?php echo L('类型');?>', width: 80, align: 'center', sort: true},
             {field: 'module', title: '<?php echo L('moudle');?>', width:120, sort: true},
             {field: 'catname', title: '<?php echo L('catname');?>', width:120, sort: true},
-            {field: 'filename', title: '<?php echo L('filename');?>', minWidth:340, sort: true, edit: 'text'},
+            {field: 'filename', title: '<?php echo L('filename');?>', minWidth:200, sort: true, edit: 'text'},
             {field: 'fileext', title: '<?php echo L('fileext');?>', width:120, align: 'center', sort: true},
+            {field: 'related', title: '<?php echo L('附件归属');?>', width:180},
             {field: 'filesize', title: '<?php echo L('filesize');?>', width:120, sort: true},
             {field: 'uploadtime', title: '<?php echo L('uploadtime');?>', width:180, sort: true},
             {width: 160, align: 'center', toolbar: '#action',title:'<?php echo L('operations_manage');?>'<?php if(!is_mobile(0)) {?>, fixed: 'right'<?php }?>}

@@ -103,10 +103,14 @@ CREATE TABLE `cms_attachment` (
   `filemd5` varchar(50) NOT NULL COMMENT '文件md5值',
   `remote` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '远程附件id',
   `attachinfo` text NOT NULL COMMENT '附件信息',
+  `related` varchar(50) NOT NULL COMMENT '相关表标识',
   `siteid` smallint(5) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`aid`),
   KEY `authcode` (`authcode`),
-  KEY `filemd5` (`filemd5`)
+  KEY `relatedtid` (`related`),
+  KEY `fileext` (`fileext`),
+  KEY `filemd5` (`filemd5`),
+  KEY `siteid` (`siteid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- ----------------------------

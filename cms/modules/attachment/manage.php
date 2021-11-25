@@ -64,6 +64,7 @@ class manage extends admin {
 					}
 					$rs['filename'] = $r['filename'];
 					$rs['fileext'] = $r['fileext'].'<img src="'.file_icon('.'.$r['fileext'],'gif').'" />'.($thumb ? '<img title="'.L('att_thumb_manage').'" src="'.IMG_PATH.'admin_img/havthumb.png" onclick="showthumb('.$r['aid'].', \''.new_addslashes($r['filename']).'\')"/>':'').($r['status'] ? ' <img src="'.IMG_PATH.'admin_img/link.png"':'');
+					$rs['related'] = $r['related'];
 					$rs['status'] = $r['status'];
 					$rs['filesize'] = format_file_size($r['filesize']);
 					$rs['uploadtime'] = dr_date($r['uploadtime'],null,'red');

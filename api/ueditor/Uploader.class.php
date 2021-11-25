@@ -75,6 +75,7 @@ class Uploader
         $this->upload->set_userid($this->userid);
         $config = siteinfo($this->siteid);
         $site_setting = string2array($config['setting']);
+        $this->rid = md5(FC_NOW_URL.$this->input->get_user_agent().$this->input->ip_address().$this->userid);
         $this->watermark = $site_setting['ueditor'] ? 1 : intval(intval($this->is_wm));
         $this->attachment_info = $this->upload->get_attach_info((int)$this->attachment, (int)$this->image_reduce);
 
@@ -411,7 +412,7 @@ class Uploader
                 'name' => strstr($this->oriName, '.', true),
                 'info' => $rt['data']['info'],
                 'remote' => $this->attachment_info['id'],
-            ));
+            ), 'ueditor:'.$this->rid);
         } else {
             $this->oriName = $rt['data']['filename'];
             $this->fileSize = $rt['data']['filesize'];

@@ -16,6 +16,8 @@ class download {
         $this->siteid = intval($siteid)== 0 ? 1 : intval($siteid);
         $this->module = $module ? $module : 'content';
         $this->userid = $_SESSION['userid'] ? $_SESSION['userid'] : (param::get_cookie('_userid') ? param::get_cookie('_userid') : param::get_cookie('userid'));
+        $this->input = pc_base::load_sys_class('input');
+        $this->rid = md5(FC_NOW_URL.$this->input->get_user_agent().$this->input->ip_address().intval($this->userid));
     }
 
     /**
@@ -83,7 +85,7 @@ class download {
                                 'file_ext' => $ext,
                             ));
                             if ($rt['code']) {
-                                $att = $upload->save_data($rt['data']);
+                                $att = $upload->save_data($rt['data'], 'ueditor:'.$this->rid);
                                 if ($att['code']) {
                                     // 归档成功
                                     $value = str_replace($img, $rt['data']['url'], $value);
@@ -125,7 +127,7 @@ class download {
                     'file_ext' => $ext,
                 ));
                 if ($rt['code']) {
-                    $att = $upload->save_data($rt['data']);
+                    $att = $upload->save_data($rt['data'], 'ueditor:'.$this->rid);
                     if ($att['code']) {
                         // 归档成功
                         $value = str_replace($img, $rt['data']['url'], $value);

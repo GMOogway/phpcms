@@ -6,6 +6,7 @@ defined('IN_CMS') or exit('No permission resources.');
 
 $userid = $_SESSION['userid'] ? $_SESSION['userid'] : (param::get_cookie('_userid') ? param::get_cookie('_userid') : param::get_cookie('userid'));
 $siteid = param::get_cookie('siteid');
+$rid = md5(FC_NOW_URL.$input->get_user_agent().$input->ip_address().intval($userid));
 if(!$siteid) $siteid = get_siteid() ? get_siteid() : 1 ;
 
 pc_base::load_sys_class('upload','',0);
@@ -27,7 +28,7 @@ if (!$rt['code']) {
 }
 
 // 附件归档
-$data = $upload->save_data($rt['data']);
+$data = $upload->save_data($rt['data'], 'word:'.$rid);
 if (!$data['code']) {
 	exit(dr_array2string($data));
 }
@@ -126,7 +127,7 @@ function readWordToHtml($source) {
 							'attachment' => $upload->get_attach_info(intval($input->get('attachment')), intval($input->get('image_reduce'))),
 						));
 						if ($rt['code']) {
-							$att = $upload->save_data($rt['data']);
+							$att = $upload->save_data($rt['data'], 'word:'.$rid);
 							if ($att['code']) {
 								// 归档成功
 								$html .= '<img src="'.$rt['data']['url'].'" title="'.$rt['data']['name'].'" alt="'.$rt['data']['name'].'"/>';
