@@ -32,7 +32,7 @@ class config {
      * @param	array	$data	对应值数组	array('变量名称' => '变量值'), ... 为空时直接生成$var
      * @return	int
      */
-    public function to_require_one($var, $data = []) {
+    public function to_require_one($var, $data = array()) {
 
         $body = $this->header.'return array('.PHP_EOL.PHP_EOL;
         if ($data) {
@@ -71,7 +71,7 @@ class config {
     public function to_require($data) {
 
         if (!is_array($data)) {
-            $data = [];
+            $data = array();
         }
 
         $body = $this->header.'return ';
@@ -98,10 +98,10 @@ class config {
             return NULL;
         }
 
-        $body = $this->header.'return ['.PHP_EOL.PHP_EOL;
+        $body = $this->header.'return array('.PHP_EOL.PHP_EOL;
         foreach ($value as $id => $data) {
 
-            $body.= '       '.$id .' => ['.PHP_EOL.PHP_EOL;
+            $body.= '       '.$id .' => array('.PHP_EOL.PHP_EOL;
             foreach ($data as $name => $val) {
                 if (is_array($data[$name])) {
                     continue;
@@ -109,9 +109,9 @@ class config {
                 $name = $this->_safe_replace($name);
                 $body.= '       	   \''.$name.'\''.$this->_space($name).'=> '.$this->_format_value($data[$name]).','.PHP_EOL;
             }
-            $body.= PHP_EOL.'       ],'.PHP_EOL.PHP_EOL;
+            $body.= PHP_EOL.'       ),'.PHP_EOL.PHP_EOL;
         }
-        $body.= PHP_EOL.'];';
+        $body.= PHP_EOL.');';
         
         !is_dir(dirname($this->file)) && create_folder(dirname($this->file));
 
@@ -136,7 +136,7 @@ class config {
      * 格式化值
      */
     private function _format_value($value) {
-        return is_numeric($value) && strlen($value) <= 10 ? $value : '\''.str_replace(['\'', '\\'], '', $value).'\'';
+        return is_numeric($value) && strlen($value) <= 10 ? $value : '\''.str_replace(array('\'', '\\'), '', $value).'\'';
     }
 
     /**
@@ -144,7 +144,7 @@ class config {
      */
     private function _safe_replace($name) {
         return str_replace(
-            ['..', '\\', '<', '>', "{", '}', ';', '[', ']', '\'', '"', '*', '?'],
+            array('..', '\\', '<', '>', "{", '}', ';', '[', ']', '\'', '"', '*', '?'),
             '',
             $name
         );
