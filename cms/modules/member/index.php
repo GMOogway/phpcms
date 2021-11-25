@@ -168,7 +168,7 @@ class index extends foreground {
 					$this->member_login_db->update(array('logintime' => SYS_TIME,), array('uid'=>$userid));
 					$config = getcache('common', 'commons');
 					if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
-						$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME);
+						$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME, 1);
 					}
 				}
 			}
@@ -716,7 +716,7 @@ class index extends foreground {
 			$this->member_login_db->update(array('logintime' => SYS_TIME,), array('uid'=>$userid));
 			$config = getcache('common', 'commons');
 			if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
-				$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME);
+				$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME, 1);
 			}
 			$forward = isset($_POST['forward']) && !empty($_POST['forward']) ? urldecode($_POST['forward']) : 'index.php?m=member&c=index';
 			showmessage(L('login_success'), $forward);
@@ -770,7 +770,7 @@ class index extends foreground {
 			$this->member_login_db->update(array('logintime' => SYS_TIME,), array('uid'=>$userid));
 			$config = getcache('common', 'commons');
 			if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
-				$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME);
+				$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME, 1);
 			}
 		}
 		$this->cache->del_auth_data('admin_login_member', 1);
@@ -788,7 +788,7 @@ class index extends foreground {
 		} else {
 			$config = getcache('common', 'commons');
 			if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
-				$this->cache->del_auth_data('member_option_'.param::get_cookie('_userid'));
+				$this->cache->del_auth_data('member_option_'.param::get_cookie('_userid'), 1);
 			}
 			param::set_cookie('auth', '');
 			param::set_cookie('_userid', '');
@@ -1111,7 +1111,7 @@ class index extends foreground {
 					$this->member_login_db->update(array('logintime' => SYS_TIME,), array('uid'=>$userid));
 					$config = getcache('common', 'commons');
 					if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
-						$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME);
+						$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME, 1);
 					}
 					$forward = isset($_GET['forward']) && !empty($_GET['forward']) ? $_GET['forward'] : 'index.php?m=member&c=index';
 					showmessage(L('login_success'), $forward);
@@ -1235,7 +1235,7 @@ class index extends foreground {
 					$this->member_login_db->update(array('logintime' => SYS_TIME,), array('uid'=>$userid));
 					$config = getcache('common', 'commons');
 					if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
-						$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME);
+						$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME, 1);
 					}
 					param::set_cookie('_from', 'snda');
 					$forward = isset($_GET['forward']) && !empty($_GET['forward']) ? $_GET['forward'] : 'index.php?m=member&c=index';
@@ -1303,7 +1303,7 @@ class index extends foreground {
 								$this->member_login_db->update(array('logintime' => SYS_TIME,), array('uid'=>$userid));
 								$config = getcache('common', 'commons');
 								if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
-									$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME);
+									$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME, 1);
 								}
 								$forward = isset($_GET['forward']) && !empty($_GET['forward']) ? $_GET['forward'] : 'index.php?m=member&c=index';
 								showmessage(L('login_success'), $forward);
@@ -1367,7 +1367,7 @@ class index extends foreground {
 					$this->member_login_db->update(array('logintime' => SYS_TIME,), array('uid'=>$userid));
 					$config = getcache('common', 'commons');
 					if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
-						$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME);
+						$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME, 1);
 					}
 					param::set_cookie('_from', 'snda');
 					$forward = isset($_GET['forward']) && !empty($_GET['forward']) ? $_GET['forward'] : 'index.php?m=member&c=index';

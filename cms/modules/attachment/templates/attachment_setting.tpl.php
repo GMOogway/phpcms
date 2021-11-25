@@ -83,7 +83,7 @@ include $this->admin_tpl('header', 'admin');?>
                         <label class="col-md-2 control-label"><?php echo L('防止重复上传');?></label>
                         <div class="col-md-9">
                             <input type="checkbox" name="data[sys_attachment_cf]" value="1" <?php echo ($sys_attachment_cf) ? ' checked' : ''?> data-on-text="<?php echo L('开启');?>" data-off-text="<?php echo L('关闭');?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
-                            <span class="help-block"><?php echo L('当存在重复上传同一文件时值只存储一个文件');?></span>
+                            <span class="help-block"><?php echo L('当存在重复上传同一文件时只存储一个文件');?></span>
                         </div>
                     </div>
 

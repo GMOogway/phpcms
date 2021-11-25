@@ -24,11 +24,7 @@ class module extends admin {
 		}
 		define('INSTALL', true);
 		$modules = $this->db->select('', '*', '', '', '', 'module');
-		$total = count($dirs_arr);
-		$dirs_arr = array_chunk($dirs_arr, 20, true);
-		$page = max(intval($this->input->get('page')), 1);
-		$pages = pages($total, $page, 20);
-		$directory = $dirs_arr[intval($page-1)];
+		$directory = $dirs_arr;
 		include $this->admin_tpl('module_list');
 	}
 	

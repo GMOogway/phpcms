@@ -387,20 +387,40 @@ class Uploader
      */
     private function save_attach($rt)
     {
-        $rt = $this->upload->save_data(array(
-            'ext' => trim($this->fileType, '.'),
-            'url' => $this->fileUrl,
-            'md5' => $rt['data']['md5'],
-            'file' => $this->fullName,
-            'size' => $this->fileSize,
-            'path' => $this->attachment_info['value']['path'].$this->fullName,
-            'name' => strstr($this->oriName, '.', true),
-            'info' => $rt['data']['info'],
-            'remote' => $this->attachment_info['id'],
-        ));
-        if ($rt['code']) {
-            $this->aid = $rt['code'];
-            $this->upload_json($this->aid,$this->fileUrl,strstr($this->oriName, '.', true),format_file_size($this->fileSize));
+        $data = array();
+        if (defined('SYS_ATTACHMENT_CF') && SYS_ATTACHMENT_CF && $rt['data']['md5']) {
+            $att_db = pc_base::load_model('attachment_model');
+            $att = $att_db->get_one(array('userid'=>intval($this->userid),'filemd5'=>$rt['data']['md5'],'fileext'=>trim($this->fileType, '.'),'filesize'=>$this->fileSize));
+            if ($att) {
+                $data = dr_return_data($att['aid'], 'ok');
+                // 删除现有附件
+                // 开始删除文件
+                $storage = new storage($this->module,$this->catid,$this->siteid);
+                $storage->delete($this->upload->get_attach_info((int)$this->attachment), $this->fullName);
+                $rt['data'] = get_attachment($att['aid']);
+            }
+        }
+        if (!$data) {
+            $data = $this->upload->save_data(array(
+                'ext' => trim($this->fileType, '.'),
+                'url' => $this->fileUrl,
+                'md5' => $rt['data']['md5'],
+                'file' => $this->fullName,
+                'size' => $this->fileSize,
+                'path' => $this->attachment_info['value']['path'].$this->fullName,
+                'name' => strstr($this->oriName, '.', true),
+                'info' => $rt['data']['info'],
+                'remote' => $this->attachment_info['id'],
+            ));
+        } else {
+            $this->oriName = $rt['data']['filename'];
+            $this->fileSize = $rt['data']['filesize'];
+            $this->fileType = $rt['data']['fileext'];
+            $this->fullName = $rt['data']['filepath'];
+            $this->fileUrl = $this->attachment_info['url'].$rt['data']['filepath'];
+        }
+        if($rt && $data) {
+            $this->upload_json($data['code'],$this->fileUrl,strstr($this->oriName, '.', true),format_file_size($this->fileSize));
         } else {
             $this->stateInfo = $rt['msg'];
         }

@@ -40,7 +40,7 @@ $(function(){
 <body>
 <style type="text/css">
 html{_overflow-y:scroll}
-.scroll-to-top{padding:1px;text-align:center;position:fixed;bottom:60px;z-index:10002;display:none;right:20px}
+.scroll-to-top{padding:1px;text-align:center;position:fixed;bottom:32px;z-index:10002;display:none;right:20px}
 .scroll-to-top>i{display:inline-block;color:#687991;font-size:30px;opacity:.6;filter:alpha(opacity=60)}
 .scroll-to-top:hover{cursor:pointer}
 .scroll-to-top:hover>i{opacity:1;filter:alpha(opacity=100)}

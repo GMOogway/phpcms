@@ -103,7 +103,7 @@ class index extends admin {
 			$_SESSION['login_attr'] = $login_attr;
 			$_SESSION['roleid'] = $r['roleid'];
 			$_SESSION['lock_screen'] = 0;
-			$this->cache->set_data(COOKIE_PRE.ip().'pc_hash', bin2hex(random_bytes(16)), 3600);
+			$this->cache->set_auth_data(COOKIE_PRE.ip().'pc_hash', bin2hex(random_bytes(16)), 1);
 			$site = pc_base::load_app_class('sites');
 			$sitelist = $site->get_list($_SESSION['roleid']);
 			$default_siteid = self::return_siteid();
@@ -118,7 +118,7 @@ class index extends admin {
 			$log = admin::admin_get_log($r['userid']);
 			$this->admin_login_db->update(array('logintime' => SYS_TIME,), array('uid'=>$r['userid']));
 			if (isset($setting['login_use']) && dr_in_array('admin', $setting['login_use'])) {
-				$this->cache->set_auth_data('admin_option_'.$r['userid'], SYS_TIME);
+				$this->cache->set_auth_data('admin_option_'.$r['userid'], SYS_TIME, 1);
 			}
 			dr_json(1, L('login_success'), array('url' => '?m=admin&c=index&pc_hash='.dr_get_csrf_token()));
 		} else {
@@ -156,7 +156,7 @@ class index extends admin {
 		$_SESSION['login_attr'] = $login_attr;
 		$_SESSION['roleid'] = $member['roleid'];
 		$_SESSION['lock_screen'] = 0;
-		$this->cache->set_data(COOKIE_PRE.ip().'pc_hash', bin2hex(random_bytes(16)), 3600);
+		$this->cache->set_auth_data(COOKIE_PRE.ip().'pc_hash', bin2hex(random_bytes(16)), 1);
 		$default_siteid = self::return_siteid();
 		$cookie_time = SYS_TIME+86400*30;
 		if(!$member['lang']) $member['lang'] = 'zh-cn';
@@ -170,7 +170,7 @@ class index extends admin {
 		$this->admin_login_db->update(array('logintime' => SYS_TIME,), array('uid'=>$member['userid']));
 		$config = getcache('common','commons');
 		if (isset($config['login_use']) && dr_in_array('admin', $config['login_use'])) {
-			$this->cache->set_auth_data('admin_option_'.$member['userid'], SYS_TIME);
+			$this->cache->set_auth_data('admin_option_'.$member['userid'], SYS_TIME, 1);
 		}
 		dr_admin_msg(1,L('fclient_sn_succ'),'?m=admin&c=index');
 	}
@@ -178,13 +178,13 @@ class index extends admin {
 	public function public_logout() {
 		$config = getcache('common','commons');
 		if (isset($config['login_use']) && dr_in_array('admin', $config['login_use'])) {
-			$this->cache->del_auth_data('admin_option_'.$_SESSION['userid']);
+			$this->cache->del_auth_data('admin_option_'.$_SESSION['userid'], 1);
 		}
 		$_SESSION['userid'] = 0;
 		$_SESSION['roleid'] = 0;
 		param::set_cookie('admin_username','');
 		param::set_cookie('userid',0);
-		$this->cache->clear(COOKIE_PRE.ip().'pc_hash');
+		$this->cache->del_auth_data(COOKIE_PRE.ip().'pc_hash', 1);
 
 		dr_admin_msg(1,L('logout_success'),'?m=admin&c=index&a='.SYS_ADMIN_PATH);
 	}

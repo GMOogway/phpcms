@@ -92,7 +92,7 @@ class attachments {
 			$fn = intval($this->input->get('CKEditorFuncNum'));
 			$rt['data']['filename'] && $rt['data']['name'] = $rt['data']['filename'];
 			$rt['data']['size'] = $rt['data']['size'] ? format_file_size($rt['data']['size']) : format_file_size($rt['data']['filesize']);
-			$this->upload_json($data['code'] ? $data['code'] : $data['aid'],$rt['data']['url'],$rt['data']['name'],$rt['data']['size']);
+			$this->upload_json($data['code'],$rt['data']['url'],$rt['data']['name'],$rt['data']['size']);
 			$result = array("uploaded"=>true,
 				"fileName"=>$rt['data']['name'],
 				"url"=>$rt['data']['url'],
@@ -173,7 +173,7 @@ class attachments {
 				if($upload->uploadedfiles[0]['isimage'] || $rt['data']['isimage']) {
 					$rt['data']['ext'] = 1;
 				}
-				$rt['data']['id'] = $data['code'] ? $data['code'] : $data['aid'];
+				$rt['data']['id'] = $data['code'];
 				$rt['data']['filename'] && $rt['data']['name'] = $rt['data']['filename'];
 				$rt['data']['size'] = $rt['data']['size'] ? format_file_size($rt['data']['size']) : format_file_size($rt['data']['filesize']);
 				dr_json(1, L('att_upload_succ'), $rt['data']);
@@ -262,8 +262,8 @@ class attachments {
 		
 		$rt['data']['filename'] && $rt['data']['name'] = $rt['data']['filename'];
 		$rt['data']['size'] = $rt['data']['size'] ? format_file_size($rt['data']['size']) : format_file_size($rt['data']['filesize']);
-		$this->upload_json($data['code'] ? $data['code'] : $data['aid'],$rt['data']['url'],$rt['data']['name'],$rt['data']['size']);
-		exit(dr_array2string(array('code' => 1, 'msg' => L('上传成功'), 'id' => $data['code'] ? $data['code'] : $data['aid'], 'info' => $rt['data'])));
+		$this->upload_json($data['code'],$rt['data']['url'],$rt['data']['name'],$rt['data']['size']);
+		exit(dr_array2string(array('code' => 1, 'msg' => L('上传成功'), 'id' => $data['code'], 'info' => $rt['data'])));
 	}
 	/**
 	 * 获取临时未处理文件列表

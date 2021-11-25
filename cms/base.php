@@ -48,7 +48,7 @@ define('ROOT_URL', siteurl(1).'/');
 
 // 系统变量
 /*$system = array(
-    'WEB_PATH' => '',
+	'WEB_PATH' => '',
 	'SESSION_STORAGE' => 'mysqli',
 	'SESSION_TTL' => 1800,
 	'SESSION_SAVEPATH' => CACHE_PATH.'sessions/',
@@ -209,9 +209,9 @@ define('SYS_EXECUTION_SQL', pc_base::load_config('system','execution_sql'));
 //网站创始人ID
 define('ADMIN_FOUNDERS', explode(',', pc_base::load_config('system','admin_founders')));
 //生成静态文件路径
-define('SYS_HTML_ROOT', explode(',', pc_base::load_config('system','html_root')));
+define('SYS_HTML_ROOT', pc_base::load_config('system','html_root'));
 //生成手机静态文件路径
-define('SYS_MOBILE_ROOT', explode(',', pc_base::load_config('system','mobile_root')));
+define('SYS_MOBILE_ROOT', pc_base::load_config('system','mobile_root'));
 //站点id
 !defined('SITE_ID') && define('SITE_ID', 1);
 define('SITE_URL', siteurl(SITE_ID));
@@ -351,12 +351,18 @@ if (is_cli()) {
 
 	// 伪静态字符串
 	$uu = isset($_SERVER['HTTP_X_REWRITE_URL']) || trim($_SERVER['REQUEST_URI'], '/') == SELF ? trim($_SERVER['HTTP_X_REWRITE_URL'], '/') : ($_SERVER['REQUEST_URI'] ? trim($_SERVER['REQUEST_URI'], '/') : NULL);
-    if (defined('WEB_PATH') && WEB_PATH && strpos($uu, WEB_PATH) !== false &&  strpos($uu, WEB_PATH) === 0) {
-        $uu = trim(substr($uu, strlen(WEB_PATH)), '/');
-        define('WEB_DIR', trim(WEB_PATH, '/').'/');
-    } else {
-        define('WEB_DIR', '/');
-    }
+	if (defined('WEB_PATH') && WEB_PATH && strpos($uu, WEB_PATH) !== false &&  strpos($uu, WEB_PATH) === 0) {
+		$uu = trim(substr($uu, strlen(WEB_PATH)), '/');
+		define('WEB_DIR', trim(WEB_PATH, '/').'/');
+	} else {
+		define('WEB_DIR', '/');
+	}
+
+	// 以index.php或者?开头的uri不做处理
+	$uri = strpos($uu, SELF) === 0 || strpos($uu, '?') === 0 ? '' : $uu;
+
+	// 当前URI
+	define('CMSURI', $uri);
 }
 
 if (defined('SYS_CSRF') && SYS_CSRF && defined('IS_API') && !IS_API && !in_array($_GET['c'], array('attachments')) && !in_array($_GET['a'], array('public_upload_index', 'uploadavatar', 'public_ajax_add_panel', 'public_ajax_delete_panel')) && defined('IS_INSTALL') && !IS_INSTALL) {

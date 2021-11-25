@@ -41,7 +41,7 @@ class admin {
 			$user = $admin_db->get_one(array('userid'=>$userid));
 			if ($user && $login_attr!=md5(SYS_KEY.$user['password'].(isset($user['login_attr']) ? $user['login_attr'] : ''))) {
 				if (isset($config['login_use']) && dr_in_array('admin', $config['login_use'])) {
-					$cache->del_auth_data('admin_option_'.$_SESSION['userid']);
+					$cache->del_auth_data('admin_option_'.$_SESSION['userid'], 1);
 				}
 				$_SESSION['userid'] = 0;
 				$_SESSION['login_attr'] = '';
@@ -49,7 +49,7 @@ class admin {
 				param::set_cookie('admin_username','');
 				param::set_cookie('userid',0);
 				param::set_cookie('login_attr', '');
-				$cache->clear(COOKIE_PRE.ip().'pc_hash');
+				$cache->del_auth_data(COOKIE_PRE.ip().'pc_hash', 1);
 				redirect('?m=admin&c=index&a='.SYS_ADMIN_PATH);
 			}
 			if(!isset($_SESSION['userid']) || !isset($_SESSION['roleid']) || !$_SESSION['userid'] || !$_SESSION['roleid'] || $userid != $_SESSION['userid']) dr_admin_msg(0,L('admin_login'),'?m=admin&c=index&a='.SYS_ADMIN_PATH);
@@ -409,15 +409,15 @@ class admin {
 					return; // 本身控制器不判断
 				}
 				if (isset($config['login_is_option']) && $config['login_is_option'] && $config['login_exit_time']) {
-					$time = (int)$cache->get_auth_data('admin_option_'.$userid);
+					$time = (int)$cache->get_auth_data('admin_option_'.$userid, 1);
 					$ctime = SYS_TIME - $time;
 					if ($time && SYS_TIME - $time > $config['login_exit_time'] * 60) {
 						// 长时间不动作退出
 						$admin_db->update(array('login_attr'=>rand(0, 99999)), array('userid'=>$log['uid']));
-						$cache->del_auth_data('admin_option_'.$userid);
+						$cache->del_auth_data('admin_option_'.$userid, 1);
 						dr_admin_msg(0,L('长时间（'.ceil($ctime/60).'分钟）未操作，当前账号自动退出'),'?m=admin&c=index&a='.SYS_ADMIN_PATH);
 					}
-					$cache->set_auth_data('admin_option_'.$userid, SYS_TIME);
+					$cache->set_auth_data('admin_option_'.$userid, SYS_TIME, 1);
 				}
 			}
 		}
