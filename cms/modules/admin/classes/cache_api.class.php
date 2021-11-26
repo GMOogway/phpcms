@@ -12,6 +12,7 @@ class cache_api {
 	
 	public function __construct() {
 		$this->input = pc_base::load_sys_class('input');
+		$this->config = pc_base::load_sys_class('config');
 		$this->db = '';
 		$this->siteid = get_siteid() ? get_siteid() : 1 ;
 	}
@@ -342,7 +343,9 @@ class cache_api {
 		if ($param=='search') {
 			$this->search_type();
 		} else {
-			setcache('type_'.$param, $datas, 'commons');
+			if ($param) {
+				setcache('type_'.$param, $datas, 'commons');
+			}
 		}
 		return true;
 	}

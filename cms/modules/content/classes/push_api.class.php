@@ -52,65 +52,31 @@ class push_api {
 					$this->categorys = getcache('category_content_'.$siteid,'commons');
 					$modelid = $this->categorys[$catid]['modelid'];
 					$this->db->set_model($modelid);
-						$newid = $this->db->insert(
-						array('title'=>addslashes($r['title']),
-							'style'=>addslashes($r['style']),
-							'thumb'=>addslashes($r['thumb']),
-							'keywords'=>addslashes($r['keywords']),
-							'description'=>addslashes($r['description']),
-							'status'=>addslashes($r['status']),
-							'catid'=>addslashes($catid),
-							'url'=>addslashes($linkurl),
-							'sysadd'=>1,
-							'username'=>addslashes($r['username']),
-							'inputtime'=>addslashes($r['inputtime']),
-							'updatetime'=>addslashes($r['updatetime']),
-							'islink'=>1
-						),true);
-						$this->db->table_name = $this->db->table_name.'_data';
-						$this->db->insert(array('id'=>$newid));
-						$hitsid = 'c-'.$modelid.'-'.$newid;
-						$this->hits_db->insert(array('hitsid'=>$hitsid,'catid'=>$catid,'updatetime'=>SYS_TIME));
+					$newid = $this->db->insert(
+					array('title'=>addslashes($r['title']),
+						'style'=>addslashes($r['style']),
+						'thumb'=>addslashes($r['thumb']),
+						'keywords'=>addslashes($r['keywords']),
+						'description'=>addslashes($r['description']),
+						'status'=>addslashes($r['status']),
+						'catid'=>addslashes($catid),
+						'url'=>addslashes($linkurl),
+						'sysadd'=>1,
+						'username'=>addslashes($r['username']),
+						'inputtime'=>addslashes($r['inputtime']),
+						'updatetime'=>addslashes($r['updatetime']),
+						'islink'=>1
+					),true);
+					$this->db->table_name = $this->db->table_name.'_data';
+					$this->db->insert(array('id'=>$newid));
+					$hitsid = 'c-'.$modelid.'-'.$newid;
+					$this->hits_db->insert(array('hitsid'=>$hitsid,'catid'=>$catid,'updatetime'=>SYS_TIME));
+					$this->db->set_model($modelid);
+					$number = $this->db->count(array('catid'=>$catid));
+					$this->category->update(array('items'=>$number),array('catid'=>$catid));
 				}
-				$this->db->set_model($modelid);
-				$number = $this->db->count(array('catid'=>$catid));
-				$this->category->update(array('items'=>$number),array('catid'=>$catid));
-				$categorys = array();
-				$models = getcache('model','commons');
-				foreach ($models as $modelid=>$model) {
-					$datas = $this->category->select(array('modelid'=>$modelid),'catid,type,items',10000);
-					$array = array();
-					foreach ($datas as $r) {
-						if($r['type']==0) $array[$r['catid']] = $r['items'];
-					}
-					setcache('category_items_'.$modelid, $array,'commons');
-				}
-				$array = array();
-				$categorys = $this->category->select('`module`=\'content\'','catid,siteid',20000,'listorder ASC');
-				foreach ($categorys as $r) {
-					$array[$r['catid']] = $r['siteid'];
-				}
-				setcache('category_content',$array,'commons');
-				$categorys = $this->categorys = array();
-				$this->categorys = $this->category->select(array('siteid'=>$this->siteid, 'module'=>'content'),'*',10000,'listorder ASC');
-				foreach($this->categorys as $r) {
-					unset($r['module']);
-					$setting = string2array($r['setting']);
-					$r['create_to_html_root'] = $setting['create_to_html_root'];
-					$r['ishtml'] = $setting['ishtml'];
-					$r['content_ishtml'] = $setting['content_ishtml'];
-					$r['category_ruleid'] = $setting['category_ruleid'];
-					$r['show_ruleid'] = $setting['show_ruleid'];
-					$r['workflowid'] = $setting['workflowid'];
-					$r['isdomain'] = '0';
-					if(!preg_match('/^(http|https):\/\//', $r['url'])) {
-						$r['url'] = siteurl($r['siteid']).$r['url'];
-					} elseif ($r['ishtml']) {
-						$r['isdomain'] = '1';
-					}
-					$categorys[$r['catid']] = $r;
-				}
-				setcache('category_content_'.$this->siteid,$categorys,'commons');
+				$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
+				$this->cache_api->cache('category');
 			}
 			return true;
 		} else {
@@ -196,54 +162,6 @@ class push_api {
 				$r = $this->db->get_one(array('id'=>$id));
 				$this->db->table_name = $this->db->table_name.'_data';
 				$r2 = $this->db->get_one(array('id'=>$id));
-				/*foreach($ids as $catid) {
-					$siteid = $siteids[$catid];
-					$this->categorys = getcache('category_content_'.$siteid,'commons');
-					$modelid = $this->categorys[$catid]['modelid'];
-					$this->db->set_model($modelid);
-					$newid = $this->db->insert(
-					array('title'=>addslashes($r['title']),
-						'style'=>addslashes($r['style']),
-						'thumb'=>addslashes($r['thumb']),
-						'keywords'=>addslashes($r['keywords']),
-						'description'=>addslashes($r['description']),
-						'status'=>addslashes($r['status']),
-						'catid'=>addslashes($catid),
-						'sysadd'=>1,
-						'username'=>addslashes($r['username']),
-						'inputtime'=>addslashes($r['inputtime']),
-						'updatetime'=>addslashes($r['updatetime']),
-						'islink'=>0
-					),true);
-					$category = $this->category->get_one(array('catid'=>$catid));
-					$catdir = $category['catdir'];
-					$parentdir = $category['parentdir'];
-					$setting = string2array($category['setting']);
-					$url = $this->url->get_one(array('urlruleid'=>$setting['show_ruleid'],'module'=>'content','file'=>'show','ishtml'=>$setting['content_ishtml']));
-					$linkurl = explode("|",$url['urlrule']);
-					$linkurl = $linkurl[0];
-					$linkurl = str_replace('{$year}',date('Y',$r['inputtime']),$linkurl);
-					$linkurl = str_replace('{$month}',date('m',$r['inputtime']),$linkurl);
-					$linkurl = str_replace('{$day}',date('d',$r['inputtime']),$linkurl);
-					$linkurl = str_replace('{$categorydir}',$parentdir,$linkurl);
-					$linkurl = str_replace('{$catdir}',$catdir,$linkurl);
-					$linkurl = str_replace('{$catid}',$catid,$linkurl);
-					$linkurl = str_replace('{$id}',$newid,$linkurl);
-					if ($setting['content_ishtml']=='1') {
-						$linkurl = 'html/'.$linkurl;
-					}
-					$linkurl = siteurl($category['siteid']).'/'.$linkurl;
-					$this->db->update(array('url'=>addslashes($linkurl)),array('id'=>$newid));
-					$this->db->table_name = $this->db->table_name.'_data';
-					$this->db->insert(array('id'=>$newid,'content'=>addslashes($r2['content']),'paginationtype'=>addslashes($r2['paginationtype']),'maxcharperpage'=>addslashes($r2['maxcharperpage']),'template'=>addslashes($r2['template'])));
-					$hitsid = 'c-'.$modelid.'-'.$newid;
-					$this->hits_db->insert(array('hitsid'=>$hitsid,'catid'=>$catid,'updatetime'=>SYS_TIME));
-					$this->db->set_model($modelid);
-					$number = $this->db->count(array('catid'=>$catid));
-					$this->category->update(array('items'=>$number),array('catid'=>$catid));
-					$categorys = array();
-					$models = getcache('model','commons');
-				}*/
 				foreach($ids as $catid) {
 					$siteid = $siteids[$catid];
 					$this->categorys = getcache('category_content_'.$siteid,'commons');
@@ -305,43 +223,9 @@ class push_api {
 					$this->db->set_model($modelid);
 					$number = $this->db->count(array('catid'=>$catid));
 					$this->category->update(array('items'=>$number),array('catid'=>$catid));
-					$categorys = array();
-					$models = getcache('model','commons');
 				}
-				foreach ($models as $modelid=>$model) {
-					$datas = $this->category->select(array('modelid'=>$modelid),'catid,type,items',10000);
-					$array = array();
-					foreach ($datas as $r) {
-						if($r['type']==0) $array[$r['catid']] = $r['items'];
-					}
-					setcache('category_items_'.$modelid, $array,'commons');
-				}
-				$array = array();
-				$categorys = $this->category->select('`module`=\'content\'','catid,siteid',20000,'listorder ASC');
-				foreach ($categorys as $r) {
-					$array[$r['catid']] = $r['siteid'];
-				}
-				setcache('category_content',$array,'commons');
-				$categorys = $this->categorys = array();
-				$this->categorys = $this->category->select(array('siteid'=>$this->siteid, 'module'=>'content'),'*',10000,'listorder ASC');
-				foreach($this->categorys as $r) {
-					unset($r['module']);
-					$setting = string2array($r['setting']);
-					$r['create_to_html_root'] = $setting['create_to_html_root'];
-					$r['ishtml'] = $setting['ishtml'];
-					$r['content_ishtml'] = $setting['content_ishtml'];
-					$r['category_ruleid'] = $setting['category_ruleid'];
-					$r['show_ruleid'] = $setting['show_ruleid'];
-					$r['workflowid'] = $setting['workflowid'];
-					$r['isdomain'] = '0';
-					if(!preg_match('/^(http|https):\/\//', $r['url'])) {
-						$r['url'] = siteurl($r['siteid']).$r['url'];
-					} elseif ($r['ishtml']) {
-						$r['isdomain'] = '1';
-					}
-					$categorys[$r['catid']] = $r;
-				}
-				setcache('category_content_'.$this->siteid,$categorys,'commons');
+				$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
+				$this->cache_api->cache('category');
 			}
 			return true;
 		} else {

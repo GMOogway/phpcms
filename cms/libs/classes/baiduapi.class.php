@@ -40,8 +40,9 @@ class baiduapi {
     }
 
     static function _access_token() {
+        $cache = pc_base::load_sys_class('cache');
 
-        $cache_data = getcache('baidu_api_access_token', 'commons');;
+        $cache_data = $cache->get_data('baidu_api_access_token');
         if ($cache_data['endtime'] && $cache_data['endtime'] > SYS_TIME && $cache_data['access_token']) {
             return dr_return_data(1, $cache_data['access_token']);
         }
@@ -56,9 +57,9 @@ class baiduapi {
         }
 
         $res['data']['endtime'] = SYS_TIME + 100000;
-        $rt = setcache('baidu_api_access_token', $res['data'], 'commons');
+        $rt = $cache->set_data('baidu_api_access_token', $res['data'], 1000000);
         if (!$rt) {
-            return dr_return_data(0, 'BaiduApi AccessToken：/caches/caches_commons/目录不可写，文件写入失败');
+            return dr_return_data(0, 'BaiduApi AccessToken：/caches/caches_file/caches_data/目录不可写，文件写入失败');
         }
 
         return dr_return_data(1, $res['data']['access_token']);

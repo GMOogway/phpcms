@@ -51,11 +51,12 @@ class sites {
 		$list = $this->db->select();
 		$data = array();
 		foreach ($list as $key=>$val) {
-			$val['setting'] = dr_string2array($val['setting']);
 			$data[$val['siteid']] = $val;
 			$data[$val['siteid']]['url'] = $val['domain'] ? $val['domain'] : WEB_PATH.$val['dirname'].'/';
-			$cache[$val['siteid']]['config'] = $val;
-			$cache[$val['siteid']]['param'] = $val['setting'];
+			$dataval = $val;
+			unset($dataval['siteid'], $dataval['setting']);
+			$cache[$val['siteid']]['config'] = $dataval;
+			$cache[$val['siteid']]['param'] = dr_string2array($val['setting']);
 		}
 		setcache('sitelist', $data, 'commons');
 		$this->cache->set_file('site', $cache);

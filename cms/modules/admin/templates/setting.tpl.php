@@ -116,7 +116,7 @@ include $this->admin_tpl('header');?>
                             <span class="help-block"><?php echo L('setting_category_ajax_desc')?></span>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="dr_row_sys_max_category">
                         <label class="col-md-2 control-label"><?php echo L('setting_max_category')?></label>
                         <div class="col-md-9">
                             <input class="form-control input-large" type="text" id="sys_max_category" name="setconfig[sys_max_category]" value="<?php echo $sys_max_category;?>" >

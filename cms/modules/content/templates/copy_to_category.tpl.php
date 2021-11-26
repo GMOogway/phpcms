@@ -48,7 +48,7 @@ $siteid = $this->siteid;
 echo '<div class="mt-radio-inline">';
 	foreach($sitelist as $_k=>$_v) {
 		$checked = $_k==$siteid ? 'checked' : '';
-		echo '<label class="mt-radio mt-radio-outline"><input type=\'radio\' name=\'select_siteid\' '.$checked.' onclick=\'change_siteid($_k)\'> '.$_v['name'].' <span></span></label>';
+		echo '<label class="mt-radio mt-radio-outline"><input type=\'radio\' name=\'select_siteid\' '.$checked.' onclick=\'change_siteid('.$_k.')\'> '.$_v['name'].' <span></span></label>';
 
 	}
 echo '</div>';

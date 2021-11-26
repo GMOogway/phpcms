@@ -18,6 +18,7 @@ class cache_file {
 	 */
 	public function __construct($setting = '') {
 		$this->get_setting($setting);
+		$this->header = '<?php'.PHP_EOL.PHP_EOL.'if (!defined(\'IN_CMS\')) exit(\'No direct script access allowed\');'.PHP_EOL.PHP_EOL;
 	}
 	
 	/**
@@ -36,33 +37,33 @@ class cache_file {
 		if(empty($module)) $module = ROUTE_M;
 		$filepath = CACHE_PATH.'caches_'.$module.'/caches_'.$type.'/';
 		$filename = $name.$this->_setting['suf'];
-	    if(!is_dir($filepath)) {
+		if(!is_dir($filepath)) {
 			mkdir($filepath, 0777, true);
-	    }
-	    
-	    if($this->_setting['type'] == 'array') {
-	    	$data = "<?php\nreturn ".var_export($data, true).";\n?>";
-	    } elseif($this->_setting['type'] == 'serialize') {
-	    	$data = serialize($data);
-	    }
-	    if ($module == 'commons' || ($module == 'commons' && substr($name, 0, 16) != 'category_content')) {
-		    $db = pc_base::load_model('cache_model');
-		    $datas = new_addslashes($data);
-		    if ($db->get_one(array('filename'=>$filename, 'path'=>'caches_'.$module.'/caches_'.$type.'/'), '`filename`')) {
-		    	$db->update(array('data'=>$datas), array('filename'=>$filename, 'path'=>'caches_'.$module.'/caches_'.$type.'/'));
-		    } else {
-		    	$db->insert(array('filename'=>$filename, 'path'=>'caches_'.$module.'/caches_'.$type.'/', 'data'=>$datas));
-		    }
-	    }
-	    
-	    //是否开启互斥锁
+		}
+
+		if($this->_setting['type'] == 'array') {
+			$data = $this->header."return ".var_export($data, true).";\n?>";
+		} elseif($this->_setting['type'] == 'serialize') {
+			$data = serialize($data);
+		}
+		if ($module == 'commons' || ($module == 'commons' && substr($name, 0, 16) != 'category_content')) {
+			$db = pc_base::load_model('cache_model');
+			$datas = new_addslashes($data);
+			if ($db->get_one(array('filename'=>$filename, 'path'=>'caches_'.$module.'/caches_'.$type.'/'), '`filename`')) {
+				$db->update(array('data'=>$datas), array('filename'=>$filename, 'path'=>'caches_'.$module.'/caches_'.$type.'/'));
+			} else {
+				$db->insert(array('filename'=>$filename, 'path'=>'caches_'.$module.'/caches_'.$type.'/', 'data'=>$datas));
+			}
+		}
+		
+		//是否开启互斥锁
 		if(pc_base::load_config('system', 'lock_ex')) {
 			$file_size = file_put_contents($filepath.$filename, $data, LOCK_EX);
 		} else {
 			$file_size = file_put_contents($filepath.$filename, $data);
 		}
-	    
-	    return $file_size ? $file_size : 'false';
+		
+		return $file_size ? $file_size : 'false';
 	}
 	
 	/**
@@ -82,13 +83,13 @@ class cache_file {
 		if (!file_exists($filepath.$filename)) {
 			return false;
 		} else {
-		    if($this->_setting['type'] == 'array') {
-		    	$data = @require($filepath.$filename);
-		    } elseif($this->_setting['type'] == 'serialize') {
-		    	$data = unserialize(file_get_contents($filepath.$filename));
-		    }
-		    
-		    return $data;
+			if($this->_setting['type'] == 'array') {
+				$data = @require($filepath.$filename);
+			} elseif($this->_setting['type'] == 'serialize') {
+				$data = unserialize(file_get_contents($filepath.$filename));
+			}
+			
+			return $data;
 		}
 	}
 	
@@ -109,7 +110,7 @@ class cache_file {
 		if(file_exists($filepath.$filename)) {
 			if ($module == 'commons' && substr($name, 0, 16) != 'category_content') {
 				$db = pc_base::load_model('cache_model');
-		    	$db->delete(array('filename'=>$filename, 'path'=>'caches_'.$module.'/caches_'.$type.'/'));
+				$db->delete(array('filename'=>$filename, 'path'=>'caches_'.$module.'/caches_'.$type.'/'));
 			}
 			return @unlink($filepath.$filename) ? true : false;
 		} else {
@@ -148,5 +149,4 @@ class cache_file {
 	}
 
 }
-
 ?>
