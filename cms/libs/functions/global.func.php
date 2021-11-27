@@ -899,7 +899,11 @@ function dr_admin_msg($code, $msg, $url = '', $time = 3, $dialog = '') {
 		dr_json($code, $msg, $url);
 	}
 
-	$url = dr_safe_url($url, true);
+	if (!is_array($url)) {
+		$url = dr_safe_url($url, true);
+	} else {
+		$url = '';
+	}
 	$backurl = $url ? $url : dr_safe_url($_SERVER['HTTP_REFERER'], true);
 
 	if ($backurl) {
@@ -929,11 +933,17 @@ function dr_msg($code, $msg, $url = '', $time = 3, $dialog = '') {
 		}
 	}
 
-	if (!$url) {
-		$backurl = dr_safe_url($_SERVER['HTTP_REFERER'], true);
-		(!$backurl || $backurl == FC_NOW_URL ) && $backurl = SITE_URL;
+	if (!is_array($url)) {
+		$url = dr_safe_url($url, true);
 	} else {
-		$backurl = dr_safe_url($url, true);
+		$url = '';
+	}
+	$backurl = $url ? $url : dr_safe_url($_SERVER['HTTP_REFERER'], true);
+
+	if ($backurl) {
+		strpos(FC_NOW_URL, $backurl) === 0 && $backurl = '';
+	} else {
+		$backurl = 'javascript:history.back();';
 	}
 
 	$mark = $code;

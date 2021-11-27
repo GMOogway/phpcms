@@ -24,6 +24,17 @@ include $this->admin_tpl('header', 'admin');
         </div></td>
 	</tr>
 	<tr>
+		<th><?php echo L('code')?>：</th>
+		<td><div class="mt-radio-inline">
+          <label class="mt-radio mt-radio-outline"><input type='radio' name='setting[code]' value='1' <?php if($code == 1) {?>checked<?php }?>> <?php echo L('yes')?> <span></span></label>
+          <label class="mt-radio mt-radio-outline"><input type='radio' name='setting[code]' value='0' <?php if($code == 0) {?>checked<?php }?>> <?php echo L('no')?> <span></span></label>
+        </div></td>
+	</tr>
+	<tr id="codelen"<?php if ($code == 0) {?> style="display:none;"<?php }?>>
+		<th width="130"><?php echo L('codelen')?>：</th>
+		<td><input type="text" value="<?php echo $codelen;?>" name="setting[codelen]" size="10" class="input-text"></td>
+	</tr>
+	<tr>
 		<th><?php echo L('mailmessage')?>：</th>
 		<td><textarea cols="50" rows="6" id="mailmessage" name="setting[mailmessage]"><?php echo $mailmessage?></textarea></td>
 	</tr>
@@ -41,6 +52,13 @@ $("input:radio[name='setting[allowmultisubmit]']").click(function (){
 		$("#setting").hide();
 	} else if($("input:radio[name='setting[allowmultisubmit]'][checked]").val()==1) {
 		$("#setting").show();
+	}
+});
+$("input:radio[name='setting[code]']").click(function (){
+	if($("input:radio[name='setting[code]'][checked]").val()==0) {
+		$("#codelen").hide();
+	} else if($("input:radio[name='setting[code]'][checked]").val()==1) {
+		$("#codelen").show();
 	}
 });
 </script>

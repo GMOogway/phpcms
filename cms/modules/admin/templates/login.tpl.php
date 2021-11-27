@@ -52,7 +52,7 @@
                                     </label>
                                     <input type="text" id="captcha" name="code" placeholder="验证码" autocomplete="off" maxlength="4" class="layui-input">
                                     <div class="captcha">
-                                        <?php echo form::checkcode('code_img')?>
+                                        <?php echo form::checkcode('code_img', $setting['sysadmincodelen'])?>
                                     </div>
                                 </div>
                                 <?php }?>

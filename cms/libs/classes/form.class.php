@@ -663,7 +663,7 @@ class form {
 			$setting = getcache('common','commons');
 			$sysadmincodemodel = isset($setting['sysadmincodemodel']) ? (int)$setting['sysadmincodemodel'] : 0;
 			$js = '<div id="voices" style="width: 0px; height: 0px; overflow:hidden; text-indent:-99999px;"></div><script type="text/javascript">function voice() {$(\'#voices\').html(\'<audio id="audio" controls="controls" autoplay="autoplay"><source src="'.SITE_PROTOCOL.SITE_HURL.WEB_PATH.'api.php?op=voice&\'+Math.random()+\'" type="audio/mpeg"></audio>\');$(\'#audio\').play();$(\'#captcha\').val(\'\');$(\'#captcha\').focus();}</script>';
-			return "<img id='$id' onclick='this.src=this.src+\"&\"+Math.random();".($sysadmincodemodel==1 || $sysadmincodemodel==2 ? 'voice();' : '')."' src='".SITE_PROTOCOL.SITE_HURL.WEB_PATH."api.php?op=checkcode&code_len=$code_len&font_size=$font_size&width=$width&height=$height&font_color=".urlencode($font_color)."&background=".urlencode($background)."'>".($sysadmincodemodel==1 || $sysadmincodemodel==2 ? $js : '');
+			return "<img id='$id' onclick='this.src=this.src+\"&\"+Math.random();".($sysadmincodemodel==1 || $sysadmincodemodel==2 ? 'voice();' : '')."' src='".SITE_PROTOCOL.SITE_HURL.WEB_PATH."api.php?op=checkcode&code_len=$code_len&font_size=$font_size&width=$width&height=$height&font_color=".urlencode($font_color)."&background=".urlencode($background)."' style=\"vertical-align: middle;\">".($sysadmincodemodel==1 || $sysadmincodemodel==2 ? $js : '');
 		} else {
 			return "<img id='$id' onclick='this.src=this.src+\"&\"+Math.random()' src='".SITE_PROTOCOL.SITE_HURL.WEB_PATH."api.php?op=checkcode&code_len=$code_len&font_size=$font_size&width=$width&height=$height&font_color=".urlencode($font_color)."&background=".urlencode($background)."'>";
 		}

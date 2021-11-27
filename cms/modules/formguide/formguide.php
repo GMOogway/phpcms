@@ -238,11 +238,15 @@ class formguide extends admin {
 	 */
 	public function setting() {
 		if ($this->input->post('dosubmit')) {
+			$post = $this->input->post('setting');
 			$setting = getcache('formguide', 'commons');
-			$setting[$this->get_siteid()] = $this->input->post('setting');
+			$setting[$this->get_siteid()] = $post;
 			setcache('formguide', $setting, 'commons'); //设置缓存
 			$m_db = pc_base::load_model('module_model'); //调用模块数据模型
-			$setting = array2string($this->input->post('setting'));  
+			if (intval($post['codelen'])<2 || intval($post['codelen'])>8) {
+				dr_admin_msg(0, L('setting_noe_code_len'));
+			}
+			$setting = array2string($post);  
 			$m_db->update(array('setting'=>$setting), array('module'=>ROUTE_M)); //将配置信息存入数据表中
 			
 			dr_admin_msg(1,L('setting_updates_successful'), HTTP_REFERER, '', 'setting');
@@ -299,6 +303,24 @@ class formguide extends admin {
 			$num++;
 		}
 		return $ret;
+	}
+	/**
+	 * 汉字转换拼音
+	 */
+	public function public_ajax_pinyin() {
+		$pinyin = pc_base::load_sys_class('pinyin');
+		$name = dr_safe_replace($this->input->get('name'));
+		if (!$name) {
+			exit('');
+		}
+		$py = $pinyin->result($name);
+		if (strlen($py) > 12) {
+			$sx = $pinyin->result($name, 0);
+			if ($sx) {
+				exit($sx);
+			}
+		}
+		exit($py);
 	}
 }
 ?>

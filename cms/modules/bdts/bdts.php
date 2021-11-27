@@ -49,12 +49,12 @@ class bdts extends admin {
 				foreach ($post['bdts'] as $i => $t) {
 					if (isset($t['site'])) {
 						if (!$t['site']) {
-							dr_admin_msg(0,L('域名必须填写'));
+							dr_json(0,L('域名必须填写'));
 						}
 						$bdts[$i]['site'] = $t['site'];
 					} else {
 						if (!$t['token']) {
-							dr_admin_msg(0,L('token必须填写'));
+							dr_json(0,L('token必须填写'));
 						}
 						$bdts[$i-1]['token'] = $t['token'];
 					}
@@ -62,10 +62,11 @@ class bdts extends admin {
 				$post['bdts'] = $bdts;
 			}
 			$this->bdts->setConfig($post);
-			dr_admin_msg(1,L('操作成功'), '?m=bdts&c=bdts&a=config&menuid='.$this->input->get('menuid'));
+			dr_json(1,L('操作成功'), array('url' => '?m=bdts&c=bdts&a=config&menuid='.$this->input->get('menuid').'&page='.(int)($this->input->post('page')).'&pc_hash='.dr_get_csrf_token()));
 		}else{
 			$this->siteid = $this->get_siteid();
 			if(!$this->siteid) $this->siteid = 1;
+			$page = max(intval($this->input->get('page')), 0);
 			$this->sitemodel_db = pc_base::load_model('sitemodel_model');
 			$sitemodel_data = $this->sitemodel_db->listinfo(array('siteid'=>$this->siteid,'type'=>0));
 			$data = $this->bdts->getConfig();
@@ -87,18 +88,18 @@ class bdts extends admin {
         if (IS_POST) {
             $url = $this->input->post('url');
             if (!$url) {
-                dr_admin_msg(0,L('URL不能为空'));
+                dr_json(0,L('URL不能为空'));
             }
 
             $config = $this->bdts->getConfig();
             if (!$config) {
-                dr_admin_msg(0,L('百度推送配置为空，不能推送'));
+                dr_json(0,L('百度推送配置为空，不能推送'));
             }
 
             $uri = parse_url($url);
             $site = $uri['host'];
             if (!$site) {
-                dr_admin_msg(0,L('百度推送没有获取到内容url（'.$url.'）的host值，不能推送'));
+                dr_json(0,L('百度推送没有获取到内容url（'.$url.'）的host值，不能推送'));
             }
 
             $token = '';
@@ -108,7 +109,7 @@ class bdts extends admin {
                 }
             }
             if (!$token) {
-                dr_admin_msg(0,L('百度推送没有获取到内容url的Token，不能推送'));
+                dr_json(0,L('百度推送没有获取到内容url的Token，不能推送'));
             }
 
             $api = 'http://data.zz.baidu.com/urls?site='.$site.'&token='.$token;
@@ -131,9 +132,10 @@ class bdts extends admin {
                 @file_put_contents(CACHE_PATH.'caches_bdts/bdts_log.php', date('Y-m-d H:i:s').' 手动['.$url.'] - 成功'.PHP_EOL, FILE_APPEND);
             }
 
-            dr_admin_msg(1,L('操作成功'), '?m=bdts&c=bdts&a=url_add&menuid='.$this->input->get('menuid'));
+            dr_json(1,L('操作成功'), array('url' => '?m=bdts&c=bdts&a=url_add&menuid='.$this->input->get('menuid').'&page='.(int)($this->input->post('page')).'&pc_hash='.dr_get_csrf_token()));
         }
 
+		$page = max(intval($this->input->get('page')), 0);
         include $this->admin_tpl('url_add');
         exit;
     }

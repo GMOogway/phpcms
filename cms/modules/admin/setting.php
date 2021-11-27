@@ -19,6 +19,9 @@ class setting extends admin {
 			$setconfig = $this->input->post('setconfig');
 			$setting = $this->input->post('setting');
 			$setting['admin_email'] = is_email($setting['admin_email']) ? trim($setting['admin_email']) : dr_json(0, L('email_illegal'), array('field' => 'admin_email'));
+			if (intval($setting['sysadmincodelen'])<2 || intval($setting['sysadmincodelen'])>8) {
+				dr_json(0, L('setting_noe_code_len'), array('field' => 'sysadmincodelen'));
+			}
 			if (!$setconfig['js_path']) {
 				dr_json(0, L('setting_js_path').L('empty'), array('field' => 'js_path'));
 			}

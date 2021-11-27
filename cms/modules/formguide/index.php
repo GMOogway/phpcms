@@ -10,7 +10,7 @@ class index {
 		$this->db = pc_base::load_model('sitemodel_model');
 		$this->m_db = pc_base::load_model('sitemodel_field_model');
 		$setting = new_html_special_chars(getcache('formguide', 'commons'));
-		$this->siteid = intval($_GET['siteid']) ? intval($_GET['siteid']) : get_siteid();
+		$this->siteid = intval($this->input->get('siteid')) ? intval($this->input->get('siteid')) : get_siteid();
 		$this->setting = $setting[$this->siteid];
 		if (!$this->setting) {
 			$this->setting = array();
@@ -23,7 +23,7 @@ class index {
 	public function index() {
 		$siteid = $this->siteid;
 		$SEO = seo($this->siteid, '', L('formguide_list'));
-		$page = max(intval($_GET['page']), 1);
+		$page = max(intval($this->input->get('page')), 1);
 		$total = $this->db->count(array('siteid'=>$this->siteid, 'type'=>3, 'disabled'=>0));
 		$pages = pages($total, $page, 20);
 		$offset = ($page-1)*20;
@@ -35,24 +35,31 @@ class index {
 	 * 表单展示
 	 */
 	public function show() {
-		if (!isset($_GET['formid']) || empty($_GET['formid'])) {
-			$_GET['action'] ? exit : showmessage(L('form_no_exist'), HTTP_REFERER);
+		if (!$this->input->get('formid') || empty($this->input->get('formid'))) {
+			$this->input->get('action') ? exit : showmessage(L('form_no_exist'), HTTP_REFERER);
 		}
-		$siteid = $_GET['siteid'] ? intval($_GET['siteid']) : 1;
-		$formid = intval($_GET['formid']);
+		$siteid = $this->input->get('siteid') ? intval($this->input->get('siteid')) : 1;
+		$formid = intval($this->input->get('formid'));
 		$r = $this->db->get_one(array('modelid'=>$formid, 'siteid'=>$siteid, 'disabled'=>0), 'tablename, setting');
 		if (!$r) {
-			$_GET['action'] ? exit : showmessage(L('form_no_exist'), HTTP_REFERER);
+			$this->input->get('action') ? exit : showmessage(L('form_no_exist'), HTTP_REFERER);
 		}
 		$setting = string2array($r['setting']);
 		if ($setting['enabletime']) {
 			if ($setting['starttime']>SYS_TIME || ($setting['endtime']+3600*24)<SYS_TIME) {
-				$_GET['action'] ? exit : showmessage(L('form_expired'), APP_PATH.'index.php?m=formguide&c=index&a=index');
+				$this->input->get('action') ? exit : showmessage(L('form_expired'), APP_PATH.'index.php?m=formguide&c=index&a=index');
 			}
 		}
 		$userid = intval(param::get_cookie('_userid'));
-		if ($setting['allowunreg']==0 && !$userid && $_GET['action']!='js') showmessage(L('please_login_in'), APP_PATH.'index.php?m=member&c=index&a=login&forward='.urlencode(HTTP_REFERER));
-		if (isset($_POST['dosubmit'])) {
+		if ($setting['allowunreg']==0 && !$userid && $this->input->get('action')!='js') showmessage(L('please_login_in'), APP_PATH.'index.php?m=member&c=index&a=login&forward='.urlencode(HTTP_REFERER));
+		if ($this->input->post('dosubmit')) {
+			if($setting['code']){//开启验证码
+				if ((empty($_SESSION['connectid']) && $_SESSION['code'] != strtolower($this->input->post('code')) && $this->input->post('code')!==NULL) || empty($_SESSION['code'])) {
+					showmessage(L('code_error'));
+				} else {
+					$_SESSION['code'] = '';
+				}
+			}
 			$tablename = 'form_'.$r['tablename'];
 			$this->m_db->change_table($tablename);
 			
@@ -61,12 +68,12 @@ class index {
 			$where[] = 'ip="'.ip().'"';
 			$re = $this->m_db->get_one(implode(' AND ', $where), 'datetime', '`dataid` DESC');
 			if (!$setting['allowmultisubmit'] || ($setting['allowmultisubmit'] && $re['datetime']) && ((SYS_TIME-$re['datetime'])<intval($this->setting['interval'])*60)) {
-				$_GET['action'] ? exit : showmessage(L('had_participate'), APP_PATH.'index.php?m=formguide&c=index&a=index');
+				$this->input->get('action') ? exit : showmessage(L('had_participate'), APP_PATH.'index.php?m=formguide&c=index&a=index');
 			}
 			$data = array();
 			require CACHE_MODEL_PATH.'formguide_input.class.php';
 			$formguide_input = new formguide_input($formid);
-			$data = new_addslashes($_POST['info']);
+			$data = new_addslashes($this->input->post('info'));
 			$data = new_html_special_chars($data);
 			$data = $formguide_input->get($data);
 			$data['userid'] = $userid;
@@ -88,7 +95,7 @@ class index {
 			}
 			showmessage($setting['rt_text'] && isset($setting['rt_text']) ? $setting['rt_text'] : L('thanks'), $setting['rt_url'] && isset($setting['rt_url']) ? str_replace(array('{APP_PATH}', '{formid}', '{siteid}'), array(APP_PATH, $formid, $this->siteid), $setting['rt_url']) : APP_PATH);
 		} else {
-			if ($setting['allowunreg']==0 && !$userid && $_GET['action']=='js') {
+			if ($setting['allowunreg']==0 && !$userid && $this->input->get('action')=='js') {
 				$no_allowed = 1;
 			}
 			pc_base::load_sys_class('form', '', '');
@@ -103,20 +110,20 @@ class index {
 			$re = $this->m_db->get_one(implode(' AND ', $where), 'datetime', '`dataid` DESC');
 			$setting = string2array($setting);
 			if (!$setting['allowmultisubmit'] || ($setting['allowmultisubmit'] && $re['datetime']) && ((SYS_TIME-$re['datetime'])<intval($this->setting['interval'])*60)) {
-				$_GET['action'] ? exit : showmessage(L('had_participate'), APP_PATH.'index.php?m=formguide&c=index&a=index');
+				$this->input->get('action') ? exit : showmessage(L('had_participate'), APP_PATH.'index.php?m=formguide&c=index&a=index');
 			}
 			
 			require CACHE_MODEL_PATH.'formguide_form.class.php';
 			$formguide_form = new formguide_form($formid, $no_allowed);
 			$forminfos_data = $formguide_form->get();
 			$SEO = seo($this->siteid, L('formguide'), $name);
-			if (isset($_GET['action']) && $_GET['action']=='js') {
+			if ($this->input->get('action') && $this->input->get('action')=='js') {
 				if(!function_exists('ob_gzhandler')) ob_clean();
 				ob_start();
 			}
-			$template = ($_GET['action']=='js') ? $js_template : $show_template;
+			$template = ($this->input->get('action')=='js') ? $js_template : $show_template;
 			include template('formguide', $template, $default_style);
-			if (isset($_GET['action']) && $_GET['action']=='js') {
+			if ($this->input->get('action') && $this->input->get('action')=='js') {
 				$data=ob_get_contents();
 				ob_clean();
 				exit(format_js($data));

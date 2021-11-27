@@ -8,7 +8,7 @@ include $this->admin_tpl('header', 'admin');
 <tbody>
 	<tr>
 		<th width="150"><strong><?php echo L('name')?>：</strong></th>
-		<td><input name="info[name]" id="name" class="input-text" type="text" size="30"></td>
+		<td><input name="info[name]" id="name" class="input-text" type="text" size="30" onblur="topinyin('tablename','name','?m=formguide&c=formguide&a=public_ajax_pinyin');"></td>
 	</tr>
 	<tr>
 		<th><strong><?php echo L('tablename')?>：</strong></th>
@@ -56,6 +56,13 @@ include $this->admin_tpl('header', 'admin');
 		<td><div class="mt-radio-inline">
           <label class="mt-radio mt-radio-outline"><input type='radio' name='setting[allowunreg]' value='1' <?php if($this->setting['allowunreg'] == 1) {?>checked<?php }?>> <?php echo L('yes')?> <span></span></label>
           <label class="mt-radio mt-radio-outline"><input type='radio' name='setting[allowunreg]' value='0' <?php if($this->setting['allowunreg'] == 0) {?>checked<?php }?>> <?php echo L('no')?> <span></span></label>
+        </div></td>
+	</tr>
+	<tr>
+		<th><strong><?php echo L('code')?>：</strong></th>
+		<td><div class="mt-radio-inline">
+          <label class="mt-radio mt-radio-outline"><input type='radio' name='setting[code]' value='1' <?php if($this->setting['code'] == 1) {?>checked<?php }?>> <?php echo L('yes')?> <span></span></label>
+          <label class="mt-radio mt-radio-outline"><input type='radio' name='setting[code]' value='0' <?php if($this->setting['code'] == 0) {?>checked<?php }?>> <?php echo L('no')?> <span></span></label>
         </div></td>
 	</tr>
 	<tr>

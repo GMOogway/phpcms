@@ -32,10 +32,9 @@ include $this->admin_tpl('header','admin');?>
     <table width="100%" cellspacing="0" >
         <thead>
             <tr class="heading">
-			<th width="70" class="<?php echo dr_sorting('listorder')?>" name="listorder"><?php echo L('listorder')?></th>
-            <th class="<?php echo dr_sorting('field')?>" name="field"><?php echo L('fieldname')?></th>
-			<th width="150" class="<?php echo dr_sorting('name')?>" name="name"><?php echo L('cnames');?></th>
-			<th width="150" class="<?php echo dr_sorting('formtype')?>" name="formtype"><?php echo L('type');?></th>
+			<th width="70"><?php echo L('listorder')?></th>
+            <th><?php echo L('fields')?></th>
+			<th width="150"><?php echo L('type');?></th>
 			<th width="50"><?php echo L('system');?></th> 
             <th width="50"><?php echo L('must_input');?></th>
             <th width="50"<?php if(!$modelid || $modelid==-1) {echo ' style="display: none;"';}?>><?php echo L('search');?></th>
@@ -47,8 +46,7 @@ include $this->admin_tpl('header','admin');?>
 	<?php foreach($datas as $r) {?>
     <tr>
 		<td align='center'><input name='listorders[<?php echo $r['fieldid']?>]' type='text' size='3' value='<?php echo $r['listorder']?>' class='input-text-c'></td>
-		<td><?php echo $r['field']?></td>
-		<td><?php echo $r['name']?></td>
+		<td><?php echo $r['name']?> / <?php echo $r['field']?></td>
 		<td align='center'><?php echo $r['formtype']?></td>
 		<td align='center'><?php echo $r['issystem'] ? L('icon_unlock') : L('icon_locked')?></td>
 		<td align='center'><?php echo $r['minlength'] ? L('icon_unlock') : L('icon_locked')?></td>
@@ -56,7 +54,7 @@ include $this->admin_tpl('header','admin');?>
 		<td align='center'<?php if(!$modelid || $modelid==-1) {echo ' style="display: none;"';}?>><?php echo $r['isadd'] ? L('icon_unlock') : L('icon_locked')?></td>
 		<td align='center'> <a class="btn btn-xs green" href="?m=content&c=sitemodel_field&a=edit&modelid=<?php echo $r['modelid']?>&fieldid=<?php echo $r['fieldid']?>&menuid=<?php echo $this->input->get('menuid')?>"><?php echo L('edit');?></a>
 		<?php if(!in_array($r['field'],$forbid_fields)) { ?>
-		<a class="btn btn-xs dark" href="?m=content&c=sitemodel_field&a=disabled&disabled=<?php echo $r['disabled'];?>&modelid=<?php echo $r['modelid']?>&fieldid=<?php echo $r['fieldid']?>&fieldid=<?php echo $r['fieldid']?>&menuid=<?php echo $this->input->get('menuid')?>"><?php echo $r['disabled'] ? L('field_enabled') : L('field_disabled');?></a>
+		<a class="btn btn-xs dark" href="?m=content&c=sitemodel_field&a=disabled&disabled=<?php echo $r['disabled'];?>&modelid=<?php echo $r['modelid']?>&fieldid=<?php echo $r['fieldid']?>&fieldid=<?php echo $r['fieldid']?>&menuid=<?php echo $this->input->get('menuid')?>"><?php echo $r['disabled'] ? L('enable') : L('field_disabled');?></a>
 		<?php } ?><?php if(!in_array($r['field'],$forbid_delete)) {?> 
 		<a class="btn btn-xs red" href="javascript:confirmurl('?m=content&c=sitemodel_field&a=delete&modelid=<?php echo $r['modelid']?>&fieldid=<?php echo $r['fieldid']?>&menuid=<?php echo $this->input->get('menuid')?>','<?php echo L('confirm',array('message'=>$r['name']))?>')"><?php echo L('delete')?></a><?php }?> </td>
 	</tr>

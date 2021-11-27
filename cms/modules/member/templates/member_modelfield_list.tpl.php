@@ -13,8 +13,7 @@
         <thead>
             <tr>
 			<th width="70"><?php echo L('listorder')?></th>
-            <th><?php echo L('fieldname')?></th>
-			<th width="150"><?php echo L('cnames');?></th>
+            <th><?php echo L('fields')?></th>
 			<th width="150"><?php echo L('type');?></th>
             <th width="50"><?php echo L('must_input');?></th>
             <th width="50"><?php echo L('search');?></th>
@@ -30,8 +29,7 @@
 		<td align='center'>
 			<input name='listorders[<?php echo $r['fieldid']?>]' type='text' size='3' value='<?php echo $r['listorder']?>' class='input-text-c'>
 		</td>
-		<td><?php echo $r['field']?></td>
-		<td><?php echo $r['name']?></td>
+		<td><?php echo $r['name']?> / <?php echo $r['field']?></td>
 		<td align='center'><?php echo $r['formtype']?></td>
 		<td align='center'><?php echo $r['isbase'] ? L('icon_unlock') : L('icon_locked')?></td>
 		<td align='center'><?php echo $r['issearch'] ? L('icon_unlock') : L('icon_locked')?></td>

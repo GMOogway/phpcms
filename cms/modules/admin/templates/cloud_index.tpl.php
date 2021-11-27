@@ -71,7 +71,7 @@ table td[class*=col-],table th[class*=col-] {position: static;float: none;displa
 
             </div>
             <div class="portlet-body">
-                <div class="form-body fc-yun-list">
+                <div class="form-body yun-list">
 
                     <div class="form-group">
                         <label class="col-md-3 control-label"><?php echo L('系统版本');?></label>

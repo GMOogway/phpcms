@@ -98,6 +98,8 @@
 /*首页*/
 
 /*提示信息*/
+.portlet>.portlet-body, .portlet>.portlet-title:after, .row:after {clear: both;}
+label {display: inline-block;margin-bottom: 5px;}
 .portlet.light {padding: 12px 20px 15px;background-color: #fff;}
 .portlet {margin-top: 20px;margin-bottom: 25px;padding: 0;border-radius: 4px;}
 .portlet.light>.portlet-title{padding:0;min-height:48px}
@@ -116,7 +118,10 @@
 .msg-info,.msg-url{padding-left:0;text-align:left}
 .container-fluid:after,.container-fluid:before,.container:after,.container:before,.row:after,.row:before{display:table;content:" "}
 .text-center{text-align:center}
-.msg-info,.msg-url{padding-left:0;text-align:left}
+.msg-icon {font-size: 60px;color: #ddd;width: 80px;}
+.msg-info,.msg-url{padding-left:0;text-align:left;}
+.msg-info {margin-top: -10px;padding-bottom: 5px;top: -8px;}
+.msg-title {color: #9a9393;padding-bottom: 0;}
 .404-title,.msg-info,.todo-comment{position:relative}
 .msg-title{color:#9a9393;padding-bottom:0}
 @media (min-width:992px){

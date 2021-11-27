@@ -65,7 +65,7 @@ include $this->admin_tpl('header');?>
 </script>
 <div class="page-content main-content">
 <div class="note note-danger my-content-top-tool">
-    <p><a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=init&pc_hash='+pc_hash+'&is_ajax=1',1);"><?php echo L('操作之前请更新下全站缓存');?></a></p>
+    <p><a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=init&pc_hash='+pc_hash+'&is_ajax=1',1);"><?php echo L('更改数据之后需要更新缓存之后才能生效');?></a></p>
 </div>
 <form action="?m=admin&c=setting&a=init" class="form-horizontal" method="post" name="myform" id="myform">
 <input name="page" id="dr_page" type="hidden" value="<?php echo $page;?>">
@@ -283,8 +283,8 @@ include $this->admin_tpl('header');?>
                         <label class="col-md-2 control-label"><?php echo L('setting_admin_code')?></label>
                         <div class="col-md-9">
                             <div class="mt-radio-inline">
-                                <label class="mt-radio mt-radio-outline"><input name="setting[sysadmincode]" value="0" type="radio" <?php echo (!$sysadmincode) ? ' checked' : ''?> onclick="$('#sysadmincodemodel').removeClass('hidden');"> <?php echo L('open')?> <span></span></label>
-                                <label class="mt-radio mt-radio-outline"><input name="setting[sysadmincode]" value="1" type="radio" <?php echo ($sysadmincode) ? ' checked' : ''?> onclick="$('#sysadmincodemodel').addClass('hidden');$('#captcha_charset').addClass('hidden');$('#sysadmincodevoicemodel').addClass('hidden');"> <?php echo L('close')?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input name="setting[sysadmincode]" value="0" type="radio" <?php echo (!$sysadmincode) ? ' checked' : ''?> onclick="$('#sysadmincodemodel').removeClass('hidden');$('#sysadmincodelen').removeClass('hidden');"> <?php echo L('open')?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input name="setting[sysadmincode]" value="1" type="radio" <?php echo ($sysadmincode) ? ' checked' : ''?> onclick="$('#sysadmincodemodel').addClass('hidden');$('#captcha_charset').addClass('hidden');$('#sysadmincodevoicemodel').addClass('hidden');$('#sysadmincodelen').addClass('hidden');"> <?php echo L('close')?> <span></span></label>
                             </div>
                         </div>
                     </div>
@@ -312,6 +312,19 @@ include $this->admin_tpl('header');?>
                                 <label class="mt-radio mt-radio-outline"><input name="setting[sysadmincodevoicemodel]" value="0" type="radio" <?php echo (!$sysadmincodevoicemodel) ? ' checked' : ''?>> <?php echo L('setting_voice_default')?> <span></span></label>
                                 <label class="mt-radio mt-radio-outline"><input name="setting[sysadmincodevoicemodel]" value="1" type="radio" <?php echo ($sysadmincodevoicemodel==1) ? ' checked' : ''?>> <?php echo L('setting_voice_girl')?> <span></span></label>
                                 <label class="mt-radio mt-radio-outline"><input name="setting[sysadmincodevoicemodel]" value="2" type="radio" <?php echo ($sysadmincodevoicemodel==2) ? ' checked' : ''?>> <?php echo L('setting_voice_boy')?> <span></span></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group<?php echo ($sysadmincode) ? ' hidden' : ''?>" id="sysadmincodelen">
+                        <label class="col-md-2 control-label"><?php echo L('setting_admin_code_len')?></label>
+                        <div class="col-md-9">
+                            <div class="input-inline input-medium">
+                                <div class="input-group">
+                                    <input type="text" name="setting[sysadmincodelen]" id="sysadmincodelen" value="<?php echo intval($sysadmincodelen) ? intval($sysadmincodelen) : 4;?>" class="form-control">
+                                    <span class="input-group-addon">
+                                        <?php echo L('setting_code_position')?>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>

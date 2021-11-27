@@ -25,7 +25,6 @@ $LANG['listorder']					=	'排序';
 $LANG['contribute']					=	'投稿';
 $LANG['field_enabled']				=	'<font color="red"> 启用</font>';
 $LANG['field_disabled'] 			=	'禁用';
-$LANG['fieldname']					=	'字段类型';
 $LANG['between_1_to_20']			=	'长度必须为1-20位';
 $LANG['fieldname_was_wrong']		=	'字段名称不正确';
 $LANG['already_exist'] 				=	'已经存在';
@@ -71,7 +70,6 @@ $LANG['fields']						=	'字段';
 $LANG['picutre_list']				=	'图片列表';
 $LANG['max_upload_num']				=	'您最多可以同时上传';
 $LANG['zhang']						=	'张';
-$LANG['image_upload']				=	'图片上传';
 $LANG['attachment_upload']			=	'附件上传';
 $LANG['select_picture']				=	'选择图片';
 
@@ -143,6 +141,10 @@ $LANG['not_more_than'] 				=	'不得多于';
 $LANG['the_value_must_not_repeat'] 	=	'的值不得重复！';
 $LANG['interval']					=	'两次提交间隔时间';
 $LANG['minute']						=	'分';
+$LANG['code']						=	'验证码';
+$LANG['codelen']					=	'验证码位数';
+$LANG['setting_noe_code_len']		=	'验证码位数不能小于2位或超过8位';
+$LANG['setting_updates_successful']	=	'配置更新完成!';
 
 //index
 $LANG['formguide_list']				=	'表单向导列表';

@@ -814,6 +814,41 @@ function iframe_show(type, url, width, height) {
 		content: url+'&is_ajax=1'
 	});
 }
+// ajax 批量操作确认
+function dr_ajax_option(url, msg, remove) {
+	layer.confirm(msg,{
+			icon: 3,
+			shade: 0,
+			title: '提示',
+			btn: ['确定', '取消']
+	}, function(index){
+		layer.close(index);
+		var loading = layer.load(2, {
+			shade: [0.3,'#fff'], //0.1透明度的白色背景
+			time: 100000000
+		});
+		$.ajax({
+			type: "POST",
+			dataType: "json",
+			url: url,
+			data: $("#myform").serialize(),
+			success: function(json) {
+				layer.close(loading);
+				if (json.code) {
+					if (json.data.url) {
+						setTimeout("window.location.href = '"+json.data.url+"'", 2000);
+					} else {
+						setTimeout("window.location.reload(true)", 3000)
+					}
+				}
+				dr_tips(json.code, json.msg, json.data.time);
+			},
+			error: function(HttpRequest, ajaxOptions, thrownError) {
+				dr_ajax_alert_error(HttpRequest, ajaxOptions, thrownError)
+			}
+		});
+	});
+}
 // ajax提交
 function dr_ajax_submit(url, form, time, go) {
 	var flen = $('[id='+form+']').length;
@@ -904,7 +939,7 @@ function dr_post_submit(url, form, time, go) {
 				}
 			} else {
 				dr_tips(0, json.msg, json.data.time);
-				$('.fc-code img').click();
+				$('.captcha img').click();
 				if (json.data.field) {
 					$('#dr_row_'+json.data.field).addClass('has-error');
 					$('#dr_'+json.data.field).focus();
