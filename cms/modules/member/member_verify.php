@@ -14,6 +14,7 @@ class member_verify extends admin {
 	function __construct() {
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
+		$this->email = pc_base::load_sys_class('email');
 		$this->db = pc_base::load_model('member_verify_model');
 	}
 
@@ -106,9 +107,8 @@ class member_verify extends admin {
 			//发送 email通知
 			if($_POST['sendemail']) {
 				$memberinfo = $this->db->select($where);
-				pc_base::load_sys_func('mail');
 				foreach ($memberinfo as $v) {
-					sendmail($v['email'], L('reg_pass'), $_POST['message']);
+					$this->email->send($v['email'], L('reg_pass'), $_POST['message']);
 				}
 			}
 			
@@ -146,9 +146,8 @@ class member_verify extends admin {
 			if($res) {
 				if($_POST['sendemail']) {
 					$memberinfo = $this->db->select($where);
-					pc_base::load_sys_func('mail');
 					foreach ($memberinfo as $v) {
-						sendmail($v['email'], L('reg_reject'), $_POST['message']);
+						$this->email->send($v['email'], L('reg_reject'), $_POST['message']);
 					}
 				}
 			}
@@ -171,9 +170,8 @@ class member_verify extends admin {
 			if($res) {
 				if($_POST['sendemail']) {
 					$memberinfo = $this->db->select($where);
-					pc_base::load_sys_func('mail');
 					foreach ($memberinfo as $v) {
-						sendmail($v['email'], L('reg_ignore'), $_POST['message']);
+						$this->email->send($v['email'], L('reg_ignore'), $_POST['message']);
 					}
 				}
 			}

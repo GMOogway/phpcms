@@ -1232,6 +1232,13 @@ class image {
                     return FALSE;
                 }
                 return imagecreatefrompng($path);
+            case 18:
+                if ( ! function_exists('imagecreatefromwebp'))
+                {
+                    $this->set_error(array('imglib_unsupported_imagecreate', 'imglib_webp_not_supported'));
+                    return FALSE;
+                }
+                return imagecreatefromwebp($path);
             default:
                 $this->set_error(array('imglib_unsupported_imagecreate'));
                 return FALSE;
@@ -1287,6 +1294,18 @@ class image {
                     return FALSE;
                 }
                 break;
+            case 18:
+                if ( ! function_exists('imagewebp'))
+                {
+                    $this->set_error(array('imglib_unsupported_imagecreate', 'imglib_jpg_not_supported'));
+                    return FALSE;
+                }
+                if ( ! imagewebp($resource, $this->full_dst_path, $this->quality))
+                {
+                    $this->set_error('imglib_save_failed');
+                    return FALSE;
+                }
+                break;
             default:
                 $this->set_error(array('imglib_unsupported_imagecreate'));
                 return FALSE;
@@ -1314,6 +1333,8 @@ class image {
             case 2 : imagejpeg($resource, NULL, $this->quality);
                 break;
             case 3 : imagepng($resource);
+                break;
+            case 18 : imagewebp($resource, NULL, $this->quality);
                 break;
             default: echo 'Unable to display the image';
                 break;
@@ -1800,6 +1821,9 @@ class image {
             case 'image/png':
                 $source_image = imagecreatefrompng($source_path);
                 break;
+            case 'image/webp':
+                $source_image = imagecreatefromwebp($source_path);
+                break;
             default:
                 return ;
                 break;
@@ -1860,6 +1884,16 @@ class image {
                     imagecopyresampled($image_wp, $image, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
                     //90代表的是质量、压缩图片容量大小
                     imagejpeg($image_wp, $imgsrc, 100);
+                    imagedestroy($image_wp);
+                    imagedestroy($image);
+                    break;
+                case 18:
+                    header('Content-Type:image/webp');
+                    $image_wp = imagecreatetruecolor($new_width, $new_height);
+                    $image = imagecreatefromwebp($imgsrc);
+                    imagecopyresampled($image_wp, $image, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+                    //90代表的是质量、压缩图片容量大小
+                    imagewebp($image_wp, $imgsrc, 100);
                     imagedestroy($image_wp);
                     imagedestroy($image);
                     break;

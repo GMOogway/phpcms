@@ -41,7 +41,7 @@ if(is_array($infos)){
 	<td><?php echo $info['title']?> <?php if($info['thumb']!='') {echo '<img src="'.IMG_PATH.'icon/small_img.gif">'; }?></td>
 	<td align="center"><?php echo $info['catname']?></td>
 	<td align="center"><?php echo dr_date($info['inputtime'], null, 'red')?></td>
-	<td align="center"><a class="btn btn-xs blue" href="<?php echo $info['url']?>" target="_blank"><?php echo L('posid_item_view')?></a> <a class="btn btn-xs green" onclick="javascript:contentopen('?m=content&c=content&a=edit&catid=<?php echo $info['catid']?>&id=<?php echo $info['id']?>','<?php echo L('posid_item_edit');?>')" href="javascript:;"><?php echo L('posid_item_edit');?></a> <a class="btn btn-xs yellow" href="javascript:item_manage(<?php echo $info['id']?>,<?php echo $info['posid']?>, <?php echo $info['modelid']?>,'<?php echo $info['title']?>')"><?php echo L('posid_item_manage')?></a>
+	<td align="center"><a class="btn btn-xs blue" href="<?php echo $info['url']?>" target="_blank"><?php echo L('posid_item_view')?></a> <a class="btn btn-xs green" onclick="javascript:dr_content_submit('?m=content&c=content&a=edit&catid=<?php echo $info['catid']?>&id=<?php echo $info['id']?>','edit')" href="javascript:;"><?php echo L('posid_item_edit');?></a> <a class="btn btn-xs yellow" href="javascript:item_manage(<?php echo $info['id']?>,<?php echo $info['posid']?>, <?php echo $info['modelid']?>,'<?php echo $info['title']?>')"><?php echo L('posid_item_manage')?></a>
 	</td>
 	</tr>
 <?php 

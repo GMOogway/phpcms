@@ -16,6 +16,7 @@ class index extends foreground {
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
 		$this->cache = pc_base::load_sys_class('cache');
+		$this->email = pc_base::load_sys_class('email');
 	}
 
 	public function init() {
@@ -174,12 +175,11 @@ class index extends foreground {
 			}
 			//如果需要邮箱认证
 			if($member_setting['enablemailcheck']) {
-				pc_base::load_sys_func('mail');
 				$code = sys_auth($userid.'|'.microtime(true), 'ENCODE', get_auth_key('email'));
 				$url = APP_PATH."index.php?m=member&c=index&a=register&code=$code&verify=1";
 				$message = $member_setting['registerverifymessage'];
 				$message = str_replace(array('{click}','{url}','{username}','{email}','{password}'), array('<a href="'.$url.'">'.L('please_click').'</a>',$url,$userinfo['username'],$userinfo['email'],$password), $message);
-				sendmail($userinfo['email'], L('reg_verify_email'), $message);
+				$this->email->send($userinfo['email'], L('reg_verify_email'), $message);
 				//设置当前注册账号COOKIE，为第二步重发邮件所用
 				$_SESSION['_regusername'] = $userinfo['username'];
 				$_SESSION['_reguserid'] = $userid;
@@ -268,7 +268,6 @@ class index extends foreground {
 		}
 		
 		//验证邮箱格式
-		pc_base::load_sys_func('mail');
 		$code = sys_auth($_userid.'|'.microtime(true), 'ENCODE', get_auth_key('email'));
 		$url = APP_PATH."index.php?m=member&c=index&a=register&code=$code&verify=1";
 		
@@ -277,7 +276,7 @@ class index extends foreground {
 		$message = $member_setting['registerverifymessage'];
 		$message = str_replace(array('{click}','{url}','{username}','{email}','{password}'), array('<a href="'.$url.'">'.L('please_click').'</a>',$url,$_username,$newemail,$password), $message);
 		
- 		if(sendmail($newemail, L('reg_verify_email'), $message)){
+ 		if($this->email->send($newemail, L('reg_verify_email'), $message)){
 			//更新新的邮箱，用来验证
  			$this->db->update(array('email'=>$newemail), array('userid'=>$_userid));
 			$return = '1';
@@ -1480,8 +1479,6 @@ class index extends foreground {
 				showmessage(L('email_error'), HTTP_REFERER);
 			}
 			
-			pc_base::load_sys_func('mail');
-
 			$code = sys_auth($memberinfo['userid']."\t".microtime(true), 'ENCODE', get_auth_key('email'));
 
 			$url = APP_PATH."index.php?m=member&c=index&a=public_forget_password&code=$code";
@@ -1495,7 +1492,7 @@ class index extends foreground {
 			} else {
 				$sitename = 'CMS_V9_MAIL';
 			}
-			sendmail($email, L('forgetpassword'), $message, '', '', $sitename);
+			$this->email->send($email, L('forgetpassword'), $message, $sitename);
 			showmessage(L('operation_success'), 'index.php?m=member&c=index&a=login');
 		} elseif($_GET['code']) {
 			$hour = date('y-m-d h', SYS_TIME);
@@ -1521,8 +1518,7 @@ class index extends foreground {
 				} else {
 					$sitename = 'CMS_V9_MAIL';
 				}
-				pc_base::load_sys_func('mail');
-				sendmail($email, L('forgetpassword'), "New password:".$password, '', '', $sitename);
+				$this->email->send($email, L('forgetpassword'), "New password:".$password, $sitename);
 				showmessage(L('operation_success').L('newpassword').':'.$password);
 
 			} else {
@@ -1718,8 +1714,7 @@ class index extends foreground {
 					$_SESSION['userid'] = '';
 					$_SESSION['emc'] = '';
 					$_SESSION['code'] = '';
-					pc_base::load_sys_func('mail');
-					sendmail($email, '密码重置通知', "您在".date('Y-m-d H:i:s')."通过密码找回功能，重置了本站密码。");
+					$this->email->send($email, '密码重置通知', "您在".date('Y-m-d H:i:s')."通过密码找回功能，重置了本站密码。");
 					include template('member', 'forget_password_username');
 					exit;
 				} else {
@@ -1735,13 +1730,12 @@ class index extends foreground {
 
 	//邮箱获取验证码
 	public function public_get_email_verify() {
-		pc_base::load_sys_func('mail');
 		$this->_session_start();
 		$code = $_SESSION['emc'] = random(8,"23456789abcdefghkmnrstwxy");
 		$_SESSION['emc_times']=5;
 		$message = '您的验证码为：'.$code;
 
-		sendmail($_SESSION['email'], '邮箱找回密码验证', $message);
+		$this->email->send($_SESSION['email'], '邮箱找回密码验证', $message);
 		echo '1';
 	}
 }

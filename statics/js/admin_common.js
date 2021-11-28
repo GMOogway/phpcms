@@ -420,91 +420,6 @@ function dr_content_submit(url,type,w,h) {
 	};
 	diag.show();
 }
-function contentopen(url,name,w,h) {
-	if(!w) w='100%';
-	if(!h) h='100%';
-	if (is_mobile()) {
-		w = h = '100%';
-	}
-	if (w=='100%' && h=='100%') {
-		var drag = false;
-	} else {
-		var drag = true;
-	}
-	if (typeof pc_hash == 'string') url += (url.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
-	if (url.toLowerCase().indexOf("http://") != -1 || url.toLowerCase().indexOf("https://") != -1) {
-	} else {
-		url = geturlpathname()+url;
-	}
-	var diag = new Dialog({
-		id:'content_id',
-		title:name,
-		url:url,
-		width:w,
-		height:h,
-		modal:true,
-		draggable:drag
-	});
-	diag.addButton('dosubmit','保存后自动关闭',function(){
-		var form = $DW.$('#dosubmit');
-		if(form.length > 0) {
-			form.click();
-		} else {
-			if (parent.right) {
-				parent.right.location.reload(true);
-			} else {
-				window.top.$(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.location.reload(true);
-			}
-			diag.close();
-		}
-		return false;
-	},0,1);
-	diag.okText = '保存并继续发表';
-	diag.onOk = function(){
-		var form = $DW.$('#dosubmit_continue');
-		if(form.length > 0) {
-			form.click();
-		} else {
-			if (parent.right) {
-				parent.right.location.reload(true);
-			} else {
-				window.top.$(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.location.reload(true);
-			}
-			diag.close();
-		}
-		return false;
-	};
-	diag.cancelText = '关闭(X)';
-	diag.onCancel=function(){
-		if($DW.$V('#title') !='') {
-			Dialog.confirm('内容已经录入，确定离开将不保存数据？', function(){
-				if (parent.right) {
-					parent.right.location.reload(true);
-				} else {
-					window.top.$(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.location.reload(true);
-				}
-				diag.close();
-			}, function(){});
-		} else {
-			if (parent.right) {
-				parent.right.location.reload(true);
-			} else {
-				window.top.$(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.location.reload(true);
-			}
-			diag.close();
-		}
-		return false;
-	};
-	diag.onClose=function(){
-		if (parent.right) {
-			parent.right.location.reload(true);
-		} else {
-			window.top.$(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.location.reload(true);
-		}
-		$DW.close();
-	};
-	diag.show();
-}
 //弹出对话框
 function artdialog(id,url,title,w,h) {
 	if (typeof pc_hash == 'string') url += (url.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
@@ -787,7 +702,7 @@ function iframe_show(type, url, width, height) {
 		width = '60%';
 	}
 	if (!height) {
-		height = '70%';
+		height = '75%';
 	}
 	if (is_mobile()) {
 		width = '95%';

@@ -36,6 +36,7 @@ $p = dr_authcode(array(
 </style>
 <div class="page-content main-content">
 <form name="myform" id="myform" action="?m=special&c=content&a=add&specialid=<?php echo $_GET['specialid']?>" class="form-horizontal" onsubmit="return checkall()" method="post" enctype="multipart/form-data">
+<input value="1" type="hidden" name="dosubmit">
 <div class="myfbody">
         <div class="row ">
             <div class="col-md-9">
@@ -155,8 +156,6 @@ $p = dr_authcode(array(
             </div>
         </div>
     </div>
-<input value="<?php echo L('save');?>" type="submit" name="dosubmit" id="dosubmit" class="dialog" style="width:145px;">
-<input value="<?php echo L('save_and_add');?>" type="submit" name="dosubmit_continue" id="dosubmit_continue" class="dialog" style="width:130px;">
 </form>
 </div>
 </body>
@@ -169,31 +168,6 @@ function load_file_list(id) {
 self.moveTo(0, 0);
 function refersh_window() {
 	setcookie('refersh_time', 1);
-}
-function checkall(){
-	if(!$("#typeid").val()){
-		$('#dr_row_typeid').addClass('has-error');
-		Dialog.alert("<?php echo L('please_choose_type')?>",function(){$("#typeid").focus();})
-		return false;
-	}
-	if(!$("#title").val()){
-		$('#dr_row_title').addClass('has-error');
-		Dialog.alert("<?php echo L('please_input_title')?>",function(){$("#title").focus();})
-		return false;
-	}
-<?php if (SYS_EDITOR) {?>
-	if(CKEDITOR.instances.content.getData()==""){
-		$('#dr_row_content').addClass('has-error');
-		Dialog.alert("<?php echo L('content_empty')?>",function(){editor.focus();})
-		return false;
-	}
-<?php } else {?>
-	if(UE.getEditor("content").getContent()==""){
-		$('#dr_row_content').addClass('has-error');
-		Dialog.alert("<?php echo L('content_empty')?>",function(){UE.getEditor("content").focus();})
-		return false;
-	}
-<?php }?>
 }
 //-->
 </script>

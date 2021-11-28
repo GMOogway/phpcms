@@ -83,11 +83,11 @@ class index {
 			$dataid = $this->m_db->insert($data, true);
 			if ($dataid) {
 				if ($setting['sendmail']) {
-					pc_base::load_sys_func('mail');
+					$email = pc_base::load_sys_class('email');
 					$mails = explode(',', $setting['mails']);
 					if (is_array($mails)) {
 						foreach ($mails as $m) {
-							sendmail($m, L('tips'), $this->setting['mailmessage']);
+							$email->send($m, L('tips'), $this->setting['mailmessage']);
 						}
 					}
 				}

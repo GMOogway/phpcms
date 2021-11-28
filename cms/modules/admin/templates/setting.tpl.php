@@ -48,19 +48,19 @@ include $this->admin_tpl('header');?>
 </style>
 <script type="text/javascript">
 <!--
-	$(function(){
-		$.formValidator.initConfig({formid:"myform",autotip:true,onerror:function(msg,obj){Dialog.alert(msg,function(){$(obj).focus();})}});
-		$("#dr_js_path").formValidator({onshow:"<?php echo L('setting_input').L('setting_js_path')?>",onfocus:"<?php echo L('setting_js_path').L('setting_end_with_x')?>"}).inputValidator({onerror:"<?php echo L('setting_js_path').L('setting_input_error')?>"}).regexValidator({regexp:"(.+)\/$",onerror:"<?php echo L('setting_js_path').L('setting_end_with_x')?>"});
-		$("#dr_css_path").formValidator({onshow:"<?php echo L('setting_input').L('setting_css_path')?>",onfocus:"<?php echo L('setting_css_path').L('setting_end_with_x')?>"}).inputValidator({onerror:"<?php echo L('setting_css_path').L('setting_input_error')?>"}).regexValidator({regexp:"(.+)\/$",onerror:"<?php echo L('setting_css_path').L('setting_end_with_x')?>"});
+    $(function(){
+        $.formValidator.initConfig({formid:"myform",autotip:true,onerror:function(msg,obj){Dialog.alert(msg,function(){$(obj).focus();})}});
+        $("#dr_js_path").formValidator({onshow:"<?php echo L('setting_input').L('setting_js_path')?>",onfocus:"<?php echo L('setting_js_path').L('setting_end_with_x')?>"}).inputValidator({onerror:"<?php echo L('setting_js_path').L('setting_input_error')?>"}).regexValidator({regexp:"(.+)\/$",onerror:"<?php echo L('setting_js_path').L('setting_end_with_x')?>"});
+        $("#dr_css_path").formValidator({onshow:"<?php echo L('setting_input').L('setting_css_path')?>",onfocus:"<?php echo L('setting_css_path').L('setting_end_with_x')?>"}).inputValidator({onerror:"<?php echo L('setting_css_path').L('setting_input_error')?>"}).regexValidator({regexp:"(.+)\/$",onerror:"<?php echo L('setting_css_path').L('setting_end_with_x')?>"});
 
-		$("#dr_img_path").formValidator({onshow:"<?php echo L('setting_input').L('setting_img_path')?>",onfocus:"<?php echo L('setting_img_path').L('setting_end_with_x')?>"}).inputValidator({onerror:"<?php echo L('setting_img_path').L('setting_input_error')?>"}).regexValidator({regexp:"(.+)\/$",onerror:"<?php echo L('setting_img_path').L('setting_end_with_x')?>"});
-		$("#dr_mobile_js_path").formValidator({onshow:"<?php echo L('setting_input').L('setting_mobile_js_path')?>",onfocus:"<?php echo L('setting_mobile_js_path').L('setting_end_with_x')?>"}).inputValidator({onerror:"<?php echo L('setting_mobile_js_path').L('setting_input_error')?>"}).regexValidator({regexp:"(.+)\/$",onerror:"<?php echo L('setting_mobile_js_path').L('setting_end_with_x')?>"});
-		$("#dr_mobile_css_path").formValidator({onshow:"<?php echo L('setting_input').L('setting_mobile_css_path')?>",onfocus:"<?php echo L('setting_mobile_css_path').L('setting_end_with_x')?>"}).inputValidator({onerror:"<?php echo L('setting_mobile_css_path').L('setting_input_error')?>"}).regexValidator({regexp:"(.+)\/$",onerror:"<?php echo L('setting_mobile_css_path').L('setting_end_with_x')?>"});
+        $("#dr_img_path").formValidator({onshow:"<?php echo L('setting_input').L('setting_img_path')?>",onfocus:"<?php echo L('setting_img_path').L('setting_end_with_x')?>"}).inputValidator({onerror:"<?php echo L('setting_img_path').L('setting_input_error')?>"}).regexValidator({regexp:"(.+)\/$",onerror:"<?php echo L('setting_img_path').L('setting_end_with_x')?>"});
+        $("#dr_mobile_js_path").formValidator({onshow:"<?php echo L('setting_input').L('setting_mobile_js_path')?>",onfocus:"<?php echo L('setting_mobile_js_path').L('setting_end_with_x')?>"}).inputValidator({onerror:"<?php echo L('setting_mobile_js_path').L('setting_input_error')?>"}).regexValidator({regexp:"(.+)\/$",onerror:"<?php echo L('setting_mobile_js_path').L('setting_end_with_x')?>"});
+        $("#dr_mobile_css_path").formValidator({onshow:"<?php echo L('setting_input').L('setting_mobile_css_path')?>",onfocus:"<?php echo L('setting_mobile_css_path').L('setting_end_with_x')?>"}).inputValidator({onerror:"<?php echo L('setting_mobile_css_path').L('setting_input_error')?>"}).regexValidator({regexp:"(.+)\/$",onerror:"<?php echo L('setting_mobile_css_path').L('setting_end_with_x')?>"});
 
-		$("#dr_mobile_img_path").formValidator({onshow:"<?php echo L('setting_input').L('setting_mobile_img_path')?>",onfocus:"<?php echo L('setting_mobile_img_path').L('setting_end_with_x')?>"}).inputValidator({onerror:"<?php echo L('setting_mobile_img_path').L('setting_input_error')?>"}).regexValidator({regexp:"(.+)\/$",onerror:"<?php echo L('setting_mobile_img_path').L('setting_end_with_x')?>"});
+        $("#dr_mobile_img_path").formValidator({onshow:"<?php echo L('setting_input').L('setting_mobile_img_path')?>",onfocus:"<?php echo L('setting_mobile_img_path').L('setting_end_with_x')?>"}).inputValidator({onerror:"<?php echo L('setting_mobile_img_path').L('setting_input_error')?>"}).regexValidator({regexp:"(.+)\/$",onerror:"<?php echo L('setting_mobile_img_path').L('setting_end_with_x')?>"});
 
-		$("#dr_errorlog_size").formValidator({onshow:"<?php echo L('setting_errorlog_hint')?>",onfocus:"<?php echo L('setting_input').L('setting_error_log_size')?>"}).inputValidator({onerror:"<?php echo L('setting_error_log_size').L('setting_input_error')?>"}).regexValidator({regexp:"num",datatype:"enum",onerror:"<?php echo L('setting_errorlog_type')?>"});	
-	})
+        $("#dr_errorlog_size").formValidator({onshow:"<?php echo L('setting_errorlog_hint')?>",onfocus:"<?php echo L('setting_input').L('setting_error_log_size')?>"}).inputValidator({onerror:"<?php echo L('setting_error_log_size').L('setting_input_error')?>"}).regexValidator({regexp:"num",datatype:"enum",onerror:"<?php echo L('setting_errorlog_type')?>"});    
+    })
 //-->
 </script>
 <div class="page-content main-content">
@@ -548,7 +548,7 @@ include $this->admin_tpl('header');?>
                         <label class="col-md-2 control-label"><?php echo L('mail_test')?></label>
                         <div class="col-md-9">
                             <label><input class="form-control input-large" type="text" id="mail_to" name="mail_to" value="" ></label>
-                            <label><button class="btn btn-sm blue" type="button" name="button" onclick="test_mail()"> <i class="fa fa-send"></i> <?php echo L('mail_test_send')?> </button></label>
+                            <label><a id="dr_sending" href="javascript:;" onclick="test_mail()" class="btn btn-sm blue"> <i class="fa fa-send"></i> <?php echo L('mail_test_send')?> </a></label>
                         </div>
                     </div>
 
@@ -727,41 +727,48 @@ $('.nav-tabs a').click(function (e) {
     $('#'+$(this).attr("data-toggle")).addClass('active');
 })
 function showsmtp(obj,hiddenid){
-	hiddenid = hiddenid ? hiddenid : 'smtpcfg';
-	var status = $(obj).val();
-	if(status == 1) $("#"+hiddenid).show();
-	else  $("#"+hiddenid).hide();
+    hiddenid = hiddenid ? hiddenid : 'smtpcfg';
+    var status = $(obj).val();
+    if(status == 1) $("#"+hiddenid).show();
+    else  $("#"+hiddenid).hide();
 }
 function test_mail() {
-	var mail_type = $('input[checkbox=mail_type][checked]').val();
-	var mail_auth = $('input[checkbox=mail_auth][checked]').val();
-    $.post('?m=admin&c=setting&a=public_test_mail&mail_to='+$('#mail_to').val(),{mail_type:mail_type,mail_server:$('#mail_server').val(),mail_port:$('#mail_port').val(),mail_user:$('#mail_user').val(),mail_password:$('#mail_password').val(),mail_auth:mail_auth,mail_from:$('#mail_from').val()}, function(data){
-	Dialog.alert(data);
-	});
+    var mail_type = $('input[checkbox=mail_type][checked]').val();
+    var mail_auth = $('input[name="setting[mail_auth]"][checked]').val();
+    $("#dr_sending").html(" <i class='fa fa-send'></i> <?php echo L('发送中...');?>");
+    $.ajax({type: "POST",dataType:"json", url: "?m=admin&c=setting&a=public_test_mail&mail_to="+$('#mail_to').val()+"&"+Math.random(), data: {mail_type:mail_type,mail_server:$('#mail_server').val(),mail_port:$('#mail_port').val(),mail_user:$('#mail_user').val(),mail_password:$('#mail_password').val(),mail_auth:mail_auth,mail_from:$('#mail_from').val()},
+        success: function(json) {
+            dr_tips(json.code, json.msg, -1);
+            $("#dr_sending").html(" <i class='fa fa-send'></i> <?php echo L('发送测试');?>");
+        },
+        error: function(HttpRequest, ajaxOptions, thrownError) {
+            dr_ajax_alert_error(HttpRequest, this, thrownError);
+        }
+    });
 }
 function to_key() {
    $.get('?m=admin&c=setting&a=public_syskey&pc_hash='+pc_hash, function(data){
-		$('#auth_key').val(data);
-	});
+        $('#auth_key').val(data);
+    });
 }
 function to_cookie() {
    $.get('?m=admin&c=setting&a=public_syskey&action=cookie_pre&pc_hash='+pc_hash, function(data){
-		$('#cookie_pre').val(data);
-	});
+        $('#cookie_pre').val(data);
+    });
 }
 $(function() {
-	$(".make-switch").bootstrapSwitch();
-	setInterval(dr_site_time, 1000);
+    $(".make-switch").bootstrapSwitch();
+    setInterval(dr_site_time, 1000);
 });
 function dr_site_time() {
-	$.ajax({
-		type: "get",
-		dataType: "json",
-		url: "?m=admin&c=setting&a=public_site_time&pc_hash="+pc_hash,
-		success: function(json) {
-			$('#site_time').html(json.msg);
-		}
-	});
+    $.ajax({
+        type: "get",
+        dataType: "json",
+        url: "?m=admin&c=setting&a=public_site_time&pc_hash="+pc_hash,
+        success: function(json) {
+            $('#site_time').html(json.msg);
+        }
+    });
 }
 </script>
 </body>

@@ -10,6 +10,7 @@ class payment extends admin {
 		if (!module_exists(ROUTE_M)) dr_admin_msg(0,L('module_not_exists')); 
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
+		$this->email = pc_base::load_sys_class('email');
 		$this->db = pc_base::load_model('pay_payment_model');
 		$this->account_db = pc_base::load_model('pay_account_model');
 		$this->member_db = pc_base::load_model('member_model');
@@ -233,11 +234,10 @@ class payment extends admin {
 					$spend->$func($value,$msg,$userinfo['userid'],$username,param::get_cookie('userid'),param::get_cookie('admin_username'));
 				}
 				if(intval($_POST['sendemail'])) {
-					pc_base::load_sys_func('mail');
 					$op = $this->input->post('pay_unit') ? $value: '-'.$value;
 					$op = $this->input->post('pay_type') ? $op.L('yuan') : $op.L('point');
 					$msg = L('account_changes_notice_tips',array('username'=>$username,'time'=>date('Y-m-d H:i:s',SYS_TIME),'op'=>$op,'note'=>$usernote,'amount'=>$userinfo['amount'],'point'=>$userinfo['point']));
-					sendmail($userinfo['email'],L('send_account_changes_notice'),$msg);
+					$this->email->send($userinfo['email'],L('send_account_changes_notice'),$msg);
 				}
 				dr_admin_msg(1,L('public_discount_succ'),HTTP_REFERER);	
 			}

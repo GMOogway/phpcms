@@ -294,6 +294,9 @@ a.dropdown-item.active{color:#fff;}
 .badge-success {background-color: #36c6d3;}
 .badge-danger {background-color: #ed6b75;}
 .badge-warning {background-color: #F1C40F;}
+.badge-no,.badge-yes {height: 22px;padding: 4px;width: 22px;}
+.badge-no {background-color: #ed6b75;}
+.badge-yes {background-color: #3ea9e2;}
 .scroller {padding: 0 12px 0 0;margin: 0;overflow: hidden;}
 
 /*分页修改配色*/

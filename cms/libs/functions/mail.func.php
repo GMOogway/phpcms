@@ -4,11 +4,15 @@
  * @copyright			(C) 2005-2010
  * @lastmodify			2021-06-06
  */
-function runlog($server, $msg) {
+function runlog($server, $name, $msg) {
 	if (is_gb2312($msg) && function_exists('iconv')) {
-		$msg = iconv('GB2312', 'UTF-8', $msg);
+		$new = iconv('GB2312', 'UTF-8', $msg);
+		if ($new) {
+			$msg = $new;
+		}
 	}
-	@file_put_contents(CACHE_PATH.'email_log.php', date('Y-m-d H:i:s').' ['.$server.'] '.str_replace([PHP_EOL, chr(13), chr(10)], '', $msg).PHP_EOL, FILE_APPEND);
+	$error = $name.'-'.$msg;
+	@file_put_contents(CACHE_PATH.'email_log.php', date('Y-m-d H:i:s').' ['.$server.'] '.str_replace(array(PHP_EOL, chr(13), chr(10)), '', $msg).PHP_EOL, FILE_APPEND);
 }
 
 function is_gb2312($str) {
@@ -43,7 +47,7 @@ function sendmail($toemail, $subject, $message, $from='',$cfg = array(), $sitena
 		if($cfg['mail_user']=='' || $cfg['mail_password'] ==''){
 			return false;
 		}
-		$mail= Array (
+		$mail= array (
 			'mailsend' => 2,
 			'maildelimiter' => 1,
 			'mailusername' => 1,
@@ -93,14 +97,14 @@ function sendmail($toemail, $subject, $message, $from='',$cfg = array(), $sitena
 	stream_set_blocking($fp, true);
 	$lastmessage = fgets($fp, 512);
 	if(substr($lastmessage, 0, 3) != '220') {
-		runlog($mail['server'].' - '.$mail['auth_username'].' - '.$toemail, "连接失败 - $lastmessage");
+		runlog($mail['server'].' - '.$mail['auth_username'].' - '.$toemail, "连接失败", $lastmessage);
 		return FALSE;
 	}
 
 	fputs($fp, ($mail['auth'] ? 'EHLO' : 'HELO')." cms\r\n");
 	$lastmessage = fgets($fp, 512);
 	if(substr($lastmessage, 0, 3) != 220 && substr($lastmessage, 0, 3) != 250) {
-		runlog($mail['server'].' - '.$mail['auth_username'].' - '.$toemail, "HELO/EHLO - $lastmessage");
+		runlog($mail['server'].' - '.$mail['auth_username'].' - '.$toemail, "HELO/EHLO", $lastmessage);
 		return FALSE;
 	}
 
@@ -109,7 +113,7 @@ function sendmail($toemail, $subject, $message, $from='',$cfg = array(), $sitena
 		fputs($fp, "STARTTLS cms\r\n");
 		$lastmessage = fgets($fp, 512);
 		if(substr($lastmessage, 0, 3) != 220 && substr($lastmessage, 0, 3) != 250) {
-			runlog($mail['server'].' - '.$mail['auth_username'].' - '.$toemail, "STARTTLS - $lastmessage");
+			runlog($mail['server'].' - '.$mail['auth_username'].' - '.$toemail, "STARTTLS", $lastmessage);
 			return FALSE;
 		}
 	}
@@ -128,19 +132,19 @@ function sendmail($toemail, $subject, $message, $from='',$cfg = array(), $sitena
 		fputs($fp, "AUTH LOGIN\r\n");
 		$lastmessage = fgets($fp, 512);
 		if(substr($lastmessage, 0, 3) != 334) {
-			runlog($mail['server'].' - '.$mail['auth_username'].' - '.$toemail, "认证登录失败 - $lastmessage");
+			runlog($mail['server'].' - '.$mail['auth_username'].' - '.$toemail, "认证登录失败", $lastmessage);
 			return FALSE;
 		}
 		fputs($fp, base64_encode($mail['auth_username']) . "\r\n");
 		$lastmessage = fgets($fp, 512);
 		if(substr($lastmessage, 0, 3) != 334) {
-			runlog($mail['server'].' - '.$mail['auth_username'].' - '.$toemail, "账号验证失败 - $lastmessage");
+			runlog($mail['server'].' - '.$mail['auth_username'].' - '.$toemail, "账号验证失败", $lastmessage);
 			return FALSE;
 		}
 		fputs($fp, base64_encode($mail['auth_password']) . "\r\n");
 		$lastmessage = fgets($fp, 512);
 		if(substr($lastmessage, 0, 3) != 235) {
-			runlog($mail['server'].' - '.$mail['auth_username'].' - '.$toemail, "密码验证失败 - $lastmessage");
+			runlog($mail['server'].' - '.$mail['auth_username'].' - '.$toemail, "密码验证失败", $lastmessage);
 			return FALSE;
 		}
 
@@ -153,7 +157,7 @@ function sendmail($toemail, $subject, $message, $from='',$cfg = array(), $sitena
 		fputs($fp, "MAIL FROM: <".preg_replace("/.*\<(.+?)\>.*/", "\\1", $email_from).">\r\n");
 		$lastmessage = fgets($fp, 512);
 		if(substr($lastmessage, 0, 3) != 250) {
-			runlog($mail['server'].' - '.$mail['auth_username'].' - '.$toemail, "MAIL FROM - $lastmessage");
+			runlog($mail['server'].' - '.$mail['auth_username'].' - '.$toemail, "MAIL FROM", $lastmessage);
 			return FALSE;
 		}
 	}
@@ -163,13 +167,13 @@ function sendmail($toemail, $subject, $message, $from='',$cfg = array(), $sitena
 	if(substr($lastmessage, 0, 3) != 250) {
 		fputs($fp, "RCPT TO: <".preg_replace("/.*\<(.+?)\>.*/", "\\1", $toemail).">\r\n");
 		$lastmessage = fgets($fp, 512);
-		runlog($mail['server'].' - '.$mail['auth_username'].' - '.$toemail, "RCPT TO - $lastmessage");
+		runlog($mail['server'].' - '.$mail['auth_username'].' - '.$toemail, "RCPT TO", $lastmessage);
 		return FALSE;
 	}
 	fputs($fp, "DATA\r\n");
 	$lastmessage = fgets($fp, 512);
 	if(substr($lastmessage, 0, 3) != 354) {
-		runlog($mail['server'].' - '.$mail['auth_username'].' - '.$toemail, "DATA - $lastmessage");
+		runlog($mail['server'].' - '.$mail['auth_username'].' - '.$toemail, "DATA", $lastmessage);
 		return FALSE;
 	}
 	$headers .= 'Message-ID: <'.gmdate('YmdHs').'.'.substr(md5($email_message.microtime()), 0, 6).rand(100000, 999999).'@'.$_SERVER['HTTP_HOST'].">{$maildelimiter}";
@@ -182,7 +186,7 @@ function sendmail($toemail, $subject, $message, $from='',$cfg = array(), $sitena
 	fputs($fp, "$email_message\r\n.\r\n");
 	$lastmessage = fgets($fp, 512);
 	if(substr($lastmessage, 0, 3) != 250) {
-		runlog($mail['server'].' - '.$mail['auth_username'].' - '.$toemail, "END - $lastmessage");
+		runlog($mail['server'].' - '.$mail['auth_username'].' - '.$toemail, "END", $lastmessage);
 		return FALSE;
 	}
 	fputs($fp, "QUIT\r\n");

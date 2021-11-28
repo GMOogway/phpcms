@@ -23,6 +23,10 @@ class create_all_html extends admin {
 	* 一键生成全站
 	*/
 	public function all_update(){
+		$this->site_db = pc_base::load_model('site_model');
+		$data = $this->site_db->get_one(array('siteid'=>$this->siteid));
+		$ishtml = $data['ishtml'];
+		$mobilehtml = $data['mobilehtml'];
 		include $this->admin_tpl('create_html_all');
 	}
 	/**

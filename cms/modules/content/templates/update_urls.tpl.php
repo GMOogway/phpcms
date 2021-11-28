@@ -81,13 +81,13 @@ include $this->admin_tpl('header','admin');?>
                             <td>
                                 <button type="button" onclick="dr_submit_todo('', '?m=content&c=create_html&a=public_show_url&modelid=<?php echo $_v['modelid'];?>')" class="btn blue btn-xs"> <i class="fa fa-refresh"></i> <?php echo L('批量更新内容URL地址')?> </button>
                                 <?php if (ADMIN_FOUNDERS && dr_in_array($_SESSION['userid'], ADMIN_FOUNDERS)) {?>
-                                <button type="button" onclick="dr_iframe_show_html('desc',<?php echo $_v['modelid'];?>)" class="btn drak btn-xs"> <i class="fa fa-th-large"></i> <?php echo L('批量提取描述字段')?> </button>
-                                <button type="button" onclick="dr_iframe_show_html('thumb',<?php echo $_v['modelid'];?>)" class="btn green btn-xs"> <i class="fa fa-photo"></i> <?php echo L('批量提取缩略图')?> </button>
-                                <button type="button" onclick="dr_iframe_show_html('tag',<?php echo $_v['modelid'];?>)" class="btn yellow btn-xs"> <i class="fa fa-tag"></i> <?php echo L('批量提取关键词')?> </button>
+                                <button type="button" onclick="iframe_show('<?php echo L('批量操作')?>','?m=content&c=create_html&a=public_desc_index&modelid=<?php echo $_v['modelid'];?>')" class="btn drak btn-xs"> <i class="fa fa-th-large"></i> <?php echo L('批量提取描述字段')?> </button>
+                                <button type="button" onclick="iframe_show('<?php echo L('批量操作')?>','?m=content&c=create_html&a=public_thumb_index&modelid=<?php echo $_v['modelid'];?>')" class="btn green btn-xs"> <i class="fa fa-photo"></i> <?php echo L('批量提取缩略图')?> </button>
+                                <button type="button" onclick="iframe_show('<?php echo L('批量操作')?>','?m=content&c=create_html&a=public_tag_index&modelid=<?php echo $_v['modelid'];?>')" class="btn yellow btn-xs"> <i class="fa fa-tag"></i> <?php echo L('批量提取关键词')?> </button>
                                 <?php }?>
                                 <?php if($_SESSION['roleid']==1 && ADMIN_FOUNDERS && dr_in_array($_SESSION['userid'], ADMIN_FOUNDERS)) {?>
-                                <button type="button" onclick="dr_iframe_show_html('del',<?php echo $_v['modelid'];?>)" class="btn red btn-xs"> <i class="fa fa-trash"></i> <?php echo L('批量彻底删除内容')?> </button>
-                                <button type="button" onclick="dr_iframe_show_html('cat',<?php echo $_v['modelid'];?>)" class="btn green btn-xs"> <i class="fa fa-reorder"></i> <?php echo L('批量变更栏目')?> </button>
+                                <button type="button" onclick="iframe_show('<?php echo L('批量操作')?>','?m=content&c=create_html&a=public_del_index&modelid=<?php echo $_v['modelid'];?>')" class="btn red btn-xs"> <i class="fa fa-trash"></i> <?php echo L('批量彻底删除内容')?> </button>
+                                <button type="button" onclick="iframe_show('<?php echo L('批量操作')?>','?m=content&c=create_html&a=public_cat_index&modelid=<?php echo $_v['modelid'];?>')" class="btn green btn-xs"> <i class="fa fa-reorder"></i> <?php echo L('批量变更栏目')?> </button>
                                 <?php }?>
                             </td>
                         </tr>
@@ -253,197 +253,6 @@ include $this->admin_tpl('header','admin');?>
         </div>
     </div>
 </div>
-<div class="hide">
-    <div id="tagform_html">
-        <form id="tagform">
-            <div class="form-body">
-
-                <div class="form-group">
-                    <select class="bs-select form-control" name='catids[]' id='catids' multiple="multiple" style="height:200px;" title="<?php echo L('push_ctrl_to_select');?>">
-                    <option value='0' selected><?php echo L('no_limit_category');?></option>
-                    <?php echo $string;?>
-                    </select>
-                </div>
-                <div class="form-actions">
-                    <div class="row">
-                        <div class="col-md-6" style="text-align:left">
-                            <div class="form-group" style="margin-bottom:5px">
-                                <label> <?php echo L('提取范围')?> </label>
-                            </div>
-                            <div class="form-group">
-                                <div class="mt-radio-inline">
-                                    <label class="mt-radio">
-                                        <input type="radio" name="keyword"  value="1" checked=""> <?php echo L('只提取空词的内容')?>
-                                        <span></span>
-                                    </label>
-                                    <label class="mt-radio">
-                                        <input type="radio" name="keyword" value="0"> <?php echo L('重新提取全部内容')?>
-                                        <span></span>
-                                    </label>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="col-md-6" style="text-align:right;padding-top:25px">
-                            <button type="button" onclick="dr_submit_todo('tagform_post', '?m=content&c=create_html&a=public_tag_index&modelid=[modelid]')" class="btn blue"> <i class="fa fa-tag"></i> <?php echo L('立即执行')?></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div id="thumbform_html">
-        <form id="thumbform">
-            <input type="hidden" name="dosubmit" value="1">
-            <div class="form-body">
-                <div class="form-group">
-                    <select class="bs-select form-control" name='catids[]' id='catids' multiple="multiple" style="height:200px;" title="<?php echo L('push_ctrl_to_select');?>">
-                    <option value='0' selected><?php echo L('no_limit_category');?></option>
-                    <?php echo $string;?>
-                    </select>
-                </div>
-                <div class="form-actions">
-                    <div class="row">
-                        <div class="col-md-6" style="text-align:left">
-                            <div class="form-group" style="margin-bottom:5px">
-                                <label> <?php echo L('替换范围')?> </label>
-                            </div>
-                            <div class="form-group">
-                                <div class="mt-radio-inline">
-                                    <label class="mt-radio">
-                                        <input type="radio" name="thumb"  value="1" checked=""> <?php echo L('只替换空图')?>
-                                        <span></span>
-                                    </label>
-                                    <label class="mt-radio">
-                                        <input type="radio" name="thumb" value="0"> <?php echo L('替换全部')?>
-                                        <span></span>
-                                    </label>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="col-md-6" style="text-align:right;padding-top:25px">
-                            <button type="button" onclick="dr_submit_todo('thumbform_post', '?m=content&c=create_html&a=public_thumb_index&modelid=[modelid]')" class="btn blue"> <i class="fa fa-photo"></i> <?php echo L('立即执行')?></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div id="descform_html">
-        <form id="descform">
-            <div class="form-body">
-
-                <div class="form-group">
-                    <select class="bs-select form-control" name='catids[]' id='catids' multiple="multiple" style="height:200px;" title="<?php echo L('push_ctrl_to_select');?>">
-                    <option value='0' selected><?php echo L('no_limit_category');?></option>
-                    <?php echo $string;?>
-                    </select>
-                </div>
-                <div class="form-actions">
-                    <div class="row">
-                        <div class="col-md-3" style="text-align:left">
-                            <div class="form-group" style="margin-bottom:5px">
-                                <label> <?php echo L('提取字数')?> </label>
-                            </div>
-                            <div class="form-group">
-                                <label><input type="text" name="nums" value="100" class="form-control"></label>
-                            </div>
-                        </div>
-                        <div class="col-md-6" style="text-align:left">
-                            <div class="form-group" style="margin-bottom:5px">
-                                <label> <?php echo L('提取范围')?> </label>
-                            </div>
-                            <div class="form-group">
-                                <div class="mt-radio-inline">
-                                    <label class="mt-radio">
-                                        <input type="radio" name="keyword"  value="1" checked=""> <?php echo L('只提取空描述的内容')?>
-                                        <span></span>
-                                    </label>
-                                    <label class="mt-radio">
-                                        <input type="radio" name="keyword" value="0"> <?php echo L('重新提取全部内容')?>
-                                        <span></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12" style="text-align:center;padding-top:20px">
-                            <button type="button" onclick="dr_submit_todo('descform_post', '?m=content&c=create_html&a=public_desc_index&modelid=[modelid]')" class="btn blue"> <i class="fa fa-tag"></i> <?php echo L('立即执行')?></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div id="delform_html">
-        <form id="delform">
-            <div class="form-body">
-                <div class="form-group">
-                    <select class="bs-select form-control" name='catids[]' id='catids' multiple="multiple" style="height:200px;" title="<?php echo L('push_ctrl_to_select');?>">
-                    <option value='0' selected><?php echo L('no_limit_category');?></option>
-                    <?php echo $string;?>
-                    </select>
-                </div>
-                <div class="form-actions">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group" style="margin-bottom:5px">
-                                <label> <?php echo L('按管理员账号或按管理员uid')?> </label>
-                            </div>
-                            <div class="form-group">
-                                <label><input type="text" name="author" class="form-control"></label>
-                            </div>
-                        </div>
-                        <div class="col-md-8">
-                            <div class="form-group" style="margin-bottom:5px">
-                                <label> <?php echo L('按id范围')?> </label>
-                            </div>
-                            <div class="form-group">
-                                <label><input type="text" name="id1" class="form-control"></label>
-                                <label><?php echo L('到')?></label>
-                                <label><input type="text" name="id2" class="form-control"></label>
-                            </div>
-                        </div>
-                        <div class="col-md-12" style="text-align:center;padding-top:20px">
-                            <button type="button" onclick="dr_submit_todo('delform_post', '?m=content&c=create_html&a=public_del_index&modelid=[modelid]')" class="btn red"> <i class="fa fa-trash"></i> <?php echo L('立即执行')?></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div id="catform_html">
-        <form id="catform">
-            <div class="form-body">
-                <div class="form-group">
-                    <select class="bs-select form-control" name='catids[]' id='catids' multiple="multiple" style="height:200px;" title="<?php echo L('push_ctrl_to_select');?>">
-                    <option value='0' selected><?php echo L('no_limit_category');?></option>
-                    <?php echo $string;?>
-                    </select>
-                </div>
-                <div class="form-actions">
-                    <div class="row">
-                        <div class="col-md-12" style="text-align:left">
-                            <div class="form-group" style="margin-bottom:5px">
-                                <label> <?php echo L('变更为')?> </label>
-                            </div>
-                            <div class="form-group">
-                                <select class="bs-select form-control" name='toid' id='toid'>
-                                <option value='0' selected><?php echo L('选择栏目');?></option>
-                                <?php echo $select_post;?>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-md-12" style="text-align:center;padding-top:20px">
-                            <button type="button" onclick="dr_submit_todo('catform_post', '?m=content&c=create_html&a=public_cat_index&modelid=[modelid]')" class="btn blue"> <i class="fa fa-tag"></i> <?php echo L('立即执行')?></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
 </div>
 <script>
 $('.nav-tabs a').click(function (e) {
@@ -452,25 +261,6 @@ $('.nav-tabs a').click(function (e) {
     $(this).parent().addClass('active');
     $('#'+$(this).attr("data-toggle")).addClass('active');
 })
-function dr_iframe_show_html(id,modelid) {
-    var html = $("#"+id+"form_html").html();
-    html = html.replace('<form id="'+id+'form">', '<form id="'+id+'form_post">');
-    html = html.replace('[modelid]', modelid);
-    var w = '50%';
-    var h = '60%';
-    if (is_mobile()) {
-        w = '95%';
-        h = '90%';
-    }
-    layer.open({
-        type: 1,
-        title: '<?php echo L('批量操作')?>',
-        shadeClose: true,
-        shade: 0,
-        area: [w, h],
-        content: "<div  style=\"padding: 20px;\">"+html+"</div>"
-    });
-}
 function dr_fd(v) {
     $.ajax({type: "get",dataType:"json", url: "?m=content&c=create_html&a=public_field_index&table="+v,
         success: function(json) {

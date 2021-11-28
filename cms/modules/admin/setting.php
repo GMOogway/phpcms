@@ -136,27 +136,26 @@ class setting extends admin {
 	 * 测试邮件配置
 	 */
 	public function public_test_mail() {
-		pc_base::load_sys_func('mail');
+		if (!$this->input->get('mail_to')) {
+			dr_json(0, L('test_email_to'));
+		}
+		$email = pc_base::load_sys_class('email');
+		$dmail = $email->set(array(
+			'host' => $this->input->post('mail_server'),
+			'user' => $this->input->post('mail_user'),
+			'pass' => $this->input->post('mail_password'),
+			'port' => intval($this->input->post('mail_port')),
+			'type' => intval($this->input->post('mail_type')),
+			'auth' => intval($this->input->post('mail_auth')),
+			'from' => $this->input->post('mail_from')
+		));
 		$subject = 'cms test mail';
 		$message = 'this is a test mail from cms team';
-		$mail= Array (
-			'mailsend' => 2,
-			'maildelimiter' => 1,
-			'mailusername' => 1,
-			'server' => $this->input->post('mail_server'),
-			'port' => intval($this->input->post('mail_port')),
-			'mail_type' => intval($this->input->post('mail_type')),
-			'auth' => intval($this->input->post('mail_auth')),
-			'from' => $this->input->post('mail_from'),
-			'auth_username' => $this->input->post('mail_user'),
-			'auth_password' => $this->input->post('mail_password')
-		);	
-		
-		if(sendmail($this->input->get('mail_to'),$subject,$message,$this->input->post('mail_from'),$mail)) {
-			echo L('test_email_succ').$this->input->get('mail_to');
+		if ($dmail->send($this->input->get('mail_to'), $subject, $message)) {
+			dr_json(1, str_replace('{mail_to}', $this->input->get('mail_to'), L('test_email_succ_to')));
 		} else {
-			echo L('test_email_faild');
-		}	
+			dr_json(0, L('test_email_faild_to'). $dmail->error());
+		}
 	}
 	
 	/**

@@ -19,8 +19,8 @@ class content extends admin {
 	 */
 	public function add() {
 		$_GET['specialid'] = intval($_GET['specialid']);
-		if (!$_GET['specialid']) dr_admin_msg(0,L('illegal_action'), HTTP_REFERER);
-		if ($_POST['dosubmit'] || $_POST['dosubmit_continue']) {
+		if (!$_GET['specialid']) dr_json(0, L('illegal_action'));
+		if($this->input->post('dosubmit')) {
 			$info = $this->check($_POST['info'], 'info', 'add', $_POST['data']['content']); //验证数据的合法性
 			//处理外部链接情况
 			if ($info['islink']) {
@@ -59,11 +59,7 @@ class content extends admin {
 				}
 				$this->attachment_db->api_update(stripslashes($data['content']),'special-c-'.$contentid);
 			}
-			if(isset($_POST['dosubmit'])) {
-				showmessage(L('content_add_success').L('2s_close'),'blank','','','window.top.$(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.location.reload(true);function set_time() {$("#secondid").html(1);}setTimeout("set_time()", 500);setTimeout("ownerDialog.close()", 1200);');
-			} else {
-				showmessage(L('content_add_success'),HTTP_REFERER);
-			}
+			dr_json(1, L('content_add_success'));
 		} else {
 			$rs = $this->type_db->select(array('parentid'=>$_GET['specialid'], 'siteid'=>$this->get_siteid()), 'typeid, name');
 			$types = array();
@@ -91,8 +87,8 @@ class content extends admin {
 	public function edit() {
 		$_GET['specialid'] = intval($_GET['specialid']);
 		$_GET['id'] = intval($_GET['id']);
-		if (!$_GET['specialid'] || !$_GET['id']) dr_admin_msg(0,L('illegal_action'), HTTP_REFERER);
-		if (isset($_POST['dosubmit']) || isset($_POST['dosubmit_continue'])) {
+		if (!$_GET['specialid'] || !$_GET['id']) dr_json(0, L('illegal_action'));
+		if($this->input->post('dosubmit')) {
 			$info = $this->check($_POST['info'], 'info', 'edit', $_POST['data']['content']); //验证数据的合法性
 			//处理外部链接更换情况
 			$r = $this->db->get_one(array('id'=>$_GET['id'], 'specialid'=>$_GET['specialid']));
@@ -146,11 +142,7 @@ class content extends admin {
 			}
 			$html->_index($_GET['specialid'], 20, 5);
 			$html->_list($info['typeid'], 20, 5);
-			if(isset($_POST['dosubmit'])) {
-				showmessage(L('content_edit_success').L('2s_close'),'blank','','','window.top.$(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.location.reload(true);function set_time() {$("#secondid").html(1);}setTimeout("set_time()", 500);setTimeout("ownerDialog.close()", 1200);');
-			} else {
-				showmessage(L('content_edit_success'),HTTP_REFERER);
-			}
+			dr_json(1, L('content_edit_success'));
 		} else {
 			$info = $this->db->get_one(array('id'=>$_GET['id'], 'specialid'=>$_GET['specialid']));
 			if($info['isdata']) $data = $this->data_db->get_one(array('id'=>$_GET['id']));
@@ -213,7 +205,7 @@ class content extends admin {
 		$page = max(intval($_GET['page']), 1);
 		$datas = $this->db->listinfo(array('specialid'=>$_GET['specialid']), '`listorder` ASC , `id` DESC', $page);
 		$pages = $this->db->pages;
-		$big_menu = array(array('javascript:contentopen(\'?m=special&c=content&a=add&specialid='.$_GET['specialid'].'\',\'\');void(0);', L('add_content')), array('javascript:omnipotent(\'import\',\'?m=special&c=special&a=import&specialid='.$_GET['specialid'].'\',\''.L('import_content').'\',1,700,500);void(0);', L('import_content')));
+		$big_menu = array(array('javascript:dr_content_submit(\'?m=special&c=content&a=add&specialid='.$_GET['specialid'].'\',\'add\');void(0);', L('add_content')), array('javascript:omnipotent(\'import\',\'?m=special&c=special&a=import&specialid='.$_GET['specialid'].'\',\''.L('import_content').'\',1,700,500);void(0);', L('import_content')));
 		include $this->admin_tpl('content_list');
 	}
 	
@@ -293,8 +285,8 @@ class content extends admin {
 	 */
 	private function check($data = array(), $type = 'info', $action = 'add', $content = '') {
 		if ($type == 'info') {
-			if (!$data['title']) dr_admin_msg(0,L('title_no_empty'), HTTP_REFERER);
-			if (!$data['typeid']) dr_admin_msg(0,L('no_select_type'), HTTP_REFERER);
+			if (!$data['typeid']) dr_json(0 ,L('no_select_type'), array('field' => 'typeid'));
+			if (!$data['title']) dr_json(0, L('title_no_empty'), array('field' => 'title'));
 			$data['inputtime'] = $data['inputtime'] ? strtotime($data['inputtime']) : SYS_TIME;
 			$data['islink'] = $data['islink'] ? intval($data['islink']) : 0;
 			$data['style'] = '';
@@ -327,7 +319,7 @@ class content extends admin {
 				$data['userid'] = $_SESSION['userid'];
 			}
 		} elseif ($type == 'data') {
-			if (!$data['content']) dr_admin_msg(0,L('content_no_empty'), HTTP_REFERER);
+			if (!$data['content']) dr_json(0, L('content_no_empty'), array('field' => 'content'));
 		}
 		return $data;
 	}

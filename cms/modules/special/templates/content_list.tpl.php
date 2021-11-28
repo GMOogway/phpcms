@@ -48,7 +48,7 @@ include $this->admin_tpl('header','admin');
 		<td align='center'><?php echo $types[$r['typeid']]['name'];?></td>
 		<td align='center'><?php echo $r['username'];?></td>
 		<td align='center'><?php echo dr_date($r['updatetime'], null, 'red');?></td>
-		<td align='center'><a class="btn btn-xs green" href="javascript:;" onclick="javascript:contentopen('?m=special&c=content&a=edit&specialid=<?php echo $r['specialid']?>&id=<?php echo $r['id']?>','')"><?php echo L('content_edit')?></a> </td>
+		<td align='center'><a class="btn btn-xs green" href="javascript:;" onclick="javascript:dr_content_submit('?m=special&c=content&a=edit&specialid=<?php echo $r['specialid']?>&id=<?php echo $r['id']?>','edit')"><?php echo L('content_edit')?></a> </td>
 	</tr>
      <?php }?>
 </tbody>

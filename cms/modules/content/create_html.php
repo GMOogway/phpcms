@@ -35,43 +35,6 @@ class create_html extends admin {
 				$tables[$t['Name']] = $t;
 			//}
 		}
-		
-		$tree = pc_base::load_sys_class('tree');
-		$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
-		$tree->nbsp = '&nbsp;&nbsp;&nbsp;';
-		$categorys = array();
-		if(!empty($this->categorys)) {
-			foreach($this->categorys as $catid=>$r) {
-				$setting = string2array($r['setting']);
-				if ($setting['disabled']) continue;
-				if($this->siteid != $r['siteid'] || ($r['type']!=0 && $r['child']==0)) continue;
-				if($modelid && $modelid != $r['modelid']) continue;
-				$categorys[$catid] = $r;
-			}
-		}
-		$str  = "<option value='\$catid' \$selected>\$spacer \$catname</option>";
-
-		$tree->init($categorys);
-		$string = $tree->get_tree(0, $str);
-		
-		$tree = pc_base::load_sys_class('tree');
-		$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
-		$tree->nbsp = '&nbsp;&nbsp;&nbsp;';
-		$categorys_post = array();
-		if(!empty($this->categorys)) {
-			foreach($this->categorys as $catid=>$r) {
-				$setting = string2array($r['setting']);
-				if ($setting['disabled']) continue;
-				if($this->siteid != $r['siteid'] || ($r['type']!=0 && $r['child']==0)) continue;
-				if($modelid && $modelid != $r['modelid']) continue;
-				$r['disabled'] = $r['child'] ? 'disabled' : '';
-				$categorys_post[$catid] = $r;
-			}
-		}
-		$str_post  = "<option value='\$catid' \$selected \$disabled>\$spacer \$catname</option>";
-
-		$tree->init($categorys_post);
-		$select_post = $tree->get_tree(0, $str_post);
 		include $this->admin_tpl('update_urls');
 	}
 
@@ -205,7 +168,7 @@ class create_html extends admin {
 			$pagesize = $this->input->get('pagesize');
 			$maxsize = $this->input->get('maxsize');
 			$count_url = '?m=content&c=create_html&a=public_category_count&maxsize='.$maxsize.'&pagesize='.$pagesize.'&catids='.$catids;
-			$todo_url = '?m=content&c=create_html&a=public_category_add&maxsize='.$maxsize.'&pagesize='.$pagesize.'&&catids='.$catids;
+			$todo_url = '?m=content&c=create_html&a=public_category_add&maxsize='.$maxsize.'&pagesize='.$pagesize.'&catids='.$catids;
 			include $this->admin_tpl('show_html');
 		} else {
 			$show_header = $show_dialog  = '';
@@ -557,8 +520,226 @@ class create_html extends admin {
 			dr_json($page + 1, $html, array('pcount' => $pcount + 1));
 		}
 	}
+	
+	// 按栏目设置URL规则
+	public function public_html_index() {
+		$show_header = $show_dialog  = '';
+		$tree = pc_base::load_sys_class('tree');
+		$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
+		$tree->nbsp = '&nbsp;&nbsp;&nbsp;';
+		$categorys = array();
+		if(!empty($this->categorys)) {
+			foreach($this->categorys as $catid=>$r) {
+				$setting = string2array($r['setting']);
+				if($this->siteid != $r['siteid'] || $r['type']==2) continue;
+				$r['name'] = str_cut($r['catname'], 30);
+				$ishtml = intval($setting['ishtml']);
+				$r['is_page_html'] = '<a href="javascript:;" onclick="dr_cat_ajax_open_close(this, \'?m=content&c=create_html&a=public_html_edit&share=1&catid='.$r['catid'].'&pc_hash=\'+pc_hash, 0);" class="badge badge-'.(!$ishtml ? 'no' : 'yes').'"><i class="fa fa-'.(!$ishtml ? 'times' : 'check').'"></i></a>';
+				if ($r['type']==0) {
+					$content_ishtml = intval($setting['content_ishtml']);
+					$r['is_show_html'] = '<a href="javascript:;" onclick="dr_cat_ajax_open_close(this, \'?m=content&c=create_html&a=public_html_edit&share=0&catid='.$r['catid'].'&pc_hash=\'+pc_hash, 0);" class="badge badge-'.(!$content_ishtml ? 'no' : 'yes').'"><i class="fa fa-'.(!$content_ishtml ? 'times' : 'check').'"></i></a>';
+				} else {
+					$r['is_show_html'] = '';
+				}
+				$r['category'] = form::urlrule('content','category',$ishtml,$setting['category_ruleid'],'class="form-control" onchange="dr_save_urlrule(1, \''.$r['catid'].'\', this.value)"');
+				if ($r['type']==0) {
+					$r['show'] = form::urlrule('content','show',$content_ishtml,$setting['category_ruleid'],'class="form-control" onchange="dr_save_urlrule(0, \''.$r['catid'].'\', this.value)"');
+				} else {
+					$r['show'] = '';
+				}
+				$categorys[$catid] = $r;
+			}
+		}
+		$str = "<tr>";
+		$str.= "<td style='text-align:center'>\$catid</td>";
+		$str.= "<td>\$spacer \$name</td>";
+		$str.= "<td style='text-align:center'>\$is_page_html</td>";
+		$str.= "<td style='text-align:center'>\$is_show_html</td>";
+		$str.= "<td>\$category</td>";
+		$str.= "<td>\$show</td>";
+		$str.= "</tr>";
+		$tree->init($categorys);
+		$string = $tree->get_tree(0, $str);
+		include $this->admin_tpl('module_content_html');
+	}
+	public function public_html_edit() {
+		$show_header = $show_dialog  = '';
+		$share = intval($this->input->get('share'));
+		$catid = intval($this->input->get('catid'));
+		$this->category_db = pc_base::load_model('category_model');
+		$row = $this->category_db->get_one(array('catid'=>$catid));
+		if (!$row) {
+			dr_json(0, L('栏目数据不存在'));
+		}
+		$row['setting'] = dr_string2array($row['setting']);
+		if ($share) {
+			$html = (int)$row['setting']['ishtml'];
+			$v = $html ? 0 : 1;
+			$row['setting']['ishtml'] = $v;
+		} else {
+			$html = (int)$row['setting']['content_ishtml'];
+			$v = $html ? 0 : 1;
+			$row['setting']['content_ishtml'] = $v;
+		}
+		$this->category_db->update(array('setting' => dr_array2string($row['setting'])),array('catid'=>$catid));
+		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
+		$this->cache_api->cache('category');
+		dr_json(1, L($v ? '静态模式' : '动态模式'), array('value' => $v, 'share' => 1));
+	}
+	public function public_index_edit() {
+		$show_header = $show_dialog  = '';
+		$share = intval($this->input->get('share'));
+		$this->site_db = pc_base::load_model('site_model');
+		$row = $this->site_db->get_one(array('siteid'=>$this->siteid));
+		if (!$row) {
+			dr_json(0, L('站点数据不存在'));
+		}
+		if ($share) {
+			$html = (int)$row['ishtml'];
+			$v = $html ? 0 : 1;
+			$row['ishtml'] = $v;
+			$this->site_db->update(array('ishtml' => $row['ishtml']),array('siteid'=>$this->siteid));
+		} else {
+			$html = (int)$row['mobilehtml'];
+			$v = $html ? 0 : 1;
+			$row['mobilehtml'] = $v;
+			$this->site_db->update(array('mobilehtml' => $row['mobilehtml']),array('siteid'=>$this->siteid));
+		}
+		$this->cache_site = pc_base::load_app_class('sites', 'admin');
+		$this->cache_site->set_cache();
+		dr_json(1, L($v ? '静态模式' : '动态模式'), array('value' => $v, 'share' => 1));
+	}
+	public function public_rule_edit() {
+		$show_header = $show_dialog  = '';
+		$share = intval($this->input->get('share'));
+		$catid = intval($this->input->get('catid'));
+		$value = $this->input->get('value');
+		$this->category_db = pc_base::load_model('category_model');
+		$data = $this->category_db->get_one(array('catid'=>$catid));
+		if (!$data) {
+			dr_json(0, L('栏目#'.$id.'不存在'));
+		}
+		$data['setting'] = dr_string2array($data['setting']);
+		if ($share) {
+			$data['setting']['category_ruleid'] = $value;
+		} else {
+			$data['setting']['show_ruleid'] = $value;
+		}
+		$this->category_db->update(array('setting' => dr_array2string($data['setting'])),array('catid'=>$catid));
+		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
+		$this->cache_api->cache('category');
+		dr_json(1, L('操作成功，更新缓存生效'));
+	}
+	public function public_sync_index() {
+		$this->category_db = pc_base::load_model('category_model');
+		$this->urlrule_db = pc_base::load_model('urlrule_model');
+		$url = '?m=content&c=create_html&a=public_sync_index';
+		$page = intval($this->input->get('page'));
+		$categoryrules = $this->urlrule_db->select(array('module'=>'content','file'=>'category','ishtml'=>1));
+		$showrules = $this->urlrule_db->select(array('module'=>'content','file'=>'show','ishtml'=>1));
+		if (!$categoryurlruleid) {$onecategoryrules = reset($categoryrules);$categoryurlruleid = $onecategoryrules['urlruleid'];}
+		if (!$showurlruleid) {$oneshowrules = reset($showrules);$showurlruleid = $oneshowrules['urlruleid'];}
+		if (!$page) {
+			// 计算数量
+			$total = $this->category_db->count();
+			if (!$total) {
+				$this->html_msg(0, L('无可用栏目更新'));
+			}
+			$this->html_msg(1, L('正在执行中...'), $url.'&total='.$total.'&page=1');
+		}
+
+		$psize = 100; // 每页处理的数量
+		$total = (int)$this->input->get('total');
+		$tpage = ceil($total / $psize); // 总页数
+		// 更新完成
+		if ($page > $tpage) {
+			$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
+			$this->cache_api->cache('category');
+			$this->html_msg(1, L('更新完成'));
+		}
+
+		$category = $this->category_db->listinfo('', 'catid DESC', $page, $psize);
+		if ($category) {
+			foreach ($category as $data) {
+				$data['setting'] = dr_string2array($data['setting']);
+				$data['setting']['ishtml'] = 1;
+				$data['setting']['content_ishtml'] = 1;
+				$data['setting']['category_ruleid'] = $categoryurlruleid;
+				$data['setting']['show_ruleid'] = $showurlruleid;
+				$this->category_db->update(array('setting' => dr_array2string($data['setting'])),array('catid'=>$data['catid']));
+			}
+		}
+
+		$this->html_msg(1, L('正在执行中【'.$tpage.'/'.$page.'】...'), $url.'&total='.$total.'&page='.($page+1));
+	}
+	public function public_sync2_index() {
+		$this->category_db = pc_base::load_model('category_model');
+		$this->urlrule_db = pc_base::load_model('urlrule_model');
+		$url = '?m=content&c=create_html&a=public_sync2_index';
+		$page = intval($this->input->get('page'));
+		$categoryrules = $this->urlrule_db->select(array('module'=>'content','file'=>'category','ishtml'=>0));
+		$showrules = $this->urlrule_db->select(array('module'=>'content','file'=>'show','ishtml'=>0));
+		if (!$categoryurlruleid) {$onecategoryrules = reset($categoryrules);$categoryurlruleid = $onecategoryrules['urlruleid'];}
+		if (!$showurlruleid) {$oneshowrules = reset($showrules);$showurlruleid = $oneshowrules['urlruleid'];}
+		if (!$page) {
+			// 计算数量
+			$total = $this->category_db->count();
+			if (!$total) {
+				$this->html_msg(0, L('无可用栏目更新'));
+			}
+			$this->html_msg(1, L('正在执行中...'), $url.'&total='.$total.'&page=1');
+		}
+
+		$psize = 100; // 每页处理的数量
+		$total = (int)$this->input->get('total');
+		$tpage = ceil($total / $psize); // 总页数
+		// 更新完成
+		if ($page > $tpage) {
+			$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
+			$this->cache_api->cache('category');
+			$this->html_msg(1, L('更新完成'));
+		}
+
+		$category = $this->category_db->listinfo('', 'catid DESC', $page, $psize);
+		if ($category) {
+			foreach ($category as $data) {
+				$data['setting'] = dr_string2array($data['setting']);
+				$data['setting']['ishtml'] = 0;
+				$data['setting']['content_ishtml'] = 0;
+				$data['setting']['category_ruleid'] = $categoryurlruleid;
+				$data['setting']['show_ruleid'] = $showurlruleid;
+				$this->category_db->update(array('setting' => dr_array2string($data['setting'])),array('catid'=>$data['catid']));
+			}
+		}
+
+		$this->html_msg(1, L('正在执行中【'.$tpage.'/'.$page.'】...'), $url.'&total='.$total.'&page='.($page+1));
+	}
 	// 提取tag
 	public function public_tag_index() {
+		$show_header = $show_dialog  = '';
+		$modelid = intval($this->input->get('modelid'));
+		$tree = pc_base::load_sys_class('tree');
+		$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
+		$tree->nbsp = '&nbsp;&nbsp;&nbsp;';
+		$categorys = array();
+		if(!empty($this->categorys)) {
+			foreach($this->categorys as $catid=>$r) {
+				$setting = string2array($r['setting']);
+				if ($setting['disabled']) continue;
+				if($this->siteid != $r['siteid'] || ($r['type']!=0 && $r['child']==0)) continue;
+				if($modelid && $modelid != $r['modelid']) continue;
+				$categorys[$catid] = $r;
+			}
+		}
+		$str  = "<option value='\$catid' \$selected>\$spacer \$catname</option>";
+		$tree->init($categorys);
+		$string = $tree->get_tree(0, $str);
+		$todo_url = '?m=content&c=create_html&a=public_tag_edit&modelid='.$modelid;
+		include $this->admin_tpl('module_content_tag');
+	}
+	// 提取tag
+	public function public_tag_edit() {
+		$show_header = $show_dialog  = '';
 		$modelid = intval($this->input->get('modelid'));
 		$page = (int)$this->input->get('page');
 		$psize = 10; // 每页处理的数量
@@ -566,20 +747,20 @@ class create_html extends admin {
 		$this->db->set_model($modelid);
 
 		$where = 'status = 99';
-		$catids = $this->input->get('catids');
+		$catid = $this->input->get('catid');
 
-		$url = '?m=content&c=create_html&a=public_tag_index&modelid='.$modelid;
+		$url = '?m=content&c=create_html&a=public_tag_edit&modelid='.$modelid;
 
 		// 获取生成栏目
-		if ($catids) {
+		if ($catid) {
 			$cat = array();
-			foreach ($catids as $i) {
+			foreach ($catid as $i) {
 				if ($i) {
 					$cat[] = intval($i);
 					if ($this->categorys[$i]['child']) {
 						$cat = dr_array2array($cat, explode(',', $this->categorys[$i]['arrchildid']));
 					}
-					$url.= '&catids[]='.intval($i);
+					$url.= '&catid[]='.intval($i);
 				}
 			}
 			$cat && $where.= ' AND catid IN ('.implode(',', $cat).')';
@@ -618,6 +799,30 @@ class create_html extends admin {
 	}
 	// 提取缩略图
 	public function public_thumb_index() {
+		$show_header = $show_dialog  = '';
+		$modelid = intval($this->input->get('modelid'));
+		$tree = pc_base::load_sys_class('tree');
+		$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
+		$tree->nbsp = '&nbsp;&nbsp;&nbsp;';
+		$categorys = array();
+		if(!empty($this->categorys)) {
+			foreach($this->categorys as $catid=>$r) {
+				$setting = string2array($r['setting']);
+				if ($setting['disabled']) continue;
+				if($this->siteid != $r['siteid'] || ($r['type']!=0 && $r['child']==0)) continue;
+				if($modelid && $modelid != $r['modelid']) continue;
+				$categorys[$catid] = $r;
+			}
+		}
+		$str  = "<option value='\$catid' \$selected>\$spacer \$catname</option>";
+		$tree->init($categorys);
+		$string = $tree->get_tree(0, $str);
+		$todo_url = '?m=content&c=create_html&a=public_thumb_edit&modelid='.$modelid;
+		include $this->admin_tpl('module_content_thumb');
+	}
+	// 提取缩略图
+	public function public_thumb_edit() {
+		$show_header = $show_dialog  = '';
 		$modelid = intval($this->input->get('modelid'));
 		$page = (int)$this->input->get('page');
 		$psize = 100; // 每页处理的数量
@@ -625,20 +830,20 @@ class create_html extends admin {
 		$this->db->set_model($modelid);
 
 		$where = 'status = 99';
-		$catids = $this->input->get('catids');
+		$catid = $this->input->get('catid');
 
-		$url = '?m=content&c=create_html&a=public_thumb_index&modelid='.$modelid;
+		$url = '?m=content&c=create_html&a=public_thumb_edit&modelid='.$modelid;
 
 		// 获取生成栏目
-		if ($catids) {
+		if ($catid) {
 			$cat = array();
-			foreach ($catids as $i) {
+			foreach ($catid as $i) {
 				if ($i) {
 					$cat[] = intval($i);
 					if ($this->categorys[$i]['child']) {
 						$cat = dr_array2array($cat, explode(',', $this->categorys[$i]['arrchildid']));
 					}
-					$url.= '&catids[]='.intval($i);
+					$url.= '&catid[]='.intval($i);
 				}
 			}
 			$cat && $where.= ' AND catid IN ('.implode(',', $cat).')';
@@ -678,6 +883,30 @@ class create_html extends admin {
 	}
 	// 提取描述信息
 	public function public_desc_index() {
+		$show_header = $show_dialog  = '';
+		$modelid = intval($this->input->get('modelid'));
+		$tree = pc_base::load_sys_class('tree');
+		$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
+		$tree->nbsp = '&nbsp;&nbsp;&nbsp;';
+		$categorys = array();
+		if(!empty($this->categorys)) {
+			foreach($this->categorys as $catid=>$r) {
+				$setting = string2array($r['setting']);
+				if ($setting['disabled']) continue;
+				if($this->siteid != $r['siteid'] || ($r['type']!=0 && $r['child']==0)) continue;
+				if($modelid && $modelid != $r['modelid']) continue;
+				$categorys[$catid] = $r;
+			}
+		}
+		$str  = "<option value='\$catid' \$selected>\$spacer \$catname</option>";
+		$tree->init($categorys);
+		$string = $tree->get_tree(0, $str);
+		$todo_url = '?m=content&c=create_html&a=public_desc_edit&modelid='.$modelid;
+		include $this->admin_tpl('module_content_desc');
+	}
+	// 提取描述信息
+	public function public_desc_edit() {
+		$show_header = $show_dialog  = '';
 		$modelid = intval($this->input->get('modelid'));
 		$page = (int)$this->input->get('page');
 		$psize = 100; // 每页处理的数量
@@ -685,20 +914,20 @@ class create_html extends admin {
 		$this->db->set_model($modelid);
 
 		$where = 'status = 99';
-		$catids = $this->input->get('catids');
+		$catid = $this->input->get('catid');
 
-		$url = '?m=content&c=create_html&a=public_desc_index&modelid='.$modelid;
+		$url = '?m=content&c=create_html&a=public_desc_edit&modelid='.$modelid;
 
 		// 获取生成栏目
-		if ($catids) {
+		if ($catid) {
 			$cat = array();
-			foreach ($catids as $i) {
+			foreach ($catid as $i) {
 				if ($i) {
 					$cat[] = intval($i);
 					if ($this->categorys[$i]['child']) {
 						$cat = dr_array2array($cat, explode(',', $this->categorys[$i]['arrchildid']));
 					}
-					$url.= '&catids[]='.intval($i);
+					$url.= '&catid[]='.intval($i);
 				}
 			}
 			$cat && $where.= ' AND catid IN ('.implode(',', $cat).')';
@@ -742,6 +971,44 @@ class create_html extends admin {
 	}
 	// 提取变更栏目
 	public function public_cat_index() {
+		$show_header = $show_dialog  = '';
+		$modelid = intval($this->input->get('modelid'));
+		$tree = pc_base::load_sys_class('tree');
+		$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
+		$tree->nbsp = '&nbsp;&nbsp;&nbsp;';
+		$categorys = array();
+		if(!empty($this->categorys)) {
+			foreach($this->categorys as $catid=>$r) {
+				$setting = string2array($r['setting']);
+				if ($setting['disabled']) continue;
+				if($this->siteid != $r['siteid'] || ($r['type']!=0 && $r['child']==0)) continue;
+				if($modelid && $modelid != $r['modelid']) continue;
+				$categorys[$catid] = $r;
+			}
+		}
+		$str  = "<option value='\$catid' \$selected>\$spacer \$catname</option>";
+		$tree->init($categorys);
+		$string = $tree->get_tree(0, $str);
+		$categorys_post = array();
+		if(!empty($this->categorys)) {
+			foreach($this->categorys as $catid=>$r) {
+				$setting = string2array($r['setting']);
+				if ($setting['disabled']) continue;
+				if($this->siteid != $r['siteid'] || ($r['type']!=0 && $r['child']==0)) continue;
+				if($modelid && $modelid != $r['modelid']) continue;
+				$r['disabled'] = $r['child'] ? 'disabled' : '';
+				$categorys_post[$catid] = $r;
+			}
+		}
+		$str_post  = "<option value='\$catid' \$selected \$disabled>\$spacer \$catname</option>";
+		$tree->init($categorys_post);
+		$select_post = $tree->get_tree(0, $str_post);
+		$todo_url = '?m=content&c=create_html&a=public_cat_edit&modelid='.$modelid;
+		include $this->admin_tpl('module_content_cat');
+	}
+	// 提取变更栏目
+	public function public_cat_edit() {
+		$show_header = $show_dialog  = '';
 		$modelid = intval($this->input->get('modelid'));
 		$page = (int)$this->input->get('page');
 		$psize = 100; // 每页处理的数量
@@ -753,21 +1020,21 @@ class create_html extends admin {
 			$this->html_msg(0, L('目标栏目必须选择'));
 		}
 
-		$url = '?m=content&c=create_html&a=public_cat_index&modelid='.$modelid;
+		$url = '?m=content&c=create_html&a=public_cat_edit&modelid='.$modelid;
 		$url.= '&toid='.$toid;
 		$where = '';
 
 		// 获取生成栏目
-		$catids = $this->input->get('catids');
-		if ($catids) {
+		$catid = $this->input->get('catid');
+		if ($catid) {
 			$cat = array();
-			foreach ($catids as $i) {
+			foreach ($catid as $i) {
 				if ($i) {
 					$cat[] = intval($i);
 					if ($this->categorys[$i]['child']) {
 						$cat = dr_array2array($cat, explode(',', $this->categorys[$i]['arrchildid']));
 					}
-					$url.= '&catids[]='.intval($i);
+					$url.= '&catid[]='.intval($i);
 				}
 			}
 			$cat && $where.= ' catid IN ('.implode(',', $cat).')';
@@ -800,6 +1067,30 @@ class create_html extends admin {
 	}
 	// 批量删除
 	public function public_del_index() {
+		$show_header = $show_dialog  = '';
+		$modelid = intval($this->input->get('modelid'));
+		$tree = pc_base::load_sys_class('tree');
+		$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
+		$tree->nbsp = '&nbsp;&nbsp;&nbsp;';
+		$categorys = array();
+		if(!empty($this->categorys)) {
+			foreach($this->categorys as $catid=>$r) {
+				$setting = string2array($r['setting']);
+				if ($setting['disabled']) continue;
+				if($this->siteid != $r['siteid'] || ($r['type']!=0 && $r['child']==0)) continue;
+				if($modelid && $modelid != $r['modelid']) continue;
+				$categorys[$catid] = $r;
+			}
+		}
+		$str  = "<option value='\$catid' \$selected>\$spacer \$catname</option>";
+		$tree->init($categorys);
+		$string = $tree->get_tree(0, $str);
+		$todo_url = '?m=content&c=create_html&a=public_del_edit&modelid='.$modelid;
+		include $this->admin_tpl('module_content_del');
+	}
+	// 批量删除
+	public function public_del_edit() {
+		$show_header = $show_dialog  = '';
 		$modelid = intval($this->input->get('modelid'));
 		$page = (int)$this->input->get('page');
 		$psize = 100; // 每页处理的数量
@@ -820,20 +1111,20 @@ class create_html extends admin {
 		$sitelist = getcache('sitelist','commons');
 
 		$where = array();
-		$catids = $this->input->get('catids');
+		$catid = $this->input->get('catid');
 
-		$url = '?m=content&c=create_html&a=public_del_index&modelid='.$modelid;
+		$url = '?m=content&c=create_html&a=public_del_edit&modelid='.$modelid;
 
 		// 获取生成栏目
-		if ($catids) {
+		if ($catid) {
 			$cat = array();
-			foreach ($catids as $i) {
+			foreach ($catid as $i) {
 				if ($i) {
 					$cat[] = intval($i);
 					if ($this->categorys[$i]['child']) {
 						$cat = dr_array2array($cat, explode(',', $this->categorys[$i]['arrchildid']));
 					}
-					$url.= '&catids[]='.intval($i);
+					$url.= '&catid[]='.intval($i);
 				}
 			}
 			$cat && $where[] = ' catid IN ('.implode(',', $cat).')';
