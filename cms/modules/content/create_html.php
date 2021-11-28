@@ -53,7 +53,7 @@ class create_html extends admin {
 	public function show() {
 		// 生成权限文件
 		if (!dr_html_auth(1)) {
-			dr_admin_msg(0,L('/cache/html/ 无法写入文件'));
+			dr_admin_msg(0, L('/cache/html/ 无法写入文件'));
 		}
 		if($this->input->get('dosubmit')) {
 			$modelid = intval($this->input->get('modelid'));
@@ -158,7 +158,7 @@ class create_html extends admin {
 	public function category() {
 		// 生成权限文件
 		if (!dr_html_auth(1)) {
-			dr_admin_msg(0,L('/cache/html/ 无法写入文件'));
+			dr_admin_msg(0, L('/cache/html/ 无法写入文件'));
 		}
 		if($this->input->get('dosubmit')) {
 			$catids = $this->input->get('catids');

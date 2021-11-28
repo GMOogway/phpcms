@@ -13,6 +13,10 @@ class create_all_html extends admin {
 		$this->db = pc_base::load_model('content_model');
 		$this->siteid = $this->get_siteid();
 		$this->categorys = getcache('category_content_'.$this->siteid,'commons');
+		// 生成权限文件
+		if (!dr_html_auth(1)) {
+			dr_admin_msg(0, L('/cache/html/ 无法写入文件'));
+		}
 		// 不是超级管理员
 		/*if ($_SESSION['roleid']!=1) {
 			dr_admin_msg(0,L('需要超级管理员账号操作'));
