@@ -567,6 +567,7 @@ class create_html extends admin {
 		$share = intval($this->input->get('share'));
 		$catid = intval($this->input->get('catid'));
 		$this->category_db = pc_base::load_model('category_model');
+		$this->urlrule_db = pc_base::load_model('urlrule_model');
 		$row = $this->category_db->get_one(array('catid'=>$catid));
 		if (!$row) {
 			dr_json(0, L('栏目数据不存在'));
