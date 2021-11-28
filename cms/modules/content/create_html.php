@@ -543,7 +543,7 @@ class create_html extends admin {
 				}
 				$r['category'] = form::urlrule('content','category',$ishtml,$setting['category_ruleid'],'class="form-control" onchange="dr_save_urlrule(1, \''.$r['catid'].'\', this.value)"');
 				if ($r['type']==0) {
-					$r['show'] = form::urlrule('content','show',$content_ishtml,$setting['category_ruleid'],'class="form-control" onchange="dr_save_urlrule(0, \''.$r['catid'].'\', this.value)"');
+					$r['show'] = form::urlrule('content','show',$content_ishtml,$setting['show_ruleid'],'class="form-control" onchange="dr_save_urlrule(0, \''.$r['catid'].'\', this.value)"');
 				} else {
 					$r['show'] = '';
 				}
@@ -576,10 +576,16 @@ class create_html extends admin {
 			$html = (int)$row['setting']['ishtml'];
 			$v = $html ? 0 : 1;
 			$row['setting']['ishtml'] = $v;
+			$categoryrules = $this->urlrule_db->select(array('module'=>'content','file'=>'category','ishtml'=>$v));
+			if (!$categoryurlruleid) {$onecategoryrules = reset($categoryrules);$categoryurlruleid = $onecategoryrules['urlruleid'];}
+			$data['setting']['category_ruleid'] = $categoryurlruleid;
 		} else {
 			$html = (int)$row['setting']['content_ishtml'];
 			$v = $html ? 0 : 1;
 			$row['setting']['content_ishtml'] = $v;
+			$showrules = $this->urlrule_db->select(array('module'=>'content','file'=>'show','ishtml'=>$v));
+			if (!$showurlruleid) {$oneshowrules = reset($showrules);$showurlruleid = $oneshowrules['urlruleid'];}
+			$data['setting']['show_ruleid'] = $showurlruleid;
 		}
 		$this->category_db->update(array('setting' => dr_array2string($row['setting'])),array('catid'=>$catid));
 		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
