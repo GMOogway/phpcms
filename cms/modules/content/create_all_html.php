@@ -64,7 +64,7 @@ class create_all_html extends admin {
 		$go_url = $go_url ? trim('?m=content&c=create_all_html&a=show&modelid='.$nmid.'&go_url=1&pc_hash='.$this->input->get('pc_hash')) : '';
 		if (!$total || !$nmid) $go_url = '';
 		$name = $module[$modelid]['name'];
-		$count_url = '?m=content&c=create_html&a=public_show_count&pagesize='.intval($this->input->get('pagesize')).'&modelid='.intval($this->input->get('modelid')).'&catids='.$ids.'&fromdate='.$this->input->get('fromdate').'&todate='.$this->input->get('todate').'&fromid='.intval($this->input->get('fromid')).'&toid='.intval($this->input->get('toid')).'&number='.intval($this->input->get('number'));
+		$count_url = '?m=content&c=create_all_html&a=public_show_count&pagesize='.intval($this->input->get('pagesize')).'&modelid='.intval($this->input->get('modelid')).'&catids='.$ids.'&fromdate='.$this->input->get('fromdate').'&todate='.$this->input->get('todate').'&fromid='.intval($this->input->get('fromid')).'&toid='.intval($this->input->get('toid')).'&number='.intval($this->input->get('number'));
 		$todo_url = '?m=content&c=create_all_html&a=public_show_add&pagesize='.intval($this->input->get('pagesize')).'&modelid='.intval($this->input->get('modelid')).'&catids='.$ids.'&fromdate='.$this->input->get('fromdate').'&todate='.$this->input->get('todate').'&fromid='.intval($this->input->get('fromid')).'&toid='.intval($this->input->get('toid')).'&number='.intval($this->input->get('number'));
 		include $this->admin_tpl('show_html');
 	}
@@ -181,7 +181,7 @@ class create_all_html extends admin {
 		$go_url = $go_url ? trim('?m=content&c=create_all_html&a=show&modelid='.$fmid.'&go_url=1&pc_hash='.$this->input->get('pc_hash')) : '';
 		if (!$total || !$fmid) $go_url = '';
 		$name = '栏目';
-		$count_url = '?m=content&c=create_html&a=public_category_count&ids='.$ids.'&maxsize='.$maxsize;
+		$count_url = '?m=content&c=create_all_html&a=public_category_count&ids='.$ids.'&maxsize='.$maxsize;
 		$todo_url = '?m=content&c=create_all_html&a=public_category_add&modelid='.$modelid.'&ids='.$ids.'&go_url='.urlencode($go_url).'&maxsize='.$maxsize;
 		include $this->admin_tpl('show_html');
 	}
