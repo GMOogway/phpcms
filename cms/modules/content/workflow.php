@@ -15,7 +15,9 @@ class workflow extends admin {
 	
 	public function init () {
 		$datas = array();
-		$result_datas = $this->db->listinfo(array('siteid'=>$this->siteid));
+		$page = $this->input->get('page') && intval($this->input->get('page')) ? intval($this->input->get('page')) : 1;
+		$result_datas = $this->db->listinfo(array('siteid'=>$this->siteid),'',$page,SYS_ADMIN_PAGESIZE);
+		$pages = $this->db->pages;
 		foreach($result_datas as $r) {
 			$datas[] = $r;
 		}

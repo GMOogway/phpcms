@@ -16,7 +16,7 @@ class import extends admin {
 			$where = array("type"=>$type);
 		}
 		$page = $this->input->get('page') && intval($this->input->get('page')) ? intval($this->input->get('page')) : 1;
-		$infos = $this->import->listinfo($where,$order = 'id DESC',$page, $pages = '9');
+		$infos = $this->import->listinfo($where,$order = 'id DESC',$page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->import->pages; 
 		include $this->admin_tpl('import_list');
  	}

@@ -17,7 +17,7 @@ class link extends admin {
 			$where = array('siteid'=>$this->get_siteid());
 		}
  		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
-		$infos = $this->db->listinfo($where,$order = 'listorder ASC,linkid DESC',$page, $pages = '9');
+		$infos = $this->db->listinfo($where,$order = 'listorder ASC,linkid DESC',$page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		$types = $this->db2->get_types($this->get_siteid());
 		$types = new_html_special_chars($types);
@@ -181,7 +181,7 @@ class link extends admin {
  	public function list_type() {
 		$this->db2 = pc_base::load_model('type_model');
 		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
-		$infos = $this->db2->listinfo(array('module'=> ROUTE_M,'siteid'=>$this->get_siteid()),$order = 'listorder DESC',$page, $pages = '10');
+		$infos = $this->db2->listinfo(array('module'=> ROUTE_M,'siteid'=>$this->get_siteid()),$order = 'listorder DESC',$page, SYS_ADMIN_PAGESIZE);
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=link&c=link&a=add\',\''.L('link_add').'\',700,450);void(0);', L('link_add'));
 		$pages = $this->db2->pages;
 		include $this->admin_tpl('link_list_type');
@@ -333,7 +333,7 @@ class link extends admin {
 		}else {//读取未审核列表
 			$where = array('siteid'=>$this->get_siteid(),'passed'=>0);
 			$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
-			$infos = $this->db->listinfo($where,'linkid DESC',$page, $pages = '9');
+			$infos = $this->db->listinfo($where,'linkid DESC',$page, SYS_ADMIN_PAGESIZE);
 			$pages = $this->db->pages;
 			$big_menu = array('javascript:artdialog(\'add\',\'?m=link&c=link&a=add\',\''.L('link_add').'\',700,450);void(0);', L('link_add'));
 			include $this->admin_tpl('check_register_list');

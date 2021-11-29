@@ -12,7 +12,7 @@ class ipbanned extends admin {
 	function init () {
 		$page = $this->input->get('page') ? $this->input->get('page') : '1';
 		$infos = array();
-		$infos = $this->db->listinfo('','ipbannedid DESC',$page ,'20');
+		$infos = $this->db->listinfo('','ipbannedid DESC',$page,SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;	
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=admin&c=ipbanned&a=add\',\''.L('add_ipbanned').'\',500,320);void(0);', L('add_ipbanned'));
 		include $this->admin_tpl('ipbanned_list');
@@ -80,7 +80,7 @@ class ipbanned extends admin {
 			$where .= $where ?  " AND ip LIKE '%$ip%'" : " ip LIKE '%$ip%'";
 		}
 		$page = $this->input->get('page') && intval($this->input->get('page')) ? intval($this->input->get('page')) : 1;
-		$infos = $this->db->listinfo($where,$order = 'ipbannedid DESC',$page, $pages = '2');
+		$infos = $this->db->listinfo($where,$order = 'ipbannedid DESC',$page,SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
   		$big_menu = array('javascript:artdialog(\'add\',\'?m=admin&c=ipbanned&a=add\',\''.L('add_ipbanned').'\',450,320);void(0);', L('add_ipbanned'));
 		include $this->admin_tpl('ip_search_list');

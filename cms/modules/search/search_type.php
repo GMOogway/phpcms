@@ -16,7 +16,7 @@ class search_type extends admin {
 	public function init () {
 		$datas = array();
 		$page = isset($_GET['page']) && trim($_GET['page']) ? intval($_GET['page']) : 1;
-		$result_datas = $this->db->listinfo(array('siteid'=>$this->siteid,'module'=>'search'),'listorder ASC', $page);
+		$result_datas = $this->db->listinfo(array('siteid'=>$this->siteid,'module'=>'search'),'listorder ASC', $page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		foreach($result_datas as $r) {
 			$r['modelname'] = $this->model[$r['modelid']]['name'];

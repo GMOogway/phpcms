@@ -12,7 +12,7 @@ class data extends admin {
 	public function init() {
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=dbsource&c=data&a=add\',\''.L('adding_data_source_call').'\',700,500);void(0);', L('adding_data_source_call'));
 		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
-		$list = $this->db->listinfo('','id desc', $page, 20);
+		$list = $this->db->listinfo('','id desc', $page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		include $this->admin_tpl('data_list');
 	}

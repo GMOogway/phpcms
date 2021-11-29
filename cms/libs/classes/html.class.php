@@ -198,28 +198,23 @@ class html {
             dr_json(0, '没有可用生成的内容数据');
         }
         $count = $this->db->count($where);
-        if ($count > 100000) {
-            dr_json(0, '单次生成数量不能超过10万');
-        }
-        if($param['number']) {
-            $data = $this->db->select($where, 'id,catid,title,url,islink,inputtime', $param['number'], 'id DESC'); // 获取需要生成的内容索引
-        } else {
-            $data = $this->db->select($where, 'id,catid,title,url,islink,inputtime'); // 获取需要生成的内容索引
+        $sql = 'select id,catid,title,url,islink,inputtime from `'.$this->db->table_name.'`';
+        if ($where) {
+            $sql.= ' where '.$where;
         }
 
-        if (!dr_count($data)) {
+        if (!$count) {
             dr_json(0, '没有可用生成的内容数据');
         }
 
-        $arr = array_chunk($data, $param['pagesize'] ? $param['pagesize'] : $this->psize);
-        $count = dr_count($arr);
-        foreach ($arr as $i => $t) {
-            $cache_class->set_auth_data($name.'-'.($i+1), $t, $param['siteid']);
-        }
+        $psize = $param['pagesize'] ? $param['pagesize'] : $this->psize;
+        $cache_class->set_auth_data($name, ceil($count/$psize), $param['siteid']);
+        $cache_class->set_auth_data($name.'-data', array(
+            'sql' => $sql,
+            'pagesize' => $psize,
+        ), $param['siteid']);
 
-        $cache_class->set_auth_data($name, $count, $param['siteid']);
-
-        dr_json(1, '共'.dr_count($data).'条，分'.$count.'页');
+        dr_json(1, '共'.dr_count($data).'条，分'.ceil($count/$psize).'页');
     }
 
 }

@@ -12,7 +12,7 @@ class dbsource_admin extends admin {
 	
 	public function init() {
 		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
-		$list = $this->db->listinfo(array('siteid'=>$this->get_siteid()), '', $page, 20);
+		$list = $this->db->listinfo(array('siteid'=>$this->get_siteid()), '', $page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=dbsource&c=dbsource_admin&a=add\',\''.L('added_external_data_source').'\',700,500);void(0);', L('added_external_data_source'));
 		include $this->admin_tpl('dbsource_list');

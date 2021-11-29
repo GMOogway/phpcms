@@ -26,7 +26,7 @@ class member_model extends admin {
 	 */
 	function manage() {
 		$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-		$member_model_list = $this->db->listinfo(array('type'=>2, 'siteid'=>$this->get_siteid()), 'sort', $page, 10);
+		$member_model_list = $this->db->listinfo(array('type'=>2, 'siteid'=>$this->get_siteid()), 'sort', $page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=member&c=member_model&a=add\',\''.L('add_model').'\',700,500);void(0);', L('member_model_add'));
 		include $this->admin_tpl('member_model_list');

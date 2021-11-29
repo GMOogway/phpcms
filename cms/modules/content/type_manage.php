@@ -16,7 +16,8 @@ class type_manage extends admin {
 	
 	public function init () {
 		$datas = array();
-		$result_datas = $this->db->listinfo(array('siteid'=>$this->siteid,'module'=>'content'),$this->input->get('order') ? $this->input->get('order') : 'listorder ASC,typeid DESC',$this->input->get('page'));
+		$page = $this->input->get('page') && intval($this->input->get('page')) ? intval($this->input->get('page')) : 1;
+		$result_datas = $this->db->listinfo(array('siteid'=>$this->siteid,'module'=>'content'),$this->input->get('order') ? $this->input->get('order') : 'listorder ASC,typeid DESC',$page,SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		foreach($result_datas as $r) {
 			$r['modelname'] = $this->model[$r['modelid']]['name'];

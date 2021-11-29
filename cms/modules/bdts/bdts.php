@@ -25,10 +25,10 @@ class bdts extends admin {
 			unset($data[0]);
 			$getpage = max(intval($this->input->get('page')), 1);
 			$page = max(1, (int)$getpage);
-			$limit = ($page - 1) * 10;
+			$limit = ($page - 1) * SYS_ADMIN_PAGESIZE;
 			$i = $j = 0;
 			foreach ($data as $v) {
-				if ($i >= $limit && $j < 10) {
+				if ($i >= $limit && $j < SYS_ADMIN_PAGESIZE) {
 					$list[] = $v;
 					$j ++;
 				}
@@ -36,7 +36,7 @@ class bdts extends admin {
 			}
 		}
 		$total = $data ? max(0, count($data) - 1) : 0;
-		$pages = pages($total, $getpage, 10);
+		$pages = pages($total, $getpage, SYS_ADMIN_PAGESIZE);
 		include $this->admin_tpl('index');
 	}
 	
@@ -68,7 +68,7 @@ class bdts extends admin {
 			if(!$this->siteid) $this->siteid = 1;
 			$page = max(intval($this->input->get('page')), 0);
 			$this->sitemodel_db = pc_base::load_model('sitemodel_model');
-			$sitemodel_data = $this->sitemodel_db->listinfo(array('siteid'=>$this->siteid,'type'=>0));
+			$sitemodel_data = $this->sitemodel_db->select(array('siteid'=>$this->siteid,'type'=>0));
 			$data = $this->bdts->getConfig();
 			$bdts = $data['bdts'];
 			include $this->admin_tpl('config');

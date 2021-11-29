@@ -13,7 +13,7 @@ class vote extends admin {
 
 	public function init() {
 		$page = $this->input->get('page') && intval($this->input->get('page')) ? intval($this->input->get('page')) : 1;
-		$infos = $this->db->listinfo(array('siteid'=>$this->get_siteid()),'subjectid DESC',$page, '14');
+		$infos = $this->db->listinfo(array('siteid'=>$this->get_siteid()),'subjectid DESC',$page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=vote&c=vote&a=add\',\''.L('vote_add').'\',700,450);void(0);', L('vote_add'));
 		include $this->admin_tpl('vote_list'); 
@@ -309,7 +309,7 @@ class vote extends admin {
 			$where = array ("subjectid" => $subjectid);
 			$sdb = pc_base::load_model('vote_data_model'); //调用统计的数据模型
  			$page = $this->input->get('page') && intval($this->input->get('page')) ? intval($this->input->get('page')) : 1;
-			$infos = $sdb->listinfo($where,'time DESC',$page,'7');
+			$infos = $sdb->listinfo($where,'time DESC',$page,SYS_ADMIN_PAGESIZE);
 			$pages = $sdb->pages;
 			include $this->admin_tpl('vote_statistics_userlist');
 	}
@@ -371,7 +371,7 @@ class vote extends admin {
 	 * 信息选择投票接口
 	 */
 	public function public_get_votelist() {
-		$infos = $this->db->listinfo(array('siteid'=>$this->get_siteid()),'subjectid DESC',$page,'10');
+		$infos = $this->db->listinfo(array('siteid'=>$this->get_siteid()),'subjectid DESC',$page,SYS_ADMIN_PAGESIZE);
 		$target = $this->input->get('target') ? $this->input->get('target') : '';
 		include $this->admin_tpl('get_votelist');
 	}

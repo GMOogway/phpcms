@@ -29,7 +29,7 @@ class member_group extends admin {
 	 */
 	function manage() {
 		$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-		$member_group_list = $this->db->listinfo('', 'sort ASC', $page, 15);
+		$member_group_list = $this->db->listinfo('', 'sort ASC', $page, SYS_ADMIN_PAGESIZE);
 		$this->member_db = pc_base::load_model('member_model');
 		//TODO 此处循环中执行sql，会严重影响效率，稍后考虑在memebr_group表中加入会员数字段和统计会员总数功能解决。
 		foreach ($member_group_list as $k=>$v) {

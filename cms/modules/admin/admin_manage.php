@@ -20,7 +20,7 @@ class admin_manage extends admin {
 		$userid = $_SESSION['userid'];
 		$admin_username = param::get_cookie('admin_username');
 		$page = $this->input->get('page') ? intval($this->input->get('page')) : '1';
-		$infos = $this->db->listinfo('', '', $page, 20);
+		$infos = $this->db->listinfo('', '', $page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		$roles = getcache('role','commons');
 		include $this->admin_tpl('admin_list');

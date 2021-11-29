@@ -14,18 +14,18 @@ class position extends admin {
 	}
 	
 	public function init() {
-			$infos = array();
-			$where = '';
-			$current_siteid = self::get_siteid();
-			$category = getcache('category_content_'.$current_siteid,'commons');
-			$model = getcache('model','commons');
-			$where = "`siteid`='$current_siteid' OR `siteid`='0'";
-			$page = $this->input->get('page') ? $this->input->get('page') : '1';
-			$infos = $this->db->listinfo($where, $order = 'listorder DESC,posid DESC', $page, $pagesize = 20);
-			$pages = $this->db->pages;
-			$show_dialog = true;
-			$big_menu = array('javascript:artdialog(\'add\',\'?m=admin&c=position&a=add\',\''.L('posid_add').'\',500,360);void(0);', L('posid_add'));
- 			include $this->admin_tpl('position_list');
+		$infos = array();
+		$where = '';
+		$current_siteid = self::get_siteid();
+		$category = getcache('category_content_'.$current_siteid,'commons');
+		$model = getcache('model','commons');
+		$where = "`siteid`='$current_siteid' OR `siteid`='0'";
+		$page = $this->input->get('page') ? $this->input->get('page') : '1';
+		$infos = $this->db->listinfo($where, $order = 'listorder DESC,posid DESC', $page, SYS_ADMIN_PAGESIZE);
+		$pages = $this->db->pages;
+		$show_dialog = true;
+		$big_menu = array('javascript:artdialog(\'add\',\'?m=admin&c=position&a=add\',\''.L('posid_add').'\',500,360);void(0);', L('posid_add'));
+		include $this->admin_tpl('position_list');
 	}
 	
 	/**
@@ -155,7 +155,7 @@ class position extends admin {
 			$siteid = $this->get_siteid();
 			$CATEGORY = getcache('category_content_'.$siteid,'commons');
 			$page = $this->input->get('page') ? $this->input->get('page') : '1';
-			$pos_arr = $this->db_data->listinfo(array('posid'=>$posid,'siteid'=>$siteid),'listorder DESC', $page, $pagesize = 20);
+			$pos_arr = $this->db_data->listinfo(array('posid'=>$posid,'siteid'=>$siteid),'listorder DESC', $page, SYS_ADMIN_PAGESIZE);
 			$pages = $this->db_data->pages;
 			$infos = array();
 			foreach ($pos_arr as $_k => $_v) {

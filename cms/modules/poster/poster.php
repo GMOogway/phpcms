@@ -27,7 +27,7 @@ class poster extends admin {
 			dr_admin_msg(0,L('illegal_action'), HTTP_REFERER);
 		}
 		$page = max($this->input->get('page'), 1);
-		$infos = $this->db->listinfo(array('spaceid'=>$spaceid, 'siteid'=>$this->get_siteid()), '`listorder` ASC, `id` DESC', $page);
+		$infos = $this->db->listinfo(array('spaceid'=>$spaceid, 'siteid'=>$this->get_siteid()), '`listorder` ASC, `id` DESC', $page, SYS_ADMIN_PAGESIZE);
 		pc_base::load_sys_class('format', '', 0);
 		$types = array('images'=>L('photo'), 'flash'=>L('flash'), 'text'=>L('title'));
 		$show_dialog = $show_header = true;

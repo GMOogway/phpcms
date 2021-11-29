@@ -13,7 +13,7 @@ class badword extends admin {
 	function init () {
 		$page = $this->input->get('page') && intval($this->input->get('page')) ? intval($this->input->get('page')) : 1;
 		$infos = $pages = '';
-		$infos = $this->db->listinfo($where = '',$order = 'badid DESC',$page, $pages = '13');
+		$infos = $this->db->listinfo($where = '',$order = 'badid DESC',$page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		$level = array(1=>L('general'),2=>L('danger'));
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=admin&c=badword&a=add\',\''.L('badword_add').'\',450,180);void(0);', L('badword_add'));

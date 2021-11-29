@@ -219,7 +219,7 @@ class member extends admin {
 		}
 
 		$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-		$memberlist = $this->db->listinfo($where, 'userid DESC', $page, 15);
+		$memberlist = $this->db->listinfo($where, 'userid DESC', $page, SYS_ADMIN_PAGESIZE);
 		//查询会员头像
 		foreach($memberlist as $k=>$v) {
 			$memberlist[$k]['avatar'] = get_memberavatar($v['userid']);
@@ -249,7 +249,7 @@ class member extends admin {
 			$where .= "`siteid` = '$siteid'";
 		}
 		
-		$memberlist_arr = $this->db->listinfo($where, 'userid DESC', $page, 15);
+		$memberlist_arr = $this->db->listinfo($where, 'userid DESC', $page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 
 		//搜索框

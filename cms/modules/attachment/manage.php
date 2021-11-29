@@ -24,7 +24,7 @@ class manage extends admin {
 		$category = getcache('category_content_'.$this->siteid,'commons');
 		$remote = $this->remote_db->select();
 		if (IS_POST) {
-			$pagesize = $this->input->post('limit') ? $this->input->post('limit') : 10;
+			$pagesize = $this->input->post('limit') ? $this->input->post('limit') : SYS_ADMIN_PAGESIZE;
 			$page = $this->input->post('page') ? $this->input->post('page') : '1';
 			$where = '';
 			if($this->input->post('remote')) $where = "AND `remote` = '".$this->input->post('remote')."' ";

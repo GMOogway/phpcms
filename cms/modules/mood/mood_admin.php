@@ -50,7 +50,7 @@ class mood_admin extends admin {
 				$sql_order = "`n$order` desc";
 			}
 			$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
-			$data = $mood_db->listinfo($sql, $sql_order, $page);
+			$data = $mood_db->listinfo($sql, $sql_order, $page, SYS_ADMIN_PAGESIZE);
 			$content_db = pc_base::load_model('content_model'); 
 			$contentid = '';
 			foreach ($data as $v) {

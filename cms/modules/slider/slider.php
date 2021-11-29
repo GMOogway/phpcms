@@ -17,7 +17,7 @@ class slider extends admin {
 			$where = array('siteid'=>$this->get_siteid());
 		}
  		$page = $this->input->get('page') && intval($this->input->get('page')) ? intval($this->input->get('page')) : 1;
-		$infos = $this->db->listinfo($where,$order = 'listorder DESC,id DESC',$page, '10');
+		$infos = $this->db->listinfo($where,$order = 'listorder DESC,id DESC',$page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		$types = $this->db2->get_types($this->get_siteid());
 		$types = new_html_special_chars($types);
@@ -158,7 +158,7 @@ class slider extends admin {
  	public function list_type() {
 		$this->db2 = pc_base::load_model('type_model');
 		$page = $this->input->get('page') && intval($this->input->get('page')) ? intval($this->input->get('page')) : 1;
-		$infos = $this->db2->listinfo(array('module'=> ROUTE_M,'siteid'=>$this->get_siteid()),$order = 'listorder DESC',$page, $pages = '10');
+		$infos = $this->db2->listinfo(array('module'=> ROUTE_M,'siteid'=>$this->get_siteid()),$order = 'listorder DESC',$page, SYS_ADMIN_PAGESIZE);
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=slider&c=slider&a=add\',\''.L('slider_add').'\',700,450);void(0);', L('slider_add'));
 		$pages = $this->db2->pages;
 		include $this->admin_tpl('slider_list_type');

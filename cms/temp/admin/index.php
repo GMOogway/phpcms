@@ -385,10 +385,10 @@ class index extends admin {
 				$data && $data = array_reverse($data);
 				//$total = max(0, count($data));$total = $data ? max(0, count($data) - 1) : 0;
 				$total = max(0, substr_count($c, '- '.date('Y-m-d', $time).' '));
-				$limit = ($page - 1) * 10;
+				$limit = ($page - 1) * SYS_ADMIN_PAGESIZE;
 				$i = $j = 0;
 				foreach ($data as $t) {
-					if ($t && $i >= $limit && $j < 10) {
+					if ($t && $i >= $limit && $j < SYS_ADMIN_PAGESIZE) {
 						$v = explode(' --> ', $t);
 						$time2 = $v ? explode(' - ', $v[0]) : [1=>''];
 						if ($time2[1]) {
@@ -420,7 +420,7 @@ class index extends admin {
 			}
 		}
 		$time = date('Y-m-d', $time);
-		$pages = pages($total, $page, 10);
+		$pages = pages($total, $page, SYS_ADMIN_PAGESIZE);
 		include $this->admin_tpl('error_log');
 	}
 	public function public_error_log_show() {
@@ -462,10 +462,10 @@ class index extends admin {
 			$data = $data ? array_reverse($data) : [];
 			unset($data[0]);
 			$page = max(1, (int)$this->input->get('page'));
-			$limit = ($page - 1) * 10;
+			$limit = ($page - 1) * SYS_ADMIN_PAGESIZE;
 			$i = $j = 0;
 			foreach ($data as $v) {
-				if ($v && $i >= $limit && $j < 10) {
+				if ($v && $i >= $limit && $j < SYS_ADMIN_PAGESIZE) {
 					$list[] = $v;
 					$j ++;
 				}
@@ -473,7 +473,7 @@ class index extends admin {
 			}
 		}
 		$total = $data ? max(0, count($data) - 1) : 0;
-		$pages = pages($total, $page, 10);
+		$pages = pages($total, $page, SYS_ADMIN_PAGESIZE);
 		include $this->admin_tpl('email_log');
 	}
 	public function public_email_log_del() {
@@ -499,10 +499,10 @@ class index extends admin {
 			$data && $data = @array_reverse($data);
 			//$total = max(0, count($data));$total = $data ? max(0, count($data) - 1) : 0;
 			$total = max(0, substr_count($c, '<?php exit;?>'));
-			$limit = ($page - 1) * 10;
+			$limit = ($page - 1) * SYS_ADMIN_PAGESIZE;
 			$i = $j = 0;
 			foreach ($data as $t) {
-				if ($t && $i >= $limit && $j < 10) {
+				if ($t && $i >= $limit && $j < SYS_ADMIN_PAGESIZE) {
 					$v = @explode(' | ', $t);
 					if ($v[0]) {
 						$value['id'] = $i + 1;
@@ -518,7 +518,7 @@ class index extends admin {
 				$i ++;
 			}
 		}
-		$pages = pages($total, $page, 10);
+		$pages = pages($total, $page, SYS_ADMIN_PAGESIZE);
 		include $this->admin_tpl('error_index');
 	}
 	public function public_log_show() {

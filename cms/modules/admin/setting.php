@@ -82,6 +82,8 @@ class setting extends admin {
 			
 			//如果开始盛大通行证接入，判断服务器是否支持curl
 			$snda_error = '';
+			$setconfig['sys_max_category'] = intval($setconfig['sys_max_category']);
+			$setconfig['sys_admin_pagesize'] = intval($setconfig['sys_admin_pagesize']);
 			$setconfig['debug'] = intval($setconfig['debug']);
 			$setconfig['sys_csrf'] = intval($setconfig['sys_csrf']);
 			$setconfig['needcheckcomeurl'] = intval($setconfig['needcheckcomeurl']);

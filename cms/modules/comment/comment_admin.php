@@ -132,7 +132,7 @@ class comment_admin extends admin {
 		$order = '`id` DESC';
 		pc_base::load_sys_class('format','', 0);
 		$this->comment_data_db->table_name($tableid);
-		$data = $this->comment_data_db->listinfo($where, $order, $page, 10);
+		$data = $this->comment_data_db->listinfo($where, $order, $page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->comment_data_db->pages;
 		include $this->admin_tpl('comment_listinfo');
 	}

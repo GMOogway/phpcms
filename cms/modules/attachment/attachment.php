@@ -121,7 +121,7 @@ class attachment extends admin {
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci');
 		}
 		if (IS_POST) {
-			$pagesize = $this->input->post('limit') ? $this->input->post('limit') : 10;
+			$pagesize = $this->input->post('limit') ? $this->input->post('limit') : SYS_ADMIN_PAGESIZE;
 			$page = $this->input->post('page') ? $this->input->post('page') : '1';
 			$datas = $this->db->listinfo('', 'id ASC', $page, $pagesize);
 			$total = $this->db->count();

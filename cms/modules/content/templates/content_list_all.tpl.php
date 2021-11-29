@@ -151,7 +151,7 @@ layui.use(['table'], function(){
             {field: 'updatetime', title: '<?php echo L('updatetime');?>', width:180, sort: true},
             {width: 240, align: 'center', toolbar: '#action',title:'<?php echo L('operations_manage');?>'<?php if(!is_mobile(0)) {?>, fixed: 'right'<?php }?>}
         ]],
-        limit: 10
+        limit: <?php echo SYS_ADMIN_PAGESIZE;?>
     });
     //搜索
     /*$('#search').on('click', function () {

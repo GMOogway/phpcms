@@ -14,7 +14,7 @@ class log extends admin {
 	
 	function init () {
 		$page = $this->input->get('page') && intval($this->input->get('page')) ? intval($this->input->get('page')) : 1;
-		$infos = $this->db->listinfo($where = '',$order = 'logid DESC',$page, $pages = '13');
+		$infos = $this->db->listinfo($where = '',$order = 'logid DESC',$page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		//模块数组
 		$module_arr = array();
@@ -62,7 +62,7 @@ class log extends admin {
 		}
  
 		$page = $this->input->get('page') && intval($this->input->get('page')) ? intval($this->input->get('page')) : 1; 
-		$infos = $this->db->listinfo(($where ? implode(' AND ', $where) : ''),$order = 'logid DESC',$page, $pages = '12'); 
+		$infos = $this->db->listinfo(($where ? implode(' AND ', $where) : ''),'logid DESC',$page, SYS_ADMIN_PAGESIZE); 
  		$pages = $this->db->pages;
  		//模块数组
 		$module_arr = array();

@@ -30,7 +30,7 @@ class node extends admin {
 	 */
 	public function manage() {
 		$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-		$nodelist = $this->db->listinfo(array('siteid'=>$this->get_siteid()), 'nodeid DESC', $page, 15);
+		$nodelist = $this->db->listinfo(array('siteid'=>$this->get_siteid()), 'nodeid DESC', $page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		pc_base::load_sys_class('format', '', 0);
 		include $this->admin_tpl('node_list');
@@ -368,7 +368,7 @@ class node extends admin {
 		if ($status) {
 			$sql['status'] = $status - 1;
 		}
-		$data = $content_db->listinfo($sql, 'id desc', $page);
+		$data = $content_db->listinfo($sql, 'id desc', $page, SYS_ADMIN_PAGESIZE);
 		$pages = $content_db->pages;
 		$show_header = true;
 		include $this->admin_tpl('publist');

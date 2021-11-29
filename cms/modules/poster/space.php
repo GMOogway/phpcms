@@ -20,7 +20,7 @@ class space extends admin {
 	public function init() {
 		$TYPES = $this->template_type();
 		$page = max(intval($this->input->get('page')), 1);
-		$infos = $this->db->listinfo(array('siteid'=>$this->get_siteid()), '`spaceid`', $page);
+		$infos = $this->db->listinfo(array('siteid'=>$this->get_siteid()), '`spaceid`', $page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=poster&c=space&a=add\',\''.L('add_space').'\',540,320);void(0);', L('add_space'));
 		include $this->admin_tpl('space_list');
@@ -264,7 +264,7 @@ class space extends admin {
 			$pages = $this->input->get('pages') ? intval($this->input->get('pages')) : 0;
 		}
 		$offset = ($page-1)*20;
-		$data = $this->db->listinfo(array('disabled'=>0, 'siteid'=>get_siteid()), 'spaceid ASC', $page);
+		$data = $this->db->listinfo(array('disabled'=>0, 'siteid'=>get_siteid()), 'spaceid ASC', $page, SYS_ADMIN_PAGESIZE);
 		$html = pc_base::load_app_class('html');
 		foreach ($data as $d) {
 			if ($d['type']!='code') {

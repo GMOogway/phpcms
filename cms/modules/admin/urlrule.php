@@ -13,7 +13,7 @@ class urlrule extends admin {
 	
 	function init () {
 		$page = intval($this->input->get('page'));
-		$infos = $this->db->listinfo('','',$page);
+		$infos = $this->db->listinfo('','',$page,SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=admin&c=urlrule&a=add\',\''.L('add_urlrule').'\',750,450);void(0);', L('add_urlrule'));
 		$this->public_cache_urlrule();

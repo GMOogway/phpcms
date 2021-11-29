@@ -21,7 +21,7 @@ class fclient extends admin {
 		}elseif($field!='' && $keyword!=''){
 			$where = array($field=>$keyword);
 		}
-		$infos = $this->db->listinfo($where,$order = 'id DESC',$page, $pages = '10');
+		$infos = $this->db->listinfo($where,$order = 'id DESC',$page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		$user = $this->db2->select();
 		$user = new_html_special_chars($user);

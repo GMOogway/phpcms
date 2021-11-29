@@ -55,28 +55,11 @@ class cache_all extends admin {
 				$this->cache_api->cache($m['function'], $m['param']);
 			}
 		}
-		$this->cache2database();
+		$this->cache_api->cache2database();
 		if ($this->input->get('is_ajax') || IS_AJAX) {
 			dr_json(1, L('全站缓存更新完成'));
 		} else {
 			showmessage(L('全站缓存更新完成'), 'close');
-		}
-	}
-	
-	/**
-	 * 根据数据库记录更新缓存
-	 */
-	public function cache2database() {
-		$cache = pc_base::load_model('cache_model');
-		$result = $cache->select();
-		if (is_array($result) && !empty($result)) {
-			foreach ($result as $re) {
-				if (!file_exists(CACHE_PATH.$re['path'].$re['filename'])) {
-					$filesize = pc_base::load_config('system','lock_ex') ? file_put_contents(CACHE_PATH.$re['path'].$re['filename'], $re['data'], LOCK_EX) : file_put_contents(CACHE_PATH.$re['path'].$re['filename'], $re['data']);
-				} else {
-					continue;
-				}
-			}
 		}
 	}
 }

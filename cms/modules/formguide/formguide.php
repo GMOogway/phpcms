@@ -22,7 +22,7 @@ class formguide extends admin {
 	//表单向导列表
 	public function init() {
 		$page = max(intval($this->input->get('page')), 1);
-		$data = $this->db->listinfo(array('type' => 3, 'siteid'=>$this->get_siteid()), '`modelid` DESC', $page);
+		$data = $this->db->listinfo(array('type' => 3, 'siteid'=>$this->get_siteid()), '`modelid` DESC', $page, SYS_ADMIN_PAGESIZE);
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=formguide&c=formguide&a=add\',\''.L('formguide_add').'\',700,500);void(0);', L('formguide_add'));
 		include $this->admin_tpl('formguide_list');
 	}

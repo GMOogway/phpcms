@@ -1997,7 +1997,7 @@ function to_sqls($data, $front = ' AND ', $in_column = false) {
  * @param $array 需要传递的数组，用于增加额外的方法
  * @return 分页
  */
-function pages($num, $curr_page, $perpage = 20, $urlrule = '', $array = array(),$setpages = 10) {
+function pages($num, $curr_page, $perpage = 10, $urlrule = '', $array = array(),$setpages = 10) {
 	$input = pc_base::load_sys_class('input');
 	if(defined('URLRULE') && $urlrule == '') {
 		$urlrule = URLRULE;
@@ -2021,7 +2021,6 @@ function pages($num, $curr_page, $perpage = 20, $urlrule = '', $array = array(),
 	$multipage = '';
 	if($num > $perpage) {
 		$pages = ceil($num / $perpage);
-		if (defined('IN_ADMIN') && !defined('PAGES')) define('PAGES', $pages);
 		$multipage = $input->page(pageurl($urlrule, $curr_page, $array), $num, $perpage, $curr_page, $first_url);
 	}
 	return $multipage;
@@ -2037,7 +2036,7 @@ function pages($num, $curr_page, $perpage = 20, $urlrule = '', $array = array(),
  * @param $array 需要传递的数组，用于增加额外的方法
  * @return 分页
  */
-function mobilepages($num, $curr_page, $perpage = 20, $urlrule = '', $array = array(),$setpages = 10) {
+function mobilepages($num, $curr_page, $perpage = 10, $urlrule = '', $array = array(),$setpages = 10) {
 	$input = pc_base::load_sys_class('input');
 	if(defined('URLRULE') && $urlrule == '') {
 		$urlrule = URLRULE;
@@ -2076,7 +2075,6 @@ function mobilepages($num, $curr_page, $perpage = 20, $urlrule = '', $array = ar
 	$multipage = '';
 	if($num > $perpage) {
 		$pages = ceil($num / $perpage);
-		if (defined('IN_ADMIN') && !defined('PAGES')) define('PAGES', $pages);
 		$multipage = $input->page($mobile_root.pageurl($urlrule, $curr_page, $array), $num, $perpage, $curr_page, $first_url);
 	}
 	return $multipage;

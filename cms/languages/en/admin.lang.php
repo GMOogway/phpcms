@@ -208,6 +208,8 @@ $LANG['editormode'] = 'Editor mode';
 $LANG['setting_category_ajax_desc'] = '<font color="gray">The default is 0, namely direct display item list. When the column level is large, can be set up for the first time loading level, the remaining use asynchronous loading, generally set to 2 to 3</font>';
 $LANG['setting_max_category'] = 'The largest column limit';
 $LANG['setting_max_category_not'] = 'The largest column limit should not exceed 10000';
+$LANG['setting_admin_pagesize'] = 'The background data paging article number';
+$LANG['setting_admin_pagesize_desc'] = 'For example, the article page shows the number of control';
 $LANG['setting_admin_founders'] = 'Founder ID';
 $LANG['setting_admin_founders_desc'] = 'Founder ID, multiple ID comma "," space';
 

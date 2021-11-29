@@ -209,6 +209,8 @@ $LANG['editormode'] = '编辑器模式';
 $LANG['setting_category_ajax_desc'] = '<font color="gray">默认为0,即直接显示栏目列表。当栏目层级较多时，可设置首次加载层级，其余使用异步加载，一般设置为2-3</font>';
 $LANG['setting_max_category'] = '最大栏目数量限制';
 $LANG['setting_max_category_not'] = '最大栏目数量限制不能超过1万';
+$LANG['setting_admin_pagesize'] = '后台数据分页条数';
+$LANG['setting_admin_pagesize_desc'] = '例如文章每页显示的数量控制';
 $LANG['setting_admin_founders'] = '网站创始人ID';
 $LANG['setting_admin_founders_desc'] = '网站创始人ID，多个ID逗号“,”分隔';
 

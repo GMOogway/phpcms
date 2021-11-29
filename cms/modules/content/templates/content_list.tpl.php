@@ -174,7 +174,7 @@ layui.use(['table'], function(){
             {field: 'listorder', title: '<?php echo L('listorder');?>', width:80, templet: '#listorder', sort: true},
             {width: 240, align: 'center', toolbar: '#action',title:'<?php echo L('operations_manage');?>'<?php if(!is_mobile(0)) {?>, fixed: 'right'<?php }?>}
         ]],
-        limit: 10
+        limit: <?php echo SYS_ADMIN_PAGESIZE;?>
     });
     //搜索
     /*$('#search').on('click', function () {

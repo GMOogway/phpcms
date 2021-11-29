@@ -39,7 +39,7 @@
 		if(!is_writable($configfile)) showmessage('Please chmod '.$configfile.' to 0777 !');
 		$pattern = $replacement = array();
 		foreach($config as $k=>$v) {
-			if(in_array($k,array('js_path','css_path','img_path','mobile_js_path','mobile_css_path','mobile_img_path','bdmap_api','sys_editor','sys_max_category','admin_founders','timezone','sys_time_format','sys_csrf','needcheckcomeurl','admin_log','gzip','debug','errorlog','cookie_pre','auth_key','connect_enable', 'upload_url','sina_akey', 'sina_skey', 'snda_enable', 'snda_status', 'snda_akey', 'snda_skey', 'qq_akey', 'qq_skey','qq_appid','qq_appkey','qq_callback','keywordapi','xunfei_aid','xunfei_skey','baidu_aid','baidu_skey','baidu_arcretkey','baidu_qcnum'))) {
+			if(in_array($k,array('js_path','css_path','img_path','mobile_js_path','mobile_css_path','mobile_img_path','bdmap_api','sys_editor','sys_max_category','sys_admin_pagesize','admin_founders','timezone','sys_time_format','sys_csrf','needcheckcomeurl','admin_log','gzip','debug','errorlog','cookie_pre','auth_key','connect_enable', 'upload_url','sina_akey', 'sina_skey', 'snda_enable', 'snda_status', 'snda_akey', 'snda_skey', 'qq_akey', 'qq_skey','qq_appid','qq_appkey','qq_callback','keywordapi','xunfei_aid','xunfei_skey','baidu_aid','baidu_skey','baidu_arcretkey','baidu_qcnum'))) {
 				$v = trim($v);
 				$configs[$k] = $v;
 				$pattern[$k] = "/'".$k."'\s*=>\s*([']?)[^']*([']?)(\s*),/is";

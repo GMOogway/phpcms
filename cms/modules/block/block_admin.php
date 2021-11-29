@@ -17,16 +17,16 @@ class block_admin extends admin {
 	public function init() {
 		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
 		if ($_SESSION['roleid'] != 1) {
-			$offset = ($page-1) * 20;
-			$r = $this->priv_db->select(array('roleid'=>$this->roleid, 'siteid'=>$this->siteid),'blockid', $offset.',20');
+			$offset = ($page-1) * SYS_ADMIN_PAGESIZE;
+			$r = $this->priv_db->select(array('roleid'=>$this->roleid, 'siteid'=>$this->siteid),'blockid', $offset.','.SYS_ADMIN_PAGESIZE);
 			$blockid_list = array();
 			foreach ($r as $key=>$v) {
 				$blockid_list[$key] = $v['blockid'];
 			}
 			$sql =  implode('\',\'', $blockid_list);
-			$list = $this->db->listinfo("id in ('$sql')", '', $page, 20);
+			$list = $this->db->listinfo("id in ('$sql')", '', $page, SYS_ADMIN_PAGESIZE);
 		} else {
-			$list = $this->db->listinfo(array('siteid'=>$this->siteid), '', $page, 20);
+			$list = $this->db->listinfo(array('siteid'=>$this->siteid), '', $page, SYS_ADMIN_PAGESIZE);
 		}
 		$pages = $this->db->pages;
 		include $this->admin_tpl('block_quick');
@@ -35,16 +35,16 @@ class block_admin extends admin {
 	public function public_init() {
 		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
 		if ($_SESSION['roleid'] != 1) {
-			$offset = ($page-1) * 20;
-			$r = $this->priv_db->select(array('roleid'=>$this->roleid, 'siteid'=>$this->siteid),'blockid', $offset.',20');
+			$offset = ($page-1) * SYS_ADMIN_PAGESIZE;
+			$r = $this->priv_db->select(array('roleid'=>$this->roleid, 'siteid'=>$this->siteid),'blockid', $offset.','.SYS_ADMIN_PAGESIZE);
 			$blockid_list = array();
 			foreach ($r as $key=>$v) {
 				$blockid_list[$key] = $v['blockid'];
 			}
 			$sql =  implode('\',\'', $blockid_list);
-			$list = $this->db->listinfo("id in ('$sql')", '', $page, 20);
+			$list = $this->db->listinfo("id in ('$sql')", '', $page, SYS_ADMIN_PAGESIZE);
 		} else {
-			$list = $this->db->listinfo(array('siteid'=>$this->siteid), '', $page, 20);
+			$list = $this->db->listinfo(array('siteid'=>$this->siteid), '', $page, SYS_ADMIN_PAGESIZE);
 		}
 		$pages = $this->db->pages;
 		include $this->admin_tpl('block_list');
@@ -191,7 +191,7 @@ class block_admin extends admin {
 			pc_base::load_sys_class('form');
 			pc_base::load_sys_class('format', '', 0);
 			$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) :  1;
-			$history_list = $this->history_db->listinfo(array('blockid'=>$id), '', $page, 10);
+			$history_list = $this->history_db->listinfo(array('blockid'=>$id), '', $page, SYS_ADMIN_PAGESIZE);
 			$pages = $this->history_db->pages;
 			$show_header = $show_validator = $show_dialog = true;
 			include $this->admin_tpl('block_update');
@@ -373,7 +373,7 @@ class block_admin extends admin {
 			}
 			$content_db = pc_base::load_model('content_model');
 			$content_db->set_catid($catid);
-			$data = $content_db->listinfo($sql, 'id desc', $page);
+			$data = $content_db->listinfo($sql, 'id desc', $page, SYS_ADMIN_PAGESIZE);
 			$pages = $content_db->pages;
 		}
 		pc_base::load_sys_class('form');

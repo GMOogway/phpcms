@@ -11,7 +11,7 @@ class custom extends admin {
 	public function init() {
 		$where = array('siteid'=>$this->get_siteid());
  		$page = $this->input->get('page') && intval($this->input->get('page')) ? intval($this->input->get('page')) : 1;
-		$infos = $this->db->listinfo($where,$order = 'id DESC',$page, $pages = '30');
+		$infos = $this->db->listinfo($where,$order = 'id DESC',$page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=custom&c=custom&a=add\',\''.L('custom_add').'\',760,500);void(0);', L('custom_add'));

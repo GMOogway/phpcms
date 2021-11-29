@@ -103,7 +103,7 @@ class content extends admin {
 					$posids = $this->input->post('posids')==1 ? intval($this->input->post('posids')) : 0;
 					$where .= " AND `posids` = '$posids'";
 				}
-				$pagesize = $this->input->post('limit') ? $this->input->post('limit') : 10;
+				$pagesize = $this->input->post('limit') ? $this->input->post('limit') : SYS_ADMIN_PAGESIZE;
 				$datas = $this->db->listinfo($where,'id desc',$this->input->post('page'),$pagesize);
 				$total = $this->db->count($where);
 				$pages = $this->db->pages;
@@ -246,7 +246,7 @@ class content extends admin {
 					$posids = $this->input->post('posids')==1 ? intval($this->input->post('posids')) : 0;
 					$where .= " AND `posids` = '$posids'";
 				}
-				$pagesize = $this->input->post('limit') ? $this->input->post('limit') : 10;
+				$pagesize = $this->input->post('limit') ? $this->input->post('limit') : SYS_ADMIN_PAGESIZE;
 				$datas = $this->db->listinfo($where,'id desc',$this->input->post('page'),$pagesize);
 				$total = $this->db->count($where);
 				$pages = $this->db->pages;
@@ -316,12 +316,12 @@ class content extends admin {
 	public function initall() {
 		$show_header = $show_dialog  = $show_pc_hash = '';
 		$this->db = pc_base::load_model('admin_model');
-		$infos = $this->db->listinfo('', '', '');
+		$infos = $this->db->select();
 		$this->db = pc_base::load_model('sitemodel_model');
 		$this->siteid = $this->get_siteid();
 		if(!$this->siteid) $this->siteid = 1;
 		$categorys = getcache('category_content_'.$this->siteid,'commons');
-		$datas2 = $this->db->listinfo(array('siteid'=>$this->siteid,'type'=>0,'disabled'=>0),'','');
+		$datas2 = $this->db->select(array('siteid'=>$this->siteid,'type'=>0,'disabled'=>0));
 		//模型文章数array('模型id'=>数量);
 		$items = array();
 		foreach ($datas2 as $k=>$r) {
@@ -409,7 +409,7 @@ class content extends admin {
 				$posids = $this->input->post('posids')==1 ? intval($this->input->post('posids')) : 0;
 				$where .= " AND `posids` = '$posids'";
 			}
-			$pagesize = $this->input->post('limit') ? $this->input->post('limit') : 10;
+			$pagesize = $this->input->post('limit') ? $this->input->post('limit') : SYS_ADMIN_PAGESIZE;
 			$datas = $this->db->listinfo($where,'id desc',$this->input->post('page'),$pagesize);
 			$total = $this->db->count($where);
 			$pages = $this->db->pages;
@@ -1215,7 +1215,7 @@ class content extends admin {
 					}
 				}
 			}
-			$infos = $this->db->listinfo($where,'',$page,12);
+			$infos = $this->db->listinfo($where,'',$page,SYS_ADMIN_PAGESIZE);
 			$pages = $this->db->pages;
 			include $this->admin_tpl('relationlist');
 		}
@@ -1459,7 +1459,7 @@ class content extends admin {
 			}
 		}
 		$this->content_check_db = pc_base::load_model('content_check_model');
-		$datas = $this->content_check_db->listinfo($sql,'inputtime DESC',$page);		
+		$datas = $this->content_check_db->listinfo($sql,'inputtime DESC',$page,SYS_ADMIN_PAGESIZE);		
 		$pages = $this->content_check_db->pages;
 		include $this->admin_tpl('content_checkall');
 	}

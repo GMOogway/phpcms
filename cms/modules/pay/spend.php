@@ -55,7 +55,7 @@ class spend extends admin {
 				$sql .= $sql ? " AND `type` = '$type' " : " `type` = '$type'";
 			}
 		}
-		$list = $this->db->listinfo($sql, '`id` desc', $page);
+		$list = $this->db->listinfo($sql, '`id` desc', $page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		include $this->admin_tpl('spend_list');
 	}

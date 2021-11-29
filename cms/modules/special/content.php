@@ -203,7 +203,7 @@ class content extends admin {
 		if(!$_GET['specialid']) dr_admin_msg(0,L('illegal_action'), HTTP_REFERER);
 		$types = $this->type_db->select(array('module'=>'special', 'parentid'=>$_GET['specialid']), 'name, typeid', '', '`listorder` ASC, `typeid` ASC', '', 'typeid');
 		$page = max(intval($_GET['page']), 1);
-		$datas = $this->db->listinfo(array('specialid'=>$_GET['specialid']), '`listorder` ASC , `id` DESC', $page);
+		$datas = $this->db->listinfo(array('specialid'=>$_GET['specialid']), '`listorder` ASC , `id` DESC', $page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		$big_menu = array(array('javascript:dr_content_submit(\'?m=special&c=content&a=add&specialid='.$_GET['specialid'].'\',\'add\');void(0);', L('add_content')), array('javascript:omnipotent(\'import\',\'?m=special&c=special&a=import&specialid='.$_GET['specialid'].'\',\''.L('import_content').'\',1,700,500);void(0);', L('import_content')));
 		include $this->admin_tpl('content_list');

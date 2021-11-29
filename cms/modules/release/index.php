@@ -93,7 +93,7 @@ class index extends admin {
 		}
 		$sql .= ' AND siteid = \''.$this->get_siteid().'\'';
 		$queue = pc_base::load_model('queue_model');
-		$list = $queue->listinfo($sql, 'id desc', $page, 20);
+		$list = $queue->listinfo($sql, 'id desc', $page, SYS_ADMIN_PAGESIZE);
 		pc_base::load_sys_class('format', '', 0);
 		include $this->admin_tpl('release_failed_list');
 	}

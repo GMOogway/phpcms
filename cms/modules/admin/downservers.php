@@ -36,7 +36,7 @@ class downservers extends admin {
 				$default = '';
 			}			
 			$page = $this->input->get('page') ? $this->input->get('page') : '1';
-			$infos = $this->db->listinfo($where, 'listorder DESC,id DESC', $page, $pagesize = 20);
+			$infos = $this->db->listinfo($where, 'listorder DESC,id DESC', $page, SYS_ADMIN_PAGESIZE);
 			$pages = $this->db->pages;						
 			include $this->admin_tpl('downservers_list');
 		}

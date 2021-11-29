@@ -11,7 +11,7 @@ class taglist extends admin {
 	
 	public function init() {
 		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
-		$datas = $this->db->listinfo(array('siteid'=>$this->get_siteid()),'id DESC',$page,20);
+		$datas = $this->db->listinfo(array('siteid'=>$this->get_siteid()),'id DESC',$page,SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		//var_dump($info);	
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=taglist&c=taglist&a=add\',\'添加内容\',450,280);void(0);', '添加内容');

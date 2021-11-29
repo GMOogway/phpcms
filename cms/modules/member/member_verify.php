@@ -33,7 +33,7 @@ class member_verify extends admin {
 		$status = !empty($_GET['s']) ? $_GET['s'] : 0;
 		$where = array('status'=>$status);
 		$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-		$memberlist = $this->db->listinfo($where, 'regdate DESC', $page, 10);
+		$memberlist = $this->db->listinfo($where, 'regdate DESC', $page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		$member_model = getcache('member_model', 'commons');
 		include $this->admin_tpl('member_verify');

@@ -53,12 +53,6 @@ $(function(){
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-2 control-label"><?php echo L('last_information');?></label>
-                    <div class="col-md-9">
-                        <label><input type="text" placeholder="<?php echo L('last_information').'几'.L('information_items');?>" class="form-control" value="" name="number"></label>
-                    </div>
-                </div>
-                <div class="form-group">
                     <label class="col-md-2 control-label"><?php echo L('按内容ID范围');?></label>
                     <div class="col-md-9">
                         <div class="input-group">

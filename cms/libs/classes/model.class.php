@@ -52,7 +52,7 @@ class model {
 	 * @param $pagesize
 	 * @return unknown_type
 	 */
-	final public function listinfo($where = '', $order = '', $page = 1, $pagesize = 20, $key='', $setpages = 10,$urlrule = '',$array = array(), $data = '*') {
+	final public function listinfo($where = '', $order = '', $page = 1, $pagesize = 10, $key='', $setpages = 10,$urlrule = '',$array = array(), $data = '*') {
 		$where = to_sqls($where);
 		$this->number = $this->count($where);
 		$page = max(intval($page), 1);

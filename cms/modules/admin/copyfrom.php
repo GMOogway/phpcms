@@ -17,7 +17,7 @@ class copyfrom extends admin {
 	 */
 	public function init () {
 		$datas = array();
-		$datas = $this->db->listinfo(array('siteid'=>$this->siteid),'listorder ASC',$this->input->get('page'));
+		$datas = $this->db->listinfo(array('siteid'=>$this->siteid),'listorder ASC',$this->input->get('page'),SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=admin&c=copyfrom&a=add\',\''.L('add_copyfrom').'\',580,240);void(0);', L('add_copyfrom'));

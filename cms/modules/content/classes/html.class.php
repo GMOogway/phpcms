@@ -221,16 +221,13 @@ class html {
 			@extract($CAT);
 		}
 		if(!$ishtml){
-			!defined('PAGES') && define('PAGES', '');
 			return false;
 		}
 		if(!$catid){
-			!defined('PAGES') && define('PAGES', '');
 			return false;
 		}
 		$CATEGORYS = $this->categorys;
 		if(!isset($CATEGORYS[$catid])){
-			!defined('PAGES') && define('PAGES', '');
 			return false;
 		}
 		$siteid = $CAT['siteid'];
@@ -373,7 +370,6 @@ class html {
 		define('ISMOBILE', 0);
 		define('IS_HTML', $setting['ishtml']);
 		include template('content',$template);
-		!defined('PAGES') && define('PAGES', '');
 		$this->createhtml($file, $copyjs);
 		if($this->sitelist[$this->siteid]['mobilehtml']==1) {
 			ob_start();
@@ -384,7 +380,6 @@ class html {
 				define('IS_HTML', 0);
 			}
 			include template('mobile',$template);
-			!defined('PAGES') && define('PAGES', '');
 			return $this->createhtml($mobilefile);
 		}
 	}

@@ -17,7 +17,7 @@ class tag extends admin {
 	public function init() {
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=tag&c=tag&a=add\',\''.L('add_tag').'\',700,500);void(0);', L('add_tag'));
 		$page = $this->input->post('page') && intval($this->input->post('page')) ? intval($this->input->post('page')) : 1;
-		$list = $this->db->listinfo('','id desc', $page, 20);
+		$list = $this->db->listinfo('','id desc', $page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		include $this->admin_tpl('tag_list');
 	}
@@ -240,7 +240,7 @@ class tag extends admin {
 	 */
 	public function lists() {
 		$page = $this->input->post('page') && intval($this->input->post('page')) ? intval($this->input->post('page')) : 1;
-		$list = $this->db->listinfo('','id desc', $page, 20);
+		$list = $this->db->listinfo('','id desc', $page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		include $this->admin_tpl('tag_lists');
 	}

@@ -96,7 +96,7 @@ $end = $start + $size;
 $thisdb = pc_base::load_model('attachment_model');
 $where = "fileext in (".$s_str.") and module<>'member' and siteid=".$siteid." and userid=".(int)$userid;
 $total = $thisdb->count($where);
-$data = $thisdb->listinfo($where,'aid desc','',$total);
+$data = $thisdb->select($where,'*','','aid desc');
 $files = array();
 if ($data) {
     $index = 0;
@@ -119,7 +119,7 @@ if (!$total) {
         "state" => "no match file",
         "list" => array(),
         "start" => $start,
-        "total" => $total
+        "total" => 0
     ), JSON_UNESCAPED_UNICODE);
 }
 

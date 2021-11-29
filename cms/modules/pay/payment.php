@@ -134,7 +134,7 @@ class payment extends admin {
 		}
 		$page = $this->input->get('page') ? $_GET['page'] : '1';
 		
-		$infos = $this->account_db->listinfo($where, $order = 'addtime DESC,id DESC', $page, $pagesize = 20);
+		$infos = $this->account_db->listinfo($where, $order = 'addtime DESC,id DESC', $page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->account_db->pages;
 		$number = count($infos);
 		include $this->admin_tpl('pay_list');	

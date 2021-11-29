@@ -63,12 +63,11 @@ class create_html extends admin {
 			$todate = $this->input->get('todate');
 			$fromid = intval($this->input->get('fromid'));
 			$toid = intval($this->input->get('toid'));
-			$number = intval($this->input->get('number'));
 			if ($catids && is_array($catids)) {
 				$catids = implode(',', $catids);
 			}
-			$count_url = '?m=content&c=create_html&a=public_show_count&pagesize='.$pagesize.'&modelid='.$modelid.'&catids='.$catids.'&fromdate='.$fromdate.'&todate='.$todate.'&fromid='.$fromid.'&toid='.$toid.'&number='.$number;
-			$todo_url = '?m=content&c=create_html&a=public_show_add&pagesize='.$pagesize.'&modelid='.$modelid.'&catids='.$catids.'&fromdate='.$fromdate.'&todate='.$todate.'&fromid='.$fromid.'&toid='.$toid.'&number='.$number;
+			$count_url = '?m=content&c=create_html&a=public_show_count&pagesize='.$pagesize.'&modelid='.$modelid.'&catids='.$catids.'&fromdate='.$fromdate.'&todate='.$todate.'&fromid='.$fromid.'&toid='.$toid;
+			$todo_url = '?m=content&c=create_html&a=public_show_add&pagesize='.$pagesize.'&modelid='.$modelid.'&catids='.$catids.'&fromdate='.$fromdate.'&todate='.$todate.'&fromid='.$fromid.'&toid='.$toid;
 			include $this->admin_tpl('show_html');
 		} else {
 			$show_header = $show_dialog  = '';
@@ -108,7 +107,6 @@ class create_html extends admin {
 		$todate = $this->input->get('todate');
 		$fromid = $this->input->get('fromid');
 		$toid = intval($this->input->get('toid'));
-		$number = intval($this->input->get('number'));
 		if ($catids && is_array($catids)) {
 			$catids = implode(',', $catids);
 		}
@@ -118,8 +116,8 @@ class create_html extends admin {
 			dr_json(0, L('没有找到上次中断生成的记录'));
 		}
 
-		$count_url = '?m=content&c=create_html&a=public_show_point_count&pagesize='.$pagesize.'&modelid='.$modelid.'&catids='.$catids.'&fromdate='.$fromdate.'&todate='.$todate.'&fromid='.$fromid.'&toid='.$toid.'&number='.$number;
-		$todo_url = '?m=content&c=create_html&a=public_show_add&pagesize='.$pagesize.'&modelid='.$modelid.'&catids='.$catids.'&fromdate='.$fromdate.'&todate='.$todate.'&fromid='.$fromid.'&toid='.$toid.'&number='.$number;
+		$count_url = '?m=content&c=create_html&a=public_show_point_count&pagesize='.$pagesize.'&modelid='.$modelid.'&catids='.$catids.'&fromdate='.$fromdate.'&todate='.$todate.'&fromid='.$fromid.'&toid='.$toid;
+		$todo_url = '?m=content&c=create_html&a=public_show_add&pagesize='.$pagesize.'&modelid='.$modelid.'&catids='.$catids.'&fromdate='.$fromdate.'&todate='.$todate.'&fromid='.$fromid.'&toid='.$toid;
 		include $this->admin_tpl('show_html');
 	}
 	// 断点内容的数量统计
@@ -148,8 +146,7 @@ class create_html extends admin {
 			'toid' => $this->input->get('toid'),
 			'fromid' => $this->input->get('fromid'),
 			'pagesize' => $this->input->get('pagesize'),
-			'siteid' => $this->siteid,
-			'number' => $this->input->get('number')
+			'siteid' => $this->siteid
 		));
 	}
 	/**
@@ -413,18 +410,19 @@ class create_html extends admin {
 		$cache_class = pc_base::load_sys_class('cache');
 		$this->html = pc_base::load_app_class('html');
 		$page = max(1, intval($this->input->get('pp')));
+		$name = 'category-html-file-'.$page;
 		$name2 = 'category-html-file';
-		$pcount = $cache_class->get_auth_data($name2);
+		$pcount = $cache_class->get_auth_data($name2, $this->siteid);
 		if (!$pcount) {
 			dr_json(0, '临时缓存数据不存在：'.$name2);
 		} elseif ($page > $pcount) {
 			// 完成
-			$cache_class->del_auth_data($name2);
+			$cache_class->del_auth_data($name, $this->siteid);
+			$cache_class->del_auth_data($name2, $this->siteid);
 			dr_json(-1, '');
 		}
 
-		$name = 'category-html-file-'.$page;
-		$cache = $cache_class->get_auth_data($name);
+		$cache = $cache_class->get_auth_data($name, $this->siteid);
 		if (!$cache) {
 			dr_json(0, '临时缓存数据不存在：'.$name);
 		}
@@ -446,7 +444,6 @@ class create_html extends admin {
 				$html.= '<p class="todo_p '.$class.'"><label class="rleft">(#'.$t['catid'].')'.$t['catname'].'</label><label class="rright">'.$ok.'</label></p>';
 			}
 			// 完成
-			//$cache_class->del_auth_data($name);
 			dr_json($page + 1, $html, array('pcount' => $pcount + 1));
 		}
 	}
@@ -463,25 +460,36 @@ class create_html extends admin {
 		$this->url = pc_base::load_app_class('url');
 		$modelid = intval($this->input->get('modelid'));
 		$page = max(1, intval($this->input->get('pp')));
+		$name = 'show-'.$modelid.'-html-file-data';
 		$name2 = 'show-'.$modelid.'-html-file';
-		$pcount = $cache_class->get_auth_data($name2);
+		$pcount = $cache_class->get_auth_data($name2, $this->siteid);
 		if (!$pcount) {
-			dr_json(0, '临时缓存数据不存在：'.$name2);
+			dr_json(0, '临时数据不存在：'.$name2);
 		} elseif ($page > $pcount) {
 			// 完成
-			$cache_class->del_auth_data($name2);
+			$cache_class->del_auth_data($name, $this->siteid);
+			$cache_class->del_auth_data($name2, $this->siteid);
 			dr_json(-1, '');
 		}
 
-		$name = 'show-'.$modelid.'-html-file-'.$page;
-		$cache = $cache_class->get_auth_data($name);
+		$cache = $cache_class->get_auth_data($name, $this->siteid);
 		if (!$cache) {
-			dr_json(0, '临时缓存数据不存在：'.$name);
+			dr_json(0, '临时数据不存在：'.$name);
+		} elseif (!$cache['sql']) {
+			dr_json(0, '临时数据SQL未生成成功：'.$name);
 		}
 		
 		if ($cache) {
+			$sql = $cache['sql']. ' order by id asc limit '.($cache['pagesize'] * ($page - 1)).','.$cache['pagesize'];
+			$data = $this->db->query($sql);
+			if (!$data) {
+				// 完成
+				$cache_class->del_auth_data($name, $this->siteid);
+				$cache_class->del_auth_data($name2, $this->siteid);
+				dr_json(-1, '');
+			}
 			$html = '';
-			foreach ($cache as $t) {
+			foreach ($data as $t) {
 				$ok = '完成';
 				$class = '';
 				//设置模型数据表名
@@ -516,7 +524,6 @@ class create_html extends admin {
 				$html.= '<p class="todo_p '.$class.'"><label class="rleft">(#'.$t['id'].')'.$t['title'].'</label><label class="rright">'.$ok.'</label></p>';
 			}
 			// 完成
-			//$cache_class->del_auth_data($name);
 			dr_json($page + 1, $html, array('pcount' => $pcount + 1));
 		}
 	}

@@ -24,7 +24,7 @@ class template_bak extends admin {
 			dr_admin_msg(0,L('tpl_edit'), HTTP_REFERER);
 		}
 		$page = $this->input->get('page') && intval($this->input->get('page')) ? intval($this->input->get('page')) : 1;
-		$list = $this->db->listinfo(array('fileid'=>$this->fileid), 'creat_at desc', $page, 20);
+		$list = $this->db->listinfo(array('fileid'=>$this->fileid), 'creat_at desc', $page, SYS_ADMIN_PAGESIZE);
 		if (!$list) {
 			dr_admin_msg(0,L('not_exist_versioning'));
 		}

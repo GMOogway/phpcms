@@ -18,7 +18,7 @@ class message extends admin {
 	
 	public function init() {
 		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
-		$infos = $this->db->listinfo($where,$order = 'messageid DESC',$page, $pages = '12');
+		$infos = $this->db->listinfo($where,$order = 'messageid DESC',$page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=message&c=message&a=message_send\',\''.L('all_send_message').'\',550,300);void(0);', L('all_send_message'));
 		$trade_status = $this->trade_status;
@@ -30,7 +30,7 @@ class message extends admin {
 	 */
 	public function message_group_manage() {
 		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
-		$infos = $this->group_db->listinfo($where,$order = 'id DESC',$page, $pages = '12');
+		$infos = $this->group_db->listinfo($where,$order = 'id DESC',$page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=message&c=message&a=message_send\',\''.L('all_send_message').'\',550,300);void(0);', L('all_send_message'));
  		include $this->admin_tpl('message_group_list');
@@ -178,7 +178,7 @@ class message extends admin {
 	public function my_inbox() {
 		$where = array('send_to_id'=>$this->_username,'folder'=>'inbox');
 		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
-		$infos = $this->db->listinfo($where,$order = 'messageid DESC',$page, $pages = '12');
+		$infos = $this->db->listinfo($where,$order = 'messageid DESC',$page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=message&c=message&a=message_send\',\''.L('all_send_message').'\',550,300);void(0);', L('all_send_message'));
 		$trade_status = $this->trade_status;
@@ -219,7 +219,7 @@ class message extends admin {
 		
 		$where = array('send_from_id'=>$this->_username,'del_type'=>'0');
 		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
-		$infos = $this->db->listinfo($where,$order = 'messageid DESC',$page, $pages = '12');
+		$infos = $this->db->listinfo($where,$order = 'messageid DESC',$page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=message&c=message&a=message_send\',\''.L('all_send_message').'\',550,350);void(0);', L('all_send_message'));
 		$trade_status = $this->trade_status;
@@ -278,7 +278,7 @@ class message extends admin {
 				}
   		} 
   		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
-		$infos = $this->db->listinfo($where,$order = 'messageid DESC',$page, $pages = '12');
+		$infos = $this->db->listinfo($where,$order = 'messageid DESC',$page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
  		$big_menu = array('javascript:artdialog(\'add\',\'?m=message&c=message&a=message_send\',\''.L('all_send_message').'\',700,450);void(0);', L('all_send_message'));
 		$trade_status = $this->trade_status;

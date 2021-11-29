@@ -132,7 +132,7 @@ final class template_cache {
 			$datas[$v[1]] = $v[2];
 		}
 		$str = '';
-		$num = isset($num) && intval($num) ? intval($num) : 20;
+		$num = isset($num) && intval($num) ? intval($num) : 10;
 		$cache = isset($cache) && intval($cache) ? intval($cache) : 0;
 		$return = isset($return) && trim($return) ? trim($return) : 'data';
 		if (!isset($urlrule)) $urlrule = '';
@@ -166,7 +166,7 @@ final class template_cache {
 						} else {
 							$str .= '$get_db = new get_model();';
 						}
-						$num = isset($num) && intval($num) > 0 ? intval($num) : 20;
+						$num = isset($num) && intval($num) > 0 ? intval($num) : 10;
 						if (isset($start) && intval($start)) {
 							$limit = intval($start).','.$num;
 						} else {

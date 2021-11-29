@@ -24,7 +24,7 @@ class admin_announce extends admin {
 			case '3': $sql .= ' AND `passed`=\'1\' AND `endtime`!=\'0000-00-00\' AND `endtime` <\''.date('Y-m-d').'\' '; break;
 		}
 		$page = max(intval($this->input->get('page')), 1);
-		$data = $this->db->listinfo($sql, '`aid` DESC', $page);
+		$data = $this->db->listinfo($sql, '`aid` DESC', $page, SYS_ADMIN_PAGESIZE);
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=announce&c=admin_announce&a=add\',\''.L('announce_add').'\',700,500);void(0);', L('announce_add'));
 		include $this->admin_tpl('announce_list');
 	}

@@ -328,7 +328,7 @@ class attachments {
 		}
 		pc_base::load_sys_class('form');
 		$page = $this->input->get('page') ? $this->input->get('page') : '1';
-		$infos = $this->att_db->listinfo($where, 'aid DESC', $page, 16,'',5);
+		$infos = $this->att_db->listinfo($where, 'aid DESC', $page, 16);
 		foreach($infos as $n=>$v){
 			$ext = fileext($v['filepath']);
 			if(in_array($ext,$this->imgext)) {

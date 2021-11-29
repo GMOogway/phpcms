@@ -103,6 +103,13 @@ include $this->admin_tpl('header');?>
                             <span class="help-block"><?php echo L('setting_bdmap_api_desc')?></span>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('setting_admin_pagesize')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control input-large" type="text" id="sys_admin_pagesize" name="setconfig[sys_admin_pagesize]" value="<?php echo $sys_admin_pagesize;?>" >
+                            <span class="help-block"><?php echo L('setting_admin_pagesize_desc')?></span>
+                        </div>
+                    </div>
                     <div class="form-group" id="dr_row_admin_email">
                         <label class="col-md-2 control-label"><?php echo L('setting_admin_email')?></label>
                         <div class="col-md-9">

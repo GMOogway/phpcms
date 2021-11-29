@@ -166,7 +166,7 @@ class push_api {
 					$siteid = $siteids[$catid];
 					$this->categorys = getcache('category_content_'.$siteid,'commons');
 					$modelid = $this->categorys[$catid]['modelid'];
-					$field1 = $this->field_model_db->listinfo(array('siteid'=>$siteid,'modelid'=>$modelid,'issystem'=>1),'listorder ASC');
+					$field1 = $this->field_model_db->select(array('siteid'=>$siteid,'modelid'=>$modelid,'issystem'=>1),'*','','listorder ASC');
 					foreach($field1 as $r1) {
 						$systeminfo[$modelid]['catid'] = $catid;
 						$systeminfo[$modelid]['sysadd'] = 1;
@@ -204,7 +204,7 @@ class push_api {
 						}
 						$this->db->update(array('url'=>addslashes($linkurl)),array('id'=>$newid));
 					}
-					$field0 = $this->field_model_db->listinfo(array('siteid'=>$siteid,'modelid'=>$modelid,'issystem'=>0),'listorder ASC');
+					$field0 = $this->field_model_db->select(array('siteid'=>$siteid,'modelid'=>$modelid,'issystem'=>0),'*','','listorder ASC');
 					foreach($field0 as $r0) {
 						$modelinfo[$modelid]['id'] = $newid;
 						$modelinfo[$modelid]['readpoint'] = addslashes($r2['readpoint']);

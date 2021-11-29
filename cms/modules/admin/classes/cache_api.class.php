@@ -538,20 +538,7 @@ class cache_api {
 	 */
 	public function cache2database() {
 		$cache = pc_base::load_model('cache_model');
-		if (!$this->input->get('pages') && empty($this->input->get('pages'))) {
-			$r = $cache->get_one(array(), 'COUNT(*) AS num');
-			if ($r['num']) {
-				$total = $r['num'];
-				$pages = ceil($total/20);
-			} else {
-				$pages = 1;
-			}
-		} else {
-			$pages = intval($this->input->get('pages'));
-		}
-		$currpage = max(intval($this->input->get('currpage')), 1);
-		$offset = ($currpage-1)*20;
-		$result = $cache->select(array(), '*', $offset.', 20', 'filename ASC');
+		$result = $cache->select();
 		if (is_array($result) && !empty($result)) {
 			foreach ($result as $re) {
 				if (!file_exists(CACHE_PATH.$re['path'].$re['filename'])) {
@@ -560,13 +547,6 @@ class cache_api {
 					continue;
 				}
 			}
-		}
-		$currpage++;
-		if ($currpage>$pages) {
-			return true;
-		} else {
-			echo '<script type="text/javascript">window.parent.addtext("<li>'.L('part_cache_success').($currpage-1).'/'.$pages.'..........</li>");</script>';
-			dr_admin_msg(1,L('part_cache_success'), '?m=admin&c=cache_all&a=init&page='.$this->input->get('page').'&currpage='.$currpage.'&pages='.$pages.'&dosubmit=1',0);
 		}
 	}
 	
