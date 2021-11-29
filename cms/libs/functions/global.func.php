@@ -780,6 +780,7 @@ function format_js($string, $isjs = 1) {
 }
 /**
  * 转为utf8编码格式
+ * $str 来源字符串
  */
 function dr_code2utf8($str) {
 	if (function_exists('mb_convert_encoding')) {
@@ -801,7 +802,11 @@ if (!function_exists('is_php')) {
 		return $_is_php[$version];
 	}
 }
-// html文字提取 cn是否纯中文
+/**
+ * 将html转化为纯文字
+ * str html文字提取
+ * cn 是否纯中文
+ */
 function dr_html2text($str, $cn = false) {
 	$str = clearhtml($str);
 	if ($cn && preg_match_all('/[\x{4e00}-\x{9fff}]+/u', $str, $mt)) {
@@ -1015,7 +1020,7 @@ function dr_baidu_map($value, $zoom = 15, $width = 600, $height = 400, $ak = SYS
 
 	$js = load_js((strpos(FC_NOW_URL, 'https') === 0 ? 'https' : 'http').'://api.map.baidu.com/api?v=2.0&ak='.$ak);
 
-	return $js.'<div class="'.$class.'" id="' . $id . '" style="width:' . $width . 'px; height:' . $height . 'px; overflow:hidden"></div>
+	return $js.'<div class="'.$class.'" id="' . $id . '" style="width:' . (strpos($width, '%') ? $width : $width. 'px').'; height:' . (strpos($height, '%') ? $height : $height. 'px') . '; overflow:hidden"></div>
 	<script type="text/javascript">
 	var mapObj=null;
 	lngX = "' . $lngX . '";
@@ -1626,7 +1631,7 @@ function template($module = 'content', $template = 'index', $style = '') {
 	!defined('ISMOBILE') && define('ISMOBILE', 0);
 	!defined('IS_HTML') && define('IS_HTML', 0);
 	if(strpos($template, '..') !== false){
-		showmessage('Template filename illegality.');
+		show_error('Template filename illegality.');
 	}
 	if(strpos($module, 'plugin/')!== false) {
 		$plugin = str_replace('plugin/', '', $module);

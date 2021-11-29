@@ -1,6 +1,5 @@
 <?php 
 defined('IN_CMS') or exit('No permission resources.');
-if (!module_exists(ROUTE_M)) showmessage(L('module_not_exists'));
 pc_base::load_app_func('global', 'special');
 class index {
 	

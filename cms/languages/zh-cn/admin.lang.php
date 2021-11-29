@@ -820,6 +820,7 @@ $LANG['setting'] = '网站配置';
 $LANG['database'] = '数据源模型';
 $LANG['cache_file'] = '系统缓存文件';
 $LANG['clear_files'] = '清理文件';
+$LANG['remote_attachment'] = '远程附件';
 $LANG['update'] = '更新';
 $LANG['cache_file_success'] = '缓存完成';
 $LANG['site_cache_success'] = '缓存完成..........</li><li style=\"color: red;\">全站缓存更新成功';

@@ -15,22 +15,22 @@ $input = pc_base::load_sys_class('input');
 $cache = '';
 
 if($input->get('id')) {
-	if(!preg_match("/^[a-z0-9_\-]+$/i",$input->get('id'))) showmessage((L('illegal_parameters')));
+	if(!preg_match("/^[a-z0-9_\-]+$/i",$input->get('id'))) dr_msg(0, (L('illegal_parameters')));
 	list($identification, $filename,$action) = explode('-', $input->get('id'));
 	$filename = !empty($filename) ? $filename : $identification;
 	$action = !empty($action) ? $action : 'init';
 }
-if(!preg_match("/^[a-z0-9_\-]+$/i", $identification)) showmessage(L('plugin_not_exist','','plugin'));
+if(!preg_match("/^[a-z0-9_\-]+$/i", $identification)) dr_msg(0, L('plugin_not_exist','','plugin'));
 $cache = getcache($identification,'plugins');
 
 if(!$cache['disable'] || $filename=='plugin_admin'  || $filename=='hook') {
-	showmessage(L('plugin_not_exist','','plugin'));
+	dr_msg(0, L('plugin_not_exist','','plugin'));
 } else {
 	$status = plugin_stat($cache['appid']);
 	if($status== 0 || $app_status == 1) {
-		showmessage(L('plugin_developing','','plugin'));
+		dr_msg(0, L('plugin_developing','','plugin'));
 	} elseif($status== 3) {
-		showmessage(L('plugin_be_locked','','plugin'));	
+		dr_msg(0, L('plugin_be_locked','','plugin'));	
 	} 
 	$iframe = string2array($cache['iframe']);
 	if($iframe['url']) {

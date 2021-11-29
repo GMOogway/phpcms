@@ -465,13 +465,13 @@ class pc_base {
 					if ($sync['close_url']) {
 						redirect($sync['close_url']);
 					} else {
-						showmessage(L('&#32593;&#31449;&#34987;&#20851;&#38381;'));
+						dr_msg(0, L('&#32593;&#31449;&#34987;&#20851;&#38381;'));
 					}
 				} elseif ($sync['status'] == 3 || ($sync['endtime'] && SYS_TIME > $sync['endtime'])) {
 					if ($sync['pay_url']) {
 						redirect($sync['pay_url']);
 					} else {
-						showmessage(L('&#32593;&#31449;&#24050;&#36807;&#26399;'));
+						dr_msg(0, L('&#32593;&#31449;&#24050;&#36807;&#26399;'));
 					}
 				}
 			}

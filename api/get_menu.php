@@ -3,7 +3,7 @@
  * 获取联动菜单接口
  */
 defined('IN_CMS') or exit('No permission resources.'); 
-if(!$input->get('callback') || !$input->get('act'))  showmessage(L('error'));
+if(!$input->get('callback') || !$input->get('act')) dr_msg(0, L('error'));
 
 switch($input->get('act')) {
 	case 'ajax_getlist':

@@ -812,6 +812,7 @@ $LANG['setting'] = 'Site setting';
 $LANG['database'] = 'Data source model';
 $LANG['cache_file'] = 'Cache file';
 $LANG['clear_files'] = 'File clearup';
+$LANG['remote_attachment'] = 'The remote attachment';
 $LANG['update'] = 'Update ';
 $LANG['cache_file_success'] = ' Successful';
 $LANG['site_cache_success'] = ' Successful...</li><li style=\"color: red;\">Update cache successfully on site-wide';

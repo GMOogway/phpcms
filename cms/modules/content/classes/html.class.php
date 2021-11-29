@@ -464,7 +464,7 @@ class html {
 		@chmod($file,0777);
 		if(!is_writable($file)) {
 			$file = str_replace(CMS_PATH,'',$file);
-			showmessage(L('file').'：'.$file.'<br>'.L('not_writable'));
+			show_error(L('file').'：'.$file.'<br>'.L('not_writable'));
 		}
 		return $strlen;
 	}

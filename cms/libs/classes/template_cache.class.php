@@ -29,7 +29,7 @@ final class template_cache {
 			$tplfile = PC_PATH.'templates'.DIRECTORY_SEPARATOR.'default'.DIRECTORY_SEPARATOR.$module.DIRECTORY_SEPARATOR.$template.'.html';
 		}
 		if (! file_exists ( $tplfile )) {
-			showmessage ( "templates".DIRECTORY_SEPARATOR.$style.DIRECTORY_SEPARATOR.$module.DIRECTORY_SEPARATOR.$template.".html is not exists!" );
+			show_error("templates".DIRECTORY_SEPARATOR.$style.DIRECTORY_SEPARATOR.$module.DIRECTORY_SEPARATOR.$template.".html is not exists!");
 		}
 		$content = @file_get_contents ( $tplfile );
 

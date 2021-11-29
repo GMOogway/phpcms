@@ -38,9 +38,9 @@
 
 		public function removeauth() {
 			if($this->auth_db->delete(array('source'=>'sina'))) {
-				showmessage('ok');
+				dr_msg(0, 'ok');
 			} else {
-				showmessage('fail');
+				dr_msg(0, 'fail');
 			}
 		}
 		public function pushtoweibo() {
