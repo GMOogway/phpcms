@@ -193,8 +193,7 @@ class html {
         }
         if ($cids) {
             $where .= ' AND catid IN ('. implode(',', $cids).')';
-        }
-        if (!$cids) {
+        } else {
             dr_json(0, '没有可用生成的内容数据');
         }
         $count = $this->db->count($where);
@@ -214,7 +213,7 @@ class html {
             'pagesize' => $psize,
         ), $param['siteid']);
 
-        dr_json(1, '共'.dr_count($data).'条，分'.ceil($count/$psize).'页');
+        dr_json(1, '共'.$count.'条，分'.ceil($count/$psize).'页');
     }
 
 }

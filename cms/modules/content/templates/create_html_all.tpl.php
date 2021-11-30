@@ -48,6 +48,7 @@ a.badge {color: #fff;}
                     <label><button type="button" onclick="iframe_show('<?php echo L('栏目设置')?>', '?m=content&c=create_html&a=public_html_index&pc_hash='+pc_hash)" class="btn default"> <i class="fa fa-reorder"></i> <?php echo L('按栏目设置URL规则')?> </button></label>
                     <label><a href="javascript:iframe_show('<?php echo L('一键更新')?>', '?m=content&c=create_html&a=public_sync_index&pc_hash='+pc_hash, '500px', '300px')" class="btn default"> <i class="fa fa-cog"></i> <?php echo L('一键开启栏目静态')?> </a></label>
                     <label><a href="javascript:iframe_show('<?php echo L('一键更新')?>', '?m=content&c=create_html&a=public_sync2_index&pc_hash='+pc_hash, '500px', '300px')" class="btn red"> <i class="fa fa-cog"></i> <?php echo L('一键关闭栏目静态')?> </a></label>
+                    <label><a href="javascript:dr_admin_menu_ajax('?m=admin&c=category&a=public_cache&pc_hash='+pc_hash+'&is_ajax=1',1);" class="btn default"> <i class="fa fa-refresh"></i> <?php echo L('一键更新栏目URL');?> </a></label>
                 </div>
             </div>
             <div class="form-group">

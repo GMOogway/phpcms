@@ -27,6 +27,7 @@ class html {
 	 * @param  $upgrade 是否是升级数据
 	 */
 	public function show($file, $data = '', $array_merge = 1,$action = 'add',$upgrade = 0) {
+		if (strpos($data['url'], 'index.php?')!==false) return false;
 		if($upgrade) $file = '/'.ltrim($file,WEB_PATH);
 		$allow_visitor = 1;
 		$id = $data['id'];
@@ -190,14 +191,8 @@ class html {
 			}
 		}
 		//分页处理结束
-		$file = CMS_PATH.$file;
-		$mobilefile = CMS_PATH.$this->mobile_root.'/'.str_replace(CMS_PATH,'',$file);
-		ob_start();
-		define('ISMOBILE', 0);
-		define('IS_HTML', $CAT['setting']['content_ishtml']);
-		include template('content', $template);
-		$this->createhtml($file);
 		if($this->sitelist[$this->siteid]['mobilehtml']==1) {
+			$mobilefile = CMS_PATH.$this->mobile_root.'/'.str_replace(CMS_PATH,'',$file);
 			ob_start();
 			define('ISMOBILE', 1);
 			if($CAT['setting']['content_ishtml'] && $this->sitelist[$this->siteid]['mobilehtml']) {
@@ -206,8 +201,14 @@ class html {
 				define('IS_HTML', 0);
 			}
 			include template('mobile', $template);
-			return $this->createhtml($mobilefile);
+			$this->createhtml($mobilefile);
 		}
+		$file = CMS_PATH.$file;
+		ob_start();
+		define('ISMOBILE', 0);
+		define('IS_HTML', $CAT['setting']['content_ishtml']);
+		include template('content', $template);
+		return $this->createhtml($file);
 	}
 
 	/**
@@ -217,6 +218,7 @@ class html {
 	 */
 	public function category($catid, $page = 0) {
 		$CAT = $this->categorys[$catid];
+		if (strpos($CAT['url'], 'index.php?')!==false) return false;
 		if (is_array($CAT)) {
 			@extract($CAT);
 		}
@@ -366,11 +368,6 @@ class html {
 			$keywords = $keywords ? $keywords : $setting['meta_keywords'];
 			$SEO = seo($siteid, 0, $setting['meta_title'] ? $setting['meta_title'] : $title,$setting['meta_description'],$keywords);
 		}
-		ob_start();
-		define('ISMOBILE', 0);
-		define('IS_HTML', $setting['ishtml']);
-		include template('content',$template);
-		$this->createhtml($file, $copyjs);
 		if($this->sitelist[$this->siteid]['mobilehtml']==1) {
 			ob_start();
 			define('ISMOBILE', 1);
@@ -380,8 +377,13 @@ class html {
 				define('IS_HTML', 0);
 			}
 			include template('mobile',$template);
-			return $this->createhtml($mobilefile);
+			$this->createhtml($mobilefile);
 		}
+		ob_start();
+		define('ISMOBILE', 0);
+		define('IS_HTML', $setting['ishtml']);
+		include template('content',$template);
+		return $this->createhtml($file, $copyjs);
 	}
 	/**
 	 * 更新首页
@@ -455,7 +457,7 @@ class html {
 		if ($copyjs && !file_exists($dir.'/js.html')) {
 			@copy(PC_PATH.'modules/content/templates/js.html', $dir.'/js.html');
 		}
-		$strlen = file_put_contents($file, $data);
+		$strlen = file_put_contents($file, $data, LOCK_EX);
 		@chmod($file,0777);
 		if(!is_writable($file)) {
 			$file = str_replace(CMS_PATH,'',$file);

@@ -417,7 +417,7 @@ class create_html extends admin {
 			dr_json(0, '临时缓存数据不存在：'.$name2);
 		} elseif ($page > $pcount) {
 			// 完成
-			$cache_class->del_auth_data($name, $this->siteid);
+			//$cache_class->del_auth_data($name, $this->siteid);
 			$cache_class->del_auth_data($name2, $this->siteid);
 			dr_json(-1, '');
 		}
@@ -436,10 +436,15 @@ class create_html extends admin {
 					$class = 'p_error';
 					$ok = '<a class="error" href="'.$t['url'].'" target="_blank">它是动态模式</a>';
 				} else {
-					$this->html->category($t['catid'],$t['page']);
-					$cache_class->set_auth_data($name2.'-error', $page); // 设置断点
-					$class = 'ok';
-					$ok = '<a class="ok" href="'.$t['url'].'" target="_blank">生成成功</a>';
+					if (strpos($t['url'], 'index.php?')!==false) {
+						$class = 'p_error';
+						$ok = '<a class="error" href="'.$t['url'].'" target="_blank">地址【'.$t['url'].'】是动态，请更新内容URL地址为静态模式</a>';
+					} else {
+						$this->html->category($t['catid'],$t['page']);
+						$cache_class->set_auth_data($name2.'-error', $page); // 设置断点
+						$class = 'ok';
+						$ok = '<a class="ok" href="'.$t['url'].'" target="_blank">生成成功</a>';
+					}
 				}
 				$html.= '<p class="todo_p '.$class.'"><label class="rleft">(#'.$t['catid'].')'.$t['catname'].'</label><label class="rright">'.$ok.'</label></p>';
 			}
@@ -481,7 +486,8 @@ class create_html extends admin {
 		
 		if ($cache) {
 			$sql = $cache['sql']. ' order by id asc limit '.($cache['pagesize'] * ($page - 1)).','.$cache['pagesize'];
-			$data = $this->db->query($sql);
+			$this->db->query($sql);
+			$data = $this->db->fetch_array();
 			if (!$data) {
 				// 完成
 				$cache_class->del_auth_data($name, $this->siteid);
@@ -512,10 +518,15 @@ class create_html extends admin {
 						} else {
 							$urls = $this->url->show($t['id'], '', $t['catid'], $t['inputtime']);
 						}
-						$this->html->show($urls[1],$r,0,'edit',$t['upgrade']);
-						$cache_class->set_auth_data($name2.'-error', $page); // 设置断点
-						$class = 'ok';
-						$ok = '<a class="ok" href="'.$t['url'].'" target="_blank">生成成功</a>';
+						if (strpos($t['url'], 'index.php?')!==false) {
+							$class = 'p_error';
+							$ok = '<a class="error" href="'.$t['url'].'" target="_blank">地址【'.$t['url'].'】是动态，请更新内容URL地址为静态模式</a>';
+						} else {
+							$this->html->show($urls[1],$r,0,'edit',$t['upgrade']);
+							$cache_class->set_auth_data($name2.'-error', $page); // 设置断点
+							$class = 'ok';
+							$ok = '<a class="ok" href="'.$t['url'].'" target="_blank">生成成功</a>';
+						}
 					}
 				} else {
 					$class = 'p_error';

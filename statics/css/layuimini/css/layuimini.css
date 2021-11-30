@@ -1,6 +1,12 @@
 /**
 配色方案（如有需要，请自行配置）
  */
+body {
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+}
 /**头部-配色*/
 .layui-layout-admin .layui-header {
     background-color: #1aa094 !important;
