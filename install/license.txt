@@ -131,9 +131,9 @@ QQ、微信：297885395  QQ讨论群：551419699  联系电话：17684313488
 127. title_style函数修改：title_style(样式, 是否随机颜色)
 128. 增加站点信息输出{dr_site_info('字段名称', $siteid)}
 129. 增加站点设置setting信息输出{dr_site_value('setting字段里的名称', $siteid)}
-130. 增加获取栏目数据及自定义字段{dr_cat_value($catid, '栏目字段', $siteid)}
+130. 增加获取栏目数据及自定义字段{dr_cat_value($catid, '栏目字段')}
 131. 增加获取单页数据及自定义字段{dr_page_value($catid, '栏目字段')}
-132. 增加获取模型数据及自定义字段{dr_value($modelid, $id, '栏目字段', $siteid)}
+132. 增加获取模型数据及自定义字段{dr_value($modelid, $id, '栏目字段')}
 
 运行环境
 PHP7.1以上（支持PHP8）

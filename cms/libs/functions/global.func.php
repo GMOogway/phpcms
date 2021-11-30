@@ -55,7 +55,7 @@ function new_htmlentities($string) {
 
 // html实体字符转换
 function html2code($value) {
-    return htmlspecialchars($value);
+	return htmlspecialchars($value);
 }
 // html实体字符转换
 function code2html($value, $fk = false, $flags = null) {
@@ -703,13 +703,13 @@ function local_attachment($option, $table = 0) {
  * @return string
  */
 function remove_xss($string) { 
-    $string = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]+/S', '', $string);
+	$string = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]+/S', '', $string);
 
-    $parm1 = Array('javascript', 'vbscript', 'expression', 'applet', 'meta', 'xml', 'blink', 'link', 'script', 'embed', 'object', 'iframe', 'frame', 'frameset', 'ilayer', 'layer', 'bgsound', 'title', 'base');
+	$parm1 = Array('javascript', 'vbscript', 'expression', 'applet', 'meta', 'xml', 'blink', 'link', 'script', 'embed', 'object', 'iframe', 'frame', 'frameset', 'ilayer', 'layer', 'bgsound', 'title', 'base');
 
-    $parm2 = Array('onabort', 'onactivate', 'onafterprint', 'onafterupdate', 'onbeforeactivate', 'onbeforecopy', 'onbeforecut', 'onbeforedeactivate', 'onbeforeeditfocus', 'onbeforepaste', 'onbeforeprint', 'onbeforeunload', 'onbeforeupdate', 'onblur', 'onbounce', 'oncellchange', 'onchange', 'onclick', 'oncontextmenu', 'oncontrolselect', 'oncopy', 'oncut', 'ondataavailable', 'ondatasetchanged', 'ondatasetcomplete', 'ondblclick', 'ondeactivate', 'ondrag', 'ondragend', 'ondragenter', 'ondragleave', 'ondragover', 'ondragstart', 'ondrop', 'onerror', 'onerrorupdate', 'onfilterchange', 'onfinish', 'onfocus', 'onfocusin', 'onfocusout', 'onhelp', 'onkeydown', 'onkeypress', 'onkeyup', 'onlayoutcomplete', 'onload', 'onlosecapture', 'onmousedown', 'onmouseenter', 'onmouseleave', 'onmousemove', 'onmouseout', 'onmouseover', 'onmouseup', 'onmousewheel', 'onmove', 'onmoveend', 'onmovestart', 'onpaste', 'onpropertychange', 'onreadystatechange', 'onreset', 'onresize', 'onresizeend', 'onresizestart', 'onrowenter', 'onrowexit', 'onrowsdelete', 'onrowsinserted', 'onscroll', 'onselect', 'onselectionchange', 'onselectstart', 'onstart', 'onstop', 'onsubmit', 'onunload');
+	$parm2 = Array('onabort', 'onactivate', 'onafterprint', 'onafterupdate', 'onbeforeactivate', 'onbeforecopy', 'onbeforecut', 'onbeforedeactivate', 'onbeforeeditfocus', 'onbeforepaste', 'onbeforeprint', 'onbeforeunload', 'onbeforeupdate', 'onblur', 'onbounce', 'oncellchange', 'onchange', 'onclick', 'oncontextmenu', 'oncontrolselect', 'oncopy', 'oncut', 'ondataavailable', 'ondatasetchanged', 'ondatasetcomplete', 'ondblclick', 'ondeactivate', 'ondrag', 'ondragend', 'ondragenter', 'ondragleave', 'ondragover', 'ondragstart', 'ondrop', 'onerror', 'onerrorupdate', 'onfilterchange', 'onfinish', 'onfocus', 'onfocusin', 'onfocusout', 'onhelp', 'onkeydown', 'onkeypress', 'onkeyup', 'onlayoutcomplete', 'onload', 'onlosecapture', 'onmousedown', 'onmouseenter', 'onmouseleave', 'onmousemove', 'onmouseout', 'onmouseover', 'onmouseup', 'onmousewheel', 'onmove', 'onmoveend', 'onmovestart', 'onpaste', 'onpropertychange', 'onreadystatechange', 'onreset', 'onresize', 'onresizeend', 'onresizestart', 'onrowenter', 'onrowexit', 'onrowsdelete', 'onrowsinserted', 'onscroll', 'onselect', 'onselectionchange', 'onselectstart', 'onstart', 'onstop', 'onsubmit', 'onunload');
 
-    $parm = array_merge($parm1, $parm2); 
+	$parm = array_merge($parm1, $parm2); 
 
 	for ($i = 0; $i < sizeof($parm); $i++) { 
 		$pattern = '/'; 
@@ -1438,32 +1438,32 @@ function get_attachment($id, $update = 0) {
 *
 */
 function mult_iconv($in_charset,$out_charset,$data){
-    if(substr($out_charset,-8)=='//IGNORE'){
-        $out_charset=substr($out_charset,0,-8);
-    }
-    if(is_array($data)){
-        foreach($data as $key => $value){
-            if(is_array($value)){
-                $key=iconv($in_charset,$out_charset.'//IGNORE',$key);
-                $rtn[$key]=mult_iconv($in_charset,$out_charset,$value);
-            }elseif(is_string($key) || is_string($value)){
-                if(is_string($key)){
-                    $key=iconv($in_charset,$out_charset.'//IGNORE',$key);
-                }
-                if(is_string($value)){
-                    $value=iconv($in_charset,$out_charset.'//IGNORE',$value);
-                }
-                $rtn[$key]=$value;
-            }else{
-                $rtn[$key]=$value;
-            }
-        }
-    }elseif(is_string($data)){
-        $rtn=iconv($in_charset,$out_charset.'//IGNORE',$data);
-    }else{
-        $rtn=$data;
-    }
-    return $rtn;
+	if(substr($out_charset,-8)=='//IGNORE'){
+		$out_charset=substr($out_charset,0,-8);
+	}
+	if(is_array($data)){
+		foreach($data as $key => $value){
+			if(is_array($value)){
+				$key=iconv($in_charset,$out_charset.'//IGNORE',$key);
+				$rtn[$key]=mult_iconv($in_charset,$out_charset,$value);
+			}elseif(is_string($key) || is_string($value)){
+				if(is_string($key)){
+					$key=iconv($in_charset,$out_charset.'//IGNORE',$key);
+				}
+				if(is_string($value)){
+					$value=iconv($in_charset,$out_charset.'//IGNORE',$value);
+				}
+				$rtn[$key]=$value;
+			}else{
+				$rtn[$key]=$value;
+			}
+		}
+	}elseif(is_string($data)){
+		$rtn=iconv($in_charset,$out_charset.'//IGNORE',$data);
+	}else{
+		$rtn=$data;
+	}
+	return $rtn;
 }
 /**
  * 格式化输出文件大小
@@ -3006,11 +3006,19 @@ function dr_site_value($name, $siteid = SITE_ID) {
 }
 
 // 获取栏目数据及自定义字段
-function dr_cat_value($catid, $name, $siteid = SITE_ID) {
+function dr_cat_value($catid, $name) {
+	if (!$catid) {
+		return '';
+	}
+	$siteids = getcache('category_content','commons');
+	$siteid = $siteids[$catid];
+	if (!$siteid) {
+		return '';
+	}
 	$data = getcache('category_content_'.$siteid,'commons');
 	if ($data) {
-        return $data[$catid][$name];
-    }
+		return $data[$catid][$name];
+	}
 	return '';
 }
 
@@ -3019,13 +3027,13 @@ function dr_page_value($catid, $name) {
 	$page_db = pc_base::load_model('page_model');
 	$data = $page_db->get_one(array('catid'=>$catid));
 	if ($data) {
-        return $data[$name];
-    }
+		return $data[$name];
+	}
 	return '';
 }
 
 // 获取模型数据及自定义字段
-function dr_value($modelid, $id, $name, $siteid = SITE_ID) {
+function dr_value($modelid, $id, $name) {
 	if ($modelid) {
 		$content_db = pc_base::load_model('content_model');
 		$content_db->set_model($modelid);
@@ -3598,51 +3606,51 @@ function sec2time($times){
 * @return string
 */
 function formattime($date = 0, $type = 1) { //$type = 1为时间戳格式，$type = 2为date时间格式
-    //date_default_timezone_set('PRC'); //设置成中国的时区
-    switch ($type) {
-        case 1:
-            //$date时间戳格式
-            $second = SYS_TIME - $date;
-            $minute = floor($second / 60) ? floor($second / 60) : 1; //得到分钟数
-            if ($minute >= 60 && $minute < (60 * 24)) { //分钟大于等于60分钟且小于一天的分钟数，即按小时显示
-                $hour = floor($minute / 60); //得到小时数
-            } elseif ($minute >= (60 * 24) && $minute < (60 * 24 * 30)) { //如果分钟数大于等于一天的分钟数，且小于一月的分钟数，则按天显示
-                $day = floor($minute / ( 60 * 24)); //得到天数
-            } elseif ($minute >= (60 * 24 * 30) && $minute < (60 * 24 * 365)) { //如果分钟数大于等于一月且小于一年的分钟数，则按月显示
-                $month = floor($minute / (60 * 24 * 30)); //得到月数
-            } elseif ($minute >= (60 * 24 * 365)) { //如果分钟数大于等于一年的分钟数，则按年显示
-                $year = floor($minute / (60 * 24 * 365)); //得到年数
-            }
-            break;
-        case 2:
-            //$date为字符串格式 2013-06-06 19:16:12
-            $date = strtotime($date);
-            $second = SYS_TIME - $date;
-            $minute = floor($second / 60) ? floor($second / 60) : 1; //得到分钟数
-            if ($minute >= 60 && $minute < (60 * 24)) { //分钟大于等于60分钟且小于一天的分钟数，即按小时显示
-                $hour = floor($minute / 60); //得到小时数
-            } elseif ($minute >= (60 * 24) && $minute < (60 * 24 * 30)) { //如果分钟数大于等于一天的分钟数，且小于一月的分钟数，则按天显示
-                $day = floor($minute / ( 60 * 24)); //得到天数
-            } elseif ($minute >= (60 * 24 * 30) && $minute < (60 * 24 * 365)) { //如果分钟数大于等于一月且小于一年的分钟数，则按月显示
-                $month = floor($minute / (60 * 24 * 30)); //得到月数
-            } elseif ($minute >= (60 * 24 * 365)) { //如果分钟数大于等于一年的分钟数，则按年显示
-                $year = floor($minute / (60 * 24 * 365)); //得到年数
-            }
-            break;
-        default:
-            break;
-    }
-    if (isset($year)) {
-        return dr_date($date, 'Y年m月d日');
-    } elseif (isset($month)) {
-        return dr_date($date, 'm月d日');
-    } elseif (isset($day)) {
-        return $day . '天前';
-    } elseif (isset($hour)) {
-        return $hour . '小时前';
-    } elseif (isset($minute)) {
-        return $minute . '分钟前';
-    }
+	//date_default_timezone_set('PRC'); //设置成中国的时区
+	switch ($type) {
+		case 1:
+			//$date时间戳格式
+			$second = SYS_TIME - $date;
+			$minute = floor($second / 60) ? floor($second / 60) : 1; //得到分钟数
+			if ($minute >= 60 && $minute < (60 * 24)) { //分钟大于等于60分钟且小于一天的分钟数，即按小时显示
+				$hour = floor($minute / 60); //得到小时数
+			} elseif ($minute >= (60 * 24) && $minute < (60 * 24 * 30)) { //如果分钟数大于等于一天的分钟数，且小于一月的分钟数，则按天显示
+				$day = floor($minute / ( 60 * 24)); //得到天数
+			} elseif ($minute >= (60 * 24 * 30) && $minute < (60 * 24 * 365)) { //如果分钟数大于等于一月且小于一年的分钟数，则按月显示
+				$month = floor($minute / (60 * 24 * 30)); //得到月数
+			} elseif ($minute >= (60 * 24 * 365)) { //如果分钟数大于等于一年的分钟数，则按年显示
+				$year = floor($minute / (60 * 24 * 365)); //得到年数
+			}
+			break;
+		case 2:
+			//$date为字符串格式 2013-06-06 19:16:12
+			$date = strtotime($date);
+			$second = SYS_TIME - $date;
+			$minute = floor($second / 60) ? floor($second / 60) : 1; //得到分钟数
+			if ($minute >= 60 && $minute < (60 * 24)) { //分钟大于等于60分钟且小于一天的分钟数，即按小时显示
+				$hour = floor($minute / 60); //得到小时数
+			} elseif ($minute >= (60 * 24) && $minute < (60 * 24 * 30)) { //如果分钟数大于等于一天的分钟数，且小于一月的分钟数，则按天显示
+				$day = floor($minute / ( 60 * 24)); //得到天数
+			} elseif ($minute >= (60 * 24 * 30) && $minute < (60 * 24 * 365)) { //如果分钟数大于等于一月且小于一年的分钟数，则按月显示
+				$month = floor($minute / (60 * 24 * 30)); //得到月数
+			} elseif ($minute >= (60 * 24 * 365)) { //如果分钟数大于等于一年的分钟数，则按年显示
+				$year = floor($minute / (60 * 24 * 365)); //得到年数
+			}
+			break;
+		default:
+			break;
+	}
+	if (isset($year)) {
+		return dr_date($date, 'Y年m月d日');
+	} elseif (isset($month)) {
+		return dr_date($date, 'm月d日');
+	} elseif (isset($day)) {
+		return $day . '天前';
+	} elseif (isset($hour)) {
+		return $hour . '小时前';
+	} elseif (isset($minute)) {
+		return $minute . '分钟前';
+	}
 }
 
 function formatdate($time){
@@ -3727,38 +3735,38 @@ function mtime($time){
 }
 
 function mdate($time = NULL) {
-    //date_default_timezone_set('PRC'); //设置成中国的时区
-    $text = '';
-    $time = $time === NULL || $time > SYS_TIME ? SYS_TIME : intval($time);
-    $t = SYS_TIME - $time; //时间差 （秒）
-    $y = dr_date($time, 'Y')-dr_date(SYS_TIME, 'Y');//是否跨年
-    switch($t){
-        case $t == 0:
-            $text = '刚刚';
-            break;
-        case $t < 60:
-            $text = $t . '秒前'; // 一分钟内
-            break;
-        case $t < 60 * 60:
-            $text = floor($t / 60) . '分钟前'; //一小时内
-            break;
-        case $t < 60 * 60 * 24:
-            $text = floor($t / (60 * 60)) . '小时前'; // 一天内
-            break;
-        case $t < 60 * 60 * 24 * 3:
-            $text = floor($time/(60*60*24)) ==1 ?'昨天' : '前天' ; //昨天和前天
-            break;
-        case $t < 60 * 60 * 24 * 30:
-            $text = dr_date($time, 'm月d日'); //一个月内
-            break;
-        case $t < 60 * 60 * 24 * 365&&$y==0:
-            $text = dr_date($time, 'm月d日'); //一年内
-            break;
-        default:
-            $text = dr_date($time, 'Y年m月d日'); //一年以前
-            break; 
-    }
-    return $text;
+	//date_default_timezone_set('PRC'); //设置成中国的时区
+	$text = '';
+	$time = $time === NULL || $time > SYS_TIME ? SYS_TIME : intval($time);
+	$t = SYS_TIME - $time; //时间差 （秒）
+	$y = dr_date($time, 'Y')-dr_date(SYS_TIME, 'Y');//是否跨年
+	switch($t){
+		case $t == 0:
+			$text = '刚刚';
+			break;
+		case $t < 60:
+			$text = $t . '秒前'; // 一分钟内
+			break;
+		case $t < 60 * 60:
+			$text = floor($t / 60) . '分钟前'; //一小时内
+			break;
+		case $t < 60 * 60 * 24:
+			$text = floor($t / (60 * 60)) . '小时前'; // 一天内
+			break;
+		case $t < 60 * 60 * 24 * 3:
+			$text = floor($time/(60*60*24)) ==1 ?'昨天' : '前天' ; //昨天和前天
+			break;
+		case $t < 60 * 60 * 24 * 30:
+			$text = dr_date($time, 'm月d日'); //一个月内
+			break;
+		case $t < 60 * 60 * 24 * 365&&$y==0:
+			$text = dr_date($time, 'm月d日'); //一年内
+			break;
+		default:
+			$text = dr_date($time, 'Y年m月d日'); //一年以前
+			break; 
+	}
+	return $text;
 }
 
 /**
