@@ -3005,6 +3005,38 @@ function dr_site_value($name, $siteid = SITE_ID) {
 	return get_cache('site', $siteid, 'param', $name);
 }
 
+// 获取栏目数据及自定义字段
+function dr_cat_value($catid, $name, $siteid = SITE_ID) {
+	$data = getcache('category_content_'.$siteid,'commons');
+	if ($data) {
+        return $data[$catid][$name];
+    }
+	return '';
+}
+
+// 获取单页数据及自定义字段
+function dr_page_value($catid, $name) {
+	$page_db = pc_base::load_model('page_model');
+	$data = $page_db->get_one(array('catid'=>$catid));
+	if ($data) {
+        return $data[$name];
+    }
+	return '';
+}
+
+// 获取模型数据及自定义字段
+function dr_value($modelid, $id, $name, $siteid = SITE_ID) {
+	if ($modelid) {
+		$content_db = pc_base::load_model('content_model');
+		$content_db->set_model($modelid);
+		$data = $content_db->get_one(array('id'=>$id));
+		if ($data) {
+			return $data[$name];
+		}
+	}
+	return '';
+}
+
 // 判断是否是移动端终端
 function is_mobile($siteid) {
 	if($siteid) {
