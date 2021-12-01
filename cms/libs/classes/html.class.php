@@ -12,14 +12,14 @@ class html {
     }
 
     // 栏目的数量统计
-    public function get_category_data($cat, $pagesize, $maxsize) {
+    public function get_category_data($cat, $maxsize, $is_mobile = 0) {
 
         // 获取生成栏目
         if (!$cat) {
             dr_json(0, '没有可用生成的栏目数据');
         }
 
-        $name = 'category-html-file';
+        $name = 'category-'.$is_mobile.'-html-file';
         $cache_class = pc_base::load_sys_class('cache');
         $cache_class->del_auth_data($name, $this->siteid);
 
@@ -68,6 +68,11 @@ class html {
                     );
                     if ($total) {
                         // 分页
+                        if ($is_mobile) {
+                            $pagesize = (int)$setting['mpagesize']; // 每页数量
+                        } else {
+                            $pagesize = (int)$setting['pagesize']; // 每页数量
+                        }
                         !$pagesize && $pagesize = 10; // 默认10条分页
                         $count = ceil($total/$pagesize); // 计算总页数
                         if ($maxsize && $count > $maxsize) {
@@ -99,6 +104,11 @@ class html {
                     );
                     if ($total) {
                         // 分页
+                        if ($is_mobile) {
+                            $pagesize = (int)$setting['mpagesize']; // 每页数量
+                        } else {
+                            $pagesize = (int)$setting['pagesize']; // 每页数量
+                        }
                         !$pagesize && $pagesize = 10; // 默认10条分页
                         $count = ceil($total/$pagesize); // 计算总页数
                         if ($maxsize && $count > $maxsize) {

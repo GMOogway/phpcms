@@ -88,7 +88,7 @@ function dr_ajax2ajax(page) {
                         window.location.href = '<?php echo $go_url;?>';
                     <?php }?>
                 } else {
-                    $('#dr_check_button').html('<i class="fa fa-refresh"></i> <?php echo $name ? '【'.$name.'】' : '';?>正在生成第'+json.code+'页 / 共'+(json.data.pcount)+'页');
+                    $('#dr_check_button').html('<i class="fa fa-refresh"></i> <?php echo $modulename ? '【'.$modulename.'】' : '';?>正在生成第'+json.code+'页 / 共'+(json.data.pcount)+'页');
                     dr_ajax2ajax(json.code);
                 }
             }

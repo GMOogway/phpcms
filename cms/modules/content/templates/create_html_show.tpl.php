@@ -7,9 +7,16 @@ include $this->admin_tpl('header','admin');?>
 <script src="<?php echo JS_PATH;?>bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
 <script src="<?php echo JS_PATH;?>bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
 <script type="text/javascript">
-$(function(){
+jQuery(document).ready(function() {
+    if (jQuery().datepicker) {
+        $('.date-picker').datepicker({
+            format: "yyyy-mm-dd",
+            orientation: "left",
+            autoclose: true
+        });
+    }
 	$(":text").removeClass('input-text');
-})
+});
 </script>
 <style type="text/css">
 .page-content {margin-left: 0px;margin-top: 0;padding: 25px 20px 10px;}
@@ -49,7 +56,6 @@ $(function(){
                     <label class="col-md-2 control-label"><?php echo L('每页生成数量');?></label>
                     <div class="col-md-9">
                         <label><input type="text" placeholder="<?php echo L('建议不要太多');?>" class="form-control" value="10" name="pagesize"></label>
-                        <span class="help-block">请与模板调用数量相同</span>
                     </div>
                 </div>
                 <div class="form-group">
@@ -68,34 +74,10 @@ $(function(){
                     <label class="col-md-2 control-label"><?php echo L('按发布时间范围');?></label>
                     <div class="col-md-9">
                         <div class="input-group">
-                            <div class="input-group input-daterange">
-                                <input type="text" placeholder="<?php echo L('按发布时间范围');?>" class="form-control" value="" name="fromdate" id="fromdate">
-                                <script type="text/javascript">
-                                $(function(){
-                                    $("#fromdate").datepicker({
-                                        isRTL: false,
-                                        format: "yyyy-mm-dd",
-                                        showMeridian: true,
-                                        autoclose: true,
-                                        pickerPosition: "bottom-right",
-                                        todayBtn: "linked"
-                                    });
-                                });
-                                </script>
+                            <div class="input-group date-picker input-daterange " data-date="" data-date-format="yyyy-mm-dd">
+                                <input type="text" placeholder="<?php echo L('按发布时间范围');?>" class="form-control" value="" name="fromdate">
                                 <span class="input-group-addon"> <?php echo L('到');?> </span>
-                                <input type="text" placeholder="<?php echo L('按发布时间范围');?>" class="form-control" value="" name="todate" id="todate">
-                                <script type="text/javascript">
-                                $(function(){
-                                    $("#todate").datepicker({
-                                        isRTL: false,
-                                        format: "yyyy-mm-dd",
-                                        showMeridian: true,
-                                        autoclose: true,
-                                        pickerPosition: "bottom-right",
-                                        todayBtn: "linked"
-                                    });
-                                });
-                                </script>
+                                <input type="text" placeholder="<?php echo L('按发布时间范围');?>" class="form-control" value="" name="todate">
                             </div>
                         </div>
                     </div>
