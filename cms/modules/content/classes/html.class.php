@@ -216,7 +216,7 @@ class html {
 	 * @param $catid 栏目id
 	 * @param $page 当前页数
 	 */
-	public function category($catid, $page = 0, $is_mobile = 0) {
+	public function category($catid, $page = 0) {
 		$CAT = $this->categorys[$catid];
 		if (strpos($CAT['url'], 'index.php?')!==false) return false;
 		if (is_array($CAT)) {
@@ -368,42 +368,22 @@ class html {
 			$keywords = $keywords ? $keywords : $setting['meta_keywords'];
 			$SEO = seo($siteid, 0, $setting['meta_title'] ? $setting['meta_title'] : $title,$setting['meta_description'],$keywords);
 		}
-		if ($is_mobile==2) {
-			if($this->sitelist[$this->siteid]['mobilehtml']==1) {
-				ob_start();
-				define('ISMOBILE', 1);
-				if($setting['ishtml'] && $this->sitelist[$this->siteid]['mobilehtml']) {
-					define('IS_HTML', 1);
-				} else {
-					define('IS_HTML', 0);
-				}
-				include template('mobile',$template);
-				return $this->createhtml($mobilefile);
-			}
-		} else if ($is_mobile==1) {
+		if($this->sitelist[$this->siteid]['mobilehtml']==1) {
 			ob_start();
-			define('ISMOBILE', 0);
-			define('IS_HTML', $setting['ishtml']);
-			include template('content',$template);
-			return $this->createhtml($file, $copyjs);
-		} else {
-			if($this->sitelist[$this->siteid]['mobilehtml']==1) {
-				ob_start();
-				define('ISMOBILE', 1);
-				if($setting['ishtml'] && $this->sitelist[$this->siteid]['mobilehtml']) {
-					define('IS_HTML', 1);
-				} else {
-					define('IS_HTML', 0);
-				}
-				include template('mobile',$template);
-				$this->createhtml($mobilefile);
+			define('ISMOBILE', 1);
+			if($setting['ishtml'] && $this->sitelist[$this->siteid]['mobilehtml']) {
+				define('IS_HTML', 1);
+			} else {
+				define('IS_HTML', 0);
 			}
-			ob_start();
-			define('ISMOBILE', 0);
-			define('IS_HTML', $setting['ishtml']);
-			include template('content',$template);
-			return $this->createhtml($file, $copyjs);
+			include template('mobile',$template);
+			$this->createhtml($mobilefile);
 		}
+		ob_start();
+		define('ISMOBILE', 0);
+		define('IS_HTML', $setting['ishtml']);
+		include template('content',$template);
+		return $this->createhtml($file, $copyjs);
 	}
 	/**
 	 * 更新首页

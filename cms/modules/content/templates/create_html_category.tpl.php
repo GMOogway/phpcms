@@ -4,7 +4,7 @@ include $this->admin_tpl('header','admin');?>
 <link rel="stylesheet" href="<?php echo CSS_PATH;?>bootstrap/css/bootstrap.min.css" media="all" />
 <script type="text/javascript">
 $(function(){
-	$(":text").removeClass('input-text');
+    $(":text").removeClass('input-text');
 })
 </script>
 <style type="text/css">
@@ -62,17 +62,10 @@ $(function(){
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-2 control-label"><?php echo L('生成栏目页面（PC端）');?></label>
+                    <label class="col-md-2 control-label"><?php echo L('生成栏目页面');?></label>
                     <div class="col-md-9">
                         <label><button type="button" onclick="dr_bfb('<?php echo L('生成栏目页面');?>', 'myform_category', '?m=content&c=create_html&a=category')" class="btn dark"> <i class="fa fa-th-large"></i> <?php echo L('开始生成静态');?> </button></label>
                         <label><button type="button" onclick="dr_bfb('<?php echo L('生成栏目页面');?>', 'myform_category', '?m=content&c=create_html&a=public_category_point')" class="btn red"> <i class="fa fa-th-large"></i> <?php echo L('上次未执行完毕时继续执行');?> </button></label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-2 control-label"><?php echo L('生成栏目页面（移动端）');?></label>
-                    <div class="col-md-9">
-                        <label><button type="button" onclick="dr_bfb('<?php echo L('生成栏目页面');?>', 'myform_category', '?m=content&c=create_html&a=category&is_mobile=1')" class="btn dark"> <i class="fa fa-th-large"></i> <?php echo L('开始生成静态');?> </button></label>
-                        <label><button type="button" onclick="dr_bfb('<?php echo L('生成栏目页面');?>', 'myform_category', '?m=content&c=create_html&a=public_category_point&is_mobile=1')" class="btn red"> <i class="fa fa-th-large"></i> <?php echo L('上次未执行完毕时继续执行');?> </button></label>
                     </div>
                 </div>
             </form>

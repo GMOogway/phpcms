@@ -291,14 +291,7 @@ include $this->admin_tpl('header');?>
                         <label class="col-md-2 control-label">列表信息数</label>
                         <div class="col-md-9">
                             <label><input class="form-control" type="text" value="10" name="setting[pagesize]"></label>
-                            <span class="help-block">请与模板调用数量相同，静态生成时调用此参数</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-2 control-label">手机列表信息数</label>
-                        <div class="col-md-9">
-                            <label><input class="form-control" type="text" value="10" name="setting[mpagesize]"></label>
-                            <span class="help-block">请与模板调用数量相同，静态生成时调用此参数</span>
+                            <span class="help-block">列表页面每页显示的信息数量，静态生成时调用此参数</span>
                         </div>
                     </div>
                     <div class="form-group" id="dr_row_template_list">

@@ -4,7 +4,7 @@ include $this->admin_tpl('header','admin');?>
 <link rel="stylesheet" href="<?php echo CSS_PATH;?>bootstrap/css/bootstrap.min.css" media="all" />
 <script type="text/javascript">
 $(function(){
-	$(":text").removeClass('input-text');
+    $(":text").removeClass('input-text');
 })
 </script>
 <style type="text/css">

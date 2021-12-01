@@ -3,7 +3,7 @@
  *  模板解析缓存
  */
 final class template_cache {
-	
+
 	/**
 	 * 编译模板
 	 *
@@ -12,7 +12,7 @@ final class template_cache {
 	 * @param $istag	是否为标签模板
 	 * @return unknown
 	 */
-	
+
 	public function template_compile($module, $template, $style = 'default') {
 		if(strpos($module, '/')=== false) {
 		$tplfile = $_tpl = PC_PATH.'templates'.DIRECTORY_SEPARATOR.$style.DIRECTORY_SEPARATOR.$module.DIRECTORY_SEPARATOR.$template.'.html';
@@ -34,16 +34,16 @@ final class template_cache {
 		$content = @file_get_contents ( $tplfile );
 
 		$filepath = CACHE_PATH.'caches_template'.DIRECTORY_SEPARATOR.$style.DIRECTORY_SEPARATOR.$module.DIRECTORY_SEPARATOR;
-	    if(!is_dir($filepath)) {
+		if(!is_dir($filepath)) {
 			mkdir($filepath, 0777, true);
-	    }
+		}
 		$compiledtplfile = $filepath.$template.'.php';
 		$content = $this->template_parse($content);
 		$strlen = file_put_contents ( $compiledtplfile, $content );
 		chmod ( $compiledtplfile, 0777 );
 		return $strlen;
 	}
-	
+
 	/**
 	 * 更新模板缓存
 	 *
@@ -58,7 +58,7 @@ final class template_cache {
 		chmod ($compiledtplfile, 0777);
 		return $strlen;
 	}
-	
+
 
 	/**
 	 * 解析模板
@@ -181,7 +181,6 @@ final class template_cache {
 							$str .= '$r = $get_db->sql_query("'.$sql.'");$s = $get_db->fetch_next();$pages=pages($s[\'count\'], $page, $pagesize, $urlrule);';
 						}
 						
-						
 						$str .= '$r = $get_db->sql_query("'.$datas['sql'].' LIMIT '.$limit.'");while(($s = $get_db->fetch_next()) != false) {$a[] = $s;}$'.$return.' = $a;unset($a);';
 					break;
 					
@@ -200,7 +199,9 @@ final class template_cache {
 					$datas['limit'] = $num;
 				}
 				if (isset($page)) {
-					$str .= '$pagesize = '.$num.';';
+					$str .= '$cat = getcache(\'category_content_\'.$siteid,\'commons\');';
+					$str .= '$setting = dr_string2array($cat[$catid][\'setting\']);';
+					$str .= '$pagesize = (int)$setting[\'pagesize\'] ? (int)$setting[\'pagesize\'] : '.$num.';';
 					$str .= '$page = intval('.$page.') ? intval('.$page.') : 1;if($page<=0){$page=1;}';
 					$str .= '$offset = ($page - 1) * $pagesize;';
 					$datas['limit'] = '$offset.",".$pagesize';
@@ -219,14 +220,14 @@ final class template_cache {
 		}
 		return "<"."?php if(defined('IN_ADMIN')  && !defined('HTML')) {echo \"<div class=\\\"admin_piao\\\" pc_action=\\\"".$op."\\\" data=\\\"".$str_datas."\\\"><a href=\\\"javascript:void(0)\\\" class=\\\"admin_piao_edit\\\">".($op=='block' ? L('block_add') : L('edit'))."</a>\";}".$str."?".">";
 	}
-	
+
 	/**
 	 * PC标签结束
 	 */
 	static private function end_pc_tag() {
 		return '<?php if(defined(\'IN_ADMIN\') && !defined(\'HTML\')) {echo \'</div>\';}?>';
 	}
-	
+
 	/**
 	 * 转换数据为HTML代码
 	 * @param array $data 数组

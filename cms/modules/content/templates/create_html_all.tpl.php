@@ -4,7 +4,7 @@ include $this->admin_tpl('header','admin');?>
 <link rel="stylesheet" href="<?php echo CSS_PATH;?>bootstrap/css/bootstrap.min.css" media="all" />
 <script type="text/javascript">
 $(function(){
-	$(":text").removeClass('input-text');
+    $(":text").removeClass('input-text');
 })
 </script>
 <style type="text/css">
@@ -60,8 +60,7 @@ a.badge {color: #fff;}
             <div class="form-group">
                 <label class="col-md-2 control-label"><?php echo L('一键生成');?></label>
                 <div class="col-md-9">
-                    <label><button type="button" onclick="dr_bfb('<?php echo L('一键生成');?>', 'myform_category', '?m=content&c=create_all_html&a=category&go_url=1&pc_hash='+pc_hash)" class="btn dark"> <i class="fa fa-th-large"></i> <?php echo L('一键生成PC全站栏目和内容');?> </button></label>
-                    <label><button type="button" onclick="dr_bfb('<?php echo L('一键生成');?>', 'myform_category', '?m=content&c=create_all_html&a=category&go_url=1&is_mobile=1&pc_hash='+pc_hash)" class="btn blue"> <i class="fa fa-th-large"></i> <?php echo L('一键生成移动端全站栏目和内容');?> </button></label>
+                    <label><button type="button" onclick="dr_bfb('<?php echo L('一键生成');?>', 'myform_category', '?m=content&c=create_all_html&a=category&go_url=1&pc_hash='+pc_hash)" class="btn dark"> <i class="fa fa-th-large"></i> <?php echo L('一键生成全站栏目和内容');?> </button></label>
                 </div>
             </div>
         </div>

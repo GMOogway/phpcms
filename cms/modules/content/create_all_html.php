@@ -191,24 +191,22 @@ class create_all_html extends admin {
 		$this->db->set_model(intval($fmid));
 		$total = $this->db->count();
 		$maxsize = $this->input->get('maxsize');
-		$is_mobile = (int)$this->input->get('is_mobile');
 		$go_url = $this->input->get('go_url');
 		$go_url = $go_url ? trim('?m=content&c=create_all_html&a=show&modelid='.$fmid.'&go_url=1&pc_hash='.$this->input->get('pc_hash')) : '';
 		if (!$total || !$fmid) $go_url = '';
-		$modulename = ($is_mobile ? '移动端' : 'PC端').'栏目';
-		$count_url = '?m=content&c=create_all_html&a=public_category_count&ids='.$ids.'&maxsize='.$maxsize.'&is_mobile='.$is_mobile;
-		$todo_url = '?m=content&c=create_all_html&a=public_category_add&modelid='.$modelid.'&ids='.$ids.'&go_url='.urlencode($go_url).'&maxsize='.$maxsize.'&is_mobile='.$is_mobile;
+		$modulename = '栏目';
+		$count_url = '?m=content&c=create_all_html&a=public_category_count&ids='.$ids.'&maxsize='.$maxsize;
+		$todo_url = '?m=content&c=create_all_html&a=public_category_add&modelid='.$modelid.'&ids='.$ids.'&go_url='.urlencode($go_url).'&maxsize='.$maxsize;
 		include $this->admin_tpl('show_html');
 	}
 	// 栏目的数量统计
 	public function public_category_count() {
 		$modelid = $this->input->get('modelid');
 		$maxsize = (int)$this->input->get('maxsize');
-		$is_mobile = (int)$this->input->get('is_mobile');
 
 		$cat = getcache('category_content_'.$this->siteid,'commons');
 		$html = pc_base::load_sys_class('html');
-		$html->get_category_data($cat, $maxsize, $is_mobile);
+		$html->get_category_data($cat, $maxsize);
 	}
 	/**
 	* 批量生成栏目页
@@ -222,13 +220,8 @@ class create_all_html extends admin {
 		$this->html = pc_base::load_app_class('html');
 		$modelid = $this->input->get('modelid');
 		$page = max(1, intval($this->input->get('pp')));
-        $is_mobile = intval($this->input->get('is_mobile'));
-		$sitelist = getcache('sitelist','commons');
-		if ($is_mobile && !$sitelist[$this->siteid]['mobilehtml']) {
-			dr_json(0, '没有开启移动端生成静态功能');
-		}
-		$name = 'category-'.$is_mobile.'-html-file-'.$page;
-		$name2 = 'category-'.$is_mobile.'-html-file';
+		$name = 'category-html-file-'.$page;
+		$name2 = 'category-html-file';
 		$pcount = $cache_class->get_auth_data($name2, $this->siteid);
 		if (!$pcount) {
 			dr_json(0, '临时缓存数据不存在：'.$name2);
@@ -257,11 +250,7 @@ class create_all_html extends admin {
 						$class = 'p_error';
 						$ok = '<a class="error" href="'.$t['url'].'" target="_blank">地址【'.$t['url'].'】是动态，请更新内容URL地址为静态模式</a>';
 					} else {
-						if ($is_mobile) {
-							$this->html->category($t['catid'],$t['page'],2);
-						} else {
-							$this->html->category($t['catid'],$t['page'],1);
-						}
+						$this->html->category($t['catid'],$t['page']);
 						$cache_class->set_auth_data($name2.'-error', $page); // 设置断点
 						$class = 'ok';
 						$ok = '<a class="ok" href="'.$t['url'].'" target="_blank">生成成功</a>';

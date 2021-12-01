@@ -15,7 +15,7 @@ jQuery(document).ready(function() {
             autoclose: true
         });
     }
-	$(":text").removeClass('input-text');
+    $(":text").removeClass('input-text');
 });
 </script>
 <style type="text/css">

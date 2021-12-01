@@ -169,10 +169,9 @@ class create_html extends admin {
 				$catids = implode(',', $catids);
 			}
 			$maxsize = $this->input->get('maxsize');
-			$is_mobile = (int)$this->input->get('is_mobile');
-			$modulename = ($is_mobile ? '移动端' : 'PC端').'栏目';
-			$count_url = '?m=content&c=create_html&a=public_category_count&maxsize='.$maxsize.'&is_mobile='.$is_mobile.'&catids='.$catids;
-			$todo_url = '?m=content&c=create_html&a=public_category_add&maxsize='.$maxsize.'&is_mobile='.$is_mobile.'&catids='.$catids;
+			$modulename = '栏目';
+			$count_url = '?m=content&c=create_html&a=public_category_count&maxsize='.$maxsize.'&catids='.$catids;
+			$todo_url = '?m=content&c=create_html&a=public_category_add&maxsize='.$maxsize.'&catids='.$catids;
 			include $this->admin_tpl('show_html');
 		} else {
 			$show_header = $show_dialog  = '';
@@ -203,8 +202,7 @@ class create_html extends admin {
 	// 断点生成栏目
 	public function public_category_point() {
 		$cache_class = pc_base::load_sys_class('cache');
-		$is_mobile = (int)$this->input->get('is_mobile');
-		$name = 'category-'.$is_mobile.'-html-file';
+		$name = 'category-html-file';
 		$page = $cache_class->get_auth_data($name.'-error'); // 设置断点
 		if (!$page) {
 			dr_json(0, L('没有找到上次中断生成的记录'));
@@ -215,16 +213,15 @@ class create_html extends admin {
 			$catids = implode(',', $catids);
 		}
 
-		$modulename = ($is_mobile ? '移动端' : 'PC端').'栏目';
-		$count_url = '?m=content&c=create_html&a=public_category_point_count&maxsize='.$maxsize.'&catids='.$catids.'&is_mobile='.$is_mobile;
-		$todo_url = '?m=content&c=create_html&a=public_category_add&maxsize='.$maxsize.'&catids='.$catids.'&is_mobile='.$is_mobile;
+		$modulename = '栏目';
+		$count_url = '?m=content&c=create_html&a=public_category_point_count&maxsize='.$maxsize.'&catids='.$catids;
+		$todo_url = '?m=content&c=create_html&a=public_category_add&maxsize='.$maxsize.'&catids='.$catids;
 		include $this->admin_tpl('show_html');
 	}
 	// 断点栏目的数量统计
 	public function public_category_point_count() {
 		$cache_class = pc_base::load_sys_class('cache');
-		$is_mobile = (int)$this->input->get('is_mobile');
-		$name = 'category-'.$is_mobile.'-html-file';
+		$name = 'category-html-file';
 		$page = $cache_class->get_auth_data($name.'-error'); // 设置断点
 		if (!$page) {
 			dr_json(0, L('没有找到上次中断生成的记录'));
@@ -256,11 +253,10 @@ class create_html extends admin {
 	public function public_category_count() {
 		$catids = $this->input->get('catids');
 		$maxsize = (int)$this->input->get('maxsize');
-		$is_mobile = (int)$this->input->get('is_mobile');
 
 		$cat = getcache('category_content_'.$this->siteid,'commons');
 		$html = pc_base::load_sys_class('html');
-		$html->get_category_data($this->_category_data($catids, $cat), $maxsize, $is_mobile);
+		$html->get_category_data($this->_category_data($catids, $cat), $maxsize);
 	}
 	//生成首页
 	public function public_index() {
@@ -424,13 +420,8 @@ class create_html extends admin {
 		$cache_class = pc_base::load_sys_class('cache');
 		$this->html = pc_base::load_app_class('html');
 		$page = max(1, intval($this->input->get('pp')));
-        $is_mobile = intval($this->input->get('is_mobile'));
-		$sitelist = getcache('sitelist','commons');
-		if ($is_mobile && !$sitelist[$this->siteid]['mobilehtml']) {
-			dr_json(0, '没有开启移动端生成静态功能');
-		}
-		$name = 'category-'.$is_mobile.'-html-file-'.$page;
-		$name2 = 'category-'.$is_mobile.'-html-file';
+		$name = 'category-html-file-'.$page;
+		$name2 = 'category-html-file';
 		$pcount = $cache_class->get_auth_data($name2, $this->siteid);
 		if (!$pcount) {
 			dr_json(0, '临时缓存数据不存在：'.$name2);
@@ -459,11 +450,7 @@ class create_html extends admin {
 						$class = 'p_error';
 						$ok = '<a class="error" href="'.$t['url'].'" target="_blank">地址【'.$t['url'].'】是动态，请更新内容URL地址为静态模式</a>';
 					} else {
-						if ($is_mobile) {
-							$this->html->category($t['catid'],$t['page'],2);
-						} else {
-							$this->html->category($t['catid'],$t['page'],1);
-						}
+						$this->html->category($t['catid'],$t['page']);
 						$cache_class->set_auth_data($name2.'-error', $page); // 设置断点
 						$class = 'ok';
 						$ok = '<a class="ok" href="'.$t['url'].'" target="_blank">生成成功</a>';

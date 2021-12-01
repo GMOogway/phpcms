@@ -112,6 +112,7 @@ class category extends admin {
 			$info['siteid'] = $this->siteid;
 			$info['module'] = 'content';
 			$setting = $this->input->post('setting');
+			if (!$setting['pagesize']) $setting['pagesize'] = 10;
 			if($info['type']!=2) {
 				if(!$setting['template_list']) dr_json(0, L('template_setting'), array('field' => 'template_list'));
 				//栏目生成静态配置
@@ -271,6 +272,7 @@ class category extends admin {
 					dr_json(0, L('当前栏目存在内容数据，无法禁用'));
 				}
 			}
+			if (!$setting['pagesize']) $setting['pagesize'] = 10;
 			//栏目生成静态配置
 			if($this->input->post('type') != 2) {
 				if(!$setting['template_list']) dr_json(0, L('template_setting'), array('field' => 'template_list'));

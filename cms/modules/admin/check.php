@@ -408,6 +408,18 @@ class check extends admin {
                 $this->db->update(array('setting'=>'{"width":"","fieldtype":"int","format":"1","format2":"0","is_left":"0","defaultvalue":"","color":""}', 'iscore'=>0, 'isbase'=>0),array('field'=>'updatetime', 'formtype'=>'datetime'));
                 $this->db->update(array('setting'=>'{"width":"","fieldtype":"int","format":"1","format2":"0","is_left":"0","defaultvalue":"","color":""}', 'iscore'=>0, 'isbase'=>0),array('field'=>'inputtime', 'formtype'=>'datetime'));
                 $this->db->update(array('setting'=>'{"width":"","fieldtype":"int","format":"0","format2":"0","is_left":"0","defaultvalue":"","color":""}'),array('modelid'=>10, 'field'=>'birthday', 'formtype'=>'datetime'));
+
+                $this->category_db = pc_base::load_model('category_model');
+                $category_data = $this->category_db->select();
+                foreach ($category_data as $t) {
+                    $t['setting'] = dr_string2array($t['setting']);
+                    $pagesize = (int)$t['setting']['pagesize'];
+                    if (!$pagesize) {
+                        $t['setting']['pagesize'] = 10;
+                        $this->category_db->update(array('setting' => dr_array2string($t['setting'])),array('catid'=>$t['catid']));
+                    }
+                }
+
                 break;
 
             case '07':

@@ -6,7 +6,7 @@ return array(
 'cms_version' => 'V9.6.6', //cms 版本号
 'cms_release' => '20210606', //cms 更新日期
 'cms_updatetime' => '2021-12-01', // 服务端最近更新时间
-'cms_downtime' => '2021-12-01 16:06:06', // 本网站程序下载时间
+'cms_downtime' => '2021-12-01 18:06:06', // 本网站程序下载时间
 'update' => '0', //cms 更新
 );
 ?>
