@@ -59,7 +59,7 @@ class email {
     public function mail($toemail, $subject, $message, $fname = '') {
 
         $subject = "=?UTF-8?B?".base64_encode($subject)."?=";
-        $from_user = "=?UTF-8?B?".base64_encode($fname ? $fname : this->config['sitename'])."?=";
+        $from_user = "=?UTF-8?B?".base64_encode($fname ? $fname : $this->config['sitename'])."?=";
         $headers = "From: ".$from_user." <".$this->config['from'].">\r\n".
             "MIME-Version: 1.0" . "\r\n" .
             "Content-type: text/html; charset=".CHARSET."" . "\r\n";

@@ -284,7 +284,7 @@ include $this->admin_tpl('header');?>
                     <div class="form-group">
                         <label class="col-md-2 control-label">列表信息数</label>
                         <div class="col-md-9">
-                            <label><input class="form-control" type="text" value="<?php echo $setting['pagesize'];?>" name="setting[pagesize]"></label>
+                            <label><input class="form-control" type="text" value="<?php echo intval($setting['pagesize']);?>" name="setting[pagesize]"></label>
                             <span class="help-block">列表页面每页显示的信息数量，静态生成时调用此参数</span>
                         </div>
                     </div>

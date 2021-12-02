@@ -61,7 +61,6 @@ a.badge {color: #fff;}
                 layer.close(index);
                 if (json.code == 1) {
                     dr_tips(1, json.msg);
-                    setTimeout("window.location.reload(true)", 2000);
                 } else {
                     dr_tips(0, json.msg);
                 }

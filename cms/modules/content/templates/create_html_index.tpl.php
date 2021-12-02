@@ -75,7 +75,6 @@ a.badge {color: #fff;}
                         $(e).html('<i class="fa fa-check"></i>');
                     }
                     dr_tips(1, json.msg);
-                    setTimeout("window.location.reload(true)", 2000);
                 } else {
                     dr_tips(0, json.msg);
                 }

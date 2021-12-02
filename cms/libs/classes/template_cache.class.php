@@ -192,7 +192,7 @@ final class template_cache {
 		} else {
 			if (!isset($action) || empty($action)) return false;
 			if (module_exists($op) && file_exists(PC_PATH.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.$op.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.$op.'_tag.class.php')) {
-				$str .= '$'.$op.'_tag = pc_base::load_app_class("'.$op.'_tag", "'.$op.'");if (method_exists($'.$op.'_tag, \''.$action.'\')) {';	
+				$str .= '$'.$op.'_tag = pc_base::load_app_class("'.$op.'_tag", "'.$op.'");if (method_exists($'.$op.'_tag, \''.$action.'\')) {';
 				if (isset($start) && intval($start)) {
 					$datas['limit'] = intval($start).','.$num;
 				} else {
@@ -201,7 +201,11 @@ final class template_cache {
 				if (isset($page)) {
 					$str .= '$cat = getcache(\'category_content_\'.$siteid,\'commons\');';
 					$str .= '$setting = dr_string2array($cat[$catid][\'setting\']);';
-					$str .= '$pagesize = (int)$setting[\'pagesize\'] ? (int)$setting[\'pagesize\'] : '.$num.';';
+					$str .= 'if ((int)$setting[\'ishtml\']) {';
+					$str .= '$pagesize = (int)$setting[\'pagesize\'] ? (int)$setting[\'pagesize\'] : 10;';
+					$str .= '} else {';
+					$str .= '$pagesize = '.$num.';';
+					$str .= '}';
 					$str .= '$page = intval('.$page.') ? intval('.$page.') : 1;if($page<=0){$page=1;}';
 					$str .= '$offset = ($page - 1) * $pagesize;';
 					$datas['limit'] = '$offset.",".$pagesize';
