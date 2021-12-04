@@ -20,11 +20,21 @@
 		} else {
 			$str = '';
 		}
+		if($up && $down) {
+			$str .= '<style type="text/css">';
+			if($up!='#ffffff' && $up!='#fff') {
+				$str .= '.btn.up:not(.btn-outline){color: #FFF;background-color: '.$up.';border-color: '.$up.';}';
+			}
+			if($down!='#ffffff' && $down!='#fff') {
+				$str .= '.btn.down:not(.btn-outline){color: #FFF;background-color: '.$down.';border-color: '.$down.';}';
+			}
+			$str .= '</style>';
+		}
 		$js = '<script type="text/javascript">
     $(function(){
         $("#dr_'.$field.'").TouchSpin({
-            buttondown_class: "btn '.$down.'",
-            buttonup_class: "btn '.$up.'",
+            buttondown_class: "btn down",
+            buttonup_class: "btn up",
             verticalbuttons: '.(!$setting['show'] ?  'true' : 'false').',
             step: '.$setting['step'].',
             min: '.$setting['minnumber'].',
