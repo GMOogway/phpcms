@@ -14,7 +14,6 @@
 		if(!$value) $value = $defaultvalue;
 		if(!defined('TOUCHSPIN_INIT')) {
 			$str = '<link href="'.JS_PATH.'bootstrap-touchspin/bootstrap.touchspin.css" rel="stylesheet" type="text/css" />
-			<script src="'.JS_PATH.'fuelux/js/spinner.min.js" type="text/javascript"></script>
 			<script src="'.JS_PATH.'bootstrap-touchspin/bootstrap.touchspin.js" type="text/javascript"></script>';
 			define('TOUCHSPIN_INIT', 1);
 		} else {
