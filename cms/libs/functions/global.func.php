@@ -1566,7 +1566,7 @@ function sys_auth($string, $operation = 'ENCODE', $key = '', $expiry = 0) {
 	}
 
 	if($operation == 'DECODE') {
-		if((substr($result, 0, 10) == 0 || substr($result, 0, 10) - time() > 0) && substr($result, 10, 16) == substr(md5(substr($result, 26).$keyb), 0, 16)) {
+		if((substr($result, 0, 10) == 0 || substr($result, 0, 10) - SYS_TIME > 0) && substr($result, 10, 16) == substr(md5(substr($result, 26).$keyb), 0, 16)) {
 			return substr($result, 26);
 		} else {
 			return '';
@@ -3816,7 +3816,7 @@ function dr_fdate($sTime, $formt = 'Y-m-d') {
 		return '';
 	}
 	//sTime=源时间，cTime=当前时间，dTime=时间差
-	$cTime = time();
+	$cTime = SYS_TIME;
 	$dTime = $cTime - $sTime;
 	$dDay = intval(dr_date($cTime, 'z')) - intval(dr_date($sTime, 'z'));
 	$dYear = intval(dr_date($cTime, 'Y')) - intval(dr_date($sTime, 'Y'));

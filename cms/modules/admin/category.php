@@ -323,8 +323,7 @@ class category extends admin {
 					 if(!empty($arr)){
 						foreach ($arr as $v){
 							$new_setting = array2string(
-							array_merge(string2array($v['setting']), array('category_template' => $this->input->post('setting')['category_template'],'list_template' =>  $this->input->post('setting')['list_template'],'show_template' =>  $this->input->post('setting')['show_template'])
-													)
+							array_merge(string2array($v['setting']), array('category_template' => $setting['category_template'],'list_template' =>  $setting['list_template'],'show_template' =>  $setting['show_template']))
 							);
 							$this->db->update(array('setting'=>$new_setting), 'catid='.$v['catid']);
 						}

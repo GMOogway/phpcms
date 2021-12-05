@@ -172,7 +172,6 @@ class create_all_html extends admin {
 	*/
 	public function category() {
 		$cache_class = pc_base::load_sys_class('cache');
-		$modelid = $this->input->get('modelid');
 		$ids = $this->input->get('ids');
 		if ($ids && is_array($ids)) {
 			$ids = implode(',', $ids);
@@ -196,12 +195,11 @@ class create_all_html extends admin {
 		if (!$total || !$fmid) $go_url = '';
 		$modulename = '栏目';
 		$count_url = '?m=content&c=create_all_html&a=public_category_count&ids='.$ids.'&maxsize='.$maxsize;
-		$todo_url = '?m=content&c=create_all_html&a=public_category_add&modelid='.$modelid.'&ids='.$ids.'&go_url='.urlencode($go_url).'&maxsize='.$maxsize;
+		$todo_url = '?m=content&c=create_all_html&a=public_category_add&ids='.$ids.'&go_url='.urlencode($go_url).'&maxsize='.$maxsize;
 		include $this->admin_tpl('show_html');
 	}
 	// 栏目的数量统计
 	public function public_category_count() {
-		$modelid = $this->input->get('modelid');
 		$maxsize = (int)$this->input->get('maxsize');
 
 		$cat = getcache('category_content_'.$this->siteid,'commons');
@@ -218,7 +216,6 @@ class create_all_html extends admin {
 		}
 		$cache_class = pc_base::load_sys_class('cache');
 		$this->html = pc_base::load_app_class('html');
-		$modelid = $this->input->get('modelid');
 		$page = max(1, intval($this->input->get('pp')));
 		$name = 'category-html-file-'.$page;
 		$name2 = 'category-html-file';
