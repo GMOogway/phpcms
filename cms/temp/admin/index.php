@@ -66,13 +66,17 @@ class index extends admin {
 				
 				if ($maxloginfailedtimes) {
 					if((int)$rtime['times'] && (int)$rtime['times'] >= $maxloginfailedtimes) {
-						dr_json(0, L('失败次数已达到'.$rtime['times'].'次，已被禁止登录'));
+						dr_json(0, L('失败次数已达到'.$rtime['times'].'次，已被禁止登录，请'.$sysadminlogintimes.'分钟后登录'));
 					}
 				}
 			}
 			//查询帐号
 			$r = $this->db->get_one(array('username'=>$username));
 			if(!$r) dr_json(0, L('user_not_exist'));
+			//如果账号被锁定
+			if($r['islock']) {
+				dr_json(3, L('管理员已经被锁定'));
+			}
 			$password = md5(trim($this->input->post('password')).$r['encrypt']);
 			
 			if($r['password'] != $password) {
@@ -92,10 +96,6 @@ class index extends admin {
 				}
 			}
 			$this->times_db->delete(array('username'=>$username));
-			//如果账号被锁定
-			if($r['islock']) {
-				dr_json(3, L('管理员已经被锁定'));
-			}
 			
 			$this->db->update(array('lastloginip'=>ip(),'lastlogintime'=>SYS_TIME),array('userid'=>$r['userid']));
 			$login_attr = md5(SYS_KEY.$r['password'].(isset($r['login_attr']) ? $r['login_attr'] : ''));

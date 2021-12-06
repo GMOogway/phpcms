@@ -14,7 +14,8 @@ class setting extends admin {
 	 * 配置信息
 	 */
 	public function init() {
-		$show_header = $show_validator = true;
+		$show_header = '';
+		$show_validator = true;
 		if(IS_AJAX_POST) {
 			$setconfig = $this->input->post('setconfig');
 			$setting = $this->input->post('setting');

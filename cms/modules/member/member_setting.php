@@ -21,12 +21,29 @@ class member_setting extends admin {
 	 * member list
 	 */
 	function manage() {
-		if($this->input->post('dosubmit')) {
-			$member_setting = array2string($this->input->post('info'));
-			
-			$this->db->update(array('module'=>'member', 'setting'=>$member_setting), array('module'=>'member'));
-			setcache('member_setting', $this->input->post('info'));
-			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
+		$show_header = '';
+		$show_validator = true;
+		if(IS_AJAX_POST) {
+			$member_setting = $this->input->post('info');
+			$member_setting['allowregister'] = intval($member_setting['allowregister']);
+			$member_setting['choosemodel'] = intval($member_setting['choosemodel']);
+			$member_setting['enablemailcheck'] = intval($member_setting['enablemailcheck']);
+			$member_setting['enablcodecheck'] = intval($member_setting['enablcodecheck']);
+			$member_setting['registerverify'] = intval($member_setting['registerverify']);
+			$member_setting['showapppoint'] = intval($member_setting['showapppoint']);
+			$member_setting['showregprotocol'] = intval($member_setting['showregprotocol']);
+			if (!preg_match('/^\\d{1,8}$/i', $member_setting['rmb_point_rate'])) {
+				dr_json(0, L('rmb_point_rate').L('between_1_to_8_num'), array('field' => 'rmb_point_rate'));
+			}
+			if (!preg_match('/^\\d{1,8}$/i', $member_setting['defualtpoint'])) {
+				dr_json(0, L('defualtpoint').L('between_1_to_8_num'), array('field' => 'defualtpoint'));
+			}
+			if (!preg_match('/^\\d{1,8}$/i', $member_setting['defualtamount'])) {
+				dr_json(0, L('defualtamount').L('between_1_to_8_num'), array('field' => 'defualtamount'));
+			}
+			$this->db->update(array('module'=>'member', 'setting'=>array2string($member_setting)), array('module'=>'member'));
+			setcache('member_setting', $member_setting);
+			dr_json(1, L('operation_success'), array('url' => '?m=member&c=member_setting&a=manage&page='.(int)($this->input->post('page')).'&pc_hash='.dr_get_csrf_token()));
 		} else {
 			$show_scroll = true;
 			$member_setting = $this->db->get_one(array('module'=>'member'), 'setting');

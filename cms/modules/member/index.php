@@ -610,6 +610,8 @@ class index extends foreground {
 		
 		//加载用户模块配置
 		$member_setting = getcache('member_setting');
+		$maxloginfailedtimes = isset($member_setting['maxloginfailedtimes']) ? (int)$member_setting['maxloginfailedtimes'] : '';
+		$syslogintimes = isset($member_setting['syslogintimes']) ? (int)$member_setting['syslogintimes'] : 10;
 		//加载短信模块配置
  		$sms_setting_arr = getcache('sms','sms');
 		$sms_setting = $sms_setting_arr[$siteid];
@@ -631,10 +633,20 @@ class index extends foreground {
 			
 			//密码错误剩余重试次数
 			$this->times_db = pc_base::load_model('times_model');
-			$rtime = $this->times_db->get_one(array('username'=>$username));
-			if($rtime['times'] > 4) {
-				$minute = 60 - floor((SYS_TIME - $rtime['logintime']) / 60);
-				showmessage(L('wait_1_hour', array('minute'=>$minute)));
+			$rtime = $this->times_db->get_one(array('username'=>$username,'isadmin'=>0));
+			if ($rtime) {
+				if ($maxloginfailedtimes) {
+					if ($syslogintimes && (int)$rtime['logintime'] && SYS_TIME - (int)$rtime['logintime'] > ($syslogintimes * 60)) {
+						// 超过时间了
+						$this->times_db->delete(array('username'=>$username));
+					}
+				}
+				
+				if ($maxloginfailedtimes) {
+					if((int)$rtime['times'] && (int)$rtime['times'] >= $maxloginfailedtimes) {
+						showmessage(L('失败次数已达到'.$rtime['times'].'次，已被禁止登录，请'.$syslogintimes.'分钟后登录'));
+					}
+				}
 			}
 			
 			//查询帐号
@@ -642,25 +654,30 @@ class index extends foreground {
 
 			if(!$r) showmessage(L('user_not_exist'),'index.php?m=member&c=index&a=login');
 			
-			//验证用户密码
-			$password = md5(md5(trim($password)).$r['encrypt']);
-			if($r['password'] != $password) {				
-				$ip = ip();
-				if($rtime && $rtime['times'] < 5) {
-					$times = 5 - intval($rtime['times']);
-					$this->times_db->update(array('ip'=>$ip, 'times'=>'+=1'), array('username'=>$username));
-				} else {
-					$this->times_db->insert(array('username'=>$username, 'ip'=>$ip, 'logintime'=>SYS_TIME, 'times'=>1));
-					$times = 5;
-				}
-				showmessage(L('password_error', array('times'=>$times)), 'index.php?m=member&c=index&a=login', 3000);
-			}
-			$this->times_db->delete(array('username'=>$username));
-			
 			//如果用户被锁定
 			if($r['islock']) {
 				showmessage(L('user_is_lock'));
 			}
+			
+			//验证用户密码
+			$password = md5(md5(trim($password)).$r['encrypt']);
+			if($r['password'] != $password) {
+				$ip = ip();
+				if ($maxloginfailedtimes) {
+					if($rtime && $rtime['times'] < $maxloginfailedtimes) {
+						$times = $maxloginfailedtimes-intval($rtime['times']);
+						$this->times_db->update(array('ip'=>$ip,'isadmin'=>0,'times'=>'+=1'),array('username'=>$username));
+					} else {
+						$this->times_db->delete(array('username'=>$username,'isadmin'=>0));
+						$this->times_db->insert(array('username'=>$username,'ip'=>$ip,'isadmin'=>0,'logintime'=>SYS_TIME,'times'=>1));
+						$times = $maxloginfailedtimes;
+					}
+					showmessage(L('密码错误，您还有'.$times.'次尝试机会！'), 'index.php?m=member&c=index&a=login', 3000);
+				} else {
+					showmessage(L('password_error'), 'index.php?m=member&c=index&a=login', 3000);
+				}
+			}
+			$this->times_db->delete(array('username'=>$username));
 			
 			$userid = $r['userid'];
 			$groupid = $r['groupid'];

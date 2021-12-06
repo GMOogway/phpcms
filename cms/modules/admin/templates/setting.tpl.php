@@ -2,8 +2,8 @@
 defined('IN_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header');?>
 <link rel="stylesheet" href="<?php echo CSS_PATH;?>bootstrap/css/bootstrap.min.css" media="all" />
-<link href="<?php echo JS_PATH?>bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css" />
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>bootstrap-switch/js/bootstrap-switch.min.js"></script>
+<link rel="stylesheet" href="<?php echo JS_PATH;?>bootstrap-switch/css/bootstrap-switch.min.css" media="all" />
+<script type="text/javascript" src="<?php echo JS_PATH;?>bootstrap-switch/js/bootstrap-switch.min.js"></script>
 <style type="text/css">
 .page-content {margin-left: 0px;margin-top: 0;padding: 25px 20px 10px;}
 .main-content {background: #f5f6f8;}
