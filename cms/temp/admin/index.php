@@ -60,7 +60,7 @@ class index extends admin {
 				if ($maxloginfailedtimes) {
 					if ($sysadminlogintimes && (int)$rtime['logintime'] && SYS_TIME - (int)$rtime['logintime'] > ($sysadminlogintimes * 60)) {
 						// 超过时间了
-						$this->times_db->delete(array('username'=>$username));
+						$this->times_db->delete(array('username'=>$username,'isadmin'=>1));
 					}
 				}
 				
@@ -95,7 +95,7 @@ class index extends admin {
 					dr_json(3, L('密码错误'));
 				}
 			}
-			$this->times_db->delete(array('username'=>$username));
+			$this->times_db->delete(array('username'=>$username,'isadmin'=>1));
 			
 			$this->db->update(array('lastloginip'=>ip(),'lastlogintime'=>SYS_TIME),array('userid'=>$r['userid']));
 			$login_attr = md5(SYS_KEY.$r['password'].(isset($r['login_attr']) ? $r['login_attr'] : ''));
@@ -567,7 +567,7 @@ class index extends admin {
 			if ($maxloginfailedtimes) {
 				if ($sysadminlogintimes && (int)$rtime['logintime'] && SYS_TIME - (int)$rtime['logintime'] > ($sysadminlogintimes * 60)) {
 					// 超过时间了
-					$this->times_db->delete(array('username'=>$username));
+					$this->times_db->delete(array('username'=>$username,'isadmin'=>1));
 				}
 			}
 			
@@ -594,7 +594,7 @@ class index extends admin {
 			}
 			exit('2|'.$times);//密码错误
 		}
-		$this->times_db->delete(array('username'=>$username));
+		$this->times_db->delete(array('username'=>$username,'isadmin'=>1));
 		$_SESSION['lock_screen'] = 0;
 		exit('1');
 	}

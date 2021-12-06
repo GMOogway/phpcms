@@ -638,7 +638,7 @@ class index extends foreground {
 				if ($maxloginfailedtimes) {
 					if ($syslogintimes && (int)$rtime['logintime'] && SYS_TIME - (int)$rtime['logintime'] > ($syslogintimes * 60)) {
 						// 超过时间了
-						$this->times_db->delete(array('username'=>$username));
+						$this->times_db->delete(array('username'=>$username,'isadmin'=>0));
 					}
 				}
 				
@@ -677,7 +677,7 @@ class index extends foreground {
 					showmessage(L('password_error'), 'index.php?m=member&c=index&a=login', 3000);
 				}
 			}
-			$this->times_db->delete(array('username'=>$username));
+			$this->times_db->delete(array('username'=>$username,'isadmin'=>0));
 			
 			$userid = $r['userid'];
 			$groupid = $r['groupid'];
