@@ -1,6 +1,7 @@
 <?php defined('IN_ADMIN') or exit('No permission resources.');?>
 <?php include $this->admin_tpl('header', 'admin');?>
 <div class="pad-lr-10">
+<div class="myfbody">
 <div class="table-list">
 <table width="100%" cellspacing="0">
         <thead>
@@ -23,9 +24,12 @@
  </tbody>
 </table>
 </div>
-<div class="btn">
+</div>
+<div class="portlet-body form myfooter">
+<div class="form-actions text-center">
 <input type="button" class="dialog" name="dosubmit" id="dosubmit" value="<?php echo L('goback')?>" onclick="ownerDialog.close();"/>
-</div> 
+</div>
+</div>
 </div>
 </body>
 </html>

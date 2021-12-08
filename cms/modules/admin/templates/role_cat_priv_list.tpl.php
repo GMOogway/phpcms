@@ -3,6 +3,7 @@ defined('IN_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header');
 ?>
 <form action="?m=admin&c=role&a=setting_cat_priv&roleid=<?php echo $roleid?>&siteid=<?php echo $siteid?>&op=2" method="post">
+<div class="myfbody">
 <div class="table-list" id="load_priv">
 <table width="100%">
 			  <thead>
@@ -15,7 +16,10 @@ include $this->admin_tpl('header');
 			 </tbody>
 			</table>
 </div>
-<div class="btn"><input type="submit" value="<?php echo L('submit')?>" class="button"></div>
+</div>
+<div class="portlet-body form myfooter">
+<div class="form-actions text-center"><input type="submit" value="<?php echo L('submit')?>" class="button"></div>
+</div>
 </form>
 <script type="text/javascript">
 function select_all(name, obj) {

@@ -40,7 +40,6 @@ include $this->admin_tpl('header','admin');?>
 .tabbable-line>.nav-tabs>li.open>a>i,.tabbable-line>.nav-tabs>li:hover>a>i {color: #a6a6a6;}
 .tabbable-line>.nav-tabs>li.active {border-bottom: 4px solid #40aae3;}
 .form .form-body,.portlet-form .form-body {padding: 20px;}
-.myfbody {margin-bottom: 90px;}
 </style>
 <div class="page-content main-content">
 <form action="?m=content&c=content&a=remove" class="form-horizontal" method="post" name="myform" id="myform">

@@ -7,7 +7,6 @@ include $this->admin_tpl('header');?>
 <style type="text/css">
 .page-content {margin-left: 0px;margin-top: 0;padding: 25px 20px 10px;}
 .main-content {background: #f5f6f8;}
-.myfbody {margin-bottom: 90px;}
 .portlet.light {padding: 12px 20px 15px;background-color: #fff;}
 .portlet.light>.portlet-title {padding: 0;color: #181C32;font-weight: 500;}
 .portlet.bordered>.portlet-title {border-bottom: 0;}

@@ -45,7 +45,6 @@ define('IMAGES_INIT', 1);?>
 <style type="text/css">
 .my-sysfield .col-md-2 {width: 100%!important;}
 .my-sysfield .control-label {text-align: left!important;margin-bottom: 10px;}
-.myfbody {margin-bottom: 90px;}
 </style>
 <div class="page-content main-content">
 <div class="row my-content-top-tool">

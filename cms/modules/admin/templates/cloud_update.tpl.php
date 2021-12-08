@@ -14,7 +14,6 @@ include $this->admin_tpl('header', 'admin');?>
 .portlet.light>.portlet-title {padding: 0;color: #181C32;font-weight: 500;}
 .portlet.bordered>.portlet-title {border-bottom: 0;}
 .right-card-box {position: relative;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-orient: vertical;-webkit-box-direction: normal;-ms-flex-direction: column;flex-direction: column;min-width: 0;word-wrap: break-word;background-color: #fff;background-clip: border-box;border: 0 solid #f7f7f7;border-radius: .25rem;padding: 1.5rem;}
-.myfbody {margin-bottom: 90px;}
 .portlet>.portlet-title {padding: 0;margin-bottom: 2px;-webkit-border-radius: 4px 4px 0 0;-moz-border-radius: 4px 4px 0 0;-ms-border-radius: 4px 4px 0 0;-o-border-radius: 4px 4px 0 0;border-radius: 4px 4px 0 0;}
 .portlet>.portlet-title:after, .portlet>.portlet-title:before {content: " ";display: table;}
 .portlet.light>.portlet-title>.caption {color: #181C32;padding: 10px 0;}

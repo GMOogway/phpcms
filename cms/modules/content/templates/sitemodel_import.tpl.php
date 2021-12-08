@@ -13,6 +13,7 @@ include $this->admin_tpl('header','admin');
 </script>
 <div class="pad-lr-10">
 <form action="?m=content&c=sitemodel&a=import" method="post" id="myform" enctype="multipart/form-data">
+<div class="myfbody">
 <fieldset>
 	<legend><?php echo L('basic_configuration')?></legend>
 	<table width="100%"  class="table_form">
@@ -70,8 +71,11 @@ include $this->admin_tpl('header','admin');
       </tr>
 </table>
 </fieldset>
+</div>
 <div class="bk15"></div>
-<div class="btn"><input type="submit" id="dosubmit" name="dosubmit" value="<?php echo L('submit');?>" class="button"/></div> 
+<div class="portlet-body form myfooter">
+<div class="form-actions text-center"><input type="submit" id="dosubmit" name="dosubmit" value="<?php echo L('submit');?>" class="button"/></div>
+</div>
 </form>
 </div>
 <script language="JavaScript">

@@ -77,8 +77,12 @@ jQuery(document).ready(function() {
 </tbody>
 </table>
 </div>
-<div class="btn"><label for="check_box"><?php echo L('select_all')?>/<?php echo L('cancel')?></label> <input type="button" value="<?php echo L('insert_a_comment_about_the_selected_text')?>" class="button" onclick="insert_form()"></div>
-<dir id="pages"><?php echo $pages?></dir>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select">
+        <label><label for="check_box"><?php echo L('select_all')?>/<?php echo L('cancel')?></label> <input type="button" value="<?php echo L('insert_a_comment_about_the_selected_text')?>" class="button" onclick="insert_form()"></label>
+    </div>
+    <div class="col-md-5 list-page"><?php echo $pages?></div>
+</div>
 <?php endif;?>	
 	</div>
 <script type="text/javascript">

@@ -186,6 +186,7 @@ include $this->admin_tpl('header');?>
 </script>
 <div class="common-form">
 <form name="myform" id="myform" action="?m=admin&c=menu&a=add" method="post">
+<div class="myfbody">
 <table width="100%" class="table_form contentWrap">
       <tr>
         <th width="200"><?php echo L('menu_parentid')?>：</th>
@@ -238,8 +239,10 @@ include $this->admin_tpl('header');?>
 </table>
 <!--table_form_off-->
 </div>
-    <div class="bk15"></div>
-	<div class="btn"><input type="submit" id="dosubmit" class="button" name="dosubmit" value="<?php echo L('submit')?>"/></div>
+</div>
+	<div class="portlet-body form myfooter">
+    <div class="form-actions text-center"><input type="submit" id="dosubmit" class="button" name="dosubmit" value="<?php echo L('submit')?>"/></div>
+    </div>
 </div>
 
 </form>
@@ -314,7 +317,9 @@ include $this->admin_tpl('header');?>
 </div>
     <div class="bk15"></div>
 	<input name="id" type="hidden" value="<?php echo $id?>">
-    <div class="btn"><input type="submit" id="dosubmit" class="button" name="dosubmit" value="<?php echo L('submit')?>"/></div>
+    <div class="portlet-body form myfooter">
+    <div class="form-actions text-center"><input type="submit" id="dosubmit" class="button" name="dosubmit" value="<?php echo L('submit')?>"/></div>
+    </div>
 </div>
 
 </form>

@@ -43,7 +43,12 @@ if(is_array($infos)){
 </tbody>
 </table>
 </div>
-<div class="btn"><input type="submit" class="button" name="dosubmit" value="<?php echo L('listorder')?>" /></div>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select">
+        <label><input type="submit" class="button" name="dosubmit" value="<?php echo L('listorder');?>" /></label>
+    </div>
+    <div class="col-md-5 list-page"></div>
+</div>
 </form>
 </body>
 <script type="text/javascript">

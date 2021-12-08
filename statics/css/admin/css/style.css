@@ -721,6 +721,7 @@ form .portlet.light .portlet-body {padding-top: 20px;padding-bottom: 20px;}
 .help-block {display: block;color: #737373;}
 .my-sysfield .col-md-2 {width: 100%!important;}
 .my-sysfield .control-label {text-align: left!important;margin-bottom: 10px;}
+.myfbody {margin-bottom: 90px;}
 .myfooter {margin: 0 -20px!important;font-size: 13px;position: fixed;left: 0;right: 0;z-index: 1000;bottom: 0;}
 .form {padding: 0!important;}
 .myfooter .form-actions {background-color: #ecf0f1 !important;padding: 15px !important;}
@@ -857,6 +858,9 @@ form .portlet.light .portlet-body {padding-top: 20px;padding-bottom: 20px;}
 	}
 	input[name='introcude_length'],input[name='auto_thumb_no'] {
 		width: auto!important;
+	}
+	.minicolors-input {
+		width: 120px!important;
 	}
 	#page_title_div{
 		left:-20px

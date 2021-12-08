@@ -341,10 +341,10 @@ $(document).ready(function() {
                     <a href="javascript:;"><?php echo $admin_username;?></a>
                     <dl class="layui-nav-child">
                         <dd>
-                            <a href="javascript:;" layuimini-content-href="?m=admin&c=admin_manage&a=public_edit_info&pc_hash=<?php echo dr_get_csrf_token()?>" data-title="<?php echo L('基本资料');?>" data-icon="fa fa-gears"><?php echo L('基本资料');?><span class="layui-badge-dot"></span></a>
+                            <a href="javascript:;" layuimini-content-href="?m=admin&c=admin_manage&a=public_edit_info&menuid=3&pc_hash=<?php echo dr_get_csrf_token()?>" data-title="<?php echo L('基本资料');?>" data-icon="fa fa-gears"><?php echo L('基本资料');?><span class="layui-badge-dot"></span></a>
                         </dd>
                         <dd>
-                            <a href="javascript:;" layuimini-content-href="?m=admin&c=admin_manage&a=public_edit_pwd&pc_hash=<?php echo dr_get_csrf_token()?>" data-title="<?php echo L('修改密码');?>" data-icon="fa fa-gears"><?php echo L('修改密码');?></a>
+                            <a href="javascript:;" layuimini-content-href="?m=admin&c=admin_manage&a=public_edit_pwd&menuid=4&pc_hash=<?php echo dr_get_csrf_token()?>" data-title="<?php echo L('修改密码');?>" data-icon="fa fa-gears"><?php echo L('修改密码');?></a>
                         </dd>
                         <dd>
                             <hr>

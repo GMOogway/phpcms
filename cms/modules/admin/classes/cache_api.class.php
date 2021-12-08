@@ -273,6 +273,7 @@ class cache_api {
 	 * 更新模型缓存方法
 	 */
 	public function sitemodel() {
+		$this->content_db = pc_base::load_model('content_model');
 		define('MODEL_PATH', PC_PATH.'modules'.DIRECTORY_SEPARATOR.'content'.DIRECTORY_SEPARATOR.'fields'.DIRECTORY_SEPARATOR);
 		define('CACHE_MODEL_PATH', CMS_PATH.'caches'.DIRECTORY_SEPARATOR.'caches_model'.DIRECTORY_SEPARATOR.'caches_data'.DIRECTORY_SEPARATOR);
 		require MODEL_PATH.'fields.inc.php';
@@ -293,19 +294,10 @@ class cache_api {
 		//更新模型数据缓存
 		$model_array = array();
 		$datas = $this->db->select(array('type'=>0,'disabled'=>0));
-		$categorys = getcache('category_content_'.$this->siteid,'commons');
-		$items = array();
-		foreach ($datas as $k=>$r) {
-			if (isset($categorys) && is_array($categorys)) {
-				foreach ($categorys as $catid=>$cat) {
-					if(intval($cat['modelid']) == intval($r['modelid'])) {
-						$items[$r['modelid']] += intval($cat['items']);
-					} else {
-						$items[$r['modelid']] = 0;
-					}
-				}
-			}
-			$datas[$k]['items'] = $items[$r['modelid']];
+		foreach ($datas as $r) {
+			$this->content_db->set_model($r['modelid']);
+			$number = $this->content_db->count();
+			$this->db->update(array('items'=>$number),array('modelid'=>$r['modelid']));
 		}
 		foreach ($datas as $r) {
 			$model_array[$r['modelid']] = $r;

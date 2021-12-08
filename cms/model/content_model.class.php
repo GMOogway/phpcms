@@ -497,6 +497,10 @@ class content_model extends model {
 	}
 	
 	public function cache_items() {
+		$this->sitemodel_db = pc_base::load_model('sitemodel_model');
+		$this->set_model($this->modelid);
+		$number = $this->count();
+		$this->sitemodel_db->update(array('items'=>$number),array('modelid'=>$this->modelid));
 		$datas = $this->category_db->select(array('modelid'=>$this->modelid),'catid,type,items',10000);
 		$array = array();
 		foreach ($datas as $r) {

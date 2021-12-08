@@ -8,6 +8,7 @@
 <div class="explain-col"><?php echo L('plugin_debug_tips','','plugin')?></div>
 <div class="bk10"></div>
 <?php } ?>
+<div class="myfbody">
 <div class="table-list">
     <table width="100%" cellspacing="0">
         <thead>
@@ -52,7 +53,10 @@ if(is_array($pluginfo)){
     </tbody>
     </table>
 </div>
-   <div class="btn"><input type="submit" class="button" name="dosubmit" value="<?php echo L('listorder')?>" /></div> </div>
+</div>
+   <div class="portlet-body form myfooter">
+   <div class="form-actions text-center"><input type="submit" class="button" name="dosubmit" value="<?php echo L('listorder')?>" /></div>
+   </div></div>
 
 </div>
 </div>

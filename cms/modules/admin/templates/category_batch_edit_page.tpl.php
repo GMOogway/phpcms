@@ -5,7 +5,6 @@ include $this->admin_tpl('header');?>
 .table-list td b{color:#666}
 .tpl_style{background-color:#FBFAE3}
 .table-list tbody>tr>td, .table-list tbody>tr>th, .table-list thead>tr>td, .table-list thead>tr>th {border: 1px solid #e7ecf1;}
-.myfbody {margin-bottom: 90px;}
 </style>
 <form name="myform" action="?m=admin&c=category&a=batch_edit" method="post">
 <div class="pad_10">

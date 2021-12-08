@@ -12,29 +12,18 @@ class sitemodel extends admin {
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
 		$this->db = pc_base::load_model('sitemodel_model');
+		$this->content_db = pc_base::load_model('content_model');
 		$this->siteid = $this->get_siteid();
 		if(!$this->siteid) $this->siteid = 1;
 	}
 	
 	public function init() {
-		$categorys = getcache('category_content_'.$this->siteid,'commons');
-		
 		$datas = $this->db->listinfo(array('siteid'=>$this->siteid,'type'=>0),$this->input->get('order'),$this->input->get('page'),SYS_ADMIN_PAGESIZE);
-		//模型文章数array('模型id'=>数量);
-		$items = array();
-		foreach ($datas as $k=>$r) {
-			if (isset($categorys) && is_array($categorys)) {
-				foreach ($categorys as $catid=>$cat) {
-					if(intval($cat['modelid']) == intval($r['modelid'])) {
-						$items[$r['modelid']] += intval($cat['items']);
-					} else {
-						$items[$r['modelid']] = 0;
-					}
-				}
-			}
-			$datas[$k]['items'] = $items[$r['modelid']];
+		foreach ($datas as $r) {
+			$this->content_db->set_model($r['modelid']);
+			$number = $this->content_db->count();
+			$this->db->update(array('items'=>$number),array('modelid'=>$r['modelid']));
 		}
-
 		$pages = $this->db->pages;
 		$this->public_cache();
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=content&c=sitemodel&a=add\',\''.L('add_model').'\',580,420);void(0);', L('add_model'));
@@ -173,19 +162,10 @@ class sitemodel extends admin {
 		//更新模型数据缓存
 		$model_array = array();
 		$datas = $this->db->select(array('type'=>0,'disabled'=>0));
-		$categorys = getcache('category_content_'.$this->siteid,'commons');
-		$items = array();
-		foreach ($datas as $k=>$r) {
-			if (isset($categorys) && is_array($categorys)) {
-				foreach ($categorys as $catid=>$cat) {
-					if(intval($cat['modelid']) == intval($r['modelid'])) {
-						$items[$r['modelid']] += intval($cat['items']);
-					} else {
-						$items[$r['modelid']] = 0;
-					}
-				}
-			}
-			$datas[$k]['items'] = $items[$r['modelid']];
+		foreach ($datas as $r) {
+			$this->content_db->set_model($r['modelid']);
+			$number = $this->content_db->count();
+			$this->db->update(array('items'=>$number),array('modelid'=>$r['modelid']));
 		}
 		foreach ($datas as $r) {
 			if(!$r['disabled']) $model_array[$r['modelid']] = $r;

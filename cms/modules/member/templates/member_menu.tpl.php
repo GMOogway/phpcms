@@ -19,7 +19,12 @@ include $this->admin_tpl('header', 'admin');?>
 	</tbody>
     </table>
 </div>
-    <div class="btn"><input type="submit" class="button" name="dosubmit" value="<?php echo L('listorder')?>" /></div>
+<div class="list-footer table-checkable clear">
+    <div class="col-md-7 list-select">
+        <label><input type="submit" class="button" name="dosubmit" value="<?php echo L('listorder');?>" /></label>
+    </div>
+    <div class="col-md-5 list-page"></div>
+</div>
 </div>
 </div>
 </form>
@@ -42,6 +47,7 @@ include $this->admin_tpl('header', 'admin');?>
 </script>
 <div class="common-form">
 <form name="myform" id="myform" action="?m=member&c=member_menu&a=add" method="post">
+<div class="myfbody">
 <table width="100%" class="table_form contentWrap">
       <tr>
         <th width="200"><?php echo L('menu_parentid')?>：</th>
@@ -101,8 +107,10 @@ include $this->admin_tpl('header', 'admin');?>
 </table>
 <!--table_form_off-->
 </div>
-    <div class="bk15"></div>
-	<div class="btn"><input type="submit" id="dosubmit" class="button" name="dosubmit" value="<?php echo L('submit')?>"/></div>
+</div>
+	<div class="portlet-body form myfooter">
+    <div class="form-actions text-center"><input type="submit" id="dosubmit" class="button" name="dosubmit" value="<?php echo L('submit')?>"/></div>
+    </div>
 </div>
 
 </form>
@@ -122,6 +130,7 @@ include $this->admin_tpl('header', 'admin');?>
 </script>
 <div class="common-form">
 <form name="myform" id="myform" action="?m=member&c=member_menu&a=edit" method="post">
+<div class="myfbody">
 <table width="100%" class="table_form contentWrap">
       <tr>
         <th width="200"><?php echo L('menu_parentid')?>：</th>
@@ -184,9 +193,11 @@ include $this->admin_tpl('header', 'admin');?>
 </table>
 <!--table_form_off-->
 </div>
-    <div class="bk15"></div>
+</div>
 	<input name="id" type="hidden" value="<?php echo $id?>">
-    <div class="btn"><input type="submit" id="dosubmit" class="button" name="dosubmit" value="<?php echo L('submit')?>"/></div>
+    <div class="portlet-body form myfooter">
+    <div class="form-actions text-center"><input type="submit" id="dosubmit" class="button" name="dosubmit" value="<?php echo L('submit')?>"/></div>
+    </div>
 </div>
 
 </form>

@@ -12,6 +12,7 @@ include $this->admin_tpl('header','admin');
 </script>
 <div class="pad-lr-10">
 <form action="?m=content&c=workflow&a=add" method="post" id="myform">
+<div class="myfbody">
 	<table width="100%"  class="table_form">
   <tr>
     <th width="200"><?php echo L('workflow_name')?>：</th>
@@ -71,9 +72,10 @@ include $this->admin_tpl('header','admin');
 	</td>
   </tr>
 </table>
-
-<div class="bk15"></div>
-<div class="btn"><input type="submit" id="dosubmit" class="button" name="dosubmit" value="<?php echo L('submit')?>"/></div>
+</div>
+<div class="portlet-body form myfooter">
+<div class="form-actions text-center"><input type="submit" id="dosubmit" class="button" name="dosubmit" value="<?php echo L('submit')?>"/></div>
+</div>
 </form>
 </div>
 </body>

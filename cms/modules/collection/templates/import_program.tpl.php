@@ -43,10 +43,7 @@
 	<input type="hidden" name="nodeid" value="<?php if(isset($nodeid)) echo $nodeid?>">
 	<input type="hidden" name="type" value="<?php echo $type?>">
 	<input type="hidden" name="ids" value="<?php echo $ids?>">
-<div class="btn">
-<label for="check_box"><input type="submit" class="button" name="dosubmit" value="<?php echo L('submit')?>"/>
-</div>
-
+	<input type="submit" class="button" name="dosubmit" value="<?php echo L('submit')?>"/>
 </div>
 </form>
 </div>

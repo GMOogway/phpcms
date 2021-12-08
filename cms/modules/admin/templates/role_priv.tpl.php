@@ -52,6 +52,7 @@ include $this->admin_tpl('header');
 <form name="myform" action="?m=admin&c=role&a=role_priv" method="post">
 <input type="hidden" name="roleid" value="<?php echo $roleid?>"></input>
 <input type="hidden" name="siteid" value="<?php echo $siteid?>"></input>
+<div class="myfbody">
 <div class="table-list">
 <table width="100%" cellspacing="0" id="dnd-example">
 <tbody>
@@ -59,7 +60,10 @@ include $this->admin_tpl('header');
 </tbody>
 </table>
 </div>
-<div class="btn"><input type="submit"  class="button" name="dosubmit" id="dosubmit" value="<?php echo L('submit');?>" /></div>
+
+<div class="portlet-body form myfooter">
+<div class="form-actions text-center"><input type="submit"  class="button" name="dosubmit" id="dosubmit" value="<?php echo L('submit');?>" /></div>
+</div>
 </form>
 <?php } else {?>
 <style type="text/css">

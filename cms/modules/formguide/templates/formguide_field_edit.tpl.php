@@ -20,7 +20,7 @@ $(function(){
   <div class="bk10"></div>
 </div>
 <form name="myform" id="myform" action="?m=formguide&c=formguide_field&a=edit" method="post">
-<div class="common-form">
+<div class="common-form myfbody">
 <table width="100%" class="table_form">
 	<tr> 
       <th><strong><?php echo L('field_type');?></strong><br /></th>
@@ -90,12 +90,14 @@ $(function(){
       <td><?php echo form::checkbox($grouplist,$unsetgroupids,'name="unsetgroupids[]" id="unsetgroupids"',0,'100');?></td>
     </tr>
 </table>
-
+</div>
     <div class="bk15"></div>
     <input name="info[modelid]" type="hidden" value="<?php echo $formid?>">
     <input name="fieldid" type="hidden" value="<?php echo $fieldid?>">
     <input name="oldfield" type="hidden" value="<?php echo $field?>">
-    <div class="btn"><input name="dosubmit" type="submit" value="<?php echo L('submit')?>" class="button"></div>
+    <div class="portlet-body form myfooter">
+    <div class="form-actions text-center"><input name="dosubmit" type="submit" value="<?php echo L('submit')?>" class="button"></div>
+    </div>
 	</form>
 
 </div>

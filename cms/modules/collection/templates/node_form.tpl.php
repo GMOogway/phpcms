@@ -16,6 +16,7 @@ $(document).ready(function() {
 <li  id="tab_4"><a href="javascript:show_div('4')"><?php echo L('eigrp')?></a></li>
 </ul>
 <form name="myform" action="?m=collection&c=node&a=<?php echo ROUTE_A?>&nodeid=<?php if(isset($nodeid)) echo $nodeid?>" method="post" id="myform">
+<div class="myfbody">
 <div class="content pad-10" id="show_div_1" style="height:auto">
 <div class="common-form">
 <fieldset>
@@ -255,13 +256,12 @@ $(document).ready(function() {
 	</table>
 </div>
 </div>
-
-
-    <div class="bk15"></div>
-    <input name="dosubmit" type="submit" id="dosubmit" value="<?php echo L('submit')?>" class="button">
-</div>
-
+	<div class="portlet-body form myfooter">
+    <div class="form-actions text-center"><input name="dosubmit" type="submit" id="dosubmit" value="<?php echo L('submit')?>" class="button"></div>
+    </div>
 </form>
+</div>
+</div>
 <script type="text/javascript">
 <!--
 function insertText(id, text)

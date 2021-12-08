@@ -861,12 +861,12 @@ if (! function_exists('dr_redirect')) {
 	// 执行跳转动作
 	function dr_redirect($url) {
 		// 跳转
-		if ($url != FC_NOW_URL) {
+		if ($url != dr_now_url()) {
 			if (IS_DEV) {
 				if (IS_ADMIN) {
-					dr_admin_msg(0, '开发者模式：<br>当前URL['.FC_NOW_URL.']<br>与其本身地址['.$url.']不符<br>正在自动跳转本身地址（关闭开发者模式时即可自动跳转）', $url, 9);
+					dr_admin_msg(0, '开发者模式：<br>当前URL['.dr_now_url().']<br>与其本身地址['.$url.']不符<br>正在自动跳转本身地址（关闭开发者模式时即可自动跳转）', $url, 9);
 				} else {
-					dr_msg(0, '开发者模式：<br>当前URL['.FC_NOW_URL.']<br>与其本身地址['.$url.']不符<br>正在自动跳转本身地址（关闭开发者模式时即可自动跳转）', $url, 9);
+					dr_msg(0, '开发者模式：<br>当前URL['.dr_now_url().']<br>与其本身地址['.$url.']不符<br>正在自动跳转本身地址（关闭开发者模式时即可自动跳转）', $url, 9);
 				}
 			} else {
 				redirect($url, 'location', '301');
@@ -912,7 +912,7 @@ function dr_admin_msg($code, $msg, $url = '', $time = 3, $dialog = '') {
 	$backurl = $url ? $url : dr_safe_url($_SERVER['HTTP_REFERER'], true);
 
 	if ($backurl) {
-		strpos(FC_NOW_URL, $backurl) === 0 && $backurl = '';
+		strpos(dr_now_url(), $backurl) === 0 && $backurl = '';
 	} else {
 		$backurl = 'javascript:history.back();';
 	}
@@ -946,7 +946,7 @@ function dr_msg($code, $msg, $url = '', $time = 3, $dialog = '') {
 	$backurl = $url ? $url : dr_safe_url($_SERVER['HTTP_REFERER'], true);
 
 	if ($backurl) {
-		strpos(FC_NOW_URL, $backurl) === 0 && $backurl = '';
+		strpos(dr_now_url(), $backurl) === 0 && $backurl = '';
 	} else {
 		$backurl = 'javascript:history.back();';
 	}
@@ -981,6 +981,12 @@ function now_url($url, $siteid = 1, $ismobile = 1, $ishtml = 1) {
 	} else {
 		return FC_NOW_URL;
 	}
+}
+/**
+ * 当前URL
+ */
+function dr_now_url() {
+	return FC_NOW_URL;
 }
 /**
  * 排序操作

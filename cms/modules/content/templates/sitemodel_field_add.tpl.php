@@ -27,7 +27,7 @@ $(function(){
   <div class="bk10"></div>
 </div>
 <form name="myform" id="myform" action="?m=content&c=sitemodel_field&a=add" method="post">
-<div class="common-form">
+<div class="common-form myfbody">
 
 <table width="100%" class="table_form contentWrap">
 	<tr> 
@@ -173,11 +173,12 @@ $(function(){
       <td><?php echo form::checkbox($roles,'','name="unsetroleids[]" id="unsetroleids"',0,'100');?> </td>
     </tr>
 </table>
-
 </div>
     <div class="bk15"></div>
     <input name="info[modelid]" type="hidden" value="<?php echo $modelid?>">
-    <div class="btn"><input name="dosubmit" type="submit" value="<?php echo L('submit')?>" class="button"></div>
+    <div class="portlet-body form myfooter">
+    <div class="form-actions text-center"><input name="dosubmit" type="submit" value="<?php echo L('submit')?>" class="button"></div>
+    </div>
 	</form>
 
 <script type="text/javascript">

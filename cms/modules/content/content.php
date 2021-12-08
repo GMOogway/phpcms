@@ -315,28 +315,19 @@ class content extends admin {
 	
 	public function initall() {
 		$show_header = $show_dialog  = $show_pc_hash = '';
-		$this->db = pc_base::load_model('admin_model');
-		$infos = $this->db->select();
-		$this->db = pc_base::load_model('sitemodel_model');
+		$this->admin_db = pc_base::load_model('admin_model');
+		$infos = $this->admin_db->select();
+		$this->sitemodel_db = pc_base::load_model('sitemodel_model');
 		$this->siteid = $this->get_siteid();
 		if(!$this->siteid) $this->siteid = 1;
-		$categorys = getcache('category_content_'.$this->siteid,'commons');
-		$datas2 = $this->db->select(array('siteid'=>$this->siteid,'type'=>0,'disabled'=>0));
-		//模型文章数array('模型id'=>数量);
-		$items = array();
-		foreach ($datas2 as $k=>$r) {
-			foreach ($categorys as $catid=>$cat) {
-				if(intval($cat['modelid']) == intval($r['modelid'])) {
-					$items[$r['modelid']] += intval($cat['items']);
-				} else {
-					$items[$r['modelid']] = 0;
-				}
-			}
-			$datas2[$k]['items'] = $items[$r['modelid']];
+		$datas2 = $this->sitemodel_db->select(array('siteid'=>$this->siteid,'type'=>0,'disabled'=>0));
+		foreach ($datas2 as $r) {
+			$this->db->set_model($r['modelid']);
+			$number = $this->db->count();
+			$this->sitemodel_db->update(array('items'=>$number),array('modelid'=>$r['modelid']));
 		}
 		$modelid = intval($this->input->get('modelid'));
 		if (!$modelid) {$one = reset($datas2);$modelid = $one['modelid'];}
-		$this->db = pc_base::load_model('content_model');
 		$this->siteid = $this->get_siteid();
 		$this->categorys = getcache('category_content_'.$this->siteid,'commons');
 		//权限判断
