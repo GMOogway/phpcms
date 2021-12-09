@@ -1,5 +1,5 @@
 <?php
-defined('IN_ADMIN') or exit('No permission resources.');
+defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header');?>
 <form action="?m=admin&c=plugin&a=config" method="post" id="myform">
 <div class="pad-10">

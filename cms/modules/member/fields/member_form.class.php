@@ -20,7 +20,7 @@ class member_form {
 		$info = array();
 		if (is_array($this->fields)) {
 			foreach($this->fields as $field=>$v) {
-				if(defined('IN_ADMIN')) {
+				if(defined('IS_ADMIN') && IS_ADMIN) {
 					if($v['disabled'] || $v['iscore'] || check_in($_roleid, $v['unsetroleids']) || check_in($_groupid, $v['unsetgroupids'])) continue;
 				} else {
 					if($v['disabled'] || $v['iscore'] || !$v['isadd'] || check_in($_roleid, $v['unsetroleids']) || check_in($_groupid, $v['unsetgroupids'])) continue;

@@ -1596,14 +1596,14 @@ function L($language = 'no_language',$pars = array(), $modules = '') {
 	static $LANG = array();
 	static $LANG_MODULES = array();
 	static $lang = '';
-	if(defined('IN_ADMIN')) {
+	if(defined('IS_ADMIN') && IS_ADMIN) {
 		$lang = SYS_STYLE ? SYS_STYLE : 'zh-cn';
 	} else {
 		$lang = SYS_LANGUAGE;
 	}
 	if(!$LANG) {
 		require_once PC_PATH.'languages'.DIRECTORY_SEPARATOR.$lang.DIRECTORY_SEPARATOR.'system.lang.php';
-		if(defined('IN_ADMIN')) require_once PC_PATH.'languages'.DIRECTORY_SEPARATOR.$lang.DIRECTORY_SEPARATOR.'system_menu.lang.php';
+		if(defined('IS_ADMIN') && IS_ADMIN) require_once PC_PATH.'languages'.DIRECTORY_SEPARATOR.$lang.DIRECTORY_SEPARATOR.'system_menu.lang.php';
 		if(file_exists(PC_PATH.'languages'.DIRECTORY_SEPARATOR.$lang.DIRECTORY_SEPARATOR.ROUTE_M.'.lang.php')) require_once PC_PATH.'languages'.DIRECTORY_SEPARATOR.$lang.DIRECTORY_SEPARATOR.ROUTE_M.'.lang.php';
 	}
 	if(!empty($modules)) {
@@ -1753,7 +1753,7 @@ function log_message($level, $message) {
  * @param int $ms 跳转等待时间
  */
 function showmessage($msg, $url_forward = 'goback', $ms = 1250, $dialog = '', $returnjs = '', $code = 2) {
-	if(defined('IN_ADMIN')) {
+	if(defined('IS_ADMIN') && IS_ADMIN) {
 		include(admin_template('showmessage', 'admin'));
 	} else {
 		include(template('content', 'message'));
@@ -2455,7 +2455,7 @@ function menu_linkage($linkageid = 0, $id = 'linkid', $defaultvalue = 0) {
 		if(!defined('LINKAGE_INIT')) {
 			define('LINKAGE_INIT', 1);
 			$string .= '<script type="text/javascript" src="'.JS_PATH.'linkage/js/mln.colselect.js"></script>';
-			if(defined('IN_ADMIN')) {
+			if(defined('IS_ADMIN') && IS_ADMIN) {
 				$string .= '<link href="'.JS_PATH.'linkage/style/admin.css" rel="stylesheet" type="text/css">';
 			} else {
 				$string .= '<link href="'.JS_PATH.'linkage/style/css.css" rel="stylesheet" type="text/css">';

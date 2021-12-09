@@ -1,4 +1,4 @@
-<?php defined('IN_ADMIN') or exit('No permission resources.');
+<?php defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header', 'admin');?>
 <link rel="stylesheet" href="<?php echo CSS_PATH;?>bootstrap/css/bootstrap.min.css" media="all" />
 <link rel="stylesheet" href="<?php echo JS_PATH;?>bootstrap-switch/css/bootstrap-switch.min.css" media="all" />

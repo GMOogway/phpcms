@@ -1,6 +1,6 @@
-<?php
-include $this->admin_tpl('header','admin');
-?>
+<?php 
+defined('IS_ADMIN') or exit('No permission resources.');
+include $this->admin_tpl('header', 'admin');?>
 <script type="text/javascript">
 <!--
 	$(function(){

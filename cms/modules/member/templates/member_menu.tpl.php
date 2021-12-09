@@ -1,5 +1,5 @@
 <?php
-defined('IN_ADMIN') or exit('No permission resources.');
+defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header', 'admin');?>
 <?php if(ROUTE_A=='manage') {?>
 <form name="myform" action="?m=member&c=member_menu&a=listorder" method="post">

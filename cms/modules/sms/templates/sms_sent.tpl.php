@@ -1,5 +1,5 @@
 <?php 
-	defined('IN_ADMIN') or exit('No permission resources.');
+	defined('IS_ADMIN') or exit('No permission resources.');
 	include $this->admin_tpl('header', 'admin');
 ?>
 <link href="<?php echo JS_PATH;?>bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />

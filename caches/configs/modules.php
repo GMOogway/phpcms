@@ -1,4 +1,5 @@
 <?php
+if (!defined('IN_CMS')) exit('No direct script access allowed');
 return array (
   'member' => '会员',
   'special' => '专题',

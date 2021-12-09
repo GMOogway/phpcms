@@ -1,5 +1,5 @@
 <?php
-defined('IN_ADMIN') or exit('No permission resources.');
+defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');?>
 <div class="subnav">
   <h2 class="title-1 line-x f14 fb blue lh28"><?php echo L('formguide');?>--<?php if ($formid) echo $r['name']; else echo L('public')?><?php echo L('field_manage');?></h2>

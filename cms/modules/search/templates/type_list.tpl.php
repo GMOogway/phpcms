@@ -1,5 +1,5 @@
 <?php
-defined('IN_ADMIN') or exit('No permission resources.');
+defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');?>
 <form name="myform" action="?m=search&c=search_type&a=listorder" method="post">
 <input name="dosubmit" type="hidden" value="1">

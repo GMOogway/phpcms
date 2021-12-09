@@ -23,7 +23,7 @@ class content_input {
 		$info = array();
 		foreach($data as $field=>$value) {
 			if(!isset($this->fields[$field]) && !check_in($field,'paytype,paginationtype,maxcharperpage,id')) continue;
-			if(defined('IN_ADMIN')) {
+			if(defined('IS_ADMIN') && IS_ADMIN) {
 				if(check_in($_SESSION['roleid'], $this->fields[$field]['unsetroleids'])) continue;
 			} else {
 				$_groupid = param::get_cookie('_groupid');

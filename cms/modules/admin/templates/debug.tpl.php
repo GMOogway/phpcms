@@ -1,3 +1,5 @@
+<?php
+defined('IS_ADMIN') or exit('No permission resources.');?>
 <div id="think_page_trace" style="position: fixed;bottom:0;right:0;font-size:14px;width:100%;z-index: 10001; color: #000;text-align:left;font-family:'微软雅黑';">
     <div id="think_page_trace_tab" style="display: none;background:white;margin:0;height: 250px;">
         

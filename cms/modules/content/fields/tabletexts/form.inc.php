@@ -4,7 +4,7 @@
 		$grouplist = getcache('grouplist','member');
 		$_groupid = param::get_cookie('_groupid');
 		$grouplist = $grouplist[$_groupid];
-		$allowupload = defined('IN_ADMIN') ? 1 : ($grouplist['allowattachment'] ? 1: 0);
+		$allowupload = defined('IS_ADMIN') && IS_ADMIN ? 1 : ($grouplist['allowattachment'] ? 1: 0);
 		$toolbar = 'full';
 		$list_str = '';
 		if($value) {

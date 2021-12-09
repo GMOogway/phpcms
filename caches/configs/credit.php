@@ -1,4 +1,5 @@
 <?php
+if (!defined('IN_CMS')) exit('No direct script access allowed');
 /**
  * 积分兑换配置
  */

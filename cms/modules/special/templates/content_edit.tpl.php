@@ -1,5 +1,5 @@
 <?php 
-defined('IN_ADMIN') or exit('No permission resources.'); 
+defined('IS_ADMIN') or exit('No permission resources.'); 
 $show_dialog = $show_validator = $show_header = 1; 
 include $this->admin_tpl('header','admin');
 $authkey = upload_key('1,jpg|jpeg|gif|bmp|png,,300,300,,,');

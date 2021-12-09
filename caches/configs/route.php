@@ -1,4 +1,5 @@
 <?php
+if (!defined('IN_CMS')) exit('No direct script access allowed');
 /**
  * 路由配置文件
  * 默认配置为default如下：

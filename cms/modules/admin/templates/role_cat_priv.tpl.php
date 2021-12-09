@@ -1,5 +1,5 @@
 <?php
-defined('IN_ADMIN') or exit('No permission resources.');
+defined('IS_ADMIN') or exit('No permission resources.');
 $show_header = true;
 $show_scroll = true;
 include $this->admin_tpl('header');

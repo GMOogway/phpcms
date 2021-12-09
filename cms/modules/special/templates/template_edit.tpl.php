@@ -1,3 +1,5 @@
+<?php
+defined('IS_ADMIN') or exit('No permission resources.');?>
 <script src="<?php echo JS_PATH;?>colorpicker.js" type="text/javascript" language="javascript"></script>
 
 <?php echo $html?>

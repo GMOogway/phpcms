@@ -1,5 +1,5 @@
 <?php 
-    defined('IN_ADMIN') or exit('No permission resources.');
+    defined('IS_ADMIN') or exit('No permission resources.');
     include $this->admin_tpl('header', 'admin');
 ?>
 <link rel="stylesheet" href="<?php echo JS_PATH;?>layui/css/layui.css" media="all" />

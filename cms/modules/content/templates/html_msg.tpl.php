@@ -1,4 +1,6 @@
-<?php if($url) {?>
+<?php
+defined('IS_ADMIN') or exit('No permission resources.');
+if($url) {?>
 <div class="alert">
     <a href="<?php echo $url;?>"><?php echo $msg;?></a>
     <p><?php echo $note;?></p>

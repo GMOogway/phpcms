@@ -1,8 +1,6 @@
 <?php
 defined('IN_CMS') or exit('No permission resources.');
 
-//定义在后台
-!defined('IN_ADMIN') && define('IN_ADMIN', TRUE);
 class admin_op {
 	public function __construct() {
 		$this->input = pc_base::load_sys_class('input');

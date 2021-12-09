@@ -1,5 +1,5 @@
 <?php
-defined('IN_ADMIN') or exit('No permission resources.');
+defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');?>
 <form action="?m=customfield&c=customfield&a=manage_save" method="post" id="myform">
 <input type="hidden" value="<?php echo $siteid ?>" name="siteid" />

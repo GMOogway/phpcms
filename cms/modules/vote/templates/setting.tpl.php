@@ -1,5 +1,5 @@
 <?php 
-defined('IN_ADMIN') or exit('No permission resources.');
+defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header', 'admin');?>
 <form method="post" action="?m=vote&c=vote&a=setting">
 <table width="100%" cellpadding="0" cellspacing="1" class="table_form">

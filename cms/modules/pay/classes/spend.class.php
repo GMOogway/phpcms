@@ -101,7 +101,7 @@ class spend {
 		
 		//检察userid和username并偿试再次的获取
 		if (empty($data['userid']) || empty($data['username'])) {
-			if (defined('IN_ADMIN')) {
+			if (defined('IS_ADMIN') && IS_ADMIN) {
 				self::$msg = 3;
 				return false;
 			} elseif (!$data['userid'] = param::get_cookie('_userid') || !$data['username'] = param::get_cookie('_username')) {
@@ -114,7 +114,7 @@ class spend {
 		}
 		
 		//检察op_userid和op_username并偿试再次的获取
-		if (defined('IN_ADMIN') && (empty($data['op_userid']) || empty($data['op_username']))) {
+		if (defined('IS_ADMIN') && IS_ADMIN && (empty($data['op_userid']) || empty($data['op_username']))) {
 			$data['op_username'] = param::get_cookie('admin_username');
 			$data['op_userid'] = param::get_cookie('userid');
 		}

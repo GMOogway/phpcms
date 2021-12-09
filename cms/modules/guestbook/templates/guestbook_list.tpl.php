@@ -1,9 +1,8 @@
 <?php
-defined('IN_ADMIN') or exit('No permission resources.');
+defined('IS_ADMIN') or exit('No permission resources.');
 $show_dialog = 1;
 include $this->admin_tpl('header', 'admin');
 ?>
-
 <div class="pad-lr-10">
   <table width="100%" cellspacing="0" class="search-form">
     <tbody>

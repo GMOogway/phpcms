@@ -30,9 +30,6 @@ class attachments {
 	public function upload() {
 		$grouplist = getcache('grouplist','member');
 		if($this->isadmin==0 && !$grouplist[$this->groupid]['allowattachment']) return false;
-		if($this->isadmin==1) {
-			!defined('IN_ADMIN') && define('IN_ADMIN', TRUE);
-		}
 		$args = $this->input->get('args');
 		$p = dr_string2array(dr_authcode($args, 'DECODE'));
 		if (!$p) {

@@ -1,4 +1,4 @@
-<?php defined('IN_ADMIN') or exit('No permission resources.');?>
+<?php defined('IS_ADMIN') or exit('No permission resources.');?>
 <?php include $this->admin_tpl('header', 'admin');?>
 
 <form name="myform" id="myform" action="?m=member&c=member_group&a=delete" method="post" onsubmit="check();return false;">

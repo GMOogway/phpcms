@@ -470,7 +470,7 @@ class html {
 	 * 设置当前站点id
 	 */
 	private function set_siteid() {
-		if(defined('IN_ADMIN')) {
+		if(defined('IS_ADMIN') && IS_ADMIN) {
 			$this->siteid = $GLOBALS['siteid'] = get_siteid();
 		} else {
 			if (param::get_cookie('siteid')) {

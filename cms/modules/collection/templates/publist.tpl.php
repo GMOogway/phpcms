@@ -1,4 +1,4 @@
-<?php defined('IN_ADMIN') or exit('No permission resources.');?>
+<?php defined('IS_ADMIN') or exit('No permission resources.');?>
 <?php include $this->admin_tpl('header', 'admin');?>
 <div class="subnav">
   <h1 class="title-2 line-x"><?php echo $node['name']?> - <?php echo L('content_list')?></h1>

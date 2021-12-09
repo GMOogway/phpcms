@@ -1,4 +1,4 @@
-<?php defined('IN_ADMIN') or exit('No permission resources.');?>
+<?php defined('IS_ADMIN') or exit('No permission resources.');?>
 <?php include $this->admin_tpl('header', 'admin');?>
 <div class="pad-lr-10">
 <form name="searchform" action="" method="get" >

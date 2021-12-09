@@ -7,8 +7,6 @@ if(param::get_cookie('sys_lang')) {
 } else {
 	define('SYS_STYLE','zh-cn');
 }
-//定义在后台
-!defined('IN_ADMIN') && define('IN_ADMIN', TRUE);
 class admin {
 	public $userid;
 	public $username;

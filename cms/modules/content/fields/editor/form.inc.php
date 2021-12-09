@@ -11,7 +11,7 @@
 		$width = is_mobile(0) ? '100%' : ($width ? $width : '100%');
 		// 表单高度设置
 		if(!$height) $height = 300;
-		$allowupload = defined('IN_ADMIN') ? 1 : (isset($grouplist['allowattachment']) && $grouplist['allowattachment'] ? 1: 0);
+		$allowupload = defined('IS_ADMIN') && IS_ADMIN ? 1 : (isset($grouplist['allowattachment']) && $grouplist['allowattachment'] ? 1: 0);
 		$value = code2html(strlen($value) ? $value : $defaultvalue);
 		//if(!$toolvalue) $toolvalue = '\'Source\',\'Bold\', \'Italic\', \'Underline\'';
 		if($minlength || $pattern) $allow_empty = '';

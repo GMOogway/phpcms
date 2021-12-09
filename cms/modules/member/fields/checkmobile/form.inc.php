@@ -1,6 +1,6 @@
 	function checkmobile($field, $value, $fieldinfo) {
 		$errortips = L('please_input_mobile');
-		if(defined('IN_ADMIN')) {
+		if(defined('IS_ADMIN') && IS_ADMIN) {
 			$string = "<div id='mobile_div'><input type='text' name='info[mobile]' id='mobile' value='".$value."' size='36' class='input-text'></div>";
 			$this->formValidator .= '$("#'.$field.'").formValidator({onshow:"'.$errortips.'",onfocus:"'.$errortips.'"}).inputValidator({min:1,onerror:"'.$errortips.'"});';
 		} elseif($value && ROUTE_A!='register') {

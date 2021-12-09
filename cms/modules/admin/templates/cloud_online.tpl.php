@@ -1,4 +1,5 @@
-<?php if (IS_DEV) {?>
+<?php defined('IS_ADMIN') or exit('No permission resources.');
+if (IS_DEV) {?>
 <html>
 <head>
 <link href="<?php echo CSS_PATH;?>admin/css/style.css" rel="stylesheet" type="text/css" />

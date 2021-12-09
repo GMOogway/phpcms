@@ -30,7 +30,7 @@ class mobile_url{
 			$mobile_root = $this->mobile_root;
 		}
 		//当内容为转换或升级时
-		if($upgrade || ($this->input->post('upgrade') && defined('IN_ADMIN') && $this->input->post('upgrade'))) {
+		if($upgrade || ($this->input->post('upgrade') && defined('IS_ADMIN') && IS_ADMIN && $this->input->post('upgrade'))) {
 			if($this->input->post('upgrade')) $upgrade = $this->input->post('upgrade');
 			$upgrade = '/'.ltrim($upgrade,WEB_PATH);
 			if($page==1) {
@@ -125,7 +125,7 @@ class mobile_url{
 			$mobile_root = $this->mobile_root;
 		}
 		//当内容为转换或升级时
-		if($upgrade || ($this->input->post('upgrade') && defined('IN_ADMIN') && $this->input->post('upgrade'))) {
+		if($upgrade || ($this->input->post('upgrade') && defined('IS_ADMIN') && IS_ADMIN && $this->input->post('upgrade'))) {
 			if($this->input->post('upgrade')) $upgrade = $this->input->post('upgrade');
 			$upgrade = '/'.ltrim($upgrade,WEB_PATH);
 			if($page==1) {
@@ -220,7 +220,7 @@ class mobile_url{
 	 * 设置站点id
 	 */
 	private function set_siteid() {
-		if(defined('IN_ADMIN')) {
+		if(defined('IS_ADMIN') && IS_ADMIN) {
 			$this->siteid = get_siteid();
 		} else {
 			param::get_cookie('siteid');

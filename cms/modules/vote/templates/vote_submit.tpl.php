@@ -1,5 +1,5 @@
 <?php
-defined('IN_ADMIN') or exit('No permission resources.');
+defined('IS_ADMIN') or exit('No permission resources.');
 ?>
 <form style="border: medium none;" id="voteform<?php echo $subjectid;?>" method="post" action="<?php echo APP_PATH.SELF;?>index.php?m=vote&c=index&a=post&subjectid=<?php echo $subjectid;?>">
  <dl>

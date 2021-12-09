@@ -23,7 +23,7 @@ class content_form {
 		if(isset($data['url'])) $this->content_url = $data['url'];
 		if (is_array($this->fields)) {
 			foreach($this->fields as $field=>$v) {
-				if(defined('IN_ADMIN')) {
+				if(defined('IS_ADMIN') && IS_ADMIN) {
 					if($v['iscore'] || check_in($_SESSION['roleid'], $v['unsetroleids'])) continue;
 				} else {
 					if($v['iscore'] || !$v['isadd'] || check_in($_groupid, $v['unsetgroupids'])) continue;
@@ -36,7 +36,7 @@ class content_form {
 				if(!method_exists($this, $func)) continue;
 				$form = $this->$func($field, $value, $v);
 				if($form !== false) {
-					if(defined('IN_ADMIN')) {
+					if(defined('IS_ADMIN') && IS_ADMIN) {
 						if($v['isbase']) {
 							$star = $v['minlength'] || $v['pattern'] ? 1 : 0;
 							$info['base'][$field] = array('name'=>$v['name'], 'tips'=>$v['tips'], 'form'=>$form, 'star'=>$star,'isomnipotent'=>$v['isomnipotent'],'formtype'=>$v['formtype']);

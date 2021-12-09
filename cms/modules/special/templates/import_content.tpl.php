@@ -1,5 +1,5 @@
 <?php 
-defined('IN_ADMIN') or exit('No permission resources.'); 
+defined('IS_ADMIN') or exit('No permission resources.'); 
 $show_header = $show_validator = $show_scroll = 1; 
 include $this->admin_tpl('header','admin');
 ?>

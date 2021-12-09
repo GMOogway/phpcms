@@ -19,11 +19,6 @@ class sitemodel extends admin {
 	
 	public function init() {
 		$datas = $this->db->listinfo(array('siteid'=>$this->siteid,'type'=>0),$this->input->get('order'),$this->input->get('page'),SYS_ADMIN_PAGESIZE);
-		foreach ($datas as $r) {
-			$this->content_db->set_model($r['modelid']);
-			$number = $this->content_db->count();
-			$this->db->update(array('items'=>$number),array('modelid'=>$r['modelid']));
-		}
 		$pages = $this->db->pages;
 		$this->public_cache();
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=content&c=sitemodel&a=add\',\''.L('add_model').'\',580,420);void(0);', L('add_model'));

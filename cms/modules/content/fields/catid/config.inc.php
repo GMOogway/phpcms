@@ -1,5 +1,5 @@
 <?php
-defined('IN_ADMIN') or exit('No permission resources.');
+defined('IS_ADMIN') or exit('No permission resources.');
 
 $field_type				= 'int'; //字段数据库类型	
 $field_basic_table		= 1; //是否允许作为主表字段

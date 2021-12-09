@@ -60,10 +60,10 @@ class form {
 				define('EDITOR_INIT', 1);
 			}
 			if($toolbar == 'basic') {
-				$toolbar = defined('IN_ADMIN') ? "['Source']," : '';
+				$toolbar = defined('IS_ADMIN') && IS_ADMIN ? "['Source']," : '';
 				$toolbar .= "['Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink' ],['Maximize'],\r\n";
 			} elseif($toolbar == 'full') {
-				if(defined('IN_ADMIN')) {
+				if(defined('IS_ADMIN') && IS_ADMIN) {
 					$toolbar = "['Source',";
 				} else {
 					$toolbar = '[';
@@ -88,7 +88,7 @@ class form {
 			} elseif($toolbar == 'desc') {
 				$toolbar = "['Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', '-', 'Image', '-','Source'],['Maximize'],\r\n";
 			} elseif($toolbar == 'standard') {
-				if(defined('IN_ADMIN')) {
+				if(defined('IS_ADMIN') && IS_ADMIN) {
 					$toolbar = "['Source',";
 				} else {
 					$toolbar = '[';
@@ -99,7 +99,7 @@ class form {
 				}
 				$toolbar .= "],['Maximize'],\r\n";
 			} else {
-				if(defined('IN_ADMIN')) {
+				if(defined('IS_ADMIN') && IS_ADMIN) {
 					$toolbar = "['Source',";
 				} else {
 					$toolbar = '[';
@@ -133,10 +133,10 @@ class form {
 				define('EDITOR_INIT', 1);
 			}
 			if($toolbar == 'basic') {
-				$toolbar = defined('IN_ADMIN') ? "['Source'," : '[';
+				$toolbar = defined('IS_ADMIN') && IS_ADMIN ? "['Source'," : '[';
 				$toolbar .= "'Bold', 'Italic', '|', 'InsertOrderedList', 'InsertUnorderedList', '|', 'Link', 'Unlink' ]";
 			} elseif($toolbar == 'standard') {
-				if(defined('IN_ADMIN')) {
+				if(defined('IS_ADMIN') && IS_ADMIN) {
 					$toolbar = "['Source',";
 				} else {
 					$toolbar = '[';
@@ -149,7 +149,7 @@ class form {
 			} elseif($toolbar == 'desc') {
 				$toolbar = "['Bold', 'Italic', '|', 'InsertOrderedList', 'InsertUnorderedList', '|', 'Link', 'Unlink', '|', 'SimpleUpload', 'InsertImage', '|', 'Source']";
 			} elseif($toolbar == 'full') {
-				if(defined('IN_ADMIN')) {
+				if(defined('IS_ADMIN') && IS_ADMIN) {
 					$toolbar = "['Source',";
 				} else {
 					$toolbar = '[';
@@ -170,7 +170,7 @@ class form {
 				'Inserttable', 'Deletetable', 'Insertparagraphbeforetable', 'Insertrow', 'Deleterow', 'Insertcol', 'Deletecol', 'Mergecells', 'Mergeright', 'Mergedown', 'Splittocells', 'Splittorows', 'Splittocols', 'Charts', '|',
 				'Print', 'Preview', 'Searchreplace', 'Help']";
 			} else {
-				if(defined('IN_ADMIN')) {
+				if(defined('IS_ADMIN') && IS_ADMIN) {
 					$toolbar = "['Source',";
 				} else {
 					$toolbar = '[';
@@ -659,7 +659,7 @@ class form {
 	 * @param string $background    背景使用什么颜色
 	 */
 	public static function checkcode($id = 'checkcode',$code_len = 4, $font_size = 20, $width = 130, $height = 50, $font = '', $font_color = '', $background = '') {
-		if (IS_ADMIN) {
+		if (defined('IS_ADMIN') && IS_ADMIN) {
 			$setting = getcache('common','commons');
 			$sysadmincodemodel = isset($setting['sysadmincodemodel']) ? (int)$setting['sysadmincodemodel'] : 0;
 			$js = '<div id="voices" style="width: 0px; height: 0px; overflow:hidden; text-indent:-99999px;"></div><script type="text/javascript">function voice() {$(\'#voices\').html(\'<audio id="audio" controls="controls" autoplay="autoplay"><source src="'.SITE_PROTOCOL.SITE_HURL.WEB_PATH.'api.php?op=voice&\'+Math.random()+\'" type="audio/mpeg"></audio>\');$(\'#audio\').play();$(\'#captcha\').val(\'\');$(\'#captcha\').focus();}</script>';

@@ -76,7 +76,7 @@ class content_model extends model {
 			}
 		//}
 		$inputinfo['system']['username'] = $systeminfo['username'] = $data['username'] ? $data['username'] : param::get_cookie('admin_username');
-		$systeminfo['sysadd'] = defined('IN_ADMIN') ? 1 : 0;
+		$systeminfo['sysadd'] = defined('IS_ADMIN') && IS_ADMIN ? 1 : 0;
 		
 		//自动提取摘要
 		if($this->input->post('add_introduce') && $systeminfo['description'] == '' && isset($modelinfo['content'])) {
@@ -139,7 +139,7 @@ class content_model extends model {
 		$content_update->update($merge_data);
 		
 		//发布到审核列表中
-		if(!defined('IN_ADMIN') || $data['status']!=99) {
+		if((!defined('IS_ADMIN') && !IS_ADMIN) || $data['status']!=99) {
 			$this->content_check_db = pc_base::load_model('content_check_model');
 			$check_data = array(
 				'checkid'=>'c-'.$id.'-'.$modelid,
@@ -252,7 +252,7 @@ class content_model extends model {
 	public function edit_content($data,$id) {
 		$model_tablename = $this->model_tablename;
 		//前台权限判断
-		if(!defined('IN_ADMIN')) {
+		if(!defined('IS_ADMIN') && !IS_ADMIN) {
 			$_username = param::get_cookie('_username');
 			$us = $this->get_one(array('id'=>$id,'username'=>$_username));
 			if(!$us) return false;
@@ -487,26 +487,31 @@ class content_model extends model {
 	}
 	
 	private function update_category_items($catid,$action = 'add',$cache = 0) {
+		$this->sitemodel_db = pc_base::load_model('sitemodel_model');
 		$this->category_db = pc_base::load_model('category_model');
 		if($action=='add') {
 			$this->category_db->update(array('items'=>'+=1'),array('catid'=>$catid));
+			$this->sitemodel_db->update(array('items'=>'+=1'),array('modelid'=>$this->modelid));
 		}  else {
 			$this->category_db->update(array('items'=>'-=1'),array('catid'=>$catid));
+			$this->sitemodel_db->update(array('items'=>'-=1'),array('modelid'=>$this->modelid));
 		}
 		if($cache) $this->cache_items();
 	}
 	
 	public function cache_items() {
-		$this->sitemodel_db = pc_base::load_model('sitemodel_model');
-		$this->set_model($this->modelid);
-		$number = $this->count();
-		$this->sitemodel_db->update(array('items'=>$number),array('modelid'=>$this->modelid));
 		$datas = $this->category_db->select(array('modelid'=>$this->modelid),'catid,type,items',10000);
 		$array = array();
 		foreach ($datas as $r) {
 			if($r['type']==0) $array[$r['catid']] = $r['items'];
 		}
 		setcache('category_items_'.$this->modelid, $array,'commons');
+		$sitemodel_datas = $this->sitemodel_db->select(array('type'=>0,'disabled'=>0));
+		$model_array = array();
+		foreach ($sitemodel_datas as $r) {
+			$model_array[$r['modelid']] = $r;
+		}
+		setcache('model', $model_array, 'commons');
 	}
 }
 ?>

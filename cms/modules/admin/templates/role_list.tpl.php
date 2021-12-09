@@ -1,5 +1,5 @@
 <?php
-defined('IN_ADMIN') or exit('No permission resources.');
+defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header');?>
 <div class="pad-lr-10">
 <form name="myform" action="?m=admin&c=role&a=listorder" method="post">

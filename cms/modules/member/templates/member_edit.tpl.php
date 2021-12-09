@@ -1,4 +1,4 @@
-<?php defined('IN_ADMIN') or exit('No permission resources.');?>
+<?php defined('IS_ADMIN') or exit('No permission resources.');?>
 <?php include $this->admin_tpl('header', 'admin');?>
 <link href="<?php echo CSS_PATH?>bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>member_common.js"></script>
@@ -65,7 +65,7 @@
 		</tr>
 		<tr>
 			<td><?php echo L('avatar')?></td> 
-			<td><img src="<?php echo $memberinfo['avatar']?>" onerror="this.src='<?php echo IMG_PATH?>member/nophoto.gif'" height=90 width=90><label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="delavatar" id="delavatar" class="input-text" value="1" ><?php echo L('delete').L('avatar')?><span></span></label></td>
+			<td><img src="<?php echo $memberinfo['avatar']?>" onerror="this.src='<?php echo IMG_PATH?>member/nophoto.gif'" width="90" height="90"><label class="mt-checkbox mt-checkbox-outline" style="margin-top: 15px;margin-left: 15px;"><input type="checkbox" name="delavatar" id="delavatar" class="input-text" value="1"><?php echo L('delete').L('avatar')?><span></span></label></td>
 		</tr>
 		<tr>
 			<td><?php echo L('password')?></td> 

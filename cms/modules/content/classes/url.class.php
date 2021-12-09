@@ -29,7 +29,7 @@ class url{
 		$setting = string2array($category['setting']);
 		$content_ishtml = $setting['content_ishtml'];
 		//当内容为转换或升级时
-		if($upgrade || ($this->input->post('upgrade') && defined('IN_ADMIN') && $this->input->post('upgrade'))) {
+		if($upgrade || ($this->input->post('upgrade') && defined('IS_ADMIN') && IS_ADMIN && $this->input->post('upgrade'))) {
 			if($this->input->post('upgrade')) $upgrade = $this->input->post('upgrade');
 			$upgrade = '/'.ltrim($upgrade,WEB_PATH);
 			if($page==1) {
@@ -118,7 +118,7 @@ class url{
 		$setting = string2array($category['setting']);
 		$content_ishtml = $setting['content_ishtml'];
 		//当内容为转换或升级时
-		if($upgrade || ($this->input->post('upgrade') && defined('IN_ADMIN') && $this->input->post('upgrade'))) {
+		if($upgrade || ($this->input->post('upgrade') && defined('IS_ADMIN') && IS_ADMIN && $this->input->post('upgrade'))) {
 			if($this->input->post('upgrade')) $upgrade = $this->input->post('upgrade');
 			$upgrade = '/'.ltrim($upgrade,WEB_PATH);
 			if($page==1) {
@@ -290,7 +290,7 @@ class url{
 	 * 设置当前站点
 	 */
 	private function set_siteid() {
-		if(defined('IN_ADMIN')) {
+		if(defined('IS_ADMIN') && IS_ADMIN) {
 			$this->siteid = get_siteid();
 		} else {
 			if (param::get_cookie('siteid')) {

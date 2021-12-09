@@ -1,5 +1,5 @@
 <?php
-defined('IN_ADMIN') or exit('No permission resources.');
+defined('IS_ADMIN') or exit('No permission resources.');
 $input = pc_base::load_sys_class('input');
 $setting = $input->post('setting');
 $tips = $cname ? ' COMMENT \''.$cname.'\'' : '';

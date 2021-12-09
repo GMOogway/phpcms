@@ -1,8 +1,6 @@
 <?php
 defined('IN_CMS') or exit('No permission resources.');
 
-//定义在后台
-!defined('IN_ADMIN') && define('IN_ADMIN', TRUE);
 class plugin_op {
 	private $db,$db_var;
 	public function __construct(){

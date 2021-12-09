@@ -1,4 +1,4 @@
-<?php defined('IN_ADMIN') or exit('No permission resources.'); ?>
+<?php defined('IS_ADMIN') or exit('No permission resources.'); ?>
 <!DOCTYPE html>
 <html>
 <head>

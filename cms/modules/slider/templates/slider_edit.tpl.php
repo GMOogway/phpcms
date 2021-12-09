@@ -1,8 +1,7 @@
 <?php
+defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');
 ?>
-
-
 <div class="pad_10">
 <form action="?m=slider&c=slider&a=edit&id=<?php echo $id; ?>" method="post" name="myform" id="myform">
 <table cellpadding="2" cellspacing="1" class="table_form" width="100%">

@@ -1,5 +1,5 @@
 <?php
-defined('IN_ADMIN') or exit('No permission resources.');
+defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header');?>
 <style type="text/css">
 .page-content {margin-left: 0px;margin-top: 0;padding: 25px 20px 10px;}

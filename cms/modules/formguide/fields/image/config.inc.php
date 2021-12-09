@@ -1,5 +1,5 @@
 <?php
-defined('IN_ADMIN') or exit('No permission resources.');
+defined('IS_ADMIN') or exit('No permission resources.');
 
 $field_type				= 'varchar'; //字段数据库类型	
 $field_allow_index		= 0; //是否允许建立索引

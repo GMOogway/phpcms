@@ -7,7 +7,7 @@
 	
 </style>
 <?php
-defined('IN_ADMIN') or exit('No permission resources.');
+defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');?>
 <div class="pad-10">
 <form action="?m=admin&c=cache_all&a=init&pc_hash=<?php echo dr_get_csrf_token()?>" target="cache_if" method="post" id="myform" name="myform">

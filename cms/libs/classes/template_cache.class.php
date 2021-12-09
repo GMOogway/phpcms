@@ -222,14 +222,14 @@ final class template_cache {
 			$str .= 'if(!empty($'.$return.')){setcache($tag_cache_name, $'.$return.', \'tpl_data\');}';
 			$str .= '}';
 		}
-		return "<"."?php if(defined('IN_ADMIN')  && !defined('HTML')) {echo \"<div class=\\\"admin_piao\\\" pc_action=\\\"".$op."\\\" data=\\\"".$str_datas."\\\"><a href=\\\"javascript:void(0)\\\" class=\\\"admin_piao_edit\\\">".($op=='block' ? L('block_add') : L('edit'))."</a>\";}".$str."?".">";
+		return "<"."?php if(defined('IS_ADMIN') && IS_ADMIN && !defined('HTML')) {echo \"<div class=\\\"admin_piao\\\" pc_action=\\\"".$op."\\\" data=\\\"".$str_datas."\\\"><a href=\\\"javascript:void(0)\\\" class=\\\"admin_piao_edit\\\">".($op=='block' ? L('block_add') : L('edit'))."</a>\";}".$str."?".">";
 	}
 
 	/**
 	 * PC标签结束
 	 */
 	static private function end_pc_tag() {
-		return '<?php if(defined(\'IN_ADMIN\') && !defined(\'HTML\')) {echo \'</div>\';}?>';
+		return '<?php if(defined(\'IS_ADMIN\') && IS_ADMIN && !defined(\'HTML\')) {echo \'</div>\';}?>';
 	}
 
 	/**

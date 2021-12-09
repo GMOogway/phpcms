@@ -1,5 +1,5 @@
 <?php 
-defined('IN_ADMIN') or exit('No permission resources.');
+defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header', 'admin');
 ?>
 <form method="post" action="?m=poster&c=space&a=edit&spaceid=<?php echo $_GET['spaceid']?>" name="myform" id="myform">

@@ -1,5 +1,5 @@
 <?php
-defined('IN_ADMIN') or exit('No permission resources.');
+defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header');?>
 <div class="pad_10">
 <table cellpadding="2" cellspacing="1" class="table_form" width="100%">

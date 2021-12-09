@@ -18,7 +18,7 @@ class block_tag {
 		$r = $this->db->select(array('pos'=>$data['pos'], 'siteid'=>$siteid));
 		$str = '';
 		if (!empty($r) && is_array($r)) foreach ($r as $v) {
-			if (defined('IN_ADMIN') && !defined('HTML')) $str .= '<div id="block_id_'.$v['id'].'" class="admin_block" blockid="'.$v['id'].'">';
+			if (defined('IS_ADMIN') && IS_ADMIN && !defined('HTML')) $str .= '<div id="block_id_'.$v['id'].'" class="admin_block" blockid="'.$v['id'].'">';
 			if ($v['type'] == '2') {
 				extract($v, EXTR_OVERWRITE);
 				$data = string2array($data);
@@ -34,7 +34,7 @@ class block_tag {
 			} else {
 				$str .= $v['data'];
 			}
-			if (defined('IN_ADMIN')  && !defined('HTML')) $str .= '</div>';
+			if (defined('IS_ADMIN') && IS_ADMIN  && !defined('HTML')) $str .= '</div>';
 		}
 		return $str;
 	}
