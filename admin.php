@@ -6,7 +6,6 @@
 
 // 后台管理标识
 define('IS_ADMIN', TRUE);
-define('IN_ADMIN', TRUE);
 
 // 项目标识
 define('IS_SELF', 'admin');
