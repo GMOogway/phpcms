@@ -21,9 +21,9 @@
       <td>{$info['form']}  {$info['tips']}</td>
     </tr>
 {/loop}
-    {if $this->setting['code']}
+    {if $setting['code']}
 	<tr>
-      <th><font color="red">*</font>{/if} {L('验证码')}</th>
+      <th><font color="red">*</font>{L('验证码')}</th>
       <td><input type="text" class="input-text" required name="code">{form::checkcode('code_img', $this->setting['codelen'], '20', 126, 40)}</td>
     </tr>
     {/if}

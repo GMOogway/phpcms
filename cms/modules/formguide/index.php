@@ -67,7 +67,9 @@ class index {
 			$where[] = 'userid="'.$userid.'"';
 			$where[] = 'ip="'.ip().'"';
 			$re = $this->m_db->get_one(implode(' AND ', $where), 'datetime', '`dataid` DESC');
-			if (!$setting['allowmultisubmit'] || ($setting['allowmultisubmit'] && $re['datetime']) && ((SYS_TIME-$re['datetime'])<intval($this->setting['interval'])*60)) {
+			if (!$setting['allowmultisubmit'] && $re) {
+				$this->input->get('action') ? exit : showmessage(L('had_participate'), APP_PATH.'index.php?m=formguide&c=index&a=index');
+			} else if (($setting['allowmultisubmit'] && $re['datetime']) && ((SYS_TIME-$re['datetime'])<intval($this->setting['interval'])*60)) {
 				$this->input->get('action') ? exit : showmessage(L('had_participate'), APP_PATH.'index.php?m=formguide&c=index&a=index');
 			}
 			$data = array();
@@ -109,7 +111,9 @@ class index {
 			$where[] = 'ip="'.ip().'"';
 			$re = $this->m_db->get_one(implode(' AND ', $where), 'datetime', '`dataid` DESC');
 			$setting = string2array($setting);
-			if (!$setting['allowmultisubmit'] || ($setting['allowmultisubmit'] && $re['datetime']) && ((SYS_TIME-$re['datetime'])<intval($this->setting['interval'])*60)) {
+			if (!$setting['allowmultisubmit'] && $re) {
+				$this->input->get('action') ? exit : showmessage(L('had_participate'), APP_PATH.'index.php?m=formguide&c=index&a=index');
+			} else if (($setting['allowmultisubmit'] && $re['datetime']) && ((SYS_TIME-$re['datetime'])<intval($this->setting['interval'])*60)) {
 				$this->input->get('action') ? exit : showmessage(L('had_participate'), APP_PATH.'index.php?m=formguide&c=index&a=index');
 			}
 			

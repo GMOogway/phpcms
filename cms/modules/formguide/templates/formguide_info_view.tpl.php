@@ -27,6 +27,16 @@ if(is_array($forminfos_data)){
 	}
 }
 ?>
+	<?php if($info['userid']){?>
+	<tr>
+      <th><?php echo L('账号Id');?></th>
+      <td><?php echo $info['userid'];?></td>
+    </tr>
+    <?php }?>
+	<tr>
+      <th><?php echo L('作者');?></th>
+      <td><?php echo $info['username'] ? $info['username'] : '游客';?></td>
+    </tr>
 	</tbody>
 </table>
 </div>

@@ -18,9 +18,12 @@ include $this->admin_tpl('header', 'admin');
                         <input type="checkbox" class="group-checkable" value="" id="check_box" onclick="selectall('did[]');" />
                         <span></span>
                     </label></th>
-			<th align="center"><?php echo L('username')?></th>
-			<th width='200' align="center"><?php echo L('userip')?></th>
-			<th width='180' align="center"><?php echo L('times')?></th>
+			<?php 
+			if(is_array($list_field)){
+			foreach($list_field as $i=>$t){
+			?>
+			<th<?php if($t['width']){?> width="<?php echo $t['width'];?>"<?php }?><?php if($t['center']){?> style="text-align:center"<?php }?>><?php echo L($t['name']);?></th>
+			<?php }}?>
 			<th align="center"><?php echo L('operation')?></th>
             </tr>
         </thead>
@@ -35,9 +38,12 @@ if(is_array($datas)){
                         <input type="checkbox" class="checkboxes" name="did[]" value="<?php echo $d['dataid']?>" />
                         <span></span>
                     </label></td>
-	<td><?php if ($d['username']) {echo $d['username'];} else {echo '<font color="red">无</font>';}?></td>
-	<td align="center"><?php echo $d['ip']?></td>
-	<td align="center"><?php echo dr_date($d['datetime'], null, 'red')?></td>
+	<?php 
+	if(is_array($list_field)){
+	foreach($list_field as $i=>$tt){
+	?>
+	<td<?php if($tt['center']){?> style="text-align:center"<?php }?>><?php echo dr_list_function($tt['func'], $d[$i], $param, $d, $field[$i]);?></td>
+	<?php }}?>
 	<td align="center"><a class="btn btn-xs blue" href="javascript:check('<?php echo $formid?>', '<?php echo $d['dataid']?>', '<?php echo safe_replace($d['username'])?>');void(0);"><?php echo L('check')?></a><a class="btn btn-xs red" href="###" onClick="Dialog.confirm('<?php echo L('confirm', array('message' => L('delete')))?>',function(){redirect('?m=formguide&c=formguide_info&a=public_delete&formid=<?php echo $formid?>&did=<?php echo $d['dataid']?>&pc_hash='+pc_hash);});"><?php echo L('del')?></a></td>
 	</tr>
 <?php 

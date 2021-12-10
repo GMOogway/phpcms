@@ -473,6 +473,166 @@ function dr_safe_replace_path($path) {
 	);
 }
 /**
+ * 清除空白字符
+ */
+function dr_clear_empty($value) {
+	return str_replace(array('　', ' '), '', trim($value));
+}
+
+/**
+ * 列表字段进行排序筛选
+ */
+function dr_list_field_order($field) {
+	if (!$field) {
+		return array();
+	}
+	$rt = array();
+	foreach ($field as $name => $m) {
+		$m['use'] && $rt[$name] = $m;
+	}
+	return $rt;
+}
+function dr_list_field_value($value, $sys_field, $field) {
+	foreach ($field as $t) {
+		$t && $sys_field[$t['field']] = $t;
+	}
+	$rt = array();
+	foreach ($value as $name => $t) {
+		if ($t && $t['name']) {
+			$rt[$name] = $sys_field[$name];
+			unset($sys_field[$name]);
+		}
+	}
+	if (!$sys_field) {
+		return $rt;
+	}
+	foreach ($sys_field as $name => $t) {
+		$rt[$name] = $t;
+	}
+	return $rt;
+}
+/**
+ * 系统内置字段
+ */
+function sys_field($field) {
+	$system = array(
+		'dataid' => array(
+			'name' => L('Id'),
+			'formtype' => 'text',
+			'field' => 'dataid',
+			'setting' => array()
+		),
+		'content' => array(
+			'name' => L('内容'),
+			'formtype' => 'text',
+			'field' => 'content',
+			'setting' => array()
+		),
+		'title' => array(
+			'name' => L('主题'),
+			'formtype' => 'text',
+			'field' => 'title',
+			'setting' => array()
+		),
+		'thumb' => array(
+			'name' => L('缩略图'),
+			'formtype' => 'File',
+			'field' => 'thumb',
+			'setting' => array()
+		),
+		'catid' => array(
+			'name' => L('栏目'),
+			'formtype' => 'text',
+			'field' => 'catid',
+			'setting' => array()
+		),
+		'userid' => array(
+			'name' => L('账号Id'),
+			'ismain' => 1,
+			'ismember' => 1,
+			'formtype' => 'text',
+			'field' => 'userid',
+			'setting' => array()
+		),
+		'username' => array(
+			'name' => L('用户名'),
+			'formtype' => 'text',
+			'field' => 'username',
+			'setting' => array()
+		),
+		'datetime' => array(
+			'name' => L('时间'),
+			'formtype' => 'datetime',
+			'field' => 'datetime',
+			'setting' => array()
+		),
+		'ip' => array(
+			'name' => L('用户ip'),
+			'formtype' => 'text',
+			'field' => 'ip',
+			'setting' => array()
+		),
+		'displayorder' => array(
+			'name' => L('排列值'),
+			'formtype' => 'touchspin',
+			'field' => 'displayorder',
+			'setting' => array()
+		),
+		'hits' => array(
+			'name' => L('浏览数'),
+			'formtype' => 'touchspin',
+			'field' => 'hits',
+			'setting' => array()
+		),
+	);
+	$rt = array();
+	foreach ($field as $name) {
+		$rt[$name] = $system[$name];
+	}
+	return $rt;
+}
+/**
+ * 执行函数
+ */
+function dr_list_function($func, $value, $param = array(), $data = array(), $field = array(), $name = '') {
+	if (!$func) {
+		$dfunc = array(
+			'userid' => 'userid',
+			'username' => 'username',
+			'datetime' => 'datetime',
+			'editor' => 'content',
+			'image' => 'image',
+			'images' => 'images',
+			'number' => 'number',
+			'box' => 'checkbox_name',
+			'linkage' => 'linkage_name',
+		);
+		$dname = array(
+			'title' => 'title',
+			'catid' => 'catid',
+			'author' => 'author',
+			'displayorder' => 'save_text_value',
+		);
+		if ($name && isset($dname[$name]) && $dname[$name]) {
+			$func = $dname[$name];
+		} elseif ($field['formtype'] && isset($dfunc[$field['formtype']]) && $dfunc[$field['formtype']]) {
+			$func = $dfunc[$field['formtype']];
+		} else {
+			return $value;
+		}
+	}
+	$obj = pc_base::load_sys_class('function_list');
+	if (method_exists($obj, $func)) {
+		return call_user_func_array(array($obj, $func), array($value, $param, $data, $field));
+	} elseif (function_exists($func)) {
+		return call_user_func_array($func, array($value, $param, $data, $field));
+	} else {
+		log_message('debug', '你没有定义字段列表回调函数：'.$func);
+	}
+
+	return $value;
+}
+/**
  * 两数组追加合并
  */
 function dr_array2array($a1, $a2) {

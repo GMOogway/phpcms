@@ -8,10 +8,17 @@ class formguide_info extends admin {
 	public function __construct() {
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
+		$this->cache = pc_base::load_sys_class('cache');
 		$this->db = pc_base::load_model('sitemodel_field_model');
 		$this->f_db = pc_base::load_model('sitemodel_model');
 		if (isset($_GET['formid']) && !empty($_GET['formid'])) {
 			$formid = intval($_GET['formid']);
+			$this->sitemodel_field_db = pc_base::load_model('sitemodel_field_model');
+			$this->field = $this->sitemodel_field_db->select(array('siteid'=>$this->get_siteid(), 'modelid'=>$formid),'*','','listorder ASC,fieldid ASC');
+			$this->form = $this->f_db->get_one(array('modelid'=>$formid));
+			$this->formguide = $this->cache->get('formguide');
+			$this->form_cache = $this->formguide[$this->form['tablename']];
+			$this->list_field = $this->form_cache['setting']['list_field'];
 			$f_info = $this->f_db->get_one(array('modelid'=>$formid, 'siteid'=>$this->get_siteid()), 'tablename');
 			$this->tablename = 'form_'.$f_info['tablename'];
 			$this->db->change_table($this->tablename);
@@ -31,6 +38,8 @@ class formguide_info extends admin {
 			$this->tablename = 'form_'.$f_info['tablename'];
 			$this->db->change_table($this->tablename);
 		}
+		$field = $this->field;
+		$list_field = $this->list_field;
 		$page = max(intval($_GET['page']), 1);
 		$r = $this->db->get_one(array(), "COUNT(dataid) sum");
 		$total = $r['sum'];

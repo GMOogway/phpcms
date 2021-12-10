@@ -9,6 +9,7 @@ class formguide extends admin {
 	public function __construct() {
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
+		$this->cache = pc_base::load_sys_class('cache');
 		$this->tablename = '';
 		$setting = new_html_special_chars(getcache('formguide', 'commons'));
 		$this->setting = $setting[$this->get_siteid()];
@@ -23,6 +24,7 @@ class formguide extends admin {
 	public function init() {
 		$page = max(intval($this->input->get('page')), 1);
 		$data = $this->db->listinfo(array('type' => 3, 'siteid'=>$this->get_siteid()), '`modelid` DESC', $page, SYS_ADMIN_PAGESIZE);
+		$this->cache();
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=formguide&c=formguide&a=add\',\''.L('formguide_add').'\',700,500);void(0);', L('formguide_add'));
 		include $this->admin_tpl('formguide_list');
 	}
@@ -61,6 +63,7 @@ class formguide extends admin {
 					$this->m_db->query($sql);
 				}
 			}
+			$this->cache();
 			dr_admin_msg(1,L('add_success'), '?m=formguide&c=formguide_field&a=init&formid='.$formid, '', 'add');
 		} else {
 			$siteid = $this->get_siteid();
@@ -82,12 +85,17 @@ class formguide extends admin {
 	 * 编辑表单向导
 	 */
 	public function edit() {
-		if (!$this->input->get('formid') || empty($this->input->get('formid'))) {
-			dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
-		}
-		$formid = intval($this->input->get('formid'));
-		$setting = $this->input->post('setting');
-		if ($this->input->post('dosubmit')) {
+		if (IS_AJAX_POST) {
+			$formid = intval($this->input->post('formid'));
+			$setting = $this->input->post('setting');
+			if ($setting['list_field']) {
+				foreach ($setting['list_field'] as $t) {
+					if ($t['func']
+						&& !method_exists(pc_base::load_sys_class('function_list'), $t['func']) && !function_exists($t['func'])) {
+						dr_json(0, L('列表回调函数['.$t['func'].']未定义', ));
+					}
+				}
+			}
 			if ($setting['starttime']) {
 				$setting['starttime'] = strtotime($setting['starttime']);
 			}
@@ -99,8 +107,13 @@ class formguide extends admin {
 			$info['js_template'] = $info['show_js_template'];
 			unset($info['show_js_template']);
 			$this->db->update($info, array('modelid'=>$formid));
-			dr_admin_msg(1,L('update_success'), '?m=formguide&c=formguide&a=init&formid='.$formid, '', 'edit');
+			$this->cache();
+			dr_json(1, L('update_success'), array('url' => '?m=formguide&c=formguide&a=init&page='.(int)$this->input->post('page').'&pc_hash='.dr_get_csrf_token()));
 		} else {
+			if (!$this->input->get('formid') || empty($this->input->get('formid'))) {
+				dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
+			}
+			$formid = intval($this->input->get('formid'));
 			$siteid = $this->get_siteid();
 			$template_list = template_list($siteid, 0);
 			$site = pc_base::load_app_class('sites','admin');
@@ -109,12 +122,24 @@ class formguide extends admin {
 				$template_list[$v['dirname']] = $v['name'] ? $v['name'] : $v['dirname'];
 				unset($template_list[$k]);
 			}
+			$this->sitemodel_field_db = pc_base::load_model('sitemodel_field_model');
+			$this->field = $this->sitemodel_field_db->select(array('siteid'=>$siteid, 'modelid'=>$formid),'*','','listorder ASC,fieldid ASC');
+			$sys_field = array();
+			$field = dr_list_field_value($data['setting']['list_field'], $sys_field, $this->field);
 			$data = $this->db->get_one(array('modelid'=>$formid));
 			$data['setting'] = string2array($data['setting']);
 			pc_base::load_sys_class('form', '', false);
 			$show_header = $show_validator = $show_scroll = 1;
 			include $this->admin_tpl('formguide_edit');
 		}
+	}
+	
+	/**
+	 * 在线帮助
+	 */
+	public function help() {
+		$show_header = $show_validator = '';
+		include $this->admin_tpl('formguide_help');
 	}
 	
 	/**
@@ -128,23 +153,6 @@ class formguide extends admin {
 		$val = $this->input->get('val') ? intval($this->input->get('val')) : 0;
 		$this->db->update(array('disabled'=>$val), array('modelid'=>$formid, 'siteid'=>$this->get_siteid()));
 		dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
-	}
-	
-	/**
-	 * 预览
-	 */
-	public function public_preview() {
-		if (!$this->input->get('formid') || empty($this->input->get('formid'))) {
-			dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
-		}
-		$formid = intval($this->input->get('formid'));
-		$f_info = $this->db->get_one(array('modelid'=>$formid, 'siteid'=>$this->get_siteid()), 'name');
-		define('CACHE_MODEL_PATH',CMS_PATH.'caches'.DIRECTORY_SEPARATOR.'caches_model'.DIRECTORY_SEPARATOR.'caches_data'.DIRECTORY_SEPARATOR);
-		require CACHE_MODEL_PATH.'formguide_form.class.php';
-		$formguide_form = new formguide_form($formid);
-		$forminfos_data = $formguide_form->get();
-		$show_header = 1;
-		include $this->admin_tpl('formguide_preview');
 	}
 	
 	/**
@@ -196,6 +204,7 @@ class formguide extends admin {
 			$tablename = $m_db->db_tablepre.'form_'.$m_info['tablename'];
 			$m_db->query("DROP TABLE `$tablename`");
 			$this->db->delete(array('modelid'=>$formid, 'siteid'=>$siteid));
+			$this->cache();
 			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		} elseif ($this->input->post('formid') && !empty($this->input->post('formid'))) {
 			$m_db = pc_base::load_model('sitemodel_field_model');
@@ -208,6 +217,7 @@ class formguide extends admin {
 					$this->db->delete(array('modelid'=>$fid, 'siteid'=>$siteid));
 				}
 			}
+			$this->cache();
 			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		} else {
 			dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
@@ -322,5 +332,34 @@ class formguide extends admin {
 		}
 		exit($py);
 	}
+
+    // 缓存
+    public function cache() {
+		$data = $this->db->select(array('type'=> 3));
+		if ($data) {
+			foreach ($data as $t) {
+				$t['field'] = array();
+				$t['setting'] = dr_string2array($t['setting']);
+				// 排列table字段顺序
+				$t['setting']['list_field'] = dr_list_field_order($t['setting']['list_field']);
+
+				// 当前表单的自定义字段
+				$this->sitemodel_field_db = pc_base::load_model('sitemodel_field_model');
+				$field = $this->sitemodel_field_db->select(array('modelid'=>intval($t['modelid'])),'*','','listorder ASC,fieldid ASC');
+				if ($field) {
+					foreach ($field as $fv) {
+						$fv['setting'] = dr_string2array($fv['setting']);
+						$t['field'][$fv['fieldname']] = $fv;
+					}
+				}
+				$cache[$t['tablename']] = $t;
+			}
+		}
+		if ($cache) {
+			$this->cache->set_file('formguide', $cache);
+		} else {
+			$this->cache->del_file('formguide');
+		}
+    }
 }
 ?>

@@ -304,6 +304,32 @@ class cache_api {
 			$this->sitemodel_field($r['modelid']);
 		}
 		setcache('model', $model_array, 'commons');
+		$this->cache = pc_base::load_sys_class('cache');
+		$data = $this->db->select(array('type'=> 3));
+		if ($data) {
+			foreach ($data as $t) {
+				$t['field'] = array();
+				$t['setting'] = dr_string2array($t['setting']);
+				// 排列table字段顺序
+				$t['setting']['list_field'] = dr_list_field_order($t['setting']['list_field']);
+
+				// 当前表单的自定义字段
+				$this->sitemodel_field_db = pc_base::load_model('sitemodel_field_model');
+				$field = $this->sitemodel_field_db->select(array('modelid'=>intval($t['modelid'])),'*','','listorder ASC,fieldid ASC');
+				if ($field) {
+					foreach ($field as $fv) {
+						$fv['setting'] = dr_string2array($fv['setting']);
+						$t['field'][$fv['fieldname']] = $fv;
+					}
+				}
+				$cache[$t['tablename']] = $t;
+			}
+		}
+		if ($cache) {
+			$this->cache->set_file('formguide', $cache);
+		} else {
+			$this->cache->del_file('formguide');
+		}
 		return true;
 	}
 	
