@@ -729,6 +729,30 @@ function iframe_show(type, url, width, height) {
 		content: url+'&is_ajax=1'
 	});
 }
+// ajax保存数据
+function dr_ajax_save(value, url, name) {
+	if (typeof pc_hash == 'string') url += (url.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
+	if (url.toLowerCase().indexOf("http://") != -1 || url.toLowerCase().indexOf("https://") != -1) {
+	} else {
+		url = geturlpathname()+url;
+	}
+	var index = layer.load(2, {
+		shade: [0.3,'#fff'], //0.1透明度的白色背景
+		time: 5000
+	});
+	$.ajax({
+		type: "GET",
+		url: url+'&name='+name+'&value='+value,
+		dataType: "json",
+		success: function (json) {
+			layer.close(index);
+			dr_tips(json.code, json.msg, json.data.time);
+		},
+		error: function(HttpRequest, ajaxOptions, thrownError) {
+			dr_ajax_admin_alert_error(HttpRequest, ajaxOptions, thrownError);
+		}
+	});
+}
 // ajax 批量操作确认
 function dr_ajax_option(url, msg, remove) {
 	layer.confirm(msg,{
@@ -750,6 +774,16 @@ function dr_ajax_option(url, msg, remove) {
 			success: function(json) {
 				layer.close(loading);
 				if (json.code) {
+					if (remove) {
+						// 批量移出去
+						var ids = json.data.ids;
+						if (typeof ids != "undefined" ) {
+							console.log(ids);
+							for ( var i = 0; i < ids.length; i++){
+								$("#dr_row_"+ids[i]).remove();
+							}
+						}
+					}
 					if (json.data.url) {
 						setTimeout("window.location.href = '"+json.data.url+"'", 2000);
 					} else {

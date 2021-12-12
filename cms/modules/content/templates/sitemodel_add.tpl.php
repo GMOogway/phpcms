@@ -18,11 +18,11 @@ include $this->admin_tpl('header','admin');
 	<table width="100%"  class="table_form">
   <tr>
     <th width="150"><?php echo L('model_name')?>：</th>
-    <td class="y-bg"><input type="text" class="input-text" name="info[name]" id="name" size="30" /></td>
+    <td class="y-bg"><input type="text" class="input-text" name="info[name]" id="name" size="30" onblur="topinyin('tablename','name','?m=content&c=sitemodel&a=public_ajax_pinyin');"/></td>
   </tr>
   <tr>
     <th><?php echo L('model_tablename')?>：</th>
-    <td class="y-bg"><input type="text" class="input-text" name="info[tablename]" id="tablename" size="30" /></td>
+    <td class="y-bg"><input type="text" class="input-text" name="info[tablename]" id="tablename" size="30"/></td>
   </tr>
     <tr>
     <th><?php echo L('description')?>：</th>

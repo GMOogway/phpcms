@@ -19,7 +19,7 @@ class access{
  		if($this->conn->state == 0)
 		{
 			$this->conn->open("Provider=Microsoft.Jet.OLEDB.4.0; Data Source=$dbhost");
-			if($this->conn->state == 0)	return false;;
+			if($this->conn->state == 0)	return false;
 		}
 		define('NUM', 1);
 		define('ASSOC', 2);

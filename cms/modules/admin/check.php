@@ -166,10 +166,19 @@ class check extends admin {
         \'pconnect\' => '.$my['pconnect'].',
         \'autoconnect\' => '.$my['autoconnect'].'
     ),';
+
                 $database_data.= PHP_EOL.');'.PHP_EOL.'?>';
                 $this->db->query('ALTER DATABASE '.$my['database'].' CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;');
                 if (!strstr($database, 'IN_CMS') || $my['charset']!='utf8mb4' || $my['type']!='mysqli') {
                     file_put_contents($rt,$database_data);
+                }
+
+                $this->content_db = pc_base::load_model('content_model');
+                $datas = $this->db->select(array('type'=>0,'disabled'=>0));
+                foreach ($datas as $r) {
+                    $this->content_db->set_model($r['modelid']);
+                    $number = $this->content_db->count();
+                    $this->db->update(array('items'=>$number),array('modelid'=>$r['modelid']));
                 }
 
                 $prefix = $this->db->db_tablepre;

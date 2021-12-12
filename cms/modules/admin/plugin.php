@@ -438,7 +438,7 @@ EOF;
 						$plugin_menus[] =array('name'=>L('plugin_config','','plugin'),'url'=>'','status'=>'0');
 						$form = $this->creatconfigform($info_var);
 					}
-					$meun_total = count($plugin_menus);;
+					$meun_total = count($plugin_menus);
 					$setting = string2array($setting);
 					if(is_array($setting)) {
 						foreach($setting as $m) {

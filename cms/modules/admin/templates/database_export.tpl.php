@@ -46,7 +46,7 @@ include $this->admin_tpl('header');?>
         </ul>
     </div>
     <div class="portlet-body form">
-		<div class="table-list">
+        <div class="table-list">
 <table width="100%" cellspacing="0" class="table-checkable">
  <?php 
 if(is_array($infos)){
@@ -68,23 +68,23 @@ if(is_array($infos)){
        </tr>
     </thead>
     <tbody>
-	<?php foreach($infos['cmstables'] as $v){?>
-	<tr>
-	<td align="center" class="myselect">
+    <?php foreach($infos['cmstables'] as $v){?>
+    <tr>
+    <td align="center" class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="checkboxes" name="tables[]" value="<?php echo $v['name']?>" />
                         <span></span>
                     </label></td>
-	<td align="center"><a href="javascript:void(0);" onclick="show('<?php echo $v['name']?>')"><?php echo $v['name']?></a></td>
-	<td align="center"><?php echo $v['engine']?></td>
-	<td align="center"><?php echo $v['collation']?></td>
-	<td align="center"><?php echo $v['rows']?></td>
-	<td align="center"><?php echo format_file_size($v['size'])?></td>
-	<td align="center"><?php echo dr_date($v['updatetime'], null, 'red')?></td>
-	<td align="center"><a href="?m=admin&c=database&a=public_repair&operation=optimize&tables=<?php echo $v['name']?>"><?php echo L('database_optimize')?></a> | <a href="?m=admin&c=database&a=public_repair&operation=repair&tables=<?php echo $v['name']?>"><?php echo L('database_repair')?></a> | <a href="?m=admin&c=database&a=public_repair&operation=flush&tables=<?php echo $v['name']?>"><?php echo L('database_flush')?></a> | <a href="?m=admin&c=database&a=public_repair&operation=jc&tables=<?php echo $v['name']?>"><?php echo L('database_check')?></a> | <a href="javascript:void(0);" onclick="showcreat('<?php echo $v['name']?>')"><?php echo L('database_showcreat')?></a></td>
-	</tr>
-	<?php } ?>
-	</tbody>
+    <td align="center"><a href="javascript:void(0);" onclick="show('<?php echo $v['name']?>')"><?php echo $v['name']?></a></td>
+    <td align="center"><?php echo $v['engine']?></td>
+    <td align="center"><?php echo $v['collation']?></td>
+    <td align="center"><?php echo $v['rows']?></td>
+    <td align="center"><?php echo format_file_size($v['size'])?></td>
+    <td align="center"><?php echo dr_date($v['updatetime'], null, 'red')?></td>
+    <td align="center"><a href="?m=admin&c=database&a=public_repair&operation=optimize&tables=<?php echo $v['name']?>"><?php echo L('database_optimize')?></a> | <a href="?m=admin&c=database&a=public_repair&operation=repair&tables=<?php echo $v['name']?>"><?php echo L('database_repair')?></a> | <a href="?m=admin&c=database&a=public_repair&operation=flush&tables=<?php echo $v['name']?>"><?php echo L('database_flush')?></a> | <a href="?m=admin&c=database&a=public_repair&operation=jc&tables=<?php echo $v['name']?>"><?php echo L('database_check')?></a> | <a href="javascript:void(0);" onclick="showcreat('<?php echo $v['name']?>')"><?php echo L('database_showcreat')?></a></td>
+    </tr>
+    <?php } ?>
+    </tbody>
 <?php 
 }
 ?>
@@ -122,18 +122,15 @@ $(function() {
             url: '?m=admin&c=database&a=import&menuid=<?php echo $this->input->get('menuid');?>&pc_hash='+pc_hash,
             data: $("#myform").serialize(),
             success: function(json) {
+                layer.close(loading);
                 if (json.code == 1) {
-                    layer.close(loading);
-                    dr_tips(1, json.msg);
                     if (json.data.url) {
                         setTimeout("window.location.href = '"+json.data.url+"'", 2000);
                     } else {
                         setTimeout("window.location.reload(true)", 2000);
                     }
-                } else {
-                    layer.close(loading);
-                    dr_tips(0, json.msg);
                 }
+                dr_tips(json.code, json.msg);
                 return false;
             },
             error: function(HttpRequest, ajaxOptions, thrownError) {
@@ -143,14 +140,14 @@ $(function() {
     });
 });
 function show_tbl(obj) {
-	var pdoname = $(obj).val();
-	location.href='?m=admin&c=database&a=export&pdoname='+pdoname+'&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token()?>';
+    var pdoname = $(obj).val();
+    location.href='?m=admin&c=database&a=export&pdoname='+pdoname+'&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token()?>';
 }
 function showcreat(tblname) {
-	omnipotent('show','?m=admin&c=database&a=public_repair&operation=showcreat&menuid=<?php echo $this->input->get('menuid');?>&tables='+tblname,tblname,1,'60%','70%')
+    omnipotent('show','?m=admin&c=database&a=public_repair&operation=showcreat&menuid=<?php echo $this->input->get('menuid');?>&tables='+tblname,tblname,1,'60%','70%')
 }
 function show(tblname) {
-	omnipotent('show','?m=admin&c=database&a=public_repair&operation=show&menuid=<?php echo $this->input->get('menuid');?>&tables='+tblname,tblname,1,'60%','70%')
+    omnipotent('show','?m=admin&c=database&a=public_repair&operation=show&menuid=<?php echo $this->input->get('menuid');?>&tables='+tblname,tblname,1,'60%','70%')
 }
 </script>
 </html>

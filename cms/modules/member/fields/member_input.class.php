@@ -38,39 +38,39 @@ class member_input {
 				$length = empty($value) ? 0 : mb_strlen($value);
 				if($minlength && $length < $minlength && !$isimport) {
 					if (IS_ADMIN) {
-						dr_admin_msg(0, "$name 不得少于 $minlength 个字符！", array('field' => $field)););
+						dr_admin_msg(0, "$name 不得少于 $minlength 个字符！", array('field' => $field));
 					} else {
-						dr_msg(0, "$name 不得少于 $minlength 个字符！", array('field' => $field)););
+						dr_msg(0, "$name 不得少于 $minlength 个字符！", array('field' => $field));
 					}
 				}
 				if (!array_key_exists($field, $this->fields)) {
 					if (IS_ADMIN) {
-						dr_admin_msg(0, '模型中不存在'.$field.'字段', array('field' => $field)););
+						dr_admin_msg(0, '模型中不存在'.$field.'字段', array('field' => $field));
 					} else {
-						dr_msg(0, '模型中不存在'.$field.'字段', array('field' => $field)););
+						dr_msg(0, '模型中不存在'.$field.'字段', array('field' => $field));
 					}
 				}
 				if($maxlength && $length > $maxlength && !$isimport) {
 					if (IS_ADMIN) {
-						dr_admin_msg(0, "$name 不得超过 $maxlength 个字符！", array('field' => $field)););
+						dr_admin_msg(0, "$name 不得超过 $maxlength 个字符！", array('field' => $field));
 					} else {
-						dr_msg(0, "$name 不得超过 $maxlength 个字符！", array('field' => $field)););
+						dr_msg(0, "$name 不得超过 $maxlength 个字符！", array('field' => $field));
 					}
 				} else {
 					str_cut($value, $maxlength);
 				}
 				if($pattern && $length && !preg_match($pattern, $value) && !$isimport) {
 					if (IS_ADMIN) {
-						dr_admin_msg(0, $errortips, array('field' => $field)););
+						dr_admin_msg(0, $errortips, array('field' => $field));
 					} else {
-						dr_msg(0, $errortips, array('field' => $field)););
+						dr_msg(0, $errortips, array('field' => $field));
 					}
 				}
 				if($this->fields[$field]['isunique'] && $this->db->get_one(array($field=>$value),$field) && ROUTE_A != 'edit') {
 					if (IS_ADMIN) {
-						dr_admin_msg(0, "$name 的值不得重复！", array('field' => $field)););
+						dr_admin_msg(0, "$name 的值不得重复！", array('field' => $field));
 					} else {
-						dr_msg(0, "$name 的值不得重复！", array('field' => $field)););
+						dr_msg(0, "$name 的值不得重复！", array('field' => $field));
 					}
 				}
 				$func = $this->fields[$field]['formtype'];

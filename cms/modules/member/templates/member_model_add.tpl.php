@@ -52,7 +52,7 @@ $(function(){
 	<table width="100%" class="table_form">
 		<tr>
 			<td width="80"><?php echo L('model_name')?></td> 
-			<td><input type="text" name="info[modelname]"  class="input-text" id="modelname" size="30"></input></td>
+			<td><input type="text" name="info[modelname]" class="input-text" id="modelname" size="30" onblur="topinyin('tablename','modelname','?m=member&c=member_model&a=public_ajax_pinyin');"></input></td>
 		</tr>
 		<tr>
 			<td><?php echo L('table_name')?></td>

@@ -62,6 +62,9 @@ class setting extends admin {
 			if (!$setting['errorlog_size']) {
 				dr_json(0, L('setting_error_log_size').L('empty'), array('field' => 'errorlog_size'));
 			}
+			if (!$setconfig['sys_max_category']) {
+				dr_json(0, L('setting_max_category').L('empty'), array('field' => 'sys_max_category'));
+			}
 			if ($setconfig['sys_max_category']>10000) {
 				dr_json(0, L('setting_max_category_not'), array('field' => 'sys_max_category'));
 			}

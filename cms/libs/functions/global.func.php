@@ -315,6 +315,31 @@ function dr_get_file($id) {
 }
 
 /**
+ * 格式化多文件数组
+ */
+function dr_get_files($value, $limit = '') {
+	$data = array();
+	$value = dr_string2array($value, $limit);
+	if (!$value) {
+		return $data;
+	} elseif (!isset($value['file']) && !isset($value['id'])) {
+		return $value;
+	}
+	$arr = isset($value['id']) && $value['id'] ? $value['id'] : $value['file'];
+	foreach ($arr as $i => $file) {
+		if ($file) {
+			$data[] = [
+				'url' => dr_get_file($file), // 对应文件的url
+				'file' => $file, // 对应文件或附件id
+				'title' => $value['filename'][$i], // 对应标题
+				'description' => $value['description'][$i], // 对应描述
+			];
+		}
+	}
+	return $data;
+}
+
+/**
  * 根据附件信息获取文件地址
  *
  * @param   array   $data
@@ -404,20 +429,7 @@ function dr_move_uploaded_file($tempfile, $fullname) {
  * @return string
  */
 function safe_replace($string) {
-	$string = str_replace('%20','',$string);
-	$string = str_replace('%27','',$string);
-	$string = str_replace('%2527','',$string);
-	$string = str_replace('*','',$string);
-	$string = str_replace('"','&quot;',$string);
-	$string = str_replace("'",'',$string);
-	$string = str_replace('"','',$string);
-	$string = str_replace(';','',$string);
-	$string = str_replace('<','&lt;',$string);
-	$string = str_replace('>','&gt;',$string);
-	$string = str_replace("{",'',$string);
-	$string = str_replace('}','',$string);
-	$string = str_replace('\\','',$string);
-	return $string;
+	return dr_safe_replace($string);
 }
 /**
  * 安全过滤函数
@@ -516,6 +528,12 @@ function dr_list_field_value($value, $sys_field, $field) {
  */
 function sys_field($field) {
 	$system = array(
+		'id' => array(
+			'name' => L('Id'),
+			'formtype' => 'text',
+			'field' => 'id',
+			'setting' => array()
+		),
 		'dataid' => array(
 			'name' => L('Id'),
 			'formtype' => 'text',
@@ -524,19 +542,19 @@ function sys_field($field) {
 		),
 		'content' => array(
 			'name' => L('内容'),
-			'formtype' => 'text',
+			'formtype' => 'editor',
 			'field' => 'content',
 			'setting' => array()
 		),
 		'title' => array(
 			'name' => L('主题'),
-			'formtype' => 'text',
+			'formtype' => 'title',
 			'field' => 'title',
 			'setting' => array()
 		),
 		'thumb' => array(
 			'name' => L('缩略图'),
-			'formtype' => 'File',
+			'formtype' => 'image',
 			'field' => 'thumb',
 			'setting' => array()
 		),
@@ -560,6 +578,18 @@ function sys_field($field) {
 			'field' => 'username',
 			'setting' => array()
 		),
+		'inputtime' => array(
+			'name' => L('发布时间'),
+			'formtype' => 'datetime',
+			'field' => 'inputtime',
+			'setting' => array()
+		),
+		'updatetime' => array(
+			'name' => L('更新时间'),
+			'formtype' => 'datetime',
+			'field' => 'updatetime',
+			'setting' => array()
+		),
 		'datetime' => array(
 			'name' => L('时间'),
 			'formtype' => 'datetime',
@@ -572,15 +602,15 @@ function sys_field($field) {
 			'field' => 'ip',
 			'setting' => array()
 		),
-		'displayorder' => array(
+		'listorder' => array(
 			'name' => L('排列值'),
-			'formtype' => 'touchspin',
-			'field' => 'displayorder',
+			'formtype' => 'number',
+			'field' => 'listorder',
 			'setting' => array()
 		),
 		'hits' => array(
 			'name' => L('浏览数'),
-			'formtype' => 'touchspin',
+			'formtype' => 'number',
 			'field' => 'hits',
 			'setting' => array()
 		),
@@ -590,6 +620,24 @@ function sys_field($field) {
 		$rt[$name] = $system[$name];
 	}
 	return $rt;
+}
+/**
+ * 调用会员详细信息（自定义字段需要手动格式化）
+ *
+ * @param   intval  $userid    会员userid
+ * @param   intval  $name   输出字段
+ * @return  string
+ */
+function dr_member_info($userid, $name = '') {
+	$member_db = pc_base::load_model('member_model');
+	$data = $member_db->get_one(array('userid'=>$userid));
+	return $name ? $data[$name] : $data;
+}
+
+function dr_member_username_info($username, $name = '') {
+	$member_db = pc_base::load_model('member_model');
+	$data = $member_db->get_one(array('username'=>$username));
+	return $name ? $data[$name] : $data;
 }
 /**
  * 执行函数
@@ -946,7 +994,7 @@ function dr_code2utf8($str) {
 	if (function_exists('mb_convert_encoding')) {
 		return mb_convert_encoding($str, 'UTF-8', 'GBK');
 	} elseif (function_exists('iconv')) {
-		return iconv('GBK', 'UTF-8', $str);;
+		return iconv('GBK', 'UTF-8', $str);
 	}
 	return $str;
 }
@@ -1451,6 +1499,29 @@ function dr_file_list_preview_html($t) {
 	} else {
 		return '<a href="javascript:dr_preview_url(\''.dr_get_file_url($t).'\');"><img src="'.IMG_PATH.'ext/error.png"></a>';
 	}
+}
+/**
+ * 格式化复选框\单选框\选项值 字符串转换为数组
+ */
+function dr_format_option_array($value) {
+	$data = array();
+	if (!$value) {
+		return $data;
+	}
+	$options = explode(PHP_EOL, str_replace(array(chr(13), chr(10)), PHP_EOL, $value));
+	foreach ($options as $t) {
+		if (strlen($t)) {
+			$n = $v = '';
+			if (strpos($t, '|') !== FALSE) {
+				list($n, $v) = explode('|', $t);
+				$v = is_null($v) || !strlen($v) ? '' : trim($v);
+			} else {
+				$v = $n = trim($t);
+			}
+			$data[htmlspecialchars($v)] = htmlspecialchars($n);
+		}
+	}
+	return $data;
 }
 /**
 * 统一返回json格式并退出程序
@@ -2892,7 +2963,7 @@ function thumb($img, $width = 0, $height = 0, $water = 0, $mode = 'auto', $webim
 	}
 	if ($img || $webimg) {
 		// 强制缩略图水印
-		$config = siteinfo((SITEID ? SITEID : (SITE_ID ? SITE_ID : get_siteid())));
+		$config = siteinfo((defined('SITEID') && SITEID ? SITEID : (SITE_ID ? SITE_ID : get_siteid())));
 		$site_setting = string2array($config['setting']);
 		if ($site_setting['thumb']) {
 			$water = 1;

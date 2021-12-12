@@ -16,7 +16,7 @@ class index extends admin {
 		$info = $this->db->get_one(array('module'=>'sqltoolplus'));
 		extract($info);
 		$plugin_menus[] =array('name'=>$info['name'],'url'=>'init','status'=>'1');
-		$meun_total = count($plugin_menus);;
+		$meun_total = count($plugin_menus);
 		$setting = string2array($info['setting']);
 		if(is_array($setting)) {
 			foreach($setting as $m) {
@@ -32,7 +32,7 @@ class index extends admin {
 		$info = $this->db->get_one(array('module'=>'sqltoolplus'));
 		extract($info);
 		$plugin_menus[] =array('name'=>$info['name'],'url'=>'init','status'=>'1');
-		$meun_total = count($plugin_menus);;
+		$meun_total = count($plugin_menus);
 		$setting = string2array($info['setting']);
 		if(is_array($setting)) {
 			foreach($setting as $m) {
@@ -120,7 +120,7 @@ class index extends admin {
 		$info = $this->db->get_one(array('module'=>'sqltoolplus'));
 		extract($info);
 		$plugin_menus[] =array('name'=>$info['name'],'url'=>'init','status'=>'1');
-		$meun_total = count($plugin_menus);;
+		$meun_total = count($plugin_menus);
 		$setting = string2array($info['setting']);
 		if(is_array($setting)) {
 			foreach($setting as $m) {
@@ -213,7 +213,7 @@ class index extends admin {
 		$info = $this->db->get_one(array('module'=>'sqltoolplus'));
 		extract($info);
 		$plugin_menus[] =array('name'=>$info['name'],'url'=>'init','status'=>'1');
-		$meun_total = count($plugin_menus);;
+		$meun_total = count($plugin_menus);
 		$setting = string2array($info['setting']);
 		if(is_array($setting)) {
 			foreach($setting as $m) {

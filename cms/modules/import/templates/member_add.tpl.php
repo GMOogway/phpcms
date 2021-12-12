@@ -6,7 +6,7 @@ include $this->admin_tpl('header', 'admin');
 <!--
 	$(function(){
 	$.formValidator.initConfig({formid:"myform",autotip:true,onerror:function(msg,obj){window.top.art.dialog({content:msg,lock:true,width:'200',height:'50'}, function(){this.close();$(obj).focus();})}});
-	$("#import_name").formValidator({onshow:"<?php echo L('importname_must')?>",onfocus:"<?php echo L('input_importname')?>"}).inputValidator({min:1,onerror:"<?php echo L('input_importname')?>"}).ajaxValidator({type : "get",url : "",data :"m=import&c=import&a=check_import_name&importid=<?php echo $importid;?>",datatype : "html",async:'false',success : function(data){	if( data == "1" ){return true;}else{return false;}},buttons: $("#dosubmit"),onerror : "<?php echo L('name_is_exit')?>",onwait : "<?php echo L('connecting')?>"}).defaultPassed();;
+	$("#import_name").formValidator({onshow:"<?php echo L('importname_must')?>",onfocus:"<?php echo L('input_importname')?>"}).inputValidator({min:1,onerror:"<?php echo L('input_importname')?>"}).ajaxValidator({type : "get",url : "",data :"m=import&c=import&a=check_import_name&importid=<?php echo $importid;?>",datatype : "html",async:'false',success : function(data){	if( data == "1" ){return true;}else{return false;}},buttons: $("#dosubmit"),onerror : "<?php echo L('name_is_exit')?>",onwait : "<?php echo L('connecting')?>"}).defaultPassed();
 	$('#dbhost').formValidator({onshow:"<?php echo L('dbhost_infos')?>",onfocus:"<?php echo L('please_check_dbhost')?>",oncorrect:"<?php echo L('input_isok')?>"}).inputValidator({min:4,onerror:"<?php echo L('please_check_dbhost')?>"});	
 	});
 //-->

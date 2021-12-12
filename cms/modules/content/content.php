@@ -20,6 +20,8 @@ class content extends admin {
 		$this->input = pc_base::load_sys_class('input');
 		$this->cache = pc_base::load_sys_class('cache');
 		$this->db = pc_base::load_model('content_model');
+		$this->f_db = pc_base::load_model('sitemodel_model');
+		$this->field_db = pc_base::load_model('sitemodel_field_model');
 		$this->siteid = $this->get_siteid();
 		$this->categorys = getcache('category_content_'.$this->siteid,'commons');
 		//权限判断
@@ -38,6 +40,11 @@ class content extends admin {
 			$catid = intval($this->input->get('catid'));
 			$category = $this->categorys[$catid];
 			$modelid = $category['modelid'];
+			$this->form = $this->f_db->get_one(array('modelid'=>$modelid));
+			$this->sitemodel = $this->cache->get('sitemodel');
+			$this->form_cache = $this->sitemodel[$this->form['tablename']];
+			$field = $this->form_cache['field'];
+			$list_field = $this->form_cache['setting']['list_field'];
 			$model_arr = getcache('model', 'commons');
 			$MODEL = $model_arr[$modelid];
 			unset($model_arr);
@@ -157,6 +164,37 @@ class content extends admin {
 				}
 				exit(json_encode(array('code'=>0,'msg'=>L('to_success'),'count'=>$total,'data'=>$array,'rel'=>1)));
 			}
+			//搜索
+			if($this->input->get('start_time') && $this->input->get('end_time')) {
+				$start_time = strtotime($this->input->get('start_time').' 00:00:00');
+				$end_time = strtotime($this->input->get('end_time').' 23:59:59');
+				if($start_time < $end_time) {
+					$where .= " AND `inputtime` >= '$start_time' AND  `inputtime` <= '$end_time'";
+				} else {
+					dr_json(0, L('starttime_than_endtime'));
+				}
+			}
+			if($this->input->get('keyword')) {
+				$type_array = array('title','description','username');
+				$searchtype = intval($this->input->get('searchtype'));
+				if($searchtype < 3) {
+					$searchtype = $type_array[$searchtype];
+					$keyword = clearhtml(trim($this->input->get('keyword')));
+					$where .= " AND `$searchtype` like '%$keyword%'";
+				} elseif($searchtype==3) {
+					$keyword = intval($this->input->get('keyword'));
+					$where .= " AND `id`='$keyword'";
+				}
+			}
+			if($this->input->get('posids') && !empty($this->input->get('posids'))) {
+				$posids = $this->input->get('posids')==1 ? intval($this->input->get('posids')) : 0;
+				$where .= " AND `posids` = '$posids'";
+			}
+			$pagesize = $this->input->get('limit') ? $this->input->get('limit') : SYS_ADMIN_PAGESIZE;
+			$order = $this->input->get('order') ? $this->input->get('order') : ($this->form_cache['order'] ? $this->form_cache['order'] : 'id desc');
+			$datas = $this->db->listinfo($where,$order,$this->input->get('page'),$pagesize);
+			$total = $this->db->count($where);
+			$pages = $this->db->pages;
 			$pc_hash = dr_get_csrf_token();
 			for($i=1;$i<=$workflow_steps;$i++) {
 				if($_SESSION['roleid']!=1 && !in_array($i,$admin_privs)) continue;
@@ -934,12 +972,28 @@ class content extends admin {
 	 * 排序
 	 */
 	public function listorder() {
-		if($this->input->post('dosubmit')) {
-			$catid = intval($this->input->get('catid'));
+        $id = intval($this->input->get('id'));
+		$catid = intval($this->input->get('catid'));
+        $name = dr_safe_filename($this->input->get('name'));
+        $value = $this->input->get('value');
+        $after = dr_safe_filename($this->input->get('after'));
+        $before = dr_safe_filename($this->input->get('before'));
+		if($id && $catid) {
 			if(!$catid) dr_json(0, L('missing_part_parameters'));
 			$modelid = $this->categorys[$catid]['modelid'];
 			$this->db->set_model($modelid);
-			$this->db->update(array('listorder'=>$this->input->post('listorder')),array('id'=>$this->input->post('id')));
+			// 查询数据
+			$row = $this->db->get_one(array('catid'=>$catid,'id'=>$id));
+			if (!$row) {
+				dr_json(0, L('数据'.$id.'不存在'));
+			} elseif ($row[$name] == $value) {
+				dr_json(1, L('没有变化'));
+			}
+			$this->db->update(array($name=>$value),array('id'=>$id));
+			// 提交之后的操作
+			if ($after) {
+				call_user_func_array($after, [$row]);
+			}
 			dr_json(1, L('operation_success'));
 		} else {
 			dr_json(0, L('operation_failure'));

@@ -82,7 +82,7 @@ class urlrule extends admin {
 		$datas = $this->db->select('','*','','','','urlruleid');
 		$basic_data = array();
 		foreach($datas as $roleid=>$r) {
-			$basic_data[$roleid] = $r['urlrule'];;
+			$basic_data[$roleid] = $r['urlrule'];
 		}
 		setcache('urlrules_detail',$datas,'commons');
 		setcache('urlrules',$basic_data,'commons');

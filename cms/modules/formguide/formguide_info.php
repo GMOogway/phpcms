@@ -13,11 +13,10 @@ class formguide_info extends admin {
 		$this->f_db = pc_base::load_model('sitemodel_model');
 		if (isset($_GET['formid']) && !empty($_GET['formid'])) {
 			$formid = intval($_GET['formid']);
-			$this->sitemodel_field_db = pc_base::load_model('sitemodel_field_model');
-			$this->field = $this->sitemodel_field_db->select(array('siteid'=>$this->get_siteid(), 'modelid'=>$formid),'*','','listorder ASC,fieldid ASC');
 			$this->form = $this->f_db->get_one(array('modelid'=>$formid));
-			$this->formguide = $this->cache->get('formguide');
-			$this->form_cache = $this->formguide[$this->form['tablename']];
+			$this->sitemodel = $this->cache->get('sitemodel');
+			$this->form_cache = $this->sitemodel[$this->form['tablename']];
+			$this->field = $this->form_cache['field'];
 			$this->list_field = $this->form_cache['setting']['list_field'];
 			$f_info = $this->f_db->get_one(array('modelid'=>$formid, 'siteid'=>$this->get_siteid()), 'tablename');
 			$this->tablename = 'form_'.$f_info['tablename'];
@@ -41,8 +40,7 @@ class formguide_info extends admin {
 		$field = $this->field;
 		$list_field = $this->list_field;
 		$page = max(intval($_GET['page']), 1);
-		$r = $this->db->get_one(array(), "COUNT(dataid) sum");
-		$total = $r['sum'];
+		$total = $this->db->count();;
 		$this->f_db->update(array('items'=>$total), array('modelid'=>$formid));
 		$pages = pages($total, $page, 20);
 		$offset = ($page-1)*20;

@@ -42,7 +42,7 @@ class respond {
 		$_POST['code'] = $this->input->post('code') ? $_POST['code'] : $_GET['code'];
 		if ($_POST['code']){
 			$payment = $this->get_by_code($_POST['code']);
-			if(!$payment) error_log(date('m-d H:i:s',SYS_TIME).'| POST: payment is null |'."\r\n", 3, CACHE_PATH.'pay_error_log.php');;
+			if(!$payment) error_log(date('m-d H:i:s',SYS_TIME).'| POST: payment is null |'."\r\n", 3, CACHE_PATH.'pay_error_log.php');
 			$cfg = unserialize_config($payment['config']);
 			$pay_name = ucwords($payment['pay_code']);
 			pc_base::load_app_class('pay_factory','',0);

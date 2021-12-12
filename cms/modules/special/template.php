@@ -17,7 +17,7 @@ class template extends admin {
 	 */
 	public function init() {
 		echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
-		$specialid = isset($_GET['specialid']) && intval($_GET['specialid']) ? intval($_GET['specialid']) : dr_admin_msg(0,L('illegal_action'), HTTP_REFERER);;
+		$specialid = isset($_GET['specialid']) && intval($_GET['specialid']) ? intval($_GET['specialid']) : dr_admin_msg(0,L('illegal_action'), HTTP_REFERER);
 		if (!$specialid) dr_admin_msg(0,L('illegal_action'), HTTP_REFERER);
 		
 		$info = $this->db->get_one(array('id'=>$specialid, 'disabled'=>'0', 'siteid'=>$this->get_siteid()));

@@ -1,145 +1,283 @@
-<?php 
+<?php
 defined('IS_ADMIN') or exit('No permission resources.');
-include $this->admin_tpl('header', 'admin');
-?>
-<div class="pad-10">
-<form method="post" action="?m=formguide&c=formguide&a=add" name="myform" id="myform">
-<table class="table_form" width="100%" cellspacing="0">
-<tbody>
-	<tr>
-		<th width="150"><strong><?php echo L('name')?>：</strong></th>
-		<td><input name="info[name]" id="name" class="input-text" type="text" size="30" onblur="topinyin('tablename','name','?m=formguide&c=formguide&a=public_ajax_pinyin');"></td>
-	</tr>
-	<tr>
-		<th><strong><?php echo L('tablename')?>：</strong></th>
-		<td><input name="info[tablename]" id="tablename" class="input-text" type="text" size="25"></td>
-	</tr>
-	<tr>
-		<th><strong><?php echo L('introduction')?>：</strong></th>
-		<td><textarea name="info[description]" id="description" rows="6" cols="50"></textarea></td>
-	</tr>
-	<tr>
-		<th><strong><?php echo L('time_limit')?>：</strong></th>
-		<td><div class="mt-radio-inline">
-          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[enabletime]" value="1"> <?php echo L('enable')?> <span></span></label>
-          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[enabletime]" value="0" checked> <?php echo L('unenable')?> <span></span></label>
-        </div></td>
-	</tr>
-	<tr id="time_start" style="display:none;">
-  		<th><strong><?php echo L('start_time')?>：</strong></th>
-        <td><?php echo form::date('setting[starttime]', date('Y-m-d', SYS_TIME))?></td>
-	</tr>
-	<tr id="time_end" style="display:none;">
-		<th><strong><?php echo L('end_time')?>：</strong></th>
-		<td><?php echo form::date('setting[endtime]')?></td>
-	</tr>
-	<tr>
-		<th><strong><?php echo L('allowed_send_mail')?>：</strong></th>
-		<td><div class="mt-radio-inline">
-          <label class="mt-radio mt-radio-outline"><input name="setting[sendmail]" type="radio" value="1" >&nbsp;<?php echo L('yes')?> <span></span></label>
-          <label class="mt-radio mt-radio-outline"><input name="setting[sendmail]" type="radio" value="0" checked>&nbsp;<?php echo L('no')?> <span></span></label>
-        </div></td>
-	</tr>
-	<tr id="mailaddress" style="display:none;">
-		<th><strong><?php echo L('e-mail_address')?>：</strong></th>
-		<td><input type="text" name="setting[mails]" id="mails" class="input-text" size="50"> <?php echo L('multiple_with_commas')?></td>
-	</tr>
-	<tr>
-		<th><strong><?php echo L('allows_more_ip')?>：</strong></th>
-		<td><div class="mt-radio-inline">
-          <label class="mt-radio mt-radio-outline"><input type='radio' name='setting[allowmultisubmit]' value='1' <?php if($this->setting['allowmultisubmit'] == 1) {?>checked<?php }?>> <?php echo L('yes')?> <span></span></label>
-          <label class="mt-radio mt-radio-outline"><input type='radio' name='setting[allowmultisubmit]' value='0' <?php if($this->setting['allowmultisubmit'] == 0) {?>checked<?php }?>> <?php echo L('no')?> <span></span></label>
-        </div></td>
-	</tr>
-	<tr>
-		<th><strong><?php echo L('allowunreg')?>：</strong></th>
-		<td><div class="mt-radio-inline">
-          <label class="mt-radio mt-radio-outline"><input type='radio' name='setting[allowunreg]' value='1' <?php if($this->setting['allowunreg'] == 1) {?>checked<?php }?>> <?php echo L('yes')?> <span></span></label>
-          <label class="mt-radio mt-radio-outline"><input type='radio' name='setting[allowunreg]' value='0' <?php if($this->setting['allowunreg'] == 0) {?>checked<?php }?>> <?php echo L('no')?> <span></span></label>
-        </div></td>
-	</tr>
-	<tr>
-		<th><strong><?php echo L('code')?>：</strong></th>
-		<td><div class="mt-radio-inline">
-          <label class="mt-radio mt-radio-outline"><input type='radio' name='setting[code]' value='1' <?php if($this->setting['code'] == 1) {?>checked<?php }?>> <?php echo L('yes')?> <span></span></label>
-          <label class="mt-radio mt-radio-outline"><input type='radio' name='setting[code]' value='0' <?php if($this->setting['code'] == 0) {?>checked<?php }?>> <?php echo L('no')?> <span></span></label>
-        </div></td>
-	</tr>
-	<tr>
-		<th><strong><?php echo L('提交成功提示文字')?>：</strong></th>
-		<td><input name="setting[rt_text]" id="rt_text" class="input-text" type="text" size="50"><br>当用户提交表单成功之后显示的文字，默认为：感谢您的参与！</td>
-	</tr>
-	<tr>
-		<th><strong><?php echo L('提交成功跳转URL')?>：</strong></th>
-		<td><input name="setting[rt_url]" id="rt_url" class="input-text" type="text" size="50"><br>当用户提交表单成功之后跳转的链接，{APP_PATH}表示当前站点URL，{formid}表示当前表单的id号，{siteid}表示当前站点的id号</td>
-	</tr>
-	<tr>
-		<th><strong><?php echo L('optional_style')?>：</strong></th>
-		<td>
-		<?php echo form::select($template_list, $info['default_style'], 'name="info[default_style]" id="style" onchange="load_file_list(this.value)"', L('please_select'))?> 
-		</td>
-	</tr>
-	<tr>
-		<th><strong><?php echo L('template_selection')?>：</strong></th>
-		<td id="show_template"><script type="text/javascript">$.getJSON('?m=admin&c=category&a=public_tpl_file_list&style=<?php echo $info['default_style']?>&module=formguide&templates=show&name=info&pc_hash='+pc_hash, function(data){$('#show_template').html(data.show_template);});</script></td>
-	</tr>
-	<tr>
-		<th><strong><?php echo L('js调用使用的模板')?>：</strong></th>
-		<td id="show_js_template"><script type="text/javascript">$.getJSON('?m=admin&c=category&a=public_tpl_file_list&style=<?php echo $info['default_style']?>&module=formguide&templates=show_js&name=info&pc_hash='+pc_hash, function(data){$('#show_js_template').html(data.show_js_template);});</script></td>
-	</tr>
-	</tbody>
-</table>
-<input type="submit" name="dosubmit" id="dosubmit" value=" <?php echo L('ok')?> " class="dialog">&nbsp;<input type="reset" class="dialog" value=" <?php echo L('clear')?> ">
+include $this->admin_tpl('header', 'admin');?>
+<link rel="stylesheet" href="<?php echo CSS_PATH;?>bootstrap/css/bootstrap.min.css" media="all" />
+<link rel="stylesheet" href="<?php echo JS_PATH;?>bootstrap-switch/css/bootstrap-switch.min.css" media="all" />
+<script type="text/javascript" src="<?php echo JS_PATH;?>bootstrap-switch/js/bootstrap-switch.min.js"></script>
+<link rel="stylesheet" href="<?php echo JS_PATH;?>jquery-ui/jquery-ui.min.css">
+<script type="text/javascript" src="<?php echo JS_PATH;?>jquery-ui/jquery-ui.min.js"></script>
+<link href="<?php echo JS_PATH;?>bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo JS_PATH;?>bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css" />
+<script src="<?php echo JS_PATH;?>bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
+<script src="<?php echo JS_PATH;?>bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+    if (jQuery().datepicker) {
+        $('.date-picker').datepicker({
+            format: "yyyy-mm-dd",
+            orientation: "left",
+            autoclose: true
+        });
+    }
+    $(":text").removeClass('input-text');
+});
+</script>
+<style type="text/css">
+.page-content {margin-left: 0px;margin-top: 0;padding: 25px 20px 10px;}
+.main-content {background: #f5f6f8;}
+.portlet.light {padding: 12px 20px 15px;background-color: #fff;}
+.portlet.light>.portlet-title {padding: 0;color: #181C32;font-weight: 500;}
+.portlet.bordered>.portlet-title {border-bottom: 0;}
+.portlet>.portlet-title {padding: 0;margin-bottom: 2px;-webkit-border-radius: 4px 4px 0 0;-moz-border-radius: 4px 4px 0 0;-ms-border-radius: 4px 4px 0 0;-o-border-radius: 4px 4px 0 0;border-radius: 4px 4px 0 0;}
+.portlet>.portlet-title>.caption {float: left;display: inline-block;font-size: 18px;line-height: 18px;padding: 10px 0;}
+.portlet.light>.portlet-title>.caption.caption-md>.caption-subject, .portlet.light>.portlet-title>.caption>.caption-subject {font-size: 15px;}
+.font-dark {color: #2f353b!important;}
+.portlet>.portlet-title:after,.portlet>.portlet-title:before {content: " ";display: table;}
+.portlet>.portlet-title:after {clear: both;}
+.portlet>.portlet-title>.nav-tabs {background: 0 0;margin: 1px 0 0;float: right;display: inline-block;border: 0;}
+.portlet>.portlet-title>.nav-tabs>li {background: 0 0;margin: 0;border: 0;}
+.portlet>.portlet-title>.nav-tabs>li>a {background: 0 0;margin: 5px 0 0 1px;border: 0;padding: 8px 10px;color: #fff;}
+.portlet>.portlet-title>.nav-tabs>li.active>a,.portlet>.portlet-title>.nav-tabs>li:hover>a {color: #333;background: #fff;border: 0;}
+.portlet.light>.portlet-title>.nav-tabs>li {margin: 0;padding: 0;}
+.portlet.light>.portlet-title>.nav-tabs>li>a {margin: 0;padding: 12px 13px 13px;color: #666;}
+.portlet.light>.portlet-title>.nav-tabs>li>a {font-size: 14px!important;}
+.tabbable-line>.nav-tabs {border: none;margin: 0;}
+.tabbable-line>.nav-tabs>li {margin: 0;border-bottom: 4px solid transparent;}
+.tabbable-line>.nav-tabs>li>a {background: 0 0!important;border: 0;margin: 0;padding-left: 15px;padding-right: 15px;color: #737373;cursor: pointer;}
+.tabbable-line>.nav-tabs>li>a>i {color: #a6a6a6;}
+.tabbable-line>.nav-tabs>li.active {background: 0 0;border-bottom: 4px solid #3ea9e2;position: relative;}
+.tabbable-line>.nav-tabs>li.active>a {border: 0;color: #333;}
+.tabbable-line>.nav-tabs>li.active>a>i {color: #404040;}
+.tabbable-line>.nav-tabs>li.open,.tabbable-line>.nav-tabs>li:hover {background: 0 0;border-bottom: 4px solid #dadbde;}
+.tabbable-line>.nav-tabs>li.open>a,.tabbable-line>.nav-tabs>li:hover>a {border: 0;background: 0 0!important;color: #333;}
+.tabbable-line>.nav-tabs>li.open>a>i,.tabbable-line>.nav-tabs>li:hover>a>i {color: #a6a6a6;}
+.tabbable-line>.nav-tabs>li.active {border-bottom: 4px solid #40aae3;}
+.form .form-body,.portlet-form .form-body {padding: 20px;}
+.form-group .input-inline {margin-right: 5px;}
+.btn-success {color: #fff!important;background-color: #3ea9e2;border-color: #2bb8c4;}
+.btn-success.focus,.btn-success:focus {color: #fff;background-color: #27a4b0;border-color: #14565c;}
+.btn-success.active,.btn-success:active,.btn-success:hover,.open>.btn-success.dropdown-toggle {color: #fff;background-color: #27a4b0;border-color: #208992;}
+.btn-success.active.focus,.btn-success.active:focus,.btn-success.active:hover,.btn-success:active.focus,.btn-success:active:focus,.btn-success:active:hover,.open>.btn-success.dropdown-toggle.focus,.open>.btn-success.dropdown-toggle:focus,.open>.btn-success.dropdown-toggle:hover {color: #fff;background-color: #208992;border-color: #14565c;}
+.input-inline, .radio-list>label.radio-inline {display: inline-block;}
+.badge, .input-inline {vertical-align: middle;}
+.input-medium{width: 240px!important;}
+.input-large {width: 320px!important;}
+@media (max-width:768px) {
+.input-large {width: 250px!important;}
+.input-xlarge {width: 300px!important;}
+}
+</style>
+<div class="page-content main-content">
+<div class="note note-danger my-content-top-tool">
+    <p><a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=init&pc_hash='+pc_hash+'&is_ajax=1',1);"><?php echo L('更改数据之后需要更新缓存之后才能生效');?></a></p>
+</div>
+<form action="?m=formguide&c=formguide&a=add" class="form-horizontal" method="post" name="myform" id="myform">
+<input name="page" id="dr_page" type="hidden" value="<?php echo $page;?>">
+<div class="portlet light bordered">
+    <div class="portlet-title tabbable-line">
+        <ul class="nav nav-tabs" style="float:left;">
+            <li<?php if ($page==0) {?> class="active"<?php }?>>
+                <a data-toggle="tab_0" onclick="$('#dr_page').val('0')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('基本设置').'\',this,{tips: [1, \'#000\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-cog"></i> <?php if (!is_mobile(0)) {echo L('基本设置');}?> </a>
+            </li>
+        </ul>
+    </div>
+    <div class="portlet-body form">
+        <div class="tab-content">
+            <div class="tab-pane<?php if ($page==0) {?> active<?php }?>" id="tab_0">
+
+                <div class="form-body">
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('name');?></label>
+                        <div class="col-md-9">
+                            <label><input class="form-control input-large" type="text" id="name" name="info[name]" value="" onblur="topinyin('tablename','name','?m=formguide&c=formguide&a=public_ajax_pinyin');"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('tablename');?></label>
+                        <div class="col-md-9">
+                            <label><input class="form-control input-large" type="text" id="tablename" name="info[tablename]" value=""></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('introduction');?></label>
+                        <div class="col-md-9">
+                            <textarea class="form-control " style="height:90px" name="info[description]"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('time_limit');?></label>
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[enabletime]" value="1"> <?php echo L('enable');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[enabletime]" value="0" checked> <?php echo L('unenable');?> <span></span></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" id="time" style="display:none;">
+                        <label class="col-md-2 control-label"><?php echo L('时间范围');?></label>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <div class="input-group date-picker input-daterange " data-date="" data-date-format="yyyy-mm-dd">
+                                    <input type="text" placeholder="<?php echo L('start_time');?>" class="form-control" value="" name="setting[starttime]">
+                                    <span class="input-group-addon"> <?php echo L('到');?> </span>
+                                    <input type="text" placeholder="<?php echo L('end_time');?>" class="form-control" value="" name="setting[endtime]">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('allowed_send_mail');?></label>
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[sendmail]" value="1"> <?php echo L('yes');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[sendmail]" value="0" checked> <?php echo L('no');?> <span></span></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" id="mailaddress" style="display:none;">
+                        <label class="col-md-2 control-label"><?php echo L('e-mail_address');?></label>
+                        <div class="col-md-9">
+                            <label><input class="form-control input-large" type="text" id="mails" name="setting[mails]" value=""></label>
+                            <span class="help-block"><?php echo L('multiple_with_commas')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('allows_more_ip');?></label>
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[allowmultisubmit]" value="1"<?php echo ($this->setting['allowmultisubmit']) ? ' checked' : ''?>> <?php echo L('yes');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[allowmultisubmit]" value="0"<?php echo (!$this->setting['allowmultisubmit']) ? ' checked' : ''?>> <?php echo L('no');?> <span></span></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('allowunreg');?></label>
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[allowunreg]" value="1"<?php echo ($this->setting['allowunreg']) ? ' checked' : ''?>> <?php echo L('yes');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[allowunreg]" value="0"<?php echo (!$this->setting['allowunreg']) ? ' checked' : ''?>> <?php echo L('no');?> <span></span></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('code');?></label>
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[code]" value="1"<?php echo ($this->setting['code']) ? ' checked' : ''?>> <?php echo L('yes');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[code]" value="0"<?php echo (!$this->setting['code']) ? ' checked' : ''?>> <?php echo L('no');?> <span></span></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('提交成功提示文字');?></label>
+                        <div class="col-md-9">
+                            <label><input class="form-control input-large" type="text" id="rt_text" name="setting[rt_text]" value=""></label>
+                            <span class="help-block"><?php echo L('当用户提交表单成功之后显示的文字，默认为：感谢您的参与！')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('提交成功跳转URL');?></label>
+                        <div class="col-md-9">
+                            <label><input class="form-control input-large" type="text" id="rt_url" name="setting[rt_url]" value=""></label>
+                            <span class="help-block"><?php echo L('当用户提交表单成功之后跳转的链接，{APP_PATH}表示当前站点URL，{formid}表示当前表单的id号，{siteid}表示当前站点的id号')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('optional_style');?></label>
+                        <div class="col-md-9">
+                            <label><?php echo form::select($template_list, $info['default_style'], 'name="info[default_style]" id="style" onchange="load_file_list(this.value)"', L('please_select'))?></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('template_selection')?></label>
+                        <div class="col-md-9">
+                            <label id="show_template"><script type="text/javascript">$.getJSON('?m=admin&c=category&a=public_tpl_file_list&style=<?php echo $info['default_style']?>&module=formguide&templates=show&name=info&pc_hash='+pc_hash, function(data){$('#show_template').html(data.show_template);});</script></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('js调用使用的模板');?></label>
+                        <div class="col-md-9">
+                            <label id="show_js_template"><script type="text/javascript">$.getJSON('?m=admin&c=category&a=public_tpl_file_list&style=<?php echo $info['default_style']?>&module=formguide&templates=show_js&name=info&pc_hash='+pc_hash, function(data){$('#show_js_template').html(data.show_js_template);});</script></label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <input type="submit" name="dosubmit" id="dosubmit" value=" <?php echo L('ok')?> " class="dialog">
+    </div>
+</div>
 </form>
 </div>
-</body>
-</html>
 <script type="text/javascript">
+$('body').keydown(function(e){
+    if (e.keyCode == 13) {
+        $('#my_submit').trigger('click');
+    }
+})
+$('.nav-tabs a').click(function (e) {
+    $('.nav-tabs').find('li').removeClass('active');
+    $('.tab-pane').removeClass('active');
+    $(this).parent().addClass('active');
+    $('#'+$(this).attr("data-toggle")).addClass('active');
+})
 function load_file_list(id) {
-	if (id=='') return false;
-	$.getJSON('?m=admin&c=category&a=public_tpl_file_list&style='+id+'&module=formguide&templates=show|show_js&name=info&pc_hash='+pc_hash, function(data){$('#show_template').html(data.show_template);$('#show_js_template').html(data.show_js_template);});
+    if (id=='') return false;
+    $.getJSON('?m=admin&c=category&a=public_tpl_file_list&style='+id+'&module=formguide&templates=show|show_js&name=info&pc_hash='+pc_hash, function(data){$('#show_template').html(data.show_template);$('#show_js_template').html(data.show_js_template);});
 }
 
 $(document).ready(function(){
-	$.formValidator.initConfig({formid:"myform",autotip:true,onerror:function(msg,obj){Dialog.alert(msg,function(){$(obj).focus();})}});
-	$('#name').formValidator({onshow:"<?php echo L('input_form_title')?>",onfocus:"<?php echo L('title_min_3_chars')?>",oncorrect:"<?php echo L('right')?>"}).inputValidator({min:1,onerror:"<?php echo L('title_cannot_empty')?>"});
-	$('#tablename').formValidator({onshow:"<?php echo L('please_input_tallename')?>", onfocus:"<?php echo L('standard')?>", oncorrect:"<?php echo L('right')?>"}).regexValidator({regexp:"^[a-zA-Z]{1}([a-zA-Z0-9]|[_]){0,19}$",onerror:"<?php echo L('tablename_was_wrong');?>"}).inputValidator({min:1,onerror:"<?php echo L('tablename_no_empty')?>"}).ajaxValidator({
-	    type : "get",
-		url : "",
-		data : "m=formguide&c=formguide&a=public_checktable",
-		datatype : "html",
-		cached:false,
-		getdata:{issystem:'issystem'},
-		async:'false',
-		success : function(data){	
+    $.formValidator.initConfig({formid:"myform",autotip:true,onerror:function(msg,obj){Dialog.alert(msg,function(){$(obj).focus();})}});
+    $('#name').formValidator({onshow:"<?php echo L('input_form_title')?>",onfocus:"<?php echo L('title_min_3_chars')?>",oncorrect:"<?php echo L('right')?>"}).inputValidator({min:1,onerror:"<?php echo L('title_cannot_empty')?>"});
+    $('#tablename').formValidator({onshow:"<?php echo L('please_input_tallename')?>", onfocus:"<?php echo L('standard')?>", oncorrect:"<?php echo L('right')?>"}).regexValidator({regexp:"^[a-zA-Z]{1}([a-zA-Z0-9]|[_]){0,19}$",onerror:"<?php echo L('tablename_was_wrong');?>"}).inputValidator({min:1,onerror:"<?php echo L('tablename_no_empty')?>"}).ajaxValidator({
+        type : "get",
+        url : "",
+        data : "m=formguide&c=formguide&a=public_checktable",
+        datatype : "html",
+        cached:false,
+        getdata:{issystem:'issystem'},
+        async:'false',
+        success : function(data){    
             if( data == "1" ){
                 return true;
-			} else {
+            } else {
                 return false;
-			}
-		},
-		buttons: $("#dosubmit"),
-		onerror : "<?php echo L('tablename_existed')?>",
-		onwait : "<?php echo L('connecting_please_wait')?>"
-	});
-	$('#starttime').formValidator({onshow:"<?php echo L('select_stardate')?>",onfocus:"<?php echo L('select_stardate')?>",oncorrect:"<?php echo L('right_all')?>"});
-	$('#endtime').formValidator({onshow:"<?php echo L('select_downdate')?>",onfocus:"<?php echo L('select_downdate')?>",oncorrect:"<?php echo L('right_all')?>"});
-	$('#style').formValidator({onshow:"<?php echo L('select_style')?>",onfocus:"<?php echo L('select_style')?>",oncorrect:"<?php echo L('right')?>"}).inputValidator({min:1,onerror:"<?php echo L('select_style')?>"});
+            }
+        },
+        buttons: $("#dosubmit"),
+        onerror : "<?php echo L('tablename_existed')?>",
+        onwait : "<?php echo L('connecting_please_wait')?>"
+    });
+    $('#starttime').formValidator({onshow:"<?php echo L('select_stardate')?>",onfocus:"<?php echo L('select_stardate')?>",oncorrect:"<?php echo L('right_all')?>"});
+    $('#endtime').formValidator({onshow:"<?php echo L('select_downdate')?>",onfocus:"<?php echo L('select_downdate')?>",oncorrect:"<?php echo L('right_all')?>"});
+    $('#style').formValidator({onshow:"<?php echo L('select_style')?>",onfocus:"<?php echo L('select_style')?>",oncorrect:"<?php echo L('right')?>"}).inputValidator({min:1,onerror:"<?php echo L('select_style')?>"});
 });
 $("input:radio[name='setting[enabletime]']").click(function (){
-	if($("input:radio[name='setting[enabletime]'][checked]").val()==0) {
-		$("#time_start").hide();
-		$("#time_end").hide();
-	} else if($("input:radio[name='setting[enabletime]'][checked]").val()==1) {
-		$("#time_start").show();
-		$("#time_end").show();
-	}
+    if($("input:radio[name='setting[enabletime]'][checked]").val()==0) {
+        $("#time").hide();
+    } else if($("input:radio[name='setting[enabletime]'][checked]").val()==1) {
+        $("#time").show();
+    }
 });
 $("input:radio[name='setting[sendmail]']").click(function (){
-	if($("input:radio[name='setting[sendmail]'][checked]").val()==0) {
-		$("#mailaddress").hide();
-	} else if($("input:radio[name='setting[sendmail]'][checked]").val()==1) {
-		$("#mailaddress").show();
-	}
+    if($("input:radio[name='setting[sendmail]'][checked]").val()==0) {
+        $("#mailaddress").hide();
+    } else if($("input:radio[name='setting[sendmail]'][checked]").val()==1) {
+        $("#mailaddress").show();
+    }
 });
+function dr_call_alert() {
+    layer.open({
+        type: 2,
+        title: '<i class="fa fa-question-circle"></i> 在线帮助',
+        shadeClose: true,
+        scrollbar: false,
+        shade: 0,
+        area: ['80%', '90%'],
+        content: '?m=formguide&c=formguide&a=help&pc_hash='+pc_hash
+    });
+}
 </script>
+</body>
+</html>

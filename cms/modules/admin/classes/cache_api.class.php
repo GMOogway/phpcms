@@ -253,7 +253,7 @@ class cache_api {
 		$datas = $this->db->select('','*','','','','urlruleid');
 		$basic_data = array();
 		foreach($datas as $roleid=>$r) {
-			$basic_data[$roleid] = $r['urlrule'];;
+			$basic_data[$roleid] = $r['urlrule'];
 		}
 		setcache('urlrules_detail',$datas,'commons');
 		setcache('urlrules',$basic_data,'commons');
@@ -273,7 +273,6 @@ class cache_api {
 	 * 更新模型缓存方法
 	 */
 	public function sitemodel() {
-		$this->content_db = pc_base::load_model('content_model');
 		define('MODEL_PATH', PC_PATH.'modules'.DIRECTORY_SEPARATOR.'content'.DIRECTORY_SEPARATOR.'fields'.DIRECTORY_SEPARATOR);
 		define('CACHE_MODEL_PATH', CMS_PATH.'caches'.DIRECTORY_SEPARATOR.'caches_model'.DIRECTORY_SEPARATOR.'caches_data'.DIRECTORY_SEPARATOR);
 		require MODEL_PATH.'fields.inc.php';
@@ -295,17 +294,12 @@ class cache_api {
 		$model_array = array();
 		$datas = $this->db->select(array('type'=>0,'disabled'=>0));
 		foreach ($datas as $r) {
-			$this->content_db->set_model($r['modelid']);
-			$number = $this->content_db->count();
-			$this->db->update(array('items'=>$number),array('modelid'=>$r['modelid']));
-		}
-		foreach ($datas as $r) {
 			$model_array[$r['modelid']] = $r;
 			$this->sitemodel_field($r['modelid']);
 		}
 		setcache('model', $model_array, 'commons');
 		$this->cache = pc_base::load_sys_class('cache');
-		$data = $this->db->select(array('type'=> 3));
+		$data = $this->db->select();
 		if ($data) {
 			foreach ($data as $t) {
 				$t['field'] = array();
@@ -319,17 +313,13 @@ class cache_api {
 				if ($field) {
 					foreach ($field as $fv) {
 						$fv['setting'] = dr_string2array($fv['setting']);
-						$t['field'][$fv['fieldname']] = $fv;
+						$t['field'][$fv['field']] = $fv;
 					}
 				}
 				$cache[$t['tablename']] = $t;
 			}
 		}
-		if ($cache) {
-			$this->cache->set_file('formguide', $cache);
-		} else {
-			$this->cache->del_file('formguide');
-		}
+		$this->cache->set_file('sitemodel', $cache);
 		return true;
 	}
 	

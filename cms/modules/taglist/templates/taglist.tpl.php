@@ -33,7 +33,7 @@ if(is_array($datas)){
                         <span></span>
                     </label></td>
 		<td align="center"><?php echo $v['id']?></td> 
-		<td align="center"><?php echo $v['keyword'];;?></td>
+		<td align="center"><?php echo $v['keyword'];?></td>
 		<td align="center"><?php echo $v['pinyin']; ?></td>
 		<td align="center"><?php echo $v['videonum']; ?></td>
 		 <td align="center"><a class="btn btn-xs green" href="###"

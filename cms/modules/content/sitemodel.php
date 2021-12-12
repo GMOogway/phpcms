@@ -11,6 +11,7 @@ class sitemodel extends admin {
 	function __construct() {
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
+		$this->cache = pc_base::load_sys_class('cache');
 		$this->db = pc_base::load_model('sitemodel_model');
 		$this->content_db = pc_base::load_model('content_model');
 		$this->siteid = $this->get_siteid();
@@ -21,6 +22,7 @@ class sitemodel extends admin {
 		$datas = $this->db->listinfo(array('siteid'=>$this->siteid,'type'=>0),$this->input->get('order'),$this->input->get('page'),SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		$this->public_cache();
+		$this->sitemodel_cache();
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=content&c=sitemodel&a=add\',\''.L('add_model').'\',580,420);void(0);', L('add_model'));
 		include $this->admin_tpl('sitemodel_manage');
 	}
@@ -29,6 +31,33 @@ class sitemodel extends admin {
 		if($this->input->post('dosubmit')) {
 			$info = $this->input->post('info');
 			$setting = $this->input->post('setting');
+			!$setting['list_field'] && $setting['list_field'] = array(
+				'title' => array(
+					'use' => 1,
+					'name' => L('主题'),
+					'width' => '',
+					'func' => 'title',
+				),
+				'username' => array(
+					'use' => 1,
+					'name' => L('用户名'),
+					'width' => '100',
+					'func' => '',
+				),
+				'updatetime' => array(
+					'use' => 1,
+					'name' => L('更新时间'),
+					'width' => '180',
+					'func' => 'datetime',
+				),
+				'listorder' => array(
+					'use' => 1,
+					'name' => L('排序'),
+					'width' => '100',
+					'center' => 1,
+					'func' => 'save_text_value',
+				),
+			);
 			$info['setting'] = array2string($setting);
 			$info['siteid'] = $this->siteid;
 			$info['category_template'] = $setting['category_template'];
@@ -59,6 +88,7 @@ class sitemodel extends admin {
 			$cache_api = pc_base::load_app_class('cache_api','admin');
 			$cache_api->cache('type');
 			$cache_api->search_type();
+			$this->sitemodel_cache();
 			dr_admin_msg(1,L('add_success'), '', '', 'add');
 		} else {
 			pc_base::load_sys_class('form','',0);
@@ -73,9 +103,17 @@ class sitemodel extends admin {
 		}
 	}
 	public function edit() {
-		if($this->input->post('dosubmit')) {
+		if(IS_AJAX_POST) {
 			$info = $this->input->post('info');
 			$setting = $this->input->post('setting');
+			if ($setting['list_field']) {
+				foreach ($setting['list_field'] as $t) {
+					if ($t['func']
+						&& !method_exists(pc_base::load_sys_class('function_list'), $t['func']) && !function_exists($t['func'])) {
+						dr_json(0, L('列表回调函数['.$t['func'].']未定义', ));
+					}
+				}
+			}
 			$info['setting'] = array2string($setting);
 			$modelid = intval($this->input->post('modelid'));
 			$info['category_template'] = $setting['category_template'];
@@ -90,7 +128,8 @@ class sitemodel extends admin {
 			}
 			
 			$this->db->update($info,array('modelid'=>$modelid,'siteid'=>$this->siteid));
-			dr_admin_msg(1,L('update_success'), '', '', 'edit');
+			$this->sitemodel_cache();
+			dr_json(1, L('update_success'), array('url' => '?m=content&c=sitemodel&a=init&page='.(int)$this->input->post('page').'&pc_hash='.dr_get_csrf_token()));
 		} else {
 			pc_base::load_sys_class('form','',0);
 			$show_header = $show_validator = '';
@@ -100,11 +139,42 @@ class sitemodel extends admin {
 				unset($style_list[$k]);
 			}
 			$modelid = intval($this->input->get('modelid'));
+			$this->m_db = pc_base::load_model('sitemodel_field_model');
+			$this->field = $this->m_db->select(array('siteid'=>$this->siteid, 'modelid'=>$modelid, 'issystem'=>1),'*','','listorder ASC,fieldid ASC');
+			$sys_field = sys_field(array('id', 'title', 'username', 'updatetime', 'listorder'));
 			$r = $this->db->get_one(array('modelid'=>$modelid));
 			extract($r);
 			if ($r['setting']) {
 				extract(string2array($r['setting']));
 			}
+			!$list_field && $list_field = array(
+				'title' => array(
+					'use' => 1,
+					'name' => L('主题'),
+					'width' => '',
+					'func' => 'title',
+				),
+				'username' => array(
+					'use' => 1,
+					'name' => L('用户名'),
+					'width' => '100',
+					'func' => '',
+				),
+				'updatetime' => array(
+					'use' => 1,
+					'name' => L('更新时间'),
+					'width' => '180',
+					'func' => 'datetime',
+				),
+				'listorder' => array(
+					'use' => 1,
+					'name' => L('排序'),
+					'width' => '100',
+					'center' => 1,
+					'func' => 'save_text_value',
+				),
+			);
+			$field = dr_list_field_value($list_field, $sys_field, $this->field);
 			$admin_list_template_f = $this->admin_list_template($admin_list_template, 'name="setting[admin_list_template]"');
 			include $this->admin_tpl('sitemodel_edit');
 		}
@@ -125,6 +195,7 @@ class sitemodel extends admin {
 		$cache_api = pc_base::load_app_class('cache_api','admin');
 		$cache_api->cache('type');
 		$cache_api->search_type();
+		$this->sitemodel_cache();
 		exit('1');
 	}
 	public function disabled() {
@@ -158,11 +229,6 @@ class sitemodel extends admin {
 		$model_array = array();
 		$datas = $this->db->select(array('type'=>0,'disabled'=>0));
 		foreach ($datas as $r) {
-			$this->content_db->set_model($r['modelid']);
-			$number = $this->content_db->count();
-			$this->db->update(array('items'=>$number),array('modelid'=>$r['modelid']));
-		}
-		foreach ($datas as $r) {
 			if(!$r['disabled']) $model_array[$r['modelid']] = $r;
 		}
 		setcache('model', $model_array, 'commons');
@@ -194,6 +260,33 @@ class sitemodel extends admin {
 		if($this->input->post('dosubmit')) {
 			$info = $this->input->post('info');
 			$setting = $this->input->post('setting');
+			!$setting['list_field'] && $setting['list_field'] = array(
+				'title' => array(
+					'use' => 1,
+					'name' => L('主题'),
+					'width' => '',
+					'func' => 'title',
+				),
+				'username' => array(
+					'use' => 1,
+					'name' => L('用户名'),
+					'width' => '100',
+					'func' => '',
+				),
+				'updatetime' => array(
+					'use' => 1,
+					'name' => L('更新时间'),
+					'width' => '180',
+					'func' => 'datetime',
+				),
+				'listorder' => array(
+					'use' => 1,
+					'name' => L('排序'),
+					'width' => '100',
+					'center' => 1,
+					'func' => 'save_text_value',
+				),
+			);
 			$info['name'] = $info['modelname'];
 			unset($info['modelname']);
 			//主表表名
@@ -267,6 +360,7 @@ class sitemodel extends admin {
 					}
 				}
 				$this->public_cache();
+				$this->sitemodel_cache();
 				dr_admin_msg(1,L('operation_success'),'?m=content&c=sitemodel&a=init');
 			}
 		} else {
@@ -280,6 +374,13 @@ class sitemodel extends admin {
 			$big_menu = array('javascript:artdialog(\'add\',\'?m=content&c=sitemodel&a=add\',\''.L('add_model').'\',580,400);void(0);', L('add_model'));
 			include $this->admin_tpl('sitemodel_import');
 		}
+	}
+	/**
+	 * 在线帮助
+	 */
+	public function public_help() {
+		$show_header = $show_validator = '';
+		include $this->admin_tpl('sitemodel_help');
 	}
 	/**
 	 * 检查表是否存在
@@ -305,5 +406,48 @@ class sitemodel extends admin {
 		setcache('model_field_'.$modelid,$field_array,'model');
 		return true;
 	}
+	/**
+	 * 汉字转换拼音
+	 */
+	public function public_ajax_pinyin() {
+		$pinyin = pc_base::load_sys_class('pinyin');
+		$name = dr_safe_replace($this->input->get('name'));
+		if (!$name) {
+			exit('');
+		}
+		$py = $pinyin->result($name);
+		if (strlen($py) > 12) {
+			$sx = $pinyin->result($name, 0);
+			if ($sx) {
+				exit($sx);
+			}
+		}
+		exit($py);
+	}
+
+    // 缓存
+    public function sitemodel_cache() {
+		$data = $this->db->select();
+		if ($data) {
+			foreach ($data as $t) {
+				$t['field'] = array();
+				$t['setting'] = dr_string2array($t['setting']);
+				// 排列table字段顺序
+				$t['setting']['list_field'] = dr_list_field_order($t['setting']['list_field']);
+
+				// 当前表单的自定义字段
+				$this->sitemodel_field_db = pc_base::load_model('sitemodel_field_model');
+				$field = $this->sitemodel_field_db->select(array('modelid'=>intval($t['modelid'])),'*','','listorder ASC,fieldid ASC');
+				if ($field) {
+					foreach ($field as $fv) {
+						$fv['setting'] = dr_string2array($fv['setting']);
+						$t['field'][$fv['field']] = $fv;
+					}
+				}
+				$cache[$t['tablename']] = $t;
+			}
+		}
+		$this->cache->set_file('sitemodel', $cache);
+    }
 }
 ?>

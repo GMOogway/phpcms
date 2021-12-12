@@ -73,13 +73,11 @@ $(function() {
             url: '?m=admin&c=database&a=import&pc_hash='+pc_hash,
             data: {action: 'backup', csrf_test_name: csrf_hash},
             success: function(json) {
+                layer.close(loading);
                 if (json.code == 1) {
-                    layer.close(loading);
-                    dr_tips(1, json.msg);
                     setTimeout("window.location.reload(true)", 2000);
-                } else {
-                    dr_tips(0, json.msg);
                 }
+                dr_tips(json.code, json.msg);
                 return false;
             },
             error: function(HttpRequest, ajaxOptions, thrownError) {
@@ -190,12 +188,9 @@ $(function() {
                 success: function(json) {
                     layer.close(loading);
                     if (json.code == 1) {
-                        layer.close(loading);
-                        dr_tips(1, json.msg);
                         setTimeout("window.location.reload(true)", 2000);
-                    } else {
-                        dr_tips(0, json.msg);
                     }
+                    dr_tips(json.code, json.msg);
                     return false;
                 },
                 error: function(HttpRequest, ajaxOptions, thrownError) {

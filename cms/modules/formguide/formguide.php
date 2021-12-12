@@ -35,6 +35,32 @@ class formguide extends admin {
 	public function add() {
 		if ($this->input->post('dosubmit')) {
 			$setting = $this->input->post('setting');
+			!$setting['list_field'] && $setting['list_field'] = array(
+				'dataid' => array(
+					'use' => 1,
+					'name' => L('Id'),
+					'width' => '',
+					'func' => '',
+				),
+				'username' => array(
+					'use' => 1,
+					'name' => L('用户名'),
+					'width' => '',
+					'func' => 'author',
+				),
+				'ip' => array(
+					'use' => 1,
+					'name' => L('用户ip'),
+					'width' => '',
+					'func' => 'ip',
+				),
+				'datetime' => array(
+					'use' => 1,
+					'name' => L('时间'),
+					'width' => '',
+					'func' => 'datetime',
+				),
+			);
 			if ($setting['starttime']) {
 				$setting['starttime'] = strtotime($setting['starttime']);
 			}
@@ -122,24 +148,42 @@ class formguide extends admin {
 				$template_list[$v['dirname']] = $v['name'] ? $v['name'] : $v['dirname'];
 				unset($template_list[$k]);
 			}
-			$this->sitemodel_field_db = pc_base::load_model('sitemodel_field_model');
-			$this->field = $this->sitemodel_field_db->select(array('siteid'=>$siteid, 'modelid'=>$formid),'*','','listorder ASC,fieldid ASC');
-			$sys_field = array();
-			$field = dr_list_field_value($data['setting']['list_field'], $sys_field, $this->field);
+			$this->m_db = pc_base::load_model('sitemodel_field_model');
+			$this->field = $this->m_db->select(array('siteid'=>$siteid, 'modelid'=>$formid),'*','','listorder ASC,fieldid ASC');
+			$sys_field = sys_field(array('dataid', 'userid', 'username', 'datetime', 'ip'));
 			$data = $this->db->get_one(array('modelid'=>$formid));
 			$data['setting'] = string2array($data['setting']);
+			!$data['setting']['list_field'] && $data['setting']['list_field'] = array(
+				'dataid' => array(
+					'use' => 1,
+					'name' => L('Id'),
+					'width' => '',
+					'func' => '',
+				),
+				'username' => array(
+					'use' => 1,
+					'name' => L('用户名'),
+					'width' => '',
+					'func' => 'author',
+				),
+				'ip' => array(
+					'use' => 1,
+					'name' => L('用户ip'),
+					'width' => '',
+					'func' => 'ip',
+				),
+				'datetime' => array(
+					'use' => 1,
+					'name' => L('时间'),
+					'width' => '',
+					'func' => 'datetime',
+				),
+			);
+			$field = dr_list_field_value($data['setting']['list_field'], $sys_field, $this->field);
 			pc_base::load_sys_class('form', '', false);
 			$show_header = $show_validator = $show_scroll = 1;
 			include $this->admin_tpl('formguide_edit');
 		}
-	}
-	
-	/**
-	 * 在线帮助
-	 */
-	public function help() {
-		$show_header = $show_validator = '';
-		include $this->admin_tpl('formguide_help');
 	}
 	
 	/**
@@ -253,7 +297,7 @@ class formguide extends admin {
 			$setting[$this->get_siteid()] = $post;
 			setcache('formguide', $setting, 'commons'); //设置缓存
 			$m_db = pc_base::load_model('module_model'); //调用模块数据模型
-			if (intval($post['codelen'])<2 || intval($post['codelen'])>8) {
+			if ($post['code'] && (intval($post['codelen'])<2 || intval($post['codelen'])>8)) {
 				dr_admin_msg(0, L('setting_noe_code_len'));
 			}
 			$setting = array2string($post);  
@@ -335,7 +379,7 @@ class formguide extends admin {
 
     // 缓存
     public function cache() {
-		$data = $this->db->select(array('type'=> 3));
+		$data = $this->db->select();
 		if ($data) {
 			foreach ($data as $t) {
 				$t['field'] = array();
@@ -349,17 +393,13 @@ class formguide extends admin {
 				if ($field) {
 					foreach ($field as $fv) {
 						$fv['setting'] = dr_string2array($fv['setting']);
-						$t['field'][$fv['fieldname']] = $fv;
+						$t['field'][$fv['field']] = $fv;
 					}
 				}
 				$cache[$t['tablename']] = $t;
 			}
 		}
-		if ($cache) {
-			$this->cache->set_file('formguide', $cache);
-		} else {
-			$this->cache->del_file('formguide');
-		}
+		$this->cache->set_file('sitemodel', $cache);
     }
 }
 ?>

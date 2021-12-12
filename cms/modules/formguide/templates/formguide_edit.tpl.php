@@ -4,10 +4,12 @@ include $this->admin_tpl('header', 'admin');?>
 <link rel="stylesheet" href="<?php echo CSS_PATH;?>bootstrap/css/bootstrap.min.css" media="all" />
 <link rel="stylesheet" href="<?php echo JS_PATH;?>bootstrap-switch/css/bootstrap-switch.min.css" media="all" />
 <script type="text/javascript" src="<?php echo JS_PATH;?>bootstrap-switch/js/bootstrap-switch.min.js"></script>
-<link href="<?php echo JS_PATH;?>bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
-<script src="<?php echo JS_PATH;?>bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
 <link rel="stylesheet" href="<?php echo JS_PATH;?>jquery-ui/jquery-ui.min.css">
 <script type="text/javascript" src="<?php echo JS_PATH;?>jquery-ui/jquery-ui.min.js"></script>
+<link href="<?php echo JS_PATH;?>bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo JS_PATH;?>bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css" />
+<script src="<?php echo JS_PATH;?>bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
+<script src="<?php echo JS_PATH;?>bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 jQuery(document).ready(function() {
     if (jQuery().datepicker) {
@@ -17,6 +19,7 @@ jQuery(document).ready(function() {
             autoclose: true
         });
     }
+    $(":text").removeClass('input-text');
 });
 </script>
 <style type="text/css">
@@ -97,7 +100,7 @@ jQuery(document).ready(function() {
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('tablename');?></label>
                         <div class="col-md-9">
-                            <input class="form-control input-large" type="text" id="tablename" name="info[tablename]" value="<?php echo $data['tablename'];?>">
+                            <label><input class="form-control input-large" type="text" id="tablename" name="info[tablename]" value="<?php echo $data['tablename'];?>"></label>
                         </div>
                     </div>
                     <div class="form-group">
@@ -115,7 +118,7 @@ jQuery(document).ready(function() {
                             </div>
                         </div>
                     </div>
-                    <div class="form-group" id="time_start"<?php echo (!$data['setting']['enabletime']) ? ' style="display:none;"' : ''?>>
+                    <div class="form-group" id="time"<?php echo (!$data['setting']['enabletime']) ? ' style="display:none;"' : ''?>>
                         <label class="col-md-2 control-label"><?php echo L('时间范围');?></label>
                         <div class="col-md-9">
                             <div class="input-group">
@@ -173,14 +176,14 @@ jQuery(document).ready(function() {
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('提交成功提示文字');?></label>
                         <div class="col-md-9">
-                            <input class="form-control input-large" type="text" id="rt_text" name="setting[rt_text]" value="<?php echo $data['setting']['rt_text'];?>" >
+                            <label><input class="form-control input-large" type="text" id="rt_text" name="setting[rt_text]" value="<?php echo $data['setting']['rt_text'];?>"></label>
                             <span class="help-block"><?php echo L('当用户提交表单成功之后显示的文字，默认为：感谢您的参与！')?></span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('提交成功跳转URL');?></label>
                         <div class="col-md-9">
-                            <input class="form-control input-large" type="text" id="rt_url" name="setting[rt_url]" value="<?php echo $data['setting']['rt_url'];?>" >
+                            <label><input class="form-control input-large" type="text" id="rt_url" name="setting[rt_url]" value="<?php echo $data['setting']['rt_url'];?>"></label>
                             <span class="help-block"><?php echo L('当用户提交表单成功之后跳转的链接，{APP_PATH}表示当前站点URL，{formid}表示当前表单的id号，{siteid}表示当前站点的id号')?></span>
                         </div>
                     </div>
@@ -311,11 +314,9 @@ $(document).ready(function(){
 });
 $("input:radio[name='setting[enabletime]']").click(function (){
     if($("input:radio[name='setting[enabletime]'][checked]").val()==0) {
-        $("#time_start").hide();
-        $("#time_end").hide();
+        $("#time").hide();
     } else if($("input:radio[name='setting[enabletime]'][checked]").val()==1) {
-        $("#time_start").show();
-        $("#time_end").show();
+        $("#time").show();
     }
 });
 $("input:radio[name='setting[sendmail]']").click(function (){
@@ -333,7 +334,7 @@ function dr_call_alert() {
         scrollbar: false,
         shade: 0,
         area: ['80%', '90%'],
-        content: '?m=formguide&c=formguide&a=help&pc_hash='+pc_hash
+        content: '?m=content&c=sitemodel&a=public_help&pc_hash='+pc_hash
     });
 }
 </script>

@@ -91,11 +91,9 @@ a.badge {color: #fff;}
                         $(e).attr('class', 'badge badge-yes');
                         $(e).html('<i class="fa fa-check"></i>');
                     }
-                    dr_tips(1, json.msg);
                     setTimeout("window.location.reload(true)", 2000);
-                } else {
-                    dr_tips(0, json.msg);
                 }
+                dr_tips(json.code, json.msg);
             },
             error: function(HttpRequest, ajaxOptions, thrownError) {
                 dr_ajax_alert_error(HttpRequest, ajaxOptions, thrownError);

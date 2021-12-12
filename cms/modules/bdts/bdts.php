@@ -49,12 +49,12 @@ class bdts extends admin {
 				foreach ($post['bdts'] as $i => $t) {
 					if (isset($t['site'])) {
 						if (!$t['site']) {
-							dr_json(0,L('域名必须填写'));
+							dr_json(0, L('域名必须填写'));
 						}
 						$bdts[$i]['site'] = $t['site'];
 					} else {
 						if (!$t['token']) {
-							dr_json(0,L('token必须填写'));
+							dr_json(0, L('token必须填写'));
 						}
 						$bdts[$i-1]['token'] = $t['token'];
 					}
@@ -83,72 +83,72 @@ class bdts extends admin {
 	}
 	
 	//手动推送
-    public function url_add() {
+	public function url_add() {
 
-        if (IS_POST) {
-            $url = $this->input->post('url');
-            if (!$url) {
-                dr_json(0,L('URL不能为空'));
-            }
+		if (IS_POST) {
+			$url = $this->input->post('url');
+			if (!$url) {
+				dr_json(0, L('URL不能为空'));
+			}
 
-            $config = $this->bdts->getConfig();
-            if (!$config) {
-                dr_json(0,L('百度推送配置为空，不能推送'));
-            }
+			$config = $this->bdts->getConfig();
+			if (!$config) {
+				dr_json(0, L('百度推送配置为空，不能推送'));
+			}
 
-            $uri = parse_url($url);
-            $site = $uri['host'];
-            if (!$site) {
-                dr_json(0,L('百度推送没有获取到内容url（'.$url.'）的host值，不能推送'));
-            }
+			$uri = parse_url($url);
+			$site = $uri['host'];
+			if (!$site) {
+				dr_json(0, L('百度推送没有获取到内容url（'.$url.'）的host值，不能推送'));
+			}
 
-            $token = '';
-            foreach ($config['bdts'] as $t) {
-                if ($t['site'] == $site && !$token) {
-                    $token = $t['token'];
-                }
-            }
-            if (!$token) {
-                dr_json(0,L('百度推送没有获取到内容url的Token，不能推送'));
-            }
+			$token = '';
+			foreach ($config['bdts'] as $t) {
+				if ($t['site'] == $site && !$token) {
+					$token = $t['token'];
+				}
+			}
+			if (!$token) {
+				dr_json(0, L('百度推送没有获取到内容url的Token，不能推送'));
+			}
 
-            $api = 'http://data.zz.baidu.com/urls?site='.$site.'&token='.$token;
-            $urls = [$url];
-            $ch = curl_init();
-            $options =  array(
-                CURLOPT_URL => $api,
-                CURLOPT_POST => true,
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_POSTFIELDS => implode("\n", $urls),
-                CURLOPT_HTTPHEADER => array('Content-Type: text/plain'),
-            );
-            curl_setopt_array($ch, $options);
-            $rt = json_decode(curl_exec($ch), true);
-            if ($rt['error']) {
-                // 错误日志
-                @file_put_contents(CACHE_PATH.'caches_bdts/bdts_log.php', date('Y-m-d H:i:s').' 手动['.$url.'] - 失败 - '.$rt['message'].PHP_EOL, FILE_APPEND);
-            } else {
-                // 推送成功
-                @file_put_contents(CACHE_PATH.'caches_bdts/bdts_log.php', date('Y-m-d H:i:s').' 手动['.$url.'] - 成功'.PHP_EOL, FILE_APPEND);
-            }
+			$api = 'http://data.zz.baidu.com/urls?site='.$site.'&token='.$token;
+			$urls = [$url];
+			$ch = curl_init();
+			$options =  array(
+				CURLOPT_URL => $api,
+				CURLOPT_POST => true,
+				CURLOPT_RETURNTRANSFER => true,
+				CURLOPT_POSTFIELDS => implode("\n", $urls),
+				CURLOPT_HTTPHEADER => array('Content-Type: text/plain'),
+			);
+			curl_setopt_array($ch, $options);
+			$rt = json_decode(curl_exec($ch), true);
+			if ($rt['error']) {
+				// 错误日志
+				@file_put_contents(CACHE_PATH.'caches_bdts/bdts_log.php', date('Y-m-d H:i:s').' 手动['.$url.'] - 失败 - '.$rt['message'].PHP_EOL, FILE_APPEND);
+			} else {
+				// 推送成功
+				@file_put_contents(CACHE_PATH.'caches_bdts/bdts_log.php', date('Y-m-d H:i:s').' 手动['.$url.'] - 成功'.PHP_EOL, FILE_APPEND);
+			}
 
-            dr_json(1,L('操作成功'), array('url' => '?m=bdts&c=bdts&a=url_add&menuid='.$this->input->get('menuid').'&page='.(int)($this->input->post('page')).'&pc_hash='.dr_get_csrf_token()));
-        }
+			dr_json(1,L('操作成功'), array('url' => '?m=bdts&c=bdts&a=url_add&menuid='.$this->input->get('menuid').'&page='.(int)($this->input->post('page')).'&pc_hash='.dr_get_csrf_token()));
+		}
 
 		$page = max(intval($this->input->get('page')), 0);
-        include $this->admin_tpl('url_add');
-        exit;
-    }
+		include $this->admin_tpl('url_add');
+		exit;
+	}
 	
 	//批量百度主动推送
 	public function add() {
 
-		$mid = $this->dr_safe_filename($this->input->get('modelid'));
+		$mid = intval($this->input->get('modelid'));
 		$ids = $this->input->post('ids');
 		if (!$ids) {
-			exit(json_encode(array('code' => 0, 'msg' => L('所选数据不存在'))));
+			dr_json(0, L('所选数据不存在'));
 		} elseif (!$mid) {
-			exit(json_encode(array('code' => 0, 'msg' => L('模块参数不存在'))));
+			dr_json(0, L('模块参数不存在'));
 		}
 		foreach ($ids as $id) {
 			if ($field=='') {
@@ -161,12 +161,12 @@ class bdts extends admin {
 		$this->db->set_model($mid);
 		$sitemodel_model_db = pc_base::load_model('sitemodel_model');
 		$sitemodel = $sitemodel_model_db->get_one(array('modelid'=>$mid));
-		if($this->db->table_name==$this->db->db_tablepre) exit(json_encode(array('code' => 0, 'msg' => L('模型被禁用或者是模型内容表不存在'))));;
+		if($this->db->table_name==$this->db->db_tablepre) dr_json(0, L('模型被禁用或者是模型内容表不存在'));
 		$status = 99;
 		$where = 'id in ('.$field.')';
 		$data = $this->db->select($where,'*',100);
 		if (!$data) {
-			exit(json_encode(array('code' => 0, 'msg' => L('所选数据为空'))));
+			dr_json(0, L('所选数据为空'));
 		}
 
 		$ct = 0;
@@ -175,18 +175,7 @@ class bdts extends admin {
 			$ct++;
 		}
 
-		exit(json_encode(array('code' => 1, 'msg' => L('共批量'.$ct.'个URL'))));
-	}
-	
-	/**
-	 * 安全过滤文件及目录名称函数
-	 */
-	public function dr_safe_filename($string) {
-		return str_replace(
-			['..', "/", '\\', ' ', '<', '>', "{", '}', ';', '[', ']', '\'', '"', '*', '?'],
-			'',
-			$string
-		);
+		dr_json(1, L('共批量'.$ct.'个URL'));
 	}
 	
 	//推送

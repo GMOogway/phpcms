@@ -371,13 +371,13 @@ function urlrule(type,html,catid) {
 		if(html) {
 			$('#category_php_ruleid'+catid).css('display','none');$('#category_html_ruleid'+catid).css('display','');
 		} else {
-			$('#category_php_ruleid'+catid).css('display','');$('#category_html_ruleid'+catid).css('display','none');;
+			$('#category_php_ruleid'+catid).css('display','');$('#category_html_ruleid'+catid).css('display','none');
 		}
 	} else {
 		if(html) {
 			$('#show_php_ruleid'+catid).css('display','none');$('#show_html_ruleid'+catid).css('display','');
 		} else {
-			$('#show_php_ruleid'+catid).css('display','');$('#show_html_ruleid'+catid).css('display','none');;
+			$('#show_php_ruleid'+catid).css('display','');$('#show_html_ruleid'+catid).css('display','none');
 		}
 	}	
 }
