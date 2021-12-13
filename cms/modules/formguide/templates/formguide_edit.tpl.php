@@ -229,6 +229,7 @@ jQuery(document).ready(function() {
                             <?php 
                             if(is_array($field)){
                             foreach($field as $n=>$t){
+                            if ($t['field']) {
                             ?>
                             <tr class="odd gradeX">
                                 <td class="myselect">
@@ -249,7 +250,7 @@ jQuery(document).ready(function() {
                                     <input class="form-control" type="text" name="setting[list_field][<?php echo $t['field'];?>][func]" value="<?php echo htmlspecialchars($data['setting']['list_field'][$t['field']]['func']);?>" />
                                 </div></td>
                             </tr>
-                            <?php }}?>
+                            <?php }}}?>
                             </tbody>
                         </table>
                     </div>

@@ -51,13 +51,13 @@ class formguide extends admin {
 				'ip' => array(
 					'use' => 1,
 					'name' => L('用户ip'),
-					'width' => '',
+					'width' => '140',
 					'func' => 'ip',
 				),
 				'datetime' => array(
 					'use' => 1,
 					'name' => L('时间'),
-					'width' => '',
+					'width' => '160',
 					'func' => 'datetime',
 				),
 			);
@@ -122,6 +122,7 @@ class formguide extends admin {
 					}
 				}
 			}
+			$setting['list_field'] = dr_list_field_order($setting['list_field']);
 			if ($setting['starttime']) {
 				$setting['starttime'] = strtotime($setting['starttime']);
 			}
@@ -169,17 +170,18 @@ class formguide extends admin {
 				'ip' => array(
 					'use' => 1,
 					'name' => L('用户ip'),
-					'width' => '',
+					'width' => '140',
 					'func' => 'ip',
 				),
 				'datetime' => array(
 					'use' => 1,
 					'name' => L('时间'),
-					'width' => '',
+					'width' => '160',
 					'func' => 'datetime',
 				),
 			);
 			$field = dr_list_field_value($data['setting']['list_field'], $sys_field, $this->field);
+			$page = intval($this->input->get('page'));
 			pc_base::load_sys_class('form', '', false);
 			$show_header = $show_validator = $show_scroll = 1;
 			include $this->admin_tpl('formguide_edit');

@@ -45,6 +45,7 @@ class content extends admin {
 			$this->form_cache = $this->sitemodel[$this->form['tablename']];
 			$field = $this->form_cache['field'];
 			$list_field = $this->form_cache['setting']['list_field'];
+			$date_field = $this->form_cache['setting']['search_time'] ? $this->form_cache['setting']['search_time'] : 'updatetime';
 			$model_arr = getcache('model', 'commons');
 			$MODEL = $model_arr[$modelid];
 			unset($model_arr);
@@ -85,14 +86,8 @@ class content extends admin {
 			$where = 'catid='.$catid.' AND status='.$status;
 			if (IS_POST) {
 				//搜索
-				if($this->input->post('start_time') && $this->input->post('end_time')) {
-					$start_time = strtotime($this->input->post('start_time').' 00:00:00');
-					$end_time = strtotime($this->input->post('end_time').' 23:59:59');
-					if($start_time < $end_time) {
-						$where .= " AND `inputtime` >= '$start_time' AND  `inputtime` <= '$end_time'";
-					} else {
-						dr_json(0, L('starttime_than_endtime'));
-					}
+				if($this->input->post('start_time')) {
+					$where .= ' AND '.$date_field.' BETWEEN ' . max((int)strtotime(strpos($this->input->post('start_time'), ' ') ? $this->input->post('start_time') : $this->input->post('start_time').' 00:00:00'), 1) . ' AND ' . ($this->input->post('end_time') ? (int)strtotime(strpos($this->input->post('end_time'), ' ') ? $this->input->post('end_time') : $this->input->post('end_time').' 23:59:59') : SYS_TIME);
 				}
 				if($this->input->post('keyword')) {
 					$type_array = array('title','description','username');
@@ -165,14 +160,8 @@ class content extends admin {
 				exit(json_encode(array('code'=>0,'msg'=>L('to_success'),'count'=>$total,'data'=>$array,'rel'=>1)));
 			}
 			//搜索
-			if($this->input->get('start_time') && $this->input->get('end_time')) {
-				$start_time = strtotime($this->input->get('start_time').' 00:00:00');
-				$end_time = strtotime($this->input->get('end_time').' 23:59:59');
-				if($start_time < $end_time) {
-					$where .= " AND `inputtime` >= '$start_time' AND  `inputtime` <= '$end_time'";
-				} else {
-					dr_json(0, L('starttime_than_endtime'));
-				}
+			if($this->input->get('start_time')) {
+				$where .= ' AND '.$date_field.' BETWEEN ' . max((int)strtotime(strpos($this->input->get('start_time'), ' ') ? $this->input->get('start_time') : $this->input->get('start_time').' 00:00:00'), 1) . ' AND ' . ($this->input->get('end_time') ? (int)strtotime(strpos($this->input->get('end_time'), ' ') ? $this->input->get('end_time') : $this->input->get('end_time').' 23:59:59') : SYS_TIME);
 			}
 			if($this->input->get('keyword')) {
 				$type_array = array('title','description','username');
@@ -191,7 +180,7 @@ class content extends admin {
 				$where .= " AND `posids` = '$posids'";
 			}
 			$pagesize = $this->input->get('limit') ? $this->input->get('limit') : SYS_ADMIN_PAGESIZE;
-			$order = $this->input->get('order') ? $this->input->get('order') : ($this->form_cache['order'] ? $this->form_cache['order'] : 'id desc');
+			$order = $this->input->get('order') ? $this->input->get('order') : ($this->form_cache['setting']['order'] ? dr_safe_replace($this->form_cache['setting']['order']) : 'id desc');
 			$datas = $this->db->listinfo($where,$order,$this->input->get('page'),$pagesize);
 			$total = $this->db->count($where);
 			$pages = $this->db->pages;
@@ -259,14 +248,8 @@ class content extends admin {
 			$where = 'catid='.$catid.' AND status='.$status;
 			if (IS_POST) {
 				//搜索
-				if($this->input->post('start_time') && $this->input->post('end_time')) {
-					$start_time = strtotime($this->input->post('start_time').' 00:00:00');
-					$end_time = strtotime($this->input->post('end_time').' 23:59:59');
-					if($start_time < $end_time) {
-						$where .= " AND `inputtime` >= '$start_time' AND  `inputtime` <= '$end_time'";
-					} else {
-						dr_json(0, L('starttime_than_endtime'));
-					}
+				if($this->input->post('start_time')) {
+					$where .= ' AND '.$date_field.' BETWEEN ' . max((int)strtotime(strpos($this->input->post('start_time'), ' ') ? $this->input->post('start_time') : $this->input->post('start_time').' 00:00:00'), 1) . ' AND ' . ($this->input->post('end_time') ? (int)strtotime(strpos($this->input->post('end_time'), ' ') ? $this->input->post('end_time') : $this->input->post('end_time').' 23:59:59') : SYS_TIME);
 				}
 				if($this->input->post('keyword')) {
 					$type_array = array('title','description','username');
@@ -413,14 +396,8 @@ class content extends admin {
 		$where = 'status='.$status;
 		if (IS_POST) {
 			//搜索
-			if($this->input->post('start_time') && $this->input->post('end_time')) {
-				$start_time = strtotime($this->input->post('start_time').' 00:00:00');
-				$end_time = strtotime($this->input->post('end_time').' 23:59:59');
-				if($start_time < $end_time) {
-					$where .= " AND `inputtime` >= '$start_time' AND  `inputtime` <= '$end_time'";
-				} else {
-					dr_json(0, L('starttime_than_endtime'));
-				}
+			if($this->input->post('start_time')) {
+				$where .= ' AND '.$date_field.' BETWEEN ' . max((int)strtotime(strpos($this->input->post('start_time'), ' ') ? $this->input->post('start_time') : $this->input->post('start_time').' 00:00:00'), 1) . ' AND ' . ($this->input->post('end_time') ? (int)strtotime(strpos($this->input->post('end_time'), ' ') ? $this->input->post('end_time') : $this->input->post('end_time').' 23:59:59') : SYS_TIME);
 			}
 			if($this->input->post('keyword')) {
 				$type_array = array('title','description','username');

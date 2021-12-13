@@ -12,7 +12,7 @@ include $this->admin_tpl('header', 'admin');
 <div class="table-list">
     <table width="100%" cellspacing="0">
         <thead>
-            <tr>
+            <tr class="heading">
             <th align="center" class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="group-checkable" value="" id="check_box" onclick="selectall('did[]');" />
@@ -22,7 +22,7 @@ include $this->admin_tpl('header', 'admin');
 			if(is_array($list_field)){
 			foreach($list_field as $i=>$t){
 			?>
-			<th<?php if($t['width']){?> width="<?php echo $t['width'];?>"<?php }?><?php if($t['center']){?> style="text-align:center"<?php }?>><?php echo L($t['name']);?></th>
+			<th<?php if($t['width']){?> width="<?php echo $t['width'];?>"<?php }?><?php if($t['center']){?> style="text-align:center"<?php }?> class="<?php echo dr_sorting($i);?>" name="<?php echo $i;?>"><?php echo L($t['name']);?></th>
 			<?php }}?>
 			<th align="center"><?php echo L('operation')?></th>
             </tr>

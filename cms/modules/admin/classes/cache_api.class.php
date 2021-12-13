@@ -401,8 +401,19 @@ class cache_api {
 	 * 更新会员配置缓存方法
 	 */
 	public function member_setting() {
+		$this->cache = pc_base::load_sys_class('cache');
 		$this->db = pc_base::load_model('module_model');
 		$member_setting = $this->db->get_one(array('module'=>'member'), 'setting');
+		if ($member_setting) {
+			$t = $member_setting;
+			$t['field'] = array();
+			$t['setting'] = dr_string2array($t['setting']);
+			// 排列table字段顺序
+			$t['setting']['list_field'] = dr_list_field_order($t['setting']['list_field']);
+
+			$cache['member'] = $t;
+		}
+		$this->cache->set_file('member', $cache);
 		$member_setting = string2array($member_setting['setting']);
 		setcache('member_setting', $member_setting, 'member');
 		return true;

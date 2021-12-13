@@ -44,7 +44,7 @@ class formguide_info extends admin {
 		$this->f_db->update(array('items'=>$total), array('modelid'=>$formid));
 		$pages = pages($total, $page, 20);
 		$offset = ($page-1)*20;
-		$datas = $this->db->select(array(), '*', $offset.', 20', '`dataid` DESC');
+		$datas = $this->db->select(array(), '*', $offset.', 20', $this->input->get('order') ? $this->input->get('order') : '`dataid` DESC');
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=formguide&c=formguide&a=add\',\''.L('formguide_add').'\',700,500);void(0);', L('formguide_add'));
 		include $this->admin_tpl('formguide_info_list');
 	}

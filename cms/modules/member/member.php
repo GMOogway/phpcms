@@ -19,8 +19,14 @@ class member extends admin {
 	function __construct() {
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
+		$this->cache = pc_base::load_sys_class('cache');
 		$this->db = pc_base::load_model('member_model');
 		$this->member_login_db = pc_base::load_model('member_login_model');
+		$this->module_db = pc_base::load_model('module_model');
+		$this->member = $this->cache->get('member');
+		$this->member_cache = $this->member['member'];
+		$this->field = $this->member_cache['field'];
+		$this->list_field = $this->member_cache['setting']['list_field'];
 	}
 
 	/**
@@ -219,12 +225,13 @@ class member extends admin {
 		}
 
 		$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-		$memberlist = $this->db->listinfo($where, 'userid DESC', $page, SYS_ADMIN_PAGESIZE);
+		$memberlist = $this->db->listinfo($where, $this->input->get('order') ? $this->input->get('order') : 'userid DESC', $page, SYS_ADMIN_PAGESIZE);
 		//查询会员头像
 		foreach($memberlist as $k=>$v) {
 			$memberlist[$k]['avatar'] = get_memberavatar($v['userid']);
 		}
 		$pages = $this->db->pages;
+		$list_field = $this->list_field;
 		$big_menu = array('?m=member&c=member&a=manage&menuid='.$this->input->get('menuid'), L('member_research'));
 		include $this->admin_tpl('member_list');
 	}
@@ -249,7 +256,7 @@ class member extends admin {
 			$where .= "`siteid` = '$siteid'";
 		}
 		
-		$memberlist_arr = $this->db->listinfo($where, 'userid DESC', $page, SYS_ADMIN_PAGESIZE);
+		$memberlist_arr = $this->db->listinfo($where, $this->input->get('order') ? $this->input->get('order') : 'userid DESC', $page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 
 		//搜索框
@@ -274,6 +281,7 @@ class member extends admin {
 			$memberlist[$k]['avatar'] = get_memberavatar($v['userid']);
 		}
 
+		$list_field = $this->list_field;
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=member&c=member&a=add\',\''.L('member_add').'\',700,500);void(0);', L('member_add'));
 		include $this->admin_tpl('member_list');
 	}

@@ -3,6 +3,8 @@ include $this->admin_tpl('header', 'admin');?>
 <link rel="stylesheet" href="<?php echo CSS_PATH;?>bootstrap/css/bootstrap.min.css" media="all" />
 <link rel="stylesheet" href="<?php echo JS_PATH;?>bootstrap-switch/css/bootstrap-switch.min.css" media="all" />
 <script type="text/javascript" src="<?php echo JS_PATH;?>bootstrap-switch/js/bootstrap-switch.min.js"></script>
+<link rel="stylesheet" href="<?php echo JS_PATH;?>jquery-ui/jquery-ui.min.css">
+<script type="text/javascript" src="<?php echo JS_PATH;?>jquery-ui/jquery-ui.min.js"></script>
 <style type="text/css">
 .page-content {margin-left: 0px;margin-top: 0;padding: 25px 20px 10px;}
 .main-content {background: #f5f6f8;}
@@ -35,6 +37,10 @@ include $this->admin_tpl('header', 'admin');?>
 .tabbable-line>.nav-tabs>li.active {border-bottom: 4px solid #40aae3;}
 .form .form-body,.portlet-form .form-body {padding: 20px;}
 .form-group .input-inline {margin-right: 5px;}
+.btn-success {color: #fff!important;background-color: #3ea9e2;border-color: #2bb8c4;}
+.btn-success.focus,.btn-success:focus {color: #fff;background-color: #27a4b0;border-color: #14565c;}
+.btn-success.active,.btn-success:active,.btn-success:hover,.open>.btn-success.dropdown-toggle {color: #fff;background-color: #27a4b0;border-color: #208992;}
+.btn-success.active.focus,.btn-success.active:focus,.btn-success.active:hover,.btn-success:active.focus,.btn-success:active:focus,.btn-success:active:hover,.open>.btn-success.dropdown-toggle.focus,.open>.btn-success.dropdown-toggle:focus,.open>.btn-success.dropdown-toggle:hover {color: #fff;background-color: #208992;border-color: #14565c;}
 .input-inline, .radio-list>label.radio-inline {display: inline-block;}
 .badge, .input-inline {vertical-align: middle;}
 .input-medium{width: 240px!important;}
@@ -66,6 +72,9 @@ $(function(){
         <ul class="nav nav-tabs" style="float:left;">
             <li<?php if ($page==0) {?> class="active"<?php }?>>
                 <a data-toggle="tab_0" onclick="$('#dr_page').val('0')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('member_setting').'\',this,{tips: [1, \'#000\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-cog"></i> <?php if (!is_mobile(0)) {echo L('member_setting');}?> </a>
+            </li>
+            <li<?php if ($page==1) {?> class="active"<?php }?>>
+                <a data-toggle="tab_1" onclick="$('#dr_page').val('1')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('后台列表显示字段').'\',this,{tips: [1, \'#000\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-table"></i> <?php if (!is_mobile(0)) {echo L('后台列表显示字段');}?> </a>
             </li>
         </ul>
     </div>
@@ -204,6 +213,55 @@ $(function(){
 
                 </div>
             </div>
+            <div class="tab-pane<?php if ($page==1) {?> active<?php }?>" id="tab_1">
+                <div class="form-body">
+
+                    <div class="table-list">
+                        <table class="table table-striped table-bordered table-hover table-checkable dataTable">
+                            <thead>
+                            <tr class="heading">
+                                <th class="myselect">
+                                    <?php echo L('显示');?>
+                                </th>
+                                <th width="180"> <?php echo L('字段');?> </th>
+                                <th width="150"> <?php echo L('名称');?> </th>
+                                <th width="100"> <?php echo L('宽度');?> </th>
+                                <th width="140"> <?php echo L('对其方式');?> </th>
+                                <th> <?php echo L('回调方法');?> </th>
+                            </tr>
+                            </thead>
+                            <tbody class="field-sort-items">
+                            <?php 
+                            if(is_array($field)){
+                            foreach($field as $n=>$t){
+                            if ($t['field']) {
+                            ?>
+                            <tr class="odd gradeX">
+                                <td class="myselect">
+                                    <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
+                                        <input type="checkbox" class="checkboxes" name="setting[list_field][<?php echo $t['field'];?>][use]" value="1" <?php if ($data['setting']['list_field'][$t['field']]['use']){?> checked<?php }?> />
+                                        <span></span>
+                                    </label>
+                                </td>
+                                <td><?php echo L($t['name']);?> (<?php echo $t['field'];?>)</td>
+                                <td><input class="form-control" type="text" name="setting[list_field][<?php echo $t['field'];?>][name]" value="<?php echo $data['setting']['list_field'][$t['field']]['name'] ? htmlspecialchars($data['setting']['list_field'][$t['field']]['name']) : $t['name'];?>" /></td>
+                                <td> <input class="form-control" type="text" name="setting[list_field][<?php echo $t['field'];?>][width]" value="<?php echo htmlspecialchars($data['setting']['list_field'][$t['field']]['width']);?>" /></td>
+                                <td><input type="checkbox" name="setting[list_field][<?php echo $t['field'];?>][center]" <?php if ($data['setting']['list_field'][$t['field']]['center']){?> checked<?php }?> value="1"  data-on-text="<?php echo L('居中');?>" data-off-text="<?php echo L('默认');?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+                                </td>
+                                <td> <div class="input-group" style="width:250px">
+                                        <span class="input-group-btn">
+                                            <a class="btn btn-success" href="javascript:dr_call_alert();"><?php echo L('回调');?></a>
+                                        </span>
+                                    <input class="form-control" type="text" name="setting[list_field][<?php echo $t['field'];?>][func]" value="<?php echo htmlspecialchars($data['setting']['list_field'][$t['field']]['func']);?>" />
+                                </div></td>
+                            </tr>
+                            <?php }}}?>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
         </div>
         <div class="portlet-body form myfooter">
             <div class="form-actions text-center">
@@ -227,8 +285,20 @@ $('.nav-tabs a').click(function (e) {
     $('#'+$(this).attr("data-toggle")).addClass('active');
 })
 $(function() {
+    $(".field-sort-items").sortable();
     $(".make-switch").bootstrapSwitch();
 });
+function dr_call_alert() {
+    layer.open({
+        type: 2,
+        title: '<i class="fa fa-question-circle"></i> 在线帮助',
+        shadeClose: true,
+        scrollbar: false,
+        shade: 0,
+        area: ['80%', '90%'],
+        content: '?m=content&c=sitemodel&a=public_help&pc_hash='+pc_hash
+    });
+}
 </script>
 </body>
 </html>

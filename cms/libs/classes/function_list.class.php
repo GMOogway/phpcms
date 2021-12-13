@@ -249,7 +249,9 @@ class function_list {
     // 实时存储文本值
     public function save_text_value($value, $param = array(), $data = array(), $field = array()) {
 
-        $url = '?m=content&c=content&a=listorder&catid='.$data['catid'].'&id='.$data['id'].'&after='; //after是回调函数
+        $m = defined('ROUTE_M') && ROUTE_M ? ROUTE_M : '';
+        $c = defined('ROUTE_C') && ROUTE_C ? ROUTE_C : '';
+        $url = '?m='.$m.'&c='.$c.'&a=listorder&catid='.$data['catid'].'&id='.$data['id'].'&after='; //after是回调函数
         $html = '<input type="text" class="form-control" placeholder="" value="'.htmlspecialchars($value).'" onblur="dr_ajax_save(this.value, \''.$url.'\', \''.$field['field'].'\')">';
 
         return $html;

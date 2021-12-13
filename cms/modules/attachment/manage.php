@@ -27,14 +27,10 @@ class manage extends admin {
 			$pagesize = $this->input->post('limit') ? $this->input->post('limit') : SYS_ADMIN_PAGESIZE;
 			$page = $this->input->post('page') ? $this->input->post('page') : '1';
 			$where = '';
-			if($this->input->post('remote')) $where = "AND `remote` = '".$this->input->post('remote')."' ";
-			if($this->input->post('keyword')) $where = "AND `filename` LIKE '%".$this->input->post('keyword')."%' ";
-			if($this->input->post('start_uploadtime') && $this->input->post('end_uploadtime')) {
-				$start = strtotime($this->input->post('start_uploadtime').' 00:00:00');
-				$end = strtotime($this->input->post('end_uploadtime').' 23:59:59');
-				if($start < $end) {
-					$where .= "AND `uploadtime` >= '$start' AND  `uploadtime` <= '$end' ";
-				}
+			if($this->input->post('remote')) $where .= "AND `remote` = '".$this->input->post('remote')."' ";
+			if($this->input->post('keyword')) $where .= "AND `filename` LIKE '%".$this->input->post('keyword')."%' ";
+			if($this->input->post('start_uploadtime')) {
+				$where .= 'AND uploadtime BETWEEN ' . max((int)strtotime(strpos($this->input->post('start_uploadtime'), ' ') ? $this->input->post('start_uploadtime') : $this->input->post('start_uploadtime').' 00:00:00'), 1) . ' AND ' . ($this->input->post('end_uploadtime') ? (int)strtotime(strpos($this->input->post('end_uploadtime'), ' ') ? $this->input->post('end_uploadtime') : $this->input->post('end_uploadtime').' 23:59:59') : SYS_TIME).' ';
 			}
 			if($this->input->post('fileext')) $where .= "AND `fileext`='".$this->input->post('fileext')."' ";
 			$status =  trim($this->input->get('status'));

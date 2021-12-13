@@ -123,6 +123,14 @@ include $this->admin_tpl('header', 'admin');?>
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('列表时间搜索');?></label>
+                        <div class="col-md-9">
+
+                            <label><input class="form-control" type="text" name="setting[search_time]" value="<?php if ($search_time){?><?php echo htmlspecialchars($search_time);?><?php }else{?>updatetime<?php }?>" ></label>
+                            <span class="help-block"><?php echo L('设置后台时间范围搜索字段，默认为更新时间字段：updatetime');?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('列表显示字段');?></label>
                         <div class="col-md-9">
                             <div class="table-list">
@@ -143,6 +151,7 @@ include $this->admin_tpl('header', 'admin');?>
                                     <?php 
                                     if(is_array($field)){
                                     foreach($field as $n=>$t){
+                                    if ($t['field']) {
                                     ?>
                                     <tr class="odd gradeX">
                                         <td class="myselect">
@@ -163,7 +172,7 @@ include $this->admin_tpl('header', 'admin');?>
                                             <input class="form-control" type="text" name="setting[list_field][<?php echo $t['field'];?>][func]" value="<?php echo htmlspecialchars($list_field[$t['field']]['func']);?>" />
                                         </div></td>
                                     </tr>
-                                    <?php }}?>
+                                    <?php }}}?>
                                     </tbody>
                                 </table>
                             </div>

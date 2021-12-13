@@ -76,20 +76,19 @@ jQuery(document).ready(function() {
 <div class="table-list">
 <table width="100%" cellspacing="0">
 	<thead>
-		<tr>
+		<tr class="heading">
 			<th class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="group-checkable" value="" id="check_box" onclick="selectall('userid[]');" />
                         <span></span>
                     </label></th>
-			<th width="80"><?php echo L('uid')?></th>
-			<th width="60"><?php echo L('头像')?></th>
-			<th><?php echo L('username')?></th>
-			<th width="120"><?php echo L('nickname')?></th>
-			<th><?php echo L('regip')?></th>
-			<th width="160"><?php echo L('lastlogintime')?></th>
-			<th><?php echo L('amount')?></th>
-			<th><?php echo L('point')?></th>
+			<th width="60" class="<?php echo dr_sorting('userid');?>" name="userid"><?php echo L('头像')?></th>
+            <?php 
+            if(is_array($list_field)){
+            foreach($list_field as $i=>$t){
+            ?>
+            <th<?php if($t['width']){?> width="<?php echo $t['width'];?>"<?php }?><?php if($t['center']){?> style="text-align:center"<?php }?> class="<?php echo dr_sorting($i);?>" name="<?php echo $i;?>"><?php echo L($t['name']);?></th>
+            <?php }}?>
 			<th><?php echo L('operation')?></th>
 		</tr>
 	</thead>
@@ -104,14 +103,13 @@ jQuery(document).ready(function() {
                         <input type="checkbox" class="checkboxes" value="<?php echo $v['userid']?>" name="userid[]" />
                         <span></span>
                     </label></td>
-		<td><?php echo $v['userid']?></td>
 		<td><a href="javascript:member_infomation(<?php echo $v['userid']?>, '<?php echo $v['modelid']?>', '')"><img src="<?php echo $v['avatar']?>" height="30" width="30" onerror="this.src='<?php echo IMG_PATH?>member/nophoto.gif'"></a></td>
-		<td><?php if($v['vip']) {?><img title="<?php echo L('vip')?>" src="<?php echo IMG_PATH?>icon/vip.gif"><?php }?><?php echo $v['username']?><?php echo $member_model[$v['modelid']]['name']?><?php if($v['islock']) {?><img onmouseover="layer.tips('<?php echo L('lock')?>',this,{tips: [1, '#000']});" onmouseout="layer.closeAll();" src="<?php echo IMG_PATH?>icon/icon_padlock.gif"><?php }?></td>
-		<td><?php echo new_html_special_chars($v['nickname'])?></td>
-		<td><?php echo $v['regip']?></td>
-		<td><?php echo dr_date($v['lastdate'], null, 'red');?></td>
-		<td><?php echo $v['amount']?></td>
-		<td><?php echo $v['point']?></td>
+		<?php 
+		if(is_array($list_field)){
+		foreach($list_field as $i=>$tt){
+		?>
+		<td<?php if($tt['center']){?> style="text-align:center"<?php }?>><?php echo dr_list_function($tt['func'], $v[$i], $param, $v, $field[$i]);?></td>
+		<?php }}?>
 		<td>
 			<a href="javascript:edit(<?php echo $v['userid']?>, '<?php echo $v['username']?>')" class="btn btn-xs green"><?php echo L('edit')?></a>
 			<a href="?m=member&c=member&a=alogin_index&id=<?php echo $v['userid']?>" target="_blank" class="btn btn-xs red"><?php echo L('login')?></a>

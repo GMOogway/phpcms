@@ -47,7 +47,7 @@ class sitemodel extends admin {
 				'updatetime' => array(
 					'use' => 1,
 					'name' => L('更新时间'),
-					'width' => '180',
+					'width' => '160',
 					'func' => 'datetime',
 				),
 				'listorder' => array(
@@ -104,18 +104,37 @@ class sitemodel extends admin {
 	}
 	public function edit() {
 		if(IS_AJAX_POST) {
+			$modelid = intval($this->input->post('modelid'));
+			$this->m_db = pc_base::load_model('sitemodel_field_model');
+			$this->field = $this->m_db->select(array('siteid'=>$this->siteid, 'modelid'=>$modelid, 'issystem'=>1),'*','','listorder ASC,fieldid ASC');
+			$sys_field = sys_field(array('id', 'title', 'username', 'updatetime', 'listorder'));
+			$data = $this->db->get_one(array('modelid'=>$modelid));
+			$data['setting'] = dr_string2array($data['setting']);
+			$field = dr_list_field_value($data['setting']['list_field'], $sys_field, $this->field);
 			$info = $this->input->post('info');
 			$setting = $this->input->post('setting');
 			if ($setting['list_field']) {
 				foreach ($setting['list_field'] as $t) {
 					if ($t['func']
 						&& !method_exists(pc_base::load_sys_class('function_list'), $t['func']) && !function_exists($t['func'])) {
-						dr_json(0, L('列表回调函数['.$t['func'].']未定义', ));
+						dr_json(0, L('列表回调函数['.$t['func'].']未定义'));
+					}
+				}
+			}
+			$setting['list_field'] = dr_list_field_order($setting['list_field']);
+			if ($setting['search_time'] && !isset($field[$setting['search_time']])) {
+				dr_json(0, L('后台列表时间搜索字段'.$setting['search_time'].'不存在'));
+			}
+			if ($setting['order']) {
+				$arr = explode(',', $setting['order']);
+				foreach ($arr as $t) {
+					list($a) = explode(' ', $t);
+					if ($a && !isset($field[$a])) {
+						dr_json(0, L('后台列表的默认排序字段'.$a.'不存在'));
 					}
 				}
 			}
 			$info['setting'] = array2string($setting);
-			$modelid = intval($this->input->post('modelid'));
 			$info['category_template'] = $setting['category_template'];
 			$info['list_template'] = $setting['list_template'];
 			$info['show_template'] = $setting['show_template'];
@@ -163,7 +182,7 @@ class sitemodel extends admin {
 				'updatetime' => array(
 					'use' => 1,
 					'name' => L('更新时间'),
-					'width' => '180',
+					'width' => '160',
 					'func' => 'datetime',
 				),
 				'listorder' => array(
@@ -175,6 +194,7 @@ class sitemodel extends admin {
 				),
 			);
 			$field = dr_list_field_value($list_field, $sys_field, $this->field);
+			$page = intval($this->input->get('page'));
 			$admin_list_template_f = $this->admin_list_template($admin_list_template, 'name="setting[admin_list_template]"');
 			include $this->admin_tpl('sitemodel_edit');
 		}
@@ -276,7 +296,7 @@ class sitemodel extends admin {
 				'updatetime' => array(
 					'use' => 1,
 					'name' => L('更新时间'),
-					'width' => '180',
+					'width' => '160',
 					'func' => 'datetime',
 				),
 				'listorder' => array(
