@@ -72,19 +72,19 @@ include $this->admin_tpl('header');?>
     <div class="portlet-title tabbable-line">
         <ul class="nav nav-tabs" style="float:left;">
             <li<?php if ($page==0) {?> class="active"<?php }?>>
-                <a data-toggle="tab_0" onclick="$('#dr_page').val('0')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('setting_basic_cfg').'\',this,{tips: [1, \'#000\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-cog"></i> <?php if (!is_mobile(0)) {echo L('setting_basic_cfg');}?> </a>
+                <a data-toggle="tab_0" onclick="$('#dr_page').val('0')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('setting_basic_cfg').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-cog"></i> <?php if (!is_mobile(0)) {echo L('setting_basic_cfg');}?> </a>
             </li>
             <li<?php if ($page==1) {?> class="active"<?php }?>>
-                <a data-toggle="tab_1" onclick="$('#dr_page').val('1')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('setting_safe_cfg').'\',this,{tips: [1, \'#000\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-shield"></i> <?php if (!is_mobile(0)) {echo L('setting_safe_cfg');}?> </a>
+                <a data-toggle="tab_1" onclick="$('#dr_page').val('1')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('setting_safe_cfg').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-shield"></i> <?php if (!is_mobile(0)) {echo L('setting_safe_cfg');}?> </a>
             </li>
             <li<?php if ($page==2) {?> class="active"<?php }?>>
-                <a data-toggle="tab_2" onclick="$('#dr_page').val('2')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('setting_mail_cfg').'\',this,{tips: [1, \'#000\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-envelope"></i> <?php if (!is_mobile(0)) {echo L('setting_mail_cfg');}?> </a>
+                <a data-toggle="tab_2" onclick="$('#dr_page').val('2')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('setting_mail_cfg').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-envelope"></i> <?php if (!is_mobile(0)) {echo L('setting_mail_cfg');}?> </a>
             </li>
             <li<?php if ($page==3) {?> class="active"<?php }?>>
-                <a data-toggle="tab_3" onclick="$('#dr_page').val('3')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('setting_connect').'\',this,{tips: [1, \'#000\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-html5"></i> <?php if (!is_mobile(0)) {echo L('setting_connect');}?> </a>
+                <a data-toggle="tab_3" onclick="$('#dr_page').val('3')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('setting_connect').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-html5"></i> <?php if (!is_mobile(0)) {echo L('setting_connect');}?> </a>
             </li>
             <li<?php if ($page==4) {?> class="active"<?php }?>>
-                <a data-toggle="tab_4" onclick="$('#dr_page').val('4')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('setting_keyword_enable').'\',this,{tips: [1, \'#000\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-tags"></i> <?php if (!is_mobile(0)) {echo L('setting_keyword_enable');}?> </a>
+                <a data-toggle="tab_4" onclick="$('#dr_page').val('4')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('setting_keyword_enable').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-tags"></i> <?php if (!is_mobile(0)) {echo L('setting_keyword_enable');}?> </a>
             </li>
         </ul>
     </div>

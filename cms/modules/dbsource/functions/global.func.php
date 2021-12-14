@@ -4,17 +4,8 @@ defined('IN_CMS') or exit('No permission resources.');
  * 外部数据源缓存
  */
 function dbsource_cache() {
-	$db = pc_base::load_model('dbsource_model');
-	$list = $db->select();
-	$data = array();
-	if ($list) {
-		foreach ($list as $val) {
-			$data[$val['name']] = array('hostname'=>$val['host'].':'.$val['port'], 'database' =>$val['dbname'] , 'db_tablepre'=>$val['dbtablepre'], 'username' =>$val['username'],'password' => $val['password'],'charset'=>$val['charset'],'debug'=>0,'pconnect'=>0,'autoconnect'=>0);
-		}
-	} else {
-		return false;
-	}
-	return setcache('dbsource', $data, 'commons');
+	$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
+	$this->cache_api->cache('dbsource');
 }
 
 /**

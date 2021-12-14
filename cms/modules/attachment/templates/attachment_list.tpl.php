@@ -139,7 +139,7 @@ layui.use(['table'], function(){
     table.on('edit(list)',function(obj) {
         var value = obj.value, data = obj.data, field = obj.field;
         if (field=='filename' && value=='') {
-            layer.tips('<?php echo L('attachment_name_not')?>',this,{tips: [1, '#000']});
+            layer.tips('<?php echo L('attachment_name_not')?>',this,{tips: [1, '#fff']});
             return false;
         }else{
             $.ajax({

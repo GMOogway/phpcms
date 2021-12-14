@@ -15,6 +15,7 @@ userid会员:&nbsp;userid
 用于列表显示缩略图：image
 用于列表显示单文件：file
 用于列表显示多文件：files
+用于列表显示用户组：group
 实时存储文本值：save_text_value</pre></div>
 
 

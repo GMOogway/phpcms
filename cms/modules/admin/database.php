@@ -60,7 +60,7 @@ class database extends admin {
 				if(ADMIN_FOUNDERS && !dr_in_array($this->userid, ADMIN_FOUNDERS)) {
 					dr_json(0, L('only_fonder_operation'));
 				}
-				if (!preg_match("/^backup\-([a-z0-9\-]+)\.zip$/i", $file)) {
+				if (!preg_match("/^backup\-((?!\").)*\.zip$/i", $file)) {
 					dr_json(0, L('参数不正确'));
 				}
 				$file = $backupDir.$file;

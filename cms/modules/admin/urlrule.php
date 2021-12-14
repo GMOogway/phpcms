@@ -9,6 +9,7 @@ class urlrule extends admin {
 		$this->input = pc_base::load_sys_class('input');
 		$this->db = pc_base::load_model('urlrule_model');
 		$this->module_db = pc_base::load_model('module_model');
+		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 	}
 	
 	function init () {
@@ -79,13 +80,7 @@ class urlrule extends admin {
 	 * 更新URL规则
 	 */
 	public function public_cache_urlrule() {
-		$datas = $this->db->select('','*','','','','urlruleid');
-		$basic_data = array();
-		foreach($datas as $roleid=>$r) {
-			$basic_data[$roleid] = $r['urlrule'];
-		}
-		setcache('urlrules_detail',$datas,'commons');
-		setcache('urlrules',$basic_data,'commons');
+		$this->cache_api->cache('urlrule');
 	}
 	/*
 	*url规则替换

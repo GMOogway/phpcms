@@ -11,6 +11,7 @@ class search_type extends admin {
 		$this->model = getcache('model','commons');
 		$this->yp_model = getcache('yp_model','model');
 		$this->module_db = pc_base::load_model('module_model');
+		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 	}
 	
 	public function init () {
@@ -127,27 +128,7 @@ class search_type extends admin {
 	}
 	
 	public function cache() {
-		$datas = $search_model = array();
-		$result_datas = $result_datas2 = $this->db->select(array('siteid'=>$this->siteid,'module'=>'search'),'*',1000,'listorder ASC');
-		foreach($result_datas as $_key=>$_value) {
-			if(!$_value['modelid']) continue;
-			$datas[$_value['modelid']] = $_value['typeid'];
-			$search_model[$_value['modelid']]['typeid'] = $_value['typeid'];
-			$search_model[$_value['modelid']]['name'] = $_value['name'];
-			$search_model[$_value['modelid']]['sort'] = $_value['listorder'];
-		}
-
-		setcache('type_model_'.$this->siteid,$datas,'search');
-		$datas = array();	
-		foreach($result_datas2 as $_key=>$_value) {
-			if($_value['modelid']) continue;
-			$datas[$_value['typedir']] = $_value['typeid'];
-			$search_model[$_value['typedir']]['typeid'] = $_value['typeid'];
-			$search_model[$_value['typedir']]['name'] = $_value['name'];
-		}
-		setcache('type_module_'.$this->siteid,$datas,'search');
-		//搜索header头中使用类型缓存
-		setcache('search_model_'.$this->siteid,$search_model,'search');
+		$this->cache_api->cache('type', 'search');
 		return true;
 	}
 }

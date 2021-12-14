@@ -7,6 +7,7 @@ class setting extends admin {
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
 		$this->db = pc_base::load_model('module_model');
+		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 		pc_base::load_app_func('global');
 	}
 	
@@ -169,9 +170,7 @@ class setting extends admin {
 	 * Enter description here ...
 	 */
 	private function setcache() {
-		$result = $this->db->get_one(array('module'=>'admin'));
-		$setting = string2array($result['setting']);
-		setcache('common', $setting,'commons');
+		$this->cache_api->cache('setting');
 	}
 	
 	/**

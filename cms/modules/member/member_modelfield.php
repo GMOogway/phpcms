@@ -17,12 +17,14 @@ class member_modelfield extends admin {
 		$this->input = pc_base::load_sys_class('input');
 		$this->db = pc_base::load_model('sitemodel_field_model');
 		$this->model_db = pc_base::load_model('sitemodel_model');
+		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 		$this->siteid = $this->get_siteid();
 	}
 	
 	public function manage() {
 		$modelid = $this->input->get('modelid');
-		$datas = $this->cache_field($modelid);
+		$this->cache_field($modelid);
+		$datas = $this->db->select(array('modelid'=>$modelid),'*',100,$this->input->get('order') ? $this->input->get('order') : 'listorder ASC');
 		$modelinfo = $this->model_db->get_one(array('modelid'=>$modelid));
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=member&c=member_modelfield&a=add&modelid='.$modelinfo['modelid'].'\',\''.L('member_modelfield_add').' '.L('model_name').'：'.$modelinfo['name'].'\',\'80%\',\'80%\');void(0);', L('member_modelfield_add'));
 		include $this->admin_tpl('member_modelfield_list');
@@ -242,15 +244,7 @@ class member_modelfield extends admin {
 	 * @param $modelid 模型id
 	 */
 	public function cache_field($modelid = 0) {
-		$field_array = array();
-		$fields = $this->db->select(array('modelid'=>$modelid),'*',100,'listorder ASC');
-		foreach($fields as $_value) {
-			$setting = string2array($_value['setting']);
-			$_value = array_merge($_value,$setting);
-			$field_array[$_value['field']] = $_value;
-		}
-		setcache('model_field_'.$modelid,$field_array,'model');
-		return $field_array;
+		$this->cache_api->sitemodel_field($modelid);
 	}
 	
 	/**

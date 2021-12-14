@@ -10,6 +10,7 @@ class workflow extends admin {
 		$this->input = pc_base::load_sys_class('input');
 		$this->db = pc_base::load_model('workflow_model');
 		$this->admin_db = pc_base::load_model('admin_model');
+		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 		$this->siteid = $this->get_siteid();
 	}
 	
@@ -118,13 +119,7 @@ class workflow extends admin {
 	
 	
 	public function cache() {
-		$datas = array();
-		$workflow_datas = $this->db->select(array('siteid'=>$this->siteid),'*',1000);
-		foreach($workflow_datas as $_k=>$_v) {
-			$datas[$_v['workflowid']] = $_v;
-		}
-		setcache('workflow_'.$this->siteid,$datas,'commons');
-		return true;
+		$this->cache_api->cache('workflow');
 	}
 	/**
 	 * 用逗号分隔数组

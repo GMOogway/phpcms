@@ -30,7 +30,7 @@ jQuery(document).ready(function() {
         <legend><?php echo L('list');?></legend>
     </fieldset>-->
     <blockquote class="layui-elem-quote">
-        <a href="?m=content&c=content&a=init&catid=<?php echo $catid;?>&pc_hash=<?php echo $pc_hash;?>" class="layui-btn layui-btn-sm<?php if(!$this->input->get('reject')) echo ' on';?>">
+        <a href="?m=content&c=content&a=init&catid=<?php echo $catid;?>&pc_hash=<?php echo dr_get_csrf_token();?>" class="layui-btn layui-btn-sm<?php if(!$this->input->get('reject')) echo ' on';?>">
             <i class="fa fa-check  "></i> <?php echo L('check_passed');?>
         </a>
         <a href="javascript:;" onclick="javascript:$('#searchid').toggle();" class="layui-btn layui-btn-sm layui-btn-normal">
@@ -44,7 +44,7 @@ jQuery(document).ready(function() {
         <input type="hidden" value="recycle_init" name="a">
         <input type="hidden" value="<?php echo $catid;?>" name="catid">
         <input type="hidden" value="1" name="search">
-        <input type="hidden" value="<?php echo $pc_hash;?>" name="pc_hash">
+        <input type="hidden" value="<?php echo dr_get_csrf_token();?>" name="pc_hash">
         <?php echo L('addtime');?>：
         <div class="formdate">
             <div class="input-group input-medium date-picker input-daterange">
@@ -77,18 +77,18 @@ jQuery(document).ready(function() {
     <img src="<?php echo IMG_PATH;?>icon/small_img.gif" onmouseover="layer.tips('<img src={{d.thumb}}>',this,{tips: [1, '#fff']});" onmouseout="layer.closeAll();">
     {{# } }}
     {{# if(d.posids==1){ }}
-    <img src="<?php echo IMG_PATH;?>icon/small_elite.png" onmouseover="layer.tips('<?php echo L('elite');?>',this,{tips: [1, '#000']});" onmouseout="layer.closeAll();">
+    <img src="<?php echo IMG_PATH;?>icon/small_elite.png" onmouseover="layer.tips('<?php echo L('elite');?>',this,{tips: [1, '#fff']});" onmouseout="layer.closeAll();">
     {{# } }}
     {{# if(d.islink==1){ }}
-    <img src="<?php echo IMG_PATH;?>icon/link.png" onmouseover="layer.tips('<?php echo L('islink_url');?>',this,{tips: [1, '#000']});" onmouseout="layer.closeAll();">
+    <img src="<?php echo IMG_PATH;?>icon/link.png" onmouseover="layer.tips('<?php echo L('islink_url');?>',this,{tips: [1, '#fff']});" onmouseout="layer.closeAll();">
     {{# } }}
 </script>
 <script type="text/html" id="hits">
-    <span style="display: block;" onmouseover="layer.tips('<?php echo L('today_hits');?>：{{d.dayviews}}<br><?php echo L('yestoday_hits');?>：{{d.yesterdayviews}}<br><?php echo L('week_hits');?>：{{d.weekviews}}<br><?php echo L('month_hits');?>：{{d.monthviews}}',this,{tips: [1, '#000']});" onmouseout="layer.closeAll();">{{d.views}}</span>
+    <span style="display: block;" onmouseover="layer.tips('<?php echo L('today_hits');?>：{{d.dayviews}}<br><?php echo L('yestoday_hits');?>：{{d.yesterdayviews}}<br><?php echo L('week_hits');?>：{{d.weekviews}}<br><?php echo L('month_hits');?>：{{d.monthviews}}',this,{tips: [1, '#fff']});" onmouseout="layer.closeAll();">{{d.views}}</span>
 </script>
 <script type="text/html" id="username">
     {{# if(d.sysadd==0){ }}
-    <a href='javascript:;' onclick="omnipotent('member','?m=member&c=member&a=memberinfo&username={{d.deusername}}&pc_hash=<?php echo $this->input->get('pc_hash');?>','<?php echo L('view_memberlinfo');?>',1,700,500);">{{d.username}}</a><img src="<?php echo IMG_PATH;?>icon/contribute.png" onmouseover="layer.tips('<?php echo L('member_contribute');?>',this,{tips: [1, '#000']});" onmouseout="layer.closeAll();">
+    <a href='javascript:;' onclick="omnipotent('member','?m=member&c=member&a=memberinfo&username={{d.deusername}}&pc_hash=<?php echo $this->input->get('pc_hash');?>','<?php echo L('view_memberlinfo');?>',1,700,500);">{{d.username}}</a><img src="<?php echo IMG_PATH;?>icon/contribute.png" onmouseover="layer.tips('<?php echo L('member_contribute');?>',this,{tips: [1, '#fff']});" onmouseout="layer.closeAll();">
     {{# } else { }}
     {{d.username}}
     {{# } }}
@@ -104,10 +104,8 @@ jQuery(document).ready(function() {
     <div class="btn-group">
         <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="dropdown" data-toggle="dropdown"><i class="fa fa-files-o"></i> <?php echo L('批量操作')?></button>
         <div class="dropdown dropdown-bottom-left">
-            <?php if($status==100) {?>
             <a href="javascript:;" class="dropdown-item" id="recycle"><i class="fa fa-window-restore"></i> <?php echo L('还原');?></a>
             <div class="dropdown-line"></div>
-            <?php }?>
             <a href="javascript:;" class="dropdown-item" id="delAll"><i class="fa fa-trash-o"></i> <?php echo L('thorough');?><?php echo L('delete');?></a>
         </div>
     </div>
@@ -178,7 +176,7 @@ layui.use(['table'], function(){
     table.on('edit(list)',function(obj) {
         var value = obj.value, data = obj.data, field = obj.field;
         if (field=='title' && value=='') {
-            layer.tips('标题不能为空',this,{tips: [1, '#000']});
+            layer.tips('标题不能为空',this,{tips: [1, '#fff']});
             return false;
         }else{
             $.ajax({
@@ -204,7 +202,7 @@ layui.use(['table'], function(){
         var loading = layer.load(1, {shade: [0.1, '#fff']});
         $.ajax({
             type: 'post',
-            url: '?m=content&c=content&a=listorder&catid=<?php echo $catid;?>&steps=0&pc_hash='+pc_hash,
+            url: '?m=content&c=content&a=listorder&catid=<?php echo $catid;?>&pc_hash='+pc_hash,
             data: {id:id,listorder:listorder,dosubmit:1,csrf_test_name:csrf_hash},
             dataType: 'json',
             success: function(res) {
@@ -232,7 +230,7 @@ layui.use(['table'], function(){
                 var loading = layer.load(1, {shade: [0.1, '#fff']});
                 $.ajax({
                     type: 'post',
-                    url: '?m=content&c=content&a=delete&catid=<?php echo $catid;?>&steps=0&pc_hash='+pc_hash,
+                    url: '?m=content&c=content&a=delete&catid=<?php echo $catid;?>&pc_hash='+pc_hash,
                     data: {ids: ids,dosubmit:1,csrf_test_name:csrf_hash},
                     dataType: 'json',
                     success: function(res) {
@@ -262,7 +260,7 @@ layui.use(['table'], function(){
                 var loading = layer.load(1, {shade: [0.1, '#fff']});
                 $.ajax({
                     type: 'post',
-                    url: '?m=content&c=content&a=recycle&recycle=0&catid=<?php echo $catid;?>&steps=0&pc_hash=<?php echo $pc_hash;?>',
+                    url: '?m=content&c=content&a=recycle&recycle=0&catid=<?php echo $catid;?>&pc_hash='+pc_hash,
                     data: {ids: ids,dosubmit:1,csrf_test_name:csrf_hash},
                     dataType: 'json',
                     success: function(res) {

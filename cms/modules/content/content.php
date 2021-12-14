@@ -84,86 +84,12 @@ class content extends admin {
 			$status = $steps ? $steps : 99;
 			if($this->input->get('reject')) $status = 0;
 			$where = 'catid='.$catid.' AND status='.$status;
-			if (IS_POST) {
-				//搜索
-				if($this->input->post('start_time')) {
-					$where .= ' AND '.$date_field.' BETWEEN ' . max((int)strtotime(strpos($this->input->post('start_time'), ' ') ? $this->input->post('start_time') : $this->input->post('start_time').' 00:00:00'), 1) . ' AND ' . ($this->input->post('end_time') ? (int)strtotime(strpos($this->input->post('end_time'), ' ') ? $this->input->post('end_time') : $this->input->post('end_time').' 23:59:59') : SYS_TIME);
-				}
-				if($this->input->post('keyword')) {
-					$type_array = array('title','description','username');
-					$searchtype = intval($this->input->post('searchtype'));
-					if($searchtype < 3) {
-						$searchtype = $type_array[$searchtype];
-						$keyword = clearhtml(trim($this->input->post('keyword')));
-						$where .= " AND `$searchtype` like '%$keyword%'";
-					} elseif($searchtype==3) {
-						$keyword = intval($this->input->post('keyword'));
-						$where .= " AND `id`='$keyword'";
-					}
-				}
-				if($this->input->post('posids') && !empty($this->input->post('posids'))) {
-					$posids = $this->input->post('posids')==1 ? intval($this->input->post('posids')) : 0;
-					$where .= " AND `posids` = '$posids'";
-				}
-				$pagesize = $this->input->post('limit') ? $this->input->post('limit') : SYS_ADMIN_PAGESIZE;
-				$datas = $this->db->listinfo($where,'id desc',$this->input->post('page'),$pagesize);
-				$total = $this->db->count($where);
-				$pages = $this->db->pages;
-				if(!empty($datas)) {
-					$sitelist = getcache('sitelist','commons');
-					$release_siteurl = $sitelist[$category['siteid']]['url'];
-					$path_len = -strlen(WEB_PATH);
-					$release_siteurl = substr($release_siteurl,0,$path_len);
-					$this->hits_db = pc_base::load_model('hits_model');
-					foreach($datas as $r) {
-						$hits_r = $this->hits_db->get_one(array('hitsid'=>'c-'.$modelid.'-'.$r['id']));
-						$rs['id'] = $r['id'];
-						$rs['catid'] = $r['catid'];
-						if ($r['style'] && strstr($r['style'], ';')) {
-							$style_arr = explode(';',$r['style']);
-							$rs['title'] = '<span style="'.($style_arr[0] ? 'color:'.$style_arr[0].';' : '').($style_arr[1] ? 'font-weight:'.$style_arr[1].';' : '').'">'.$r['title'].'</span>';
-						} else if ($r['style']) {
-							$rs['title'] = '<span style="color:'.$r['style'].';">'.$r['title'].'</span>';
-						} else {
-							$rs['title'] = dr_keyword_highlight($r['title'], $keyword);
-						}
-						$rs['thumb'] = $r['thumb'];
-						$rs['posids'] = $r['posids'];
-						$rs['islink'] = $r['islink'];
-						$rs['status'] = $r['status'];
-						$rs['sysadd'] = $r['sysadd'];
-						$rs['username'] = $r['username'];
-						$rs['deusername'] = urlencode($r['username']);
-						$rs['updatetime'] = dr_date($r['updatetime'],null,'red');
-						$rs['listorder'] = $r['listorder'];
-						if($r['status']==99) {
-							if($r['islink']) {
-								$rs['url'] = $r['url'];
-							} elseif(strpos($r['url'],'http://')!==false || strpos($r['url'],'https://')!==false) {
-								$rs['url'] = $r['url'];
-							} else {
-								$rs['url'] = $release_siteurl.$r['url'];
-							}
-						} else {
-							$rs['url'] = '?m=content&c=content&a=public_preview&steps='.$steps.'&catid='.$r['catid'].'&id='.$r['id'].'';
-						}
-						$rs['dayviews'] = $hits_r['dayviews'];
-						$rs['yesterdayviews'] = $hits_r['yesterdayviews'];
-						$rs['weekviews'] = $hits_r['weekviews'];
-						$rs['monthviews'] = $hits_r['monthviews'];
-						$rs['views'] = $hits_r['views'];
-						$rs['idencode'] = id_encode('content_'.$r['catid'],$r['id'],$this->siteid);
-						$rs['safetitle'] = safe_replace($r['title']);
-						$array[] = $rs;
-					}
-				}
-				exit(json_encode(array('code'=>0,'msg'=>L('to_success'),'count'=>$total,'data'=>$array,'rel'=>1)));
-			}
 			//搜索
 			if($this->input->get('start_time')) {
 				$where .= ' AND '.$date_field.' BETWEEN ' . max((int)strtotime(strpos($this->input->get('start_time'), ' ') ? $this->input->get('start_time') : $this->input->get('start_time').' 00:00:00'), 1) . ' AND ' . ($this->input->get('end_time') ? (int)strtotime(strpos($this->input->get('end_time'), ' ') ? $this->input->get('end_time') : $this->input->get('end_time').' 23:59:59') : SYS_TIME);
 			}
 			if($this->input->get('keyword')) {
+				$param['keyword'] = $this->input->get('keyword');
 				$type_array = array('title','description','username');
 				$searchtype = intval($this->input->get('searchtype'));
 				if($searchtype < 3) {
@@ -182,7 +108,6 @@ class content extends admin {
 			$pagesize = $this->input->get('limit') ? $this->input->get('limit') : SYS_ADMIN_PAGESIZE;
 			$order = $this->input->get('order') ? $this->input->get('order') : ($this->form_cache['setting']['order'] ? dr_safe_replace($this->form_cache['setting']['order']) : 'id desc');
 			$datas = $this->db->listinfo($where,$order,$this->input->get('page'),$pagesize);
-			$total = $this->db->count($where);
 			$pages = $this->db->pages;
 			$pc_hash = dr_get_csrf_token();
 			for($i=1;$i<=$workflow_steps;$i++) {
@@ -196,11 +121,6 @@ class content extends admin {
 				$current = $this->input->get('reject') ? ' layui-btn-danger' : '';
 				$workflow_menu .= '<a href="?m=content&c=content&a=&menuid='.intval($this->input->get('menuid')).'&catid='.$catid.'&pc_hash='.$pc_hash.'&reject=1" class="layui-btn layui-btn-sm'.$current.'"><i class="fa fa-check"></i>'.L('reject').'</a>';
 			}
-			//$ = 153fc6d28dda8ca94eaa3686c8eed857;获取模型的thumb字段配置信息
-			$model_fields = getcache('model_field_'.$modelid, 'model');
-			$setting = string2array($model_fields['thumb']['setting']);
-			$args = '1,'.$setting['upload_allowext'].','.$setting['isselectimage'].','.$setting['images_width'].','.$setting['images_height'].','.$setting['watermark'];
-			$authkey = upload_key($args);
 			$template = $MODEL['admin_list_template'] ? $MODEL['admin_list_template'] : 'content_list';
 			include $this->admin_tpl($template);
 		} else {
@@ -219,33 +139,15 @@ class content extends admin {
 			$catid = intval($this->input->get('catid'));
 			$category = $this->categorys[$catid];
 			$modelid = $category['modelid'];
-			$model_arr = getcache('model', 'commons');
-			$MODEL = $model_arr[$modelid];
-			unset($model_arr);
-			$admin_username = param::get_cookie('admin_username');
-			//查询当前的工作流
-			$setting = string2array($category['setting']);
-			$workflowid = $setting['workflowid'];
-			$workflows = getcache('workflow_'.$this->siteid,'commons');
-			if ($workflowid) {
-				$workflows = $workflows[$workflowid];
-				$workflows_setting = string2array($workflows['setting']);
-			} else{
-				$workflows_setting = array();
-			}
-
-			//将有权限的级别放到新数组中
-			$admin_privs = array();
-			foreach($workflows_setting as $_k=>$_v) {
-				if(empty($_v)) continue;
-				foreach($_v as $_value) {
-					if($_value==$admin_username) $admin_privs[$_k] = $_k;
-				}
-			}
+			$this->form = $this->f_db->get_one(array('modelid'=>$modelid));
+			$this->sitemodel = $this->cache->get('sitemodel');
+			$this->form_cache = $this->sitemodel[$this->form['tablename']];
+			$field = $this->form_cache['field'];
+			$list_field = $this->form_cache['setting']['list_field'];
+			$date_field = $this->form_cache['setting']['search_time'] ? $this->form_cache['setting']['search_time'] : 'updatetime';
 			$this->db->set_model($modelid);
 			if($this->db->table_name==$this->db->db_tablepre) dr_admin_msg(0,L('model_table_not_exists'));
-			$status = 100;
-			$where = 'catid='.$catid.' AND status='.$status;
+			$where = 'catid='.$catid.' AND status=100';
 			if (IS_POST) {
 				//搜索
 				if($this->input->post('start_time')) {
@@ -308,7 +210,7 @@ class content extends admin {
 								$rs['url'] = $release_siteurl.$r['url'];
 							}
 						} else {
-							$rs['url'] = '?m=content&c=content&a=public_preview&steps=0&catid='.$r['catid'].'&id='.$r['id'].'';
+							$rs['url'] = '?m=content&c=content&a=public_preview&catid='.$r['catid'].'&id='.$r['id'].'';
 						}
 						$rs['dayviews'] = $hits_r['dayviews'];
 						$rs['yesterdayviews'] = $hits_r['yesterdayviews'];
@@ -322,12 +224,6 @@ class content extends admin {
 				}
 				exit(json_encode(array('code'=>0,'msg'=>L('to_success'),'count'=>$total,'data'=>$array,'rel'=>1)));
 			}
-			$pc_hash = dr_get_csrf_token();
-			//$ = 153fc6d28dda8ca94eaa3686c8eed857;获取模型的thumb字段配置信息
-			$model_fields = getcache('model_field_'.$modelid, 'model');
-			$setting = string2array($model_fields['thumb']['setting']);
-			$args = '1,'.$setting['upload_allowext'].','.$setting['isselectimage'].','.$setting['images_width'].','.$setting['images_height'].','.$setting['watermark'];
-			$authkey = upload_key($args);
 			include $this->admin_tpl('content_recycle');
 		} else {
 			include $this->admin_tpl('content_quick');
@@ -349,51 +245,15 @@ class content extends admin {
 		}
 		$modelid = intval($this->input->get('modelid'));
 		if (!$modelid) {$one = reset($datas2);$modelid = $one['modelid'];}
-		$this->siteid = $this->get_siteid();
-		$this->categorys = getcache('category_content_'.$this->siteid,'commons');
-		//权限判断
-		if($this->input->get('catid') && $_SESSION['roleid'] != 1 && ROUTE_A !='pass' && strpos(ROUTE_A,'public_')===false) {
-			$catid = intval($this->input->get('catid'));
-			$this->priv_db = pc_base::load_model('category_priv_model');
-			$action = $this->categorys[$catid]['type']==0 ? ROUTE_A : 'initall';
-			$priv_datas = $this->priv_db->get_one(array('catid'=>$catid,'is_admin'=>1,'action'=>$action));
-			if(!$priv_datas) dr_admin_msg(0,L('permission_to_operate'));
-		}
-		$admin_username = param::get_cookie('admin_username');
-		//查询当前的工作流
-		$category = $this->categorys[$catid];
-		$setting = string2array($category['setting']);
-		$workflowid = $setting['workflowid'];
-		$workflows = getcache('workflow_'.$this->siteid,'commons');
-		if ($workflowid) {
-			$workflows = $workflows[$workflowid];
-			$workflows_setting = string2array($workflows['setting']);
-		} else{
-			$workflows_setting = array();
-		}
-
-		//将有权限的级别放到新数组中
-		$admin_privs = array();
-		foreach($workflows_setting as $_k=>$_v) {
-			if(empty($_v)) continue;
-			foreach($_v as $_value) {
-				if($_value==$admin_username) $admin_privs[$_k] = $_k;
-			}
-		}
-		//工作流审核级别
-		if ($workflowid) {
-			$workflow_steps = $workflows['steps'];
-		} else{
-			$workflow_steps = '';
-		}
-		$steps = $this->input->get('steps') ? intval($this->input->get('steps')) : 0;
-		//工作流权限判断
-		if($_SESSION['roleid']!=1 && $steps && !in_array($steps,$admin_privs)) dr_admin_msg(0,L('permission_to_operate'));
+		$this->form = $this->f_db->get_one(array('modelid'=>$modelid));
+		$this->sitemodel = $this->cache->get('sitemodel');
+		$this->form_cache = $this->sitemodel[$this->form['tablename']];
+		$field = $this->form_cache['field'];
+		$list_field = $this->form_cache['setting']['list_field'];
+		$date_field = $this->form_cache['setting']['search_time'] ? $this->form_cache['setting']['search_time'] : 'updatetime';
 		$this->db->set_model($modelid);
 		if($this->db->table_name==$this->db->db_tablepre) dr_admin_msg(0,L('model_table_not_exists'));
-		$status = $steps ? $steps : 99;
-		if($this->input->get('reject')) $status = 0;
-		$where = 'status='.$status;
+		$where = 'status=99';
 		if (IS_POST) {
 			//搜索
 			if($this->input->post('start_time')) {
@@ -455,7 +315,7 @@ class content extends admin {
 							$rs['url'] = $release_siteurl.$r['url'];
 						}
 					} else {
-						$rs['url'] = '?m=content&c=content&a=public_preview&steps='.$steps.'&catid='.$r['catid'].'&id='.$r['id'].'';
+						$rs['url'] = '?m=content&c=content&a=public_preview&catid='.$r['catid'].'&id='.$r['id'].'';
 					}
 					$rs['dayviews'] = $hits_r['dayviews'];
 					$rs['yesterdayviews'] = $hits_r['yesterdayviews'];
@@ -469,12 +329,6 @@ class content extends admin {
 			}
 			exit(json_encode(array('code'=>0,'msg'=>L('to_success'),'count'=>$total,'data'=>$array,'rel'=>1)));
 		}
-		$pc_hash = dr_get_csrf_token();
-		//$ = 153fc6d28dda8ca94eaa3686c8eed857;获取模型的thumb字段配置信息
-		$model_fields = getcache('model_field_'.$modelid, 'model');
-		$setting = string2array($model_fields['thumb']['setting']);
-		$args = '1,'.$setting['upload_allowext'].','.$setting['isselectimage'].','.$setting['images_width'].','.$setting['images_height'].','.$setting['watermark'];
-		$authkey = upload_key($args);
 		include $this->admin_tpl('content_list_all');
 	}
 	public function add() {

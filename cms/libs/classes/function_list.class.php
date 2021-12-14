@@ -177,9 +177,8 @@ class function_list {
 
         $user = dr_member_info($value);
         if ($user && $user['groupid']) {
-            $this->member_group_db = pc_base::load_model('member_group_model');
-            $rt = $this->member_group_db->get_one(array('groupid'=>$user['groupid']));
-            return $rt['name'] ? $rt['name'] : L('无');
+            $rt =getcache('grouplist', 'member');
+            return $rt[$user['groupid']]['name'] ? $rt[$user['groupid']]['name'] : L('无');
         }
 
         return L('无');

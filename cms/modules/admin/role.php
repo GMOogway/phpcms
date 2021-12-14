@@ -10,6 +10,7 @@ class role extends admin {
 		$this->db = pc_base::load_model('admin_role_model');
 		$this->priv_db = pc_base::load_model('admin_role_priv_model');
 		$this->op = pc_base::load_app_class('role_op');
+		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 	}
 	
 	/**
@@ -258,35 +259,7 @@ class role extends admin {
 	 * 角色缓存
 	 */
 	private function _cache() {
-
-		$infos = $this->db->select(array('disabled'=>'0'), $data = '`roleid`,`rolename`', '', 'roleid ASC');
-		$role = array();
-		foreach ($infos as $info){
-			$role[$info['roleid']] = $info['rolename'];
-		}
-		$this->_cache_siteid($role);
-		setcache('role', $role,'commons');
-		return $infos;
-	}
-	
-	/**
-	 * 缓存站点数据
-	 */
-	private function _cache_siteid($role) {
-		$sitelist = array();
-		foreach($role as $n=>$r) {
-			$sitelists = $this->priv_db->select(array('roleid'=>$n),'siteid', '', 'siteid');
-			foreach($sitelists as $site) {
-				foreach($site as $v){
-					$sitelist[$n][] = intval($v);
-				}
-			}
-		}
-		if(is_array($sitelist)) {
-			$sitelist = @array_map("array_unique", $sitelist);
-			setcache('role_siteid', $sitelist,'commons');
-		}								
-		return $sitelist;
+		$this->cache_api->cache('admin_role');
 	}
 	
 }

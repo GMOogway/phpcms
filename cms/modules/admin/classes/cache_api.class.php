@@ -13,6 +13,8 @@ class cache_api {
 	public function __construct() {
 		$this->input = pc_base::load_sys_class('input');
 		$this->config = pc_base::load_sys_class('config');
+		$this->cache = pc_base::load_sys_class('cache');
+		$this->cache->clean();
 		$this->db = '';
 		$this->siteid = get_siteid() ? get_siteid() : 1 ;
 	}
@@ -107,7 +109,7 @@ class cache_api {
 	/**
 	 * 更新下载服务器缓存方法
 	 */
-	public function downservers () {
+	public function downservers() {
 		$infos = $this->db->select();
 		foreach ($infos as $info){
 			$servers[$info['id']] = $info;
@@ -185,7 +187,7 @@ class cache_api {
 	/**
 	 * 更新推荐位缓存方法
 	 */
-	public function position () {
+	public function position() {
 		$infos = $this->db->select('','*',1000,'listorder DESC');
 		foreach ($infos as $info){
 			$positions[$info['posid']] = $info;

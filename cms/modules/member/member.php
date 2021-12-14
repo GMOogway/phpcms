@@ -59,9 +59,9 @@ class member extends admin {
 	}
 	
 	/**
-	 * 会员搜索
+	 * 会员列表
 	 */
-	function search() {
+	function manage() {
 
 		//搜索框
 		$keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
@@ -72,8 +72,15 @@ class member extends admin {
 		//站点信息
 		$sitelistarr = getcache('sitelist', 'commons');
 		$siteid = isset($_GET['siteid']) ? $_GET['siteid'] : '';
+		
 		foreach ($sitelistarr as $k=>$v) {
 			$sitelist[$k] = $v['name'];
+		}
+		
+		//如果是超级管理员角色，显示所有用户，否则显示当前站点用户
+		if($_SESSION['roleid'] != 1) {
+			$siteid = get_siteid();
+			$where[] = "`siteid` = '$siteid'";
 		}
 		
 		$status = isset($_GET['status']) ? $_GET['status'] : '';
@@ -111,9 +118,6 @@ class member extends admin {
 				unset($tmp, $tmptime);
 			}
 			
-			
-			$where = '';
-			
 			//如果是超级管理员角色，显示所有用户，否则显示当前站点用户
 			if($_SESSION['roleid'] == 1) {
 				if(!empty($siteid)) {
@@ -126,13 +130,13 @@ class member extends admin {
 							}
 						}
 						if ($sidin) {
-							$where .= "`siteid` in (".implode(',', $sidin).") AND ";
+							$where[] = "`siteid` in (".implode(',', $sidin).")";
 						}
 					}
 				}
 			} else {
 				$siteid = get_siteid();
-				$where .= "`siteid` = '$siteid' AND ";
+				$where[] = "`siteid` = '$siteid'";
 			}
 			
 			if ($status && is_array($status)) {
@@ -142,7 +146,7 @@ class member extends admin {
 					$sin[] = $sid;
 				}
 				if ($sin) {
-					$where .= "`islock` in (".implode(',', $sin).") AND ";
+					$where[] = "`islock` in (".implode(',', $sin).")";
 				}
 			}
 			
@@ -155,7 +159,7 @@ class member extends admin {
 					}
 				}
 				if ($in) {
-					$where .= "`groupid` in (".implode(',', $in).") AND ";
+					$where[] = "`groupid` in (".implode(',', $in).")";
 				}
 			}
 			
@@ -168,10 +172,10 @@ class member extends admin {
 					}
 				}
 				if ($min) {
-					$where .= "`modelid` in (".implode(',', $min).") AND ";
+					$where[] = "`modelid` in (".implode(',', $min).")";
 				}
 			}
-			$start_time && $end_time && $where .= "`regdate` BETWEEN '$where_start_time' AND '$where_end_time' AND ";
+			$start_time && $end_time && $where[] = "`regdate` BETWEEN '$where_start_time' AND '$where_end_time'";
 
 			//资金范围
 			if($amount_from) {
@@ -182,9 +186,9 @@ class member extends admin {
 						$amount_to = $tmp;
 						unset($tmp);
 					}
-					$where .= "`amount` BETWEEN '$amount_from' AND '$amount_to' AND ";
+					$where[] = "`amount` BETWEEN '$amount_from' AND '$amount_to'";
 				} else {
-					$where .= "`amount` > '$amount_from' AND ";
+					$where[] = "`amount` > '$amount_from'";
 				}
 			}
 			//点数范围
@@ -196,91 +200,36 @@ class member extends admin {
 						$point_to = $tmp;
 						unset($tmp);
 					}
-					$where .= "`point` BETWEEN '$point_from' AND '$point_to' AND ";
+					$where[] = "`point` BETWEEN '$point_from' AND '$point_to'";
 				} else {
-					$where .= "`point` > '$point_from' AND ";
+					$where[] = "`point` > '$point_from'";
 				}
 			}
 		
 			if($keyword) {
 				if ($type == '1') {
-					$where .= "`username` LIKE '%$keyword%'";
+					$where[] = "`username` LIKE '%$keyword%'";
 				} elseif($type == '2') {
-					$where .= "`userid` = '$keyword'";
+					$where[] = "`userid` = '$keyword'";
 				} elseif($type == '3') {
-					$where .= "`email` LIKE '%$keyword%'";
+					$where[] = "`email` LIKE '%$keyword%'";
 				} elseif($type == '4') {
-					$where .= "`regip` = '$keyword'";
+					$where[] = "`regip` = '$keyword'";
 				} elseif($type == '5') {
-					$where .= "`nickname` LIKE '%$keyword%'";
+					$where[] = "`nickname` LIKE '%$keyword%'";
 				} else {
-					$where .= "`username` LIKE '%$keyword%'";
+					$where[] = "`username` LIKE '%$keyword%'";
 				}
-			} else {
-				$where .= '1';
 			}
-			
-		} else {
-			$where = '';
 		}
 
 		$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-		$memberlist = $this->db->listinfo($where, $this->input->get('order') ? $this->input->get('order') : 'userid DESC', $page, SYS_ADMIN_PAGESIZE);
+		$memberlist = $this->db->listinfo(($where ? implode(' AND ', $where) : ''), $this->input->get('order') ? $this->input->get('order') : 'userid DESC', $page, SYS_ADMIN_PAGESIZE);
 		//查询会员头像
 		foreach($memberlist as $k=>$v) {
 			$memberlist[$k]['avatar'] = get_memberavatar($v['userid']);
 		}
 		$pages = $this->db->pages;
-		$list_field = $this->list_field;
-		$big_menu = array('?m=member&c=member&a=manage&menuid='.$this->input->get('menuid'), L('member_research'));
-		include $this->admin_tpl('member_list');
-	}
-	
-	/**
-	 * member list
-	 */
-	function manage() {
-		$sitelistarr = getcache('sitelist', 'commons');
-		foreach ($sitelistarr as $k=>$v) {
-			$sitelist[$k] = $v['name'];
-		}
-	
-		$groupid = isset($_GET['groupid']) ? intval($_GET['groupid']) : '';
-		$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-		
-		//如果是超级管理员角色，显示所有用户，否则显示当前站点用户
-		if($_SESSION['roleid'] == 1) {
-			$where = '';
-		} else {
-			$siteid = get_siteid();
-			$where .= "`siteid` = '$siteid'";
-		}
-		
-		$memberlist_arr = $this->db->listinfo($where, $this->input->get('order') ? $this->input->get('order') : 'userid DESC', $page, SYS_ADMIN_PAGESIZE);
-		$pages = $this->db->pages;
-
-		//搜索框
-		$keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
-		$type = isset($_GET['type']) ? $_GET['type'] : '';
-		$start_time = isset($_GET['start_time']) ? $_GET['start_time'] : '';
-		$end_time = isset($_GET['end_time']) ? $_GET['end_time'] : '';
-		$grouplist = getcache('grouplist');
-		foreach($grouplist as $k=>$v) {
-			$grouplist[$k] = $v['name'];
-		}
-		
-		//会员所属模型		
-		$modellistarr = getcache('member_model', 'commons');
-		foreach ($modellistarr as $k=>$v) {
-			$modellist[$k] = $v['name'];
-		}
-		
-		//查询会员头像
-		foreach($memberlist_arr as $k=>$v) {
-			$memberlist[$k] = $v;
-			$memberlist[$k]['avatar'] = get_memberavatar($v['userid']);
-		}
-
 		$list_field = $this->list_field;
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=member&c=member&a=add\',\''.L('member_add').'\',700,500);void(0);', L('member_add'));
 		include $this->admin_tpl('member_list');

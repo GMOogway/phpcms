@@ -7,6 +7,7 @@ class copyfrom extends admin {
 	function __construct() {
 		$this->input = pc_base::load_sys_class('input');
 		$this->db = pc_base::load_model('copyfrom_model');
+		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 		pc_base::load_sys_class('form', '', 0);
 		parent::__construct();
 		$this->siteid = $this->get_siteid();
@@ -104,9 +105,7 @@ class copyfrom extends admin {
 	 * 生成缓存
 	 */
 	public function public_cache() {
-		$infos = $this->db->select('','*','','listorder DESC','','id');
-		setcache('copyfrom', $infos, 'admin');
-		return true;
+		$this->cache_api->cache('copyfrom');
  	}
 }
 ?>

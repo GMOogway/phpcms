@@ -5,6 +5,7 @@ class keylink extends admin {
 	function __construct() {
 		$this->input = pc_base::load_sys_class('input');
 		$this->db = pc_base::load_model('keylink_model');
+		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 		parent::__construct();
 	}
 	
@@ -97,15 +98,7 @@ class keylink extends admin {
 	 * 生成缓存
 	 */
 	public function public_cache_file() {
-		$infos = $this->db->select('','word,url','','keylinkid ASC');
-		$datas = $rs = array();
-		foreach($infos as $r) {
-			$rs[0] = $r['word'];
-			$rs[1] = $r['url'];
-			$datas[] = $rs;
-		}
-		setcache('keylink', $datas, 'commons');
-		return true;
+		$this->cache_api->cache('keylink');
  	}
 }
 ?>

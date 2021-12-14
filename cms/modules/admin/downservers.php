@@ -9,6 +9,7 @@ class downservers extends admin {
 		$this->input = pc_base::load_sys_class('input');
 		$this->db = pc_base::load_model('downservers_model');
 		$this->sites = pc_base::load_app_class('sites');
+		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 	}
 	
 	public function init() {
@@ -97,12 +98,7 @@ class downservers extends admin {
 	}	
 	
 	private function _set_cache() {
-		$infos = $this->db->select();
-		foreach ($infos as $info){
-			$servers[$info['id']] = $info;
-		}
-		setcache('downservers', $servers,'commons');
-		return $infos;
+		$this->cache_api->cache('downservers');
 	}
 	
 }

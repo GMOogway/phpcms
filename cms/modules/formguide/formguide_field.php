@@ -11,6 +11,7 @@ class formguide_field extends admin {
 		$this->input = pc_base::load_sys_class('input');
 		$this->db = pc_base::load_model('sitemodel_field_model');
 		$this->model_db = pc_base::load_model('sitemodel_model');
+		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 		$this->siteid = $this->get_siteid();
 	}
 	
@@ -339,16 +340,8 @@ class formguide_field extends admin {
 	 * @param $formid 表单向导id
 	 * @param $disabled 字段状态
 	 */
-	public function cache_field($formid = 0, $disabled = 0) {
-		$field_array = array();
-		$fields = $this->db->select(array('modelid'=>$formid,'disabled'=>$disabled),'*',100,'listorder ASC');
-		foreach($fields as $_value) {
-			$setting = string2array($_value['setting']);
-			$_value = array_merge($_value,$setting);
-			$field_array[$_value['field']] = $_value;
-		}
-		setcache('formguide_field_'.$formid,$field_array,'model');
-		return true;
+	public function cache_field($formid = 0) {
+		$this->cache_api->sitemodel_field($formid);
 	}
 	/**
 	 * 汉字转换拼音

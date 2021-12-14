@@ -53,16 +53,16 @@ include $this->admin_tpl('header');?>
     {{# } }}
 </script>
 <script type="text/html" id="ismenu">
-    <span onmouseover="layer.tips('前端循环调用不会显示，但可以正常访问',this,{tips: [1, '#000']});" onmouseout="layer.closeAll();"><input type="checkbox" name="ismenu" value="{{d.id}}" lay-skin="switch" lay-text="<?php echo L('display');?>|<?php echo L('hidden');?>" lay-filter="ismenu" {{ d.ismenu == 1 ? 'checked' : '' }}></span>
+    <span onmouseover="layer.tips('前端循环调用不会显示，但可以正常访问',this,{tips: [1, '#fff']});" onmouseout="layer.closeAll();"><input type="checkbox" name="ismenu" value="{{d.id}}" lay-skin="switch" lay-text="<?php echo L('display');?>|<?php echo L('hidden');?>" lay-filter="ismenu" {{ d.ismenu == 1 ? 'checked' : '' }}></span>
 </script>
 <script type="text/html" id="disabled">
-    <span onmouseover="layer.tips('禁用状态下此栏目不能正常访问',this,{tips: [1, '#000']});" onmouseout="layer.closeAll();"><input type="checkbox" name="disabled" value="{{d.id}}" lay-skin="switch" lay-text="<?php echo L('可用');?>|<?php echo L('禁用');?>" lay-filter="disabled" {{ d.disabled == 0 ? 'checked' : '' }}></span>
+    <span onmouseover="layer.tips('禁用状态下此栏目不能正常访问',this,{tips: [1, '#fff']});" onmouseout="layer.closeAll();"><input type="checkbox" name="disabled" value="{{d.id}}" lay-skin="switch" lay-text="<?php echo L('可用');?>|<?php echo L('禁用');?>" lay-filter="disabled" {{ d.disabled == 0 ? 'checked' : '' }}></span>
 </script>
 <script type="text/html" id="iscatpos">
-    <span onmouseover="layer.tips('前端栏目面包屑导航调用不会显示，但可以正常访问，您现在的位置不显示',this,{tips: [1, '#000']});" onmouseout="layer.closeAll();"><input type="checkbox" name="iscatpos" value="{{d.id}}" lay-skin="switch" lay-text="<?php echo L('display');?>|<?php echo L('hidden');?>" lay-filter="iscatpos" {{ d.iscatpos == 1 ? 'checked' : '' }}></span>
+    <span onmouseover="layer.tips('前端栏目面包屑导航调用不会显示，但可以正常访问，您现在的位置不显示',this,{tips: [1, '#fff']});" onmouseout="layer.closeAll();"><input type="checkbox" name="iscatpos" value="{{d.id}}" lay-skin="switch" lay-text="<?php echo L('display');?>|<?php echo L('hidden');?>" lay-filter="iscatpos" {{ d.iscatpos == 1 ? 'checked' : '' }}></span>
 </script>
 <script type="text/html" id="isleft">
-    <span onmouseover="layer.tips('前端栏目调用左侧不会显示，但可以正常访问',this,{tips: [1, '#000']});" onmouseout="layer.closeAll();"><input type="checkbox" name="isleft" value="{{d.id}}" lay-skin="switch" lay-text="<?php echo L('display');?>|<?php echo L('hidden');?>" lay-filter="isleft" {{ d.isleft == 1 ? 'checked' : '' }}></span>
+    <span onmouseover="layer.tips('前端栏目调用左侧不会显示，但可以正常访问',this,{tips: [1, '#fff']});" onmouseout="layer.closeAll();"><input type="checkbox" name="isleft" value="{{d.id}}" lay-skin="switch" lay-text="<?php echo L('display');?>|<?php echo L('hidden');?>" lay-filter="isleft" {{ d.isleft == 1 ? 'checked' : '' }}></span>
 </script>
 <script type="text/html" id="listorder">
     <input name="{{d.id}}" data-id="{{d.id}}" class="list_order layui-input" value="{{d.listorder}}" size="10"/>

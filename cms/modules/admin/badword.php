@@ -7,6 +7,7 @@ class badword extends admin {
 		$admin_username = param::get_cookie('admin_username');
 		$userid = $_SESSION['userid'];
 		$this->db = pc_base::load_model('badword_model');
+		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 		parent::__construct();
 	}
 	
@@ -185,9 +186,7 @@ class badword extends admin {
 	 * 生成缓存
 	 */
 	function public_cache_file() { 
-		$infos = $this->db->select('','badid,badword,replaceword,level','','badid ASC');
-		setcache('badword', $infos, 'commons');
-		return true;
+		$this->cache_api->cache('badword');
  	}
 	
 }

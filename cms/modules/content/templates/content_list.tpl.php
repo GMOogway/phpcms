@@ -17,6 +17,7 @@ jQuery(document).ready(function() {
             autoclose: true
         });
     }
+    $('.tooltips').tooltip();
 });
 </script>
 <style type="text/css">
@@ -33,10 +34,10 @@ a:hover {cursor: pointer;color: #23527c;}
         <a href="javascript:;" onclick="javascript:dr_content_submit('?m=content&c=content&a=add&menuid=&catid=<?php echo $catid;?>&pc_hash=<?php echo dr_get_csrf_token();?>','add');" class="layui-btn layui-btn-sm">
             <i class="fa fa-plus"></i> <?php echo L('add_content');?>
         </a>
-        <a href="?m=content&c=content&a=init&catid=<?php echo $catid;?>&pc_hash=<?php echo $pc_hash;?>" class="layui-btn layui-btn-sm<?php if($steps==0 && !$this->input->get('reject')) echo ' on';?>">
+        <a href="?m=content&c=content&a=init&catid=<?php echo $catid;?>&pc_hash=<?php echo dr_get_csrf_token();?>" class="layui-btn layui-btn-sm<?php if($steps==0 && !$this->input->get('reject')) echo ' on';?>">
             <i class="fa fa-check"></i> <?php echo L('check_passed');?>
         </a>
-        <a href="?m=content&c=content&a=recycle_init&catid=<?php echo $catid;?>&pc_hash=<?php echo $pc_hash;?>" class="layui-btn layui-btn-sm layui-btn-danger">
+        <a href="?m=content&c=content&a=recycle_init&catid=<?php echo $catid;?>&pc_hash=<?php echo dr_get_csrf_token();?>" class="layui-btn layui-btn-sm layui-btn-danger">
             <i class="fa fa-trash-o"></i> <?php echo L('recycle');?>
         </a>
         <?php echo $workflow_menu;?>
@@ -44,7 +45,7 @@ a:hover {cursor: pointer;color: #23527c;}
             <i class="fa fa-search"></i> <?php echo L('search');?>
         </a>
         <?php if($category['ishtml']) {?>
-        <a href="javascript:;" onclick="dr_bfb('<?php echo L('update_htmls',array('catname'=>$category['catname']));?>', 'myform', '?m=content&c=create_html&a=category&pagesize=30&dosubmit=1&modelid=0&catids[0]=<?php echo $catid;?>&pc_hash=<?php echo $pc_hash;?>&referer=<?php echo urlencode($_SERVER['QUERY_STRING']);?>')" class="layui-btn layui-btn-sm layui-btn-normal">
+        <a href="javascript:;" onclick="dr_bfb('<?php echo L('update_htmls',array('catname'=>$category['catname']));?>', 'myform', '?m=content&c=create_html&a=category&pagesize=30&dosubmit=1&modelid=0&catids[0]=<?php echo $catid;?>&pc_hash=<?php echo dr_get_csrf_token();?>&referer=<?php echo urlencode($_SERVER['QUERY_STRING']);?>')" class="layui-btn layui-btn-sm layui-btn-normal">
             <i class="fa fa-html5"></i> <?php echo L('update_htmls',array('catname'=>$category['catname']));?>
         </a>
         <?php }?>
@@ -57,7 +58,7 @@ a:hover {cursor: pointer;color: #23527c;}
         <input type="hidden" value="<?php echo $catid;?>" name="catid">
         <input type="hidden" value="<?php echo $steps;?>" name="steps">
         <input type="hidden" value="1" name="search">
-        <input type="hidden" value="<?php echo $pc_hash;?>" name="pc_hash">
+        <input type="hidden" value="<?php echo dr_get_csrf_token();?>" name="pc_hash">
         <?php echo L('time');?>：
         <div class="formdate">
             <div class="input-group input-medium date-picker input-daterange">
@@ -168,11 +169,10 @@ if(is_array($datas)){
         </label>
         <label>
             <?php if(!$this->input->get('reject')) { ?>
-            <?php if($workflow_menu) { ?><button type="button" class="layui-btn layui-btn-danger layui-btn-sm" id="reject_check"><?php echo L('reject');?></button>
-            <div id='reject_content' style='background-color: #fff;border:#006699 solid 1px;position:absolute;z-index:10;padding:1px;display:none;'>
-            <table cellpadding='0' cellspacing='1' border='0'><tr><tr><td colspan='2'><textarea name='reject_c' id='reject_c' style='width:300px;height:46px;' onfocus="if(this.value == this.defaultValue) this.value = ''" onblur="if(this.value.replace(' ','') == '') this.value = this.defaultValue;"><?php echo L('reject_msg');?></textarea></td><td><button type="button" class="layui-btn layui-btn-danger layui-btn-sm" id="reject_check1"><?php echo L('submit');?></button></td></tr>
-            </table>
-            </div>
+            <?php if($workflow_menu) { ?><div style='position:relative;'><button type="button" class="layui-btn layui-btn-danger layui-btn-sm" id="reject_check"><?php echo L('reject');?></button>
+            <div id='reject_content' style='background-color: #fff;border:#e7ecf1 solid 1px;position:absolute;z-index:10;left:0px;top:-84px;padding:10px;display:none;'>
+            <table cellpadding='0' cellspacing='1' border='0'><tr><tr><td colspan='2'><textarea class="form-control" name='reject_c' id='reject_c' style='width:200px;height:46px;margin-right:10px;' onfocus="if(this.value == this.defaultValue) this.value = ''" onblur="if(this.value.replace(' ','') == '') this.value = this.defaultValue;"><?php echo L('reject_msg');?></textarea></td><td><button type="button" class="layui-btn layui-btn-danger layui-btn-sm" id="reject_check1"><?php echo L('submit');?></button></td></tr>
+            </table></div></div>
             <?php }}?>
         </label>
     </div>

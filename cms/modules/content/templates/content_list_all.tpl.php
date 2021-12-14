@@ -28,7 +28,7 @@ jQuery(document).ready(function() {
     <blockquote class="layui-elem-quote">
         <?php 
         foreach($datas2 as $r) {
-            echo "<a href=\"?m=content&c=content&a=initall&modelid=".$r['modelid']."&menuid=".$this->input->get('menuid')."&pc_hash=".$pc_hash."\" class=\"layui-btn layui-btn-sm";
+            echo "<a href=\"?m=content&c=content&a=initall&modelid=".$r['modelid']."&menuid=".$this->input->get('menuid')."&pc_hash=".dr_get_csrf_token()."\" class=\"layui-btn layui-btn-sm";
             if($r['modelid']==$modelid) echo " layui-btn-danger";
             if ($r['modelid']==2) {
                 echo "\"><i class=\"fa fa-download\"></i> ".$r['name']."(".$r['items'].")</a>";
@@ -47,24 +47,24 @@ echo "<br>";
 echo "<br>";
 if(is_array($infos)){
     foreach($infos as $info){
-        $r = $this->db->get_one(array('status'=>$status,'username'=>$info['username']), "COUNT(*) AS num");
-        echo "<a class=\"layui-btn layui-btn-sm";
-        if($info['username']==$this->input->get('keyword')) echo ' layui-btn-danger';
+        $total = $this->db->count(array('status'=>99,'username'=>$info['username']));
+        echo "<a href=\"?m=content&c=content&a=initall&modelid=".$modelid."&menuid=".$this->input->get('menuid')."&start_time=&end_time=&posids=&searchtype=2&keyword=".$info['username']."&pc_hash=".dr_get_csrf_token()."\" class=\"layui-btn layui-btn-sm";
+        if($info['username']==$this->input->get('keyword') && !$this->input->get('start_time') && !$this->input->get('end_time')) echo ' layui-btn-danger';
         echo "\">";
         echo $info['realname'] ? $info['realname'] : $info['username'];
-        echo "(总".$r['num'].")</a>";
+        echo "(总".$total.")</a>";
     }
 }
 echo "<br>";
 echo "<br>";
 if(is_array($infos)){
     foreach($infos as $info){
-        $r2 = $this->db->get_one("status=".$status." and username='".$info['username']."' and `inputtime` > '".strtotime(date("Ymd", time()))."' and `inputtime` < '".strtotime(date("Ymd", strtotime('+1 day',time())))."'", "COUNT(*) AS num");
-        echo "<a class=\"layui-btn layui-btn-sm";
-        if($info['username']==$this->input->get('keyword')) echo ' layui-btn-danger';
+        $total2 = $this->db->count("status=99 and username='".$info['username']."' and `inputtime` > '".strtotime(date("Ymd", time()))."' and `inputtime` < '".strtotime(date("Ymd", strtotime('+1 day',time())))."'");
+        echo "<a href=\"?m=content&c=content&a=initall&modelid=".$modelid."&menuid=".$this->input->get('menuid')."&start_time=".dr_date(SYS_TIME,'Y-m-d')."&end_time=".dr_date(SYS_TIME,'Y-m-d')."&posids=&searchtype=2&keyword=".$info['username']."&pc_hash=".dr_get_csrf_token()."\" class=\"layui-btn layui-btn-sm";
+        if($info['username']==$this->input->get('keyword') && dr_date(SYS_TIME,'Y-m-d')==$this->input->get('start_time') && dr_date(SYS_TIME,'Y-m-d')==$this->input->get('end_time')) echo ' layui-btn-danger';
         echo "\">";
         echo $info['realname'] ? $info['realname'] : $info['username'];
-        echo "(今".$r2['num'].")</a>";
+        echo "(今".$total2.")</a>";
     }
 }
 ?>
@@ -75,9 +75,8 @@ if(is_array($infos)){
         <input type="hidden" value="content" name="c">
         <input type="hidden" value="initall" name="a">
         <input type="hidden" value="<?php echo $modelid;?>" name="modelid">
-        <input type="hidden" value="<?php echo $steps;?>" name="steps">
         <input type="hidden" value="1" name="search">
-        <input type="hidden" value="<?php echo $pc_hash;?>" name="pc_hash">
+        <input type="hidden" value="<?php echo dr_get_csrf_token();?>" name="pc_hash">
         <?php echo L('addtime');?>：
         <div class="formdate">
             <div class="input-group input-medium date-picker input-daterange">
@@ -110,18 +109,18 @@ if(is_array($infos)){
     <img src="<?php echo IMG_PATH;?>icon/small_img.gif" onmouseover="layer.tips('<img src={{d.thumb}}>',this,{tips: [1, '#fff']});" onmouseout="layer.closeAll();">
     {{# } }}
     {{# if(d.posids==1){ }}
-    <img src="<?php echo IMG_PATH;?>icon/small_elite.png" onmouseover="layer.tips('<?php echo L('elite');?>',this,{tips: [1, '#000']});" onmouseout="layer.closeAll();">
+    <img src="<?php echo IMG_PATH;?>icon/small_elite.png" onmouseover="layer.tips('<?php echo L('elite');?>',this,{tips: [1, '#fff']});" onmouseout="layer.closeAll();">
     {{# } }}
     {{# if(d.islink==1){ }}
-    <img src="<?php echo IMG_PATH;?>icon/link.png" onmouseover="layer.tips('<?php echo L('islink_url');?>',this,{tips: [1, '#000']});" onmouseout="layer.closeAll();">
+    <img src="<?php echo IMG_PATH;?>icon/link.png" onmouseover="layer.tips('<?php echo L('islink_url');?>',this,{tips: [1, '#fff']});" onmouseout="layer.closeAll();">
     {{# } }}
 </script>
 <script type="text/html" id="hits">
-    <span style="display: block;" onmouseover="layer.tips('<?php echo L('today_hits');?>：{{d.dayviews}}<br><?php echo L('yestoday_hits');?>：{{d.yesterdayviews}}<br><?php echo L('week_hits');?>：{{d.weekviews}}<br><?php echo L('month_hits');?>：{{d.monthviews}}',this,{tips: [1, '#000']});" onmouseout="layer.closeAll();">{{d.views}}</span>
+    <span style="display: block;" onmouseover="layer.tips('<?php echo L('today_hits');?>：{{d.dayviews}}<br><?php echo L('yestoday_hits');?>：{{d.yesterdayviews}}<br><?php echo L('week_hits');?>：{{d.weekviews}}<br><?php echo L('month_hits');?>：{{d.monthviews}}',this,{tips: [1, '#fff']});" onmouseout="layer.closeAll();">{{d.views}}</span>
 </script>
 <script type="text/html" id="username">
     {{# if(d.sysadd==0){ }}
-    <a href='javascript:;' onclick="omnipotent('member','?m=member&c=member&a=memberinfo&username={{d.deusername}}&pc_hash=<?php echo $this->input->get('pc_hash');?>','<?php echo L('view_memberlinfo');?>',1,700,500);">{{d.username}}</a><img src="<?php echo IMG_PATH;?>icon/contribute.png" onmouseover="layer.tips('<?php echo L('member_contribute');?>',this,{tips: [1, '#000']});" onmouseout="layer.closeAll();">
+    <a href='javascript:;' onclick="omnipotent('member','?m=member&c=member&a=memberinfo&username={{d.deusername}}&pc_hash=<?php echo $this->input->get('pc_hash');?>','<?php echo L('view_memberlinfo');?>',1,700,500);">{{d.username}}</a><img src="<?php echo IMG_PATH;?>icon/contribute.png" onmouseover="layer.tips('<?php echo L('member_contribute');?>',this,{tips: [1, '#fff']});" onmouseout="layer.closeAll();">
     {{# } else { }}
     {{d.username}}
     {{# } }}
@@ -137,7 +136,7 @@ layui.use(['table'], function(){
     var tableIn = table.render({
         id: 'content',
         elem: '#list',
-        url:'?m=content&c=content&a=initall&modelid=<?php echo $modelid;?>&steps=<?php echo $steps;?>&pc_hash='+pc_hash,
+        url:'?m=content&c=content&a=initall&modelid=<?php echo $modelid;?>&pc_hash='+pc_hash,
         method: 'post',
         where: {keyword: '<?php echo $this->input->get('keyword');?>',start_time: '<?php echo $this->input->get('start_time');?>',end_time: '<?php echo $this->input->get('end_time');?>',posids: '<?php echo $this->input->get('posids');?>',searchtype: '<?php echo $this->input->get('searchtype');?>',csrf_test_name: csrf_hash},
         cellMinWidth: 80,
@@ -170,12 +169,12 @@ layui.use(['table'], function(){
     table.on('edit(list)',function(obj) {
         var value = obj.value, data = obj.data, field = obj.field;
         if (field=='title' && value=='') {
-            layer.tips('标题不能为空',this,{tips: [1, '#000']});
+            layer.tips('标题不能为空',this,{tips: [1, '#fff']});
             return false;
         }else{
             $.ajax({
                 type: 'post',
-                url: '?m=content&c=content&a=update&modelid=<?php echo $modelid;?>&steps=<?php echo $steps;?>&pc_hash=<?php echo $pc_hash;?>',
+                url: '?m=content&c=content&a=update&modelid=<?php echo $modelid;?>&pc_hash='+pc_hash,
                 data: {id:data.id,field:field,value:value,dosubmit:1},
                 dataType: 'json',
                 success: function(res) {

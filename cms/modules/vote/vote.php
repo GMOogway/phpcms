@@ -9,6 +9,7 @@ class vote extends admin {
 		$this->setting = new_html_special_chars(getcache('vote', 'commons'));
 		$this->db = pc_base::load_model('vote_subject_model');
 		$this->db2 = pc_base::load_model('vote_option_model');
+		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 	}
 
 	public function init() {
@@ -223,10 +224,10 @@ class vote extends admin {
 			//多站点存储配置文件
 			$siteid = $this->get_siteid();//当前站点
 			$setting[$siteid] = $this->input->post('setting');
-  			setcache('vote', $setting, 'commons');  
 			//更新模型数据库,重设setting 数据. 
  			$set = array2string($setting);
 			$m_db->update(array('setting'=>$set), array('module'=>ROUTE_M));
+			$this->cache_api->cache('vote_setting');
 			dr_admin_msg(1,L('setting_updates_successful'), '?m=vote&c=vote&a=init');
 		} else {
 			@extract($now_seting);

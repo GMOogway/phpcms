@@ -10,6 +10,7 @@ class search_admin extends admin {
 		$this->db = pc_base::load_model('search_model');
 		$this->module_db = pc_base::load_model('module_model');
 		$this->type_db = pc_base::load_model('type_model');
+		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 	}
 
 	public function setting() {
@@ -21,8 +22,8 @@ class search_admin extends admin {
 			
 			$search_setting[$siteid] = $this->input->post('setting');
 			$setting = array2string($search_setting);
-			setcache('search', $search_setting);
 			$this->module_db->update(array('setting'=>$setting),array('module'=>'search'));
+			$this->cache_api->cache('search_setting');
 			dr_json(1, L('operation_success'), array('url' => HTTP_REFERER));
 		} else {
 			$r = $this->module_db->get_one(array('module'=>'search'));

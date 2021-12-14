@@ -14,8 +14,8 @@ class member_setting extends admin {
 	function __construct() {
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
-		$this->cache = pc_base::load_sys_class('cache');
 		$this->db = pc_base::load_model('module_model');
+		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 	}
 
 	/**
@@ -45,8 +45,7 @@ class member_setting extends admin {
 				dr_json(0, L('defualtamount').L('between_1_to_8_num'), array('field' => 'defualtamount'));
 			}
 			$this->db->update(array('module'=>'member', 'setting'=>array2string($member_setting)), array('module'=>'member'));
-			setcache('member_setting', $member_setting);
-			$this->cache();
+			$this->cache_api->cache('member_setting');
 			dr_json(1, L('operation_success'), array('url' => '?m=member&c=member_setting&a=manage&page='.(int)($this->input->post('page')).'&pc_hash='.dr_get_csrf_token()));
 		} else {
 			$show_scroll = true;
@@ -199,20 +198,5 @@ class member_setting extends admin {
 			),
 		);
 	}
-
-    // 缓存
-    public function cache() {
-		$data = $this->db->get_one(array('module'=>'member'), 'setting');
-		if ($data) {
-			$t = $data;
-			$t['field'] = array();
-			$t['setting'] = dr_string2array($t['setting']);
-			// 排列table字段顺序
-			$t['setting']['list_field'] = dr_list_field_order($t['setting']['list_field']);
-
-			$cache['member'] = $t;
-		}
-		$this->cache->set_file('member', $cache);
-    }
 }
 ?>

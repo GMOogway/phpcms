@@ -51,7 +51,7 @@ jQuery(document).ready(function() {
 <div class="bk20 hr"></div>
 <div class="files clear">
 <?php foreach($infos as $r) {?>
-	<div class="files_row" onmouseover="layer.tips('<?php echo $r['filename']?>&nbsp;&nbsp;<?php echo format_file_size($r['filesize'])?>',this,{tips: [1, '#000']});" onmouseout="layer.closeAll();">
+	<div class="files_row" onmouseover="layer.tips('<?php echo $r['filename']?>&nbsp;&nbsp;<?php echo format_file_size($r['filesize'])?>',this,{tips: [1, '#fff']});" onmouseout="layer.closeAll();">
 		<span class="checkbox"></span>
 		<input type="checkbox" class="checkboxes" name="ids[]" value="<?php echo $r['aid']?>" />
 		<a><img src="<?php echo $r['src']?>" id="<?php echo $r['aid']?>" width="<?php echo $r['width']?>" path="<?php echo dr_get_file_url($r)?>" size="<?php echo format_file_size($r['filesize'])?>" filename="<?php echo $r['filename']?>"/></a>

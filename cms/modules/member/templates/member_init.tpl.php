@@ -40,18 +40,14 @@ jQuery(document).ready(function() {
 	</table>
 </fieldset>
 <div class="bk15"></div>
-<form name="myform" action="" method="get">
-<input type="hidden" name="m" value="member" />
-<input type="hidden" name="c" value="member" />
-<input type="hidden" name="a" value="search" />
 <fieldset>
 	<legend><?php echo L('member_search')?></legend>
 <div class="bk10"></div>
 <form name="searchform" action="" method="get" >
 <input type="hidden" value="member" name="m">
 <input type="hidden" value="member" name="c">
-<input type="hidden" value="search" name="a">
-<input type="hidden" value="168" name="menuid">
+<input type="hidden" value="manage" name="a">
+<input type="hidden" value="<?php echo $this->input->get('menuid');?>" name="menuid">
 <table width="100%" class="table_form contentWrap">
 		<tr>
 			<td width="120"><?php echo L('regtime')?></td> 
@@ -111,10 +107,7 @@ jQuery(document).ready(function() {
 <div class="bk15"></div>
 <input type="submit" name="search" class="button" value="<?php echo L('search')?>" />
 </form>
-
 </fieldset>
-</form>
-
 </div>
 </div>
 </body>

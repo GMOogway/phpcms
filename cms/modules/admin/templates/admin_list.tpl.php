@@ -24,7 +24,7 @@ if(is_array($infos)){
 ?>
 <tr>
 <td><?php echo $info['userid']?></td>
-<td><?php echo $info['username']?><?php if($info['islock']) {?><img onmouseover="layer.tips('<?php echo L('lock')?>',this,{tips: [1, '#000']});" onmouseout="layer.closeAll();" src="<?php echo IMG_PATH?>icon/icon_padlock.gif"><?php }?></td>
+<td><?php echo $info['username']?><?php if($info['islock']) {?><img onmouseover="layer.tips('<?php echo L('lock')?>',this,{tips: [1, '#fff']});" onmouseout="layer.closeAll();" src="<?php echo IMG_PATH?>icon/icon_padlock.gif"><?php }?></td>
 <td><?php echo $roles[$info['roleid']]?></td>
 <td><?php echo $info['lastloginip']?></td>
 <td><?php echo $info['lastlogintime'] ? date('Y-m-d H:i:s',$info['lastlogintime']) : ''?></td>

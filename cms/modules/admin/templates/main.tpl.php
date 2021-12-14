@@ -48,6 +48,7 @@ padding-right: 70px !important;text-overflow:ellipsis!important;overflow:hidden!
 .scroll-to-top>i{display:inline-block;color:#687991;font-size:30px;opacity:.6;filter:alpha(opacity=60)}
 .scroll-to-top:hover{cursor:pointer}
 .scroll-to-top:hover>i{opacity:1;filter:alpha(opacity=100)}
+.layui-layer-tips .layui-layer-content {color: #000!important;}
 </style>
 <script type="text/javascript">
 handlegotop = function() {
@@ -241,10 +242,10 @@ $(function () {
                     <div class="layui-card-header"><i class="fa fa-paper-plane-o icon"></i>作者心语</div>
                     <div class="layui-card-body layui-text layadmin-text">
                         <p><?php echo L('main_product_planning')?><?php echo $designer;?><?php echo $programmer;?></p>
-                        <p><?php echo L('main_product_qq')?>（<?php echo $qq;?>）<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=<?php echo $qq;?>&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:<?php echo $qq;?>:51" onmouseover="layer.tips('点击这里给我发消息',this,{tips: [1, '#000']});" onmouseout="layer.closeAll();"></a></p>
+                        <p><?php echo L('main_product_qq')?>（<?php echo $qq;?>）<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=<?php echo $qq;?>&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:<?php echo $qq;?>:51" onmouseover="layer.tips('点击这里给我发消息',this,{tips: [1, '#fff']});" onmouseout="layer.closeAll();"></a></p>
                         <p><?php echo L('main_product_tel')?><?php echo $tel;?></p>
                         <p><?php echo L('main_support')?><?php echo $designer;?><?php echo $programmer;?></p>
-                        <p>技术交流QQ群（<?php echo $qqgroup;?>）：<a target="_blank" href="https://jq.qq.com/?_wv=1027&k=NdLwEXcR"><img border="0" src="https://pub.idqqimg.com/wpa/images/group.png" onmouseover="layer.tips('点击这里加入群聊<br>【PHPCMS二次开发】',this,{tips: [1, '#000']});" onmouseout="layer.closeAll();"></a></p>
+                        <p>技术交流QQ群（<?php echo $qqgroup;?>）：<a target="_blank" href="https://jq.qq.com/?_wv=1027&k=NdLwEXcR"><img border="0" src="https://pub.idqqimg.com/wpa/images/group.png" onmouseover="layer.tips('点击这里加入群聊<br>【PHPCMS二次开发】',this,{tips: [1, '#fff']});" onmouseout="layer.closeAll();"></a></p>
                         <p>（加群请备注来源：如gitee官网等）</p>
                         <p>喜欢此后台模板的可以给我的Gitee加个Star支持一下</p>
                     </div>

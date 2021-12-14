@@ -14,6 +14,7 @@ class member_group extends admin {
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
 		$this->db = pc_base::load_model('member_group_model');
+		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 	}
 
 	/**
@@ -146,8 +147,7 @@ class member_group extends admin {
 	 * 更新会员组列表缓存
 	 */
 	private function _updatecache() {
-		$grouplist = $this->db->listinfo('', '', 1, 1000, 'groupid');
-		setcache('grouplist', $grouplist);
+		$this->cache_api->cache('member_group');
 	}
 	
 	public function public_checkname_ajax() {

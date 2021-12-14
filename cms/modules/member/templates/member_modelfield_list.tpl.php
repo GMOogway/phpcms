@@ -2,7 +2,7 @@
 <?php include $this->admin_tpl('header', 'admin');?>
 <div class="subnav">
 <div class="content-menu ib-a blue line-x">
-<a href="?m=member&c=member_model&a=manage&menuid=<?php echo $this->input->get('menuid')?>"><em><?php echo L('管理会员模型');?></em></a>
+<a href="?m=member&c=member_model&a=manage&menuid=<?php echo $this->input->get('menuid');?>"><em><?php echo L('管理会员模型');?></em></a>
 </div></div>
 <div class="pad-lr-10">
 <div class="bk10"></div>

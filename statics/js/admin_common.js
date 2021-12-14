@@ -72,7 +72,7 @@ $(function(){
 			if (t.indexOf('class="btn') != -1);
 			else if (t.indexOf('href="') != -1) return;
 			layer.tips(t, e, {
-				tips: [1, "#000"],
+				tips: [1, "#fff"],
 				time: 5e3
 			})
 		}

@@ -11,6 +11,7 @@ class position extends admin {
 		$this->db_data = pc_base::load_model('position_data_model');
 		$this->db_content = pc_base::load_model('content_model');			
 		$this->sites = pc_base::load_app_class('sites');
+		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 	}
 	
 	public function init() {
@@ -234,13 +235,7 @@ class position extends admin {
 	}
 	
 	private function _set_cache() {
-		$infos = $this->db->select('','*',1000,'listorder DESC');
-		$positions = array();
-		foreach ($infos as $info){
-			$positions[$info['posid']] = $info;
-		}
-		setcache('position', $positions,'commons');
-		return $infos;
+		$this->cache_api->cache('position');
 	}
 	
 	private function content_pos($id,$modelid) {

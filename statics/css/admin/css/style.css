@@ -772,6 +772,7 @@ form .portlet.light .portlet-body {padding-top: 20px;padding-bottom: 20px;}
 .open>a {outline: 0;}
 .bootstrap-select .dropdown-menu {z-index: 9999!important;}
 .minicolors-input {width: 120px!important;}
+.layui-layer-tips .layui-layer-content {color: #000!important;}
 .layui-layer-tips .layui-layer-content .btn{margin-right:10px;}
 .order_sorting {background: url(../../../images/admin_img/sort_both.png) right center no-repeat!important;}
 .order_sorting_asc {background: url(../../../images/admin_img/sort_asc.png) right center no-repeat!important;}

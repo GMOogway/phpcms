@@ -9,6 +9,7 @@ class attachment extends admin {
 		pc_base::load_app_func('global');
 		$this->input = pc_base::load_sys_class('input');
 		$this->upload = pc_base::load_sys_class('upload');
+		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 		$this->admin_username = param::get_cookie('admin_username');
 		$this->userid = $_SESSION['userid'] ? $_SESSION['userid'] : (param::get_cookie('_userid') ? param::get_cookie('_userid') : param::get_cookie('userid'));
 		$this->siteid = $this->get_siteid();
@@ -99,10 +100,7 @@ class attachment extends admin {
 	 * Enter description here ...
 	 */
 	private function setcache() {
-		$this->module_db = pc_base::load_model('module_model');
-		$result = $this->module_db->get_one(array('module'=>'admin'));
-		$setting = string2array($result['setting']);
-		setcache('common', $setting, 'commons');
+		$this->cache_api->cache('setting');
 	}
 	
 	/**
@@ -390,17 +388,7 @@ class attachment extends admin {
 	
 	// 远程附件缓存
 	public function public_cache_remote() {
-		$data = $this->db->select();
-		$cache = array();
-		if ($data) {
-			foreach ($data as $t) {
-				$t['url'] = trim($t['url'], '/').'/';
-				$t['value'] = dr_string2array($t['value']);
-				$t['value'] = $t['value'][intval($t['type'])];
-				$cache[$t['id']] = $t;
-			}
-		}
-		setcache('attachment', $cache, 'commons');
+		$this->cache_api->cache('attachment_remote');
 	}
 }
 ?>

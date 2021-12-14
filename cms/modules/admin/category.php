@@ -47,7 +47,7 @@ class category extends admin {
 					} else {
 						$rs['typename'] = '<span class="badge badge-info"> '.L('单页').' </span>';
 					}
-					$rs['display_icon'] = $r['ismenu'] ? '' : ' <img src ="'.IMG_PATH.'icon/gear_disable.png" onmouseover="layer.tips(\''.L('not_display_in_menu').'\',this,{tips: [1, \'#000\']});" onmouseout="layer.closeAll();">';
+					$rs['display_icon'] = $r['ismenu'] ? '' : ' <img src ="'.IMG_PATH.'icon/gear_disable.png" onmouseover="layer.tips(\''.L('not_display_in_menu').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();">';
 					if($r['type'] || $r['child']) {
 						$rs['items'] = '-';
 					} else {
@@ -63,7 +63,7 @@ class category extends admin {
 							} else {
 								$catdir = $prefix.'/'.$sitelist[$this->siteid]['dirname'].$html_root.'/'.$catdir;
 							}
-							if($r['type']==0 && $setting['ishtml'] && strpos($r['url'], '?')===false && substr_count($r['url'],'/')<4) $rs['help'] = '<img src="'.IMG_PATH.'icon/help.png" onmouseover="layer.tips(\''.L('tips_domain').$r['url'].'<br>'.L('directory_binding').'<br>'.$catdir.'/\',this,{tips: [1, \'#000\']});" onmouseout="layer.closeAll();">';
+							if($r['type']==0 && $setting['ishtml'] && strpos($r['url'], '?')===false && substr_count($r['url'],'/')<4) $rs['help'] = '<img src="'.IMG_PATH.'icon/help.png" onmouseover="layer.tips(\''.L('tips_domain').$r['url'].'<br>'.L('directory_binding').'<br>'.$catdir.'/\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();">';
 							$rs['url'] = $r['url'];
 						} else {
 							$rs['url'] = substr($sitelist[$this->siteid]['domain'],0,-1).$r['url'];

@@ -5,6 +5,7 @@ class ipbanned extends admin {
 	function __construct() {
 		$this->input = pc_base::load_sys_class('input');
 		$this->db = pc_base::load_model('ipbanned_model');
+		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 		pc_base::load_sys_class('form', '', 0);
 		parent::__construct();
 	}
@@ -90,9 +91,7 @@ class ipbanned extends admin {
 	 * 生成缓存
 	 */
 	public function public_cache_file() {
-		$infos = $this->db->select('','ip,expires','','ipbannedid desc');
-		setcache('ipbanned', $infos, 'commons');
-		return true;
+		$this->cache_api->cache('ipbanned');
  	}
 }
 ?>

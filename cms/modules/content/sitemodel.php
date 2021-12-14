@@ -14,6 +14,7 @@ class sitemodel extends admin {
 		$this->cache = pc_base::load_sys_class('cache');
 		$this->db = pc_base::load_model('sitemodel_model');
 		$this->content_db = pc_base::load_model('content_model');
+		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 		$this->siteid = $this->get_siteid();
 		if(!$this->siteid) $this->siteid = 1;
 	}
@@ -21,8 +22,7 @@ class sitemodel extends admin {
 	public function init() {
 		$datas = $this->db->listinfo(array('siteid'=>$this->siteid,'type'=>0),$this->input->get('order'),$this->input->get('page'),SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
-		$this->public_cache();
-		$this->sitemodel_cache();
+		$this->cache_api->cache('sitemodel');
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=content&c=sitemodel&a=add\',\''.L('add_model').'\',580,420);void(0);', L('add_model'));
 		include $this->admin_tpl('sitemodel_manage');
 	}
@@ -85,10 +85,8 @@ class sitemodel extends admin {
 			//调用全站搜索类别接口
 			$this->type_db = pc_base::load_model('type_model');
 			$this->type_db->insert(array('name'=>$info['name'],'module'=>'search','modelid'=>$modelid,'siteid'=>$this->siteid));
-			$cache_api = pc_base::load_app_class('cache_api','admin');
-			$cache_api->cache('type');
-			$cache_api->search_type();
-			$this->sitemodel_cache();
+			$this->cache_api->cache('sitemodel');
+			$this->cache_api->cache('type', 'search');
 			dr_admin_msg(1,L('add_success'), '', '', 'add');
 		} else {
 			pc_base::load_sys_class('form','',0);
@@ -147,7 +145,6 @@ class sitemodel extends admin {
 			}
 			
 			$this->db->update($info,array('modelid'=>$modelid,'siteid'=>$this->siteid));
-			$this->sitemodel_cache();
 			dr_json(1, L('update_success'), array('url' => '?m=content&c=sitemodel&a=init&page='.(int)$this->input->post('page').'&pc_hash='.dr_get_csrf_token()));
 		} else {
 			pc_base::load_sys_class('form','',0);
@@ -212,10 +209,8 @@ class sitemodel extends admin {
 		//删除全站搜索接口数据
 		$this->type_db = pc_base::load_model('type_model');
 		$this->type_db->delete(array('module'=>'search','modelid'=>$modelid,'siteid'=>$this->siteid));
-		$cache_api = pc_base::load_app_class('cache_api','admin');
-		$cache_api->cache('type');
-		$cache_api->search_type();
-		$this->sitemodel_cache();
+		$this->cache_api->cache('sitemodel');
+		$this->cache_api->cache('type', 'search');
 		exit('1');
 	}
 	public function disabled() {
@@ -225,34 +220,6 @@ class sitemodel extends admin {
 		$status = $r['disabled'] == '1' ? '0' : '1';
 		$this->db->update(array('disabled'=>$status),array('modelid'=>$modelid,'siteid'=>$this->siteid));
 		dr_admin_msg(1,L('update_success'), HTTP_REFERER);
-	}
-	/**
-	 * 更新模型缓存
-	 */
-	public function public_cache() {
-		require MODEL_PATH.'fields.inc.php';
-		//更新内容模型类：表单生成、入库、更新、输出
-		$classtypes = array('form','input','update','output');
-		foreach($classtypes as $classtype) {
-			$cache_data = file_get_contents(MODEL_PATH.'content_'.$classtype.'.class.php');
-			$cache_data = str_replace('}?>','',$cache_data);
-			foreach($fields as $field=>$fieldvalue) {
-				if(file_exists(MODEL_PATH.$field.DIRECTORY_SEPARATOR.$classtype.'.inc.php')) {
-					$cache_data .= file_get_contents(MODEL_PATH.$field.DIRECTORY_SEPARATOR.$classtype.'.inc.php');
-				}
-			}
-			$cache_data .= "\r\n } \r\n?>";
-			file_put_contents(CACHE_MODEL_PATH.'content_'.$classtype.'.class.php',$cache_data);
-			@chmod(CACHE_MODEL_PATH.'content_'.$classtype.'.class.php',0777);
-		}
-		//更新模型数据缓存
-		$model_array = array();
-		$datas = $this->db->select(array('type'=>0,'disabled'=>0));
-		foreach ($datas as $r) {
-			if(!$r['disabled']) $model_array[$r['modelid']] = $r;
-		}
-		setcache('model', $model_array, 'commons');
-		return true;
 	}
 	/**
 	 * 导出模型
@@ -379,8 +346,7 @@ class sitemodel extends admin {
 						}
 					}
 				}
-				$this->public_cache();
-				$this->sitemodel_cache();
+				$this->cache_api->cache('sitemodel');
 				dr_admin_msg(1,L('operation_success'),'?m=content&c=sitemodel&a=init');
 			}
 		} else {
@@ -415,16 +381,7 @@ class sitemodel extends admin {
 	 * @param $modelid 模型id
 	 */
 	public function cache_field($modelid = 0) {
-		$this->field_db = pc_base::load_model('sitemodel_field_model');
-		$field_array = array();
-		$fields = $this->field_db->select(array('modelid'=>$modelid,'disabled'=>$disabled),'*',100,'listorder ASC');
-		foreach($fields as $_value) {
-			$setting = string2array($_value['setting']);
-			$_value = array_merge($_value,$setting);
-			$field_array[$_value['field']] = $_value;
-		}
-		setcache('model_field_'.$modelid,$field_array,'model');
-		return true;
+		$this->cache_api->sitemodel_field($modelid);
 	}
 	/**
 	 * 汉字转换拼音
@@ -444,30 +401,5 @@ class sitemodel extends admin {
 		}
 		exit($py);
 	}
-
-    // 缓存
-    public function sitemodel_cache() {
-		$data = $this->db->select();
-		if ($data) {
-			foreach ($data as $t) {
-				$t['field'] = array();
-				$t['setting'] = dr_string2array($t['setting']);
-				// 排列table字段顺序
-				$t['setting']['list_field'] = dr_list_field_order($t['setting']['list_field']);
-
-				// 当前表单的自定义字段
-				$this->sitemodel_field_db = pc_base::load_model('sitemodel_field_model');
-				$field = $this->sitemodel_field_db->select(array('modelid'=>intval($t['modelid'])),'*','','listorder ASC,fieldid ASC');
-				if ($field) {
-					foreach ($field as $fv) {
-						$fv['setting'] = dr_string2array($fv['setting']);
-						$t['field'][$fv['field']] = $fv;
-					}
-				}
-				$cache[$t['tablename']] = $t;
-			}
-		}
-		$this->cache->set_file('sitemodel', $cache);
-    }
 }
 ?>

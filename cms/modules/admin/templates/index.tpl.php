@@ -289,7 +289,7 @@ $(document).ready(function() {
 
         <div class="layuimini-header-content">
             <a>
-                <div class="layuimini-tool"><i onmouseover="layer.tips('<?php echo L('spread_or_closed')?>',this,{tips: [1, '#000']});" onmouseout="layer.closeAll();" class="fa fa-outdent" data-side-fold="1"></i></div>
+                <div class="layuimini-tool"><i onmouseover="layer.tips('<?php echo L('spread_or_closed')?>',this,{tips: [1, '#fff']});" onmouseout="layer.closeAll();" class="fa fa-outdent" data-side-fold="1"></i></div>
             </a>
 
             <!--电脑端头部菜单-->
