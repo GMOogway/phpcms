@@ -34,7 +34,7 @@ $p = dr_authcode(array(
                 <div class="portlet light bordered">
                     <div class="portlet-title">
                         <div class="caption">
-                            <span class="caption-subject font-green sbold "></span>
+                            <span class="caption-subject font-blue sbold"></span>
                         </div>
                         <div class="actions">
                             <div class="btn-group">

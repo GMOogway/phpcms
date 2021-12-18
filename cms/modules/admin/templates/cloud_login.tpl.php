@@ -13,7 +13,7 @@ include $this->admin_tpl('header', 'admin');?>
             <div class="portlet light bordered" style="margin-top: 40px">
                 <div class="portlet-title">
                     <div class="caption">
-                        <span class="caption-subject font-green"><?php echo L('绑定账号');?></span>
+                        <span class="caption-subject font-blue"><?php echo L('绑定账号');?></span>
                     </div>
                 </div>
                 <div class="portlet-body form">
