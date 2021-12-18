@@ -36,16 +36,6 @@ function closeParent() {
 <?php define('EDITOR_INIT', 1);
 define('IMAGES_INIT', 1);?>
 <link rel="stylesheet" href="<?php echo JS_PATH?>layui/css/layui.css" media="all" />
-<style type="text/css">
-.page-content {margin-left: 0px;margin-top: 0;padding: 25px 20px 10px;}
-.main-content {background: #f5f6f8;}
-.my-content-top-tool {margin-bottom: 10px;}
-</style>
-<link rel="stylesheet" href="<?php echo CSS_PATH;?>bootstrap/css/bootstrap.min.css" media="all" />
-<style type="text/css">
-.my-sysfield .col-md-2 {width: 100%!important;}
-.my-sysfield .control-label {text-align: left!important;margin-bottom: 10px;}
-</style>
 <div class="page-content main-content">
 <div class="row my-content-top-tool">
     <div class="col-md-12 col-sm-12">

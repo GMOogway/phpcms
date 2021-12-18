@@ -1,23 +1,11 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');?>
-<link rel="stylesheet" href="<?php echo CSS_PATH;?>bootstrap/css/bootstrap.min.css" media="all" />
 <script type="text/javascript">
-$(function(){
+jQuery(document).ready(function() {
     $(":text").removeClass('input-text');
-})
+});
 </script>
-<style type="text/css">
-.page-content {margin-left: 0px;margin-top: 0;padding: 25px 20px 10px;}
-.main-content {background: #f5f6f8;}
-.portlet.light>.portlet-title {padding: 0;color: #181C32;font-weight: 500;}
-.portlet.bordered>.portlet-title {border-bottom: 0;}
-.portlet>.portlet-title {padding: 0;margin-bottom: 2px;-webkit-border-radius: 4px 4px 0 0;-moz-border-radius: 4px 4px 0 0;-ms-border-radius: 4px 4px 0 0;-o-border-radius: 4px 4px 0 0;border-radius: 4px 4px 0 0;}
-.portlet>.portlet-title>.caption {float: left;display: inline-block;font-size: 18px;line-height: 18px;padding: 10px 0;}
-.portlet.light>.portlet-title>.caption.caption-md>.caption-subject, .portlet.light>.portlet-title>.caption>.caption-subject {font-size: 15px;}
-.font-dark {color: #2f353b!important;}
-@media (max-width:480px) {select[multiple],select[size]{width:100% !important;}}
-</style>
 <div class="page-content main-content">
 <div class="note note-danger">
     <p><?php echo L('确保网站目录必须有可写权限');?></p>

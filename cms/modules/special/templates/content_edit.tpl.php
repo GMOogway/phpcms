@@ -15,10 +15,6 @@ $p = dr_authcode(array(
 ), 'ENCODE');
 ?>
 <link rel="stylesheet" href="<?php echo JS_PATH?>layui/css/layui.css" media="all" />
-<style type="text/css">
-.page-content {margin-left: 0px;margin-top: 0;padding: 25px 20px 10px;}
-.main-content {background: #f5f6f8;}
-</style>
 <script type="text/javascript">
 <!--
 	var charset = '<?php echo CHARSET?>';
@@ -29,15 +25,10 @@ $p = dr_authcode(array(
 <link href="<?php echo JS_PATH?>jquery-minicolors/jquery.minicolors.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="<?php echo JS_PATH?>jquery-minicolors/jquery.minicolors.min.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>cookie.js"></script>
-<link rel="stylesheet" href="<?php echo CSS_PATH;?>bootstrap/css/bootstrap.min.css" media="all" />
-<style type="text/css">
-.my-sysfield .col-md-2 {width: 100%!important;}
-.my-sysfield .control-label {text-align: left!important;margin-bottom: 10px;}
-</style>
 <div class="page-content main-content">
 <form name="myform" id="myform" action="?m=special&c=content&a=edit&specialid=<?php echo $_GET['specialid']?>&id=<?php echo $_GET['id']?>" class="form-horizontal" onsubmit="return checkall()" method="post" enctype="multipart/form-data">
 <input value="1" type="hidden" name="dosubmit">
-<div class="myfbody">
+<div class="">
         <div class="row ">
             <div class="col-md-9">
                 <div class="portlet light bordered">

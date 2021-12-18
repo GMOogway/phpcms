@@ -1,7 +1,6 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header', 'admin');?>
-<link rel="stylesheet" href="<?php echo CSS_PATH;?>bootstrap/css/bootstrap.min.css" media="all" />
 <div class="container">
         <h2>后台显示字段回调</h2>
         <div class="content-text">

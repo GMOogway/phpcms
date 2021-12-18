@@ -9,7 +9,6 @@ include $this->admin_tpl('header');
 //-->
 </script>
 <link href="<?php echo JS_PATH?>layui/css/layui.css" rel="stylesheet" type="text/css" />
-<link href="<?php echo CSS_PATH?>bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>jquery-3.5.1.min.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo CSS_PATH?>bootstrap/js/bootstrap.min.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>jquery-1.7.2.min.js"></script>
@@ -40,12 +39,6 @@ include $this->admin_tpl('header');
 	}
 //-->
 </script>
-<style type="text/css">
-label {font-weight: 400;}
-.radio-label{border-top:1px solid #e4e2e2; border-left:1px solid #e4e2e2;}
-.radio-label td{border-right:1px solid #e4e2e2; border-bottom:1px solid #e4e2e2;background:#f6f9fd;}
-.input-text{height: 34px;}
-</style>
 <div class="pad-10">
 <form action="?m=admin&c=site&a=add" method="post" id="myform" onsubmit="return checkall()">
 <input name="dosubmit" type="hidden" value="1">

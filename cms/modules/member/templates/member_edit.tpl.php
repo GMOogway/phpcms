@@ -1,6 +1,5 @@
 <?php defined('IS_ADMIN') or exit('No permission resources.');?>
 <?php include $this->admin_tpl('header', 'admin');?>
-<link href="<?php echo CSS_PATH?>bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>member_common.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>formvalidator.js" charset="UTF-8"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>formvalidatorregex.js" charset="UTF-8"></script>

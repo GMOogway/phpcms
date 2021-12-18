@@ -5,8 +5,8 @@
 <title><?php echo $meta_title ? $meta_title : L('message_tips');?></title>
 <meta name="author" content="zhaoxunzhiyin" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" href="<?php echo CSS_PATH;?>bootstrap/css/bootstrap.min.css" media="all" />
 <link href="<?php echo CSS_PATH?>font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-<link href="<?php echo CSS_PATH?>bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo CSS_PATH?>admin/css/style.css" rel="stylesheet" type="text/css" />
 <script type="text/javaScript" src="<?php echo JS_PATH?>jquery.min.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>Dialog/main.js"></script>

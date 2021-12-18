@@ -2,7 +2,6 @@
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');?>
 <script type="text/javascript" src="<?php echo JS_PATH?>jquery-3.5.1.min.js"></script>
-<link rel="stylesheet" href="<?php echo CSS_PATH;?>bootstrap/css/bootstrap.min.css" media="all" />
 <script type="text/javascript" src="<?php echo CSS_PATH?>bootstrap/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="<?php echo JS_PATH;?>layui/css/layui.css" media="all" />
 <link rel="stylesheet" href="<?php echo CSS_PATH;?>admin/css/global.css" media="all" />

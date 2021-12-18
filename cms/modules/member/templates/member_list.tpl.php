@@ -1,6 +1,5 @@
 <?php defined('IS_ADMIN') or exit('No permission resources.');?>
 <?php include $this->admin_tpl('header', 'admin');?>
-<link href="<?php echo CSS_PATH?>bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>jquery-3.5.1.min.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo CSS_PATH?>bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript">var bs_selectAllText = '全选';var bs_deselectAllText = '全删';var bs_noneSelectedText = '没有选择'; var bs_noneResultsText = '没有找到 {0}';</script>
@@ -20,10 +19,6 @@ jQuery(document).ready(function() {
     }
 });
 </script>
-<style type="text/css">
-.dropdown::after {opacity: 0!important;}
-:not(.input-group)>.bootstrap-select.form-control:not([class*=col-]) {width: auto;}
-</style>
 <div class="pad-lr-10">
 <form name="searchform" action="" method="get" >
 <input type="hidden" value="member" name="m">
@@ -37,33 +32,33 @@ jQuery(document).ready(function() {
 		<div class="explain-col">
 				
 				<?php echo L('regtime')?>：
-        <div class="formdate">
-            <div class="input-group input-medium date-picker input-daterange">
-                <input type="text" class="form-control" value="<?php echo $start_time;?>" name="start_time" id="start_time">
-                <span class="input-group-addon"> - </span>
-                <input type="text" class="form-control" value="<?php echo $end_time;?>" name="end_time" id="end_time">
-            </div>
-        </div>
+				<label><div class="formdate">
+					<div class="input-group input-medium date-picker input-daterange">
+						<input type="text" class="form-control" value="<?php echo $start_time;?>" name="start_time" id="start_time">
+						<span class="input-group-addon"> - </span>
+						<input type="text" class="form-control" value="<?php echo $end_time;?>" name="end_time" id="end_time">
+					</div>
+				</div></label>
 				<?php if($_SESSION['roleid'] == 1) {?>
-				<?php echo form::select($sitelist, $siteid, 'name="siteid[]" class="form-control bs-select" data-title="'.L('all_site').'" multiple="multiple"');}?>
+				<label><?php echo form::select($sitelist, $siteid, 'name="siteid[]" class="form-control bs-select" data-title="'.L('all_site').'" multiple="multiple"');}?></label>
 							
-				<select name="status[]" class="form-control bs-select" data-title="<?php echo L('status')?>" multiple="multiple">
+				<label><select name="status[]" class="form-control bs-select" data-title="<?php echo L('status')?>" multiple="multiple">
 					<option value='1' <?php if(isset($_GET['status']) && dr_in_array(1, $_GET['status'])){?>selected<?php }?>><?php echo L('lock')?></option>
 					<option value='0' <?php if(isset($_GET['status']) && dr_in_array(0, $_GET['status'])){?>selected<?php }?>><?php echo L('normal')?></option>
-				</select>
-				<?php echo form::select($modellist, $modelid, 'name="modelid[]" class="form-control bs-select" data-title="'.L('member_model').'" multiple="multiple"')?>
-				<?php echo form::select($grouplist, $groupid, 'name="groupid[]" class="form-control bs-select" data-title="'.L('member_group').'" multiple="multiple" data-actions-box="true"')?>
+				</select></label>
+				<label><?php echo form::select($modellist, $modelid, 'name="modelid[]" class="form-control bs-select" data-title="'.L('member_model').'" multiple="multiple"')?></label>
+				<label><?php echo form::select($grouplist, $groupid, 'name="groupid[]" class="form-control bs-select" data-title="'.L('member_group').'" multiple="multiple" data-actions-box="true"')?></label>
 				
-				<select name="type">
+				<label><select name="type">
 					<option value='1' <?php if(isset($_GET['type']) && $_GET['type']==1){?>selected<?php }?>><?php echo L('username')?></option>
 					<option value='2' <?php if(isset($_GET['type']) && $_GET['type']==2){?>selected<?php }?>><?php echo L('uid')?></option>
 					<option value='3' <?php if(isset($_GET['type']) && $_GET['type']==3){?>selected<?php }?>><?php echo L('email')?></option>
 					<option value='4' <?php if(isset($_GET['type']) && $_GET['type']==4){?>selected<?php }?>><?php echo L('regip')?></option>
 					<option value='5' <?php if(isset($_GET['type']) && $_GET['type']==5){?>selected<?php }?>><?php echo L('nickname')?></option>
-				</select>
+				</select></label>
 				
-				<input name="keyword" type="text" value="<?php if(isset($_GET['keyword'])) {echo $_GET['keyword'];}?>" class="input-text" />
-				<input type="submit" name="search" class="button" value="<?php echo L('search')?>" />
+				<label><input name="keyword" type="text" value="<?php if(isset($_GET['keyword'])) {echo $_GET['keyword'];}?>" class="input-text" /></label>
+				<label><input type="submit" name="search" class="button" value="<?php echo L('search')?>" /></label>
 	</div>
 		</td>
 		</tr>

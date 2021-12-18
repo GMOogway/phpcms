@@ -5,6 +5,7 @@
 <title><?php echo L('website_manage');?></title>
 <meta name="author" content="zhaoxunzhiyin" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" href="<?php echo CSS_PATH;?>bootstrap/css/bootstrap.min.css" media="all" />
 <link href="<?php echo CSS_PATH?>font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo CSS_PATH?>admin/css/style.css" rel="stylesheet" type="text/css" />
 <link href='<?php echo CSS_PATH?>bootstrap-tagsinput.css' rel='stylesheet' type='text/css' />

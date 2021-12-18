@@ -27,6 +27,7 @@ class create_all_html extends admin {
 	* 一键生成全站
 	*/
 	public function all_update(){
+		$show_header = $show_dialog  = '';
 		$this->site_db = pc_base::load_model('site_model');
 		$data = $this->site_db->get_one(array('siteid'=>$this->siteid));
 		$ishtml = $data['ishtml'];
