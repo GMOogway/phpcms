@@ -23,23 +23,25 @@ jQuery(document).ready(function() {
 <input type="hidden" value="special" name="m">
 <input type="hidden" value="special" name="c">
 <input type="hidden" value="public_get_pics" name="a">
+<input type="hidden" name="dosubmit" value="1">
 <table width="100%" cellspacing="0" class="search-form">
     <tbody>
 		<tr>
 		<td>
 		<div class="explain-col">
- 			<?php echo $model_form?>&nbsp;&nbsp; 
-<span id="catids"></span>&nbsp;&nbsp; <span id="title" style="display:none;"><?php echo L('title')?>：<input type="text" name="title" size="20"></span>
-				<?php echo L('input_time')?>：
-				<?php $start_f = $this->input->get('start_time') ? $this->input->get('start_time') : format::date(SYS_TIME-2592000);$end_f = $this->input->get('end_time') ? $this->input->get('end_time') : format::date(SYS_TIME+86400);?>
-        <div class="formdate">
-            <div class="input-group input-medium date-picker input-daterange">
-                <input type="text" class="form-control" value="<?php echo $start_f;?>" name="start_time" id="start_time">
-                <span class="input-group-addon"> - </span>
-                <input type="text" class="form-control" value="<?php echo $end_f;?>" name="end_time" id="end_time">
-            </div>
-        </div>
-				 <input type="submit" name="search" class="button" value="<?php echo L('search')?>" />
+ 			<label><?php echo $model_form?></label>
+			<label id="catids"></label>
+			<span id="title" style="display:none;"><?php echo L('title')?>：<label><input type="text" name="title" size="20"></label></span>
+			<?php echo L('input_time')?>：
+			<?php $start_f = $this->input->get('start_time') ? $this->input->get('start_time') : format::date(SYS_TIME-2592000);$end_f = $this->input->get('end_time') ? $this->input->get('end_time') : format::date(SYS_TIME+86400);?>
+			<label><div class="formdate">
+				<div class="input-group input-medium date-picker input-daterange">
+					<input type="text" class="form-control" value="<?php echo $start_f;?>" name="start_time" id="start_time">
+					<span class="input-group-addon"> - </span>
+					<input type="text" class="form-control" value="<?php echo $end_f;?>" name="end_time" id="end_time">
+				</div>
+			</div></label>
+			<label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('search')?></button></label>
 	</div>
 		</td>
 		</tr>

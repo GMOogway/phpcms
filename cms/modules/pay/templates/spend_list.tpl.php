@@ -20,24 +20,28 @@ jQuery(document).ready(function() {
 <input type="hidden" value="pay" name="m">
 <input type="hidden" value="spend" name="c">
 <input type="hidden" value="init" name="a">
+<input type="hidden" name="dosubmit" value="1">
 <input type="hidden" value="<?php echo $_GET['menuid']?>" name="menuid">
 <table width="100%" cellspacing="0" class="search-form">
     <tbody>
 		<tr>
 		<td>
 		<div class="explain-col">
-		<?php echo  form::select(array('1'=>L('username'), '2'=>L('userid')), $user_type, 'name="user_type"')?>： <input type="text" value="<?php echo $username?>" class="input-text" name="username"> 
-		<?php echo L('from')?>  <div class="formdate">
+		<label><?php echo  form::select(array('1'=>L('username'), '2'=>L('userid')), $user_type, 'name="user_type"')?></label>
+		<label><i class="fa fa-caret-right"></i></label>
+		<label><input type="text" value="<?php echo $username?>" class="input-text" name="username"></label>
+		<?php echo L('from')?> <label><div class="formdate">
             <div class="input-group input-medium date-picker input-daterange">
                 <input type="text" class="form-control" value="<?php echo ($starttime ? format::date($starttime) : '');?>" name="starttime">
                 <span class="input-group-addon"> <?php echo L('to')?> </span>
                 <input type="text" class="form-control" value="<?php echo ($endtime ? format::date($endtime) : '');?>" name="endtime">
             </div>
-        </div>
-		<?php echo  form::select(array(''=>L('op'), '1'=>L('username'), '2'=>L('userid')), $op_type, 'name="op_type"')?>：
-		<input type="text" value="<?php echo $op?>" class="input-text" name="op"> 
-		<?php echo  form::select(array(''=>L('expenditure_patterns'), '1'=>L('money'), '2'=>L('point')), $type, 'name="type"')?>
-		<input type="submit" value="<?php echo L('search')?>" class="button" name="dosubmit">
+        </div></label>
+		<label><?php echo form::select(array(''=>L('op'), '1'=>L('username'), '2'=>L('userid')), $op_type, 'name="op_type"')?></label>
+		<label><i class="fa fa-caret-right"></i></label>
+		<label><input type="text" value="<?php echo $op?>" class="input-text" name="op"></label>
+		<label><?php echo form::select(array(''=>L('expenditure_patterns'), '1'=>L('money'), '2'=>L('point')), $type, 'name="type"')?></label>
+		<label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('search')?></button></label>
 		</div>
 		</td>
 		</tr>

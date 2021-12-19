@@ -88,11 +88,11 @@ function test_spider(id) {
 }
 
 function copy_spider(id) {
-	artdialog('test','?m=collection&c=node&a=copy&nodeid='+id,'<?php echo L('copy_node')?>',420,220);
+	artdialog('test','?m=collection&c=node&a=copy&nodeid='+id,'<?php echo L('copy_node')?>',200,220);
 }
 
 function import_spider() {
-	artdialog('test','?m=collection&c=node&a=node_import','<?php echo L('import_collection_points')?>',420,220);
+	artdialog('test','?m=collection&c=node&a=node_import','<?php echo L('import_collection_points')?>',500,220);
 }
 
 window.top.$('#display_center_id').css('display','none');

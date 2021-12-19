@@ -20,19 +20,20 @@ jQuery(document).ready(function() {
 <input type="hidden" value="pay" name="m">
 <input type="hidden" value="payment" name="c">
 <input type="hidden" value="pay_list" name="a">
+<input type="hidden" name="dosubmit" value="1">
 <input type="hidden" value="<?php echo $_GET['menuid']?>" name="menuid">
 <div class="explain-col search-form">
-<?php echo L('order_sn')?>  <input type="text" value="<?php echo $trade_sn?>" class="input-text" name="info[trade_sn]"> 
-<?php echo L('username')?>  <input type="text" value="<?php echo $username?>" class="input-text" name="info[username]"> 
-<?php echo L('addtime')?>  <div class="formdate">
+<?php echo L('order_sn')?> <label><input type="text" value="<?php echo $trade_sn?>" class="input-text" name="info[trade_sn]"></label> 
+<?php echo L('username')?> <label><input type="text" value="<?php echo $username?>" class="input-text" name="info[username]"></label>
+<?php echo L('addtime')?> <label><div class="formdate">
             <div class="input-group input-medium date-picker input-daterange">
                 <input type="text" class="form-control" value="<?php echo $start_addtime;?>" name="info[start_addtime]">
                 <span class="input-group-addon"> <?php echo L('to')?> </span>
                 <input type="text" class="form-control" value="<?php echo $end_addtime;?>" name="info[end_addtime]">
             </div>
-        </div>
-<?php echo form::select($trade_status,$status,'name="info[status]"', L('all_status'))?>  
-<input type="submit" value="<?php echo L('search')?>" class="button" name="dosubmit">
+        </div></label>
+<label><?php echo form::select($trade_status,$status,'name="info[status]"', L('all_status'))?></label>
+<label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('search')?></button></label>
 </div>
 </form>
 <div class="table-list">

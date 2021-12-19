@@ -54,8 +54,7 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,
 *:focus {outline:none}
 html,body{color: #676a6c;}
 html {font-size: 10px;-webkit-tap-highlight-color: transparent;}
-body{background:#fff;font-size: 14px;line-height: 1.5em;}
-body {color: #333;padding: 0!important;margin: 0!important;font-size: 14px;}
+body{background:#fff;font-size: 14px;line-height: 1.5em;color: #333;padding: 0!important;margin: 0!important;}
 ul,li{ list-style:none;}
 a {text-decoration: none;background-color: transparent;}
 a:active,a:hover {outline: 0;}
@@ -179,7 +178,7 @@ label{font-weight:400;}
 .blue,.blue a{color:#3498db;}
 .title-1{padding:5px 0px;margin-bottom:0px;border-bottom:1px solid #f3f3f3;font-weight: bold;}
 .title-2{padding:10px 0px;margin:0px;font-size: 18px;}
-.explain-col{border: 1px solid #ffbe7a;background: #fffced;padding: 8px 10px;line-height: 20px;}
+.explain-col{padding: 15px 30px 15px 15px;line-height: 20px;border-radius: 4px;border-left: 4px solid #f0868e;background-color: #fbf3f5;color: #888;margin-bottom: 10px;}
 .ib,.ib-li li,.ib-a a,.ib-span span,.common-form ul li span.text,.fixed-bottom .fixed-but .button,.arrowhead,.arrowhead-b,.shortcut a,.shortcut a span,.picBut a,.tab-use,.scroll a{display: inline-block;}
 
 /*后台主页信息展示修改*/
@@ -900,6 +899,13 @@ table td[class*=col-],table th[class*=col-] {position: static;float: none;displa
 .page-content3 {margin-left:0px!important; border-left:0!important;}
 .right-card-box {position: relative;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-orient: vertical;-webkit-box-direction: normal;-ms-flex-direction: column;flex-direction: column;min-width: 0;word-wrap: break-word;background-color: #fff;background-clip: border-box;border: 0 solid #f7f7f7;border-radius: .25rem;padding: 1.5rem;}
 .my-content-top-tool {margin-bottom: 10px;}
+.layui-elem-quote {font-size: 14px;}
+.container pre {padding: 9.5px;margin: 0 0 10px;}
+.dataTable>tbody>tr>td>label {margin-bottom:0;}
+.scroll-to-top{padding:1px;text-align:center;position:fixed;bottom:32px;z-index:10002;display:none;right:20px;}
+.scroll-to-top>i{display:inline-block;color:#687991;font-size:30px;opacity:.6;filter:alpha(opacity=60);}
+.scroll-to-top:hover{cursor:pointer;}
+.scroll-to-top:hover>i{opacity:1;filter:alpha(opacity=100);}
 @media (min-width:992px) {
 	.col-md-1,.col-md-10,.col-md-11,.col-md-12,.col-md-2,.col-md-3,.col-md-4,.col-md-5,.col-md-6,.col-md-7,.col-md-8,.col-md-9 {
 		float: left;
@@ -975,16 +981,6 @@ table td[class*=col-],table th[class*=col-] {position: static;float: none;displa
 		width: 100%;
 		letter-spacing: 0;
 		left: 0;
-	}
-	.formdate,.input-group {
-		width: 100%;
-	}
-	.input-time,.input-medium {
-		margin-bottom: 5px;
-	}
-	.input-text,.measure-input,textarea,select,input.date,input.endDate,.input-focus {
-		width: 100%!important;
-		margin-bottom: 5px;
 	}
 	input[name='introcude_length'],input[name='auto_thumb_no'] {
 		width: auto!important;

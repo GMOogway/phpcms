@@ -23,7 +23,7 @@ include $this->admin_tpl('header','admin');?>
 			<th width="150"><?php echo L('operations_manage');?></th>
             </tr>
         </thead>
-    <tbody class="td-line">
+    <tbody>
 	<?php
 	foreach($datas as $r) {
 		$tablename = L($r['tablename']);

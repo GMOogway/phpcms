@@ -13,14 +13,29 @@ class log extends admin {
 	}
 	
 	function init () {
-		$page = $this->input->get('page') && intval($this->input->get('page')) ? intval($this->input->get('page')) : 1;
-		$infos = $this->db->listinfo($where = '',$order = 'logid DESC',$page, SYS_ADMIN_PAGESIZE);
-		$pages = $this->db->pages;
-		//模块数组
+		if ($this->input->get('search')){
+			extract($this->input->get('search'),EXTR_SKIP);
+		}
+		if($username){
+			$where[] = "username='$username'";
+		}
+		if ($module){
+			$where[] = "module='$module'";
+		}
+		if($start_time) {
+			$start = $start_time;
+			$end = $end_time;
+			$where[] = "`time` >= '".$start." 00:00:00' AND `time` <= '".$end." 23:59:59'";
+		}
+ 
+		$page = $this->input->get('page') && intval($this->input->get('page')) ? intval($this->input->get('page')) : 1; 
+		$infos = $this->db->listinfo(($where ? implode(' AND ', $where) : ''),'logid DESC',$page, SYS_ADMIN_PAGESIZE); 
+ 		$pages = $this->db->pages;
+ 		//模块数组
 		$module_arr = array();
 		$modules = getcache('modules','commons');
-		$default = L('open_module');
-		foreach($modules as $module=>$m) $module_arr[$m['module']] = $m['module'];
+		$default = $module ? $module : L('open_module');
+ 		foreach($modules as $module=>$m) $module_arr[$m['module']] = $m['module'];
  		include $this->admin_tpl('log_list');
 	}
 		
@@ -42,36 +57,6 @@ class log extends admin {
 			return false;
 		}
 	}
- 		
- 	
-	/**
-	 * 日志搜索
-	 */
-	public function search_log() {
-		extract($this->input->get('search'),EXTR_SKIP);
-		if($username){
-			$where[] = "username='$username'";
-		}
-		if ($module){
-			$where[] = "module='$module'";
-		}
-		if($start_time && $end_time) {
-			$start = $start_time;
-			$end = $end_time;
-			$where[] = "`time` >= '".$start." 00:00:00' AND `time` <= '".$end." 23:59:59'";
-		}
- 
-		$page = $this->input->get('page') && intval($this->input->get('page')) ? intval($this->input->get('page')) : 1; 
-		$infos = $this->db->listinfo(($where ? implode(' AND ', $where) : ''),'logid DESC',$page, SYS_ADMIN_PAGESIZE); 
- 		$pages = $this->db->pages;
- 		//模块数组
-		$module_arr = array();
-		$modules = getcache('modules','commons');
-		$default = $module ? $module : L('open_module');//未设定则显示 不限模块 ，设定则显示指定的
- 		foreach($modules as $module=>$m) $module_arr[$m['module']] = $m['module'];
-		
- 		include $this->admin_tpl('log_search_list');
-	} 
 	
 }
 ?>

@@ -17,20 +17,23 @@ jQuery(document).ready(function() {
 });
 </script>
 <div class="pad-lr-10"> 
-<form name="searchform" action="?m=admin&c=log&a=search_log&menuid=<?php echo $this->input->get('menuid');?>" method="get" >
+<form name="searchform" action="?m=admin&c=log&a=init&menuid=<?php echo $this->input->get('menuid');?>" method="get" >
 <input type="hidden" value="admin" name="m">
 <input type="hidden" value="log" name="c">
-<input type="hidden" value="search_log" name="a">
+<input type="hidden" value="init" name="a">
+<input type="hidden" name="dosubmit" value="1">
 <table width="100%" cellspacing="0" class="search-form">
     <tbody>
 		<tr>
-		<td><div class="explain-col"><?php echo L('module')?>: <?php echo form::select($module_arr,'','name="search[module]"',$default)?> <?php echo L('username')?>  <input type="text" value="" class="input-text" name="search[username]" size='10'>  <?php echo L('times')?> <div class="formdate">
+		<td><div class="explain-col"><?php echo L('module')?>: <label><?php echo form::select($module_arr,'','name="search[module]"',$default)?></label> <?php echo L('username')?> <label><input type="text" value="" class="input-text" name="search[username]" size='10'></label>  <?php echo L('times')?> <label><div class="formdate">
             <div class="input-group input-medium date-picker input-daterange">
                 <input type="text" class="form-control" value="<?php echo $this->input->get('search')['start_time'];?>" name="search[start_time]">
                 <span class="input-group-addon"> <?php echo L('to')?> </span>
                 <input type="text" class="form-control" value="<?php echo $this->input->get('search')['end_time'];?>" name="search[end_time]">
             </div>
-        </div>   <input type="submit" value="<?php echo L('determine_search')?>" class="button" name="dosubmit"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="button" name="del_log_4" value="<?php echo L('removed_data')?>" onclick="location='?m=admin&c=log&a=delete&week=4&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token();?>'"  />
+        </div></label>
+		<label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('determine_search')?></button></label>
+		<label><button type="button" onclick="location='?m=admin&c=log&a=delete&week=4&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token();?>'" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('removed_data')?></button></label>
 		</div>
 		</td>
 		</tr>

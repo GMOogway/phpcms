@@ -11,10 +11,14 @@ class ipbanned extends admin {
 	}
 	
 	function init () {
-		$page = $this->input->get('page') ? $this->input->get('page') : '1';
-		$infos = array();
-		$infos = $this->db->listinfo('','ipbannedid DESC',$page,SYS_ADMIN_PAGESIZE);
-		$pages = $this->db->pages;	
+		$where = '';
+		if($this->input->get('search')) extract($this->input->get('search'));
+		if($ip){
+			$where .= $where ?  " AND ip LIKE '%$ip%'" : " ip LIKE '%$ip%'";
+		}
+		$page = $this->input->get('page') && intval($this->input->get('page')) ? intval($this->input->get('page')) : 1;
+		$infos = $this->db->listinfo($where,'ipbannedid DESC',$page,SYS_ADMIN_PAGESIZE);
+		$pages = $this->db->pages;
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=admin&c=ipbanned&a=add\',\''.L('add_ipbanned').'\',500,320);void(0);', L('add_ipbanned'));
 		include $this->admin_tpl('ipbanned_list');
 	}
@@ -70,22 +74,6 @@ class ipbanned extends admin {
 			}
 		}
 	}
-	
-	/**
-	 * IP搜索
-	 */
-	public function search_ip() {
-		$where = '';
-		if($this->input->get('search')) extract($this->input->get('search'));
-		if($ip){
-			$where .= $where ?  " AND ip LIKE '%$ip%'" : " ip LIKE '%$ip%'";
-		}
-		$page = $this->input->get('page') && intval($this->input->get('page')) ? intval($this->input->get('page')) : 1;
-		$infos = $this->db->listinfo($where,$order = 'ipbannedid DESC',$page,SYS_ADMIN_PAGESIZE);
-		$pages = $this->db->pages;
-  		$big_menu = array('javascript:artdialog(\'add\',\'?m=admin&c=ipbanned&a=add\',\''.L('add_ipbanned').'\',450,320);void(0);', L('add_ipbanned'));
-		include $this->admin_tpl('ip_search_list');
-	} 
 	
 	/**
 	 * 生成缓存

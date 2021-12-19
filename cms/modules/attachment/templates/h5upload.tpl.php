@@ -91,10 +91,12 @@ function SwapTab(name,cls_show,cls_hide,cnt,cur) {
     for(i=1;i<=cnt;i++){
         if(i==cur){
              $('#div_'+name+'_'+i).show();
+             $('#div_'+name+'_'+i).removeClass('hidden');
              $('#tab_'+name+'_'+i).addClass(cls_show);
              $('#tab_'+name+'_'+i).removeClass(cls_hide);
         }else{
              $('#div_'+name+'_'+i).hide();
+             $('#div_'+name+'_'+i).addClass('hidden');
              $('#tab_'+name+'_'+i).removeClass(cls_show);
              $('#tab_'+name+'_'+i).addClass(cls_hide);
         }

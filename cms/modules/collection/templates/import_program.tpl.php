@@ -19,7 +19,8 @@
 	<input type="hidden" name="nodeid" value="<?php if(isset($nodeid)) echo $nodeid?>">
 	<input type="hidden" name="type" value="<?php echo $type?>">
 	<input type="hidden" name="ids" value="<?php echo $ids?>">
-	<input type="submit" id="dosubmit"  class="button" value="<?php echo L('submit')?>">
+	<input type="hidden" name="dosubmit" value="1">
+	<label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('search')?></button></label>
 	</form>
 </fieldset>
 <div class="bk15"></div>

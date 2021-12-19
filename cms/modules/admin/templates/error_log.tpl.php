@@ -22,7 +22,7 @@ jQuery(document).ready(function() {
 <table width="100%" cellspacing="0" class="search-form">
     <tbody>
 		<tr>
-		<td><div class="explain-col"><div class="formdate">
+		<td><div class="explain-col"><label><div class="formdate">
             <div class="input-group input-time date date-picker">
                         <input type="text" class="form-control" name="time" value="<?php echo $time;?>">
                         <span class="input-group-btn">
@@ -30,8 +30,8 @@ jQuery(document).ready(function() {
                                 <i class="fa fa-calendar"></i>
                             </button>
                         </span>
-                    </div></div>
-		<input type="submit" value="搜索" class="button" name="dosubmit">
+                    </div></div></label>
+		<label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('search')?></button></label>
 		</div>
 		</td>
 		</tr>

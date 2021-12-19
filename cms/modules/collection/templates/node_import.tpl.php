@@ -20,7 +20,7 @@ $(document).ready(function() {
 		<tr>
 			<td width="120"><?php echo L('cfg')?>：</td> 
 			<td>
-			<input type="text" class='input-text' id="myfile" name="myfile" size="26" readonly="readonly">&nbsp;<span class="btn green fileinput-button"><i class="fa fa-cloud-upload"></i> <span> <?php echo L('select_file');?> </span> <input type="file" name="file" id="file" onchange="myfile.value=this.value"></span>
+			<input type="text" class='input-text' id="myfile" name="myfile" size="26" readonly="readonly">&nbsp;<span class="btn green btn-sm fileinput-button"><i class="fa fa-cloud-upload"></i> <span> <?php echo L('select_file');?> </span> <input type="file" name="file" id="file" onchange="myfile.value=this.value"></span>
 			<br /><?php echo L('only_support_txt_file_upload')?>
 			</td>
 		</tr>

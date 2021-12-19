@@ -9,6 +9,7 @@ include $this->admin_tpl('header', 'admin');
 <input type="hidden" value="comment_admin" name="c">
 <input type="hidden" value="listinfo" name="a">
 <input type="hidden" value="1" name="search">
+<input type="hidden" name="dosubmit" value="1">
 <input type="hidden" value="<?php echo dr_get_csrf_token()?>" name="pc_hash">
 <table width="100%" cellspacing="0" class="search-form">
     <tbody>
@@ -16,15 +17,15 @@ include $this->admin_tpl('header', 'admin');
 		<td>
 		<div class="explain-col">	
 			<?php if($max_table > 1) {?>
-			<?php echo L('choose_database')?>：<select name="tableid" onchange="show_tbl(this)"><?php for($i=1;$i<=$max_table;$i++) {?><option value="<?php echo $i?>" <?php if($i==$tableid){?>selected<?php }?>><?php echo $this->comment_data_db->db_tablepre?>comment_data_<?php echo $i?></option><?php }?></select>
+			<?php echo L('choose_database')?>：<label><select name="tableid" onchange="show_tbl(this)"><?php for($i=1;$i<=$max_table;$i++) {?><option value="<?php echo $i?>" <?php if($i==$tableid){?>selected<?php }?>><?php echo $this->comment_data_db->db_tablepre?>comment_data_<?php echo $i?></option><?php }?></select></label>
 			<?php }?>
-			<select name="searchtype">
+			<label><select name="searchtype">
 				<option value='0' <?php if($_GET['searchtype']==0) echo 'selected';?>><?php echo L('original').L('title');?></option>
 				<option value='1' <?php if($_GET['searchtype']==1) echo 'selected';?>><?php echo L('original');?>ID</option>
 				<option value='2' <?php if($_GET['searchtype']==2) echo 'selected';?>><?php echo L('username');?></option>
-			</select>
-			<input name="keyword" type="text" value="<?php if(isset($keywords)) echo $keywords;?>" class="input-text" />
-			<input type="submit" name="search" class="button" value="<?php echo L('search');?>" />
+			</select></label>
+			<label><input name="keyword" type="text" value="<?php if(isset($keywords)) echo $keywords;?>" class="input-text" /></label>
+			<label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('search')?></button></label>
 		</div>
 		</td>
 		</tr>

@@ -329,7 +329,7 @@ class content extends admin {
 			}
 			exit(json_encode(array('code'=>0,'msg'=>L('to_success'),'count'=>$total,'data'=>$array,'rel'=>1)));
 		}
-		include $this->admin_tpl('content_list_all');
+		include $this->admin_tpl('content_all');
 	}
 	public function add() {
 		if($this->input->post('dosubmit')) {

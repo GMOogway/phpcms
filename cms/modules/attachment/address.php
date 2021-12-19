@@ -41,7 +41,7 @@ class address extends admin {
 				if (!empty($sql)) $modle_table_db->query("UPDATE ".$db->db_tablepre.$table_name." SET $sql");
 			}
 		}
-		dr_admin_msg(1,L('operation_success'));
+		dr_json(1, L('operation_success'), array('url' => '?m=attachment&c=address&a=init&menuid='.(int)$this->input->post('menuid').'&page='.(int)$this->input->post('page').'&pc_hash='.dr_get_csrf_token()));
 		
 	}
 }

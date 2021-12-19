@@ -24,6 +24,7 @@ jQuery(document).ready(function() {
 <input type="hidden" value="member" name="m">
 <input type="hidden" value="member" name="c">
 <input type="hidden" value="manage" name="a">
+<input type="hidden" name="dosubmit" value="1">
 <input type="hidden" value="<?php echo $this->input->get('menuid');?>" name="menuid">
 <table width="100%" cellspacing="0" class="search-form">
     <tbody>
@@ -57,8 +58,8 @@ jQuery(document).ready(function() {
 					<option value='5' <?php if(isset($_GET['type']) && $_GET['type']==5){?>selected<?php }?>><?php echo L('nickname')?></option>
 				</select></label>
 				
-				<label><input name="keyword" type="text" value="<?php if(isset($_GET['keyword'])) {echo $_GET['keyword'];}?>" class="input-text" /></label>
-				<label><input type="submit" name="search" class="button" value="<?php echo L('search')?>" /></label>
+				<label><input name="keyword" type="text" value="<?php if(isset($_GET['keyword'])) {echo $_GET['keyword'];}?>" class="form-control input-text" /></label>
+				<label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('search')?></button></label>
 	</div>
 		</td>
 		</tr>

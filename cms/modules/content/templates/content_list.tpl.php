@@ -23,7 +23,6 @@ jQuery(document).ready(function() {
 a, a:link {text-shadow: none;color: #337ab7;text-decoration: none;}
 a:hover {cursor: pointer;color: #23527c;}
 .btn-group {margin-left: 10px;}
-#search {height: 32px;line-height: 32px;}
 </style>
 <div class="admin-main layui-anim layui-anim-upbit">
     <!--<fieldset class="layui-elem-field layui-field-title">
@@ -59,27 +58,27 @@ a:hover {cursor: pointer;color: #23527c;}
         <input type="hidden" value="1" name="search">
         <input type="hidden" value="<?php echo dr_get_csrf_token();?>" name="pc_hash">
         <?php echo L('time');?>：
-        <div class="formdate">
+        <label><div class="formdate">
             <div class="input-group input-medium date-picker input-daterange">
                 <input type="text" class="form-control" value="<?php echo $this->input->get('start_time');?>" name="start_time" id="start_time">
                 <span class="input-group-addon"> - </span>
                 <input type="text" class="form-control" value="<?php echo $this->input->get('end_time');?>" name="end_time" id="end_time">
             </div>
-        </div>
-        <select id="posids" name="posids"><option value='' <?php if($this->input->get('posids')=='') echo 'selected';?>><?php echo L('all');?></option>
+        </div></label>
+        <label><select id="posids" name="posids"><option value='' <?php if($this->input->get('posids')=='') echo 'selected';?>><?php echo L('all');?></option>
         <option value="1" <?php if($this->input->get('posids')==1) echo 'selected';?>><?php echo L('elite');?></option>
         <option value="2" <?php if($this->input->get('posids')==2) echo 'selected';?>><?php echo L('no_elite');?></option>
-        </select>                
-        <select id="searchtype" name="searchtype">
+        </select></label>
+        <label><select id="searchtype" name="searchtype">
             <option value='0' <?php if($this->input->get('searchtype')==0) echo 'selected';?>><?php echo L('title');?></option>
             <option value='1' <?php if($this->input->get('searchtype')==1) echo 'selected';?>><?php echo L('intro');?></option>
             <option value='2' <?php if($this->input->get('searchtype')==2) echo 'selected';?>><?php echo L('username');?></option>
             <option value='3' <?php if($this->input->get('searchtype')==3) echo 'selected';?>>ID</option>
-        </select>
-        <div class="layui-inline">
+        </select></label>
+        <label>
             <input class="input-text" name="keyword" id="keyword" value="<?php if($this->input->get('keyword')) echo $this->input->get('keyword');?>" placeholder="请输入关键字">
-        </div>
-        <button type="submit" class="layui-btn" id="search" data-type="reload"><i class="fa fa-search"></i> <?php echo L('search');?></button>
+        </label>
+        <label><button type="submit" class="btn green btn-sm"><i class="fa fa-search"></i> <?php echo L('search');?></button></label>
         <div style="clear: both;"></div>
         </form>
     </div>

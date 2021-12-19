@@ -4,14 +4,17 @@ $show_dialog = 1;
 include $this->admin_tpl('header','admin');
 ?>
 <div class="pad-lr-10">
-<form name="searchform" id="searchform" action="?m=admin&c=ipbanned&a=search_ip&menuid=<?php echo $this->input->get('menuid');?>" method="get"  >
+<form name="searchform" id="searchform" action="?m=admin&c=ipbanned&a=init&menuid=<?php echo $this->input->get('menuid');?>" method="get"  >
 <input type="hidden" value="admin" name="m">
 <input type="hidden" value="ipbanned" name="c">
-<input type="hidden" value="search_ip" name="a">
+<input type="hidden" value="init" name="a">
+<input type="hidden" name="dosubmit" value="1">
 <table width="100%" cellspacing="0" class="search-form">
     <tbody>
 		<tr>
-		<td><div class="explain-col">IP:  <input type="text" value="" class="input-text" id="ip" name="search[ip]">    <input type="submit" value="<?php echo L('search')?>" class="button" name="dosubmit">
+		<td><div class="explain-col">
+		IP: <label><input type="text" value="" class="input-text" id="ip" name="search[ip]"></label>
+		<label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('search')?></button></label>
 		</div>
 		</td>
 		</tr>

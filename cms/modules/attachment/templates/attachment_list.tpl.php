@@ -22,7 +22,6 @@ jQuery(document).ready(function() {
 <style type="text/css">
 .list_order {text-align: left;}
 .btn-group {margin-left: 10px;}
-#search {height: 32px;line-height: 32px;}
 .layui-input, .layui-laypage-btn {color: #000000;}
 </style>
 <script type="text/javascript" src="<?php echo JS_PATH;?>layui/layui.js"></script>
@@ -37,7 +36,7 @@ jQuery(document).ready(function() {
     </blockquote>
     <div class="demoTable" id="searchid" style="display:none;">
         <?php if ($remote) {?>
-        <select name="remote" id="remote" class="form-control">
+        <label><select name="remote" id="remote" class="form-control">
             <option value=""> - </option>
             <?php 
             if (is_array($remote)) {
@@ -45,25 +44,22 @@ jQuery(document).ready(function() {
             ?>
             <option value="<?php echo $t['id'];?>"<?php if ($this->input->get('remote')==$t['id']) {?> selected<?php }?>><?php echo $t['name'];?></option>
             <?php }} ?>
-        </select>
+        </select></label>
         <?php }?>
-        <?php echo L('time');?>：
-        <div class="formdate">
+        <label><div class="formdate">
             <div class="input-group input-medium date-picker input-daterange">
                 <input type="text" class="form-control" value="<?php echo $this->input->get('start_uploadtime');?>" name="start_uploadtime" id="start_uploadtime">
                 <span class="input-group-addon"> <?php echo L('to')?> </span>
                 <input type="text" class="form-control" value="<?php echo $this->input->get('end_uploadtime');?>" name="end_uploadtime" id="end_uploadtime">
             </div>
-        </div>
-        <?php echo L('filetype')?>
-        <div class="layui-inline">
+        </div></label>
+        <label>
             <input class="input-text" name="fileext" id="fileext" <?php if(isset($fileext)) echo $fileext;?> placeholder="<?php echo L('filetype')?>">
-        </div>        
-        <?php echo L('name')?>
-        <div class="layui-inline">
+        </label>
+        <label>
             <input class="input-text" name="keyword" id="keyword" <?php if(isset($keyword)) echo $keyword;?> placeholder="<?php echo L('name')?>">
-        </div>
-        <button class="layui-btn" id="search" data-type="reload"><i class="fa fa-search"></i> <?php echo L('search');?></button>
+        </label>
+        <label><button class="btn green btn-sm" id="search" data-type="reload"><i class="fa fa-search"></i> <?php echo L('search');?></button></label>
         <div style="clear: both;"></div>
     </div>
     <table class="layui-table" id="list" lay-filter="list"></table>

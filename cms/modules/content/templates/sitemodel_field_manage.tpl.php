@@ -42,7 +42,7 @@ include $this->admin_tpl('header','admin');?>
 			<th width="150"><?php echo L('operations_manage');?></th>
             </tr>
         </thead>
-    <tbody class="td-line">
+    <tbody>
 	<?php foreach($datas as $r) {?>
     <tr>
 		<td align='center'><input name='listorders[<?php echo $r['fieldid']?>]' type='text' size='3' value='<?php echo $r['listorder']?>' class='input-text-c'></td>

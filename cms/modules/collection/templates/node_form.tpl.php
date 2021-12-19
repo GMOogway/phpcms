@@ -31,7 +31,7 @@ $(document).ready(function() {
 		<tr>
 			<td width="120"><?php echo L('encode_varchar')?>：</td> 
 			<td>
-			<?php echo form::radio(array('gbk'=>'GBK', 'utf-8'=>'UTF-8', 'big5'=>'BIG5'), (isset($data['sourcecharset']) ? $data['sourcecharset'] : 'gbk'), 'name="data[sourcecharset]"')?>
+			<?php echo form::radio(array('utf-8'=>'UTF-8', 'gbk'=>'GBK', 'big5'=>'BIG5'), (isset($data['sourcecharset']) ? $data['sourcecharset'] : 'utf-8'), 'name="data[sourcecharset]"')?>
 			</td>
 		</tr>
 	</table>
@@ -95,7 +95,7 @@ $(document).ready(function() {
 		<tr>
 			<td width="120"><?php echo L('get_url')?>：</td> 
 			<td>
-			<?php echo L('from')?> <textarea rows="10" cols="40" name="data[url_start]"><?php if(isset($data['url_start'])) echo $data['url_start']?></textarea> <?php echo L('to')?> <textarea rows="10" name="data[url_end]" cols="40"><?php if(isset($data['url_end'])) echo $data['url_end']?></textarea> <?php echo L('finish')?>
+			<?php echo L('from')?> <label><textarea rows="10" cols="40" name="data[url_start]"><?php if(isset($data['url_start'])) echo $data['url_start']?></textarea></label> <?php echo L('to')?> <label><textarea rows="10" name="data[url_end]" cols="40"><?php if(isset($data['url_end'])) echo $data['url_end']?></textarea></label> <?php echo L('finish')?>
 			</td>
 		</tr>
 	</table>

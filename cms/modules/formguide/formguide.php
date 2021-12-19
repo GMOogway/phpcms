@@ -135,7 +135,7 @@ class formguide extends admin {
 			unset($info['show_js_template']);
 			$this->db->update($info, array('modelid'=>$formid));
 			$this->cache();
-			dr_json(1, L('update_success'), array('url' => '?m=formguide&c=formguide&a=init&page='.(int)$this->input->post('page').'&pc_hash='.dr_get_csrf_token()));
+			dr_json(1, L('update_success'), array('url' => '?m=formguide&c=formguide&a=init&pc_hash='.dr_get_csrf_token()));
 		} else {
 			if (!$this->input->get('formid') || empty($this->input->get('formid'))) {
 				dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);

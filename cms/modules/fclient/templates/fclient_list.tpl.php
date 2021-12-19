@@ -45,9 +45,10 @@ function sync_web(id) {
 <input type="hidden" value="fclient" name="m">
 <input type="hidden" value="fclient" name="c">
 <input type="hidden" value="init" name="a">
+<input type="hidden" name="dosubmit" value="1">
 <input type="hidden" value="<?php echo $_GET['menuid']?>" name="menuid">
 <div class="explain-col search-form">
-<select name="field" class="form-control">
+<label><select name="field" class="form-control">
 	<option value="uid"<?php if ($_GET['field']=='uid') echo ' selected'?>>UID</option>
 	<option value="username"<?php if ($_GET['field']=='username') echo ' selected'?>><?php echo L('username')?></option>
 	<option value="name"<?php if ($_GET['field']=='name') echo ' selected'?>><?php echo L('name')?></option>
@@ -56,9 +57,9 @@ function sync_web(id) {
 	<option value="money"<?php if ($_GET['field']=='money') echo ' selected'?>><?php echo L('money')?></option>
 	<option value="status"<?php if ($_GET['field']=='status') echo ' selected'?>><?php echo L('status')?></option>
 	<option value="id"<?php if ($_GET['field']=='id') echo ' selected'?>> Id </option>
-</select>
-<input type="text" value="<?php echo $keyword?>" class="input-text" name="keyword">
-<input type="submit" value="<?php echo L('search')?>" class="button" name="dosubmit">
+</select></label>
+<label><input type="text" value="<?php echo $keyword?>" class="input-text" name="keyword"></label>
+<label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('search')?></button></label>
 </div>
 </form>
 <form name="myform" id="myform" action="?m=fclient&c=fclient" method="post">

@@ -39,6 +39,9 @@ body {
     background-color: #1aa094 !important;
 }
 
+.layui-layer-tips .layui-layer-content {
+    color: #000!important;
+}
 
 /**头部样式 */
 .layui-layout-admin .header {

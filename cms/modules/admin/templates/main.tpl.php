@@ -10,8 +10,9 @@ defined('IS_ADMIN') or exit('No permission resources.');
 <meta name="renderer" content="webkit">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<link rel="stylesheet" href="<?php echo JS_PATH?>layui/css/layui.css" media="all">
+<link rel="stylesheet" href="<?php echo CSS_PATH;?>bootstrap/css/bootstrap.min.css" media="all" />
 <link rel="stylesheet" href="<?php echo CSS_PATH?>font-awesome/css/font-awesome.min.css" media="all">
+<link rel="stylesheet" href="<?php echo JS_PATH?>layui/css/layui.css" media="all">
 <link rel="stylesheet" href="<?php echo CSS_PATH?>layuimini/css/public.css" media="all">
 <?php if(!$this->get_siteid()) dr_admin_msg(0,L('admin_login'),'?m=admin&c=index&a='.SYS_ADMIN_PATH);?>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>jquery-3.5.1.min.js"></script>
@@ -20,36 +21,6 @@ defined('IS_ADMIN') or exit('No permission resources.');
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>admin_common.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>styleswitch.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>layer/layer.js"></script>
-<style>
-.layui-card {border:1px solid #f2f2f2;border-radius:5px;}
-.ml10 {margin-left: 10px;}
-.icon {margin-right:10px;color:#1aa094;}
-.icon-cray {color:#ffb800!important;}
-.icon-blue {color:#1e9fff!important;}
-.icon-tip {color:#ff5722!important;}
-.layuimini-qiuck-module {text-align:center;margin-top: 10px}
-.layuimini-qiuck-module a i {display:inline-block;width:100%;height:60px;line-height:60px;text-align:center;border-radius:2px;font-size:30px;background-color:#F8F8F8;color:#333;transition:all .3s;-webkit-transition:all .3s;}
-.layuimini-qiuck-module a cite {position:relative;top:2px;display:block;color:#666;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;font-size:14px;}
-.welcome-module {width:100%;min-height:280px;}
-.panel {background-color:#fff;border:1px solid transparent;border-radius:3px;-webkit-box-shadow:0 1px 1px rgba(0,0,0,.05);box-shadow:0 1px 1px rgba(0,0,0,.05)}
-.panel-body {padding:10px}
-.panel-title {margin-top:0;margin-bottom:0;font-size:12px;color:inherit}
-.label {display:inline;padding:.3em .6em .3em;font-size:75%;font-weight:700;line-height:1;color:#fff;text-align:center;white-space:nowrap;vertical-align:baseline;border-radius:.25em;margin-top: .3em;}
-.layui-red {color:red}
-.main_btn > p {height:40px;}
-.layui-bg-number {background-color:#F8F8F8;}
-.layuimini-notice:hover {background:#f6f6f6;}
-.layuimini-notice {padding:7px 16px;clear:both;font-size:12px !important;cursor:pointer;position:relative;transition:background 0.2s ease-in-out;}
-.layuimini-notice-title,.layuimini-notice-label {
-padding-right: 70px !important;text-overflow:ellipsis!important;overflow:hidden!important;white-space:nowrap!important;}
-.layuimini-notice-title {line-height:28px;font-size:14px;}
-.layuimini-notice-extra {position:absolute;top:50%;margin-top:-8px;right:16px;display:inline-block;height:16px;color:#999;}
-.scroll-to-top{padding:1px;text-align:center;position:fixed;bottom:32px;z-index:10002;display:none;right:20px}
-.scroll-to-top>i{display:inline-block;color:#687991;font-size:30px;opacity:.6;filter:alpha(opacity=60)}
-.scroll-to-top:hover{cursor:pointer}
-.scroll-to-top:hover>i{opacity:1;filter:alpha(opacity=100)}
-.layui-layer-tips .layui-layer-content {color: #000!important;}
-</style>
 <script type="text/javascript">
 handlegotop = function() {
 	navigator.userAgent.match(/iPhone|iPad|iPod/i) ? $(window).bind("touchend touchcancel touchleave", function(a) {

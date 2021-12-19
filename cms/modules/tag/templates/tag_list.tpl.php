@@ -3,7 +3,7 @@ defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header', 'admin');
 ?>
 <div class="pad_10">
-<form id="myform" name="myform" action="" method="get">
+<form id="myform" name="myform" action="" method="post">
 <input name="dosubmit" type="hidden" value="1">
 <input type="hidden" name="m" value="tag" />
 <input type="hidden" name="c" value="tag" />

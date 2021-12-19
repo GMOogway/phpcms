@@ -6,14 +6,16 @@ include $this->admin_tpl('header','attachment');
 <link href="<?php echo JS_PATH?>h5upload/h5upload.css" rel="stylesheet" type="text/css" />
 <style type="text/css">
 img{max-width: 180px;max-height: 180px;border:none;}
-body .table-list table tr>td:first-child, body .table-list table tr>th:first-child {text-align: left;padding: 8px;}
 </style>
 <div class="pad-lr-10">
 <div class="table-list">
 <table width="100%" cellspacing="0" id="imgPreview">
-<tr>
-<td align="left"><?php echo L("local_dir")?>：<?php echo $local?></td>
-</tr>
+	<thead>
+		<tr>
+			<th><?php echo L("local_dir")?>：<?php echo $local?></th>
+		</tr>
+	</thead>
+<tbody>
 <?php if ($dir !='' && $dir != '.'):?>
 <tr>
 <td align="left"><a href="<?php echo '?m=attachment&c=attachments&a=album_dir&args='.$this->input->get('args').'&authkey='.$this->input->get('authkey').'&dir='.stripslashes(dirname($dir))?>"><img src="<?php echo IMG_PATH?>folder-closed.gif" /><?php echo L("parent_directory")?></td></a>
@@ -39,6 +41,7 @@ if(is_array($list)):
 	endforeach;
 endif;
 ?>
+</tbody>
 </table>
 </div>
 </div>

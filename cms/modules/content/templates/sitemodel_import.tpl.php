@@ -39,7 +39,7 @@ include $this->admin_tpl('header','admin');
   <tr>
 		<th><?php echo L('import_model');?></th>
 		<td>
-		<input type="text" class='input-text' id="myfile" name="myfile" size="26" readonly="readonly">&nbsp;<span class="btn green fileinput-button"><i class="fa fa-cloud-upload"></i> <span> <?php echo L('select_file');?> </span> <input type="file" name="model_import" id="model_import" onchange="myfile.value=this.value"></span>
+		<input type="text" class='input-text' id="myfile" name="myfile" size="26" readonly="readonly">&nbsp;<span class="btn green btn-sm fileinput-button"><i class="fa fa-cloud-upload"></i> <span> <?php echo L('select_file');?> </span> <input type="file" name="model_import" id="model_import" onchange="myfile.value=this.value"></span>
 		</td>
 	</tr>
 </table>

@@ -23,24 +23,26 @@ jQuery(document).ready(function() {
 <input type="hidden" value="special" name="m">
 <input type="hidden" value="special" name="c">
 <input type="hidden" value="import" name="a">
+<input type="hidden" name="dosubmit" value="1">
 <input type="hidden" value="<?php echo $this->input->get('specialid')?>" name="specialid">
 <table width="100%" cellspacing="0" class="search-form">
     <tbody>
 		<tr>
 		<td>
 		<div class="explain-col">
- 			<?php echo $model_form?>&nbsp;&nbsp; <?php echo L('keyword')?>：<input type='text' name="key" id="key" value="<?php echo $this->input->get('key');?>" size="25"> <div class="bk10"></div>
-<span id="catids"></span>&nbsp;&nbsp; 
+ 			<label><?php echo $model_form?></label>
+			<?php echo L('keyword')?>：<label><input type='text' name="key" id="key" value="<?php echo $this->input->get('key');?>" size="25"></label>
+			<label id="catids"></label>
 				<?php echo L('input_time')?>：
 				<?php $start_f = $this->input->get('start_time') ? $this->input->get('start_time') : format::date(SYS_TIME-2592000);$end_f = $this->input->get('end_time') ? $this->input->get('end_time') : format::date(SYS_TIME+86400);?>
-        <div class="formdate">
-            <div class="input-group input-medium date-picker input-daterange">
-                <input type="text" class="form-control" value="<?php echo $this->input->get('start_time');?>" name="start_time" id="start_time">
-                <span class="input-group-addon"> - </span>
-                <input type="text" class="form-control" value="<?php echo $this->input->get('end_time');?>" name="end_time" id="end_time">
-            </div>
-        </div>
-				 <input type="submit" name="search" class="button" value="<?php echo L('search')?>" />
+				<label><div class="formdate">
+					<div class="input-group input-medium date-picker input-daterange">
+						<input type="text" class="form-control" value="<?php echo $this->input->get('start_time');?>" name="start_time" id="start_time">
+						<span class="input-group-addon"> - </span>
+						<input type="text" class="form-control" value="<?php echo $this->input->get('end_time');?>" name="end_time" id="end_time">
+					</div>
+				</div></label>
+				<label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('search')?></button></label>
 	</div>
 		</td>
 		</tr>

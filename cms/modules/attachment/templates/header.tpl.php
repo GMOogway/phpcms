@@ -4,6 +4,7 @@
 <title><?php echo L('website_manage');?></title>
 <meta name="author" content="zhaoxunzhiyin" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" href="<?php echo CSS_PATH;?>bootstrap/css/bootstrap.min.css" media="all" />
 <link href="<?php echo CSS_PATH?>font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo CSS_PATH?>admin/css/style.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo CSS_PATH?>table_form.css" rel="stylesheet" type="text/css" />
@@ -40,10 +41,6 @@ $(function(){
 <body>
 <style type="text/css">
 html{_overflow-y:scroll}
-.scroll-to-top{padding:1px;text-align:center;position:fixed;bottom:32px;z-index:10002;display:none;right:20px}
-.scroll-to-top>i{display:inline-block;color:#687991;font-size:30px;opacity:.6;filter:alpha(opacity=60)}
-.scroll-to-top:hover{cursor:pointer}
-.scroll-to-top:hover>i{opacity:1;filter:alpha(opacity=100)}
 </style>
 <div class="scroll-to-top">
     <i class="bi bi-arrow-up-circle-fill"></i>

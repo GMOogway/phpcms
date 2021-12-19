@@ -7,21 +7,22 @@ include $this->admin_tpl('header','admin');
 <input type="hidden" value="content" name="m">
 <input type="hidden" value="content" name="c">
 <input type="hidden" value="public_relationlist" name="a">
+<input type="hidden" name="dosubmit" value="1">
 <input type="hidden" value="<?php echo $modelid;?>" name="modelid">
 <table width="100%" cellspacing="0" class="search-form">
     <tbody>
 		<tr>
 		<td align="center">
 		<div class="explain-col">
-				<select name="field">
+				<label><select name="field">
 					<option value='title' <?php if($this->input->get('field')=='title') echo 'selected';?>><?php echo L('title');?></option>
 					<option value='keywords' <?php if($this->input->get('field')=='keywords') echo 'selected';?> ><?php echo L('keywords');?></option>
 					<option value='description' <?php if($this->input->get('field')=='description') echo 'selected';?>><?php echo L('description');?></option>
 					<option value='id' <?php if($this->input->get('field')=='id') echo 'selected';?>>ID</option>
-				</select>
-				<?php echo form::select_category('',(isset($catid) && $catid ? $catid : 0),'name="catid"',L('please_select_category'),$modelid,0,1);?>
-				<input name="keywords" type="text" value="<?php echo stripslashes($this->input->get('keywords'))?>" style="width:330px;" class="input-text" />
-				<input type="submit" name="dosubmit" class="button" value="<?php echo L('search');?>" />
+				</select></label>
+				<label><?php echo form::select_category('',(isset($catid) && $catid ? $catid : 0),'name="catid"',L('please_select_category'),$modelid,0,1);?></label>
+				<label><input name="keywords" type="text" value="<?php echo stripslashes($this->input->get('keywords'))?>" style="width:330px;" class="input-text" /></label>
+				<label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('search')?></button></label>
 	</div>
 		</td>
 		</tr>

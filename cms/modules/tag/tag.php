@@ -249,7 +249,7 @@ class tag extends admin {
 	 * 删除标签向导
 	 */
 	public function del() {
-		$id = $this->input->get('id') ? $this->input->get('id') : '';
+		$id = $this->input->post('id') ? $this->input->post('id') : '';
 		if (is_array($id)) {
 			foreach ($id as $key => $v) {
 				if (intval($v)) {

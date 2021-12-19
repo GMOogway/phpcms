@@ -20,6 +20,7 @@ jQuery(document).ready(function() {
 <input type="hidden" name="m" value="block">
 <input type="hidden" name="c" value="block_admin">
 <input type="hidden" name="a" value="public_search_content">
+<input type="hidden" name="dosubmit" value="1">
 <table width="100%" class="table_form">
 		<tr>
 			<td width="80"><?php echo L('category')?>:</td> 
@@ -64,13 +65,27 @@ jQuery(document).ready(function() {
 	</table>
 	</form>
 <?php if (isset($_GET['dosubmit']) && !empty($data)) :?>	
-	<label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" value="" id="check_box" onclick="selectall('ids[]');"><span></span></label><input type="button" value="<?php echo L('insert_a_comment_about_the_selected_text')?>" class="button" onclick="insert_form()">
+	<input type="button" value="<?php echo L('insert_a_comment_about_the_selected_text')?>" class="button" onclick="insert_form()">
 <div class="table-list">
 <table width="100%">
+<thead>
+	<tr>
+	<th align="center" class="myselect">
+			<label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
+				<input type="checkbox" class="group-checkable" value="" id="check_box" onclick="selectall('ids[]');" />
+				<span></span>
+			</label></th>
+	<th><?php echo L('标题')?></th>
+	</tr>
+</thead>
 <tbody>
 <?php foreach ($data as $v):?>
 <tr>
-<td align="center" width="40"><label class="mt-checkbox mt-checkbox-outline"><input class="inputcheckbox " name="ids[]" value="{title:'<?php echo str_replace('\'', '\\\'', $v['title'])?>', thumb:'<?php echo $v['thumb']?>', desc:'<?php echo str_replace(array('\'', "\r","\n"), array('\\\'', "", ""), $v['description'])?>', url:'<?php echo $v['url']?>'}" type="checkbox"><span></span></label></td>
+    <td align="center" class="myselect">
+                    <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
+                        <input type="checkbox" class="checkboxes" name="ids[]" value="{title:'<?php echo str_replace('\'', '\\\'', $v['title'])?>', thumb:'<?php echo $v['thumb']?>', desc:'<?php echo str_replace(array('\'', "\r","\n"), array('\\\'', "", ""), $v['description'])?>', url:'<?php echo $v['url']?>'}" />
+                        <span></span>
+                    </label></td>
 <td><?php echo $v['title']?> <?php if ($v['thumb']) echo '<font color="red">['.L('pic').']</font>'?></td>
 </tr>
 <?php endforeach;?>
@@ -79,7 +94,11 @@ jQuery(document).ready(function() {
 </div>
 <div class="list-footer table-checkable clear">
     <div class="col-md-7 list-select">
-        <label><label for="check_box"><?php echo L('select_all')?>/<?php echo L('cancel')?></label> <input type="button" value="<?php echo L('insert_a_comment_about_the_selected_text')?>" class="button" onclick="insert_form()"></label>
+        <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
+            <input type="checkbox" class="group-checkable" data-set=".checkboxes">
+            <span></span>
+        </label>
+        <label><input type="button" value="<?php echo L('insert_a_comment_about_the_selected_text')?>" class="button" onclick="insert_form()"></label>
     </div>
     <div class="col-md-5 list-page"><?php echo $pages?></div>
 </div>

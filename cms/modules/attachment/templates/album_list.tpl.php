@@ -2,6 +2,8 @@
 $show_header = $show_validator = $show_scroll = 1; 
 include $this->admin_tpl('header', 'attachment');
 ?>
+<script type="text/javascript" src="<?php echo JS_PATH?>jquery-3.5.1.min.js"></script>
+<script type="text/javascript" src="<?php echo CSS_PATH?>bootstrap/js/bootstrap.min.js"></script>
 <link href="<?php echo JS_PATH;?>bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
 <script src="<?php echo JS_PATH;?>bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
 <script type="text/javascript">
@@ -13,6 +15,7 @@ jQuery(document).ready(function() {
             autoclose: true
         });
     }
+    $('.tooltips').tooltip();
 });
 </script>
 <!--上传组件js-->
@@ -23,15 +26,16 @@ jQuery(document).ready(function() {
 <input type="hidden" value="attachment" name="m">
 <input type="hidden" value="attachments" name="c">
 <input type="hidden" value="album_load" name="a">
+<input type="hidden" name="dosubmit" value="1">
 <input type="hidden" value="<?php echo $this->input->get('args');?>" name="args">
 <input type="hidden" value="<?php echo $this->input->get('authkey');?>" name="authkey">
 <input type="hidden" value="<?php echo $file_types_post?>" name="site_allowext">
 <input type="hidden" value="<?php echo $file_upload_limit?>" name="info[file_upload_limit]">
 <div class="lh26" style="padding:0 0 10px">
 <label><?php echo L('name')?></label>
-<input type="text" value="<?php echo isset($filename) && $filename ? $filename : '';?>" class="input-text" name="info[filename]"> 
+<label><input type="text" value="<?php echo isset($filename) && $filename ? $filename : '';?>" class="input-text" name="info[filename]"></label>
 <label><?php echo L('date')?></label>
-<div class="formdate">
+<label><div class="formdate">
 <div class="form-date input-group">
 <div class="input-group input-time date date-picker">
 <input type="text" class="form-control" name="info[uploadtime]" value="<?php echo $uploadtime;?>">
@@ -42,16 +46,16 @@ jQuery(document).ready(function() {
 </span>
 </div>
 </div>
-</div>
-<input type="submit" value="<?php echo L('search')?>" class="btn blue" style="color: #fff;background-color: #32c5d2;border-color: #32c5d2;line-height: 1.44;outline: 0!important;box-shadow: none!important;display: inline-block;margin-bottom: 0;vertical-align: middle;cursor: pointer;border: 1px solid transparent;white-space: nowrap;padding: 6px 12px;font-size: 14px;line-height: 1.42857;border-radius: 4px;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;" name="dosubmit">
+</div></label>
+<label><button type="submit" class="btn green btn-sm" name="submit"> <i class="fa fa-search"></i> <?php echo L('search')?></button></label>
 </div>
 </form>
 </div>
-<div style="float: right;margin-right:10px;"><span id="all" class="btn blue" style="color: #fff;background-color: #32c5d2;border-color: #32c5d2;line-height: 1.44;outline: 0!important;box-shadow: none!important;display: inline-block;margin-bottom: 0;vertical-align: middle;cursor: pointer;border: 1px solid transparent;white-space: nowrap;padding: 6px 12px;font-size: 14px;line-height: 1.42857;border-radius: 4px;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;margin-left: 10px;">全选</span><span id="allno" class="btn blue" style="color: #fff;background-color: #32c5d2;border-color: #32c5d2;line-height: 1.44;outline: 0!important;box-shadow: none!important;display: inline-block;margin-bottom: 0;vertical-align: middle;cursor: pointer;border: 1px solid transparent;white-space: nowrap;padding: 6px 12px;font-size: 14px;line-height: 1.42857;border-radius: 4px;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;margin-left: 10px;">全不选</span><span id="other" class="btn blue" style="color: #fff;background-color: #32c5d2;border-color: #32c5d2;line-height: 1.44;outline: 0!important;box-shadow: none!important;display: inline-block;margin-bottom: 0;vertical-align: middle;cursor: pointer;border: 1px solid transparent;white-space: nowrap;padding: 6px 12px;font-size: 14px;line-height: 1.42857;border-radius: 4px;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;margin-left: 10px;">反选</span></div>
+<div style="float: right;margin-right:10px;"><label><span id="all" class="btn green btn-sm" style="margin-right:10px;">全选</span></label><label><span id="allno" class="btn red btn-sm" style="margin-right:10px;">全不选</span></label><label><span id="other" class="btn dark btn-sm">反选</span></label></div>
 <div class="bk20 hr"></div>
 <div class="files clear">
 <?php foreach($infos as $r) {?>
-	<div class="files_row" onmouseover="layer.tips('<?php echo $r['filename']?>&nbsp;&nbsp;<?php echo format_file_size($r['filesize'])?>',this,{tips: [1, '#fff']});" onmouseout="layer.closeAll();">
+	<div class="files_row tooltips" data-original-title="<?php echo $r['filename']?>&nbsp;&nbsp;<?php echo format_file_size($r['filesize'])?>">
 		<span class="checkbox"></span>
 		<input type="checkbox" class="checkboxes" name="ids[]" value="<?php echo $r['aid']?>" />
 		<a><img src="<?php echo $r['src']?>" id="<?php echo $r['aid']?>" width="<?php echo $r['width']?>" path="<?php echo dr_get_file_url($r)?>" size="<?php echo format_file_size($r['filesize'])?>" filename="<?php echo $r['filename']?>"/></a>

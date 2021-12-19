@@ -3,7 +3,7 @@ defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header', 'admin');
 ?>
 <div class="pad_10">
-<form action="" method="get">
+<form id="myform" name="myform" action="" method="post">
 <input type="hidden" name="m" value="tag" />
 <input type="hidden" name="c" value="tag" />
 <input type="hidden" name="a" value="del" />
@@ -41,14 +41,12 @@ endif;
 </div>
 <script type="text/javascript">
 <!--
-
 function copy_text(matter){
 	matter.select();
 	js1=matter.createTextRange();
 	js1.execCommand("Copy");
 	Dialog.alert('<?php echo L('copy_code');?>');
 }
-
 //-->
 </script>
 </body>
