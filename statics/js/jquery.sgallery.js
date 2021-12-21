@@ -1,11 +1,3 @@
-/*
- *	sGallery 1.0 - simple gallery with jQuery
- *	made by bujichong 2009-11-25
- *	作者：不羁虫  2009-11-25
- * http://hi.baidu.com/bujichong/
- *	欢迎交流转载，但请尊重作者劳动成果，标明插件来源及作者
- */
-
 (function ($) {
 $.fn.sGallery = function (o) {
     return  new $sG(this, o);

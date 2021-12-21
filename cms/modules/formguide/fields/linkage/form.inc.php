@@ -1,5 +1,5 @@
 	function linkage($field, $value, $fieldinfo) {
 		$setting = string2array($fieldinfo['setting']);
-		$linkageid = $setting['linkageid'];
-		return menu_linkage($linkageid,$field,$value);
+		$linkage = $setting['linkage'];
+		return menu_linkage($linkage,$field,$value);
 	}

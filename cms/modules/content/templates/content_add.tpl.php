@@ -14,25 +14,26 @@ include $this->admin_tpl('header','admin');?>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>hotkeys.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>cookie.js"></script>
 <script type="text/javascript">var catid=<?php echo $catid;?></script>
-<div class="page-content main-content">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content">
+                <div class="page-body" style="padding-top:15px;">
 <form name="myform" id="myform" action="?m=content&c=content&a=add" class="form-horizontal" onsubmit="return checkall()" method="post" enctype="multipart/form-data">
 <input value="1" type="hidden" name="dosubmit">
-<div class="">
+    <div class="">
         <div class="row ">
-            <div class="col-md-9">
+            <div class="<?php if (is_mobile(0)){?>col-md-12<?php }else{?>col-md-9<?php }?>">
+
                 <div class="portlet light bordered">
                     <div class="portlet-title">
                         <div class="caption">
                             <span class="caption-subject font-blue sbold"></span>
                         </div>
-                        <div class="actions">
-                            <div class="btn-group">
-                            </div>
-                        </div>
+
                     </div>
                     <div class="portlet-body">
-                        <div class="form-body clear">
-                           <?php
+                        <div class="form-body">
+                            <?php
 if(is_array($forminfos['base'])) {
  foreach($forminfos['base'] as $field=>$info) {
 	 if($info['isomnipotent']) continue;
@@ -59,17 +60,17 @@ if(is_array($forminfos['base'])) {
 <?php
 } }
 ?>
-                        </div>
+                   </div>
                     </div>
                 </div>
 
                 
             </div>
-            <div class="col-md-3 my-sysfield">
+            <div class="<?php if (is_mobile(0)){?>col-md-12<?php }else{?>col-md-3<?php }?> my-sysfield" >
                 <div class="portlet light bordered">
                     <div class="portlet-body">
-                        <div class="form-body clear">
-<?php
+                        <div class="form-body">
+                          <?php
 if(is_array($forminfos['senior'])) {
  foreach($forminfos['senior'] as $field=>$info) {
 	if($info['isomnipotent']) continue;
@@ -106,29 +107,24 @@ if(is_array($forminfos['senior'])) {
 	</div>
 </div>
 <?php }?>
-
-                       </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+
+        
     </div>
 </form>
 </div>
-</body>
-</html>
+</div>
+</div>
+</div>
 <script type="text/javascript"> 
 <!--
 //只能放到最下面
 $(function(){
-	$.formValidator.initConfig({formid:"myform",autotip:true,onerror:function(msg,obj){Dialog.alert(msg,function(){$(obj).focus();
-	boxid = $(obj).attr('id');
-	if($('#'+boxid).attr('boxid')!=undefined) {
-		check_content(boxid);
-	}
-	})}});
-	<?php echo $formValidator;?>
-	
 /*
  * 加载禁用外边链接
  */
@@ -137,13 +133,7 @@ $(function(){
 	$('#islink').attr('checked',false);
 	$('.edit_content').hide();
 })
-document.title='<?php echo L('add_content');?>';
-self.moveTo(-4, -4);
-function refersh_window() {
-	setcookie('refersh_time', 1);
-}
-function checkall(){
-	<?php echo $checkall;?>
-}
 //-->
 </script>
+</body>
+</html>

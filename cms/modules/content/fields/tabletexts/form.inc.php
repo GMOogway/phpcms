@@ -44,7 +44,7 @@
 		foreach($columns as $column){
 			$string .="<th align='left' style='border-bottom: 1px solid #d5dfe8;'>".$column."</th>";
 		}
-		$string .="<th align='left' style='border-bottom: 1px solid #d5dfe8; width:185px;'>操作</th></tr></thead><tbody class=\"".$field."-sortable\">";
+		$string .="<th align='left' width='185'>操作</th></tr></thead><tbody class=\"".$field."-sortable\">";
 		$string .= $list_str;
 		$string .= "<tr id='".$field."'></tr></tbody>
 		</table></div>

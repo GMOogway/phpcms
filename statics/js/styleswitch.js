@@ -1,10 +1,3 @@
-/**
-* Styleswitch stylesheet switcher built on jQuery
-* Under an Attribution, Share Alike License
-* Download by http://www.codefans.net
-* By Kelvin Luck ( http://www.kelvinluck.com/ )
-**/
-
 (function($)
 {
 	$(document).ready(function() {
@@ -33,7 +26,6 @@
 		createCookie('style', styleName, 365);
 	}
 })(jQuery);
-// cookie functions http://www.quirksmode.org/js/cookies.html
 function createCookie(name,value,days)
 {
 	if (days)
@@ -61,4 +53,3 @@ function eraseCookie(name)
 {
 	createCookie(name,"",-1);
 }
-// /cookie functions

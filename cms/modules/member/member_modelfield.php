@@ -26,7 +26,7 @@ class member_modelfield extends admin {
 		$this->cache_field($modelid);
 		$datas = $this->db->select(array('modelid'=>$modelid),'*',100,$this->input->get('order') ? $this->input->get('order') : 'listorder ASC');
 		$modelinfo = $this->model_db->get_one(array('modelid'=>$modelid));
-		$big_menu = array('javascript:artdialog(\'add\',\'?m=member&c=member_modelfield&a=add&modelid='.$modelinfo['modelid'].'\',\''.L('member_modelfield_add').' '.L('model_name').'：'.$modelinfo['name'].'\',\'80%\',\'80%\');void(0);', L('member_modelfield_add'));
+		$big_menu = array('?m=member&c=member_modelfield&a=add&modelid='.$modelinfo['modelid'].'&menuid='.$this->input->get('menuid').'', L('member_modelfield_add'));
 		include $this->admin_tpl('member_modelfield_list');
 	}
 	
@@ -35,6 +35,8 @@ class member_modelfield extends admin {
 			$model_cache = getcache('member_model', 'commons');
 			$info = $this->input->post('info');
 			$setting = $this->input->post('setting');
+			if (!$info['formtype']) dr_json(0, L('select_fieldtype'), array('field' => 'formtype'));
+			if (!$info['name']) dr_json(0, L('fieldname').L('empty'), array('field' => 'name'));
 			
 			$modelid = intval($info['modelid']);
 			$model_table = $model_cache[$modelid]['tablename'];
@@ -47,7 +49,7 @@ class member_modelfield extends admin {
 			$field_type = $info['formtype'];
 			$where = 'modelid='.$modelid.' AND field=\''.$field.'\' AND siteid='.$this->siteid.'';
 			$model_field = $this->db->get_one($where);
-			if ($model_field) dr_admin_msg(0,L('fieldname').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
+			if ($model_field) dr_json(0, L('fieldname').'（'.$field.'）'.L('already_exist'), array('field' => 'name'));
 			
 			require MODEL_PATH.$field_type.DIRECTORY_SEPARATOR.'config.inc.php';
 			
@@ -63,7 +65,7 @@ class member_modelfield extends admin {
 
 			$this->db->insert($info);
 			$this->cache_field($modelid);
-			dr_admin_msg(1,L('operation_success'), '?m=member&c=member_model&a=manage', '', 'add');
+			dr_json(1, L('operation_success'), array('url' => '?m=member&c=member_modelfield&a=manage&modelid='.$modelid.'&menuid='.$this->input->post('menuid').'&pc_hash='.dr_get_csrf_token()));
 		} else {
 			$show_header = $show_validator= $show_dialog ='';
 			pc_base::load_sys_class('form', '', 0);
@@ -91,6 +93,8 @@ class member_modelfield extends admin {
 			$model_cache = getcache('member_model','commons');
 			$info = $this->input->post('info');
 			$setting = $this->input->post('setting');
+			if (!$info['formtype']) dr_json(0, L('select_fieldtype'), array('field' => 'formtype'));
+			if (!$info['name']) dr_json(0, L('fieldname').L('empty'), array('field' => 'name'));
 			$fieldid = intval($this->input->post('fieldid'));
 			$modelid = intval($info['modelid']);
 			$model_table = $model_cache[$modelid]['tablename'];
@@ -107,7 +111,7 @@ class member_modelfield extends admin {
 				$where .= ' AND fieldid<>'.$fieldid;
 			}
 			$model_field = $this->db->get_one($where);
-			if ($model_field) dr_admin_msg(0,L('fieldname').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
+			if ($model_field) dr_json(0, L('fieldname').'（'.$field.'）'.L('already_exist'), array('field' => 'name'));
 			
 			require MODEL_PATH.$field_type.DIRECTORY_SEPARATOR.'config.inc.php';
 			
@@ -127,7 +131,7 @@ class member_modelfield extends admin {
 			pc_base::load_app_class('member_cache','','');
 			member_cache::update_cache_model();
 			
-			dr_admin_msg(1,L('operation_success'), HTTP_REFERER, '', 'edit');
+			dr_json(1, L('operation_success'), array('url' => '?m=member&c=member_modelfield&a=manage&modelid='.$modelid.'&menuid='.$this->input->post('menuid').'&pc_hash='.dr_get_csrf_token()));
 		} else {
 			$show_header = $show_validator= $show_dialog ='';
 			pc_base::load_sys_class('form','',0);
@@ -136,6 +140,8 @@ class member_modelfield extends admin {
 			$fieldid = intval($_GET['fieldid']);
 			$r = $this->db->get_one(array('fieldid'=>$fieldid));
 			extract($r);
+			if($unsetgroupids != '') $unsetgroupids = strpos($unsetgroupids, ',') ? explode(',', $unsetgroupids) : array($unsetgroupids);
+			if($unsetroleids != '') $unsetroleids = strpos($unsetroleids, ',') ? explode(',', $unsetroleids) : array($unsetroleids);
 			$setting = string2array($setting);
 			ob_start();
 			include MODEL_PATH.$formtype.DIRECTORY_SEPARATOR.'field_edit_form.inc.php';

@@ -1,4 +1,5 @@
-<?php
+<?php
+
 /*Language Format:
 Add a new file(.lang.php) with your module name at /cms/languages/
 translation save at the array:$LANG
@@ -26,7 +27,8 @@ $LANG['release_point_add'] = 'Add publishing point';
 $LANG['release_point_del'] = 'Delete publishing point';
 $LANG['release_point_edit'] = 'Edit publishing point';
 $LANG['content_publish'] = 'Content management';
-$LANG['content_manage'] = 'Manage content';$LANG['content_all'] = 'All content';
+$LANG['content_manage'] = 'Manage content';
+$LANG['content_all'] = 'All content';
 $LANG['add_content'] = 'Add content';
 $LANG['add_space'] = 'Edit position';
 $LANG['model_manage'] = 'Manage model';
@@ -73,7 +75,12 @@ $LANG['edit_poster'] = 'Edit ads';
 $LANG['del_poster'] = 'Delete ads';
 $LANG['poster_stat'] = 'Statistics';
 $LANG['poster_setting'] = 'Module settings';
-$LANG['attachment_manage'] = 'Manage attachment';$LANG['attachment'] = 'Attachment setting';$LANG['remote'] = 'Storage policy';$LANG['remote_add'] = 'Add';$LANG['remote_edit'] = 'Edit';$LANG['remote_delete'] = 'Delete';
+$LANG['attachment_manage'] = 'Manage attachment';
+$LANG['attachment'] = 'Attachment setting';
+$LANG['remote'] = 'Storage policy';
+$LANG['remote_add'] = 'Add';
+$LANG['remote_edit'] = 'Edit';
+$LANG['remote_delete'] = 'Delete';
 $LANG['linkage'] = 'Linkage menu';
 $LANG['special'] = 'Topic';
 $LANG['template_editor'] = 'Edit template';
@@ -127,7 +134,9 @@ $LANG['dbsource_data_del'] = 'Delete data source calling';
 $LANG['message'] = 'Message';
 $LANG['database'] = 'Database management';
 $LANG['database_export'] = 'The data dictionary';
-$LANG['database_import'] = 'Backup and Restore';$LANG['check_bom'] = 'File detection';$LANG['check'] = 'System is a medical';
+$LANG['database_import'] = 'Backup and Restore';
+$LANG['check_bom'] = 'File detection';
+$LANG['check'] = 'System is a medical';
 $LANG['add_special'] = 'Add topic';
 $LANG['edit_special'] = 'Edit topic';
 $LANG['special_list'] = 'A list of topics';
@@ -224,7 +233,8 @@ $LANG['announce'] = 'Announcement';
 $LANG['mood'] = 'Emoticons';
 $LANG['mood_setting'] = 'Emoticons settings';
 $LANG['edit_content'] = 'Edit content';
-$LANG['push_to_special'] = 'Promote';$LANG['copy_to_special'] = 'Copy';
+$LANG['push_to_special'] = 'Promote';
+$LANG['copy_to_special'] = 'Copy';
 $LANG['list_type'] = 'Manage category';
 $LANG['add_link'] = 'Add partner link';
 $LANG['add_vote'] = 'Add poll';

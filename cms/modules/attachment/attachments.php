@@ -116,6 +116,7 @@ class attachments {
 			if (!$p) {
 				dr_json(0, L('attachment_parameter_error'));
 			}
+			define('SITEID', $this->input->post('siteid'));
 			$upload = new upload($this->input->post('module'),$this->input->post('catid'),$this->input->post('siteid'));
 			$upload->set_userid($this->input->post('userid'));
 			$site_setting = get_site_setting($this->input->post('siteid'));
@@ -162,8 +163,8 @@ class attachments {
 			//exit(dr_array2string(array('code' => 1, 'msg' => L('上传成功'), 'id' => $data['code'], 'info' => $rt['data'])));
 			
 			// 缩略图
-			if (dr_is_image($rt['data']['path']) && ($this->input->post('thumb_width') > 0 || $this->input->post('thumb_height') > 0)) {
-				thumb($rt['data']['path'], $this->input->post('thumb_width'), $this->input->post('thumb_height') ,$this->input->post('watermark_enable'));
+			if (dr_is_image($rt['data']['url']) && ($this->input->post('thumb_width') > 0 || $this->input->post('thumb_height') > 0)) {
+				thumb($rt['data']['url'], $this->input->post('thumb_width'), $this->input->post('thumb_height') ,$this->input->post('watermark_enable'));
 			}
 			
 			if($rt && $data) {

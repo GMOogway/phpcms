@@ -230,6 +230,11 @@ body {
     background: #f6f6f6;
 }
 
+.layui-table td, .layui-table th {
+    word-wrap:break-word;
+    word-break:break-all;
+}
+
 .layuimini-notice {
     padding: 7px 16px;
     clear: both;

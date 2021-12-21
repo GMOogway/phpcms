@@ -1,6 +1,7 @@
-<table cellpadding="2" cellspacing="1" width="98%">
-	<tr> 
-      <td width="100">输入框大小</td>
-      <td><input type="text" name="setting[size]" value="30" size="6" class="input-text"></td>
-    </tr>
-</table>
+
+	<div class="form-group">
+      <label class="col-md-2 control-label">输入框大小</label>
+      <div class="col-md-9">
+            <label><input type="text" name="setting[size]" value="30" size="6" class="input-text"></label>
+      </div>
+    </div>

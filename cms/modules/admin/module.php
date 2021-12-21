@@ -69,7 +69,6 @@ class module extends admin {
 			array('function' => 'badword'),
 			array('function' => 'ipbanned'),
 			array('function' => 'keylink'),
-			array('function' => 'linkage'),
 			array('function' => 'position'),
 			array('function' => 'admin_role'),
 			array('function' => 'urlrule'),

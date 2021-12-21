@@ -1,7 +1,9 @@
 <?php defined('IN_CMS') or exit('No permission resources.');?>
-<table cellpadding="2" cellspacing="1" width="98%">
-	<tr>
-    <td width="100">表格列名</td>
-    <td><textarea name="setting[column]" cols="20" id="column" style="height:100px;width:200px;"><?php echo $setting['column'];?></textarea>表格每列的名称，一行代表一个列名</td>
-  </tr>
-</table>
+
+	<div class="form-group">
+    <label class="col-md-2 control-label">表格列名</label>
+      <div class="col-md-9">
+            <textarea name="setting[column]" id="column" style="height:100px;"><?php echo $setting['column'];?></textarea>
+            <span class="help-block"><?php echo L('表格每列的名称，一行代表一个列名')?></span>
+      </div>
+  </div>

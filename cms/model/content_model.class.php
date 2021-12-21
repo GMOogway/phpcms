@@ -76,7 +76,7 @@ class content_model extends model {
 			}
 		//}
 		$inputinfo['system']['username'] = $systeminfo['username'] = $data['username'] ? $data['username'] : param::get_cookie('admin_username');
-		$systeminfo['sysadd'] = defined('IS_ADMIN') && IS_ADMIN ? 1 : 0;
+		$systeminfo['sysadd'] = IS_ADMIN ? 1 : 0;
 		
 		//自动提取摘要
 		if($this->input->post('add_introduce') && $systeminfo['description'] == '' && isset($modelinfo['content'])) {
@@ -139,7 +139,7 @@ class content_model extends model {
 		$content_update->update($merge_data);
 		
 		//发布到审核列表中
-		if((!defined('IS_ADMIN') && !IS_ADMIN) || $data['status']!=99) {
+		if(!IS_ADMIN || $data['status']!=99) {
 			$this->content_check_db = pc_base::load_model('content_check_model');
 			$check_data = array(
 				'checkid'=>'c-'.$id.'-'.$modelid,
@@ -252,7 +252,7 @@ class content_model extends model {
 	public function edit_content($data,$id) {
 		$model_tablename = $this->model_tablename;
 		//前台权限判断
-		if(!defined('IS_ADMIN') && !IS_ADMIN) {
+		if(!IS_ADMIN) {
 			$_username = param::get_cookie('_username');
 			$us = $this->get_one(array('id'=>$id,'username'=>$_username));
 			if(!$us) return false;

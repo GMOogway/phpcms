@@ -390,16 +390,16 @@ class create_html extends admin {
 			// 计算数量
 			$total = $this->db->count(array('status' => 99));
 			if (!$total) {
-				$this->html_msg(0, L('无可用内容更新'));
+				html_msg(0, L('无可用内容更新'));
 			}
 
 			$url = '?m=content&c=create_html&a=public_show_url&modelid='.$modelid;
-			$this->html_msg(1, L('正在执行中...'), $url.'&total='.$total.'&page='.($page+1));
+			html_msg(1, L('正在执行中...'), $url.'&total='.$total.'&page='.($page+1));
 		}
 		$tpage = ceil($total / $psize); // 总页数
 		// 更新完成
 		if ($page > $tpage) {
-			$this->html_msg(1, L('更新完成'));
+			html_msg(1, L('更新完成'));
 		}
 		$data = $this->db->listinfo(array('status' => 99), 'id DESC', $page, $psize);
 		foreach ($data as $t) {
@@ -407,7 +407,7 @@ class create_html extends admin {
 				$urls = $this->urls($t['id'], $t['catid'], $t['inputtime'], $t['prefix']);
 			}
 		}
-		$this->html_msg( 1, L('正在执行中'.$tpage.'/'.$page.'...'), '?m=content&c=create_html&a=public_show_url&modelid='.$modelid.'&total='.$total.'&page='.($page+1));
+		html_msg(1, L('正在执行中'.$tpage.'/'.$page.'...'), '?m=content&c=create_html&a=public_show_url&modelid='.$modelid.'&total='.$total.'&page='.($page+1));
 	}
 	/**
 	* 批量生成栏目页
@@ -744,9 +744,9 @@ class create_html extends admin {
 			// 计算数量
 			$total = $this->category_db->count();
 			if (!$total) {
-				$this->html_msg(0, L('无可用栏目更新'));
+				html_msg(0, L('无可用栏目更新'));
 			}
-			$this->html_msg(1, L('正在执行中...'), $url.'&total='.$total.'&page=1');
+			html_msg(1, L('正在执行中...'), $url.'&total='.$total.'&page=1');
 		}
 
 		$psize = 100; // 每页处理的数量
@@ -756,7 +756,7 @@ class create_html extends admin {
 		if ($page > $tpage) {
 			$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 			$this->cache_api->cache('category');
-			$this->html_msg(1, L('更新完成'));
+			html_msg(1, L('更新完成'));
 		}
 
 		$category = $this->category_db->listinfo('', 'catid DESC', $page, $psize);
@@ -771,7 +771,7 @@ class create_html extends admin {
 			}
 		}
 
-		$this->html_msg(1, L('正在执行中【'.$tpage.'/'.$page.'】...'), $url.'&total='.$total.'&page='.($page+1));
+		html_msg(1, L('正在执行中【'.$tpage.'/'.$page.'】...'), $url.'&total='.$total.'&page='.($page+1));
 	}
 	public function public_sync2_index() {
 		$this->category_db = pc_base::load_model('category_model');
@@ -786,9 +786,9 @@ class create_html extends admin {
 			// 计算数量
 			$total = $this->category_db->count();
 			if (!$total) {
-				$this->html_msg(0, L('无可用栏目更新'));
+				html_msg(0, L('无可用栏目更新'));
 			}
-			$this->html_msg(1, L('正在执行中...'), $url.'&total='.$total.'&page=1');
+			html_msg(1, L('正在执行中...'), $url.'&total='.$total.'&page=1');
 		}
 
 		$psize = 100; // 每页处理的数量
@@ -798,7 +798,7 @@ class create_html extends admin {
 		if ($page > $tpage) {
 			$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 			$this->cache_api->cache('category');
-			$this->html_msg(1, L('更新完成'));
+			html_msg(1, L('更新完成'));
 		}
 
 		$category = $this->category_db->listinfo('', 'catid DESC', $page, $psize);
@@ -813,7 +813,7 @@ class create_html extends admin {
 			}
 		}
 
-		$this->html_msg(1, L('正在执行中【'.$tpage.'/'.$page.'】...'), $url.'&total='.$total.'&page='.($page+1));
+		html_msg(1, L('正在执行中【'.$tpage.'/'.$page.'】...'), $url.'&total='.$total.'&page='.($page+1));
 	}
 	// 提取tag
 	public function public_tag_index() {
@@ -875,17 +875,17 @@ class create_html extends admin {
 			// 计算数量
 			$total = $this->db->count($where);
 			if (!$total) {
-				$this->html_msg(0, L('无可用内容更新'));
+				html_msg(0, L('无可用内容更新'));
 			}
 
-			$this->html_msg(1, L('正在执行中...'), $url.'&total='.$total.'&page='.($page+1), L('在使用网络分词接口时可能会很慢'));
+			html_msg(1, L('正在执行中...'), $url.'&total='.$total.'&page='.($page+1), L('在使用网络分词接口时可能会很慢'));
 		}
 
 		$tpage = ceil($total / $psize); // 总页数
 
 		// 更新完成
 		if ($page > $tpage) {
-			$this->html_msg(1, L('更新完成'));
+			html_msg(1, L('更新完成'));
 		}
 
 		$data = $this->db->listinfo($where, 'id DESC', $page, $psize);
@@ -896,7 +896,7 @@ class create_html extends admin {
 			}
 		}
 
-		$this->html_msg(1, L('正在执行中【'.$tpage.'/'.$page.'】...'), $url.'&total='.$total.'&page='.($page+1), L('在使用网络分词接口时可能会很慢'));
+		html_msg(1, L('正在执行中【'.$tpage.'/'.$page.'】...'), $url.'&total='.$total.'&page='.($page+1), L('在使用网络分词接口时可能会很慢'));
 	}
 	// 提取缩略图
 	public function public_thumb_index() {
@@ -958,17 +958,17 @@ class create_html extends admin {
 			// 计算数量
 			$total = $this->db->count($where);
 			if (!$total) {
-				$this->html_msg(0, L('无可用内容更新'));
+				html_msg(0, L('无可用内容更新'));
 			}
 
-			$this->html_msg(1, L('正在执行中...'), $url.'&total='.$total.'&page='.($page+1));
+			html_msg(1, L('正在执行中...'), $url.'&total='.$total.'&page='.($page+1));
 		}
 
 		$tpage = ceil($total / $psize); // 总页数
 
 		// 更新完成
 		if ($page > $tpage) {
-			$this->html_msg(1, L('更新完成'));
+			html_msg(1, L('更新完成'));
 		}
 
 		$data = $this->db->listinfo($where, 'id DESC', $page, $psize);
@@ -980,7 +980,7 @@ class create_html extends admin {
 			}
 		}
 
-		$this->html_msg(1, L('正在执行中【'.$tpage.'/'.$page.'】...'), $url.'&total='.$total.'&page='.($page+1));
+		html_msg(1, L('正在执行中【'.$tpage.'/'.$page.'】...'), $url.'&total='.$total.'&page='.($page+1));
 	}
 	// 提取描述信息
 	public function public_desc_index() {
@@ -1044,17 +1044,17 @@ class create_html extends admin {
 			// 计算数量
 			$total = $this->db->count($where);
 			if (!$total) {
-				$this->html_msg(0, L('无可用内容更新'));
+				html_msg(0, L('无可用内容更新'));
 			}
 
-			$this->html_msg(1, L('正在执行中...'), $url.'&total='.$total.'&page='.($page+1));
+			html_msg(1, L('正在执行中...'), $url.'&total='.$total.'&page='.($page+1));
 		}
 
 		$tpage = ceil($total / $psize); // 总页数
 
 		// 更新完成
 		if ($page > $tpage) {
-			$this->html_msg(1, L('更新完成'));
+			html_msg(1, L('更新完成'));
 		}
 
 		$data = $this->db->listinfo($where, 'id DESC', $page, $psize);
@@ -1068,7 +1068,7 @@ class create_html extends admin {
 			}
 		}
 
-		$this->html_msg(1, L('正在执行中【'.$tpage.'/'.$page.'】...'), $url.'&total='.$total.'&page='.($page+1));
+		html_msg(1, L('正在执行中【'.$tpage.'/'.$page.'】...'), $url.'&total='.$total.'&page='.($page+1));
 	}
 	// 提取变更栏目
 	public function public_cat_index() {
@@ -1118,7 +1118,7 @@ class create_html extends admin {
 
 		$toid = (int)$this->input->get('toid');
 		if (!$toid) {
-			$this->html_msg(0, L('目标栏目必须选择'));
+			html_msg(0, L('目标栏目必须选择'));
 		}
 
 		$url = '?m=content&c=create_html&a=public_cat_edit&modelid='.$modelid;
@@ -1144,17 +1144,17 @@ class create_html extends admin {
 			// 计算数量
 			$total = $this->db->count($where);
 			if (!$total) {
-				$this->html_msg(0, L('无可用内容更新'));
+				html_msg(0, L('无可用内容更新'));
 			}
 
-			$this->html_msg(1, L('正在执行中...'), $url.'&total='.$total.'&page='.($page+1));
+			html_msg(1, L('正在执行中...'), $url.'&total='.$total.'&page='.($page+1));
 		}
 
 		$tpage = ceil($total / $psize); // 总页数
 
 		// 更新完成
 		if ($page > $tpage) {
-			$this->html_msg(1, L('更新完成'));
+			html_msg(1, L('更新完成'));
 		}
 
 		$data = $this->db->listinfo($where, 'id DESC', 1, $psize);
@@ -1164,7 +1164,7 @@ class create_html extends admin {
 			}
 		}
 
-		$this->html_msg(1, L('正在执行中【'.$tpage.'/'.$page.'】...'), $url.'&total='.$total.'&page='.($page+1));
+		html_msg(1, L('正在执行中【'.$tpage.'/'.$page.'】...'), $url.'&total='.$total.'&page='.($page+1));
 	}
 	// 批量删除
 	public function public_del_index() {
@@ -1255,7 +1255,7 @@ class create_html extends admin {
 		}
 
 		if (!$where) {
-			$this->html_msg(0, L('没有设置条件'));
+			html_msg(0, L('没有设置条件'));
 		}
 
 		$where = implode(' AND ', $where);
@@ -1264,17 +1264,17 @@ class create_html extends admin {
 			// 计算数量
 			$total = $this->db->count($where);
 			if (!$total) {
-				$this->html_msg(0, L('无可用内容更新'));
+				html_msg(0, L('无可用内容更新'));
 			}
 
-			$this->html_msg(1, L('正在删除中...'), $url.'&total='.$total.'&page='.($page+1));
+			html_msg(1, L('正在删除中...'), $url.'&total='.$total.'&page='.($page+1));
 		}
 
 		$tpage = ceil($total / $psize); // 总页数
 
 		// 更新完成
 		if ($page > $tpage) {
-			$this->html_msg(1, L('删除完成'));
+			html_msg(1, L('删除完成'));
 		}
 
 		$data = $this->db->listinfo($where, 'id DESC', 1, $psize);
@@ -1353,7 +1353,7 @@ class create_html extends admin {
 		//更新栏目统计
 		$this->db->cache_items();
 
-		$this->html_msg(1, L('正在删除中【'.$tpage.'/'.$page.'】...'), $url.'&total='.$total.'&page='.($page+1));
+		html_msg(1, L('正在删除中【'.$tpage.'/'.$page.'】...'), $url.'&total='.$total.'&page='.($page+1));
 	}
 	// 获取可用字段
 	private function _get_field($bm) {
@@ -1543,20 +1543,20 @@ class create_html extends admin {
 
 			$cache_class->set_auth_data($name, [$t1, $t2]);
 
-			$this->html_msg(1, L('正在执行中...'), $url.'&cache='.$name.'&page=1&tpage='.dr_count($cache));
+			html_msg(1, L('正在执行中...'), $url.'&cache='.$name.'&page=1&tpage='.dr_count($cache));
 		}
 
 		$value = $cache_class->get_auth_data($name);
 		$replace = $cache_class->get_auth_data($name.'-'.$page);
 		if (!$value) {
-			$this->html_msg(0, L('临时数据读取失败'));
+			html_msg(0, L('临时数据读取失败'));
 		} elseif (!isset($replace[$page+1])) {
-			$this->html_msg(0, L('替换完成'));
+			html_msg(0, L('替换完成'));
 		}
 
 		// 更新完成
 		if ($page > $tpage) {
-			$this->html_msg(1, L('替换完成'));
+			html_msg(1, L('替换完成'));
 		}
 
 		foreach ($replace as $t) {
@@ -1564,7 +1564,7 @@ class create_html extends admin {
 			$this->db->query($sql);
 		}
 
-		$this->html_msg(1, L('正在执行中【%s】...', "$tpage/$page"), $url.'&tpage='.$tpage.'&page='.($page+1));
+		html_msg(1, L('正在执行中【%s】...', "$tpage/$page"), $url.'&tpage='.$tpage.'&page='.($page+1));
 	}
 	// 检测字段是否存在
 	private function _is_rp_field($f, $table) {
@@ -1608,12 +1608,6 @@ class create_html extends admin {
 		$msg.= '</select>';
 
 		dr_json(1, $msg);
-	}
-	/**
-	 * 生成静态时的跳转提示
-	 */
-	public function html_msg($code, $msg, $url = '', $note = '') {
-		include $this->admin_tpl('html_msg');exit;
 	}
 }
 ?>

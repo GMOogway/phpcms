@@ -905,6 +905,37 @@ function local_attachment($option, $table = 0) {
 	}
 }
 /**
+ * 联动菜单
+ * @return  string
+ */
+function linkage($option, $table = 0) {
+	$db = pc_base::load_model('linkage_model');
+	$str = '<select class="form-control" name="setting[linkage]">';
+	$data = $db->select();
+	if ($data) {
+		$linkage = isset($option['linkage']) ? $option['linkage'] : '';
+		foreach ($data as $t) {
+			$str.= '<option value="'.$t['code'].'" '.($linkage == $t['code'] ? 'selected' : '').'> '.$t['name'].'（'.$t['code'].'） </option>';
+		}
+	}
+	$str.= '</select>';
+	if ($table) {
+		return '<tr>
+    <td>'.L('选择菜单').' </td>
+    <td>
+        <label>'.$str.'</label>
+</td>
+</tr>';
+	} else {
+		return '<div class="form-group">
+    <label class="col-md-2 control-label">'.L('选择菜单').' </label>
+    <div class="col-md-9">
+        <label>'.$str.'</label>
+    </div>
+</div>';
+	}
+}
+/**
  * xss过滤函数
  *
  * @param $string
@@ -1195,6 +1226,13 @@ function now_url($url, $siteid = 1, $ismobile = 1, $ishtml = 1) {
  */
 function dr_now_url() {
 	return FC_NOW_URL;
+}
+/**
+ * 生成静态时的跳转提示
+ */
+function html_msg($code, $msg, $url = '', $note = '') {
+	include(admin_template('html_msg', 'admin'));
+	exit;
 }
 /**
  * 排序操作
@@ -2602,127 +2640,79 @@ function get_memberavatar($uid, $size = '') {
 
 /**
  * 调用关联菜单
- * @param $linkageid 联动菜单id
+ * @param $code 联动菜单代码
  * @param $id 生成联动菜单的样式id
  * @param $defaultvalue 默认值
  */
-function menu_linkage($linkageid = 0, $id = 'linkid', $defaultvalue = 0) {
-	$linkageid = intval($linkageid);
-	if (!$linkageid) {$linkageid = 1;}
-	$datas = array();
-	$datas = getcache($linkageid,'linkage');
-	if (!$datas) {$linkageid = 1;}
-	$datas = getcache($linkageid,'linkage');
-	$infos = $datas['data'];
-
-	if($datas['style']=='1') {
-		$title = $datas['title'];
-		$container = 'content'.random(3).date('is');
-		if(!defined('DIALOG_INIT_1')) {
-			define('DIALOG_INIT_1', 1);
-			$string .= '<script type="text/javascript" src="'.JS_PATH.'dialog.js"></script>';
-			//TODO $string .= '<link href="'.CSS_PATH.'dialog.css" rel="stylesheet" type="text/css">';
-		}
-		if(!defined('LINKAGE_INIT_1')) {
-			define('LINKAGE_INIT_1', 1);
-			$string .= '<script type="text/javascript" src="'.JS_PATH.'linkage/js/pop.js"></script>';
-		}
-		$var_div = $defaultvalue && (ROUTE_A=='edit' || ROUTE_A=='account_manage_info'  || ROUTE_A=='info_publish' || ROUTE_A=='orderinfo') ? menu_linkage_level($defaultvalue,$linkageid,$infos) : $datas['title'];
-		$var_input = $defaultvalue && (ROUTE_A=='edit' || ROUTE_A=='account_manage_info'  || ROUTE_A=='info_publish') ? '<input type="hidden" name="info['.$id.']" value="'.$defaultvalue.'">' : '<input type="hidden" name="info['.$id.']" value="">';
-		$string .= '<div name="'.$id.'" value="" id="'.$id.'" class="ib">'.$var_div.'</div>'.$var_input.' <input type="button" name="btn_'.$id.'" class="button" value="'.L('linkage_select').'" onclick="open_linkage(\''.$id.'\',\''.$title.'\','.$container.',\''.$linkageid.'\')">';
-		$string .= '<script type="text/javascript">';
-		$string .= 'var returnid_'.$id.'= \''.$id.'\';';
-		$string .= 'var returnkeyid_'.$id.' = \''.$linkageid.'\';';
-		$string .=  'var '.$container.' = new Array(';
-		foreach($infos AS $k=>$v) {
-			if($v['parentid'] == 0) {
-				$s[]='new Array(\''.$v['linkageid'].'\',\''.$v['name'].'\',\''.$v['parentid'].'\')';
-			} else {
-				continue;
-			}
-		}
-		$s = implode(',',$s);
-		$string .=$s;
-		$string .= ')';
-		$string .= '</script>';
-		
-	} elseif($datas['style']=='2') {
-		if(!defined('LINKAGE_INIT_1')) {
-			define('LINKAGE_INIT_1', 1);
-			$string .= '<script type="text/javascript" src="'.JS_PATH.'linkage/js/jquery.ld.js"></script>';
-		}
-		$default_txt = '';
-		if($defaultvalue) {
-				$default_txt = menu_linkage_level($defaultvalue,$linkageid,$infos);
-				$default_txt = '["'.str_replace(' > ','","',$default_txt).'"]';
-		}
-		$string .= $defaultvalue && (ROUTE_A=='edit' || ROUTE_A=='account_manage_info'  || ROUTE_A=='info_publish') ? '<input type="hidden" name="info['.$id.']"  id="'.$id.'" value="'.$defaultvalue.'">' : '<input type="hidden" name="info['.$id.']"  id="'.$id.'" value="">';
-
-		for($i=1;$i<=$datas['setting']['level'];$i++) {
-			$string .='<select class="pc-select-'.$id.'" name="'.$id.'-'.$i.'" id="'.$id.'-'.$i.'" width="100"><option value="">请选择菜单</option></select> ';
-		}
-
-		$string .= '<script type="text/javascript">
-					$(function(){
-						var $ld5 = $(".pc-select-'.$id.'");					  
-						$ld5.ld({ajaxOptions : {"url" : "'.APP_PATH.'api.php?op=get_linkage&act=ajax_select&keyid='.$linkageid.'"},defaultParentId : 0,style : {"width" : 120}})	 
-						var ld5_api = $ld5.ld("api");
-						ld5_api.selected('.$default_txt.');
-						$ld5.bind("change",onchange);
-						function onchange(e){
-							var $target = $(e.target);
-							var index = $ld5.index($target);
-							$("#'.$id.'-'.$i.'").remove();
-							$("#'.$id.'").val($ld5.eq(index).show().val());
-							index ++;
-							$ld5.eq(index).show();								}
-					})
-		</script>';
-			
-	} else {
-		$title = $defaultvalue ? $infos[$defaultvalue]['name'] : $datas['title'];
-		$colObj = random(3).date('is');
-		$string = '';
-		if(!defined('LINKAGE_INIT')) {
-			define('LINKAGE_INIT', 1);
-			$string .= '<script type="text/javascript" src="'.JS_PATH.'linkage/js/mln.colselect.js"></script>';
-			if(defined('IS_ADMIN') && IS_ADMIN) {
-				$string .= '<link href="'.JS_PATH.'linkage/style/admin.css" rel="stylesheet" type="text/css">';
-			} else {
-				$string .= '<link href="'.JS_PATH.'linkage/style/css.css" rel="stylesheet" type="text/css">';
-			}
-		}
-		$string .= '<input type="hidden" name="info['.$id.']" value="1"><div id="'.$id.'"></div>';
-		$string .= '<script type="text/javascript">';
-		$string .= 'var colObj'.$colObj.' = {"Items":[';
-
-		foreach($infos AS $k=>$v) {
-			$s .= '{"name":"'.$v['name'].'","topid":"'.$v['parentid'].'","colid":"'.$k.'","value":"'.$k.'","fun":function(){}},';
-		}
-
-		$string .= substr($s, 0, -1);
-		$string .= ']};';
-		$string .= '$("#'.$id.'").mlnColsel(colObj'.$colObj.',{';
-		$string .= 'title:"'.$title.'",';
-		$string .= 'value:"'.$defaultvalue.'",';
-		$string .= 'width:100';
-		$string .= '});';
-		$string .= '</script>';
+function menu_linkage($code = '', $id = 'linkid', $defaultvalue = 0) {
+	// 最大几层
+	$linklevel = dr_linkage_level($code) + 1;
+	$string = $defaultvalue && (ROUTE_A=='edit' || ROUTE_A=='account_manage_info'  || ROUTE_A=='info_publish') ? '<input type="hidden" name="info['.$id.']"  id="dr_'.$id.'" value="'.$defaultvalue.'">' : '<input type="hidden" name="info['.$id.']"  id="dr_'.$id.'" value="">';
+	if(!defined('LINKAGE_INIT_1')) {
+		define('LINKAGE_INIT_1', 1);
+		$string .= '<script type="text/javascript" src="'.JS_PATH.'jquery.ld.js"></script>';
 	}
+	$level = 1;
+	$default = '';
+	if ($defaultvalue) {
+		$link = dr_linkage($code, $defaultvalue);
+		$pids = substr($link['pids'], 2);
+		$level = substr_count($pids, ',') + 1;
+		$default = !$pids ? '["'.$defaultvalue.'"]' : '["'.str_replace(',', '","', $pids).'","'.$defaultvalue.'"]';
+	}
+	// 输出默认菜单
+	$string.= '<span id="dr_linkage_'.$id.'_select" style="'.($defaultvalue ? 'display:none' : '').'">';
+	for ($i = 1; $i <= $linklevel; $i++) {
+		$style = $i > $level ? 'style="display:none"' : '';
+		$string.= '<label style="padding-right:10px;"><select class="form-control select-'.$id.'" name="'.$id.'-'.$i.'" id="'.$id.'-'.$i.'" width="100" '.$style.'><option defaultvalue=""> -- </option></select></label>';
+	}
+	$string.= '<label id="dr_linkage_'.$id.'_html"></label>';
+	$string.= '</span>';
+	// 重新选择
+	if ($defaultvalue) {
+		$string.= '<div id="dr_linkage_'.$id.'_cxselect">';
+		$edit_html = '<div class="form-control-static" >'.dr_linkagepos($code, $defaultvalue, ' » ').'&nbsp;&nbsp;<a href="javascript:;" onclick="dr_linkage_select_'.$id.'()" style="color:blue">'.L('[重新选择]').'</a></div>';
+		$string.= $edit_html;
+		$string.= '</div>';
+	}
+	// 输出js支持
+	$string.= '
+	<script type="text/javascript">
+		function dr_linkage_select_'.$id.'() {
+			$("#dr_linkage_'.$id.'_select").show();
+			$("#dr_linkage_'.$id.'_cxselect").hide();
+		}
+		$(function(){
+			var $ld5 = $(".select-'.$id.'");					  
+			$ld5.ld({ajaxOptions:{"url": "'.APP_PATH.'api.php?op=get_linkage&code='.$code.'"},inputId:"dr_linkage_'.$id.'_html",defaultParentId:0});
+			var ld5_api = $ld5.ld("api");
+			ld5_api.selected('.$default.');
+			$ld5.bind("change", function(e){
+				var $target = $(e.target);
+				var index = $ld5.index($target);
+				//$("#'.$id.'-'.$i.'").remove();
+				var vv = $ld5.eq(index).show().val();
+				$("#dr_'.$id.'").val(vv);
+				index ++;
+				$ld5.eq(index).show();
+				//console.log("value="+vv);
+			});
+		})
+	</script>';
 	return $string;
 }
-
 /**
- * 联动菜单层级
+ * 联动菜单的最大层级
+ *
+ * @param   string  $code   菜单代码
+ * @return  array
  */
-
-function menu_linkage_level($linkageid,$keyid,$infos,$result=array()) {
-	if(array_key_exists($linkageid,$infos)) {
-		$result[]=$infos[$linkageid]['name'];
-		return menu_linkage_level($infos[$linkageid]['parentid'],$keyid,$infos,$result);
+function dr_linkage_level($code) {
+	$cache = pc_base::load_sys_class('cache');
+	if (!$code) {
+		return 0;
 	}
-	krsort($result);
-	return implode(' > ',$result);
+	return (int)$cache->get_file('level', 'linkage/0_'.$code.'/');
 }
 /**
  * 通过catid获取显示菜单完整结构
@@ -2744,35 +2734,20 @@ function menu_level($menuid, $cache_file, $cache_path = 'commons', $key = 'catna
 }
 /**
  * 通过id获取显示联动菜单
- * @param  $linkageid 联动菜单ID
- * @param  $keyid 菜单keyid
- * @param  $space 菜单间隔符
- * @param  $tyoe 1 返回间隔符链接，完整路径名称 3 返回完整路径数组，2返回当前联动菜单名称，4 直接返回ID
- * @param  $result 递归使用字段1
- * @param  $infos 递归使用字段2
+ * @param   intval  $id     联动菜单ID
+ * @param   string  $keyid   菜单keyid
+ * @param   string  $space 间隔符号
+ * @param   string  $url    url地址格式，必须存在[linkage]，否则返回不带url的字符串
+ * @param   string  $html   格式替换
  */
-function get_linkage($linkageid, $keyid, $space = '>', $type = 1, $result = array(), $infos = array()) {
+function get_linkage($id, $keyid, $space = '>', $url = '', $html = '') {
+	$linkage_db = pc_base::load_model('linkage_model');
 	if($space=='' || !isset($space))$space = '>';
-	if(!$infos) {
-		$datas = getcache($keyid,'linkage');
-		$infos = $datas['data'];
+	$link = $linkage_db->get_one(array('id'=>$keyid));
+	if ($link) {
+		return dr_linkagepos($link['code'], $id, $space, $url, $html);
 	}
-	if($type == 1 || $type == 3 || $type == 4) {
-		if(array_key_exists($linkageid,$infos)) {
-			$result[]= ($type == 1) ? $infos[$linkageid]['name'] : (($type == 4) ? $linkageid :$infos[$linkageid]);
-			return get_linkage($infos[$linkageid]['parentid'], $keyid, $space, $type, $result, $infos);
-		} else {
-			if(count($result)>0) {
-				krsort($result);
-				if($type == 1 || $type == 4) $result = implode($space,$result);
-				return $result;
-			} else {
-				return $result;
-			}
-		}
-	} else {
-		return $infos[$linkageid]['name'];
-	}
+	return '';
 }
 /**
  * IE浏览器判断
@@ -2963,7 +2938,7 @@ function thumb($img, $width = 0, $height = 0, $water = 0, $mode = 'auto', $webim
 	}
 	if ($img || $webimg) {
 		// 强制缩略图水印
-		$config = siteinfo((defined('SITEID') && SITEID ? SITEID : (SITE_ID ? SITE_ID : get_siteid())));
+		$config = siteinfo((defined('SITEID') && SITEID ? SITEID : (get_siteid() ? get_siteid() : SITE_ID)));
 		$site_setting = string2array($config['setting']);
 		if ($site_setting['thumb']) {
 			$water = 1;
@@ -3042,6 +3017,147 @@ function dr_mobile_catpos($catid, $symbol = ' > ', $url = true, $html= '') {
 		}
 	}
 	return implode($symbol, array_unique($name));
+}
+/**
+ * 联动菜单包屑导航
+ *
+ * @param   string  $code   联动菜单代码
+ * @param   intval  $id     id
+ * @param   string  $symbol 间隔符号
+ * @param   string  $url    url地址格式，必须存在[linkage]，否则返回不带url的字符串
+ * @param   string  $html   格式替换
+ * @return  string
+ */
+function dr_linkagepos($code, $id, $symbol = ' > ', $url = '', $html = '') {
+	if (!$code || !$id) {
+		return '';
+	}
+	$url = $url ? urldecode($url) : '';
+	$data = dr_linkage($code, $id, 0);
+	if (!$data) {
+		return '';
+	}
+	$name = [];
+	$array = explode(',', $data['pids']);
+	$array[] = $data['ii'];
+	foreach ($array as $ii) {
+		if ($ii) {
+			$data = dr_linkage($code, $ii, 0);
+			if ($url) {
+				$name[] = ($html ? str_replace(array('[url]', '[name]'), array(str_replace(array('[linkage]', '{linkage}'), $data['id'], $url), $data['name']), $html) : "<a href=\"".str_replace(array('[linkage]', '{linkage}'), $data['id'], $url)."\">{$data['name']}</a>");
+			} else {
+				$name[] = $data['name'];
+			}
+		}
+	}
+	return implode($symbol, array_unique($name));
+}
+
+/**
+ * 联动菜单调用
+ *
+ * @param   string  $code   菜单代码
+ * @param   intval  $id     菜单id
+ * @param   intval  $level  调用级别，1表示顶级，2表示第二级，等等
+ * @param   string  $name   菜单名称，如果有显示它的值，否则返回数组
+ * @return  array
+ */
+function dr_linkage($code, $id, $level = 0, $name = '') {
+	$linkage_db = pc_base::load_model('linkage_model');
+	$cache = pc_base::load_sys_class('cache');
+	if (!$id) {
+		return false;
+	}
+	$linkage_data = $linkage_db->get_one(array('code'=>$code));
+	// id 查询
+	if (is_numeric($id)) {
+		$id = dr_linkage_id($code, $id);
+		if (!$id) {
+			return false;
+		}
+	}
+	$data = $cache->get_file('data-'.$id, 'linkage/'.($linkage_data['type'] ? $linkage_data['type'] : 0).'_'.$code.'/');
+	if (!$data) {
+		return false;
+	}
+	$pids = explode(',', $data['pids']);
+	if ($level == 0) {
+		return $name ? $data[$name] : $data;
+	}
+	if (!$pids) {
+		return $name ? $data[$name] : $data;
+	}
+	$i = 1;
+	foreach ($pids as $pid) {
+		if ($pid) {
+			if ($i == $level) {
+				$link = dr_linkage($code, $pid, 0);
+				return $name ? $link[$name] : $link;
+			}
+			$i++;
+		}
+	}
+	return $name ? $data[$name] : $data;
+}
+/**
+ * 联动菜单列表数据
+ *
+ * @param   string  $code   菜单代码
+ * @param   intval  $pid    菜单父级id或者别名
+ * @return  array
+ */
+function dr_linkage_list($code, $pid) {
+	$cache = pc_base::load_sys_class('cache');
+	$linkage_db = pc_base::load_model('linkage_model');
+	if (!$code) {
+		return false;
+	}
+	$linkage_data = $linkage_db->get_one(array('code'=>$code));
+	if ($pid && !is_numeric($pid)) {
+		// 别名情况时获取id号
+		$pid = dr_linkage_cname($code, $pid);
+	}
+	return $cache->get_file('list-'.$pid, 'linkage/'.($linkage_data['type'] ? $linkage_data['type'] : 0).'_'.$code.'/');
+}
+/**
+ * 联动菜单的id号获取
+ *
+ * @param   string  $code   菜单代码
+ * @param   string  $cname  别名
+ * @return  array
+ */
+function dr_linkage_id($code, $cname) {
+	$cache = pc_base::load_sys_class('cache');
+	$linkage_db = pc_base::load_model('linkage_model');
+	if (!$code || !$cname) {
+		return false;
+	}
+	$linkage_data = $linkage_db->get_one(array('code'=>$code));
+	$ids = $cache->get_file('id', 'linkage/'.($linkage_data['type'] ? $linkage_data['type'] : 0).'_'.$code.'/');
+	if (isset($ids[$cname]) && $ids[$cname]) {
+		return $ids[$cname];
+	}
+	return false;
+}
+/**
+ * 联动菜单的别名获取
+ *
+ * @param   string  $code   菜单代码
+ * @param   int     $id     id
+ * @return  array
+ */
+function dr_linkage_cname($code, $id) {
+	$cache = pc_base::load_sys_class('cache');
+	$linkage_db = pc_base::load_model('linkage_model');
+	if (!$code || !$id) {
+		return 0;
+	}
+	$linkage_data = $linkage_db->get_one(array('code'=>$code));
+	$ids = array_flip($cache->get_file('id', 'linkage/'.($linkage_data['type'] ? $linkage_data['type'] : 0).'_'.$code.'/'));
+	if (isset($ids[$id]) && $ids[$id]) {
+		return $ids[$id];
+	}
+	return 0;
 }
 
 /**

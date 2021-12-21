@@ -214,8 +214,6 @@ class site extends admin {
 				$model_db->delete(array('siteid'=>$siteid));
 				$model_field_db = pc_base::load_model('sitemodel_field_model');
 				$model_field_db->delete(array('siteid'=>$siteid));
-				$linkage_db = pc_base::load_model('linkage_model');
-				$linkage_db->delete(array('siteid'=>$siteid));
 				$keyword_db = pc_base::load_model('keyword_model');
 				$keyword_data_db = pc_base::load_model('keyword_data_model');
 				$keyword_db->delete(array('siteid'=>$siteid));

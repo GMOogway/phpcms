@@ -1676,7 +1676,7 @@ class image {
         // 水印处理
         if ($water) {
             $siteinfo = getcache('sitelist', 'commons');
-            $data = string2array($siteinfo[(SITEID ? SITEID : (SITE_ID ? SITE_ID : get_siteid()))]['setting']);
+            $data = string2array($siteinfo[(SITEID ? SITEID : (get_siteid() ? get_siteid() : SITE_ID))]['setting']);
             if ($data) {
                 if ($data['watermark_enable']) {
                     $data['source_image'] = $cache_path.$cache_file;

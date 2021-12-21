@@ -7,8 +7,10 @@ class linkage extends admin {
 	function __construct() {
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
+		$this->cache = pc_base::load_sys_class('cache');
 		$this->db = pc_base::load_model('linkage_model');
 		$this->sites = pc_base::load_app_class('sites');
+		$this->siteid = $this->get_siteid();
 		pc_base::load_sys_class('form', '', 0);
 		$this->childnode = array();
 	}
@@ -17,9 +19,19 @@ class linkage extends admin {
 	 * 联动菜单列表
 	 */
 	public function init() {
-		$where = array('keyid'=>0);
-		$infos = $this->db->select($where);
-		$big_menu = array('javascript:artdialog(\'add\',\'?m=admin&c=linkage&a=add\',\''.L('linkage_add').'\',500,220);void(0);', L('linkage_add'));
+		$dt_data = array(
+			1 => '导入省级',
+			2 => '导入省市',
+			3 => '导入省市县',
+		);
+		$infos = $this->db->select();
+		$items = array();
+		foreach ($infos as $k=>$r) {
+			$this->db->table_name = $this->db->table_name.'_data_'.$r['id'];
+			$number = $this->db->count();
+			$infos[$k]['count'] = $number;
+		}
+		$big_menu = array('javascript:dr_iframe(\'add\',\'?m=admin&c=linkage&a=add\',500,300);void(0);', L('linkage_add'));
 		include $this->admin_tpl('linkage_list');
 	}
 	
@@ -27,17 +39,14 @@ class linkage extends admin {
 	 * 添加联动菜单
 	 */
 	function add() {
-		if($this->input->post('dosubmit')) {
-			$info = array();
-			$info['name'] = $this->input->post('info')['name'] && trim($this->input->post('info')['name']) ? trim($this->input->post('info')['name']) : dr_admin_msg(0,L('linkage_not_empty'));
-			$info['description'] = trim($this->input->post('info')['description']);
-			$info['style'] = trim(intval($this->input->post('info')['style']));
-			$info['siteid'] = trim(intval($this->input->post('info')['siteid']));
-			$this->db->insert($info);
-			$insert_id = $this->db->insert_id();
-			if($insert_id){
-				dr_admin_msg(1,L('operation_success'), '', '', 'add');
+		if(IS_AJAX_POST) {
+			$data = $this->input->post('data');
+			$this->_validation(0, $data);
+			$rt = $this->create($data);
+			if (!$rt['code']) {
+				dr_json(0, $rt['msg']);
 			}
+			dr_json(1, L('操作成功'));
 		} else {
 			$show_header = true;
 			$show_validator = true;
@@ -47,30 +56,24 @@ class linkage extends admin {
 			}
 			include $this->admin_tpl('linkage_add');
 		}
-
 	}
 	/**
 	 * 编辑联动菜单
 	 */
 	public function edit() {
-		if($this->input->post('dosubmit')) {
-			$info = array();
-			$linkageid = intval($this->input->post('linkageid'));
-			$info['name'] = $this->input->post('info')['name'] && trim($this->input->post('info')['name']) ? trim($this->input->post('info')['name']) : dr_admin_msg(0,L('linkage_not_empty'));
-			$info['description'] = trim($this->input->post('info')['description']);
-			$info['style'] = trim(intval($this->input->post('info')['style']));
-			$info['siteid'] = trim(intval($this->input->post('info')['siteid']));
-			$info['setting'] = array2string(array('level'=>intval($this->input->post('info')['level'])));
-			if($this->input->post('info')['keyid']) $info['keyid'] = trim($this->input->post('info')['keyid']);
-			if($this->input->post('info')['parentid']) $info['parentid'] = trim($this->input->post('info')['parentid']);
-			$this->db->update($info,array('linkageid'=>$linkageid));
-			$id = $info['keyid'] ? $info['keyid'] : $linkageid;
-			dr_admin_msg(1,L('operation_success'), '', '', 'edit');			
+		if(IS_AJAX_POST) {
+			$id = intval($this->input->post('id'));
+			$data = $this->input->post('data');
+			$data['code'] = strtolower($data['code']);
+			$this->_validation($id, $data);
+			$this->db->update($data,array('id'=>$id));
+			dr_json(1,L('operation_success'));
 		} else {
-			$linkageid = intval($this->input->get('linkageid'));
-			$info = $this->db->get_one(array('linkageid'=>$linkageid));
-			extract($info);	
-			$setting = string2array($setting);
+			$id = intval($this->input->get('id'));
+			$data = $this->db->get_one(array('id'=>$id));
+			if (!$data) {
+				dr_admin_msg(0, L('联动菜单（'.$id.'）不存在'));
+			}
 			$sitelist = $this->sites->get_list();
 			foreach($sitelist as $id=>$v) {
 				$sitelist[$id] = $v['name'];
@@ -81,224 +84,584 @@ class linkage extends admin {
 		}
 		
 	}
+	public function public_import() {
+		
+		$id = (int)$this->input->get('id');
+		$code = (int)$this->input->get('code');
+		if (!is_file(CACHE_PATH.'configs/linkage/'.$code.'.php')) {
+			dr_admin_msg(0, L('数据文件不存在无法导入'));
+		}
+
+		// 清空数据
+		$count = 0;
+		$this->db->table_name = $this->db->table_name.'_data_'.$id;
+		$this->db->query('TRUNCATE `'.$this->db->table_name.'`');
+
+		// 开始导入
+		$data = require CACHE_PATH.'configs/linkage/'.$code.'.php';
+		$this->db->query('BEGIN');
+		foreach ($data as $t) {
+			if (is_numeric($t['cname'])) {
+				$t['cname'] = 'a'.$t['cname'];
+			}
+			$insert_id = $this->db->insert($t, true);
+			if($insert_id){
+				$count++;
+				if($count%10000==0){
+					$this->db->query('COMMIT');
+					$this->db->query('BEGIN');
+				}
+			}
+		}
+		$this->db->query('COMMIT');
+
+		dr_admin_msg(1, L('共'.dr_count($data).'条数据，导入成功'.$count.'条'));
+	}
 	/**
 	 * 删除菜单
 	 */
 	public function delete() {
-		$linkageid = intval($this->input->get('linkageid'));
-		$keyid = intval($this->input->get('keyid'));
-		$this->_get_childnode($linkageid);
-		if(is_array($this->childnode)){
-			foreach($this->childnode as $linkageid_tmp) {
-				$this->db->delete(array('linkageid' => $linkageid_tmp));
-			}
+		$ids = $this->input->get_post_ids();
+		if (!$ids) {
+			dr_admin_msg(0, L('你还没有选择呢'));
 		}
-		$this->db->delete(array('keyid' => $linkageid));
-		$id = $keyid ? $keyid : $linkageid;
-		if(!$keyid)$this->_dlecache($linkageid);
-		dr_admin_msg(1,L('operation_success'));	
+		foreach ($ids as $id) {
+			$row = $this->db->get_one(array('id' => intval($id)));
+			if (!$row) {
+				return dr_return_data(0, L('数据不存在(id:'.$id.')'));
+			}
+			$this->db->delete(array('id' => $id));
+			// 删除表数据
+			$table = $this->db->table_name.'_data_'.$id;
+			$this->db->query('DROP TABLE IF EXISTS `'.$table.'`');
+		}
+		dr_admin_msg(1, L('operation_success'), HTTP_REFERER);
+	}
+
+	// 验证数据
+	private function _validation($id, $data) {
+		$where = 'id<>'.$id.' and code=\''.$data['code'].'\'';
+		$info = $this->db->get_one($where);
+		if (!$data['name']) {
+			dr_json(0, L('名称不能为空'), array('field' => 'name'));
+		} elseif (!$data['code']) {
+			dr_json(0, L('别名不能为空'), array('field' => 'code'));
+		} elseif ($info) {
+			dr_json(0, L('别名已经存在'), array('field' => 'code'));
+		}
+	}
+
+	// 创建菜单
+	public function create($data) {
+		$where = 'id<>0 and code=\''.$data['code'].'\'';
+		$info = $this->db->get_one($where);
+		if ($info) {
+			return dr_return_data(0, L('别名已经存在'));
+		}
+
+		$insert_id = $this->db->insert(array(
+			'name' => $data['name'],
+			'code' => strtolower($data['code']),
+			'type' => (int)$data['type'],
+		), true);
+		if (!$insert_id) {
+			return $insert_id;
+		}
+
+		// 返回id
+		$id = intval($insert_id);
+
+		// 创建数据表
+		$table = $this->db->table_name.'_data_'.$id;
+		$this->db->query('DROP TABLE IF EXISTS `'.$table.'`');
+		$this->db->query(trim("CREATE TABLE IF NOT EXISTS `{$table}` (
+		  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+		  `site` smallint(5) unsigned NOT NULL,
+		  `pid` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '上级id',
+		  `pids` varchar(255) DEFAULT NULL COMMENT '所有上级id',
+		  `name` varchar(255) NOT NULL COMMENT '菜单名称',
+		  `cname` varchar(255) NOT NULL COMMENT '菜单别名',
+		  `child` tinyint(1) unsigned DEFAULT NULL DEFAULT '0' COMMENT '是否有下级',
+		  `hidden` tinyint(1) unsigned DEFAULT NULL DEFAULT '0' COMMENT '前端隐藏',
+		  `childids` text DEFAULT NULL COMMENT '下级所有id',
+		  `displayorder` int(10) DEFAULT NULL DEFAULT '0',
+		  PRIMARY KEY (`id`),
+		  KEY `cname` (`cname`),
+		  KEY `hidden` (`hidden`),
+		  KEY `list` (`site`,`displayorder`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT='联动菜单".dr_safe_replace($data['name'])."数据表'"));
+
+		return dr_return_data($id);
 	}
 	
 	public function public_cache() {
-		$linkageid = intval($this->input->get('linkageid'));
-		$this->_cache($linkageid);
-		dr_admin_msg(1,L('operation_success'));
+		$key = (int)$this->input->get('key');
+		$link = $this->db->get_one(array('id'=>$key));
+		if (!$link) {
+			html_msg(L('联动菜单不存在'));
+		}
+
+		$page = (int)$this->input->get('page');
+		$psize = 10; // 每页处理的数量
+		$total = (int)$this->input->get('total');
+
+		if (!$page) {
+			$path = CACHE_PATH.'caches_linkage/'.$link['type'].'_'.$link['code'].'/';
+			dr_dir_delete($path);
+			$this->repair($link); // 修复菜单
+			$pids = $this->child_pids;
+			$total = dr_count($pids);
+			if (!$total) {
+				html_msg(0, L('无可用数据'));
+			}
+			// 存储执行
+			$this->cache->set_auth_data('linkage-cache-'.$key, array_chunk($pids, $psize), $link['type']);
+			html_msg(1, L('正在执行中...'), '?m=admin&c=linkage&a=public_cache&key='.$key.'&total='.$total.'&page='.($page+1));
+		}
+
+		$pids = $this->cache->get_auth_data('linkage-cache-'.$key, $link['type']);
+		if (!$pids) {
+			html_msg(0, L('临时数据读取失败'));
+		} elseif (!isset($pids[$page-1])) {
+			html_msg(0, L('更新完成'));
+		}
+
+		$tpage = ceil($total / $psize); // 总页数
+
+		// 更新完成
+		if ($page > $tpage) {
+			html_msg(1, L('更新完成'));
+		}
+		foreach ($pids[$page-1] as $pid) {
+			$this->cache_list($link, $pid);
+		}
+
+		html_msg(1, L('正在执行中'.$tpage.'/'.$page.'...'),'?m=admin&c=linkage&a=public_cache&key='.$key.'&total='.$total.'&page='.($page+1));
 	}
+
 	/**
-	 * 菜单排序
+	 * 修复菜单数据
 	 */
-	public function public_listorder() {
-		if ($this->input->post('listorders') && is_array($this->input->post('listorders'))) {
-			foreach($this->input->post('listorders') as $linkageid=>$value) {
-				$value = intval($value);
-				$this->db->update(array('listorder'=>$value),array('linkageid'=>$linkageid));
+	public function repair($link) {
+
+		if (!$link) {
+			return;
+		}
+
+		$this->categorys = $categorys = [];
+		
+		// 站点独立 // 共享共享
+		$this->db->table_name = $this->db->table_name.'_data_'.$link['id'];
+		$_data = $link['type']
+			? $this->db->select(array('site'=>$link['type']),'*','','displayorder ASC,id ASC')
+			: $this->db->select('','*','','displayorder ASC,id ASC');
+		if (!$_data) {
+			return;
+		}
+
+		// 全部栏目数据
+		foreach ($_data as $t) {
+			$this->pids[$t['pid']][] = $t['id']; // 归类
+			$categorys[$t['id']] = $this->categorys[$t['id']] = $t;
+		}
+
+		$this->child_pids = [0];
+		foreach ($this->categorys as $catid => $cat) {
+			$this->categorys[$catid]['pids'] = $this->get_pids($catid);
+			$this->categorys[$catid]['childids'] = $this->get_childids($catid);
+			$this->categorys[$catid]['child'] = is_numeric($this->categorys[$catid]['childids']) ? 0 : 1;
+			if ($this->categorys[$catid]['child']) {
+				$this->child_pids[] = $catid;
+			}
+			// 当库中与实际不符合才更新数据表
+			if ($categorys[$catid]['pids'] != $this->categorys[$catid]['pids']
+				|| $categorys[$catid]['childids'] != $this->categorys[$catid]['childids']
+				|| $categorys[$catid]['child'] != $this->categorys[$catid]['child']) {
+				$this->db->update(array(
+					'pids' => $this->categorys[$catid]['pids'],
+					'child' => $this->categorys[$catid]['child'],
+					'childids' => $this->categorys[$catid]['childids']
+				), array('id'=>$cat['id']));
 			}
 		}
-		$id = intval($this->input->post('keyid'));
-		dr_admin_msg(1,L('operation_success'),'?m=admin&c=linkage&a=init');
+		
+		return $this->categorys;
+	}
+
+	/**
+	 * 获取父栏目ID列表
+	 *
+	 * @param	integer	$catid	栏目ID
+	 * @param	array	$pids	父目录ID
+	 * @param	integer	$n		查找的层次
+	 * @return	string
+	 */
+	protected function get_pids($catid, $pids = '', $n = 1) {
+
+		if ($n > 100 || !$this->categorys || !isset($this->categorys[$catid])) {
+			return FALSE;
+		}
+
+		$pid = $this->categorys[$catid]['pid'];
+		$pids = $pids ? $pid.','.$pids : $pid;
+		$pid && $pids = $this->get_pids($pid, $pids, ++$n);
+
+		return $pids;
+	}
+
+	/**
+	 * 获取子栏目ID列表
+	 *
+	 * @param	$catid	栏目ID
+	 * @return	string
+	 */
+	protected function get_childids($catid, $n = 1) {
+
+		$childids = $catid;
+
+		if ($n > 100 || !is_array($this->categorys)
+			|| !isset($this->categorys[$catid])) {
+			return $childids;
+		}
+
+		if ($this->pids[$catid]) {
+			foreach ($this->pids[$catid] as $id) {
+				$cat = $this->categorys[$id];
+				// 避免造成死循环
+				$cat['pid']
+				&& $id != $catid
+				&& $cat['pid'] == $catid
+				&& $this->categorys[$catid]['pid'] != $id
+				&& $childids.= ','.$this->get_childids($id, ++$n);
+			}
+		}
+
+		return $childids;
+	}
+
+	/**
+	 * 分组缓存菜单数据
+	 */
+	public function cache_list($link, $pid) {
+
+		$data_path = 'linkage/'.$link['type'].'_'.$link['code'].'/';
+
+		// 格式返回数据
+		$lv = $data = array();
+		$cid = $this->cache->get_file('id', $data_path, false);
+		!$cid && $cid = array();
+
+		// 执行程序
+		$key = (int)$link['id'];
+		$this->db->table_name = $this->db->db_tablepre.'linkage_data_'.$key;
+		$link['type'] && $where = array('site'=>$link['type']); // 站点查询
+		$where = array('pid'=>(int)$pid);
+		$menu = $this->db->select($where,'*','','displayorder ASC,id ASC');
+		if ($menu) {
+			foreach ($menu as $t) {
+				if ($t['hidden']) {
+					continue;
+				}
+				$lv[] = substr_count($t['pids'], ',');
+				$t['ii'] = $t['id'];
+				$t['id'] = $t['cname'];
+				$cid[$t['ii']] = $t['id'];
+				$data[$t['cname']] = $t;
+				$this->cache->set_file('data-'.$t['cname'], $data[$t['cname']], $data_path);
+			}
+		}
+
+		$this->cache->set_file('list-'.$pid, $data, $data_path);
+
+		$this->cache->set_file('id', $cid, $data_path);
+		$this->cache->set_file('key', $key, $data_path);
+
+		$level_data = (int)$this->cache->get_file('level', $data_path, false);
+		$this->cache->set_file('level', max($lv ? max($lv) : 0, $level_data), $data_path);
+
+		return $data;
 	}
 
 	/**
 	 * 管理联动菜单子菜单
 	 */
 	public function public_manage_submenu() {
-		$keyid = $this->input->get('keyid') && trim($this->input->get('keyid')) ? trim($this->input->get('keyid')) : dr_admin_msg(0,L('linkage_parameter_error'));
-		$tree = pc_base::load_sys_class('tree');
-		$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
-		$tree->nbsp = '&nbsp;&nbsp;&nbsp;';
-		$sum = $this->db->count(array('keyid'=>$keyid));
-		$sql_parentid = $this->input->get('parentid') ? trim($this->input->get('parentid')) : 0;
-		$where = $sum > 40 ? array('keyid'=>$keyid,'parentid'=>$sql_parentid) : array('keyid'=>$keyid);
-		$result = $this->db->select($where,'*','','listorder ,linkageid');
-
-		foreach($result as $areaid => $area){
-			$areas[$area['linkageid']] = array('id'=>$area['linkageid'],'parentid'=>$area['parentid'],'name'=>$area['name'],'listorder'=>$area['listorder'],'style'=>$area['style'],'mod'=>$mod,'file'=>$file,'keyid'=>$keyid,'description'=>$area['description']);
-			$areas[$area['linkageid']]['str_manage'] = ($sum > 40 && $this->_is_last_node($area['keyid'],$area['linkageid'])) ? '<a class="btn btn-xs blue" href="?m=admin&c=linkage&a=public_manage_submenu&keyid='.$area['keyid'].'&parentid='.$area['linkageid'].'">'.L('linkage_manage_submenu').'</a>' : '';
-			$areas[$area['linkageid']]['str_manage'] .= '<a class="btn btn-xs yellow" href="javascript:void(0);" onclick="add(\''.$keyid.'\',\''.new_addslashes($area['name']).'\',\''.$area['linkageid'].'\')">'.L('linkage_add_submenu').'</a><a class="btn btn-xs green" href="javascript:void(0);" onclick="edit(\''.$area['linkageid'].'\',\''.$area['name'].'\',\''.$area['parentid'].'\')">'.L('edit').'</a><a class="btn btn-xs red" href="javascript:confirmurl(\'?m=admin&c=linkage&a=delete&linkageid='.$area['linkageid'].'&keyid='.$area['keyid'].'\', \''.L('linkage_is_del').'\')">'.L('delete').'</a> ';
+		$key = (int)$this->input->get('key');
+		$pid = (int)$this->input->get('pid');
+		$link = $this->db->get_one(array('id'=>$key));
+		if (!$link) {
+			dr_admin_msg(0, L('联动菜单不存在'));
 		}
-		
-		$str  = "<tr>
-					<td align='center'><input name='listorders[\$id]' type='text' size='3' value='\$listorder' class='input-text-c'></td>
-					<td align='center'>\$id</td>
-					<td>\$spacer\$name</td>
-					<td >\$description</td>
-					<td align='center'>\$str_manage</td>
-				</tr>";
-		$tree->init($areas);
-		$submenu = $tree->get_tree($sql_parentid, $str);
-		$big_menu =array('javascript:artdialog(\'add\',\'?m=admin&c=linkage&a=public_sub_add&keyid='.$keyid.'\',\''.L('linkage_add').'\',500,430);void(0);', L('linkage_add'));		
+		$list = $this->getList($link, $pid);
+		$big_menu = array('?m=admin&c=linkage&a=init&menuid=269', L('linkage'));		
 		include $this->admin_tpl('linkage_submenu');
+	}
+
+	/**
+	 * 全部子菜单数据
+	 *
+	 * @param	array	$link
+	 * @param	intval	$pid
+	 * @return	array
+	 */
+	public function getList($link, $pid = 'NULL') {
+
+		$key = (int)$link['id'];
+
+		if ($pid === 'NULL') {
+			$name = 'linkage-cahce-list-'.$key.'-'.$pid;
+			$data = $this->cache->get_data($name);
+			if ($data) {
+				return $data;
+			}
+			$this->db->table_name = $this->db->table_name.'_data_'.$key;
+			// 获取菜单数据
+			$menu = $this->db->select('','*','','displayorder ASC,id ASC');
+			if (!$menu) {
+				return array();
+			}
+			// 格式返回数据
+			$data = array();
+			foreach ($menu as $t) {
+				$data[$t['id']]	= $t;
+			}
+			$this->cache->set_data($name, $data);
+		} else {
+			$this->db->table_name = $this->db->table_name.'_data_'.$key;
+			// 站点查询
+			$link['type'] && $where = array('site'=>$link['type']);
+			$where = array('pid'=>(int)$pid);
+			$menu = $this->db->select($where,'*','','displayorder ASC,id ASC');
+			if (!$menu) {
+				return array();
+			}
+			// 格式返回数据
+			$data = array();
+			foreach ($menu as $t) {
+				$data[$t['id']]	= $t;
+			}
+		}
+
+		return $data;
 	}
 	
 	/**
 	 * 子菜单添加
 	 */
-	public function public_sub_add() {		
-		if($this->input->post('dosubmit')) {
-			$info = array();
-			$info['keyid'] = $this->input->post('keyid') && trim($this->input->post('keyid')) ? trim(intval($this->input->post('keyid'))) : dr_admin_msg(0,L('linkage_parameter_error'));
-			$name = $this->input->post('info')['name'] && trim($this->input->post('info')['name']) ? trim($this->input->post('info')['name']) : dr_admin_msg(0,L('linkage_parameter_error'));
-			$info['description'] = trim($this->input->post('info')['description']);
-			$info['style'] = trim($this->input->post('info')['style']);
-			$info['parentid'] = trim($this->input->post('info')['parentid']);
-			$names = explode("\n", trim($name));
-			foreach($names as $name) {
-				$name = trim($name);
-				if(!$name) continue;
-				$info['name'] = $name;
-				$this->db->insert($info);
-			}		
-			if($this->db->insert_id()){
-				dr_admin_msg(1,L('operation_success'), '', '', 'add');
+	public function public_listk_add() {		
+		if(IS_AJAX_POST) {
+			$key = (int)$this->input->post('key');
+			$all = (int)$this->input->post('all');
+			$data = $this->input->post('data');
+			$this->db->table_name = $this->db->table_name.'_data_'.$key;
+			$pid = intval($data['pid']);
+
+			if ($all) {
+				// 批量
+				if (!$data['all']) {
+					dr_json(0, L('名称不能为空'), array('field' => 'all'));
+				}
+				$c = 0;
+				$py = pc_base::load_sys_class('pinyin');; // 拼音转换类
+				$names = explode(PHP_EOL, trim($data['all']));
+				foreach ($names as $t) {
+					$t = trim($t);
+					if (!$t) {
+						continue;
+					}
+					$cname = $py->result($t);
+					if (is_numeric($cname)) {
+						$cname = 'a'.$cname;
+					}
+					$where = 'cname=\''.$cname.'\'';
+					$cf = $this->db->get_one($where);
+					$rt = $this->db->insert(array(
+						'pid' => $pid,
+						'pids' => '',
+						'name' => $t,
+						'site' => $this->siteid,
+						'child' => 0,
+						'cname' => $cname,
+						'hidden' => 0,
+						'childids' => '',
+						'displayorder' => 0
+					), true);
+					if (!$rt) {
+						return $rt;
+					}
+					if ($cf) {
+						// 重复验证
+						$this->db->update(array('cname' => $cname.$rt), array('id' => $rt));
+					}
+					$c++;
+				}
+				// 更新pid
+				$pid && $this->db->update(array('child' => 1), array('id' => $pid));
+				dr_json(1, L('批量添加'.$c.'个'));
+			} else {
+				// 单个
+				$data['name'] = trim($data['name']);
+				if (!$data['name']) {
+					dr_json(0, L('名称不能为空'), array('field' => 'name'));
+				} elseif (!$data['cname']) {
+					dr_json(0, L('别名不能为空'), array('field' => 'cname'));
+				}
+				if (is_numeric($data['cname'])) {
+					$data['cname'] = 'a'.$data['cname'];
+				}
+				$where = 'cname=\''.$cname.'\'';
+				$cf = $this->db->get_one($where);
+				if ($cf) {
+					dr_json(0, L('别名已经存在'), array('field' => 'cname'));
+				}
+				$rt = $this->db->insert(array(
+					'pid' => $pid,
+					'pids' => '',
+					'name' => $data['name'],
+					'site' => $this->siteid,
+					'child' => 0,
+					'cname' => $data['cname'],
+					'hidden' => 0,
+					'childids' => '',
+					'displayorder' => 0
+				), true);
+				if (!$rt) {
+					return $rt;
+				}
+				// 更新pid
+				$pid && $this->db->update(array('child' => 1), array('id' => $pid));
+				dr_json(1, L('操作成功'));
 			}
 		} else {
-			$keyid = $this->input->get('keyid');
-			$linkageid = $this->input->get('linkageid');
-			$list = form::select_linkage($keyid,'0','info[parentid]', 'parentid', L('cat_empty'), $linkageid);
+			$pid = (int)$this->input->get('pid');
+			$key = (int)$this->input->get('key');
+			$link = $this->db->get_one(array('id'=>$key));
+			if (!$link) {
+				dr_admin_msg(0, L('联动菜单不存在'));
+			}
+			$select = '';
+			if ($pid) {
+				$this->db->table_name = $this->db->table_name.'_data_'.$key;
+				$top = $this->db->get_one(array('id'=>$pid));
+				if ($top) {
+					$select = '<input type="hidden" name="data[pid]" value="'.$pid.'">';
+					$select.= '<p class="form-control-static"> '.$top['name'].' </p>';
+				}
+			}
+			if (!$select) {
+				$select = '<input type="hidden" name="data[pid]" value="0">';
+				$select.= '<p class="form-control-static"> '.L('顶级').' </p>';
+			}
+			$show_header = true;
 			$show_validator = true;
 			include $this->admin_tpl('linkage_sub_add');			
 		}
 	}
-	public function ajax_getlist() {
 
-		$keyid = intval($this->input->get('keyid'));
-		$datas = getcache($keyid,'linkage');
-		$infos = $datas['data'];
-		$where_id = $this->input->get('parentid') ? $this->input->get('parentid') : intval($infos[$this->input->get('linkageid')]['parentid']);
-		$parent_menu_name = ($where_id==0) ? $datas['title'] :$infos[$where_id]['name'];
-		foreach($infos AS $k=>$v) {
-			if($v['parentid'] == $where_id) {
-				$s[]=iconv('gb2312','utf-8',$v['linkageid'].','.$v['name'].','.$v['parentid'].','.$parent_menu_name);
+	/**
+	 * 子菜单修改
+	 */
+	public function public_list_edit() {		
+		if(IS_AJAX_POST) {
+			$id = (int)$this->input->post('id');
+			$key = (int)$this->input->post('key');
+			$post = $this->input->post('data');
+			$post['name'] = trim($post['name']);
+			$this->db->table_name = $this->db->table_name.'_data_'.$key;
+			$where = 'id<>'.$id.' and cname=\''.$post['cname'].'\'';
+			$info = $this->db->get_one($where);
+			if (!$post['name']) {
+				dr_json(0, L('名称不能为空'));
+			} elseif (!$post['cname']) {
+				dr_json(0, L('别名不能为空'));
+			} elseif (is_numeric($post['cname'])) {
+				dr_json(0, L('别名不能是数字'));
+			} else if ($info) {
+				dr_json(0, L('别名已经存在'));
 			}
-		}
-		if(count($s)>0) {
-			$jsonstr = json_encode($s);
-			echo $this->input->get('callback').'(',$jsonstr,')';
-			exit;			
+			$this->db->update($post,array('id'=>$id));
+			dr_json(1, L('操作成功'));
 		} else {
-			echo $this->input->get('callback').'()';exit;			
-		}
-	}
-	/**
-	 * 生成联动菜单缓存
-	 * @param init $linkageid
-	 */
-	private function _cache($linkageid) {
-		$linkageid = intval($linkageid);
-		$info = array();
-		$r = $this->db->get_one(array('linkageid'=>$linkageid),'name,siteid,style,keyid,setting');
-		$info['title'] = $r['name'];
-		$info['style'] = $r['style'];
-		$info['setting'] = string2array($r['setting']);
-		$info['siteid'] = $r['siteid'];
-		$info['data'] = $this->submenulist($linkageid);
-		setcache($linkageid, $info,'linkage');
-		return $info;
-	}
-	
-	/**
-	 * 删除联动菜单缓存文件
-	 * @param init $linkageid
-	 */
-	private function _dlecache($linkageid) {
-		return delcache($linkageid,'linkage');
-	}
-	
-	/**
-	 * 子菜单列表
-	 * @param unknown_type $keyid
-	 */
-	private function submenulist($keyid=0) {
-		$keyid = intval($keyid);
-		$datas = array();
-		$where = ($keyid > 0) ? array('keyid'=>$keyid) : '';
-		$result = $this->db->select($where,'*','','listorder ,linkageid');	
-		if(is_array($result)) {
-			foreach($result as $r) {
-				$arrchildid = $r['arrchildid'] = $this->get_arrchildid($r['linkageid'],$result);				
-				$child = $r['child'] =  is_numeric($arrchildid) ? 0 : 1;
-				$this->db->update(array('child'=>$child,'arrchildid'=>$arrchildid),array('linkageid'=>$r['linkageid']));			
-				$datas[$r['linkageid']] = $r;
+			$id = (int)$this->input->get('id');
+			$pid = (int)$this->input->get('pid');
+			$key = (int)$this->input->get('key');
+			$link = $this->db->get_one(array('id'=>$key));
+			if (!$link) {
+				dr_admin_msg(0, L('联动菜单不存在'));
 			}
-		}
-		return $datas;
-	}
-	
-	/**
-	 * 获取所属站点
-	 * @param unknown_type $keyid
-	 */
-	private function _get_belong_siteid($keyid) {
-		$keyid = intval($keyid);
-		$info = $this->db->get_one(array('linkageid'=>$keyid));
-		return $info ? $info['siteid'] : false;
-	}
-
-	
-	/**
-	 * 获取联动菜单子节点
-	 * @param int $linkageid
-	 */
-	private function _get_childnode($linkageid) {
-		$where = array('parentid'=>$linkageid);
-		$this->childnode[] = intval($linkageid);
-		$result = $this->db->select($where);
-		if($result) {
-			foreach($result as $r) {
-				$this->_get_childnode($r['linkageid']);
+			$this->db->table_name = $this->db->table_name.'_data_'.$key;
+			$data = $this->db->get_one(array('id'=>$id));
+			if (!$data) {
+				dr_admin_msg(0, L('联动菜单数据#'.$id.'不存在'));
 			}
-		}
-	}
-	
-	private function _is_last_node($keyid,$linkageid) {
-		$result = $this->db->count(array('keyid'=>$keyid,'parentid'=>$linkageid));
-		return $result ? true : false;
-	}	
-	/**
-	 * 返回菜单ID
-	 */
-	public function public_get_list() {
-		$where = array('keyid'=>0);
-		$infos = $this->db->select($where);
-		include $this->admin_tpl('linkage_get_list');
-	}
-	
-	/**
-	 * 获取子菜单ID列表
-	 * @param $linkageid 联动菜单id
-	 * @param $linkageinfo
-	 */
-	private function get_arrchildid($linkageid,$linkageinfo) {
-		$arrchildid = $linkageid;
-		if(is_array($linkageinfo)) {
-			foreach($linkageinfo as $linkage) {
-				if($linkage['parentid'] && $linkage['linkageid'] != $linkageid && $linkage['parentid']== $linkageid) 	{
-					$arrchildid .= ','.$this->get_arrchildid($linkage['linkageid'],$linkageinfo);
-	
+			$select = '';
+			if ($data['pid']) {
+				$top = $this->db->get_one(array('id'=>$data['pid']));
+				if ($top) {
+					$select = '<input type="hidden" name="data[pid]" value="'.$data['pid'].'">';
+					$select.= '<p class="form-control-static"> '.$top['name'].' </p>';
 				}
 			}
+			if (!$select) {
+				$select = '<input type="hidden" name="data[pid]" value="0">';
+				$select.= '<p class="form-control-static"> '.L('顶级').' </p>';
+			}
+			$show_header = true;
+			$show_validator = true;
+			include $this->admin_tpl('linkage_sub_edit');			
 		}
-		return $arrchildid;
-	}		
+	}
+
+	public function public_displayorder() {
+
+		// 查询数据
+		$id = (int)$this->input->get('id');
+		$key = (int)$this->input->get('key');
+		$this->db->table_name = $this->db->table_name.'_data_'.$key;
+		$row = $this->db->get_one(array('id'=>$id));
+		if (!$row) {
+			dr_json(0, L('数据#'.$id.'不存在'));
+		}
+
+		$value = (int)$this->input->get('value');
+		$this->db->update(array('displayorder'=>$value),array('id'=>$id));
+		dr_json(1, L('操作成功'));
+	}
+
+	// 禁用或者启用
+	public function public_hidden_edit() {
+
+		$id = (int)$this->input->get('id');
+		$key = (int)$this->input->get('key');
+		$this->db->table_name = $this->db->table_name.'_data_'.$key;
+		$row = $this->db->get_one(array('id'=>$id));
+		if (!$row) {
+			dr_json(0, L('数据#'.$id.'不存在'));
+		}
+
+		$i = intval($this->input->get('id'));
+		$v = $row['hidden'] ? 0 : 1;
+		$this->db->update(array('hidden'=>$v),array('id'=>$id));
+		dr_json(1, L($v ? '此菜单已被禁用' : '此菜单已被启用'), ['value' => $v]);
+
+	}
+	/**
+	 * 汉字转换拼音
+	 */
+	public function public_ajax_pinyin() {
+		$pinyin = pc_base::load_sys_class('pinyin');
+		$name = dr_safe_replace($this->input->get('name'));
+		if (!$name) {
+			exit('');
+		}
+		$py = $pinyin->result($name);
+		if (strlen($py) > 12) {
+			$sx = $pinyin->result($name, 0);
+			if ($sx) {
+				exit($sx);
+			}
+		}
+		exit($py);
+	}
 }
 ?>

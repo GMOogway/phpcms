@@ -35,7 +35,7 @@
 		<td align='center'><?php echo $r['issearch'] ? L('icon_unlock') : L('icon_locked')?></td>
 		<td align='center'><?php echo $r['disabled'] ? L('icon_unlock') : L('icon_locked')?></td>
 		<td align='center'>
-			<a class="btn btn-xs green" href="javascript:edit(<?php echo $r['modelid']?>, <?php echo $r['fieldid']?>, '<?php echo $r['name']?>')"><?php echo L('modify')?></a>
+			<a class="btn btn-xs green" href="?m=member&c=member_modelfield&a=edit&modelid=<?php echo $r['modelid']?>&fieldid=<?php echo $r['fieldid']?>&menuid=<?php echo $_GET['menuid']?>"><?php echo L('modify')?></a>
 			<?php if(!$r['disabled']) {?>
 			<a class="btn btn-xs dark" href="?m=member&c=member_modelfield&a=disable&disabled=1&fieldid=<?php echo $r['fieldid']?>&menuid=<?php echo $_GET['menuid']?>"><?php echo L('disable')?></a>
 			<?php } else {?>
@@ -58,10 +58,6 @@
 </form>
 <script language="JavaScript">
 <!--
-function edit(modelid, fieldid, name) {
-	artdialog('edit','?m=member&c=member_modelfield&a=edit&modelid='+modelid+'&fieldid='+fieldid,'<?php echo L('edit').L('field')?>《'+name+'》','80%','80%');
-}
-
 function move(id, name) {
 	artdialog('move','?m=member&c=member_model&a=move&modelid='+id,'<?php echo L('move')?>《'+name+'》',700,500);
 }

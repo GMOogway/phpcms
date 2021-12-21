@@ -1,9 +1,3 @@
-/*
-PIE: CSS3 rendering for IE
-Version 1.0beta5
-http://css3pie.com
-Dual-licensed for use under the Apache License Version 2.0 or the General Public License (GPL) Version 2.
-*/
 (function(){
 var doc = document;var f=window.PIE;
 if(!f){f=window.PIE={Q:"-pie-",nb:"Pie",La:"pie_",Ac:{TD:1,TH:1},cc:{TABLE:1,THEAD:1,TBODY:1,TFOOT:1,TR:1,INPUT:1,TEXTAREA:1,SELECT:1,OPTION:1,IMG:1,HR:1},fc:{A:1,INPUT:1,TEXTAREA:1,SELECT:1,BUTTON:1},Gd:{submit:1,button:1,reset:1},aa:function(){}};try{doc.execCommand("BackgroundImageCache",false,true)}catch(aa){}for(var X=4,Y=doc.createElement("div"),ca=Y.getElementsByTagName("i"),Z;Y.innerHTML="<!--[if gt IE "+ ++X+"]><i></i><![endif]--\>",ca[0];);f.V=X;if(X===6)f.Q=f.Q.replace(/^-/,"");f.Ba=doc.documentMode||

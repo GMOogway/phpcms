@@ -1,9 +1,10 @@
 <?php defined('IN_CMS') or exit('No permission resources.');?>
-<table cellpadding="2" cellspacing="1" width="96%">
-	<tr> 
-      <td>默认值</td>
-      <td>
+	<div class="form-group">
+      <label class="col-md-2 control-label">默认值</label>
+      <div class="col-md-9">
+            <label>
 	  <input type="hidden" name="setting[minnumber]" value="<?php echo $setting['minnumber'];?>">
-	  <input type="text" name="setting[defaultvalue]" value="<?php echo $setting['defaultvalue'];?>" size="40" class="input-text"> 正整数 最大长度 5 </td>
-    </tr>
-</table>
+	  <input type="text" name="setting[defaultvalue]" value="<?php echo $setting['defaultvalue'];?>" size="40" class="input-text"></label>
+            <span class="help-block"><?php echo L('正整数 最大长度 5')?></span>
+      </div>
+    </div>

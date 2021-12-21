@@ -1,4 +1,6 @@
 	function copyfrom($field, $value, $fieldinfo) {
+		// 表单宽度设置
+		$width = is_mobile(0) ? '100%' : 400;
 		$value_data = '';
 		if($value && strpos($value,'|')!==false) {
 			$arr = explode('|',$value);
@@ -12,5 +14,5 @@
 				if($this->siteid==$_v['siteid']) $copyfrom_datas[$_k] = $_v['sitename'];
 			}
 		}
-		return "<input type='text' name='info[$field]' value='$value' style='width: 400px;' class='input-text'>".form::select($copyfrom_datas,$value_data,"name='{$field}_data' ");
+		return "<input type='text' name='info[$field]' value='$value' style='width:".$width.(is_numeric($width) ? "px" : "").";' class='input-text'>".form::select($copyfrom_datas,$value_data,"name='{$field}_data' ");
 	}

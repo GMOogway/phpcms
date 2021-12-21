@@ -1,16 +1,3 @@
-﻿/**
- * $.ld
- * @extends jquery.1.4.2
- * @fileOverview 创建一组联动选择框
- * @author 明河共影
- * @email mohaiguyan12@126.com
- * @site wwww.36ria.com
- * @version 0.2
- * @date 2010-08-18
- * Copyright (c) 2010-2010 明河共影
- * @example
- *    $(".ld-select").ld();
- */
 (function($){
 	$.fn.ld = function(options){
 		var opts;
@@ -26,26 +13,26 @@
 			//覆盖参数
 			opts = $.extend(true, {}, $.fn.ld.defaults, options);
 		}
-		if($(this).size() > 0){
+		if($(this).length > 0){
 			var ld = new yijs.Ld(opts);
 			ld.$applyTo = $(this);
 			ld.render();
 			$(this).data(DATA_NAME,ld);
 		}
-		return $(this);			
+		return $(this);
 	}
 	var yijs = yijs || {};
-	yijs.Ld = function(options){	
+	yijs.Ld = function(options){
 		//参数
 		this.options = options;
 		//起作用的对象
 		this.$applyTo  = this.options.applyTo && $(this.options.applyTo) || null;
 		//缓存前缀
 		this.cachePrefix = "data_";
-		//写入到选择框的option的样式名	
+		//写入到选择框的option的样式名
 		this.OPTIONS_CLASS = "ld-option";
 		//缓存，为一个对象字面量。
-		this.cache = {};				
+		this.cache = {};
 	}
 	yijs.Ld.prototype = {
 		/**
@@ -54,7 +41,7 @@
 		 */
 		render: function(){
 			var _that = this;
-			var _opts = this.options;			
+			var _opts = this.options;
 			if (this.$applyTo != null && this.size() > 0) {
 				_opts.style != null && this.css(_opts.style);
 				//加载默认数据，向第一个选择框填充数据
@@ -62,10 +49,11 @@
 				_opts.texts.length > 0 && this.selected(_opts.texts);
 				//给每个选择框绑定change事件
 				this.$applyTo.each(function(i){
-					i < _that.size()-1 && $(this).bind("change.ld",{target:_that,index:i},_that.onchange);
-				})					
+					// i < _that.size()-1 &&
+					 $(this).bind(_opts.drevent+".ld",{target:_that,index:i},_that.onchange);
+				})
 			}
-			return this;	
+			return this;
 		},
 		texts : function(ts){
 			var that = this;
@@ -84,7 +72,7 @@
 		 * @return {Number} 选择框的数量
 		 */
 		size : function(){
-			return this.$applyTo.size();
+			return this.$applyTo.length;
 		},
 		/**
 		 * 设置选择框的样式
@@ -105,7 +93,7 @@
 			//清理index以下的选择框的选项
 			for(var i = selectIndex ; i< _that.size();i++){
 				_that.removeOptions(i);
-			}						
+			}
 			//存在缓存数据,直接使用缓存数据生成选择框的子项；不存在，则请求数据
 			if(_that.cache[parent_id]){
 				_that._create(_that.cache[parent_id],selectIndex);
@@ -113,22 +101,35 @@
 				if(callback) callback.call(this);
 			}else{
 				var _ajaxOptions = this.options.ajaxOptions;
-				var _d = _ajaxOptions.data;	
+				var _d = _ajaxOptions.data;
 				var _parentIdField = this.options.field['parent_id'];
-				_d[_parentIdField] = parent_id;	
+				_d[_parentIdField] = parent_id;
 				//传递给后台的参数
 				_ajaxOptions.data = _d;
 				//ajax获取数据成功后的回调函数
-				_ajaxOptions.success = function(data){
+				_ajaxOptions.success = function(res){
+                    	//console.log(res);
+                    	var ops = res.data;
 						//遍历数据，获取html字符串
-						var _h = _that._getOptionsHtml(data);
+						if (ops.length > 0) { //本菜单有内容才显示，否者隐藏(dayrui添加)
+							_that.$applyTo.eq(selectIndex).show();
+						} else {
+							_that.$applyTo.eq(selectIndex).hide();
+							// 说明已经选择到尾部了
+							var html = res.html;
+                            if (html.length > 0) {
+                            	$('#'+_that.options.inputId).html(html);
+								//console.log('#'+_that.options.inputId+'_select');
+							}
+						}
+						var _h = _that._getOptionsHtml(ops);
 						_that._create(_h,selectIndex);
 						_that.cache[parent_id] =  _h;
 						_that.$applyTo.eq(selectIndex).trigger("afterLoad.ld");
 						if(callback) callback.call(this);
-					} 
-					$.ajax(_ajaxOptions);																					
-				}												
+					}
+					$.ajax(_ajaxOptions);
+				}
 		},
 		/**
 		 * 删除指定index索引值的选择框下的选择项
@@ -164,14 +165,13 @@
 			/**
 			 * 选中包含指定文本的选择项
 			 * @param {Number} index 选择框的索引值
-			 * @param {String} text  文本
+			 * @param {String} text  选择框的value值 (dayrui修改为按id匹配)
 			 * @return {Number} 该选择框的value值
 			 */
 			function _selected(index,text){
 				var id = 0;
 				_that.$applyTo.eq(index).children().each(function(){
-					var reg = new RegExp(text);
-					if(reg.test($(this).text())){
+					if(text != undefined && text.toString() == $(this).val()){
 						$(this).attr("selected",true);
 						id = $(this).val();
 						return;
@@ -194,8 +194,8 @@
 			var $target = $(e.target);
 			var _parentId = $target.val();
 			var _i = index+1;
-            _that.load(_i,_parentId);									   		
-		},			
+            _that.load(_i,_parentId);
+		},
 		/**
 		 * 将数据源（json或xml）转成html
 		 * @param {Object} data
@@ -205,7 +205,7 @@
 			var _that = this;
 			var ajaxOptions = this.options.ajaxOptions;
 			var dataType = ajaxOptions.dataType;
-			var field = this.options.field; 
+			var field = this.options.field;
 			var _h = "";
 			_h = _getOptions(data,dataType,field).join("");;
 			/**
@@ -213,7 +213,7 @@
 			 * @param {Object | Array} data 数据
 			 * @param {String} dataType 数据类型
 			 * @param {Object} field 字段
-			 * @return {Array} aStr 
+			 * @return {Array} aStr
 			 */
 			function _getOptions(data,dataType,field){
 				var optionClass = _that.OPTIONS_CLASS;
@@ -224,14 +224,14 @@
 					    id   = data[i][field.region_id];
 						name = data[i][field.region_name];
 						var _option = "<option value='"+id+"' class='"+optionClass+"'>"+name+"</option>";
-						aStr.push(_option);						
-					})				
+						aStr.push(_option);
+					})
 				}else if(dataType == "xml"){
 					$(data).children().children().each(function(){
 						id   = $(this).find(field.region_id).text();
 						name = $(this).find(field.region_name).text();
 						var _option = "<option value='"+id+"' class='"+optionClass+"'>"+name+"</option>";
-						aStr.push(_option);							
+						aStr.push(_option);
 					})
 				}
 				return aStr;
@@ -246,12 +246,13 @@
 		_create : function(_h,index){
 			var _that = this;
 			this.removeOptions(index);
-			this.$applyTo.eq(index).append(_h);									
+			this.$applyTo.eq(index).append(_h);
 		}
 	}
 	$.fn.ld.defaults = {
 		/**选择框对象数组*/
         selects : null,
+        drevent : 'change',
 		/**ajax配置*/
 		ajaxOptions : {
 			url : null,
@@ -259,7 +260,7 @@
 			data : {},
 			dataType : 'json',
 			success : function(){},
-			beforeSend : function(){}				
+			beforeSend : function(){}
 		},
 		/**默认父级id*/
 		defaultParentId : 0,
@@ -269,6 +270,7 @@
 		texts : [],
 		/**选择框的样式*/
 		style : null,
+        inputId : null,
 		/**选择框值改变时的回调函数*/
 		change : function(){},
 		field : {
@@ -276,6 +278,6 @@
 			region_name : "region_name",
 			parent_id : "parent_id"
 		}
-	
-	} 
+
+	}
 })(jQuery);

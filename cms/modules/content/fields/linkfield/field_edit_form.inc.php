@@ -21,17 +21,19 @@ foreach($web_tables as $key => $table) {
 $json_web_tables_info = json_encode($web_tables_info);
 $db->free_result($tbl_show);
 ?>
-<table cellpadding="2" cellspacing="1" onclick="javascript:$('#minlength').val(0);$('#maxlength').val(255);">
-	<tr>
-		<td>搜索类型</td>
-		<td><div class="mt-radio-inline">
+	<div class="form-group">
+		<label class="col-md-2 control-label">搜索类型</label>
+      <div class="col-md-9">
+            <div class="mt-radio-inline">
           <label class="mt-radio mt-radio-outline"><input name="setting[link_type]" type="radio" value="1"<?php if ($setting['link_type']==1){;?> checked<?php };?> /> 下拉选择框 <span></span></label>
           <label class="mt-radio mt-radio-outline"><input name="setting[link_type]" type="radio" value="0"<?php if ($setting['link_type']==0){;?> checked<?php };?> /> 搜索选择 <span></span></label>
-        </div></td>
-	</tr>
-	<tr>
-		<td>关联表名</td>
-		<td>
+        </div></label>
+      </div>
+	</div>
+	<div class="form-group">
+		<label class="col-md-2 control-label">关联表名</label>
+      <div class="col-md-9">
+            <label>
 			<?php if(is_array($web_tables)){?>
 				<select name="setting[table_name]" id="st_name">
 					<?php
@@ -146,31 +148,45 @@ $db->free_result($tbl_show);
 				});
 				//-->
 			</script>
-		</td>
-	</tr>
-	<tr>
-		<td>主键</td>
-		<td><select name="setting[set_id]" id="set_id"></select> 用于返回值赋值给管理字段作为存入ID。(表里面唯一标示，比如主键)</td>
-	</tr>
-	<tr>
-		<td>赋值字段</td>
-		<td><select name="setting[set_title]" id="set_title"></select> 用于返回值赋值给管理字段作为存入标题。</td>
-	</tr>
-	<tr>
-		<td>like字段</td>
-		<td><select name="setting[like_title]" id="like_title"></select> 选择like字段。(解读为where '【字段名】' like '%张三%')</td>
-	</tr>
-	<tr>
-		<td>查询字段</td>
-		<td><input type="text" name="setting[select_title]" id="select_title" value="<?php echo $setting['select_title'];?>" size="40" class="input-text"> 请填写字段名如：id,title (为空则表示全部查询。非空时必须包含like字段、赋值字段、主键)</td>
-	</tr>
-	<tr>
-		<td>存入数据方式</td>
-		<td><div class="mt-radio-inline">
+		</label>
+      </div>
+	</div>
+	<div class="form-group">
+		<label class="col-md-2 control-label">主键</label>
+      <div class="col-md-9">
+            <label><select name="setting[set_id]" id="set_id"></select></label>
+            <span class="help-block">用于返回值赋值给管理字段作为存入ID。(表里面唯一标示，比如主键)</span>
+      </div>
+	</div>
+	<div class="form-group">
+		<label class="col-md-2 control-label">赋值字段</label>
+      <div class="col-md-9">
+            <label><select name="setting[set_title]" id="set_title"></select></label>
+            <span class="help-block">用于返回值赋值给管理字段作为存入标题。</span>
+      </div>
+	</div>
+	<div class="form-group">
+		<label class="col-md-2 control-label">like字段</label>
+      <div class="col-md-9">
+            <label><select name="setting[like_title]" id="like_title"></select></label>
+            <span class="help-block">选择like字段。(解读为where '【字段名】' like '%张三%')</span>
+      </div>
+	</div>
+	<div class="form-group">
+		<label class="col-md-2 control-label">查询字段</label>
+      <div class="col-md-9">
+            <label><input type="text" name="setting[select_title]" id="select_title" value="<?php echo $setting['select_title'];?>" size="40" class="input-text"></label>
+            <span class="help-block">请填写字段名如：id,title (为空则表示全部查询。非空时必须包含like字段、赋值字段、主键)</span>
+      </div>
+	</div>
+	<div class="form-group">
+		<label class="col-md-2 control-label">存入数据方式</label>
+      <div class="col-md-9">
+            <div class="mt-radio-inline">
           <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[insert_type]" value="id" <?php if($setting['insert_type']=='id') echo 'checked';?> /> ID存入 <span></span></label>
           <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[insert_type]" value="title" <?php if($setting['insert_type']=='title') echo 'checked';?> /> 标题存入 <span></span></label>
           <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[insert_type]" value="title_id" <?php if($setting['insert_type']=='title_id') echo 'checked';?> /> 标题+ID存入 <span></span></label>
           <label class="mt-radio mt-radio-outline"><input name="setting[insert_type]" type="radio" value="multiple_id" id="multiple_id" <?php if($setting['insert_type']=='multiple_id') echo 'checked';?> /> 多选ID存入 <span></span></label>
-        </div></td>
-	</tr>
-</table>
+        </div></label>
+      </div>
+	</div>

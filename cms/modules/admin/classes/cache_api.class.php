@@ -152,39 +152,6 @@ class cache_api {
 	}
 	
 	/**
-	 * 更新联动菜单缓存方法
-	 */
-	public function linkage() {
-		$infos = $this->db->select(array('keyid'=>0));
-		foreach ($infos as $r) {
-			$linkageid = intval($r['linkageid']);
-			$r = $this->db->get_one(array('linkageid'=>$linkageid),'name,siteid,style,setting');
-			$info['title'] = $r['name'];
-			$info['style'] = $r['style'];
-			$info['siteid'] = $r['siteid'];
-			$info['setting'] = string2array($r['setting']);
-			$info['data'] = $this->submenulist($linkageid);
-			setcache($linkageid, $info,'linkage');
-		}
-		return true;
-	}
-	
-	/**
-	 * 子菜单列表
-	 * @param intval $keyid 菜单id
-	 */
-	public function submenulist($keyid=0) {
-		$keyid = intval($keyid);
-		$datas = array();
-		$where = ($keyid > 0) ? array('keyid'=>$keyid) : '';
-		$result = $this->db->select($where,'*','','listorder ,linkageid');
-		foreach($result as $r) {
-			$datas[$r['linkageid']] = $r;
-		}
-		return $datas;
-	}
-	
-	/**
 	 * 更新推荐位缓存方法
 	 */
 	public function position() {

@@ -411,6 +411,41 @@ class check extends admin {
                     $this->db->delete(array('modelid' => 11));
                 }
 
+                $this->db->table_name = $prefix.'linkage';
+                $linkage = $this->db->get_one(array('linkageid' => 1, 'name' => '中国', 'siteid' => 0));
+                if ($linkage) {
+                    $this->db->query('DROP TABLE IF EXISTS `'.$this->db->table_name.'`');
+                    $this->db->query(format_create_sql('CREATE TABLE `'.$this->db->table_name.'` (
+                    `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+                    `name` varchar(255) NOT NULL COMMENT \'菜单名称\',
+                    `type` tinyint(1) unsigned NOT NULL,
+                    `code` char(20) NOT NULL,
+                    PRIMARY KEY (`id`),
+                    UNIQUE KEY `code` (`code`),
+                    KEY `module` (`id`)
+                    ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT=\'联动菜单表\''));
+                    $this->db->query('INSERT INTO `'.$this->db->table_name.'` (`id`, `name`, `type`, `code`) VALUES(1, \'中国地区\', 0, \'address\')');
+                    $this->db->query('DROP TABLE IF EXISTS `'.$this->db->table_name.'_data_1`');
+                    $this->db->query(format_create_sql('CREATE TABLE `'.$this->db->table_name.'_data_1` (
+                    `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+                    `site` mediumint(5) unsigned NOT NULL COMMENT \'站点id\',
+                    `pid` mediumint(8) unsigned NOT NULL DEFAULT \'0\' COMMENT \'上级id\',
+                    `pids` varchar(255) DEFAULT NULL COMMENT \'所有上级id\',
+                    `name` varchar(30) NOT NULL COMMENT \'栏目名称\',
+                    `cname` varchar(30) NOT NULL COMMENT \'别名\',
+                    `child` tinyint(1) unsigned DEFAULT NULL DEFAULT \'0\' COMMENT \'是否有下级\',
+                    `hidden` tinyint(1) unsigned DEFAULT NULL DEFAULT \'0\' COMMENT \'前端隐藏\',
+                    `childids` text DEFAULT NULL COMMENT \'下级所有id\',
+                    `displayorder` mediumint(8) DEFAULT NULL DEFAULT \'0\',
+                    PRIMARY KEY (`id`),
+                    KEY `cname` (`cname`),
+                    KEY `hidden` (`hidden`),
+                    KEY `list` (`site`,`displayorder`)
+                    ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT=\'联动菜单数据表\''));
+                    $this->db->query('INSERT INTO `'.$this->db->table_name.'_data_1` (`id`, `site`, `pid`, `pids`, `name`, `cname`, `child`, `hidden`, `childids`, `displayorder`) VALUES(1, 1, 0, \'0\', \'北京\', \'beijing\', 0, 0, \'1\', 0)');
+                    $this->db->query('INSERT INTO `'.$this->db->table_name.'_data_1` (`id`, `site`, `pid`, `pids`, `name`, `cname`, `child`, `hidden`, `childids`, `displayorder`) VALUES(2, 1, 0, \'0\', \'天津\', \'tianjin\', 0, 0, \'2\', 0)');
+                }
+
                 $this->db->table_name = $prefix.'model_field';
                 $this->db->update(array('tips'=>'<div class="mt-checkbox-inline" style="margin-top: 10px;"><label style="margin-bottom: 0;" class="mt-checkbox mt-checkbox-outline"><input name="add_introduce" type="checkbox"  value="1" checked>是否截取内容<span></span></label><input type="text" name="introcude_length" value="200" size="3">字符至内容摘要\r\n<label style="margin-bottom: 0;" class="mt-checkbox mt-checkbox-outline"><input type=\'\'checkbox\'\' name=\'\'auto_thumb\'\' value="1" checked>是否获取内容第<span></span></label><input type="text" name="auto_thumb_no" value="1" size="2" class="">张图片作为标题图片\r\n<label style="margin-bottom: 0;" class="mt-checkbox mt-checkbox-outline"><input type=\'\'checkbox\'\' name=\'\'is_remove_a\'\' value="1" checked>去除站外链接<span></span></label>\r\n</div>'),array('formtype'=>'editor','tips'=>'<div class="content_attr"><label><input name="add_introduce" type="checkbox"  value="1" checked>是否截取内容</label><input type="text" name="introcude_length" value="200" size="3">字符至内容摘要\r\n<label><input type=\'\'checkbox\'\' name=\'\'auto_thumb\'\' value="1" checked>是否获取内容第</label><input type="text" name="auto_thumb_no" value="1" size="2" class="">张图片作为标题图片\r\n</div>'));
                 $this->db->update(array('tips'=>'<div class="mt-checkbox-inline" style="margin-top: 10px;"><label style="margin-bottom: 0;" class="mt-checkbox mt-checkbox-outline"><input name="add_introduce" type="checkbox"  value="1" checked>是否截取内容<span></span></label><input type="text" name="introcude_length" value="200" size="3">字符至内容摘要\r\n<label style="margin-bottom: 0;" class="mt-checkbox mt-checkbox-outline"><input type=\'\'checkbox\'\' name=\'\'auto_thumb\'\' value="1" checked>是否获取内容第<span></span></label><input type="text" name="auto_thumb_no" value="1" size="2" class="">张图片作为标题图片\r\n<label style="margin-bottom: 0;" class="mt-checkbox mt-checkbox-outline"><input type=\'\'checkbox\'\' name=\'\'is_remove_a\'\' value="1" checked>去除站外链接<span></span></label>\r\n</div>'),array('tips'=>'<div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="add_introduce" type="checkbox"  value="1" checked>是否截取内容<span></span></label><input type="text" name="introcude_length" value="200" size="3">字符至内容摘要\r\n<label class="mt-checkbox mt-checkbox-outline"><input type=\'\'checkbox\'\' name=\'\'auto_thumb\'\' value="1" checked>是否获取内容第<span></span></label><input type="text" name="auto_thumb_no" value="1" size="2" class="">张图片作为标题图片\r\n<label class="mt-checkbox mt-checkbox-outline"><input type=\'\'checkbox\'\' name=\'\'is_remove_a\'\' value="1" checked>去除站外链接<span></span></label>\r\n</div>', 'formtype'=>'editor'));

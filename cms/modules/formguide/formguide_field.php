@@ -42,6 +42,8 @@ class formguide_field extends admin {
 		if($this->input->post('dosubmit')) {
 			$info = $this->input->post('info');
 			$setting = $this->input->post('setting');
+			if (!$info['formtype']) dr_json(0, L('select_fieldtype'), array('field' => 'formtype'));
+			if (!$info['name']) dr_json(0, L('fieldname').L('empty'), array('field' => 'name'));
 			$field = $info['field'];
 			$cname = $info['name'];
 			$minlength = $info['minlength'] ? $info['minlength'] : 0;
@@ -53,7 +55,7 @@ class formguide_field extends admin {
 			$info['unsetgroupids'] = $this->input->post('unsetgroupids') ? implode(',',$this->input->post('unsetgroupids')) : '';
 			$info['unsetroleids'] = $this->input->post('unsetroleids') ? implode(',',$this->input->post('unsetroleids')) : '';
 			if (in_array($field, array('dataid', 'userid', 'username', 'datetime', 'ip'))) {
-				dr_admin_msg(0,L('fieldname').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
+				dr_json(0, L('fieldname').'（'.$field.'）'.L('already_exist'), array('field' => 'name'));
 			}
 			
 			require MODEL_PATH.$field_type.DIRECTORY_SEPARATOR.'config.inc.php';
@@ -65,7 +67,7 @@ class formguide_field extends admin {
 				$formid = intval($info['modelid']);
 				$where = 'modelid='.$formid.' AND field=\''.$field.'\' AND siteid='.$this->siteid.'';
 				$model_field = $this->db->get_one($where);
-				if ($model_field) dr_admin_msg(0,L('fields').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
+				if ($model_field) dr_json(0, L('fields').'（'.$field.'）'.L('already_exist'), array('field' => 'name'));
 				$forminfo = $this->model_db->get_one(array('modelid'=>$formid, 'siteid'=>$this->siteid), 'tablename');
 				$tablename = $this->db->db_tablepre.'form_'.$forminfo['tablename'];
 				require MODEL_PATH.'add.sql.php';
@@ -79,13 +81,13 @@ class formguide_field extends admin {
 				
 				$form_public_field_array = getcache('form_public_field_array', 'model');
 				if (is_array($form_public_field_array) && array_key_exists($info['field'], $form_public_field_array)) {
-					dr_admin_msg(0,L('fields').L('already_exist'), HTTP_REFERER);
+					dr_json(0, L('fields').L('already_exist'), array('field' => 'name'));
 				} else {
 					$form_public_field_array[$info['field']] = array('info'=>$info, 'sql'=>$sql); 
 					setcache('form_public_field_array', $form_public_field_array, 'model');	
 				}
 			}
-			dr_admin_msg(1,L('add_success'),'?m=formguide&c=formguide_field&a=init&formid='.$formid);
+			dr_json(1, L('add_success'), array('url' => '?m=formguide&c=formguide_field&a=init&formid='.$formid.'&menuid='.$this->input->post('menuid').'&pc_hash='.dr_get_csrf_token()));
 		} else {
 			$show_header = $show_validator = $show_dialog = '';
 			pc_base::load_sys_class('form','',0);
@@ -117,6 +119,8 @@ class formguide_field extends admin {
 		if ($this->input->post('dosubmit')) {
 			$info = $this->input->post('info');
 			$setting = $this->input->post('setting');
+			if (!$info['formtype']) dr_json(0, L('select_fieldtype'), array('field' => 'formtype'));
+			if (!$info['name']) dr_json(0, L('fieldname').L('empty'), array('field' => 'name'));
 			$field = $info['field'];
 			$cname = $info['name'];
 			$minlength = $info['minlength'] ? $info['minlength'] : 0;
@@ -129,7 +133,7 @@ class formguide_field extends admin {
 			$info['unsetgroupids'] = $this->input->post('unsetgroupids') ? implode(',',$this->input->post('unsetgroupids')) : '';
 			$info['unsetroleids'] = $this->input->post('unsetroleids') ? implode(',',$this->input->post('unsetroleids')) : '';
 			if (in_array($field, array('dataid', 'userid', 'username', 'datetime', 'ip'))) {
-				dr_admin_msg(0,L('fieldname').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
+				dr_json(0, L('fieldname').'（'.$field.'）'.L('already_exist'), array('field' => 'name'));
 			}
 			
 			require MODEL_PATH.$field_type.DIRECTORY_SEPARATOR.'config.inc.php';
@@ -146,7 +150,7 @@ class formguide_field extends admin {
 					$where .= ' AND fieldid<>'.$fieldid;
 				}
 				$model_field = $this->db->get_one($where);
-				if ($model_field) dr_admin_msg(0,L('fields').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
+				if ($model_field) dr_json(0, L('fields').'（'.$field.'）'.L('already_exist'), array('field' => 'name'));
 				$forminfo = $this->model_db->get_one(array('modelid'=>$formid, 'siteid'=>$this->siteid), 'tablename');
 				$tablename = $this->db->db_tablepre.'form_'.$forminfo['tablename'];
 				
@@ -166,7 +170,7 @@ class formguide_field extends admin {
 						$form_public_field_array[$info['field']] = array('info'=>$info, 'sql'=>$sql);
 					} else {
 						if (is_array($form_public_field_array) && array_key_exists($info['field'], $form_public_field_array)) {
-							dr_admin_msg(0,L('fields').L('already_exist'), HTTP_REFERER);
+							dr_json(0, L('fields').L('already_exist'), array('field' => 'name'));
 						}
 						$new_form_field = $form_public_field_array;
 						$form_public_field_array = array();
@@ -181,7 +185,7 @@ class formguide_field extends admin {
 				}
 				setcache('form_public_field_array', $form_public_field_array, 'model');	
 			}
-			dr_admin_msg(1,L('update_success'),'?m=formguide&c=formguide_field&a=init&formid='.$formid);
+			dr_json(1, L('update_success'), array('url' => '?m=formguide&c=formguide_field&a=init&formid='.$formid.'&menuid='.$this->input->post('menuid').'&pc_hash='.dr_get_csrf_token()));
 		} else {
 			if ($this->input->get('formid') && !empty($this->input->get('formid'))) {
 				pc_base::load_sys_class('form','',0);
@@ -192,6 +196,7 @@ class formguide_field extends admin {
 				$m_r = $this->model_db->get_one(array('modelid'=>$formid));
 				$r = $this->db->get_one(array('fieldid'=>$fieldid));
 				extract($r);
+				if($unsetgroupids != '') $unsetgroupids = strpos($unsetgroupids, ',') ? explode(',', $unsetgroupids) : array($unsetgroupids);
 				require MODEL_PATH.$formtype.DIRECTORY_SEPARATOR.'config.inc.php';
 			} else {
 				if (!$this->input->get('field') || empty($this->input->get('field'))) {
@@ -204,6 +209,7 @@ class formguide_field extends admin {
 				}
 				extract($form_public_field_array[$this->input->get('field')]);
 				extract($info);
+				if($unsetgroupids != '') $unsetgroupids = strpos($unsetgroupids, ',') ? explode(',', $unsetgroupids) : array($unsetgroupids);
 				$setting = stripslashes($setting);
 				$show_header = $show_validator = $show_dialog = '';
 				pc_base::load_sys_class('form','',0);

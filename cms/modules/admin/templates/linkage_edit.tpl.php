@@ -1,66 +1,48 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header');?>
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content main-content2">
+                            <div class="page-body">
 <script type="text/javascript">
-  $(document).ready(function() {
-	$.formValidator.initConfig({autotip:true,formid:"myform",onerror:function(msg){}});
-	$("#name").formValidator({onshow:"<?php echo L('input').L('linkage_name')?>",onfocus:"<?php echo L('linkage_name').L('not_empty')?>"}).inputValidator({min:1,max:999,onerror:"<?php echo L('linkage_name').L('not_empty')?>"});
-  })
+    $(function() { //防止回车提交表单
+        document.onkeydown = function(e){
+            var ev = document.all ? window.event : e;
+            if (ev.keyCode==13) {
+                return false;
+            }
+        }
+    });
 </script>
-<div class="pad_10">
-<div class="common-form">
-<form name="myform" action="?m=admin&c=linkage&a=edit" method="post" id="myform">
-<table width="100%" class="table_form contentWrap">
-<?php
-if($this->input->get('parentid')) { ?>
-<tr>
-  <td><?php echo L('linkage_parent_menu')?></td>
-  <td>
-<?php echo form::select_linkage($info['keyid'], 0, 'info[parentid]', 'parentid', L('cat_empty'), $this->input->get('parentid'))?>
-  </td>
-  </tr>
-  <?php } ?>
-<tr>
-<td><?php echo L('linkage_name')?></td>
-<td>
-<input type="text" name="info[name]" value="<?php echo $name?>" class="input-text" id="name" size="30"></input>
-</td>
-</tr>
-
-<tr>
-<td><?php echo L('linkage_desc')?></td>
-<td>
-<textarea name="info[description]" rows="2" cols="20" id="description" class="inputtext" style="height:45px;width:300px;"><?php echo $description?></textarea>
-</td>
-</tr>
-<?php
-if($this->input->get('parentid')) { ?>
-<input type="hidden" name="info[siteid]" value="<?php echo $this->_get_belong_siteid($keyid)?>" class="input-text" id="name" size="30"></input>
-<input type="hidden" name="linkageid" value="<?php echo $linkageid?>">
- <input name="dosubmit" type="submit" value="<?php echo L('submit')?>" class="dialog" id="dosubmit">
-<?php } else { ?>
-<tr>
-<td><?php echo L('linkage_menu_style')?></td>
-<td>
-<div class="mt-radio-inline">
-<label class="mt-radio mt-radio-outline"><input name="info[style]" value="0" type="radio" <?php if($style==0) {?>checked<?php }?>> <?php echo L('linkage_option_style')?> <span></span></label>
-<label class="mt-radio mt-radio-outline"><input name="info[style]" value="1" type="radio" <?php if($style==1) {?>checked<?php }?>> <?php echo L('linkage_pop_style')?> <span></span></label>
-<label class="mt-radio mt-radio-outline"><input name="info[style]" value="2" type="radio" <?php if($style==2) {?>checked<?php }?>> <?php echo L('linkage_select_style')?> <span></span></label>,<?php echo L('linkage_select_show')?><input type="text" name="info[level]" value="<?php echo $setting['level']?>" class="input-text" id="level" size="5"></input><?php echo L('linkage_select_level')?>
-</div>
-</td>
-</tr>
-<tr>
-<td><?php echo L('site_select')?></td>
-<td>
-<?php echo form::select($sitelist,$siteid,'name="info[siteid]"',L('all_site'))?><input type="hidden" name="linkageid" value="<?php echo $linkageid?>">
-	<input type="hidden" name="info[keyid]" value="<?php echo $keyid?>">
-    <input name="dosubmit" type="submit" value="<?php echo L('submit')?>" class="dialog" id="dosubmit">
-</td>
-</tr>
-  <?php } ?>
-</table>
-    
+<form class="form-horizontal" role="form" id="myform" name="myform" action="?m=admin&c=linkage&a=edit" method="post">
+<input type="hidden" name="id" value="<?php echo $id?>">
+    <div class="form-body">
+        <div class="form-group" id="dr_row_name">
+            <label class="col-xs-3 control-label ajax_name"><?php echo L('名称');?></label>
+            <div class="col-xs-7">
+                <input type="text" onblur="topinyin('code','name','?m=admin&c=linkage&a=public_ajax_pinyin');" class="form-control" id="name" name="data[name]" value="<?php echo htmlspecialchars($data['name']);?>">
+                <span class="help-block"> <?php echo L('它的描述名称');?> </span>
+            </div>
+        </div>
+        <div class="form-group" id="dr_row_code">
+            <label class="col-xs-3 control-label ajax_name"><?php echo L('别名');?></label>
+            <div class="col-xs-7">
+                <input type="text" class="form-control" id="code" name="data[code]" value="<?php echo htmlspecialchars($data['code']);?>">
+                <span class="help-block"> <?php echo L('别名只能由字母或者字母+数字组成');?> </span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-3 control-label ajax_name"><?php echo L('sites');?></label>
+            <div class="col-xs-9">
+                <?php echo form::select($sitelist,$siteid,'name="data[type]"',L('all_sites'))?>
+                <span class="help-block"> <?php echo L('站点独立是指各个站点的联动菜单数据分开录入');?> </span>
+            </div>
+        </div>
+    </div>
 </form>
+</div>
+</div>
 </div>
 </div>
 </body>

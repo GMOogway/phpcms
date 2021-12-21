@@ -27,10 +27,12 @@ class sitemodel_field extends admin {
 		include $this->admin_tpl('sitemodel_field_manage');
 	}
 	public function add() {
-		if($this->input->post('dosubmit')) {
+		if(IS_AJAX_POST) {
 			$model_cache = getcache('model','commons');
 			$info = $this->input->post('info');
 			$setting = $this->input->post('setting');
+			if (!$info['formtype']) dr_json(0, L('select_fieldtype'), array('field' => 'formtype'));
+			if (!$info['name']) dr_json(0, L('fieldname').L('empty'), array('field' => 'name'));
 			$modelid = $info['modelid'];
 			if($modelid==-1) {
 				$tablename = $this->db->db_tablepre.'category';
@@ -50,7 +52,7 @@ class sitemodel_field extends admin {
 			$cname = $info['name'];
 			$where = 'modelid='.$modelid.' AND field=\''.$field.'\' AND siteid='.$this->siteid.'';
 			$model_field = $this->db->get_one($where);
-			if ($model_field) dr_admin_msg(0,L('fieldname').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
+			if ($model_field) dr_json(0, L('fieldname').'（'.$field.'）'.L('already_exist'), array('field' => 'name'));
 			$minlength = $info['minlength'] ? $info['minlength'] : 0;
 			$maxlength = $info['maxlength'] ? $info['maxlength'] : 0;
 			$field_type = $info['formtype'];
@@ -68,7 +70,7 @@ class sitemodel_field extends admin {
 			$info['unsetroleids'] = $this->input->post('unsetroleids') ? implode(',',$this->input->post('unsetroleids')) : '';
 			$this->db->insert($info);
 			$this->cache_field($modelid);
-			dr_admin_msg(1,L('add_success'),'?m=content&c=sitemodel_field&a=init&modelid='.$modelid.'&menuid='.$this->input->get('menuid'));
+			dr_json(1, L('add_success'), array('url' => '?m=content&c=sitemodel_field&a=init&modelid='.$modelid.'&menuid='.$this->input->post('menuid').'&pc_hash='.dr_get_csrf_token()));
 		} else {
 			$show_header = $show_validator = $show_dialog = '';
 			pc_base::load_sys_class('form','',0);
@@ -113,6 +115,8 @@ class sitemodel_field extends admin {
 			$fieldid = intval($this->input->post('fieldid'));
 			$info = $this->input->post('info');
 			$setting = $this->input->post('setting');
+			if (!$info['formtype']) dr_json(0, L('select_fieldtype'), array('field' => 'formtype'));
+			if (!$info['name']) dr_json(0, L('fieldname').L('empty'), array('field' => 'name'));
 			$modelid = $info['modelid'];
 			if($modelid==-1) {
 				$tablename = $this->db->db_tablepre.'category';
@@ -135,7 +139,7 @@ class sitemodel_field extends admin {
 				$where .= ' AND fieldid<>'.$fieldid;
 			}
 			$model_field = $this->db->get_one($where);
-			if ($model_field) dr_admin_msg(0,L('fieldname').'（'.$field.'）'.L('already_exist'), HTTP_REFERER);
+			if ($model_field) dr_json(0 ,L('fieldname').'（'.$field.'）'.L('already_exist'), array('field' => 'name'));
 			
 			require MODEL_PATH.$field_type.DIRECTORY_SEPARATOR.'config.inc.php';
 			
@@ -151,7 +155,7 @@ class sitemodel_field extends admin {
 			$info['unsetroleids'] = $this->input->post('unsetroleids') ? implode(',',$this->input->post('unsetroleids')) : '';
 			$this->db->update($info,array('fieldid'=>$fieldid,'siteid'=>$this->siteid));
 			$this->cache_field($modelid);
-			dr_admin_msg(1,L('update_success'),'?m=content&c=sitemodel_field&a=init&modelid='.$modelid.'&menuid='.$this->input->get('menuid'));
+			dr_json(1, L('update_success'), array('url' => '?m=content&c=sitemodel_field&a=init&modelid='.$modelid.'&menuid='.$this->input->post('menuid').'&pc_hash='.dr_get_csrf_token()));
 		} else {
 			$show_header = $show_validator = $show_dialog = '';
 			pc_base::load_sys_class('form','',0);
@@ -163,6 +167,8 @@ class sitemodel_field extends admin {
 			$m_r = $this->model_db->get_one(array('modelid'=>$modelid));
 			$r = $this->db->get_one(array('fieldid'=>$fieldid));
 			extract($r);
+			if($unsetgroupids != '') $unsetgroupids = strpos($unsetgroupids, ',') ? explode(',', $unsetgroupids) : array($unsetgroupids);
+			if($unsetroleids != '') $unsetroleids = strpos($unsetroleids, ',') ? explode(',', $unsetroleids) : array($unsetroleids);
 			require MODEL_PATH.$formtype.DIRECTORY_SEPARATOR.'config.inc.php';
 			
 			$setting = string2array($setting);

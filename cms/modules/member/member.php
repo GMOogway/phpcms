@@ -665,31 +665,16 @@ class member extends admin {
 				unset($tmp, $tmp_key, $box_tmp, $box_tmp_arr);
 			} elseif($v['formtype'] == 'linkage') {	//如果为联动菜单
 				$tmp = string2array($v['setting']);
-				$tmpid = $tmp['linkageid'];
-				$linkagelist = getcache($tmpid, 'linkage');
-				$fullname = $this->_get_linkage_fullname($member_modelinfo_arr[$k], $linkagelist);
+				$fullname = dr_linkagepos($tmp['linkage'], $member_modelinfo_arr[$k], $tmp['space']);
 
 				$member_modelinfo[$v['name']] = substr($fullname, 0, -1);
-				unset($tmp, $tmpid, $linkagelist, $fullname);
+				unset($tmp, $fullname);
 			} else {
 				$member_modelinfo[$v['name']] = $member_modelinfo_arr[$k];
 			}
 		}
 
 		include $this->admin_tpl('member_moreinfo');
-	}
-
-	/*
-	 * 通过linkageid获取名字路径
-	 */
-	private function _get_linkage_fullname($linkageid,  $linkagelist) {
-		$fullname = '';
-		if($linkagelist['data'][$linkageid]['parentid'] != 0) {
-			$fullname = $this->_get_linkage_fullname($linkagelist['data'][$linkageid]['parentid'], $linkagelist);
-		}
-		//所在地区名称
-		$return = $fullname.$linkagelist['data'][$linkageid]['name'].'>';
-		return $return;
 	}
 	
 	private function _checkuserinfo($data, $is_edit=0) {

@@ -25,24 +25,25 @@ $p = dr_authcode(array(
 <link href="<?php echo JS_PATH?>jquery-minicolors/jquery.minicolors.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="<?php echo JS_PATH?>jquery-minicolors/jquery.minicolors.min.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>cookie.js"></script>
-<div class="page-content main-content">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content">
+                <div class="page-body" style="padding-top:15px;">
 <form name="myform" id="myform" action="?m=special&c=content&a=add&specialid=<?php echo $_GET['specialid']?>" class="form-horizontal" onsubmit="return checkall()" method="post" enctype="multipart/form-data">
 <input value="1" type="hidden" name="dosubmit">
-<div class="">
+    <div class="">
         <div class="row ">
-            <div class="col-md-9">
+            <div class="<?php if (is_mobile(0)){?>col-md-12<?php }else{?>col-md-9<?php }?>">
+
                 <div class="portlet light bordered">
                     <div class="portlet-title">
                         <div class="caption">
                             <span class="caption-subject font-blue sbold"></span>
                         </div>
-                        <div class="actions">
-                            <div class="btn-group">
-                            </div>
-                        </div>
+
                     </div>
                     <div class="portlet-body">
-                        <div class="form-body clear">
+                        <div class="form-body">
                             <div class="form-group" id="dr_row_typeid">
                                 <label class="control-label col-md-2"><font color="red">*</font> <?php echo L('for_type')?></label>
                                 <div class="col-md-10">
@@ -89,16 +90,17 @@ $p = dr_authcode(array(
 			<span id="paginationtype1" style="display:none"><input name="data[maxcharperpage]" type="text" id="maxcharperpage" value="10000" size="8" maxlength="8"><?php echo L('number_of_characters')?></span>
                                 </div>
                             </div>
-                        </div>
+                   </div>
                     </div>
                 </div>
 
+                
             </div>
-            <div class="col-md-3 my-sysfield">
+            <div class="<?php if (is_mobile(0)){?>col-md-12<?php }else{?>col-md-3<?php }?> my-sysfield" >
                 <div class="portlet light bordered">
                     <div class="portlet-body">
-                        <div class="form-body clear">
-                            <div class="form-group">
+                        <div class="form-body">
+                          <div class="form-group">
                                 <label class="control-label col-md-2"><?php echo L('content_thumb')?></label>
                                 <div class="col-md-10">
                                     <div class="upload-pic img-wrap"><div class="bk10"></div><input type="hidden" name="info[thumb]" id="thumb">
@@ -141,24 +143,24 @@ $p = dr_authcode(array(
                                     <span id="show_template"><script type="text/javascript">$.getJSON('?m=admin&c=category&a=public_tpl_file_list&style=<?php echo $style?>&module=special&templates=show&id=<?php echo $show_template?>&name=data', function(data){$('#show_template').html(data.show_template);});</script></span>
                                 </div>
                             </div>
-                       </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+
+        
     </div>
 </form>
 </div>
-</body>
-</html>
+</div>
+</div>
+</div>
 <script type="text/javascript"> 
-
 function load_file_list(id) {
 	$.getJSON('?m=admin&c=category&a=public_tpl_file_list&style='+id+'&module=special&templates=show&name=data', function(data){$('#show_template').html(data.show_template);});
 }
-self.moveTo(0, 0);
-function refersh_window() {
-	setcookie('refersh_time', 1);
-}
-//-->
 </script>
+</body>
+</html>

@@ -13,16 +13,16 @@
  * @param  $modelid 模型id
  * @param  $fieldname  字段名称
  */
-function show_linkage($keyid = 0, $linkageid = 0, $modelid = '', $fieldname='diqu') {
+function show_linkage($keyid = 0, $modelid = '', $fieldname='diqu') {
+	$linkage_db = pc_base::load_model('linkage_model');
 	$datas = $infos = $array = array();
 	$keyid = intval($keyid);
-	$linkageid = intval($linkageid);
+	$linkage_db->table_name = $linkage_db->table_name.'_data_'.$keyid;
 	//当前菜单id
 	$field_value = intval($_GET[$fieldname]);
 	$urlrule = structure_filters_url($fieldname,$array,1,$modelid);
 	if($keyid == 0) return false;
-	$datas = getcache($keyid,'linkage');
-	$infos = $datas['data'];
+	$infos = $linkage_db->select('','*','','displayorder ASC,id ASC');
 
 	foreach($infos as $k=>$v){
 		if($v['parentid']==$field_value){
@@ -32,7 +32,7 @@ function show_linkage($keyid = 0, $linkageid = 0, $modelid = '', $fieldname='diq
 			$array[$k]['menu'] = $field_value == $k ? '<em>'.$v['name'].'</em>' : '<a href='.$array[$k]['url'].'>'.$v['name'].'</a>' ;
 		}
 	}
-	$all['name'] = '全部';
+	$all['name'] = '不限';
 	$all['url'] = structure_filters_url($fieldname,array($fieldname=>''),2,$modelid);
 	$all['menu'] = $field_value == '' ? '<em>'.$all['name'].'</em>' : '<a href='.$all['url'].'>'.$all['name'].'</a>';
 
@@ -115,51 +115,6 @@ function dr_filters($field = '',$modelid = '') {
 	return $str;
 }
 /**
- * 获取联动菜单层级
- * @param  $keyid     联动菜单分类id
- * @param  $linkageid 菜单id
- * @param  $leveltype 获取类型 parentid 获取父级id child 获取时候有子栏目 arrchildid 获取子栏目数组
- */
-function get_linkage_level($keyid = 0,$linkageid = 0,$leveltype = 'parentid') {
-	$child_arr = $childs = array();
-	$leveltypes = array('parentid','child','arrchildid','arrchildinfo');
-	$datas = getcache($keyid,'linkage');
-	$infos = $datas['data'];
-	if (in_array($leveltype, $leveltypes)) {
-		if($leveltype == 'arrchildinfo') {
-			$child_arr = explode(',',$infos[$linkageid]['arrchildid']);
-			foreach ($child_arr as $r) {
-				$childs[] = $infos[$r];
-			}
-			return $childs;
-		} else {
-			return $infos[$linkageid][$leveltype];
-		}
-	}	
-}
-// 根据linkageid递归到父级
-function get_parent_url($modelid = '',$field = '',$linkageid=0,$array = array()){
-	$modelid = intval($modelid);
-	if(!$modelid || empty($field)) return false;
-	$fields = getcache('model_field_'.$modelid,'model');
-	$keyid = $fields[$field]['linkageid'];
-	$datas = getcache($keyid,'linkage');
-	$infos = $datas['data'];
-	
-	if(empty($linkageid)){
-		$linkageid = intval($_GET[$field]);
-		if(!$linkageid) return false;
-	}
-
-	$urlrule = structure_filters_url($field,array(),1,$modelid);
-	$urlrule = str_replace('{$'.$field.'}',$infos[$linkageid]['parentid'],$urlrule);
-	array_unshift($array,array('name'=> $infos[$linkageid]['name'],'url'=>$urlrule));
-	if($infos[$linkageid]['parentid']){
-		return get_parent_url($modelid,$field,$infos[$linkageid]['parentid'],$array);
-	}
-	return $array;
-}
-/**
  * 构造筛选时候的sql语句
  */
 function structure_filters_sql($modelid = '',$catid = '') {
@@ -176,10 +131,12 @@ function structure_filters_sql($modelid = '',$catid = '') {
 	foreach ($_GET as $k=>$r) {
 		if(in_array($k,$fields_key) && intval($r)!=0 && ($fields[$k]['filtertype'] || $fields[$k]['rangetype'])) {
 			if($fields[$k]['formtype'] == 'linkage') {
-				$datas = getcache($fields[$k]['linkageid'],'linkage');
-				$infos = $datas['data'];
-				if($infos[$r]['arrchildid']) {
-					$sql .=  ' AND `'.$k.'` in('.$infos[$r]['arrchildid'].')';	
+				$linkage_db = pc_base::load_model('linkage_model');
+				$linkage_data = $linkage_db->get_one(array('code'=>$fields[$k]['linkage']));
+				$linkage_db->table_name = $linkage_db->table_name.'_data_'.$linkage_data['id'];
+				$infos = $linkage_db->select('','*','','displayorder ASC,id ASC');
+				if($infos[$r]['childids']) {
+					$sql .=  ' AND `'.$k.'` in('.$infos[$r]['childids'].')';	
 				}	
 			} elseif($fields[$k]['rangetype']) {
 				if(is_numeric($r)) {

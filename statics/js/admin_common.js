@@ -753,6 +753,42 @@ function dr_ajax_save(value, url, name) {
 		}
 	});
 }
+// ajax关闭或启用
+function dr_ajax_open_close(e, url, fan) {
+	if (typeof pc_hash == 'string') url += (url.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
+	if (url.toLowerCase().indexOf("http://") != -1 || url.toLowerCase().indexOf("https://") != -1) {
+	} else {
+		url = geturlpathname()+url;
+	}
+	var index = layer.load(2, {
+		shade: [0.3,'#fff'], //0.1透明度的白色背景
+		time: 10000
+	});
+	$.ajax({
+		type: "GET",
+		cache: false,
+		url: url,
+		dataType: "json",
+		success: function (json) {
+			layer.close(index);
+			if (json.code == 1) {
+				if (json.data.value == fan) {
+					$(e).attr('class', 'badge badge-no');
+					$(e).html('<i class="fa fa-times"></i>');
+				} else {
+					$(e).attr('class', 'badge badge-yes');
+					$(e).html('<i class="fa fa-check"></i>');
+				}
+				dr_tips(1, json.msg);
+			} else {
+				dr_tips(0, json.msg);
+			}
+		},
+		error: function(HttpRequest, ajaxOptions, thrownError) {
+			dr_ajax_alert_error(HttpRequest, ajaxOptions, thrownError);
+		}
+	});
+}
 // ajax 批量操作确认
 function dr_ajax_option(url, msg, remove) {
 	layer.confirm(msg,{

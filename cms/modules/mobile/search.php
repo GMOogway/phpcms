@@ -97,7 +97,7 @@ class search {
 					if(isset($info[$field]) && $info[$field]) {
 						$value = $info[$field];
 					}
-					$r['form'] = menu_linkage($setting['linkageid'],$field,$value);
+					$r['form'] = menu_linkage($setting['linkage'],$field,$value);
 				} elseif(in_array($r['formtype'], array('text','keyword','textarea','editor','title','author','omnipotent'))) {
 					if(isset($info[$field]) && $info[$field]) {
 						$value = safe_replace($info[$field]);

@@ -1,42 +1,61 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header');?>
-<script type="text/javascript">
-  $(document).ready(function() {
-	$.formValidator.initConfig({autotip:true,formid:"myform",onerror:function(msg){}});
-	$("#name").formValidator({onshow:"<?php echo L('input').L('linkage_name').L('linkage_name_desc')?>",onfocus:"<?php echo L('linkage_name').L('not_empty')?>"}).inputValidator({min:1,max:999,onerror:"<?php echo L('linkage_name').L('not_empty')?>"});
-  })
-</script>
-<div class="pad_10">
-<div class="common-form">
-<form name="myform" action="?m=admin&c=linkage&a=public_sub_add" method="post" id="myform">
-<table width="100%" class="table_form contentWrap">
-<tr>
-<td><?php echo L('level_menu')?></td>
-<td>
-<?php echo $list?>
-</td>
-</tr>
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content main-content2">
+                            <div class="page-body">
+<form class="form-horizontal" role="form" id="myform" name="myform" action="?m=admin&c=linkage&a=public_listk_add" method="post">
+<input type="hidden" name="key" value="<?php echo $key?>">
+    <div class="form-body">
+        <div class="form-group">
+            <label class="col-xs-3 control-label ajax_name"><?php echo L('模式');?></label>
+            <div class="col-xs-8">
+                <div class="mt-radio-inline">
+                    <label class="mt-radio">
+                        <input type="radio" name="all" value="0" onclick="$('.dr_more').hide();$('.dr_one').show();" checked > <?php echo L('单个');?>
+                        <span></span>
+                    </label>
+                    <label class="mt-radio">
+                        <input type="radio" name="all" value="1" onclick="$('.dr_more').show();$('.dr_one').hide();"> <?php echo L('批量');?>
+                        <span></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" id="dr_row_pid">
+            <label class="col-xs-3 control-label ajax_name"><?php echo L('分类');?></label>
+            <div class="col-xs-7">
+                <?php echo $select;?>
+            </div>
+        </div>
+        <div class="form-group dr_one" id="dr_row_name">
+            <label class="col-xs-3 control-label ajax_name"><?php echo L('名称');?></label>
+            <div class="col-xs-7">
+                <input type="text" onblur="topinyin('cname','name','?m=admin&c=linkage&a=public_ajax_pinyin');" class="form-control" id="name" name="data[name]" value="<?php echo htmlspecialchars($data['name']);?>">
+                <span class="help-block"> <?php echo L('它的描述名称');?> </span>
+            </div>
+        </div>
+        <div class="form-group dr_one" id="dr_row_cname">
+            <label class="col-xs-3 control-label ajax_name"><?php echo L('别名');?></label>
+            <div class="col-xs-7">
+                <input type="text" class="form-control" id="cname" name="data[cname]" value="<?php echo htmlspecialchars($data['cname']);?>">
+                <span class="help-block"> <?php echo L('别名只能由字母或者字母+数字组成');?> </span>
+            </div>
+        </div>
 
-<tr>
-<td><?php echo L('linkage_name')?></td>
-<td>
-<textarea name="info[name]" rows="2" cols="20" id="name" class="inputtext" style="height:90px;width:150px;"><?php echo $name?></textarea>
-</td>
-</tr>
+        <div class="form-group dr_more" id="dr_row_all" style="display:none">
+            <label class="col-xs-3 control-label ajax_name"><?php echo L('批量');?></label>
+            <div class="col-xs-7">
+                <textarea name="data[all]" id="all" class="form-control" style="height:220px" rows="3"></textarea>
 
-<tr>
-<td><?php echo L('menu_description')?></td>
-<td>
-<textarea name="info[description]" rows="2" cols="20" id="description" class="inputtext" style="height:45px;width:300px;"><?php echo $description?></textarea>
-</td>
-</tr>
-</table>
-
-    <div class="bk15"></div>
-    <input type="hidden" name="keyid" value="<?php echo $keyid?>">
-    <input name="dosubmit" type="submit" value="<?php echo L('submit')?>" class="dialog" id="dosubmit">
+                <span class="help-block"> <?php echo L('换行分隔多条数据');?> </span>
+            </div>
+        </div>
+    </div>
 </form>
+</div>
+</div>
 </div>
 </div>
 </body>

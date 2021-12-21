@@ -1,12 +1,3 @@
-/**
- * Copyright (c) 2010 Anders Ekdahl (http://coffeescripter.com/)
- * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
- * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
- *
- * Version: 1.2.4
- *
- * Demo and documentation: http://coffeescripter.com/code/ad-gallery/
- */
 (function($) {
   $.fn.adGallery = function(options) {
     var defaults = { loader_image: 'statics/images/yp/loader.gif',
