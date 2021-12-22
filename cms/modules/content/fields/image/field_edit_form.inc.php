@@ -22,6 +22,13 @@
       </div>
     </div>
 	<div class="form-group">
+      <label class="col-md-2 control-label">文件大小</label>
+      <div class="col-md-9">
+            <label><input type="text" name="setting[upload_maxsize]" value="<?php echo $setting['upload_maxsize'];?>" size="40" class="input-text"></label>
+            <span class="help-block">单位MB</span>
+      </div>
+    </div>
+	<div class="form-group">
       <label class="col-md-2 control-label">允许上传的图片类型</label>
       <div class="col-md-9">
             <label><input type="text" name="setting[upload_allowext]" value="<?php echo $setting['upload_allowext'];?>" size="40" class="input-text"></label>

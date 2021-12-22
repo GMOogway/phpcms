@@ -28,6 +28,13 @@ foreach($server_list as $_r) if (in_array($_r['siteid'],array(0,$this->siteid)))
         </div>
 	</div>
 	<div class="form-group">
+      <label class="col-md-2 control-label">文件大小</label>
+      <div class="col-md-9">
+            <label><input type="text" name="setting[upload_maxsize]" value="<?php echo $setting['upload_maxsize'];?>" size="40" class="input-text"></label>
+            <span class="help-block">单位MB</span>
+      </div>
+    </div>
+	<div class="form-group">
       <label class="col-md-2 control-label">允许上传的文件类型</label>
       <div class="col-md-9">
             <label><input type="text" name="setting[upload_allowext]" value="<?php echo $setting['upload_allowext'];?>" size="40" class="input-text"></label>
@@ -45,7 +52,7 @@ foreach($server_list as $_r) if (in_array($_r['siteid'],array(0,$this->siteid)))
 	<div class="form-group">
       <label class="col-md-2 control-label">允许同时上传的个数</label>
       <div class="col-md-9">
-            <label><input type="text" name="setting[upload_number]" value="<?php echo $setting['upload_number'];?>" size=3 class="input-text"></label>
+            <label><input type="text" name="setting[upload_number]" value="<?php echo $setting['upload_number'];?>" class="input-text"></label>
       </div>
     </div>
     <?php echo attachment($setting);?>

@@ -28,39 +28,13 @@
       <label class="col-md-2 control-label">工具栏</label>
         <div class="col-md-9">
             <textarea name="setting[toolvalue]" id="toolvalue" style="height:90px;" class="form-control"><?php echo $setting['toolvalue'];?></textarea>
-            <span class="help-block"><?php if (SYS_EDITOR) {?><?php } else {?>必须严格按照Ueditor工具栏格式：'Fullscreen', 'Source', '|', 'Undo', 'Redo'<?php }?></span>
+            <span class="help-block"><?php if (SYS_EDITOR) {?>必须严格按照CKEditor工具栏格式：'Maximize', 'Source', '-', 'Undo', 'Redo'<?php } else {?>必须严格按照Ueditor工具栏格式：'Fullscreen', 'Source', '|', 'Undo', 'Redo'<?php }?></span>
         </div>
     </div>
     <div class="form-group">
       <label class="col-md-2 control-label">默认值</label>
         <div class="col-md-9">
-        <div class="col-md-9">
             <textarea name="setting[defaultvalue]" id="defaultvalue" style="height:90px;" class="form-control"><?php echo $setting['defaultvalue'];?></textarea>
-        </div>
-    </div>
-    <div class="form-group"> 
-      <label class="col-md-2 control-label">是否启用关联链接</label>
-        <div class="col-md-9">
-            <div class="mt-radio-inline">
-                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[enablekeylink]" value="1" <?php if($setting['enablekeylink']) echo 'checked';?>>是 <span></span></label>
-                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[enablekeylink]" value="0" <?php if(!$setting['enablekeylink']) echo 'checked';?>> 否 <span></span></label>
-            </div>
-        </div>
-    </div>
-    <div class="form-group"> 
-      <label class="col-md-2 control-label">替换次数</label>
-        <div class="col-md-9">
-            <label><input type="text" name="setting[replacenum]" value="<?php echo $setting['replacenum'];?>" size="4" class="input-text"></label>
-            <span class="help-block"><?php echo L('（留空则为替换全部）')?></span>
-        </div>
-    </div>
-    <div class="form-group"> 
-      <label class="col-md-2 control-label">关联链接方式</label>
-        <div class="col-md-9">
-            <div class="mt-radio-inline">
-                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[link_mode]" value="1" <?php if($setting['link_mode']) echo 'checked';?>> 关键字链接 <span></span></label>
-                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[link_mode]" value="0" <?php if(!$setting['link_mode']) echo 'checked';?>> 网址链接 <span></span></label>
-            </div>
         </div>
     </div>
     <div class="form-group"<?php if (!SYS_EDITOR) {?> style="display: none;"<?php }?>> 
@@ -144,6 +118,28 @@
     </div>
     <?php }?>
     <?php echo attachment($setting);?>
+    <div class="form-group">
+      <label class="col-md-2 control-label">是否允许上传附件</label>
+        <div class="col-md-9">
+            <div class="mt-radio-inline">
+          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[allowupload]" value="1" <?php if($setting['allowupload']) echo 'checked';?>> 是 <span></span></label>
+          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[allowupload]" value="0" <?php if(!$setting['allowupload']) echo 'checked';?>> 否 <span></span></label>
+        </div>
+        </div>
+    </div>
+    <div class="form-group">
+      <label class="col-md-2 control-label">允许同时上传的个数</label>
+      <div class="col-md-9">
+            <label><input type="text" name="setting[upload_number]" value="<?php echo $setting['upload_number'];?>" class="input-text"></label>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-md-2 control-label">文件大小</label>
+      <div class="col-md-9">
+            <label><input type="text" name="setting[upload_maxsize]" value="<?php echo $setting['upload_maxsize'];?>" size="40" class="input-text"></label>
+            <span class="help-block">单位MB</span>
+      </div>
+    </div>
     <div class="form-group">
       <label class="col-md-2 control-label">是否保存远程图片</label>
         <div class="col-md-9">

@@ -19,7 +19,7 @@ class formguide_field extends admin {
 		if ($this->input->get('formid') && !empty($this->input->get('formid'))) {
 			$formid = intval($this->input->get('formid'));
 			$this->cache_field($formid);
-			$datas = $this->db->select(array('modelid'=>$formid),'*',100,'listorder ASC');
+			$datas = $this->db->select(array('modelid'=>$formid),'*',100,'listorder ASC,fieldid ASC');
 			$r = $this->model_db->get_one(array('modelid'=>$formid));
 		} else {
 			$data = $datas = array();

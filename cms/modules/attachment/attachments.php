@@ -35,6 +35,7 @@ class attachments {
 		if (!$p) {
 			showmessage(L('attachment_parameter_error'));
 		}
+		$file_size_limit = intval($p['size']) ? floatval(intval($p['size'])) : $file_size_limit;
 		$authkey = $this->input->get('authkey');
 		foreach($p as $k=>$v) {
 			$arraykey[$k] = $v;
@@ -52,7 +53,7 @@ class attachments {
 			'path' => '',
 			'form_name' => 'upload',
 			'file_exts' => explode('|', strtolower($file_types_post)),
-			'file_size' => ($file_size_limit/1024) * 1024 * 1024,
+			'file_size' => $file_size_limit * 1024 * 1024,
 			'watermark' => $watermark,
 			'attachment' => $upload->get_attach_info(intval($attachment), intval($image_reduce)),
 		));
@@ -121,7 +122,7 @@ class attachments {
 			$upload->set_userid($this->input->post('userid'));
 			$site_setting = get_site_setting($this->input->post('siteid'));
 			$site_allowext = $site_setting['upload_allowext'];
-			$upload_maxsize = $site_setting['upload_maxsize'];
+			$upload_maxsize = intval($p['size']) ? floatval(intval($p['size'])) : $site_setting['upload_maxsize'];
 			if ($this->input->post('filetype_post')) {
 				$filetype_post = $this->input->post('filetype_post');
 			} else {
@@ -131,7 +132,7 @@ class attachments {
 				'path' => '',
 				'form_name' => 'file_upload',
 				'file_exts' => explode('|', strtolower($filetype_post)),
-				'file_size' => ($upload_maxsize/1024) * 1024 * 1024,
+				'file_size' => $upload_maxsize * 1024 * 1024,
 				'watermark' => intval($this->input->post('watermark_enable')),
 				'attachment' => $upload->get_attach_info(intval($this->input->post('attachment')), (int)$this->input->post('image_reduce')),
 			));
@@ -192,7 +193,6 @@ class attachments {
 			$argskey = str_replace('"', '', dr_array2string(implode(',', $arraykey)));
 			if(upload_key($argskey) != $authkey) showmessage(L('attachment_parameter_error'));
 			extract(geth5init($args));
-			$file_size_limit = sizecount($file_size_limit*1024);		
 			$att_not_used = $this->cache->get_data('att_json');
 			if(empty($att_not_used) || !isset($att_not_used)) $tab_status = ' class="on"';
 			if(!empty($att_not_used)) $div_status = ' hidden';

@@ -24,7 +24,7 @@ class member_modelfield extends admin {
 	public function manage() {
 		$modelid = $this->input->get('modelid');
 		$this->cache_field($modelid);
-		$datas = $this->db->select(array('modelid'=>$modelid),'*',100,$this->input->get('order') ? $this->input->get('order') : 'listorder ASC');
+		$datas = $this->db->select(array('modelid'=>$modelid),'*',100,$this->input->get('order') ? $this->input->get('order') : 'listorder ASC,fieldid ASC');
 		$modelinfo = $this->model_db->get_one(array('modelid'=>$modelid));
 		$big_menu = array('?m=member&c=member_modelfield&a=add&modelid='.$modelinfo['modelid'].'&menuid='.$this->input->get('menuid').'', L('member_modelfield_add'));
 		include $this->admin_tpl('member_modelfield_list');

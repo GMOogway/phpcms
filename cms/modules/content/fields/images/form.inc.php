@@ -39,11 +39,12 @@
 		} else {
 			$str = '';
 		}
-		$authkey = upload_key($this->input->get('siteid').",$upload_number,$upload_allowext,$isselectimage,,,,$attachment,$image_reduce");
+		$authkey = upload_key($this->input->get('siteid').",$upload_number,$upload_allowext,$upload_maxsize,$isselectimage,,,,$attachment,$image_reduce");
 		$p = dr_authcode(array(
 			'siteid' => $this->input->get('siteid'),
 			'file_upload_limit' => $upload_number,
 			'file_types_post' => $upload_allowext,
+			'size' => $upload_maxsize,
 			'allowupload' => $isselectimage,
 			'thumb_width' => '',
 			'thumb_height' => '',

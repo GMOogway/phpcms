@@ -21,7 +21,6 @@
 						if($_v) $string .= $option[$_v].' 、';
 					}
 				break;
-
 				case 'select':
 					$string = $option[$value];
 				break;

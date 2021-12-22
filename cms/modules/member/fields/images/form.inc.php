@@ -39,11 +39,12 @@
 		} else {
 			$str = '';
 		}
-		$authkey = upload_key($this->input->get('siteid').",$upload_number,$upload_allowext,$isselectimage,,,,$attachment,$image_reduce");
+		$authkey = upload_key($this->input->get('siteid').",$upload_number,$upload_allowext,$upload_maxsize,$isselectimage,,,,$attachment,$image_reduce");
 		$p = dr_authcode(array(
 			'siteid' => $this->input->get('siteid'),
 			'file_upload_limit' => $upload_number,
 			'file_types_post' => $upload_allowext,
+			'size' => $upload_maxsize,
 			'allowupload' => $isselectimage,
 			'thumb_width' => '',
 			'thumb_height' => '',
@@ -54,7 +55,7 @@
 		if($show_type && defined('IS_ADMIN') && IS_ADMIN) {
 			$string .= $str."<input type='button' class='button' onclick=\"javascript:h5upload('".SELF."', '{$field}_images', '".L('attachment_upload')."','{$field}','change_thumbs','{$p}','content','$this->catid','{$authkey}',".SYS_EDITOR.")\"/ value='".L('select_pic')."'>";
 		} else {
-			$string .= $str."<input type='button' class='button' onclick=\"javascript:h5upload('".SELF."', '{$field}_images', '".L('attachment_upload')."','{$field}','change_images','{$p}','content','$this->catid','{$authkey}',".SYS_EDITOR.")\"/ value='".L('select_pic')."'>";
+		$string .= $str."<input type='button' class='button' onclick=\"javascript:h5upload('".SELF."', '{$field}_images', '".L('attachment_upload')."','{$field}','change_images','{$p}','content','$this->catid','{$authkey}',".SYS_EDITOR.")\"/ value='".L('select_pic')."'>";
 		}
 		return $string;
 	}

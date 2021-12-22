@@ -4,10 +4,11 @@ defined('IS_ADMIN') or exit('No permission resources.');
 $show_dialog = $show_header = 1; 
 include $this->admin_tpl('header', 'admin');
 $thisExt = isset($this->setting['ext'])?$this->setting['ext']:'';
-$authkey = upload_key('1,'.$thisExt.',1,,,,,');
+$authkey = upload_key('1,'.$thisExt.',0,1,,,,,');
 $p = dr_authcode(array(
 	'file_upload_limit' => 1,
 	'file_types_post' => $thisExt,
+	'size' => 0,
 	'allowupload' => 1,
 	'thumb_width' => '',
 	'thumb_height' => '',

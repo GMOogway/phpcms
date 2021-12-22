@@ -23,8 +23,9 @@ class form {
 	 * @param string $enter
 	 * @param string $enablesaveimage
 	 * @param string $allowuploadnum
+	 * @param string $upload_maxsize
 	 */
-	public static function editor($textareaid = 'content', $toolbar = 'basic', $toolvalue = '', $module = '', $catid = '', $color = '', $allowupload = 0, $allowbrowser = 1,$alowuploadexts = '',$height = 300,$disabled_page = 0, $autofloat = 0, $autoheight = 0, $theme = '', $watermark = 1, $attachment = 0, $image_reduce = '', $div2p = 0, $enter = 0, $simpleupload = 0, $enablesaveimage = 1, $width = '100%', $allowuploadnum = '10') {
+	public static function editor($textareaid = 'content', $toolbar = 'basic', $toolvalue = '', $module = '', $catid = '', $color = '', $allowupload = 0, $allowbrowser = 1,$alowuploadexts = '',$height = 300,$disabled_page = 0, $autofloat = 0, $autoheight = 0, $theme = '', $watermark = 1, $attachment = 0, $image_reduce = '', $div2p = 0, $enter = 0, $simpleupload = 0, $enablesaveimage = 1, $width = '100%', $allowuploadnum = '10', $upload_maxsize = 0) {
 		$input = pc_base::load_sys_class('input');
 		$siteid = $input->get('siteid') ? $input->get('siteid') : param::get_cookie('siteid');
 		if(!$siteid) $siteid = get_siteid() ? get_siteid() : 1 ;
@@ -40,11 +41,12 @@ class form {
 		}
 		$show_page = ($module == 'content' && !$disabled_page) ? 'true' : 'false';
 		if($allowupload) {
-			$authkey = upload_key("$siteid,$allowuploadnum,$alowuploadexts,$allowbrowser,,,$watermark,$attachment,$image_reduce");
+			$authkey = upload_key("$siteid,$allowuploadnum,$alowuploadexts,$upload_maxsize,$allowbrowser,,,$watermark,$attachment,$image_reduce");
 			$p = dr_authcode(array(
 				'siteid' => $siteid,
 				'file_upload_limit' => $allowuploadnum,
 				'file_types_post' => $alowuploadexts,
+				'size' => $upload_maxsize,
 				'allowupload' => $allowbrowser,
 				'thumb_width' => '',
 				'thumb_height' => '',
@@ -239,7 +241,7 @@ class form {
 	 * @param int $attachment
 	 * @param int $image_reduce
 	 */
-	public static function images($name, $id = '', $value = '', $moudle='', $catid='', $size = 50, $class = '', $ext = '', $alowexts = '',$thumb_setting = array(),$watermark_setting = 0,$attachment = 0, $image_reduce = '') {
+	public static function images($name, $id = '', $value = '', $moudle='', $catid='', $size = 50, $class = '', $ext = '', $alowexts = '',$thumb_setting = array(),$watermark_setting = 0,$attachment = 0, $image_reduce = '', $upload_maxsize = 0) {
 		$input = pc_base::load_sys_class('input');
 		$siteid = $input->get('siteid') ? $input->get('siteid') : param::get_cookie('siteid');
 		if(!$siteid) $siteid = get_siteid() ? get_siteid() : 1 ;
@@ -253,11 +255,12 @@ class form {
 			define('IMAGES_INIT', 1);
 		}
 		$value = new_html_special_chars($value);
-		$authkey = upload_key("$siteid,1,$alowexts,1,$thumb_ext,$watermark_setting,$attachment,$image_reduce");
+		$authkey = upload_key("$siteid,1,$alowexts,$upload_maxsize,1,$thumb_ext,$watermark_setting,$attachment,$image_reduce");
 		$p = dr_authcode(array(
 			'siteid' => $siteid,
 			'file_upload_limit' => 1,
 			'file_types_post' => $alowexts,
+			'size' => $upload_maxsize,
 			'allowupload' => 1,
 			'thumb_width' => isset($thumb_setting[0]) && $thumb_setting[0] ? $thumb_setting[0] : '',
 			'thumb_height' => isset($thumb_setting[1]) && $thumb_setting[1] ? $thumb_setting[1] : '',
@@ -283,7 +286,7 @@ class form {
 	 * @param int $attachment
 	 * @param int $image_reduce
 	 */
-	public static function upfiles($name, $id = '', $value = '', $moudle='', $catid='', $size = 50, $class = '', $ext = '', $alowexts = '',$file_setting = array(),$attachment = 0, $image_reduce = '' ) {
+	public static function upfiles($name, $id = '', $value = '', $moudle='', $catid='', $size = 50, $class = '', $ext = '', $alowexts = '',$file_setting = array(),$attachment = 0, $image_reduce = '', $upload_maxsize = 0) {
 		$input = pc_base::load_sys_class('input');
 		$siteid = $input->get('siteid') ? $input->get('siteid') : param::get_cookie('siteid');
 		if(!$siteid) $siteid = get_siteid() ? get_siteid() : 1 ;
@@ -296,11 +299,12 @@ class form {
 			$str = '<script type="text/javascript" src="'.JS_PATH.'h5upload/h5editor.js"></script>';
 			define('IMAGES_INIT', 1);
 		}
-		$authkey = upload_key("$siteid,1,$alowexts,1,$file_ext,,$attachment,$image_reduce");
+		$authkey = upload_key("$siteid,1,$alowexts,$upload_maxsize,1,$file_ext,,$attachment,$image_reduce");
 		$p = dr_authcode(array(
 			'siteid' => $siteid,
 			'file_upload_limit' => 1,
 			'file_types_post' => $alowexts,
+			'size' => $upload_maxsize,
 			'allowupload' => 1,
 			'thumb_width' => isset($file_setting[0]) && $file_setting[0] ? $file_setting[0] : '',
 			'thumb_height' => isset($file_setting[1]) && $file_setting[1] ? $file_setting[1] : '',

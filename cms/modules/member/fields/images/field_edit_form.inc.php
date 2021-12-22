@@ -1,6 +1,13 @@
 <?php defined('IN_CMS') or exit('No permission resources.');?>
 
 	<div class="form-group">
+      <label class="col-md-2 control-label">文件大小</label>
+      <div class="col-md-9">
+            <label><input type="text" name="setting[upload_maxsize]" value="<?php echo $setting['upload_maxsize'];?>" size="40" class="input-text"></label>
+            <span class="help-block">单位MB</span>
+      </div>
+    </div>
+	<div class="form-group">
       <label class="col-md-2 control-label">允许上传的图片类型</label>
       <div class="col-md-9">
             <label><input type="text" name="setting[upload_allowext]" value="<?php echo $setting['upload_allowext'];?>" size="40" class="input-text"></label>
@@ -26,7 +33,7 @@
 	<div class="form-group">
       <label class="col-md-2 control-label">允许同时上传的个数</label>
       <div class="col-md-9">
-            <label><input type="text" name="setting[upload_number]" value="<?php echo $setting['upload_number'];?>" size=3 class="input-text"></label>
+            <label><input type="text" name="setting[upload_number]" value="<?php echo $setting['upload_number'];?>" class="input-text"></label>
       </div>
     </div>
     <?php echo attachment($setting);?>

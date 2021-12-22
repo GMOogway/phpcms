@@ -15,24 +15,26 @@ include $this->admin_tpl('header','admin');?>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>hotkeys.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>cookie.js"></script>
 <script type="text/javascript">var catid=<?php echo $catid;?></script>
-<div class="page-content main-content">
-<div class="form-horizontal">
-<div class="myfbody">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content">
+                <div class="page-body" style="padding-top:15px;">
+<form name="myform" id="myform" action="?m=content&c=content&a=add" class="form-horizontal" onsubmit="return checkall()" method="post" enctype="multipart/form-data">
+<input value="1" type="hidden" name="dosubmit">
+    <div class="">
         <div class="row ">
-            <div class="col-md-9">
+            <div class="<?php if (is_mobile(0)){?>col-md-12<?php }else{?>col-md-9<?php }?>">
+
                 <div class="portlet light bordered">
                     <div class="portlet-title">
                         <div class="caption">
                             <span class="caption-subject font-blue sbold"></span>
                         </div>
-                        <div class="actions">
-                            <div class="btn-group">
-                            </div>
-                        </div>
+
                     </div>
                     <div class="portlet-body">
-                        <div class="form-body clear">
-                           <?php
+                        <div class="form-body">
+                            <?php
 if(is_array($forminfos['base'])) {
  foreach($forminfos['base'] as $field=>$info) {
 	 if($info['isomnipotent']) continue;
@@ -49,27 +51,27 @@ if(is_array($forminfos['base'])) {
 		}
 	}
  ?>
-<div class="form-group">
+<div class="form-group" id="dr_row_<?php echo $field?>">
     <label class="control-label col-md-2"><?php if($info['star']){ ?><span class="required" aria-required="true"> * </span><?php } ?><?php echo $info['name']?></label>
     <div class="col-md-10">
 		<?php echo $info['form']?>
-		<span class="help-block"><?php echo $info['tips']?></span>
+		<span class="help-block" id="dr_<?php echo $field?>_tips"><?php echo $info['tips']?></span>
 	</div>
 </div>
 <?php
 } }
 ?>
-                        </div>
+                   </div>
                     </div>
                 </div>
 
                 
             </div>
-            <div class="col-md-3 my-sysfield">
+            <div class="<?php if (is_mobile(0)){?>col-md-12<?php }else{?>col-md-3<?php }?> my-sysfield" >
                 <div class="portlet light bordered">
                     <div class="portlet-body">
-                        <div class="form-body clear">
-<?php
+                        <div class="form-body">
+                          <?php
 if(is_array($forminfos['senior'])) {
  foreach($forminfos['senior'] as $field=>$info) {
 	if($info['isomnipotent']) continue;
@@ -86,11 +88,11 @@ if(is_array($forminfos['senior'])) {
 		}
 	}
  ?>
-<div class="form-group">
+<div class="form-group" id="dr_row_<?php echo $field?>">
     <label class="control-label col-md-2"><?php if($info['star']){ ?><span class="required" aria-required="true"> * </span><?php } ?><?php echo $info['name']?></label>
     <div class="col-md-10">
 		<?php echo $info['form']?>
-		<span class="help-block"><?php echo $info['tips']?></span>
+		<span class="help-block" id="dr_<?php echo $field?>_tips"><?php echo $info['tips']?></span>
 	</div>
 </div>
 <?php
@@ -101,34 +103,29 @@ if(is_array($forminfos['senior'])) {
     <label class="control-label col-md-2"><?php echo L('c_status');?></label>
     <div class="col-md-10">
 		<div class="mt-radio-inline"><label class="mt-radio mt-radio-outline"><input type="radio" name="status" value="99" checked/> <?php echo L('c_publish');?> <span></span></label>
-<?php if(isset($workflowid) && $workflowid) { ?><label class="mt-radio mt-radio-outline"><input type="radio" name="status" value="1" > <?php echo L('c_check');?> <span></span></label><?php }?>
+<?php if($workflowid) { ?><label class="mt-radio mt-radio-outline"><input type="radio" name="status" value="1" > <?php echo L('c_check');?> <span></span></label><?php }?>
 </div>
 	</div>
 </div>
 <?php }?>
-
-                       </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+
+        
     </div>
+</form>
 </div>
 </div>
-</body>
-</html>
+</div>
+</div>
 <script type="text/javascript"> 
 <!--
 //只能放到最下面
 $(function(){
-	$.formValidator.initConfig({formid:"myform",autotip:true,onerror:function(msg,obj){Dialog.alert(msg,function(){$(obj).focus();
-	boxid = $(obj).attr('id');
-	if($('#'+boxid).attr('boxid')!=undefined) {
-		check_content(boxid);
-	}
-	})}});
-	<?php echo isset($formValidator) && $formValidator ? $formValidator : '';?>
-	
 /*
  * 加载禁用外边链接
  */
@@ -137,6 +134,7 @@ $(function(){
 	$('#islink').attr('checked',false);
 	$('.edit_content').hide();
 })
-document.title='<?php echo L('priview_modelfield');?>';
 //-->
 </script>
+</body>
+</html>

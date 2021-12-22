@@ -217,7 +217,7 @@ function default_list() {
 	<table width="100%"  class="table_form">
   <tr>
     <th width="130" valign="top"><?php echo L('site_att_upload_maxsize')?></th>
-    <td class="y-bg"><input type="text" class="input-text" name="setting[upload_maxsize]" id="upload_maxsize" size="10" value="2048"/> KB </td>
+    <td class="y-bg"><input type="text" class="input-text" name="setting[upload_maxsize]" id="upload_maxsize" size="10" value="2"/> MB </td>
   </tr>
   <tr>
     <th width="130" valign="top"><?php echo L('site_att_allow_ext')?></th>
@@ -233,7 +233,7 @@ function default_list() {
   </tr>
   <tr>
     <th width="130" valign="top"><?php echo L('ueditor_image_max_size')?></th>
-    <td class="y-bg"><input type="text" class="input-text" name="setting[imageMaxSize]" id="imageMaxSize" size="10" value="2048"/> KB </td>
+    <td class="y-bg"><input type="text" class="input-text" name="setting[imageMaxSize]" id="imageMaxSize" size="10" value="2"/> MB </td>
   </tr>
   <tr>
     <th width="130" valign="top"><?php echo L('ueditor_image_allow_ext')?></th>
@@ -241,7 +241,7 @@ function default_list() {
   </tr>
   <tr>
     <th width="130" valign="top"><?php echo L('ueditor_catcher_max_size')?></th>
-    <td class="y-bg"><input type="text" class="input-text" name="setting[catcherMaxSize]" id="catcherMaxSize" size="10" value="2048"/> KB </td>
+    <td class="y-bg"><input type="text" class="input-text" name="setting[catcherMaxSize]" id="catcherMaxSize" size="10" value="2"/> MB </td>
   </tr>
   <tr>
     <th width="130" valign="top"><?php echo L('ueditor_catcher_allow_ext')?></th>
@@ -249,7 +249,7 @@ function default_list() {
   </tr>
   <tr>
     <th width="130" valign="top"><?php echo L('ueditor_video_max_size')?></th>
-    <td class="y-bg"><input type="text" class="input-text" name="setting[videoMaxSize]" id="videoMaxSize" size="10" value="102400"/> KB </td>
+    <td class="y-bg"><input type="text" class="input-text" name="setting[videoMaxSize]" id="videoMaxSize" size="10" value="100"/> MB </td>
   </tr>
   <tr>
     <th width="130" valign="top"><?php echo L('ueditor_video_allow_ext')?></th>
@@ -257,7 +257,7 @@ function default_list() {
   </tr>
   <tr>
     <th width="130" valign="top"><?php echo L('ueditor_file_max_size')?></th>
-    <td class="y-bg"><input type="text" class="input-text" name="setting[fileMaxSize]" id="fileMaxSize" size="10" value="51200"/> KB </td>
+    <td class="y-bg"><input type="text" class="input-text" name="setting[fileMaxSize]" id="fileMaxSize" size="10" value="50"/> MB </td>
   </tr>
   <tr>
     <th width="130" valign="top"><?php echo L('ueditor_file_allow_ext')?></th>

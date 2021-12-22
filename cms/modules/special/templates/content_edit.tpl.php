@@ -2,10 +2,11 @@
 defined('IS_ADMIN') or exit('No permission resources.'); 
 $show_dialog = $show_validator = $show_header = 1; 
 include $this->admin_tpl('header','admin');
-$authkey = upload_key('1,jpg|jpeg|gif|bmp|png,,300,300,,,');
+$authkey = upload_key('1,jpg|jpeg|gif|bmp|png,0,,300,300,,,');
 $p = dr_authcode(array(
 	'file_upload_limit' => 1,
 	'file_types_post' => 'jpg|jpeg|gif|bmp|png',
+	'size' => 0,
 	'allowupload' => '',
 	'thumb_width' => 300,
 	'thumb_height' => 300,

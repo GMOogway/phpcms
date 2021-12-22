@@ -7,7 +7,7 @@
       </div>
     </div>
 	<div class="form-group">
-      <label class="col-md-2 control-label">表单附加属性<br />可以通过此处加入javascript事件</label>
+      <label class="col-md-2 control-label">表单附加属性</label>
       <div class="col-md-9">
             <label><input type="text" name="setting[bformattribute]" value="<?php echo $setting['bformattribute'];?>" size="40" class="input-text"><br />javascript事件：get_wxurl('表单名称','标题字段名称','关键词字段名称','内容字段名称')，内容必须是编辑器。</label>
       </div>

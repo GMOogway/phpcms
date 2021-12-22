@@ -1,5 +1,4 @@
 	function box($field, $value, $fieldinfo) {
-
 		$setting = string2array($fieldinfo['setting']);
 		if($value=='') $value = $this->fields[$field]['defaultvalue'];
 		$options = explode("\n",$this->fields[$field]['options']);

@@ -12,6 +12,13 @@
       </div>
     </div>
 	<div class="form-group">
+      <label class="col-md-2 control-label">文件大小</label>
+      <div class="col-md-9">
+            <label><input type="text" name="setting[upload_maxsize]" value="0" size="40" class="input-text"></label>
+            <span class="help-block">单位MB</span>
+      </div>
+    </div>
+	<div class="form-group">
       <label class="col-md-2 control-label">允许上传的文件类型</label>
       <div class="col-md-9">
             <label><input type="text" name="setting[upload_allowext]" value="pdf|doc|docx|xls|wps|rar|zip|7z|jpg|jpeg|png|bmp" size="60" class="input-text"></label>

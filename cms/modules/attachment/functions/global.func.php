@@ -134,7 +134,7 @@
 		$arr['siteid'] = intval($args['siteid']) ? intval($args['siteid']) : intval($siteid);
 		$arr['file_upload_limit'] = intval($args['file_upload_limit']) ? intval($args['file_upload_limit']) : 10;
 		$arr['file_types_post'] = $args['file_types_post'] ? $args['file_types_post'] : $site_allowext;
-		$arr['file_size_limit'] = $file_size_limit ? $file_size_limit : 0;
+		$arr['file_size_limit'] = intval($args['size']) ? intval($args['size']) : ($file_size_limit ? $file_size_limit : 0);
 		$arr['allowupload'] = intval($args['allowupload']);
 		$arr['thumb_width'] = intval($args['thumb_width']);
 		$arr['thumb_height'] = intval($args['thumb_height']);

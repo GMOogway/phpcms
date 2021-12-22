@@ -8,11 +8,12 @@ function file($field, $value, $fieldinfo) {
 			$str = '';
 		}
 		$html = '';
-		$authkey = upload_key($this->input->get('siteid').",1,$upload_allowext,$isselectimage,$images_width,$images_height,$watermark,$attachment,$image_reduce");
+		$authkey = upload_key($this->input->get('siteid').",1,$upload_allowext,$upload_maxsize,$isselectimage,$images_width,$images_height,$watermark,$attachment,$image_reduce");
 		$p = dr_authcode(array(
 			'siteid' => $this->input->get('siteid'),
 			'file_upload_limit' => 1,
 			'file_types_post' => $upload_allowext,
+			'size' => $upload_maxsize,
 			'allowupload' => $isselectimage,
 			'thumb_width' => $images_width,
 			'thumb_height' => $images_height,
