@@ -2,6 +2,13 @@
 $show_header = $show_validator = $show_scroll = 1; 
 include $this->admin_tpl('header', 'attachment');
 ?>
+<script type="text/javascript" src="<?php echo JS_PATH?>jquery-3.5.1.min.js"></script>
+<script type="text/javascript" src="<?php echo CSS_PATH?>bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+    $('.tooltips').tooltip();
+});
+</script>
 <!--上传组件js-->
 <script src="<?php echo JS_PATH?>assets/ds.min.js"></script>
 <link href="<?php echo JS_PATH?>h5upload/h5upload.css" rel="stylesheet" type="text/css" />
@@ -10,7 +17,7 @@ include $this->admin_tpl('header', 'attachment');
 <div class="bk20 hr"></div>
 <div class="files clear">
 <?php if(is_array($att) && !empty($att)){ foreach ($att as $_v) {?>
-    <div class="files_row" onmouseover="layer.tips('<?php echo $_v['filename']?>&nbsp;&nbsp;<?php echo $_v['size']?>',this,{tips: [1, '#fff']});" onmouseout="layer.closeAll();">
+    <div class="files_row tooltips" data-original-title="<?php echo $_v['filename']?>&nbsp;&nbsp;<?php echo format_file_size($_v['size'])?>">
         <span class="checkbox"></span>
         <input type="checkbox" class="checkboxes" name="ids[]" value="<?php echo $_v['aid']?>" />
         <a class="off"><img width="<?php echo $_v['width']?>" id="<?php echo $_v['aid']?>" path="<?php echo $_v['src']?>" src="<?php echo $_v['fileimg']?>" filename="<?php echo $_v['filename']?>" size="<?php echo $_v['size']?>"></a>
