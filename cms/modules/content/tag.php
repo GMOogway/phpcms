@@ -29,7 +29,7 @@ class tag {
 		if (is_mobile($this->siteid) && $sitelist[$this->siteid]['mobileauto'] || defined('IS_MOBILE') && IS_MOBILE) {
 			if (!file_exists(PC_PATH.'templates'.DIRECTORY_SEPARATOR.$default_style.DIRECTORY_SEPARATOR.'mobile'.DIRECTORY_SEPARATOR.'tag.html')) {
 				define('ISMOBILE', 0);
-				define('IS_HTML', $sitelist[$this->siteid]['ishtml']);
+				define('IS_HTML', 0);
 				include template('content', 'tag');
 			} else {
 				if ($sitelist[$this->siteid]['mobile_domain']) {
@@ -38,16 +38,12 @@ class tag {
 				}
 				pc_base::load_app_func('global','mobile');
 				define('ISMOBILE', 1);
-				if($sitelist[$this->siteid]['ishtml'] && $sitelist[$this->siteid]['mobilehtml']) {
-					define('IS_HTML', 1);
-				} else {
-					define('IS_HTML', 0);
-				}
+				define('IS_HTML', 0);
 				include template('mobile','tag');
 			}
 		}else{
 			define('ISMOBILE', 0);
-			define('IS_HTML', $sitelist[$this->siteid]['ishtml']);
+			define('IS_HTML', 0);
 			include template('content', 'tag');
 		}
 	}
@@ -89,7 +85,7 @@ class tag {
 		if (is_mobile($this->siteid) && $sitelist[$this->siteid]['mobileauto'] || defined('IS_MOBILE') && IS_MOBILE) {
 			if (!file_exists(PC_PATH.'templates'.DIRECTORY_SEPARATOR.$default_style.DIRECTORY_SEPARATOR.'mobile'.DIRECTORY_SEPARATOR.'tag_list.html')) {
 				define('ISMOBILE', 0);
-				define('IS_HTML', $sitelist[$this->siteid]['ishtml']);
+				define('IS_HTML', 0);
 				include template('content', 'tag_list');
 			} else {
 				if ($sitelist[$this->siteid]['mobile_domain']) {
@@ -98,16 +94,12 @@ class tag {
 				}
 				pc_base::load_app_func('global','mobile');
 				define('ISMOBILE', 1);
-				if($sitelist[$this->siteid]['ishtml'] && $sitelist[$this->siteid]['mobilehtml']) {
-					define('IS_HTML', 1);
-				} else {
-					define('IS_HTML', 0);
-				}
+				define('IS_HTML', 0);
 				include template('mobile','tag_list',$default_style);
 			}
 		}else{
 			define('ISMOBILE', 0);
-			define('IS_HTML', $sitelist[$this->siteid]['ishtml']);
+			define('IS_HTML', 0);
 			include template('content', 'tag_list');
 		}
 	}

@@ -25,6 +25,8 @@ class tag {
 		}
 		$infos = $this->keyword_db->listinfo($where, '`searchnums` DESC, `videonum` DESC', $page, $pagesize);
 		$pages = $this->keyword_db->pages;
+		define('ISMOBILE', 1);
+		define('IS_HTML', 0);
 		include template('mobile', 'tag');
 	}
 
@@ -62,6 +64,8 @@ class tag {
 		}
 
 		$SEO = seo($this->siteid, '', $tag);
+		define('ISMOBILE', 1);
+		define('IS_HTML', 0);
 		include template('mobile','tag_list');
 	}
 }

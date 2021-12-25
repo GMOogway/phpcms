@@ -27,7 +27,7 @@ class rss {
 			if (is_mobile($siteid) && $sitelist[$siteid]['mobileauto'] || defined('IS_MOBILE') && IS_MOBILE) {
 				if (!file_exists(PC_PATH.'templates'.DIRECTORY_SEPARATOR.$default_style.DIRECTORY_SEPARATOR.'mobile'.DIRECTORY_SEPARATOR.'rss.html')) {
 					define('ISMOBILE', 0);
-					define('IS_HTML', $sitelist[$siteid]['ishtml']);
+					define('IS_HTML', 0);
 					include template('content', 'rss');
 				} else {
 					if ($sitelist[$siteid]['mobile_domain']) {
@@ -36,16 +36,12 @@ class rss {
 					}
 					pc_base::load_app_func('global','mobile');
 					define('ISMOBILE', 1);
-					if($sitelist[$siteid]['ishtml'] && $sitelist[$siteid]['mobilehtml']) {
-						define('IS_HTML', 1);
-					} else {
-						define('IS_HTML', 0);
-					}
+					define('IS_HTML', 0);
 					include template('mobile','rss');
 				}
 			}else{
 				define('ISMOBILE', 0);
-				define('IS_HTML', $sitelist[$siteid]['ishtml']);
+				define('IS_HTML', 0);
 				include template('content','rss');
 			}
 		} else {
