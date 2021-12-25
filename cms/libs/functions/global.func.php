@@ -3596,6 +3596,9 @@ function dr_form_hidden($data = array()) {
  * 效验安全码
  */
 function csrf_hash($key = 'csrf_token') {
+	if (defined('SYS_CSRF') && !SYS_CSRF) {
+		return '';
+	}
 	$cache = pc_base::load_sys_class('cache');
 	!$key && $key = 'csrf_hash_'.md5(isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT'] ? $_SERVER['HTTP_USER_AGENT'] : '');
 	$csrf_token = $cache->get_auth_data($key, 1, 600);
@@ -3608,7 +3611,7 @@ function csrf_hash($key = 'csrf_token') {
 // 验证字符串
 function dr_get_csrf_token($key = 'pc_hash') {
 	$cache = pc_base::load_sys_class('cache');
-	!$key && $key = 'csrf_hash_'.md5(isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT'] ? $_SERVER['HTTP_USER_AGENT'] : '');
+	!$key && $key = 'pc_hash_'.md5(isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT'] ? $_SERVER['HTTP_USER_AGENT'] : '');
 	$code = $cache->get_auth_data(COOKIE_PRE.ip().$key, 1);
 	if (!$code) {
 		$code = bin2hex(random_bytes(16));

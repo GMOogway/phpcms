@@ -25,7 +25,7 @@ class checkcode {
 	public $code;
 
 	//验证码的随机种子
-	public $code_string  = 'abcdefghkmnprstuvwyzABCDEFGHKLMNPRSTUVWYZ23456789';
+	public $code_string = 'abcdefghkmnprstuvwyzABCDEFGHKLMNPRSTUVWYZ23456789';
 
 	//验证码长度
 	public $code_len = 4;
@@ -62,12 +62,12 @@ class checkcode {
 		$setting = getcache('common','commons');
 		$sysadmincodemodel = isset($setting['sysadmincodemodel']) ? (int)$setting['sysadmincodemodel'] : 0;
 		if ($sysadmincodemodel==1) {
-			$this->code_string  = '1234567890';
+			$this->code_string = '1234567890';
 		} else if ($sysadmincodemodel==2) {
-			$this->code_string  = 'abcdefghkmnprstuvwyzABCDEFGHKLMNPRSTUVWYZ';
+			$this->code_string = 'abcdefghkmnprstuvwyzABCDEFGHKLMNPRSTUVWYZ';
 		} else if ($sysadmincodemodel==3) {
 			if (isset($setting['captcha_charset']) && $setting['captcha_charset']) {
-				$this->code_string  = $setting['captcha_charset'];
+				$this->code_string = $setting['captcha_charset'];
 			}
 		}
 		$code = '';
@@ -89,7 +89,7 @@ class checkcode {
 	/**
 	 * 建画布
 	 */
-	public function create() {  
+	public function create() {
 		$w = $this->width;
 		$h = $this->height;
 		$background = $this->background;
@@ -106,7 +106,7 @@ class checkcode {
 
 
 	/**
-	*  画线
+	* 画线
 	*/
 	private function create_line(){
 		$w = $this->width;
@@ -160,7 +160,7 @@ class checkcode {
 		}
 		for ($i = 0; $i < 1; $i++) {
 			// 设置画线宽度
-		   // imagesetthickness($this->img, mt_rand(1, 3));
+			// imagesetthickness($this->img, mt_rand(1, 3));
 			imagearc($this->img, mt_rand(0, $this->width), mt_rand(0, $this->height), mt_rand(0, $this->width), mt_rand(0, $this->height)
 					, mt_rand(0, 160), mt_rand(0, 200), $pix_color);
 		}
