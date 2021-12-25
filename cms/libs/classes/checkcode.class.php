@@ -6,7 +6,7 @@
  * $checkcode = new checkcode();
  * $checkcode->show_code();
  * //取得验证
- * $_SESSION['code']=$checkcode->get_code();
+ * $checkcode->get_code();
  */
 class checkcode {
 	//资源

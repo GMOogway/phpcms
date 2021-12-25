@@ -42,12 +42,9 @@ class index extends admin {
 			$username = $this->input->post('username') && trim($this->input->post('username')) ? trim($this->input->post('username')) : dr_json(0, L('nameerror'));
 			admin::admin_login_before($username);
 			if (!$sysadmincode) {
-				$code = $this->input->post('code') && trim($this->input->post('code')) ? trim($this->input->post('code')) : dr_json(0, L('input_code'));
-				if ($_SESSION['code'] != strtolower($code)) {
-					$_SESSION['code'] = '';
+				if (!check_captcha('code')) {
 					dr_json(4, L('code_error'));
 				}
-				$_SESSION['code'] = '';
 			}
 			if(!is_username($username)){
 				dr_json(2, L('username_illegal'));
@@ -103,7 +100,7 @@ class index extends admin {
 			$_SESSION['login_attr'] = $login_attr;
 			$_SESSION['roleid'] = $r['roleid'];
 			$_SESSION['lock_screen'] = 0;
-			$this->cache->set_auth_data(COOKIE_PRE.ip().'pc_hash', bin2hex(random_bytes(16)), 1);
+			dr_get_csrf_token();
 			$site = pc_base::load_app_class('sites');
 			$sitelist = $site->get_list($_SESSION['roleid']);
 			$default_siteid = self::return_siteid();
@@ -156,7 +153,7 @@ class index extends admin {
 		$_SESSION['login_attr'] = $login_attr;
 		$_SESSION['roleid'] = $member['roleid'];
 		$_SESSION['lock_screen'] = 0;
-		$this->cache->set_auth_data(COOKIE_PRE.ip().'pc_hash', bin2hex(random_bytes(16)), 1);
+		dr_get_csrf_token();
 		$default_siteid = self::return_siteid();
 		$cookie_time = SYS_TIME+86400*30;
 		if(!$member['lang']) $member['lang'] = 'zh-cn';

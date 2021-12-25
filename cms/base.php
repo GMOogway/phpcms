@@ -208,6 +208,8 @@ define('IS_EDIT_TPL', pc_base::load_config('system','tpl_edit'));
 define('SYS_ADMIN_LOG', pc_base::load_config('system','admin_log'));
 //是否保存错误日志
 define('SYS_ERRORLOG', pc_base::load_config('system','errorlog'));
+//是否Gzip压缩后输出
+define('SYS_GZIP', pc_base::load_config('system','gzip'));
 //EXECUTION_SQL
 define('SYS_EXECUTION_SQL', pc_base::load_config('system','execution_sql'));
 //网站创始人ID
@@ -252,7 +254,6 @@ if (CI_DEBUG) {
 
 // API接口项目标识
 !defined('IS_API') && define('IS_API', FALSE);
-!defined('IS_INSTALL') && define('IS_INSTALL', FALSE);
 
 if (SYS_ATTACHMENT_PATH
 	&& (strpos(SYS_ATTACHMENT_PATH, '/') === 0 || strpos(SYS_ATTACHMENT_PATH, ':') !== false)
@@ -369,26 +370,12 @@ if (is_cli()) {
 	define('CMSURI', $uri);
 }
 
-if (defined('SYS_CSRF') && SYS_CSRF && defined('IS_API') && !IS_API && !in_array($_GET['c'], array('attachments')) && !in_array($_GET['a'], array('public_upload_index', 'uploadavatar', 'public_ajax_add_panel', 'public_ajax_delete_panel')) && defined('IS_INSTALL') && !IS_INSTALL) {
-	if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
-		$data = @unserialize(file_get_contents(CACHE_PATH.'caches_file/caches_data/'.md5(SYS_KEY.SITE_ID.'csrf_token')));
-		if ($data['ttl'] > 0 && SYS_TIME > $data['time'] + $data['ttl']) {
-			if (is_file(CACHE_PATH.'caches_file/caches_data/'.md5(SYS_KEY.SITE_ID.'csrf_token'))) {
-				unlink(CACHE_PATH.'caches_file/caches_data/'.md5(SYS_KEY.SITE_ID.'csrf_token'));
-			}
-		}
-		if (!isset($_POST['csrf_test_name'], $data['data']) || $_POST['csrf_test_name'] !== $data['data']) {
-			CI_DEBUG && log_message('error', '跨站验证禁止此操作：'.FC_NOW_URL);
-			dr_exit_msg(0, '跨站验证禁止此操作', 'CSRFVerify');
-		}
-		unset($_POST['csrf_test_name']);
-	}
-}
+pc_base::verify();
 
 //应用静态文件路径
 define('PLUGIN_STATICS_PATH',WEB_PATH.'statics/plugin/');
 
-if(pc_base::load_config('system','gzip') && function_exists('ob_gzhandler')) {
+if(SYS_GZIP && function_exists('ob_gzhandler')) {
 	ob_start('ob_gzhandler');
 } else {
 	ob_start();
@@ -630,6 +617,41 @@ class pc_base {
 			return $configs[$file][$key];
 		} else {
 			return $default;
+		}
+	}
+
+	/**
+	 * CSRF Verify
+	 */
+	public static function verify() {
+		if (defined('SYS_CSRF') && !SYS_CSRF) {
+			return '';
+		} elseif (defined('IS_API') && IS_API) {
+			return '';
+		} elseif (in_array($_GET['c'], array('attachments'))) {
+			return '';
+		} elseif (in_array($_GET['a'], array('public_upload_index', 'uploadavatar', 'public_ajax_add_panel', 'public_ajax_delete_panel'))) {
+			return '';
+		} elseif (defined('IS_INSTALL')) {
+			return '';
+		}
+		if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
+			$token =  $_POST['csrf_test_name'];
+			$name = 'csrf_token';
+			$hash = file_get_contents(CACHE_PATH.'caches_authcode/caches_data/'.md5('1'.$name));
+			if (is_file(CACHE_PATH.'caches_authcode/caches_data/'.md5('1'.$name))) {
+				unlink(CACHE_PATH.'caches_authcode/caches_data/'.md5('1'.$name));
+			}
+			if (!isset($token, $hash) || !hash_equals($hash, $token)) {
+				CI_DEBUG && log_message('error', '跨站验证禁止此操作：'.FC_NOW_URL);
+				dr_exit_msg(0, '跨站验证禁止此操作', 'CSRFVerify');
+			}
+
+			if (isset($token)) {
+				unset($token);
+			}
+			unset($name);
+			unset($hash);
 		}
 	}
 }

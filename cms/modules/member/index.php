@@ -51,10 +51,8 @@ class index extends foreground {
 		header("Cache-control: private");
 		if(isset($_POST['dosubmit'])) {
 			if($member_setting['enablcodecheck']=='1'){//开启验证码
-				if ((empty($_SESSION['connectid']) && $_SESSION['code'] != strtolower($_POST['code']) && $_POST['code']!==NULL) || empty($_SESSION['code'])) {
+				if (empty($_SESSION['connectid']) && !check_captcha('code')) {
 					showmessage(L('code_error'));
-				} else {
-					$_SESSION['code'] = '';
 				}
 			}
 			
@@ -616,10 +614,8 @@ class index extends foreground {
 		
 		if(isset($_POST['dosubmit'])) {
 			if($member_setting['enablcodecheck']=='1'){//开启验证码
-				if ((empty($_SESSION['connectid']) && $_SESSION['code'] != strtolower($_POST['code']) && $_POST['code']!==NULL) || empty($_SESSION['code'])) {
+				if (empty($_SESSION['connectid']) && !check_captcha('code')) {
 					showmessage(L('code_error'));
-				} else {
-					$_SESSION['code'] = '';
 				}
 			}
 			
@@ -1467,7 +1463,7 @@ class index extends foreground {
 		$this->_session_start();
 		$member_setting = getcache('member_setting');
 		if(isset($_POST['dosubmit'])) {
-			if ($_SESSION['code'] != strtolower($_POST['code'])) {
+			if (!check_captcha('code')) {
 				showmessage(L('code_error'), HTTP_REFERER);
 			}
 			//邮箱验证
@@ -1603,7 +1599,7 @@ class index extends foreground {
 		
 		if(isset($_POST['dosubmit']) && $step==2) {
 		//处理提交申请，以手机号为准
-			if ($_SESSION['code'] != strtolower($_POST['code'])) {
+			if (!check_captcha('code')) {
 				showmessage(L('code_error'), HTTP_REFERER);
 			}
 			//验证
@@ -1616,7 +1612,6 @@ class index extends foreground {
 			if($r['mobile']=='') {
 				$_SESSION['mobile'] = '';
 				$_SESSION['userid'] = '';
-				$_SESSION['code'] = '';
 				showmessage("该账号没有绑定手机号码，请选择其他方式找回！");
 			}
 			$_SESSION['mobile'] = $r['mobile'];
@@ -1647,7 +1642,6 @@ class index extends foreground {
 					if($status!==0) showmessage($status);
 					$_SESSION['mobile'] = '';
 					$_SESSION['userid'] = '';
-					$_SESSION['code'] = '';
 					showmessage("密码已重置成功！请查收手机",'?m=member&c=index&a=login');
 				} else {
 					showmessage("短信验证码错误！请重新获取！");
@@ -1669,7 +1663,7 @@ class index extends foreground {
 		
 		if(isset($_POST['dosubmit']) && $step==2) {
 		//处理提交申请，以手机号为准
-			if ($_SESSION['code'] != strtolower($_POST['code'])) {
+			if (!check_captcha('code')) {
 				showmessage(L('code_error'), HTTP_REFERER);
 			}
 			//验证
@@ -1681,7 +1675,6 @@ class index extends foreground {
 			$r = $this->db->get_one(array('username'=>$username),'userid,email');
 			if($r['email']=='') {
 				$_SESSION['userid'] = '';
-				$_SESSION['code'] = '';
 				showmessage("该账号没有绑定邮箱，请选择其他方式找回！");
 			} else {
 				$_SESSION['userid'] = $r['userid'];
@@ -1715,7 +1708,6 @@ class index extends foreground {
 					$_SESSION['email'] = '';
 					$_SESSION['userid'] = '';
 					$_SESSION['emc'] = '';
-					$_SESSION['code'] = '';
 					$this->email->send($email, '密码重置通知', "您在".date('Y-m-d H:i:s')."通过密码找回功能，重置了本站密码。");
 					include template('member', 'forget_password_username');
 					exit;

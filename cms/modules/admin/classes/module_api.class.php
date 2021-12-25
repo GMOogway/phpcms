@@ -46,48 +46,44 @@ class module_api {
 		if (file_exists($this->installdir.'extention.inc.php')) {
 			$menu_db = pc_base::load_model('menu_model');
 			@include ($this->installdir.'extention.inc.php');
-			if(!defined('INSTALL_MODULE')) {
-				$file = PC_PATH.'languages'.DIRECTORY_SEPARATOR.SYS_LANGUAGE.DIRECTORY_SEPARATOR.'system_menu.lang.php';
-				if(file_exists($file)) {
-					$content = file_get_contents($file);
-					$content = substr($content,0,-2);
-					$data = '';
-					foreach ($language as $key => $l) {
-						if (L($key, '', 'system_menu')==$key) {
-							$data .= "\$LANG['".$key."'] = '".$l."';\r\n";
-						}
+			$file = PC_PATH.'languages'.DIRECTORY_SEPARATOR.SYS_LANGUAGE.DIRECTORY_SEPARATOR.'system_menu.lang.php';
+			if(file_exists($file)) {
+				$content = file_get_contents($file);
+				$content = substr($content,0,-2);
+				$data = '';
+				foreach ($language as $key => $l) {
+					if (L($key, '', 'system_menu')==$key) {
+						$data .= "\$LANG['".$key."'] = '".$l."';\r\n";
 					}
-					$data = $content.$data."?>";
-					file_put_contents($file,$data);
-				} else {
-					foreach ($language as $key =>$l) {
-						if (L($key, '', 'system_menu')==$key) {
-							$data .= "\$LANG['".$key."'] = '".$l."';\r\n";
-						}
-					}
-					$data = "<?"."php\r\n\$data?>";
-					file_put_contents($file,$data);
 				}
+				$data = $content.$data."?>";
+				file_put_contents($file,$data);
+			} else {
+				foreach ($language as $key =>$l) {
+					if (L($key, '', 'system_menu')==$key) {
+						$data .= "\$LANG['".$key."'] = '".$l."';\r\n";
+					}
+				}
+				$data = "<?"."php\r\n\$data?>";
+				file_put_contents($file,$data);
 			}
 		}
 
-		if(!defined('INSTALL_MODULE')) {
-			if (file_exists($this->installdir.'languages'.DIRECTORY_SEPARATOR)) {
-				dir_copy($this->installdir.'languages'.DIRECTORY_SEPARATOR, PC_PATH.'languages'.DIRECTORY_SEPARATOR);
-			}
-			if(file_exists($this->installdir.'templates'.DIRECTORY_SEPARATOR)) {
-				dir_copy($this->installdir.'templates'.DIRECTORY_SEPARATOR, PC_PATH.'templates'.DIRECTORY_SEPARATOR.SYS_TPL_NAME.DIRECTORY_SEPARATOR.$this->module.DIRECTORY_SEPARATOR);
-				if (file_exists($this->installdir.'templates'.DIRECTORY_SEPARATOR.'name.inc.php')) {
-					$keyid = 'templates|'.SYS_TPL_NAME.'|'.$this->module;
-					$file_explan[$keyid] = include $this->installdir.'templates'.DIRECTORY_SEPARATOR.'name.inc.php';
-					$templatepath = PC_PATH.'templates'.DIRECTORY_SEPARATOR.SYS_TPL_NAME.DIRECTORY_SEPARATOR;
-					if (file_exists($templatepath.'config.php')) {
-						$style_info = include $templatepath.'config.php';
-						$style_info['file_explan'] = array_merge($style_info['file_explan'], $file_explan);
-						@file_put_contents($templatepath.'config.php', '<?php return '.var_export($style_info, true).';?>');
-					}
-					unlink(PC_PATH.'templates'.DIRECTORY_SEPARATOR.SYS_TPL_NAME.DIRECTORY_SEPARATOR.$this->module.DIRECTORY_SEPARATOR.'name.inc.php');
+		if (file_exists($this->installdir.'languages'.DIRECTORY_SEPARATOR)) {
+			dir_copy($this->installdir.'languages'.DIRECTORY_SEPARATOR, PC_PATH.'languages'.DIRECTORY_SEPARATOR);
+		}
+		if(file_exists($this->installdir.'templates'.DIRECTORY_SEPARATOR)) {
+			dir_copy($this->installdir.'templates'.DIRECTORY_SEPARATOR, PC_PATH.'templates'.DIRECTORY_SEPARATOR.SYS_TPL_NAME.DIRECTORY_SEPARATOR.$this->module.DIRECTORY_SEPARATOR);
+			if (file_exists($this->installdir.'templates'.DIRECTORY_SEPARATOR.'name.inc.php')) {
+				$keyid = 'templates|'.SYS_TPL_NAME.'|'.$this->module;
+				$file_explan[$keyid] = include $this->installdir.'templates'.DIRECTORY_SEPARATOR.'name.inc.php';
+				$templatepath = PC_PATH.'templates'.DIRECTORY_SEPARATOR.SYS_TPL_NAME.DIRECTORY_SEPARATOR;
+				if (file_exists($templatepath.'config.php')) {
+					$style_info = include $templatepath.'config.php';
+					$style_info['file_explan'] = array_merge($style_info['file_explan'], $file_explan);
+					@file_put_contents($templatepath.'config.php', '<?php return '.var_export($style_info, true).';?>');
 				}
+				unlink(PC_PATH.'templates'.DIRECTORY_SEPARATOR.SYS_TPL_NAME.DIRECTORY_SEPARATOR.$this->module.DIRECTORY_SEPARATOR.'name.inc.php');
 			}
 		}
 		return true;
@@ -104,15 +100,13 @@ class module_api {
 			$this->error_msg = L('no_module');
 			return false;
 		}
-		if(!defined('INSTALL_MODULE')) {
-			if (dir_create(PC_PATH.'languages'.DIRECTORY_SEPARATOR.SYS_LANGUAGE.DIRECTORY_SEPARATOR.'test_create_dir')) {
-				sleep(1);
-				dir_delete(PC_PATH.'languages'.DIRECTORY_SEPARATOR.SYS_LANGUAGE.DIRECTORY_SEPARATOR.'test_create_dir');
-				
-			} else {
-				$this->error_msg = L('lang_dir_no_write');
-				return false;
-			}
+		if (dir_create(PC_PATH.'languages'.DIRECTORY_SEPARATOR.SYS_LANGUAGE.DIRECTORY_SEPARATOR.'test_create_dir')) {
+			sleep(1);
+			dir_delete(PC_PATH.'languages'.DIRECTORY_SEPARATOR.SYS_LANGUAGE.DIRECTORY_SEPARATOR.'test_create_dir');
+			
+		} else {
+			$this->error_msg = L('lang_dir_no_write');
+			return false;
 		}
 		$r = $this->db->get_one(array('module'=>$this->module));
 		if ($r) {

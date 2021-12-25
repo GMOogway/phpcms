@@ -6,7 +6,6 @@ define('IS_INSTALL', TRUE);
 set_time_limit(0);
 if (version_compare(PHP_VERSION, '7.1.0') < 0) exit('<font color=red>PHP版本必须在7.1以上</font>');
 include '../cms/base.php';
-define('INSTALL_MODULE',true);
 defined('IN_CMS') or exit('No permission resources.');
 if (is_file(CACHE_PATH.'install.lock')) exit('安装程序已经被锁定，重新安装请删除：caches/install.lock');
 pc_base::load_sys_class('param','','','0');
@@ -190,8 +189,8 @@ switch($step)
 			if (!mysqli_set_charset($mysqli, "utf8mb4")) {
 				exit('当前MySQL不支持utf8mb4编码（'.mysqli_error($mysqli).'）！');
 			}
-			if (mysqli_get_server_info($mysqli) < '5.0') {
-				exit('数据库版本低于Mysql 5.0，无法安装CMS，请升级数据库版本！');
+			if (mysqli_get_server_info($mysqli) < 50600) {
+				exit('数据库版本低于Mysql 5.6，无法安装CMS，请升级数据库版本！');
 			}
 			$version = mysqli_get_server_info($mysqli);
 
@@ -264,27 +263,32 @@ switch($step)
 		extract($_POST);
 		$adminpath = trim($adminpath);
 		if($adminpath && (is_numeric($adminpath) || preg_match('/^[0-9]+$/', $adminpath[0]) || !preg_match('/^[A-Za-z0-9]+$/', $adminpath))) {
-			exit('2');
+			dr_json(0, '后台登录口地址不能是数字开头或不能包含中文和特殊字符！');
 		}
 		$noname_arr = array('admin','api','caches','cms','html','login','mobile','statics','uploadfile');
 		if(in_array($adminpath,$noname_arr)) {
-			exit('3');
+			dr_json(0, '后台登录口地址不能使用CMS默认目录名（admin，api，caches，cms，login，html，mobile，statics，uploadfile），请重新设置！');
+		}
+		if (is_numeric($dbname)) {
+			dr_json(0, '数据库名称不能是数字');
+		} elseif (strpos($dbname, '.') !== false) {
+			dr_json(0, '数据库名称不能存在.号');
 		}
 		$mysqli = function_exists('mysqli_init') ? mysqli_init() : 0;
 		if (!$mysqli) {
-			exit('PHP环境必须启用Mysqli扩展！');
+			dr_json(0, 'PHP环境必须启用Mysqli扩展！');
 		} elseif (!mysqli_real_connect($mysqli, $dbhost, $dbuser, $dbpw, null, $dbport)) {
-			exit('['.mysqli_connect_errno().'] - 无法连接到数据库服务器（'.$dbhost.'），请检查端口（'.$dbport.'）和用户名（'.$dbuser.'）和密码（'.$dbpw.'）是否正确！');
+			dr_json(0, '['.mysqli_connect_errno().'] - 无法连接到数据库服务器（'.$dbhost.'），请检查端口（'.$dbport.'）和用户名（'.$dbuser.'）和密码（'.$dbpw.'）是否正确！');
 		} elseif (!mysqli_select_db($mysqli, $dbname)) {
 			if (!mysqli_query($mysqli, 'CREATE DATABASE '.$dbname.' CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci')) {
-				exit('指定的数据库（'.$dbname.'）不存在，系统尝试创建失败，请先通过其他方式建立好数据库！');
+				dr_json(0, '指定的数据库（'.$dbname.'）不存在，系统尝试创建失败，请先通过其他方式建立好数据库！');
 			}
 		}
 		if (!mysqli_set_charset($mysqli, "utf8mb4")) {
-			exit('当前MySQL不支持utf8mb4编码（'.mysqli_error($mysqli).'）！');
+			dr_json(0, '当前MySQL不支持utf8mb4编码（'.mysqli_error($mysqli).'）！');
 		}
-		if (mysqli_get_server_info($mysqli) < '5.0') {
-			exit('数据库版本低于Mysql 5.0，无法安装CMS，请升级数据库版本！');
+		if (mysqli_get_server_info($mysqli) < 50600) {
+			dr_json(0, '数据库版本低于Mysql 5.6，无法安装CMS，请升级数据库版本！');
 		}
 		$tables = array();
 		$query = mysqli_query($mysqli,"SHOW TABLES FROM `$dbname`");
@@ -292,9 +296,9 @@ switch($step)
 			$tables[] = $r[0];
 		}
 		if($tables && in_array($tablepre.'module', $tables)) {
-			exit('0');
+			dr_json(2, '您已经安装过CMS，系统会自动删除老数据！是否继续？');
 		} else {
-			exit('1');
+			dr_json(1, '成功');
 		}
 		break;
 		
@@ -306,7 +310,6 @@ switch($step)
 		$cache->cache('badword');
 		$cache->cache('ipbanned');
 		$cache->cache('keylink');
-		$cache->cache('linkage');
 		$cache->cache('position');
 		$cache->cache('admin_role');
 		$cache->cache('urlrule');
@@ -324,6 +327,7 @@ switch($step)
 		$cache->cache('member_model_field');
 		$cache->cache('search_setting');
 		$cache->cache('attachment_remote');
+		$cache->cache('cache2database');
 		break;
 		
 	case 'alpha':

@@ -41,6 +41,7 @@ class cache_all extends admin {
 			array('function' => 'copyfrom'),
 			array('function' => 'del_file'),
 			array('function' => 'attachment_remote'),
+			array('function' => 'cache2database'),
 		);
 		foreach ($modules as $m) {
 			if ($m['mod'] && $m['function']) {
@@ -54,7 +55,6 @@ class cache_all extends admin {
 				$this->cache_api->cache($m['function'], $m['param']);
 			}
 		}
-		$this->cache_api->cache2database();
 		if ($this->input->get('is_ajax') || IS_AJAX) {
 			dr_json(1, L('全站缓存更新完成'));
 		} else {

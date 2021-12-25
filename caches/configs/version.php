@@ -4,9 +4,9 @@ return array(
 'pc_version' => 'V9.6.3', //版本号
 'pc_release' => '20170515', //更新日期
 'cms_version' => 'V10.0.0', //cms 版本号
-'cms_release' => '20211222', //cms 更新日期
-'cms_updatetime' => '2021-12-22', // 服务端最近更新时间
-'cms_downtime' => '2021-12-22 16:06:06', // 本网站程序下载时间
+'cms_release' => '20211225', //cms 更新日期
+'cms_updatetime' => '2021-12-25', // 服务端最近更新时间
+'cms_downtime' => '2021-12-25 16:06:06', // 本网站程序下载时间
 'update' => '0', //cms 更新
 );
 ?>

@@ -1,8 +1,6 @@
 <?php
 defined('IN_CMS') or exit('No permission resources.'); 
 
-$session_storage = 'session_'.pc_base::load_config('system','session_storage');
-pc_base::load_sys_class($session_storage);
 $cache = pc_base::load_sys_class('cache');
 $checkcode = pc_base::load_sys_class('checkcode');
 if($input->get('width') && intval($input->get('width'))) $checkcode->width = intval($input->get('width'));
@@ -16,5 +14,4 @@ if($checkcode->height > 300 || $checkcode->height < 10) $checkcode->height = 35;
 if($checkcode->code_len > 8 || $checkcode->code_len < 2) $checkcode->code_len = 4;
 if($checkcode->font_size > 50 || $checkcode->font_size < 14) $checkcode->font_size = 20;
 $checkcode->show_code();
-$_SESSION['code'] = $checkcode->get_code();
-$cache->set_auth_data('code', $_SESSION['code'], 1);
+$cache->set_auth_data('web-captcha-'.md5($input->ip_address().$input->get_user_agent()), $checkcode->get_code(), 1);

@@ -152,10 +152,6 @@
 </html>
 <script language="JavaScript">
 <!--
-var errmsg = new Array();
-errmsg[0] = '您已经安装过CMS，系统会自动删除老数据！是否继续？';
-errmsg[2] = '后台登录口地址不能是数字开头或不能包含中文和特殊字符！';
-errmsg[3] = '后台登录口地址不能使用CMS默认目录名（admin，api，caches，cms，login，html，mobile，statics，uploadfile），请重新设置！';
 function checkdb() {
     if($('#dbhost').val()==''){
         Dialog.alert('数据库主机不能为空！',function(){$('#dbhost').focus();})
@@ -222,30 +218,28 @@ function checkdb() {
     }
     $.ajax({
         type: "POST",
+        dataType:"json",
         url: '<?php echo SELF;?>',
         data: 'step=dbtest&adminpath='+$('#adminpath').val()+'&dbhost='+$('#dbhost').val()+'&dbport='+$('#dbport').val()+'&dbuser='+$('#dbuser').val()+'&dbpw='+$('#dbpw').val()+'&dbname='+$('#dbname').val()+'&tablepre='+$('#tablepre').val()+'&sid='+Math.random()*5,
-        success: function(data){
-            if(data.length > 20) {
-                Dialog.alert(data);
-                return false;
-            } else if(data > 1) {
-                Dialog.alert(errmsg[data]);
-                return false;
-            } else if(data == 0) {
-                Dialog.confirm(errmsg[0],function() {
+        success: function(json){
+            if(json.code == 1) {
+                $('#install').submit();
+            } else if(json.code == 2) {
+                Dialog.confirm(json.msg,function() {
                     $('#install').submit();
                 });
             } else {
-                $('#install').submit();
+                Dialog.alert(json.msg);
+                return false;
             }
         }
     });
     return false;
 }
 function to_key() {
-	$.get('<?php echo SELF;?>?step=alpha', function(data){
-		$('#adminpath').val(data);
-	});
+    $.get('<?php echo SELF;?>?step=alpha', function(data){
+        $('#adminpath').val(data);
+    });
 }
 //-->
 </script>

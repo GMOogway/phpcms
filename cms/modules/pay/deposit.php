@@ -96,8 +96,7 @@ class deposit extends foreground {
 	 */
 	public function pay_recharge() {
 		if(isset($_POST['dosubmit'])) {
-			$code = isset($_POST['code']) && trim($_POST['code']) ? trim($_POST['code']) : showmessage(L('input_code'), HTTP_REFERER);
-			if ($_SESSION['code'] != strtolower($code)) {
+			if (!check_captcha('code')) {
 					showmessage(L('code_error'), HTTP_REFERER);
 			}
 			$pay_id = $this->input->post('pay_type');
@@ -169,8 +168,7 @@ class deposit extends foreground {
 	}	
 	
 	public function public_checkcode() {
-		$code = $this->input->get('code');
-		if($_SESSION['code'] != strtolower($code)) {
+		if(!check_get_captcha('code')) {
 			exit('0');
 		} else {
 			exit('1');

@@ -8,15 +8,13 @@ $sms_report_db = pc_base::load_model('sms_report_model');
 $session_storage = 'session_'.pc_base::load_config('system','session_storage');
 pc_base::load_sys_class($session_storage);
 
-if(empty($_SESSION['code'])) exit('-100');
-if(empty($input->get('session_code')) || preg_match('/^([a-z0-9])$/i',$input->get('session_code')) || $_SESSION['code']!=$input->get('session_code')) exit('-101');
+if(preg_match('/^([a-z0-9])$/i',$input->get('session_code')) || !check_get_captcha('session_code')) exit('-101');
 
 if($input->get('mobile') && !empty($input->get('mobile'))) {
 	$mobile = $input->get('mobile');
 } else {
 	$mobile = $_SESSION['mobile'];
 }
-$_SESSION['code'] = '';
 if(!isset($_SESSION['csms'])) {
 	$_SESSION['csms'] = 0;
 } elseif($_SESSION['csms'] > 3) {

@@ -91,6 +91,7 @@ class module extends admin {
 			array('function' => 'copyfrom'),
 			array('function' => 'del_file'),
 			array('function' => 'attachment_remote'),
+			array('function' => 'cache2database'),
 		);
 		foreach ($modules as $m) {
 			if ($m['mod'] && $m['function']) {
@@ -104,7 +105,6 @@ class module extends admin {
 				$this->cache_api->cache($m['function'], $m['param']);
 			}
 		}
-		$this->cache_api->cache2database();
 	}
 }
 ?>

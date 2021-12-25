@@ -72,11 +72,7 @@ class index {
 				}
 			}
 			if ($setting['code']) {
-				$session_storage = 'session_'.pc_base::load_config('system','session_storage');
-				pc_base::load_sys_class($session_storage);
-				session_start();
-				$code = isset($_POST['code']) && trim($_POST['code']) ? strtolower(trim($_POST['code'])) : $this->_show_msg(L('please_enter_code'), HTTP_REFERER);
-				if ($code != $_SESSION['code']) {
+				if (!check_captcha('code')) {
 					$this->_show_msg(L('code_error'), HTTP_REFERER);
 				}
 			}

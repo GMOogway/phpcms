@@ -58,10 +58,10 @@ function html2code($value) {
 	return htmlspecialchars($value);
 }
 // html实体字符转换
-function code2html($value, $fk = false, $flags = null) {
+function code2html($value, $fk = false, $flags = '') {
 	return html_code($value, $fk, $flags);
 }
-function html_code($value, $fk = false, $flags = null) {
+function html_code($value, $fk = false, $flags = '') {
 	!$flags && $flags = ENT_QUOTES | ENT_HTML401 | ENT_HTML5;
 	if ($fk) {
 		// 将所有HTML实体转换为它们的适用字符
@@ -434,7 +434,7 @@ function safe_replace($string) {
 /**
  * 安全过滤函数
  */
-function dr_safe_replace($string, $diy = null) {
+function dr_safe_replace($string, $diy = array()) {
 	$replace = array('%20', '%27', '%2527', '*', "'", '"', ';', '<', '>', "{", '}');
 	$diy && is_array($diy) && $replace = dr_array2array($replace, $diy);
 	$diy && !is_array($diy) && $replace[] = $diy;
@@ -1116,7 +1116,7 @@ if (! function_exists('dr_redirect')) {
 /**
  * 跳转地址
  */
-function redirect($url = '', $method = 'auto', $code = NULL) {
+function redirect($url = '', $method = 'auto', $code = 0) {
 	switch ($method) {
 		case 'refresh':
 			header('Refresh:0;url='.$url);
@@ -3597,19 +3597,73 @@ function dr_form_hidden($data = array()) {
  */
 function csrf_hash($key = 'csrf_token') {
 	$cache = pc_base::load_sys_class('cache');
-	$csrf_token = bin2hex(random_bytes(16));
-	$cache->set_data($key, $csrf_token, 300);
-	return $cache->get_data($key);
+	!$key && $key = 'csrf_hash_'.md5(isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT'] ? $_SERVER['HTTP_USER_AGENT'] : '');
+	$csrf_token = $cache->get_auth_data($key, 1, 600);
+	if (!$csrf_token) {
+		$csrf_token = bin2hex(random_bytes(16));
+		$cache->set_auth_data($key, $csrf_token, 1);
+	}
+	return $csrf_token;
 }
 // 验证字符串
 function dr_get_csrf_token($key = 'pc_hash') {
 	$cache = pc_base::load_sys_class('cache');
+	!$key && $key = 'csrf_hash_'.md5(isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT'] ? $_SERVER['HTTP_USER_AGENT'] : '');
 	$code = $cache->get_auth_data(COOKIE_PRE.ip().$key, 1);
 	if (!$code) {
 		$code = bin2hex(random_bytes(16));
 		$cache->set_auth_data(COOKIE_PRE.ip().$key, $code, 1);
 	}
-	return $cache->get_auth_data(COOKIE_PRE.ip().$key, 1);
+	return $code;
+}
+// 验证码类
+function check_captcha($id) {
+	$input = pc_base::load_sys_class('input');
+	$cache = pc_base::load_sys_class('cache');
+	$data = $input->post($id);
+	if (!$data) {
+		IS_DEV && log_message('debug', '图片验证码验证失败：没有输入验证码');
+		return false;
+	}
+	$code = $cache->get_auth_data('web-captcha-'.md5($input->ip_address().$input->get_user_agent()), 1, 300);
+	if ($code && strtolower($data) == strtolower($code)) {
+		$cache->del_auth_data('web-captcha', 1);
+		return true;
+	}
+	IS_DEV && log_message('debug', '图片验证码验证失败：你输入的是（'.$data.'），正确的是（'.$code.'）');
+	return false;
+}
+// 验证码类
+function check_get_captcha($id) {
+	$input = pc_base::load_sys_class('input');
+	$cache = pc_base::load_sys_class('cache');
+	$data = $input->get($id);
+	if (!$data) {
+		IS_DEV && log_message('debug', '图片验证码验证失败：没有输入验证码');
+		return false;
+	}
+	$code = $cache->get_auth_data('web-captcha-'.md5($input->ip_address().$input->get_user_agent()), 1, 300);
+	if ($code && strtolower($data) == strtolower($code)) {
+		$cache->del_auth_data('web-captcha', 1);
+		return true;
+	}
+	IS_DEV && log_message('debug', '图片验证码验证失败：你输入的是（'.$data.'），正确的是（'.$code.'）');
+	return false;
+}
+// 验证码类：只比较不删除
+function check_captcha_value($data) {
+	$input = pc_base::load_sys_class('input');
+	$cache = pc_base::load_sys_class('cache');
+	// 是否进行验证图片
+	if (!$data) {
+		return false;
+	}
+	$code = $cache->get_auth_data('web-captcha-'.md5($input->ip_address().$input->get_user_agent()), 1, 300);
+	if ($code && strtolower($data) == strtolower($code)) {
+		return true;
+	}
+	IS_DEV && log_message('debug', '图片验证码验证失败：你输入的是（'.$data.'），正确的是（'.$code.'）');
+	return false;
 }
 /**
  * 生成上传附件验证
@@ -4210,7 +4264,7 @@ function dr_fdate($sTime, $formt = 'Y-m-d') {
  * @param	string	$color	当天显示颜色
  * @return	string
  */
-function dr_date($time = NULL, $format = SYS_TIME_FORMAT, $color = NULL) {
+function dr_date($time = '', $format = SYS_TIME_FORMAT, $color = NULL) {
 	$time = (int)$time;
 	if (!$time) {
 		return '';

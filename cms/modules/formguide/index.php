@@ -54,10 +54,8 @@ class index {
 		if ($setting['allowunreg']==0 && !$userid && $this->input->get('action')!='js') showmessage(L('please_login_in'), APP_PATH.'index.php?m=member&c=index&a=login&forward='.urlencode(HTTP_REFERER));
 		if ($this->input->post('dosubmit')) {
 			if($setting['code']){//开启验证码
-				if ((empty($_SESSION['connectid']) && $_SESSION['code'] != strtolower($this->input->post('code')) && $this->input->post('code')!==NULL) || empty($_SESSION['code'])) {
+				if (!check_captcha('code')) {
 					showmessage(L('code_error'));
-				} else {
-					$_SESSION['code'] = '';
 				}
 			}
 			$tablename = 'form_'.$r['tablename'];
