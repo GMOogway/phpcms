@@ -52,7 +52,7 @@ function iframeSize() {
         Body.attr('scroll', 'no');
         Body.addClass('pxgridsbody')
     }
-    var sidebar = heights-20;
+    var sidebar = $("#right").height()-20;
     $('#treemain').height(sidebar+35);
     $('#right').height(sidebar+35);
     $('.openclose').height(sidebar+40);
