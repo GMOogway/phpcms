@@ -4,9 +4,9 @@ include $this->admin_tpl('header','admin');?>
 <style type="text/css">
 .pull-left {float: left!important;}
 .pull-right {float: right!important;}
-#iframecontent{position:relative; overflow:hidden;padding-top: 0px;}
+#iframecontent{position:relative;overflow:hidden;padding: 0;margin: 0;}
 #iframecontent iframe{border:none;}
-.openclose{width: 8px;position:relative;}
+.openclose{width: 8px;position: relative;}
 #openclose{display:inline-block;width: 8px;height:24px;position:absolute;top:50%;left:0px;}
 .treelistframe{border-right: 3px solid #e6e8ed;}
 </style>
@@ -53,9 +53,9 @@ function iframeSize() {
         Body.addClass('pxgridsbody')
     }
     var sidebar = $("#block_right").height()-20;
-    $('#treemain').height(sidebar+36);
-    $('#block_right').height(sidebar+36);
-    $('.openclose').height(sidebar+36);
+    $('#treemain').height(sidebar+35);
+    $('#block_right').height(sidebar+35);
+    $('.openclose').height(sidebar+40);
     iframeWindowSize();
 }
 iframeSize();
