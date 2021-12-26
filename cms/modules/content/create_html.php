@@ -576,42 +576,6 @@ class create_html extends admin {
 			}
 			dr_json(1, L('操作成功，请更新内容URL生效'), array('url' => '?m=content&c=create_html&a=public_batch_category&pc_hash='.dr_get_csrf_token()));
 		} else {
-			$tree = pc_base::load_sys_class('tree');
-			$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
-			$tree->nbsp = '&nbsp;&nbsp;&nbsp;';
-			$categorys = array();
-			if(!empty($this->categorys)) {
-				foreach($this->categorys as $catid=>$r) {
-					$setting = string2array($r['setting']);
-					if($this->siteid != $r['siteid'] || $r['type']==2) continue;
-					$r['name'] = str_cut($r['catname'], 30);
-					$ishtml = intval($setting['ishtml']);
-					$r['is_page_html'] = '<a href="javascript:;" onclick="dr_cat_ajax_open_close(this, \'?m=content&c=create_html&a=public_html_edit&share=1&catid='.$r['catid'].'&pc_hash=\'+pc_hash, 0);" class="badge badge-'.(!$ishtml ? 'no' : 'yes').'"><i class="fa fa-'.(!$ishtml ? 'times' : 'check').'"></i></a>';
-					if ($r['type']==0) {
-						$content_ishtml = intval($setting['content_ishtml']);
-						$r['is_show_html'] = '<a href="javascript:;" onclick="dr_cat_ajax_open_close(this, \'?m=content&c=create_html&a=public_html_edit&share=0&catid='.$r['catid'].'&pc_hash=\'+pc_hash, 0);" class="badge badge-'.(!$content_ishtml ? 'no' : 'yes').'"><i class="fa fa-'.(!$content_ishtml ? 'times' : 'check').'"></i></a>';
-					} else {
-						$r['is_show_html'] = '';
-					}
-					$r['category'] = form::urlrule('content','category',$ishtml,$setting['category_ruleid'],'class="form-control" onchange="dr_save_urlrule(1, \''.$r['catid'].'\', this.value)"');
-					if ($r['type']==0) {
-						$r['show'] = form::urlrule('content','show',$content_ishtml,$setting['show_ruleid'],'class="form-control" onchange="dr_save_urlrule(0, \''.$r['catid'].'\', this.value)"');
-					} else {
-						$r['show'] = '';
-					}
-					$categorys[$catid] = $r;
-				}
-			}
-			$str = "<tr>";
-			$str.= "<td style='text-align:center'>\$catid</td>";
-			$str.= "<td>\$spacer \$name</td>";
-			$str.= "<td style='text-align:center'>\$is_page_html</td>";
-			$str.= "<td style='text-align:center'>\$is_show_html</td>";
-			$str.= "<td>\$category</td>";
-			$str.= "<td>\$show</td>";
-			$str.= "</tr>";
-			$tree->init($categorys);
-			$string = $tree->get_tree(0, $str);
 			include $this->admin_tpl('module_category_html');
 		}
 	}

@@ -264,10 +264,8 @@ class category extends admin {
 			$modelid = $this->categorys[$catid]['modelid'];
 			if ($modelid) {
 				$this->content_db->set_model($modelid);
-				$table_name = $this->content_db->table_name;
-				$rs = $this->content_db->query("SELECT COUNT(*) AS `count` FROM `$table_name` WHERE catid IN(".$arrchildid['arrchildid'].")");
-				$result = $this->content_db->fetch_array($rs);
-				$total = $result[0]['count'];
+				$where = "catid IN(".$arrchildid['arrchildid'].")";
+				$total = $this->content_db->count($where);
 				if ($total && $setting['disabled']) {
 					dr_json(0, L('当前栏目存在内容数据，无法禁用'));
 				}
@@ -413,10 +411,8 @@ class category extends admin {
 			$modelid = $this->categorys[$this->input->post('catid')]['modelid'];
 			if ($modelid) {
 				$this->content_db->set_model($modelid);
-				$table_name = $this->content_db->table_name;
-				$rs = $this->content_db->query("SELECT COUNT(*) AS `count` FROM `$table_name` WHERE catid IN(".$row['arrchildid'].")");
-				$result = $this->content_db->fetch_array($rs);
-				$total = $result[0]['count'];
+				$where = "catid IN(".$row['arrchildid'].")";
+				$total = $this->content_db->count($where);
 				if ($total && $row['setting']['disabled']) {
 					dr_json(0, L('当前栏目存在内容数据，无法禁用'));
 				}
@@ -1053,13 +1049,11 @@ class category extends admin {
 				$modelid = $categorys[$catid]['modelid'];
 				if ($modelid) {
 					$this->content_db->set_model($modelid);
-					$table_name = $this->content_db->table_name;
-					$rs = $this->content_db->query("SELECT COUNT(*) AS `count` FROM `$table_name` WHERE catid IN(".$row['arrchildid'].")");
-					$result = $this->content_db->fetch_array($rs);
-					$total = $result[0]['count'];
-					if ($total && $setting['disabled']) {
-						dr_admin_msg(0,L('当前栏目存在内容数据，无法禁用'), HTTP_REFERER);
-					}
+					$where = "catid IN(".$row['arrchildid'].")";
+					$total = $this->content_db->count($where);
+				}
+				if ($total && $setting['disabled']) {
+					$setting['disabled'] = 0;
 				}
 				$info['sethtml'] = $post_setting[$catid]['create_to_html_root'];
 				$info['setting'] = array2string($setting);
@@ -1132,7 +1126,36 @@ class category extends admin {
 				include $this->admin_tpl('category_batch_select');
 			}
 		}	
-	} 
+	}
+	// 统一设置
+	public function public_batch_category() {
+		$show_header = $show_dialog  = '';
+		$this->content_db = pc_base::load_model('content_model');
+		if(IS_AJAX_POST) {
+			$info = $this->input->post('info');
+			$setting = $this->input->post('setting');
+			$row = $this->db->select(array('siteid'=>$this->siteid));
+			foreach($row as $r) {
+				$r['setting'] = dr_string2array($r['setting']);
+				if ($r['modelid']) {
+					$this->content_db->set_model($r['modelid']);
+					$where = "catid IN(".$r['arrchildid'].")";
+					$total = $this->content_db->count($where);
+				}
+				if ($total && $setting['disabled']) {
+					$r['setting']['disabled'] = 0;
+				} else {
+					$r['setting']['disabled'] = $setting['disabled'];
+				}
+				$r['setting']['iscatpos'] = $setting['iscatpos'];
+				$r['setting']['isleft'] = $setting['isleft'];
+				$this->db->update(array('ismenu'=>$info['ismenu'], 'setting'=>dr_array2string($r['setting'])), array('catid'=>$r['catid']));
+			}
+			dr_json(1, L('operation_success'), array('tourl' => '?m=admin&c=category&a=public_cache&module=admin&menuid=141&pc_hash='.dr_get_csrf_token()));
+		} else {
+			include $this->admin_tpl('category_batch_save');
+		}
+	}
 	/**
 	 * 批量移动文章
 	 */

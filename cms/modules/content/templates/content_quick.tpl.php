@@ -42,20 +42,15 @@ function iframeSize() {
     var str = iframeWindowSize();
     var pxstrs = new Array();
     iframestrs = str.toString().split(",");
-    var heights = iframestrs[0]-20,
-        Body = $('body');
-    $('#right').height(heights);
+    var heights = iframestrs[0],Body = $('body');
     if (iframestrs[1] < 980) {
         Body.attr('scroll', '');
-        Body.removeClass('pxgridsbody')
     } else {
         Body.attr('scroll', 'no');
-        Body.addClass('pxgridsbody')
     }
-    var sidebar = $("#right").height()-20;
-    $('#treemain').height(sidebar+35);
-    $('#right').height(sidebar+35);
-    $('.openclose').height(sidebar+40);
+    $('#treemain').height(heights-5);
+    $('#right').height(heights-5);
+    $('.openclose').height(heights);
     iframeWindowSize();
 }
 iframeSize();

@@ -15,6 +15,7 @@ class block_admin extends admin {
 	}
 	
 	public function init() {
+		$show_header = $show_dialog  = $show_pc_hash = '';
 		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
 		if ($_SESSION['roleid'] != 1) {
 			$offset = ($page-1) * SYS_ADMIN_PAGESIZE;

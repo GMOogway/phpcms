@@ -30,6 +30,9 @@ include $this->admin_tpl('header');?>
         <a href="?m=admin&c=category&a=batch_edit&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token();?>" class="layui-btn layui-btn-sm">
             <i class="fa fa-edit"></i> <?php echo L('category_batch_edit');?>
         </a>
+        <a href="javascript:dr_iframe('save', '?m=admin&c=category&a=public_batch_category&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token();?>&s=0', '80%', '80%')" class="layui-btn layui-btn-sm">
+            <i class="fa fa-save"></i> <?php echo L('统一设置');?>
+        </a>
         <a href="?m=content&c=sitemodel_field&a=init&menuid=<?php echo $this->input->get('menuid');?>&modelid=-1&pc_hash=<?php echo dr_get_csrf_token();?>" class="layui-btn layui-btn-sm">
             <i class="fa fa-bars"></i> <?php echo L('category_field_manage');?>
         </a>
