@@ -404,7 +404,7 @@ class database extends admin {
 			return '';
 		}
 
-		$sql_data = explode(';SQL_FINECMS_EOL', trim(str_replace(array(PHP_EOL, chr(13), chr(10)), 'SQL_FINECMS_EOL', $sql)));
+		$sql_data = explode(';SQL_CMS_EOL', trim(str_replace(array(PHP_EOL, chr(13), chr(10)), 'SQL_CMS_EOL', $sql)));
 
 		$count = 0;
 		$this->db->query('BEGIN');
@@ -413,7 +413,7 @@ class database extends admin {
 				continue;
 			}
 			$ret = '';
-			$queries = explode('SQL_FINECMS_EOL', trim($query));
+			$queries = explode('SQL_CMS_EOL', trim($query));
 			foreach($queries as $query) {
 				$ret.= $query[0] == '#' || $query[0].$query[1] == '--' ? '' : $query;
 			}
