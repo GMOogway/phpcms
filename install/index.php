@@ -4,7 +4,14 @@
 
 define('IS_INSTALL', TRUE);
 set_time_limit(0);
-if (version_compare(PHP_VERSION, '7.1.0') < 0) exit('<font color=red>PHP版本必须在7.1以上</font>');
+// 判断环境
+$min = '7.1.0';
+$max = '8.1.0';
+if (version_compare(PHP_VERSION, $max) >= 0) {
+    exit("<font color=red>PHP版本过高，请在".$max."以下的环境使用，当前".PHP_VERSION."，高版本需要等待官方对CMS版本的更新升级！~</font>");
+} elseif (version_compare(PHP_VERSION, $min) < 0) {
+    exit("<font color=red>PHP版本必须在7.1及以上，当前".PHP_VERSION."</font>");
+}
 include '../cms/base.php';
 defined('IN_CMS') or exit('No permission resources.');
 if (is_file(CACHE_PATH.'install.lock')) exit('安装程序已经被锁定，重新安装请删除：caches/install.lock');
@@ -189,7 +196,7 @@ switch($step)
 			if (!mysqli_set_charset($mysqli, "utf8mb4")) {
 				exit('当前MySQL不支持utf8mb4编码（'.mysqli_error($mysqli).'）！');
 			}
-			if (mysqli_get_server_info($mysqli) < 50600) {
+			if (mysqli_get_server_version($mysqli) < 50600) {
 				exit('数据库版本低于Mysql 5.6，无法安装CMS，请升级数据库版本！');
 			}
 			$version = mysqli_get_server_info($mysqli);
@@ -287,7 +294,7 @@ switch($step)
 		if (!mysqli_set_charset($mysqli, "utf8mb4")) {
 			dr_json(0, '当前MySQL不支持utf8mb4编码（'.mysqli_error($mysqli).'）！');
 		}
-		if (mysqli_get_server_info($mysqli) < 50600) {
+		if (mysqli_get_server_version($mysqli) < 50600) {
 			dr_json(0, '数据库版本低于Mysql 5.6，无法安装CMS，请升级数据库版本！');
 		}
 		$tables = array();
@@ -364,8 +371,7 @@ function _sql_execute($mysqli,$sql,$r_tablepre = '',$s_tablepre = 'cms_') {
 function _sql_split($mysqli,$sql,$r_tablepre = '',$s_tablepre='cms_') {
 	global $dbcharset,$tablepre;
 	$r_tablepre = $r_tablepre ? $r_tablepre : $tablepre;
-	if(mysqli_get_server_info($mysqli) > '4.1' && $dbcharset)
-	{
+	if(mysqli_get_server_info($mysqli) > '4.1' && $dbcharset){
 		$sql = preg_replace("/TYPE=(InnoDB|MyISAM|MEMORY)( DEFAULT CHARSET=[^; ]+)?/", "ENGINE=\\1 DEFAULT CHARSET=".$dbcharset,$sql);
 	}
 	$sql = str_replace('phpcms_', $s_tablepre, $sql);

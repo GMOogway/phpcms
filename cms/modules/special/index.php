@@ -26,7 +26,7 @@ class index {
 		$specialid = $this->input->get('id') ? intval($_GET['id']) : ($_GET['specialid'] ? intval($_GET['specialid']) : 0);
 		if (!$specialid) showmessage(L('illegal_action'));
 		$info = $this->db->get_one(array('id'=>$specialid, 'disabled'=>0));
-		if(!$info) showmessage(L('special_not_exist'), 'back');
+		if(!$info) showmessage(L('special_not_exist'));
 		extract($info);
 		$css = get_css(unserialize($css));
 		if(!$ispage) {
@@ -57,7 +57,7 @@ class index {
 		$specialid = intval($_GET['specialid']);
 		if (!$specialid || !$typeid) showmessage(L('illegal_action'));
 		$info = $this->db->get_one(array('id'=>$specialid, 'disabled'=>0));
-		if(!$info) showmessage(L('special_not_exist'), 'back');
+		if(!$info) showmessage(L('special_not_exist'));
 		$page = max(intval($_GET['page']), 1);
 		extract($info);
 		$css = get_css(unserialize($css));

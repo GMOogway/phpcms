@@ -64,7 +64,7 @@ if(is_array($infos)){
 <!--
 window.top.$('#display_center_id').css('display','none');
 function edit(id, name) {
-	artdialog('edit','?m=admin&c=position&a=edit&posid='+id,'<?php echo L('edit')?>--'+name,500,360);
+	artdialog('edit','?m=admin&c=position&a=edit&posid='+id,'<?php echo L('edit')?>--'+name,800,450);
 }
 
 //预览视频

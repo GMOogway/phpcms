@@ -13,6 +13,7 @@ define('SELF', pathinfo(__FILE__, PATHINFO_BASENAME));
 define('WEBPATH', dirname(__FILE__).'/');
 define('SYSTEMPATH', true);
 
+echo_msg(1, '当前脚本地址：'.$_SERVER['SCRIPT_NAME']);
 if (isset($_GET['log']) && $_GET['log']) {
     if (!is_file(WEBPATH.'caches/error_log.php')) {
         exit('没有错误日志记录');
@@ -27,7 +28,11 @@ if (isset($_GET['log']) && $_GET['log']) {
 echo_msg(1, '客户端信息：'.$_SERVER['HTTP_USER_AGENT']);
 
 // 判断环境
-if (version_compare(PHP_VERSION, '7.1.0') < 0) {
+$min = '7.1.0';
+$max = '8.1.0';
+if (version_compare(PHP_VERSION, $max) >= 0) {
+    echo_msg(0, "<font color=red>PHP版本过高，请在".$max."以下的环境使用，当前".PHP_VERSION."，高版本需要等待官方对CMS版本的更新升级！~</font>");exit;
+} elseif (version_compare(PHP_VERSION, $min) < 0) {
     exit("<font color=red>PHP版本必须在7.1及以上，当前".PHP_VERSION."</font>");
 } else {
     echo_msg(1, 'PHP版本要求：7.1及以上，当前'.PHP_VERSION.'，<a style="color:blue;text-decoration:none;" href="'.SELF.'?phpinfo=true">查看环境</a>');

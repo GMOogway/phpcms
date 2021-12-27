@@ -58,7 +58,7 @@ class special extends admin {
 				}
 				$this->special_cache();
 			}
-			dr_admin_msg(1,L('add_special_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('add_special_success'), '?m=special&c=special&a=init&menuid='.$this->input->post('menuid'));
 		} else {
 			//获取站点模板信息
 			pc_base::load_app_func('global', 'admin');
@@ -115,7 +115,7 @@ class special extends admin {
 				$this->attachment_db->api_update(array($special['thumb'], $special['banner']),'special-'.$_GET['specialid'], 1);
 			}
 			$this->special_cache();
-			dr_admin_msg(1,L('edit_special_success'), HTTP_REFERER);
+			dr_admin_msg(1,L('edit_special_success'), '?m=special&c=special&a=init&menuid='.$this->input->post('menuid'));
 		} else {
 			$info = $this->db->get_one(array('id'=>$_GET['specialid'], 'siteid'=>$this->get_siteid()));
 			//获取站点模板信息
@@ -479,6 +479,9 @@ class special extends admin {
 	 * @param string $a add/edit添加操作时，自动加上默认值
 	 */
 	private function check($data, $a = 'add') {
+		$security = pc_base::load_sys_class('security');
+		$data = new_html_special_chars(remove_xss($data));
+		$data = $security->xss_clean($data, false);
 		if(!$data['title']) dr_admin_msg(0,L('title_cannot_empty'), HTTP_REFERER);
 		if(!$data['banner']) dr_admin_msg(0,L('banner_no_empty'), HTTP_REFERER);
 		if(!$data['thumb']) dr_admin_msg(0,L('thumb_no_empty'), HTTP_REFERER);

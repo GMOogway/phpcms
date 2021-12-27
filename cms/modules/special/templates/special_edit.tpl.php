@@ -4,6 +4,7 @@ $show_validator = $show_scroll = $show_dialog = 1;
 include $this->admin_tpl('header', 'admin');
 ?>
 <form method="post" action="?m=special&c=special&a=edit&specialid=<?php echo $_GET['specialid']?>" id="myform">
+<input name="menuid" type="hidden" value="<?php echo $this->input->get('menuid');?>">
 <div class="pad-10">
 <div class="col-tab">
 	<ul class="tabBut cu-li">
@@ -179,8 +180,8 @@ $(document).ready(function(){
 	onerror : "<?php echo L('special_exist')?>",
 	onwait : "<?php echo L('checking')?>"
 }).defaultPassed();
-	$('#banner').formValidator({autotip:true,onshow:"<?php echo L('please_upload_banner')?>",oncorrect:"<?php echo L('true')?>"}).inputValidator({min:6,onerror:"<?php echo L('please_upload_banner')?>"}).defaultPassed();
-	$('#thumb').formValidator({autotip:true,onshow:"<?php echo L('please_upload_thumb')?>",oncorrect:"<?php echo L('true')?>"}).inputValidator({min:6,onerror:"<?php echo L('please_upload_thumb')?>"}).defaultPassed();
+	$('#banner').formValidator({autotip:true,onshow:"<?php echo L('please_upload_banner')?>",oncorrect:"<?php echo L('true')?>"}).inputValidator({min:1,onerror:"<?php echo L('please_upload_banner')?>"}).defaultPassed();
+	$('#thumb').formValidator({autotip:true,onshow:"<?php echo L('please_upload_thumb')?>",oncorrect:"<?php echo L('true')?>"}).inputValidator({min:1,onerror:"<?php echo L('please_upload_thumb')?>"}).defaultPassed();
 	$('#filename').formValidator({autotip:true,onshow:"<?php echo L('special_file')?>",onfocus:'<?php echo L('use_letters')?>',oncorrect:"<?php echo L('true')?>"}).functionValidator({
 	    fun:function(val,elem){
         if($("input:radio[type='radio'][checked]").val()==0){

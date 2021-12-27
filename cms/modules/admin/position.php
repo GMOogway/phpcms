@@ -25,7 +25,7 @@ class position extends admin {
 		$infos = $this->db->listinfo($where, $order = 'listorder DESC,posid DESC', $page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		$show_dialog = true;
-		$big_menu = array('javascript:artdialog(\'add\',\'?m=admin&c=position&a=add\',\''.L('posid_add').'\',500,360);void(0);', L('posid_add'));
+		$big_menu = array('javascript:artdialog(\'add\',\'?m=admin&c=position&a=add\',\''.L('posid_add').'\',800,450);void(0);', L('posid_add'));
 		include $this->admin_tpl('position_list');
 	}
 	

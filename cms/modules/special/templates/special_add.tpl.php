@@ -4,6 +4,7 @@ $show_validator = $show_scroll = $show_dialog = 1;
 include $this->admin_tpl('header', 'admin');
  ?>
 <form method="post" action="?m=special&c=special&a=add" id="myform">
+<input name="menuid" type="hidden" value="<?php echo $this->input->get('menuid');?>">
 <div class="pad-10">
 <div class="col-tab">
 	<ul class="tabBut cu-li">
