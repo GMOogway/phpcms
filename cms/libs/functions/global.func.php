@@ -1376,7 +1376,7 @@ function str_cut($string, $limit = '100', $dot = '...') {
 			$n -= $tn;
 		}
 
-		$strcut = substr($string, 0, $n);
+		$strcut = substr($string, $a, $n);
 		$strcut = str_replace(array('&', '"', '<', '>'), array('&amp;', '&quot;', '&lt;', '&gt;'), $strcut);
 	}
 	$strcut == $string && $dot = '';

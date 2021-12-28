@@ -20,6 +20,16 @@ if (version_compare(PHP_VERSION, $max) >= 0) {
     $rt[] = echo_msg('PHP版本要求：7.1及以上，当前'.PHP_VERSION);
 }
 
+if (preg_match('/[\x{4e00}-\x{9fff}]+/u', WEBPATH)) {
+    $rt[] = echo_msg('WEB目录['.WEBPATH.']不允许出现中文或全角符号');
+}
+
+foreach (array(' ', '[', ']') as $t) {
+    if (strpos(WEBPATH, $t) !== false) {
+        $rt[] = echo_msg('WEB目录'.WEBPATH.'不允许出现'.($t ? $t : '空格').'符号');
+    }
+}
+
 // GD库判断
 if (!function_exists('imagettftext')) {
     $rt[] = echo_msg('PHP扩展库：GD库未安装或GD库版本太低');
@@ -126,7 +136,7 @@ if ($rt) {
         echo $t;
     }
 } else {
-    header('Location: install');
+    header('Location: install', TRUE, 0);
 }
 
 // 检查目录权限
