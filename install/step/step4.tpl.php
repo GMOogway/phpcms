@@ -58,18 +58,15 @@
         </div>
         <div class="bg_b"></div>
     </div>
-    <div class="btn_box"><a href="javascript:history.go(-1);" class="s_btn">上一步</a>
-    <?php if($no_writablefile == 0) {?>
-    <a href="javascript:void(0);"  onClick="$('#install').submit();return false;" class="x_btn">下一步</a>
+    <div class="btn_box"><?php if($no_writablefile == 0) {?>
+    <a href="javascript:void(0);"  onClick="$('#install').submit();return false;" class="btn btn-success">下一步安装</a>
     <?php } else {?>
-    <a onClick="Dialog.alert('存在不可写目录或者文件');" class="x_btn pre">检测不通过</a>
-    <?php } ?>
-    </div>
-    <form id="install" action="<?php echo SELF;?>" method="post">
-    <input type="hidden" name="step" value="5">
-    <input type="hidden" id="selectmod" name="selectmod" value="<?php echo $selectmod?>" />
-    </form>
-    </div>
+    <a onClick="Dialog.alert('存在不可写目录或者文件');" class="btn default">无法进行下一步安装</a>
+    <?php } ?></div>
 </div>
+<form id="install" action="<?php echo SELF;?>" method="post">
+<input type="hidden" name="step" value="5">
+<input type="hidden" id="selectmod" name="selectmod" value="<?php echo $selectmod?>" />
+</form>
 </body>
 </html>

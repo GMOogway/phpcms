@@ -4,17 +4,25 @@
 
 define('IS_INSTALL', TRUE);
 set_time_limit(0);
+include '../cms/base.php';
+defined('IN_CMS') or exit('No permission resources.');
+if (is_file(CACHE_PATH.'install.lock')) exit('安装程序已经被锁定，重新安装请删除：caches/install.lock');
 // 判断环境
 $min = '7.1.0';
 $max = '8.1.0';
 if (version_compare(PHP_VERSION, $max) >= 0) {
-    exit("<font color=red>PHP版本过高，请在".$max."以下的环境使用，当前".PHP_VERSION."，高版本需要等待官方对CMS版本的更新升级！~</font>");
+	exit("<font color=red>PHP版本过高，请在".$max."以下的环境使用，当前".PHP_VERSION."，高版本需要等待官方对CMS版本的更新升级！~</font>");
 } elseif (version_compare(PHP_VERSION, $min) < 0) {
-    exit("<font color=red>PHP版本必须在7.1及以上，当前".PHP_VERSION."</font>");
+	exit("<font color=red>PHP版本必须在7.1及以上，当前".PHP_VERSION."</font>");
 }
-include '../cms/base.php';
-defined('IN_CMS') or exit('No permission resources.');
-if (is_file(CACHE_PATH.'install.lock')) exit('安装程序已经被锁定，重新安装请删除：caches/install.lock');
+if (preg_match('/[\x{4e00}-\x{9fff}]+/u', CMS_PATH)) {
+	exit('<font color=red>WEB目录['.CMS_PATH.']不允许出现中文或全角符号</font>');
+}
+foreach (array(' ', '[', ']') as $t) {
+	if (strpos(CMS_PATH, $t) !== false) {
+		exit('<font color=red>WEB目录['.CMS_PATH.']不允许出现'.($t ? $t : '空格').'符号</font>');
+	}
+}
 pc_base::load_sys_class('param','','','0');
 pc_base::load_sys_func('global');
 pc_base::load_sys_func('dir');
@@ -44,7 +52,7 @@ $mode = 0777;
 
 switch($step)
 {
-    case '1': //安装许可协议
+	case '1': //安装许可协议
 		$license = file_get_contents(CMS_PATH."install/license.txt");
 		
 		include CMS_PATH."install/step/step".$step.".tpl.php";
@@ -52,23 +60,105 @@ switch($step)
 		break;
 	
 	case '2':  //环境检测 (FTP帐号设置）
-        $PHP_GD  = '';
-		if(extension_loaded('gd')) {
-			if(function_exists('imagepng')) $PHP_GD .= 'png';
-			if(function_exists('imagejpeg')) $PHP_GD .= ' jpg';
-			if(function_exists('imagegif')) $PHP_GD .= ' gif';
-		}
-		$PHP_JSON = '0';
-		if(extension_loaded('json')) {
-			if(function_exists('json_decode') && function_exists('json_encode')) $PHP_JSON = '1';
-		}
-		//新加fsockopen 函数判断,此函数影响安装后会员注册及登录操作。
-		if(function_exists('fsockopen')) {
-			$PHP_FSOCKOPEN = '1';
-		}
-        $PHP_DNS = preg_match("/^[0-9.]{7,15}$/", @gethostbyname('www.baidu.com')) ? 1 : 0;
-		//是否满足cms安装需求
-		$is_right = (phpversion() >= '7.1.0' && extension_loaded('mysqli') && $PHP_JSON && $PHP_GD && $PHP_FSOCKOPEN) ? 1 : 0;		
+		$error = 0;
+		$php = array(
+			array(
+				'name' => 'PHP 版本',
+				'value' => 'PHP '.PHP_VERSION,
+				'error_value' => 'PHP 7.1.0 及以上不得高于8.1.0',
+				'code' => PHP_VERSION >= '7.1.0' && PHP_VERSION < '8.1.0',
+				'help' => '&nbsp;无法安装',
+				'error' => 1,
+			),
+			array(
+				'name' => 'MYSQLI 扩展',
+				'value' => '√',
+				'error_value' => '必须开启',
+				'code' => extension_loaded('mysqli'),
+				'help' => '&nbsp;无法安装',
+				'error' => 1,
+			),
+			array(
+				'name' => 'ICONV 扩展',
+				'value' => '√',
+				'error_value' => '必须开启',
+				'code' => extension_loaded('iconv'),
+				'help' => '&nbsp;字符集转换效率低',
+				'error' => 1,
+			),
+			array(
+				'name' => 'JSON 扩展',
+				'value' => '√',
+				'error_value' => '必须开启',
+				'code' => extension_loaded('json') && function_exists('json_decode') && function_exists('json_encode'),
+				'help' => '&nbsp;不只持json,<a href="http://pecl.php.net/package/json" target="_blank">安装 PECL扩展</a>',
+				'error' => 1,
+			),
+			array(
+				'name' => 'GD 扩展',
+				'value' => '√（支持 png jpg gif）',
+				'error_value' => '必须开启',
+				'code' => extension_loaded('gd'),
+				'help' => '&nbsp;不支持缩略图和水印',
+				'error' => 1,
+			),
+			array(
+				'name' => 'mb string扩展',
+				'value' => '√',
+				'error_value' => '必须开启',
+				'code' => function_exists('mb_substr'),
+				'help' => '&nbsp;无法安装',
+				'error' => 1,
+			),
+			array(
+				'name' => 'Curl扩展',
+				'value' => '√',
+				'error_value' => '必须开启',
+				'code' => function_exists('curl_init'),
+				'help' => '&nbsp;无法安装',
+				'error' => 1,
+			),
+			array(
+				'name' => 'allow_url_fopen',
+				'value' => '√',
+				'error_value' => '必须开启',
+				'code' => ini_get('allow_url_fopen'),
+				'help' => '&nbsp;不支持保存远程图片',
+				'error' => 1,
+			),
+			array(
+				'name' => 'fsockopen',
+				'value' => '√',
+				'error_value' => '必须开启',
+				'code' => function_exists('fsockopen'),
+				'help' => '&nbsp;不支持fsockopen函数',
+				'error' => 1,
+			),
+			array(
+				'name' => 'ZLIB 扩展',
+				'value' => '√',
+				'error_value' => '必须开启',
+				'code' => extension_loaded('zlib'),
+				'help' => '&nbsp;不支持Gzip功能',
+				'error' => 0,
+			),
+			array(
+				'name' => 'FTP 扩展',
+				'value' => '√',
+				'error_value' => '必须开启',
+				'code' => extension_loaded('ftp'),
+				'help' => '&nbsp;不支持FTP形式文件传送',
+				'error' => 0,
+			),
+			array(
+				'name' => 'DNS解析',
+				'value' => '√',
+				'error_value' => '必须开启',
+				'code' => preg_match("/^[0-9.]{7,15}$/", @gethostbyname('www.baidu.com')) ? 1 : 0,
+				'help' => '&nbsp;不支持采集和保存远程图片',
+				'error' => 0,
+			),
+		);
 		include CMS_PATH."install/step/step".$step.".tpl.php";
 		break;
 	
@@ -350,9 +440,8 @@ function format_textarea($string) {
 }
 
 function _sql_execute($mysqli,$sql,$r_tablepre = '',$s_tablepre = 'cms_') {
-    $sqls = _sql_split($mysqli,$sql,$r_tablepre,$s_tablepre);
-	if(is_array($sqls))
-    {
+	$sqls = _sql_split($mysqli,$sql,$r_tablepre,$s_tablepre);
+	if(is_array($sqls)){
 		foreach($sqls as $sql)
 		{
 			if(trim($sql) != '')
@@ -399,13 +488,13 @@ function _sql_split($mysqli,$sql,$r_tablepre = '',$s_tablepre='cms_') {
 function dir_writeable($dir) {
 	$writeable = 0;
 	if(is_dir($dir)) {  
-        if($fp = @fopen("$dir/chkdir.test", 'w')) {
-            @fclose($fp);      
-            @unlink("$dir/chkdir.test"); 
-            $writeable = 1;
-        } else {
-            $writeable = 0; 
-        } 
+		if($fp = @fopen("$dir/chkdir.test", 'w')) {
+			@fclose($fp);  
+			@unlink("$dir/chkdir.test"); 
+			$writeable = 1;
+		} else {
+			$writeable = 0; 
+		} 
 	}
 	return $writeable;
 }
@@ -441,10 +530,10 @@ function set_config($config,$cfgfile) {
 	if(!is_writable($configfile)) showmessage('Please chmod '.$configfile.' to 0777 !');
 	$pattern = $replacement = array();
 	foreach($config as $k=>$v) {
-			$v = trim($v);
-			$configs[$k] = $v;
-			$pattern[$k] = "/'".$k."'\s*=>\s*([']?)[^']*([']?)(\s*),/is";
-        	$replacement[$k] = "'".$k."' => \${1}".$v."\${2}\${3},";							
+		$v = trim($v);
+		$configs[$k] = $v;
+		$pattern[$k] = "/'".$k."'\s*=>\s*([']?)[^']*([']?)(\s*),/is";
+		$replacement[$k] = "'".$k."' => \${1}".$v."\${2}\${3},";							
 	}
 	$str = file_get_contents($configfile);
 	$str = preg_replace($pattern, $replacement, $str);

@@ -38,13 +38,16 @@
                 </div>
                 <div class="ct_box">
                     <div class="nr">
-                        <div id="installmessage" >正在准备安装 ...<br /></div>
+                        <div id="installmessage">正在准备安装 ...<br /></div>
                     </div>
                 </div>
             </div>
             <div class="bg_b"></div>
         </div>
-        <div class="btn_box"><a href="javascript:history.go(-1);" class="s_btn pre">上一步</a><a href="javascript:void(0);"  onClick="$('#install').submit();return false;" class="x_btn pre" id="finish">安装中..</a></div>            
+        <div class="btn_box">
+            <a href="javascript:history.back();" class="btn btn-success"> 返回上一步 </a>
+            <a href="javascript:void(0);" onClick="$('#install').submit();return false;" class="btn default" id="finish">正在执行安装程序</a>
+        </div>            
     </div>
 </div>
 <div id="hiddenop"></div>

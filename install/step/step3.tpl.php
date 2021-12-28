@@ -80,7 +80,7 @@
             </div>
             <div class="bg_b"></div>
         </div>
-        <div class="btn_box"><a href="javascript:history.go(-1);" class="s_btn pre">上一步</a><a href="javascript:void(0);"  onClick="$('#install').submit();return false;" class="x_btn">下一步</a></div>
+        <div class="btn_box"><a href="javascript:void(0);" onClick="$('#install').submit();return false;" class="btn btn-success">下一步安装</a></div>
     </div>
 </div>
 <script type="text/javascript">

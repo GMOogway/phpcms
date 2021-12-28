@@ -41,7 +41,7 @@
                         <div class="gxwc"><h1>恭喜您，安装成功！</h1></div>
                         <div class="clj">
                             <ul>
-                                <li><a href="<?php echo $url.(pc_base::load_config('system','admin_login_path') ? pc_base::load_config('system','admin_login_path') : 'admin.php')?>" title="后台管理" class="htgl">后台管理</a></li>
+                                <li><a href="<?php echo $url.(pc_base::load_config('system','admin_login_path') ? pc_base::load_config('system','admin_login_path') : 'admin.php')?>" class="btn btn-success">后台管理</a></li>
                             </ul>
                         </div>                    
                         <div class="txt_c">

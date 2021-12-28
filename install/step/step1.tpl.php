@@ -44,7 +44,7 @@
             </div>
             <div class="bg_b"></div>
         </div>
-        <div class="btn_box"><a href="javascript:void(0);" class="is_btn" onclick="$('#install').submit();return false;">开始安装</a></div>
+        <div class="btn_box"><a href="javascript:void(0);" class="btn btn-success" onclick="$('#install').submit();return false;">开始安装</a></div>
         <form id="install" action="<?php echo SELF;?>" method="post">
         <input type="hidden" name="step" value="2">
         </form>
