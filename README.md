@@ -169,7 +169,33 @@ Apache、Nginx、IIS等Web服务器都可以
 QQ、微信：297885395  QQ讨论群：551419699  联系电话：17684313488
 
 ## 页面展示
+### 安装界面
+![](http://ceshi.kaixin100.cn/upload/images/install.png "安装界面")
 ### 后台登录页面
-![](http://ceshi.kaixin100.cn/upload/20211016/login.png "后台登录")
-### 后台首页
-![](http://ceshi.kaixin100.cn/upload/20211016/index.png "后台首页")
+![](http://ceshi.kaixin100.cn/upload/images/login.png "后台登录")
+### 后台首页页面
+![](http://ceshi.kaixin100.cn/upload/images/index.png "后台首页")
+### 后台设置页面
+![](http://ceshi.kaixin100.cn/upload/images/setting.png "后台设置")
+### 新增的分词接口功能设置
+![](http://ceshi.kaixin100.cn/upload/images/tag.png "后台分词设置")
+### 存储策略页面
+![](http://ceshi.kaixin100.cn/upload/images/remote.png "存储策略")
+### 模块管理页面
+![](http://ceshi.kaixin100.cn/upload/images/module.png "模块管理")
+### 内容管理页面
+![](http://ceshi.kaixin100.cn/upload/images/content.png "内容管理")
+### 添加内容页面
+![](http://ceshi.kaixin100.cn/upload/images/add_content.png "添加内容")
+### 后台附件H5上传
+![](http://ceshi.kaixin100.cn/upload/images/h5.png "后台附件H5上传")
+### 升级为CK4.16.1编辑器
+![](http://ceshi.kaixin100.cn/upload/images/ckeditor.png "升级为CK4.16.1编辑器")
+### 升级为Ueditor编辑器
+![](http://ceshi.kaixin100.cn/upload/images/ueditor.png "升级为Ueditor编辑器")
+### Ueditor上传视频
+![](http://ceshi.kaixin100.cn/upload/images/ueditor_video.png "Ueditor上传视频")
+### 会员管理页面
+![](http://ceshi.kaixin100.cn/upload/images/member.png "会员管理")
+### 在线更新页面
+![](http://ceshi.kaixin100.cn/upload/images/upgrade.png "在线更新")
