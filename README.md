@@ -197,5 +197,7 @@ QQ、微信：297885395  QQ讨论群：551419699  联系电话：17684313488
 ![](http://ceshi.kaixin100.cn/upload/images/ueditor_video.png "Ueditor上传视频")
 ### 会员管理页面
 ![](http://ceshi.kaixin100.cn/upload/images/member.png "会员管理")
-### 在线更新页面
-![](http://ceshi.kaixin100.cn/upload/images/upgrade.png "在线更新")
+### 在线升级页面
+![](http://ceshi.kaixin100.cn/upload/images/upgrade.png "在线升级")
+### 在线文件MD5对比页面
+![](http://ceshi.kaixin100.cn/upload/images/compare.png "在线文件MD5对比")
