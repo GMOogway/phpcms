@@ -19,7 +19,7 @@ include $this->admin_tpl('header','admin');?>
                 <a data-toggle="tab_2"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('按字段批量设置').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-edit"></i> <?php if (!is_mobile(0)) {echo L('按字段批量设置');}?> </a>
             </li>
             <li<?php if ($page==3) {?> class="active"<?php }?>>
-                <a data-toggle="tab_3"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('全模型替换').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-edit"></i> <?php if (!is_mobile(0)) {echo L('全模型替换');}?> </a>
+                <a data-toggle="tab_3"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('全模型替换').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-table"></i> <?php if (!is_mobile(0)) {echo L('全模型替换');}?> </a>
             </li>
             <?php }?>
         </ul>

@@ -3052,7 +3052,7 @@ function dr_linkagepos($code, $id, $symbol = ' > ', $url = '', $html = '') {
 	if (!$data) {
 		return '';
 	}
-	$name = [];
+	$name = array();
 	$array = explode(',', $data['pids']);
 	$array[] = $data['ii'];
 	foreach ($array as $ii) {
@@ -3536,13 +3536,14 @@ function sitemobileurl($siteid) {
 /**
  * 全局返回消息
  */
-function dr_exit_msg($code, $msg, $data = []) {
+function dr_exit_msg($code, $msg, $data = array(), $token = array()) {
 	$input = pc_base::load_sys_class('input');
 	ob_end_clean();
 	$rt = array(
 		'code' => $code,
 		'msg' => $msg,
 		'data' => $data,
+		'token' => $token,
 	);
 	if ($input->get('callback')) {
 		// jsonp
@@ -3616,7 +3617,7 @@ function csrf_hash($key = 'csrf_token') {
 	}
 	$cache = pc_base::load_sys_class('cache');
 	!$key && $key = 'csrf_hash_'.md5(isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT'] ? $_SERVER['HTTP_USER_AGENT'] : '');
-	$csrf_token = $cache->get_auth_data($key, 1, 600);
+	$csrf_token = $cache->get_auth_data($key, 1, 1800);
 	if (!$csrf_token) {
 		$csrf_token = bin2hex(random_bytes(16));
 		$cache->set_auth_data($key, $csrf_token, 1);

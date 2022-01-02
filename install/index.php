@@ -309,7 +309,7 @@ switch($step)
 				$password = $password_arr['password'];
 				$encrypt = $password_arr['encrypt'];
 				$email = trim($email);
-				_sql_execute($mysqli,"INSERT INTO ".$tablepre."admin (`userid`,`username`,`password`,`roleid`,`encrypt`,`lastloginip`,`lastlogintime`,`email`,`realname`) VALUES ('1','$username','$password',1,'$encrypt','','','$email','创始人')");
+				_sql_execute($mysqli,"INSERT INTO ".$tablepre."admin (`userid`,`username`,`password`,`roleid`,`encrypt`,`lastloginip`,`lastlogintime`,`email`,`realname`) VALUES ('1','$username','$password','[\"1\"]','$encrypt','','','$email','创始人')");
 				//设置默认站点1域名
 				_sql_execute($mysqli,"update ".$tablepre."site set `domain`='$siteurl', `mobile_domain`='".$siteurl."mobile/' where `siteid`='1'");
 				if ($adminpath) {

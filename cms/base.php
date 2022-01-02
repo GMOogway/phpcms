@@ -638,19 +638,30 @@ class pc_base {
 		if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
 			$token =  $_POST['csrf_test_name'];
 			$name = 'csrf_token';
-			$hash = file_get_contents(CACHE_PATH.'caches_authcode/caches_data/'.md5('1'.$name));
-			if (is_file(CACHE_PATH.'caches_authcode/caches_data/'.md5('1'.$name))) {
-				unlink(CACHE_PATH.'caches_authcode/caches_data/'.md5('1'.$name));
+			$code_file = CACHE_PATH.'caches_authcode/caches_data/'.md5('1'.$name);
+			if (is_file($code_file)) {
+				$ft = filemtime($code_file);
+				if ($ft) {
+					$st = SYS_TIME - $ft;
+					if ($st > 1800) {
+						unlink($code_file);
+						log_message('debug', '缓存（'.$name.'）自动失效（'.FC_NOW_URL.'）超时: '.$st.'秒');
+					} else {
+						$hash = file_get_contents($code_file);
+					}
+				}
+				unlink($code_file);
 			}
 			if (!isset($token, $hash) || !hash_equals($hash, $token)) {
-				CI_DEBUG && log_message('error', '跨站验证禁止此操作：'.FC_NOW_URL);
-				dr_exit_msg(0, '跨站验证禁止此操作', 'CSRFVerify');
+				CI_DEBUG && log_message('debug', '跨站验证：'.FC_NOW_URL);
+				dr_exit_msg(0, '跨站验证超时请重试', '', array('name' => $name, 'value' => $hash));
 			}
 
 			if (isset($token)) {
 				unset($token);
 			}
 			unset($name);
+			unset($code_file);
 			unset($hash);
 		}
 	}

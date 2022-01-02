@@ -8,7 +8,7 @@ CREATE TABLE `cms_admin` (
   `username` varchar(50) DEFAULT NULL COMMENT '用户名',
   `password` varchar(50) DEFAULT NULL COMMENT '加密密码',
   `login_attr` varchar(100) NOT NULL DEFAULT '' COMMENT '登录附加验证字符',
-  `roleid` varchar(255) NOT NULL DEFAULT '0' COMMENT '权限id',
+  `roleid` varchar(255) NOT NULL COMMENT '权限id',
   `encrypt` varchar(50) NOT NULL COMMENT '随机加密码',
   `lastloginip` varchar(200) DEFAULT NULL COMMENT '最后登录Ip',
   `lastlogintime` int(10) unsigned DEFAULT '0' COMMENT '最后登录时间',
