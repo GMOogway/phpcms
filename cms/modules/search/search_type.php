@@ -48,7 +48,7 @@ class search_type extends admin {
 			$this->db->insert($_POST['info']);
 			dr_admin_msg(1,L('add_success'), '', '', 'add');
 		} else {
-			$show_header = $show_validator = '';
+			$show_header = $show_validator = true;
 			
 			foreach($this->model as $_key=>$_value) {
 				if($_value['siteid']!=$this->siteid) continue;
@@ -87,7 +87,7 @@ class search_type extends admin {
 			$this->db->update($_POST['info'],array('typeid'=>$typeid));
 			dr_admin_msg(1,L('update_success'), '', '', 'edit');
 		} else {
-			$show_header = $show_validator = '';
+			$show_header = $show_validator = true;
 			$typeid = intval($_GET['typeid']);
 			foreach($this->model as $_key=>$_value) {
 				if($_value['siteid']!=$this->siteid) continue;

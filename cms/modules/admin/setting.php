@@ -15,8 +15,7 @@ class setting extends admin {
 	 * 配置信息
 	 */
 	public function init() {
-		$show_header = '';
-		$show_validator = true;
+		$show_header = $show_validator = true;
 		if(IS_AJAX_POST) {
 			$setconfig = $this->input->post('setconfig');
 			$setting = $this->input->post('setting');
@@ -104,7 +103,7 @@ class setting extends admin {
 					$setconfig['snda_enable'] = 0;
 				}
 			}
-			if($_SESSION['roleid']==1 && dr_in_array($_SESSION['userid'], ADMIN_FOUNDERS)) {
+			if(cleck_admin($_SESSION['roleid']) && dr_in_array($_SESSION['userid'], ADMIN_FOUNDERS)) {
 				if(!$setconfig['admin_founders']) {
 					$setconfig['admin_founders'] = 1;
 				}

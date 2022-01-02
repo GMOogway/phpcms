@@ -67,7 +67,7 @@ class member_modelfield extends admin {
 			$this->cache_field($modelid);
 			dr_json(1, L('operation_success'), array('url' => '?m=member&c=member_modelfield&a=manage&modelid='.$modelid.'&menuid='.$this->input->post('menuid').'&pc_hash='.dr_get_csrf_token()));
 		} else {
-			$show_header = $show_validator= $show_dialog ='';
+			$show_header = $show_validator= $show_dialog = true;
 			pc_base::load_sys_class('form', '', 0);
 			require MODEL_PATH.'fields.inc.php'; 
 			$modelid = $this->input->get('modelid');
@@ -133,7 +133,7 @@ class member_modelfield extends admin {
 			
 			dr_json(1, L('operation_success'), array('url' => '?m=member&c=member_modelfield&a=manage&modelid='.$modelid.'&menuid='.$this->input->post('menuid').'&pc_hash='.dr_get_csrf_token()));
 		} else {
-			$show_header = $show_validator= $show_dialog ='';
+			$show_header = $show_validator= $show_dialog = true;
 			pc_base::load_sys_class('form','',0);
 			require MODEL_PATH.'fields.inc.php'; 
 			$modelid = intval($_GET['modelid']);
@@ -258,7 +258,7 @@ class member_modelfield extends admin {
 	 */
 	public function public_priview() {
 		pc_base::load_sys_class('form','',0);
-		$show_header = '';
+		$show_header = true;
 		$modelid = intval($_GET['modelid']);
 
 		require CACHE_MODEL_PATH.'content_form.class.php';

@@ -19,8 +19,7 @@ class sites {
 	 * 获取站点列表
 	 * @param string $roleid 角色ID 留空为获取所有站点列表
 	 */
-	public function get_list($roleid='') {
-		$roleid = intval($roleid);
+	public function get_list($roleid=array()) {
 		if(empty($roleid)) {
 			if ($data = getcache('sitelist', 'commons')) {
 				return $data;
@@ -29,7 +28,7 @@ class sites {
 				return $this->db->select();
 			}			
 		} else {
-			$site_arr = $this->get_role_siteid($roleid);
+			$site_arr = $this->get_role_siteid((is_array(dr_string2array($roleid)) ? dr_string2array($roleid) : $roleid));
 			$sql = "`siteid` in($site_arr)";
 			return $this->db->select($sql);
 		}
@@ -108,18 +107,22 @@ class sites {
 	 */	
 	
 	public function get_role_siteid($roleid) {
-		$roleid = intval($roleid);
-		if($roleid == 1) {
+		if(cleck_admin($roleid)) {
 			$sitelists = $this->get_list();
 			foreach($sitelists as $v) {
 				$sitelist[] = $v['siteid'];
 			}
 		} else {
 			$sitelist = getcache('role_siteid', 'commons');
-			$sitelist = $sitelist[$roleid];
+			if (is_array(dr_string2array($roleid))) {
+				foreach($roleid as $r) {
+					$sitelist = $sitelist[$r];
+				}
+			} else {
+				$sitelist = $sitelist[$roleid];
+			}
 		}
-		if(is_array($sitelist)) 
-		{
+		if(is_array($sitelist)) {
 			$siteid = implode(',',array_unique($sitelist));
 			return $siteid;			
 		} else {

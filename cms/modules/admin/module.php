@@ -13,7 +13,7 @@ class module extends admin {
 	}
 	
 	public function init() {
-		$show_header = '';
+		$show_header = true;
 		$dirs = $module = $dirs_arr = $directory = array();
 		$dirs = glob(PC_PATH.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.'*');
 		foreach ($dirs as $d) {

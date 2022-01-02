@@ -1,6 +1,6 @@
 <?php
 defined('IN_CMS') or exit('No permission resources.');
-$show_header = $show_scroll = 1;
+$show_header = $show_scroll = true;
 include $this->admin_tpl('header','attachment');
 ?>
 <link href="<?php echo JS_PATH?>h5upload/h5upload.css" rel="stylesheet" type="text/css" />

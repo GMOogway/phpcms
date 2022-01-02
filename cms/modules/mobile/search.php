@@ -40,10 +40,10 @@ class search {
 		$minrefreshtime = getcache('common','commons');
 		$minrefreshtime = intval($minrefreshtime['minrefreshtime']);
 		$minrefreshtime = $minrefreshtime ? $minrefreshtime : 5;
-		if(param::get_cookie('search_cookie') && param::get_cookie('search_cookie')>SYS_TIME-2) {
+		if(param::get_cookie('search_cookie') && param::get_cookie('search_cookie')>SYS_TIME-$minrefreshtime) {
 			showmessage(L('search_minrefreshtime',array('min'=>$minrefreshtime)),'index.php?m=content&c=search&catid='.$catid,$minrefreshtime*1280);
 		} else {
-			param::set_cookie('search_cookie',SYS_TIME+2);
+			param::set_cookie('search_cookie',SYS_TIME+$minrefreshtime);
 		}
 		//搜索间隔
 		

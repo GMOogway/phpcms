@@ -202,8 +202,7 @@ class position extends admin {
 			$pos_arr = $this->db_data->get_one(array('id'=>$id,'posid'=>$posid,'modelid'=>$modelid));
 			extract(string2array($pos_arr['data']));
 			$synedit = $pos_arr['synedit'];
-			$show_validator = true;
-			$show_header = true;		
+			$show_validator = $show_header = true;		
 			include $this->admin_tpl('position_item_manage');			
 		}
 	

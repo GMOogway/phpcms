@@ -111,7 +111,7 @@ class content extends foreground {
 				showmessage(L('contributors_checked'), APP_PATH.'index.php?m=member&c=content&a=published');
 			}
 		} else {
-			$show_header = $show_dialog = $show_validator = '';
+			$show_header = $show_dialog = $show_validator = true;
 			$temp_language = L('news','','content');
 			$sitelist = getcache('sitelist','commons');
 			if(!isset($_GET['siteid']) && count($sitelist)>1) {
@@ -242,7 +242,7 @@ class content extends foreground {
 				showmessage(L('update_success'),$forward);
 			}
 		} else {
-			$show_header = $show_dialog = $show_validator = '';
+			$show_header = $show_dialog = $show_validator = true;
 			$temp_language = L('news','','content');
 			//设置cookie 在附件添加处调用
 			param::set_cookie('module', 'content');

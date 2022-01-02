@@ -12,18 +12,13 @@ class index extends admin {
 		$this->admin_login_db = pc_base::load_model('admin_login_model');
 		$this->menu_db = pc_base::load_model('menu_model');
 		$this->panel_db = pc_base::load_model('admin_panel_model');
+		$this->role = $this->get_role_all();
 	}
 	
 	public function init() {
 		$siteid = param::get_cookie('siteid');
 		$userid = $_SESSION['userid'];
 		$admin_username = param::get_cookie('admin_username');
-		$roles = getcache('role','commons');
-		if ($_SESSION['roleid']==1) {
-			$rolename = '<span style="color:#ff0000;">'.$roles[$_SESSION['roleid']].'</span>';
-		} else {
-			$rolename = '<span style="color:#0000ff;">'.$roles[$_SESSION['roleid']].'</span>';
-		}
 		$site = pc_base::load_app_class('sites');
 		$sitelist = $site->get_list($_SESSION['roleid']);
 		$currentsite = $this->get_siteinfo(param::get_cookie('siteid'));
@@ -303,14 +298,30 @@ class index extends admin {
 		define('PC_RELEASE', pc_base::load_config('version','pc_release'));
 		define('CMS_VERSION', pc_base::load_config('version','cms_version'));
 		define('CMS_RELEASE', pc_base::load_config('version','cms_release'));
-		$admin_username = param::get_cookie('admin_username');
-		$roles = getcache('role','commons');
-		$userid = $_SESSION['userid'];
-		if ($_SESSION['roleid']==1) {
-			$rolename = '<span style="color:#ff0000;">'.$roles[$_SESSION['roleid']].'</span>';
-		} else {
-			$rolename = '<span style="color:#0000ff;">'.$roles[$_SESSION['roleid']].'</span>';
+		$where = 'roleid in ('.(is_array(dr_string2array($_SESSION['roleid'])) ? implode(',', dr_string2array($_SESSION['roleid'])) : $_SESSION['roleid']).') and disabled=0';
+		$role = $this->role_db->select($where);
+		if ($role) {
+			foreach ($role as $r) {
+				$info['role'][$r['roleid']] = $this->role[$r['roleid']]['rolename'];
+			}
 		}
+		if (cleck_admin($_SESSION['roleid'])) {
+			$class = 'danger';
+		} else {
+			$class = 'success';
+		}
+		$rolename = '';
+		if(is_array($info['role'])){
+			foreach($info['role'] as $c){
+				if(!$rolename){
+					$rolename .= '<span class="badge badge-'.$class.'">'.$c.'</span>';
+				} else {
+					$rolename .= ' <span class="badge badge-'.$class.'">'.$c.'</span>';
+				}
+			}
+		}
+		$admin_username = param::get_cookie('admin_username');
+		$userid = $_SESSION['userid'];
 		$r = $this->db->get_one(array('userid'=>$userid));
 		$logintime = $r['lastlogintime'];
 		$loginip = $r['lastloginip'];
@@ -594,6 +605,19 @@ class index extends admin {
 		$this->times_db->delete(array('username'=>$username,'isadmin'=>1));
 		$_SESSION['lock_screen'] = 0;
 		exit('1');
+	}
+
+	// 获取角色组
+	public function get_role_all($rid = []) {
+		$this->role_db = pc_base::load_model('admin_role_model');
+		$role = [];
+		$data = $this->role_db->select(array('disabled'=>'0'));
+		if ($data) {
+			foreach ($data as $t) {
+				$role[$t['roleid']] = $t;
+			}
+		}
+		return $role;
 	}
 
 	/**

@@ -42,7 +42,7 @@ class sitemodel extends admin {
 					'use' => 1,
 					'name' => L('用户名'),
 					'width' => '100',
-					'func' => '',
+					'func' => 'author',
 				),
 				'updatetime' => array(
 					'use' => 1,
@@ -90,7 +90,7 @@ class sitemodel extends admin {
 			dr_admin_msg(1,L('add_success'), '', '', 'add');
 		} else {
 			pc_base::load_sys_class('form','',0);
-			$show_header = $show_validator = '';
+			$show_header = $show_validator = true;
 			$style_list = template_list($this->siteid, 0);
 			foreach ($style_list as $k=>$v) {
 				$style_list[$v['dirname']] = $v['name'] ? $v['name'] : $v['dirname'];
@@ -148,7 +148,7 @@ class sitemodel extends admin {
 			dr_json(1, L('update_success'), array('url' => '?m=content&c=sitemodel&a=init&pc_hash='.dr_get_csrf_token()));
 		} else {
 			pc_base::load_sys_class('form','',0);
-			$show_header = $show_validator = '';
+			$show_header = $show_validator = true;
 			$style_list = template_list($this->siteid, 0);
 			foreach ($style_list as $k=>$v) {
 				$style_list[$v['dirname']] = $v['name'] ? $v['name'] : $v['dirname'];
@@ -174,7 +174,7 @@ class sitemodel extends admin {
 					'use' => 1,
 					'name' => L('用户名'),
 					'width' => '100',
-					'func' => '',
+					'func' => 'author',
 				),
 				'updatetime' => array(
 					'use' => 1,
@@ -258,7 +258,7 @@ class sitemodel extends admin {
 					'use' => 1,
 					'name' => L('用户名'),
 					'width' => '100',
-					'func' => '',
+					'func' => 'author',
 				),
 				'updatetime' => array(
 					'use' => 1,
@@ -365,7 +365,7 @@ class sitemodel extends admin {
 	 * 在线帮助
 	 */
 	public function public_help() {
-		$show_header = $show_validator = '';
+		$show_header = $show_validator = true;
 		include $this->admin_tpl('sitemodel_help');
 	}
 	/**

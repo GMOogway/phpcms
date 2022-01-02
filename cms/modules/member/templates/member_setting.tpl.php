@@ -2,15 +2,17 @@
 include $this->admin_tpl('header', 'admin');?>
 <link rel="stylesheet" href="<?php echo JS_PATH;?>bootstrap-switch/css/bootstrap-switch.min.css" media="all" />
 <script type="text/javascript" src="<?php echo JS_PATH;?>bootstrap-switch/js/bootstrap-switch.min.js"></script>
+<link href="<?php echo JS_PATH;?>bootstrap-touchspin/bootstrap.touchspin.css" rel="stylesheet" type="text/css" />
+<script src="<?php echo JS_PATH;?>bootstrap-touchspin/bootstrap.touchspin.js" type="text/javascript"></script>
 <link rel="stylesheet" href="<?php echo JS_PATH;?>jquery-ui/jquery-ui.min.css">
 <script type="text/javascript" src="<?php echo JS_PATH;?>jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript">
 <!--
 $(function(){
-	$.formValidator.initConfig({autotip:true,formid:"myform",onerror:function(msg){}});
-	$("#defualtpoint").formValidator({tipid:"pointtip",onshow:"<?php echo L('input').L('defualtpoint')?>",onfocus:"<?php echo L('defualtpoint').L('between_1_to_8_num')?>"}).regexValidator({regexp:"^\\d{1,8}$",onerror:"<?php echo L('defualtpoint').L('between_1_to_8_num')?>"});
-	$("#defualtamount").formValidator({tipid:"starnumtip",onshow:"<?php echo L('input').L('defualtamount')?>",onfocus:"<?php echo L('defualtamount').L('between_1_to_8_num')?>"}).regexValidator({regexp:"^\\d{1,8}$",onerror:"<?php echo L('defualtamount').L('between_1_to_8_num')?>"});
-	$("#rmb_point_rate").formValidator({tipid:"rmb_point_rateid",onshow:"<?php echo L('input').L('rmb_point_rate')?>",onfocus:"<?php echo L('rmb_point_rate').L('between_1_to_8_num')?>"}).regexValidator({regexp:"^\\d{1,8}$",onerror:"<?php echo L('rmb_point_rate').L('between_1_to_8_num')?>"});
+    $.formValidator.initConfig({autotip:true,formid:"myform",onerror:function(msg){}});
+    $("#defualtpoint").formValidator({tipid:"pointtip",onshow:"<?php echo L('input').L('defualtpoint')?>",onfocus:"<?php echo L('defualtpoint').L('between_1_to_8_num')?>"}).regexValidator({regexp:"^\\d{1,8}$",onerror:"<?php echo L('defualtpoint').L('between_1_to_8_num')?>"});
+    $("#defualtamount").formValidator({tipid:"starnumtip",onshow:"<?php echo L('input').L('defualtamount')?>",onfocus:"<?php echo L('defualtamount').L('between_1_to_8_num')?>"}).regexValidator({regexp:"^\\d{1,8}$",onerror:"<?php echo L('defualtamount').L('between_1_to_8_num')?>"});
+    $("#rmb_point_rate").formValidator({tipid:"rmb_point_rateid",onshow:"<?php echo L('input').L('rmb_point_rate')?>",onfocus:"<?php echo L('rmb_point_rate').L('between_1_to_8_num')?>"}).regexValidator({regexp:"^\\d{1,8}$",onerror:"<?php echo L('rmb_point_rate').L('between_1_to_8_num')?>"});
 });
 //-->
 </script>
@@ -21,7 +23,7 @@ jQuery(document).ready(function() {
 </script>
 <div class="page-content main-content">
 <div class="note note-danger my-content-top-tool">
-    <p><a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=init&pc_hash='+pc_hash+'&is_ajax=1',1);"><?php echo L('更改数据之后需要更新缓存之后才能生效');?></a></p>
+    <p><a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=init&pc_hash='+pc_hash+'&is_ajax=1',1);"><?php echo L('update_cache_all');?></a></p>
 </div>
 <form action="?m=member&c=member_setting&a=manage" class="form-horizontal" method="post" name="myform" id="myform">
 <input name="page" id="dr_page" type="hidden" value="<?php echo $page;?>">
@@ -32,7 +34,10 @@ jQuery(document).ready(function() {
                 <a data-toggle="tab_0" onclick="$('#dr_page').val('0')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('member_setting').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-cog"></i> <?php if (!is_mobile(0)) {echo L('member_setting');}?> </a>
             </li>
             <li<?php if ($page==1) {?> class="active"<?php }?>>
-                <a data-toggle="tab_1" onclick="$('#dr_page').val('1')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('后台列表显示字段').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-table"></i> <?php if (!is_mobile(0)) {echo L('后台列表显示字段');}?> </a>
+                <a data-toggle="tab_1" onclick="$('#dr_page').val('1')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('格式规范').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-user-md"></i> <?php if (!is_mobile(0)) {echo L('格式规范');}?> </a>
+            </li>
+            <li<?php if ($page==2) {?> class="active"<?php }?>>
+                <a data-toggle="tab_2" onclick="$('#dr_page').val('2')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('后台列表显示字段').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-table"></i> <?php if (!is_mobile(0)) {echo L('后台列表显示字段');}?> </a>
             </li>
         </ul>
     </div>
@@ -68,6 +73,24 @@ jQuery(document).ready(function() {
                                 </div>
                             </div>
                             <span class="help-block"><?php echo L('setting_time_limit_desc')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('登录超时时间')?></label>
+                        <div class="col-md-9">
+                            <label><input class="form-control" type="text" name="info[logintime]" id="logintime" value="<?php echo intval($member_setting['logintime']);?>"></label>
+                            <span class="help-block"><?php echo L('单位秒，默认为86400秒，超时之后自动退出账号')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('登录主字段')?></label>
+                        <div class="col-md-9">
+                            <div class="mt-checkbox-inline">
+                                <label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" checked disabled /> <?php echo L('username')?> <span></span></label>
+                                <label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="info[login][field][]" value="phone" <?php if (dr_in_array('phone', (array)$member_setting['login']['field'])){?>checked<?php }?> /> <?php echo L('手机号')?> <span></span></label>
+                                <label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="info[login][field][]" value="email" <?php if (dr_in_array('email', (array)$member_setting['login']['field'])){?>checked<?php }?> /> <?php echo L('email')?> <span></span></label>
+                            </div>
+                            <span class="help-block"><?php echo L('可同时选择多个字段作为登录主字段')?></span>
                         </div>
                     </div>
                     <div class="form-group">
@@ -168,10 +191,127 @@ jQuery(document).ready(function() {
                             <textarea name='info[forgetpassword]' id='forgetpassword' class="form-control" style="width:80%;height:120px;"><?php echo $member_setting['forgetpassword']?></textarea>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('不允许账号的字符串')?></label>
+                        <div class="col-md-9">
+                            <textarea class="form-control" style="height:150px; width:100%;" name="info[notallow]"><?php echo $member_setting['notallow']?></textarea>
+                            <span class="help-block"><?php echo L('设置不允许包含在账号中的字符串，多个字符串以逗号“,”分隔')?></span>
+                        </div>
+                    </div>
 
                 </div>
             </div>
             <div class="tab-pane<?php if ($page==1) {?> active<?php }?>" id="tab_1">
+                <div class="form-body">
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('账号最小长度')?></label>
+                        <div class="col-md-9">
+                            <div class="input-small"><input class="form-control" id="dr_username" type="text" name="info[config][userlen]" value="<?php echo intval($member_setting['config']['userlen'])?>">
+                                <script type="text/javascript">
+                                    $(function(){
+                                        $("#dr_username").TouchSpin({
+                                            buttondown_class: "btn default",
+                                            buttonup_class: "btn default",
+                                            verticalbuttons: false,
+                                            step: 1,
+                                            min: 0,
+                                            max: 50
+                                        });
+                                    });
+                                </script></div>
+                            <span class="help-block"><?php echo L('账号名的最小长度控制，0表示不限制')?></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('账号最大长度')?></label>
+                        <div class="col-md-9">
+                            <div class="input-small"><input class="form-control" id="dr_usernamemax" type="text" name="info[config][userlenmax]" value="<?php echo intval($member_setting['config']['userlenmax'])?>">
+                                <script type="text/javascript">
+                                    $(function(){
+                                        $("#dr_usernamemax").TouchSpin({
+                                            buttondown_class: "btn default",
+                                            buttonup_class: "btn default",
+                                            verticalbuttons: false,
+                                            step: 1,
+                                            min: 0,
+                                            max: 50
+                                        });
+                                    });
+                                </script></div>
+                            <span class="help-block"><?php echo L('账号名的最大长度控制，最大50个字符，0表示不限制')?></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('密码最小长度')?></label>
+                        <div class="col-md-9">
+                            <div class="input-small"><input class="form-control" id="dr_password" type="text" name="info[config][pwdlen]" value="<?php echo intval($member_setting['config']['pwdlen'])?>">
+                                <script type="text/javascript">
+                                    $(function(){
+                                        $("#dr_password").TouchSpin({
+                                            buttondown_class: "btn default",
+                                            buttonup_class: "btn default",
+                                            verticalbuttons: false,
+                                            step: 1,
+                                            min: 0,
+                                            max: 50
+                                        });
+                                    });
+                                </script></div>
+                            <span class="help-block"><?php echo L('密码的最小长度控制，最大设置50位数')?></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('密码最大长度')?></label>
+                        <div class="col-md-9">
+                            <div class="input-small"><input class="form-control" id="dr_passwordmax" type="text" name="info[config][pwdmax]" value="<?php echo intval($member_setting['config']['pwdmax'])?>">
+                                <script type="text/javascript">
+                                    $(function(){
+                                        $("#dr_passwordmax").TouchSpin({
+                                            buttondown_class: "btn default",
+                                            buttonup_class: "btn default",
+                                            verticalbuttons: false,
+                                            step: 1,
+                                            min: 0,
+                                            max: 50
+                                        });
+                                    });
+                                </script></div>
+                            <span class="help-block"><?php echo L('密码的最大长度控制，最大设置50位数')?></span>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('允许账号与密码相同')?></label>
+                        <div class="col-md-9">
+                            <input type="checkbox" name="info[config][user2pwd]" value="1"<?php echo $member_setting['config']['user2pwd'] ? ' checked' : ''?> data-on-text="<?php echo L('允许')?>" data-off-text="<?php echo L('禁止')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+                            <span class="help-block"><?php echo L('针对前端注册或修改密码时的验证')?></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('密码强度（正则）')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control input-large" type="text" name="info[config][pwdpreg]" value="<?php echo $member_setting['config']['pwdpreg']?>">
+                            <span class="help-block"><?php echo L('针对前端注册或修改密码时的强度验证，可以设置自定义正则表达式，例如数字正则表达式格式：/^[0-9]+$/')?></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('账号规则（正则）')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control input-large" type="text" name="info[config][preg]" value="<?php echo $member_setting['config']['preg']?>">
+                            <span class="help-block"><?php echo L('针对前端注册时的账号格式验证，可以设置自定义正则表达式，例如数字正则表达式格式：/^[0-9]+$/')?></span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="tab-pane<?php if ($page==2) {?> active<?php }?>" id="tab_2">
                 <div class="form-body">
 
                     <div class="table-list">

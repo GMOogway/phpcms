@@ -18,7 +18,7 @@ class create_all_html extends admin {
 			dr_admin_msg(0, L('/cache/html/ 无法写入文件'));
 		}
 		// 不是超级管理员
-		/*if ($_SESSION['roleid']!=1) {
+		/*if (!cleck_admin($_SESSION['roleid'])) {
 			dr_admin_msg(0,L('需要超级管理员账号操作'));
 		}*/
 	}
@@ -27,7 +27,7 @@ class create_all_html extends admin {
 	* 一键生成全站
 	*/
 	public function all_update(){
-		$show_header = $show_dialog  = '';
+		$show_header = $show_dialog  = true;
 		$this->site_db = pc_base::load_model('site_model');
 		$data = $this->site_db->get_one(array('siteid'=>$this->siteid));
 		$ishtml = $data['ishtml'];

@@ -1,4 +1,4 @@
-<?php $show_header = $show_validator = $show_scroll = 1; include $this->admin_tpl('header', 'attachment');?>
+<?php $show_header = $show_validator = $show_scroll = true; include $this->admin_tpl('header', 'attachment');?>
 <script src="<?php echo JS_PATH?>assets/ds.min.js"></script>
 <link href="<?php echo JS_PATH?>h5upload/h5upload.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="<?php echo JS_PATH?>layui/css/layui.css" media="all" />

@@ -9,66 +9,115 @@ $show_validator = true;include $this->admin_tpl('header');?>
 	$("#email").formValidator({onshow:"<?php echo L('input').L('email')?>",onfocus:"<?php echo L('email').L('format_incorrect')?>",oncorrect:"<?php echo L('email').L('format_right')?>"}).regexValidator({regexp:"email",datatype:"enum",onerror:"<?php echo L('email').L('format_incorrect')?>"});
   })
 </script>
-<div class="pad_10">
-<div class="common-form">
-<form name="myform" action="?m=admin&c=admin_manage&a=edit" method="post" id="myform">
+<script type="text/javascript">
+jQuery(document).ready(function() {
+    $(":text").removeClass('input-text');
+});
+</script>
+<div class="subnav">
+    <div class="content-menu ib-a blue line-x">
+        <a href='?m=admin&c=admin_manage&a=init&menuid=<?php echo $this->input->get('menuid');?>'><em>管理员管理</em></a>
+    </div>
+</div>
+<div class="page-content main-content">
+<div class="note note-danger my-content-top-tool">
+    <p><?php echo L('管理员账号允许同时拥有多个角色组');?></p>
+</div>
+<form action="?m=admin&c=admin_manage&a=edit" class="form-horizontal" method="post" name="myform" id="myform">
+<input name="page" id="dr_page" type="hidden" value="<?php echo $page;?>">
+<input name="menuid" type="hidden" value="<?php echo $this->input->get('menuid');?>">
 <input type="hidden" name="info[userid]" value="<?php echo $userid?>"></input>
 <input type="hidden" name="info[username]" value="<?php echo $username?>"></input>
-<table width="100%" class="table_form contentWrap">
-<tr>
-<td width="80"><?php echo L('username')?></td> 
-<td><div class="input-group" style="width: 240px;">
-			    <input type="text" readonly="" value="<?php echo $username?>" class="form-control input-text">
-			    <span class="input-group-btn">
-			        <a class="btn red" href="javascript:dr_iframe('变更', '?m=admin&c=admin_manage&a=username_edit&userid=<?php echo $userid?>&pc_hash=<?php echo dr_get_csrf_token()?>', 500, 280);"><i class="fa fa-edit"></i> 变更</a>
-			    </span>
-			    </div></td>
-</tr>
-<tr>
-<td><?php echo L('password')?></td> 
-<td><input type="password" name="info[password]" id="password" class="input-text"></input></td>
-</tr>
-<tr>
-<td><?php echo L('cofirmpwd')?></td> 
-<td><input type="password" name="info[pwdconfirm]" id="pwdconfirm" class="input-text"></input></td>
-</tr>
-<tr>
-<td><?php echo L('email')?></td>
-<td>
-<input type="text" name="info[email]" value="<?php echo $email?>" class="input-text" id="email" size="30"></input>
-</td>
-</tr>
+<input type="hidden" name="info[admin_manage_code]" value="<?php echo $admin_manage_code?>" id="admin_manage_code">
+<div class="portlet light bordered myfbody">
+    <div class="portlet-title tabbable-line">
+        <ul class="nav nav-tabs" style="float:left;">
+            <li<?php if ($page==0) {?> class="active"<?php }?>>
+                <a data-toggle="tab_0" onclick="$('#dr_page').val('0')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('管理员').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-cog"></i> <?php if (!is_mobile(0)) {echo L('管理员');}?> </a>
+            </li>
+        </ul>
+    </div>
+    <div class="portlet-body form">
+        <div class="tab-content">
+            <div class="tab-pane<?php if ($page==0) {?> active<?php }?>" id="tab_0">
 
-<tr>
-<td><?php echo L('realname')?></td>
-<td>
-<input type="text" name="info[realname]" value="<?php echo $realname?>" class="input-text" id="realname"></input>
-</td>
-</tr>
-<?php if ($_SESSION['roleid']==1) {?>
-<tr>
-<td><?php echo L('userinrole')?></td>
-<td>
-<select name="info[roleid]">
-<?php 
-foreach($roles as $role)
-{
-?>
-<option value="<?php echo $role['roleid']?>" <?php echo (($role['roleid']==$roleid) ? 'selected' : '')?>><?php echo $role['rolename']?></option>
-<?php 
-}	
-?>
-</select>
-</td>
-</tr>
-<?php }?>
-</table>
+                <div class="form-body">
 
-    <div class="bk15"></div>
-    <input type="hidden" name="info[admin_manage_code]" value="<?php echo $admin_manage_code?>" id="admin_manage_code"></input>
-    <input name="dosubmit" type="submit" value="<?php echo L('submit')?>" class="dialog" id="dosubmit">
+                    <div class="form-group" id="dr_row_username">
+                        <label class="col-md-2 control-label"><?php echo L('username')?></label>
+                        <div class="col-md-9">
+                            <div class="input-group" style="width: 300px;">
+                                <input class="form-control" type="text" value="<?php echo $username?>" readonly >
+                                <span class="input-group-btn">
+                                    <a class="btn red" href="javascript:dr_iframe('变更', '?m=admin&c=admin_manage&a=username_edit&userid=<?php echo $userid?>&pc_hash=<?php echo dr_get_csrf_token()?>', 500, 280);"><i class="fa fa-edit"></i> 变更</a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" id="dr_row_password">
+                        <label class="col-md-2 control-label"><?php echo L('password')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control input-large" type="password" id="password" name="info[password]" value="" placeholder="留空表示不修改密码" >
+                        </div>
+                    </div>
+                    <div class="form-group" id="dr_row_pwdconfirm">
+                        <label class="col-md-2 control-label"><?php echo L('cofirmpwd')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control input-large" type="password" id="pwdconfirm" name="info[pwdconfirm]" value="" placeholder="留空表示不修改密码" >
+                        </div>
+                    </div>
+                    <div class="form-group" id="dr_row_email">
+                        <label class="col-md-2 control-label"><?php echo L('email')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control input-large" type="text" id="email" name="info[email]" value="<?php echo $email?>" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('realname')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control input-large" type="text" id="realname" name="info[realname]" value="<?php echo $realname?>" >
+                        </div>
+                    </div>
+                    <?php if (cleck_admin($_SESSION['roleid'])) {?>
+                    <div class="form-group <?php if ($userid==1){?>hide<?php }?>" id="dr_row_roleid">
+                        <label class="col-md-2 control-label"><?php echo L('userinrole')?></label>
+                        <div class="col-md-9">
+                            <div class="mt-checkbox-list">
+                                <?php foreach($this->role as $rid=>$role){?>
+                                <label class="mt-checkbox mt-checkbox-outline">
+                                    <input type="checkbox" name="info[roleid][]"<?php echo (($info['role'][$rid]) ? ' checked' : '')?> value="<?php echo $rid?>"> <?php echo $role['rolename']?>
+                                    <span></span>
+                                </label>
+                                <?php }?>
+                            </div>
+                        </div>
+                    </div>
+                    <?php }?>
+
+                </div>
+            </div>
+        </div>
+        <div class="portlet-body form myfooter">
+            <div class="form-actions text-center">
+                <button type="button" id="my_submit" onclick="dr_ajax_submit('?m=admin&c=admin_manage&a=edit&page='+$('#dr_page').val(), 'myform', '2000')" class="btn green"> <i class="fa fa-save"></i> <?php echo L('submit')?></button>
+            </div>
+        </div>
+    </div>
+</div>
 </form>
 </div>
-</div>
+<script type="text/javascript">
+$('body').keydown(function(e){
+    if (e.keyCode == 13) {
+        $('#my_submit').trigger('click');
+    }
+})
+$('.nav-tabs a').click(function (e) {
+    $('.nav-tabs').find('li').removeClass('active');
+    $('.tab-pane').removeClass('active');
+    $(this).parent().addClass('active');
+    $('#'+$(this).attr("data-toggle")).addClass('active');
+})
+</script>
 </body>
 </html>

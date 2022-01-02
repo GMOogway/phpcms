@@ -1,7 +1,7 @@
 <?php 
 defined('IS_ADMIN') or exit('No permission resources.');
-//$show_header = $show_validator = $show_scroll = 1; 
-$show_dialog = $show_header = 1; 
+//$show_header = $show_validator = $show_scroll = true; 
+$show_dialog = $show_header = true; 
 include $this->admin_tpl('header', 'admin');
 $thisExt = isset($this->setting['ext'])?$this->setting['ext']:'';
 $authkey = upload_key('1,'.$thisExt.',0,1,,,,,');

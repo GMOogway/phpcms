@@ -1,5 +1,5 @@
 <?php 
-$show_header = $show_validator = $show_scroll = 1; 
+$show_header = $show_validator = $show_scroll = true; 
 include $this->admin_tpl('header', 'attachment');
 ?>
 <script type="text/javascript" src="<?php echo JS_PATH?>jquery-3.5.1.min.js"></script>

@@ -76,7 +76,7 @@ class plugin extends admin {
 			} else {
 				$submit_url = '?m=admin&c=plugin&a=install&dir='.$dir.'&pc_hash='. dr_get_csrf_token().'&menuid='.$this->input->get('menuid');
 			}	
-				$show_header = 0;
+			$show_header = true;
 			include $this->admin_tpl('plugin_import_confirm');
 		}
 	}
@@ -116,7 +116,7 @@ class plugin extends admin {
 				dr_admin_msg(0,L('plugin_uninstall_fail','','plugin'),'?m=admin&c=plugin');
 			}	
 		} else {
-			$show_header = 0;
+			$show_header = true;
 			$pluginid = intval($this->input->get('pluginid'));
 			$plugin_data =  $this->db->get_one(array('pluginid'=>$pluginid));
 			include $this->admin_tpl('plugin_delete_confirm');			
@@ -274,7 +274,7 @@ class plugin extends admin {
 		$pre_page = $p <= 1 ? 1 : $p - 1;
 		$next_page = $p >= $pages ? $pages : $p + 1;
 		$pages = '<a class="a1">'.$data['total'].L('plugin_item','','plugin').'</a> <a href="?m=admin&c=plugin&a=appcenter&p=1">'.L('plugin_firstpage').'</a> <a href="?m=admin&c=plugin&a=appcenter&p='.$pre_page.'">'.L('plugin_prepage').'</a> <a href="?m=admin&c=plugin&a=appcenter&p='.$next_page.'">'.L('plugin_nextpage').'</a> <a href="?m=admin&c=plugin&a=appcenter&p='.$pages.'">'.L('plugin_lastpage').'</a>';
-		$show_header = 1;
+		$show_header = true;
 		include $this->admin_tpl('plugin_appcenter');
 	}
 	

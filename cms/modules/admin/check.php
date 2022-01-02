@@ -26,7 +26,7 @@ class check extends admin {
     }
     
     public function init() {
-        $show_header = '';
+        $show_header = true;
         $list = $this->_list;
         include $this->admin_tpl('check_index');
     }
@@ -187,6 +187,7 @@ class check extends admin {
                 $this->db->query('ALTER TABLE `'.$prefix.'admin` CHANGE `encrypt` `encrypt` VARCHAR(50) NOT NULL COMMENT \'随机加密码\';');
                 $this->db->query('ALTER TABLE `'.$prefix.'admin` CHANGE `email` `email` VARCHAR(50) NOT NULL COMMENT \'邮箱地址\';');
                 $this->db->query('ALTER TABLE `'.$prefix.'admin` CHANGE `lastloginip` `lastloginip` VARCHAR(200) NOT NULL COMMENT \'最后登录Ip\';');
+                $this->db->query('ALTER TABLE `'.$prefix.'admin` CHANGE `roleid` `roleid` VARCHAR(255) NOT NULL COMMENT \'权限id\';');
                 $this->db->query('ALTER TABLE `'.$prefix.'member` CHANGE `encrypt` `encrypt` VARCHAR(50) NOT NULL COMMENT \'随机加密码\';');
                 $this->db->query('ALTER TABLE `'.$prefix.'member` CHANGE `email` `email` char(50) NOT NULL COMMENT \'邮箱地址\';');
                 $this->db->query('ALTER TABLE `'.$prefix.'member` CHANGE `regip` `regip` char(200) NOT NULL COMMENT \'注册Ip\';');

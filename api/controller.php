@@ -175,7 +175,7 @@ if (intval($userid)) {
 
         /* 删除文件 */
         case 'deletefile':
-            $_SESSION['roleid']==1 ? $result = include("ueditor/action_delete.php") : $result = json_encode(array('state'=> '需要超级管理员账号操作'), JSON_UNESCAPED_UNICODE);
+            cleck_admin($_SESSION['roleid']) ? $result = include("ueditor/action_delete.php") : $result = json_encode(array('state'=> '需要超级管理员账号操作'), JSON_UNESCAPED_UNICODE);
             break;
 
         default:

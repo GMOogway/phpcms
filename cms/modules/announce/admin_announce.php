@@ -47,7 +47,7 @@ class admin_announce extends admin {
 				$template_list[$v['dirname']] = $v['name'] ? $v['name'] : $v['dirname'];
 				unset($template_list[$k]);
 			}
-			$show_header = $show_validator = $show_scroll = 1;
+			$show_header = $show_validator = $show_scroll = true;
 			pc_base::load_sys_class('form', '', 0);
 			include $this->admin_tpl('announce_add');
 		}
@@ -73,7 +73,7 @@ class admin_announce extends admin {
 				$template_list[$v['dirname']] = $v['name'] ? $v['name'] : $v['dirname'];
 				unset($template_list[$k]);
 			}
-			$show_header = $show_validator = $show_scroll = 1;
+			$show_header = $show_validator = $show_scroll = true;
 			include $this->admin_tpl('announce_edit');
 		}
 	}

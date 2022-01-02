@@ -59,8 +59,7 @@ class payment extends admin {
 		} else {
 			$infos = $this->method->get_payment($_GET['code']);
 			extract($infos);
-			$show_header = true;
-			$show_validator = true;
+			$show_header = $show_validator = true;
 			include $this->admin_tpl('payment_detail');			
 		}
 	}
@@ -96,8 +95,7 @@ class payment extends admin {
 			$infos = $this->db->get_one(array('pay_id'=>$pay_id));
 			extract($infos);
 			$config = string2array($config);
-			$show_header = true;
-			$show_validator = true;
+			$show_header = $show_validator = true;
 			include $this->admin_tpl('payment_detail');			
 		}
 	}
@@ -199,8 +197,7 @@ class payment extends admin {
 			$infos = $this->account_db->update(array('discount'=>$discount),array('id'=>$id));
 			dr_admin_msg(1,L('public_discount_succ'), '', '', 'discount');			
 		} else {
-			$show_header = true;
-			$show_validator = true;
+			$show_header = $show_validator = true;
 			$id = intval($_GET['id']);
 			$infos = $this->account_db->get_one(array('id'=>$id));
 			extract($infos);

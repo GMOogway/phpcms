@@ -11,6 +11,7 @@ class admin_manage extends admin {
 		$this->admin_login_db = pc_base::load_model('admin_login_model');
 		$this->role_db = pc_base::load_model('admin_role_model');
 		$this->op = pc_base::load_app_class('admin_op');
+		$this->role = $this->get_role_all();
 	}
 	
 	/**
@@ -21,69 +22,111 @@ class admin_manage extends admin {
 		$admin_username = param::get_cookie('admin_username');
 		$page = $this->input->get('page') ? intval($this->input->get('page')) : '1';
 		$infos = $this->db->listinfo('', '', $page, SYS_ADMIN_PAGESIZE);
+		if ($infos) {
+			foreach ($infos as $i => $t) {
+				$where = 'roleid in ('.(is_array(dr_string2array($t['roleid'])) ? implode(',', dr_string2array($t['roleid'])) : $t['roleid']).') and disabled=0';
+				$role = $this->role_db->select($where);
+				if ($role) {
+					foreach ($role as $r) {
+						$infos[$i]['role'][$r['roleid']] = $this->role[$r['roleid']]['rolename'];
+					}
+				}
+			}
+		}
 		$pages = $this->db->pages;
 		$roles = getcache('role','commons');
 		include $this->admin_tpl('admin_list');
 	}
 
-    // 修改账号
-    public function username_edit() {
-        $show_header = '';
+	// 修改账号
+	public function username_edit() {
+		$show_header = true;
 
-        $userid = intval($this->input->get('userid'));
-        $info = $this->db->get_one(array('userid'=>$userid));
-        extract($info);	
-        if (!$info) {
-            dr_json(0, L('该用户不存在'));
-        }
+		$userid = intval($this->input->get('userid'));
+		$info = $this->db->get_one(array('userid'=>$userid));
+		extract($info);	
+		if (!$info) {
+			dr_json(0, L('该用户不存在'));
+		}
 
-        if (IS_POST) {
-            $name = trim(dr_safe_filename($this->input->post('name')));
-            if (!$name) {
-                dr_json(0, L('新账号不能为空'));
-            } elseif ($info['username'] == $name) {
-                dr_json(0, L('新账号不能和原始账号相同'));
-            } elseif ($this->db->count(array('username'=>$name))) {
-                dr_json(0, L('新账号'.$name.'已经注册'));
-            }
+		if (IS_POST) {
+			$name = trim(dr_safe_filename($this->input->post('name')));
+			if (!$name) {
+				dr_json(0, L('新账号不能为空'), array('field' => 'name'));
+			} elseif ($info['username'] == $name) {
+				dr_json(0, L('新账号不能和原始账号相同'), array('field' => 'name'));
+			} elseif ($this->db->count(array('username'=>$name))) {
+				dr_json(0, L('新账号'.$name.'已经注册'), array('field' => 'name'));
+			}
+			$rt = $this->check_username($name);
+			if (!$rt['code']) {
+				dr_json(0, $rt['msg'], array('field' => 'name'));
+			}
 
-            $this->db->update(array('username'=>$name), array('userid'=>$userid));
+			$this->db->update(array('username'=>$name), array('userid'=>$userid));
 
-            dr_json(1, L('操作成功'));
-        }
+			dr_json(1, L('操作成功'));
+		}
 
-        include $this->admin_tpl('admin_edit_username');exit;
-    }
+		include $this->admin_tpl('admin_edit_username');exit;
+	}
 	
 	/**
 	 * 添加管理员
 	 */
 	public function add() {
-		if($this->input->post('dosubmit')) {
+		if(IS_AJAX_POST) {
 			if($this->check_admin_manage_code()==false){
-				dr_admin_msg(0,"error auth code");
+				dr_json(0, "error auth code");
 			}
-			$info = array();
-			if(!$this->op->checkname($this->input->post('info')['username'])){
-				dr_admin_msg(0,L('admin_already_exists'));
+			$info = $this->input->post('info');
+			$rs = $this->check_username($info['username']);
+			if (!$rs['code']) {
+				dr_json(0, $rs['msg'], array('field' => 'username'));
 			}
-			$info = checkuserinfo($this->input->post('info'));		
+			if(!$this->op->checkname($info['username'])){
+				dr_json(0, L('admin_already_exists'), array('field' => 'username'));
+			}
+			if(!$info['password']){
+				dr_json(0, L('password').L('empty'), array('field' => 'password'));
+			}
+			if(!$info['pwdconfirm']){
+				dr_json(0, L('cofirmpwd').L('empty'), array('field' => 'pwdconfirm'));
+			}
+			if($info['password']!=$info['pwdconfirm']){
+				dr_json(0, L('两次密码不同'), array('field' => 'pwdconfirm'));
+			}
+			$rs = $this->check_password($info['password'], $info['username']);
+			if (!$rs['code']) {
+				dr_json(0, $rs['msg'], array('field' => 'password'));
+			}
+			if(!$info['email']){
+				dr_json(0, L('email').L('empty'), array('field' => 'email'));
+			}
+			if(!$this->check_email($info['email'])){
+				dr_json(0, L('email').L('格式不正确'), array('field' => 'email'));
+			}
+			if (!$info['roleid']) {
+				dr_json(0, L('至少要选择一个角色组'), array('field' => 'roleid'));
+			}
+			$info = checkuserinfo($info);
 			if(!checkpasswd($info['password'])){
-				dr_admin_msg(0,L('pwd_incorrect'));
+				dr_json(0, L('pwd_incorrect'), array('field' => 'password'));
 			}
 			$passwordinfo = password($info['password']);
 			$info['password'] = $passwordinfo['password'];
 			$info['encrypt'] = $passwordinfo['encrypt'];
 			
-			$admin_fields = array('username', 'email', 'password', 'encrypt','roleid','realname');
+			$admin_fields = array('username', 'email', 'password', 'encrypt', 'roleid', 'realname');
 			foreach ($info as $k=>$value) {
 				if (!in_array($k, $admin_fields)){
 					unset($info[$k]);
 				}
 			}
+			$info['roleid'] = dr_array2string($info['roleid']);
 			$this->db->insert($info);
 			if($this->db->insert_id()){
-				dr_admin_msg(1,L('operation_success'),'?m=admin&c=admin_manage');
+				dr_json(1, L('operation_success'), array('url' => '?m=admin&c=admin_manage&a=init&menuid='.$this->input->post('menuid').'&page='.(int)$this->input->post('page').'&pc_hash='.dr_get_csrf_token()));
 			}
 		} else {
 			$roles = $this->role_db->select(array('disabled'=>'0'));
@@ -97,29 +140,57 @@ class admin_manage extends admin {
 	 * 修改管理员
 	 */
 	public function edit() {
-		if($this->input->post('dosubmit')) {
+		if(IS_AJAX_POST) {
 			if($this->check_admin_manage_code()==false){
-				dr_admin_msg(0,"error auth code");
+				dr_json(0, "error auth code");
 			}
-			$memberinfo = $info = array();			
-			$info = checkuserinfo($this->input->post('info'));
-			if(isset($info['password']) && !empty($info['password']))
-			{
+			$memberinfo = array();
+			$info = $this->input->post('info');
+			if(!$info['email']){
+				dr_json(0, L('email').L('empty'), array('field' => 'email'));
+			}
+			if(!$this->check_email($info['email'])){
+				dr_json(0, L('email').L('格式不正确'), array('field' => 'email'));
+			}
+			if (!$info['roleid']) {
+				dr_json(0, L('至少要选择一个角色组'), array('field' => 'roleid'));
+			}
+			$info = checkuserinfo($info);
+			if(isset($info['password']) && !empty($info['password'])){
+				$rs = $this->check_password($info['password'], $info['username']);
+				if (!$rs['code']) {
+					dr_json(0, $rs['msg'], array('field' => 'password'));
+				}
+				if($info['password']!=$info['pwdconfirm']){
+					dr_json(0, L('两次密码不同'), array('field' => 'pwdconfirm'));
+				}
 				$this->op->edit_password($info['userid'], $info['password']);
 			}
 			$userid = $info['userid'];
-			$admin_fields = array('username', 'email', 'roleid','realname');
+			$admin_fields = array('username', 'email', 'roleid', 'realname');
 			foreach ($info as $k=>$value) {
 				if (!in_array($k, $admin_fields)){
 					unset($info[$k]);
 				}
 			}
+			if ($userid > 1) {
+				$info['roleid'] = dr_array2string($info['roleid']);
+			} else {
+				unset($info['roleid']);
+			}
 			$this->db->update($info,array('userid'=>$userid));
-			dr_admin_msg(1,L('operation_success'),'','','edit');
+			dr_json(1, L('operation_success'), array('url' => '?m=admin&c=admin_manage&a=init&menuid='.$this->input->post('menuid').'&page='.(int)$this->input->post('page').'&pc_hash='.dr_get_csrf_token()));
 		} else {
 			$info = $this->db->get_one(array('userid'=>$this->input->get('userid')));
-			extract($info);	
-			$roles = $this->role_db->select(array('disabled'=>'0'));	
+			$where = 'roleid in ('.(is_array(dr_string2array($info['roleid'])) ? implode(',', dr_string2array($info['roleid'])) : $info['roleid']).') and disabled=0';
+			$role = $this->role_db->select($where);
+			if ($role) {
+				foreach ($role as $r) {
+					$info['role'][$r['roleid']] = $this->role[$r['roleid']]['rolename'];
+				}
+			}
+			extract($info);
+			$roles = $this->role_db->select(array('disabled'=>'0'));
 			$show_header = true;
 			$admin_manage_code = $this->get_admin_manage_code();
 			include $this->admin_tpl('admin_edit');		
@@ -133,7 +204,8 @@ class admin_manage extends admin {
 		$userid = intval($this->input->get('userid'));
 		if($userid == '1') dr_admin_msg(0,L('this_object_not_del'), HTTP_REFERER);
 		$this->db->delete(array('userid'=>$userid));
-		dr_admin_msg(1,L('admin_cancel_succ'));
+		$this->admin_login_db->delete(array('uid'=>$userid));
+		dr_admin_msg(1,L('admin_cancel_succ'), HTTP_REFERER);
 	}
 
 	/**
@@ -180,16 +252,30 @@ class admin_manage extends admin {
 	 * 管理员自助修改密码
 	 */
 	public function public_edit_pwd() {
+		$show_header = true;
 		$userid = $_SESSION['userid'];
-		if($this->input->post('dosubmit')) {
-			$r = $this->db->get_one(array('userid'=>$userid),'password,encrypt');
-			if (password($this->input->post('old_password'),$r['encrypt']) !== $r['password']) dr_admin_msg(0,L('old_password_wrong'),HTTP_REFERER);
-			if($this->input->post('new_password') && !empty($this->input->post('new_password'))) {
-				if($this->op->edit_password($userid, $this->input->post('new_password'))) {
+		if(IS_AJAX_POST) {
+			$old_password = dr_safe_password($this->input->post('old_password'));
+			$new_password = dr_safe_password($this->input->post('new_password'));
+			$new_pwdconfirm = dr_safe_password($this->input->post('new_pwdconfirm'));
+			$r = $this->db->get_one(array('userid'=>$userid),'username,password,encrypt');
+			if (password($old_password,$r['encrypt']) !== $r['password']) dr_json(0,L('old_password_wrong'), array('field' => 'old_password'));
+			if ($old_password == $new_password) {
+				dr_json(0, L('旧密码不能与新密码相同'), array('field' => 'new_password'));
+			}
+			$rs = $this->check_password($new_password, $r['username']);
+			if (!$rs['code']) {
+				dr_json(0, $rs['msg'], array('field' => 'new_password'));
+			}
+			if($new_password!=$new_pwdconfirm){
+				dr_json(0, L('两次密码不同'), array('field' => 'new_pwdconfirm'));
+			}
+			if($new_password) {
+				if($this->op->edit_password($userid, $new_password)) {
 					$this->admin_login_db->update(array('is_login' => SYS_TIME, 'is_repwd' => SYS_TIME, 'updatetime' => SYS_TIME), array('uid'=>$userid));
 				}
 			}
-			dr_admin_msg(1,L('password_edit_succ_logout'),'?m=admin&c=index&a=public_logout');
+			dr_json(1,L('password_edit_succ_logout'), array('url' => '?m=admin&c=index&a=public_logout'));
 		} else {
 			$info = $this->db->get_one(array('userid'=>$userid));
 			extract($info);
@@ -201,8 +287,9 @@ class admin_manage extends admin {
 	 * 编辑用户信息
 	 */
 	public function public_edit_info() {
+		$show_header = true;
 		$userid = $_SESSION['userid'];
-		if($this->input->post('dosubmit')) {
+		if(IS_AJAX_POST) {
 			$admin_fields = array('email','realname','lang');
 			$info = array();
 			$info = $this->input->post('info');
@@ -214,7 +301,7 @@ class admin_manage extends admin {
 			}
 			$this->db->update($info,array('userid'=>$userid));
 			param::set_cookie('sys_lang', $info['lang'],SYS_TIME+86400*30);
-			dr_admin_msg(1,L('operation_success'),HTTP_REFERER);			
+			dr_json(1,L('operation_success'), array('url' => HTTP_REFERER));
 		} else {
 			$info = $this->db->get_one(array('userid'=>$userid));
 			extract($info);
@@ -283,6 +370,69 @@ class admin_manage extends admin {
 		$pc_auth_key = md5(SYS_KEY.'adminuser');
 		$code = sys_auth("adminuser_".$this->input->get('pc_hash')."_".time(), 'ENCODE', $pc_auth_key);
 		return $code;
-	}	
+	}
+
+	// 验证账号
+	public function check_username($value) {
+
+		if (!$value) {
+			return dr_return_data(0, L('用户名不能为空'), array('field' => 'username'));
+		} elseif (strpos($value, '"') !== false || strpos($value, '\'') !== false) {
+			// 引号判断
+			return dr_return_data(0, L('用户名存在非法字符'), array('field' => 'username'));
+		} elseif (mb_strlen($value) < 2) {
+			// 验证用户名长度
+			return dr_return_data(0, L('用户名长度不能小于2位，当前'.mb_strlen($value).'位'), array('field' => 'username'));
+		} elseif (mb_strlen($value) > 20) {
+			// 验证用户名长度
+			return dr_return_data(0, L('用户名长度不能大于20位，当前'.mb_strlen($value).'位'), array('field' => 'username'));
+		}
+
+		return dr_return_data(1, 'ok');
+	}
+
+	// 验证账号的密码
+	public function check_password($value, $username) {
+
+		if (!$value) {
+			return dr_return_data(0, L('密码不能为空'), array('field' => 'password'));
+		} elseif ($value == $username) {
+			return dr_return_data(0, L('密码不能与用户名相同'), array('field' => 'password'));
+		} elseif (mb_strlen($value) < 6) {
+			return dr_return_data(0, L('密码长度不能小于6位，当前'.mb_strlen($value).'位'), array('field' => 'password'));
+		} elseif (mb_strlen($value) > 20) {
+			return dr_return_data(0, L('密码长度不能大于20位，当前'.mb_strlen($value).'位'), array('field' => 'username'));
+		}
+
+		return dr_return_data(1, 'ok');
+	}
+
+	// 验证邮件地址
+	public function check_email($value) {
+
+		if (!$value) {
+			return false;
+		} elseif (!preg_match('/^[\w\-\.]+@[\w\-\.]+(\.\w+)+$/', $value)) {
+			return false;
+		} elseif (strpos($value, '"') !== false || strpos($value, '\'') !== false) {
+			return false;
+		}
+
+		return true;
+	}
+
+	// 获取角色组
+	public function get_role_all($rid = []) {
+
+		$role = [];
+		$data = $this->role_db->select(array('disabled'=>'0'));
+		if ($data) {
+			foreach ($data as $t) {
+				$role[$t['roleid']] = $t;
+			}
+		}
+
+		return $role;
+	}
 }
 ?>

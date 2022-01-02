@@ -138,8 +138,7 @@ class role extends admin {
 				$menu->init($result);
 				$categorys = $menu->get_tree(0, $str);
 			}
-			$show_header = true;
-			$show_scroll = true;
+			$show_header = $show_scroll = true;
 			include $this->admin_tpl('role_priv');
 		}
 	}

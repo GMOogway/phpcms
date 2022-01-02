@@ -14,14 +14,14 @@ class create_html extends admin {
 		$this->siteid = $this->get_siteid();
 		$this->categorys = getcache('category_content_'.$this->siteid,'commons');
 		// 不是超级管理员
-		/*if ($_SESSION['roleid']!=1) {
+		/*if (!cleck_admin($_SESSION['roleid'])) {
 			dr_admin_msg(0,L('需要超级管理员账号操作'));
 		}*/
 	}
 	
 	public function update_urls() {
 		$page = max(0, intval($this->input->get('page')));
-		$show_header = $show_dialog  = '';
+		$show_header = $show_dialog  = true;
 		$admin_username = param::get_cookie('admin_username');
 		$this->model_db = pc_base::load_model('sitemodel_model');
 		$module = $this->model_db->get_one(array('siteid'=>$this->siteid,'type'=>0,'disabled'=>0),'modelid','modelid');
@@ -73,7 +73,7 @@ class create_html extends admin {
 			$todo_url = '?m=content&c=create_html&a=public_show_add&pagesize='.$pagesize.'&modelid='.$modelid.'&catids='.$catids.'&fromdate='.$fromdate.'&todate='.$todate.'&fromid='.$fromid.'&toid='.$toid;
 			include $this->admin_tpl('show_html');
 		} else {
-			$show_header = $show_dialog  = '';
+			$show_header = $show_dialog  = true;
 			$admin_username = param::get_cookie('admin_username');
 			$this->model_db = pc_base::load_model('sitemodel_model');
 			$module = $this->model_db->get_one(array('siteid'=>$this->siteid,'type'=>0,'disabled'=>0),'modelid','modelid');
@@ -174,7 +174,7 @@ class create_html extends admin {
 			$todo_url = '?m=content&c=create_html&a=public_category_add&maxsize='.$maxsize.'&catids='.$catids;
 			include $this->admin_tpl('show_html');
 		} else {
-			$show_header = $show_dialog  = '';
+			$show_header = $show_dialog  = true;
 			$admin_username = param::get_cookie('admin_username');
 			$modelid = $this->input->get('modelid') ? intval($this->input->get('modelid')) : 0;
 			
@@ -319,7 +319,7 @@ class create_html extends admin {
 	* 批量生成内容页
 	*/
 	public function public_batch_show_add() {
-		$show_header = $show_dialog = $show_pc_hash = '';
+		$show_header = $show_dialog = $show_pc_hash = true;
 		$todo_url = '?m=content&c=create_html&a=public_batch_show&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash');
 		include $this->admin_tpl('show_url');
 	}
@@ -551,7 +551,7 @@ class create_html extends admin {
 	
 	// 统一设置URL规则
 	public function public_batch_category() {
-		$show_header = $show_dialog  = '';
+		$show_header = $show_dialog  = true;
 		if(IS_AJAX_POST) {
 			$setting = $this->input->post('setting');
 			$this->category_db = pc_base::load_model('category_model');
@@ -581,7 +581,7 @@ class create_html extends admin {
 	}
 	// 按栏目设置URL规则
 	public function public_html_index() {
-		$show_header = $show_dialog  = '';
+		$show_header = $show_dialog  = true;
 		$tree = pc_base::load_sys_class('tree');
 		$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
 		$tree->nbsp = '&nbsp;&nbsp;&nbsp;';
@@ -621,7 +621,7 @@ class create_html extends admin {
 		include $this->admin_tpl('module_content_html');
 	}
 	public function public_html_edit() {
-		$show_header = $show_dialog  = '';
+		$show_header = $show_dialog  = true;
 		$share = intval($this->input->get('share'));
 		$catid = intval($this->input->get('catid'));
 		$this->category_db = pc_base::load_model('category_model');
@@ -652,7 +652,7 @@ class create_html extends admin {
 		dr_json(1, L($v ? '静态模式' : '动态模式'), array('value' => $v, 'share' => 1));
 	}
 	public function public_index_edit() {
-		$show_header = $show_dialog  = '';
+		$show_header = $show_dialog  = true;
 		$share = intval($this->input->get('share'));
 		$this->site_db = pc_base::load_model('site_model');
 		$row = $this->site_db->get_one(array('siteid'=>$this->siteid));
@@ -675,7 +675,7 @@ class create_html extends admin {
 		dr_json(1, L($v ? '静态模式' : '动态模式'), array('value' => $v, 'share' => 1));
 	}
 	public function public_rule_edit() {
-		$show_header = $show_dialog  = '';
+		$show_header = $show_dialog  = true;
 		$share = intval($this->input->get('share'));
 		$catid = intval($this->input->get('catid'));
 		$value = $this->input->get('value');
@@ -781,7 +781,7 @@ class create_html extends admin {
 	}
 	// 提取tag
 	public function public_tag_index() {
-		$show_header = $show_dialog  = '';
+		$show_header = $show_dialog  = true;
 		$modelid = intval($this->input->get('modelid'));
 		$tree = pc_base::load_sys_class('tree');
 		$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
@@ -804,7 +804,7 @@ class create_html extends admin {
 	}
 	// 提取tag
 	public function public_tag_edit() {
-		$show_header = $show_dialog  = '';
+		$show_header = $show_dialog  = true;
 		$modelid = intval($this->input->get('modelid'));
 		$page = (int)$this->input->get('page');
 		$psize = 10; // 每页处理的数量
@@ -864,7 +864,7 @@ class create_html extends admin {
 	}
 	// 提取缩略图
 	public function public_thumb_index() {
-		$show_header = $show_dialog  = '';
+		$show_header = $show_dialog  = true;
 		$modelid = intval($this->input->get('modelid'));
 		$tree = pc_base::load_sys_class('tree');
 		$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
@@ -887,7 +887,7 @@ class create_html extends admin {
 	}
 	// 提取缩略图
 	public function public_thumb_edit() {
-		$show_header = $show_dialog  = '';
+		$show_header = $show_dialog  = true;
 		$modelid = intval($this->input->get('modelid'));
 		$page = (int)$this->input->get('page');
 		$psize = 100; // 每页处理的数量
@@ -948,7 +948,7 @@ class create_html extends admin {
 	}
 	// 提取描述信息
 	public function public_desc_index() {
-		$show_header = $show_dialog  = '';
+		$show_header = $show_dialog  = true;
 		$modelid = intval($this->input->get('modelid'));
 		$tree = pc_base::load_sys_class('tree');
 		$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
@@ -971,7 +971,7 @@ class create_html extends admin {
 	}
 	// 提取描述信息
 	public function public_desc_edit() {
-		$show_header = $show_dialog  = '';
+		$show_header = $show_dialog  = true;
 		$modelid = intval($this->input->get('modelid'));
 		$page = (int)$this->input->get('page');
 		$psize = 100; // 每页处理的数量
@@ -1036,7 +1036,7 @@ class create_html extends admin {
 	}
 	// 提取变更栏目
 	public function public_cat_index() {
-		$show_header = $show_dialog  = '';
+		$show_header = $show_dialog  = true;
 		$modelid = intval($this->input->get('modelid'));
 		$tree = pc_base::load_sys_class('tree');
 		$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
@@ -1073,7 +1073,7 @@ class create_html extends admin {
 	}
 	// 提取变更栏目
 	public function public_cat_edit() {
-		$show_header = $show_dialog  = '';
+		$show_header = $show_dialog  = true;
 		$modelid = intval($this->input->get('modelid'));
 		$page = (int)$this->input->get('page');
 		$psize = 100; // 每页处理的数量
@@ -1132,7 +1132,7 @@ class create_html extends admin {
 	}
 	// 批量删除
 	public function public_del_index() {
-		$show_header = $show_dialog  = '';
+		$show_header = $show_dialog  = true;
 		$modelid = intval($this->input->get('modelid'));
 		$tree = pc_base::load_sys_class('tree');
 		$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
@@ -1155,7 +1155,7 @@ class create_html extends admin {
 	}
 	// 批量删除
 	public function public_del_edit() {
-		$show_header = $show_dialog  = '';
+		$show_header = $show_dialog  = true;
 		$modelid = intval($this->input->get('modelid'));
 		$page = (int)$this->input->get('page');
 		$psize = 100; // 每页处理的数量

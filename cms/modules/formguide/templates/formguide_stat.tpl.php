@@ -1,6 +1,6 @@
 <?php 
 defined('IS_ADMIN') or exit('No permission resources.');
-$show_header = 1;
+$show_header = true;
 include $this->admin_tpl('header', 'admin');
 ?>
 <div class="pad-10">

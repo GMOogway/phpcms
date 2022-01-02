@@ -11,7 +11,7 @@ include $this->admin_tpl('header','admin');?>
             <li<?php if ($page==0) {?> class="active"<?php }?>>
                 <a data-toggle="tab_0"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('according_model').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-th-large"></i> <?php if (!is_mobile(0)) {echo L('according_model');}?> </a>
             </li>
-            <?php if($_SESSION['roleid']==1 && ADMIN_FOUNDERS && dr_in_array($_SESSION['userid'], ADMIN_FOUNDERS)) {?>
+            <?php if(cleck_admin($_SESSION['roleid']) && ADMIN_FOUNDERS && dr_in_array($_SESSION['userid'], ADMIN_FOUNDERS)) {?>
             <li<?php if ($page==1) {?> class="active"<?php }?>>
                 <a data-toggle="tab_1"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('按字段批量替换').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-database"></i> <?php if (!is_mobile(0)) {echo L('按字段批量替换');}?> </a>
             </li>
@@ -53,7 +53,7 @@ include $this->admin_tpl('header','admin');?>
                                 <button type="button" onclick="iframe_show('<?php echo L('批量操作')?>','?m=content&c=create_html&a=public_thumb_index&modelid=<?php echo $_v['modelid'];?>')" class="btn green btn-xs"> <i class="fa fa-photo"></i> <?php echo L('批量提取缩略图')?> </button>
                                 <button type="button" onclick="iframe_show('<?php echo L('批量操作')?>','?m=content&c=create_html&a=public_tag_index&modelid=<?php echo $_v['modelid'];?>')" class="btn yellow btn-xs"> <i class="fa fa-tag"></i> <?php echo L('批量提取关键词')?> </button>
                                 <?php }?>
-                                <?php if($_SESSION['roleid']==1 && ADMIN_FOUNDERS && dr_in_array($_SESSION['userid'], ADMIN_FOUNDERS)) {?>
+                                <?php if(cleck_admin($_SESSION['roleid']) && ADMIN_FOUNDERS && dr_in_array($_SESSION['userid'], ADMIN_FOUNDERS)) {?>
                                 <button type="button" onclick="iframe_show('<?php echo L('批量操作')?>','?m=content&c=create_html&a=public_del_index&modelid=<?php echo $_v['modelid'];?>')" class="btn red btn-xs"> <i class="fa fa-trash"></i> <?php echo L('批量彻底删除内容')?> </button>
                                 <button type="button" onclick="iframe_show('<?php echo L('批量操作')?>','?m=content&c=create_html&a=public_cat_index&modelid=<?php echo $_v['modelid'];?>')" class="btn green btn-xs"> <i class="fa fa-reorder"></i> <?php echo L('批量变更栏目')?> </button>
                                 <?php }?>

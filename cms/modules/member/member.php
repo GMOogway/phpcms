@@ -77,12 +77,6 @@ class member extends admin {
 			$sitelist[$k] = $v['name'];
 		}
 		
-		//如果是超级管理员角色，显示所有用户，否则显示当前站点用户
-		if($_SESSION['roleid'] != 1) {
-			$siteid = get_siteid();
-			$where[] = "`siteid` = '$siteid'";
-		}
-		
 		$status = isset($_GET['status']) ? $_GET['status'] : '';
 		$amount_from = isset($_GET['amount_from']) ? $_GET['amount_from'] : '';
 		$amount_to = isset($_GET['amount_to']) ? $_GET['amount_to'] : '';
@@ -100,8 +94,8 @@ class member extends admin {
 		foreach ($modellistarr as $k=>$v) {
 			$modellist[$k] = $v['name'];
 		}
-				
-		if (isset($_GET['search'])) {
+
+		if (isset($_GET['dosubmit'])) {
 			
 			//默认选取一个月内的用户，防止用户量过大给数据造成灾难
 			$where_start_time = strtotime($start_time) ? strtotime($start_time) : 0;
@@ -119,7 +113,7 @@ class member extends admin {
 			}
 			
 			//如果是超级管理员角色，显示所有用户，否则显示当前站点用户
-			if($_SESSION['roleid'] == 1) {
+			if(cleck_admin($_SESSION['roleid'])) {
 				if(!empty($siteid)) {
 					if ($siteid && is_array($siteid)) {
 						$sidin = [];
@@ -248,12 +242,16 @@ class member extends admin {
         if (IS_POST) {
             $name = trim(dr_safe_filename($this->input->post('name')));
             if (!$name) {
-                dr_json(0, L('新账号不能为空'));
+                dr_json(0, L('新账号不能为空'), array('field' => 'name'));
             } elseif ($member['username'] == $name) {
-                dr_json(0, L('新账号不能和原始账号相同'));
+                dr_json(0, L('新账号不能和原始账号相同'), array('field' => 'name'));
             } elseif ($this->db->count(array('username'=>$name))) {
-                dr_json(0, L('新账号'.$name.'已经注册'));
+                dr_json(0, L('新账号'.$name.'已经注册'), array('field' => 'name'));
             }
+			$rt = $this->check_username($name);
+			if (!$rt['code']) {
+				dr_json(0, $rt['msg'], array('field' => 'name'));
+			}
 
             $this->db->update(array('username'=>$name), array('userid'=>$userid));
 
@@ -347,7 +345,7 @@ class member extends admin {
 			$userid = $info['userid'];
 			
 			//如果是超级管理员角色，显示所有用户，否则显示当前站点用户
-			if($_SESSION['roleid'] == 1) {
+			if(cleck_admin($_SESSION['roleid'])) {
 				$where = array('userid'=>$userid);
 			} else {
 				$siteid = get_siteid();
@@ -413,7 +411,7 @@ class member extends admin {
 			}
 			
 			//如果是超级管理员角色，显示所有用户，否则显示当前站点用户
-			if($_SESSION['roleid'] == 1) {
+			if(cleck_admin($_SESSION['roleid'])) {
 				$where = array('userid'=>$userid);
 			} else {
 				$where = array('userid'=>$userid, 'siteid'=>$siteid);
@@ -521,6 +519,7 @@ class member extends admin {
 				if(!empty($userinfo[$v])) {
 					$this->db->set_model($userinfo[$v]);
 					$this->db->delete(array('userid'=>$v));
+					$this->member_login_db->delete(array('uid'=>$v));
 				}
 			}
 			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
@@ -776,6 +775,76 @@ class member extends admin {
 				exit('1');
 			}
 		}
+	}
+
+	// 验证邮件地址
+	public function check_email($value) {
+
+		if (!$value) {
+			return false;
+		} elseif (!preg_match('/^[\w\-\.]+@[\w\-\.]+(\.\w+)+$/', $value)) {
+			return false;
+		} elseif (strpos($value, '"') !== false || strpos($value, '\'') !== false) {
+			return false;
+		}
+
+		return true;
+	}
+
+	// 验证账号
+	public function check_username($value) {
+		$member_setting = getcache('member_setting', 'member');
+
+		if (!$value) {
+			return dr_return_data(0, L('账号不能为空'), array('field' => 'username'));
+		} elseif ($member_setting['config']['preg']
+			&& !preg_match($member_setting['config']['preg'], $value)) {
+			// 验证账号的组成格式
+			return dr_return_data(0, L('账号格式不正确'), array('field' => 'username'));
+		} elseif (strpos($value, '"') !== false || strpos($value, '\'') !== false) {
+			// 引号判断
+			return dr_return_data(0, L('账号名存在非法字符'), array('field' => 'username'));
+		} elseif ($member_setting['config']['userlen']
+			&& mb_strlen($value) < $member_setting['config']['userlen']) {
+			// 验证账号长度
+			return dr_return_data(0, L('账号长度不能小于'.$member_setting['config']['userlen'].'位，当前'.mb_strlen($value).'位'), array('field' => 'username'));
+		} elseif ($member_setting['config']['userlenmax']
+			&& mb_strlen($value) > $member_setting['config']['userlenmax']) {
+			// 验证账号长度
+			return dr_return_data(0, L('账号长度不能大于'.$member_setting['config']['userlenmax'].'位，当前'.mb_strlen($value).'位'), array('field' => 'username'));
+		}
+		$notallow = [$member_setting['notallow']];
+		$notallow[] = L('游客');
+		// 后台不允许注册的词语，放在最后一次比较
+		foreach ($notallow as $a) {
+			if (dr_strlen($a) && strpos($value, $a) !== false) {
+				return dr_return_data(0, L('账号名不允许注册'), array('field' => 'username'));
+			}
+		}
+
+		return dr_return_data(1, 'ok');
+	}
+
+	// 验证账号的密码
+	public function check_password($value, $username) {
+		$member_setting = getcache('member_setting', 'member');
+
+		if (!$value) {
+			return dr_return_data(0, L('密码不能为空'), array('field' => 'password'));
+		} elseif (!$member_setting['config']['user2pwd'] && $value == $username) {
+			return dr_return_data(0, L('密码不能与账号相同'), array('field' => 'password'));
+		} elseif ($member_setting['config']['pwdpreg']
+			&& !preg_match(trim($member_setting['config']['pwdpreg']), $value)) {
+			return dr_return_data(0, L('密码格式不正确'), array('field' => 'password'));
+		} elseif ($member_setting['config']['pwdlen']
+			&& mb_strlen($value) < $member_setting['config']['pwdlen']) {
+			return dr_return_data(0, L('密码长度不能小于'.$member_setting['config']['pwdlen'].'位，当前'.mb_strlen($value).'位'), array('field' => 'password'));
+		} elseif ($member_setting['config']['pwdmax']
+			&& mb_strlen($value) > $member_setting['config']['pwdmax']) {
+			return dr_return_data(0, L('密码长度不能大于'.$member_setting['config']['pwdmax'].'位，当前'.mb_strlen($value).'位'), array('field' => 'password'));
+		}
+
+		return dr_return_data(1, 'ok');
 	}
 	
 }

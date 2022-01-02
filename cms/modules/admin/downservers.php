@@ -29,7 +29,7 @@ class downservers extends admin {
 			$current_siteid = get_siteid();
 			$where = "`siteid`='$current_siteid' or `siteid`=''";
 			$sitelists = $this->sites->get_list();
-			if($_SESSION['roleid'] == '1') {
+			if(cleck_admin($_SESSION['roleid'])) {
 				foreach($sitelists as $key=>$v) $sitelist[$key] = $v['name'];
 				$default = L('all_site');
 			} else {
@@ -58,7 +58,7 @@ class downservers extends admin {
 			$info =  $sitelist = array();
 			$default = '';
 			$sitelists = $this->sites->get_list();
-			if($_SESSION['roleid'] == '1') {
+			if(cleck_admin($_SESSION['roleid'])) {
 				foreach($sitelists as $key=>$v) $sitelist[$key] = $v['name'];
 				$default = L('all_site');
 			} else {
@@ -68,8 +68,7 @@ class downservers extends admin {
 			}			
 			$info = $this->db->get_one(array('id'=>intval($this->input->get('id'))));
 			extract($info);
-			$show_validator = true;
-			$show_header = true;
+			$show_validator = $show_header = true;
 			include $this->admin_tpl('downservers_edit');
 		}
 	}

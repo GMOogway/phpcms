@@ -189,6 +189,7 @@ $LANG['setting_bdmap_api'] = '百度地图Api-AK';
 $LANG['setting_bdmap_api_desc'] = '用于百度地图调用';
 $LANG['setting_apply_immediately'] = '立即申请';
 $LANG['setting_admin_email'] = '管理员邮箱';
+$LANG['setting_tpl_edit'] = '是否允许在线编辑模板';
 $LANG['setting_gzip'] = '启用页面Gzip压缩';
 $LANG['setting_js_path'] = 'JS路径';
 $LANG['setting_css_path'] = 'CSS路径';

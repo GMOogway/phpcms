@@ -743,7 +743,6 @@ form .portlet.light .portlet-body {padding-top: 20px;padding-bottom: 20px;}
 .minicolors-theme-bootstrap .minicolors-swatch .minicolors-swatch-color {width: 28px;height: 28px;}
 .formdate {display: inline-block;vertical-align: middle;}
 .input-time {width: 150px!important;}
-.input-medium {width: 240px!important;}
 .form-date .dateright {margin-right: 0px;}
 .input-group,.input-group-btn,.input-group-btn>.btn {position: relative;}
 .input-group {display: table;border-collapse: separate;}
@@ -835,9 +834,12 @@ form .portlet.light .portlet-body {padding-top: 20px;padding-bottom: 20px;}
 .btn-success.active.focus,.btn-success.active:focus,.btn-success.active:hover,.btn-success:active.focus,.btn-success:active:focus,.btn-success:active:hover,.open>.btn-success.dropdown-toggle.focus,.open>.btn-success.dropdown-toggle:focus,.open>.btn-success.dropdown-toggle:hover {color: #fff;background-color: #208992;border-color: #14565c;}
 .input-inline, .radio-list>label.radio-inline {display: inline-block;}
 .badge, .input-inline {vertical-align: middle;}
-.input-medium{width: 240px!important;}
+.input-xsmall {width: 80px!important;}
+.input-small {width: 145px!important;}
+.input-medium {width: 240px!important;}
 .input-large {width: 320px!important;}
 .input-xlarge {width: 420px!important;}
+.input-inline {width: auto;}
 .bootstrap-select .btn {border-color: #E4E6EF;}
 .has-error .bootstrap-select .btn {border-color: #fbe1e3;}
 .has-success .bootstrap-select .btn {border-color: #abe7ed;}

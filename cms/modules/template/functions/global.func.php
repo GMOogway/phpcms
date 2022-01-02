@@ -5,7 +5,16 @@ defined('IN_CMS') or exit('No permission resources.');
  * @param $file 模板文件地址
  */
 function tag_md5($file) {
-	
+	$data = file_get_contents($file);
+	preg_match_all("/\{pc:(\w+)\s+([^}]+)\}/i", stripslashes($data),$matches);
+	$arr = array();
+	if(is_array($matches) && !empty($matches)) foreach($matches[0] as $k=>$v) {
+		if (!$v) continue;
+		$md5 = md5($v);
+		$arr[0][$k] = $md5;
+		$arr[1][$md5] = $v;
+	}
+	return $arr;
 }
 
 /**

@@ -22,8 +22,7 @@ class member_setting extends admin {
 	 * member list
 	 */
 	function manage() {
-		$show_header = '';
-		$show_validator = true;
+		$show_header = $show_validator = true;
 		if(IS_AJAX_POST) {
 			$member_setting = $this->input->post('info');
 			$setting = $this->input->post('setting');

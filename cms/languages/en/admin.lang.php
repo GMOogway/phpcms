@@ -188,6 +188,7 @@ $LANG['setting_bdmap_api'] = 'Baidu map Api-AK';
 $LANG['setting_bdmap_api_desc'] = 'Call for baidu map';
 $LANG['setting_apply_immediately'] = 'Apply immediately';
 $LANG['setting_admin_email'] = 'Administrator mailbox';
+$LANG['setting_tpl_edit'] = 'Whether to allow online editing template';
 $LANG['setting_gzip'] = 'Enable gzip compression';
 $LANG['setting_js_path'] = 'JS path ';
 $LANG['setting_css_path'] = 'CSS path ';

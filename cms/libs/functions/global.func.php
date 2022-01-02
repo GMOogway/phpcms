@@ -726,6 +726,19 @@ function dr_html_auth($ip = 0) {
 		}
 	}
 }
+// 验证后台用户身份权限
+function cleck_admin($roleid) {
+	if (is_array(dr_string2array($roleid))) {
+		if (dr_in_array(1, dr_string2array($roleid))) {
+			return 1;
+		}
+	} else {
+		if ($roleid==1) {
+			return 1;
+		}
+	}
+	return 0;
+}
 // 判断用户前端权限
 function check_member_auth($groupid, $catid, $action) {
 	$priv_db = pc_base::load_model('category_priv_model');
@@ -2850,8 +2863,9 @@ function create_randomstr($lenth = 10) {
  * @return 	TRUE or FALSE
  */
 function is_password($password) {
-	$strlen = strlen($password);
-	if($strlen >= 6 && $strlen <= 20) return true;
+	$member_setting = getcache('member_setting', 'member');
+	$strlen = mb_strlen($password);
+	if($member_setting['config']['pwdlen'] && $strlen >= $member_setting['config']['pwdlen'] || $member_setting['config']['pwdmax'] && $strlen <= $member_setting['config']['pwdmax']) return true;
 	return false;
 }
 
@@ -2878,10 +2892,11 @@ function is_badword($string) {
  * @return 	TRUE or FALSE
  */
 function is_username($username) {
-	$strlen = strlen($username);
+	$member_setting = getcache('member_setting', 'member');
+	$strlen = mb_strlen($username);
 	if(is_badword($username) || !preg_match("/^[a-zA-Z0-9_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]+$/", $username)){
 		return false;
-	} elseif ( 20 < $strlen || $strlen < 2 ) {
+	} elseif (($member_setting['config']['userlenmax'] && $member_setting['config']['userlenmax'] < $strlen) || ($member_setting['config']['userlen'] && $strlen < $member_setting['config']['userlen'])) {
 		return false;
 	}
 	return true;
@@ -3583,7 +3598,7 @@ function show_error($msg, $file = '') {
  */
 function dr_form_hidden($data = array()) {
 	$form = '<input name="is_form" type="hidden" value="1">'.PHP_EOL;
-	$form.= '<input name="is_admin" type="hidden" value="'.(IS_ADMIN && $_SESSION['roleid'] && $_SESSION['roleid']==1 ? 1 : 0).'">'.PHP_EOL;
+	$form.= '<input name="is_admin" type="hidden" value="'.(IS_ADMIN && $_SESSION['roleid'] && cleck_admin($_SESSION['roleid']) ? 1 : 0).'">'.PHP_EOL;
 	$form.= '<input name="csrf_test_name" type="hidden" value="'.csrf_hash().'">'.PHP_EOL;
 	if ($data) {
 		foreach ($data as $name => $value) {

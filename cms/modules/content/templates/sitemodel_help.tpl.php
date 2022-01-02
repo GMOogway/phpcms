@@ -27,11 +27,25 @@ h2 {
     margin-bottom: 20px;
     border-bottom: 1px solid #e7e7eb;
 }
+.h1, .h2, .h3, h1, h2, h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    font-family: inherit;
+    font-weight: 500;
+    line-height: 1.1;
+    color: inherit;
+}
 img,video {
     border: 2px solid #f1f3f4;
     padding: 10px;
     border-radius: 5px;
     margin: 5px;
+}
+.container {
+    width: 100%;
+    padding: 0px 28px;
 }
 .content-text table {
     border: 1px solid #000000;

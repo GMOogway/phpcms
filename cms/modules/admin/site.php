@@ -72,8 +72,7 @@ class site extends admin {
 	}
 	
 	public function add() {
-		header("Cache-control: private"); 
-		if ($this->input->get('show_header')) $show_header = 1;
+		header("Cache-control: private");
 		if ($this->input->post('dosubmit')) {
 			$info = $this->input->post('info');
 			$template = $this->input->post('template');
@@ -169,7 +168,7 @@ class site extends admin {
 			}
 			dr_json(1, L('operation_success'));
 		} else {
-			$show_dialog = '';
+			$show_dialog = $show_validator = $show_scroll = $show_header = true;
 			$locate = $this->locate;
 			$waterfont = $this->waterfont;
 			$waterfile = $this->waterfile;
@@ -180,7 +179,6 @@ class site extends admin {
  			$checkall = $content_form->checkall;
 			$release_point_db = pc_base::load_model('release_point_model');
 			$release_point_list = $release_point_db->select('', 'id, name');
-			$show_validator = $show_scroll = $show_header = true;
 			$template_list = template_list();
 			include $this->admin_tpl('site_add');
 		}
@@ -312,7 +310,7 @@ class site extends admin {
 					dr_json(0, L('operation_failure'));
 				}
 			} else {
-				$show_dialog = '';
+				$show_dialog = $show_validator = $show_header = $show_scroll = true;
 				$locate = $this->locate;
 				$waterfont = $this->waterfont;
 				$waterfile = $this->waterfile;
@@ -322,9 +320,6 @@ class site extends admin {
 				$forminfos = $content_form->get($data);
 				$formValidator = $content_form->formValidator;
 				$checkall = $content_form->checkall;
-				$show_validator = true;
-				$show_header = true;
-				$show_scroll = true;
 				$template_list = template_list();
 				$setting = string2array($data['setting']);
 				$release_point_db = pc_base::load_model('release_point_model');

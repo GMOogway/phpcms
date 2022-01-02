@@ -11,7 +11,7 @@
     </fieldset>-->
     <blockquote class="layui-elem-quote">
         <a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=init&pc_hash='+pc_hash+'&is_ajax=1',1);" class="layui-btn layui-btn-sm">
-            <i class="fa fa-refresh"></i> <?php echo L('更改数据之后需要更新缓存之后才能生效');?>
+            <i class="fa fa-refresh"></i> <?php echo L('update_cache_all');?>
         </a>
         <a href="?m=attachment&c=attachment&a=remote_add&menuid=<?php echo $this->input->get('menuid');?>" class="layui-btn layui-btn-sm">
             <i class="fa fa-plus"></i> <?php echo L('add');?>

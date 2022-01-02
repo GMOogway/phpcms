@@ -12,7 +12,7 @@ class menu extends admin {
 	}
 	
 	function init () {
-		$show_header = '';
+		$show_header = true;
 		$tablename = $this->db->db_tablepre.'menu';
 		if (!$this->db->field_exists('icon')) {
 			$this->db->query('ALTER TABLE `'.$tablename.'` ADD `icon` varchar(255) NULL DEFAULT NULL COMMENT \'图标标示\' AFTER `data`');
@@ -146,7 +146,7 @@ class menu extends admin {
 	 * 选择图标
 	 */
 	public function public_icon() {
-		$show_header = $show_pc_hash = 1;
+		$show_header = $show_pc_hash = true;
 		include $this->admin_tpl('menu_icon');
 	}
 	

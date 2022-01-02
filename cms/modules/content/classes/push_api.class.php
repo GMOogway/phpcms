@@ -87,9 +87,10 @@ class push_api {
 			$tree->nbsp = '&nbsp;&nbsp;&nbsp;';
 			$categorys = array();
 			$this->catids_string = array();
-			if($_SESSION['roleid'] != 1) {
+			if(!cleck_admin($_SESSION['roleid'])) {
 				$this->priv_db = pc_base::load_model('category_priv_model');
-				$priv_result = $this->priv_db->select(array('action'=>'add','roleid'=>$_SESSION['roleid'],'siteid'=>$siteid,'is_admin'=>1));
+				$rolewhere = 'action="add" and roleid in ('.(is_array(dr_string2array($_SESSION['roleid'])) ? implode(',', dr_string2array($_SESSION['roleid'])) : $_SESSION['roleid']).') and siteid='.$siteid.' and is_admin=1';
+				$priv_result = $this->priv_db->select($rolewhere);
 				$priv_catids = array();
 				foreach($priv_result as $_v) {
 					$priv_catids[] = $_v['catid'];
@@ -99,7 +100,7 @@ class push_api {
 
 			foreach($this->categorys as $r) {
 				if($r['siteid']!=$siteid || $r['type']!=0) continue;
-				if($_SESSION['roleid'] != 1 && !in_array($r['catid'],$priv_catids)) {
+				if(!cleck_admin($_SESSION['roleid']) && !in_array($r['catid'],$priv_catids)) {
 					$arrchildid = explode(',',$r['arrchildid']);
 					$array_intersect = array_intersect($priv_catids,$arrchildid);
 					if(empty($array_intersect)) continue;
@@ -236,9 +237,10 @@ class push_api {
 			$tree->nbsp = '&nbsp;&nbsp;&nbsp;';
 			$categorys = array();
 			$this->catids_string = array();
-			if($_SESSION['roleid'] != 1) {
+			if(!cleck_admin($_SESSION['roleid'])) {
 				$this->priv_db = pc_base::load_model('category_priv_model');
-				$priv_result = $this->priv_db->select(array('action'=>'add','roleid'=>$_SESSION['roleid'],'siteid'=>$siteid,'is_admin'=>1));
+				$rolewhere = 'action="add" and roleid in ('.(is_array(dr_string2array($_SESSION['roleid'])) ? implode(',', dr_string2array($_SESSION['roleid'])) : $_SESSION['roleid']).') and siteid='.$siteid.' and is_admin=1';
+				$priv_result = $this->priv_db->select($rolewhere);
 				$priv_catids = array();
 				foreach($priv_result as $_v) {
 					$priv_catids[] = $_v['catid'];
@@ -248,7 +250,7 @@ class push_api {
 
 			foreach($this->categorys as $r) {
 				if($r['siteid']!=$siteid || $r['type']!=0) continue;
-				if($_SESSION['roleid'] != 1 && !in_array($r['catid'],$priv_catids)) {
+				if(!cleck_admin($_SESSION['roleid']) && !in_array($r['catid'],$priv_catids)) {
 					$arrchildid = explode(',',$r['arrchildid']);
 					$array_intersect = array_intersect($priv_catids,$arrchildid);
 					if(empty($array_intersect)) continue;

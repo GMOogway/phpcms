@@ -60,6 +60,11 @@ class function_list {
         if (!$value) {
             return L('游客');
         }
+        $m = defined('ROUTE_M') && ROUTE_M ? ROUTE_M : '';
+        $c = defined('ROUTE_C') && ROUTE_C ? ROUTE_C : '';
+        if (IS_ADMIN && $m=='content' && $c=='content' && !$data['sysadd']) {
+            return $value ? '<a href="javascript:dr_iframe_show(\'用户信息\', \'?m=member&c=member&a=memberinfo&username='.urlencode($value).'&pc_hash='.dr_get_csrf_token().'\', \'50%\')">'.str_cut($value, 10).'</a>' : L('游客');
+        }
         return $value ? str_cut($value, 10) : L('游客');
     }
 
@@ -70,10 +75,10 @@ class function_list {
             return L('游客');
         }
         $this->admin_db = pc_base::load_model('admin_model');
-        $this->member_db = pc_base::load_model('member_model');
         $userinfo = $this->admin_db->get_one(array('userid'=>$userid));
         $username = $userinfo['realname'] ? $userinfo['realname'] : $userinfo['username'];
         if (!$userinfo) {
+            $this->member_db = pc_base::load_model('member_model');
             $userinfo = $this->member_db->get_one(array('userid'=>$userid));
             $username = $userinfo['nickname'] ? $userinfo['nickname'] : $userinfo['username'];
         }

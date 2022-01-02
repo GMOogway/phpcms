@@ -35,8 +35,7 @@ class copyfrom extends admin {
 			$this->db->insert($info);
 			dr_admin_msg(1, L('add_success'), '', '', 'add');
 		} else {
-			$show_header = $show_validator = '';
-			
+			$show_header = $show_validator = true;
 			include $this->admin_tpl('copyfrom_add');
 		}
 	}
@@ -51,7 +50,7 @@ class copyfrom extends admin {
 			$this->db->update($info,array('id'=>$id));
 			dr_admin_msg(1, L('update_success'), '', '', 'edit');
 		} else {
-			$show_header = $show_validator = '';
+			$show_header = $show_validator = true;
 			$id = intval($this->input->get('id'));
 			if (!$id) dr_admin_msg(0, L('illegal_action'));
 			$r = $this->db->get_one(array('id'=>$id, 'siteid'=>$this->siteid));

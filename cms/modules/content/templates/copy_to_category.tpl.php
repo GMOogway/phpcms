@@ -1,6 +1,6 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');
-$show_header = $show_validator = 1;
+$show_header = $show_validator = true;
 include $this->admin_tpl('header', 'admin');
 ?>
 <script type="text/javascript">

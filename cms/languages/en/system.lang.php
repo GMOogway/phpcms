@@ -113,6 +113,7 @@ $LANG['input_code'] = 'Please type the code shown';
 $LANG['code_error'] = 'Incorrect';
 $LANG['module_not_exists'] = 'The module is not installed or disabled';
 $LANG['part_cache_success'] = 'Updating cache files';
+$LANG['update_cache_all'] = 'After change the data needs to be updated after the cache to take effect';
 $LANG['message_tips'] = 'Message';
 $LANG['return_previous'] = 'Click here return to previous page';
 $LANG['close'] = 'Close';

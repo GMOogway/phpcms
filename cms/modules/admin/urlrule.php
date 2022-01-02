@@ -32,7 +32,7 @@ class urlrule extends admin {
 			$this->public_cache_urlrule();
 			dr_admin_msg(1,L('add_success'),'','','add');
 		} else {
-			$show_validator = $show_header = '';
+			$show_validator = $show_header = true;
 			$modules_arr = $this->module_db->select('','module,name');
 			
 			$modules = array();
@@ -63,7 +63,7 @@ class urlrule extends admin {
 			$this->public_cache_urlrule();
 			dr_admin_msg(1,L('update_success'),'','','edit');
 		} else {
-			$show_validator = $show_header = '';
+			$show_validator = $show_header = true;
 			$urlruleid = $this->input->get('urlruleid');
 			$r = $this->db->get_one(array('urlruleid'=>$urlruleid));
 			extract($r);

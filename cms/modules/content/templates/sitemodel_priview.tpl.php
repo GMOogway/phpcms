@@ -98,7 +98,7 @@ if(is_array($forminfos['senior'])) {
 <?php
 } }
 ?>
-<?php if($_SESSION['roleid']==1 || $priv_status) {?>
+<?php if(cleck_admin($_SESSION['roleid']) || $priv_status) {?>
 <div class="form-group">
     <label class="control-label col-md-2"><?php echo L('c_status');?></label>
     <div class="col-md-10">

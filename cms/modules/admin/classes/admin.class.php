@@ -37,6 +37,9 @@ class admin {
 			$userid = param::get_cookie('userid');
 			$login_attr = param::get_cookie('login_attr');
 			$user = $admin_db->get_one(array('userid'=>$userid));
+			if ($user && $_SESSION['roleid']!=$user['roleid']) {
+				$_SESSION['roleid'] = $user['roleid'];
+			}
 			if ($user && $login_attr!=md5(SYS_KEY.$user['password'].(isset($user['login_attr']) ? $user['login_attr'] : ''))) {
 				if (isset($config['login_use']) && dr_in_array('admin', $config['login_use'])) {
 					$cache->del_auth_data('admin_option_'.$_SESSION['userid'], 1);
@@ -82,7 +85,7 @@ class admin {
 			$result = array_merge($result2,$result);
 		}
 		//权限检查
-		if($_SESSION['roleid'] == 1) return $result;
+		if(cleck_admin($_SESSION['roleid'])) return $result;
 		$array = array();
 		$privdb = pc_base::load_model('admin_role_priv_model');
 		$siteid = param::get_cookie('siteid');
@@ -92,7 +95,8 @@ class admin {
 				$array[] = $v;
 			} else {
 				if(preg_match('/^ajax_([a-z]+)_/',$action,$_match)) $action = $_match[1];
-				$r = $privdb->get_one(array('m'=>$v['m'],'c'=>$v['c'],'a'=>$action,'roleid'=>$_SESSION['roleid'],'siteid'=>$siteid));
+				$rolewhere = 'm="'.$v['m'].'" and c="'.$v['c'].'" and a="'.$action.'" and roleid in ('.(is_array(dr_string2array($_SESSION['roleid'])) ? implode(',', dr_string2array($_SESSION['roleid'])) : $_SESSION['roleid']).') and siteid='.$siteid;
+				$r = $privdb->get_one($rolewhere);
 				if($r) $array[] = $v;
 			}
 		}
@@ -202,7 +206,7 @@ class admin {
 	
 	final public static function return_siteid() {
 		$sites = pc_base::load_app_class('sites', 'admin');
-		$siteid = explode(',',$sites->get_role_siteid($_SESSION['roleid']));
+		$siteid = explode(',',$sites->get_role_siteid((is_array(dr_string2array($_SESSION['roleid'])) ? dr_string2array($_SESSION['roleid']) : $_SESSION['roleid'])));
 		return current($siteid);
 	}
 	/**
@@ -210,7 +214,7 @@ class admin {
 	 */
 	final public function check_priv() {
 		if(ROUTE_M =='admin' && ROUTE_C =='index' && in_array(ROUTE_A, array(SYS_ADMIN_PATH, 'init', 'fclient'))) return true;
-		if($_SESSION['roleid'] == 1) return true;
+		if(cleck_admin($_SESSION['roleid'])) return true;
 		$siteid = param::get_cookie('siteid');
 		$action = ROUTE_A;
 		$privdb = pc_base::load_model('admin_role_priv_model');
@@ -218,7 +222,8 @@ class admin {
 		if(preg_match('/^ajax_([a-z]+)_/',ROUTE_A,$_match)) {
 			$action = $_match[1];
 		}
-		$r =$privdb->get_one(array('m'=>ROUTE_M,'c'=>ROUTE_C,'a'=>$action,'roleid'=>$_SESSION['roleid'],'siteid'=>$siteid));
+		$rolewhere = 'm="'.ROUTE_M.'" and c="'.ROUTE_C.'" and a="'.$action.'" and roleid in ('.(is_array(dr_string2array($_SESSION['roleid'])) ? implode(',', dr_string2array($_SESSION['roleid'])) : $_SESSION['roleid']).') and siteid='.$siteid;
+		$r = $privdb->get_one($rolewhere);
 		if(!$r) dr_admin_msg(0,'您没有权限操作该项');
 	}
 
@@ -447,7 +452,7 @@ class admin {
 	public function cleck_edit_member($uid) {
 
 		// 超管不验证
-		//if (in_array(1, $_SESSION['roleid'])) {
+		//if (cleck_admin($_SESSION['roleid'])) {
 			//return true;
 		//} elseif (param::get_cookie('userid') == $uid) {
 			// 自己不验证

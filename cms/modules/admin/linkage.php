@@ -48,8 +48,7 @@ class linkage extends admin {
 			}
 			dr_json(1, L('操作成功'));
 		} else {
-			$show_header = true;
-			$show_validator = true;
+			$show_header = $show_validator = true;
 			$sitelist = $this->sites->get_list();
 			foreach($sitelist as $siteid=>$v) {
 				$sitelist[$siteid] = $v['name'];
@@ -78,8 +77,7 @@ class linkage extends admin {
 			foreach($sitelist as $id=>$v) {
 				$sitelist[$id] = $v['name'];
 			}
-			$show_header = true;
-			$show_validator = true;
+			$show_header = $show_validator = true;
 			include $this->admin_tpl('linkage_edit');
 		}
 		
@@ -552,8 +550,7 @@ class linkage extends admin {
 				$select = '<input type="hidden" name="data[pid]" value="0">';
 				$select.= '<p class="form-control-static"> '.L('顶级').' </p>';
 			}
-			$show_header = true;
-			$show_validator = true;
+			$show_header = $show_validator = true;
 			include $this->admin_tpl('linkage_sub_add');			
 		}
 	}
@@ -606,8 +603,7 @@ class linkage extends admin {
 				$select = '<input type="hidden" name="data[pid]" value="0">';
 				$select.= '<p class="form-control-static"> '.L('顶级').' </p>';
 			}
-			$show_header = true;
-			$show_validator = true;
+			$show_header = $show_validator = true;
 			include $this->admin_tpl('linkage_sub_edit');			
 		}
 	}

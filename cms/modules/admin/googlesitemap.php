@@ -218,7 +218,7 @@ class googlesitemap extends admin {
 					dr_json(1, L('create_success'), array('url' => HTTP_REFERER));
 			     } 
 			} else {
-				$show_header = $show_dialog = '';
+				$show_header = $show_dialog = true;
 				$tree = pc_base::load_sys_class('tree');
 				$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
 				$tree->nbsp = '&nbsp;&nbsp;&nbsp;';

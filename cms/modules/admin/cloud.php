@@ -15,7 +15,7 @@ class cloud extends admin {
         $this->file = pc_base::load_sys_class('file');
         $this->db = pc_base::load_model('site_model');
         // 不是超级管理员
-        if ($_SESSION['roleid']!=1) {
+        if (!cleck_admin($_SESSION['roleid'])) {
             dr_admin_msg(0,L('需要超级管理员账号操作'));
         }
         define('CMS_VERSION', pc_base::load_config('version','cms_version'));
@@ -34,19 +34,19 @@ class cloud extends admin {
 
     // 我的网站
     public function init() {
-        $show_header = '';
+        $show_header = true;
         include $this->admin_tpl('cloud_index');exit;
     }
 
-	// 常用配置
+    // 常用配置
     public function config() {
-        $show_header = '';
+        $show_header = true;
         include $this->admin_tpl('cloud_config');exit;
     }
 
     // 程序升级
     public function upgrade() {
-        $show_header = '';
+        $show_header = true;
 
         if (CMS_LICENSE == 'dev') {
             include $this->admin_tpl('cloud_login');exit;
@@ -59,7 +59,7 @@ class cloud extends admin {
 
     // 验证授权
     public function login() {
-        $show_header = '';
+        $show_header = true;
 
         if (IS_POST) {
 
@@ -77,7 +77,7 @@ class cloud extends admin {
 
     // 绑定账号
     public function license() {
-        $show_header = '';
+        $show_header = true;
 
         if (IS_POST) {
 
@@ -366,7 +366,7 @@ class cloud extends admin {
 
     // 文件对比
     public function compare() {
-        $show_header = '';
+        $show_header = true;
         include $this->admin_tpl('cloud_bf');exit;
     }
 

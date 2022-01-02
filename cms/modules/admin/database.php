@@ -178,14 +178,14 @@ class database extends admin {
 	}
 	
 	public function public_import_index() {
-		$show_header = '';
+		$show_header = true;
 		$action = $this->input->get('action');
 		$todo_url = '?m=admin&c=database&a=public_todo_import&action='.$action;
 		include $this->admin_tpl('database_bfb');
     }
 	
 	public function public_todo_import() {
-		$show_header = '';
+		$show_header = true;
 		$action = $this->input->get('action');
 		$page = max(1, intval($this->input->get('page')));
 		$cache = $this->cache->get_auth_data('db-todo-'.$action);
@@ -289,7 +289,7 @@ class database extends admin {
 	}
 	// 批量操作
 	public function public_add() {
-		$show_header = '';
+		$show_header = true;
 		$operation = $this->input->get('operation');
 		$ids = $this->input->post('tables');
 		if (!$ids) {
@@ -313,14 +313,14 @@ class database extends admin {
     }
 	
 	public function public_count_index() {
-		$show_header = '';
+		$show_header = true;
 		$operation = $this->input->get('operation');
 		$todo_url = '?m=admin&c=database&a=public_todo_index&operation='.$operation;
 		include $this->admin_tpl('database_bfb');
     }
 	
 	public function public_todo_index() {
-		$show_header = '';
+		$show_header = true;
 		$database = pc_base::load_config('database');
 		$operation = $this->input->get('operation');
 		$this->db = db_factory::get_instance($database)->get_database('default');

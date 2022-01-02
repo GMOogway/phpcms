@@ -12,18 +12,13 @@ class index extends admin {
 		$this->admin_login_db = pc_base::load_model('admin_login_model');
 		$this->menu_db = pc_base::load_model('menu_model');
 		$this->panel_db = pc_base::load_model('admin_panel_model');
+		$this->role = $this->get_role_all();
 	}
 	
 	public function init() {
 		$siteid = param::get_cookie('siteid');
 		$userid = $_SESSION['userid'];
 		$admin_username = param::get_cookie('admin_username');
-		$roles = getcache('role','commons');
-		if ($_SESSION['roleid']==1) {
-			$rolename = '<span style="color:#ff0000;">'.$roles[$_SESSION['roleid']].'</span>';
-		} else {
-			$rolename = '<span style="color:#0000ff;">'.$roles[$_SESSION['roleid']].'</span>';
-		}
 		$site = pc_base::load_app_class('sites');
 		$sitelist = $site->get_list($_SESSION['roleid']);
 		$currentsite = $this->get_siteinfo(param::get_cookie('siteid'));
@@ -303,20 +298,36 @@ class index extends admin {
 		define('PC_RELEASE', pc_base::load_config('version','pc_release'));
 		define('CMS_VERSION', pc_base::load_config('version','cms_version'));
 		define('CMS_RELEASE', pc_base::load_config('version','cms_release'));
-		$admin_username = param::get_cookie('admin_username');
-		$roles = getcache('role','commons');
-		$userid = $_SESSION['userid'];
-		if ($_SESSION['roleid']==1) {
-			$rolename = '<span style="color:#ff0000;">'.$roles[$_SESSION['roleid']].'</span>';
-		} else {
-			$rolename = '<span style="color:#0000ff;">'.$roles[$_SESSION['roleid']].'</span>';
+		$where = 'roleid in ('.(is_array(dr_string2array($_SESSION['roleid'])) ? implode(',', dr_string2array($_SESSION['roleid'])) : $_SESSION['roleid']).') and disabled=0';
+		$role = $this->role_db->select($where);
+		if ($role) {
+			foreach ($role as $r) {
+				$info['role'][$r['roleid']] = $this->role[$r['roleid']]['rolename'];
+			}
 		}
+		if (cleck_admin($_SESSION['roleid'])) {
+			$class = 'danger';
+		} else {
+			$class = 'success';
+		}
+		$rolename = '';
+		if(is_array($info['role'])){
+			foreach($info['role'] as $c){
+				if(!$rolename){
+					$rolename .= '<span class="badge badge-'.$class.'">'.$c.'</span>';
+				} else {
+					$rolename .= ' <span class="badge badge-'.$class.'">'.$c.'</span>';
+				}
+			}
+		}
+		$admin_username = param::get_cookie('admin_username');
+		$userid = $_SESSION['userid'];
 		$r = $this->db->get_one(array('userid'=>$userid));
 		$logintime = $r['lastlogintime'];
 		$loginip = $r['lastloginip'];
 		$sysinfo = get_sysinfo();
 		$sysinfo['mysqlv'] = $this->db->version();
-		$show_header = $show_pc_hash = 1;
+		$show_header = $show_pc_hash = true;
 		/*检测框架目录可写性*/
 		$pc_writeable = is_writable(PC_PATH.'base.php');
 		$common_cache = getcache('common','commons');
@@ -351,11 +362,11 @@ class index extends admin {
 		exit(dr_catcher_data($surl));
 	}
 	public function public_icon() {
-		$show_header = $show_pc_hash = 1;
+		$show_header = $show_pc_hash = true;
 		include $this->admin_tpl('icon');
 	}
 	public function public_error_log() {
-		$show_header = $show_pc_hash = 1;
+		$show_header = $show_pc_hash = true;
 		$time = (int)strtotime($this->input->get('time'));
 		!$time && $time = SYS_TIME;
 		$list = array();
@@ -421,7 +432,7 @@ class index extends admin {
 		include $this->admin_tpl('error_log');
 	}
 	public function public_error_log_show() {
-		$show_header = $show_pc_hash = 1;
+		$show_header = $show_pc_hash = true;
 		$time = (int)strtotime($this->input->get('time'));
 		$file = CACHE_PATH.'caches_error/caches_data/log-'.date('Y-m-d',$time).'.php';
 		if (!is_file($file)) {
@@ -441,7 +452,7 @@ class index extends admin {
 		include $this->admin_tpl('error_file');
 	}
 	public function public_error_log_del() {
-		$show_header = $show_pc_hash = 1;
+		$show_header = $show_pc_hash = true;
 		$time = (int)strtotime($this->input->get('time'));
 		$file = CACHE_PATH.'caches_error/caches_data/log-'.date('Y-m-d',$time).'.php';
 		if (!is_file($file)) {
@@ -451,7 +462,7 @@ class index extends admin {
 		dr_admin_msg(1,L('operation_success'),'?m=admin&c=index&a=public_error_log');
 	}
 	public function public_email_log() {
-		$show_header = $show_pc_hash = 1;
+		$show_header = $show_pc_hash = true;
 		$data = $list = array();
 		$file = CACHE_PATH.'email_log.php';
 		if (is_file(CACHE_PATH.'email_log.php')) {
@@ -474,7 +485,7 @@ class index extends admin {
 		include $this->admin_tpl('email_log');
 	}
 	public function public_email_log_del() {
-		$show_header = $show_pc_hash = 1;
+		$show_header = $show_pc_hash = true;
 		$file = CACHE_PATH.'email_log.php';
 		if (!is_file($file)) {
 			dr_admin_msg(0,L('文件不存在：'.$file),'?m=admin&c=index&a=public_email_log');
@@ -483,7 +494,7 @@ class index extends admin {
 		dr_admin_msg(1,L('operation_success'),'?m=admin&c=index&a=public_email_log');
 	}
 	public function public_error() {
-		$show_header = $show_pc_hash = 1;
+		$show_header = $show_pc_hash = true;
 		$time = (int)strtotime($this->input->get('time'));
 		!$time && $time = SYS_TIME;
 		$list = array();
@@ -519,7 +530,7 @@ class index extends admin {
 		include $this->admin_tpl('error_index');
 	}
 	public function public_log_show() {
-		$show_header = $show_pc_hash = 1;
+		$show_header = $show_pc_hash = true;
 		$file = CACHE_PATH.'error_log.php';
 		if (!is_file($file)) {
 			dr_admin_msg(0,L('文件不存在：'.$file),'','','edit');
@@ -529,7 +540,7 @@ class index extends admin {
 		include $this->admin_tpl('error_file');
 	}
 	public function public_error_del() {
-		$show_header = $show_pc_hash = 1;
+		$show_header = $show_pc_hash = true;
 		$file = CACHE_PATH.'error_log.php';
 		if (!is_file($file)) {
 			dr_admin_msg(0,L('文件不存在：'.$file),'?m=admin&c=index&a=public_error');
@@ -594,6 +605,19 @@ class index extends admin {
 		$this->times_db->delete(array('username'=>$username,'isadmin'=>1));
 		$_SESSION['lock_screen'] = 0;
 		exit('1');
+	}
+
+	// 获取角色组
+	public function get_role_all($rid = []) {
+		$this->role_db = pc_base::load_model('admin_role_model');
+		$role = [];
+		$data = $this->role_db->select(array('disabled'=>'0'));
+		if ($data) {
+			foreach ($data as $t) {
+				$role[$t['roleid']] = $t;
+			}
+		}
+		return $role;
 	}
 
 	/**

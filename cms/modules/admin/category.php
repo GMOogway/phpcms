@@ -16,7 +16,7 @@ class category extends admin {
 	 * 管理栏目
 	 */
 	public function init () {
-		$show_header = $show_dialog = $show_pc_hash = '';
+		$show_header = $show_dialog = $show_pc_hash = true;
 		if (IS_POST) {
 			$tree = pc_base::load_sys_class('tree');
 			$models = getcache('model','commons');
@@ -181,7 +181,7 @@ class category extends admin {
 			$this->cache();
 			dr_json(1, L('add_success'), array('tourl' => '?m=admin&c=category&a=public_cache&module=admin&menuid=141&pc_hash='.dr_get_csrf_token()));
 		} else {
-			$show_header = $show_dialog = '';
+			$show_header = $show_dialog = true;
 			$catid = 0;
 			$parentid = intval($this->input->get('parentid'));
 			$image = '';
@@ -347,7 +347,7 @@ class category extends admin {
 			}
 			dr_json(1, L('operation_success'), array('tourl' => '?m=admin&c=category&a=public_cache&module=admin&menuid=141&pc_hash='.dr_get_csrf_token()));
 		} else {
-			$show_header = $show_dialog = '';
+			$show_header = $show_dialog = true;
 			//获取站点模板信息
 			pc_base::load_app_func('global');
 			$page = max(0, intval($this->input->get('page')));
@@ -1081,7 +1081,7 @@ class category extends admin {
 					unset($template_list[$k]);
 				}
 				
-				$show_validator = $show_header = '';
+				$show_validator = $show_header = true;
 				$catid = intval($this->input->get('catid'));
 				$type = $this->input->post('type') ? intval($this->input->post('type')) : 0;
 				pc_base::load_sys_class('form','',0);
@@ -1108,7 +1108,7 @@ class category extends admin {
 					include $this->admin_tpl('category_batch_edit');
 				}
 			} else {
-				$show_header = $show_dialog = '';
+				$show_header = $show_dialog = true;
 				$type = $this->input->get('select_type') ? intval($this->input->get('select_type')) : 0;
 				
 				$tree = pc_base::load_sys_class('tree');
@@ -1129,7 +1129,7 @@ class category extends admin {
 	}
 	// 统一设置
 	public function public_batch_category() {
-		$show_header = $show_dialog  = '';
+		$show_header = $show_dialog  = true;
 		$this->content_db = pc_base::load_model('content_model');
 		if(IS_AJAX_POST) {
 			$info = $this->input->post('info');
@@ -1175,7 +1175,7 @@ class category extends admin {
 			$this->content_db->update(array('catid'=>$tocatid),"catid IN($fromid)");
  			dr_admin_msg(1,L('operation_success'),HTTP_REFERER);
  		} else {
-			$show_header = '';
+			$show_header = true;
 			$catid = intval($this->input->get('catid'));
 			$categorys = array();
  			

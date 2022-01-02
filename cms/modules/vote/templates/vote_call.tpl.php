@@ -1,6 +1,6 @@
 <?php 
 defined('IS_ADMIN') or exit('No permission resources.');
-$show_header = $show_validator = $show_scroll = 1; 
+$show_header = $show_validator = $show_scroll = true; 
 include $this->admin_tpl('header', 'admin');
 ?>
 <script type="text/javascript" src="<?php echo JS_PATH?>clipboard.min.js"></script>

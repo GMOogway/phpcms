@@ -102,7 +102,7 @@ class formguide extends admin {
 			}
 			$formid = intval($this->input->get('formid'));
 			pc_base::load_sys_class('form', '', false);
-			$show_header = $show_validator = $show_scroll = 1;
+			$show_header = $show_validator = $show_scroll = true;
 			include $this->admin_tpl('formguide_add');
 		}
 	}
@@ -183,7 +183,7 @@ class formguide extends admin {
 			$field = dr_list_field_value($data['setting']['list_field'], $sys_field, $this->field);
 			$page = intval($this->input->get('page'));
 			pc_base::load_sys_class('form', '', false);
-			$show_header = $show_validator = $show_scroll = 1;
+			$show_header = $show_validator = $show_scroll = true;
 			include $this->admin_tpl('formguide_edit');
 		}
 	}

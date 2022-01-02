@@ -54,7 +54,7 @@ class type_manage extends admin {
 			$this->cache();//更新类别缓存，按站点
 			dr_admin_msg(1,L('add_success'), '', '', 'add');
 		} else {
-			$show_header = $show_validator = '';
+			$show_header = $show_validator = true;
 			$categorys = $this->public_getsite_categorys();
 			include $this->admin_tpl('type_add');
 		}
@@ -106,7 +106,7 @@ class type_manage extends admin {
 			$this->cache();//更新类别缓存，按站点
 			dr_admin_msg(1,L('update_success'), '', '', 'edit');
 		} else {
-			$show_header = $show_validator = '';
+			$show_header = $show_validator = true;
 			$typeid = intval($this->input->get('typeid'));
 			$r = $this->db->get_one(array('typeid'=>$typeid));
 			extract($r);

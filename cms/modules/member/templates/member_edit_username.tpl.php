@@ -14,7 +14,7 @@ include $this->admin_tpl('header', 'admin');?>
                 <p class="form-control-static"> <?php echo $member['username'];?> </p>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" id="dr_row_name">
             <label class="col-xs-3 control-label ajax_name"><?php echo L('新账号');?></label>
             <div class="col-xs-7">
                 <input type="text" id="dr_name" class="form-control" value="<?php echo html2code($member['username']);?>" name="name">

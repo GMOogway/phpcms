@@ -1,6 +1,6 @@
 <?php 
 defined('IS_ADMIN') or exit('No permission resources.'); 
-$show_dialog = $show_validator = $show_header = 1; 
+$show_dialog = $show_validator = $show_header = true; 
 include $this->admin_tpl('header','admin');
 $authkey = upload_key('1,jpg|jpeg|gif|bmp|png,0,,300,300,,,');
 $p = dr_authcode(array(

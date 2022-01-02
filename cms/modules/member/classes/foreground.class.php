@@ -93,6 +93,7 @@ class foreground {
 					param::set_cookie('_login_attr', '');
 					param::set_cookie('_username', '');
 					param::set_cookie('_groupid', '');
+					redirect('index.php?m=member&c=index&a=login');
 				}
 				unset($userid, $password, $cms_auth, $auth_key);
 			} else {

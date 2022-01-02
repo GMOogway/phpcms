@@ -11,7 +11,7 @@ class check_bom extends admin {
     }
 
     public function init() {
-        $show_header = '';
+        $show_header = true;
         include $this->admin_tpl('check_bom_index');
     }
 

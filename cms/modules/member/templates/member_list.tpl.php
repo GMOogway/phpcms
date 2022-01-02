@@ -40,9 +40,9 @@ jQuery(document).ready(function() {
 						<input type="text" class="form-control" value="<?php echo $end_time;?>" name="end_time" id="end_time">
 					</div>
 				</div></label>
-				<?php if($_SESSION['roleid'] == 1) {?>
-				<label><?php echo form::select($sitelist, $siteid, 'name="siteid[]" class="form-control bs-select" data-title="'.L('all_site').'" multiple="multiple"');}?></label>
-							
+				<?php if(cleck_admin($_SESSION['roleid'])) {?>
+				<label><?php echo form::select($sitelist, $siteid, 'name="siteid[]" class="form-control bs-select" data-title="'.L('all_site').'" multiple="multiple"');?></label>
+				<?php }?>
 				<label><select name="status[]" class="form-control bs-select" data-title="<?php echo L('status')?>" multiple="multiple">
 					<option value='1' <?php if(isset($_GET['status']) && dr_in_array(1, $_GET['status'])){?>selected<?php }?>><?php echo L('lock')?></option>
 					<option value='0' <?php if(isset($_GET['status']) && dr_in_array(0, $_GET['status'])){?>selected<?php }?>><?php echo L('normal')?></option>

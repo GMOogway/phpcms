@@ -68,7 +68,7 @@ class workflow extends admin {
 			$this->cache();
 			dr_admin_msg(1,L('update_success'), '', '', 'edit');
 		} else {
-			$show_header = $show_validator = '';
+			$show_header = $show_validator = true;
 			$workflowid = intval($this->input->get('workflowid'));
 			$admin_data = array();
 			$result = $this->admin_db->select();
@@ -91,7 +91,7 @@ class workflow extends admin {
 	}
 	public function view() {
 
-			$show_header = '';
+			$show_header = true;
 			$workflowid = intval($this->input->get('workflowid'));
 			$admin_data = array();
 			$result = $this->admin_db->select();

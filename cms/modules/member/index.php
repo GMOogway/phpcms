@@ -59,11 +59,19 @@ class index extends foreground {
 			$userinfo = array();
 			$userinfo['encrypt'] = create_randomstr(10);
 
-			$userinfo['username'] = (isset($_POST['username']) && is_username($_POST['username'])) ? $_POST['username'] : exit('0');
+			$userinfo['username'] = $_POST['username'];
+			$rt = $this->check_username($userinfo['username']);
+			if (!$rt['code']) {
+				showmessage($rt['msg'], HTTP_REFERER);
+			}
 			$userinfo['nickname'] = (isset($_POST['nickname']) && is_username($_POST['nickname'])) ? $_POST['nickname'] : '';
 			
 			$userinfo['email'] = (isset($_POST['email']) && is_email($_POST['email'])) ? $_POST['email'] : exit('0');
-			$userinfo['password'] = (isset($_POST['password']) && is_badword($_POST['password'])==false) ? $_POST['password'] : exit('0');
+			$userinfo['password'] = $_POST['password'];
+			$rt = $this->check_password($userinfo['password'], $userinfo['username']);
+			if (!$rt['code']) {
+				showmessage($rt['msg'], HTTP_REFERER);
+			}
 			
 			$userinfo['email'] = (isset($_POST['email']) && is_email($_POST['email'])) ? $_POST['email'] : exit('0');
 
@@ -147,9 +155,7 @@ class index extends foreground {
 			
 			if($userid > 0) {
 				//执行登陆操作
-				if(!$cookietime) $get_cookietime = param::get_cookie('cookietime');
-				$_cookietime = $cookietime ? intval($cookietime) : ($get_cookietime ? $get_cookietime : 0);
-				$cookietime = $_cookietime ? TIME + $_cookietime : 0;
+				$cookietime = $member_setting['logintime'] ? SYS_TIME+intval($member_setting['logintime']) : SYS_TIME+86400;
 				
 				if($userinfo['groupid'] == 7) {
 					param::set_cookie('_username', $userinfo['username'], $cookietime);
@@ -162,7 +168,6 @@ class index extends foreground {
 					param::set_cookie('_username', $userinfo['username'], $cookietime);
 					param::set_cookie('_nickname', $userinfo['nickname'], $cookietime);
 					param::set_cookie('_groupid', $userinfo['groupid'], $cookietime);
-					param::set_cookie('cookietime', $_cookietime, $cookietime);
 					$log = foreground::member_get_log($userid);
 					$this->member_login_db->update(array('logintime' => SYS_TIME,), array('uid'=>$userid));
 					$config = getcache('common', 'commons');
@@ -410,17 +415,14 @@ class index extends foreground {
 	}
 	
 	public function account_manage_info() {
+		$member_setting = getcache('member_setting');
 		if(isset($_POST['dosubmit'])) {
 			//更新用户昵称
 			$nickname = isset($_POST['nickname']) && is_username(trim($_POST['nickname'])) ? trim($_POST['nickname']) : '';
 			$nickname = safe_replace($nickname);
 			if($nickname) {
 				$this->db->update(array('nickname'=>$nickname), array('userid'=>$this->memberinfo['userid']));
-				if(!isset($cookietime)) {
-					$get_cookietime = param::get_cookie('cookietime');
-				}
-				$_cookietime = $cookietime ? intval($cookietime) : ($get_cookietime ? $get_cookietime : 0);
-				$cookietime = $_cookietime ? TIME + $_cookietime : 0;
+				$cookietime = $member_setting['logintime'] ? SYS_TIME+intval($member_setting['logintime']) : SYS_TIME+86400;
 				param::set_cookie('_nickname', $nickname, $cookietime);
 			}
 			require_once CACHE_MODEL_PATH.'member_input.class.php';
@@ -473,13 +475,12 @@ class index extends foreground {
 	public function account_manage_password() {
 		if(isset($_POST['dosubmit'])) {
 			$updateinfo = array();
-			if(!is_password($_POST['info']['password'])) {
-				showmessage(L('password_format_incorrect'), HTTP_REFERER);
-			}
 			if($this->memberinfo['password'] != password($_POST['info']['password'], $this->memberinfo['encrypt'])) {
 				showmessage(L('old_password_incorrect'), HTTP_REFERER);
 			}
-			
+			if ($_POST['info']['password'] == $_POST['info']['newpassword']) {
+                showmessage(L('原密码不能与新密码相同'));
+            }
 			//修改会员邮箱
 			if($this->memberinfo['email'] != $this->input->post('info')['email'] && is_email($_POST['info']['email'])) {
 				$email = $this->input->post('info')['email'];
@@ -487,8 +488,9 @@ class index extends foreground {
 			} else {
 				$email = '';
 			}
-			if(!is_password($_POST['info']['newpassword']) || is_badword($_POST['info']['newpassword'])) {
-				showmessage(L('password_format_incorrect'), HTTP_REFERER);
+			$rt = $this->check_password($_POST['info']['newpassword'], $this->memberinfo['username']);
+			if (!$rt['code']) {
+				showmessage($rt['msg'], HTTP_REFERER);
 			}
 			$newpassword = password($_POST['info']['newpassword'], $this->memberinfo['encrypt']);
 			$updateinfo['password'] = $newpassword;
@@ -619,11 +621,14 @@ class index extends foreground {
 				}
 			}
 			
-			$username = isset($_POST['username']) && is_username($_POST['username']) ? trim($_POST['username']) : showmessage(L('username_empty'), HTTP_REFERER);
+			$username = $_POST['username'];
 			foreground::member_login_before($username);
+			$rt = $this->check_username($username);
+			if (!$rt['code']) {
+				showmessage($rt['msg'], HTTP_REFERER);
+			}
 			$password = isset($_POST['password']) && trim($_POST['password']) ? addslashes(urldecode(trim($_POST['password']))) : showmessage(L('password_empty'), HTTP_REFERER);
-			is_password($_POST['password']) && is_badword($_POST['password'])==false ? trim($_POST['password']) : showmessage(L('password_format_incorrect'), HTTP_REFERER);
-			$cookietime = intval($_POST['cookietime']);
+			is_badword($_POST['password'])==false ? trim($_POST['password']) : showmessage(L('password_format_incorrect'), HTTP_REFERER);
 			
 			//密码错误剩余重试次数
 			$this->times_db = pc_base::load_model('times_model');
@@ -644,7 +649,7 @@ class index extends foreground {
 			}
 			
 			//查询帐号
-			$r = $this->db->get_one(array('username'=>$username));
+			$r = $this->_find_member_info($username);
 
 			if(!$r) showmessage(L('user_not_exist'),'index.php?m=member&c=index&a=login');
 			
@@ -708,11 +713,7 @@ class index extends foreground {
 						
 			$this->db->update($updatearr, array('userid'=>$userid));
 			
-			if(!isset($cookietime)) {
-				$get_cookietime = param::get_cookie('cookietime');
-			}
-			$_cookietime = $cookietime ? intval($cookietime) : ($get_cookietime ? $get_cookietime : 0);
-			$cookietime = $_cookietime ? SYS_TIME + $_cookietime : 0;
+			$cookietime = $member_setting['logintime'] ? SYS_TIME+intval($member_setting['logintime']) : SYS_TIME+86400;
 			
 			$cms_auth = sys_auth($userid."\t".$password, 'ENCODE', get_auth_key('login'));
 			
@@ -722,7 +723,6 @@ class index extends foreground {
 			param::set_cookie('_username', $username, $cookietime);
 			param::set_cookie('_groupid', $groupid, $cookietime);
 			param::set_cookie('_nickname', $nickname, $cookietime);
-			//param::set_cookie('cookietime', $_cookietime, $cookietime);
 			$log = foreground::member_get_log($userid);
 			$this->member_login_db->update(array('logintime' => SYS_TIME,), array('uid'=>$userid));
 			$config = getcache('common', 'commons');
@@ -746,6 +746,7 @@ class index extends foreground {
 	 * 授权登录用户中心跳转
 	 */
 	public function alogin() {
+		$member_setting = getcache('member_setting');
 		$code = $this->cache->get_auth_data('admin_login_member', 1);
 		if (!$code) {
 			showmessage(L('没有获取到会话信息'));
@@ -755,7 +756,6 @@ class index extends foreground {
 		param::set_cookie('_username', '');
 		param::set_cookie('_groupid', '');
 		param::set_cookie('_nickname', '');
-		param::set_cookie('cookietime', '');
 		if ($code) {
 			//如果用户被锁定
 			if($code['islock']) {
@@ -768,7 +768,7 @@ class index extends foreground {
 			$password = $code['password'];
 			$nickname = empty($code['nickname']) ? $username : $code['nickname'];
 			$login_attr = md5(SYS_KEY.$code['password'].(isset($code['login_attr']) ? $code['login_attr'] : ''));
-			$cookietime = 0;
+			$cookietime = $member_setting['logintime'] ? SYS_TIME+intval($member_setting['logintime']) : SYS_TIME+86400;
 			$cms_auth = sys_auth($userid."\t".$password, 'ENCODE', get_auth_key('login'));
 			param::set_cookie('auth', $cms_auth, $cookietime);
 			param::set_cookie('_userid', $userid, $cookietime);
@@ -776,7 +776,6 @@ class index extends foreground {
 			param::set_cookie('_username', $username, $cookietime);
 			param::set_cookie('_groupid', $groupid, $cookietime);
 			param::set_cookie('_nickname', $nickname, $cookietime);
-			//param::set_cookie('cookietime', $_cookietime, $cookietime);
 			$log = foreground::member_get_log($userid);
 			$this->member_login_db->update(array('logintime' => SYS_TIME,), array('uid'=>$userid));
 			$config = getcache('common', 'commons');
@@ -807,7 +806,6 @@ class index extends foreground {
 			param::set_cookie('_username', '');
 			param::set_cookie('_groupid', '');
 			param::set_cookie('_nickname', '');
-			param::set_cookie('cookietime', '');
 			
 			$forward = isset($_GET['forward']) && trim($_GET['forward']) ? $_GET['forward'] : 'index.php?m=member&c=index&a=login';
 			showmessage(L('logout_success'), $forward);
@@ -1038,9 +1036,23 @@ class index extends foreground {
 	 */
 	public function public_checkemail_ajax() {
 		$email = isset($_GET['email']) && trim($_GET['email']) && is_email(trim($_GET['email']))  ? trim($_GET['email']) : exit(0);
-		
-		$status = $this->db->get_one(array('email'=>$email));
-		$status ? exit('-1') : exit('1');
+		if (!$this->check_email($email)) {
+			exit('-1');
+		}
+		if(isset($_GET['userid'])) {
+			$userid = intval($_GET['userid']);
+			//如果是会员修改，而且NICKNAME和原来优质一致返回1，否则返回0
+			$info = get_memberinfo($userid);
+			if($info['email'] == $email){//未改变
+				exit('1');
+			}else{//已改变，判断是否已有此名
+				$status = $this->db->get_one(array('email'=>$email));
+				$status ? exit('-1') : exit('1');
+			}
+ 		} else {
+			$status = $this->db->get_one(array('email'=>$email));
+			$status ? exit('-1') : exit('1');
+		}
 	}
 	
 	public function public_sina_login() {
@@ -1049,7 +1061,7 @@ class index extends foreground {
 		define('WEB_CALLBACK', APP_PATH.'index.php?m=member&c=index&a=public_sina_login&callback=1');
 		pc_base::load_app_class('saetv2.ex', '' ,0);
 		$this->_session_start();
-					
+		$member_setting = getcache('member_setting');
 		if(isset($_GET['callback']) && trim($_GET['callback'])) {
 			$o = new SaeTOAuthV2(WB_AKEY, WB_SKEY);
 			if ($this->input->request('code')) {
@@ -1092,9 +1104,7 @@ class index extends foreground {
 					$login_attr = md5(SYS_KEY.$r['password'].(isset($r['login_attr']) ? $r['login_attr'] : ''));
 					$this->db->update(array('lastip'=>ip(), 'lastdate'=>SYS_TIME, 'nickname'=>$me['name']), array('userid'=>$userid));
 					
-					if(!$cookietime) $get_cookietime = param::get_cookie('cookietime');
-					$_cookietime = $cookietime ? intval($cookietime) : ($get_cookietime ? $get_cookietime : 0);
-					$cookietime = $_cookietime ? TIME + $_cookietime : 0;
+					$cookietime = $member_setting['logintime'] ? SYS_TIME+intval($member_setting['logintime']) : SYS_TIME+86400;
 					
 					$cms_auth = sys_auth($userid."\t".$password, 'ENCODE', get_auth_key('login'));
 					
@@ -1103,7 +1113,6 @@ class index extends foreground {
 					param::set_cookie('_login_attr', $login_attr, $cookietime);
 					param::set_cookie('_username', $username, $cookietime);
 					param::set_cookie('_groupid', $groupid, $cookietime);
-					param::set_cookie('cookietime', $_cookietime, $cookietime);
 					param::set_cookie('_nickname', $nickname, $cookietime);
 					$log = foreground::member_get_log($userid);
 					$this->member_login_db->update(array('logintime' => SYS_TIME,), array('uid'=>$userid));
@@ -1187,9 +1196,9 @@ class index extends foreground {
 		define('SNDA_CALLBACK', urlencode(APP_PATH.'index.php?m=member&c=index&a=public_snda_login&callback=1'));
 		
 		pc_base::load_app_class('OauthSDK', '' ,0);
-		$this->_session_start();		
+		$this->_session_start();
+		$member_setting = getcache('member_setting');
 		if(isset($_GET['callback']) && trim($_GET['callback'])) {
-					
 			$o = new OauthSDK(SNDA_AKEY, SNDA_SKEY, SNDA_CALLBACK);
 			$code = $this->input->request('code');
 			$accesstoken = $o->getAccessToken($code);
@@ -1216,9 +1225,7 @@ class index extends foreground {
 					$nickname = empty($r['nickname']) ? $username : $r['nickname'];
 					$login_attr = md5(SYS_KEY.$r['password'].(isset($r['login_attr']) ? $r['login_attr'] : ''));
 					$this->db->update(array('lastip'=>ip(), 'lastdate'=>SYS_TIME, 'nickname'=>$me['name']), array('userid'=>$userid));
-					if(!$cookietime) $get_cookietime = param::get_cookie('cookietime');
-					$_cookietime = $cookietime ? intval($cookietime) : ($get_cookietime ? $get_cookietime : 0);
-					$cookietime = $_cookietime ? TIME + $_cookietime : 0;
+					$cookietime = $member_setting['logintime'] ? SYS_TIME+intval($member_setting['logintime']) : SYS_TIME+86400;
 					
 					$cms_auth = sys_auth($userid."\t".$password, 'ENCODE', get_auth_key('login'));
 					
@@ -1227,7 +1234,6 @@ class index extends foreground {
 					param::set_cookie('_login_attr', $login_attr, $cookietime);
 					param::set_cookie('_username', $username, $cookietime);
 					param::set_cookie('_groupid', $groupid, $cookietime);
-					param::set_cookie('cookietime', $_cookietime, $cookietime);
 					param::set_cookie('_nickname', $nickname, $cookietime);
 					$log = foreground::member_get_log($userid);
 					$this->member_login_db->update(array('logintime' => SYS_TIME,), array('uid'=>$userid));
@@ -1263,62 +1269,59 @@ class index extends foreground {
 	 * 该函数为QQ登录回调地址
 	 */
 	public function public_qq_loginnew(){
-                $appid = pc_base::load_config('system', 'qq_appid');
-                $appkey = pc_base::load_config('system', 'qq_appkey');
-                $callback = pc_base::load_config('system', 'qq_callback');
-                pc_base::load_app_class('qqapi','',0);
-                $info = new qqapi($appid,$appkey,$callback);
-                $this->_session_start();
-                if(!isset($_GET['code'])){
-                         $info->redirect_to_login();
-                }else{
-					$code = $this->input->get('code');
-					$openid = $_SESSION['openid'] = $info->get_openid($code);
-					if(!empty($openid)){
-						$r = $this->db->get_one(array('connectid'=>$openid,'from'=>'qq'));
-						
-						 if(!empty($r)){
-								//QQ已存在于数据库，则直接转向登陆操作
-								$password = $r['password'];
-								$userid = $r['userid'];
-								$groupid = $r['groupid'];
-								$username = $r['username'];
-								$nickname = empty($r['nickname']) ? $username : $r['nickname'];
-								$login_attr = md5(SYS_KEY.$r['password'].(isset($r['login_attr']) ? $r['login_attr'] : ''));
-								$this->db->update(array('lastip'=>ip(), 'lastdate'=>SYS_TIME, 'nickname'=>$me['name']), array('userid'=>$userid));
-								if(!$cookietime) $get_cookietime = param::get_cookie('cookietime');
-								$_cookietime = $cookietime ? intval($cookietime) : ($get_cookietime ? $get_cookietime : 0);
-								$cookietime = $_cookietime ? TIME + $_cookietime : 0;
-								$cms_auth = sys_auth($userid."\t".$password, 'ENCODE', get_auth_key('login'));
-								param::set_cookie('auth', $cms_auth, $cookietime);
-								param::set_cookie('_userid', $userid, $cookietime);
-								param::set_cookie('_login_attr', $login_attr, $cookietime);
-								param::set_cookie('_username', $username, $cookietime);
-								param::set_cookie('_groupid', $groupid, $cookietime);
-								param::set_cookie('cookietime', $_cookietime, $cookietime);
-								param::set_cookie('_nickname', $nickname, $cookietime);
-								$log = foreground::member_get_log($userid);
-								$this->member_login_db->update(array('logintime' => SYS_TIME,), array('uid'=>$userid));
-								$config = getcache('common', 'commons');
-								if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
-									$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME, 1);
-								}
-								$forward = isset($_GET['forward']) && !empty($_GET['forward']) ? $_GET['forward'] : 'index.php?m=member&c=index';
-								showmessage(L('login_success'), $forward);
-						}else{	
-								//未存在于数据库中，跳去完善资料页面。页面预置用户名（QQ返回是UTF8编码，如有需要进行转码）
-								$user = $info->get_user_info();
- 								$_SESSION['connectid'] = $openid;
-								$_SESSION['from'] = 'qq';
-								if(CHARSET != 'utf-8') {//转编码
-									$connect_username = iconv('utf-8', CHARSET, $user);
-								} else {
-									 $connect_username = $user;
-								}
- 								include template('member', 'connect');
-						}
+		$appid = pc_base::load_config('system', 'qq_appid');
+		$appkey = pc_base::load_config('system', 'qq_appkey');
+		$callback = pc_base::load_config('system', 'qq_callback');
+		pc_base::load_app_class('qqapi','',0);
+		$info = new qqapi($appid,$appkey,$callback);
+		$this->_session_start();
+		$member_setting = getcache('member_setting');
+		if(!isset($_GET['code'])){
+			$info->redirect_to_login();
+		}else{
+			$code = $this->input->get('code');
+			$openid = $_SESSION['openid'] = $info->get_openid($code);
+			if(!empty($openid)){
+				$r = $this->db->get_one(array('connectid'=>$openid,'from'=>'qq'));
+				if(!empty($r)){
+					//QQ已存在于数据库，则直接转向登陆操作
+					$password = $r['password'];
+					$userid = $r['userid'];
+					$groupid = $r['groupid'];
+					$username = $r['username'];
+					$nickname = empty($r['nickname']) ? $username : $r['nickname'];
+					$login_attr = md5(SYS_KEY.$r['password'].(isset($r['login_attr']) ? $r['login_attr'] : ''));
+					$this->db->update(array('lastip'=>ip(), 'lastdate'=>SYS_TIME, 'nickname'=>$me['name']), array('userid'=>$userid));
+					$cookietime = $member_setting['logintime'] ? SYS_TIME+intval($member_setting['logintime']) : SYS_TIME+86400;
+					$cms_auth = sys_auth($userid."\t".$password, 'ENCODE', get_auth_key('login'));
+					param::set_cookie('auth', $cms_auth, $cookietime);
+					param::set_cookie('_userid', $userid, $cookietime);
+					param::set_cookie('_login_attr', $login_attr, $cookietime);
+					param::set_cookie('_username', $username, $cookietime);
+					param::set_cookie('_groupid', $groupid, $cookietime);
+					param::set_cookie('_nickname', $nickname, $cookietime);
+					$log = foreground::member_get_log($userid);
+					$this->member_login_db->update(array('logintime' => SYS_TIME,), array('uid'=>$userid));
+					$config = getcache('common', 'commons');
+					if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
+						$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME, 1);
 					}
-                }
+					$forward = isset($_GET['forward']) && !empty($_GET['forward']) ? $_GET['forward'] : 'index.php?m=member&c=index';
+					showmessage(L('login_success'), $forward);
+				}else{	
+					//未存在于数据库中，跳去完善资料页面。页面预置用户名（QQ返回是UTF8编码，如有需要进行转码）
+					$user = $info->get_user_info();
+					$_SESSION['connectid'] = $openid;
+					$_SESSION['from'] = 'qq';
+					if(CHARSET != 'utf-8') {//转编码
+						$connect_username = iconv('utf-8', CHARSET, $user);
+					} else {
+						 $connect_username = $user;
+					}
+					include template('member', 'connect');
+				}
+			}
+		}
     }
 	
 	/**
@@ -1329,6 +1332,7 @@ class index extends foreground {
 		define('QQ_SKEY', pc_base::load_config('system', 'qq_skey'));
 		pc_base::load_app_class('qqoauth', '' ,0);
 		$this->_session_start();
+		$member_setting = getcache('member_setting');
 		if(isset($_GET['callback']) && trim($_GET['callback'])) {
 			$o = new WeiboOAuth(QQ_AKEY, QQ_SKEY, $_SESSION['keys']['oauth_token'], $_SESSION['keys']['oauth_token_secret']);
 			$_SESSION['last_key'] = $o->getAccessToken($this->input->request('oauth_verifier'));
@@ -1348,9 +1352,7 @@ class index extends foreground {
 					$nickname = empty($r['nickname']) ? $username : $r['nickname'];
 					$login_attr = md5(SYS_KEY.$r['password'].(isset($r['login_attr']) ? $r['login_attr'] : ''));
 					$this->db->update(array('lastip'=>ip(), 'lastdate'=>SYS_TIME, 'nickname'=>$me['name']), array('userid'=>$userid));
-					if(!$cookietime) $get_cookietime = param::get_cookie('cookietime');
-					$_cookietime = $cookietime ? intval($cookietime) : ($get_cookietime ? $get_cookietime : 0);
-					$cookietime = $_cookietime ? TIME + $_cookietime : 0;
+					$cookietime = $member_setting['logintime'] ? SYS_TIME+intval($member_setting['logintime']) : SYS_TIME+86400;
 					
 					$cms_auth = sys_auth($userid."\t".$password, 'ENCODE', get_auth_key('login'));
 					
@@ -1359,7 +1361,6 @@ class index extends foreground {
 					param::set_cookie('_login_attr', $login_attr, $cookietime);
 					param::set_cookie('_username', $username, $cookietime);
 					param::set_cookie('_groupid', $groupid, $cookietime);
-					param::set_cookie('cookietime', $_cookietime, $cookietime);
 					param::set_cookie('_nickname', $nickname, $cookietime);
 					$log = foreground::member_get_log($userid);
 					$this->member_login_db->update(array('logintime' => SYS_TIME,), array('uid'=>$userid));
@@ -1722,15 +1723,112 @@ class index extends foreground {
 		}
 	}
 
-	//邮箱获取验证码
-	public function public_get_email_verify() {
-		$this->_session_start();
-		$code = $_SESSION['emc'] = random(8,"23456789abcdefghkmnrstwxy");
-		$_SESSION['emc_times']=5;
-		$message = '您的验证码为：'.$code;
+    // 查询会员信息
+    protected function _find_member_info($username) {
+		$member_setting = getcache('member_setting');
 
-		$this->email->send($_SESSION['email'], '邮箱找回密码验证', $message);
-		echo '1';
+		$data = $this->db->get_one(array('username'=>$username));
+		if (!$data && $member_setting['login']['field']) {
+			if (dr_in_array('email', $member_setting['login']['field'])
+				&& $this->check_email($username)) {
+				$data = $this->db->get_one(array('email'=>$username));
+			} elseif (dr_in_array('phone', $member_setting['login']['field'])
+				&& $this->check_phone($username)) {
+				$data = $this->db->get_one(array('phone'=>$username));
+			}
+		}
+
+		if (!$data) {
+			return array();
+		}
+
+		$data['userid'] = $data['userid'];
+
+		return $data;
+	}
+
+	// 验证手机号码
+	public function check_phone($value) {
+
+		if (!$value) {
+			return false;
+		} elseif (!is_numeric($value)) {
+			return false;
+		} elseif (strlen($value) != 11) {
+			return false;
+		}
+
+		return true;
+	}
+
+	// 验证邮件地址
+	public function check_email($value) {
+
+		if (!$value) {
+			return false;
+		} elseif (!preg_match('/^[\w\-\.]+@[\w\-\.]+(\.\w+)+$/', $value)) {
+			return false;
+		} elseif (strpos($value, '"') !== false || strpos($value, '\'') !== false) {
+			return false;
+		}
+
+		return true;
+	}
+
+	// 验证账号
+	public function check_username($value) {
+		$member_setting = getcache('member_setting');
+
+		if (!$value) {
+			return dr_return_data(0, L('账号不能为空'), array('field' => 'username'));
+		} elseif ($member_setting['config']['preg']
+			&& !preg_match($member_setting['config']['preg'], $value)) {
+			// 验证账号的组成格式
+			return dr_return_data(0, L('账号格式不正确'), array('field' => 'username'));
+		} elseif (strpos($value, '"') !== false || strpos($value, '\'') !== false) {
+			// 引号判断
+			return dr_return_data(0, L('账号名存在非法字符'), array('field' => 'username'));
+		} elseif ($member_setting['config']['userlen']
+			&& mb_strlen($value) < $member_setting['config']['userlen']) {
+			// 验证账号长度
+			return dr_return_data(0, L('账号长度不能小于'.$member_setting['config']['userlen'].'位，当前'.mb_strlen($value).'位'), array('field' => 'username'));
+		} elseif ($member_setting['config']['userlenmax']
+			&& mb_strlen($value) > $member_setting['config']['userlenmax']) {
+			// 验证账号长度
+			return dr_return_data(0, L('账号长度不能大于'.$member_setting['config']['userlenmax'].'位，当前'.mb_strlen($value).'位'), array('field' => 'username'));
+		}
+		$notallow = [$member_setting['notallow']];
+		$notallow[] = L('游客');
+		// 后台不允许注册的词语，放在最后一次比较
+		foreach ($notallow as $a) {
+			if (dr_strlen($a) && strpos($value, $a) !== false) {
+				return dr_return_data(0, L('账号名不允许注册'), array('field' => 'username'));
+			}
+		}
+
+		return dr_return_data(1, 'ok');
+	}
+
+	// 验证账号的密码
+	public function check_password($value, $username) {
+		$member_setting = getcache('member_setting');
+
+		if (!$value) {
+			return dr_return_data(0, L('密码不能为空'), array('field' => 'password'));
+		} elseif (!$member_setting['config']['user2pwd'] && $value == $username) {
+			return dr_return_data(0, L('密码不能与账号相同'), array('field' => 'password'));
+		} elseif ($member_setting['config']['pwdpreg']
+			&& !preg_match(trim($member_setting['config']['pwdpreg']), $value)) {
+			return dr_return_data(0, L('密码格式不正确'), array('field' => 'password'));
+		} elseif ($member_setting['config']['pwdlen']
+			&& mb_strlen($value) < $member_setting['config']['pwdlen']) {
+			return dr_return_data(0, L('密码长度不能小于'.$member_setting['config']['pwdlen'].'位，当前'.mb_strlen($value).'位'), array('field' => 'password'));
+		} elseif ($member_setting['config']['pwdmax']
+			&& mb_strlen($value) > $member_setting['config']['pwdmax']) {
+			return dr_return_data(0, L('密码长度不能大于'.$member_setting['config']['pwdmax'].'位，当前'.mb_strlen($value).'位'), array('field' => 'password'));
+		}
+
+		return dr_return_data(1, 'ok');
 	}
 }
 ?>

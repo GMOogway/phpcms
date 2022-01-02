@@ -30,7 +30,7 @@ class formguide_field extends admin {
 				}
 			}
 		}
-		$show_header = $show_validator = $show_dialog = '';
+		$show_header = $show_validator = $show_dialog = true;
 		require MODEL_PATH.'fields.inc.php';
 		include $this->admin_tpl('formguide_field_list');
 	}
@@ -89,7 +89,7 @@ class formguide_field extends admin {
 			}
 			dr_json(1, L('add_success'), array('url' => '?m=formguide&c=formguide_field&a=init&formid='.$formid.'&menuid='.$this->input->post('menuid').'&pc_hash='.dr_get_csrf_token()));
 		} else {
-			$show_header = $show_validator = $show_dialog = '';
+			$show_header = $show_validator = $show_dialog = true;
 			pc_base::load_sys_class('form','',0);
 			require MODEL_PATH.'fields.inc.php';
 			$formid = intval($this->input->get('formid'));
@@ -211,7 +211,7 @@ class formguide_field extends admin {
 				extract($info);
 				if($unsetgroupids != '') $unsetgroupids = strpos($unsetgroupids, ',') ? explode(',', $unsetgroupids) : array($unsetgroupids);
 				$setting = stripslashes($setting);
-				$show_header = $show_validator = $show_dialog = '';
+				$show_header = $show_validator = $show_dialog = true;
 				pc_base::load_sys_class('form','',0);
 				require MODEL_PATH.'fields.inc.php';
 			}

@@ -121,7 +121,7 @@ class node extends admin {
 	
 	public function html_rule() {
 		header("Cache-control: private");
-		$show_header = $show_dialog = $show_pc_hash = '';
+		$show_header = $show_dialog = $show_pc_hash = true;
 		include $this->admin_tpl('html_rule');
 	}
 	

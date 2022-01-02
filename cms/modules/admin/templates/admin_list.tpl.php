@@ -8,8 +8,8 @@ include $this->admin_tpl('header');?>
         <thead>
 		<tr>
 		<th width="80"><?php echo L('userid')?></th>
-		<th><?php echo L('username')?></th>
-		<th width="150"><?php echo L('userinrole')?></th>
+		<th width="200"><?php echo L('username')?></th>
+		<th><?php echo L('userinrole')?></th>
 		<th width="180"><?php echo L('lastloginip')?></th>
 		<th width="180"><?php echo L('lastlogintime')?></th>
 		<th width="200"><?php echo L('email')?></th>
@@ -25,13 +25,18 @@ if(is_array($infos)){
 <tr>
 <td><?php echo $info['userid']?></td>
 <td><?php echo $info['username']?><?php if($info['islock']) {?><img onmouseover="layer.tips('<?php echo L('lock')?>',this,{tips: [1, '#fff']});" onmouseout="layer.closeAll();" src="<?php echo IMG_PATH?>icon/icon_padlock.gif"><?php }?></td>
-<td><?php echo $roles[$info['roleid']]?></td>
+<td><?php if(is_array($info['role'])){
+foreach($info['role'] as $c){
+?>
+<span class="badge badge-blue"><?php echo $c;?></span>
+<?php }}?>
+</td>
 <td><?php echo $info['lastloginip']?></td>
-<td><?php echo $info['lastlogintime'] ? date('Y-m-d H:i:s',$info['lastlogintime']) : ''?></td>
+<td><?php echo $info['lastlogintime'] ? dr_date($info['lastlogintime'], null, 'red') : ''?></td>
 <td><?php echo $info['email']?></td>
 <td><?php echo $info['realname']?></td>
 <td>
-<a class="btn btn-xs green" href="javascript:edit(<?php echo $info['userid']?>, '<?php echo new_addslashes($info['username'])?>')"><?php echo L('edit')?></a>
+<a class="btn btn-xs green" href="?m=admin&c=admin_manage&a=edit&userid=<?php echo $info['userid']?>&menuid=<?php echo $this->input->get('menuid');?>"><?php echo L('edit')?></a>
 <?php if(!dr_in_array($info['userid'], ADMIN_FOUNDERS)) {?>
 <?php if($info['islock']) {?>
 <a class="btn btn-xs yellow" href="?m=admin&c=admin_manage&a=unlock&userid=<?php echo $info['userid']?>"><?php echo L('unlock')?></a>
@@ -57,10 +62,3 @@ if(is_array($infos)){
 </div>
 </body>
 </html>
-<script type="text/javascript">
-<!--
-function edit(id, name) {
-	artdialog('edit','?m=admin&c=admin_manage&a=edit&userid='+id,'<?php echo L('edit')?>--'+name,500,400);
-}
-//-->
-</script>

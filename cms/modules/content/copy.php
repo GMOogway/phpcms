@@ -11,7 +11,7 @@ class copy extends admin {
 		$this->input = pc_base::load_sys_class('input');
 		$this->siteid = $this->get_siteid();
 		//权限判断，根据栏目里面的权限设置检查
-		if($this->input->get('catid') && $_SESSION['roleid'] != 1) {
+		if($this->input->get('catid') && !cleck_admin($_SESSION['roleid'])) {
 			$catid = $this->input->get('catid') ? intval($this->input->get('catid')) : intval($this->input->post('catid'));
 			$this->priv_db = pc_base::load_model('category_priv_model');
 			$priv_datas = $this->priv_db->get_one(array('catid'=>$catid,'is_admin'=>1,'action'=>'copy'));

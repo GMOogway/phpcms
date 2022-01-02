@@ -103,7 +103,7 @@ class custom extends admin {
 	}
 
 	public function view_content(){
-		$show_header = $show_dialog = $show_pc_hash = '';
+		$show_header = $show_dialog = $show_pc_hash = true;
 		$id=intval($this->input->get('id'));
 		$info = $this->db->get_one(array('id'=>$id));
 		if(!$info) dr_admin_msg(0,L('custom_exit'));
@@ -112,7 +112,7 @@ class custom extends admin {
 	}
 
 	public function view_lable(){
-		$show_header = $show_dialog = $show_pc_hash = '';
+		$show_header = $show_dialog = $show_pc_hash = true;
 		$id=intval($this->input->get('id'));
 		$info = $this->db->get_one(array('id'=>$id));
 		if(!$info) dr_admin_msg(0,L('custom_exit'));

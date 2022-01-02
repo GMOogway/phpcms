@@ -15,11 +15,12 @@ class block_admin extends admin {
 	}
 	
 	public function init() {
-		$show_header = $show_dialog  = $show_pc_hash = '';
+		$show_header = $show_dialog  = $show_pc_hash = true;
 		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
-		if ($_SESSION['roleid'] != 1) {
+		if (!cleck_admin($this->roleid)) {
 			$offset = ($page-1) * SYS_ADMIN_PAGESIZE;
-			$r = $this->priv_db->select(array('roleid'=>$this->roleid, 'siteid'=>$this->siteid),'blockid', $offset.','.SYS_ADMIN_PAGESIZE);
+			$rolewhere = 'roleid in ('.(is_array(dr_string2array($this->roleid)) ? implode(',', dr_string2array($this->roleid)) : $this->roleid).') and siteid='.$this->siteid;
+			$r = $this->priv_db->select($rolewhere,'blockid', $offset.','.SYS_ADMIN_PAGESIZE);
 			$blockid_list = array();
 			foreach ($r as $key=>$v) {
 				$blockid_list[$key] = $v['blockid'];
@@ -35,9 +36,10 @@ class block_admin extends admin {
 	
 	public function public_init() {
 		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
-		if ($_SESSION['roleid'] != 1) {
+		if (!cleck_admin($this->roleid)) {
 			$offset = ($page-1) * SYS_ADMIN_PAGESIZE;
-			$r = $this->priv_db->select(array('roleid'=>$this->roleid, 'siteid'=>$this->siteid),'blockid', $offset.','.SYS_ADMIN_PAGESIZE);
+			$rolewhere = 'roleid in ('.(is_array(dr_string2array($this->roleid)) ? implode(',', dr_string2array($this->roleid)) : $this->roleid).') and siteid='.$this->siteid;
+			$r = $this->priv_db->select($rolewhere,'blockid', $offset.','.SYS_ADMIN_PAGESIZE);
 			$blockid_list = array();
 			foreach ($r as $key=>$v) {
 				$blockid_list[$key] = $v['blockid'];
@@ -141,8 +143,9 @@ class block_admin extends admin {
 	public function block_update() {
 		$id = isset($_GET['id']) && intval($_GET['id']) ? intval($_GET['id']) :  dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
 		//进行权限判断
-		if ($this->roleid != 1) {
-			if (!$this->priv_db->get_one(array('blockid'=>$id, 'roleid'=>$this->roleid, 'siteid'=>$this->siteid))) {
+		if (!cleck_admin($this->roleid)) {
+			$rolewhere = 'blockid='.$id.' and roleid in ('.(is_array(dr_string2array($this->roleid)) ? implode(',', dr_string2array($this->roleid)) : $this->roleid).') and siteid='.$this->siteid;
+			if (!$this->priv_db->get_one($rolewhere)) {
 				dr_admin_msg(0,L('not_have_permissions'));
 			}
 		}

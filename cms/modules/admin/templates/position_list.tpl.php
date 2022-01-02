@@ -32,7 +32,7 @@ if(is_array($infos)){
 	<td align="center">
 	<a class="btn btn-xs blue" href="?m=admin&c=position&a=public_item&posid=<?php echo $info['posid']?>&menuid=<?php echo $this->input->get('menuid')?>"><?php echo L('posid_item_manage')?></a>
 	<a class="btn btn-xs green" href="javascript:edit(<?php echo $info['posid']?>, '<?php echo new_addslashes($info['name'])?>')"><?php echo L('edit')?></a>
-	<?php if($info['siteid']=='0' && $_SESSION['roleid'] != 1) {?>
+	<?php if($info['siteid']=='0' && !cleck_admin($_SESSION['roleid'])) {?>
 	<?php } else {?>
 	<a class="btn btn-xs red" href="javascript:confirmurl('?m=admin&c=position&a=delete&posid=<?php echo $info['posid']?>', '<?php echo L('posid_del_cofirm')?>')"><?php echo L('delete')?></a>	
 	<?php } ?>

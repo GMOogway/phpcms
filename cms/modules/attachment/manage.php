@@ -82,7 +82,6 @@ class manage extends admin {
 		$list = glob($filepath.'/'.'*');
 		if(!empty($list)) rsort($list);
 		$local = str_replace(array(PC_PATH, CMS_PATH ,DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR), array('','',DIRECTORY_SEPARATOR), $filepath);
-		//$show_header = true;
 		include $this->admin_tpl('attachment_dir');
 	}
 	
@@ -164,7 +163,7 @@ class manage extends admin {
 				$thumbs[$n]['height'] = $thumbinfo[2];
 			}
 		}
-		$show_header = 1; 
+		$show_header = true; 
 		include $this->admin_tpl('attachment_thumb');
 	}
 	

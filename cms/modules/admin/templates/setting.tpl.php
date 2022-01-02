@@ -26,7 +26,7 @@ jQuery(document).ready(function() {
 </script>
 <div class="page-content main-content">
 <div class="note note-danger my-content-top-tool">
-    <p><a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=init&pc_hash='+pc_hash+'&is_ajax=1',1);"><?php echo L('更改数据之后需要更新缓存之后才能生效');?></a></p>
+    <p><a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=init&pc_hash='+pc_hash+'&is_ajax=1',1);"><?php echo L('update_cache_all');?></a></p>
 </div>
 <form action="?m=admin&c=setting&a=init" class="form-horizontal" method="post" name="myform" id="myform">
 <input name="page" id="dr_page" type="hidden" value="<?php echo $page;?>">
@@ -88,6 +88,12 @@ jQuery(document).ready(function() {
                         <label class="col-md-2 control-label"><?php echo L('setting_max_category')?></label>
                         <div class="col-md-9">
                             <input class="form-control input-large" type="text" id="sys_max_category" name="setconfig[sys_max_category]" value="<?php echo $sys_max_category;?>" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('setting_tpl_edit')?></label>
+                        <div class="col-md-9">
+                            <input type="checkbox" name="setconfig[tpl_edit]" value="1" <?php echo $tpl_edit ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
                         </div>
                     </div>
                     <div class="form-group">
@@ -213,7 +219,7 @@ jQuery(document).ready(function() {
                             <input type="checkbox" name="setconfig[needcheckcomeurl]" value="1" <?php echo $needcheckcomeurl ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
                         </div>
                     </div>
-                    <?php if($_SESSION['roleid']==1 && dr_in_array($_SESSION['userid'], ADMIN_FOUNDERS)) {?>
+                    <?php if(cleck_admin($_SESSION['roleid']) && dr_in_array($_SESSION['userid'], ADMIN_FOUNDERS)) {?>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('setting_admin_founders')?></label>
                         <div class="col-md-9">

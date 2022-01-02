@@ -18,7 +18,7 @@ class sitemodel_field extends admin {
 	}
 	
 	public function init() {
-		$show_header = '';
+		$show_header = true;
 		$modelid = $this->input->get('modelid');
 		$this->cache_field($modelid);
 		$datas = $this->db->select(array('modelid'=>$modelid),'*',100,$this->input->get('order') ? $this->input->get('order') : 'listorder ASC,fieldid ASC');
@@ -72,7 +72,7 @@ class sitemodel_field extends admin {
 			$this->cache_field($modelid);
 			dr_json(1, L('add_success'), array('url' => '?m=content&c=sitemodel_field&a=init&modelid='.$modelid.'&menuid='.$this->input->post('menuid').'&pc_hash='.dr_get_csrf_token()));
 		} else {
-			$show_header = $show_validator = $show_dialog = '';
+			$show_header = $show_validator = $show_dialog = true;
 			pc_base::load_sys_class('form','',0);
 			require MODEL_PATH.'fields.inc.php';
 			$modelid = $this->input->get('modelid');
@@ -157,7 +157,7 @@ class sitemodel_field extends admin {
 			$this->cache_field($modelid);
 			dr_json(1, L('update_success'), array('url' => '?m=content&c=sitemodel_field&a=init&modelid='.$modelid.'&menuid='.$this->input->post('menuid').'&pc_hash='.dr_get_csrf_token()));
 		} else {
-			$show_header = $show_validator = $show_dialog = '';
+			$show_header = $show_validator = $show_dialog = true;
 			pc_base::load_sys_class('form','',0);
 			require MODEL_PATH.'fields.inc.php';
 			$modelid = intval($this->input->get('modelid'));
@@ -307,7 +307,7 @@ class sitemodel_field extends admin {
 	public function public_priview() {
 		$catid = 0;
 		pc_base::load_sys_class('form','',0);
-		$show_header = $show_validator = $show_dialog = '';
+		$show_header = $show_validator = $show_dialog = true;
 		$modelid = intval($this->input->get('modelid'));
 		require CACHE_MODEL_PATH.'content_form.class.php';
 		$content_form = new content_form($modelid);
