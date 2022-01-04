@@ -73,7 +73,7 @@ jQuery(document).ready(function() {
         </div>
         <div class="portlet-body form myfooter">
             <div class="form-actions text-center">
-                <button type="button" id="my_submit" onclick="dr_ajax_submit('?m=bdts&c=bdts&a=config&menuid=<?php echo $this->input->get('menuid');?>&page='+$('#dr_page').val(), 'myform', '2000')" class="btn green"> <i class="fa fa-save"></i> <?php echo L('the_save')?></button>
+                <button type="button" onclick="dr_ajax_submit('?m=bdts&c=bdts&a=config&menuid=<?php echo $this->input->get('menuid');?>&page='+$('#dr_page').val(), 'myform', '2000')" class="btn green"> <i class="fa fa-save"></i> <?php echo L('the_save')?></button>
             </div>
         </div>
     </div>
@@ -81,11 +81,6 @@ jQuery(document).ready(function() {
 </form>
 </div>
 <script type="text/javascript">
-$('body').keydown(function(e){
-    if (e.keyCode == 13) {
-        $('#my_submit').trigger('click');
-    }
-})
 $(function() {
 	$(".make-switch").bootstrapSwitch();
 });

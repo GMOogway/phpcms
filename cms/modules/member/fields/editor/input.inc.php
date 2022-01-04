@@ -11,6 +11,7 @@
 		$site_setting = string2array($this->site_config['setting']);
 		$watermark = $site_setting['ueditor'] || $watermark ? 1 : 0;
 		$local_watermark = $site_setting['ueditor'] || $local_watermark ? 1 : 0;
+		$value = str_replace(' style=""', '', $value);
 		if($enablesaveimage) {
 			$value = $this->download->download($value, $watermark, $attachment, $image_reduce, 0);
 		}

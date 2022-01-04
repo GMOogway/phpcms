@@ -24,7 +24,7 @@ class admin_op {
 	 * 检查用户名重名
 	 */	
 	public function checkname($username) {
-		$username =  trim($username);
+		$username = trim($username);
 		if ($this->db->get_one(array('username'=>$username),'userid')){
 			return false;
 		}

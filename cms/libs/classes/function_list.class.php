@@ -250,13 +250,60 @@ class function_list {
         return $value;
     }
 
-    // 实时存储文本值
-    public function save_text_value($value, $param = array(), $data = array(), $field = array()) {
+    // 联动字段name值
+    public function linkage_name($value, $param = [], $data = [], $field = []) {
+
+        if (!$value) {
+            return '';
+        }
+
+        $setting = dr_string2array($field['setting']);
+        if ($field && $setting['linkage']) {
+            return dr_linkagepos($setting['linkage'], $value, $setting['space']);
+        }
+
+        return $value;
+    }
+
+    // 实时存储时间值
+    public function save_time_value($value, $param = array(), $data = array(), $field = array()) {
+        $cache = pc_base::load_sys_class('cache');
 
         $m = defined('ROUTE_M') && ROUTE_M ? ROUTE_M : '';
         $c = defined('ROUTE_C') && ROUTE_C ? ROUTE_C : '';
-        $url = '?m='.$m.'&c='.$c.'&a=listorder&catid='.$data['catid'].'&id='.$data['id'].'&after='; //after是回调函数
+        $url = '?m='.$m.'&c='.$c.'&a=public_save_value_edit&catid='.$data['catid'].'&id='.$data['id'].'&after='; //after是回调函数
+        $html = '<input type="text" class="form-control" placeholder="" value="'.dr_date($value).'" onblur="dr_ajax_save(dr_strtotime(this.value), \''.$url.'\', \''.$field['field'].'\')">';
+
+        $cache->set_auth_data('function_list_save_text_value', $_SESSION['userid'], 1);
+
+        return $html;
+    }
+
+    // 实时存储文本值
+    public function save_text_value($value, $param = array(), $data = array(), $field = array()) {
+        $cache = pc_base::load_sys_class('cache');
+
+        $m = defined('ROUTE_M') && ROUTE_M ? ROUTE_M : '';
+        $c = defined('ROUTE_C') && ROUTE_C ? ROUTE_C : '';
+        $url = '?m='.$m.'&c='.$c.'&a=public_save_value_edit&catid='.$data['catid'].'&id='.$data['id'].'&after='; //after是回调函数
         $html = '<input type="text" class="form-control" placeholder="" value="'.htmlspecialchars($value).'" onblur="dr_ajax_save(this.value, \''.$url.'\', \''.$field['field'].'\')">';
+
+        $cache->set_auth_data('function_list_save_text_value', $_SESSION['userid'], 1);
+
+        return $html;
+    }
+
+    // 实时存储选择值
+    public function save_select_value($value, $param = array(), $data = array(), $field = array()) {
+        $cache = pc_base::load_sys_class('cache');
+
+        $m = defined('ROUTE_M') && ROUTE_M ? ROUTE_M : '';
+        $c = defined('ROUTE_C') && ROUTE_C ? ROUTE_C : '';
+        $url = '?m='.$m.'&c='.$c.'&a=public_save_value_edit&catid='.$data['catid'].'&name='.$field['field'].'&id='.$data['id'].'&after='; //after是回调函数
+
+        $html = '<a href="javascript:;" onclick="dr_ajax_list_open_close(this, \''.$url.'\');" value="'.$value.'" class="badge badge-'.($value ? "yes" : "no").'"><i class="fa fa-'.($value ? "check" : "times").'"></i></a>';
+
+        $cache->set_auth_data('function_list_save_text_value', $_SESSION['userid'], 1);
 
         return $html;
     }

@@ -79,7 +79,7 @@ class email {
             return $this->mail($toemail, $subject, $message, $fname);
         }
 
-        $cfg = [];
+        $cfg = array();
         $cfg['charset'] = $charset = CHARSET;
         $cfg['server'] = $mail['server'];
         $cfg['port'] = $mail['port'];

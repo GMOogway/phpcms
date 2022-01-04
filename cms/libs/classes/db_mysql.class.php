@@ -1,12 +1,12 @@
 <?php
 /**
- *  mysql.class.php 数据库实现类
+ *  db_mysql.class.php 数据库实现类
  *
  * @copyright			(C) 2005-2010
  * @lastmodify			2010-6-1
  */
 
-final class mysql {
+final class db_mysql {
 	
 	/**
 	 * 数据库配置信息
@@ -450,7 +450,7 @@ final class mysql {
 		} else {
 			$q = '';
 		}
-		$value = $q.$value.$q;
+		$value = $q.addslashes($value).$q;
 		return $value;
 	}
 }

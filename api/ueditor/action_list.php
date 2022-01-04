@@ -78,14 +78,10 @@ switch ($input->get('action')) {
         $listSize = $CONFIG['imageManagerListSize'];
         $path = $CONFIG['imageManagerListPath'];
 }
-$allowFiles = substr(str_replace(".", "|", join("", $allowFiles)), 1);
-
-$array_test = explode('|',$allowFiles);
-$length = sizeof($array_test);
-for($i=0;$i<$length;$i++){
-    $s_str .= "'".$array_test[$i]."',";
+$allowFiles = explode('.', join("", $allowFiles));
+if (!$allowFiles[0]) {
+    unset($allowFiles[0]);
 }
-$s_str = substr($s_str, 0, strlen($s_str) - 1);
 
 /* 获取参数 */
 $size = $input->get('size') ? html2code($input->get('size')) : $listSize;
@@ -94,9 +90,9 @@ $end = $start + $size;
 
 /* 获取文件列表 */
 $thisdb = pc_base::load_model('attachment_model');
-$where = "fileext in (".$s_str.") and module<>'member' and siteid=".$siteid." and userid=".(int)$userid;
-$total = $thisdb->count($where);
+$where = array('fileext'=>$allowFiles, 'module<>'=>'member', 'siteid'=>$siteid, 'userid'=>(int)$userid);
 $data = $thisdb->select($where,'*','','aid desc');
+$total = $thisdb->count($where);
 $files = array();
 if ($data) {
     $index = 0;

@@ -60,6 +60,6 @@ class check extends admin {
 				}
 			}
 		}
-		echo json_encode(array('total'=>$total, 'data'=>$r));
+		exit(dr_array2string(array('total'=>$total, 'data'=>$r)));
 	}
 }

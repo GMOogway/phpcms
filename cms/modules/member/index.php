@@ -67,7 +67,7 @@ class index extends foreground {
 			$userinfo['nickname'] = (isset($_POST['nickname']) && is_username($_POST['nickname'])) ? $_POST['nickname'] : '';
 			
 			$userinfo['email'] = (isset($_POST['email']) && is_email($_POST['email'])) ? $_POST['email'] : exit('0');
-			$userinfo['password'] = $_POST['password'];
+			$userinfo['password'] = dr_safe_password($_POST['password']);
 			$rt = $this->check_password($userinfo['password'], $userinfo['username']);
 			if (!$rt['code']) {
 				showmessage($rt['msg'], HTTP_REFERER);
@@ -1010,8 +1010,7 @@ class index extends foreground {
 			if($info['nickname'] == $nickname){//未改变
 				exit('1');
 			}else{//已改变，判断是否已有此名
-				$where = array('nickname'=>$nickname);
-				$res = $this->db->get_one($where);
+				$res = $this->db->get_one(array('nickname'=>$nickname));
 				if($res) {
 					exit('0');
 				} else {
@@ -1019,8 +1018,7 @@ class index extends foreground {
 				}
 			}
  		} else {
-			$where = array('nickname'=>$nickname);
-			$res = $this->db->get_one($where);
+			$res = $this->db->get_one(array('nickname'=>$nickname));
 			if($res) {
 				exit('0');
 			} else {

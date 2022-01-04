@@ -19,8 +19,7 @@ class block_admin extends admin {
 		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
 		if (!cleck_admin($this->roleid)) {
 			$offset = ($page-1) * SYS_ADMIN_PAGESIZE;
-			$rolewhere = 'roleid in ('.(is_array(dr_string2array($this->roleid)) ? implode(',', dr_string2array($this->roleid)) : $this->roleid).') and siteid='.$this->siteid;
-			$r = $this->priv_db->select($rolewhere,'blockid', $offset.','.SYS_ADMIN_PAGESIZE);
+			$r = $this->priv_db->select(array('roleid'=>is_array(dr_string2array($this->roleid)) ? dr_string2array($this->roleid) : $this->roleid, 'siteid'=>$this->siteid),'blockid', $offset.','.SYS_ADMIN_PAGESIZE);
 			$blockid_list = array();
 			foreach ($r as $key=>$v) {
 				$blockid_list[$key] = $v['blockid'];
@@ -38,8 +37,7 @@ class block_admin extends admin {
 		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
 		if (!cleck_admin($this->roleid)) {
 			$offset = ($page-1) * SYS_ADMIN_PAGESIZE;
-			$rolewhere = 'roleid in ('.(is_array(dr_string2array($this->roleid)) ? implode(',', dr_string2array($this->roleid)) : $this->roleid).') and siteid='.$this->siteid;
-			$r = $this->priv_db->select($rolewhere,'blockid', $offset.','.SYS_ADMIN_PAGESIZE);
+			$r = $this->priv_db->select(array('roleid'=>is_array(dr_string2array($this->roleid)) ? dr_string2array($this->roleid) : $this->roleid, 'siteid'=>$this->siteid),'blockid', $offset.','.SYS_ADMIN_PAGESIZE);
 			$blockid_list = array();
 			foreach ($r as $key=>$v) {
 				$blockid_list[$key] = $v['blockid'];
@@ -144,8 +142,7 @@ class block_admin extends admin {
 		$id = isset($_GET['id']) && intval($_GET['id']) ? intval($_GET['id']) :  dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
 		//进行权限判断
 		if (!cleck_admin($this->roleid)) {
-			$rolewhere = 'blockid='.$id.' and roleid in ('.(is_array(dr_string2array($this->roleid)) ? implode(',', dr_string2array($this->roleid)) : $this->roleid).') and siteid='.$this->siteid;
-			if (!$this->priv_db->get_one($rolewhere)) {
+			if (!$this->priv_db->get_one(array('blockid'=>$id, 'roleid'=>is_array(dr_string2array($this->roleid)) ? dr_string2array($this->roleid) : $this->roleid, 'siteid'=>$this->siteid))) {
 				dr_admin_msg(0,L('not_have_permissions'));
 			}
 		}

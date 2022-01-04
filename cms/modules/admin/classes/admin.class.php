@@ -95,8 +95,7 @@ class admin {
 				$array[] = $v;
 			} else {
 				if(preg_match('/^ajax_([a-z]+)_/',$action,$_match)) $action = $_match[1];
-				$rolewhere = 'm="'.$v['m'].'" and c="'.$v['c'].'" and a="'.$action.'" and roleid in ('.(is_array(dr_string2array($_SESSION['roleid'])) ? implode(',', dr_string2array($_SESSION['roleid'])) : $_SESSION['roleid']).') and siteid='.$siteid;
-				$r = $privdb->get_one($rolewhere);
+				$r = $privdb->get_one(array('m'=>$v['m'],'c'=>$v['c'],'a'=>$action,'roleid'=>is_array(dr_string2array($_SESSION['roleid'])) ? dr_string2array($_SESSION['roleid']) : $_SESSION['roleid'],'siteid'=>$siteid));
 				if($r) $array[] = $v;
 			}
 		}
@@ -222,8 +221,7 @@ class admin {
 		if(preg_match('/^ajax_([a-z]+)_/',ROUTE_A,$_match)) {
 			$action = $_match[1];
 		}
-		$rolewhere = 'm="'.ROUTE_M.'" and c="'.ROUTE_C.'" and a="'.$action.'" and roleid in ('.(is_array(dr_string2array($_SESSION['roleid'])) ? implode(',', dr_string2array($_SESSION['roleid'])) : $_SESSION['roleid']).') and siteid='.$siteid;
-		$r = $privdb->get_one($rolewhere);
+		$r = $privdb->get_one(array('m'=>ROUTE_M,'c'=>ROUTE_C,'a'=>$action,'roleid'=>is_array(dr_string2array($_SESSION['roleid'])) ? dr_string2array($_SESSION['roleid']) : $_SESSION['roleid'],'siteid'=>$siteid));
 		if(!$r) dr_admin_msg(0,'您没有权限操作该项');
 	}
 

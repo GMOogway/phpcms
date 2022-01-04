@@ -300,7 +300,11 @@ class cache_api {
 		$db = pc_base::load_model('sitemodel_field_model');
 		$fields = $db->select(array('modelid'=>$modelid,'disabled'=>0),'*',100,'listorder ASC,fieldid ASC');
 		foreach($fields as $_value) {
-			$setting = string2array($_value['setting']);
+			if (is_array(string2array($_value['setting']))) {
+				$setting = string2array($_value['setting']);
+			} else {
+				$setting = $_value['setting'];
+			}
 			$_value = array_merge($_value,$setting);
 			$field_array[$_value['field']] = $_value;
 		}

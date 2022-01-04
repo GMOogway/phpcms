@@ -60,7 +60,7 @@ a {text-decoration: none;background-color: transparent;}
 a:active,a:hover {outline: 0;}
 a:focus,a:hover {color: #23527c;text-decoration: underline;}
 a:focus {outline-offset: -2px;}
-a.badge:focus,a.badge:hover {color: #fff;text-decoration: none;cursor: pointer;}
+a.badge:link,a.badge:focus,a.badge:hover {color: #fff;text-decoration: none;cursor: pointer;}
 img{border:none;}
 h1,h2,h3,h4,h5{font-weight:normal;color: #676a6c;}
 table{border-collapse:collapse;}
@@ -903,6 +903,7 @@ table td[class*=col-],table th[class*=col-] {position: static;float: none;displa
 .my-content-top-tool {margin-bottom: 10px;}
 .layui-elem-quote {font-size: 14px;}
 .container pre {padding: 9.5px;margin: 0 0 10px;}
+.dataTable>tbody>tr>td:first-child>label {margin-bottom: 15px;}
 .dataTable>tbody>tr>td>label {margin-bottom:0;}
 .input-mini, .input-xxs {width: 45px!important;}
 .input-group-sm>.form-control, .input-group-sm>.input-group-addon, .input-group-sm>.input-group-btn>.btn, .input-sm {height: 30px!important;margin: 0px!important;padding: 5px 10px!important;font-size: 12px!important;line-height: 1.5!important;border-radius: 3px!important;}

@@ -47,7 +47,7 @@ jQuery(document).ready(function() {
         </div>
         <div class="portlet-body form myfooter">
             <div class="form-actions text-center">
-                <button type="button" id="my_submit" onclick="Dialog.confirm('<?php echo L('form_submit_confirm')?>',function(){dr_ajax_submit('?m=attachment&c=address&a=update&page='+$('#dr_page').val(), 'myform', '2000');});" class="btn green"> <i class="fa fa-save"></i> <?php echo L('保存');?></button>
+                <button type="button" onclick="Dialog.confirm('<?php echo L('form_submit_confirm')?>',function(){dr_ajax_submit('?m=attachment&c=address&a=update&page='+$('#dr_page').val(), 'myform', '2000');});" class="btn green"> <i class="fa fa-save"></i> <?php echo L('保存');?></button>
             </div>
         </div>
     </div>
@@ -55,11 +55,6 @@ jQuery(document).ready(function() {
 </form>
 </div>
 <script>
-$('body').keydown(function(e){
-    if (e.keyCode == 13) {
-        $('#my_submit').trigger('click');
-    }
-})
 $('.nav-tabs a').click(function (e) {
     $('.nav-tabs').find('li').removeClass('active');
     $('.tab-pane').removeClass('active');

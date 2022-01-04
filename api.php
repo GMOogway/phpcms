@@ -5,6 +5,8 @@
  * @copyright			(C) 2005-2010
  * @lastmodify			2021-06-06
  */
+// 是否是开发者模式
+define('IS_DEV', FALSE);
 // API接口项目标识
 define('IS_API', TRUE);
 // 入口文件名称

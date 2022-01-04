@@ -154,6 +154,12 @@ jQuery(document).ready(function() {
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('category_index_tpl');?></label>
                         <div class="col-md-9">
+                            <label id="category_template"><?php echo form::select_template($default_style,'content', $category_template, 'name="setting[category_template]" id="template_category"', 'category')?></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('category_list_tpl');?></label>
+                        <div class="col-md-9">
                             <label id="list_template"><?php echo form::select_template($default_style,'content', $list_template, 'name="setting[list_template]" id="template_list"', 'list')?></label>
                         </div>
                     </div>
@@ -196,7 +202,7 @@ jQuery(document).ready(function() {
         </div>
         <div class="portlet-body form myfooter">
             <div class="form-actions text-center">
-                <button type="button" id="my_submit" onclick="dr_ajax_submit('?m=content&c=sitemodel&a=edit&page='+$('#dr_page').val(), 'myform', '2000')" class="btn green"> <i class="fa fa-save"></i> <?php echo L('submit')?></button>
+                <button type="button" onclick="dr_ajax_submit('?m=content&c=sitemodel&a=edit&page='+$('#dr_page').val(), 'myform', '2000')" class="btn green"> <i class="fa fa-save"></i> <?php echo L('submit')?></button>
             </div>
         </div>
     </div>
@@ -204,11 +210,6 @@ jQuery(document).ready(function() {
 </form>
 </div>
 <script type="text/javascript">
-$('body').keydown(function(e){
-    if (e.keyCode == 13) {
-        $('#my_submit').trigger('click');
-    }
-})
 $('.nav-tabs a').click(function (e) {
     $('.nav-tabs').find('li').removeClass('active');
     $('.tab-pane').removeClass('active');

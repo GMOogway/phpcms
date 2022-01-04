@@ -79,10 +79,67 @@ class content_input {
 			}
 			$func = $this->fields[$field]['formtype'];
 			if(method_exists($this, $func)) $value = $this->$func($field, $value);
+			// 下载远程图片
+			if (isset($_POST['is_auto_down_img_'.$field]) && $_POST['is_auto_down_img_'.$field]) {
+				$setting = string2array($this->fields[$field]['setting']);
+				$watermark = $setting['watermark'];
+				$attachment = $setting['attachment'];
+				$image_reduce = $setting['image_reduce'];
+				$value = $this->download->download($_POST['info'][$field], $watermark, $attachment, $image_reduce, $this->input->post('info')['catid']);
+				$info['model']['content'] = $value;
+			}
+			// 提取缩略图
+			if(isset($_POST['info']['thumb']) && isset($_POST['is_auto_thumb_'.$field]) && !$_POST['info']['thumb']) {
+				$content = $this->input->post('info')[$field];
+				$auto_thumb_length = intval($_POST['auto_thumb_'.$field])-1;
+				if(preg_match_all("/(src)=([\"|']?)([^ \"'>]+\.(gif|jpg|jpeg|bmp|png))\\2/i", code2html($content), $matches)) {
+					$info['system']['thumb'] = $matches[3][$auto_thumb_length];
+				}
+			}
+			// 去除站外链接
+			if (isset($_POST['is_remove_a_'.$field]) && $_POST['is_remove_a_'.$field]) {
+				$value = $_POST['info'][$field];
+				if (preg_match_all("/<a(.*)href=(.+)>(.*)<\/a>/Ui", $value, $arrs)) {
+					//$sites = require CACHE_PATH.'caches_commons/caches_data/domain_site.cache.php';
+					$this->sitedb = pc_base::load_model('site_model');
+					$sitedb_data = $this->sitedb->select();
+					$sites = array();
+					foreach ($sitedb_data as $t) {
+						$domain = parse_url($t['domain']);
+						if ($domain['port']) {
+							$sites[$domain['host'].':'.$domain['port']] = $t['siteid'];
+						} else {
+							$sites[$domain['host']] = $t['siteid'];
+						}
+					}
+					foreach ($arrs[2] as $i => $a) {
+						if (strpos($a, ' ') !== false) {
+							list($a) = explode(' ', $a);
+						}
+						$a = trim($a, '"');
+						$a = trim($a, '\'');
+						$arr = parse_url($a);
+						if ($arr && $arr['host'] && !isset($sites[$arr['host']])) {
+							// 去除a标签
+							$value = str_replace($arrs[0][$i], $arrs[3][$i], $value);
+						}
+					}
+				}
+			}
+			// 提取描述信息
+			if(isset($_POST['info']['description']) && isset($_POST['is_auto_description_'.$field]) && !$_POST['info']['description']) {
+				$content = code2html($_POST['info'][$field]);
+				$auto_description_length = intval($_POST['auto_description_'.$field]);
+				$info['system']['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]','&ldquo;','&rdquo;','&nbsp;',' ','　','	'), '', $content), $auto_description_length);
+			}
 			if($this->fields[$field]['issystem']) {
-				$info['system'][$field] = $value;
+				if (!$info['system']['thumb'] || !$info['system']['description']) {
+					$info['system'][$field] = $value;
+				}
 			} else {
-				$info['model'][$field] = $value;
+				if (!$info['model']['content']) {
+					$info['model'][$field] = $value;
+				}
 			}
 			//颜色选择为隐藏域 在这里进行取值
 			$info['system']['style'] = $this->input->post('style_color') && preg_match('/^#([0-9a-z]+)/i', $this->input->post('style_color')) ? $this->input->post('style_color') : '';

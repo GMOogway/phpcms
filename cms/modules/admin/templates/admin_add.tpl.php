@@ -5,7 +5,7 @@ $show_validator = true;include $this->admin_tpl('header');?>
 <!--
 $(function(){
     $.formValidator.initConfig({autotip:true,formid:"myform",onerror:function(msg){}});
-    $("#username").formValidator({onshow:"<?php echo L('input').L('username')?>",onfocus:"<?php echo L('username').L('between_2_to_20')?>"}).inputValidator({min:2,max:20,onerror:"<?php echo L('username').L('between_2_to_20')?>"}).ajaxValidator({
+    $("#dr_username").formValidator({onshow:"<?php echo L('input').L('username')?>",onfocus:"<?php echo L('username').L('between_2_to_20')?>"}).inputValidator({min:2,max:20,onerror:"<?php echo L('username').L('between_2_to_20')?>"}).ajaxValidator({
         type : "get",
         url : "",
         data :"m=admin&c=admin_manage&a=public_checkname_ajx",
@@ -25,9 +25,9 @@ $(function(){
         onerror : "<?php echo L('user_already_exist')?>",
         onwait : "<?php echo L('connecting_please_wait')?>"
     });
-    $("#password").formValidator({onshow:"<?php echo L('input').L('password')?>",onfocus:"<?php echo L('password').L('between_6_to_20')?>"}).inputValidator({min:6,max:20,onerror:"<?php echo L('password').L('between_6_to_20')?>"});
-    $("#pwdconfirm").formValidator({onshow:"<?php echo L('input').L('cofirmpwd')?>",onfocus:"<?php echo L('input').L('passwords_not_match')?>",oncorrect:"<?php echo L('passwords_match')?>"}).compareValidator({desid:"password",operateor:"=",onerror:"<?php echo L('input').L('passwords_not_match')?>"});
-    $("#email").formValidator({onshow:"<?php echo L('input').L('email')?>",onfocus:"<?php echo L('email').L('format_incorrect')?>",oncorrect:"<?php echo L('email').L('format_right')?>"}).regexValidator({regexp:"email",datatype:"enum",onerror:"<?php echo L('email').L('format_incorrect')?>"});
+    $("#dr_password").formValidator({onshow:"<?php echo L('input').L('password')?>",onfocus:"<?php echo L('password').L('between_6_to_20')?>"}).inputValidator({min:6,max:20,onerror:"<?php echo L('password').L('between_6_to_20')?>"});
+    $("#dr_pwdconfirm").formValidator({onshow:"<?php echo L('input').L('cofirmpwd')?>",onfocus:"<?php echo L('input').L('passwords_not_match')?>",oncorrect:"<?php echo L('passwords_match')?>"}).compareValidator({desid:"password",operateor:"=",onerror:"<?php echo L('input').L('passwords_not_match')?>"});
+    $("#dr_email").formValidator({onshow:"<?php echo L('input').L('email')?>",onfocus:"<?php echo L('email').L('format_incorrect')?>",oncorrect:"<?php echo L('email').L('format_right')?>"}).regexValidator({regexp:"email",datatype:"enum",onerror:"<?php echo L('email').L('format_incorrect')?>"});
 })
 //-->
 </script>
@@ -61,25 +61,25 @@ jQuery(document).ready(function() {
                     <div class="form-group" id="dr_row_username">
                         <label class="col-md-2 control-label"><?php echo L('username')?></label>
                         <div class="col-md-9">
-                            <input class="form-control input-large" type="text" id="username" name="info[username]" value="" >
+                            <input class="form-control input-large" type="text" id="dr_username" name="info[username]" value="" >
                         </div>
                     </div>
                     <div class="form-group" id="dr_row_password">
                         <label class="col-md-2 control-label"><?php echo L('password')?></label>
                         <div class="col-md-9">
-                            <input class="form-control input-large" type="password" id="password" name="info[password]" value="" >
+                            <input class="form-control input-large" type="password" id="dr_password" name="info[password]" value="" >
                         </div>
                     </div>
                     <div class="form-group" id="dr_row_pwdconfirm">
                         <label class="col-md-2 control-label"><?php echo L('cofirmpwd')?></label>
                         <div class="col-md-9">
-                            <input class="form-control input-large" type="password" id="pwdconfirm" name="info[pwdconfirm]" value="" >
+                            <input class="form-control input-large" type="password" id="dr_pwdconfirm" name="info[pwdconfirm]" value="" >
                         </div>
                     </div>
                     <div class="form-group" id="dr_row_email">
                         <label class="col-md-2 control-label"><?php echo L('email')?></label>
                         <div class="col-md-9">
-                            <input class="form-control input-large" type="text" id="email" name="info[email]" value="" >
+                            <input class="form-control input-large" type="text" id="dr_email" name="info[email]" value="" >
                         </div>
                     </div>
                     <div class="form-group">
@@ -107,7 +107,7 @@ jQuery(document).ready(function() {
         </div>
         <div class="portlet-body form myfooter">
             <div class="form-actions text-center">
-                <button type="button" id="my_submit" onclick="dr_ajax_submit('?m=admin&c=admin_manage&a=add&page='+$('#dr_page').val(), 'myform', '2000')" class="btn green"> <i class="fa fa-save"></i> <?php echo L('submit')?></button>
+                <button type="button" onclick="dr_ajax_submit('?m=admin&c=admin_manage&a=add&page='+$('#dr_page').val(), 'myform', '2000')" class="btn green"> <i class="fa fa-save"></i> <?php echo L('submit')?></button>
             </div>
         </div>
     </div>
@@ -115,11 +115,6 @@ jQuery(document).ready(function() {
 </form>
 </div>
 <script type="text/javascript">
-$('body').keydown(function(e){
-    if (e.keyCode == 13) {
-        $('#my_submit').trigger('click');
-    }
-})
 $('.nav-tabs a').click(function (e) {
     $('.nav-tabs').find('li').removeClass('active');
     $('.tab-pane').removeClass('active');

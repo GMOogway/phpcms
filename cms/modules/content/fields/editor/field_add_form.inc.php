@@ -64,6 +64,44 @@
             </div>
         </div>
     </div>
+    <div class="form-group"> 
+      <label class="col-md-2 control-label">底部工具栏</label>
+        <div class="col-md-9">
+            <div class="mt-radio-inline">
+                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[show_bottom_boot]" value="1" onclick="$('#sdmrx').show()"> 开启 <span></span></label>
+                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[show_bottom_boot]" value="0" onclick="$('#sdmrx').hide()" checked> 关闭 <span></span></label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group" id="sdmrx" style="display:none">
+        <label class="col-md-1 control-label">&nbsp;&nbsp;</label>
+        <div class="col-md-9">
+            <div class="form-group">
+                <label class="col-md-2 control-label">提取描述</label>
+                <div class="col-md-9">
+                    <input type="checkbox" name="setting[tool_select_1]" value="1" data-on-text="默认选中" data-off-text="默认不选" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label">提取缩略图</label>
+                <div class="col-md-9">
+                    <input type="checkbox" name="setting[tool_select_2]" value="1" data-on-text="默认选中" data-off-text="默认不选" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label">下载远程图</label>
+                <div class="col-md-9">
+                    <input type="checkbox" name="setting[tool_select_3]" value="1" data-on-text="默认选中" data-off-text="默认不选" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">                             
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label">去除站外链接</label>
+                <div class="col-md-9">
+                    <input type="checkbox" name="setting[tool_select_4]" value="1" data-on-text="默认选中" data-off-text="默认不选" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">                             
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="form-group"<?php if (!SYS_EDITOR) {?> style="display: none;"<?php }?>> 
       <label class="col-md-2 control-label">编辑器颜色</label>
         <div class="col-md-9">
@@ -224,3 +262,8 @@
         </div>
     </div>
     <?php }?>
+<script type="text/javascript">
+$(function() {
+    $(".make-switch").bootstrapSwitch();
+});
+</script>

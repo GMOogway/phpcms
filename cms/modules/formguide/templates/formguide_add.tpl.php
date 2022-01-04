@@ -165,11 +165,6 @@ jQuery(document).ready(function() {
 </form>
 </div>
 <script type="text/javascript">
-$('body').keydown(function(e){
-    if (e.keyCode == 13) {
-        $('#my_submit').trigger('click');
-    }
-})
 $('.nav-tabs a').click(function (e) {
     $('.nav-tabs').find('li').removeClass('active');
     $('.tab-pane').removeClass('active');

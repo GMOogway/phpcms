@@ -26,17 +26,18 @@ class role extends admin {
 	 * 添加角色
 	 */
 	public function add() {
-		if($this->input->post('dosubmit')) {
-			if(!is_array($this->input->post('info')) || empty($this->input->post('info')['rolename'])){
-				dr_admin_msg(0,L('operation_failure'));
+		if(IS_AJAX_POST) {
+			$info = $this->input->post('info');
+			if(!is_array($info) || empty($info['rolename'])){
+				dr_json(0,L('role_name').L('not_empty'), array('field' => 'rolename'));
 			}
-			if($this->op->checkname($this->input->post('info')['rolename'])){
-				dr_admin_msg(0,L('role_duplicate'));
+			if($this->op->checkname($info['rolename'])){
+				dr_json(0,L('role_duplicate'));
 			}
-			$insert_id = $this->db->insert($this->input->post('info'),true);
+			$insert_id = $this->db->insert($info,true);
 			$this->_cache();
 			if($insert_id){
-				dr_admin_msg(1,L('operation_success'),'?m=admin&c=role&a=init');
+				dr_json(1,L('operation_success'), array('url' => '?m=admin&c=role&a=init&menuid='.$this->input->post('menuid').'&page='.(int)$this->input->post('page').'&pc_hash='.dr_get_csrf_token()));
 			}
 		} else {
 			include $this->admin_tpl('role_add');
@@ -48,17 +49,19 @@ class role extends admin {
 	 * 编辑角色
 	 */
 	public function edit() {
-		if($this->input->post('dosubmit')) {
+		if(IS_AJAX_POST) {
 			$roleid = intval($this->input->post('roleid'));
-			if(!is_array($this->input->post('info')) || empty($this->input->post('info')['rolename'])){
-				dr_admin_msg(0,L('operation_failure'));
+			$info = $this->input->post('info');
+			if(!is_array($info) || empty($info['rolename'])){
+				dr_json(0,L('role_name').L('not_empty'), array('field' => 'rolename'));
 			}
-			$this->db->update($this->input->post('info'),array('roleid'=>$roleid));
+			$this->db->update($info,array('roleid'=>$roleid));
 			$this->_cache();
-			dr_admin_msg(1,L('operation_success'),'?m=admin&c=role');
-		} else {					
+			dr_json(1,L('operation_success'), array('url' => '?m=admin&c=role&a=init&menuid='.$this->input->post('menuid').'&page='.(int)$this->input->post('page').'&pc_hash='.dr_get_csrf_token()));
+		} else {
+			$show_header = true;
 			$info = $this->db->get_one(array('roleid'=>$this->input->get('roleid')));
-			extract($info);		
+			extract($info);
 			include $this->admin_tpl('role_edit');		
 		}
 	}
@@ -160,16 +163,6 @@ class role extends admin {
 		$this->db->update(array('disabled'=>$disabled),array('roleid'=>$roleid));
 		$this->_cache();
 		dr_admin_msg(1,L('operation_success'),'?m=admin&c=role');
-	}
-	/**
-	 * 成员管理
-	 */
-	public function member_manage() {
-		$this->admin_db = pc_base::load_model('admin_model');
-		$roleid = intval($this->input->get('roleid'));
-		$roles = getcache('role','commons');
-		$infos = $this->admin_db->select(array('roleid'=>$roleid));
-		include $this->admin_tpl('admin_list');
 	}
 		
 	/**

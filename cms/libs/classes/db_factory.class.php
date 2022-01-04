@@ -65,8 +65,8 @@ final class db_factory {
 		$object = null;
 		switch($this->db_config[$db_name]['type']) {
 			case 'mysql' :
-				pc_base::load_sys_class('mysql', '', 0);
-				$object = new mysql();
+				pc_base::load_sys_class('db_mysql', '', 0);
+				$object = new db_mysql();
 				break;
 			case 'mysqli' :
 				pc_base::load_sys_class('db_mysqli', '', 0);
@@ -76,7 +76,7 @@ final class db_factory {
 				$object = pc_base::load_sys_class('db_access');
 				break;
 			default :
-				pc_base::load_sys_class('mysqli', '', 0);
+				pc_base::load_sys_class('db_mysqli', '', 0);
 				$object = new db_mysqli();
 		}
 		$object->open($this->db_config[$db_name]);

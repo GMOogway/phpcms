@@ -137,7 +137,7 @@ function h5upload(sysfilename, uploadid, name, textareaid, funcName, args, modul
 			var img = '';
 			for (var n=0;n<data.length;n++){
 				var filename = filenames[n];
-				img += IsImg(data[n]) ? '<img src="'+data[n]+'" alt="'+filename+'" /><br />' : (IsSwf(data[n]) ? '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0"><param name="quality" value="high" /><param name="movie" value="'+data[n]+'" /><embed pluginspage="http://www.macromedia.com/go/getflashplayer" quality="high" src="'+data[n]+'" type="application/x-shockwave-flash" width="460"></embed></object>' :'<a href="'+data[n]+'" title="'+filename+'" />'+data[n]+'</a><br />') ;
+				img += IsImg(data[n]) ? '<p><img src="'+data[n]+'" alt="'+filename+'" /></p>' : (IsSwf(data[n]) ? '<p><object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0"><param name="quality" value="high" /><param name="movie" value="'+data[n]+'" /><embed pluginspage="http://www.macromedia.com/go/getflashplayer" quality="high" src="'+data[n]+'" type="application/x-shockwave-flash" width="460"></embed></object></p>' :'<p><a href="'+data[n]+'" title="'+filename+'" />'+data[n]+'</a></p>') ;
 			}
 			$.get(sysfilename+"?m=attachment&c=attachments&a=h5delete",{data: del_content},function(data){});
 			if (syseditor==1) {

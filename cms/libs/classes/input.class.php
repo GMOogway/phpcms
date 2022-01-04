@@ -4,19 +4,19 @@ class input {
     protected $ip_address;
 
     // get post解析
-    public function request($name, $xss = false) {
+    public function request($name, $xss = true) {
         $value = isset($_REQUEST[$name]) ? $_REQUEST[$name] : (isset($_POST[$name]) ? $_POST[$name] : (isset($_GET[$name]) ? $_GET[$name] : false));
         return $xss ? $this->xss_clean($value) : $value;
     }
     
     // post解析
-    public function post($name, $xss = false) {
+    public function post($name, $xss = true) {
         $value = isset($_POST[$name]) ? $_POST[$name] : false;
         return $xss ? $this->xss_clean($value) : $value;
     }
 
     // get解析
-    public function get($name = '', $xss = false) {
+    public function get($name = '', $xss = true) {
         $value = !$name ? $_GET : (isset($_GET[$name]) ? $_GET[$name] : false);
         return $xss ? $this->xss_clean($value) : $value;
     }

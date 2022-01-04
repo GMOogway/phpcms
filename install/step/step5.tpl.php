@@ -81,7 +81,7 @@
                                         <tr>
                                             <th align="right">数据库字符集：</th>
                                             <td><div class="mt-radio-inline">
-                                                <label class="mt-radio mt-radio-outline"><input name="dbcharset" type="radio" id="dbcharset" value="utf8mb4" <?php if(strtolower($charset)=='utf8mb4') echo '  checked="checked" '?> <?php if(strtolower($charset)=='gbk') echo 'disabled'?>/> utf8mb4 <span></span></label>
+                                                <label class="mt-radio mt-radio-outline"><input name="dbcharset" type="radio" id="dbcharset" value="utf8mb4" <?php if(strtolower($charset)=='utf8mb4') echo '  checked="checked" '?> <?php if(strtolower($charset)!='utf8mb4') echo 'disabled'?>/> utf8mb4 <span></span></label>
                                                 <img src="./images/help.png" style="cursor:pointer;" onmouseover="layer.tips('如果Mysql版本为4.0.x，则请选择默认；如果Mysql版本为4.1.x或以上，则请选择其他字符集（一般选GBK）',this,{tips: [1, '#000']});" onmouseout="layer.closeAll();" align="absmiddle" />
                                                 <span id='helpdbcharset'></span></div></td>
                                         </tr>

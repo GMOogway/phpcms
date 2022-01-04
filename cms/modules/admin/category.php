@@ -963,7 +963,7 @@ class category extends admin {
 		if (CHARSET == 'gbk') {
 			$html = array_iconv($html, 'gbk', 'utf-8');
 		}
-		echo json_encode($html);
+		echo dr_array2string($html);exit();
 	}
 
 	/**
@@ -983,7 +983,7 @@ class category extends admin {
 			if (CHARSET == 'gbk') {
 				$result = array_iconv($result, 'gbk', 'utf-8');
 			}
-			echo json_encode($result);
+			echo dr_array2string($result);exit();
 		}
 	}
 	/**
@@ -1007,7 +1007,7 @@ class category extends admin {
 			if (CHARSET == 'gbk') {
 				$html = array_iconv($html, 'gbk', 'utf-8');
 			}
-			echo json_encode($html);
+			echo dr_array2string($html);exit();
 		}
 	}
 	/**

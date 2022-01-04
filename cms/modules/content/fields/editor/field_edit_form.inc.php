@@ -1,4 +1,6 @@
 <?php defined('IN_CMS') or exit('No permission resources.');$siteinfo = getcache('sitelist', 'commons');$config = string2array($siteinfo[$this->siteid]['setting']);?>
+<link rel="stylesheet" href="<?php echo JS_PATH;?>bootstrap-switch/css/bootstrap-switch.min.css" media="all" />
+<script type="text/javascript" src="<?php echo JS_PATH;?>bootstrap-switch/js/bootstrap-switch.min.js"></script>
     <div class="form-group">
       <label class="col-md-2 control-label">编辑器默认宽度</label>
       <div class="col-md-9">
@@ -59,6 +61,44 @@
             <div class="mt-radio-inline">
                 <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[link_mode]" value="1" <?php if($setting['link_mode']) echo 'checked';?>> 关键字链接 <span></span></label>
                 <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[link_mode]" value="0" <?php if(!$setting['link_mode']) echo 'checked';?>> 网址链接 <span></span></label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group"> 
+      <label class="col-md-2 control-label">底部工具栏</label>
+        <div class="col-md-9">
+            <div class="mt-radio-inline">
+                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[show_bottom_boot]" value="1" onclick="$('#sdmrx').show()" <?php if($setting['show_bottom_boot']) echo 'checked';?>> 开启 <span></span></label>
+                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[show_bottom_boot]" value="0" onclick="$('#sdmrx').hide()" <?php if(!$setting['show_bottom_boot']) echo 'checked';?>> 关闭 <span></span></label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group" id="sdmrx" <?php if(!$setting['show_bottom_boot']) echo 'style="display:none"';?>>
+        <label class="col-md-1 control-label">&nbsp;&nbsp;</label>
+        <div class="col-md-9">
+            <div class="form-group">
+                <label class="col-md-2 control-label">提取描述</label>
+                <div class="col-md-9">
+                    <input type="checkbox" name="setting[tool_select_1]" value="1" <?php if($setting['tool_select_1']) echo 'checked';?> data-on-text="默认选中" data-off-text="默认不选" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label">提取缩略图</label>
+                <div class="col-md-9">
+                    <input type="checkbox" name="setting[tool_select_2]" value="1" <?php if($setting['tool_select_2']) echo 'checked';?> data-on-text="默认选中" data-off-text="默认不选" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label">下载远程图</label>
+                <div class="col-md-9">
+                    <input type="checkbox" name="setting[tool_select_3]" value="1" <?php if($setting['tool_select_3']) echo 'checked';?> data-on-text="默认选中" data-off-text="默认不选" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">                             
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label">去除站外链接</label>
+                <div class="col-md-9">
+                    <input type="checkbox" name="setting[tool_select_4]" value="1" <?php if($setting['tool_select_4']) echo 'checked';?> data-on-text="默认选中" data-off-text="默认不选" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">                             
+                </div>
             </div>
         </div>
     </div>
@@ -222,3 +262,8 @@
         </div>
     </div>
     <?php }?>
+<script type="text/javascript">
+$(function() {
+    $(".make-switch").bootstrapSwitch();
+});
+</script>

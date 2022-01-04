@@ -336,7 +336,7 @@ class formguide_field extends admin {
 		//$data_setting = iconv('gbk','utf-8',$data_setting);
 		ob_end_clean();
 		$settings = array('field_basic_table'=>$field_basic_table,'field_minlength'=>$field_minlength,'field_maxlength'=>$field_maxlength,'field_allow_search'=>$field_allow_search,'field_allow_fulltext'=>$field_allow_fulltext,'field_allow_isunique'=>$field_allow_isunique,'setting'=>$data_setting);
-		echo json_encode($settings);
+		exit(dr_array2string($settings));
 		return true;
 	}
 	

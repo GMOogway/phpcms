@@ -33,8 +33,7 @@ class menu extends admin {
 				$rs['manage'] = '<a href="?m=admin&c=menu&a=add&parentid='.$r['id'].'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash').'" class="layui-btn layui-btn-xs"><i class="fa fa-plus"></i> '.L('add_submenu').'</a><a href="?m=admin&c=menu&a=edit&id='.$r['id'].'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash').'" class="layui-btn layui-btn-xs"><i class="fa fa-edit"></i> '.L('modify').'</a><a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="fa fa-trash-o"></i> '.L('delete').'</a>';
 				$array[] = $rs;
 			}
-			echo json_encode(array('code'=>0,'msg'=>L('to_success'),'data'=>$array,'rel'=>1));
-			exit();
+			exit(json_encode(array('code'=>0,'msg'=>L('to_success'),'data'=>$array,'rel'=>1)));
 		}
 		include $this->admin_tpl('menu');
 	}

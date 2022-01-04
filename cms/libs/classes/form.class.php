@@ -24,8 +24,14 @@ class form {
 	 * @param string $enablesaveimage
 	 * @param string $allowuploadnum
 	 * @param string $upload_maxsize
+	 * @param string $show_bottom_boot
+	 * @param string $tool_select_1
+	 * @param string $tool_select_2
+	 * @param string $tool_select_3
+	 * @param string $tool_select_4
+	 * @param string $field
 	 */
-	public static function editor($textareaid = 'content', $toolbar = 'basic', $toolvalue = '', $module = '', $catid = '', $color = '', $allowupload = 0, $allowbrowser = 1,$alowuploadexts = '',$height = 300,$disabled_page = 0, $autofloat = 0, $autoheight = 0, $theme = '', $watermark = 1, $attachment = 0, $image_reduce = '', $div2p = 0, $enter = 0, $simpleupload = 0, $enablesaveimage = 1, $width = '100%', $allowuploadnum = '10', $upload_maxsize = 0) {
+	public static function editor($textareaid = 'content', $toolbar = 'basic', $toolvalue = '', $module = '', $catid = '', $color = '', $allowupload = 0, $allowbrowser = 1,$alowuploadexts = '',$height = 300,$disabled_page = 0, $autofloat = 0, $autoheight = 0, $theme = '', $watermark = 1, $attachment = 0, $image_reduce = '', $div2p = 0, $enter = 0, $simpleupload = 0, $enablesaveimage = 1, $width = '100%', $allowuploadnum = '10', $upload_maxsize = 0, $show_bottom_boot = 0, $tool_select_1 = 0, $tool_select_2 = 0, $tool_select_3 = 0, $tool_select_4 = 0, $field = '') {
 		$input = pc_base::load_sys_class('input');
 		$siteid = $input->get('siteid') ? $input->get('siteid') : param::get_cookie('siteid');
 		if(!$siteid) $siteid = get_siteid() ? get_siteid() : 1 ;
@@ -62,15 +68,15 @@ class form {
 				define('EDITOR_INIT', 1);
 			}
 			if($toolbar == 'basic') {
-				$toolbar = defined('IS_ADMIN') && IS_ADMIN ? "['Source']," : '';
-				$toolbar .= "['Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink' ],['Maximize'],\r\n";
+				$tool = defined('IS_ADMIN') && IS_ADMIN ? "['Source']," : '';
+				$tool .= "['Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink' ],['Maximize'],\r\n";
 			} elseif($toolbar == 'full') {
 				if(defined('IS_ADMIN') && IS_ADMIN) {
-					$toolbar = "['Source',";
+					$tool = "['Source',";
 				} else {
-					$toolbar = '[';
+					$tool = '[';
 				}
-				$toolbar .= "'-','Templates'],
+				$tool .= "'-','Templates'],
 				['Cut','Copy','Paste','PasteText','PasteFromWord','-','Print'],
 				['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],['ShowBlocks'],['Image','Capture','Html5video'],['Maximize'],
 				'/',
@@ -81,32 +87,32 @@ class form {
 				['Link','Unlink','Anchor'],
 				['Table','HorizontalRule','Smiley','SpecialChar'";
 				if ($show_page=="true") {
-					$toolbar .= ",'PageBreak'";
+					$tool .= ",'PageBreak'";
 				}
-				$toolbar .= "],
+				$tool .= "],
 				'/',
 				['Styles','Format','Font','FontSize'],
 				['TextColor','BGColor'],\r\n";
 			} elseif($toolbar == 'desc') {
-				$toolbar = "['Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', '-', 'Image', '-','Source'],['Maximize'],\r\n";
+				$tool = "['Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', '-', 'Image', '-','Source'],['Maximize'],\r\n";
 			} elseif($toolbar == 'standard') {
 				if(defined('IS_ADMIN') && IS_ADMIN) {
-					$toolbar = "['Source',";
+					$tool = "['Source',";
 				} else {
-					$toolbar = '[';
+					$tool = '[';
 				}
-				$toolbar .= "'Undo', 'Redo', 'Bold', 'Italic', 'Underline', 'Superscript', 'Subscript', 'RemoveFormat','BlockQuote', 'SelectAll', 'Font', 'FontSize', '|', 'Indent', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'Link', 'Unlink', 'Anchor', '|', 'Image'";
+				$tool .= "'Undo', 'Redo', 'Bold', 'Italic', 'Underline', 'Superscript', 'Subscript', 'RemoveFormat','BlockQuote', 'SelectAll', 'Font', 'FontSize', '|', 'Indent', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'Link', 'Unlink', 'Anchor', '|', 'Image'";
 				if ($show_page=="true") {
-					$toolbar .= ", 'PageBreak'";
+					$tool .= ", 'PageBreak'";
 				}
-				$toolbar .= "],['Maximize'],\r\n";
+				$tool .= "],['Maximize'],\r\n";
 			} else {
 				if(defined('IS_ADMIN') && IS_ADMIN) {
-					$toolbar = "['Source',";
+					$tool = "['Source',";
 				} else {
-					$toolbar = '[';
+					$tool = '[';
 				}
-				$toolbar .= "" . $toolvalue . "],['Maximize'],\r\n";
+				$tool .= "" . $toolvalue . "],['Maximize'],\r\n";
 			}
 			$str .= "<script type=\"text/javascript\">\r\n";
 			$str .= "var editor = CKEDITOR.replace('$textareaid', {";
@@ -124,7 +130,7 @@ class form {
 			}
 			$str .= "toolbar :\r\n";
 			$str .= "[\r\n";
-			$str .= $toolbar;
+			$str .= $tool;
 			$str .= "]\r\n";
 			$str .= "});\r\n";
 			$str .= '</script>';
@@ -135,28 +141,28 @@ class form {
 				define('EDITOR_INIT', 1);
 			}
 			if($toolbar == 'basic') {
-				$toolbar = defined('IS_ADMIN') && IS_ADMIN ? "['Source'," : '[';
-				$toolbar .= "'Bold', 'Italic', '|', 'InsertOrderedList', 'InsertUnorderedList', '|', 'Link', 'Unlink' ]";
+				$tool = defined('IS_ADMIN') && IS_ADMIN ? "['Source'," : '[';
+				$tool .= "'Bold', 'Italic', '|', 'InsertOrderedList', 'InsertUnorderedList', '|', 'Link', 'Unlink' ]";
 			} elseif($toolbar == 'standard') {
 				if(defined('IS_ADMIN') && IS_ADMIN) {
-					$toolbar = "['Source',";
+					$tool = "['Source',";
 				} else {
-					$toolbar = '[';
+					$tool = '[';
 				}
-				$toolbar .= "'FullScreen', 'Undo', 'Redo', '|', 'Bold', 'Italic', 'Underline', 'StrikeThrough', 'Superscript', 'Subscript', 'RemoveFormat', 'FormatMatch', 'AutoTypeSet', '|', 'BlockQuote', '|', 'PastePlain', '|', 'ForeColor', 'BackColor', 'InsertOrderedList', 'InsertUnorderedList', 'SelectAll', 'ClearDoc', '|', 'CustomStyle', 'Paragraph', '|', 'RowSpacingTop', 'RowSpacingBottom', 'LineHeight', '|', 'FontFamily', 'FontSize', '|', 'DirectionalityLtr', 'DirectionalityRtl', '|', '', 'Indent', '|', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyJustify', '|', 'Link', 'Unlink', 'Anchor', '|', 'ImageNone', 'ImageLeft', 'ImageRight', 'ImageCenter', '|', 'SimpleUpload', 'InsertImage', 'Emotion', 'Scrawl', 'InsertVideo', 'Attachment', 'Map', 'InsertFrame'";
+				$tool .= "'FullScreen', 'Undo', 'Redo', '|', 'Bold', 'Italic', 'Underline', 'StrikeThrough', 'Superscript', 'Subscript', 'RemoveFormat', 'FormatMatch', 'AutoTypeSet', '|', 'BlockQuote', '|', 'PastePlain', '|', 'ForeColor', 'BackColor', 'InsertOrderedList', 'InsertUnorderedList', 'SelectAll', 'ClearDoc', '|', 'CustomStyle', 'Paragraph', '|', 'RowSpacingTop', 'RowSpacingBottom', 'LineHeight', '|', 'FontFamily', 'FontSize', '|', 'DirectionalityLtr', 'DirectionalityRtl', '|', '', 'Indent', '|', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyJustify', '|', 'Link', 'Unlink', 'Anchor', '|', 'ImageNone', 'ImageLeft', 'ImageRight', 'ImageCenter', '|', 'SimpleUpload', 'InsertImage', 'Emotion', 'Scrawl', 'InsertVideo', 'Attachment', 'Map', 'InsertFrame'";
 				if ($show_page=="true") {
-					$toolbar .= ", 'PageBreak'";
+					$tool .= ", 'PageBreak'";
 				}
-				$toolbar .= ", 'HighlightCode', '|', 'Horizontal', 'Date', 'Time', 'Spechars', '|', 'InsertTable', 'DeleteTable', 'InsertParagraphBeforeTable', 'InsertRow', 'DeleteRow', 'InsertCol', 'DeleteCol', 'MergeCells', 'MergeRight', 'MergeDown', 'SplittoCells', 'SplittoRows', 'SplittoCols', '|', 'Print', 'Preview', 'SearchReplace', 'Help']";
+				$tool .= ", 'HighlightCode', '|', 'Horizontal', 'Date', 'Time', 'Spechars', '|', 'InsertTable', 'DeleteTable', 'InsertParagraphBeforeTable', 'InsertRow', 'DeleteRow', 'InsertCol', 'DeleteCol', 'MergeCells', 'MergeRight', 'MergeDown', 'SplittoCells', 'SplittoRows', 'SplittoCols', '|', 'Print', 'Preview', 'SearchReplace', 'Help']";
 			} elseif($toolbar == 'desc') {
-				$toolbar = "['Bold', 'Italic', '|', 'InsertOrderedList', 'InsertUnorderedList', '|', 'Link', 'Unlink', '|', 'SimpleUpload', 'InsertImage', '|', 'Source']";
+				$tool = "['Bold', 'Italic', '|', 'InsertOrderedList', 'InsertUnorderedList', '|', 'Link', 'Unlink', '|', 'SimpleUpload', 'InsertImage', '|', 'Source']";
 			} elseif($toolbar == 'full') {
 				if(defined('IS_ADMIN') && IS_ADMIN) {
-					$toolbar = "['Source',";
+					$tool = "['Source',";
 				} else {
-					$toolbar = '[';
+					$tool = '[';
 				}
-				$toolbar .= "'Fullscreen', '|', 'Undo', 'Redo', '|',
+				$tool .= "'Fullscreen', '|', 'Undo', 'Redo', '|',
 				'Bold', 'Italic', 'Underline', 'Fontborder', 'Strikethrough', 'Superscript', 'Subscript', 'Removeformat', 'Formatmatch', 'Autotypeset', 'Blockquote', 'Pasteplain', '|', 'Forecolor', 'Backcolor', 'Insertorderedlist', 'Insertunorderedlist', 'Selectall', 'Cleardoc', '|',
 				'Rowspacingtop', 'Rowspacingbottom', 'Lineheight', '|',
 				'Customstyle', 'Paragraph', 'Fontfamily', 'Fontsize', '|',
@@ -165,34 +171,34 @@ class form {
 				'Link', 'Unlink', 'Anchor', '|', 'Imagenone', 'Imageleft', 'Imageright', 'Imagecenter', '|',
 				'Simpleupload', 'Insertimage', 'Emotion', 'Scrawl', 'Insertvideo', 'Attachment', 'Map', 'Insertframe', 'Insertcode'";
 				if ($show_page=="true") {
-					$toolbar .= ", 'PageBreak', 'Subtitle'";
+					$tool .= ", 'PageBreak', 'Subtitle'";
 				}
-				$toolbar .= ", 'Template', 'Background', '|',
+				$tool .= ", 'Template', 'Background', '|',
 				'Horizontal', 'Date', 'Time', 'Spechars', '|',
 				'Inserttable', 'Deletetable', 'Insertparagraphbeforetable', 'Insertrow', 'Deleterow', 'Insertcol', 'Deletecol', 'Mergecells', 'Mergeright', 'Mergedown', 'Splittocells', 'Splittorows', 'Splittocols', 'Charts', '|',
 				'Print', 'Preview', 'Searchreplace', 'Help']";
 			} else {
 				if(defined('IS_ADMIN') && IS_ADMIN) {
-					$toolbar = "['Source',";
+					$tool = "['Source',";
 				} else {
-					$toolbar = '[';
+					$tool = '[';
 				}
-				$toolbar .= "'Fullscreen', '|', " . $toolvalue . "]";
+				$tool .= "'Fullscreen', '|', " . $toolvalue . "]";
 			}
 			// 低版本浏览器关闭单图上传
 			if (preg_match('/Chrome\/([0-9]+)\./iU', $_SERVER['HTTP_USER_AGENT'], $mt)) {
 				$chrome = intval($mt[1]);
 				if ($chrome && $chrome < 78) {
-					$toolbar = str_replace(['"Simpleupload", ', ', "Simpleupload"',"'Simpleupload', ", ", 'Simpleupload'", '"Simpleupload",', ',"Simpleupload"',"'Simpleupload',", ",'Simpleupload'"], '', $toolbar);
+					$tool = str_replace(['"Simpleupload", ', ', "Simpleupload"',"'Simpleupload', ", ", 'Simpleupload'", '"Simpleupload",', ',"Simpleupload"',"'Simpleupload',", ",'Simpleupload'"], '', $tool);
 				}
 			}
 			// 后台设置的关闭单图上传
 			if (isset($simpleupload) && $simpleupload) {
-				$toolbar = str_replace(['"Simpleupload", ', ', "Simpleupload"',"'Simpleupload', ", ", 'Simpleupload'", '"Simpleupload",', ',"Simpleupload"',"'Simpleupload',", ",'Simpleupload'"], '', $toolbar);
+				$tool = str_replace(['"Simpleupload", ', ', "Simpleupload"',"'Simpleupload', ", ", 'Simpleupload'", '"Simpleupload",', ',"Simpleupload"',"'Simpleupload',", ",'Simpleupload'"], '', $tool);
 			}
 			$str .= "<script type=\"text/javascript\">\r\n";
 			$opt = array();
-			if($toolbar) {$opt[] = "toolbars:[".$toolbar."]";}
+			if($tool) {$opt[] = "toolbars:[".$tool."]";}
 			if($theme && $theme!='default') {$opt[] = "theme:'".$theme."'";}
 			$opt[] = "initialFrameWidth:\"".$width."\"";
 			$opt[] = "initialFrameHeight:".$height;
@@ -203,7 +209,28 @@ class form {
 			$str .= "var editor = new baidu.editor.ui.Editor({UEDITOR_HOME_URL:'".WEB_PATH."statics/js/ueditor/',serverUrl:'".WEB_PATH."api.php?op=controller&module=".$module."&catid=".$catid."&is_wm=".intval($watermark)."&is_esi=".intval($enablesaveimage)."&attachment=".intval($attachment)."&image_reduce=".intval($image_reduce)."&siteid=".intval($siteid)."',".join(",",$opt)."});editor.render('$textareaid');\n";
 			$str .= '</script>';
 		}
-		$ext_str = "<div class='editor_bottom'>";
+		if (isset($show_bottom_boot) && $show_bottom_boot) {
+			$ext_str .= '<div class="mt-checkbox-inline" style="margin-top: 10px;">';
+			$ext_str .= '
+				 <label style="margin-bottom: 5px;" class="mt-checkbox mt-checkbox-outline">
+				  <input name="is_auto_description_'.$field.'" type="checkbox" '.($tool_select_1 ? 'checked' : '').' value="1"> '.L('提取内容').' <span></span>
+				 </label><label style="width: 80px;margin-right: 15px;"><input type="text" name="auto_description_'.$field.'" value="200" class="input-text" style="width: 80px;"></label><label style="margin-right: 15px;">'.L('作为描述信息').'</label>';
+			$ext_str .= '     <label style="margin-bottom: 5px;" class="mt-checkbox mt-checkbox-outline">
+				  <input name="is_auto_thumb_'.$field.'" type="checkbox" '.($tool_select_2 ? 'checked' : '').' value="1"> '.L('提取第').' <span></span>
+				 </label><label style="width: 80px;margin-right: 15px;"><input type="text" name="auto_thumb_'.$field.'" value="1" class="input-text" style="width: 80px;"></label><label style="margin-right: 15px;">'.L('个图片为缩略图').'</label>';
+			if (!intval($enablesaveimage)) {
+				$ext_str .= '
+				 <label style="margin-bottom: 5px;" class="mt-checkbox mt-checkbox-outline">
+				  <input name="is_auto_down_img_'.$field.'" type="checkbox" '.($tool_select_3 ? 'checked' : '').' value="1"> '.L('下载远程图片').' <span></span>
+				 </label>';
+			}
+			$ext_str .= '
+				 <label style="margin-bottom: 5px;" class="mt-checkbox mt-checkbox-outline">
+				  <input name="is_remove_a_'.$field.'" type="checkbox" '.($tool_select_4 ? 'checked' : '').' value="1"> '.L('去除站外链接').' <span></span>
+				 </label>';
+			$ext_str .= '</div>';
+		}
+		$ext_str .= "<div class='editor_bottom'>";
 		if(!defined('IMAGES_INIT')) {
 			$ext_str .= '<script type="text/javascript" src="'.JS_PATH.'h5upload/h5editor.js"></script>';
 			define('IMAGES_INIT', 1);

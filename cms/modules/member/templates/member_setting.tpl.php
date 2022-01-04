@@ -296,7 +296,12 @@ jQuery(document).ready(function() {
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('密码强度（正则）')?></label>
                         <div class="col-md-9">
-                            <input class="form-control input-large" type="text" name="info[config][pwdpreg]" value="<?php echo $member_setting['config']['pwdpreg']?>">
+                            <div class="input-group">
+                                <input class="form-control" type="text" name="info[config][pwdpreg]" value="<?php echo $member_setting['config']['pwdpreg']?>">
+                                <span class="input-group-btn">
+                                    <button class="btn blue" onclick="dr_iframe_show('<?php echo L('正则表达式')?>', '?m=member&c=member_setting&a=public_test_pattern')" type="button"><?php echo L('测试')?></button>
+                                </span>
+                            </div>
                             <span class="help-block"><?php echo L('针对前端注册或修改密码时的强度验证，可以设置自定义正则表达式，例如数字正则表达式格式：/^[0-9]+$/')?></span>
                         </div>
                     </div>
@@ -304,7 +309,12 @@ jQuery(document).ready(function() {
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('账号规则（正则）')?></label>
                         <div class="col-md-9">
-                            <input class="form-control input-large" type="text" name="info[config][preg]" value="<?php echo $member_setting['config']['preg']?>">
+                            <div class="input-group">
+                                <input class="form-control" type="text" name="info[config][preg]" value="<?php echo $member_setting['config']['preg']?>">
+                                <span class="input-group-btn">
+                                    <button class="btn blue" onclick="dr_iframe_show('<?php echo L('正则表达式')?>', '?m=member&c=member_setting&a=public_test_pattern')" type="button"><?php echo L('测试')?></button>
+                                </span>
+                            </div>
                             <span class="help-block"><?php echo L('针对前端注册时的账号格式验证，可以设置自定义正则表达式，例如数字正则表达式格式：/^[0-9]+$/')?></span>
                         </div>
                     </div>
@@ -363,7 +373,7 @@ jQuery(document).ready(function() {
         </div>
         <div class="portlet-body form myfooter">
             <div class="form-actions text-center">
-                <button type="button" id="my_submit" onclick="dr_ajax_submit('?m=member&c=member_setting&a=manage&page='+$('#dr_page').val(), 'myform', '2000')" class="btn green"> <i class="fa fa-save"></i> <?php echo L('submit')?></button>
+                <button type="button" onclick="dr_ajax_submit('?m=member&c=member_setting&a=manage&page='+$('#dr_page').val(), 'myform', '2000')" class="btn green"> <i class="fa fa-save"></i> <?php echo L('submit')?></button>
             </div>
         </div>
     </div>
@@ -371,11 +381,6 @@ jQuery(document).ready(function() {
 </form>
 </div>
 <script type="text/javascript">
-$('body').keydown(function(e){
-    if (e.keyCode == 13) {
-        $('#my_submit').trigger('click');
-    }
-})
 $('.nav-tabs a').click(function (e) {
     $('.nav-tabs').find('li').removeClass('active');
     $('.tab-pane').removeClass('active');

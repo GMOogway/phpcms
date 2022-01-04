@@ -114,10 +114,8 @@ class sites {
 			}
 		} else {
 			$sitelist = getcache('role_siteid', 'commons');
-			if (is_array(dr_string2array($roleid))) {
-				foreach($roleid as $r) {
-					$sitelist = $sitelist[$r];
-				}
+			if (is_array($roleid)) {
+				$sitelist = $sitelist[$roleid[0]];
 			} else {
 				$sitelist = $sitelist[$roleid];
 			}

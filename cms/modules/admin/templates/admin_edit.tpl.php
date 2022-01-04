@@ -4,9 +4,9 @@ $show_validator = true;include $this->admin_tpl('header');?>
 <script type="text/javascript">
   $(document).ready(function() {
 	$.formValidator.initConfig({autotip:true,formid:"myform",onerror:function(msg){}});
-	$("#password").formValidator({empty:true,onshow:"<?php echo L('not_change_the_password_please_leave_a_blank')?>",onfocus:"<?php echo L('password').L('between_6_to_20')?>"}).inputValidator({min:6,max:20,onerror:"<?php echo L('password').L('between_6_to_20')?>"});
-	$("#pwdconfirm").formValidator({empty:true,onshow:"<?php echo L('not_change_the_password_please_leave_a_blank')?>",onfocus:"<?php echo L('input').L('passwords_not_match')?>",oncorrect:"<?php echo L('passwords_match')?>"}).compareValidator({desid:"password",operateor:"=",onerror:"<?php echo L('input').L('passwords_not_match')?>"});
-	$("#email").formValidator({onshow:"<?php echo L('input').L('email')?>",onfocus:"<?php echo L('email').L('format_incorrect')?>",oncorrect:"<?php echo L('email').L('format_right')?>"}).regexValidator({regexp:"email",datatype:"enum",onerror:"<?php echo L('email').L('format_incorrect')?>"});
+	$("#dr_password").formValidator({empty:true,onshow:"<?php echo L('not_change_the_password_please_leave_a_blank')?>",onfocus:"<?php echo L('password').L('between_6_to_20')?>"}).inputValidator({min:6,max:20,onerror:"<?php echo L('password').L('between_6_to_20')?>"});
+	$("#dr_pwdconfirm").formValidator({empty:true,onshow:"<?php echo L('not_change_the_password_please_leave_a_blank')?>",onfocus:"<?php echo L('input').L('passwords_not_match')?>",oncorrect:"<?php echo L('passwords_match')?>"}).compareValidator({desid:"password",operateor:"=",onerror:"<?php echo L('input').L('passwords_not_match')?>"});
+	$("#dr_email").formValidator({onshow:"<?php echo L('input').L('email')?>",onfocus:"<?php echo L('email').L('format_incorrect')?>",oncorrect:"<?php echo L('email').L('format_right')?>"}).regexValidator({regexp:"email",datatype:"enum",onerror:"<?php echo L('email').L('format_incorrect')?>"});
   })
 </script>
 <script type="text/javascript">
@@ -57,19 +57,19 @@ jQuery(document).ready(function() {
                     <div class="form-group" id="dr_row_password">
                         <label class="col-md-2 control-label"><?php echo L('password')?></label>
                         <div class="col-md-9">
-                            <input class="form-control input-large" type="password" id="password" name="info[password]" value="" placeholder="留空表示不修改密码" >
+                            <input class="form-control input-large" type="password" id="dr_password" name="info[password]" value="" placeholder="留空表示不修改密码" >
                         </div>
                     </div>
                     <div class="form-group" id="dr_row_pwdconfirm">
                         <label class="col-md-2 control-label"><?php echo L('cofirmpwd')?></label>
                         <div class="col-md-9">
-                            <input class="form-control input-large" type="password" id="pwdconfirm" name="info[pwdconfirm]" value="" placeholder="留空表示不修改密码" >
+                            <input class="form-control input-large" type="password" id="dr_pwdconfirm" name="info[pwdconfirm]" value="" placeholder="留空表示不修改密码" >
                         </div>
                     </div>
                     <div class="form-group" id="dr_row_email">
                         <label class="col-md-2 control-label"><?php echo L('email')?></label>
                         <div class="col-md-9">
-                            <input class="form-control input-large" type="text" id="email" name="info[email]" value="<?php echo $email?>" >
+                            <input class="form-control input-large" type="text" id="dr_email" name="info[email]" value="<?php echo $email?>" >
                         </div>
                     </div>
                     <div class="form-group">
@@ -99,7 +99,7 @@ jQuery(document).ready(function() {
         </div>
         <div class="portlet-body form myfooter">
             <div class="form-actions text-center">
-                <button type="button" id="my_submit" onclick="dr_ajax_submit('?m=admin&c=admin_manage&a=edit&page='+$('#dr_page').val(), 'myform', '2000')" class="btn green"> <i class="fa fa-save"></i> <?php echo L('submit')?></button>
+                <button type="button" onclick="dr_ajax_submit('?m=admin&c=admin_manage&a=edit&page='+$('#dr_page').val(), 'myform', '2000')" class="btn green"> <i class="fa fa-save"></i> <?php echo L('submit')?></button>
             </div>
         </div>
     </div>
@@ -107,11 +107,6 @@ jQuery(document).ready(function() {
 </form>
 </div>
 <script type="text/javascript">
-$('body').keydown(function(e){
-    if (e.keyCode == 13) {
-        $('#my_submit').trigger('click');
-    }
-})
 $('.nav-tabs a').click(function (e) {
     $('.nav-tabs').find('li').removeClass('active');
     $('.tab-pane').removeClass('active');

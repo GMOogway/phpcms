@@ -789,6 +789,42 @@ function dr_ajax_open_close(e, url, fan) {
 		}
 	});
 }
+function dr_ajax_list_open_close(e, url) {
+	if (typeof pc_hash == 'string') url += (url.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
+	if (url.toLowerCase().indexOf("http://") != -1 || url.toLowerCase().indexOf("https://") != -1) {
+	} else {
+		url = geturlpathname()+url;
+	}
+	var obj = $(e);
+	var val = 0;
+	if (obj.attr("value") == 1) {
+		val = 0;
+	} else {
+		val = 1;
+	}
+	url+="&value="+val;
+	$.ajax({
+		type: "GET",
+		url: url,
+		dataType: "json",
+		success: function (json) {
+			if (json.code == 1) {
+				if (val == 0) {
+					obj.attr('class', 'badge badge-no');
+					obj.html('<i class="fa fa-times"></i>');
+				} else {
+					obj.attr('class', 'badge badge-yes');
+					obj.html('<i class="fa fa-check"></i>');
+				}
+				obj.attr("value", val);
+			}
+			dr_tips(json.code, json.msg);
+		},
+		error: function(HttpRequest, ajaxOptions, thrownError) {
+			dr_ajax_admin_alert_error(HttpRequest, ajaxOptions, thrownError);
+		}
+	});
+}
 // ajax 批量操作确认
 function dr_ajax_option(url, msg, remove) {
 	layer.confirm(msg,{

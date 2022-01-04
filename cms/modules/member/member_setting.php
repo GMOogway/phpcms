@@ -130,6 +130,29 @@ class member_setting extends admin {
 
 	}
 
+	// 测试正则表达式
+	public function public_test_pattern() {
+		$show_header = true;
+
+		if (IS_POST) {
+
+			$data = $this->input->post('data');
+			if (!$data['text']) {
+				dr_json(0, L('测试文字不能为空'));
+			} elseif (!$data['code']) {
+				dr_json(0, L('正则表达式不能为空'));
+			}
+
+			if (!preg_match($data['code'], $data['text'])) {
+				dr_json(0, L('正则表达式验证结果：未通过'));
+			}
+
+			dr_json(1, L('正则表达式验证结果：通过'));
+		}
+
+		include $this->admin_tpl('member_pattern');;exit;
+	}
+
 	/**
 	 * 会员内置字段
 	 */

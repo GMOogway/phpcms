@@ -89,8 +89,7 @@ class push_api {
 			$this->catids_string = array();
 			if(!cleck_admin($_SESSION['roleid'])) {
 				$this->priv_db = pc_base::load_model('category_priv_model');
-				$rolewhere = 'action="add" and roleid in ('.(is_array(dr_string2array($_SESSION['roleid'])) ? implode(',', dr_string2array($_SESSION['roleid'])) : $_SESSION['roleid']).') and siteid='.$siteid.' and is_admin=1';
-				$priv_result = $this->priv_db->select($rolewhere);
+				$priv_result = $this->priv_db->select(array('action'=>'add','roleid'=>is_array(dr_string2array($_SESSION['roleid'])) ? dr_string2array($_SESSION['roleid']) : $_SESSION['roleid'],'siteid'=>$siteid,'is_admin'=>1));
 				$priv_catids = array();
 				foreach($priv_result as $_v) {
 					$priv_catids[] = $_v['catid'];
@@ -239,8 +238,7 @@ class push_api {
 			$this->catids_string = array();
 			if(!cleck_admin($_SESSION['roleid'])) {
 				$this->priv_db = pc_base::load_model('category_priv_model');
-				$rolewhere = 'action="add" and roleid in ('.(is_array(dr_string2array($_SESSION['roleid'])) ? implode(',', dr_string2array($_SESSION['roleid'])) : $_SESSION['roleid']).') and siteid='.$siteid.' and is_admin=1';
-				$priv_result = $this->priv_db->select($rolewhere);
+				$priv_result = $this->priv_db->select(array('action'=>'add','roleid'=>is_array(dr_string2array($_SESSION['roleid'])) ? dr_string2array($_SESSION['roleid']) : $_SESSION['roleid'],'siteid'=>$siteid,'is_admin'=>1));
 				$priv_catids = array();
 				foreach($priv_result as $_v) {
 					$priv_catids[] = $_v['catid'];

@@ -202,17 +202,17 @@ class member extends admin {
 		
 			if($keyword) {
 				if ($type == '1') {
-					$where[] = "`username` LIKE '%$keyword%'";
+					$where[] = "`username` LIKE '%".addslashes($keyword)."%'";
 				} elseif($type == '2') {
-					$where[] = "`userid` = '$keyword'";
+					$where[] = "`userid` = '".addslashes($keyword)."'";
 				} elseif($type == '3') {
-					$where[] = "`email` LIKE '%$keyword%'";
+					$where[] = "`email` LIKE '%".addslashes($keyword)."%'";
 				} elseif($type == '4') {
-					$where[] = "`regip` = '$keyword'";
+					$where[] = "`regip` = '".addslashes($keyword)."'";
 				} elseif($type == '5') {
-					$where[] = "`nickname` LIKE '%$keyword%'";
+					$where[] = "`nickname` LIKE '%".addslashes($keyword)."%'";
 				} else {
-					$where[] = "`username` LIKE '%$keyword%'";
+					$where[] = "`username` LIKE '%".addslashes($keyword)."%'";
 				}
 			}
 		}
@@ -267,28 +267,29 @@ class member extends admin {
 	function add() {
 		header("Cache-control: private");
 		if(isset($_POST['dosubmit'])) {
-			$info = array();
-			if(!$this->_checkname($_POST['info']['username'])){
+			$info = $this->input->post('info');
+			if(!$this->_checkname($info['username'])){
 				dr_admin_msg(0,L('member_exist'));
 			}
-			$info['username'] = $this->input->post('info')['username'];
-			if(!$this->_checkpasswd($_POST['info']['password'])){
+			$info['password'] = dr_safe_password($info['password']);
+			if(!$this->_checkpasswd($info['password'])){
 				dr_admin_msg(0,L('password_format_incorrect'));
 			}
 			$info['regip'] = ip_info();
-			$info['overduedate'] = strtotime($_POST['info']['overduedate']);
+			$info['overduedate'] = strtotime($info['overduedate']);
 
-			$_POST['info']['encrypt'] = create_randomstr(10);
-			$info['password'] = password($_POST['info']['password'], $_POST['info']['encrypt']);
-			$info['encrypt'] = $this->input->post('info')['encrypt'];
-			$info['nickname'] = $this->input->post('info')['nickname'];
-			$info['email'] = $this->input->post('info')['email'];
-			$info['mobile'] = $this->input->post('info')['mobile'];
-			$info['groupid'] = $this->input->post('info')['groupid'];
-			$info['point'] = $this->input->post('info')['point'];
-			$info['modelid'] = $this->input->post('info')['modelid'];
-			$info['vip'] = $this->input->post('info')['vip'];
-			$info['regdate'] = $this->input->post('info')['lastdate'] = SYS_TIME;
+			$info['encrypt'] = create_randomstr(10);
+			$info['password'] = password($info['password'], $info['encrypt']);
+			$info['encrypt'] = $info['encrypt'];
+			$info['nickname'] = $info['nickname'];
+			$info['email'] = $info['email'];
+			$info['mobile'] = $info['mobile'];
+			$info['groupid'] = $info['groupid'];
+			$info['point'] = $info['point'];
+			$info['modelid'] = $info['modelid'];
+			$info['vip'] = $info['vip'];
+			$info['regdate'] = $info['lastdate'] = SYS_TIME;
+			unset($info['pwdconfirm']);
 			
 			$this->db->insert($info);
 			if($this->db->insert_id()){
@@ -321,23 +322,24 @@ class member extends admin {
 	function edit() {
 		if(isset($_POST['dosubmit'])) {
 			$memberinfo = $info = array();
-			$basicinfo['userid'] = $this->input->post('info')['userid'];
-			$basicinfo['username'] = $this->input->post('info')['username'];
-			$basicinfo['nickname'] = $this->input->post('info')['nickname'];
-			$basicinfo['email'] = $this->input->post('info')['email'];
-			$basicinfo['point'] = $this->input->post('info')['point'];
-			$basicinfo['password'] = $this->input->post('info')['password'];
-			$basicinfo['groupid'] = $this->input->post('info')['groupid'];
-			$basicinfo['modelid'] = $this->input->post('info')['modelid'];
-			$basicinfo['vip'] = $this->input->post('info')['vip'];
-			$basicinfo['mobile'] = $this->input->post('info')['mobile'];
-			$basicinfo['overduedate'] = strtotime($_POST['info']['overduedate']);
+			$post = $this->input->post('info');
+			$basicinfo['userid'] = $post['userid'];
+			$basicinfo['username'] = $post['username'];
+			$basicinfo['nickname'] = $post['nickname'];
+			$basicinfo['email'] = $post['email'];
+			$basicinfo['point'] = $post['point'];
+			$basicinfo['password'] = dr_safe_password($post['password']);
+			$basicinfo['groupid'] = $post['groupid'];
+			$basicinfo['modelid'] = $post['modelid'];
+			$basicinfo['vip'] = $post['vip'];
+			$basicinfo['mobile'] = $post['mobile'];
+			$basicinfo['overduedate'] = strtotime($post['overduedate']);
 
 			//会员基本信息
 			$info = $this->_checkuserinfo($basicinfo, 1);
 
 			//会员模型信息
-			$modelinfo = array_diff_key($_POST['info'], $info);
+			$modelinfo = array_diff_key($post, $info);
 			//过滤vip过期时间
 			unset($modelinfo['overduedate']);
 			unset($modelinfo['pwdconfirm']);
@@ -769,6 +771,46 @@ class member extends admin {
  		} else {
 			$where = array('email'=>$email);
 			$res = $this->db->get_one($where);
+			if($res) {
+				exit('0');
+			} else {
+				exit('1');
+			}
+		}
+	}
+	
+	/**
+	 * 检查用户昵称
+	 * @param string $nickname	昵称
+	 * @return $status {0:已存在;1:成功}
+	 */
+	public function public_checknickname_ajax() {
+		$nickname = isset($_GET['nickname']) && trim($_GET['nickname']) && is_username(trim($_GET['nickname'])) ? trim($_GET['nickname']) : exit('0');
+		if(CHARSET != 'utf-8') {
+			$nickname = iconv('utf-8', CHARSET, $nickname);
+			$nickname = addslashes($nickname);
+		} 
+		//首先判断会员审核表
+		$this->verify_db = pc_base::load_model('member_verify_model');
+		if($this->verify_db->get_one(array('nickname'=>$nickname))) {
+			exit('0');
+		}
+		if(isset($_GET['userid'])) {
+			$userid = intval($_GET['userid']);
+			//如果是会员修改，而且NICKNAME和原来优质一致返回1，否则返回0
+			$info = get_memberinfo($userid);
+			if($info['nickname'] == $nickname){//未改变
+				exit('1');
+			}else{//已改变，判断是否已有此名
+				$res = $this->db->get_one(array('nickname'=>$nickname));
+				if($res) {
+					exit('0');
+				} else {
+					exit('1');
+				}
+			}
+ 		} else {
+			$res = $this->db->get_one(array('nickname'=>$nickname));
 			if($res) {
 				exit('0');
 			} else {

@@ -52,7 +52,7 @@ $CONFIG = array (
     /* 上传图片配置项 */
     'imageActionName'=>'uploadimage', /* 执行上传图片的action名称 */
     'imageFieldName'=>'upfile', /* 提交的图片表单名称 */
-    'imageMaxSize'=>$site_setting['imageMaxSize'] * 1000, /* 上传大小限制，单位B */
+    'imageMaxSize'=>$site_setting['imageMaxSize'] * 1024 *1024, /* 上传大小限制，单位B */
     'imageAllowFiles'=>$imageAllowFiles, /* 上传图片格式显示 */
     'imageCompressEnable'=>true, /* 是否压缩图片,默认是true */
     'imageCompressBorder'=>1600, /* 图片压缩最长边限制 */
@@ -76,14 +76,14 @@ $CONFIG = array (
     'scrawlActionName'=>'uploadscrawl', /* 执行上传涂鸦的action名称 */
     'scrawlFieldName'=>'upfile', /* 提交的图片表单名称 */
     'scrawlPathFormat'=>$filename, /* 上传保存路径,可以自定义保存路径和文件名格式 */
-    'scrawlMaxSize'=>$site_setting['upload_maxsize'] * 1000, /* 上传大小限制，单位B */
+    'scrawlMaxSize'=>$site_setting['upload_maxsize'] * 1024 *1024, /* 上传大小限制，单位B */
     'scrawlUrlPrefix'=>'', /* 图片访问路径前缀 */
     'scrawlInsertAlign'=>'none',
 
     /* 截图工具上传 */
     'snapscreenActionName'=>'uploadscreen', /* 执行上传截图的action名称 */
     'snapscreenFieldName'=>'upfile', /* 提交的截图表单名称 */
-    'snapscreenMaxSize'=>$site_setting['upload_maxsize'] * 1000, /* 上传大小限制，单位B */
+    'snapscreenMaxSize'=>$site_setting['upload_maxsize'] * 1024 *1024, /* 上传大小限制，单位B */
     'snapscreenAllowFiles'=>$alowexts, /* 上传图片格式显示 */
     'snapscreenCompressEnable'=>true, /* 是否压缩图片,默认是true */
     'snapscreenCompressBorder'=>1600, /* 图片压缩最长边限制 */
@@ -97,7 +97,7 @@ $CONFIG = array (
     'catcherFieldName'=>'source', /* 提交的图片列表表单名称 */
     'catcherPathFormat'=>$filename, /* 上传保存路径,可以自定义保存路径和文件名格式 */
     'catcherUrlPrefix'=>'', /* 图片访问路径前缀 */
-    'catcherMaxSize'=>$site_setting['catcherMaxSize'] * 1000, /* 上传大小限制，单位B */
+    'catcherMaxSize'=>$site_setting['catcherMaxSize'] * 1024 *1024, /* 上传大小限制，单位B */
     'catcherAllowFiles'=>$catcherAllowFiles, /* 抓取图片格式显示 */
 
     /* 上传视频配置 */
@@ -105,7 +105,7 @@ $CONFIG = array (
     'videoFieldName'=>'upfile', /* 提交的视频表单名称 */
     'videoPathFormat'=>$filename, /* 上传保存路径,可以自定义保存路径和文件名格式 */
     'videoUrlPrefix'=>'', /* 视频访问路径前缀 */
-    'videoMaxSize'=>$site_setting['videoMaxSize'] * 1000, /* 上传大小限制，单位B，默认100MB */
+    'videoMaxSize'=>$site_setting['videoMaxSize'] * 1024 *1024, /* 上传大小限制，单位B，默认100MB */
     'videoAllowFiles'=>$videoAllowFiles, /* 上传视频格式显示 */
 
     /* 上传文件配置 */
@@ -113,7 +113,7 @@ $CONFIG = array (
     "fileFieldName"=>"upfile", /* 提交的文件表单名称 */
     "filePathFormat"=>$filename, /* 上传保存路径,可以自定义保存路径和文件名格式 */
     "fileUrlPrefix"=>'', /* 文件访问路径前缀 */
-    "fileMaxSize"=>$site_setting['fileMaxSize'] * 1000, /* 上传大小限制，单位B，默认50MB */
+    "fileMaxSize"=>$site_setting['fileMaxSize'] * 1024 *1024, /* 上传大小限制，单位B，默认50MB */
     "fileAllowFiles"=>$fileAllowFiles, /* 上传文件格式显示 */
 
     /* 列出指定目录下的图片 */

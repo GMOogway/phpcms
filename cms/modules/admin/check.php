@@ -267,6 +267,12 @@ class check extends admin {
                     $this->db->query('ALTER TABLE `'.$this->db->table_name.'` ADD `icon` varchar(255) NULL DEFAULT NULL COMMENT \'图标标示\' AFTER `name`');
                 }
 
+                $this->db->table_name = $prefix.'category';
+                $categorys = $this->db->select();
+                foreach ($categorys as $r) {
+                    $this->db->update(array('setting'=>dr_array2string($this->string2array($r['setting']))),array('catid'=>$r['catid']));
+                }
+
                 $this->db->table_name = $prefix.'menu';
                 if (!$this->db->field_exists('icon')) {
                     $this->db->query('ALTER TABLE `'.$this->db->table_name.'` ADD `icon` varchar(255) NULL DEFAULT NULL COMMENT \'图标标示\' AFTER `data`');
@@ -401,6 +407,10 @@ class check extends admin {
                 $this->db->update(array('iscore'=>1),array('module'=>'special', 'iscore'=>0));
                 $this->db->update(array('iscore'=>1),array('module'=>'search', 'iscore'=>0));
                 $this->db->update(array('iscore'=>1),array('module'=>'scan', 'iscore'=>0));
+                $modules = $this->db->select();
+                foreach ($modules as $r) {
+                    $this->db->update(array('setting'=>dr_array2string($this->string2array($r['setting']))),array('module'=>$r['module']));
+                }
 
                 $this->db->table_name = $prefix.'model';
                 $model = $this->db->get_one(array('modelid' => 11, 'siteid' => 1, 'name' => '视频模型', 'tablename' => 'video'));
@@ -410,6 +420,10 @@ class check extends admin {
                     $this->db->query('DROP TABLE IF EXISTS `'.$prefix.'video_data`');
                     $this->db->table_name = $prefix.'model_field';
                     $this->db->delete(array('modelid' => 11));
+                }
+                $models = $this->db->select();
+                foreach ($models as $r) {
+                    $this->db->update(array('setting'=>dr_array2string($this->string2array($r['setting']))),array('modelid'=>$r['modelid']));
                 }
 
                 $this->db->table_name = $prefix.'linkage';
@@ -448,12 +462,10 @@ class check extends admin {
                 }
 
                 $this->db->table_name = $prefix.'model_field';
-                $this->db->update(array('tips'=>'<div class="mt-checkbox-inline" style="margin-top: 10px;"><label style="margin-bottom: 0;" class="mt-checkbox mt-checkbox-outline"><input name="add_introduce" type="checkbox"  value="1" checked>是否截取内容<span></span></label><input type="text" name="introcude_length" value="200" size="3">字符至内容摘要\r\n<label style="margin-bottom: 0;" class="mt-checkbox mt-checkbox-outline"><input type=\'\'checkbox\'\' name=\'\'auto_thumb\'\' value="1" checked>是否获取内容第<span></span></label><input type="text" name="auto_thumb_no" value="1" size="2" class="">张图片作为标题图片\r\n<label style="margin-bottom: 0;" class="mt-checkbox mt-checkbox-outline"><input type=\'\'checkbox\'\' name=\'\'is_remove_a\'\' value="1" checked>去除站外链接<span></span></label>\r\n</div>'),array('formtype'=>'editor','tips'=>'<div class="content_attr"><label><input name="add_introduce" type="checkbox"  value="1" checked>是否截取内容</label><input type="text" name="introcude_length" value="200" size="3">字符至内容摘要\r\n<label><input type=\'\'checkbox\'\' name=\'\'auto_thumb\'\' value="1" checked>是否获取内容第</label><input type="text" name="auto_thumb_no" value="1" size="2" class="">张图片作为标题图片\r\n</div>'));
-                $this->db->update(array('tips'=>'<div class="mt-checkbox-inline" style="margin-top: 10px;"><label style="margin-bottom: 0;" class="mt-checkbox mt-checkbox-outline"><input name="add_introduce" type="checkbox"  value="1" checked>是否截取内容<span></span></label><input type="text" name="introcude_length" value="200" size="3">字符至内容摘要\r\n<label style="margin-bottom: 0;" class="mt-checkbox mt-checkbox-outline"><input type=\'\'checkbox\'\' name=\'\'auto_thumb\'\' value="1" checked>是否获取内容第<span></span></label><input type="text" name="auto_thumb_no" value="1" size="2" class="">张图片作为标题图片\r\n<label style="margin-bottom: 0;" class="mt-checkbox mt-checkbox-outline"><input type=\'\'checkbox\'\' name=\'\'is_remove_a\'\' value="1" checked>去除站外链接<span></span></label>\r\n</div>'),array('tips'=>'<div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="add_introduce" type="checkbox"  value="1" checked>是否截取内容<span></span></label><input type="text" name="introcude_length" value="200" size="3">字符至内容摘要\r\n<label class="mt-checkbox mt-checkbox-outline"><input type=\'\'checkbox\'\' name=\'\'auto_thumb\'\' value="1" checked>是否获取内容第<span></span></label><input type="text" name="auto_thumb_no" value="1" size="2" class="">张图片作为标题图片\r\n<label class="mt-checkbox mt-checkbox-outline"><input type=\'\'checkbox\'\' name=\'\'is_remove_a\'\' value="1" checked>去除站外链接<span></span></label>\r\n</div>', 'formtype'=>'editor'));
-                $this->db->update(array('tips'=>'<div class="mt-checkbox-inline" style="margin-top: 10px;"><label style="margin-bottom: 5px;" class="mt-checkbox mt-checkbox-outline"><input name="auto_thumb" type="checkbox" checked value="1"> 提取第 <span></span></label><label style="width: 80px;margin-right: 15px;"><input type="text" name="auto_thumb_no" value="1" class="input-text" style="width: 80px;"></label><label style="margin-right: 15px;">个图片为缩略图</label><label style="margin-bottom: 5px;" class="mt-checkbox mt-checkbox-outline"><input name="add_introduce" type="checkbox" checked value="1"> 提取内容 <span></span></label><label style="width: 80px;margin-right: 15px;"><input type="text" name="introcude_length" value="200" class="input-text" style="width: 80px;"></label><label style="margin-right: 15px;">作为描述信息</label><label style="margin-bottom: 5px;" class="mt-checkbox mt-checkbox-outline"><input name="is_remove_a" type="checkbox" checked value="1"> 去除站外链接 <span></span></label></div>'),array('tips'=>'<div class="mt-checkbox-inline" style="margin-top: 10px;"><label style="margin-bottom: 0;" class="mt-checkbox mt-checkbox-outline"><input name="add_introduce" type="checkbox"  value="1" checked>是否截取内容<span></span></label><input type="text" name="introcude_length" value="200" size="3">字符至内容摘要\r\n<label style="margin-bottom: 0;" class="mt-checkbox mt-checkbox-outline"><input type=\'\'checkbox\'\' name=\'\'auto_thumb\'\' value="1" checked>是否获取内容第<span></span></label><input type="text" name="auto_thumb_no" value="1" size="2" class="">张图片作为标题图片\r\n<label style="margin-bottom: 0;" class="mt-checkbox mt-checkbox-outline"><input type=\'\'checkbox\'\' name=\'\'is_remove_a\'\' value="1" checked>去除站外链接<span></span></label>\r\n</div>', 'formtype'=>'editor'));
-                $this->db->update(array('setting'=>'{"width":"","fieldtype":"int","format":"1","format2":"0","is_left":"0","defaultvalue":"","color":""}', 'iscore'=>0, 'isbase'=>0),array('field'=>'updatetime', 'formtype'=>'datetime'));
-                $this->db->update(array('setting'=>'{"width":"","fieldtype":"int","format":"1","format2":"0","is_left":"0","defaultvalue":"","color":""}', 'iscore'=>0, 'isbase'=>0),array('field'=>'inputtime', 'formtype'=>'datetime'));
-                $this->db->update(array('setting'=>'{"width":"","fieldtype":"int","format":"0","format2":"0","is_left":"0","defaultvalue":"","color":""}'),array('modelid'=>10, 'field'=>'birthday', 'formtype'=>'datetime'));
+                $fields = $this->db->select();
+                foreach ($fields as $r) {
+                    $this->db->update(array('setting'=>dr_array2string($this->string2array($r['setting']))),array('fieldid'=>$r['fieldid']));
+                }
 
                 break;
 
@@ -785,6 +797,21 @@ class check extends admin {
         }
         $menu_db->delete(array('id'=>$id));
         return true;
+    }
+
+    private function string2array($data) {
+        $data = trim($data);
+        if($data == '') return array();
+        if(strpos($data, 'array')===0){
+            @eval("\$array = $data;");
+        }else{
+            if(strpos($data, '{\\')===0) $data = stripslashes($data);
+            $array=dr_string2array($data);
+            if(strtolower(CHARSET)=='gbk'){
+                $array = mult_iconv("UTF-8", "GBK//IGNORE", $array);
+            }
+        }
+        return $array;
     }
 
 }

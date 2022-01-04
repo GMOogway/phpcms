@@ -350,35 +350,6 @@ class content extends admin {
 				} else {
 					$info['status'] = 99;
 				}
-				// 去除站外链接
-				$value = new_stripslashes($info['content']);
-				if ($this->input->post('is_remove_a') && preg_match_all("/<a(.*)href=(.+)>(.*)<\/a>/Ui", $value, $arrs)) {
-					//$sites = require CACHE_PATH.'caches_commons/caches_data/domain_site.cache.php';
-					$this->sitedb = pc_base::load_model('site_model');
-					$data = $this->sitedb->select();
-					$sites = array();
-					foreach ($data as $t) {
-						$domain = parse_url($t['domain']);
-						if ($domain['port']) {
-							$sites[$domain['host'].':'.$domain['port']] = $t['siteid'];
-						} else {
-							$sites[$domain['host']] = $t['siteid'];
-						}
-					}
-					foreach ($arrs[2] as $i => $a) {
-						if (strpos($a, ' ') !== false) {
-							list($a) = explode(' ', $a);
-						}
-						$a = trim($a, '"');
-						$a = trim($a, '\'');
-						$arr = parse_url($a);
-						if ($arr && $arr['host'] && !isset($sites[$arr['host']])) {
-							// 去除a标签
-							$value = str_replace($arrs[0][$i], $arrs[3][$i], $value);
-						}
-					}
-				}
-				$info['content'] = $value;
 				$this->db->add_content($info);
 				dr_json(1, L('add_success'));
 			} else {
@@ -477,35 +448,6 @@ class content extends admin {
 			//if(!trim($info['title'])) dr_json(0, L('title_is_empty'), array('field' => 'title'));
 			$modelid = $this->categorys[$catid]['modelid'];
 			$this->db->set_model($modelid);
-			// 去除站外链接
-			$value = new_stripslashes($info['content']);
-			if ($this->input->post('is_remove_a') && preg_match_all("/<a(.*)href=(.+)>(.*)<\/a>/Ui", $value, $arrs)) {
-				//$sites = require CACHE_PATH.'caches_commons/caches_data/domain_site.cache.php';
-				$this->sitedb = pc_base::load_model('site_model');
-				$data = $this->sitedb->select();
-				$sites = array();
-				foreach ($data as $t) {
-					$domain = parse_url($t['domain']);
-					if ($domain['port']) {
-						$sites[$domain['host'].':'.$domain['port']] = $t['siteid'];
-					} else {
-						$sites[$domain['host']] = $t['siteid'];
-					}
-				}
-				foreach ($arrs[2] as $i => $a) {
-					if (strpos($a, ' ') !== false) {
-						list($a) = explode(' ', $a);
-					}
-					$a = trim($a, '"');
-					$a = trim($a, '\'');
-					$arr = parse_url($a);
-					if ($arr && $arr['host'] && !isset($sites[$arr['host']])) {
-						// 去除a标签
-						$value = str_replace($arrs[0][$i], $arrs[3][$i], $value);
-					}
-				}
-			}
-			$info['content'] = $value;
 			$this->db->edit_content($info,$id);
 			dr_json(1, L('update_success'));
 		} else {
@@ -800,9 +742,15 @@ class content extends admin {
 		dr_json(1, L('operation_success'));
 	}
 	/**
-	 * 排序
+	 * 用于控制器的存储
 	 */
-	public function listorder() {
+	public function public_save_value_edit() {
+		$cache_uid = $this->cache->get_auth_data('function_list_save_text_value', 1);
+		if (!$cache_uid) {
+			dr_json(0, L('权限认证过期，请重试'));
+		} elseif ($_SESSION['userid'] != $cache_uid) {
+			dr_json(0, L('权限认证失败，请重试'));
+		}
         $id = intval($this->input->get('id'));
 		$catid = intval($this->input->get('catid'));
         $name = dr_safe_filename($this->input->get('name'));
@@ -841,8 +789,7 @@ class content extends admin {
 		$tree = pc_base::load_sys_class('tree');
 		if($from=='content' && !cleck_admin($_SESSION['roleid'])) {	
 			$this->priv_db = pc_base::load_model('category_priv_model');
-			$rolewhere = 'action="init" and roleid in ('.(is_array(dr_string2array($_SESSION['roleid'])) ? implode(',', dr_string2array($_SESSION['roleid'])) : $_SESSION['roleid']).') and siteid='.$this->siteid.' and is_admin=1';
-			$priv_result = $this->priv_db->select($rolewhere);
+			$priv_result = $this->priv_db->select(array('action'=>'init','roleid'=>is_array(dr_string2array($_SESSION['roleid'])) ? dr_string2array($_SESSION['roleid']) : $_SESSION['roleid'],'siteid'=>$this->siteid,'is_admin'=>1));
 			$priv_catids = array();
 			foreach($priv_result as $_v) {
 				$priv_catids[] = $_v['catid'];
@@ -911,11 +858,7 @@ class content extends admin {
 		$this->db->set_model($modelid);
 		$title = $this->input->get('data');
 		if(CHARSET=='gbk') $title = iconv('utf-8','gbk',$title);
-		$where = "title='".$title."'";
-		if ($id) {
-			$where .= ' AND id<>'.$id;
-		}
-		$r = $this->db->get_one($where);
+		$r = $this->db->get_one(array('title'=>$title, 'id<>'=>$id));
 		if ($is_ajax) {
 			if($r) {
 				exit(L('已经有相同的存在'));
@@ -1117,7 +1060,7 @@ class content extends admin {
 				if(strtolower(CHARSET)=='gbk') $_v['title'] = iconv('gbk', 'utf-8', $_v['title']);
 				$infos[] = $_v;
 			}
-			echo json_encode($infos);
+			exit(dr_array2string($infos));
 		}
 	}
 
@@ -1312,8 +1255,7 @@ class content extends admin {
 			foreach ($this->categorys as $catid => $cat) {
 				if($cat['type']!=0) continue;
 				//查看管理员是否有这个栏目的查看权限。
-				$rolewhere = 'catid='.$catid.' and siteid='.$this->siteid.' and roleid in ('.(is_array(dr_string2array($_SESSION['roleid'])) ? implode(',', dr_string2array($_SESSION['roleid'])) : $_SESSION['roleid']).') and is_admin=1';
-				if (!$this->priv_db->get_one($rolewhere)) {
+				if (!$this->priv_db->get_one(array('catid'=>$catid, 'siteid'=>$this->siteid, 'roleid'=>is_array(dr_string2array($_SESSION['roleid'])) ? dr_string2array($_SESSION['roleid']) : $_SESSION['roleid'], 'is_admin'=>'1'))) {
 					continue;
 				}
 				//如果栏目有设置工作流，进行权限检查。
@@ -1430,8 +1372,7 @@ class content extends admin {
 		$categorys = array();
 		if(!cleck_admin($_SESSION['roleid'])) {
 			$this->priv_db = pc_base::load_model('category_priv_model');
-			$rolewhere = 'action="add" and roleid in ('.(is_array(dr_string2array($_SESSION['roleid'])) ? implode(',', dr_string2array($_SESSION['roleid'])) : $_SESSION['roleid']).') and siteid='.$siteid.' and is_admin=1';
-			$priv_result = $this->priv_db->select($rolewhere);
+			$priv_result = $this->priv_db->select(array('action'=>'add','roleid'=>is_array(dr_string2array($_SESSION['roleid'])) ? dr_string2array($_SESSION['roleid']) : $_SESSION['roleid'],'siteid'=>$siteid,'is_admin'=>1));
 			$priv_catids = array();
 			foreach($priv_result as $_v) {
 				$priv_catids[] = $_v['catid'];

@@ -24,7 +24,7 @@ class role_op {
 	 */
 	public function checkname($name) {
 		$info = $this->db->get_one(array('rolename'=>$name),'roleid');
-		if($info[roleid]){
+		if($info['roleid']){
 			return true;
 		}
 		return false;

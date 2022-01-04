@@ -59,7 +59,7 @@ class attachments {
 		));
 		if (!$rt['code']) {
 			$result = array("uploaded"=>false,"error"=>array("message"=>$rt['msg']));
-			exit(json_encode($result,JSON_UNESCAPED_UNICODE));
+			exit(dr_array2string($result));
 			//exit(dr_array2string($rt));
 		}
 		$data = array();
@@ -81,8 +81,7 @@ class attachments {
 			$data = $upload->save_data($rt['data']);
 			if (!$data['code']) {
 				$result = array("uploaded"=>false,"error"=>array("message"=>$data['msg']));
-				exit(json_encode($result,JSON_UNESCAPED_UNICODE));
-				//exit(dr_array2string($data));
+				exit(dr_array2string($result));
 			}
 		}
 		
@@ -101,8 +100,7 @@ class attachments {
 		}else{
 			$result = array('uploaded'=>false,'error'=>array('message'=>L('上传错误')));
 		}
-		exit(json_encode($result,JSON_UNESCAPED_UNICODE));
-		//exit(dr_array2string(array('code' => 1, 'msg' => L('上传成功'), 'id' => $data['code'], 'info' => $rt['data'])));
+		exit(dr_array2string($result));
 	}
 	/**
 	 * h5upload上传附件
@@ -160,8 +158,6 @@ class attachments {
 					exit(dr_array2string($data));
 				}
 			}
-			
-			//exit(dr_array2string(array('code' => 1, 'msg' => L('上传成功'), 'id' => $data['code'], 'info' => $rt['data'])));
 			
 			// 缩略图
 			if (dr_is_image($rt['data']['url']) && ($this->input->post('thumb_width') > 0 || $this->input->post('thumb_height') > 0)) {

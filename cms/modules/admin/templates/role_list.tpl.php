@@ -30,7 +30,6 @@ if(is_array($infos)){
 <?php if($info['roleid'] > 1) {?>
 <a class="btn btn-xs blue" href="javascript:setting_role(<?php echo $info['roleid']?>, '<?php echo new_addslashes($info['rolename'])?>')"><?php echo L('role_setting');?></a> <a class="btn btn-xs dark" href="javascript:void(0)" onclick="setting_cat_priv(<?php echo $info['roleid']?>, '<?php echo new_addslashes($info['rolename'])?>')"><?php echo L('usersandmenus')?></a>
 <?php }?>
-<a class="btn btn-xs yellow" href="?m=admin&c=role&a=member_manage&roleid=<?php echo $info['roleid']?>&menuid=<?php echo $this->input->get('menuid')?>"><?php echo L('role_member_manage');?></a>
 <?php if($info['roleid'] > 1) {?><a class="btn btn-xs green" href="?m=admin&c=role&a=edit&roleid=<?php echo $info['roleid']?>&menuid=<?php echo $this->input->get('menuid')?>"><?php echo L('edit')?></a>
 <a class="btn btn-xs red" href="javascript:confirmurl('?m=admin&c=role&a=delete&roleid=<?php echo $info['roleid']?>', '<?php echo L('posid_del_cofirm')?>')"><?php echo L('delete')?></a>
 <?php }?>

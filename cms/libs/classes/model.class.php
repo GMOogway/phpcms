@@ -40,7 +40,7 @@ class model {
 	 * @return array		查询结果集数组
 	 */
 	final public function select($where = '', $data = '*', $limit = '', $order = '', $group = '', $key='') {
-		if (is_array($where)) $where = $this->sqls($where);
+		if (is_array($where)) $where = $this->where($where);
 		return $this->db->select($data, $this->table_name, $where, $limit, $order, $group, $key);
 	}
 
@@ -53,7 +53,7 @@ class model {
 	 * @return unknown_type
 	 */
 	final public function listinfo($where = '', $order = '', $page = 1, $pagesize = 10, $key='', $setpages = 10,$urlrule = '',$array = array(), $data = '*') {
-		$where = to_sqls($where);
+		if (is_array($where)) $where = $this->where($where);
 		$this->number = $this->count($where);
 		$page = max(intval($page), 1);
 		$offset = $pagesize*($page-1);
@@ -76,7 +76,7 @@ class model {
 	 * @return array/null	数据查询结果集,如果不存在，则返回空
 	 */
 	final public function get_one($where = '', $data = '*', $order = '', $group = '') {
-		if (is_array($where)) $where = $this->sqls($where);
+		if (is_array($where)) $where = $this->where($where);
 		return $this->db->get_one($data, $this->table_name, $where, $order, $group);
 	}
 	
@@ -154,6 +154,36 @@ class model {
 			$sql = '';
 			foreach ($where as $key=>$val) {
 				$sql .= $sql ? " $font `$key` = '$val' " : " `$key` = '$val'";
+			}
+			return $sql;
+		} else {
+			return $where;
+		}
+	}
+	
+	/**
+	 * 将数组转换为SQL语句
+	 * @param array $where 要生成的数组
+	 * @param string $font 连接串。
+	 */
+	final public function where($where, $font = ' AND ') {
+		if (is_array($where)) {
+			$sql = '';
+			foreach ($where as $key=>$val) {
+				if(is_array($val)){
+					$sql .= $sql ? " $font `$key` IN ('".str_replace(',', '\',\'', implode(',', $val))."') " : " `$key` IN ('".str_replace(',', '\',\'', implode(',', $val))."')";
+				}else if(substr($val, 0, 1) == '(' || substr($val, -1) == ')'){
+					$sql .= $sql ? " $font `$key` IN '$val' " : " `$key` IN '$val'";
+				}else if(!strpos($key,'>') && !strpos($key,'<') && !strpos($key,'=') && substr($val, 0, 1) != '%' && substr($val, -1) != '%'){
+					$val = addslashes($val);
+					$sql .= $sql ? " $font `$key` = '$val' " : " `$key` = '$val'";
+				}else if(substr($val, 0, 1) == '%' || substr($val, -1) == '%'){
+					$val = addslashes($val);
+					$sql .= $sql ? " $font `$key` LIKE '$val' " : " `$key` LIKE '$val'";
+				}else{
+					$val = addslashes($val);
+					$sql .= $sql ? " $font $key '$val' " : " $key '$val'";
+				}
 			}
 			return $sql;
 		} else {

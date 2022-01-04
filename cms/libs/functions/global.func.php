@@ -650,8 +650,7 @@ function dr_list_function($func, $value, $param = array(), $data = array(), $fie
 			'datetime' => 'datetime',
 			'editor' => 'content',
 			'image' => 'image',
-			'images' => 'images',
-			'number' => 'number',
+			'images' => 'image',
 			'box' => 'checkbox_name',
 			'linkage' => 'linkage_name',
 		);
@@ -659,7 +658,7 @@ function dr_list_function($func, $value, $param = array(), $data = array(), $fie
 			'title' => 'title',
 			'catid' => 'catid',
 			'author' => 'author',
-			'displayorder' => 'save_text_value',
+			'listorder' => 'save_text_value',
 		);
 		if ($name && isset($dname[$name]) && $dname[$name]) {
 			$func = $dname[$name];
@@ -1487,18 +1486,8 @@ function random($length, $chars = '0123456789') {
 * @return	array	返回数组格式，如果，data为空，则返回空数组
 */
 function string2array($data) {
-	$data = trim($data);
-	if($data == '') return array();
-	if(strpos($data, 'array')===0){
-		@eval("\$array = $data;");
-	}else{
-		if(strpos($data, '{\\')===0) $data = stripslashes($data);
-		$array=dr_string2array($data);
-		if(strtolower(CHARSET)=='gbk'){
-			$array = mult_iconv("UTF-8", "GBK//IGNORE", $array);
-		}
-	}
-	return $array;
+	if($data == '' || empty($data)) return array();
+	return dr_string2array($data);
 }
 /**
 * 将数组转换为字符串
@@ -1509,12 +1498,7 @@ function string2array($data) {
 */
 function array2string($data, $isformdata = 1) {
 	if($data == '' || empty($data)) return '';
-	
-	if($isformdata) $data = new_stripslashes($data);
-	if(strtolower(CHARSET)=='gbk'){
-		$data = mult_iconv("GBK", "UTF-8", $data);
-	}
-	return addslashes(dr_array2string($data));
+	return dr_array2string($data);
 }
 /**
  * 根据文件扩展名获取文件预览信息

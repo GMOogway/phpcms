@@ -15,7 +15,9 @@ userid会员:&nbsp;userid
 用于列表显示单文件：file
 用于列表显示多文件：files
 用于列表显示用户组：group
-实时存储文本值：save_text_value</pre></div>
+实时存储时间值：save_time_value
+实时存储文本值：save_text_value
+实时存储选择值：save_select_value</pre></div>
 
 
     <p> &nbsp;&nbsp;</p>

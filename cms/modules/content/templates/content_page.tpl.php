@@ -133,11 +133,6 @@ if(is_array($forminfos['base'])) {
 <link href="<?php echo JS_PATH?>jquery-minicolors/jquery.minicolors.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="<?php echo JS_PATH?>jquery-minicolors/jquery.minicolors.min.js"></script>
 <script type="text/javascript">
-$('body').keydown(function(e){
-    if (e.keyCode == 13) {
-        $('#my_submit').trigger('click');
-    }
-})
 $(document).ready(function() {
     $('#my_submit').click(function () {
         url = '?m=content&c=content&a=add';

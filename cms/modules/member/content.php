@@ -485,11 +485,7 @@ class content extends foreground {
 		$this->content_db->set_model($modelid);
 		$title = $this->input->get('data');
 		if(CHARSET=='gbk') $title = iconv('utf-8','gbk',$title);
-		$where = "title='".$title."'";
-		if ($id) {
-			$where .= ' AND id<>'.$id;
-		}
-		$r = $this->content_db->get_one($where);
+		$r = $this->content_db->get_one(array('title'=>$title, 'id<>'=>$id));
 		if ($is_ajax) {
 			if($r) {
 				exit(L('已经有相同的存在'));

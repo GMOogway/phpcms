@@ -70,8 +70,8 @@ include $this->admin_tpl('header');?>
                         <label class="col-md-2 control-label"><?php echo L('add_category_types')?></label>
                         <div class="col-md-9">
                             <div class="mt-radio-inline">
-                                <label class="mt-radio mt-radio-outline"><input type="radio" name="addtype" value="0" checked onclick="$('#catdir_tr').show();$('#normal_add').show();$('#normal_add').show();$('#batch_add').hide();"> <?php echo L('normal_add');?> <span></span></label>
-                                <label class="mt-radio mt-radio-outline"><input type="radio" name="addtype" value="1" onclick="$('#catdir_tr').hide();$('#normal_add').hide();$('#normal_add').hide();$('#batch_add').show();"> <?php echo L('batch_add');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="addtype" value="0" checked onclick="$('#catdir_tr').show();$('#normal_add').show();$('#normal_add').show();$('#batch_add').hide();$('#dr_row_catdir').show();"> <?php echo L('normal_add');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="addtype" value="1" onclick="$('#catdir_tr').hide();$('#normal_add').hide();$('#normal_add').hide();$('#batch_add').show();$('#dr_row_catdir').hide();"> <?php echo L('batch_add');?> <span></span></label>
                             </div>
                         </div>
                     </div>
@@ -103,7 +103,7 @@ include $this->admin_tpl('header');?>
                             </span>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="dr_row_catdir">
                         <label class="col-md-2 control-label"><?php echo L('catdir')?></label>
                         <div class="col-md-9">
                             <label><input class="form-control input-large" type="text" id="catdir" name="info[catdir]" value=""></label>

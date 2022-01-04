@@ -24,8 +24,7 @@ class admin_manage extends admin {
 		$infos = $this->db->listinfo('', '', $page, SYS_ADMIN_PAGESIZE);
 		if ($infos) {
 			foreach ($infos as $i => $t) {
-				$where = 'roleid in ('.(is_array(dr_string2array($t['roleid'])) ? implode(',', dr_string2array($t['roleid'])) : $t['roleid']).') and disabled=0';
-				$role = $this->role_db->select($where);
+				$role = $this->role_db->select(array('roleid'=>is_array(dr_string2array($t['roleid'])) ? dr_string2array($t['roleid']) : $t['roleid'], 'disabled'=>0));
 				if ($role) {
 					foreach ($role as $r) {
 						$infos[$i]['role'][$r['roleid']] = $this->role[$r['roleid']]['rolename'];
@@ -80,6 +79,7 @@ class admin_manage extends admin {
 				dr_json(0, "error auth code");
 			}
 			$info = $this->input->post('info');
+			$info['password'] = dr_safe_password($info['password']);
 			$rs = $this->check_username($info['username']);
 			if (!$rs['code']) {
 				dr_json(0, $rs['msg'], array('field' => 'username'));
@@ -146,6 +146,7 @@ class admin_manage extends admin {
 			}
 			$memberinfo = array();
 			$info = $this->input->post('info');
+			$info['password'] = dr_safe_password($info['password']);
 			if(!$info['email']){
 				dr_json(0, L('email').L('empty'), array('field' => 'email'));
 			}
@@ -182,8 +183,7 @@ class admin_manage extends admin {
 			dr_json(1, L('operation_success'), array('url' => '?m=admin&c=admin_manage&a=init&menuid='.$this->input->post('menuid').'&page='.(int)$this->input->post('page').'&pc_hash='.dr_get_csrf_token()));
 		} else {
 			$info = $this->db->get_one(array('userid'=>$this->input->get('userid')));
-			$where = 'roleid in ('.(is_array(dr_string2array($info['roleid'])) ? implode(',', dr_string2array($info['roleid'])) : $info['roleid']).') and disabled=0';
-			$role = $this->role_db->select($where);
+			$role = $this->role_db->select(array('roleid'=>is_array(dr_string2array($info['roleid'])) ? dr_string2array($info['roleid']) : $info['roleid'], 'disabled'=>0));
 			if ($role) {
 				foreach ($role as $r) {
 					$info['role'][$r['roleid']] = $this->role[$r['roleid']]['rolename'];
@@ -422,9 +422,9 @@ class admin_manage extends admin {
 	}
 
 	// 获取角色组
-	public function get_role_all($rid = []) {
+	public function get_role_all($rid = array()) {
 
-		$role = [];
+		$role = array();
 		$data = $this->role_db->select(array('disabled'=>'0'));
 		if ($data) {
 			foreach ($data as $t) {

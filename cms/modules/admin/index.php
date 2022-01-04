@@ -298,8 +298,8 @@ class index extends admin {
 		define('PC_RELEASE', pc_base::load_config('version','pc_release'));
 		define('CMS_VERSION', pc_base::load_config('version','cms_version'));
 		define('CMS_RELEASE', pc_base::load_config('version','cms_release'));
-		$where = 'roleid in ('.(is_array(dr_string2array($_SESSION['roleid'])) ? implode(',', dr_string2array($_SESSION['roleid'])) : $_SESSION['roleid']).') and disabled=0';
-		$role = $this->role_db->select($where);
+		$this->role_db = pc_base::load_model('admin_role_model');
+		$role = $this->role_db->select(array('roleid'=>is_array(dr_string2array($_SESSION['roleid'])) ? dr_string2array($_SESSION['roleid']) : $_SESSION['roleid'], 'disabled'=>0));
 		if ($role) {
 			foreach ($role as $r) {
 				$info['role'][$r['roleid']] = $this->role[$r['roleid']]['rolename'];
@@ -610,7 +610,7 @@ class index extends admin {
 	// 获取角色组
 	public function get_role_all($rid = []) {
 		$this->role_db = pc_base::load_model('admin_role_model');
-		$role = [];
+		$role = array();
 		$data = $this->role_db->select(array('disabled'=>'0'));
 		if ($data) {
 			foreach ($data as $t) {

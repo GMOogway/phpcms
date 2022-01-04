@@ -12,10 +12,6 @@ class param {
 	
 	public function __construct() {
 		$this->input = pc_base::load_sys_class('input');
-		$_POST = new_addslashes($_POST);
-		$_GET = new_addslashes($_GET);
-		$_REQUEST = new_addslashes($_REQUEST);
-		$_COOKIE = new_addslashes($_COOKIE);
 
 		$this->route_config = pc_base::load_config('route', SITE_HURL) ? pc_base::load_config('route', SITE_HURL) : pc_base::load_config('route', 'default');
 

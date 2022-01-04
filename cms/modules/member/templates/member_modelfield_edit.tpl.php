@@ -217,17 +217,12 @@
 
     <div class="portlet-body form myfooter">
         <div class="form-actions text-center">
-            <button type="button" id="my_submit" onclick="dr_ajax_submit('?m=member&c=member_modelfield&a=edit&page='+$('#dr_page').val(), 'myform', '2000')" class="btn green"> <i class="fa fa-save"></i> <?php echo L('submit')?></button>
+            <button type="button" onclick="dr_ajax_submit('?m=member&c=member_modelfield&a=edit&page='+$('#dr_page').val(), 'myform', '2000')" class="btn green"> <i class="fa fa-save"></i> <?php echo L('submit')?></button>
         </div>
     </div>
 </form>
 </div>
 <script type="text/javascript">
-$('body').keydown(function(e){
-    if (e.keyCode == 13) {
-        $('#my_submit').trigger('click');
-    }
-})
 $('.nav-tabs a').click(function (e) {
     $('.nav-tabs').find('li').removeClass('active');
     $('.tab-pane').removeClass('active');

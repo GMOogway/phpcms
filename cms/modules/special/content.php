@@ -177,11 +177,7 @@ class content extends admin {
 		$is_ajax = intval($this->input->get('is_ajax'));
 		$specialid = intval($this->input->get('specialid'));
 		$id = intval($this->input->get('id'));
-		$where = "title='".$title."' And specialid=".$specialid;
-		if ($id) {
-			$where .= ' AND id<>'.$id;
-		}
-		$r = $this->db->get_one($where);
+		$r = $this->db->get_one(array('title'=>$title,'id<>'=>$id,'specialid'=>$specialid));
 		if ($is_ajax) {
 			if($r) {
 				exit(L('已经有相同的存在'));
