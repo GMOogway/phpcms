@@ -6,5 +6,5 @@
 		$type = $ispassword ? 'password' : 'text';
 		$errortips = $this->fields[$field]['errortips'];
 		if($errortips || $minlength) $this->formValidator .= '$("#'.$field.'").formValidator({onshow:"",onfocus:"'.$errortips.'"}).inputValidator({min:1,onerror:"'.$errortips.'"});';
-		return '<input type="'.$type.'" name="info['.$field.']" id="'.$field.'" size="'.$size.'" value="'.$value.'" class="input-text" '.$formattribute.' '.$css.'>';
+		return '<input type="'.$type.'" name="info['.$field.']" id="'.$field.'" size="'.$size.'" value="'.$value.'" class="form-control" '.$formattribute.' '.$css.'>';
 	}

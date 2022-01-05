@@ -3,7 +3,7 @@
 	<div class="form-group">
       <label class="col-md-2 control-label">取值范围</label>
       <div class="col-md-9">
-            <label><input type="text" name="setting[minnumber]" value="<?php echo $setting['minnumber'];?>" size="5" class="input-text"></label> - <label><input type="text" name="setting[maxnumber]" value="<?php echo $setting['maxnumber'];?>" size="5" class="input-text"></label>
+            <label><input type="text" name="setting[minnumber]" value="<?php echo $setting['minnumber'];?>" size="5" class="form-control"></label> - <label><input type="text" name="setting[maxnumber]" value="<?php echo $setting['maxnumber'];?>" size="5" class="form-control"></label>
       </div>
     </div>
 	<div class="form-group">
@@ -25,14 +25,14 @@
 	<div class="form-group">
       <label class="col-md-2 control-label">输入框长度</label>
       <div class="col-md-9">
-            <label><input type="text" name="setting[size]" value="<?php echo $setting['size'];?>" size="3" class="input-text"></label>
+            <label><input type="text" name="setting[size]" value="<?php echo $setting['size'];?>" size="3" class="form-control"></label>
             <span class="help-block"><?php echo L('px')?></span>
       </div>
     </div>
 	<div class="form-group">
       <label class="col-md-2 control-label">默认值</label>
       <div class="col-md-9">
-            <label><input type="text" name="setting[defaultvalue]" value="<?php echo $setting['defaultvalue'];?>" size="40" class="input-text"></label>
+            <label><input type="text" name="setting[defaultvalue]" value="<?php echo $setting['defaultvalue'];?>" size="40" class="form-control"></label>
       </div>
     </div>
 	<div class="form-group">

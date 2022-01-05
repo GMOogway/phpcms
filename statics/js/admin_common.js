@@ -422,39 +422,7 @@ function dr_content_submit(url,type,w,h) {
 }
 //弹出对话框
 function artdialog(id,url,title,w,h) {
-	if (typeof pc_hash == 'string') url += (url.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
-	if (url.toLowerCase().indexOf("http://") != -1 || url.toLowerCase().indexOf("https://") != -1) {
-	} else {
-		url = geturlpathname()+url;
-	}
-	if(!w) w=700;
-	if(!h) h=500;
-	if (is_mobile()) {
-		w = h = '100%';
-	}
-	if (w=='100%' && h=='100%') {
-		var drag = false;
-	} else {
-		var drag = true;
-	}
-	var diag = new Dialog({
-		id:id,
-		title:title,
-		url:url,
-		width:w,
-		height:h,
-		modal:true,
-		draggable:drag
-	});
-	diag.onOk = function(){
-		var form = $DW.$('#dosubmit');
-		form.click();
-		return false;
-	};
-	diag.onCancel=function() {
-		$DW.close();
-	};
-	diag.show();
+	omnipotent(id,url,title,0,w,h);
 }
 //选择图标
 function menuicon(id,linkurl,title,w,h) {

@@ -2,14 +2,14 @@
     <div class="form-group">
       <label class="col-md-2 control-label">编辑器默认宽度</label>
       <div class="col-md-9">
-            <label><input type="text" name="setting[width]" value="" size="20" class="input-text"></label>
+            <label><input type="text" name="setting[width]" value="" size="20" class="form-control"></label>
             <span class="help-block"><?php echo L('[整数]表示固定宽度；[整数%]表示百分比')?></span>
       </div>
     </div>
     <div class="form-group">
       <label class="col-md-2 control-label">编辑器默认高度</label>
         <div class="col-md-9">
-            <label><input type="text" name="setting[height]" value="" size="20" class="input-text"></label>
+            <label><input type="text" name="setting[height]" value="" size="20" class="form-control"></label>
             <span class="help-block"><?php echo L('px')?></span>
         </div>
     </div>
@@ -130,13 +130,13 @@
 	<div class="form-group">
       <label class="col-md-2 control-label">允许同时上传的个数</label>
       <div class="col-md-9">
-            <label><input type="text" name="setting[upload_number]" value="10" class="input-text"></label>
+            <label><input type="text" name="setting[upload_number]" value="10" class="form-control"></label>
       </div>
     </div>
 	<div class="form-group">
       <label class="col-md-2 control-label">文件大小</label>
       <div class="col-md-9">
-            <label><input type="text" name="setting[upload_maxsize]" value="0" size="40" class="input-text"></label>
+            <label><input type="text" name="setting[upload_maxsize]" value="0" size="40" class="form-control"></label>
             <span class="help-block">单位MB</span>
       </div>
     </div>

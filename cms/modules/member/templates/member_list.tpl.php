@@ -17,6 +17,7 @@ jQuery(document).ready(function() {
             autoclose: true
         });
     }
+    $(":text").removeClass('input-text');
 });
 </script>
 <div class="pad-lr-10">

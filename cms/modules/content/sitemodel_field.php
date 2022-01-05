@@ -139,7 +139,7 @@ class sitemodel_field extends admin {
 				$where .= ' AND fieldid<>'.$fieldid;
 			}
 			$model_field = $this->db->get_one($where);
-			if ($model_field) dr_json(0 ,L('fieldname').'（'.$field.'）'.L('already_exist'), array('field' => 'name'));
+			if ($model_field) dr_json(0, L('fieldname').'（'.$field.'）'.L('already_exist'), array('field' => 'name'));
 			
 			require MODEL_PATH.$field_type.DIRECTORY_SEPARATOR.'config.inc.php';
 			

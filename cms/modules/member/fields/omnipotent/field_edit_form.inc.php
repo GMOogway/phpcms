@@ -3,7 +3,7 @@
 	<div class="form-group">
       <label class="col-md-2 control-label">表单</label>
       <div class="col-md-9">
-            <textarea name="setting[formtext]" id="options" style="height:100px;width:400px;"><?php echo new_html_special_chars($setting['formtext']);?></textarea>
+            <textarea name="setting[formtext]" id="options" style="height:100px;" class="form-control"><?php echo $setting['formtext'];?></textarea>
             <span class="help-block">例如：&lt;input type='text' name='info[voteid]' id='voteid' value='{FIELD_VALUE}' style='50' &gt;</span>
       </div>
     </div>

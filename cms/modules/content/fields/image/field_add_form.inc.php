@@ -2,13 +2,13 @@
 	<div class="form-group">
       <label class="col-md-2 control-label">文本框长度</label>
       <div class="col-md-9">
-            <label><input type="text" name="setting[size]" size="10" class="input-text"></label>
+            <label><input type="text" name="setting[size]" size="10" class="form-control"></label>
       </div>
     </div>
 	<div class="form-group">
       <label class="col-md-2 control-label">默认值</label>
       <div class="col-md-9">
-            <label><input type="text" name="setting[defaultvalue]" size="40" class="input-text"></label>
+            <label><input type="text" name="setting[defaultvalue]" size="40" class="form-control"></label>
       </div>
     </div>
 	<div class="form-group">
@@ -23,14 +23,14 @@
 	<div class="form-group">
       <label class="col-md-2 control-label">文件大小</label>
       <div class="col-md-9">
-            <label><input type="text" name="setting[upload_maxsize]" value="0" size="40" class="input-text"></label>
+            <label><input type="text" name="setting[upload_maxsize]" value="0" size="40" class="form-control"></label>
             <span class="help-block">单位MB</span>
       </div>
     </div>
 	<div class="form-group">
       <label class="col-md-2 control-label">允许上传的图片类型</label>
       <div class="col-md-9">
-            <label><input type="text" name="setting[upload_allowext]" value="gif|jpg|jpeg|png|bmp" size="40" class="input-text"></label>
+            <label><input type="text" name="setting[upload_allowext]" value="gif|jpg|jpeg|png|bmp" size="40" class="form-control"></label>
       </div>
     </div>
 	<div class="form-group">

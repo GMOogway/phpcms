@@ -3,32 +3,32 @@
 	<div class="form-group">
       <label class="col-md-2 control-label">宽度</label>
       <div class="col-md-9">
-            <label><input type="text" name="setting[width]" value="<?php echo $setting['width'];?>" size="20" class="input-text"> </label>
+            <label><input type="text" name="setting[width]" value="<?php echo $setting['width'];?>" size="20" class="form-control"> </label>
             <span class="help-block"><?php echo L('[整数]表示固定宽度；[整数%]表示百分比')?></span>
       </div>
     </div>
 	<div class="form-group">
       <label class="col-md-2 control-label">最大值</label>
       <div class="col-md-9">
-            <label><input type="text" name="setting[maxnumber]" value="<?php echo $setting['maxnumber'];?>" size="20" class="input-text"></label>
+            <label><input type="text" name="setting[maxnumber]" value="<?php echo $setting['maxnumber'];?>" size="20" class="form-control"></label>
       </div>
     </div>
 	<div class="form-group">
       <label class="col-md-2 control-label">最小值</label>
       <div class="col-md-9">
-            <label><input type="text" name="setting[minnumber]" value="<?php echo $setting['minnumber'];?>" size="20" class="input-text"></label>
+            <label><input type="text" name="setting[minnumber]" value="<?php echo $setting['minnumber'];?>" size="20" class="form-control"></label>
       </div>
     </div>
 	<div class="form-group">
       <label class="col-md-2 control-label">步长值</label>
       <div class="col-md-9">
-            <label><input type="text" name="setting[step]" value="<?php echo $setting['step'];?>" size="20" class="input-text"></label>
+            <label><input type="text" name="setting[step]" value="<?php echo $setting['step'];?>" size="20" class="form-control"></label>
       </div>
     </div>
 	<div class="form-group">
       <label class="col-md-2 control-label">默认值</label>
       <div class="col-md-9">
-            <label><input type="text" name="setting[defaultvalue]" value="<?php echo $setting['defaultvalue'];?>" size="40" class="input-text"></label>
+            <label><input type="text" name="setting[defaultvalue]" value="<?php echo $setting['defaultvalue'];?>" size="40" class="form-control"></label>
       </div>
     </div>
 	<div class="form-group">

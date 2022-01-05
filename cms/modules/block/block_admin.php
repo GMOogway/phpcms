@@ -359,16 +359,16 @@ class block_admin extends admin {
 			if (!empty($searchtype) && !empty($keyword)) {
 				switch ($searchtype) {
 					case '1'://标题搜索
-						$sql .= " AND `title` LIKE '%$keyword%' ";
+						$sql .= " AND `title` LIKE '%".addslashes($keyword)."%' ";
 						break;
 					case '2'://简介搜索
-						$sql .= " AND `description` LIKE '%$keyword%' ";
+						$sql .= " AND `description` LIKE '%".addslashes($keyword)."%' ";
 						break;
 					case '3'://用户名
-						$sql .= " AND `username` = '$keyword' ";
+						$sql .= " AND `username` = '".addslashes($keyword)."' ";
 						break;
 					case '4'://ID搜索
-						$sql .= " AND `id` = '$keyword' ";
+						$sql .= " AND `id` = '".addslashes($keyword)."' ";
 						break;
 				}
 			}

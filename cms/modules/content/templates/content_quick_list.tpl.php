@@ -2,6 +2,7 @@
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');?>
 <style type="text/css">
+body {background: #f5f6f8;}
 #search_div{ position:absolute; top:23px; border:1px solid #dfdfdf; text-align:left; padding:1px; left:89px;*left:88px; width:263px;*width:260px; background-color:#FFF; display:none; font-size:12px}
 #search_div li{line-height:24px;}
 #search_div li a{padding-left:6px;display:block}

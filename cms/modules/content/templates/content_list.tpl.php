@@ -3,8 +3,6 @@ defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');?>
 <script type="text/javascript" src="<?php echo JS_PATH?>jquery-3.5.1.min.js"></script>
 <script type="text/javascript" src="<?php echo CSS_PATH?>bootstrap/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="<?php echo JS_PATH;?>layui/css/layui.css" media="all" />
-<link rel="stylesheet" href="<?php echo CSS_PATH;?>admin/css/global.css" media="all" />
 <link href="<?php echo JS_PATH;?>bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
 <script src="<?php echo JS_PATH;?>bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
 <script type="text/javascript">
@@ -17,38 +15,38 @@ jQuery(document).ready(function() {
         });
     }
     $('.tooltips').tooltip();
+    $(":text").removeClass('input-text');
 });
 </script>
 <style type="text/css">
-a, a:link {text-shadow: none;color: #337ab7;text-decoration: none;}
-a:hover {cursor: pointer;color: #23527c;}
-.btn-group {margin-left: 10px;}
+body {background: #f5f6f8;}
 </style>
-<div class="admin-main layui-anim layui-anim-upbit">
-    <!--<fieldset class="layui-elem-field layui-field-title">
-        <legend><?php echo L('list');?></legend>
-    </fieldset>-->
-    <blockquote class="layui-elem-quote">
-        <a href="javascript:;" onclick="javascript:dr_content_submit('?m=content&c=content&a=add&menuid=&catid=<?php echo $catid;?>&pc_hash=<?php echo dr_get_csrf_token();?>','add');" class="layui-btn layui-btn-sm">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="page-body">
+<div class="note note-danger my-content-top-tool">
+    <p><a href="javascript:;" onclick="javascript:dr_content_submit('?m=content&c=content&a=add&menuid=&catid=<?php echo $catid;?>&pc_hash=<?php echo dr_get_csrf_token();?>','add');" class="btn green">
             <i class="fa fa-plus"></i> <?php echo L('add_content');?>
         </a>
-        <a href="?m=content&c=content&a=init&catid=<?php echo $catid;?>&pc_hash=<?php echo dr_get_csrf_token();?>" class="layui-btn layui-btn-sm<?php if($steps==0 && !$this->input->get('reject')) echo ' on';?>">
+        <a href="?m=content&c=content&a=init&catid=<?php echo $catid;?>&pc_hash=<?php echo dr_get_csrf_token();?>" class="btn green">
             <i class="fa fa-check"></i> <?php echo L('check_passed');?>
         </a>
-        <a href="?m=content&c=content&a=recycle_init&catid=<?php echo $catid;?>&pc_hash=<?php echo dr_get_csrf_token();?>" class="layui-btn layui-btn-sm layui-btn-danger">
+        <a href="?m=content&c=content&a=recycle_init&catid=<?php echo $catid;?>&pc_hash=<?php echo dr_get_csrf_token();?>" class="btn yellow">
             <i class="fa fa-trash-o"></i> <?php echo L('recycle');?>
         </a>
         <?php echo $workflow_menu;?>
-        <a href="javascript:;" onclick="javascript:$('#searchid').toggle();" class="layui-btn layui-btn-sm layui-btn-normal">
+        <a href="javascript:;" onclick="javascript:$('#searchid').toggle();" class="btn blue">
             <i class="fa fa-search"></i> <?php echo L('search');?>
         </a>
         <?php if($category['ishtml']) {?>
         <a href="javascript:;" onclick="dr_bfb('<?php echo L('update_htmls',array('catname'=>$category['catname']));?>', 'myform', '?m=content&c=create_html&a=category&pagesize=30&dosubmit=1&modelid=0&catids[0]=<?php echo $catid;?>&pc_hash=<?php echo dr_get_csrf_token();?>&referer=<?php echo urlencode($_SERVER['QUERY_STRING']);?>')" class="layui-btn layui-btn-sm layui-btn-normal">
             <i class="fa fa-html5"></i> <?php echo L('update_htmls',array('catname'=>$category['catname']));?>
         </a>
-        <?php }?>
-    </blockquote>
-    <div class="demoTable" id="searchid"<?php if (!$this->input->get('search')) {?> style="display:none;"<?php }?>>
+        <?php }?></p>
+</div>
+<div class="right-card-box">
+    <div class="table-search-tool" id="searchid"<?php if (!$this->input->get('search')) {?> style="display:none;"<?php }?>>
         <form name="searchform" action="" method="get" >
         <input type="hidden" value="content" name="m">
         <input type="hidden" value="content" name="c">
@@ -57,7 +55,6 @@ a:hover {cursor: pointer;color: #23527c;}
         <input type="hidden" value="<?php echo $steps;?>" name="steps">
         <input type="hidden" value="1" name="search">
         <input type="hidden" value="<?php echo dr_get_csrf_token();?>" name="pc_hash">
-        <?php echo L('time');?>：
         <label><div class="formdate">
             <div class="input-group input-medium date-picker input-daterange">
                 <input type="text" class="form-control" value="<?php echo $this->input->get('start_time');?>" name="start_time" id="start_time">
@@ -76,9 +73,9 @@ a:hover {cursor: pointer;color: #23527c;}
             <option value='3' <?php if($this->input->get('searchtype')==3) echo 'selected';?>>ID</option>
         </select></label>
         <label>
-            <input class="input-text" name="keyword" id="keyword" value="<?php if($this->input->get('keyword')) echo $this->input->get('keyword');?>" placeholder="请输入关键字">
+            <input class="form-control" name="keyword" id="keyword" value="<?php if($this->input->get('keyword')) echo $this->input->get('keyword');?>" placeholder="请输入关键字">
         </label>
-        <label><button type="submit" class="btn green btn-sm"><i class="fa fa-search"></i> <?php echo L('search');?></button></label>
+        <label><button type="submit" class="btn green"><i class="fa fa-search"></i> <?php echo L('search');?></button></label>
         <div style="clear: both;"></div>
         </form>
     </div>
@@ -118,9 +115,24 @@ if(is_array($datas)){
     ?>
     <td<?php if($tt['center']){?> style="text-align:center"<?php }?>><?php echo dr_list_function($tt['func'], $r[$i], $param, $r, $field[$i], $i);?></td>
     <?php }}?>
-    <td align="center"><a href="<?php echo $r['url'];?>" target="_blank" class="layui-btn layui-btn-xs layui-btn-normal"><i class="fa fa-eye"></i> <?php echo L('preview');?></a>
-    <a href="javascript:;" onclick="javascript:dr_content_submit('?m=content&c=content&a=edit&catid=<?php echo $r['catid'];?>&id=<?php echo $r['id'];?>','edit')" class="layui-btn layui-btn-xs"><i class="fa fa-edit"></i> <?php echo L('edit');?></a>
-    <a href="javascript:view_comment('<?php echo id_encode('content_'.$r['catid'],$r['id'],$this->siteid);?>','<?php echo safe_replace($r['title']);?>')" class="layui-btn layui-btn-xs layui-btn-danger"><i class="fa fa-comment"></i> <?php echo L('comment');?></a></td>
+    <td align="center"><a href="<?php
+        $sitelist = getcache('sitelist','commons');
+        $release_siteurl = $sitelist[$category['siteid']]['url'];
+        $path_len = -strlen(WEB_PATH);
+        $release_siteurl = substr($release_siteurl,0,$path_len);
+        if($r['status']==99) {
+            if($r['islink']) {
+                echo $r['url'];
+            } elseif(strpos($r['url'],'http://')!==false || strpos($r['url'],'https://')!==false) {
+                echo $r['url'];
+            } else {
+                echo $release_siteurl.$r['url'];
+            }
+        } else {
+            echo '?m=content&c=content&a=public_preview&catid='.$r['catid'].'&id='.$r['id'].'';
+        }?>" target="_blank" class="btn btn-xs blue"><i class="fa fa-eye"></i> <?php echo L('preview');?></a>
+        <a href="javascript:;" onclick="javascript:dr_content_submit('?m=content&c=content&a=edit&catid=<?php echo $r['catid'];?>&id=<?php echo $r['id'];?>','edit')" class="btn btn-xs green"><i class="fa fa-edit"></i> <?php echo L('edit');?></a>
+        <a href="javascript:view_comment('<?php echo id_encode('content_'.$r['catid'],$r['id'],$this->siteid);?>','<?php echo safe_replace($r['title']);?>')" class="btn btn-xs yellow"><i class="fa fa-comment"></i> <?php echo L('comment');?></a></td>
     </tr>
 <?php 
     }
@@ -415,10 +427,6 @@ $(function() {
     })
     <?php }?>
 });
-</script>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>cookie.js"></script>
-<script type="text/javascript"> 
-<!--
 function view_comment(id, name) {
     var w = 800;
     var h = 500;
@@ -438,15 +446,10 @@ function view_comment(id, name) {
     };
     diag.show();
 }
-setcookie('refersh_time', 0);
-function refersh_window() {
-    var refersh_time = getcookie('refersh_time');
-    if(refersh_time==1) {
-        location.reload(true);
-    }
-}
-setInterval("refersh_window()", 3000);
-//-->
 </script>
+</div>
+</div>
+</div>
+</div>
 </body>
 </html>

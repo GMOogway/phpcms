@@ -141,7 +141,7 @@ class special extends admin {
 	 * 信息导入专题
 	 */
 	public function import() {
-		if(isset($_POST['dosubmit']) || isset($_GET['dosubmit'])) {
+		if(isset($_POST['dosubmit'])) {
 			if(!is_array($_POST['ids']) || empty($_POST['ids']) || !$_GET['modelid']) dr_admin_msg(0,L('illegal_action'), HTTP_REFERER);
 			if(!isset($_POST['typeid']) || empty($_POST['typeid'])) dr_admin_msg(0,L('select_type'), HTTP_REFERER);
 			foreach($_POST['ids'] as $id) {
@@ -158,14 +158,11 @@ class special extends admin {
 			$where = '';
 			if($_GET['catid']) $where .= get_sql_catid('category_content_'.$this->get_siteid(), $_GET['catid'])." AND `status`=99";
 			else $where .= " `status`=99";
-			if($_GET['start_time']) {
-				$where .= " AND `inputtime`>=".strtotime($_GET['start_time']);
-			}
-			if($_GET['end_time']) {
-				$where .= " AND `inputtime`<=".strtotime($_GET['end_time']);
+			if($this->input->get('start_time')) {
+				$where .= ' AND `inputtime` BETWEEN ' . max((int)strtotime(strpos($this->input->get('start_time'), ' ') ? $this->input->get('start_time') : $this->input->get('start_time').' 00:00:00'), 1) . ' AND ' . ($this->input->get('end_time') ? (int)strtotime(strpos($this->input->get('end_time'), ' ') ? $this->input->get('end_time') : $this->input->get('end_time').' 23:59:59') : SYS_TIME);
 			}
 			if ($_GET['key']) {
-				$where .= " AND `title` LIKE '%$_GET[key]%' OR `keywords` LIKE '%$_GET[key]%'";
+				$where .= " AND `title` LIKE '%".addslashes($_GET['key'])."%' OR `keywords` LIKE '%".addslashes($_GET['key'])."%'";
 			}
 			$data = $this->special_api->_get_import_data($_GET['modelid'], $where, $_GET['page']);
 			$pages = $this->special_api->pages;

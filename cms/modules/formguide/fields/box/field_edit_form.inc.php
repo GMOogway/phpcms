@@ -3,7 +3,7 @@
 	<div class="form-group">
       <label class="col-md-2 control-label">选项列表</label>
       <div class="col-md-9">
-            <textarea name="setting[options]" id="options" style="height:100px;"><?php echo $setting['options'];?></textarea>
+            <textarea name="setting[options]" id="options" style="height:100px;" class="form-control"><?php echo $setting['options'];?></textarea>
       </div>
     </div>
 	<div class="form-group">
@@ -35,21 +35,21 @@
 	<div class="form-group" id="setcols" style="display:"> 
       <label class="col-md-2 control-label">每列宽度</label>
       <div class="col-md-9">
-            <label><input type="text" name="setting[width]" value="<?php echo $setting['width'];?>" size="5" class="input-text"></label>
+            <label><input type="text" name="setting[width]" value="<?php echo $setting['width'];?>" size="5" class="form-control"></label>
             <span class="help-block"><?php echo L('px')?></span>
       </div>
     </div>
 	<div class="form-group" id="setsize" style="display:none"> 
       <label class="col-md-2 control-label">高度</label>
       <div class="col-md-9">
-            <label><input type="text" name="setting[size]" value="<?php echo $setting['size'];?>" size="5" class="input-text"></label>
+            <label><input type="text" name="setting[size]" value="<?php echo $setting['size'];?>" size="5" class="form-control"></label>
             <span class="help-block"><?php echo L('行')?></span>
       </div>
     </div>
 	<div class="form-group">
       <label class="col-md-2 control-label">默认值</label>
       <div class="col-md-9">
-            <label><input type="text" name="setting[defaultvalue]" size="40" class="input-text" value="<?php echo $setting['defaultvalue'];?>"></label>
+            <label><input type="text" name="setting[defaultvalue]" size="40" class="form-control" value="<?php echo $setting['defaultvalue'];?>"></label>
       </div>
     </div>
 	<div class="form-group">

@@ -28,11 +28,11 @@ class manage extends admin {
 			$page = $this->input->post('page') ? $this->input->post('page') : '1';
 			$where = '';
 			if($this->input->post('remote')) $where .= "AND `remote` = '".$this->input->post('remote')."' ";
-			if($this->input->post('keyword')) $where .= "AND `filename` LIKE '%".$this->input->post('keyword')."%' ";
+			if($this->input->post('keyword')) $where .= "AND `filename` LIKE '%".addslashes($this->input->post('keyword'))."%' ";
 			if($this->input->post('start_uploadtime')) {
 				$where .= 'AND uploadtime BETWEEN ' . max((int)strtotime(strpos($this->input->post('start_uploadtime'), ' ') ? $this->input->post('start_uploadtime') : $this->input->post('start_uploadtime').' 00:00:00'), 1) . ' AND ' . ($this->input->post('end_uploadtime') ? (int)strtotime(strpos($this->input->post('end_uploadtime'), ' ') ? $this->input->post('end_uploadtime') : $this->input->post('end_uploadtime').' 23:59:59') : SYS_TIME).' ';
 			}
-			if($this->input->post('fileext')) $where .= "AND `fileext`='".$this->input->post('fileext')."' ";
+			if($this->input->post('fileext')) $where .= "AND `fileext`='".addslashes($this->input->post('fileext'))."' ";
 			$status =  trim($this->input->get('status'));
 			if($status!='' && ($status==1 ||$status==0)) $where .= "AND `status`='$status' ";
 			$module =  trim($this->input->get('module'));

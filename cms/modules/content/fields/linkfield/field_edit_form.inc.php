@@ -175,7 +175,7 @@ $db->free_result($tbl_show);
 	<div class="form-group">
 		<label class="col-md-2 control-label">查询字段</label>
       <div class="col-md-9">
-            <label><input type="text" name="setting[select_title]" id="select_title" value="<?php echo $setting['select_title'];?>" size="40" class="input-text"></label>
+            <label><input type="text" name="setting[select_title]" id="select_title" value="<?php echo $setting['select_title'];?>" size="40" class="form-control"></label>
             <span class="help-block">请填写字段名如：id,title (为空则表示全部查询。非空时必须包含like字段、赋值字段、主键)</span>
       </div>
 	</div>

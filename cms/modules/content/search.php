@@ -146,19 +146,19 @@ class search {
 							$field_value = safe_replace($info[$field]);
 							switch($r['boxtype']) {
 								case 'radio':
-									$where .= " AND {$table_nickname}.`$field`='$field_value'";
+									$where .= " AND {$table_nickname}.`$field`='".addslashes($field_value)."'";
 								break;
 					
 								case 'checkbox':
-									$where .= " AND {$table_nickname}.`$field` LIKE '%,$field_value,%'";
+									$where .= " AND {$table_nickname}.`$field` LIKE '%,".addslashes($field_value).",%'";
 								break;
 					
 								case 'select':
-									$where .= " AND {$table_nickname}.`$field`='$field_value'";
+									$where .= " AND {$table_nickname}.`$field`='".addslashes($field_value)."'";
 								break;
 					
 								case 'multiple':
-									$where .= " AND {$table_nickname}.`$field` LIKE '%,$field_value,%'";
+									$where .= " AND {$table_nickname}.`$field` LIKE '%,".addslashes($field_value).",%'";
 								break;
 							}
 						}
@@ -175,7 +175,7 @@ class search {
 					} elseif(in_array($r['formtype'], array('text','keyword','textarea','editor','title','author','omnipotent'))) {
 						if($info[$field]) {
 							$keywords = safe_replace($info[$field]);
-							$where .= " AND {$table_nickname}.`$field` LIKE '%$keywords%'";
+							$where .= " AND {$table_nickname}.`$field` LIKE '%".addslashes($keywords)."%'";
 						}
 					} else {
 						continue;
