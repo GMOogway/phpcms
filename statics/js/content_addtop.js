@@ -9,7 +9,7 @@ jQuery.browser = {
 
 function add_multifile(returnid) {
 	var ids = parseInt(Math.random() * 10000); 
-	var str = "<li id='multifile"+ids+"'><input type='text' name='"+returnid+"_fileurl[]' value='' class='input-text'><input type='text' name='"+returnid+"_filename[]' value='附件说明' placeholder='附件说明...' onfocus=\"if(this.value == this.defaultValue) this.value = ''\" onblur=\"if(this.value.replace(' ','') == '') this.value = this.defaultValue;\" class='input-textarea'> <a href='javascript:;' class='img-left'><i class='am-icon-angle-double-left am-icon-fw'></i>上移</a><a href='javascript:;' class='img-right'><i class='am-icon-angle-double-right am-icon-fw'></i>下移</a><a href=\"javascript:remove_div('multifile"+ids+"')\">移除</a> </li>";
+	var str = "<li id='multifile"+ids+"'><input type='text' name='"+returnid+"_fileurl[]' value='' class='input-text'><input type='text' name='"+returnid+"_filename[]' value='附件说明' placeholder='附件说明...' onfocus=\"if(this.value == this.defaultValue) this.value = ''\" onblur=\"if(this.value.replace(' ','') == '') this.value = this.defaultValue;\" class='input-textarea'> <a href='javascript:;' class='img-left btn blue btn-xs'><i class='fa fa-arrow-up'></i></a> <a href='javascript:;' class='img-right btn blue btn-xs'><i class='fa fa-arrow-down'></i></a> <a href=\"javascript:remove_div('multifile"+ids+"')\" class=\"btn red btn-xs\"><i class=\"fa fa-trash\"></i></a> </li>";
 	$('#'+returnid).append(str);
 }
 

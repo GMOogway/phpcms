@@ -7,6 +7,7 @@ include $this->admin_tpl('header', 'admin');
   <h1 class="title-2"><?php echo L('comment_check')?> (<?php echo L('for_audit_several')?>：<span id="wait" style="color:red"><?php echo $total?></span>)</h1>
 </div>
 </div>
+<div class="content-header"></div>
 <div class="pad-lr-10">
 <div class="comment">
 <?php if(is_array($comment_check_data)) foreach($comment_check_data as $v) :

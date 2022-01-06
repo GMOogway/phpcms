@@ -1,7 +1,6 @@
 	function touchspin($field, $value, $fieldinfo) {
 		extract($fieldinfo);
 		$setting = string2array($setting);
-		$size = $setting['size'];
 		// 表单宽度设置
 		$width = is_mobile(0) ? '100%' : ($setting['width'] ? $setting['width'] : 200);
 		// 风格
@@ -41,5 +40,5 @@
         });
     });
 </script>';
-		return $str."<div $style><input type='text' name='info[$field]' id='dr_$field' value='$value' class='input-text' size='$size'></div>".$js;
+		return $str."<div $style><input type='text' name='info[$field]' id='dr_$field' value='$value' class='form-control'></div>".$js;
 	}

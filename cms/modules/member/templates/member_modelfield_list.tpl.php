@@ -1,9 +1,10 @@
 <?php defined('IS_ADMIN') or exit('No permission resources.');?>
 <?php include $this->admin_tpl('header', 'admin');?>
 <div class="subnav">
-<div class="content-menu ib-a blue line-x">
-<a href="?m=member&c=member_model&a=manage&menuid=<?php echo $this->input->get('menuid');?>"><em><?php echo L('管理会员模型');?></em></a>
+<div class="content-menu ib-a blue">
+<a href="?m=member&c=member_model&a=manage&menuid=<?php echo $this->input->get('menuid');?>"><i class="fa fa-cogs"></i> <?php echo L('管理会员模型');?></a>
 </div></div>
+<div class="content-header"></div>
 <div class="pad-lr-10">
 <div class="bk10"></div>
 <form name="myform" id="myform" action="?m=member&c=member_modelfield&a=sort" method="post" onsubmit="check();return false;">
@@ -49,10 +50,10 @@
     </table>
 </div>
 <div class="list-footer table-checkable clear">
-    <div class="col-md-7 list-select">
+    <div class="col-md-5 col-sm-5 table-footer-button">
         <label><button type="submit" class="btn green btn-sm"> <i class="fa fa-refresh"></i> <?php echo L('listorder')?></button></label>
     </div>
-    <div class="col-md-5 list-page"><?php if(isset($pages)){echo $pages;}?></div>
+    <div class="col-md-7 col-sm-7 text-right"><?php if(isset($pages)){echo $pages;}?></div>
 </div>
 </div>
 </form>

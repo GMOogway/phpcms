@@ -9,7 +9,7 @@
 		}
 		$html = '';
 		if (defined('IS_ADMIN') && IS_ADMIN) {
-			$html = "<input type=\"button\" style=\"width: 66px;\" class=\"button\" onclick=\"crop_cut_".$field."($('#$field').val());return false;\" value=\"".L('cut_the_picture','','content')."\"><input type=\"button\" style=\"width: 66px;\" class=\"button\" onclick=\"$('#".$field."_preview').attr('src','".IMG_PATH."icon/upload-pic.png');$('#".$field."').val('');return false;\" value=\"".L('cancel_the_picture','','content')."\"><script type=\"text/javascript\">function crop_cut_".$field."(id){
+			$html = "<label><button type=\"button\" onclick=\"crop_cut_".$field."($('#$field').val());return false;\" class=\"btn blue btn-sm\"> <i class=\"fa fa-cut\"></i> ".L('cut_the_picture','','content')."</button></label> <label><button type=\"button\" onclick=\"$('#".$field."_preview').attr('src','".IMG_PATH."icon/upload-pic.png');$('#".$field."').val('');return false;\" class=\"btn red btn-sm\"> <i class=\"fa fa-trash\"></i> ".L('cancel_the_picture','','content')."</button></label><script type=\"text/javascript\">function crop_cut_".$field."(id){
 	if (id=='') { Dialog.alert('".L('upload_thumbnails', '', 'content')."');return false;}
 	var w = 770;
 	var h = 510;
@@ -33,9 +33,9 @@
 		if($show_type && defined('IS_ADMIN') && IS_ADMIN) {
 			$preview_img = $value ? $value : IMG_PATH.'icon/upload-pic.png';
 			return $str."<div class='upload-pic img-wrap'><input type='hidden' name='info[$field]' id='$field' value='$value'>
-			<a href='javascript:void(0);' onclick=\"h5upload('".SELF."', '{$field}_images', '".L('attachment_upload', '', 'content')."','{$field}','thumb_images','{$p}','content','$this->catid','$authkey',".SYS_EDITOR.");return false;\">
-			<img src='$preview_img' id='{$field}_preview' width='135' height='113' style='cursor:hand' /></a>".$html."</div>";
+			<p><a href='javascript:void(0);' onclick=\"h5upload('".SELF."', '{$field}_images', '".L('attachment_upload', '', 'content')."','{$field}','thumb_images','{$p}','content','$this->catid','$authkey',".SYS_EDITOR.");return false;\">
+			<img src='$preview_img' id='{$field}_preview' width='135' height='113' style='cursor:hand' /></a></p>".$html."</div>";
 		} else {
-			return $str."<input type='text' name='info[$field]' id='$field' value='$value' size='$size' class='input-text' />  <input type='button' class='button' onclick=\"h5upload('".SELF."', '{$field}_images', '".L('attachment_upload', '', 'content')."','{$field}','submit_images','{$p}','content','$this->catid','$authkey',".SYS_EDITOR.")\"/ value='".L('upload_pic', '', 'content')."'>".$html;
+			return $str."<label><input type='text' name='info[$field]' id='$field' value='$value' size='$size' class='form-control' /></label> <label><button type=\"button\" onclick=\"h5upload('".SELF."', '{$field}_images', '".L('attachment_upload', '', 'content')."','{$field}','submit_images','{$p}','content','$this->catid','$authkey',".SYS_EDITOR.")\" class=\"btn green\"> <i class=\"fa fa-plus\"></i> ".L('upload_pic', '', 'content')."</button></label>".$html;
 		}
 	}

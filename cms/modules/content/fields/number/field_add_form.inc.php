@@ -24,14 +24,14 @@
 	<div class="form-group">
       <label class="col-md-2 control-label">输入框长度</label>
       <div class="col-md-9">
-            <label><input type="text" name="setting[size]" value="" size="3" class="form-control"></label>
+            <label><input type="text" name="setting[width]" value="" class="form-control"></label>
             <span class="help-block"><?php echo L('px')?></span>
       </div>
     </div>
 	<div class="form-group">
       <label class="col-md-2 control-label">默认值</label>
       <div class="col-md-9">
-            <label><input type="text" name="setting[defaultvalue]" value="" size="40" class="form-control"></label>
+            <label><input type="text" name="setting[defaultvalue]" value="" class="form-control"></label>
       </div>
     </div>
 

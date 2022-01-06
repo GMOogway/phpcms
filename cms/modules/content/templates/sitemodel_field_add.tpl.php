@@ -7,7 +7,10 @@ include $this->admin_tpl('header','admin');?>
 <link href="<?php echo JS_PATH?>bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" type="text/css" />
 <script src="<?php echo JS_PATH?>bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
 <script type="text/javascript">jQuery(document).ready(function(){$('.bs-select').selectpicker();});</script>
-<div class="page-content main-content">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+                            <div class="page-body" style="padding-top:0px;margin-bottom:30px;">
 <div class="row my-content-top-tool">
     <div class="col-md-12 col-sm-12">
         <label style="margin-right:10px"><a href="javascript:;" class="btn red"> <i class="fa fa-plus"></i> <?php echo L('add_field');?></a></label>
@@ -63,14 +66,14 @@ include $this->admin_tpl('header','admin');?>
                         <div class="form-group" id="dr_row_name">
                             <label class="col-md-2 control-label"><?php echo L('field_nickname')?></label>
                             <div class="col-md-9">
-                                <label><input class="form-control" type="text" name="info[name]" value="" id="name" onblur="topinyin('field','name','?m=content&c=sitemodel_field&a=public_ajax_pinyin');"></label>
+                                <label><input class="form-control" type="text" name="info[name]" value="" id="dr_name" onblur="topinyin('dr_field','dr_name','?m=content&c=sitemodel_field&a=public_ajax_pinyin');"></label>
                                 <span class="help-block"><?php echo L('nickname_tips')?></span>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" id="dr_row_field">
                             <label class="col-md-2 control-label"><?php echo L('fieldname')?></label>
                             <div class="col-md-9">
-                                <label><input class="form-control" type="text" name="info[field]" value="" id="field"></label>
+                                <label><input class="form-control" type="text" name="info[field]" value="" id="dr_field"></label>
                                 <span class="help-block"><?php echo L('fieldname_tips')?></span>
                             </div>
                         </div>
@@ -307,5 +310,9 @@ function field_setting(fieldtype) {
     }
 }
 </script>
+</div>
+</div>
+</div>
+</div>
 </body>
 </html>

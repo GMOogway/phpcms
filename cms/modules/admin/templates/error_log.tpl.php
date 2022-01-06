@@ -14,30 +14,34 @@ jQuery(document).ready(function() {
     }
 });
 </script>
-<div class="pad-lr-10">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+                <div class="page-body" style="padding-top:15px;">
+<div class="right-card-box">
+    <div class="row table-search-tool">
 <form name="searchform" action="?m=admin&c=index&a=public_error_log" method="get" >
 <input type="hidden" value="admin" name="m">
 <input type="hidden" value="index" name="c">
 <input type="hidden" value="public_error_log" name="a">
-<table width="100%" cellspacing="0" class="search-form">
-    <tbody>
-		<tr>
-		<td><div class="explain-col"><label><div class="formdate">
-            <div class="input-group input-time date date-picker">
+            <div class="col-md-12" style="padding-right: 0">
+                <label>
+                    <div class="input-group fc-input-time date date-picker" data-date-format="yyyy-mm-dd">
                         <input type="text" class="form-control" name="time" value="<?php echo $time;?>">
                         <span class="input-group-btn">
                             <button class="btn default" type="button">
                                 <i class="fa fa-calendar"></i>
                             </button>
                         </span>
-                    </div></div></label>
-		<label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('search')?></button></label>
-		</div>
-		</td>
-		</tr>
-    </tbody>
-</table>
+                    </div>
+                </label>
+            </div>
+            <div class="col-md-12">
+                <label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('search')?></button></label>
+                <label><button type="button" onclick="ajax_option('?m=admin&c=index&a=public_error_log_del&time=<?php echo $time;?>', '你确定要清空当天记录吗？', 1)" class="btn red btn-sm"> <i class="fa fa-trash"></i> 清空</button></label>
+            </div>
 </form>
+    </div>
 <form name="myform" id="myform" action="" method="post">
 <div class="table-list">
     <table width="100%" cellspacing="0">
@@ -67,15 +71,14 @@ if(is_array($list)){
     </tbody>
     </table>
 </div>
-<div class="list-footer table-checkable clear">
-<?php if($list){?>
-    <div class="col-md-7 list-select">
-        <label><button type="button" onclick="ajax_option('?m=admin&c=index&a=public_error_log_del&time=<?php echo $time;?>', '你确定要清空全部记录吗？')" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('清空全部')?></button></label>
-    </div>
-<?php }?>
-    <div class="col-md-5 list-page"><?php echo $pages?></div>
-</div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 text-right"><?php echo $pages?></div>
+        </div>
 </form>
+</div>
+</div>
+</div>
+</div>
 </div>
 </body>
 </html>
@@ -83,9 +86,6 @@ if(is_array($list)){
 <!--
 function show_file_code() {
 	openwinx('?m=admin&c=index&a=public_error_log_show&time=<?php echo $time;?>','查看文件','80%','80%');
-}
-function ajax_option(url, msg) {
-	Dialog.confirm(msg,function(){location.href = url;});
 }
 //-->
 </script>

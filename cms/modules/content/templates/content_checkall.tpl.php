@@ -2,18 +2,19 @@
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');?>
 <div class="subnav">
-<div class="content-menu ib-a blue line-x">
+<div class="content-menu ib-a blue">
 <?php if($super_admin) {?>
-<a href='?m=content&c=content&a=public_checkall&menuid=<?php echo $this->input->get('menuid');?>' class="on"><em><?php echo L('all_check_list');?></em></a>
+<a href='?m=content&c=content&a=public_checkall&menuid=<?php echo $this->input->get('menuid');?>' class="on"><i class="fa fa-check"></i> <?php echo L('all_check_list');?></a>
 <?php } else {
-	echo L('check_status');
+	echo '<a class="on"><i class="fa fa-check"></i> '.L('check_status').'</a>';
 }
 for ($j=0;$j<5;$j++) {
 ?>
-<span>|</span><a href='?m=content&c=content&a=public_checkall&menuid=<?php echo $this->input->get('menuid');?>&status=<?php echo $j;?>' class="<?php if($status==$j) echo 'on';?>"><em><?php echo L('workflow_'.$j);?></em></a>
+<i class="fa fa-circle"></i><a href='?m=content&c=content&a=public_checkall&menuid=<?php echo $this->input->get('menuid');?>&status=<?php echo $j;?>' class="<?php if($status==$j) echo 'on';?>"><i class="fa fa-check"></i> <?php echo L('workflow_'.$j);?></a>
 <?php }?>
 </div>
 </div>
+<div class="content-header"></div>
 <div class="pad-10">
 
 <form name="myform" id="myform" action="" method="post" >
@@ -24,9 +25,9 @@ for ($j=0;$j<5;$j++) {
             <th width="60">ID</th>
 			<th><?php echo L('title');?></th>
             <th><?php echo L('select_model_name');?></th>
-            <th width="90"><?php echo L('current_steps');?></th>
+            <th width="110"><?php echo L('current_steps');?></th>
             <th width="80"><?php echo L('steps');?></th>
-            <th width="90"><?php echo L('belong_category');?></th>
+            <th width="100"><?php echo L('belong_category');?></th>
             <th width="180"><?php echo L('contribute_time');?></th>
             <th><?php echo L('username');?></th>
 			<th><?php echo L('operations_manage');?></th>
@@ -71,8 +72,8 @@ for ($j=0;$j<5;$j++) {
      </table>
 </div>
 <div class="list-footer table-checkable clear">
-    <div class="col-md-7 list-select"></div>
-    <div class="col-md-5 list-page"><?php echo $pages?></div>
+    <div class="col-md-5 col-sm-5 table-footer-button"></div>
+    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
 </div>
 </form>
 </div>

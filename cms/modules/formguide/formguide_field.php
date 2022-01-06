@@ -43,7 +43,7 @@ class formguide_field extends admin {
 			$info = $this->input->post('info');
 			$setting = $this->input->post('setting');
 			if (!$info['formtype']) dr_json(0, L('select_fieldtype'), array('field' => 'formtype'));
-			if (!$info['name']) dr_json(0, L('fieldname').L('empty'), array('field' => 'name'));
+			if (!$info['name']) dr_json(0, L('field_nickname').L('empty'), array('field' => 'name'));
 			$field = $info['field'];
 			$cname = $info['name'];
 			$minlength = $info['minlength'] ? $info['minlength'] : 0;
@@ -55,7 +55,7 @@ class formguide_field extends admin {
 			$info['unsetgroupids'] = $this->input->post('unsetgroupids') ? implode(',',$this->input->post('unsetgroupids')) : '';
 			$info['unsetroleids'] = $this->input->post('unsetroleids') ? implode(',',$this->input->post('unsetroleids')) : '';
 			if (in_array($field, array('dataid', 'userid', 'username', 'datetime', 'ip'))) {
-				dr_json(0, L('fieldname').'（'.$field.'）'.L('already_exist'), array('field' => 'name'));
+				dr_json(0, L('fieldname').'（'.$field.'）'.L('already_exist'), array('field' => 'field'));
 			}
 			
 			require MODEL_PATH.$field_type.DIRECTORY_SEPARATOR.'config.inc.php';
@@ -67,7 +67,7 @@ class formguide_field extends admin {
 				$formid = intval($info['modelid']);
 				$where = 'modelid='.$formid.' AND field=\''.$field.'\' AND siteid='.$this->siteid.'';
 				$model_field = $this->db->get_one($where);
-				if ($model_field) dr_json(0, L('fields').'（'.$field.'）'.L('already_exist'), array('field' => 'name'));
+				if ($model_field) dr_json(0, L('fieldname').'（'.$field.'）'.L('already_exist'), array('field' => 'field'));
 				$forminfo = $this->model_db->get_one(array('modelid'=>$formid, 'siteid'=>$this->siteid), 'tablename');
 				$tablename = $this->db->db_tablepre.'form_'.$forminfo['tablename'];
 				require MODEL_PATH.'add.sql.php';
@@ -81,7 +81,7 @@ class formguide_field extends admin {
 				
 				$form_public_field_array = getcache('form_public_field_array', 'model');
 				if (is_array($form_public_field_array) && array_key_exists($info['field'], $form_public_field_array)) {
-					dr_json(0, L('fields').L('already_exist'), array('field' => 'name'));
+					dr_json(0, L('fieldname').L('already_exist'), array('field' => 'field'));
 				} else {
 					$form_public_field_array[$info['field']] = array('info'=>$info, 'sql'=>$sql); 
 					setcache('form_public_field_array', $form_public_field_array, 'model');	
@@ -120,7 +120,7 @@ class formguide_field extends admin {
 			$info = $this->input->post('info');
 			$setting = $this->input->post('setting');
 			if (!$info['formtype']) dr_json(0, L('select_fieldtype'), array('field' => 'formtype'));
-			if (!$info['name']) dr_json(0, L('fieldname').L('empty'), array('field' => 'name'));
+			if (!$info['name']) dr_json(0, L('field_nickname').L('empty'), array('field' => 'name'));
 			$field = $info['field'];
 			$cname = $info['name'];
 			$minlength = $info['minlength'] ? $info['minlength'] : 0;
@@ -133,7 +133,7 @@ class formguide_field extends admin {
 			$info['unsetgroupids'] = $this->input->post('unsetgroupids') ? implode(',',$this->input->post('unsetgroupids')) : '';
 			$info['unsetroleids'] = $this->input->post('unsetroleids') ? implode(',',$this->input->post('unsetroleids')) : '';
 			if (in_array($field, array('dataid', 'userid', 'username', 'datetime', 'ip'))) {
-				dr_json(0, L('fieldname').'（'.$field.'）'.L('already_exist'), array('field' => 'name'));
+				dr_json(0, L('fieldname').'（'.$field.'）'.L('already_exist'), array('field' => 'field'));
 			}
 			
 			require MODEL_PATH.$field_type.DIRECTORY_SEPARATOR.'config.inc.php';
@@ -150,7 +150,7 @@ class formguide_field extends admin {
 					$where .= ' AND fieldid<>'.$fieldid;
 				}
 				$model_field = $this->db->get_one($where);
-				if ($model_field) dr_json(0, L('fields').'（'.$field.'）'.L('already_exist'), array('field' => 'name'));
+				if ($model_field) dr_json(0, L('fieldname').'（'.$field.'）'.L('already_exist'), array('field' => 'field'));
 				$forminfo = $this->model_db->get_one(array('modelid'=>$formid, 'siteid'=>$this->siteid), 'tablename');
 				$tablename = $this->db->db_tablepre.'form_'.$forminfo['tablename'];
 				
@@ -170,7 +170,7 @@ class formguide_field extends admin {
 						$form_public_field_array[$info['field']] = array('info'=>$info, 'sql'=>$sql);
 					} else {
 						if (is_array($form_public_field_array) && array_key_exists($info['field'], $form_public_field_array)) {
-							dr_json(0, L('fields').L('already_exist'), array('field' => 'name'));
+							dr_json(0, L('fieldname').L('already_exist'), array('field' => 'field'));
 						}
 						$new_form_field = $form_public_field_array;
 						$form_public_field_array = array();

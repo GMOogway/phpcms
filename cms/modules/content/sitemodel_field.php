@@ -32,7 +32,7 @@ class sitemodel_field extends admin {
 			$info = $this->input->post('info');
 			$setting = $this->input->post('setting');
 			if (!$info['formtype']) dr_json(0, L('select_fieldtype'), array('field' => 'formtype'));
-			if (!$info['name']) dr_json(0, L('fieldname').L('empty'), array('field' => 'name'));
+			if (!$info['name']) dr_json(0, L('field_nickname').L('empty'), array('field' => 'name'));
 			$modelid = $info['modelid'];
 			if($modelid==-1) {
 				$tablename = $this->db->db_tablepre.'category';
@@ -52,7 +52,7 @@ class sitemodel_field extends admin {
 			$cname = $info['name'];
 			$where = 'modelid='.$modelid.' AND field=\''.$field.'\' AND siteid='.$this->siteid.'';
 			$model_field = $this->db->get_one($where);
-			if ($model_field) dr_json(0, L('fieldname').'（'.$field.'）'.L('already_exist'), array('field' => 'name'));
+			if ($model_field) dr_json(0, L('fieldname').'（'.$field.'）'.L('already_exist'), array('field' => 'field'));
 			$minlength = $info['minlength'] ? $info['minlength'] : 0;
 			$maxlength = $info['maxlength'] ? $info['maxlength'] : 0;
 			$field_type = $info['formtype'];
@@ -116,7 +116,7 @@ class sitemodel_field extends admin {
 			$info = $this->input->post('info');
 			$setting = $this->input->post('setting');
 			if (!$info['formtype']) dr_json(0, L('select_fieldtype'), array('field' => 'formtype'));
-			if (!$info['name']) dr_json(0, L('fieldname').L('empty'), array('field' => 'name'));
+			if (!$info['name']) dr_json(0, L('field_nickname').L('empty'), array('field' => 'name'));
 			$modelid = $info['modelid'];
 			if($modelid==-1) {
 				$tablename = $this->db->db_tablepre.'category';
@@ -139,7 +139,7 @@ class sitemodel_field extends admin {
 				$where .= ' AND fieldid<>'.$fieldid;
 			}
 			$model_field = $this->db->get_one($where);
-			if ($model_field) dr_json(0, L('fieldname').'（'.$field.'）'.L('already_exist'), array('field' => 'name'));
+			if ($model_field) dr_json(0, L('fieldname').'（'.$field.'）'.L('already_exist'), array('field' => 'field'));
 			
 			require MODEL_PATH.$field_type.DIRECTORY_SEPARATOR.'config.inc.php';
 			

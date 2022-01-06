@@ -67,8 +67,8 @@ jQuery(document).ready(function() {
 </div>
 <input type="hidden" name="msg_id" id="msg_id">
 <div class="list-footer table-checkable clear">
-    <div class="col-md-7 list-select"></div>
-    <div class="col-md-5 list-page"><?php echo $pages;?></div>
+    <div class="col-md-5 col-sm-5 table-footer-button"></div>
+    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages;?></div>
 </div>
 </div>
 </body>

@@ -40,13 +40,13 @@ body {background: #f5f6f8;}
             <i class="fa fa-search"></i> <?php echo L('search');?>
         </a>
         <?php if($category['ishtml']) {?>
-        <a href="javascript:;" onclick="dr_bfb('<?php echo L('update_htmls',array('catname'=>$category['catname']));?>', 'myform', '?m=content&c=create_html&a=category&pagesize=30&dosubmit=1&modelid=0&catids[0]=<?php echo $catid;?>&pc_hash=<?php echo dr_get_csrf_token();?>&referer=<?php echo urlencode($_SERVER['QUERY_STRING']);?>')" class="layui-btn layui-btn-sm layui-btn-normal">
+        <a href="javascript:;" onclick="dr_bfb('<?php echo L('update_htmls',array('catname'=>$category['catname']));?>', 'myform', '?m=content&c=create_html&a=category&pagesize=30&dosubmit=1&modelid=0&catids[0]=<?php echo $catid;?>&pc_hash=<?php echo dr_get_csrf_token();?>&referer=<?php echo urlencode($_SERVER['QUERY_STRING']);?>')" class="btn red">
             <i class="fa fa-html5"></i> <?php echo L('update_htmls',array('catname'=>$category['catname']));?>
         </a>
         <?php }?></p>
 </div>
 <div class="right-card-box">
-    <div class="table-search-tool" id="searchid"<?php if (!$this->input->get('search')) {?> style="display:none;"<?php }?>>
+    <div class="row table-search-tool" id="searchid"<?php if (!$this->input->get('search')) {?> style="display:none;"<?php }?>>
         <form name="searchform" action="" method="get" >
         <input type="hidden" value="content" name="m">
         <input type="hidden" value="content" name="c">
@@ -55,6 +55,7 @@ body {background: #f5f6f8;}
         <input type="hidden" value="<?php echo $steps;?>" name="steps">
         <input type="hidden" value="1" name="search">
         <input type="hidden" value="<?php echo dr_get_csrf_token();?>" name="pc_hash">
+        <div class="col-md-12 col-sm-12">
         <label><div class="formdate">
             <div class="input-group input-medium date-picker input-daterange">
                 <input type="text" class="form-control" value="<?php echo $this->input->get('start_time');?>" name="start_time" id="start_time">
@@ -62,21 +63,26 @@ body {background: #f5f6f8;}
                 <input type="text" class="form-control" value="<?php echo $this->input->get('end_time');?>" name="end_time" id="end_time">
             </div>
         </div></label>
+        </div>
+        <div class="col-md-12 col-sm-12">
         <label><select id="posids" name="posids"><option value='' <?php if($this->input->get('posids')=='') echo 'selected';?>><?php echo L('all');?></option>
         <option value="1" <?php if($this->input->get('posids')==1) echo 'selected';?>><?php echo L('elite');?></option>
         <option value="2" <?php if($this->input->get('posids')==2) echo 'selected';?>><?php echo L('no_elite');?></option>
         </select></label>
+        </div>
+        <div class="col-md-12 col-sm-12">
         <label><select id="searchtype" name="searchtype">
             <option value='0' <?php if($this->input->get('searchtype')==0) echo 'selected';?>><?php echo L('title');?></option>
             <option value='1' <?php if($this->input->get('searchtype')==1) echo 'selected';?>><?php echo L('intro');?></option>
             <option value='2' <?php if($this->input->get('searchtype')==2) echo 'selected';?>><?php echo L('username');?></option>
             <option value='3' <?php if($this->input->get('searchtype')==3) echo 'selected';?>>ID</option>
         </select></label>
-        <label>
-            <input class="form-control" name="keyword" id="keyword" value="<?php if($this->input->get('keyword')) echo $this->input->get('keyword');?>" placeholder="请输入关键字">
-        </label>
+        <label><i class="fa fa-caret-right"></i></label>
+        <label><input class="form-control" name="keyword" id="keyword" value="<?php if($this->input->get('keyword')) echo $this->input->get('keyword');?>" placeholder="请输入关键字"></label>
+        </div>
+        <div class="col-md-12 col-sm-12">
         <label><button type="submit" class="btn green"><i class="fa fa-search"></i> <?php echo L('search');?></button></label>
-        <div style="clear: both;"></div>
+        </div>
         </form>
     </div>
 <form class="form-horizontal" name="myform" id="myform" action="" method="post">
@@ -142,7 +148,7 @@ if(is_array($datas)){
     </table>
 </div>
 <div class="list-footer table-checkable clear">
-    <div class="col-md-7 list-select">
+    <div class="col-md-5 col-sm-5 table-footer-button">
         <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
             <input type="checkbox" class="group-checkable" data-set=".checkboxes">
             <span></span>
@@ -150,7 +156,7 @@ if(is_array($datas)){
         <label><button type="button" id="delAll" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete');?></button></label>
         <label>
             <div class="btn-group dropup">
-                <a class="btn blue btn-sm dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="false" href="javascript:;"> <?php echo L('批量操作')?> <i class="fa fa-angle-up"></i>
+                <a class="btn blue btn-sm dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="false" href="javascript:;"><i class="fa fa-cogs"></i> <?php echo L('批量操作')?> <i class="fa fa-angle-up"></i>
                 </a>
                 <ul class="dropdown-menu">
                     <a href="javascript:;" class="dropdown-item" id="remove"><i class="fa fa-arrows"></i> <?php echo L('remove');?></a>
@@ -179,14 +185,13 @@ if(is_array($datas)){
         </label>
         <label>
             <?php if(!$this->input->get('reject')) { ?>
-            <?php if($workflow_menu) { ?><div style='position:relative;'><button type="button" class="layui-btn layui-btn-danger layui-btn-sm" id="reject_check"><?php echo L('reject');?></button>
-            <div id='reject_content' style='background-color: #fff;border:#e7ecf1 solid 1px;position:absolute;z-index:10;left:0px;top:-84px;padding:10px;display:none;'>
-            <table cellpadding='0' cellspacing='1' border='0'><tr><tr><td colspan='2'><textarea class="form-control" name='reject_c' id='reject_c' style='width:200px;height:46px;margin-right:10px;' onfocus="if(this.value == this.defaultValue) this.value = ''" onblur="if(this.value.replace(' ','') == '') this.value = this.defaultValue;"><?php echo L('reject_msg');?></textarea></td><td><button type="button" class="layui-btn layui-btn-danger layui-btn-sm" id="reject_check1"><?php echo L('submit');?></button></td></tr>
-            </table></div></div>
+            <?php if($workflow_menu) { ?><div style='position:relative;'><button type="button" class="btn dark btn-sm" id="reject_check"><i class="fa fa-times"></i> <?php echo L('reject');?></button>
+            <div id='reject_content' style='background-color: #fff;border:#e7ecf1 solid 1px;position:absolute;z-index:10;right:-20px;bottom:30px;padding:10px;display:none;'>
+            <label><textarea class="form-control" name='reject_c' id='reject_c' style='width:200px;height:46px;margin-right:10px;' onfocus="if(this.value == this.defaultValue) this.value = ''" onblur="if(this.value.replace(' ','') == '') this.value = this.defaultValue;"><?php echo L('reject_msg');?></textarea></label> <label><button type="button" class="btn dark btn-sm" id="reject_check1"><i class="fa fa-times"></i> <?php echo L('submit');?></button></label></div></div>
             <?php }}?>
         </label>
     </div>
-    <div class="col-md-5 list-page"><?php echo $pages?></div>
+    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
 </div>
 </form>
 </div>

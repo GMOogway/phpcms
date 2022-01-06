@@ -42,7 +42,7 @@ function h5upload(sysfilename, uploadid, name, textareaid, funcName, args, modul
 			$.each( contents, function(i, n) {
 				var ids = parseInt(Math.random() * 10000 + 10*i); 
 				var filename = filenames[i];
-				str += "<li id='image"+ids+"'><input type='text' name='"+textareaid+"_url[]' value='"+n+"' ondblclick='image_priview(this.value);' class='input-text'><input type='text' name='"+textareaid+"_alt[]' value='"+filename+"' class='input-textarea' placeholder='图片描述...' onfocus=\"if(this.value == this.defaultValue) this.value = ''\" onblur=\"if(this.value.replace(' ','') == '') this.value = this.defaultValue;\"> <a href='javascript:;' class='img-left'><i class='am-icon-angle-double-left am-icon-fw'></i>上移</a><a href='javascript:;' class='img-right'><i class='am-icon-angle-double-right am-icon-fw'></i>下移</a><a href=\"javascript:remove_div('image"+ids+"')\" class='img-del'>删除</a></li>";
+				str += "<li id='image"+ids+"'><input type='text' name='"+textareaid+"_url[]' value='"+n+"' ondblclick='image_priview(this.value);' class='input-text'><input type='text' name='"+textareaid+"_alt[]' value='"+filename+"' class='input-textarea' placeholder='图片描述...' onfocus=\"if(this.value == this.defaultValue) this.value = ''\" onblur=\"if(this.value.replace(' ','') == '') this.value = this.defaultValue;\"> <a href='javascript:;' class='img-left btn blue btn-xs'><i class='fa fa-arrow-up'></i></a> <a href='javascript:;' class='img-right btn blue btn-xs'><i class='fa fa-arrow-down'></i></a> <a href=\"javascript:remove_div('image"+ids+"')\" class='img-del btn red btn-xs'><i class=\"fa fa-trash\"></i></a></li>";
 				});
 			
 			$('#'+textareaid).html(str);
@@ -58,7 +58,7 @@ function h5upload(sysfilename, uploadid, name, textareaid, funcName, args, modul
 			$.each( contents, function(i, n) {
 				var ids = parseInt(Math.random() * 10000 + 10*i); 
 				var filename = filenames[i];
-				str += "<li id='image"+ids+"'><div class='preview'><input type='hidden' name='"+textareaid+"_url[]' value='"+n+"'><img src='"+n+"' id='thumb_preview'></div><div class='intro'><textarea name='"+textareaid+"_alt[]' placeholder='图片描述...' onfocus=\"if(this.value == this.defaultValue) this.value = ''\" onblur=\"if(this.value.replace(' ','') == '') this.value = this.defaultValue;\">"+filename+"</textarea></div><div class='action'><a href='javascript:;' class='img-left'><i class='am-icon-angle-double-left am-icon-fw'></i>左移</a><a href='javascript:;' class='img-right'><i class='am-icon-angle-double-right am-icon-fw'></i>右移</a><a href=\"javascript:remove_div('image"+ids+"')\" class='img-del'>删除</a></div></li>";
+				str += "<li id='image"+ids+"'><div class='preview'><input type='hidden' name='"+textareaid+"_url[]' value='"+n+"'><img src='"+n+"' id='thumb_preview'></div><div class='intro'><textarea name='"+textareaid+"_alt[]' placeholder='图片描述...' onfocus=\"if(this.value == this.defaultValue) this.value = ''\" onblur=\"if(this.value.replace(' ','') == '') this.value = this.defaultValue;\">"+filename+"</textarea></div><div class='action'><a href='javascript:;' class='img-left btn blue btn-xs'><i class='fa fa-arrow-left'></i></a> <a href='javascript:;' class='img-right btn blue btn-xs'><i class='fa fa-arrow-right'></i></a> <a href=\"javascript:remove_div('image"+ids+"')\" class='img-del btn red btn-xs'><i class=\"fa fa-trash\"></i></a></div></li>";
 				});
 			
 			$('#'+textareaid).html(str);

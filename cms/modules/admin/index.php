@@ -456,10 +456,10 @@ class index extends admin {
 		$time = (int)strtotime($this->input->get('time'));
 		$file = CACHE_PATH.'caches_error/caches_data/log-'.date('Y-m-d',$time).'.php';
 		if (!is_file($file)) {
-			dr_admin_msg(0,L('文件不存在：'.$file),'?m=admin&c=index&a=public_error_log');
+			dr_json(0, L('文件不存在：'.$file));
 		}
 		unlink($file);
-		dr_admin_msg(1,L('operation_success'),'?m=admin&c=index&a=public_error_log');
+		dr_json(1, L('operation_success'));
 	}
 	public function public_email_log() {
 		$show_header = $show_pc_hash = true;
@@ -488,10 +488,10 @@ class index extends admin {
 		$show_header = $show_pc_hash = true;
 		$file = CACHE_PATH.'email_log.php';
 		if (!is_file($file)) {
-			dr_admin_msg(0,L('文件不存在：'.$file),'?m=admin&c=index&a=public_email_log');
+			dr_json(0, L('文件不存在：'.$file));
 		}
 		unlink($file);
-		dr_admin_msg(1,L('operation_success'),'?m=admin&c=index&a=public_email_log');
+		dr_json(1, L('operation_success'));
 	}
 	public function public_error() {
 		$show_header = $show_pc_hash = true;
@@ -543,10 +543,10 @@ class index extends admin {
 		$show_header = $show_pc_hash = true;
 		$file = CACHE_PATH.'error_log.php';
 		if (!is_file($file)) {
-			dr_admin_msg(0,L('文件不存在：'.$file),'?m=admin&c=index&a=public_error');
+			dr_json(0, L('文件不存在：'.$file));
 		}
 		unlink($file);
-		dr_admin_msg(1,L('operation_success'),'?m=admin&c=index&a=public_error');
+		dr_json(1, L('operation_success'));
 	}
 	/**
 	 * 维持 session 登陆状态

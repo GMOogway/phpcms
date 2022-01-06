@@ -93,14 +93,14 @@ jQuery(document).ready(function() {
 </table>
 </div>
 <div class="list-footer table-checkable clear">
-    <div class="col-md-7 list-select">
+    <div class="col-md-5 col-sm-5 table-footer-button">
         <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
             <input type="checkbox" class="group-checkable" data-set=".checkboxes">
             <span></span>
         </label>
         <label><input type="button" value="<?php echo L('insert_a_comment_about_the_selected_text')?>" class="button" onclick="insert_form()"></label>
     </div>
-    <div class="col-md-5 list-page"><?php echo $pages?></div>
+    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
 </div>
 <?php endif;?>	
 	</div>

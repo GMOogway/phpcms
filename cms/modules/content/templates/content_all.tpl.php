@@ -68,7 +68,7 @@ if(is_array($infos)){
 ?></p>
 </div>
 <div class="right-card-box">
-    <div class="table-search-tool" id="searchid"<?php if (!$this->input->get('search')) {?> style="display:none;"<?php }?>>
+    <div class="row table-search-tool" id="searchid"<?php if (!$this->input->get('search')) {?> style="display:none;"<?php }?>>
         <form name="searchform" action="" method="get" >
         <input type="hidden" value="content" name="m">
         <input type="hidden" value="content" name="c">
@@ -76,6 +76,7 @@ if(is_array($infos)){
         <input type="hidden" value="<?php echo $modelid;?>" name="modelid">
         <input type="hidden" value="1" name="search">
         <input type="hidden" value="<?php echo dr_get_csrf_token();?>" name="pc_hash">
+        <div class="col-md-12 col-sm-12">
         <label><div class="formdate">
             <div class="input-group input-medium date-picker input-daterange">
                 <input type="text" class="form-control" value="<?php echo $this->input->get('start_time');?>" name="start_time" id="start_time">
@@ -83,21 +84,26 @@ if(is_array($infos)){
                 <input type="text" class="form-control" value="<?php echo $this->input->get('end_time');?>" name="end_time" id="end_time">
             </div>
         </div></label>
+        </div>
+        <div class="col-md-12 col-sm-12">
         <label><select id="posids" name="posids"><option value='' <?php if($this->input->get('posids')=='') echo 'selected';?>><?php echo L('all');?></option>
         <option value="1" <?php if($this->input->get('posids')==1) echo 'selected';?>><?php echo L('elite');?></option>
         <option value="2" <?php if($this->input->get('posids')==2) echo 'selected';?>><?php echo L('no_elite');?></option>
         </select></label>
+        </div>
+        <div class="col-md-12 col-sm-12">
         <label><select id="searchtype" name="searchtype">
             <option value='0' <?php if($this->input->get('searchtype')==0) echo 'selected';?>><?php echo L('title');?></option>
             <option value='1' <?php if($this->input->get('searchtype')==1) echo 'selected';?>><?php echo L('intro');?></option>
             <option value='2' <?php if($this->input->get('searchtype')==2) echo 'selected';?>><?php echo L('username');?></option>
             <option value='3' <?php if($this->input->get('searchtype')==3) echo 'selected';?>>ID</option>
         </select></label>
-        <label>
-            <input class="form-control" name="keyword" id="keyword" value="<?php if($this->input->get('keyword')) echo $this->input->get('keyword');?>" placeholder="请输入关键字">
-        </label>
+        <label><i class="fa fa-caret-right"></i></label>
+        <label><input class="form-control" name="keyword" id="keyword" value="<?php if($this->input->get('keyword')) echo $this->input->get('keyword');?>" placeholder="请输入关键字"></label>
+        </div>
+        <div class="col-md-12 col-sm-12">
         <label><button type="submit" class="btn green"><i class="fa fa-search"></i> <?php echo L('search');?></button></label>
-        <div style="clear: both;"></div>
+        </div>
         </form>
     </div>
 <form class="form-horizontal" name="myform" id="myform" action="" method="post">
@@ -163,8 +169,8 @@ if(is_array($datas)){
     </table>
 </div>
 <div class="list-footer table-checkable clear">
-    <div class="col-md-7 list-select"></div>
-    <div class="col-md-5 list-page"><?php echo $pages?></div>
+    <div class="col-md-5 col-sm-5 table-footer-button"></div>
+    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
 </div>
 </form>
 </div>

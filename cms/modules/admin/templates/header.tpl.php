@@ -84,16 +84,17 @@ $(function(){
 </script>
 </head>
 <body>
-<?php if(!isset($show_header)) { ?>
+<?php if(!isset($show_header)) {?>
 <div class="subnav">
-    <div class="content-menu ib-a blue line-x">
-    <?php if(isset($big_menu)) { echo '<a class="add fb" href="'.$big_menu[0].'"><em>'.$big_menu[1].'</em></a>　';} else {$big_menu = '';} ?>
+    <div class="content-menu ib-a">
+    <?php if(isset($big_menu)) { echo '<a class="add fb" href="'.$big_menu[0].'"><i class="fa fa-plus"></i> '.$big_menu[1].'</a><i class="fa fa-circle"></i>';} else {$big_menu = '';} ?>
     <?php echo admin::submenu($this->input->get('menuid'),$big_menu); ?>
     </div>
 </div>
-<?php } ?>
+<div class="content-header"></div>
+<?php }?>
 <style type="text/css">
-	html{_overflow-y:scroll}
+html{_overflow-y:scroll}
 </style>
 <div class="scroll-to-top">
     <i class="bi bi-arrow-up-circle-fill"></i>

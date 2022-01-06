@@ -20,12 +20,12 @@ $p = dr_authcode(array(
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH;?>formvalidator.js" charset="UTF-8"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH;?>formvalidatorregex.js" charset="UTF-8"></script>
 <div class="subnav">
-    <div class="content-menu ib-a blue line-x">
-    <?php if(isset($big_menu)) echo '<a class="add fb" href="'.$big_menu[0].'"><em>'.$big_menu[1].'</em></a>　';?>
-    <?php echo admin::submenu($_GET['menuid'],$big_menu); ?><span>|</span><a href="javascript:artdialog('setting','?m=poster&c=space&a=setting','<?php echo L('module_setting')?>',540,320);void(0);"><em><?php echo L('module_setting')?></em></a>
+    <div class="content-menu ib-a blue">
+    <?php if(isset($big_menu)) echo '<a class="add fb" href="'.$big_menu[0].'"><i class="fa fa-plus"></i> '.$big_menu[1].'</a>　';?>
+    <?php echo admin::submenu($_GET['menuid'],$big_menu); ?><i class="fa fa-circle"></i><a href="javascript:artdialog('setting','?m=poster&c=space&a=setting','<?php echo L('module_setting')?>',540,320);void(0);"><i class="fa fa-cog"></i> <?php echo L('module_setting')?></a>
     </div>
 </div>
-
+<div class="content-header"></div>
 <form method="post" action="?m=poster&c=poster&a=edit&id=<?php echo $_GET['id']?>&spaceid=<?php echo $info['spaceid']?>" id="myform">
 <table class="table_form" width="100%" cellspacing="0">
 <tbody>

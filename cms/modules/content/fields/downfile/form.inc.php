@@ -11,12 +11,14 @@
 		}
 		$server_list = getcache('downservers','commons');
 		if(is_array($server_list)) {
+			$list_str .= "<div class='mt-checkbox-inline'>";
 			foreach($server_list as $_k=>$_v) {
 				if (in_array($_v['siteid'],array(0,$fieldinfo['siteid']))) {
 					$checked = $edit ? ((is_array($sel_server) && in_array($_k,$sel_server)) ? ' checked' : '') : ' checked';
-					$list_str .= "<lable id='downfile{$_k}' class='ib lh24' style='width:25%'><input type='checkbox' value='{$_k}' name='{$field}_servers[]' {$checked}>  {$_v['sitename']}</lable>";
+					$list_str .= "<label id='downfile{$_k}' class='mt-checkbox mt-checkbox-outline'><input type='checkbox' value='{$_k}' name='{$field}_servers[]' {$checked}>   {$_v['sitename']} <span></span> </label>";
 				}
 			}
+			$list_str .= "</div>";
 		}
 	
 		$string = '
@@ -45,6 +47,6 @@
 			'attachment' => $attachment,
 			'image_reduce' => $image_reduce,
 		), 'ENCODE');
-		$string .= $str."<input type='text' name='info[$field]' id='$field' value='$value' class='input-text' style='width:80%'/>  <input type='button' class='button' onclick=\"javascript:h5upload('".SELF."', '{$field}_downfield', '".L('attachment_upload')."','{$field}','submit_files','{$p}','content','$this->catid','{$authkey}',".SYS_EDITOR.")\"/ value='".L('upload_soft')."'>";
+		$string .= $str."<label><input type='text' name='info[$field]' id='$field' value='$value' class='form-control input-xlarge' /></label> <label><button type=\"button\" onclick=\"javascript:h5upload('".SELF."', '{$field}_downfield', '".L('attachment_upload')."','{$field}','submit_files','{$p}','content','$this->catid','{$authkey}',".SYS_EDITOR.")\" class=\"btn green\"> <i class=\"fa fa-plus\"></i> ".L('upload_soft')."</button></label>";
 		return $string;
 	}

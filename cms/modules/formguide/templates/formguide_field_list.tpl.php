@@ -2,11 +2,11 @@
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');?>
 <div class="subnav">
-  <h2 class="title-1 line-x f14 fb blue lh28"><?php echo L('formguide');?>--<?php if ($formid) echo $r['name']; else echo L('public')?><?php echo L('field_manage');?></h2>
-<div class="content-menu ib-a blue line-x"><a href="?m=formguide&c=formguide&a=init&s=3&menuid=<?php echo $this->input->get('menuid')?>"><em><?php echo L('表单向导');?></em></a>
-　<a class="add fb" href="?m=formguide&c=formguide_field&a=add&formid=<?php echo $formid?>&menuid=<?php echo $this->input->get('menuid')?>"><em><?php echo L('add_field');?></em></a>
-　<a class="on" href="?m=formguide&c=formguide_field&a=init&formid=<?php echo $formid?>"><em><?php echo L('manage_field');?></em></a><?php if ($formid) {?><span>|</span><a href="?m=formguide&c=formguide&a=public_preview&formid=<?php echo $formid?>&menuid=<?php echo $this->input->get('menuid')?>"><em><?php echo L('priview_modelfield');?></em></a><?php }?>
+<div class="content-menu ib-a blue"><a href="?m=formguide&c=formguide&a=init&s=3&menuid=<?php echo $this->input->get('menuid')?>"><i class="fa fa-table"></i> <?php echo L('表单向导');?></a>
+　<a class="add fb" href="?m=formguide&c=formguide_field&a=add&formid=<?php echo $formid?>&menuid=<?php echo $this->input->get('menuid')?>"><i class="fa fa-plus"></i> <?php echo L('add_field');?></a>
+　<a class="on" href="?m=formguide&c=formguide_field&a=init&formid=<?php echo $formid?>"><i class="fa fa-code"></i> <?php echo L('manage_field');?></a><?php if ($formid) {?><i class="fa fa-circle"></i><a href="?m=formguide&c=formguide&a=public_preview&formid=<?php echo $formid?>&menuid=<?php echo $this->input->get('menuid')?>"><i class="fa fa-code"></i> <?php echo L('priview_modelfield');?></a><?php }?>
 </div></div>
+<div class="content-header"></div>
 <div class="pad-lr-10">
 <form name="myform" action="?m=formguide&c=formguide_field&a=listorder&formid=<?php echo $formid?>" method="post">
 <div class="table-list">
@@ -47,10 +47,10 @@ include $this->admin_tpl('header','admin');?>
     </table>
 </div>
 <div class="list-footer table-checkable clear">
-    <div class="col-md-7 list-select">
+    <div class="col-md-5 col-sm-5 table-footer-button">
         <label><input type="submit" class="button" name="dosubmit" value="<?php echo L('listorder');?>" /></label>
     </div>
-    <div class="col-md-5 list-page"></div>
+    <div class="col-md-7 col-sm-7 text-right"></div>
 </div>
 </form>
 </div>

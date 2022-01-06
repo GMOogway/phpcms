@@ -35,11 +35,11 @@ if(is_array($list)){
 </div>
 <div class="list-footer table-checkable clear">
 <?php if($list){?>
-    <div class="col-md-7 list-select">
+    <div class="col-md-5 col-sm-5 table-footer-button">
         <label><button type="button" onclick="ajax_option('?m=admin&c=index&a=public_error_del', '你确定要清空全部记录吗？')" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('清空全部')?></button></label>
     </div>
 <?php }?>
-    <div class="col-md-5 list-page"><?php echo $pages?></div>
+    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
 </div>
 </form>
 </div>
@@ -49,9 +49,6 @@ if(is_array($list)){
 <!--
 function show_file_code() {
 	openwinx('?m=admin&c=index&a=public_log_show','查看文件','80%','80%');
-}
-function ajax_option(url, msg) {
-	Dialog.confirm(msg,function(){location.href = url;});
 }
 //-->
 </script>

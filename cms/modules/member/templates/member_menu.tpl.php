@@ -20,10 +20,10 @@ include $this->admin_tpl('header', 'admin');?>
     </table>
 </div>
 <div class="list-footer table-checkable clear">
-    <div class="col-md-7 list-select">
+    <div class="col-md-5 col-sm-5 table-footer-button">
         <label><input type="submit" class="button" name="dosubmit" value="<?php echo L('listorder');?>" /></label>
     </div>
-    <div class="col-md-5 list-page"></div>
+    <div class="col-md-7 col-sm-7 text-right"></div>
 </div>
 </div>
 </div>

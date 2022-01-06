@@ -80,14 +80,14 @@ if(is_array($infos)){
 </table>
 </div>
 <div class="list-footer table-checkable clear">
-    <div class="col-md-7 list-select">
+    <div class="col-md-5 col-sm-5 table-footer-button">
         <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
             <input type="checkbox" class="group-checkable" data-set=".checkboxes">
             <span></span>
         </label>
         <label><button type="button" onClick="Dialog.confirm('<?php echo L('confirm', array('message' => L('selected')))?>',function(){$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('remove_all_selected')?></button></label>
     </div>
-    <div class="col-md-5 list-page"><?php echo $pages?></div>
+    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
 </div>
 </form>
 </div>

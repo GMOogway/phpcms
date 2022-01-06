@@ -1,10 +1,9 @@
 <style type="text/css">
-	.sbs{}
-	.sbul{margin:10px;}
-	.sbul li{line-height:30px;}
-	.button{margin-top:20px;}
-	.subnav,.ifm{display:none;}
-	
+.sbs{}
+.sbul{margin:10px;}
+.sbul li{line-height:30px;}
+.button{margin-top:20px;}
+.subnav,.ifm{display:none;}
 </style>
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');

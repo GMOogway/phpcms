@@ -36,7 +36,7 @@ class member_modelfield extends admin {
 			$info = $this->input->post('info');
 			$setting = $this->input->post('setting');
 			if (!$info['formtype']) dr_json(0, L('select_fieldtype'), array('field' => 'formtype'));
-			if (!$info['name']) dr_json(0, L('fieldname').L('empty'), array('field' => 'name'));
+			if (!$info['name']) dr_json(0, L('filed_nickname').L('empty'), array('field' => 'name'));
 			
 			$modelid = intval($info['modelid']);
 			$model_table = $model_cache[$modelid]['tablename'];
@@ -49,7 +49,7 @@ class member_modelfield extends admin {
 			$field_type = $info['formtype'];
 			$where = 'modelid='.$modelid.' AND field=\''.$field.'\' AND siteid='.$this->siteid.'';
 			$model_field = $this->db->get_one($where);
-			if ($model_field) dr_json(0, L('fieldname').'（'.$field.'）'.L('already_exist'), array('field' => 'name'));
+			if ($model_field) dr_json(0, L('fieldname').'（'.$field.'）'.L('already_exist'), array('field' => 'field'));
 			
 			require MODEL_PATH.$field_type.DIRECTORY_SEPARATOR.'config.inc.php';
 			
@@ -94,7 +94,7 @@ class member_modelfield extends admin {
 			$info = $this->input->post('info');
 			$setting = $this->input->post('setting');
 			if (!$info['formtype']) dr_json(0, L('select_fieldtype'), array('field' => 'formtype'));
-			if (!$info['name']) dr_json(0, L('fieldname').L('empty'), array('field' => 'name'));
+			if (!$info['name']) dr_json(0, L('filed_nickname').L('empty'), array('field' => 'name'));
 			$fieldid = intval($this->input->post('fieldid'));
 			$modelid = intval($info['modelid']);
 			$model_table = $model_cache[$modelid]['tablename'];
@@ -111,7 +111,7 @@ class member_modelfield extends admin {
 				$where .= ' AND fieldid<>'.$fieldid;
 			}
 			$model_field = $this->db->get_one($where);
-			if ($model_field) dr_json(0, L('fieldname').'（'.$field.'）'.L('already_exist'), array('field' => 'name'));
+			if ($model_field) dr_json(0, L('fieldname').'（'.$field.'）'.L('already_exist'), array('field' => 'field'));
 			
 			require MODEL_PATH.$field_type.DIRECTORY_SEPARATOR.'config.inc.php';
 			

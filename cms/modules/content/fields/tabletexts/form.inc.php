@@ -13,9 +13,9 @@
 				foreach($value as $_k=>$_v) {
 					$list_str .= "<tr>";
 					for ($x=1; $x<=count($columns); $x++) {
-						$list_str .="<td><input type='text' name='".$field."_".$x."[]' value='".$_v[$field."_".$x]."' class='input-text' style='width:100%; padding:6px 0;'></td>";
+						$list_str .="<td><input type='text' name='".$field."_".$x."[]' value='".$_v[$field."_".$x]."' class='form-control' style='width:100%; padding:6px 0;'></td>";
 					}
-					$list_str .= "<td><input type='button' class='button' value='删除' onclick='delThisAttr(this)'> <input type='button' class='button' value='↑上移' onclick='moveUp(this)'> <input type='button' class='button' value='↓下移' onclick='moveDown(this)'></td></tr>";
+					$list_str .= "<td><button type='button' class='btn blue btn-xs' onclick='moveUp(this)'> <i class='fa fa-arrow-up'></i> </button> <button type='button' class='btn blue btn-xs' onclick='moveDown(this)'> <i class='fa fa-arrow-down'></i> </button> <button type='button' class='btn red btn-xs' onclick='delThisAttr(this)'> <i class='fa fa-trash'></i> </button></td></tr>";
 				}
 			}
 		}
@@ -30,26 +30,26 @@
 		function add'.$field.'(id){
 			var html = "<tr>';
 			for($cols=1; $cols<=count($columns); $cols++){
-				$string .='<td><input type=\'text\' name=\''.$field.'_'.$cols.'[]\' value=\'\' class=\'input-text\' style=\'width:100%; padding:6px 0;\'></td>';
+				$string .='<td><input type=\'text\' name=\''.$field.'_'.$cols.'[]\' value=\'\' class=\'form-control\' style=\'width:100%; padding:6px 0;\'></td>';
 			}
-			$string .='<td><input type=\'button\' class=\'button\' value=\'删除\' onclick=\'delThisAttr(this)\'> <input type=\'button\' class=\'button\' value=\'↑上移\' onclick=\'moveUp(this)\'> <input type=\'button\' class=\'button\' value=\'↓下移\' onclick=\'moveDown(this)\'></td></tr>";
+			$string .='<td><button type=\'button\' class=\'btn blue btn-xs\' onclick=\'moveUp(this)\'> <i class=\'fa fa-arrow-up\'></i> </button> <button type=\'button\' class=\'btn blue btn-xs\' onclick=\'moveDown(this)\'> <i class=\'fa fa-arrow-down\'></i> </button> <button type=\'button\' class=\'btn red btn-xs\' onclick=\'delThisAttr(this)\'> <i class=\'fa fa-trash\'></i> </button></td></tr>";
 			var temp_id = Math.random().toString(36).substr(2);
 			var html_new = html.replace(/thisisid/g,temp_id);
-			$("#"+id).before(html_new);
+			$("#"+id).append(html_new);
 		}
 		</script>';
 		$string .= '<input name="info['.$field.']" type="hidden" value="1">
 		<fieldset class="blue pad-10">
-		<legend>列表</legend><div class="table-list"><table width="100%" cellspacing="0"><thead><tr align="left"> ';
+		<legend>列表</legend><div class="table-scrollable"><table class="table table-nomargin table-striped table-bordered table-advance"><thead><tr align="left"> ';
 		foreach($columns as $column){
-			$string .="<th align='left' style='border-bottom: 1px solid #d5dfe8;'>".$column."</th>";
+			$string .="<th align='left'>".$column."</th>";
 		}
-		$string .="<th align='left' width='185'>操作</th></tr></thead><tbody class=\"".$field."-sortable\">";
+		$string .="<th align='left' width='110'>操作</th></tr></thead><tbody id='".$field."' class=\"".$field."-sortable\">";
 		$string .= $list_str;
-		$string .= "<tr id='".$field."'></tr></tbody>
+		$string .= "</tbody>
 		</table></div>
 		</fieldset><script type=\"text/javascript\">$(\".".$field."-sortable\").sortable();</script>
 		<div class='bk10'></div>";
-		$string .= "<input type=\"button\" class=\"button\" value=\"添加一行\" onclick=\"add".$field."('".$field."')\">";
+		$string .= "<button type=\"button\" class=\"btn blue btn-sm\" onclick=\"add".$field."('".$field."')\"> <i class=\"fa fa-plus\"></i> 添加一行</button>";
 		return $string;
 	}

@@ -1,9 +1,5 @@
 <?php defined('IS_ADMIN') or exit('No permission resources.');?>
 <?php include $this->admin_tpl('header', 'admin');?>
-<div class="subnav">
-  <h1 class="title-2 line-x"><?php echo $node['name']?> - <?php echo L('content_list')?></h1>
-</div>
-
 <div class="pad-lr-10">
 <div class="col-tab">
 <ul class="tabBut cu-li">
@@ -60,7 +56,7 @@
 </table>
 </div>
 <div class="list-footer table-checkable clear">
-    <div class="col-md-7 list-select">
+    <div class="col-md-5 col-sm-5 table-footer-button">
         <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
             <input type="checkbox" class="group-checkable" data-set=".checkboxes">
             <span></span>
@@ -70,7 +66,7 @@
         <label><button type="submit" onclick="re_url('m=collection&c=node&a=import&nodeid=<?php echo $nodeid?>');return check_checkbox();" class="btn green btn-sm"> <i class="fa fa-cloud-upload"></i> <?php echo L('import_selected')?></button></label>
         <label><button type="submit" onclick="re_url('m=collection&c=node&a=import&type=all&nodeid=<?php echo $nodeid?>')" class="btn blue btn-sm"> <i class="fa fa-cloud-upload"></i> <?php echo L('import_all')?></button></label>
     </div>
-    <div class="col-md-5 list-page"><?php echo $pages?></div>
+    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
 </div>
 </form>
 </div>

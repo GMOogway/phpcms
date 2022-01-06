@@ -6,8 +6,9 @@ include $this->admin_tpl('header','admin');
 body .table-list table tr>td:first-child, body .table-list table tr>th:first-child {text-align: left;padding: 8px;}
 </style>
 <div class="subnav">
-  <h1 class="title-2 line-x"><?php echo $this->style_info['name'].' - '.L('detail')?></h1>
+  <h1 class="title-2"><?php echo $this->style_info['name'].' - '.L('detail')?></h1>
 </div>
+<div class="content-header"></div>
 <div class="pad-lr-10">
 <form action="?m=template&c=file&a=updatefilename&style=<?php echo $this->style?>" method="post">
 <div class="table-list">
@@ -25,7 +26,7 @@ body .table-list table tr>td:first-child, body .table-list table tr>th:first-chi
 </tr>
 <?php if ($dir !='' && $dir != '.'):?>
 <tr>
-<td align="left" colspan="3"><a href="<?php echo '?m=template&c=file&a=init&style='.$this->style.'&dir='.stripslashes(dirname($dir))?>"><img src="<?php echo IMG_PATH?>folder-closed.gif" /><?php echo L("parent_directory")?></a></td>
+<td align="left" colspan="3"><a href="<?php echo '?m=template&c=file&a=init&style='.$this->style.'&dir='.stripslashes(dirname($dir))?>"><img src="<?php echo IMG_PATH?>folder-closed.png" /><?php echo L("parent_directory")?></a></td>
 </tr>
 <?php endif;?>
 <?php 
@@ -35,10 +36,10 @@ if(is_array($list)):
 ?>
 <tr>
 <?php if (is_dir($v)) {
-	echo '<td align="left"><img src="'.IMG_PATH.'folder-closed.gif" /> <a href="?m=template&c=file&a=init&style='.$this->style.'&dir='.(isset($_GET['dir']) && !empty($_GET['dir']) ? stripslashes($_GET['dir']).DIRECTORY_SEPARATOR : '').$filename.'"><b>'.$filename.'</b></a></td><td align="left"><input type="text" name="file_explan['.$encode_local.']['.$filename.']" value="'.(isset($file_explan[$encode_local][$filename]) ? $file_explan[$encode_local][$filename] : "").'"></td><td></td>';
+	echo '<td align="left"><img src="'.IMG_PATH.'folder-closed.png" /> <a href="?m=template&c=file&a=init&style='.$this->style.'&dir='.(isset($_GET['dir']) && !empty($_GET['dir']) ? stripslashes($_GET['dir']).DIRECTORY_SEPARATOR : '').$filename.'"><b>'.$filename.'</b></a></td><td align="left"><input type="text" name="file_explan['.$encode_local.']['.$filename.']" value="'.(isset($file_explan[$encode_local][$filename]) ? $file_explan[$encode_local][$filename] : "").'"></td><td></td>';
 } else {
  	if (substr($filename,-4,4) == 'html') {
- 		echo '<td align="left"><img src="'.IMG_PATH.'file.gif" /> '.$filename.'</td><td align="left"><input type="text" name="file_explan['.$encode_local.']['.$filename.']" value="'.(isset($file_explan[$encode_local][$filename]) ? $file_explan[$encode_local][$filename] : "").'"></td>';
+ 		echo '<td align="left"><img src="'.IMG_PATH.'file.png" /> '.$filename.'</td><td align="left"><input type="text" name="file_explan['.$encode_local.']['.$filename.']" value="'.(isset($file_explan[$encode_local][$filename]) ? $file_explan[$encode_local][$filename] : "").'"></td>';
 		if($tpl_edit=='1'){
 			echo '<td> <a class="btn btn-xs green" href="?m=template&c=file&a=edit_file&style='.$this->style.'&dir='.urlencode(stripslashes($dir)).'&file='.$filename.'">'.L('edit').'</a> <a class="btn btn-xs blue" href="?m=template&c=file&a=visualization&style='.$this->style.'&dir='.urlencode(stripslashes($dir)).'&file='.$filename.'" target="_blank">'.L('visualization').'</a> <a class="btn btn-xs dark" href="javascript:history_file(\''.$filename.'\')">'.L('histroy').'</a></td>';
 		}else{
@@ -54,12 +55,12 @@ endif;
 </table>
 </div>
 <div class="list-footer table-checkable clear">
-    <div class="col-md-7 list-select">
+    <div class="col-md-5 col-sm-5 table-footer-button">
         <label><button type="button" onclick="location.href='?m=template&c=style&a=init&pc_hash=<?php echo dr_get_csrf_token();?>'" class="btn yellow btn-sm"> <i class="fa fa-mail-reply-all"></i> <?php echo L('returns_list_style')?></button></label>
         <label><button type="button" onclick="add_file()" class="btn blue btn-sm"> <i class="fa fa-plus"></i> <?php echo L('new')?></button></label>
         <label><button type="submit" class="btn green btn-sm"> <i class="fa fa-refresh"></i> <?php echo L('update')?></button></label>
     </div>
-    <div class="col-md-5 list-page"><?php echo $pages?></div>
+    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
 </div>
 </form>
 </div>

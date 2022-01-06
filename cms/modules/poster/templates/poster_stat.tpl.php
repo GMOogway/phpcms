@@ -3,10 +3,10 @@ defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');
 ?>
 <div class="subnav">
-  <h2 class="title-1 line-x f14 fb blue lh28"><?php echo L('ads_module')?></h2>  
-<div class="content-menu ib-a blue line-x">
-<a class="add fb" href="?m=poster&c=poster&a=init&spaceid=<?php echo $info['spaceid'];?>"><em><?php echo L('ad_list')?></em></a>　<a class="on" href="?m=poster&c=space"><em><?php echo L('space_list')?></em></a></div>
+<div class="content-menu ib-a blue">
+<a class="add fb" href="?m=poster&c=poster&a=init&spaceid=<?php echo $info['spaceid'];?>"><i class="fa fa-plus"></i> <?php echo L('ad_list')?></a> <a class="on" href="?m=poster&c=space"><i class="fa fa-reorder"></i> <?php echo L('space_list')?></a></div>
 </div>
+<div class="content-header"></div>
 <div class="pad-lr-10">
 <div class="col-tab">
         <ul class="tabBut cu-li">

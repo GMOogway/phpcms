@@ -45,7 +45,7 @@
 </table>
 </div>
 <div class="list-footer table-checkable clear">
-    <div class="col-md-7 list-select">
+    <div class="col-md-5 col-sm-5 table-footer-button">
         <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
             <input type="checkbox" class="group-checkable" data-set=".checkboxes">
             <span></span>
@@ -57,7 +57,7 @@
         <label><?php echo L('verify_message')?>：<input type="text" name="message"></label>
         <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline"><input type="checkbox" value=1 name="sendemail" checked/><?php echo L('sendemail')?><span></span></label>
     </div>
-    <div class="col-md-5 list-page"><?php echo $pages?></div>
+    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
 </div>
 </div>
 </form>

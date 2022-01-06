@@ -5,7 +5,9 @@ include $this->admin_tpl('header');?>
 html,body{background:#f5f6f8!important;}
 body{padding: 20px 20px 0px 20px;}
 </style>
-<div class="pad-lr-10">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
 <div class="note note-danger">
     <p><?php echo L('邮件发送失败时返回的错误代码，格式为：时间 [邮件服务器 - 服务器账号 - 发送给的邮箱] 错误代码');?></p>
 </div>
@@ -29,20 +31,15 @@ if(is_array($list)){
 </div>
 <div class="list-footer table-checkable clear">
 <?php if($list){?>
-    <div class="col-md-7 list-select">
+    <div class="col-md-5 col-sm-5 table-footer-button">
         <label><button type="button" onclick="ajax_option('?m=admin&c=index&a=public_email_log_del', '你确定要清空全部记录吗？')" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('清空全部')?></button></label>
     </div>
 <?php }?>
-    <div class="col-md-5 list-page"><?php echo $pages?></div>
+    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
 </div>
 </form>
 </div>
+</div>
+</div>
 </body>
 </html>
-<script type="text/javascript">
-<!--
-function ajax_option(url, msg) {
-	Dialog.confirm(msg,function(){location.href = url;});
-}
-//-->
-</script>

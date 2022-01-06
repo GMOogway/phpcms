@@ -26,10 +26,10 @@ include $this->admin_tpl('header', 'admin');
 <?php endforeach;?>
 </div>
 <div class="list-footer table-checkable clear">
-    <div class="col-md-7 list-select">
+    <div class="col-md-5 col-sm-5 table-footer-button">
         <label><button type="button" onclick="Dialog.confirm('<?php echo L('are_you_sure_you_want_to_delete')?>',function(){$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete')?></button></label>
     </div>
-    <div class="col-md-5 list-page"><?php echo $pages?></div>
+    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
 </div>
  </form>
 </div>

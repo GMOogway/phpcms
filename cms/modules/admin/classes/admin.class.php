@@ -127,13 +127,9 @@ class admin {
 				$classname = ROUTE_M == $_value['m'] && ROUTE_C == $_value['c'] && ROUTE_A == $_value['a'] && $input->get('s') == $_s ? 'class="on"' : '';
 			}
 			if($_value['parentid'] == 0 || $_value['m']=='') continue;
-			if($classname) {
-				$string .= "<a href='javascript:;' $classname><em>".L($_value['name'])."</em></a><span>|</span>";
-			} else {
-				$string .= "<a href='?m=".$_value['m']."&c=".$_value['c']."&a=".$_value['a']."&menuid=$parentid&pc_hash=$pc_hash".'&'.$_value['data']."' $classname><em>".L($_value['name'])."</em></a><span>|</span>";
-			}
+			$string .= "<a href='?m=".$_value['m']."&c=".$_value['c']."&a=".$_value['a']."&menuid=$parentid&pc_hash=$pc_hash".'&'.$_value['data']."' $classname><i class=\"".$_value['icon']."\"></i> ".L($_value['name'])."</a><i class=\"fa fa-circle\"></i>";
 		}
-		$string = substr($string,0,-14);
+		$string = substr($string,0,-28);
 		return $string;
 	}
 	final public static function child_menu($parentid, $self = 0) {

@@ -21,5 +21,5 @@ function file($field, $value, $fieldinfo) {
 			'attachment' => $attachment,
 			'image_reduce' => $image_reduce,
 		), 'ENCODE');
-		return $str."<input type='text' name='info[$field]' id='$field' value='$value' size='$size' class='input-text' />  <input type='button' class='button' onclick=\"h5upload('".SELF."', '{$field}_downfield', '".L('attachment_upload', '', 'content')."','{$field}','submit_attachment','{$p}','content','$this->catid','$authkey',".SYS_EDITOR.")\"/ value='".L('attachment_upload')."'>";
+		return $str."<label><input type='text' name='info[$field]' id='$field' value='$value' size='$size' class='form-control input-xlarge' /></label> <label><button type=\"button\" onclick=\"h5upload('".SELF."', '{$field}_downfield', '".L('attachment_upload', '', 'content')."','{$field}','submit_attachment','{$p}','content','$this->catid','$authkey',".SYS_EDITOR.")\" class=\"btn green\"> <i class=\"fa fa-plus\"></i> ".L('attachment_upload')."</button></label>";
 	}

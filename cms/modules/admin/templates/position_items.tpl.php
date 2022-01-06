@@ -52,7 +52,7 @@ if(is_array($infos)){
     </table>
 </div>
 <div class="list-footer table-checkable clear">
-    <div class="col-md-7 list-select">
+    <div class="col-md-5 col-sm-5 table-footer-button">
         <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
             <input type="checkbox" class="group-checkable" data-set=".checkboxes">
             <span></span>
@@ -60,7 +60,7 @@ if(is_array($infos)){
         <label><button type="button" onclick="myform.action='?m=admin&c=position&a=public_item_listorder';myform.submit();" class="btn green btn-sm"> <i class="fa fa-refresh"></i> <?php echo L('listorder')?></button></label>
         <label><button type="submit" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('posid_item_remove')?></button></label>
     </div>
-    <div class="col-md-5 list-page"><?php echo $pages?></div>
+    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
 </div>
 </div>
 </div>

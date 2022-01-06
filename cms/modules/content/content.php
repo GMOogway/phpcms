@@ -720,7 +720,7 @@ class content extends admin {
 					$r['icon_type'] = $r['vs_show'] = '';
 					$r['category_edit'] = '';
 					$r['type'] = 'init';
-					$r['add_icon'] = "<a target='right' href='?m=content&c=content&menuid=".intval($this->input->get('menuid'))."&catid=".$r['catid']."' onclick=\"javascript:dr_content_submit('?m=content&c=content&a=add&menuid=".intval($this->input->get('menuid'))."&catid=".$r['catid']."&hash_page=".$_SESSION['hash_page']."','add')\"><img src='".IMG_PATH."add_content.gif' alt='".L('add')."'></a> ";
+					$r['add_icon'] = "<a target='right' href='?m=content&c=content&menuid=".intval($this->input->get('menuid'))."&catid=".$r['catid']."' onclick=\"javascript:dr_content_submit('?m=content&c=content&a=add&menuid=".intval($this->input->get('menuid'))."&catid=".$r['catid']."&hash_page=".$_SESSION['hash_page']."','add')\"><img src='".IMG_PATH."add_content.png' alt='".L('add')."'></a> ";
 				}
 				$categorys[$r['catid']] = $r;
 			}
@@ -730,7 +730,7 @@ class content extends admin {
 				switch($from) {
 					case 'block':
 						$strs = "<span class='\$icon_type'>\$add_icon<a href='?m=block&c=block_admin&a=public_visualization&menuid=".intval($this->input->get('menuid'))."&catid=\$catid&type=list' target='".$this->input->get('from')."_right'>\$catname</a> \$vs_show</span>";
-						$strs2 = "<img src='".IMG_PATH."folder.gif'> <a href='?m=block&c=block_admin&a=public_visualization&menuid=".intval($this->input->get('menuid'))."&catid=\$catid&type=category' target='".$this->input->get('from')."_right'>\$catname</a>";
+						$strs2 = "<img src='".IMG_PATH."folder.png'> <a href='?m=block&c=block_admin&a=public_visualization&menuid=".intval($this->input->get('menuid'))."&catid=\$catid&type=category' target='".$this->input->get('from')."_right'>\$catname</a>";
 					break;
 
 					default:

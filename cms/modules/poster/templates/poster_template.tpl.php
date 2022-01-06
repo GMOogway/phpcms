@@ -4,11 +4,12 @@ $show_dialog = $show_header = true;
 include $this->admin_tpl('header', 'admin');
 ?>
 <div class="subnav">
-    <div class="content-menu ib-a blue line-x">
-    <?php if(isset($big_menu)) echo '<a class="add fb" href="'.$big_menu[0].'"><em>'.$big_menu[1].'</em></a>　';?>
-    <?php echo admin::submenu($_GET['menuid'],$big_menu); ?><span>|</span><a href="javascript:artdialog('setting','?m=poster&c=space&a=setting','<?php echo L('module_setting')?>',540,320);void(0);"><em><?php echo L('module_setting')?></em></a>
+    <div class="content-menu ib-a blue">
+    <?php if(isset($big_menu)) echo '<a class="add fb" href="'.$big_menu[0].'"><i class="fa fa-plus"></i> '.$big_menu[1].'</a>　';?>
+    <?php echo admin::submenu($_GET['menuid'],$big_menu); ?><i class="fa fa-circle"></i><a href="javascript:artdialog('setting','?m=poster&c=space&a=setting','<?php echo L('module_setting')?>',540,320);void(0);"><i class="iconm fa fa-cog"></i> <?php echo L('module_setting')?></a>
     </div>
 </div>
+<div class="content-header"></div>
 <div class="pad-lr-10">
 <div class="table-list">
     <table width="100%" cellspacing="0">
@@ -36,8 +37,8 @@ if(is_array($templates)){
 </tbody>
     </table>  </div>
 <div class="list-footer table-checkable clear">
-    <div class="col-md-7 list-select"></div>
-    <div class="col-md-5 list-page"><?php echo $this->pages?></div>
+    <div class="col-md-5 col-sm-5 table-footer-button"></div>
+    <div class="col-md-7 col-sm-7 text-right"><?php echo $this->pages?></div>
 </div>
 </div>
 <script type="text/javascript">

@@ -1,9 +1,6 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header');?>
-<style>
-body {padding: 25px 20px 10px;}
-</style>
 <link href="<?php echo JS_PATH?>codemirror/lib/codemirror.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo JS_PATH?>codemirror/theme/neat.css" rel="stylesheet" type="text/css" />
 <script src="<?php echo JS_PATH?>codemirror/lib/codemirror.js" type="text/javascript"></script>
@@ -41,11 +38,17 @@ body {padding: 25px 20px 10px;}
     });
 
 </script>
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
 <div class="note note-danger" style="margin-top: 0px;">
     <p><?php echo str_replace(CACHE_PATH, 'CACHE_PATH/', $file)?></p>
 </div>
 <div class="form-group">
     <textarea id="file_code" name="code"><?php echo $code?></textarea>
+</div>
+</div>
+</div>
 </div>
 </body>
 </html>

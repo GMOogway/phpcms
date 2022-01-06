@@ -2,14 +2,13 @@
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header', 'admin');
 ?>
-
 <div class="subnav">
-    <div class="content-menu ib-a blue line-x">
-    <?php if(isset($big_menu)) echo '<a class="add fb" href="'.$big_menu[0].'"><em>'.$big_menu[1].'</em></a>　';?>
-    <?php echo admin::submenu($_GET['menuid'],$big_menu); ?><span>|</span><a href="javascript:artdialog('setting','?m=poster&c=space&a=setting','<?php echo L('module_setting')?>',540,320);void(0);"><em><?php echo L('module_setting')?></em></a>
+    <div class="content-menu ib-a blue">
+    <?php if(isset($big_menu)) echo '<a class="add fb" href="'.$big_menu[0].'"><i class="fa fa-plus"></i> '.$big_menu[1].'</a>　';?>
+    <?php echo admin::submenu($_GET['menuid'],$big_menu); ?><i class="fa fa-circle"></i><a href="javascript:artdialog('setting','?m=poster&c=space&a=setting','<?php echo L('module_setting')?>',540,320);void(0);"><i class="fa fa-cog"></i> <?php echo L('module_setting')?></a>
     </div>
 </div>
-
+<div class="content-header"></div>
 <div class="pad-lr-10">
 <form name="myform" action="?m=poster&c=poster&a=listorder" method="post" id="myform">
 <input name="dosubmit" type="hidden" value="1">
@@ -63,7 +62,7 @@ if(is_array($infos)){
     </table>
 </div>
 <div class="list-footer table-checkable clear">
-    <div class="col-md-7 list-select">
+    <div class="col-md-5 col-sm-5 table-footer-button">
         <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
             <input type="checkbox" class="group-checkable" data-set=".checkboxes">
             <span></span>
@@ -73,7 +72,7 @@ if(is_array($infos)){
         <label><button type="submit" onClick="document.myform.action='?m=poster&c=poster&a=public_approval&passed=1'" class="btn dark btn-sm"> <i class="fa fa-stop-circle-o"></i> <?php echo L('stop')?></button></label>
         <label><button type="button" onClick="Dialog.confirm('<?php echo L('confirm', array('message' => L('selected')))?>',function(){document.myform.action='?m=poster&c=poster&a=delete';$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete')?></button></label>
     </div>
-    <div class="col-md-5 list-page"><?php echo $this->db->pages;?></div>
+    <div class="col-md-7 col-sm-7 text-right"><?php echo $this->db->pages;?></div>
 </div>
 </form>
 </div>

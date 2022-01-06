@@ -3,9 +3,10 @@ defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header', 'admin');
 ?>
 <div class="subnav">
-<div class="content-menu ib-a blue line-x">
-<a href="?m=formguide&c=formguide&a=init&s=3&menuid=<?php echo $this->input->get('menuid')?>"><em><?php echo L('表单向导');?></em></a>
+<div class="content-menu ib-a blue">
+<a href="?m=formguide&c=formguide&a=init&s=3&menuid=<?php echo $this->input->get('menuid')?>"><i class="fa fa-table"></i> <?php echo L('表单向导');?></a>
 </div></div>
+<div class="content-header"></div>
 <div class="pad-lr-10">
 <form name="myform" id="myform" action="?m=formguide&c=formguide_info&a=delete" method="post">
 <input name="dosubmit" type="hidden" value="1">
@@ -54,14 +55,14 @@ if(is_array($datas)){
     </table>
 </div>
 <div class="list-footer table-checkable clear">
-    <div class="col-md-7 list-select">
+    <div class="col-md-5 col-sm-5 table-footer-button">
         <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
             <input type="checkbox" class="group-checkable" data-set=".checkboxes">
             <span></span>
         </label>
         <label><button type="button" onClick="Dialog.confirm('<?php echo L('affirm_delete')?>',function(){document.myform.action='?m=formguide&c=formguide_info&a=public_delete&formid=<?php echo $formid?>';$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('remove_all_selected')?></button></label>
     </div>
-    <div class="col-md-5 list-page"><?php echo $pages?></div>
+    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
 </div>
 </form>
 </div>

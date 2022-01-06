@@ -214,10 +214,10 @@ class form {
 			$ext_str .= '
 				 <label style="margin-bottom: 5px;" class="mt-checkbox mt-checkbox-outline">
 				  <input name="is_auto_description_'.$field.'" type="checkbox" '.($tool_select_1 ? 'checked' : '').' value="1"> '.L('提取内容').' <span></span>
-				 </label><label style="width: 80px;margin-right: 15px;"><input type="text" name="auto_description_'.$field.'" value="200" class="input-text" style="width: 80px;"></label><label style="margin-right: 15px;">'.L('作为描述信息').'</label>';
+				 </label><label style="width: 80px;margin-right: 15px;"><input type="text" name="auto_description_'.$field.'" value="200" class="form-control" style="width: 80px;"></label><label style="margin-right: 15px;">'.L('作为描述信息').'</label>';
 			$ext_str .= '     <label style="margin-bottom: 5px;" class="mt-checkbox mt-checkbox-outline">
 				  <input name="is_auto_thumb_'.$field.'" type="checkbox" '.($tool_select_2 ? 'checked' : '').' value="1"> '.L('提取第').' <span></span>
-				 </label><label style="width: 80px;margin-right: 15px;"><input type="text" name="auto_thumb_'.$field.'" value="1" class="input-text" style="width: 80px;"></label><label style="margin-right: 15px;">'.L('个图片为缩略图').'</label>';
+				 </label><label style="width: 80px;margin-right: 15px;"><input type="text" name="auto_thumb_'.$field.'" value="1" class="form-control" style="width: 80px;"></label><label style="margin-right: 15px;">'.L('个图片为缩略图').'</label>';
 			if (!intval($enablesaveimage)) {
 				$ext_str .= '
 				 <label style="margin-bottom: 5px;" class="mt-checkbox mt-checkbox-outline">
@@ -295,7 +295,7 @@ class form {
 			'attachment' => $attachment,
 			'image_reduce' => $image_reduce,
 		), 'ENCODE');
-		return $str."<input type=\"text\" name=\"$name\" id=\"$id\" value=\"$value\" size=\"$size\" class=\"$class\" $ext/>  <input type=\"button\" class=\"button\" onclick=\"javascript:h5upload('".SELF."', '{$id}_images', '".L('attachmentupload')."','{$id}','submit_images','{$p}','{$moudle}','{$catid}','{$authkey}',".SYS_EDITOR.")\"/ value=\"".L('imagesupload')."\">";
+		return $str."<label><input type=\"text\" name=\"$name\" id=\"$id\" value=\"$value\" size=\"$size\" class=\"".($class ? $class : 'form-control input-xlarge')."\" $ext/></label> <label><button type=\"button\" onclick=\"javascript:h5upload('".SELF."', '{$id}_images', '".L('attachmentupload')."','{$id}','submit_images','{$p}','{$moudle}','{$catid}','{$authkey}',".SYS_EDITOR.")\" class=\"btn green\"> <i class=\"fa fa-plus\"></i> ".L('imagesupload')."</button></label>";
 	}
 
 	/**
@@ -339,7 +339,7 @@ class form {
 			'attachment' => $attachment,
 			'image_reduce' => $image_reduce,
 		), 'ENCODE');
-		return $str."<input type=\"text\" name=\"$name\" id=\"$id\" value=\"$value\" size=\"$size\" class=\"$class\" $ext/>  <input type=\"button\" class=\"button\" onclick=\"javascript:h5upload('".SELF."', '{$id}_files', '".L('attachmentupload')."','{$id}','submit_attachment','{$p}','{$moudle}','{$catid}','{$authkey}',".SYS_EDITOR.")\"/ value=\"".L('filesupload')."\">";
+		return $str."<label><input type=\"text\" name=\"$name\" id=\"$id\" value=\"$value\" size=\"$size\" class=\"".($class ? $class : 'form-control input-xlarge')."\" $ext/></label><label><button type=\"button\" onclick=\"javascript:h5upload('".SELF."', '{$id}_files', '".L('attachmentupload')."','{$id}','submit_attachment','{$p}','{$moudle}','{$catid}','{$authkey}',".SYS_EDITOR.")\" class=\"btn green\"> <i class=\"fa fa-plus\"></i> ".L('filesupload')."</button></label>";
 	}
 	
 	/**
@@ -502,7 +502,7 @@ class form {
 			$file = 'category_content_'.$siteid;
 		}
 		$result = getcache($file,'commons');
-		$string = '<select '.$str.'>';
+		$string = '<label><select '.$str.(!strpos($str,'class') ? ' class="form-control"' : '').'>';
 		if($default_option) $string .= "<option value='0'>$default_option</option>";
 		//加载权限表模型 ,获取会员组ID值,以备下面投入判断用
 		if($is_push=='1'){
@@ -540,7 +540,7 @@ class form {
 		$tree->init($categorys);
 		$string .= $tree->get_tree_category(0, $str, $str2);
 			
-		$string .= '</select>';
+		$string .= '</select></label>';
 		return $string;
 	}
 
@@ -554,7 +554,7 @@ class form {
 	 * 下拉选择框
 	 */
 	public static function select($array = array(), $id = 0, $str = '', $default_option = '') {
-		$string = '<select '.$str.'>';
+		$string = '<select '.$str.(!strpos($str,'class') ? ' class="form-control"' : '').'>';
 		$default_selected = (empty($id) && $default_option) ? 'selected' : '';
 		if($default_option) $string .= "<option value='' $default_selected>$default_option</option>";
 		if(!is_array($array) || count($array)== 0) return false;

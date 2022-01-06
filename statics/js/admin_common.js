@@ -794,12 +794,51 @@ function dr_ajax_list_open_close(e, url) {
 	});
 }
 // ajax 批量操作确认
+function ajax_option(url, msg, remove) {
+	Dialog.confirm(msg, function(){
+		var loading = layer.load(2, {
+			shade: [0.3,'#fff'], //0.1透明度的白色背景
+			time: 100000000
+		});
+		$.ajax({
+			type: "POST",
+			dataType: "json",
+			url: url,
+			data: $("#myform").serialize(),
+			success: function(json) {
+				layer.close(loading);
+				if (json.code) {
+					if (remove) {
+						// 批量移出去
+						var ids = json.data.ids;
+						if (typeof ids != "undefined" ) {
+							console.log(ids);
+							for ( var i = 0; i < ids.length; i++){
+								$("#dr_row_"+ids[i]).remove();
+							}
+						}
+					}
+					if (json.data.url) {
+						setTimeout("window.location.href = '"+json.data.url+"'", 2000);
+					} else {
+						setTimeout("window.location.reload(true)", 3000)
+					}
+				}
+				dr_tips(json.code, json.msg, json.data.time);
+			},
+			error: function(HttpRequest, ajaxOptions, thrownError) {
+				dr_ajax_alert_error(HttpRequest, ajaxOptions, thrownError)
+			}
+		});
+	});
+}
+// ajax 批量操作确认
 function dr_ajax_option(url, msg, remove) {
 	layer.confirm(msg,{
-			icon: 3,
-			shade: 0,
-			title: '提示',
-			btn: ['确定', '取消']
+		icon: 3,
+		shade: 0,
+		title: '提示',
+		btn: ['确定', '取消']
 	}, function(index){
 		layer.close(index);
 		var loading = layer.load(2, {

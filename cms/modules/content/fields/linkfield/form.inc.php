@@ -97,7 +97,7 @@
 			#search_view{$field} li.search_view span{margin-right: 30px;}
 			</style>
 			<div class="content_div">
-				<input type="text" size="41" id="cat_search{$field}" value="{$cat_field_value}" onfocus="if(this.value == this.defaultValue) this.value = ''" onblur="if(this.value.replace(' ','') == '') this.value = this.defaultValue;" class='input-text'><input name="info[{$fieldinfo['field']}]" id="{$fieldinfo['field']}" type="hidden" class='input-text' value="{$value}" size="41"/>
+				<input type="text" size="41" id="cat_search{$field}" value="{$cat_field_value}" onfocus="if(this.value == this.defaultValue) this.value = ''" onblur="if(this.value.replace(' ','') == '') this.value = this.defaultValue;" class='form-control'><input name="info[{$fieldinfo['field']}]" id="{$fieldinfo['field']}" type="hidden" class='form-control' value="{$value}" size="41"/>
 				<ul id="search_div{$field}"></ul>
 				<ul id="search_view{$field}" class="list-dot">{$multiple_field_value}</ul>
 			</div>

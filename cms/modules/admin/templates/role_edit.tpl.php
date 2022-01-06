@@ -15,10 +15,11 @@ jQuery(document).ready(function() {
 });
 </script>
 <div class="subnav">
-    <div class="content-menu ib-a blue line-x">
-        <a href='?m=admin&c=role&a=init&menuid=<?php echo $this->input->get('menuid');?>'><em>角色管理</em></a>
+    <div class="content-menu ib-a blue">
+        <a href='?m=admin&c=role&a=init&menuid=<?php echo $this->input->get('menuid');?>'><i class="fa fa-users"></i> 角色管理</a>
     </div>
 </div>
+<div class="content-header"></div>
 <div class="page-content main-content">
 <form action="?m=admin&c=role&a=edit" class="form-horizontal" method="post" name="myform" id="myform">
 <input name="page" id="dr_page" type="hidden" value="<?php echo $page;?>">

@@ -67,7 +67,7 @@ if(is_array($infos)){
 </table>
 </div>
 <div class="list-footer table-checkable clear">
-    <div class="col-md-7 list-select">
+    <div class="col-md-5 col-sm-5 table-footer-button">
         <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
             <input type="checkbox" class="group-checkable" data-set=".checkboxes">
             <span></span>
@@ -75,7 +75,7 @@ if(is_array($infos)){
         <label><button type="submit" onClick="return confirm('<?php echo L('pass_or_not')?>')" class="btn green btn-sm"> <i class="fa fa-refresh"></i> <?php echo L('pass_check')?></button></label>
         <label><button type="button" onclick="Dialog.confirm('<?php echo L('confirm_delete')?>',function(){document.myform.action='?m=guestbook&c=guestbook&a=delete';$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete')?></button></label>
     </div>
-    <div class="col-md-5 list-page"><?php echo $this->pages?></div>
+    <div class="col-md-7 col-sm-7 text-right"><?php echo $this->pages?></div>
 </div>
 </form>
 </div>

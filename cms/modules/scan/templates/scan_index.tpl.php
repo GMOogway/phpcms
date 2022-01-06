@@ -13,9 +13,9 @@ include $this->admin_tpl('header','admin');
 			<?php $dir = $file= ''; foreach ($list as $v){
 				$filename = basename($v);
 				if (is_dir($v)) {
-					$dir .= '<li><label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="dir[]" value="'.$v.'" '.(isset($scan['dir']) && is_array($scan['dir']) && !empty($scan['dir']) && in_array($v, $scan['dir']) ? 'checked' :'').'><span></span><img src="'.IMG_PATH.'folder.gif"> '.$filename.'</label></li>';
+					$dir .= '<li><label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="dir[]" value="'.$v.'" '.(isset($scan['dir']) && is_array($scan['dir']) && !empty($scan['dir']) && in_array($v, $scan['dir']) ? 'checked' :'').'><span></span><img src="'.IMG_PATH.'folder.png"> '.$filename.'</label></li>';
 				} elseif (substr(strtolower($v), -3, 3)=='php') {
-					$file .= '<li><label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="dir[]" value="'.$v.'" '.(isset($scan['dir']) && is_array($scan['dir']) && !empty($scan['dir']) && in_array($v, $scan['dir']) ? 'checked' :'').'><span></span><img src="'.IMG_PATH.'file.gif">'.$filename.'</label></li>';
+					$file .= '<li><label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="dir[]" value="'.$v.'" '.(isset($scan['dir']) && is_array($scan['dir']) && !empty($scan['dir']) && in_array($v, $scan['dir']) ? 'checked' :'').'><span></span><img src="'.IMG_PATH.'file.png">'.$filename.'</label></li>';
 				} else {
 					continue;
 				}

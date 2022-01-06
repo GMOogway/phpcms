@@ -3,11 +3,11 @@ defined('IS_ADMIN') or exit('No permission resources.');
 $show_header = true;
 include $this->admin_tpl('header','admin');
 ?>
-
 <div class="subnav"> 
-<div class="content-menu ib-a blue line-x">
-　<?php if(isset($big_menu)) { foreach($big_menu as $big) { echo '<a class="add fb" href="'.$big[0].'"><em>'.$big[1].'</em></a>　'; } }?>&nbsp;<a class="on" href="?m=special&c=special"><em><?php echo L('special_list')?></em></a></div>
+<div class="content-menu ib-a blue">
+　<?php if(isset($big_menu)) { foreach($big_menu as $big) { echo '<a class="add fb" href="'.$big[0].'"><i class="fa fa-plus"></i> '.$big[1].'</a>　'; } }?>&nbsp;<a class="on" href="?m=special&c=special"><i class="iconm fa fa-reorder"></i> <?php echo L('special_list')?></a></div>
 </div>
+<div class="content-header"></div>
 <div class="pad-10">
 <form name="myform" id="myform" action="?m=special&c=content&a=listorder&specialid=<?php echo $_GET['specialid']?>" method="post">
 <input name="dosubmit" type="hidden" value="1">
@@ -55,7 +55,7 @@ include $this->admin_tpl('header','admin');
      </table>
 </div>
 <div class="list-footer table-checkable clear">
-    <div class="col-md-7 list-select">
+    <div class="col-md-5 col-sm-5 table-footer-button">
         <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
             <input type="checkbox" class="group-checkable" data-set=".checkboxes">
             <span></span>
@@ -63,7 +63,7 @@ include $this->admin_tpl('header','admin');
         <label><button type="submit" class="btn green btn-sm"> <i class="fa fa-refresh"></i> <?php echo L('listorder')?></button></label>
         <label><button type="button" onclick="Dialog.confirm('<?php echo L('confirm', array('message' => L('selected')))?>',function(){document.myform.action='?m=special&c=content&a=delete&specialid=<?php echo $_GET['specialid']?>';$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete')?></button></label>
     </div>
-    <div class="col-md-5 list-page"><?php echo $pages?></div>
+    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
 </div>
 </form>
 </div>

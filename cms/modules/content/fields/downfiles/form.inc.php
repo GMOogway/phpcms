@@ -5,7 +5,7 @@
 			$value = string2array(new_html_entity_decode($value));
 			if(is_array($value)) {
 				foreach($value as $_k=>$_v) {
-				$list_str .= "<li id='multifile{$_k}'><input type='text' name='{$field}_fileurl[]' value='{$_v['fileurl']}' class='input-text'> <input type='text' name='{$field}_filename[]' value='{$_v['filename']}' placeholder='附件说明...' onfocus=\"if(this.value == this.defaultValue) this.value = ''\" onblur=\"if(this.value.replace(' ','') == '') this.value = this.defaultValue;\" class='input-textarea'> <a href='javascript:;' class='img-left'><i class='am-icon-angle-double-left am-icon-fw'></i>上移</a><a href='javascript:;' class='img-right'><i class='am-icon-angle-double-right am-icon-fw'></i>下移</a><a href=\"javascript:remove_div('multifile{$_k}')\">".L('remove_out')."</a></li>";
+				$list_str .= "<li id='multifile{$_k}'><input type='text' name='{$field}_fileurl[]' value='{$_v['fileurl']}' class='input-text'> <input type='text' name='{$field}_filename[]' value='{$_v['filename']}' placeholder='附件说明...' onfocus=\"if(this.value == this.defaultValue) this.value = ''\" onblur=\"if(this.value.replace(' ','') == '') this.value = this.defaultValue;\" class='input-textarea'> <a href='javascript:;' class='img-left btn blue btn-xs'><i class='fa fa-arrow-up'></i></a> <a href='javascript:;' class='img-right btn blue btn-xs'><i class='fa fa-arrow-down'></i></a> <a href=\"javascript:remove_div('multifile{$_k}')\" class=\"btn red btn-xs\"><i class=\"fa fa-trash\"></i></a></li>";
 				}
 			}
 		}
@@ -43,6 +43,6 @@
 			'attachment' => $attachment,
 			'image_reduce' => $image_reduce,
 		), 'ENCODE');
-		$string .= $str."<input type=\"button\"  class=\"button\" value=\"".L('multiple_file_list')."\" onclick=\"javascript:h5upload('".SELF."', '{$field}_multifile', '".L('attachment_upload')."','{$field}','change_multifile','{$p}','content','$this->catid','{$authkey}',".SYS_EDITOR.")\"/>    <input type=\"button\" class=\"button\" value=\"".L('add_remote_url')."\" onclick=\"add_multifile('{$field}')\">";
+		$string .= $str."<label><button type=\"button\" onclick=\"javascript:h5upload('".SELF."', '{$field}_multifile', '".L('attachment_upload')."','{$field}','change_multifile','{$p}','content','$this->catid','{$authkey}',".SYS_EDITOR.")\" class=\"btn green btn-sm\"> <i class=\"fa fa-plus\"></i> ".L('multiple_file_list')."</button></label> <label><button type=\"button\" onclick=\"add_multifile('{$field}')\" class=\"btn blue btn-sm\"> <i class=\"fa fa-plus\"></i> ".L('add_remote_url')."</button></label>";
 		return $string;
 	}
