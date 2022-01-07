@@ -11,14 +11,13 @@ if(empty($input->get('title')) || empty($input->get('url'))) {
 	exit('-2');	
 } else {
 	$title = $input->get('title');
-	$title = addslashes(urldecode($title));
+	$title = urldecode($title);
 	if(CHARSET != 'utf-8') {
 		$title = iconv('utf-8', CHARSET, $title);
-		$title = addslashes($title);
 	}
 	
 	$title = new_html_special_chars($title);
-	$url = safe_replace(addslashes(urldecode($input->get('url'))));
+	$url = safe_replace(urldecode($input->get('url')));
 	$url = trim_script($url);
 }
 $callback = safe_replace($input->get('callback'));

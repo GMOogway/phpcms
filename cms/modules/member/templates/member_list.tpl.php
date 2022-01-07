@@ -42,14 +42,14 @@ jQuery(document).ready(function() {
 					</div>
 				</div></label>
 				<?php if(cleck_admin($_SESSION['roleid'])) {?>
-				<label><?php echo form::select($sitelist, $siteid, 'name="siteid[]" class="form-control bs-select" data-title="'.L('all_site').'" multiple="multiple"');?></label>
+				<?php echo form::select($sitelist, $siteid, 'name="siteid[]" class="form-control bs-select" data-title="'.L('all_site').'" multiple="multiple"');?>
 				<?php }?>
 				<label><select name="status[]" class="form-control bs-select" data-title="<?php echo L('status')?>" multiple="multiple">
 					<option value='1' <?php if(isset($_GET['status']) && dr_in_array(1, $_GET['status'])){?>selected<?php }?>><?php echo L('lock')?></option>
 					<option value='0' <?php if(isset($_GET['status']) && dr_in_array(0, $_GET['status'])){?>selected<?php }?>><?php echo L('normal')?></option>
 				</select></label>
-				<label><?php echo form::select($modellist, $modelid, 'name="modelid[]" class="form-control bs-select" data-title="'.L('member_model').'" multiple="multiple"')?></label>
-				<label><?php echo form::select($grouplist, $groupid, 'name="groupid[]" class="form-control bs-select" data-title="'.L('member_group').'" multiple="multiple" data-actions-box="true"')?></label>
+				<?php echo form::select($modellist, $modelid, 'name="modelid[]" class="form-control bs-select" data-title="'.L('member_model').'" multiple="multiple"')?>
+				<?php echo form::select($grouplist, $groupid, 'name="groupid[]" class="form-control bs-select" data-title="'.L('member_group').'" multiple="multiple" data-actions-box="true"')?>
 				
 				<label><select name="type">
 					<option value='1' <?php if(isset($_GET['type']) && $_GET['type']==1){?>selected<?php }?>><?php echo L('username')?></option>

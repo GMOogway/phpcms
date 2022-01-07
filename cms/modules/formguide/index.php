@@ -73,7 +73,7 @@ class index {
 			$data = array();
 			require CACHE_MODEL_PATH.'formguide_input.class.php';
 			$formguide_input = new formguide_input($formid);
-			$data = new_addslashes($this->input->post('info'));
+			$data = $this->input->post('info');
 			$data = new_html_special_chars($data);
 			$data = $formguide_input->get($data);
 			$data['userid'] = $userid;

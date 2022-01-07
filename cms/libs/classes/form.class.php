@@ -554,7 +554,7 @@ class form {
 	 * 下拉选择框
 	 */
 	public static function select($array = array(), $id = 0, $str = '', $default_option = '') {
-		$string = '<select '.$str.(!strpos($str,'class') ? ' class="form-control"' : '').'>';
+		$string = '<label><select '.$str.(!strpos($str,'class') ? ' class="form-control"' : '').'>';
 		$default_selected = (empty($id) && $default_option) ? 'selected' : '';
 		if($default_option) $string .= "<option value='' $default_selected>$default_option</option>";
 		if(!is_array($array) || count($array)== 0) return false;
@@ -563,7 +563,7 @@ class form {
 				$selected = in_array($key, $id) ? 'selected' : '';
 				$string .= '<option value="'.$key.'" '.$selected.'>'.$value.'</option>';
 			}
-			$string .= '</select>';
+			$string .= '</select></label>';
 		} else {
 			$ids = array();
 			if(isset($id)) $ids = explode(',', $id);
@@ -571,7 +571,7 @@ class form {
 				$selected = in_array($key, $ids) ? 'selected' : '';
 				$string .= '<option value="'.$key.'" '.$selected.'>'.$value.'</option>';
 			}
-			$string .= '</select>';
+			$string .= '</select></label>';
 		}
 		return $string;
 	}

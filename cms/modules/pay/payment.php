@@ -212,7 +212,7 @@ class payment extends admin {
 	public function modify_deposit() {
 		if(isset($_POST['dosubmit'])) {
 			$username = isset($_POST['username']) && trim($_POST['username']) ? trim($_POST['username']) : dr_admin_msg(0,L('username').L('error'));
-			$usernote = isset($_POST['usernote']) && trim($_POST['usernote']) ? addslashes(trim($_POST['usernote'])) : dr_admin_msg(0,L('usernote').L('error'));	
+			$usernote = isset($_POST['usernote']) && trim($_POST['usernote']) ? trim($_POST['usernote']) : dr_admin_msg(0,L('usernote').L('error'));	
 			$userinfo = $this->get_useid($username);
 			if($userinfo) {	
 				//如果增加金钱或点数，想pay_account 中记录数据
@@ -299,7 +299,6 @@ class payment extends admin {
 		$username = isset($_GET['username']) && trim($_GET['username']) ? trim($_GET['username']) : exit(0);
 		if(CHARSET != 'utf-8') {
 			$username = iconv('utf-8', CHARSET, $username);
-			$username = addslashes($username);
 		}
 		$this->member_db = pc_base::load_model('member_model');
 		if ($r = $this->member_db->get_one(array('username'=>$username))){

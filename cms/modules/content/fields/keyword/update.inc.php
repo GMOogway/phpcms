@@ -9,7 +9,7 @@
 		pc_base::load_sys_func('iconv');
 		if (is_array($data) && !empty($data)) {
 			foreach ($data as $v) {
-				$v = defined('IS_ADMIN') && IS_ADMIN ? $v : safe_replace(addslashes($v));
+				$v = defined('IS_ADMIN') && IS_ADMIN ? $v : safe_replace($v);
 				$v = str_replace(array('//','#','.'),' ',$v);
 				if ($v) {
 					if (!$r = $keyword_db->get_one(array('keyword'=>$v, 'siteid'=>$siteid))) {

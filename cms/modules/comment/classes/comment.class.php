@@ -30,7 +30,6 @@ class comment {
 	 */
 	public function add($commentid, $siteid, $data, $id = '', $title = '', $url = '') {
 		//开始查询评论这条评论是否存在。
-		$title = new_addslashes($title);
 		if (!$comment = $this->comment_db->get_one(array('commentid'=>$commentid, 'siteid'=>$siteid), 'tableid, commentid')) { //评论不存在
 			//取得当前可以使用的内容数据表
 			$r = $this->comment_table_db->get_one('', 'tableid, total', 'tableid desc');
@@ -94,7 +93,6 @@ class comment {
 		if ($site['check']) {
 			$data['status'] = 0;
 		}
-		$data['content'] = addslashes($data['content']);
 		if ($comment_data_id = $this->comment_data_db->insert($data, true)) {
 			//需要审核，插入到审核表
 			if ($data['status']==0) {

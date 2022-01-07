@@ -99,7 +99,6 @@ class tag extends admin {
 				$tag = '{pc:block pos="'.$data.'"}';
 			}
 			$tag .= "\n".'{loop $data $n $r}'."\n".'<li><a href="{$r[\'url\']}" title="{$r[\'title\']}">{$r[\'title\']}</a></li>'."\n".'{/loop}'."\n".'{/pc}';
-			$tag = new_addslashes($tag);
 			$data = is_array($data) ? array2string($data) : $data;
 			$this->db->insert(array('siteid'=>$siteid, 'tag'=>$tag, 'name'=>$name, 'type'=>$type, 'module'=>$module, 'action'=>$action, 'data'=>$data, 'page'=>$this->input->post('page'), 'return'=>$this->input->post('return'), 'cache'=>$cache, 'num'=>$num));
 			if ($ac=='js') {
@@ -210,7 +209,6 @@ class tag extends admin {
 				$tag = '{pc:block pos="'.$data.'"}';
 			}
 			$tag .= "\n".'{loop $data $n $r}'."\n".'<li><a href="{$r[\'url\']}" title="{$r[\'title\']}">{$r[\'title\']}</a></li>'."\n".'{/loop}'."\n".'{/pc}';
-			$tag = new_addslashes($tag);
 			$data = is_array($data) ? array2string($data) : $data;
 			$this->db->update(array('siteid'=>$siteid, 'tag'=>$tag, 'name'=>$name, 'type'=>$type, 'module'=>$module, 'action'=>$action, 'data'=>$data, 'page'=>$this->input->post('page'), 'return'=>$this->input->post('return'), 'cache'=>$cache, 'num'=>$num), array('id'=>$id));
 			dr_admin_msg(1,'', '', '', 'edit');

@@ -20,7 +20,7 @@ include $this->admin_tpl('header','admin');
 					<option value='description' <?php if($this->input->get('field')=='description') echo 'selected';?>><?php echo L('description');?></option>
 					<option value='id' <?php if($this->input->get('field')=='id') echo 'selected';?>>ID</option>
 				</select></label>
-				<label><?php echo form::select_category('',(isset($catid) && $catid ? $catid : 0),'name="catid"',L('please_select_category'),$modelid,0,1);?></label>
+				<?php echo form::select_category('',(isset($catid) && $catid ? $catid : 0),'name="catid"',L('please_select_category'),$modelid,0,1);?>
 				<label><input name="keywords" type="text" value="<?php echo $this->input->get('keywords')?>" style="width:330px;" class="input-text" /></label>
 				<label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('search')?></button></label>
 	</div>

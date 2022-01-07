@@ -48,11 +48,10 @@ class cache_file {
 		}
 		if ($module == 'commons' || ($module == 'commons' && substr($name, 0, 16) != 'category_content')) {
 			$db = pc_base::load_model('cache_model');
-			$datas = new_addslashes($data);
 			if ($db->get_one(array('filename'=>$filename, 'path'=>'caches_'.$module.'/caches_'.$type.'/'), '`filename`')) {
-				$db->update(array('data'=>$datas), array('filename'=>$filename, 'path'=>'caches_'.$module.'/caches_'.$type.'/'));
+				$db->update(array('data'=>$data), array('filename'=>$filename, 'path'=>'caches_'.$module.'/caches_'.$type.'/'));
 			} else {
-				$db->insert(array('filename'=>$filename, 'path'=>'caches_'.$module.'/caches_'.$type.'/', 'data'=>$datas));
+				$db->insert(array('filename'=>$filename, 'path'=>'caches_'.$module.'/caches_'.$type.'/', 'data'=>$data));
 			}
 		}
 		

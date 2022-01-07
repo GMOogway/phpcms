@@ -319,7 +319,7 @@ class block_admin extends admin {
 			dr_admin_msg(0,L('nofound'), HTTP_REFERER);
 		}
 		$data['data'] = string2array($data['data']);
-		$this->db->update(array('data'=>new_addslashes($data['data']['data']), 'template'=>new_addslashes($data['data']['template'])), array('id'=>$data['blockid']));
+		$this->db->update(array('data'=>$data['data']['data'], 'template'=>$data['data']['template']), array('id'=>$data['blockid']));
 		if ($data['data']['type'] == 2) {
 			$block = pc_base::load_app_class('block_tag');
 			$block->template_url($data['blockid'], $data['data']['template']);

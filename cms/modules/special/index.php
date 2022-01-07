@@ -184,7 +184,7 @@ class index {
 		if ($_POST['dosubmit']) {
 			$r = $this->db->get_one(array('id'=>intval($_POST['id'])), '`title`, `url`');
 			$comment = pc_base::load_app_class('comment', 'comment');
-			if ($comment->add($commentid, $siteid, array('userid'=>$userid, 'username'=>$username, 'content'=>addslashes($_POST['content'])), '', $r['title'], $r['url'])) {
+			if ($comment->add($commentid, $siteid, array('userid'=>$userid, 'username'=>$username, 'content'=>$_POST['content']), '', $r['title'], $r['url'])) {
 				exit(remove_xss($username.'|'.SYS_TIME.'|'.$_POST['content']));
 			} else {
 				exit(0);

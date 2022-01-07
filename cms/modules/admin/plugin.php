@@ -171,7 +171,7 @@ class plugin extends admin {
 		if($op_status) {	
 			//向插件表中插入数据
 			
-			$plugin = array('name'=>new_addslashes($plugin_data['plugin']['name']),'identification'=>$plugin_data['identification'],'appid'=>$plugin_data['appid'],'description'=>new_addslashes($plugin_data['plugin']['description']),'dir'=>$plugin_data['dir'],'copyright'=>new_addslashes($plugin_data['plugin']['copyright']),'setting'=>array2string($plugin_data['plugin']['setting']),'iframe'=>array2string($plugin_data['plugin']['iframe']),'version'=>$plugin_data['plugin']['version'],'disable'=>'0');
+			$plugin = array('name'=>$plugin_data['plugin']['name'],'identification'=>$plugin_data['identification'],'appid'=>$plugin_data['appid'],'description'=>$plugin_data['plugin']['description'],'dir'=>$plugin_data['dir'],'copyright'=>$plugin_data['plugin']['copyright'],'setting'=>array2string($plugin_data['plugin']['setting']),'iframe'=>array2string($plugin_data['plugin']['iframe']),'version'=>$plugin_data['plugin']['version'],'disable'=>'0');
 			
 			$pluginid = $this->db->insert($plugin,TRUE);
 			

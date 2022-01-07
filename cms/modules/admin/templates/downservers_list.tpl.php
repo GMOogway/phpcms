@@ -6,7 +6,7 @@ include $this->admin_tpl('header');?>
 <table width="100%" cellspacing="0" class="search-form">
     <tbody>
 		<tr>
-		<td><div class="explain-col"><?php echo L('downserver_name')?>  <input type="text" value="" class="input-text" name="info[sitename]">    <?php echo L('downserver_url')?>   <input type="text" value="" class="input-text" name="info[siteurl]" size="50">  <?php echo L('downserver_site');?> <?php echo form::select($sitelist,self::get_siteid(),'name="info[siteid]"',$default)?> <input type="submit" value="<?php echo L('add');?>" class="button" name="dosubmit">
+		<td><div class="explain-col"><?php echo L('downserver_name')?> <label><input type="text" value="" class="input-text" name="info[sitename]"></label> <?php echo L('downserver_url')?> <label><input type="text" value="" class="input-text" name="info[siteurl]" size="50"></label> <?php echo L('downserver_site');?> <?php echo form::select($sitelist,self::get_siteid(),'name="info[siteid]"',$default)?> <label><input type="submit" value="<?php echo L('add');?>" class="button" name="dosubmit"></label>
 		</div>
 		</td>
 		</tr>

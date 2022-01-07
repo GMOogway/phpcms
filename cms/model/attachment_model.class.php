@@ -14,7 +14,6 @@ class attachment_model extends model {
 		$uploadfield = array();
 		$uploadfield = $uploadedfile;
 		unset($uploadfield['fn']);
-		$uploadfield = new_addslashes($uploadfield);
 		$this->insert($uploadfield);
 		$aid = $this->insert_id();
 		$uploadedfile['aid'] = $aid;

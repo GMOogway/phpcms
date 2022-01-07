@@ -246,7 +246,7 @@ final class template_cache {
 					if (strpos($val, '$')===0) {
 						$str .= "'$key'=>$val,";
 					} else {
-						$str .= "'$key'=>'".new_addslashes($val)."',";
+						$str .= "'$key'=>'".$val."',";
 					}
 				}
 			}

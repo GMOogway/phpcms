@@ -10,7 +10,7 @@ class formguide_form {
 		$this->input = pc_base::load_sys_class('input');
 		$this->formid = $formid;
 		$this->no_allowed = $no_allowed ? 'disabled=""' : '';
-		$this->fields = getcache('formguide_field_'.$formid, 'model');
+		$this->fields = getcache('model_field_'.$formid, 'model');
 		$this->siteid = get_siteid();
     }
 

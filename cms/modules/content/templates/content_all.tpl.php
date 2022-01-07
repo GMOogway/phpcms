@@ -28,7 +28,7 @@ body {background: #f5f6f8;}
 <div class="note note-danger my-content-top-tool">
     <p style='margin-bottom: 10px;'><?php 
         foreach($datas2 as $r) {
-            echo "<a href=\"?m=content&c=content&a=initall&modelid=".$r['modelid']."&menuid=".$this->input->get('menuid')."&pc_hash=".dr_get_csrf_token()."\" class=\"btn btn-sm";
+            echo "<a href=\"?m=content&c=content&a=initall&modelid=".$r['modelid']."&menuid=".$param['menuid']."&pc_hash=".dr_get_csrf_token()."\" class=\"btn btn-sm";
             if($r['modelid']==$modelid) {echo " green";} else {echo " blue";}
             if ($r['modelid']==2) {
                 echo "\"><i class=\"fa fa-download\"></i> ".$r['name']."(".$r['items'].")</a>".PHP_EOL;
@@ -47,8 +47,8 @@ echo "</p><p style='margin-bottom: 10px;'>";
 if(is_array($infos)){
     foreach($infos as $info){
         $total = $this->db->count(array('status'=>99,'username'=>$info['username']));
-        echo "<a href=\"?m=content&c=content&a=initall&modelid=".$modelid."&menuid=".$this->input->get('menuid')."&start_time=&end_time=&posids=&searchtype=2&keyword=".$info['username']."&pc_hash=".dr_get_csrf_token()."\" class=\"btn btn-sm";
-        if($info['username']==$this->input->get('keyword') && !$this->input->get('start_time') && !$this->input->get('end_time')) {echo ' green';} else {echo " blue";}
+        echo "<a href=\"?m=content&c=content&a=initall&modelid=".$modelid."&menuid=".$param['menuid']."&start_time=&end_time=&posids=&searchtype=2&keyword=".$info['username']."&pc_hash=".dr_get_csrf_token()."\" class=\"btn btn-sm";
+        if($info['username']==$param['keyword'] && !$param['start_time'] && !$param['end_time']) {echo ' green';} else {echo " blue";}
         echo "\">";
         echo $info['realname'] ? $info['realname'] : $info['username'];
         echo "(总".$total.")</a>".PHP_EOL;
@@ -58,8 +58,8 @@ echo "</p><p>";
 if(is_array($infos)){
     foreach($infos as $info){
         $total2 = $this->db->count("status=99 and username='".$info['username']."' and `inputtime` > '".strtotime(date("Ymd", time()))."' and `inputtime` < '".strtotime(date("Ymd", strtotime('+1 day',time())))."'");
-        echo "<a href=\"?m=content&c=content&a=initall&modelid=".$modelid."&menuid=".$this->input->get('menuid')."&start_time=".dr_date(SYS_TIME,'Y-m-d')."&end_time=".dr_date(SYS_TIME,'Y-m-d')."&posids=&searchtype=2&keyword=".$info['username']."&pc_hash=".dr_get_csrf_token()."\" class=\"btn btn-sm";
-        if($info['username']==$this->input->get('keyword') && dr_date(SYS_TIME,'Y-m-d')==$this->input->get('start_time') && dr_date(SYS_TIME,'Y-m-d')==$this->input->get('end_time')) {echo ' green';} else {echo " blue";}
+        echo "<a href=\"?m=content&c=content&a=initall&modelid=".$modelid."&menuid=".$param['menuid']."&start_time=".dr_date(SYS_TIME,'Y-m-d')."&end_time=".dr_date(SYS_TIME,'Y-m-d')."&posids=&searchtype=2&keyword=".$info['username']."&pc_hash=".dr_get_csrf_token()."\" class=\"btn btn-sm";
+        if($info['username']==$param['keyword'] && dr_date(SYS_TIME,'Y-m-d')==$param['start_time'] && dr_date(SYS_TIME,'Y-m-d')==$param['end_time']) {echo ' green';} else {echo " blue";}
         echo "\">";
         echo $info['realname'] ? $info['realname'] : $info['username'];
         echo "(今".$total2.")</a>".PHP_EOL;
@@ -68,7 +68,7 @@ if(is_array($infos)){
 ?></p>
 </div>
 <div class="right-card-box">
-    <div class="row table-search-tool" id="searchid"<?php if (!$this->input->get('search')) {?> style="display:none;"<?php }?>>
+    <div class="row table-search-tool" id="searchid"<?php if (!$param['search']) {?> style="display:none;"<?php }?>>
         <form name="searchform" action="" method="get" >
         <input type="hidden" value="content" name="m">
         <input type="hidden" value="content" name="c">
@@ -77,32 +77,32 @@ if(is_array($infos)){
         <input type="hidden" value="1" name="search">
         <input type="hidden" value="<?php echo dr_get_csrf_token();?>" name="pc_hash">
         <div class="col-md-12 col-sm-12">
+        <label><select id="posids" name="posids"><option value='' <?php if($param['posids']=='') echo 'selected';?>><?php echo L('all');?></option>
+        <option value="1" <?php if($param['posids']==1) echo 'selected';?>><?php echo L('elite');?></option>
+        <option value="2" <?php if($param['posids']==2) echo 'selected';?>><?php echo L('no_elite');?></option>
+        </select></label>
+        </div>
+        <div class="col-md-12 col-sm-12">
+        <label><select id="searchtype" name="searchtype" class="form-control">
+            <option value='0' <?php if($param['searchtype']==0) echo 'selected';?>><?php echo L('title');?></option>
+            <option value='1' <?php if($param['searchtype']==1) echo 'selected';?>><?php echo L('intro');?></option>
+            <option value='2' <?php if($param['searchtype']==2) echo 'selected';?>><?php echo L('username');?></option>
+            <option value='3' <?php if($param['searchtype']==3) echo 'selected';?>>ID</option>
+        </select></label>
+        <label><i class="fa fa-caret-right"></i></label>
+        <label><input type="text" class="form-control" placeholder="" value="<?php echo $param['keyword'];?>" name="keyword" /></label>
+        </div>
+        <div class="col-md-12 col-sm-12">
         <label><div class="formdate">
             <div class="input-group input-medium date-picker input-daterange">
-                <input type="text" class="form-control" value="<?php echo $this->input->get('start_time');?>" name="start_time" id="start_time">
+                <input type="text" class="form-control" value="<?php echo $param['start_time'];?>" name="start_time" id="start_time">
                 <span class="input-group-addon"> - </span>
-                <input type="text" class="form-control" value="<?php echo $this->input->get('end_time');?>" name="end_time" id="end_time">
+                <input type="text" class="form-control" value="<?php echo $param['end_time'];?>" name="end_time" id="end_time">
             </div>
         </div></label>
         </div>
         <div class="col-md-12 col-sm-12">
-        <label><select id="posids" name="posids"><option value='' <?php if($this->input->get('posids')=='') echo 'selected';?>><?php echo L('all');?></option>
-        <option value="1" <?php if($this->input->get('posids')==1) echo 'selected';?>><?php echo L('elite');?></option>
-        <option value="2" <?php if($this->input->get('posids')==2) echo 'selected';?>><?php echo L('no_elite');?></option>
-        </select></label>
-        </div>
-        <div class="col-md-12 col-sm-12">
-        <label><select id="searchtype" name="searchtype">
-            <option value='0' <?php if($this->input->get('searchtype')==0) echo 'selected';?>><?php echo L('title');?></option>
-            <option value='1' <?php if($this->input->get('searchtype')==1) echo 'selected';?>><?php echo L('intro');?></option>
-            <option value='2' <?php if($this->input->get('searchtype')==2) echo 'selected';?>><?php echo L('username');?></option>
-            <option value='3' <?php if($this->input->get('searchtype')==3) echo 'selected';?>>ID</option>
-        </select></label>
-        <label><i class="fa fa-caret-right"></i></label>
-        <label><input class="form-control" name="keyword" id="keyword" value="<?php if($this->input->get('keyword')) echo $this->input->get('keyword');?>" placeholder="请输入关键字"></label>
-        </div>
-        <div class="col-md-12 col-sm-12">
-        <label><button type="submit" class="btn green"><i class="fa fa-search"></i> <?php echo L('search');?></button></label>
+        <label><button type="submit" class="btn blue btn-sm onloading"><i class="fa fa-search"></i> <?php echo L('search');?></button></label>
         </div>
         </form>
     </div>

@@ -38,7 +38,7 @@ class tag {
 		define('SITEID', $siteid);
 		define('ISMOBILE', 1);
 		define('IS_HTML', 0);
-		$tag = safe_replace(addslashes($this->input->get('tag')));
+		$tag = safe_replace($this->input->get('tag'));
 		$keyword_data_db = pc_base::load_model('keyword_data_model');
 		//获取标签id
 		$r = $this->keyword_db->get_one(array('keyword'=>$tag, 'siteid'=>$this->siteid), 'id');

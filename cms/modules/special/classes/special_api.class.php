@@ -48,7 +48,7 @@ class special_api {
 						$url = $site_info['domain'].'index.php?m=special&c=index&a=type&specialid='.$specialid.'&typeid='.$typeid;
 					}
 				} else {
-					if($special_info['ishtml']) $url = addslashes($app_path.SYS_HTML_ROOT.'/special/'.$special_info['filename'].'/'.$v['typedir'].'/'.'type-'.$typeid.'.html');
+					if($special_info['ishtml']) $url = $app_path.SYS_HTML_ROOT.'/special/'.$special_info['filename'].'/'.$v['typedir'].'/'.'type-'.$typeid.'.html';
 					else $url = APP_PATH.'index.php?m=special&c=index&a=type&specialid='.$specialid.'&typeid='.$typeid;
 				}
 				$this->type_db->update(array('url'=>$url), array('typeid'=>$typeid));
@@ -64,7 +64,7 @@ class special_api {
 							$url = $site_info['domain'].'index.php?m=special&c=index&a=type&specialid='.$specialid.'&typeid='.$typeid;
 						}
 					} else {
-						if($special_info['ishtml']) $url = addslashes($app_path.SYS_HTML_ROOT.'/special/'.$special_info['filename'].'/'.$v['typedir'].'/'.'type-'.$typeid.'.html');
+						if($special_info['ishtml']) $url = $app_path.SYS_HTML_ROOT.'/special/'.$special_info['filename'].'/'.$v['typedir'].'/'.'type-'.$typeid.'.html';
 						else $url = APP_PATH.'index.php?m=special&c=index&a=type&specialid='.$specialid.'&typeid='.$typeid;
 					}
 					$v['url'] = $url;
@@ -81,7 +81,7 @@ class special_api {
 							$url = $site_info['domain'].'index.php?m=special&c=index&a=type&specialid='.$specialid.'&typeid='.$v['typeid'];
 						}
 					} else {
-						if($special_info['ishtml']) $url = addslashes($app_path.SYS_HTML_ROOT.'/special/'.$special_info['filename'].'/'.$v['typedir'].'/'.'type-'.$v['typeid'].'.html');
+						if($special_info['ishtml']) $url = $app_path.SYS_HTML_ROOT.'/special/'.$special_info['filename'].'/'.$v['typedir'].'/'.'type-'.$v['typeid'].'.html';
 						else $url = APP_PATH.'index.php?m=special&c=index&a=type&specialid='.$specialid.'&typeid='.$v['typeid'];
 					}
 					$v['url'] = $url;
@@ -272,12 +272,11 @@ class special_api {
 		if ($info) {
 			$info['curl'] = $info['id'].'|'.$info['catid'];
 			unset($info['id'], $info['catid']);
-			if(!$this->c_db->get_one(array('title'=>addslashes($info['title']), 'specialid'=>$specialid, 'typeid'=>$typeid))) {
+			if(!$this->c_db->get_one(array('title'=>$info['title'], 'specialid'=>$specialid, 'typeid'=>$typeid))) {
 				$info['specialid'] = $specialid;
 				$info['typeid'] = $typeid;
 				$info['islink'] = 1;
 				$info['listorder'] = $listorder;
-				$info = new_addslashes($info);
 				return $this->c_db->insert($info, true);
 			}
 		}

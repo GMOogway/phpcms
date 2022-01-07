@@ -27,7 +27,7 @@ jQuery(document).ready(function() {
 		<tr>
 		<td>
 		<div class="explain-col">
-		<label><?php echo  form::select(array('1'=>L('username'), '2'=>L('userid')), $user_type, 'name="user_type"')?></label>
+		<?php echo  form::select(array('1'=>L('username'), '2'=>L('userid')), $user_type, 'name="user_type"')?>
 		<label><i class="fa fa-caret-right"></i></label>
 		<label><input type="text" value="<?php echo $username?>" class="input-text" name="username"></label>
 		<?php echo L('from')?> <label><div class="formdate">
@@ -37,10 +37,10 @@ jQuery(document).ready(function() {
                 <input type="text" class="form-control" value="<?php echo ($endtime ? format::date($endtime) : '');?>" name="endtime">
             </div>
         </div></label>
-		<label><?php echo form::select(array(''=>L('op'), '1'=>L('username'), '2'=>L('userid')), $op_type, 'name="op_type"')?></label>
+		<?php echo form::select(array(''=>L('op'), '1'=>L('username'), '2'=>L('userid')), $op_type, 'name="op_type"')?>
 		<label><i class="fa fa-caret-right"></i></label>
 		<label><input type="text" value="<?php echo $op?>" class="input-text" name="op"></label>
-		<label><?php echo form::select(array(''=>L('expenditure_patterns'), '1'=>L('money'), '2'=>L('point')), $type, 'name="type"')?></label>
+		<?php echo form::select(array(''=>L('expenditure_patterns'), '1'=>L('money'), '2'=>L('point')), $type, 'name="type"')?>
 		<label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('search')?></button></label>
 		</div>
 		</td>

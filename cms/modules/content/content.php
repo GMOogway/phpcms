@@ -85,28 +85,28 @@ class content extends admin {
 			if($this->input->get('reject')) $status = 0;
 			$where = 'catid='.$catid.' AND status='.$status;
 			//搜索
-			if($this->input->get('start_time')) {
-				$where .= ' AND '.$date_field.' BETWEEN ' . max((int)strtotime(strpos($this->input->get('start_time'), ' ') ? $this->input->get('start_time') : $this->input->get('start_time').' 00:00:00'), 1) . ' AND ' . ($this->input->get('end_time') ? (int)strtotime(strpos($this->input->get('end_time'), ' ') ? $this->input->get('end_time') : $this->input->get('end_time').' 23:59:59') : SYS_TIME);
+			$param = $this->input->get();
+			if($param['start_time']) {
+				$where .= ' AND '.$date_field.' BETWEEN ' . max((int)strtotime(strpos($param['start_time'], ' ') ? $param['start_time'] : $param['start_time'].' 00:00:00'), 1) . ' AND ' . ($param['end_time'] ? (int)strtotime(strpos($param['end_time'], ' ') ? $param['end_time'] : $param['end_time'].' 23:59:59') : SYS_TIME);
 			}
-			if($this->input->get('keyword')) {
-				$param['keyword'] = $this->input->get('keyword');
+			if($param['keyword']) {
 				$type_array = array('title','description','username');
-				$searchtype = intval($this->input->get('searchtype'));
+				$searchtype = intval($param['searchtype']);
 				if($searchtype < 3) {
 					$searchtype = $type_array[$searchtype];
-					$keyword = clearhtml(trim($this->input->get('keyword')));
+					$keyword = clearhtml(trim($param['keyword']));
 					$where .= " AND `$searchtype` like '%".addslashes($keyword)."%'";
 				} elseif($searchtype==3) {
-					$keyword = intval($this->input->get('keyword'));
+					$keyword = intval($param['keyword']);
 					$where .= " AND `id`='$keyword'";
 				}
 			}
-			if($this->input->get('posids') && !empty($this->input->get('posids'))) {
-				$posids = $this->input->get('posids')==1 ? intval($this->input->get('posids')) : 0;
+			if($param['posids'] && !empty($param['posids'])) {
+				$posids = $param['posids']==1 ? intval($param['posids']) : 0;
 				$where .= " AND `posids` = '$posids'";
 			}
-			$pagesize = $this->input->get('limit') ? $this->input->get('limit') : SYS_ADMIN_PAGESIZE;
-			$order = $this->input->get('order') ? $this->input->get('order') : ($this->form_cache['setting']['order'] ? dr_safe_replace($this->form_cache['setting']['order']) : 'id desc');
+			$pagesize = $param['limit'] ? $param['limit'] : SYS_ADMIN_PAGESIZE;
+			$order = $param['order'] ? $param['order'] : ($this->form_cache['setting']['order'] ? dr_safe_replace($this->form_cache['setting']['order']) : 'id desc');
 			$datas = $this->db->listinfo($where,$order,$this->input->get('page'),$pagesize);
 			$pages = $this->db->pages;
 			$pc_hash = dr_get_csrf_token();
@@ -149,28 +149,28 @@ class content extends admin {
 			if($this->db->table_name==$this->db->db_tablepre) dr_admin_msg(0,L('model_table_not_exists'));
 			$where = 'catid='.$catid.' AND status=100';
 			//搜索
-			if($this->input->get('start_time')) {
-				$where .= ' AND '.$date_field.' BETWEEN ' . max((int)strtotime(strpos($this->input->get('start_time'), ' ') ? $this->input->get('start_time') : $this->input->get('start_time').' 00:00:00'), 1) . ' AND ' . ($this->input->get('end_time') ? (int)strtotime(strpos($this->input->get('end_time'), ' ') ? $this->input->get('end_time') : $this->input->get('end_time').' 23:59:59') : SYS_TIME);
+			$param = $this->input->get();
+			if($param['start_time']) {
+				$where .= ' AND '.$date_field.' BETWEEN ' . max((int)strtotime(strpos($param['start_time'], ' ') ? $param['start_time'] : $param['start_time'].' 00:00:00'), 1) . ' AND ' . ($param['end_time'] ? (int)strtotime(strpos($param['end_time'], ' ') ? $param['end_time'] : $param['end_time'].' 23:59:59') : SYS_TIME);
 			}
-			if($this->input->get('keyword')) {
-				$param['keyword'] = $this->input->get('keyword');
+			if($param['keyword']) {
 				$type_array = array('title','description','username');
-				$searchtype = intval($this->input->get('searchtype'));
+				$searchtype = intval($param['searchtype']);
 				if($searchtype < 3) {
 					$searchtype = $type_array[$searchtype];
-					$keyword = clearhtml(trim($this->input->get('keyword')));
+					$keyword = clearhtml(trim($param['keyword']));
 					$where .= " AND `$searchtype` like '%".addslashes($keyword)."%'";
 				} elseif($searchtype==3) {
-					$keyword = intval($this->input->get('keyword'));
+					$keyword = intval($param['keyword']);
 					$where .= " AND `id`='$keyword'";
 				}
 			}
-			if($this->input->get('posids') && !empty($this->input->get('posids'))) {
-				$posids = $this->input->get('posids')==1 ? intval($this->input->get('posids')) : 0;
+			if($param['posids'] && !empty($param['posids'])) {
+				$posids = $param['posids']==1 ? intval($param['posids']) : 0;
 				$where .= " AND `posids` = '$posids'";
 			}
-			$pagesize = $this->input->get('limit') ? $this->input->get('limit') : SYS_ADMIN_PAGESIZE;
-			$order = $this->input->get('order') ? $this->input->get('order') : ($this->form_cache['setting']['order'] ? dr_safe_replace($this->form_cache['setting']['order']) : 'id desc');
+			$pagesize = $param['limit'] ? $param['limit'] : SYS_ADMIN_PAGESIZE;
+			$order = $param['order'] ? $param['order'] : ($this->form_cache['setting']['order'] ? dr_safe_replace($this->form_cache['setting']['order']) : 'id desc');
 			$datas = $this->db->listinfo($where,$order,$this->input->get('page'),$pagesize);
 			$pages = $this->db->pages;
 			include $this->admin_tpl('content_recycle');
@@ -204,28 +204,28 @@ class content extends admin {
 		if($this->db->table_name==$this->db->db_tablepre) dr_admin_msg(0,L('model_table_not_exists'));
 		$where = 'status=99';
 		//搜索
-		if($this->input->get('start_time')) {
-			$where .= ' AND '.$date_field.' BETWEEN ' . max((int)strtotime(strpos($this->input->get('start_time'), ' ') ? $this->input->get('start_time') : $this->input->get('start_time').' 00:00:00'), 1) . ' AND ' . ($this->input->get('end_time') ? (int)strtotime(strpos($this->input->get('end_time'), ' ') ? $this->input->get('end_time') : $this->input->get('end_time').' 23:59:59') : SYS_TIME);
+		$param = $this->input->get();
+		if($param['start_time']) {
+			$where .= ' AND '.$date_field.' BETWEEN ' . max((int)strtotime(strpos($param['start_time'], ' ') ? $param['start_time'] : $param['start_time'].' 00:00:00'), 1) . ' AND ' . ($param['end_time'] ? (int)strtotime(strpos($param['end_time'], ' ') ? $param['end_time'] : $param['end_time'].' 23:59:59') : SYS_TIME);
 		}
-		if($this->input->get('keyword')) {
-			$param['keyword'] = $this->input->get('keyword');
+		if($param['keyword']) {
 			$type_array = array('title','description','username');
-			$searchtype = intval($this->input->get('searchtype'));
+			$searchtype = intval($param['searchtype']);
 			if($searchtype < 3) {
 				$searchtype = $type_array[$searchtype];
-				$keyword = clearhtml(trim($this->input->get('keyword')));
+				$keyword = clearhtml(trim($param['keyword']));
 				$where .= " AND `$searchtype` like '%".addslashes($keyword)."%'";
 			} elseif($searchtype==3) {
-				$keyword = intval($this->input->get('keyword'));
+				$keyword = intval($param['keyword']);
 				$where .= " AND `id`='$keyword'";
 			}
 		}
-		if($this->input->get('posids') && !empty($this->input->get('posids'))) {
-			$posids = $this->input->get('posids')==1 ? intval($this->input->get('posids')) : 0;
+		if($param['posids'] && !empty($param['posids'])) {
+			$posids = $param['posids']==1 ? intval($param['posids']) : 0;
 			$where .= " AND `posids` = '$posids'";
 		}
-		$pagesize = $this->input->get('limit') ? $this->input->get('limit') : SYS_ADMIN_PAGESIZE;
-		$order = $this->input->get('order') ? $this->input->get('order') : ($this->form_cache['setting']['order'] ? dr_safe_replace($this->form_cache['setting']['order']) : 'id desc');
+		$pagesize = $param['limit'] ? $param['limit'] : SYS_ADMIN_PAGESIZE;
+		$order = $param['order'] ? $param['order'] : ($this->form_cache['setting']['order'] ? dr_safe_replace($this->form_cache['setting']['order']) : 'id desc');
 		$datas = $this->db->listinfo($where,$order,$this->input->get('page'),$pagesize);
 		$pages = $this->db->pages;
 		include $this->admin_tpl('content_all');
@@ -1474,7 +1474,7 @@ class content extends admin {
 				$tag = '';
 				$sql .= "INSERT INTO `".$db.'` VALUES(';
 				foreach ($d as $_f => $_v) {
-					$sql .= $tag.'\''.addslashes($_v).'\'';
+					$sql .= $tag.'\''.$_v.'\'';
 					$tag = ',';
 				}
 				$sql .= ');'."\r\n";

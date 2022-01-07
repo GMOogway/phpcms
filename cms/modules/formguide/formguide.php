@@ -118,7 +118,7 @@ class formguide extends admin {
 				foreach ($setting['list_field'] as $t) {
 					if ($t['func']
 						&& !method_exists(pc_base::load_sys_class('function_list'), $t['func']) && !function_exists($t['func'])) {
-						dr_json(0, L('列表回调函数['.$t['func'].']未定义', ));
+						dr_json(0, L('列表回调函数['.$t['func'].']未定义'));
 					}
 				}
 			}
@@ -278,7 +278,7 @@ class formguide extends admin {
 			dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
 		}
 		$formid = intval($this->input->get('formid'));
-		$fields = getcache('formguide_field_'.$formid, 'model');
+		$fields = getcache('model_field_'.$formid, 'model');
 		$f_info = $this->db->get_one(array('modelid'=>$formid, 'siteid'=>$this->get_siteid()), 'tablename');
 		$tablename = 'form_'.$f_info['tablename'];
 		$m_db = pc_base::load_model('sitemodel_field_model');

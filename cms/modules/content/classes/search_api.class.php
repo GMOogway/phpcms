@@ -58,7 +58,7 @@ class search_api extends admin {
 				}
 			}
 			$temp['fulltextcontent'] = str_replace("'",'',$fulltextcontent);
-			$temp['title'] = addslashes($r['title']);
+			$temp['title'] = $r['title'];
 			$temp['adddate'] = $r['inputtime'];
 			$data[$r['id']] = $temp;
 		}

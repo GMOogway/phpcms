@@ -75,12 +75,10 @@ class slider extends admin {
 			$slider = $this->input->post('slider');
 			$slider['addtime'] = SYS_TIME;
 			$slider['siteid'] = $this->get_siteid();
-			
 			if ($slider['image']) {
 				$slider['image'] = safe_replace($slider['image']);
 			}
-			$data = new_addslashes($slider);
-			$sliderid = $this->db->insert($data,true);
+			$sliderid = $this->db->insert($slider,true);
 			if(!$sliderid) return FALSE; 
  			$siteid = $this->get_siteid();
 	 		//更新附件状态

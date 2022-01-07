@@ -32,7 +32,7 @@ jQuery(document).ready(function() {
                 <input type="text" class="form-control" value="<?php echo $end_addtime;?>" name="info[end_addtime]">
             </div>
         </div></label>
-<label><?php echo form::select($trade_status,$status,'name="info[status]"', L('all_status'))?></label>
+<?php echo form::select($trade_status,$status,'name="info[status]"', L('all_status'))?>
 <label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('search')?></button></label>
 </div>
 </form>

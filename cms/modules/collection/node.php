@@ -136,7 +136,6 @@ class node extends admin {
 					dr_admin_msg(0,L('nodename').L('exists'), HTTP_REFERER);
 				}
 				$data['name'] = $name;
-				$data = new_addslashes($data);
 				if ($this->db->insert($data)) {
 					dr_admin_msg(1,L('operation_success'), '', '', 'test');
 				} else {
@@ -169,7 +168,6 @@ class node extends admin {
 			}
 			$data['name'] = $name;
 			$data['siteid'] = $this->get_siteid();
-			$data = new_addslashes($data);
 			if ($this->db->insert($data)) {
 				dr_admin_msg(1,L('operation_success'), '', '', 'test');
 			} else {
@@ -292,7 +290,6 @@ class node extends admin {
 				$re = 0;
 				if (is_array($url) && !empty($url)) foreach ($url as $v) {
 					if (empty($v['url']) || empty($v['title'])) continue;
-					$v = new_addslashes($v);
 					$v['title'] = clearhtml($v['title']);
 					$md5 = md5($v['url']);
 					if (!$history_db->get_one(array('md5'=>$md5, 'siteid'=>$this->get_siteid()))) {

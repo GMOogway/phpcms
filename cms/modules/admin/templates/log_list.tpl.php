@@ -25,11 +25,11 @@ jQuery(document).ready(function() {
 <table width="100%" cellspacing="0" class="search-form">
     <tbody>
 		<tr>
-		<td><div class="explain-col"><?php echo L('module')?>: <label><?php echo form::select($module_arr,'','name="search[module]"',$default)?></label> <?php echo L('username')?> <label><input type="text" value="" class="input-text" name="search[username]" size='10'></label>  <?php echo L('times')?> <label><div class="formdate">
+		<td><div class="explain-col"><?php echo L('module')?>: <?php echo form::select($module_arr,'','name="search[module]"',$default)?> <?php echo L('username')?> <label><input type="text" value="" class="input-text" name="search[username]" size='10'></label>  <?php echo L('times')?> <label><div class="formdate">
             <div class="input-group input-medium date-picker input-daterange">
-                <input type="text" class="form-control" value="<?php echo $this->input->get('search')['start_time'];?>" name="search[start_time]">
+                <input type="text" class="form-control" value="<?php echo $start_time;?>" name="search[start_time]">
                 <span class="input-group-addon"> <?php echo L('to')?> </span>
-                <input type="text" class="form-control" value="<?php echo $this->input->get('search')['end_time'];?>" name="search[end_time]">
+                <input type="text" class="form-control" value="<?php echo $end_time;?>" name="search[end_time]">
             </div>
         </div></label>
 		<label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('determine_search')?></button></label>

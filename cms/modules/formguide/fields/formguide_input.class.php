@@ -7,7 +7,7 @@ class formguide_input {
 	function __construct($formid) {
 		$this->input = pc_base::load_sys_class('input');
 		$this->formid = $formid;
-		$this->fields = getcache('formguide_field_'.$formid, 'model');
+		$this->fields = getcache('model_field_'.$formid, 'model');
 		$this->siteid = get_siteid();
 		//初始化附件类
 		pc_base::load_sys_class('download','',0);

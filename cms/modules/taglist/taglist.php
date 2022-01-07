@@ -21,22 +21,22 @@ class taglist extends admin {
 	
 	public function add() {
  		if(isset($_POST['dosubmit'])) {
-			if(empty($_POST['tag']['keyword'])) {
+			$tag = $this->input->post('tag');
+			if(empty($tag['keyword'])) {
 				dr_admin_msg(0,L('关键字不能为空'),HTTP_REFERER);
 			} else {
-				$_POST['tag']['keyword'] = safe_replace($_POST['tag']['keyword']);
+				$tag['keyword'] = safe_replace($tag['keyword']);
 			}
-			if((!$_POST['tag']['pinyin']) || empty($_POST['tag']['pinyin'])) {
+			if((!$tag['pinyin']) || empty($tag['pinyin'])) {
 				$pinyin = pc_base::load_sys_class('pinyin');
-				$py = $pinyin->result($_POST['tag']['keyword']);
+				$py = $pinyin->result($tag['keyword']);
 				if (strlen($py) > 12) {
-					$py = $pinyin->result($_POST['tag']['keyword'], 0);
+					$py = $pinyin->result($tag['keyword'], 0);
 				}
-				$_POST['tag']['pinyin'] = $py;
+				$tag['pinyin'] = $py;
 			}
-			$_POST['tag']['siteid'] = $this->get_siteid();
-			$data = new_addslashes($_POST['tag']);
-			if($this->db->insert($data,true)){
+			$tag['siteid'] = $this->get_siteid();
+			if($this->db->insert($tag,true)){
 				dr_admin_msg(1,L('operation_success'),HTTP_REFERER,'', 'add');
 			}else{		
 			 return FALSE; 
@@ -51,17 +51,18 @@ class taglist extends admin {
  			$id = intval($_GET['id']);
 			echo $id;
 			if($id < 1) return false;
-			if(!is_array($_POST['tag']) || empty($_POST['tag'])) dr_admin_msg(0,L('参数错误'),HTTP_REFERER);
-			if((!$_POST['tag']['keyword']) || empty($_POST['tag']['keyword'])) dr_admin_msg(0,L('关键字不能为空'),HTTP_REFERER);
-			if((!$_POST['tag']['pinyin']) || empty($_POST['tag']['pinyin'])) {
+			$tag = $this->input->post('tag');
+			if(!is_array($tag) || empty($tag)) dr_admin_msg(0,L('参数错误'),HTTP_REFERER);
+			if((!$tag['keyword']) || empty($tag['keyword'])) dr_admin_msg(0,L('关键字不能为空'),HTTP_REFERER);
+			if((!$tag['pinyin']) || empty($tag['pinyin'])) {
 				$pinyin = pc_base::load_sys_class('pinyin');
-				$py = $pinyin->result($_POST['tag']['keyword']);
+				$py = $pinyin->result($tag['keyword']);
 				if (strlen($py) > 12) {
-					$py = $pinyin->result($_POST['tag']['keyword'], 0);
+					$py = $pinyin->result($tag['keyword'], 0);
 				}
-				$_POST['tag']['pinyin'] = $py;
+				$tag['pinyin'] = $py;
 			}
-			$this->db->update($_POST['tag'],array('id'=>$id));
+			$this->db->update($tag,array('id'=>$id));
 			dr_admin_msg(1,L('operation_success'),'?m=taglist&c=taglist&a=edit','', 'edit');
 		}else{
 			$info = $this->db->get_one(array('id'=>$_GET['id']));

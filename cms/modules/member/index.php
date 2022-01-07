@@ -627,7 +627,7 @@ class index extends foreground {
 			if (!$rt['code']) {
 				showmessage($rt['msg'], HTTP_REFERER);
 			}
-			$password = isset($_POST['password']) && trim($_POST['password']) ? addslashes(urldecode(trim($_POST['password']))) : showmessage(L('password_empty'), HTTP_REFERER);
+			$password = isset($_POST['password']) && trim($_POST['password']) ? urldecode(trim($_POST['password'])) : showmessage(L('password_empty'), HTTP_REFERER);
 			is_badword($_POST['password'])==false ? trim($_POST['password']) : showmessage(L('password_format_incorrect'), HTTP_REFERER);
 			
 			//密码错误剩余重试次数
@@ -975,7 +975,6 @@ class index extends foreground {
 		$username = isset($_GET['username']) && trim($_GET['username']) && is_username(trim($_GET['username'])) ? trim($_GET['username']) : exit(0);
 		if(CHARSET != 'utf-8') {
 			$username = iconv('utf-8', CHARSET, $username);
-			$username = addslashes($username);
 		}
 		$username = safe_replace($username);
 		//首先判断会员审核表
@@ -996,7 +995,6 @@ class index extends foreground {
 		$nickname = isset($_GET['nickname']) && trim($_GET['nickname']) && is_username(trim($_GET['nickname'])) ? trim($_GET['nickname']) : exit('0');
 		if(CHARSET != 'utf-8') {
 			$nickname = iconv('utf-8', CHARSET, $nickname);
-			$nickname = addslashes($nickname);
 		} 
 		//首先判断会员审核表
 		$this->verify_db = pc_base::load_model('member_verify_model');
@@ -1007,7 +1005,7 @@ class index extends foreground {
 			$userid = intval($_GET['userid']);
 			//如果是会员修改，而且NICKNAME和原来优质一致返回1，否则返回0
 			$info = get_memberinfo($userid);
-			if($info['nickname'] == $nickname){//未改变
+			if($info['nickname'] == addslashes($nickname)){//未改变
 				exit('1');
 			}else{//已改变，判断是否已有此名
 				$res = $this->db->get_one(array('nickname'=>$nickname));

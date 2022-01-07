@@ -56,7 +56,7 @@ class tag {
 		define('SITEID', $this->siteid);
 		$default_style = $sitelist[$this->siteid]['default_style'];
 		if(!$default_style) $default_style = 'default';
-		$tag = safe_replace(addslashes($this->input->get('tag')));
+		$tag = safe_replace($this->input->get('tag'));
 		$keyword_data_db = pc_base::load_model('keyword_data_model');
 		//获取标签id
 		$r = $this->keyword_db->get_one(array('keyword'=>$tag, 'siteid'=>$this->siteid), 'id');

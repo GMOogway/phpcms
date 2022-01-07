@@ -34,16 +34,16 @@ jQuery(document).ready(function() {
 		<td>
 		<div class="explain-col">		
 			<?php echo L('regtime')?>：
-        <div class="formdate">
+        <label><div class="formdate">
             <div class="input-group input-medium date-picker input-daterange">
                 <input type="text" class="form-control" value="<?php echo $start_time;?>" name="start_time" id="start_time">
                 <span class="input-group-addon"> - </span>
                 <input type="text" class="form-control" value="<?php echo $end_time;?>" name="end_time" id="end_time">
             </div>
-        </div>
+        </div></label>
 			<?php echo form::select($modellist, $modelid, 'name="modelid"', L('member_model'))?>
 			<?php echo form::select($grouplist, $groupid, 'name="groupid"', L('member_group'))?>
-			<input type="submit" name="search" class="button" value="<?php echo L('exportmobile')?>" />
+			<label><input type="submit" name="search" class="button" value="<?php echo L('exportmobile')?>" /></label>
 		</div>
 		</td>
 		</tr>

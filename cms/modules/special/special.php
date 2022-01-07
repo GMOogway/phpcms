@@ -434,11 +434,10 @@ class special extends admin {
 		if(pc_base::load_config('system', 'charset')=='gbk') {
 			$_GET['title'] = safe_replace(iconv('UTF-8', 'GBK', $_GET['title']));
 		}
-		$title = addslashes($_GET['title']);
+		$title = $_GET['title'];
 		if($_GET['id']) {
 			$id = intval($_GET['id']);
-			$r = $this->db->get_one(array('id'=>$id, 'siteid'=>$this->get_siteid()));
-			if($r['title'] == $title) {
+			if($this->db->get_one(array('title'=>$title, 'id'=>$id, 'siteid'=>$this->get_siteid()))) {
 				exit('1');
 			}
 		}

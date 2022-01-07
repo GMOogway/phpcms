@@ -226,7 +226,6 @@ class member_model extends admin {
 		$modelname = isset($_GET['modelname']) ? trim($_GET['modelname']) : exit('0');
 		if(CHARSET != 'utf-8') {
 			$modelname = iconv('utf-8', CHARSET, $modelname);
-			$modelname = addslashes($modelname);
 		}
 		
 		$oldmodelname = $this->input->get('oldmodelname');

@@ -53,18 +53,18 @@ class push_api {
 					$modelid = $this->categorys[$catid]['modelid'];
 					$this->db->set_model($modelid);
 					$newid = $this->db->insert(
-					array('title'=>addslashes($r['title']),
-						'style'=>addslashes($r['style']),
-						'thumb'=>addslashes($r['thumb']),
-						'keywords'=>addslashes($r['keywords']),
-						'description'=>addslashes($r['description']),
-						'status'=>addslashes($r['status']),
-						'catid'=>addslashes($catid),
-						'url'=>addslashes($linkurl),
+					array('title'=>$r['title'],
+						'style'=>$r['style'],
+						'thumb'=>$r['thumb'],
+						'keywords'=>$r['keywords'],
+						'description'=>$r['description'],
+						'status'=>$r['status'],
+						'catid'=>$catid,
+						'url'=>$linkurl,
 						'sysadd'=>1,
-						'username'=>addslashes($r['username']),
-						'inputtime'=>addslashes($r['inputtime']),
-						'updatetime'=>addslashes($r['updatetime']),
+						'username'=>$r['username'],
+						'inputtime'=>$r['inputtime'],
+						'updatetime'=>$r['updatetime'],
 						'islink'=>1
 					),true);
 					$this->db->table_name = $this->db->table_name.'_data';
@@ -170,9 +170,9 @@ class push_api {
 					foreach($field1 as $r1) {
 						$systeminfo[$modelid]['catid'] = $catid;
 						$systeminfo[$modelid]['sysadd'] = 1;
-						$systeminfo[$modelid]['username'] = addslashes($r['username']);
+						$systeminfo[$modelid]['username'] = $r['username'];
 						//$systeminfo[$modelid]['islink'] = 0;
-						$systeminfo[$modelid][$r1['field']] = addslashes($r[$r1['field']]);
+						$systeminfo[$modelid][$r1['field']] = $r[$r1['field']];
 					}
 					$this->db->set_model($modelid);
 					$newid = $this->db->insert($systeminfo[$modelid],true);
@@ -192,7 +192,7 @@ class push_api {
 						$linkurl = str_replace('{$catid}',$catid,$linkurl);
 						$linkurl = str_replace('{$id}',$newid,$linkurl);
 						if ($setting['content_ishtml']=='1') {
-							$linkurl = 'html/'.$linkurl;
+							$linkurl = SYS_HTML_ROOT.'/'.$linkurl;
 						}
 						$linkurl = siteurl($category['siteid']).'/'.$linkurl;
 						// 站长工具
@@ -200,20 +200,20 @@ class push_api {
 							$this->bdts = pc_base::load_app_class('admin_bdts','bdts');
 							$sitemodel_model_db = pc_base::load_model('sitemodel_model');
 							$sitemodel = $sitemodel_model_db->get_one(array('modelid'=>$modelid));
-							$this->bdts->module_bdts($sitemodel['tablename'], addslashes($linkurl), 'add');
+							$this->bdts->module_bdts($sitemodel['tablename'], $linkurl, 'add');
 						}
-						$this->db->update(array('url'=>addslashes($linkurl)),array('id'=>$newid));
+						$this->db->update(array('url'=>$linkurl),array('id'=>$newid));
 					}
 					$field0 = $this->field_model_db->select(array('siteid'=>$siteid,'modelid'=>$modelid,'issystem'=>0),'*','','listorder ASC');
 					foreach($field0 as $r0) {
 						$modelinfo[$modelid]['id'] = $newid;
-						$modelinfo[$modelid]['readpoint'] = addslashes($r2['readpoint']);
-						$modelinfo[$modelid]['relation'] = addslashes($r2['relation']);
+						$modelinfo[$modelid]['readpoint'] = $r2['readpoint'];
+						$modelinfo[$modelid]['relation'] = $r2['relation'];
 						if ($r0['formtype']=='pages') {
-							$modelinfo[$modelid]['paginationtype'] = addslashes($r2['paginationtype']);
-							$modelinfo[$modelid]['maxcharperpage'] = addslashes($r2['maxcharperpage']);
+							$modelinfo[$modelid]['paginationtype'] = $r2['paginationtype'];
+							$modelinfo[$modelid]['maxcharperpage'] = $r2['maxcharperpage'];
 						}else{
-							$modelinfo[$modelid][$r0['field']] = addslashes($r2[$r0['field']]);
+							$modelinfo[$modelid][$r0['field']] = $r2[$r0['field']];
 						}
 					}
 					$this->db->table_name = $this->db->table_name.'_data';

@@ -74,24 +74,24 @@ class link extends admin {
 	//添加友情链接
  	public function add() {
  		if(isset($_POST['dosubmit'])) {
-			$_POST['link']['addtime'] = SYS_TIME;
-			$_POST['link']['siteid'] = $this->get_siteid();
-			if(empty($_POST['link']['name'])) {
+			$link = $this->input->post('link');
+			$link['addtime'] = SYS_TIME;
+			$link['siteid'] = $this->get_siteid();
+			if(empty($link['name'])) {
 				dr_admin_msg(0,L('sitename_noempty'),HTTP_REFERER);
 			} else {
-				$_POST['link']['name'] = safe_replace($_POST['link']['name']);
+				$link['name'] = safe_replace($link['name']);
 			}
-			if ($_POST['link']['logo']) {
-				$_POST['link']['logo'] = safe_replace($_POST['link']['logo']);
+			if ($link['logo']) {
+				$link['logo'] = safe_replace($link['logo']);
 			}
-			$data = new_addslashes($_POST['link']);
-			$linkid = $this->db->insert($data,true);
+			$linkid = $this->db->insert($link,true);
 			if(!$linkid) return FALSE; 
  			$siteid = $this->get_siteid();
 	 		//更新附件状态
-			if(SYS_ATTACHMENT_STAT & $_POST['link']['logo']) {
+			if(SYS_ATTACHMENT_STAT & $link['logo']) {
 				$this->attachment_db = pc_base::load_model('attachment_model');
-				$this->attachment_db->api_update($_POST['link']['logo'],'link-'.$linkid,1);
+				$this->attachment_db->api_update($link['logo'],'link-'.$linkid,1);
 			}
 			dr_admin_msg(1,L('operation_success'),HTTP_REFERER,'', 'add');
 		} else {
@@ -191,13 +191,14 @@ class link extends admin {
 		if(isset($_POST['dosubmit'])){
  			$linkid = intval($_GET['linkid']);
 			if($linkid < 1) return false;
-			if(!is_array($_POST['link']) || empty($_POST['link'])) return false;
-			if((!$_POST['link']['name']) || empty($_POST['link']['name'])) return false;
-			$this->db->update($_POST['link'],array('linkid'=>$linkid));
+			$link = $this->input->post('link');
+			if(!is_array($link) || empty($link)) return false;
+			if((!$link['name']) || empty($link['name'])) return false;
+			$this->db->update($link,array('linkid'=>$linkid));
 			//更新附件状态
-			if(SYS_ATTACHMENT_STAT & $_POST['link']['logo']) {
+			if(SYS_ATTACHMENT_STAT & $link['logo']) {
 				$this->attachment_db = pc_base::load_model('attachment_model');
-				$this->attachment_db->api_update($_POST['link']['logo'],'link-'.$linkid,1);
+				$this->attachment_db->api_update($link['logo'],'link-'.$linkid,1);
 			}
 			dr_admin_msg(1,L('operation_success'),'?m=link&c=link&a=edit','', 'edit');
 			

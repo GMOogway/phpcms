@@ -6,7 +6,7 @@ class formguide_output {
 	function __construct($formid) {
 		$this->input = pc_base::load_sys_class('input');
 		$this->formid = $formid;
-		$this->fields = getcache('formguide_field_'.$formid, 'model');
+		$this->fields = getcache('model_field_'.$formid, 'model');
 		$this->siteid = get_siteid();
     }
 	function get($data) {

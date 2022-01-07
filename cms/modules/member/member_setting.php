@@ -33,6 +33,14 @@ class member_setting extends admin {
 			$member_setting['registerverify'] = intval($member_setting['registerverify']);
 			$member_setting['showapppoint'] = intval($member_setting['showapppoint']);
 			$member_setting['showregprotocol'] = intval($member_setting['showregprotocol']);
+			if ($setting['list_field']) {
+				foreach ($setting['list_field'] as $t) {
+					if ($t['func']
+						&& !method_exists(pc_base::load_sys_class('function_list'), $t['func']) && !function_exists($t['func'])) {
+						dr_json(0, L('列表回调函数['.$t['func'].']未定义'));
+					}
+				}
+			}
 			$member_setting['list_field'] = dr_list_field_order($setting['list_field']);
 			if (!preg_match('/^\\d{1,8}$/i', $member_setting['rmb_point_rate'])) {
 				dr_json(0, L('rmb_point_rate').L('between_1_to_8_num'), array('field' => 'rmb_point_rate'));

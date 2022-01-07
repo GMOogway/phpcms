@@ -46,7 +46,7 @@ body {background: #f5f6f8;}
         <?php }?></p>
 </div>
 <div class="right-card-box">
-    <div class="row table-search-tool" id="searchid"<?php if (!$this->input->get('search')) {?> style="display:none;"<?php }?>>
+    <div class="row table-search-tool" id="searchid"<?php if (!$param['search']) {?> style="display:none;"<?php }?>>
         <form name="searchform" action="" method="get" >
         <input type="hidden" value="content" name="m">
         <input type="hidden" value="content" name="c">
@@ -56,32 +56,32 @@ body {background: #f5f6f8;}
         <input type="hidden" value="1" name="search">
         <input type="hidden" value="<?php echo dr_get_csrf_token();?>" name="pc_hash">
         <div class="col-md-12 col-sm-12">
+        <label><select id="posids" name="posids"><option value='' <?php if($param['posids']=='') echo 'selected';?>><?php echo L('all');?></option>
+        <option value="1" <?php if($param['posids']==1) echo 'selected';?>><?php echo L('elite');?></option>
+        <option value="2" <?php if($param['posids']==2) echo 'selected';?>><?php echo L('no_elite');?></option>
+        </select></label>
+        </div>
+        <div class="col-md-12 col-sm-12">
+        <label><select id="searchtype" name="searchtype" class="form-control">
+            <option value='0' <?php if($param['searchtype']==0) echo 'selected';?>><?php echo L('title');?></option>
+            <option value='1' <?php if($param['searchtype']==1) echo 'selected';?>><?php echo L('intro');?></option>
+            <option value='2' <?php if($param['searchtype']==2) echo 'selected';?>><?php echo L('username');?></option>
+            <option value='3' <?php if($param['searchtype']==3) echo 'selected';?>>ID</option>
+        </select></label>
+        <label><i class="fa fa-caret-right"></i></label>
+        <label><input type="text" class="form-control" placeholder="" value="<?php echo $param['keyword'];?>" name="keyword" /></label>
+        </div>
+        <div class="col-md-12 col-sm-12">
         <label><div class="formdate">
             <div class="input-group input-medium date-picker input-daterange">
-                <input type="text" class="form-control" value="<?php echo $this->input->get('start_time');?>" name="start_time" id="start_time">
+                <input type="text" class="form-control" value="<?php echo $param['start_time'];?>" name="start_time" id="start_time">
                 <span class="input-group-addon"> - </span>
-                <input type="text" class="form-control" value="<?php echo $this->input->get('end_time');?>" name="end_time" id="end_time">
+                <input type="text" class="form-control" value="<?php echo $param['end_time'];?>" name="end_time" id="end_time">
             </div>
         </div></label>
         </div>
         <div class="col-md-12 col-sm-12">
-        <label><select id="posids" name="posids"><option value='' <?php if($this->input->get('posids')=='') echo 'selected';?>><?php echo L('all');?></option>
-        <option value="1" <?php if($this->input->get('posids')==1) echo 'selected';?>><?php echo L('elite');?></option>
-        <option value="2" <?php if($this->input->get('posids')==2) echo 'selected';?>><?php echo L('no_elite');?></option>
-        </select></label>
-        </div>
-        <div class="col-md-12 col-sm-12">
-        <label><select id="searchtype" name="searchtype">
-            <option value='0' <?php if($this->input->get('searchtype')==0) echo 'selected';?>><?php echo L('title');?></option>
-            <option value='1' <?php if($this->input->get('searchtype')==1) echo 'selected';?>><?php echo L('intro');?></option>
-            <option value='2' <?php if($this->input->get('searchtype')==2) echo 'selected';?>><?php echo L('username');?></option>
-            <option value='3' <?php if($this->input->get('searchtype')==3) echo 'selected';?>>ID</option>
-        </select></label>
-        <label><i class="fa fa-caret-right"></i></label>
-        <label><input class="form-control" name="keyword" id="keyword" value="<?php if($this->input->get('keyword')) echo $this->input->get('keyword');?>" placeholder="请输入关键字"></label>
-        </div>
-        <div class="col-md-12 col-sm-12">
-        <label><button type="submit" class="btn green"><i class="fa fa-search"></i> <?php echo L('search');?></button></label>
+        <label><button type="submit" class="btn blue btn-sm onloading"><i class="fa fa-search"></i> <?php echo L('search');?></button></label>
         </div>
         </form>
     </div>
@@ -156,29 +156,28 @@ if(is_array($datas)){
         <label><button type="button" id="delAll" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete');?></button></label>
         <label>
             <div class="btn-group dropup">
-                <a class="btn blue btn-sm dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="false" href="javascript:;"><i class="fa fa-cogs"></i> <?php echo L('批量操作')?> <i class="fa fa-angle-up"></i>
-                </a>
+                <a class="btn blue btn-sm dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="false" href="javascript:;"><i class="fa fa-cogs"></i> <?php echo L('批量操作')?> <i class="fa fa-angle-up"></i></a>
                 <ul class="dropdown-menu">
-                    <a href="javascript:;" class="dropdown-item" id="remove"><i class="fa fa-arrows"></i> <?php echo L('remove');?></a>
+                    <li><a href="javascript:;" class="dropdown-item" id="remove"><i class="fa fa-arrows"></i> <?php echo L('remove');?></a></li>
                     <?php if($category['content_ishtml']) {?>
                     <div class="dropdown-line"></div>
-                    <a href="javascript:;" class="dropdown-item" id="createhtml"><i class="fa fa-check"></i> <?php echo L('createhtml');?></a>
+                    <li><a href="javascript:;" class="dropdown-item" id="createhtml"><i class="fa fa-check"></i> <?php echo L('createhtml');?></a></li>
                     <?php }
                     if($status!=99) {?>
                     <div class="dropdown-line"></div>
-                    <a href="javascript:;" class="dropdown-item" id="passed"><i class="fa fa-check"></i> <?php echo L('passed_checked');?></a>
+                    <li><a href="javascript:;" class="dropdown-item" id="passed"><i class="fa fa-check"></i> <?php echo L('passed_checked');?></a></li>
                     <?php }?>
                     <?php if(!$this->input->get('reject')) { ?>
                     <div class="dropdown-line"></div>
-                    <a href="javascript:;" class="dropdown-item" id="push"><i class="fa fa-window-restore"></i> <?php echo L('push');?></a>
+                    <li><a href="javascript:;" class="dropdown-item" id="push"><i class="fa fa-window-restore"></i> <?php echo L('push');?></a></li>
                     <div class="dropdown-line"></div>
-                    <a href="javascript:;" class="dropdown-item" id="copy"><i class="fa fa-files-o"></i> <?php echo L('copy');?></a>
+                    <li><a href="javascript:;" class="dropdown-item" id="copy"><i class="fa fa-files-o"></i> <?php echo L('copy');?></a></li>
                     <?php }?>
                     <div class="dropdown-line"></div>
-                    <a href="javascript:;" class="dropdown-item" id="recycle"><i class="fa fa-trash-o"></i> <?php echo L('in_recycle');?></a>
+                    <li><a href="javascript:;" class="dropdown-item" id="recycle"><i class="fa fa-trash-o"></i> <?php echo L('in_recycle');?></a></li>
                     <?php if (module_exists('bdts')) {?>
                     <div class="dropdown-line"></div>
-                    <a href="javascript:;" class="dropdown-item" id="bdts"><i class="fa fa-paw"></i> <?php echo L('批量百度主动推送');?></a>
+                    <li><a href="javascript:;" class="dropdown-item" id="bdts"><i class="fa fa-paw"></i> <?php echo L('批量百度主动推送');?></a></li>
                     <?php }?>
                 </ul>
             </div>

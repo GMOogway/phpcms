@@ -318,7 +318,6 @@ class sitemodel extends admin {
 						if(in_array($field,$system_field)) {
 							$v['siteid'] = $this->siteid;
 							unset($v['fieldid'],$v['modelid'],$v['field']);
-							$v = new_addslashes($v);
 							$v['setting'] = array2string($v['setting']);
 							
 							$this->sitemodel_field_db->update($v,array('modelid'=>$modelid,'field'=>$field));
@@ -334,9 +333,6 @@ class sitemodel extends admin {
 								$field_type = $v['setting']['fieldtype'];
 							}
 							require MODEL_PATH.'add.sql.php';
-							$v['tips'] = addslashes($v['tips']);
-							$v['formattribute'] = addslashes($v['formattribute']);
-							
 							$v['setting'] = array2string($v['setting']);
 							$v['modelid'] = $modelid;
 							$v['siteid'] = $this->siteid;

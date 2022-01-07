@@ -25,7 +25,7 @@ class search_api {
 		$result = $this->db->select(array('isdata'=>1), '`id`, `title`, `inputtime`', $offset.','.$pagesize, '`id` ASC');
 		foreach ($result as $r) {
 			$d = $this->c->get_one(array('id'=>$r['id']), '`content`');
-			$tem['title'] = addslashes($r['title']);
+			$tem['title'] = $r['title'];
 			$tem['fulltextcontent'] = $d['content'];
 			$tem['adddate'] = $r['inputtime'];
 			$data[$r['id']] = $tem;

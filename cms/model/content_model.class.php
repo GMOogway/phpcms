@@ -30,7 +30,6 @@ class content_model extends model {
 	 * @param $isimport 是否为外部接口导入
 	 */
 	public function add_content($data,$isimport = 0) {
-		if($isimport) $data = new_addslashes($data);
 		$this->search_db = pc_base::load_model('search_model');
 		$modelid = $this->modelid;
 		require_once CACHE_MODEL_PATH.'content_input.class.php';
@@ -404,7 +403,7 @@ class content_model extends model {
 					$fulltextcontent .= $data['system'][$key] ? $data['system'][$key] : $data['model'][$key];
 				}
 			}
-			$this->search_db->update_search($typeid ,$id, $fulltextcontent,addslashes($data['system']['title']).' '.addslashes($data['system']['keywords']),$data['system']['inputtime']);
+			$this->search_db->update_search($typeid ,$id, $fulltextcontent,$data['system']['title'].' '.$data['system']['keywords'],$data['system']['inputtime']);
 		} elseif($action == 'delete') {
 			$this->search_db->delete_search($typeid ,$id);
 		}

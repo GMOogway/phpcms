@@ -715,18 +715,16 @@ class member extends admin {
 		$username = isset($_GET['username']) && trim($_GET['username']) ? trim($_GET['username']) : exit(0);
 		if(CHARSET != 'utf-8') {
 			$username = iconv('utf-8', CHARSET, $username);
-			$username = addslashes($username);
 		}
 			
 		if(isset($_GET['userid'])) {
 			$userid = intval($_GET['userid']);
 			//如果是会员修改，而且NICKNAME和原来优质一致返回1，否则返回0
 			$info = get_memberinfo($userid);
-			if($info['username'] == $username){//未改变
+			if($info['username'] == addslashes($username)){//未改变
 				exit('1');
 			}else{//已改变，判断是否已有此名
-				$where = array('username'=>$username);
-				$res = $this->db->get_one($where);
+				$res = $this->db->get_one(array('username'=>$username));
 				if($res) {
 					exit('0');
 				} else {
@@ -734,8 +732,7 @@ class member extends admin {
 				}
 			}
  		} else {
-			$where = array('username'=>$username);
-			$res = $this->db->get_one($where);
+			$res = $this->db->get_one(array('username'=>$username));
 			if($res) {
 				exit('0');
 			} else {
@@ -788,7 +785,6 @@ class member extends admin {
 		$nickname = isset($_GET['nickname']) && trim($_GET['nickname']) && is_username(trim($_GET['nickname'])) ? trim($_GET['nickname']) : exit('0');
 		if(CHARSET != 'utf-8') {
 			$nickname = iconv('utf-8', CHARSET, $nickname);
-			$nickname = addslashes($nickname);
 		} 
 		//首先判断会员审核表
 		$this->verify_db = pc_base::load_model('member_verify_model');
@@ -799,7 +795,7 @@ class member extends admin {
 			$userid = intval($_GET['userid']);
 			//如果是会员修改，而且NICKNAME和原来优质一致返回1，否则返回0
 			$info = get_memberinfo($userid);
-			if($info['nickname'] == $nickname){//未改变
+			if($info['nickname'] == addslashes($nickname)){//未改变
 				exit('1');
 			}else{//已改变，判断是否已有此名
 				$res = $this->db->get_one(array('nickname'=>$nickname));

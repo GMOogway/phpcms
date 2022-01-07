@@ -19,7 +19,7 @@ if(is_array($forminfos_data)){
 ?>   
 	<tr>
 		<td><?php echo $fields[$key]['name']?>:</td>
-		<td><?php echo $form?></td>
+		<td><?php echo code2html($form)?></td>
 		
 		
 		</tr>

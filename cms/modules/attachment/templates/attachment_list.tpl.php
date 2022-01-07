@@ -1,6 +1,6 @@
 <?php 
-    defined('IS_ADMIN') or exit('No permission resources.');
-    include $this->admin_tpl('header', 'admin');
+defined('IS_ADMIN') or exit('No permission resources.');
+include $this->admin_tpl('header', 'admin');
 ?>
 <script type="text/javascript" src="<?php echo JS_PATH?>jquery-3.5.1.min.js"></script>
 <script type="text/javascript" src="<?php echo CSS_PATH?>bootstrap/js/bootstrap.min.js"></script>
@@ -20,21 +20,11 @@ jQuery(document).ready(function() {
 });
 </script>
 <style type="text/css">
-.list_order {text-align: left;}
 .btn-group {margin-left: 10px;}
-.layui-input, .layui-laypage-btn {color: #000000;}
 </style>
 <script type="text/javascript" src="<?php echo JS_PATH;?>layui/layui.js"></script>
 <div class="admin-main layui-anim layui-anim-upbit">
-    <!--<fieldset class="layui-elem-field layui-field-title">
-        <legend><?php echo L('attachment_management');?></legend>
-    </fieldset>-->
-    <blockquote class="layui-elem-quote">
-        <a href="javascript:;" onclick="javascript:$('#searchid').toggle();" class="layui-btn layui-btn-sm layui-btn-normal">
-            <i class="fa fa-search"></i> <?php echo L('search');?>
-        </a>
-    </blockquote>
-    <div class="demoTable" id="searchid" style="display:none;">
+    <div class="note note-danger my-content-top-tool">
         <?php if ($remote) {?>
         <label><select name="remote" id="remote" class="form-control">
             <option value=""> - </option>
@@ -46,6 +36,8 @@ jQuery(document).ready(function() {
             <?php }} ?>
         </select></label>
         <?php }?>
+        <label><input class="form-control" name="fileext" id="fileext" <?php if(isset($fileext)) echo $fileext;?> placeholder="<?php echo L('filetype')?>"></label>
+        <label><input class="form-control" name="keyword" id="keyword" <?php if(isset($keyword)) echo $keyword;?> placeholder="<?php echo L('name')?>"></label>
         <label><div class="formdate">
             <div class="input-group input-medium date-picker input-daterange">
                 <input type="text" class="form-control" value="<?php echo $this->input->get('start_uploadtime');?>" name="start_uploadtime" id="start_uploadtime">
@@ -53,14 +45,7 @@ jQuery(document).ready(function() {
                 <input type="text" class="form-control" value="<?php echo $this->input->get('end_uploadtime');?>" name="end_uploadtime" id="end_uploadtime">
             </div>
         </div></label>
-        <label>
-            <input class="input-text" name="fileext" id="fileext" <?php if(isset($fileext)) echo $fileext;?> placeholder="<?php echo L('filetype')?>">
-        </label>
-        <label>
-            <input class="input-text" name="keyword" id="keyword" <?php if(isset($keyword)) echo $keyword;?> placeholder="<?php echo L('name')?>">
-        </label>
-        <label><button class="btn green btn-sm" id="search" data-type="reload"><i class="fa fa-search"></i> <?php echo L('search');?></button></label>
-        <div style="clear: both;"></div>
+        <label><button class="btn blue btn-sm onloading" id="search" data-type="reload"><i class="fa fa-search"></i> <?php echo L('search');?></button></label>
     </div>
     <table class="layui-table" id="list" lay-filter="list"></table>
 </div>
@@ -70,25 +55,25 @@ jQuery(document).ready(function() {
 </script>
 <script type="text/html" id="topBtn">
     <button type="button" class="layui-btn layui-btn-danger layui-btn-sm" id="delAll"><i class="fa fa-trash-o"></i> <?php echo L('thorough');?><?php echo L('delete');?></button>
-    <div class="btn-group">
-        <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="dropdown" data-toggle="dropdown"><i class="fa fa-files-o"></i> <?php echo L('moudle')?></button>
-        <div class="dropdown dropdown-bottom-left">
+    <div class="btn-group dropdown-btn-group">
+        <button type="button" class="btn blue btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-th-large"></i> <?php echo L('moudle')?> <i class="fa fa-angle-down"></i></button>
+        <ul class="dropdown-menu">
             <?php $i = 0;
             foreach ($modules as $module) {
             if(in_array($module['module'], array('pay','digg','search','scan','attachment','block','dbsource','template','release','cnzz','comment','mood'))) continue;
             if (isset($i) && $i) echo '<div class="dropdown-line"></div>';
-            echo '<a href='.url_par('module='.$module['module']).' class="dropdown-item" id="link"><i class="fa fa-chain"></i> '.$module['name'].'</a>';
+            echo '<li><a href='.url_par('module='.$module['module']).' class="dropdown-item" id="link"><i class="fa fa-chain"></i> '.$module['name'].'</a></li>';
             $i++;
             }?>
-        </div>
+        </ul>
     </div>
-    <div class="btn-group">
-        <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="dropdown" data-toggle="dropdown"><i class="fa fa-files-o"></i> <?php echo L('filename')?></button>
-        <div class="dropdown dropdown-bottom-left">
-            <a href="<?php echo url_par('status=0')?>" class="dropdown-item"><i class="fa fa-chain"></i> <?php echo L('not_used');?></a>
+    <div class="btn-group dropdown-btn-group">
+        <button type="button" class="btn blue btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-files-o"></i> <?php echo L('附件状态')?> <i class="fa fa-angle-down"></i></button>
+        <ul class="dropdown-menu">
+            <li><a href="<?php echo url_par('status=0')?>" class="dropdown-item"><i class="fa fa-chain"></i> <?php echo L('not_used');?></a></li>
             <div class="dropdown-line"></div>
-            <a href="<?php echo url_par('status=1')?>" class="dropdown-item"><i class="fa fa-chain"></i> <?php echo L('used');?></a>
-        </div>
+            <li><a href="<?php echo url_par('status=1')?>" class="dropdown-item"><i class="fa fa-chain"></i> <?php echo L('used');?></a></li>
+        </ul>
     </div>
 </script>
 <script>

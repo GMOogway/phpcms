@@ -80,8 +80,7 @@ class fclient extends admin {
 			if ($fclient['endtime']) {
 				$fclient['endtime'] = strtotime($fclient['endtime']);
 			}
-			$data = new_addslashes($fclient);
-			$id = $this->db->insert($data,true);
+			$id = $this->db->insert($fclient,true);
 			if(!$id) return FALSE;
 			dr_admin_msg(1,L('operation_success'),HTTP_REFERER,'', 'add');
 		} else {
