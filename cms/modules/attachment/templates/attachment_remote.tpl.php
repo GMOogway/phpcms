@@ -6,17 +6,14 @@
 <link rel="stylesheet" href="<?php echo CSS_PATH;?>admin/css/global.css" media="all" />
 <script type="text/javascript" src="<?php echo JS_PATH;?>layui/layui.js"></script>
 <div class="admin-main layui-anim layui-anim-upbit">
-    <!--<fieldset class="layui-elem-field layui-field-title">
-        <legend><?php echo L('存储策略');?></legend>
-    </fieldset>-->
-    <blockquote class="layui-elem-quote">
+    <div class="note note-danger my-content-top-tool">
         <a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=init&pc_hash='+pc_hash+'&is_ajax=1',1);" class="layui-btn layui-btn-sm">
             <i class="fa fa-refresh"></i> <?php echo L('update_cache_all');?>
         </a>
         <a href="?m=attachment&c=attachment&a=remote_add&menuid=<?php echo $this->input->get('menuid');?>" class="layui-btn layui-btn-sm">
             <i class="fa fa-plus"></i> <?php echo L('add');?>
         </a>
-    </blockquote>
+    </div>
     <table class="layui-table" id="list" lay-filter="list"></table>
 </div>
 <script type="text/html" id="action">

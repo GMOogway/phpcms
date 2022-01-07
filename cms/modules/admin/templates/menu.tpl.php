@@ -9,10 +9,7 @@ include $this->admin_tpl('header');?>
 </style>
 <script type="text/javascript" src="<?php echo JS_PATH;?>layui/layui.js"></script>
 <div class="admin-main layui-anim layui-anim-upbit">
-    <fieldset class="layui-elem-field layui-field-title">
-        <legend><?php echo L('menu_manage');?></legend>
-    </fieldset>
-    <blockquote class="layui-elem-quote">
+    <div class="note note-danger my-content-top-tool">
         <a href="?m=admin&c=menu&a=add&menuid=<?php echo $this->input->get('menuid');?>" class="layui-btn layui-btn-sm">
             <i class="fa fa-plus"></i> <?php echo L('add_menu');?>
         </a>
@@ -22,7 +19,7 @@ include $this->admin_tpl('header');?>
         <a class="layui-btn layui-btn-normal layui-btn-sm" onclick="openAll();">
             <i class="fa fa-folder-open-o"></i> <?php echo L('open_close');?>
         </a>
-    </blockquote>
+    </div>
     <table class="layui-table" id="treeTable" lay-filter="treeTable"></table>
 </div>
 <script type="text/html" id="icon">
