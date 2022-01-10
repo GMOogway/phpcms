@@ -1070,7 +1070,6 @@ class content extends admin {
 		$steps = intval($this->input->get('steps'));
 		if ($steps) {
 			echo "
-			<script language=\"javascript\" type=\"text/javascript\" src=\"".JS_PATH."jquery.min.js\"></script>
 			<script language=\"javascript\" type=\"text/javascript\" src=\"".JS_PATH."Dialog/main.js\"></script>
 			<script type=\"text/javascript\">var diag = new Dialog({id:'content_m',title:'".L('operations_manage')."',html:'<span id=cloading ><a href=\'javascript:ajax_manage(1)\'>".L('passed_checked')."</a> | <a href=\'javascript:ajax_manage(2)\'>".L('reject')."</a> |　<a href=\'javascript:ajax_manage(3)\'>".L('delete')."</a></span>',left:'100%',top:'100%',modal:false});diag.show();
 			function ajax_manage(type) {
