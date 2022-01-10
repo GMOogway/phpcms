@@ -16,27 +16,8 @@ include $this->admin_tpl('header');
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>cookie.js"></script>
 <script type="text/javascript" src="<?php echo JS_PATH?>layui/layui.js"></script>
 <script type="text/javascript">var catid=0</script>
-<script type="text/javascript">
-<!--
-	$(function(){
-		$.formValidator.initConfig({formid:"myform",autotip:true,onerror:function(msg,obj){Dialog.alert(msg,function(){$(obj).focus();})}});
-		$("#name").formValidator({onshow:"<?php echo L("input").L('site_name')?>",onfocus:"<?php echo L("input").L('site_name')?>"}).inputValidator({min:1,onerror:"<?php echo L("input").L('site_name')?>"}).ajaxValidator({type : "get",url : "",data :"m=admin&c=site&a=public_name",datatype : "html",async:'false',success : function(data){	if( data == "1" ){return true;}else{return false;}},buttons: $("#dosubmit"),onerror : "<?php echo L('site_name').L('exists')?>",onwait : "<?php echo L('connecting')?>"});
-
-		$("#dirname").formValidator({onshow:"<?php echo L("input").L('site_dirname')?>",onfocus:"<?php echo L("input").L('site_dirname')?>"}).inputValidator({min:1,onerror:"<?php echo L("input").L('site_dirname')?>"}).regexValidator({regexp:"username",datatype:"enum",param:'i',onerror:"<?php echo L('site_dirname_err_msg')?>"}).ajaxValidator({type : "get",url : "",data :"m=admin&c=site&a=public_dirname",datatype : "html",async:'false',success : function(data){	if( data == "1" ){return true;}else{return false;}},buttons: $("#dosubmit"),onerror : "<?php echo L('site_dirname').L('exists')?>",onwait : "<?php echo L('connecting')?>"});
-		
-		$("#domain").formValidator({onshow:"<?php echo L('site_domain_ex')?>",onfocus:"<?php echo L('site_domain_ex')?>",tipcss:{width:'300px'},empty:false}).inputValidator({onerror:"<?php echo L('site_domain_ex')?>"}).regexValidator({regexp:"http[s]?:\/\/(.+)\/$",onerror:"<?php echo L('site_domain_ex2')?>"});
-		$('#template').formValidator({onshow:"<?php echo L('style_name_point')?>",onfocus:"<?php echo L('select_at_least_1')?>"}).inputValidator({onerror:"<?php echo L('select_at_least_1')?>"});
-		$('#release_point').formValidator({onshow:"<?php echo L('publishing_sites_to_other_servers')?>",onfocus:"<?php echo L('choose_release_point')?>",empty:true}).inputValidator({max:4,onerror:"<?php echo L('most_choose_four')?>"});
-		$('#default_style_input').formValidator({tipid:"default_style_msg",onshow:"<?php echo L('please_select_a_style_and_select_the_template')?>",onfocus:"<?php echo L('please_select_a_style_and_select_the_template')?>"}).inputValidator({min:1,onerror:"<?php echo L('please_choose_the_default_style')?>"});
-		<?php echo $formValidator;?>
-	})
-	function checkall(){
-		<?php echo $checkall;?>
-	}
-//-->
-</script>
 <div class="pad-10">
-<form action="?m=admin&c=site&a=add" method="post" id="myform" onsubmit="return checkall()">
+<form action="?m=admin&c=site&a=add" method="post" id="myform">
 <input name="dosubmit" type="hidden" value="1">
 <div>
 <fieldset>
@@ -44,15 +25,15 @@ include $this->admin_tpl('header');
 	<table width="100%"  class="table_form">
   <tr id="dr_row_name">
     <th width="100"><?php echo L('site_name')?>：</th>
-    <td class="y-bg"><input type="text" class="input-text" name="info[name]" id="name" size="70" /></td>
+    <td class="y-bg"><label><input type="text" class="input-text" name="info[name]" id="name" size="70" /></label></td>
   </tr>
   <tr id="dr_row_dirname">
     <th><?php echo L('site_dirname')?>：</th>
-    <td class="y-bg"><input type="text" class="input-text" name="info[dirname]" id="dirname" size="70" /></td>
+    <td class="y-bg"><label><input type="text" class="input-text" name="info[dirname]" id="dirname" size="70" /></label></td>
   </tr>
     <tr id="dr_row_domain">
     <th><?php echo L('site_domain')?>：</th>
-    <td class="y-bg"><input type="text" class="input-text" name="info[domain]" id="domain"  size="70"/></td>
+    <td class="y-bg"><label><input type="text" class="input-text" name="info[domain]" id="domain"  size="70"/></label></td>
   </tr>
   <tr>
     <th><?php echo L('html_home')?>：</th>
@@ -98,7 +79,7 @@ include $this->admin_tpl('header');
   </tr>
   <tr>
     <th><?php echo L('mobile_domain')?>：</th>
-    <td class="y-bg"><input type="text" class="input-text" name="info[mobile_domain]" id="mobile_domain" size="70"/></td>
+    <td class="y-bg"><label><input type="text" class="input-text" name="info[mobile_domain]" id="mobile_domain" size="70"/></label></td>
   </tr>
   <tr>
     <th><?php echo L('mobile_template')?>：</th>
@@ -112,15 +93,15 @@ include $this->admin_tpl('header');
 	<table width="100%"  class="table_form">
   <tr>
     <th width="80"><?php echo L('site_title')?>：</th>
-    <td class="y-bg"><input type="text" class="input-text" name="info[site_title]" id="site_title" size="80" /></td>
+    <td class="y-bg"><label><input type="text" class="input-text" name="info[site_title]" id="site_title" size="80" /></label></td>
   </tr>
   <tr>
     <th><?php echo L('keyword_name')?>：</th>
-    <td class="y-bg"><input type="text" class="input-text" name="info[keywords]" id="keywords" size="80" /></td>
+    <td class="y-bg"><label><input type="text" class="input-text" name="info[keywords]" id="keywords" size="80" /></label></td>
   </tr>
     <tr>
     <th><?php echo L('description')?>：</th>
-    <td class="y-bg"><input type="text" class="input-text" name="info[description]" id="description" size="80" /></td>
+    <td class="y-bg"><label><input type="text" class="input-text" name="info[description]" id="description" size="80" /></label></td>
   </tr>
 </table>
 </fieldset>
@@ -213,11 +194,11 @@ function default_list() {
 	<table width="100%"  class="table_form">
   <tr>
     <th width="130" valign="top"><?php echo L('site_att_upload_maxsize')?></th>
-    <td class="y-bg"><input type="text" class="input-text" name="setting[upload_maxsize]" id="upload_maxsize" size="10" value="2"/> MB </td>
+    <td class="y-bg"><label><input type="text" class="input-text" name="setting[upload_maxsize]" id="upload_maxsize" size="10" value="2"/></label> MB </td>
   </tr>
   <tr>
     <th width="130" valign="top"><?php echo L('site_att_allow_ext')?></th>
-    <td class="y-bg"><input type="text" class="input-text" name="setting[upload_allowext]" id="upload_allowext" size="80" value="jpg|jpeg|gif|bmp|png|doc|docx|xls|xlsx|ppt|pptx|pdf|txt|rar|zip|swf"/></td>
+    <td class="y-bg"><label><input type="text" class="input-text" name="setting[upload_allowext]" id="upload_allowext" size="80" value="jpg|jpeg|gif|bmp|png|doc|docx|xls|xlsx|ppt|pptx|pdf|txt|rar|zip|swf"/></label></td>
   </tr>
   <tr<?php if (SYS_EDITOR) {?> style="display: none;"<?php }?>>
     <td valign="top" colspan="2"><fieldset>
@@ -225,63 +206,63 @@ function default_list() {
 	<table width="100%" class="radio-label">
   <tr>
     <th width="130" valign="top"><?php echo L('ueditor_filename')?></th>
-    <td class="y-bg"><input type="text" class="input-text" name="setting[filename]" id="filename" size="50" value="{yyyy}/{mm}{dd}/{time}{rand:6}"/><br><?php echo L('ueditor_filename_desc')?></td>
+    <td class="y-bg"><label><input type="text" class="input-text" name="setting[filename]" id="filename" size="50" value="{yyyy}/{mm}{dd}/{time}{rand:6}"/></label><br><?php echo L('ueditor_filename_desc')?></td>
   </tr>
   <tr>
     <th width="130" valign="top"><?php echo L('ueditor_image_max_size')?></th>
-    <td class="y-bg"><input type="text" class="input-text" name="setting[imageMaxSize]" id="imageMaxSize" size="10" value="2"/> MB </td>
+    <td class="y-bg"><label><input type="text" class="input-text" name="setting[imageMaxSize]" id="imageMaxSize" size="10" value="2"/></label> MB </td>
   </tr>
   <tr>
     <th width="130" valign="top"><?php echo L('ueditor_image_allow_ext')?></th>
-    <td class="y-bg"><input type="text" class="input-text" name="setting[imageAllowFiles]" id="imageAllowFiles" size="80" value="png|jpg|jpeg|gif|bmp"/></td>
+    <td class="y-bg"><label><input type="text" class="input-text" name="setting[imageAllowFiles]" id="imageAllowFiles" size="80" value="png|jpg|jpeg|gif|bmp"/></label></td>
   </tr>
   <tr>
     <th width="130" valign="top"><?php echo L('ueditor_catcher_max_size')?></th>
-    <td class="y-bg"><input type="text" class="input-text" name="setting[catcherMaxSize]" id="catcherMaxSize" size="10" value="2"/> MB </td>
+    <td class="y-bg"><label><input type="text" class="input-text" name="setting[catcherMaxSize]" id="catcherMaxSize" size="10" value="2"/></label> MB </td>
   </tr>
   <tr>
     <th width="130" valign="top"><?php echo L('ueditor_catcher_allow_ext')?></th>
-    <td class="y-bg"><input type="text" class="input-text" name="setting[catcherAllowFiles]" id="catcherAllowFiles" size="80" value="png|jpg|jpeg|gif|bmp"/></td>
+    <td class="y-bg"><label><input type="text" class="input-text" name="setting[catcherAllowFiles]" id="catcherAllowFiles" size="80" value="png|jpg|jpeg|gif|bmp"/></label></td>
   </tr>
   <tr>
     <th width="130" valign="top"><?php echo L('ueditor_video_max_size')?></th>
-    <td class="y-bg"><input type="text" class="input-text" name="setting[videoMaxSize]" id="videoMaxSize" size="10" value="100"/> MB </td>
+    <td class="y-bg"><label><input type="text" class="input-text" name="setting[videoMaxSize]" id="videoMaxSize" size="10" value="100"/></label> MB </td>
   </tr>
   <tr>
     <th width="130" valign="top"><?php echo L('ueditor_video_allow_ext')?></th>
-    <td class="y-bg"><input type="text" class="input-text" name="setting[videoAllowFiles]" id="videoAllowFiles" size="80" value="flv|swf|mkv|avi|rm|rmvb|mpeg|mpg|ogg|ogv|mov|wmv|mp4|webm|mp3|wav|mid"/></td>
+    <td class="y-bg"><label><input type="text" class="input-text" name="setting[videoAllowFiles]" id="videoAllowFiles" size="80" value="flv|swf|mkv|avi|rm|rmvb|mpeg|mpg|ogg|ogv|mov|wmv|mp4|webm|mp3|wav|mid"/></label></td>
   </tr>
   <tr>
     <th width="130" valign="top"><?php echo L('ueditor_file_max_size')?></th>
-    <td class="y-bg"><input type="text" class="input-text" name="setting[fileMaxSize]" id="fileMaxSize" size="10" value="50"/> MB </td>
+    <td class="y-bg"><label><input type="text" class="input-text" name="setting[fileMaxSize]" id="fileMaxSize" size="10" value="50"/></label> MB </td>
   </tr>
   <tr>
     <th width="130" valign="top"><?php echo L('ueditor_file_allow_ext')?></th>
-    <td class="y-bg"><input type="text" class="input-text" name="setting[fileAllowFiles]" id="fileAllowFiles" size="80" value="png|jpg|jpeg|gif|bmp|flv|swf|mkv|avi|rm|rmvb|mpeg|mpg|ogg|ogv|mov|wmv|mp4|webm|mp3|wav|mid|rar|zip|tar|gz|7z|bz2|cab|iso|doc|docx|xls|xlsx|ppt|pptx|pdf|txt|md|xml"/></td>
+    <td class="y-bg"><label><input type="text" class="input-text" name="setting[fileAllowFiles]" id="fileAllowFiles" size="80" value="png|jpg|jpeg|gif|bmp|flv|swf|mkv|avi|rm|rmvb|mpeg|mpg|ogg|ogv|mov|wmv|mp4|webm|mp3|wav|mid|rar|zip|tar|gz|7z|bz2|cab|iso|doc|docx|xls|xlsx|ppt|pptx|pdf|txt|md|xml"/></label></td>
   </tr>
   <tr>
     <th width="130" valign="top"><?php echo L('ueditor_imagemanager_max_size')?></th>
-    <td class="y-bg"><input type="text" class="input-text" name="setting[imageManagerListSize]" id="imageManagerListSize" size="10" value="20"/></td>
+    <td class="y-bg"><label><input type="text" class="input-text" name="setting[imageManagerListSize]" id="imageManagerListSize" size="10" value="20"/></label></td>
   </tr>
   <tr style="display: none;">
     <th width="130" valign="top"><?php echo L('ueditor_imagemanager_allow_ext')?></th>
-    <td class="y-bg"><input type="text" class="input-text" name="setting[imageManagerAllowFiles]" id="imageManagerAllowFiles" size="80" value="png|jpg|jpeg|gif|bmp"/></td>
+    <td class="y-bg"><label><input type="text" class="input-text" name="setting[imageManagerAllowFiles]" id="imageManagerAllowFiles" size="80" value="png|jpg|jpeg|gif|bmp"/></label></td>
   </tr>
   <tr>
     <th width="130" valign="top"><?php echo L('ueditor_filemanager_max_size')?></th>
-    <td class="y-bg"><input type="text" class="input-text" name="setting[fileManagerListSize]" id="fileManagerListSize" size="10" value="20"/></td>
+    <td class="y-bg"><label><input type="text" class="input-text" name="setting[fileManagerListSize]" id="fileManagerListSize" size="10" value="20"/></label></td>
   </tr>
   <tr style="display: none;">
     <th width="130" valign="top"><?php echo L('ueditor_filemanager_allow_ext')?></th>
-    <td class="y-bg"><input type="text" class="input-text" name="setting[fileManagerAllowFiles]" id="fileManagerAllowFiles" size="80" value="png|jpg|jpeg|gif|bmp|flv|swf|mkv|avi|rm|rmvb|mpeg|mpg|ogg|ogv|mov|wmv|mp4|webm|mp3|wav|mid|rar|zip|tar|gz|7z|bz2|cab|iso|doc|docx|xls|xlsx|ppt|pptx|pdf|txt|md|xml"/></td>
+    <td class="y-bg"><label><input type="text" class="input-text" name="setting[fileManagerAllowFiles]" id="fileManagerAllowFiles" size="80" value="png|jpg|jpeg|gif|bmp|flv|swf|mkv|avi|rm|rmvb|mpeg|mpg|ogg|ogv|mov|wmv|mp4|webm|mp3|wav|mid|rar|zip|tar|gz|7z|bz2|cab|iso|doc|docx|xls|xlsx|ppt|pptx|pdf|txt|md|xml"/></label></td>
   </tr>
   <tr>
     <th width="130" valign="top"><?php echo L('ueditor_videomanager_max_size')?></th>
-    <td class="y-bg"><input type="text" class="input-text" name="setting[videoManagerListSize]" id="videoManagerListSize" size="10" value="20"/></td>
+    <td class="y-bg"><label><input type="text" class="input-text" name="setting[videoManagerListSize]" id="videoManagerListSize" size="10" value="20"/></label></td>
   </tr>
   <tr style="display: none;">
     <th width="130" valign="top"><?php echo L('ueditor_videomanager_allow_ext')?></th>
-    <td class="y-bg"><input type="text" class="input-text" name="setting[videoManagerAllowFiles]" id="videoManagerAllowFiles" size="80" value="flv|swf|mkv|avi|rm|rmvb|mpeg|mpg|ogg|ogv|mov|wmv|mp4|webm|mp3|wav|mid"/></td>
+    <td class="y-bg"><label><input type="text" class="input-text" name="setting[videoManagerAllowFiles]" id="videoManagerAllowFiles" size="80" value="flv|swf|mkv|avi|rm|rmvb|mpeg|mpg|ogg|ogv|mov|wmv|mp4|webm|mp3|wav|mid"/></label></td>
   </tr>
 </table>
 </fieldset></td>
@@ -352,29 +333,29 @@ function default_list() {
   </tr>
    <tr>
     <th width="130" valign="top"><?php echo L('site_att_watermark_pct')?></th>
-    <td class="y-bg"><input type="hidden" class="input-text" name="setting[wm_opacity]" id="wm_opacity" size="10" value="100" /><div id="demo6_slider1" class="noUi-danger"></div><span id="demo6_slider1-span"></span> <?php echo L('site_att_watermark_pct_desc')?></td>
+    <td class="y-bg"><label><input type="hidden" class="input-text" name="setting[wm_opacity]" id="wm_opacity" size="10" value="100" /></label><div id="demo6_slider1" class="noUi-danger"></div><span id="demo6_slider1-span"></span> <?php echo L('site_att_watermark_pct_desc')?></td>
   </tr> 
    <tr>
     <th width="130" valign="top"><?php echo L('site_att_watermark_quality')?></th>
-    <td class="y-bg"><input type="hidden" class="input-text" name="setting[quality]" id="quality" size="10" value="80" /><div id="demo6_slider2" class="noUi-success"></div><span id="demo6_slider2-span"></span> <?php echo L('site_att_watermark_quality_desc')?></td>
+    <td class="y-bg"><label><input type="hidden" class="input-text" name="setting[quality]" id="quality" size="10" value="80" /></label><div id="demo6_slider2" class="noUi-success"></div><span id="demo6_slider2-span"></span> <?php echo L('site_att_watermark_quality_desc')?></td>
   </tr>
   <tr>
     <th><?php echo L('site_att_watermark_padding')?></th>
     <td class="y-bg">
-	  <input type="text" class="input-text" name="setting[wm_padding]" id="wm_padding" size="10" value="" placeholder="px" /><br><?php echo L('site_att_watermark_padding_desc')?>
+	  <label><input type="text" class="input-text" name="setting[wm_padding]" id="wm_padding" size="10" value="" placeholder="px" /></label><br><?php echo L('site_att_watermark_padding_desc')?>
      </td>
   </tr>
   <tr>
     <th><?php echo L('site_att_watermark_offset')?></th>
     <td class="y-bg">
 	  <?php echo L('site_att_watermark_hor_offset')?>
-<input type="text" class="input-text" name="setting[wm_hor_offset]" id="wm_hor_offset" size="10" value="" placeholder="px" /> PX <?php echo L('site_att_watermark_vrt_offset')?><input type="text" class="input-text" name="setting[wm_vrt_offset]" id="wm_vrt_offset" size="10" value="" placeholder="px" /> PX
+<label><input type="text" class="input-text" name="setting[wm_hor_offset]" id="wm_hor_offset" size="10" value="" placeholder="px" /></label> PX <?php echo L('site_att_watermark_vrt_offset')?><label><input type="text" class="input-text" name="setting[wm_vrt_offset]" id="wm_vrt_offset" size="10" value="" placeholder="px" /></label> PX
      </td>
   </tr>
   <tr>
     <th><?php echo L('site_att_watermark_photo')?></th>
     <td class="y-bg"><?php echo L('site_att_watermark_minwidth')?>
-<input type="text" class="input-text" name="setting[width]" id="width" size="10" value="" placeholder="px" /> X <?php echo L('site_att_watermark_minheight')?><input type="text" class="input-text" name="setting[height]" id="height" size="10" value="" placeholder="px" /> PX<br><?php echo L('site_att_watermark_photo_desc')?>
+<label><input type="text" class="input-text" name="setting[width]" id="width" size="10" value="" placeholder="px" /></label> PX <?php echo L('site_att_watermark_minheight')?><label><input type="text" class="input-text" name="setting[height]" id="height" size="10" value="" placeholder="px" /></label> PX<br><?php echo L('site_att_watermark_photo_desc')?>
      </td>
   </tr>
   <tr>
