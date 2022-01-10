@@ -456,7 +456,7 @@ final class db_mysqli {
 		} else {
 			$q = '';
 		}
-		$value = $q.addslashes($value).$q;
+		$value = $q.$this->escape($value).$q;
 		return $value;
 	}
 }

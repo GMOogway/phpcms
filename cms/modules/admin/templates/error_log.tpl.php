@@ -38,7 +38,7 @@ jQuery(document).ready(function() {
             </div>
             <div class="col-md-12">
                 <label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('search')?></button></label>
-                <label><button type="button" onclick="ajax_option('?m=admin&c=index&a=public_error_log_del&time=<?php echo $time;?>', '你确定要清空当天记录吗？', 1)" class="btn red btn-sm"> <i class="fa fa-trash"></i> 清空</button></label>
+                <label><button type="button" onclick="ajax_option('?m=admin&c=index&a=public_error_log_del&time=<?php echo $time;?>', '<?php echo L('你确定要清空当天记录吗？')?>', 1)" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('清空')?></button></label>
             </div>
 </form>
     </div>

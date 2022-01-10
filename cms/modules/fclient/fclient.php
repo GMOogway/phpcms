@@ -17,7 +17,7 @@ class fclient extends admin {
 		$keyword = clearhtml(trim($this->input->get('keyword')));
 		$where = '';
 		if($field=='name' && $keyword!=''){
-			$where = " `$field` like '%".addslashes($keyword)."%'";
+			$where = " `$field` like '%".$this->db->escape($keyword)."%'";
 		}elseif($field!='' && $keyword!=''){
 			$where = array($field=>$keyword);
 		}

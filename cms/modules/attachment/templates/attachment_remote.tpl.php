@@ -1,6 +1,6 @@
 <?php 
-    defined('IS_ADMIN') or exit('No permission resources.');
-    include $this->admin_tpl('header', 'admin');
+defined('IS_ADMIN') or exit('No permission resources.');
+include $this->admin_tpl('header', 'admin');
 ?>
 <link rel="stylesheet" href="<?php echo JS_PATH;?>layui/css/layui.css" media="all" />
 <link rel="stylesheet" href="<?php echo CSS_PATH;?>admin/css/global.css" media="all" />

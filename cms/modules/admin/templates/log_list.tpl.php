@@ -33,7 +33,8 @@ jQuery(document).ready(function() {
             </div>
         </div></label>
 		<label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('determine_search')?></button></label>
-		<label><button type="button" onclick="location='?m=admin&c=log&a=delete&week=4&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token();?>'" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('removed_data')?></button></label>
+		<label><button type="button" onclick="ajax_option('?m=admin&c=log&a=delete&week=4&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token();?>', '<?php echo L('你确定要删除一月前记录吗？')?>', 1)" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('removed_data')?></button></label>
+		<label><button type="button" onclick="ajax_option('?m=admin&c=log&a=delete&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token();?>', '<?php echo L('你确定要清空全部记录吗？')?>', 1)" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('清空')?></button></label>
 		</div>
 		</td>
 		</tr>

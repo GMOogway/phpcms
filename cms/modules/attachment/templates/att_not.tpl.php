@@ -2,8 +2,6 @@
 $show_header = $show_validator = $show_scroll = true; 
 include $this->admin_tpl('header', 'attachment');
 ?>
-<script type="text/javascript" src="<?php echo JS_PATH?>jquery-3.5.1.min.js"></script>
-<script type="text/javascript" src="<?php echo CSS_PATH?>bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 jQuery(document).ready(function() {
     $('.tooltips').tooltip();

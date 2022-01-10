@@ -19,7 +19,7 @@ include $this->admin_tpl('header', 'admin');
 if(is_array($infos)){
 	foreach($infos as $info){
 		?>
-	<tr onclick="return_id(<?php echo $info['subjectid'];?>, '<?php echo addslashes($info['subject'])?>')" style="cursor:hand" title="<?php echo L('check_select')?>">
+	<tr onclick="return_id(<?php echo $info['subjectid'];?>, '<?php echo new_addslashes($info['subject'])?>')" style="cursor:hand" title="<?php echo L('check_select')?>">
 		<td><?php if($target=='dialog') {?><label class="mt-radio mt-radio-outline"><input type='radio' id="voteid_<?php echo $info['subjectid']?>" name="subjectid"><span></span></label><?php } echo $info['subject']?></td>
 		<td ><?php echo $info['fromdate'];?></td>
 		<td ><?php echo $info['todate'];?></td>

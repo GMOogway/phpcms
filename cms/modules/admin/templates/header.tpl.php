@@ -15,8 +15,8 @@ if(!$this->get_siteid()) dr_admin_msg(0,L('admin_login'),'?m=admin&c=index&a='.S
 if(isset($show_dialog)) {?>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>dialog.js"></script>
 <?php } ?>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>jquery.min.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>Dialog/main.js"></script>
+<script type="text/javascript" src="<?php echo CSS_PATH?>bootstrap/js/bootstrap.min.js"></script>
 <script src='<?php echo JS_PATH?>bootstrap-tagsinput.min.js' type='text/javascript'></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>admin_common.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>styleswitch.js"></script>
@@ -86,10 +86,19 @@ $(function(){
 <body>
 <?php if(!isset($show_header)) {?>
 <div class="subnav">
+    <?php if(is_mobile(0)) {?>
+    <div class="content-menu btn-group dropdown-btn-group"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><i class="fa fa-th-large"></i> 菜单 <i class="fa fa-angle-down"></i></a>
+        <ul class="dropdown-menu">
+            <?php if(isset($big_menu)) { echo '<li><a class="add fb" href="'.$big_menu[0].'"><i class="fa fa-plus"></i> '.$big_menu[1].'</a><li><div class="dropdown-line"></div>';} else {$big_menu = '';} ?>
+            <?php echo admin::submenu($this->input->get('menuid'),$big_menu); ?>
+        </ul>
+    </div>
+    <?php } else {?>
     <div class="content-menu ib-a">
     <?php if(isset($big_menu)) { echo '<a class="add fb" href="'.$big_menu[0].'"><i class="fa fa-plus"></i> '.$big_menu[1].'</a><i class="fa fa-circle"></i>';} else {$big_menu = '';} ?>
     <?php echo admin::submenu($this->input->get('menuid'),$big_menu); ?>
     </div>
+    <?php }?>
 </div>
 <div class="content-header"></div>
 <?php }?>

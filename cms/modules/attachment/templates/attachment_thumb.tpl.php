@@ -1,11 +1,15 @@
 <?php 
-	defined('IS_ADMIN') or exit('No permission resources.');
-	include $this->admin_tpl('header', 'admin');
+defined('IS_ADMIN') or exit('No permission resources.');
+include $this->admin_tpl('header', 'admin');
 ?>
 <style type="text/css">
-.attachment-list{ width:480px}
+.attachment-list{width:480px;}
 .attachment-list .cu{dispaly:block;float:right; background:url(<?php echo IMG_PATH;?>admin_img/cross.png) no-repeat 0px 100%;width:20px; height:16px; overflow:hidden;}
-.attachment-list li{ width:120px; padding:0 20px 10px; float:left}
+.attachment-list li{width:120px; margin:10px 20px; float:left;}
+@media (max-width: 400px) {
+.attachment-list{width:300px;}
+.attachment-list li{margin:10px 15px;}
+}
 </style>
 <div class="pad-10">
 <ul class="attachment-list">

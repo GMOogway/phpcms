@@ -44,17 +44,17 @@ class log extends admin {
 	 */
 	function delete() {
 		$week = intval($this->input->get('week'));
-		if($week){
-			$where = '';
-			$start = SYS_TIME - $week*7*24*3600;
-			$d = date("Y-m-d",$start); 
- 			//$end = strtotime($end_time);
-			//$where .= "AND `message_time` >= '$start' AND `message_time` <= '$end' ";
-			$where .= "`time` <= '$d'";
-			$this->db->delete($where);
-			dr_admin_msg(1,L('operation_success'),'?m=admin&c=log');
-		} else {
-			return false;
+		if(IS_AJAX_POST){
+			if($week){
+				$start = SYS_TIME - $week*7*24*3600;
+				$d = date("Y-m-d",$start);
+				$where = "`time` <= '$d'";
+				$this->db->delete($where);
+				dr_json(1, L('operation_success'));
+			} else {
+				$this->db->query('TRUNCATE `'.$this->db->table_name.'`');
+				dr_json(1, L('operation_success'));
+			}
 		}
 	}
 	

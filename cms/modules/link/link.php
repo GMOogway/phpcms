@@ -368,8 +368,7 @@ class link extends admin {
 	 * @param $isjs 是否生成JS代码
 	 */
 	function format_js($string, $isjs = 1){
-		$string = addslashes(str_replace(array("\r", "\n"), array('', ''), $string));
-		return $isjs ? 'document.write("'.$string.'");' : $string;
+		return format_js($string, $isjs);
 	}
  
  

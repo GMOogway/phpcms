@@ -162,7 +162,7 @@ class special extends admin {
 				$where .= ' AND `inputtime` BETWEEN ' . max((int)strtotime(strpos($this->input->get('start_time'), ' ') ? $this->input->get('start_time') : $this->input->get('start_time').' 00:00:00'), 1) . ' AND ' . ($this->input->get('end_time') ? (int)strtotime(strpos($this->input->get('end_time'), ' ') ? $this->input->get('end_time') : $this->input->get('end_time').' 23:59:59') : SYS_TIME);
 			}
 			if ($_GET['key']) {
-				$where .= " AND `title` LIKE '%".addslashes($_GET['key'])."%' OR `keywords` LIKE '%".addslashes($_GET['key'])."%'";
+				$where .= " AND `title` LIKE '%".$this->db->escape($_GET['key'])."%' OR `keywords` LIKE '%".$this->db->escape($_GET['key'])."%'";
 			}
 			$data = $this->special_api->_get_import_data($_GET['modelid'], $where, $_GET['page']);
 			$pages = $this->special_api->pages;

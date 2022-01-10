@@ -27,7 +27,7 @@ if(is_array($templates)){
 	<tr>
 	<td><?php if ($poster_template[$info]['name']) { echo $poster_template[$info]['name'].' ('.$info.')'; } else { echo $info; }?></td>
 	<td align="center">
-	<a class="btn btn-xs green" href="javascript:<?php if ($poster_template[$info]['iscore']) {?>check<?php } else {?>edit<?php }?>('<?php echo addslashes(new_html_special_chars($info))?>', '<?php echo addslashes(new_html_special_chars($poster_template[$info]['name']))?>');void(0);"><?php if ($poster_template[$info]['iscore']) { echo L('check_template'); } else { echo L('setting_template'); }?></a> <a class="btn btn-xs red" href="?m=poster&c=space&a=public_tempate_del&id=<?php echo $info?>"><?php echo L('delete')?></a>
+	<a class="btn btn-xs green" href="javascript:<?php if ($poster_template[$info]['iscore']) {?>check<?php } else {?>edit<?php }?>('<?php echo new_addslashes(new_html_special_chars($info))?>', '<?php echo new_addslashes(new_html_special_chars($poster_template[$info]['name']))?>');void(0);"><?php if ($poster_template[$info]['iscore']) { echo L('check_template'); } else { echo L('setting_template'); }?></a> <a class="btn btn-xs red" href="?m=poster&c=space&a=public_tempate_del&id=<?php echo $info?>"><?php echo L('delete')?></a>
 	</td>
 	</tr>
 <?php 

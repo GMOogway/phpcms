@@ -8,7 +8,6 @@ include $this->admin_tpl('header');?>
 //-->
 </script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>content_addtop.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>colorpicker.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>hotkeys.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>cookie.js"></script>
 <script type="text/javascript">var catid=0</script>

@@ -10,7 +10,6 @@
 <link rel="stylesheet" href="<?php echo JS_PATH?>layui/css/layui.css" media="all">
 <link rel="stylesheet" href="<?php echo CSS_PATH?>layuimini/css/layuimini.css" media="all">
 <link rel="stylesheet" href="<?php echo CSS_PATH?>layuimini/css/themes/default.css" media="all">
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>jquery.min.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>Dialog/main.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>styleswitch.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>dialog.js"></script>

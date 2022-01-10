@@ -175,13 +175,13 @@ class model {
 				}else if(substr($val, 0, 1) == '(' || substr($val, -1) == ')'){
 					$sql .= $sql ? " $font `$key` IN '$val' " : " `$key` IN '$val'";
 				}else if(!strpos($key,'>') && !strpos($key,'<') && !strpos($key,'=') && substr($val, 0, 1) != '%' && substr($val, -1) != '%'){
-					$val = addslashes($val);
+					$val = $this->escape($val);
 					$sql .= $sql ? " $font `$key` = '$val' " : " `$key` = '$val'";
 				}else if(substr($val, 0, 1) == '%' || substr($val, -1) == '%'){
-					$val = addslashes($val);
+					$val = $this->escape($val);
 					$sql .= $sql ? " $font `$key` LIKE '$val' " : " `$key` LIKE '$val'";
 				}else{
-					$val = addslashes($val);
+					$val = $this->escape($val);
 					$sql .= $sql ? " $font $key '$val' " : " $key '$val'";
 				}
 			}
@@ -254,6 +254,10 @@ class model {
 			$data[] = $r;		
 		}
 		return $data;
+	}
+
+	public function escape($str){
+		return $this->db->escape($str);
 	}
 	
 	/**

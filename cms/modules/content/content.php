@@ -95,7 +95,7 @@ class content extends admin {
 				if($searchtype < 3) {
 					$searchtype = $type_array[$searchtype];
 					$keyword = clearhtml(trim($param['keyword']));
-					$where .= " AND `$searchtype` like '%".addslashes($keyword)."%'";
+					$where .= " AND `$searchtype` like '%".$this->db->escape($keyword)."%'";
 				} elseif($searchtype==3) {
 					$keyword = intval($param['keyword']);
 					$where .= " AND `id`='$keyword'";
@@ -159,7 +159,7 @@ class content extends admin {
 				if($searchtype < 3) {
 					$searchtype = $type_array[$searchtype];
 					$keyword = clearhtml(trim($param['keyword']));
-					$where .= " AND `$searchtype` like '%".addslashes($keyword)."%'";
+					$where .= " AND `$searchtype` like '%".$this->db->escape($keyword)."%'";
 				} elseif($searchtype==3) {
 					$keyword = intval($param['keyword']);
 					$where .= " AND `id`='$keyword'";
@@ -214,7 +214,7 @@ class content extends admin {
 			if($searchtype < 3) {
 				$searchtype = $type_array[$searchtype];
 				$keyword = clearhtml(trim($param['keyword']));
-				$where .= " AND `$searchtype` like '%".addslashes($keyword)."%'";
+				$where .= " AND `$searchtype` like '%".$this->db->escape($keyword)."%'";
 			} elseif($searchtype==3) {
 				$keyword = intval($param['keyword']);
 				$where .= " AND `id`='$keyword'";

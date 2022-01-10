@@ -6,6 +6,7 @@ include $this->admin_tpl('header','attachment');
 <link href="<?php echo JS_PATH?>h5upload/h5upload.css" rel="stylesheet" type="text/css" />
 <style type="text/css">
 img{max-width: 180px;max-height: 180px;border:none;}
+body .table-list table tr>td:first-child, body .table-list table tr>th:first-child {text-align: left;padding: 8px;}
 </style>
 <div class="pad-lr-10">
 <div class="table-list">

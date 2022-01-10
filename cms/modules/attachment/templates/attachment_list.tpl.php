@@ -2,8 +2,6 @@
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header', 'admin');
 ?>
-<script type="text/javascript" src="<?php echo JS_PATH?>jquery-3.5.1.min.js"></script>
-<script type="text/javascript" src="<?php echo CSS_PATH?>bootstrap/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="<?php echo JS_PATH;?>layui/css/layui.css" media="all" />
 <link rel="stylesheet" href="<?php echo CSS_PATH;?>admin/css/global.css" media="all" />
 <link href="<?php echo JS_PATH;?>bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
@@ -256,12 +254,17 @@ function att_delete(obj,aid){
 }
 
 function showthumb(id, name) {
+    var width = 500;
+    var height = 400;
+    if (is_mobile()) {
+        width = height = '90%';
+    }
     var diag = new Dialog({
         id:'edit',
         title:'<?php echo L('att_thumb_manage')?>--'+name,
         url:'<?php echo SELF;?>?m=attachment&c=manage&a=pullic_showthumbs&aid='+id+'&pc_hash='+pc_hash,
-        width:500,
-        height:400,
+        width:width,
+        height:height,
         modal:true
     });
     diag.show();

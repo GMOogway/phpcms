@@ -450,7 +450,7 @@ final class db_mysql {
 		} else {
 			$q = '';
 		}
-		$value = $q.addslashes($value).$q;
+		$value = $q.$this->escape($value).$q;
 		return $value;
 	}
 }

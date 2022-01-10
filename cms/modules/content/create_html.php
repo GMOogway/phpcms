@@ -1358,7 +1358,7 @@ class create_html extends admin {
 		}
 
 		$count = 0;
-		$replace = '`'.$fd.'`=REPLACE(`'.$fd.'`, \''.addslashes($t1).'\', \''.addslashes($t2).'\')';
+		$replace = '`'.$fd.'`=REPLACE(`'.$fd.'`, \''.$this->db->escape($t1).'\', \''.$this->db->escape($t2).'\')';
 
 		foreach ($tables as $table => $fields) {
 			if (!dr_in_array($fd, $fields)) {
@@ -1406,18 +1406,18 @@ class create_html extends admin {
 					dr_json(0, L('存在非法SQL关键词：'.$kw));
 				}
 			}
-			$where = ' WHERE '.addslashes($t1);
+			$where = ' WHERE '.$this->db->escape($t1);
 		}
 
 		if ($ms == 1) {
 			// 之前
-			$replace = '`'.$fd.'`=CONCAT(\''.addslashes($t2).'\', `'.$fd.'`)';
+			$replace = '`'.$fd.'`=CONCAT(\''.$this->db->escape($t2).'\', `'.$fd.'`)';
 		} elseif ($ms == 2) {
 			// 之后
-			$replace = '`'.$fd.'`=CONCAT(`'.$fd.'`, \''.addslashes($t2).'\')';
+			$replace = '`'.$fd.'`=CONCAT(`'.$fd.'`, \''.$this->db->escape($t2).'\')';
 		} else {
 			// 替换
-			$replace = '`'.$fd.'`=\''.addslashes($t2).'\'';
+			$replace = '`'.$fd.'`=\''.$this->db->escape($t2).'\'';
 		}
 
 
@@ -1524,7 +1524,7 @@ class create_html extends admin {
 		}
 
 		foreach ($replace as $t) {
-			$sql = 'update `'.$t[0].'` set `'.$t[1].'`=REPLACE(`'.$t[1].'`, \''.addslashes($value[0]).'\', \''.addslashes($value[1]).'\')';
+			$sql = 'update `'.$t[0].'` set `'.$t[1].'`=REPLACE(`'.$t[1].'`, \''.$this->db->escape($value[0]).'\', \''.$this->db->escape($value[1]).'\')';
 			$this->db->query($sql);
 		}
 

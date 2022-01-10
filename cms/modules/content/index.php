@@ -449,18 +449,13 @@ class index {
 			$MODEL = getcache('model','commons');
 			if(isset($MODEL[$modelid])) {
 				$keywords = safe_replace(new_html_special_chars($this->input->get('keywords')));
-				$keywords = addslashes(iconv('utf-8','gbk',$keywords));
+				$keywords = $this->db->escape($keywords);
 				$this->db->set_model($modelid);
 				$result = $this->db->select("keywords LIKE '%$keywords%'",'id,title,url',10);
 				if(!empty($result)) {
 					$data = array();
 					foreach($result as $rs) {
 						if($rs['id']==$id) continue;
-						if(CHARSET=='gbk') {
-							foreach($rs as $key=>$r) {
-								$rs[$key] = iconv('gbk','utf-8',$r);
-							}
-						}
 						$data[] = $rs;
 					}
 					if(count($data)==0) exit('0');

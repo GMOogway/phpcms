@@ -1005,7 +1005,7 @@ class index extends foreground {
 			$userid = intval($_GET['userid']);
 			//如果是会员修改，而且NICKNAME和原来优质一致返回1，否则返回0
 			$info = get_memberinfo($userid);
-			if($info['nickname'] == addslashes($nickname)){//未改变
+			if($info['nickname'] == $this->db->escape($nickname)){//未改变
 				exit('1');
 			}else{//已改变，判断是否已有此名
 				$res = $this->db->get_one(array('nickname'=>$nickname));

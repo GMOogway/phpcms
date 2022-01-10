@@ -359,16 +359,16 @@ class block_admin extends admin {
 			if (!empty($searchtype) && !empty($keyword)) {
 				switch ($searchtype) {
 					case '1'://标题搜索
-						$sql .= " AND `title` LIKE '%".addslashes($keyword)."%' ";
+						$sql .= " AND `title` LIKE '%".$this->db->escape($keyword)."%' ";
 						break;
 					case '2'://简介搜索
-						$sql .= " AND `description` LIKE '%".addslashes($keyword)."%' ";
+						$sql .= " AND `description` LIKE '%".$this->db->escape($keyword)."%' ";
 						break;
 					case '3'://用户名
-						$sql .= " AND `username` = '".addslashes($keyword)."' ";
+						$sql .= " AND `username` = '".$this->db->escape($keyword)."' ";
 						break;
 					case '4'://ID搜索
-						$sql .= " AND `id` = '".addslashes($keyword)."' ";
+						$sql .= " AND `id` = '".$this->db->escape($keyword)."' ";
 						break;
 				}
 			}

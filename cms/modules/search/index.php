@@ -60,7 +60,7 @@ class index {
             }
             if($page==1 && !$setting['sphinxenable']) {
                 //精确搜索
-                $commend = $this->db->get_one("`siteid`= '$siteid' $sql_tid $sql_time AND `data` like '%".addslashes($q)."%'");
+                $commend = $this->db->get_one("`siteid`= '$siteid' $sql_tid $sql_time AND `data` like '%".$this->db->escape($q)."%'");
             } else {
                 $commend = '';
             }
@@ -77,7 +77,7 @@ class index {
                     $result = $res['matches'];
                 }
             } else {
-                $sql = "`siteid`= '$siteid' $sql_tid $sql_time AND `data` like '%".addslashes($q)."%'";
+                $sql = "`siteid`= '$siteid' $sql_tid $sql_time AND `data` like '%".$this->db->escape($q)."%'";
                 $result = $this->db->listinfo($sql, 'searchid DESC', $page, 10);
             }
             //var_dump($result);

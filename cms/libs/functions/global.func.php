@@ -1863,7 +1863,7 @@ function L($language = 'no_language',$pars = array(), $modules = '') {
 	static $LANG_MODULES = array();
 	static $lang = '';
 	if(defined('IS_ADMIN') && IS_ADMIN) {
-		$lang = SYS_STYLE ? SYS_STYLE : 'zh-cn';
+		$lang = defined('SYS_STYLE') && SYS_STYLE ? SYS_STYLE : 'zh-cn';
 	} else {
 		$lang = SYS_LANGUAGE;
 	}
@@ -3811,7 +3811,6 @@ function cache_page_start() {
 function cache_page($ttl = 360, $isjs = 0) {
 	if($ttl == 0 || !defined('CACHE_PAGE_ID')) return false;
 	$contents = ob_get_contents();
-
 	if($isjs) $contents = format_js($contents);
 	$contents = "<!--expiretime:".(SYS_TIME + $ttl)."-->\n".$contents;
 	setcache(CACHE_PAGE_ID, $contents, 'page_tmp/'.substr(CACHE_PAGE_ID, 0, 2));

@@ -7,7 +7,6 @@ body {background-color: #f5f6f8;}
 .progress {height: 20px;background-color: #fff;border-radius: 4px;}
 .progress-bar-success {background-color: #3ea9e2;}
 </style>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>jquery-3.5.1.min.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>jquery.slimscroll.min.js"></script>
 <div class="page-container" style="margin-bottom: 0px !important;">
     <div class="page-content-wrapper">

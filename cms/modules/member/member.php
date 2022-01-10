@@ -202,17 +202,17 @@ class member extends admin {
 		
 			if($keyword) {
 				if ($type == '1') {
-					$where[] = "`username` LIKE '%".addslashes($keyword)."%'";
+					$where[] = "`username` LIKE '%".$this->db->escape($keyword)."%'";
 				} elseif($type == '2') {
-					$where[] = "`userid` = '".addslashes($keyword)."'";
+					$where[] = "`userid` = '".$this->db->escape($keyword)."'";
 				} elseif($type == '3') {
-					$where[] = "`email` LIKE '%".addslashes($keyword)."%'";
+					$where[] = "`email` LIKE '%".$this->db->escape($keyword)."%'";
 				} elseif($type == '4') {
-					$where[] = "`regip` = '".addslashes($keyword)."'";
+					$where[] = "`regip` = '".$this->db->escape($keyword)."'";
 				} elseif($type == '5') {
-					$where[] = "`nickname` LIKE '%".addslashes($keyword)."%'";
+					$where[] = "`nickname` LIKE '%".$this->db->escape($keyword)."%'";
 				} else {
-					$where[] = "`username` LIKE '%".addslashes($keyword)."%'";
+					$where[] = "`username` LIKE '%".$this->db->escape($keyword)."%'";
 				}
 			}
 		}
@@ -721,7 +721,7 @@ class member extends admin {
 			$userid = intval($_GET['userid']);
 			//如果是会员修改，而且NICKNAME和原来优质一致返回1，否则返回0
 			$info = get_memberinfo($userid);
-			if($info['username'] == addslashes($username)){//未改变
+			if($info['username'] == $this->db->escape($username)){//未改变
 				exit('1');
 			}else{//已改变，判断是否已有此名
 				$res = $this->db->get_one(array('username'=>$username));
@@ -795,7 +795,7 @@ class member extends admin {
 			$userid = intval($_GET['userid']);
 			//如果是会员修改，而且NICKNAME和原来优质一致返回1，否则返回0
 			$info = get_memberinfo($userid);
-			if($info['nickname'] == addslashes($nickname)){//未改变
+			if($info['nickname'] == $this->db->escape($nickname)){//未改变
 				exit('1');
 			}else{//已改变，判断是否已有此名
 				$res = $this->db->get_one(array('nickname'=>$nickname));

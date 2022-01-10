@@ -51,7 +51,7 @@ if(is_array($data)){
 	<a class="btn btn-xs blue" href="?m=formguide&c=formguide_info&a=init&formid=<?php echo $form['modelid']?>&menuid=<?php echo $_GET['menuid']?>"><?php echo L('info_list')?></a>
 	<a class="btn btn-xs green" href="?m=formguide&c=formguide&a=edit&formid=<?php echo $form['modelid']?>"><?php echo L('modify')?></a>
 	<a class="btn btn-xs dark" href="?m=formguide&c=formguide_field&a=init&formid=<?php echo $form['modelid']?>"><?php echo L('field_manage')?></a>
-	<a class="btn btn-xs red" href="###" onClick="Dialog.confirm('<?php echo L('confirm', array('message' => addslashes(new_html_special_chars($form['name']))))?>',function(){redirect('?m=formguide&c=formguide&a=delete&formid=<?php echo $form['modelid']?>&pc_hash='+pc_hash);});"><?php echo L('del')?></a>
+	<a class="btn btn-xs red" href="###" onClick="Dialog.confirm('<?php echo L('confirm', array('message' => new_addslashes(new_html_special_chars($form['name']))))?>',function(){redirect('?m=formguide&c=formguide&a=delete&formid=<?php echo $form['modelid']?>&pc_hash='+pc_hash);});"><?php echo L('del')?></a>
 	<a class="btn btn-xs yellow" href="javascript:stat('<?php echo $form['modelid']?>', '<?php echo safe_replace($form['name'])?>');void(0);"><?php echo L('stat')?></a></td>
 	</tr>
 <?php 
