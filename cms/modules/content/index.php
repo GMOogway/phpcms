@@ -107,7 +107,7 @@ class index {
 			$_groupid = param::get_cookie('_groupid');
 			$_groupid = intval($_groupid);
 			if(!$_groupid) {
-				$forward = urlencode(get_url());
+				$forward = urlencode(dr_now_url());
 				showmessage(L('login_website'),APP_PATH.'index.php?m=member&c=index&a=login&forward='.$forward);
 			}
 			if(!in_array($_groupid,$groupids_view)) showmessage(L('no_priv'));
@@ -115,7 +115,7 @@ class index {
 			//根据栏目访问权限判断权限
 			$_priv_data = $this->_category_priv($catid);
 			if($_priv_data=='-1') {
-				$forward = urlencode(get_url());
+				$forward = urlencode(dr_now_url());
 				showmessage(L('login_website'),APP_PATH.'index.php?m=member&c=index&a=login&forward='.$forward);
 			} elseif($_priv_data=='-2') {
 				showmessage(L('no_priv'));
@@ -139,7 +139,7 @@ class index {
 			//检查是否支付过
 			$allow_visitor = self::_check_payment($catid.'_'.$id,$paytype);
 			if(!$allow_visitor) {
-				$http_referer = urlencode(get_url());
+				$http_referer = urlencode(dr_now_url());
 				$allow_visitor = sys_auth($catid.'_'.$id.'|'.$readpoint.'|'.$paytype).'&http_referer='.$http_referer;
 			} else {
 				$allow_visitor = 1;
@@ -266,7 +266,7 @@ class index {
 		$catid = intval($this->input->get('catid'));
 		$_priv_data = $this->_category_priv($catid);
 		if($_priv_data=='-1') {
-			$forward = urlencode(get_url());
+			$forward = urlencode(dr_now_url());
 			showmessage(L('login_website'),APP_PATH.'index.php?m=member&c=index&a=login&forward='.$forward);
 		} elseif($_priv_data=='-2') {
 			showmessage(L('no_priv'));

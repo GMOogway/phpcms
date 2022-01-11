@@ -95,7 +95,7 @@ function plugin_stat($appid = '') {
 		$pars['os'] = 'Other';
 	}
 	$pars['ip'] = ip2long(ip());
-	$pars['domain'] = urlencode(SITE_PROTOCOL.SITE_HURL);
+	$pars['domain'] = urlencode(trim(FC_NOW_HOST, '/'));
 	$data = http_build_query($pars);
 	$url = 'http://open.cms.cn/api.php?op=appstatus&'.$data.'&appid='.$appid;
 	$headers = get_headers($url,1);	

@@ -162,6 +162,15 @@ $p = dr_authcode(array(
 function load_file_list(id) {
 	$.getJSON('?m=admin&c=category&a=public_tpl_file_list&style='+id+'&module=special&templates=show&name=data', function(data){$('#show_template').html(data.show_template);});
 }
+//只能放到最下面
+$(function(){
+/*
+ * 加载禁用外边链接
+ */
+	$('#linkurl').attr('disabled',true);
+	$('#islink').attr('checked',false);
+	$('.edit_content').hide();
+});
 </script>
 </body>
 </html>

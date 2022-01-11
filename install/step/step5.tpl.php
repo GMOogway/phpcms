@@ -102,7 +102,7 @@
                                     <table width="100%" cellspacing="1" cellpadding="0">
                                         <tr>
                                             <th width="20%" align="right">网站地址：</th>
-                                            <td><?php echo $siteurl;?></td>
+                                            <td><?php echo FC_NOW_HOST;?></td>
                                         </tr>
                                         <tr>
                                             <th align="right">网站名称：</th>
@@ -117,7 +117,7 @@
                                     <table width="100%" cellspacing="1" cellpadding="0">
                                         <tr>
                                             <th width="20%" align="right">后台登录口地址：</th>
-                                            <td><input name="adminpath" id="adminpath" type="text" placeholder="设置后台登录地址" value="" class="input-text" /><button class="btn btn-sm blue" type="button" name="button" onclick="to_key()"> 自动生成 </button><br>后台登录地址设置同文件夹命名规则，可为空，为空不更改后台地址，例如:admin 安装完成后后台登录地址即为 <?php echo $siteurl?>admin</td>
+                                            <td><input name="adminpath" id="adminpath" type="text" placeholder="设置后台登录地址" value="" class="input-text" /><button class="btn btn-sm blue" type="button" name="button" onclick="to_key()"> 自动生成 </button><br>后台登录地址设置同文件夹命名规则，可为空，为空不更改后台地址，例如:admin 安装完成后后台登录地址即为 <?php echo FC_NOW_HOST?>admin</td>
                                         </tr>
                                         <tr>
                                             <th align="right">超级管理员帐号：</th>

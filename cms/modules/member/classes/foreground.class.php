@@ -97,7 +97,7 @@ class foreground {
 				}
 				unset($userid, $password, $cms_auth, $auth_key);
 			} else {
-				$forward= $this->input->get('forward') ?  urlencode($this->input->get('forward')) : urlencode(get_url());
+				$forward= $this->input->get('forward') ?  urlencode($this->input->get('forward')) : urlencode(dr_now_url());
 				showmessage(L('please_login', '', 'member'), 'index.php?m=member&c=index&a=login&forward='.$forward);
 			}
 		}

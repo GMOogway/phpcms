@@ -19,5 +19,5 @@ $i++;
 <?php }?>
 <input type="hidden" name="voteid" value="<?php echo $subjectid;?>">
 </dl> 
-<p> &nbsp;&nbsp; <input type="submit" value="<?php echo L('submit')?>" name="dosubmit" />    &nbsp;&nbsp; <a href="<?php echo SITE_PROTOCOL.SITE_HURL.WEB_PATH?>index.php?m=vote&c=index&a=result&id=<?php echo $subjectid;?>"><?php echo L('vote_showresult')?></a> </p>
+<p> &nbsp;&nbsp; <input type="submit" value="<?php echo L('submit')?>" name="dosubmit" />    &nbsp;&nbsp; <a href="<?php echo trim(FC_NOW_HOST, '/').WEB_PATH?>index.php?m=vote&c=index&a=result&id=<?php echo $subjectid;?>"><?php echo L('vote_showresult')?></a> </p>
 </form>

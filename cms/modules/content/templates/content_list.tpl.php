@@ -180,13 +180,11 @@ if(is_array($datas)){
                 </ul>
             </div>
         </label>
-        <label>
-            <?php if(!$this->input->get('reject')) { ?>
-            <?php if($workflow_menu) { ?><div style='position:relative;'><button type="button" class="btn dark btn-sm" id="reject_check"><i class="fa fa-times"></i> <?php echo L('reject');?></button>
-            <div id='reject_content' style='background-color: #fff;border:#e7ecf1 solid 1px;position:absolute;z-index:10;right:-20px;bottom:30px;padding:10px;display:none;'>
-            <label><textarea class="form-control" name='reject_c' id='reject_c' style='width:200px;height:46px;margin-right:10px;' onfocus="if(this.value == this.defaultValue) this.value = ''" onblur="if(this.value.replace(' ','') == '') this.value = this.defaultValue;"><?php echo L('reject_msg');?></textarea></label> <label><button type="button" class="btn dark btn-sm" id="reject_check1"><i class="fa fa-times"></i> <?php echo L('submit');?></button></label></div></div>
-            <?php }}?>
-        </label>
+        <?php if(!$this->input->get('reject')) { ?>
+        <?php if($workflow_menu) { ?><label><div style='position:relative;'><button type="button" class="btn dark btn-sm" id="reject_check"><i class="fa fa-times"></i> <?php echo L('reject');?></button>
+        <div id='reject_content' style='background-color: #fff;border:#e7ecf1 solid 1px;position:absolute;z-index:10;right:-20px;bottom:30px;padding:10px;display:none;'>
+        <label><textarea class="form-control" name='reject_c' id='reject_c' style='width:200px;height:46px;margin-right:10px;' onfocus="if(this.value == this.defaultValue) this.value = ''" onblur="if(this.value.replace(' ','') == '') this.value = this.defaultValue;"><?php echo L('reject_msg');?></textarea></label> <label><button type="button" class="btn dark btn-sm" id="reject_check1"><i class="fa fa-times"></i> <?php echo L('submit');?></button></label></div></div></label>
+        <?php }}?>
     </div>
     <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
 </div>

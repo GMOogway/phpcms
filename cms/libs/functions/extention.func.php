@@ -162,7 +162,7 @@ function makeurlrule() {
         return url_par('page={$'.'page}'); 
     } 
     else { 
-        $url = preg_replace('/-[0-9]+.html$/','-{$page}.html',get_url()); 
+        $url = preg_replace('/-[0-9]+.html$/','-{$page}.html',dr_now_url()); 
         return $url; 
     } 
 } 

@@ -28,8 +28,6 @@ pc_base::load_sys_func('global');
 pc_base::load_sys_func('dir');
 $steps = include CMS_PATH.'install/step.inc.php';
 $step = trim($_REQUEST['step']) ? trim($_REQUEST['step']) : 1;
-$pos = strpos(get_url(),'install/'.SELF);
-$siteurl = substr(get_url(),0,$pos);
 if(strrpos(strtolower(PHP_OS),"win") === FALSE) {
 	define('ISUNIX', TRUE);
 } else {
@@ -231,8 +229,6 @@ switch($step)
 		break;
 
 	case '7': //完成安装
-		$pos = strpos(get_url(),'install/'.SELF);
-		$url = substr(get_url(),0,$pos);
 		//设置cms 报错信息
 		set_config(array('errorlog'=>'1'),'system');			
 		file_put_contents(CACHE_PATH.'install.lock', time());
@@ -252,14 +248,14 @@ switch($step)
 				'auth_key'=>token($name),
 				'web_path'=>$rootpath,
 				'errorlog'=>'0',
-				'js_path'=>$siteurl.'statics/js/',
-				'css_path'=>$siteurl.'statics/css/',
-				'img_path'=>$siteurl.'statics/images/',
-				'mobile_js_path'=>$siteurl.'mobile/statics/js/',
-				'mobile_css_path'=>$siteurl.'mobile/statics/css/',
-				'mobile_img_path'=>$siteurl.'mobile/statics/images/',
-				'app_path'=>$siteurl,
-				'mobile_path'=>$siteurl.'mobile/',
+				'js_path'=>FC_NOW_HOST.'statics/js/',
+				'css_path'=>FC_NOW_HOST.'statics/css/',
+				'img_path'=>FC_NOW_HOST.'statics/images/',
+				'mobile_js_path'=>FC_NOW_HOST.'mobile/statics/js/',
+				'mobile_css_path'=>FC_NOW_HOST.'mobile/statics/css/',
+				'mobile_img_path'=>FC_NOW_HOST.'mobile/statics/images/',
+				'app_path'=>FC_NOW_HOST,
+				'mobile_path'=>FC_NOW_HOST.'mobile/',
 			);
 			$db_config = array('hostname'=>$dbhost,
 				'port'=>$dbport,
@@ -302,7 +298,7 @@ switch($step)
 			if(file_exists(CMS_PATH."install/main/".$dbfile)) {
 				$sql = file_get_contents(CMS_PATH."install/main/".$dbfile);
 				$sql = str_replace('CMS演示站', $name , $sql);
-				$sql = str_replace('http://www.kaixin100.cn/', $siteurl , $sql);
+				$sql = str_replace('http://www.kaixin100.cn/', FC_NOW_HOST , $sql);
 				_sql_execute($mysqli,$sql);
 				//创建网站创始人
 				$password_arr = password($password);
@@ -310,8 +306,6 @@ switch($step)
 				$encrypt = $password_arr['encrypt'];
 				$email = trim($email);
 				_sql_execute($mysqli,"INSERT INTO ".$tablepre."admin (`userid`,`username`,`password`,`roleid`,`encrypt`,`lastloginip`,`lastlogintime`,`email`,`realname`) VALUES ('1','$username','$password','[\"1\"]','$encrypt','','','$email','创始人')");
-				//设置默认站点1域名
-				_sql_execute($mysqli,"update ".$tablepre."site set `domain`='$siteurl', `mobile_domain`='".$siteurl."mobile/' where `siteid`='1'");
 				if ($adminpath) {
 					//设置后台登录地址
 					$adminpath = trim($adminpath);

@@ -22,17 +22,17 @@ include $this->admin_tpl('header', 'admin');
 	<table width="100%"  class="table_form">
     <tr>
     <th width="80"><?php echo L('stdcall')?>：</th>
-    <td class="y-bg"><?php echo form::radio(array('0'=>L('model_configuration'), '1'=>L('custom_sql')), $type ? $type : 0, 'name="type" onclick="location.href=\''.get_url().'&type=\'+this.value"')?></td>
+    <td class="y-bg"><?php echo form::radio(array('0'=>L('model_configuration'), '1'=>L('custom_sql')), $type ? $type : 0, 'name="type" onclick="location.href=\''.dr_now_url().'&type=\'+this.value"')?></td>
   </tr>
   <?php if ($type==0) :?>
     <tr>
     <th><?php echo L('select_model')?>：</th>
-    <td class="y-bg"><?php echo form::select($modules, $module, 'name="module" id="module" onchange="location.href=\''.get_url().'&module=\'+this.value"')?><script type="text/javascript">$(function(){$("#module").formValidator({onshow:"<?php echo L('please_select_model')?>",onfocus:"<?php echo L('please_select_model')?>"}).inputValidator({min:1, onerror:'<?php echo L('please_select_model')?>'});});</script></td>
+    <td class="y-bg"><?php echo form::select($modules, $module, 'name="module" id="module" onchange="location.href=\''.dr_now_url().'&module=\'+this.value"')?><script type="text/javascript">$(function(){$("#module").formValidator({onshow:"<?php echo L('please_select_model')?>",onfocus:"<?php echo L('please_select_model')?>"}).inputValidator({min:1, onerror:'<?php echo L('please_select_model')?>'});});</script></td>
   </tr>
   <?php if ($module):?>
     <tr>
     <th><?php echo L('selectingoperation')?>：</th>
-    <td class="y-bg"><?php echo form::radio($html['action'], $action, 'name="action" onclick="location.href=\''.get_url().'&action=\'+this.value"')?></td>
+    <td class="y-bg"><?php echo form::radio($html['action'], $action, 'name="action" onclick="location.href=\''.dr_now_url().'&action=\'+this.value"')?></td>
   </tr>
   <?php endif;?>
   <?php if(isset($html[$action]) && is_array($html[$action]) && $action)foreach($html[$action] as $k=>$v):?>

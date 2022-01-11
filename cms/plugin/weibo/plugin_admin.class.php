@@ -19,7 +19,7 @@
 					$o = new WeiboOAuth( $setting['wb_akey'] , $setting['wb_skey']);
 					$keys = $o->getRequestToken();
 					print_r($keys);
-					$aurl = $o->getAuthorizeURL( $keys['oauth_token'] ,false , get_url());
+					$aurl = $o->getAuthorizeURL( $keys['oauth_token'] ,false , dr_now_url());
 					$_SESSION['keys'] = $keys;
 					$txt = '<a href="'.$aurl.'">点击进行授权</a>';
 				}

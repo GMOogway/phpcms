@@ -31,8 +31,8 @@ jQuery(document).ready(function() {
 		<td>
 		<div class="explain-col">
  			<label><?php echo $model_form?></label>
-			<?php echo L('keyword')?>：<label><input type='text' name="key" id="key" value="<?php echo $this->input->get('key');?>" size="25"></label>
 			<label id="catids"></label>
+			<?php echo L('keyword')?>：<label><input type='text' name="key" id="key" value="<?php echo $this->input->get('key');?>" size="25"></label>
 				<?php echo L('input_time')?>：
 				<?php $start_f = $this->input->get('start_time') ? $this->input->get('start_time') : format::date(SYS_TIME-2592000);$end_f = $this->input->get('end_time') ? $this->input->get('end_time') : format::date(SYS_TIME+86400);?>
 				<label><div class="formdate">
@@ -110,11 +110,11 @@ jQuery(document).ready(function() {
 		$("#typeid").formValidator({tipid:"msg_id",onshow:"<?php echo L('please_choose_type')?>",oncorrect:"<?php echo L('true')?>"}).inputValidator({min:1,onerror:"<?php echo L('please_choose_type')?>"});	
 	});
 	$("#myform").submit(function (){
-		var str = 0;
-		$("input[name='ids[]']").each(function() {
-			if($(this).attr('checked')=='checked') str = 1;
+		var ids='';
+		$("input[name='ids[]']:checked").each(function() {
+			ids += $(n).val() + ',';
 		});
-		if(str==0) {
+		if(ids=='') {
 			Dialog.alert('<?php echo L('choose_news')?>');
 			return false;
 		}

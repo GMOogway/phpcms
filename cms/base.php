@@ -25,10 +25,6 @@ define('IN_PHPCMS', IN_CMS);
 
 //缓存文件夹地址
 !defined('CACHE_PATH') && define('CACHE_PATH', CMS_PATH.'caches'.DIRECTORY_SEPARATOR);
-//主机协议
-define('SITE_PROTOCOL', isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == '443' ? 'https://' : 'http://');
-//当前访问的主机名
-define('SITE_HURL', (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : ''));
 //来源
 define('HTTP_REFERER', isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '');
 
@@ -341,6 +337,8 @@ if (is_cli()) {
 	) {
 		$url.= 's';
 	}
+	// 主机协议
+	define('SITE_PROTOCOL', $url.'://');
 	$host = strtolower($_SERVER['HTTP_HOST']);
 	if (strpos($host, ':') !== false) {
 		list($nhost, $port) = explode(':', $host);
@@ -358,7 +356,9 @@ if (is_cli()) {
 	$uu = isset($_SERVER['HTTP_X_REWRITE_URL']) || trim($_SERVER['REQUEST_URI'], '/') == SELF ? trim($_SERVER['HTTP_X_REWRITE_URL'], '/') : ($_SERVER['REQUEST_URI'] ? trim($_SERVER['REQUEST_URI'], '/') : NULL);
 	if (defined('WEB_PATH') && WEB_PATH && strpos($uu, WEB_PATH) !== false &&  strpos($uu, WEB_PATH) === 0) {
 		$uu = trim(substr($uu, strlen(WEB_PATH)), '/');
-		define('WEB_DIR', trim(WEB_PATH, '/').'/');
+		define('WEB_DIR', WEB_PATH);
+	} else if (defined('WEB_PATH') && WEB_PATH) {
+		define('WEB_DIR', WEB_PATH);
 	} else {
 		define('WEB_DIR', '/');
 	}

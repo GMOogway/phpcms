@@ -128,7 +128,6 @@ $(function(){
 /*
  * 加载禁用外边链接
  */
-
 	$('#linkurl').attr('disabled',true);
 	$('#islink').attr('checked',false);
 	$('.edit_content').hide();

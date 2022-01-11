@@ -94,8 +94,8 @@ include $this->admin_tpl('header', 'admin');?>
 	<tr>
         <th><?php echo L('isurl')?>：</th>
         <td><div class="mt-radio-inline">
-          <label class="mt-radio mt-radio-outline"><input type="radio" name="info[isurl]" value="1" onclick="redirect('<?php echo get_url().'&isurl=1';?>')" <?php if(isset($_GET['isurl']) && $_GET['isurl']==1) echo 'checked';?>> <?php echo L('yes')?> <span></span></label>
-          <label class="mt-radio mt-radio-outline"><input type="radio" name="info[isurl]" value="0" <?php if(!isset($_GET['isurl']) || (isset($_GET['isurl']) && $_GET['isurl']==0)) echo 'checked';?> onclick="redirect('<?php echo get_url().'&isurl=0';?>')"> <?php echo L('no')?> <span></span></label>
+          <label class="mt-radio mt-radio-outline"><input type="radio" name="info[isurl]" value="1" onclick="redirect('<?php echo dr_now_url().'&isurl=1';?>')" <?php if(isset($_GET['isurl']) && $_GET['isurl']==1) echo 'checked';?>> <?php echo L('yes')?> <span></span></label>
+          <label class="mt-radio mt-radio-outline"><input type="radio" name="info[isurl]" value="0" <?php if(!isset($_GET['isurl']) || (isset($_GET['isurl']) && $_GET['isurl']==0)) echo 'checked';?> onclick="redirect('<?php echo dr_now_url().'&isurl=0';?>')"> <?php echo L('no')?> <span></span></label>
         </div></td>
       </tr>
 <?php if(isset($_GET['isurl']) && $_GET['isurl']==1) {?>

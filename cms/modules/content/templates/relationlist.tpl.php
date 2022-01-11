@@ -2,6 +2,9 @@
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');
 ?>
+<style type="text/css">
+body .table-list table tr>td:first-child, body .table-list table tr>th:first-child {text-align: left;padding: 8px;}
+</style>
 <div class="pad-10">
 <form name="searchform" action="" method="get" >
 <input type="hidden" value="content" name="m">

@@ -13,7 +13,7 @@ class param {
 	public function __construct() {
 		$this->input = pc_base::load_sys_class('input');
 
-		$this->route_config = pc_base::load_config('route', SITE_HURL) ? pc_base::load_config('route', SITE_HURL) : pc_base::load_config('route', 'default');
+		$this->route_config = pc_base::load_config('route', DOMAIN_NAME) ? pc_base::load_config('route', DOMAIN_NAME) : pc_base::load_config('route', 'default');
 
 		if(isset($this->route_config['data']['POST']) && is_array($this->route_config['data']['POST'])) {
 			foreach($this->route_config['data']['POST'] as $_key => $_value) {

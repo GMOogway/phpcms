@@ -6,7 +6,7 @@ class readpoint {
 		$this->input = pc_base::load_sys_class('input');
 		$this->userid = param::get_cookie('_userid');
 		if(!$this->userid) {
-			header("Location: index.php?m=member&c=index&a=login&forward=".urlencode(get_url()));
+			header("Location: index.php?m=member&c=index&a=login&forward=".urlencode(dr_now_url()));
 			exit;
 		}
 		$this->username = param::get_cookie('_username');

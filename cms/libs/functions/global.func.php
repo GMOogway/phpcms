@@ -1209,16 +1209,6 @@ function dr_msg($code, $msg, $url = '', $time = 3, $dialog = '') {
 	exit();
 }
 /**
- * 获取当前页面完整URL地址
- */
-function get_url() {
-	$sys_protocal = isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == '443' || isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 1 && $_SERVER['HTTPS'] == 'on' || isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https' || isset($_SERVER['HTTP_FRONT_END_HTTPS']) && strtolower($_SERVER['HTTP_FRONT_END_HTTPS']) == 'on' ? 'https://' : 'http://';
-	$php_self = $_SERVER['PHP_SELF'] ? safe_replace($_SERVER['PHP_SELF']) : safe_replace($_SERVER['SCRIPT_NAME']);
-	$path_info = isset($_SERVER['PATH_INFO']) ? safe_replace($_SERVER['PATH_INFO']) : '';
-	$relate_url = isset($_SERVER['REQUEST_URI']) ? safe_replace($_SERVER['REQUEST_URI']) : $php_self.(isset($_SERVER['QUERY_STRING']) ? '?'.safe_replace($_SERVER['QUERY_STRING']) : $path_info);
-	return $sys_protocal.(isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '').$relate_url;
-}
-/**
  * 当前URL
  */
 function now_url($url, $siteid = 1, $ismobile = 1, $ishtml = 1) {
@@ -2383,7 +2373,7 @@ function pageurl($urlrule, $page, $array = array()) {
  * @return URL
  */
 function url_par($par, $url = '') {
-	if($url == '') $url = get_url();
+	if($url == '') $url = dr_now_url();
 	$pos = strpos($url, '?');
 	if($pos === false) {
 		$url .= '?'.$par;
@@ -2468,7 +2458,7 @@ function get_siteid() {
 	} else {
 		$data = getcache('sitelist', 'commons');
 		if(!is_array($data)) return '1';
-		$site_url = SITE_PROTOCOL.SITE_HURL;
+		$site_url = trim(FC_NOW_HOST, '/');
 		foreach ($data as $v) {
 			if ($v['url'] == $site_url.'/') $siteid = $v['siteid'];
 		}

@@ -455,9 +455,6 @@ class index extends admin {
 		$show_header = $show_pc_hash = true;
 		$time = (int)strtotime($this->input->get('time'));
 		$file = CACHE_PATH.'caches_error/caches_data/log-'.date('Y-m-d',$time).'.php';
-		if (!is_file($file)) {
-			dr_json(0, L('文件不存在：'.$file));
-		}
 		unlink($file);
 		dr_json(1, L('operation_success'));
 	}
@@ -487,9 +484,6 @@ class index extends admin {
 	public function public_email_log_del() {
 		$show_header = $show_pc_hash = true;
 		$file = CACHE_PATH.'email_log.php';
-		if (!is_file($file)) {
-			dr_json(0, L('文件不存在：'.$file));
-		}
 		unlink($file);
 		dr_json(1, L('operation_success'));
 	}
@@ -542,9 +536,6 @@ class index extends admin {
 	public function public_error_del() {
 		$show_header = $show_pc_hash = true;
 		$file = CACHE_PATH.'error_log.php';
-		if (!is_file($file)) {
-			dr_json(0, L('文件不存在：'.$file));
-		}
 		unlink($file);
 		dr_json(1, L('operation_success'));
 	}

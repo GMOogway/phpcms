@@ -186,7 +186,7 @@ class smsapi {
 		$host = $matches['host'];
 		$path = $matches['path'] ? $matches['path'].($matches['query'] ? '?'.$matches['query'] : '') : '/';
 		$port = !empty($matches['port']) ? $matches['port'] : 80;
-		$siteurl = $this->_get_url();
+		$siteurl = dr_now_url();
 		if($post) {
 			$out = "POST $path HTTP/1.1\r\n";
 			$out .= "Accept: */*\r\n";
@@ -242,40 +242,6 @@ class smsapi {
 		unset($return_arr);
 		
 		return $return;
-	}
-
-	/**
-	 * 获取当前页面完整URL地址
-	 */
-	private function _get_url() {
-		$sys_protocal = isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == '443' || isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 1 && $_SERVER['HTTPS'] == 'on' || isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https' || isset($_SERVER['HTTP_FRONT_END_HTTPS']) && strtolower($_SERVER['HTTP_FRONT_END_HTTPS']) == 'on' ? 'https://' : 'http://';
-		$php_self = $_SERVER['PHP_SELF'] ? $this->_safe_replace($_SERVER['PHP_SELF']) : $this->_safe_replace($_SERVER['SCRIPT_NAME']);
-		$path_info = isset($_SERVER['PATH_INFO']) ? $this->_safe_replace($_SERVER['PATH_INFO']) : '';
-		$relate_url = isset($_SERVER['REQUEST_URI']) ? $this->_safe_replace($_SERVER['REQUEST_URI']) : $php_self.(isset($_SERVER['QUERY_STRING']) ? '?'.$this->_safe_replace($_SERVER['QUERY_STRING']) : $path_info);
-		return $sys_protocal.(isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '').$relate_url;
-	}
-	
-	/**
-	 * 安全过滤函数
-	 *
-	 * @param $string
-	 * @return string
-	 */
-	private function _safe_replace($string) {
-		$string = str_replace('%20','',$string);
-		$string = str_replace('%27','',$string);
-		$string = str_replace('%2527','',$string);
-		$string = str_replace('*','',$string);
-		$string = str_replace('"','&quot;',$string);
-		$string = str_replace("'",'',$string);
-		$string = str_replace('"','',$string);
-		$string = str_replace(';','',$string);
-		$string = str_replace('<','&lt;',$string);
-		$string = str_replace('>','&gt;',$string);
-		$string = str_replace("{",'',$string);
-		$string = str_replace('}','',$string);
-		$string = str_replace('\\','',$string);
-		return $string;
 	}
 	
 	/**

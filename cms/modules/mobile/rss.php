@@ -38,7 +38,7 @@ class rss {
 			$MODEL = getcache('model','commons');
 			$modelid = $CAT['modelid'];		
 		    $encoding   =  CHARSET;
-		    $about      =  SITE_PROTOCOL.SITE_HURL;
+		    $about      =  trim(FC_NOW_HOST, '/');
 		    $title      =  $CAT['catname'];
 		    $description = $CAT['description'];
 		    $content_html = $CAT['content_ishtml'];
@@ -47,7 +47,7 @@ class rss {
 		    $cache      =  60;
 		    $rssfile    = new RSSBuilder($encoding, $about, $title, $description, $image_link, $category, $cache);
 		    $publisher  =  '';
-		    $creator    =  SITE_PROTOCOL.SITE_HURL;
+		    $creator    =  trim(FC_NOW_HOST, '/');
 		    $date       =  date('r');
 		    $rssfile->addDCdata($publisher, $creator, $date);
 		    $ids = explode(",",$CAT['arrchildid']);
@@ -68,7 +68,7 @@ class rss {
 		        $description    =  "<![CDATA[".$img.$r['description']."]]> ";
 		        $subject        =  '';
 		        $date           =  date('Y-m-d H:i:s' , $r['inputtime']);
-		        $author         =  $CMS['sitename'].' '.SITE_PROTOCOL.SITE_HURL;
+		        $author         =  $CMS['sitename'].' '.trim(FC_NOW_HOST, '/');
 		        $comments       =  '';//注释;
 	
 		        $rssfile->addItem($about, $title, $link, $description, $subject, $date,	$author, $comments, $image);
