@@ -91,11 +91,15 @@ class content_input {
 				$content = $this->input->post('info')[$field];
 				$site_setting = string2array($this->site_config['setting']);
 				$watermark = $site_setting['ueditor'] || $watermark ? 1 : 0;
-				$auto_thumb_length = intval($_POST['auto_thumb_'.$field])-1;
 				if(preg_match_all("/(src)=([\"|']?)([^ \"'>]+)\\2/i", code2html($content), $matches)) {
-					$img = $matches[3][$auto_thumb_length];
-					$ext = get_image_ext($img);
-					if ($ext) {
+					foreach ($matches[3] as $img) {
+						$ext = get_image_ext($img);
+						if (!$ext) {
+							continue;
+						}
+						if ($images) {
+							continue;
+						}
 						// 下载缩略图
 						// 判断域名白名单
 						$arr = parse_url($img);
@@ -109,7 +113,7 @@ class content_input {
 								$attachmentdb = pc_base::load_model('attachment_model');
 								$att = $attachmentdb->get_one(array('related'=>'%ueditor%', 'filemd5'=>md5($file)));
 								if ($att) {
-									$img = dr_get_file($att['aid']);
+									$images = dr_get_file($att['aid']);
 								} else {
 									// 下载归档
 									$rt = $this->upload->down_file([
@@ -125,7 +129,7 @@ class content_input {
 										if ($att['code']) {
 											// 归档成功
 											$value = str_replace($img, $rt['data']['url'], $value);
-											$img = dr_get_file($att['code']);
+											$images = dr_get_file($att['code']);
 											// 标记附件
 											$GLOBALS['downloadfiles'][] = $rt['data']['url'];
 										}
@@ -136,8 +140,8 @@ class content_input {
 					}
 				}
 			}
-			if ($img) {
-				$info['system']['thumb'] = $img;
+			if ($images) {
+				$info['system']['thumb'] = $images;
 			}
 			// 提取描述信息
 			if(isset($_POST['info']['description']) && isset($_POST['is_auto_description_'.$field]) && !$_POST['info']['description']) {
