@@ -215,8 +215,8 @@ class form {
 				  <input name="is_auto_description_'.$textareaid.'" type="checkbox" '.($tool_select_1 ? 'checked' : '').' value="1"> '.L('提取内容').' <span></span>
 				 </label><label style="width: 80px;margin-right: 15px;"><input type="text" name="auto_description_'.$textareaid.'" value="200" class="form-control" style="width: 80px;"></label><label style="margin-right: 15px;">'.L('作为描述信息').'</label>';
 			$ext_str .= '     <label style="margin-bottom: 5px;" class="mt-checkbox mt-checkbox-outline">
-				  <input name="is_auto_thumb_'.$textareaid.'" type="checkbox" '.($tool_select_2 ? 'checked' : '').' value="1"> '.L('提取第一个图片为缩略图').' <span></span>
-				 </label>';
+				  <input name="is_auto_thumb_'.$textareaid.'" type="checkbox" '.($tool_select_2 ? 'checked' : '').' value="1"> '.L('提取第').' <span></span>
+				 </label><label style="width: 80px;margin-right: 15px;"><input type="text" name="auto_thumb_'.$textareaid.'" value="1" class="form-control" style="width: 80px;"></label><label style="margin-right: 15px;">'.L('个图片为缩略图').'</label>';
 			if (!intval($enablesaveimage)) {
 				$ext_str .= '
 				 <label style="margin-bottom: 5px;" class="mt-checkbox mt-checkbox-outline">
