@@ -3,10 +3,21 @@ defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header', 'admin');
 ?>
 <div class="subnav">
-    <div class="content-menu ib-a blue">
-    <?php if(isset($big_menu)) echo '<a class="add fb" href="'.$big_menu[0].'"><i class="fa fa-plus"></i> '.$big_menu[1].'</a>　';?>
-    <?php echo admin::submenu($_GET['menuid'],$big_menu); ?><i class="fa fa-circle"></i><a href="javascript:artdialog('setting','?m=poster&c=space&a=setting','<?php echo L('module_setting')?>',540,320);void(0);"><i class="fa fa-cog"></i> <?php echo L('module_setting')?></a>
+    <?php if(is_mobile(0)) {?>
+    <div class="content-menu btn-group dropdown-btn-group"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><i class="fa fa-th-large"></i> 菜单 <i class="fa fa-angle-down"></i></a>
+        <ul class="dropdown-menu">
+            <?php if(isset($big_menu)) { echo '<li><a class="add fb" href="'.$big_menu[0].'"><i class="fa fa-plus"></i> '.$big_menu[1].'</a></li><div class="dropdown-line"></div>';} else {$big_menu = '';} ?>
+            <?php echo admin::submenu($this->input->get('menuid'),$big_menu); ?>
+            <div class="dropdown-line"></div>
+            <li><a href="javascript:artdialog('setting','?m=poster&c=space&a=setting','<?php echo L('module_setting')?>',540,320);void(0);"><i class="fa fa-cog"></i> <?php echo L('module_setting')?></a></li>
+        </ul>
     </div>
+    <?php } else {?>
+    <div class="content-menu ib-a">
+    <?php if(isset($big_menu)) { echo '<a class="add fb" href="'.$big_menu[0].'"><i class="fa fa-plus"></i> '.$big_menu[1].'</a><i class="fa fa-circle"></i>';} else {$big_menu = '';} ?>
+    <?php echo admin::submenu($this->input->get('menuid'),$big_menu); ?><i class="fa fa-circle"></i><a href="javascript:artdialog('setting','?m=poster&c=space&a=setting','<?php echo L('module_setting')?>',540,320);void(0);"><i class="fa fa-cog"></i> <?php echo L('module_setting')?></a>
+    </div>
+    <?php }?>
 </div>
 <div class="content-header"></div>
 <div class="pad-lr-10">

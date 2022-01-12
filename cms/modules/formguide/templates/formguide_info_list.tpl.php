@@ -2,11 +2,6 @@
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header', 'admin');
 ?>
-<div class="subnav">
-<div class="content-menu ib-a blue">
-<a href="?m=formguide&c=formguide&a=init&s=3&menuid=<?php echo $this->input->get('menuid')?>"><i class="fa fa-table"></i> <?php echo L('表单向导');?></a>
-</div></div>
-<div class="content-header"></div>
 <div class="pad-lr-10">
 <form name="myform" id="myform" action="?m=formguide&c=formguide_info&a=delete" method="post">
 <input name="dosubmit" type="hidden" value="1">

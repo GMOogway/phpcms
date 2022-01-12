@@ -84,7 +84,7 @@ function comment(id, name) {
 }
 
 function import_c(id) {
-	artdialog('import','?m=special&c=special&a=import&specialid='+id,'<?php echo L('import_news')?>--','60%','60%');
+	omnipotent('import','?m=special&c=special&a=import&specialid='+id,'<?php echo L('import_news')?>--',1,'60%','60%');
 }
 window.top.$("#display_center_id").css("display","none");
 </script>

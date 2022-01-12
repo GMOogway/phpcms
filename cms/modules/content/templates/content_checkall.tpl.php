@@ -2,6 +2,22 @@
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');?>
 <div class="subnav">
+    <?php if(is_mobile(0)) {?>
+    <div class="content-menu btn-group dropdown-btn-group"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><i class="fa fa-th-large"></i> 菜单 <i class="fa fa-angle-down"></i></a>
+        <ul class="dropdown-menu">
+		<?php if($super_admin) {?>
+		<li><a class="add on" href="?m=content&c=content&a=public_checkall&menuid=<?php echo $this->input->get('menuid');?>"><i class="fa fa-check"></i> <?php echo L('all_check_list');?></a></li>
+<?php } else {
+	echo '<li><a class="on"><i class="fa fa-check"></i> '.L('check_status').'</a></li>';
+}
+for ($j=0;$j<5;$j++) {
+?>
+            <div class="dropdown-line"></div>
+            <li><a href='?m=content&c=content&a=public_checkall&menuid=<?php echo $this->input->get('menuid');?>&status=<?php echo $j;?>' class="<?php if($status==$j) echo 'on';?>"><i class="fa fa-check"></i> <?php echo L('workflow_'.$j);?></a></li>
+<?php }?>
+        </ul>
+    </div>
+    <?php } else {?>
 <div class="content-menu ib-a blue">
 <?php if($super_admin) {?>
 <a href='?m=content&c=content&a=public_checkall&menuid=<?php echo $this->input->get('menuid');?>' class="on"><i class="fa fa-check"></i> <?php echo L('all_check_list');?></a>
@@ -13,6 +29,7 @@ for ($j=0;$j<5;$j++) {
 <i class="fa fa-circle"></i><a href='?m=content&c=content&a=public_checkall&menuid=<?php echo $this->input->get('menuid');?>&status=<?php echo $j;?>' class="<?php if($status==$j) echo 'on';?>"><i class="fa fa-check"></i> <?php echo L('workflow_'.$j);?></a>
 <?php }?>
 </div>
+    <?php }?>
 </div>
 <div class="content-header"></div>
 <div class="pad-10">

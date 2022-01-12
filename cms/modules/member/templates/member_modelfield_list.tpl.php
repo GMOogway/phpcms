@@ -1,12 +1,6 @@
 <?php defined('IS_ADMIN') or exit('No permission resources.');?>
 <?php include $this->admin_tpl('header', 'admin');?>
-<div class="subnav">
-<div class="content-menu ib-a blue">
-<a href="?m=member&c=member_model&a=manage&menuid=<?php echo $this->input->get('menuid');?>"><i class="fa fa-cogs"></i> <?php echo L('管理会员模型');?></a>
-</div></div>
-<div class="content-header"></div>
 <div class="pad-lr-10">
-<div class="bk10"></div>
 <form name="myform" id="myform" action="?m=member&c=member_modelfield&a=sort" method="post" onsubmit="check();return false;">
 <input name="dosubmit" type="hidden" value="1">
 <div class="table-list">

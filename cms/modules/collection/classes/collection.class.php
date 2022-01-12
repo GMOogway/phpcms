@@ -105,7 +105,6 @@ class collection {
 				$data['content'] = preg_replace_callback('/<img[^>]*src=[\'"]?([^>\'"\s]*)[\'"]?[^>]*>/i', array('collection','download_img_callback'), $data['content']);
 				//下载内容中的图片到本地
 				if (empty($page) && !empty($data['content']) && $config['down_attachment'] == 1) {
-					
 					pc_base::load_sys_class('download','',0);
 					$download = new download('collection','0',get_siteid());
 					$data['content'] = $download->download($data['content'],$config['watermark']);

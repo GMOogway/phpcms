@@ -3,8 +3,17 @@ defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');
 ?>
 <div class="subnav">
-<div class="content-menu ib-a blue">
-<a class="add fb" href="?m=poster&c=poster&a=init&spaceid=<?php echo $info['spaceid'];?>"><i class="fa fa-plus"></i> <?php echo L('ad_list')?></a> <a class="on" href="?m=poster&c=space"><i class="fa fa-reorder"></i> <?php echo L('space_list')?></a></div>
+    <?php if(is_mobile(0)) {?>
+    <div class="content-menu btn-group dropdown-btn-group"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><i class="fa fa-th-large"></i> 菜单 <i class="fa fa-angle-down"></i></a>
+        <ul class="dropdown-menu">
+            <li><a class="add fb" href="?m=poster&c=poster&a=init&spaceid=<?php echo $info['spaceid'];?>"><i class="fa fa-plus"></i> <?php echo L('ad_list')?></a></li>
+            <div class="dropdown-line"></div>
+            <li><a class="on" href="?m=poster&c=space"><i class="fa fa-reorder"></i> <?php echo L('space_list')?></a></li>
+        </ul>
+    </div>
+    <?php } else {?>
+    <div class="content-menu ib-a blue"><a class="add fb" href="?m=poster&c=poster&a=init&spaceid=<?php echo $info['spaceid'];?>"><i class="fa fa-plus"></i> <?php echo L('ad_list')?></a><i class="fa fa-circle"></i><a class="on" href="?m=poster&c=space"><i class="fa fa-reorder"></i> <?php echo L('space_list')?></a></div>
+    <?php }?>
 </div>
 <div class="content-header"></div>
 <div class="pad-lr-10">

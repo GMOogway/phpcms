@@ -116,7 +116,7 @@ body {background-color: #f5f6f8;}
                             isxs = 1;
                         });
                         if (isxs == 1) {
-                            $('#dr_check_bf').append('<p style="text-align: center"><a class="btn green" href="javascript:;" layuimini-content-href="?m=admin&c=cloud&a=upgrade&menuid=277&pc_hash=<?php echo dr_get_csrf_token()?>" data-title="版本升级" data-icon="fa fa-refresh">前往下载升级包</a></p>');
+                            $('#dr_check_bf').append('<p style="text-align: center"><a class="btn green" href="javascript:;" layuimini-content-href="?m=admin&c=cloud&a=upgrade&menuid=277&pc_hash=<?php echo dr_get_csrf_token()?>" data-title="版本升级" data-icon="fa fa-refresh">前往下载升级包</a> <a class="btn red" href="https://gitee.com/zhaoxunzhiyin/phpcms/" target="_blank">前往下载完整包，然后手动替换以上红色的文件</a></p>');
                         }
                     } else {
                         $('#dr_check_button').html('<i class="fa fa-refresh"></i> 文件对比中 '+json.code+'%');

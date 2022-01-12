@@ -9,34 +9,34 @@ include $this->admin_tpl('header');?>
 <script type="text/javascript" src="<?php echo JS_PATH;?>layui/layui.js"></script>
 <div class="admin-main layui-anim layui-anim-upbit">
     <div class="note note-danger my-content-top-tool">
-        <a href="javascript:dr_iframe('add', '?m=admin&c=category&a=add&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token();?>&s=0', '80%', '80%')" class="layui-btn layui-btn-sm">
+        <a href="javascript:dr_iframe('add', '?m=admin&c=category&a=add&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token();?>&s=0', '80%', '80%')" class="btn btn-sm green">
             <i class="fa fa-plus"></i> <?php echo L('add_category');?>
         </a>
-        <a href="javascript:dr_iframe('add', '?m=admin&c=category&a=add&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token();?>&s=1', '80%', '80%')" class="layui-btn layui-btn-sm">
+        <a href="javascript:dr_iframe('add', '?m=admin&c=category&a=add&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token();?>&s=1', '80%', '80%')" class="btn btn-sm green">
             <i class="fa fa-plus-square"></i> <?php echo L('add_page');?>
         </a>
-        <a href="javascript:dr_iframe('add', '?m=admin&c=category&a=add&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token();?>&s=2', '80%', '80%')" class="layui-btn layui-btn-sm">
+        <a href="javascript:dr_iframe('add', '?m=admin&c=category&a=add&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token();?>&s=2', '80%', '80%')" class="btn btn-sm green">
             <i class="fa fa-plus-square-o"></i> <?php echo L('add_cat_link');?>
         </a>
-        <a href="?m=admin&c=category&a=public_cache&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token();?>&module=admin" class="layui-btn layui-btn-sm">
+        <a href="?m=admin&c=category&a=public_cache&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token();?>&module=admin" class="btn btn-sm red">
             <i class="fa fa-refresh"></i> <?php echo L('category_cache');?>
         </a>
-        <a href="?m=admin&c=category&a=count_items&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token();?>" class="layui-btn layui-btn-sm">
+        <a href="?m=admin&c=category&a=count_items&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token();?>" class="btn btn-sm yellow">
             <i class="fa fa-sort-amount-asc"></i> <?php echo L('count_items');?>
         </a>
-        <a href="?m=admin&c=category&a=batch_edit&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token();?>" class="layui-btn layui-btn-sm">
+        <a href="?m=admin&c=category&a=batch_edit&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token();?>" class="btn btn-sm green">
             <i class="fa fa-edit"></i> <?php echo L('category_batch_edit');?>
         </a>
-        <a href="javascript:dr_iframe('save', '?m=admin&c=category&a=public_batch_category&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token();?>&s=0', '80%', '80%')" class="layui-btn layui-btn-sm">
+        <a href="javascript:dr_iframe('save', '?m=admin&c=category&a=public_batch_category&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token();?>&s=0', '80%', '80%')" class="btn btn-sm green">
             <i class="fa fa-save"></i> <?php echo L('统一设置');?>
         </a>
-        <a href="?m=content&c=sitemodel_field&a=init&menuid=<?php echo $this->input->get('menuid');?>&modelid=-1&pc_hash=<?php echo dr_get_csrf_token();?>" class="layui-btn layui-btn-sm">
-            <i class="fa fa-bars"></i> <?php echo L('category_field_manage');?>
+        <a href="?m=content&c=sitemodel_field&a=init&menuid=<?php echo $this->input->get('menuid');?>&modelid=-1&pc_hash=<?php echo dr_get_csrf_token();?>" class="btn btn-sm dark">
+            <i class="fa fa-code"></i> <?php echo L('category_field_manage');?>
         </a>
-        <a href="?m=content&c=sitemodel_field&a=init&menuid=<?php echo $this->input->get('menuid');?>&modelid=-2&pc_hash=<?php echo dr_get_csrf_token();?>" class="layui-btn layui-btn-sm">
-            <i class="fa fa-list"></i> <?php echo L('page_field_manage');?>
+        <a href="?m=content&c=sitemodel_field&a=init&menuid=<?php echo $this->input->get('menuid');?>&modelid=-2&pc_hash=<?php echo dr_get_csrf_token();?>" class="btn btn-sm dark">
+            <i class="fa fa-reorder"></i> <?php echo L('page_field_manage');?>
         </a>
-        <a class="layui-btn layui-btn-normal layui-btn-sm"  onclick="openAll();">
+        <a class="btn btn-sm blue" onclick="openAll();">
             <i class="fa fa-folder-open-o"></i> <?php echo L('open_close');?>
         </a>
     </div>
@@ -47,7 +47,7 @@ include $this->admin_tpl('header');?>
 </script>
 <script type="text/html" id="url">
     {{# if(d.url){ }}
-    <a href="{{d.url}}" target="_blank" class="layui-btn layui-btn-xs layui-btn-normal"><?php echo L('vistor');?></a>
+    <a href="{{d.url}}" target="_blank" class="layui-btn layui-btn-xs layui-btn-normal"><i class="fa fa-eye"></i> <?php echo L('vistor');?></a>
     {{# } else { }}
     <a href="?m=admin&c=category&a=public_cache&menuid=<?php echo $this->input->get('menuid');?>&module=admin" class="layui-btn layui-btn-xs layui-btn-danger"><?php echo L('update_backup');?></a>
     {{# } }}
@@ -68,10 +68,10 @@ include $this->admin_tpl('header');?>
     <input name="{{d.id}}" data-id="{{d.id}}" class="list_order layui-input" value="{{d.listorder}}" size="10"/>
 </script>
 <script type="text/html" id="action">
-    <a href="javascript:dr_iframe('add', '?m=admin&c=category&a=add&parentid={{d.id}}&menuid=<?php echo $this->input->get('menuid');?>&s={{d.type}}&pc_hash=<?php echo $this->input->get('pc_hash');?>', '80%', '80%')" class="layui-btn layui-btn-xs"><i class="fa fa-plus"></i> <?php echo L('add_sub_category');?></a>
-    <a href="javascript:dr_iframe('edit', '?m=admin&c=category&a=edit&catid={{d.id}}&menuid=<?php echo $this->input->get('menuid');?>&type={{d.type}}&pc_hash=<?php echo $this->input->get('pc_hash');?>', '80%', '80%')" class="layui-btn layui-btn-xs"><i class="fa fa-edit"></i> <?php echo L('edit');?></a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="fa fa-trash-o"></i> <?php echo L('delete');?></a>
-    <a href="?m=admin&c=category&a=remove&catid={{d.id}}&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo $this->input->get('pc_hash');?>" class="layui-btn layui-btn-danger layui-btn-xs"><i class="fa fa-arrows"></i> <?php echo L('remove','','content');?></a>
+    <a href="javascript:dr_iframe('add', '?m=admin&c=category&a=add&parentid={{d.id}}&menuid=<?php echo $this->input->get('menuid');?>&s={{d.type}}&pc_hash=<?php echo $this->input->get('pc_hash');?>', '80%', '80%')" class="btn btn-xs blue"><i class="fa fa-plus"></i> <?php echo L('add_sub_category');?></a>
+    <a href="javascript:dr_iframe('edit', '?m=admin&c=category&a=edit&catid={{d.id}}&menuid=<?php echo $this->input->get('menuid');?>&type={{d.type}}&pc_hash=<?php echo $this->input->get('pc_hash');?>', '80%', '80%')" class="btn btn-xs green"><i class="fa fa-edit"></i> <?php echo L('edit');?></a>
+    <a class="btn btn-xs red" lay-event="del"><i class="fa fa-trash-o"></i> <?php echo L('delete');?></a>
+    <a href="?m=admin&c=category&a=remove&catid={{d.id}}&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo $this->input->get('pc_hash');?>" class="btn btn-xs yellow"><i class="fa fa-arrows"></i> <?php echo L('remove','','content');?></a>
 </script>
 <script type="text/html" id="topBtn">
    <a href="javascript:dr_iframe('add', '?m=admin&c=category&a=add&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token();?>&s=0', '<?php echo L('add_category')?>')" class="layui-btn layui-btn-sm"><?php echo L('add_category');?></a>

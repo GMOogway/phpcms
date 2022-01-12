@@ -1,12 +1,9 @@
 <?php defined('IS_ADMIN') or exit('No permission resources.');?>
 <?php include $this->admin_tpl('header', 'admin');?>
 <div class="pad-lr-10">
-
 <div class="explain-col">
 <?php echo L('move_member_model_index_alert')?>
 </div>
-
-<div class="bk10"></div>
 <form name="myform" id="myform" action="?m=member&c=member_model&a=delete" method="post" onsubmit="check();return false;">
 <input name="dosubmit" type="hidden" value="1">
 <div class="table-list">

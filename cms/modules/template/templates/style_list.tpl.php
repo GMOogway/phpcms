@@ -24,7 +24,7 @@ if(is_array($list)):
 ?>
 <tr>
 <td align="center"><?php echo $v['dirname']?></td>
-<td align="center"><input type="text" name="name[<?php echo $v['dirname']?>]" value="<?php echo $v['name']?>" /></td>
+<td align="center"><label style="width: 100%;"><input type="text" name="name[<?php echo $v['dirname']?>]" value="<?php echo $v['name']?>" /></label></td>
 <td align="center"><?php if($v['homepage']) {echo  '<a href="'.$v['homepage'].'" target="_blank">';}?><?php echo $v['author']?><?php if($v['homepage']) {echo  '</a>';}?></td>
 <td align="center"><?php echo $v['version']?></td>
 <td align="center"><?php if($v['disable']){echo L('icon_locked');}else{echo L("icon_unlock");}?></td>

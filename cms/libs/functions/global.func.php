@@ -105,7 +105,7 @@ function get_content_url($value, $attr, $ext, $num = 0) {
 /**
  * 提取描述信息过滤函数
  */
-function dr_filter_description($value, $data = [], $old = []) {
+function dr_filter_description($value, $data = array(), $old = array()) {
 	return dr_get_description($value, 0);
 }
 
@@ -116,7 +116,7 @@ function dr_get_description($text, $limit = 0) {
 	if (!$limit) {
 		$limit = 200;
 	}
-	return trim(str_cut(dr_rp(clearhtml($text), ['　', ' '], ''), $limit, ''));
+	return trim(str_cut(dr_rp(clearhtml($text), '　', ''), $limit, ''));
 }
 
 /**
@@ -3842,6 +3842,17 @@ function get_image_ext($url) {
 			return $t;
 		}
 	}
+
+	$rt = getimagesize($url);
+	if ($rt && $rt['mime']) {
+		foreach ($arr as $t) {
+			if (stripos($rt['mime'], $t) !== false) {
+				return $t;
+			}
+		}
+	}
+
+	CI_DEBUG && log_message('debug', '服务器无法获取远程图片的扩展名：'.dr_safe_replace($url));
 
 	return '';
 }

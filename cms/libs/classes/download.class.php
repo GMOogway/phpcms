@@ -84,16 +84,29 @@ class download {
                                 'attachment' => $upload->get_attach_info(intval($attachment), intval($image_reduce)),
                                 'file_ext' => $ext,
                             ));
-                            if ($rt['code']) {
-                                $att = $upload->save_data($rt['data'], 'ueditor:'.$this->rid);
-                                if ($att['code']) {
-                                    // 归档成功
-                                    $value = str_replace($img, $rt['data']['url'], $value);
-                                    $img = $att['code'];
-                                    // 标记附件
-                                    $GLOBALS['downloadfiles'][] = $rt['data']['url'];
+                            $data = array();
+                            if (defined('SYS_ATTACHMENT_CF') && SYS_ATTACHMENT_CF && $rt['data']['md5']) {
+                                $att_db = pc_base::load_model('attachment_model');
+                                $att = $att_db->get_one(array('userid'=>intval($this->userid),'filemd5'=>$rt['data']['md5'],'fileext'=>$rt['data']['ext'],'filesize'=>$rt['data']['size']));
+                                if ($att) {
+                                    $data = dr_return_data($att['aid'], 'ok');
+                                    // 删除现有附件
+                                    // 开始删除文件
+                                    $storage = new storage($this->module,$catid,$this->siteid);
+                                    $storage->delete($upload->get_attach_info((int)$p['attachment']), $rt['data']['file']);
+                                    $rt['data'] = get_attachment($att['aid']);
                                 }
                             }
+                            if (!$data) {
+                                $data = $upload->save_data($rt['data'], 'ueditor:'.$this->rid);
+                                if ($data['code']) {
+                                    // 附件归档
+                                    $images = $data['code'];
+                                }
+                            }
+                            $value = str_replace($img, $rt['data']['url'], $value);
+                            // 标记附件
+                            $GLOBALS['downloadfiles'][] = $rt['data']['url'];
                         }
                     }
                 }
@@ -126,16 +139,29 @@ class download {
                     'attachment' => $upload->get_attach_info(intval($attachment), intval($image_reduce)),
                     'file_ext' => $ext,
                 ));
-                if ($rt['code']) {
-                    $att = $upload->save_data($rt['data'], 'ueditor:'.$this->rid);
-                    if ($att['code']) {
-                        // 归档成功
-                        $value = str_replace($img, $rt['data']['url'], $value);
-                        $img = $att['code'];
-                        // 标记附件
-                        $GLOBALS['downloadfiles'][] = $rt['data']['url'];
+                $data = array();
+                if (defined('SYS_ATTACHMENT_CF') && SYS_ATTACHMENT_CF && $rt['data']['md5']) {
+                    $att_db = pc_base::load_model('attachment_model');
+                    $att = $att_db->get_one(array('userid'=>intval($this->userid),'filemd5'=>$rt['data']['md5'],'fileext'=>$rt['data']['ext'],'filesize'=>$rt['data']['size']));
+                    if ($att) {
+                        $data = dr_return_data($att['aid'], 'ok');
+                        // 删除现有附件
+                        // 开始删除文件
+                        $storage = new storage($this->module,$catid,$this->siteid);
+                        $storage->delete($upload->get_attach_info((int)$p['attachment']), $rt['data']['file']);
+                        $rt['data'] = get_attachment($att['aid']);
                     }
                 }
+                if (!$data) {
+                    $data = $upload->save_data($rt['data'], 'ueditor:'.$this->rid);
+                    if ($data['code']) {
+                        // 附件归档
+                        $images = $data['code'];
+                    }
+                }
+                $value = str_replace($img, $rt['data']['url'], $value);
+                // 标记附件
+                $GLOBALS['downloadfiles'][] = $rt['data']['url'];
             }
         }
         return $value;

@@ -4,8 +4,18 @@ $show_header = true;
 include $this->admin_tpl('header','admin');
 ?>
 <div class="subnav"> 
-<div class="content-menu ib-a blue">
-　<?php if(isset($big_menu)) { foreach($big_menu as $big) { echo '<a class="add fb" href="'.$big[0].'"><i class="fa fa-plus"></i> '.$big[1].'</a>　'; } }?>&nbsp;<a class="on" href="?m=special&c=special"><i class="iconm fa fa-reorder"></i> <?php echo L('special_list')?></a></div>
+    <?php if(is_mobile(0)) {?>
+    <div class="content-menu btn-group dropdown-btn-group"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><i class="fa fa-th-large"></i> 菜单 <i class="fa fa-angle-down"></i></a>
+        <ul class="dropdown-menu">
+            <?php if(isset($big_menu)) { foreach($big_menu as $big) { echo '<li><a class="add fb" href="'.$big[0].'"><i class="fa fa-plus"></i> '.$big[1].'</a></li><div class="dropdown-line"></div>'; } }?>
+            <li><a class="on" href="?m=special&c=special"><i class="iconm fa fa-reorder"></i> <?php echo L('special_list')?></a></li>
+        </ul>
+    </div>
+    <?php } else {?>
+    <div class="content-menu ib-a">
+    <?php if(isset($big_menu)) { foreach($big_menu as $big) { echo '<a class="add fb" href="'.$big[0].'"><i class="fa fa-plus"></i> '.$big[1].'</a><i class="fa fa-circle"></i>'; } }?><a class="on" href="?m=special&c=special"><i class="iconm fa fa-reorder"></i> <?php echo L('special_list')?></a>
+    </div>
+    <?php }?>
 </div>
 <div class="content-header"></div>
 <div class="pad-10">

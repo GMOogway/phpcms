@@ -530,7 +530,6 @@ class node extends admin {
 		$_POST['introcude_length'] = $program['config']['introcude_length'];
 		$_POST['auto_thumb'] = $program['config']['auto_thumb'];
 		$_POST['auto_thumb_no'] = $program['config']['auto_thumb_no'];
-		$_POST['spider_img'] = 0;
 		$i = 0;
 		$content_db->set_model($program['modelid']);
 		$coll_contentid = array();

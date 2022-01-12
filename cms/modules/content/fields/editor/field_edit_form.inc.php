@@ -64,6 +64,16 @@
             </div>
         </div>
     </div>
+    <div class="form-group">
+      <label class="col-md-2 control-label">下载远程图片</label>
+        <div class="col-md-9">
+            <div class="mt-radio-inline">
+          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[enablesaveimage]" value="1" <?php if($setting['enablesaveimage']) echo 'checked';?>> 自动 <span></span></label>
+          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[enablesaveimage]" value="0" <?php if(!$setting['enablesaveimage']) echo 'checked';?>> 手动 <span></span></label>
+        </div>
+        <span class="help-block">自动模式下每一次编辑内容时都会下载图片；手动模式可以在编辑器下放工具栏中控制“是否下载”</span>
+        </div>
+    </div>
     <div class="form-group"> 
       <label class="col-md-2 control-label">底部工具栏</label>
         <div class="col-md-9">
@@ -204,15 +214,6 @@
             <label><input type="text" name="setting[upload_maxsize]" value="<?php echo $setting['upload_maxsize'];?>" size="40" class="form-control"></label>
             <span class="help-block">单位MB</span>
       </div>
-    </div>
-    <div class="form-group">
-      <label class="col-md-2 control-label">是否保存远程图片</label>
-        <div class="col-md-9">
-            <div class="mt-radio-inline">
-          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[enablesaveimage]" value="1" <?php if($setting['enablesaveimage']) echo 'checked';?>> 是 <span></span></label>
-          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[enablesaveimage]" value="0" <?php if(!$setting['enablesaveimage']) echo 'checked';?>> 否 <span></span></label>
-        </div>
-        </div>
     </div>
     <div class="form-group">
       <label class="col-md-2 control-label">本地图片自动上传</label>

@@ -38,14 +38,14 @@ class category extends admin {
 					$rs['type'] = $r['type'];
 					if ($r['type'] == 0) {
 						if ($r['child']) {
-							$rs['typename'] = '<span class="badge badge-danger"> '.L('封面').' </span>';
+							$rs['typename'] = '<a class="badge badge-danger" onmouseover="layer.tips(\''.L('当栏目存在子栏目时我们称之为封面').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"> '.L('封面').' </a>';
 						} else {
-							$rs['typename'] = '<span class="badge badge-success"> '.L('列表').' </span>';
+							$rs['typename'] = '<a class="badge badge-success" onmouseover="layer.tips(\''.L('最终的栏目我们称之为列表').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"> '.L('列表').' </a>';
 						}
 					} elseif ($r['type'] == 2) {
-						$rs['typename'] = '<span class="badge badge-warning"> '.L('外链').' </span>';
+						$rs['typename'] = '<a class="badge badge-warning" onmouseover="layer.tips(\''.L('属于外部链接').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"> '.L('外链').' </a>';
 					} else {
-						$rs['typename'] = '<span class="badge badge-info"> '.L('单页').' </span>';
+						$rs['typename'] = '<a class="badge badge-info" onmouseover="layer.tips(\''.L('不可发布内容的介绍性质页面，例如关于我们等页面').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"> '.L('单页').' </a>';
 					}
 					$rs['display_icon'] = $r['ismenu'] ? '' : ' <img src ="'.IMG_PATH.'icon/gear_disable.png" onmouseover="layer.tips(\''.L('not_display_in_menu').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();">';
 					if($r['type'] || $r['child']) {
@@ -76,7 +76,7 @@ class category extends admin {
 					$rs['iscatpos'] = $setting['iscatpos'];
 					$rs['isleft'] = $setting['isleft'];
 					$rs['listorder'] = $r['listorder'];
-					$rs['manage'] = '<a href="javascript:dr_iframe(\'add\', \'?m=admin&c=category&a=add&parentid='.$r['catid'].'&menuid='.$this->input->get('menuid').'&s='.$r['type'].'&pc_hash='.$this->input->get('pc_hash').'\', \'80%\', \'80%\')" class="layui-btn layui-btn-xs"><i class="fa fa-plus"></i> '.L('add_sub_category').'</a><a href="javascript:dr_iframe(\'edit\', \'?m=admin&c=category&a=edit&catid='.$r['catid'].'&menuid='.$this->input->get('menuid').'&type='.$r['type'].'&pc_hash='.$this->input->get('pc_hash').'\', \'80%\', \'80%\')" class="layui-btn layui-btn-xs"><i class="fa fa-edit"></i> '.L('edit').'</a><a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="fa fa-trash-o"></i> '.L('delete').'</a><a href="?m=admin&c=category&a=remove&catid='.$r['catid'].'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash').'" class="layui-btn layui-btn-danger layui-btn-xs"><i class="fa fa-arrows"></i> '.L('remove','','content').'</a>';
+					$rs['manage'] = '<a href="javascript:dr_iframe(\'add\', \'?m=admin&c=category&a=add&parentid='.$r['catid'].'&menuid='.$this->input->get('menuid').'&s='.$r['type'].'&pc_hash='.$this->input->get('pc_hash').'\', \'80%\', \'80%\')" class="btn btn-xs blue"><i class="fa fa-plus"></i> '.L('add_sub_category').'</a><a href="javascript:dr_iframe(\'edit\', \'?m=admin&c=category&a=edit&catid='.$r['catid'].'&menuid='.$this->input->get('menuid').'&type='.$r['type'].'&pc_hash='.$this->input->get('pc_hash').'\', \'80%\', \'80%\')" class="btn btn-xs green"><i class="fa fa-edit"></i> '.L('edit').'</a><a class="btn btn-xs red" lay-event="del"><i class="fa fa-trash-o"></i> '.L('delete').'</a><a href="?m=admin&c=category&a=remove&catid='.$r['catid'].'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash').'" class="btn btn-xs yellow"><i class="fa fa-arrows"></i> '.L('remove','','content').'</a>';
 					$array[] = $rs;
 				}
 			}

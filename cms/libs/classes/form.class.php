@@ -2,7 +2,7 @@
 class form {
 	/**
 	 * 编辑器
-	 * @param int $textareaid
+	 * @param string $textareaid
 	 * @param string $toolbar
 	 * @param string $toolvalue
 	 * @param string $module 模块名称
@@ -29,9 +29,8 @@ class form {
 	 * @param string $tool_select_2
 	 * @param string $tool_select_3
 	 * @param string $tool_select_4
-	 * @param string $field
 	 */
-	public static function editor($textareaid = 'content', $toolbar = 'basic', $toolvalue = '', $module = '', $catid = '', $color = '', $allowupload = 0, $allowbrowser = 1,$alowuploadexts = '',$height = 300,$disabled_page = 0, $autofloat = 0, $autoheight = 0, $theme = '', $watermark = 1, $attachment = 0, $image_reduce = '', $div2p = 0, $enter = 0, $simpleupload = 0, $enablesaveimage = 1, $width = '100%', $allowuploadnum = '10', $upload_maxsize = 0, $show_bottom_boot = 0, $tool_select_1 = 0, $tool_select_2 = 0, $tool_select_3 = 0, $tool_select_4 = 0, $field = '') {
+	public static function editor($textareaid = 'content', $toolbar = 'basic', $toolvalue = '', $module = '', $catid = '', $color = '', $allowupload = 0, $allowbrowser = 1,$alowuploadexts = '',$height = 300,$disabled_page = 0, $autofloat = 0, $autoheight = 0, $theme = '', $watermark = 1, $attachment = 0, $image_reduce = '', $div2p = 0, $enter = 0, $simpleupload = 0, $enablesaveimage = 1, $width = '100%', $allowuploadnum = '10', $upload_maxsize = 0, $show_bottom_boot = 0, $tool_select_1 = 0, $tool_select_2 = 0, $tool_select_3 = 0, $tool_select_4 = 0) {
 		$input = pc_base::load_sys_class('input');
 		$siteid = $input->get('siteid') ? $input->get('siteid') : param::get_cookie('siteid');
 		if(!$siteid) $siteid = get_siteid() ? get_siteid() : 1 ;
@@ -213,20 +212,20 @@ class form {
 			$ext_str .= '<div class="mt-checkbox-inline" style="margin-top: 10px;">';
 			$ext_str .= '
 				 <label style="margin-bottom: 5px;" class="mt-checkbox mt-checkbox-outline">
-				  <input name="is_auto_description_'.$field.'" type="checkbox" '.($tool_select_1 ? 'checked' : '').' value="1"> '.L('提取内容').' <span></span>
-				 </label><label style="width: 80px;margin-right: 15px;"><input type="text" name="auto_description_'.$field.'" value="200" class="form-control" style="width: 80px;"></label><label style="margin-right: 15px;">'.L('作为描述信息').'</label>';
+				  <input name="is_auto_description_'.$textareaid.'" type="checkbox" '.($tool_select_1 ? 'checked' : '').' value="1"> '.L('提取内容').' <span></span>
+				 </label><label style="width: 80px;margin-right: 15px;"><input type="text" name="auto_description_'.$textareaid.'" value="200" class="form-control" style="width: 80px;"></label><label style="margin-right: 15px;">'.L('作为描述信息').'</label>';
 			$ext_str .= '     <label style="margin-bottom: 5px;" class="mt-checkbox mt-checkbox-outline">
-				  <input name="is_auto_thumb_'.$field.'" type="checkbox" '.($tool_select_2 ? 'checked' : '').' value="1"> '.L('提取第').' <span></span>
-				 </label><label style="width: 80px;margin-right: 15px;"><input type="text" name="auto_thumb_'.$field.'" value="1" class="form-control" style="width: 80px;"></label><label style="margin-right: 15px;">'.L('个图片为缩略图').'</label>';
+				  <input name="is_auto_thumb_'.$textareaid.'" type="checkbox" '.($tool_select_2 ? 'checked' : '').' value="1"> '.L('提取第').' <span></span>
+				 </label><label style="width: 80px;margin-right: 15px;"><input type="text" name="auto_thumb_'.$textareaid.'" value="1" class="form-control" style="width: 80px;"></label><label style="margin-right: 15px;">'.L('个图片为缩略图').'</label>';
 			if (!intval($enablesaveimage)) {
 				$ext_str .= '
 				 <label style="margin-bottom: 5px;" class="mt-checkbox mt-checkbox-outline">
-				  <input name="is_auto_down_img_'.$field.'" type="checkbox" '.($tool_select_3 ? 'checked' : '').' value="1"> '.L('下载远程图片').' <span></span>
+				  <input name="is_auto_down_img_'.$textareaid.'" type="checkbox" '.($tool_select_3 ? 'checked' : '').' value="1"> '.L('下载远程图片').' <span></span>
 				 </label>';
 			}
 			$ext_str .= '
 				 <label style="margin-bottom: 5px;" class="mt-checkbox mt-checkbox-outline">
-				  <input name="is_remove_a_'.$field.'" type="checkbox" '.($tool_select_4 ? 'checked' : '').' value="1"> '.L('去除站外链接').' <span></span>
+				  <input name="is_remove_a_'.$textareaid.'" type="checkbox" '.($tool_select_4 ? 'checked' : '').' value="1"> '.L('去除站外链接').' <span></span>
 				 </label>';
 			$ext_str .= '</div>';
 		}

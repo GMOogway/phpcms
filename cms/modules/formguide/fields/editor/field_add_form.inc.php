@@ -99,6 +99,15 @@
             <span class="help-block"><?php echo L('单图上传按钮对某些浏览器不被支持，兼容性较差')?></span>
         </div>
     </div>
+    <div class="form-group">
+      <label class="col-md-2 control-label">是否保存远程图片</label>
+        <div class="col-md-9">
+            <div class="mt-radio-inline">
+          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[enablesaveimage]" value="1" checked> 是 <span></span></label>
+          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[enablesaveimage]" value="0"> 否 <span></span></label>
+        </div>
+        </div>
+    </div>
     <?php if ($config['ueditor']) {?>
     <div class="form-group">
       <label class="col-md-2 control-label">图片水印</label>
@@ -139,15 +148,6 @@
             <label><input type="text" name="setting[upload_maxsize]" value="0" size="40" class="form-control"></label>
             <span class="help-block">单位MB</span>
       </div>
-    </div>
-    <div class="form-group">
-      <label class="col-md-2 control-label">是否保存远程图片</label>
-        <div class="col-md-9">
-            <div class="mt-radio-inline">
-          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[enablesaveimage]" value="1" checked> 是 <span></span></label>
-          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[enablesaveimage]" value="0"> 否 <span></span></label>
-        </div>
-        </div>
     </div>
     <div class="form-group">
       <label class="col-md-2 control-label">本地图片自动上传</label>

@@ -297,7 +297,7 @@ body .showMsg .bottom{padding: 10px;text-align: center;border-top: 1px solid #E9
 .badge {font-size: 11px!important;font-weight: 300;height: 18px;color: #fff;padding: 3px 6px;-webkit-border-radius: 12px!important;-moz-border-radius: 12px!important;border-radius: 12px!important;text-shadow: none!important;text-align: center;}
 .badge-primary {background-color: #337ab7;}
 .badge-info {background-color: #659be0;}
-.badge-success {background-color: #36c6d3;}
+.badge-success {background-color: #3ea9e2;}
 .badge-danger {background-color: #ed6b75;}
 .badge-warning {background-color: #F1C40F;}
 .badge-no,.badge-yes {height: 22px;padding: 4px;width: 22px;}
