@@ -2,7 +2,6 @@
 defined('IS_ADMIN') or exit('No permission resources.'); 
 include $this->admin_tpl('header','admin');
 ?>
-
 <div class="pad-10">
 <div class="common-form">
 <form name="myform" action="?m=scan&c=index&a=public_update_config" method="post" id="myform" onsubmit="return check_form()">
@@ -50,7 +49,6 @@ include $this->admin_tpl('header','admin');
 </form>
 </div>
 </div>
-
 <script type="text/javascript">
 function check_form() {
 	var checked = 0;

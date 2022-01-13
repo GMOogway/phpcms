@@ -48,10 +48,5 @@
 </div>
 </form>
 </div>
-<script type="text/javascript">
-<!--
-window.top.$('#display_center_id').css('display','none');
-//-->
-</script>
 </body>
 </html>

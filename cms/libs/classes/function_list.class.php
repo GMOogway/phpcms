@@ -42,7 +42,21 @@ class function_list {
         if (!$value) {
             return '';
         }
-        return get_linkage($value, 1);
+        return dr_linkagepos('address', $value, '-');
+    }
+
+    // 用于列表显示状态
+    public function status($value, $param = array(), $data = array()) {
+
+        if (!$value) {
+            $html = '<span class="label label-sm label-danger">'.L('待审核');
+        } elseif ($value == 99) {
+            $html = '<span class="label label-sm label-success">'.L('已通过');
+        } else {
+            $html = '<span class="label label-sm label-warning">'.L('未通过') ;
+        }
+
+        return '<label>'.$html.'</span></label>';
     }
 
     // 用于列表显示时间日期格式
@@ -84,6 +98,24 @@ class function_list {
         }
         $this->uid_data[$userid] = isset($this->uid_data[$userid]) && $this->uid_data[$userid] ? $this->uid_data[$userid] : $username;
         return $this->uid_data[$userid] ? str_cut($this->uid_data[$userid], 10) : L('游客');
+    }
+
+    // 用于列表关联主题
+    public function ctitle($cid, $param = array(), $data = array()) {
+        // 查询username
+        if (!$cid) {
+            return L('未关联');
+        }
+        $siteids = getcache('category_content','commons');
+        $siteid = $siteids[$data['catid']];
+        $categorys = getcache('category_content_'.$siteid,'commons');
+        $category = $categorys[$data['catid']];
+        $modelid = $category['modelid'];
+        $content_db = pc_base::load_model('content_model');
+        $content_db->set_model($modelid);
+        $query = $content_db->get_one(array('id'=>$cid));
+        $this->cid_data[$cid] = isset($this->cid_data[$cid]) && $this->cid_data[$cid] ? $this->cid_data[$cid] : $query;
+        return $this->cid_data[$cid] ? $this->title($this->cid_data[$cid]['title'], $param, $this->cid_data[$cid]) : L('关联主题不存在');
     }
 
     // 用于列表显示ip地址

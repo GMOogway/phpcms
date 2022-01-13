@@ -3,24 +3,36 @@ defined('IS_ADMIN') or exit('No permission resources.');
 $show_dialog = 1;
 include $this->admin_tpl('header','admin');
 ?>
-<div class="pad-lr-10">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="right-card-box">
+<div class="row table-search-tool">
 <form name="searchform" action="?m=message&c=message&a=search_message&menuid=<?php echo $_GET['menuid'];?>" method="post" >
-<table width="100%" cellspacing="0" class="search-form">
-    <tbody>
-		<tr>
-		<td><div class="explain-col"><?php echo L('query_type')?>:<?php echo form::select($trade_status,$status,'name="search[status]"', L('all'))?>      <?php echo L('username')?>:  <input type="text" value="<?php echo $username;?>" class="input-text" name="search[username]">  <?php echo L('time')?>:  <div class="formdate">
+<div class="col-md-12 col-sm-12">
+<label><?php echo L('query_type')?></label>
+				<label><i class="fa fa-caret-right"></i></label>
+				<?php echo form::select($trade_status,$status,'name="search[status]"', L('all'))?>
+</div>
+<div class="col-md-12 col-sm-12">
+				<label><?php echo L('username')?></label>
+				<label><i class="fa fa-caret-right"></i></label>
+				<label><input type="text" value="<?php echo $username;?>" class="input-text" name="search[username]"></label>
+</div>
+<div class="col-md-12 col-sm-12">
+				<label><div class="formdate">
             <div class="input-group input-medium date-picker input-daterange">
                 <input type="text" class="form-control" value="<?php echo $this->input->get('search')['start_time'];?>" name="search[start_time]">
                 <span class="input-group-addon"> <?php echo L('to')?> </span>
                 <input type="text" class="form-control" value="<?php echo $this->input->get('search')['end_time'];?>" name="search[end_time]">
             </div>
-        </div>    <input type="submit" value="<?php echo L('search')?>" class="button" name="dosubmit">
-		</div>
-		</td>
-		</tr>
-    </tbody>
-</table>
+        </div></label>
+</div>
+<div class="col-md-12 col-sm-12">
+		<label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('search')?></button></label>
+</div>
 </form>
+</div>
 <form name="myform" id="myform" action="?m=message&c=message&a=delete" method="post" onsubmit="checkuid();return false;">
 <input name="dosubmit" type="hidden" value="1">
 <div class="table-list">
@@ -66,17 +78,20 @@ if(is_array($infos)){
 </tbody>
 </table>
 </div>
-<div class="list-footer table-checkable clear">
-    <div class="col-md-5 col-sm-5 table-footer-button">
+<div class="row list-footer table-checkable">
+    <div class="col-md-5 list-select">
         <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
             <input type="checkbox" class="group-checkable" data-set=".checkboxes">
             <span></span>
         </label>
         <label><button type="button" onClick="Dialog.confirm('<?php echo L('confirm', array('message' => L('selected')))?>',function(){$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('remove_all_selected')?></button></label>
     </div>
-    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
+    <div class="col-md-7 list-page"><?php echo $pages?></div>
 </div>
 </form>
+</div>
+</div>
+</div>
 </div>
 <script type="text/javascript">
 

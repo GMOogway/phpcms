@@ -24,7 +24,7 @@ include $this->admin_tpl('header');?>
 //-->
 </script>
 <div class="page-content main-content">
-<div class="note note-danger my-content-top-tool">
+<div class="note note-danger">
     <p><?php echo L('最多支持创建'.MAX_CATEGORY.'个栏目，请合理的规划网站栏目');?></p>
 </div>
 <form action="?m=admin&c=category&a=<?php echo ROUTE_A;?>" class="form-horizontal" method="post" name="myform" id="myform" onsubmit="return checkall()">
@@ -64,7 +64,7 @@ include $this->admin_tpl('header');?>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('catgory_img')?></label>
                         <div class="col-md-9">
-                            <label><?php echo form::images('info[image]', 'image', isset($image) && $image ? $image : '', 'content');?></label>
+                            <?php echo form::images('info[image]', 'image', isset($image) && $image ? $image : '', 'content');?>
                         </div>
                     </div>
                     <div class="form-group">
@@ -154,7 +154,6 @@ if($forminfos && is_array($forminfos['base'])) {
 </form>
 </div>
 <script type="text/javascript">
-window.top.$('#display_center_id').css('display','none');
 $('.nav-tabs a').click(function (e) {
     $('.nav-tabs').find('li').removeClass('active');
     $('.tab-pane').removeClass('active');

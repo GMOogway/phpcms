@@ -22,8 +22,7 @@ body {background: #f5f6f8;}
 <div class="page-container" style="margin-bottom: 0px !important;">
     <div class="page-content-wrapper">
         <div class="page-content page-content3 mybody-nheader main-content  ">
-<div class="page-body">
-<div class="note note-danger my-content-top-tool">
+<div class="note note-danger">
     <p><a href="javascript:;" onclick="javascript:dr_content_submit('?m=content&c=content&a=add&menuid=&catid=<?php echo $catid;?>&pc_hash=<?php echo dr_get_csrf_token();?>','add');" class="btn green">
             <i class="fa fa-plus"></i> <?php echo L('add_content');?>
         </a>
@@ -145,8 +144,8 @@ if(is_array($datas)){
 </tbody>
     </table>
 </div>
-<div class="list-footer table-checkable clear">
-    <div class="col-md-5 col-sm-5 table-footer-button">
+<div class="row list-footer table-checkable">
+    <div class="col-md-5 list-select">
         <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
             <input type="checkbox" class="group-checkable" data-set=".checkboxes">
             <span></span>
@@ -186,7 +185,7 @@ if(is_array($datas)){
         <label><textarea class="form-control" name='reject_c' id='reject_c' style='width:200px;height:46px;margin-right:10px;' onfocus="if(this.value == this.defaultValue) this.value = ''" onblur="if(this.value.replace(' ','') == '') this.value = this.defaultValue;"><?php echo L('reject_msg');?></textarea></label> <label><button type="button" class="btn dark btn-sm" id="reject_check1"><i class="fa fa-times"></i> <?php echo L('submit');?></button></label></div></div></label>
         <?php }}?>
     </div>
-    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
+    <div class="col-md-7 list-page"><?php echo $pages?></div>
 </div>
 </form>
 </div>
@@ -447,7 +446,6 @@ function view_comment(id, name) {
     diag.show();
 }
 </script>
-</div>
 </div>
 </div>
 </div>

@@ -2,7 +2,6 @@
 	defined('IS_ADMIN') or exit('No permission resources.');
 	include $this->admin_tpl('header', 'admin');
 ?>
-
 <div class="pad-10">
 <div class="common-form">
 <fieldset>
@@ -70,6 +69,7 @@
 <?php }?>
 </table>
 </fieldset>
+</div>
 </div>
 </body>
 </html>

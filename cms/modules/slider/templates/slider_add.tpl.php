@@ -41,7 +41,7 @@ include $this->admin_tpl('header','admin');
 	
 	<tr>
 		<th width="100"><?php echo L('icon')?>：</th>
-		<td><input type="text" id="menu_icon" name="slider[icon]" class="input-text" ><input type="button" name="icon" id="icon" value="<?php echo L('choose_icon')?>" class="button" onclick="menuicon('icons','?m=admin&c=menu&a=public_icon&value='+$('#menu_icon').val(),'<?php echo L('choose_icon')?>','80%','80%')"></td>
+		<td><label><input type="text" id="menu_icon" name="slider[icon]" class="input-text" ></label> <label><input type="button" name="icon" id="icon" value="<?php echo L('choose_icon')?>" class="button" onclick="menuicon('icons','?m=admin&c=menu&a=public_icon&value='+$('#menu_icon').val(),'<?php echo L('choose_icon')?>','80%','80%')"></label></td>
 	</tr>
 
 	<tr>

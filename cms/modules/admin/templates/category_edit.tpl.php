@@ -28,7 +28,7 @@ include $this->admin_tpl('header');?>
 //-->
 </script>
 <div class="page-content main-content">
-<div class="note note-danger my-content-top-tool">
+<div class="note note-danger">
     <p><?php echo L('最多支持创建'.MAX_CATEGORY.'个栏目，请合理的规划网站栏目');?></p>
 </div>
 <form action="?m=admin&c=category&a=edit" class="form-horizontal" method="post" name="myform" id="myform" onsubmit="return checkall()">
@@ -70,7 +70,7 @@ include $this->admin_tpl('header');?>
                     <div class="form-group" id="dr_row_modelid">
                         <label class="col-md-2 control-label"><?php echo L('select_model')?></label>
                         <div class="col-md-9">
-                            <label><?php
+                            <?php
 			$category_items = getcache('category_items_'.$modelid,'commons');
 			$disabled = $category_items[$catid] ? 'disabled' : '';
 			$models = getcache('model','commons');
@@ -81,13 +81,13 @@ include $this->admin_tpl('header');?>
 			}
 			echo form::select($model_datas,$modelid,'name="info[modelid]" id="modelid" '.$disabled,L('select_model'));
 			echo L('modelid_edit_tips');
-		?></label>
+		?>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('parent_category')?></label>
                         <div class="col-md-9">
-                            <label><?php echo form::select_category('category_content_'.$this->siteid,$parentid,'name="info[parentid]" id="parentid"',L('please_select_parent_category'),0,-1);?></label>
+                            <?php echo form::select_category('category_content_'.$this->siteid,$parentid,'name="info[parentid]" id="parentid"',L('please_select_parent_category'),0,-1);?>
                         </div>
                     </div>
                     <div class="form-group" id="dr_row_catname">
@@ -105,7 +105,7 @@ include $this->admin_tpl('header');?>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('catgory_img')?></label>
                         <div class="col-md-9">
-                            <label><?php echo form::images('info[image]', 'image', $image, 'content');?></label>
+                            <?php echo form::images('info[image]', 'image', $image, 'content');?>
                         </div>
                     </div>
                     <div class="form-group">
@@ -117,7 +117,7 @@ include $this->admin_tpl('header');?>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('workflow')?></label>
                         <div class="col-md-9">
-                            <label><?php
+                            <?php
 		$workflows = getcache('workflow_'.$this->siteid,'commons');
 		if($workflows) {
 			$workflows_datas = array();
@@ -129,7 +129,7 @@ include $this->admin_tpl('header');?>
 			echo '<input type="hidden" name="setting[workflowid]" value="">';
 			echo L('add_workflow_tips');
 		}
-	?></label>
+	?>
                         </div>
                     </div>
                     <div class="form-group">
@@ -249,7 +249,7 @@ include $this->admin_tpl('header');?>
                     <div class="form-group" id="dr_row_template_list">
                         <label class="col-md-2 control-label"><?php echo L('available_styles')?></label>
                         <div class="col-md-9">
-                            <label><?php echo form::select($template_list, $setting['template_list'], 'name="setting[template_list]" id="template_list" onchange="load_file_list(this.value)"', L('please_select'))?></label>
+                            <?php echo form::select($template_list, $setting['template_list'], 'name="setting[template_list]" id="template_list" onchange="load_file_list(this.value)"', L('please_select'))?>
                         </div>
                     </div>
                     <div class="form-group">
@@ -451,7 +451,6 @@ $('.nav-tabs a').click(function (e) {
     $(this).parent().addClass('active');
     $('#'+$(this).attr("data-toggle")).addClass('active');
 })
-window.top.$('#display_center_id').css('display','none');
 $(function(){
     var url = $('#url').val();
     if(!url.match(/^http(s?):\/\//)) $('#url').val('');

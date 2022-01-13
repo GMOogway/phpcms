@@ -39,16 +39,14 @@ foreach($datas as $r) {
 
  </div>
 </div>
-<div class="list-footer table-checkable clear">
-    <div class="col-md-5 col-sm-5 table-footer-button"></div>
-    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 text-right"><?php echo $pages?></div>
 </div>
 </div>
 </form>
 
 <script type="text/javascript"> 
 <!--
-window.top.$('#display_center_id').css('display','none');
 function edit(id, name) {
 	artdialog('edit','?m=content&c=workflow&a=edit&workflowid='+id,'<?php echo L('edit_workflow');?>《'+name+'》',680,500);
 }

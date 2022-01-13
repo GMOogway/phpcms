@@ -1,18 +1,15 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header');?>
-<div class="pad-lr-10">
-<form name="downform" action="?m=admin&c=downservers&a=init" method="post" >
-<table width="100%" cellspacing="0" class="search-form">
-    <tbody>
-		<tr>
-		<td><div class="explain-col"><?php echo L('downserver_name')?> <label><input type="text" value="" class="input-text" name="info[sitename]"></label> <?php echo L('downserver_url')?> <label><input type="text" value="" class="input-text" name="info[siteurl]" size="50"></label> <?php echo L('downserver_site');?> <?php echo form::select($sitelist,self::get_siteid(),'name="info[siteid]"',$default)?> <label><input type="submit" value="<?php echo L('add');?>" class="button" name="dosubmit"></label>
-		</div>
-		</td>
-		</tr>
-    </tbody>
-</table>
-</form>
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="note note-danger">
+    <p><form name="downform" action="?m=admin&c=downservers&a=init" method="post" >
+<?php echo L('downserver_name')?> <label><input type="text" value="" class="input-text" name="info[sitename]"></label> <?php echo L('downserver_url')?> <label><input type="text" value="" class="input-text" name="info[siteurl]" size="50"></label> <?php echo L('downserver_site');?> <?php echo form::select($sitelist,self::get_siteid(),'name="info[siteid]"',$default)?> <label><input type="submit" value="<?php echo L('add');?>" class="button" name="dosubmit"></label>
+</form></p>
+</div>
+<div class="right-card-box">
 <form name="myform" action="?m=admin&c=downservers&a=listorder" method="post">
 <input name="dosubmit" type="hidden" value="1">
 <div class="table-list">
@@ -52,13 +49,16 @@ if(is_array($infos)){
     </tbody>
     </table>
 </div>
-<div class="list-footer table-checkable clear">
-    <div class="col-md-5 col-sm-5 table-footer-button">
+<div class="row list-footer table-checkable">
+    <div class="col-md-5 list-select">
         <label><button type="submit" class="btn green btn-sm"> <i class="fa fa-refresh"></i> <?php echo L('listorder')?></button></label>
     </div>
-    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
+    <div class="col-md-7 list-page"><?php echo $pages?></div>
 </div>
 </form>
+</div>
+</div>
+</div>
 </div>
 </body>
 </html>

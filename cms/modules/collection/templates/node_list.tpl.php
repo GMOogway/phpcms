@@ -1,7 +1,9 @@
 <?php defined('IS_ADMIN') or exit('No permission resources.');?>
 <?php include $this->admin_tpl('header', 'admin');?>
-<div class="pad-lr-10">
-
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="right-card-box">
 <form name="myform" id="myform" action="?m=collection&c=node&a=del" method="post">
 <input name="dosubmit" type="hidden" value="1">
 <div class="table-list">
@@ -52,8 +54,8 @@
 </tbody>
 </table>
 </div>
-<div class="list-footer table-checkable clear">
-    <div class="col-md-5 col-sm-5 table-footer-button">
+<div class="row list-footer table-checkable">
+    <div class="col-md-5 list-select">
         <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
             <input type="checkbox" class="group-checkable" data-set=".checkboxes">
             <span></span>
@@ -61,9 +63,12 @@
         <label><button type="button" onclick="Dialog.confirm('<?php echo L('sure_delete')?>',function(){$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete')?></button></label>
         <label><button type="button" onclick="import_spider()" class="btn green btn-sm"> <i class="fa fa-cloud-upload"></i> <?php echo L('import_collection_points')?></button></label>
     </div>
-    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
+    <div class="col-md-7 list-page"><?php echo $pages?></div>
 </div>
 </form>
+</div>
+</div>
+</div>
 </div>
 <script type="text/javascript">
 <!--
@@ -94,8 +99,6 @@ function copy_spider(id) {
 function import_spider() {
 	artdialog('test','?m=collection&c=node&a=node_import','<?php echo L('import_collection_points')?>',500,220);
 }
-
-window.top.$('#display_center_id').css('display','none');
 //-->
 </script>
 </body>

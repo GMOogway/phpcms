@@ -191,7 +191,7 @@ class type_manage extends admin {
 						$this->catids_string[] = $r['catid'];
 					}
 				}
-				$r['checkbox'] = "<label class=\"mt-checkbox mt-checkbox-outline\"><input type='checkbox' name='ids[]' value='{$r['catid']}' {$checked}><span></span></label>";
+				$r['checkbox'] = "<label class=\"mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline\"><input type='checkbox' name='ids[]' value='{$r['catid']}' {$checked}><span></span></label>";
 				$r['style'] = '';
 			}
 			$categorys[$r['catid']] = $r;

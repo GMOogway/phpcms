@@ -1,6 +1,9 @@
 <?php defined('IS_ADMIN') or exit('No permission resources.');?>
 <?php include $this->admin_tpl('header', 'admin');?>
-<div class="pad-lr-10">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="right-card-box">
 <div class="col-tab">
 <ul class="tabBut cu-li">
 <li <?php if(empty($status)) echo 'class="on" '?>id="tab_1"><a href="?m=collection&c=node&a=publist&nodeid=<?php echo $nodeid?>"><?php echo L('all')?></a></li>
@@ -55,8 +58,8 @@
 </tbody>
 </table>
 </div>
-<div class="list-footer table-checkable clear">
-    <div class="col-md-5 col-sm-5 table-footer-button">
+<div class="row list-footer table-checkable">
+    <div class="col-md-5 list-select">
         <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
             <input type="checkbox" class="group-checkable" data-set=".checkboxes">
             <span></span>
@@ -66,9 +69,13 @@
         <label><button type="submit" onclick="re_url('m=collection&c=node&a=import&nodeid=<?php echo $nodeid?>');return check_checkbox();" class="btn green btn-sm"> <i class="fa fa-cloud-upload"></i> <?php echo L('import_selected')?></button></label>
         <label><button type="submit" onclick="re_url('m=collection&c=node&a=import&type=all&nodeid=<?php echo $nodeid?>')" class="btn blue btn-sm"> <i class="fa fa-cloud-upload"></i> <?php echo L('import_all')?></button></label>
     </div>
-    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
+    <div class="col-md-7 list-page"><?php echo $pages?></div>
 </div>
 </form>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 <script type="text/javascript">
@@ -99,7 +106,6 @@ function check_checkbox(obj) {
 		return false;
 	}
 }
-window.top.$('#display_center_id').css('display','none');
 //-->
 </script>
 </body>

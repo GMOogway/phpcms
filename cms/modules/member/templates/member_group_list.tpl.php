@@ -1,9 +1,14 @@
 <?php defined('IS_ADMIN') or exit('No permission resources.');?>
 <?php include $this->admin_tpl('header', 'admin');?>
-
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="note note-danger">
+    <p><a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=init&pc_hash='+pc_hash+'&is_ajax=1',1);"><?php echo L('update_cache_all');?></a></p>
+</div>
+<div class="right-card-box">
 <form name="myform" id="myform" action="?m=member&c=member_group&a=delete" method="post" onsubmit="check();return false;">
 <input name="dosubmit" type="hidden" value="1">
-<div class="pad-lr-10">
 <div class="table-list">
 <table width="100%" cellspacing="0">
 	<thead>
@@ -59,8 +64,8 @@
 </tbody>
  </table>
 </div>
-<div class="list-footer table-checkable clear">
-    <div class="col-md-5 col-sm-5 table-footer-button">
+<div class="row list-footer table-checkable">
+    <div class="col-md-5 list-select">
         <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
             <input type="checkbox" class="group-checkable" data-set=".checkboxes">
             <span></span>
@@ -68,8 +73,7 @@
         <label><button type="submit" onclick="document.myform.action='?m=member&c=member_group&a=sort'" class="btn green btn-sm"> <i class="fa fa-refresh"></i> <?php echo L('sort')?></button></label>
         <label><button type="button" onclick="Dialog.confirm('<?php echo L('sure_delete')?>',function(){$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete')?></button></label>
     </div>
-    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
-</div>
+    <div class="col-md-7 list-page"><?php echo $pages?></div>
 </div>
 </form>
 <script language="JavaScript">
@@ -93,5 +97,9 @@ function check() {
 }
 //-->
 </script>
+</div>
+</div>
+</div>
+</div>
 </body>
 </html>

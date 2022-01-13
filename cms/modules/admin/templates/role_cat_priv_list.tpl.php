@@ -27,14 +27,14 @@ function select_all(name, obj) {
         if (name == 0) {
 			$.each($("input[type='checkbox']"),function(i,rs){
 				if($(this).attr('disabled') != 'disabled'){
-					$(this).attr('checked', 'checked');
+					$(this).prop("checked", true);
 				}
 			});
             //$("input[type='checkbox']").attr('checked', 'checked');
         } else {
 			$.each($("input[type='checkbox'][name='priv[" + name + "][]']"),function(i,rs){
 				if($(this).attr('disabled') != 'disabled'){
-					$(this).attr('checked', 'checked');
+					$(this).prop("checked", true);
 				}
 			});
             //$("input[type='checkbox'][name='priv[" + name + "][]']").attr('checked', 'checked');

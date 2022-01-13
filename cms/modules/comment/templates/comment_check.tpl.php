@@ -26,7 +26,6 @@ $data = $this->comment_data_db->get_one(array('id'=>$v['comment_data_id'], 'site
 </div>
 </div>
 <script type="text/javascript">
-window.top.$('#display_center_id').css('display','none');
 function check(id, type, commentid) {
 	if(type == -1) {
 		Dialog.confirm('<?php echo L('are_you_sure_you_want_to_delete')?>',function(){$.get('?m=comment&c=check&a=ajax_checks&id='+id+'&type='+type+'&commentid='+commentid+'&pc_hash='+pc_hash+'&'+Math.random(), function(data){if(data!=1){if(data==0){Dialog.alert('<?php echo L('illegal_parameters')?>')}else{Dialog.alert(data)}}else{$('#tbody_'+id).remove();

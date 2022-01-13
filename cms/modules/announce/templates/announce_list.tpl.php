@@ -2,7 +2,10 @@
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header', 'admin');
 ?>
-<div class="pad-lr-10">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="right-card-box">
 <form name="myform" id="myform" action="?m=announce&c=admin_announce&a=listorder" method="post">
 <input name="dosubmit" type="hidden" value="1">
 <div class="table-list">
@@ -52,8 +55,8 @@ if(is_array($data)){
 </tbody>
     </table>
 </div>
-<div class="list-footer table-checkable clear">
-    <div class="col-md-5 col-sm-5 table-footer-button">
+<div class="row list-footer table-checkable">
+    <div class="col-md-5 list-select">
         <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
             <input type="checkbox" class="group-checkable" data-set=".checkboxes">
             <span></span>
@@ -65,9 +68,12 @@ if(is_array($data)){
         <?php }?>
         <label><button type="button" onClick="Dialog.confirm('<?php echo L('affirm_delete')?>',function(){document.myform.action='?m=announce&c=admin_announce&a=delete';$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('remove_all_selected')?></button></label>
     </div>
-    <div class="col-md-7 col-sm-7 text-right"><?php echo $this->db->pages;?></div>
+    <div class="col-md-7 list-page"><?php echo $this->db->pages;?></div>
 </div>
 </form>
+</div>
+</div>
+</div>
 </div>
 </body>
 </html>

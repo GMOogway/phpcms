@@ -36,5 +36,6 @@
 <input name="dosubmit" type="submit" value="<?php echo L('submit')?>" class="button" id="dosubmit">
 </form>
 </div>
+</div>
 </body>
 </html>

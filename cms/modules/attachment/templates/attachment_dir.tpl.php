@@ -21,7 +21,7 @@ body .table-list table tr>td:first-child, body .table-list table tr>th:first-chi
 <table width="100%" cellspacing="0">
 <thead>
 	<tr>
-		<th><?php echo L("local_dir")?>：<?php echo $local?></th><th width="100"></th><th></th>
+		<th><?php echo L("local_dir")?>：<?php echo $local?></th><th width="180"></th><th width="180"></th>
 	</tr>
 </thead>
 <tbody>

@@ -14,9 +14,5 @@ include $this->admin_tpl('header','admin');?>
 <label><button type="submit" class="btn green btn-sm onloading" name="submit"> <i class="fa fa-refresh"></i> <?php echo L('confirm_reindex')?></button></label>
 </form>
 </div>
-
-<script language="JavaScript">
-<!--
-window.top.$('#display_center_id').css('display','none');
-//-->
-</script>
+</body>
+</html>

@@ -1,13 +1,12 @@
 <?php defined('IS_ADMIN') or exit('No permission resources.');?>
 <?php include $this->admin_tpl('header', 'admin');?>
-
 <div class="pad-lr-10">
-<div class="table-list">
 <div class="common-form">
 	<input type="hidden" name="info[userid]" value="<?php echo $memberinfo['userid']?>"></input>
 	<input type="hidden" name="info[username]" value="<?php echo $memberinfo['username']?>"></input>
 <fieldset>
 	<legend><?php echo L('basic_configuration')?></legend>
+<div class="table-list">
 	<table width="100%" class="table_form">
 		<tr>
 			<td width="120"><?php echo L('username')?></td> 
@@ -90,12 +89,13 @@
 			<?php echo $memberinfo['lastip'];?><a class="btn btn-xs green" href="javascript:dr_show_ip('<?php echo WEB_PATH;?>api.php?op=ip_address', '<?php echo $memberinfo['lastip'];?>');"><i class="fa fa-eye" /></i> <?php echo L('查看')?></a></p>
 			</td>
 		</tr>
-		
 	</table>
+</div>
 </fieldset>
 <div class="bk15"></div>
 <fieldset>
 	<legend><?php echo L('more_configuration')?></legend>
+<div class="table-list">
 	<table width="100%" class="table_form">
 	<?php foreach($member_modelinfo as $k=>$v) {?>
 		<tr>
@@ -104,8 +104,8 @@
 		</tr>
 	<?php }?>
 	</table>
-</fieldset>
 </div>
+</fieldset>
 </div>
 </div>
 </body>

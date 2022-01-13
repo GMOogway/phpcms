@@ -4,17 +4,19 @@ include $this->admin_tpl('header', 'admin');?>
 <div class="container">
         <h2>后台显示字段回调</h2>
         <div class="content-text">
-    <p>回调是用于在列表显示时对其值进行格式化，如果不填写回调函数，那么就会原样显示数据库储存内容。<br/></p><p>CMS默认的回调函数有：</p><pre class="brush:html;toolbar:false">标题:&nbsp;title
-栏目:&nbsp;catid
-日期时间:&nbsp;datetime
-日期:&nbsp;date
-userid会员:&nbsp;userid
-会员信息:&nbsp;author
-地区联动:&nbsp;linkage_address
+    <p>回调是用于在列表显示时对其值进行格式化，如果不填写回调函数，那么就会原样显示数据库储存内容。<br/></p><p>CMS默认的回调函数有：</p><pre class="brush:html;toolbar:false">标题：title
+栏目：catid
+日期时间：datetime
+日期：date
+userid会员：userid
+会员信息：author
+地区联动：linkage_address
 用于列表显示缩略图：image
 用于列表显示单文件：file
 用于列表显示多文件：files
 用于列表显示用户组：group
+用于列表关联主题：ctitle
+用于列表显示状态：status
 实时存储时间值：save_time_value
 实时存储文本值：save_text_value
 实时存储选择值：save_select_value</pre></div>
@@ -23,6 +25,10 @@ userid会员:&nbsp;userid
     <p> &nbsp;&nbsp;</p>
 </div>
 <style>
+body {
+    background: #fff;
+    font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+}
 img {max-width: 80%}
 h2 {
     padding-bottom: 10px;
@@ -44,6 +50,9 @@ img,video {
     padding: 10px;
     border-radius: 5px;
     margin: 5px;
+}
+p {
+    margin: 0 0 10px;
 }
 .container {
     width: 100%;

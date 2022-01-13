@@ -2,7 +2,10 @@
 defined('IS_ADMIN') or exit('No permission resources.'); 
 include $this->admin_tpl('header', 'admin');
 ?>
-<div class="pad-lr-10">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="right-card-box">
 <form name="myform" id="myform" action="?m=special&c=special&a=listorder" method="post">
 <input name="dosubmit" type="hidden" value="1">
 <div class="table-list">
@@ -57,8 +60,8 @@ if(is_array($infos)){
 </tbody>
     </table>
 </div>
-<div class="list-footer table-checkable clear">
-    <div class="col-md-5 col-sm-5 table-footer-button">
+<div class="row list-footer table-checkable">
+    <div class="col-md-5 list-select">
         <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
             <input type="checkbox" class="group-checkable" data-set=".checkboxes">
             <span></span>
@@ -67,14 +70,16 @@ if(is_array($infos)){
         <label><button type="button" onclick="Dialog.confirm('<?php echo L('confirm', array('message' => L('selected')))?>',function(){document.myform.action='?m=special&c=special&a=delete';$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete')?></button></label>
         <label><button type="submit" onclick="document.myform.action='?m=special&c=special&a=html'" class="btn blue btn-sm"> <i class="fa fa fa-file-code-o"></i> <?php echo L('update')?>html</button></label>
     </div>
-    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
+    <div class="col-md-7 list-page"><?php echo $pages?></div>
 </div>
 </form>
+</div>
+</div>
+</div>
 </div>
 </body>
 </html>
 <script type="text/javascript">
-<!--
 function edit(id, name) {
 	artdialog('edit','?m=special&c=special&a=edit&specialid='+id,'<?php echo L('edit_special')?>--'+name,700,500);
 }
@@ -86,5 +91,4 @@ function comment(id, name) {
 function import_c(id) {
 	omnipotent('import','?m=special&c=special&a=import&specialid='+id,'<?php echo L('import_news')?>--',1,'60%','60%');
 }
-window.top.$("#display_center_id").css("display","none");
 </script>

@@ -22,8 +22,7 @@ body {background: #f5f6f8;}
 <div class="page-container" style="margin-bottom: 0px !important;">
     <div class="page-content-wrapper">
         <div class="page-content page-content3 mybody-nheader main-content  ">
-<div class="page-body">
-<div class="note note-danger my-content-top-tool">
+<div class="note note-danger">
     <p style='margin-bottom: 10px;'><?php 
         foreach($datas2 as $r) {
             echo "<a href=\"?m=content&c=content&a=initall&modelid=".$r['modelid']."&menuid=".$param['menuid']."&pc_hash=".dr_get_csrf_token()."\" class=\"btn btn-sm";
@@ -166,9 +165,8 @@ if(is_array($datas)){
 </tbody>
     </table>
 </div>
-<div class="list-footer table-checkable clear">
-    <div class="col-md-5 col-sm-5 table-footer-button"></div>
-    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 text-right"><?php echo $pages?></div>
 </div>
 </form>
 </div>
@@ -193,7 +191,6 @@ function view_comment(id, name) {
     diag.show();
 }
 </script>
-</div>
 </div>
 </div>
 </div>

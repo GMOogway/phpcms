@@ -2,42 +2,12 @@
 defined('IS_ADMIN') or exit('No permission resources.');
 $show_validator = true;include $this->admin_tpl('header');?>
 <script type="text/javascript">
-<!--
-$(function(){
-    $.formValidator.initConfig({autotip:true,formid:"myform",onerror:function(msg){}});
-    $("#dr_username").formValidator({onshow:"<?php echo L('input').L('username')?>",onfocus:"<?php echo L('username').L('between_2_to_20')?>"}).inputValidator({min:2,max:20,onerror:"<?php echo L('username').L('between_2_to_20')?>"}).ajaxValidator({
-        type : "get",
-        url : "",
-        data :"m=admin&c=admin_manage&a=public_checkname_ajx",
-        datatype : "html",
-        async:'false',
-        success : function(data){    
-            if( data == "1" )
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        },
-        buttons: $("#dosubmit"),
-        onerror : "<?php echo L('user_already_exist')?>",
-        onwait : "<?php echo L('connecting_please_wait')?>"
-    });
-    $("#dr_password").formValidator({onshow:"<?php echo L('input').L('password')?>",onfocus:"<?php echo L('password').L('between_6_to_20')?>"}).inputValidator({min:6,max:20,onerror:"<?php echo L('password').L('between_6_to_20')?>"});
-    $("#dr_pwdconfirm").formValidator({onshow:"<?php echo L('input').L('cofirmpwd')?>",onfocus:"<?php echo L('input').L('passwords_not_match')?>",oncorrect:"<?php echo L('passwords_match')?>"}).compareValidator({desid:"password",operateor:"=",onerror:"<?php echo L('input').L('passwords_not_match')?>"});
-    $("#dr_email").formValidator({onshow:"<?php echo L('input').L('email')?>",onfocus:"<?php echo L('email').L('format_incorrect')?>",oncorrect:"<?php echo L('email').L('format_right')?>"}).regexValidator({regexp:"email",datatype:"enum",onerror:"<?php echo L('email').L('format_incorrect')?>"});
-})
-//-->
-</script>
-<script type="text/javascript">
 jQuery(document).ready(function() {
     $(":text").removeClass('input-text');
 });
 </script>
 <div class="page-content main-content">
-<div class="note note-danger my-content-top-tool">
+<div class="note note-danger">
     <p><?php echo L('管理员账号允许同时拥有多个角色组');?></p>
 </div>
 <form action="?m=admin&c=admin_manage&a=add" class="form-horizontal" method="post" name="myform" id="myform">

@@ -3,22 +3,21 @@ defined('IS_ADMIN') or exit('No permission resources.');
 $show_dialog = 1;
 include $this->admin_tpl('header', 'admin');
 ?>
-<div class="pad-lr-10">
-<table width="100%" cellspacing="0" class="search-form">
-    <tbody>
-		<tr>
-		<td><div class="explain-col"> 
-		位置: &nbsp;&nbsp;
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="right-card-box">
+    <div class="row table-search-tool">
+	<div class="col-md-12 col-sm-12">
+		<label>位置</label>
+        <label><i class="fa fa-caret-right"></i></label>
 		<?php
 	if(is_array($type_arr)){
 	foreach($type_arr as $typeid => $type){
-		?><a href="?m=slider&c=slider&typeid=<?php echo $typeid;?>"><?php echo $type;?></a>&nbsp;
-		<?php }}?>
-		</div>
-		</td>
-		</tr>
-    </tbody>
-</table>
+		?><label><a href="?m=slider&c=slider&typeid=<?php echo $typeid;?>"><?php echo $type;?></a></label>
+		<?php }}?></label>
+</div>
+</div>
 <form name="myform" id="myform" action="?m=slider&c=slider&a=listorder" method="post">
 <input name="dosubmit" type="hidden" value="1">
 <div class="table-list">
@@ -72,8 +71,8 @@ if(is_array($infos)){
 </tbody>
 </table>
 </div>
-<div class="list-footer table-checkable clear">
-    <div class="col-md-5 col-sm-5 table-footer-button">
+<div class="row list-footer table-checkable">
+    <div class="col-md-5 list-select">
         <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
             <input type="checkbox" class="group-checkable" data-set=".checkboxes">
             <span></span>
@@ -81,12 +80,14 @@ if(is_array($infos)){
         <label><button type="submit" class="btn green btn-sm"> <i class="fa fa-refresh"></i> <?php echo L('listorder')?></button></label>
         <label><button type="button" onClick="Dialog.confirm('<?php echo L('confirm', array('message' => L('selected')))?>',function(){document.myform.action='?m=slider&c=slider&a=delete';$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete')?></button></label>
     </div>
-    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
+    <div class="col-md-7 list-page"><?php echo $pages?></div>
 </div>
 </form>
 </div>
+</div>
+</div>
+</div>
 <script type="text/javascript">
-
 function edit(id, name) {
 	artdialog('edit','?m=slider&c=slider&a=edit&id='+id,'<?php echo L('edit')?> '+name+' ',700,450);
 }
@@ -113,8 +114,6 @@ function listorder_up(id) {
 	} 
 	}); 
 } 
-
-window.top.$('#display_center_id').css('display','none');
 function preview(file) {
 	if(IsImg(file)) {
         var width = 400;

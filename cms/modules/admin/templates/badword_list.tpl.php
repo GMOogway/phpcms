@@ -3,7 +3,10 @@ defined('IS_ADMIN') or exit('No permission resources.');
 $show_dialog = 1;
 include $this->admin_tpl('header','admin');
 ?>
-<div class="pad-lr-10">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="right-card-box">
 <form name="myform" id="myform" action="?m=admin&c=badword&a=delete" method="post" onsubmit="checkuid();return false;">
 <input name="dosubmit" type="hidden" value="1">
 <div class="table-list">
@@ -46,23 +49,26 @@ foreach($infos as $info){
 </tbody>
  </table>
 </div>
-<div class="list-footer table-checkable clear">
-    <div class="col-md-5 col-sm-5 table-footer-button">
+<div class="row list-footer table-checkable">
+    <div class="col-md-5 list-select">
         <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
             <input type="checkbox" class="group-checkable" data-set=".checkboxes">
             <span></span>
         </label>
         <label><button type="button" onClick="Dialog.confirm('<?php echo L('badword_confom_del')?>',function(){$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('remove_all_selected')?></button></label>
     </div>
-    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
+    <div class="col-md-7 list-page"><?php echo $pages?></div>
 </div>
 </form>
+</div>
+</div>
+</div>
 </div>
 </body>
 </html>
 <script type="text/javascript">
 function edit(id, name) {
-	artdialog('edit','?m=admin&c=badword&a=edit&badid='+id,'<?php echo L('badword_edit')?> '+name+' ',450,180);
+	artdialog('edit','?m=admin&c=badword&a=edit&badid='+id,'<?php echo L('badword_edit')?> '+name+' ',450,260);
 }
 
 function checkuid() {

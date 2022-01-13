@@ -16,7 +16,7 @@ include $this->admin_tpl('header','admin');?>
         <label><?php if (isset($formid) && !empty($formid)) {?><a href="?m=formguide&c=formguide_field&a=init&modelid=<?php echo $formid?>&menuid=<?php echo $_GET['menuid']?>" class="btn green"> <i class="fa fa-reorder"></i> <?php echo L('manage_field');?></a><?php } else {?><a href="?m=formguide&c=formguide_field&a=init&menuid=<?php echo $_GET['menuid']?>" class="btn green"> <i class="fa fa-reorder"></i> <?php echo L('public_field_manage')?></a><?php }?></label>
     </div>
 </div>
-<div class="note note-danger my-content-top-tool">
+<div class="note note-danger">
     <p><a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=init&pc_hash='+pc_hash+'&is_ajax=1',1);"><?php echo L('update_cache_all');?></a></p>
 </div>
 <form action="" class="form-horizontal" method="post" name="myform" id="myform">

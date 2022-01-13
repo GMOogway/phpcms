@@ -6,7 +6,7 @@ include $this->admin_tpl('header', 'admin');
 <link rel="stylesheet" href="<?php echo CSS_PATH;?>admin/css/global.css" media="all" />
 <script type="text/javascript" src="<?php echo JS_PATH;?>layui/layui.js"></script>
 <div class="admin-main layui-anim layui-anim-upbit">
-    <div class="note note-danger my-content-top-tool">
+    <div class="note note-danger">
         <a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=init&pc_hash='+pc_hash+'&is_ajax=1',1);" class="layui-btn layui-btn-sm">
             <i class="fa fa-refresh"></i> <?php echo L('update_cache_all');?>
         </a>

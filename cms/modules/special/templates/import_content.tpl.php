@@ -16,24 +16,27 @@ jQuery(document).ready(function() {
     }
 });
 </script>
-<br />
-<div class="pad-lr-10">
-<div id="searchid" style="display:">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="right-card-box">
+<div class="row table-search-tool" id="searchid" style="display:">
 <form name="searchform" action="" method="get" >
 <input type="hidden" value="special" name="m">
 <input type="hidden" value="special" name="c">
 <input type="hidden" value="import" name="a">
 <input type="hidden" name="dosubmit" value="1">
 <input type="hidden" value="<?php echo $this->input->get('specialid')?>" name="specialid">
-<table width="100%" cellspacing="0" class="search-form">
-    <tbody>
-		<tr>
-		<td>
-		<div class="explain-col">
+<div class="col-md-12 col-sm-12">
  			<label><?php echo $model_form?></label>
 			<label id="catids"></label>
-			<?php echo L('keyword')?>：<label><input type='text' name="key" id="key" value="<?php echo $this->input->get('key');?>" size="25"></label>
-				<?php echo L('input_time')?>：
+</div>
+<div class="col-md-12 col-sm-12">
+			<label><?php echo L('keyword')?></label>
+			<label><i class="fa fa-caret-right"></i></label>
+			<label><input type='text' name="key" id="key" value="<?php echo $this->input->get('key');?>" size="25"></label>
+</div>
+<div class="col-md-12 col-sm-12">
 				<?php $start_f = $this->input->get('start_time') ? $this->input->get('start_time') : format::date(SYS_TIME-2592000);$end_f = $this->input->get('end_time') ? $this->input->get('end_time') : format::date(SYS_TIME+86400);?>
 				<label><div class="formdate">
 					<div class="input-group input-medium date-picker input-daterange">
@@ -42,12 +45,10 @@ jQuery(document).ready(function() {
 						<input type="text" class="form-control" value="<?php echo $this->input->get('end_time');?>" name="end_time" id="end_time">
 					</div>
 				</div></label>
+</div>
+<div class="col-md-12 col-sm-12">
 				<label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('search')?></button></label>
-	</div>
-		</td>
-		</tr>
-    </tbody>
-</table>
+</div>
 </form>
 </div>
 <form name="myform" id="myform" action="?m=special&c=special&a=import&specialid=<?php echo $this->input->get('specialid')?>&modelid=<?php echo $this->input->get('modelid')?>" method="post">
@@ -80,17 +81,21 @@ jQuery(document).ready(function() {
 </tbody>
      </table>
 </div>
-<div class="list-footer table-checkable clear">
-    <div class="col-md-5 col-sm-5 table-footer-button">
+<div class="row list-footer table-checkable">
+    <div class="col-md-5 list-select">
         <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
             <input type="checkbox" class="group-checkable" data-set=".checkboxes">
             <span></span>
         </label>
-        <label><?php echo form::select($types, '', 'name="typeid" id="typeid"', L('please_choose_type'))?><span id="msg_id"></span><button type="submit" class="btn green btn-sm"> <i class="fa fa-save"></i> <?php echo L('import')?></button></label>
+        <label><?php echo form::select($types, '', 'name="typeid" id="typeid"', L('please_choose_type'))?><span id="msg_id"></span></label>
+        <label><button type="submit" class="btn green btn-sm"> <i class="fa fa-save"></i> <?php echo L('import')?></button></label>
     </div>
-    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
+    <div class="col-md-7 list-page"><?php echo $pages?></div>
 </div>
 </form>
+</div>
+</div>
+</div>
 </div>
 </body>
 </html>

@@ -1,9 +1,11 @@
 <?php defined('IS_ADMIN') or exit('No permission resources.');?>
 <?php include $this->admin_tpl('header', 'admin');?>
-
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="right-card-box">
 <form name="myform" id="myform" action="?m=member&c=member_verify&a=delete" method="post"  onsubmit="checkuid();return false;">
 <input name="dosubmit" type="hidden" value="1">
-<div class="pad-lr-10">
 <div class="table-list">
 <table width="100%" cellspacing="0">
         <thead>
@@ -44,8 +46,8 @@
  </tbody>
 </table>
 </div>
-<div class="list-footer table-checkable clear">
-    <div class="col-md-5 col-sm-5 table-footer-button">
+<div class="row list-footer table-checkable">
+    <div class="col-md-5 list-select">
         <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
             <input type="checkbox" class="group-checkable" data-set=".checkboxes">
             <span></span>
@@ -54,13 +56,16 @@
         <label><button type="submit" onclick="document.myform.action='?m=member&c=member_verify&a=reject'" class="btn dark btn-sm"> <i class="fa fa-mail-reply-all"></i> <?php echo L('reject')?></button></label>
         <label><button type="button" onclick="Dialog.confirm('<?php echo L('sure_delete')?>',function(){$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete')?></button></label>
         <label><button type="submit" onclick="document.myform.action='?m=member&c=member_verify&a=ignore'" class="btn blue btn-sm"> <i class="fa fa-code"></i> <?php echo L('ignore')?></button></label>
-        <label><?php echo L('verify_message')?>：<input type="text" name="message"></label>
+        <label><?php echo L('verify_message')?>：<label><input type="text" name="message"></label></label>
         <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline"><input type="checkbox" value=1 name="sendemail" checked/><?php echo L('sendemail')?><span></span></label>
     </div>
-    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
-</div>
+    <div class="col-md-7 list-page"><?php echo $pages?></div>
 </div>
 </form>
+</div>
+</div>
+</div>
+</div>
 <script type="text/javascript">
 <!--
 

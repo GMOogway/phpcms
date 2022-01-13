@@ -22,8 +22,7 @@ body {background: #f5f6f8;}
 <div class="page-container" style="margin-bottom: 0px !important;">
     <div class="page-content-wrapper">
         <div class="page-content page-content3 mybody-nheader main-content  ">
-<div class="page-body">
-<div class="note note-danger my-content-top-tool">
+<div class="note note-danger">
     <p><a href="?m=content&c=content&a=init&catid=<?php echo $catid;?>&pc_hash=<?php echo dr_get_csrf_token();?>" class="btn green">
             <i class="fa fa-check"></i> <?php echo L('check_passed');?>
         </a>
@@ -131,8 +130,8 @@ if(is_array($datas)){
 </tbody>
     </table>
 </div>
-<div class="list-footer table-checkable clear">
-    <div class="col-md-5 col-sm-5 table-footer-button">
+<div class="row list-footer table-checkable">
+    <div class="col-md-5 list-select">
         <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
             <input type="checkbox" class="group-checkable" data-set=".checkboxes">
             <span></span>
@@ -140,7 +139,7 @@ if(is_array($datas)){
         <label><button type="button" id="delAll" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('thorough').L('delete');?></button></label>
         <label><button type="button" id="recycle" class="btn green btn-sm"> <i class="fa fa-window-restore"></i> <?php echo L('还原');?></button></label>
     </div>
-    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
+    <div class="col-md-7 list-page"><?php echo $pages?></div>
 </div>
 </form>
 </div>
@@ -200,7 +199,6 @@ $(function() {
     })
 });
 </script>
-</div>
 </div>
 </div>
 </div>

@@ -15,7 +15,10 @@ jQuery(document).ready(function() {
     }
 });
 </script>
-<div class="pad_10">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="right-card-box">
 <form action="?" method="get">
 <input type="hidden" name="m" value="block">
 <input type="hidden" name="c" value="block_admin">
@@ -35,7 +38,7 @@ jQuery(document).ready(function() {
                 <input type="text" class="form-control" value="<?php echo $start_time ? date('Y-m-d', $start_time) : '';?>" name="start_time" id="start_time">
                 <span class="input-group-addon"> - </span>
                 <input type="text" class="form-control" value="<?php echo $end_time ? date('Y-m-d', $end_time) : '';?>" name="end_time" id="end_time">
-            </div></td>
+            </div></div></td>
 		</tr>
 		<tr>
 			<td><?php echo L('recommend')?>：</td> 
@@ -92,18 +95,21 @@ jQuery(document).ready(function() {
 </tbody>
 </table>
 </div>
-<div class="list-footer table-checkable clear">
-    <div class="col-md-5 col-sm-5 table-footer-button">
+<div class="row list-footer table-checkable">
+    <div class="col-md-5 list-select">
         <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
             <input type="checkbox" class="group-checkable" data-set=".checkboxes">
             <span></span>
         </label>
         <label><input type="button" value="<?php echo L('insert_a_comment_about_the_selected_text')?>" class="button" onclick="insert_form()"></label>
     </div>
-    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
+    <div class="col-md-7 list-page"><?php echo $pages?></div>
 </div>
-<?php endif;?>	
-	</div>
+<?php endif;?>
+</div>
+</div>
+</div>
+</div>
 <script type="text/javascript">
 <!--
 function insert_form() {

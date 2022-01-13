@@ -15,27 +15,42 @@ jQuery(document).ready(function() {
     }
 });
 </script>
-<div class="pad_10">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="right-card-box">
+<div class="row table-search-tool">
 <form name="searchform" action="" method="get" >
 <input type="hidden" value="pay" name="m">
 <input type="hidden" value="payment" name="c">
 <input type="hidden" value="pay_list" name="a">
 <input type="hidden" name="dosubmit" value="1">
 <input type="hidden" value="<?php echo $_GET['menuid']?>" name="menuid">
-<div class="explain-col search-form">
-<?php echo L('order_sn')?> <label><input type="text" value="<?php echo $trade_sn?>" class="input-text" name="info[trade_sn]"></label> 
-<?php echo L('username')?> <label><input type="text" value="<?php echo $username?>" class="input-text" name="info[username]"></label>
-<?php echo L('addtime')?> <label><div class="formdate">
+<div class="col-md-12 col-sm-12">
+<label><?php echo L('order_sn')?></label>
+<label><i class="fa fa-caret-right"></i></label>
+<label><input type="text" value="<?php echo $trade_sn?>" class="input-text" name="info[trade_sn]"></label> 
+<label><?php echo L('username')?></label>
+<label><i class="fa fa-caret-right"></i></label>
+<label><input type="text" value="<?php echo $username?>" class="input-text" name="info[username]"></label>
+</div>
+<div class="col-md-12 col-sm-12">
+<label><div class="formdate">
             <div class="input-group input-medium date-picker input-daterange">
                 <input type="text" class="form-control" value="<?php echo $start_addtime;?>" name="info[start_addtime]">
                 <span class="input-group-addon"> <?php echo L('to')?> </span>
                 <input type="text" class="form-control" value="<?php echo $end_addtime;?>" name="info[end_addtime]">
             </div>
         </div></label>
+</div>
+<div class="col-md-12 col-sm-12">
 <?php echo form::select($trade_status,$status,'name="info[status]"', L('all_status'))?>
+</div>
+<div class="col-md-12 col-sm-12">
 <label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('search')?></button></label>
 </div>
 </form>
+</div>
 <div class="table-list">
     <table width="100%" cellspacing="0">
         <thead>
@@ -93,12 +108,14 @@ if(is_array($infos)){
     </tbody>
     </table>
 </div>
-<div class="list-footer table-checkable clear">
-    <div class="col-md-5 col-sm-5 table-footer-button"><?php echo L('thispage').L('totalize')?>  <span class="font-fixh green"><?php echo $number?></span> <?php echo L('bi').L('trade')?>(<?php echo L('money')?>：<span class="font-fixh"><?php echo $num_amount?></span><?php echo L('bi')?>，<?php echo L('point')?>：<span class="font-fixh"><?php echo $num_point?></span><?php echo L('bi')?>)，<?php echo L('total').L('amount')?>：<span class="font-fixh green"><?php echo $sum_amount?></span><?php echo L('yuan')?> ,<?php echo L('trade_succ').L('trade')?>：<span class="font-fixh green"><?php echo $sum_amount_succ?></span><?php echo L('yuan')?> ，总点数：<span class="font-fixh green"><?php echo $sum_point?></span><?php echo L('dian')?> ,<?php echo L('trade_succ').L('trade')?>：<span class="font-fixh green"><?php echo $sum_point_succ?></span><?php echo L('dian')?></div>
-    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
+<div class="row list-footer table-checkable">
+    <div class="col-md-5 list-select"><?php echo L('thispage').L('totalize')?>  <span class="font-fixh green"><?php echo $number?></span> <?php echo L('bi').L('trade')?>(<?php echo L('money')?>：<span class="font-fixh"><?php echo $num_amount?></span><?php echo L('bi')?>，<?php echo L('point')?>：<span class="font-fixh"><?php echo $num_point?></span><?php echo L('bi')?>)，<?php echo L('total').L('amount')?>：<span class="font-fixh green"><?php echo $sum_amount?></span><?php echo L('yuan')?> ,<?php echo L('trade_succ').L('trade')?>：<span class="font-fixh green"><?php echo $sum_amount_succ?></span><?php echo L('yuan')?> ，总点数：<span class="font-fixh green"><?php echo $sum_point?></span><?php echo L('dian')?> ,<?php echo L('trade_succ').L('trade')?>：<span class="font-fixh green"><?php echo $sum_point_succ?></span><?php echo L('dian')?></div>
+    <div class="col-md-7 list-page"><?php echo $pages?></div>
 </div>
 </div>
-</form>
+</div>
+</div>
+</div>
 </body>
 </html>
 <script type="text/javascript">

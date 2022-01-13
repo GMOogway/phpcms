@@ -9,7 +9,10 @@ body .table-list table tr>td:first-child, body .table-list table tr>th:first-chi
   <h1 class="title-2"><?php echo $this->style_info['name'].' - '.L('detail')?></h1>
 </div>
 <div class="content-header"></div>
-<div class="pad-lr-10">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="right-card-box">
 <form action="?m=template&c=file&a=updatefilename&style=<?php echo $this->style?>" method="post">
 <div class="table-list">
     <table width="100%" cellspacing="0">
@@ -54,15 +57,18 @@ endif;
 ?></tbody>
 </table>
 </div>
-<div class="list-footer table-checkable clear">
-    <div class="col-md-5 col-sm-5 table-footer-button">
+<div class="row list-footer table-checkable">
+    <div class="col-md-5 list-select">
         <label><button type="button" onclick="location.href='?m=template&c=style&a=init&pc_hash=<?php echo dr_get_csrf_token();?>'" class="btn yellow btn-sm"> <i class="fa fa-mail-reply-all"></i> <?php echo L('returns_list_style')?></button></label>
         <label><button type="button" onclick="add_file()" class="btn blue btn-sm"> <i class="fa fa-plus"></i> <?php echo L('new')?></button></label>
         <label><button type="submit" class="btn green btn-sm"> <i class="fa fa-refresh"></i> <?php echo L('update')?></button></label>
     </div>
-    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
+    <div class="col-md-7 list-page"><?php echo $pages?></div>
 </div>
 </form>
+</div>
+</div>
+</div>
 </div>
 <script type="text/javascript">
 <!--

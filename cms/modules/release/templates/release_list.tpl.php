@@ -24,8 +24,6 @@ echo '<b>'.$r['name'].'</b><span class="progress_status" id="status_'.$i.'"><img
 </div>
 
 <script type="text/javascript">
-<!--
-window.top.$('#display_center_id').css('display','none');
 function progress(id, val) {
 	var width = $('#progress_bar_'+id).parent('div').width();
 	var block = width/100*val;
@@ -34,7 +32,6 @@ function progress(id, val) {
 function iframe(id, url) {
 	$('#iframe_'+id).attr('src', url);
 }
-//-->
 </script>
 </body>
 </html>

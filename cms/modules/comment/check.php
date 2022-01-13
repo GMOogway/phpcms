@@ -15,7 +15,7 @@ class check extends admin {
 	public function checks() {
 		$total = $this->comment_check_db->count(array('siteid'=>$this->get_siteid()));
 		$comment_check_data = $this->comment_check_db->select(array('siteid'=>$this->get_siteid()), '*', '20', 'id desc');
-		if (empty($comment_check_data)) dr_admin_msg(0,L('no_check_comments').'<script>window.top.$("#display_center_id").css("display","none");</script>');
+		if (empty($comment_check_data)) dr_admin_msg(0,L('no_check_comments'));
 		pc_base::load_sys_class('format','', 0);
 		$show_header = true;
 		include $this->admin_tpl('comment_check');

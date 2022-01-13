@@ -22,7 +22,7 @@ jQuery(document).ready(function() {
 </style>
 <script type="text/javascript" src="<?php echo JS_PATH;?>layui/layui.js"></script>
 <div class="admin-main layui-anim layui-anim-upbit">
-    <div class="note note-danger my-content-top-tool">
+    <div class="note note-danger">
         <?php if ($remote) {?>
         <label><select name="remote" id="remote" class="form-control">
             <option value=""> - </option>
@@ -54,7 +54,7 @@ jQuery(document).ready(function() {
 <script type="text/html" id="topBtn">
     <button type="button" class="layui-btn layui-btn-danger layui-btn-sm" id="delAll"><i class="fa fa-trash-o"></i> <?php echo L('thorough');?><?php echo L('delete');?></button>
     <div class="btn-group dropdown-btn-group">
-        <button type="button" class="btn blue btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-th-large"></i> <?php echo L('moudle')?> <i class="fa fa-angle-down"></i></button>
+        <button type="button" class="btn blue btn-sm dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="false"><i class="fa fa-th-large"></i> <?php echo L('moudle')?> <i class="fa fa-angle-down"></i></button>
         <ul class="dropdown-menu">
             <?php $i = 0;
             foreach ($modules as $module) {
@@ -66,7 +66,7 @@ jQuery(document).ready(function() {
         </ul>
     </div>
     <div class="btn-group dropdown-btn-group">
-        <button type="button" class="btn blue btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-files-o"></i> <?php echo L('附件状态')?> <i class="fa fa-angle-down"></i></button>
+        <button type="button" class="btn blue btn-sm dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="false"><i class="fa fa-files-o"></i> <?php echo L('附件状态')?> <i class="fa fa-angle-down"></i></button>
         <ul class="dropdown-menu">
             <li><a href="<?php echo url_par('status=0')?>" class="dropdown-item"><i class="fa fa-chain"></i> <?php echo L('not_used');?></a></li>
             <div class="dropdown-line"></div>
@@ -193,12 +193,6 @@ layui.use(['table'], function(){
         }
     })
 });
-</script>
-</body>
-</html>
-<script type="text/javascript">
-<!--
-window.top.$('#display_center_id').css('display','none');
 function preview(file) {
     if(IsImg(file)) {
         var width = 400;
@@ -324,5 +318,6 @@ function IsMp3(url){
     }
     return b;
 }
-//-->
 </script>
+</body>
+</html>

@@ -195,9 +195,9 @@ class member_modelfield extends admin {
 			foreach($this->input->post('listorders') as $id => $listorder) {
 				$this->db->update(array('listorder'=>$listorder),array('fieldid'=>$id));
 			}
-			dr_admin_msg(1,L('operation_success'));
+			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		} else {
-			dr_admin_msg(0,L('operation_failure'));
+			dr_admin_msg(0,L('operation_failure'), HTTP_REFERER);
 		}
 	}
 	

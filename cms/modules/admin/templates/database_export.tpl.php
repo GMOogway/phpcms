@@ -59,7 +59,7 @@ if(is_array($infos)){
 </div>
 <?php if(is_array($infos)){?>
 <div class="row list-footer table-checkable">
-    <div class="col-md-12 col-sm-12 table-footer-button">
+    <div class="col-md-12 list-select">
         <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline"><input type="checkbox" class="group-checkable" data-set=".checkboxes" /><span></span></label>
         <label><button name="dosubmit" type="button" class="btn green btn-sm btn-backup"> <i class="fa fa-database"></i> <?php echo L('backup_starting');?></button></label>
         <label><button name="dosubmit" type="button" onclick="dr_bfb_submit('<?php echo L('batch_optimize')?>', 'myform', '<?php echo SELF;?>?m=admin&c=database&a=public_add&operation=y')" class="btn green btn-sm"> <i class="fa fa-refresh"></i> <?php echo L('batch_optimize');?></button></label>

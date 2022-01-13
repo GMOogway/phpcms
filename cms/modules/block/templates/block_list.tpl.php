@@ -32,20 +32,12 @@ endif;
 </table>
 </div>
 </div>
-<div class="list-footer table-checkable clear">
-    <div class="col-md-5 col-sm-5 table-footer-button"></div>
-    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 text-right"><?php echo $pages?></div>
 </div>
 <div id="closeParentTime" style="display:none"></div>
 <script type="text/javascript">
 <!--
-/*if(window.top.$("#current_pos").data('clicknum')==1 || window.top.$("#current_pos").data('clicknum')==null) {
-	parent.document.getElementById('display_center_id').style.display='';
-	parent.document.getElementById('display_menu_id').style.display='';
-	parent.document.getElementById('center_frame').src = '';
-	window.top.$("#current_pos").data('clicknum',0);
-}*/
-
 function block_update(id, name) {
 	artdialog('edit','?m=block&c=block_admin&a=block_update&id='+id,'<?php echo L('edit')?>《'+name+'》',700,500);
 }

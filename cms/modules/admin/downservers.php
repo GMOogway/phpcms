@@ -13,6 +13,7 @@ class downservers extends admin {
 	}
 	
 	public function init() {
+		$show_header = true;
 		if($this->input->post('dosubmit')) {
 			$info['siteurl'] = trim($this->input->post('info')['siteurl']);
 			$info['sitename'] = trim($this->input->post('info')['sitename']);

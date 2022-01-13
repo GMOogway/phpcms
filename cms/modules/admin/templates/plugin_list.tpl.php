@@ -3,6 +3,7 @@
 	include $this->admin_tpl('header', 'admin');
 ?>
 <form name="myform" action="?m=admin&c=plugin&a=listorder" method="post">
+<input name="dosubmit" type="hidden" value="1">
 <div class="pad_10">
 <?php if(pc_base::load_config('system','plugin_debug')) { ?>
 <div class="explain-col"><?php echo L('plugin_debug_tips','','plugin')?></div>
@@ -55,8 +56,9 @@ if(is_array($pluginfo)){
 </div>
 </div>
    <div class="portlet-body form myfooter">
-   <div class="form-actions text-center"><input type="submit" class="button" name="dosubmit" value="<?php echo L('listorder')?>" /></div>
-   </div></div>
+   <div class="form-actions text-center"><button type="submit" class="btn green btn-sm"> <i class="fa fa-refresh"></i> <?php echo L('listorder')?></button></div>
+   </div>
+</div>
 
 </div>
 </div>

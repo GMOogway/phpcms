@@ -64,7 +64,7 @@ a.badge:link,a.badge:focus,a.badge:hover {color: #fff;text-decoration: none;curs
 img{border:none;}
 h1,h2,h3,h4,h5{font-weight:normal;color: #676a6c;}
 table{border-collapse:collapse;}
-input,label,img,th {vertical-align: middle;}
+input,img,th {vertical-align: middle;}
 button[disabled],html input[disabled] {cursor: default;}
 input.dialog{height:0; font-size:0; line-height:0; border:none}
 label{font-weight:400;}
@@ -190,7 +190,6 @@ fieldset{margin-top: 10px;background: #fff;}
 .table-search-tool .col-md-12 .onloading {margin-top: 2px;}
 .table-search-tool {margin-bottom: 10px;}
 .right-card-box .portlet.light {padding: 0;}
-.right-card-box {position: relative;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-orient: vertical;-webkit-box-direction: normal;-ms-flex-direction: column;flex-direction: column;min-width: 0;word-wrap: break-word;background-color: #fff;background-clip: border-box;border: 0 solid #f7f7f7;border-radius: .25rem;padding: 1.5rem;}
 
 /*部分表格属性修改*/
 body .table_form tbody td,body .table_form tbody th,body .table_form tbody tr{border-bottom:1px dashed #f1f1f1;line-height: 22px;}
@@ -327,12 +326,14 @@ body .showMsg .bottom{padding: 10px;text-align: center;border-top: 1px solid #E9
 .col-xs-3 {width: 25%;}
 .col-xs-2 {width: 16.66666667%;}
 .col-xs-1 {width: 8.33333333%;}
-.list-select {padding-left: 18px;}
 .table-footer-button {margin-top: 12px;}
-.right-card-box .list-select {padding-left: 33px;}
+.list-footer {margin-top: 20px;}
 .list-select .btn-sm {margin-right: 8px;}
-.list-footer {margin: 20px 0px;}
+.list-select .form-control {height: 30px;padding-top: 2px;}
+.list-select {padding-left: 32px;}
+.right-card-box .list-select {padding-left: 33px;}
 .list-page {text-align: right;}
+.list-page .pagination {margin: 0;}
 .breadcrumb>li,.pagination {display: inline-block;}
 .label,.pagination>li {display: inline;}
 .pagination {padding-left: 0;border-radius: 4px;}
@@ -672,7 +673,6 @@ body .showMsg .bottom{padding: 10px;text-align: center;border-top: 1px solid #E9
 .fileinput-button input {position: absolute;top: 0;right: 0;margin: 0;opacity: 0;-ms-filter: 'alpha(opacity=0)';font-size: 200px;direction: ltr;cursor: pointer;}
 .help-block {margin-top: 5px;margin-bottom: 5px;display: block;color: #737373;}
 .mt-table>span {top: 2px;height: 15px;width: 15px;}
-.table-list table .mt-table>span {top: 0px;}
 td>.mt-table.mt-checkbox-single,th>.mt-table.mt-checkbox-single {right: -6px;}
 .mt-table>span:after {left: 4px;top: 1px;}
 
@@ -870,8 +870,6 @@ form .portlet.light .portlet-body {padding-top: 20px;padding-bottom: 20px;}
 .btn-group-lg>.btn,.btn-lg {padding: 10px 16px;font-size: 18px;line-height: 1.33333;border-radius: 6px;}
 .btn-group-sm>.btn,.btn-sm {padding: 5px 10px;font-size: 12px;line-height: 1.5;border-radius: 3px;}
 .btn-group-xs>.btn,.btn-xs {padding: 1px 5px;font-size: 12px;line-height: 1.5;border-radius: 3px;}
-.btn-block {display: block;}
-.btn-block+.btn-block {margin-top: 5px;}
 .input-inline, .radio-list>label.radio-inline {display: inline-block;}
 .badge, .input-inline {vertical-align: middle;}
 .input-xsmall {width: 80px!important;}
@@ -929,6 +927,7 @@ table td[class*=col-],table th[class*=col-] {position: static;float: none;displa
 .table>tbody>tr.danger>td,.table>tbody>tr.danger>th,.table>tbody>tr>td.danger,.table>tbody>tr>th.danger,.table>tfoot>tr.danger>td,.table>tfoot>tr.danger>th,.table>tfoot>tr>td.danger,.table>tfoot>tr>th.danger,.table>thead>tr.danger>td,.table>thead>tr.danger>th,.table>thead>tr>td.danger,.table>thead>tr>th.danger {background-color: #fbe1e3;}
 .table-hover>tbody>tr.danger:hover>td,.table-hover>tbody>tr.danger:hover>th,.table-hover>tbody>tr:hover>.danger,.table-hover>tbody>tr>td.danger:hover,.table-hover>tbody>tr>th.danger:hover {background-color: #f8cace;}
 .table-checkable tr>td:first-child,.table-checkable tr>th:first-child {text-align: center;max-width: 50px;min-width: 40px;padding-left: 0;padding-right: 0;}
+table.dataTable tr.heading>th {background-color: #fbfcfd;}
 .table td,.table th {white-space: nowrap;text-overflow: ellipsis;overflow: hidden;}
 .table>tbody>tr>td,.table>tbody>tr>th,.table>tfoot>tr>td,.table>tfoot>tr>th,.table>thead>tr>td,.table>thead>tr>th {vertical-align: middle;}
 .table-advance thead tr th {background-color: #f1f4f7;font-size: 14px;font-weight: 400;color: #3f444a;}

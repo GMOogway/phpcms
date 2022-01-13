@@ -13,7 +13,7 @@ class keylink extends admin {
 		$page = $this->input->get('page') ? intval($this->input->get('page')) : '1';
 		$infos = $this->db->listinfo('','keylinkid DESC',$page,SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;	
-		$big_menu = array('javascript:artdialog(\'add\',\'?m=admin&c=keylink&a=add\',\''.L('add_keylink').'\',450,150);void(0);', L('add_keylink'));
+		$big_menu = array('javascript:artdialog(\'add\',\'?m=admin&c=keylink&a=add\',\''.L('add_keylink').'\',450,200);void(0);', L('add_keylink'));
 		include $this->admin_tpl('keylink_list');
 	}
 	

@@ -27,11 +27,11 @@ $(function(){
 <input type="hidden"  name="id" value="<?php echo $id?>" />
 <input name="dosubmit" type="submit" value="<?php echo L('submit')?>" class="dialog" id="dosubmit">
 </form>
-</div></div>
+</div>
+</div>
 </body>
 </html>
 <script type="text/javascript">
-
 $(document).ready(function() {
 	$("#paymethod input[type='radio']").click( function () {
 		if($(this).val()== 0){

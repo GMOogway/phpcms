@@ -2,8 +2,11 @@
 defined('IS_ADMIN') or exit('No permission resources.'); 
 include $this->admin_tpl('header', 'admin');
 ?>
-<div class="pad_10">
-<div id="searchid">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="right-card-box">
+<div class="row table-search-tool">
 <form name="searchform" action="" method="get" >
 <input type="hidden" value="comment" name="m">
 <input type="hidden" value="comment_admin" name="c">
@@ -11,30 +14,27 @@ include $this->admin_tpl('header', 'admin');
 <input type="hidden" value="1" name="search">
 <input type="hidden" name="dosubmit" value="1">
 <input type="hidden" value="<?php echo dr_get_csrf_token()?>" name="pc_hash">
-<table width="100%" cellspacing="0" class="search-form">
-    <tbody>
-		<tr>
-		<td>
-		<div class="explain-col">	
+<div class="col-md-12 col-sm-12">
 			<?php if($max_table > 1) {?>
-			<?php echo L('choose_database')?>：<label><select name="tableid" onchange="show_tbl(this)"><?php for($i=1;$i<=$max_table;$i++) {?><option value="<?php echo $i?>" <?php if($i==$tableid){?>selected<?php }?>><?php echo $this->comment_data_db->db_tablepre?>comment_data_<?php echo $i?></option><?php }?></select></label>
+			<label><?php echo L('choose_database')?></label>
+			<label><i class="fa fa-caret-right"></i></label>
+			<label><select name="tableid" onchange="show_tbl(this)"><?php for($i=1;$i<=$max_table;$i++) {?><option value="<?php echo $i?>" <?php if($i==$tableid){?>selected<?php }?>><?php echo $this->comment_data_db->db_tablepre?>comment_data_<?php echo $i?></option><?php }?></select></label>
 			<?php }?>
+</div>
+<div class="col-md-12 col-sm-12">
 			<label><select name="searchtype">
 				<option value='0' <?php if($_GET['searchtype']==0) echo 'selected';?>><?php echo L('original').L('title');?></option>
 				<option value='1' <?php if($_GET['searchtype']==1) echo 'selected';?>><?php echo L('original');?>ID</option>
 				<option value='2' <?php if($_GET['searchtype']==2) echo 'selected';?>><?php echo L('username');?></option>
 			</select></label>
+			<label><i class="fa fa-caret-right"></i></label>
 			<label><input name="keyword" type="text" value="<?php if(isset($keywords)) echo $keywords;?>" class="input-text" /></label>
+</div>
+<div class="col-md-12 col-sm-12">
 			<label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('search')?></button></label>
-		</div>
-		</td>
-		</tr>
-    </tbody>
-</table>
+</div>
 </form>
 </div>
-</div>
-<div class="pad-lr-10">
 <form name="myform" id="myform" action="" method="get" >
 <input type="hidden" value="comment" name="m">
 <input type="hidden" value="comment_admin" name="c">
@@ -84,20 +84,22 @@ include $this->admin_tpl('header', 'admin');
      </table>
 </div>
 <input type="hidden" value="<?php echo dr_get_csrf_token();?>" name="pc_hash">
-<div class="list-footer table-checkable clear">
-    <div class="col-md-5 col-sm-5 table-footer-button">
+<div class="row list-footer table-checkable">
+    <div class="col-md-5 list-select">
         <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
             <input type="checkbox" class="group-checkable" data-set=".checkboxes">
             <span></span>
         </label>
         <label><button type="submit" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete')?></button></label>
     </div>
-    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
+    <div class="col-md-7 list-page"><?php echo $pages?></div>
 </div>
 </form>
 </div>
+</div>
+</div>
+</div>
 <script type="text/javascript">
-window.top.$('#display_center_id').css('display','none');
 function show_tbl(obj) {
 	var pdoname = $(obj).val();
 	location.href='?m=comment&c=comment_admin&a=listinfo&tableid='+pdoname+'&pc_hash=<?php echo dr_get_csrf_token()?>';

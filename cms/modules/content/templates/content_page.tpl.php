@@ -1,31 +1,6 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');?>
-<div id="closeParentTime" style="display:none"></div>
-<script type="text/javascript">
-<!--
-/*$(function(){
-    window.top.$(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.treemain.location = '?m=content&c=content&a=public_categorys&type=add&menuid=<?php echo $_GET['menuid'];?>';
-})
-if(window.top.$("#current_pos").data('clicknum')==1) {
-    parent.document.getElementById('display_center_id').style.display='';
-    parent.document.getElementById('center_frame').src = '?m=content&c=content&a=public_categorys&type=add&menuid=<?php echo $_GET['menuid'];?>';
-    window.top.$("#current_pos").data('clicknum',0);
-}
-$(document).ready(function(){
-    setInterval(closeParent,3000);
-});
-function closeParent() {
-    if($('#closeParentTime').html() == '') {
-        window.top.$(".left_menu").addClass("left_menu_on");
-        window.top.$("#openClose").addClass("close");
-        window.top.$("html").addClass("on");
-        $('#closeParentTime').html('1');
-        window.top.$("#openClose").data('clicknum',1);
-    }
-}*/
-//-->
-</script>
 <?php if (SYS_EDITOR) {?>
 <script type="text/javascript" src="<?php echo JS_PATH;?>ckeditor/ckeditor.js"></script>
 <?php } else {?>

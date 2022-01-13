@@ -56,7 +56,8 @@ $(function(){
 <?php echo L('position_tips')?><br/>
 <?php echo L('extention_name_tips')?>
 </div>
-</div></div>
+</div>
+</div>
 </body>
 </html>
 <script type="text/javascript">

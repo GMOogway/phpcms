@@ -9,7 +9,7 @@ include $this->admin_tpl('header');?>
 </style>
 <script type="text/javascript" src="<?php echo JS_PATH;?>layui/layui.js"></script>
 <div class="admin-main layui-anim layui-anim-upbit">
-    <div class="note note-danger my-content-top-tool">
+    <div class="note note-danger">
         <a href="?m=admin&c=menu&a=add&menuid=<?php echo $this->input->get('menuid');?>" class="layui-btn layui-btn-sm">
             <i class="fa fa-plus"></i> <?php echo L('add_menu');?>
         </a>
@@ -181,7 +181,7 @@ include $this->admin_tpl('header');?>
 	})
 //-->
 </script>
-<div class="common-form">
+<div class="pad_10">
 <form name="myform" id="myform" action="?m=admin&c=menu&a=add" method="post">
 <div class="myfbody">
 <table width="100%" class="table_form contentWrap">
@@ -218,7 +218,7 @@ include $this->admin_tpl('header');?>
       </tr>
 	<tr>
         <th><?php echo L('菜单图标')?>：</th>
-        <td><input type="text" id="menu_icon" name="info[icon]" class="input-text" ><input type="button" name="icon" id="icon" value="选择图标" class="button" onclick="menuicon('icons','?m=admin&c=menu&a=public_icon&value='+$('#menu_icon').val(),'选择图标','80%','80%')"></td>
+        <td><label><input type="text" id="menu_icon" name="info[icon]" class="input-text" ></label> <label><input type="button" name="icon" id="icon" value="选择图标" class="button" onclick="menuicon('icons','?m=admin&c=menu&a=public_icon&value='+$('#menu_icon').val(),'选择图标','80%','80%')"></label></td>
       </tr>
 	<tr>
         <th><?php echo L('menu_display')?>：</th>
@@ -257,7 +257,7 @@ include $this->admin_tpl('header');?>
 	})
 //-->
 </script>
-<div class="common-form">
+<div class="pad_10">
 <form name="myform" id="myform" action="?m=admin&c=menu&a=edit" method="post">
 <table width="100%" class="table_form contentWrap">
       <tr>
@@ -293,7 +293,7 @@ include $this->admin_tpl('header');?>
       </tr>
 	<tr>
         <th><?php echo L('菜单图标')?>：</th>
-        <td><input type="text" id="menu_icon" name="info[icon]" class="input-text" value="<?php echo $icon?>"><input type="button" name="icon" id="icon" value="选择图标" class="button" onclick="menuicon('icons','?m=admin&c=menu&a=public_icon&value='+$('#menu_icon').val(),'选择图标','80%','80%')"></td>
+        <td><label><input type="text" id="menu_icon" name="info[icon]" class="input-text" value="<?php echo $icon?>"></label> <label><input type="button" name="icon" id="icon" value="选择图标" class="button" onclick="menuicon('icons','?m=admin&c=menu&a=public_icon&value='+$('#menu_icon').val(),'选择图标','80%','80%')"></label></td>
       </tr>
 	<tr>
         <th><?php echo L('menu_display')?>：</th>

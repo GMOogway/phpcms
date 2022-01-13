@@ -7,7 +7,7 @@ include $this->admin_tpl('header', 'admin');
     <div class="page-content-wrapper">
         <div class="page-content page-content3 mybody-nheader main-content  ">
 <div class="page-body">
-<div class="note note-danger my-content-top-tool">
+<div class="note note-danger">
     <p><a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=init&pc_hash='+pc_hash+'&is_ajax=1',1);"><?php echo L('update_cache_all');?></a></p>
 </div>
 
@@ -71,10 +71,6 @@ if (is_array($directory)){
 ?>
 </tbody>
     </table>
-</div>
-<div class="list-footer table-checkable clear">
-    <div class="col-md-5 col-sm-5 table-footer-button"></div>
-    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
 </div>
 </div>
 </div>

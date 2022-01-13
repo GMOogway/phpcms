@@ -1,9 +1,12 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header');?>
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="right-card-box">
 <form name="myform" action="?m=admin&c=position&a=listorder" method="post">
 <input name="dosubmit" type="hidden" value="1">
-<div class="pad_10">
 <div class="table-list">
     <table width="100%" cellspacing="0">
         <thead>
@@ -49,24 +52,24 @@ if(is_array($infos)){
     </tbody>
     </table>
 </div>
-<div class="list-footer table-checkable clear">
-    <div class="col-md-5 col-sm-5 table-footer-button">
+<div class="row list-footer table-checkable">
+    <div class="col-md-5 list-select">
         <label><button type="submit" class="btn green btn-sm"> <i class="fa fa-refresh"></i> <?php echo L('listorder')?></button></label>
     </div>
-    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
-</div>
-</div>
+    <div class="col-md-7 list-page"><?php echo $pages?></div>
 </div>
 </form>
+</div>
+</div>
+</div>
+</div>
 </body>
 </html>
 <script type="text/javascript">
 <!--
-window.top.$('#display_center_id').css('display','none');
 function edit(id, name) {
 	artdialog('edit','?m=admin&c=position&a=edit&posid='+id,'<?php echo L('edit')?>--'+name,800,450);
 }
-
 //预览视频
 function preview(thumb, name) {
 	omnipotent('preview','?m=admin&c=position&a=preview&thumb='+thumb,'预览 '+name+' ',1,530,400)

@@ -8,7 +8,7 @@ include $this->admin_tpl('header');?>
 </style>
 <script type="text/javascript" src="<?php echo JS_PATH;?>layui/layui.js"></script>
 <div class="admin-main layui-anim layui-anim-upbit">
-    <div class="note note-danger my-content-top-tool">
+    <div class="note note-danger">
         <a href="javascript:dr_iframe('add', '?m=admin&c=category&a=add&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token();?>&s=0', '80%', '80%')" class="btn btn-sm green">
             <i class="fa fa-plus"></i> <?php echo L('add_category');?>
         </a>
@@ -47,7 +47,7 @@ include $this->admin_tpl('header');?>
 </script>
 <script type="text/html" id="url">
     {{# if(d.url){ }}
-    <a href="{{d.url}}" target="_blank" class="layui-btn layui-btn-xs layui-btn-normal"><i class="fa fa-eye"></i> <?php echo L('vistor');?></a>
+    <a href="{{d.url}}" target="_blank" class="btn btn-xs blue"><i class="fa fa-eye"></i> <?php echo L('vistor');?></a>
     {{# } else { }}
     <a href="?m=admin&c=category&a=public_cache&menuid=<?php echo $this->input->get('menuid');?>&module=admin" class="layui-btn layui-btn-xs layui-btn-danger"><?php echo L('update_backup');?></a>
     {{# } }}
@@ -261,11 +261,6 @@ include $this->admin_tpl('header');?>
         var treedata=treeGrid.getDataTreeList(tableId);
         treeGrid.treeOpenAll(tableId,!treedata[0][treeGrid.config.cols.isOpen]);
     }
-</script>
-<script language="JavaScript">
-<!--
-window.top.$('#display_center_id').css('display','none');
-//-->
 </script>
 </body>
 </html>

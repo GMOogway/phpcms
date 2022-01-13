@@ -18,27 +18,18 @@ jQuery(document).ready(function() {
     $(":text").removeClass('input-text');
 });
 </script>
-<div class="pad-lr-10">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="right-card-box">
+<div class="row table-search-tool">
 <form name="searchform" action="" method="get" >
 <input type="hidden" value="member" name="m">
 <input type="hidden" value="member" name="c">
 <input type="hidden" value="manage" name="a">
 <input type="hidden" name="dosubmit" value="1">
 <input type="hidden" value="<?php echo $this->input->get('menuid');?>" name="menuid">
-<table width="100%" cellspacing="0" class="search-form">
-    <tbody>
-		<tr>
-		<td>
-		<div class="explain-col">
-				
-				<?php echo L('regtime')?>：
-				<label><div class="formdate">
-					<div class="input-group input-medium date-picker input-daterange">
-						<input type="text" class="form-control" value="<?php echo $start_time;?>" name="start_time" id="start_time">
-						<span class="input-group-addon"> - </span>
-						<input type="text" class="form-control" value="<?php echo $end_time;?>" name="end_time" id="end_time">
-					</div>
-				</div></label>
+				<div class="col-md-12 col-sm-12">
 				<?php if(cleck_admin($_SESSION['roleid'])) {?>
 				<?php echo form::select($sitelist, $siteid, 'name="siteid[]" class="form-control bs-select" data-title="'.L('all_site').'" multiple="multiple"');?>
 				<?php }?>
@@ -48,7 +39,8 @@ jQuery(document).ready(function() {
 				</select></label>
 				<?php echo form::select($modellist, $modelid, 'name="modelid[]" class="form-control bs-select" data-title="'.L('member_model').'" multiple="multiple"')?>
 				<?php echo form::select($grouplist, $groupid, 'name="groupid[]" class="form-control bs-select" data-title="'.L('member_group').'" multiple="multiple" data-actions-box="true"')?>
-				
+				</div>
+				<div class="col-md-12 col-sm-12">
 				<label><select name="type">
 					<option value='1' <?php if(isset($_GET['type']) && $_GET['type']==1){?>selected<?php }?>><?php echo L('username')?></option>
 					<option value='2' <?php if(isset($_GET['type']) && $_GET['type']==2){?>selected<?php }?>><?php echo L('uid')?></option>
@@ -56,16 +48,23 @@ jQuery(document).ready(function() {
 					<option value='4' <?php if(isset($_GET['type']) && $_GET['type']==4){?>selected<?php }?>><?php echo L('regip')?></option>
 					<option value='5' <?php if(isset($_GET['type']) && $_GET['type']==5){?>selected<?php }?>><?php echo L('nickname')?></option>
 				</select></label>
-				
+				<label><i class="fa fa-caret-right"></i></label>
 				<label><input name="keyword" type="text" value="<?php if(isset($_GET['keyword'])) {echo $_GET['keyword'];}?>" class="form-control input-text" /></label>
+				</div>
+				<div class="col-md-12 col-sm-12">
+				<label><div class="formdate">
+					<div class="input-group input-medium date-picker input-daterange">
+						<input type="text" class="form-control" value="<?php echo $start_time;?>" name="start_time" id="start_time">
+						<span class="input-group-addon"> - </span>
+						<input type="text" class="form-control" value="<?php echo $end_time;?>" name="end_time" id="end_time">
+					</div>
+				</div></label>
+				</div>
+				<div class="col-md-12 col-sm-12">
 				<label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('search')?></button></label>
-	</div>
-		</td>
-		</tr>
-    </tbody>
-</table>
+				</div>
 </form>
-
+</div>
 <form name="myform" id="myform" action="?m=member&c=member&a=delete" method="post" onsubmit="checkuid();return false;">
 <input name="dosubmit" type="hidden" value="1">
 <div class="table-list">
@@ -117,8 +116,8 @@ jQuery(document).ready(function() {
 </tbody>
 </table>
 </div>
-<div class="list-footer table-checkable clear">
-    <div class="col-md-5 col-sm-5 table-footer-button">
+<div class="row list-footer table-checkable">
+    <div class="col-md-5 list-select">
         <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
             <input type="checkbox" class="group-checkable" data-set=".checkboxes">
             <span></span>
@@ -128,9 +127,12 @@ jQuery(document).ready(function() {
         <label><button type="submit" onclick="document.myform.action='?m=member&c=member&a=unlock'" class="btn green btn-sm"> <i class="fa fa-unlock"></i> <?php echo L('unlock')?></button></label>
         <label><button type="button" onclick="move();return false;" class="btn blue btn-sm"> <i class="fa fa-arrows"></i> <?php echo L('move')?></button></label>
     </div>
-    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
+    <div class="col-md-7 list-page"><?php echo $pages?></div>
 </div>
 </form>
+</div>
+</div>
+</div>
 </div>
 <script type="text/javascript">
 <!--

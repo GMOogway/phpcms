@@ -17,7 +17,7 @@ class badword extends admin {
 		$infos = $this->db->listinfo('',$order = 'badid DESC',$page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		$level = array(1=>L('general'),2=>L('danger'));
-		$big_menu = array('javascript:artdialog(\'add\',\'?m=admin&c=badword&a=add\',\''.L('badword_add').'\',450,180);void(0);', L('badword_add'));
+		$big_menu = array('javascript:artdialog(\'add\',\'?m=admin&c=badword&a=add\',\''.L('badword_add').'\',450,260);void(0);', L('badword_add'));
 		include $this->admin_tpl('badword_list');
 	}
 	

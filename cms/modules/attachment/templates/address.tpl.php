@@ -7,7 +7,7 @@ jQuery(document).ready(function() {
 });
 </script>
 <div class="page-content main-content">
-<div class="note note-danger my-content-top-tool">
+<div class="note note-danger">
     <p><?php echo L('attachment_address_replace_msg');?></p>
 </div>
 <form action="?m=attachment&c=address&a=update" class="form-horizontal" method="post" name="myform" id="myform">

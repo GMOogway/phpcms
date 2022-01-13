@@ -1,8 +1,9 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header');?>
-<div class="page-content main-content">
-
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
 <div class="note note-danger">
     <p><a href="javascript:iframe_show('<?php echo L('一键生成');?>', '?m=admin&c=linkage&a=public_cache&key=<?php echo $key;?>');"><?php echo L('一键生成联动菜单数据');?></a></p>
 </div>
@@ -69,6 +70,8 @@ include $this->admin_tpl('header');?>
              <div class="col-md-7 list-page"><?php echo $pages;?></div>
          </div>
     </form>
+</div>
+</div>
 </div>
 </div>
 </body>

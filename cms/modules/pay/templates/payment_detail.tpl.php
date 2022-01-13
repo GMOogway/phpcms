@@ -110,7 +110,8 @@ $(function(){
 	<input type="hidden"  name="is_online" value=<?php echo $is_online?> />
 <input name="dosubmit" type="submit" value="<?php echo L('submit')?>" class="dialog" id="dosubmit">
 </form>
-</div></div>
+</div>
+</div>
 </body>
 </html>
 <script type="text/javascript">

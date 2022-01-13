@@ -24,7 +24,7 @@ include $this->admin_tpl('header');?>
 //-->
 </script>
 <div class="page-content main-content">
-<div class="note note-danger my-content-top-tool">
+<div class="note note-danger">
     <p><?php echo L('最多支持创建'.MAX_CATEGORY.'个栏目，请合理的规划网站栏目');?></p>
 </div>
 <form action="?m=admin&c=category&a=<?php echo ROUTE_A;?>" class="form-horizontal" method="post" name="myform" id="myform" onsubmit="return checkall()">
@@ -52,7 +52,7 @@ include $this->admin_tpl('header');?>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('parent_category')?></label>
                         <div class="col-md-9">
-                            <label><?php echo form::select_category('category_content_'.$this->siteid,$parentid,'name="info[parentid]" id="parentid"',L('please_select_parent_category'),0,-1);?></label>
+                            <?php echo form::select_category('category_content_'.$this->siteid,$parentid,'name="info[parentid]" id="parentid"',L('please_select_parent_category'),0,-1);?>
                         </div>
                     </div>
                     <div class="form-group" id="dr_row_catname">
@@ -64,7 +64,7 @@ include $this->admin_tpl('header');?>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('catgory_img')?></label>
                         <div class="col-md-9">
-                            <label><?php echo form::images('info[image]', 'image', $image, 'content');?></label>
+                            <?php echo form::images('info[image]', 'image', $image, 'content');?>
                         </div>
                     </div>
                     <div class="form-group">
@@ -147,7 +147,7 @@ include $this->admin_tpl('header');?>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('available_styles')?></label>
                         <div class="col-md-9">
-                            <label><?php echo form::select($template_list, $setting['template_list'], 'name="setting[template_list]" id="template_list" onchange="load_file_list(this.value)"', L('please_select'))?></label>
+                            <?php echo form::select($template_list, $setting['template_list'], 'name="setting[template_list]" id="template_list" onchange="load_file_list(this.value)"', L('please_select'))?>
                         </div>
                     </div>
                     <div class="form-group">
@@ -286,7 +286,6 @@ $('.nav-tabs a').click(function (e) {
     $(this).parent().addClass('active');
     $('#'+$(this).attr("data-toggle")).addClass('active');
 })
-window.top.$('#display_center_id').css('display','none');
 function load_file_list(id) {
     if(id=='') return false;
     $.getJSON('?m=admin&c=category&a=public_tpl_file_list&style='+id+'&catid=<?php echo $catid?>&type=1', function(data){$('#page_template').html(data.page_template);});

@@ -21,7 +21,7 @@ jQuery(document).ready(function() {
 </div>
 <div class="content-header"></div>
 <div class="page-content main-content">
-<div class="note note-danger my-content-top-tool">
+<div class="note note-danger">
     <p><?php echo L('管理员账号允许同时拥有多个角色组');?></p>
 </div>
 <form action="?m=admin&c=admin_manage&a=edit" class="form-horizontal" method="post" name="myform" id="myform">

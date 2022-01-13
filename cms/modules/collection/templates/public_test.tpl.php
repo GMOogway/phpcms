@@ -24,7 +24,6 @@ function show_content(url) {
 	$.get("?m=collection&c=node&a=public_test_content&nodeid=<?php echo $nodeid?>&url="+url+'&pc_hash=<?php echo dr_get_csrf_token()?>', function(data){
 	var diag = new Dialog({id:'test_view',title:'<?php echo L('content_view')?>',html:'<textarea rows="26" cols="90">'+data+'</textarea>',width:w,height:h,modal:true});diag.show();});
 }
-window.top.$('#display_center_id').css('display','none');
 //-->
 </script>
 

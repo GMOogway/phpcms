@@ -21,19 +21,19 @@ include $this->admin_tpl('header');
               var le = chk.eq(i).attr('level');
               if(eval(le) < eval(level_top)) 
               {
-                  chk.eq(i).attr("checked",'checked');
+                  chk.eq(i).prop("checked", true);
                   var level_top = level_top-1;
               }
       }
       for (var j=num+1; j<count; j++)
       {
               var le = chk.eq(j).attr('level');
-              if(chk.eq(num).attr("checked")=='checked') {
-                  if(eval(le) > eval(level_bottom)) chk.eq(j).attr("checked",'checked');
+              if(chk.eq(num).is(":checked")) {
+                  if(eval(le) > eval(level_bottom)) chk.eq(j).prop("checked", true);
                   else if(eval(le) == eval(level_bottom)) break;
               }
               else {
-                  if(eval(le) > eval(level_bottom)) chk.eq(j).attr("checked",false);
+                  if(eval(le) > eval(level_bottom)) chk.eq(j).prop("checked", false);
                   else if(eval(le) == eval(level_bottom)) break;
               }
       }

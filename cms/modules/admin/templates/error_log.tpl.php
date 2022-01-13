@@ -71,9 +71,9 @@ if(is_array($list)){
     </tbody>
     </table>
 </div>
-        <div class="row">
-            <div class="col-md-12 col-sm-12 text-right"><?php echo $pages?></div>
-        </div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 text-right"><?php echo $pages?></div>
+</div>
 </form>
 </div>
 </div>

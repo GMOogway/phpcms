@@ -29,7 +29,7 @@ if(is_array($list)){
     </tbody>
     </table>
 </div>
-<div class="list-footer table-checkable clear">
+<div class="row list-footer table-checkable">
 <?php if($list){?>
     <div class="col-md-5 col-sm-5 table-footer-button">
         <label><button type="button" onclick="ajax_option('?m=admin&c=index&a=public_email_log_del', '<?php echo L('你确定要清空全部记录吗？')?>')" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('清空全部')?></button></label>

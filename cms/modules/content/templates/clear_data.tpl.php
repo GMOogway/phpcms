@@ -36,7 +36,6 @@ body .table-list table tr>td:first-child, body .table-list table tr>th:first-chi
 </div>
 <script language="JavaScript">
 <!--
-	window.top.$('#display_center_id').css('display','none');
 	function change_model(modelid) {
 		window.location.href='?m=content&c=create_html&a=category&modelid='+modelid+'&pc_hash='+pc_hash;
 	}

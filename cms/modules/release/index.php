@@ -17,7 +17,7 @@ class index extends admin {
 	
 	public function init() {
 		if (empty($this->point[0])) {
-			dr_admin_msg(0,L("the_site_not_release").'<script type="text/javascript">window.top.$(\'#display_center_id\').css(\'display\',\'none\');</script>');
+			dr_admin_msg(0,L("the_site_not_release"));
 		}
 		$ids = isset($_GET['ids']) && trim($_GET['ids']) ? trim($_GET['ids']) : 0;
 		$statuses = isset($_GET['statuses']) && intval($_GET['statuses']) ? intval($_GET['statuses']) : 0;
@@ -80,7 +80,7 @@ class index extends admin {
 	
 	public function failed() {
 		if (empty($this->point[0])) {
-			dr_admin_msg(0,L("the_site_not_release").'<script type="text/javascript">window.top.$(\'#display_center_id\').css(\'display\',\'none\');</script>');
+			dr_admin_msg(0,L("the_site_not_release"));
 		}
 		
 		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;

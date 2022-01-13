@@ -2,7 +2,10 @@
 defined('IS_ADMIN') or exit('No permission resources.'); 
 include $this->admin_tpl('header', 'admin');
 ?>
-<div class="pad-10">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="right-card-box">
 <div class="comment_button"><a href="?m=comment&c=comment_admin&a=lists&show_center_id=1&commentid=<?php echo $commentid?>&hot=0"<?php if (empty($hot)) {?> class="on"<?php }?>>最新</a> <a href="?m=comment&c=comment_admin&a=lists&show_center_id=1&commentid=<?php echo $commentid?>&hot=1"<?php if ($hot==1) {?> class="on"<?php }?>>最热</a></div> 	
 <label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" onclick="selectall('id[]');" id="check_box" style="width:0px;height: 0px;" /><span></span></label>
  <form id="myform" name="myform" action="?" method="get">
@@ -25,16 +28,18 @@ include $this->admin_tpl('header', 'admin');
 </div>
 <?php endforeach;?>
 </div>
-<div class="list-footer table-checkable clear">
-    <div class="col-md-5 col-sm-5 table-footer-button">
+<div class="row list-footer table-checkable">
+    <div class="col-md-5 list-select">
         <label><button type="button" onclick="Dialog.confirm('<?php echo L('are_you_sure_you_want_to_delete')?>',function(){$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete')?></button></label>
     </div>
-    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
+    <div class="col-md-7 list-page"><?php echo $pages?></div>
 </div>
  </form>
 </div>
+</div>
+</div>
+</div>
 <script type="text/javascript">
-<?php if(!isset($_GET['show_center_id'])) {?> window.top.$('#display_center_id').css('display','none');<?php }?>
 function check(id, type, commentid) {
 	Dialog.confirm('<?php echo L('are_you_sure_you_want_to_delete')?>',function(){$.get('?m=comment&c=check&a=ajax_checks&id='+id+'&type='+type+'&commentid='+commentid+'&pc_hash='+pc_hash+'&'+Math.random(), function(data){if(data!=1){if(data==0){alert('<?php echo L('illegal_parameters')?>')}else{alert(data)}}else{$('#tbody_'+id).remove();}});});
 }

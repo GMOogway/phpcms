@@ -77,6 +77,40 @@ $(function(){
 			})
 		}
 	});
+	// 宽度小时
+	if ($(document).width() < 900) {
+		// 缩小table
+		/*
+		$('.page-breadcrumb a').each(function () {
+			var name = $(this).html();
+			re =new RegExp(/<i class=\"(.+)\"(.+)/i);
+			if (re.test(name)) {
+				var result = name.match(re);
+				$(this).html('<i class="'+result[1]+'"></i>');
+				$(this).attr('title', result[2].replace('></i> ', ''));
+			}
+		});*/
+		// 缩小table下方按钮
+		$('.list-select button').each(function () {
+			var name = $(this).html();
+			re =new RegExp(/<i class=\"(.+)\"(.+)/i);
+			if (re.test(name)) {
+				var result = name.match(re);
+				$(this).html('<i class="'+result[1]+'"></i>');
+				$(this).attr('title', result[2].replace('></i> ', ''));
+			}
+		});
+		// 缩小后台导航面包屑
+		$('a[data-toggle="tab"]').each(function () {
+			var name = $(this).html();
+			re =new RegExp(/<i class=\"(.+)\"(.+)/i);
+			if (re.test(name)) {
+				var result = name.match(re);
+				$(this).html('<i class="'+result[1]+'"></i>');
+				$(this).attr('title', result[2].replace('></i> ', ''));
+			}
+		});
+	}
 	/*复选框全选(支持多个，纵横双控全选)。
 	 *实例：版块编辑-权限相关（双控），验证机制-验证策略（单控）
 	 *说明：
@@ -96,12 +130,12 @@ $(function(){
 			//点击全选框
 			check_all.change(function (e) {
 				var check_wrap = check_all.parents('.J_check_wrap'); //当前操作区域所有复选框的父标签（重用考虑）
-				if ($(this).attr('checked')) {
+				if ($(this).is(":checked")) {
 					//全选状态
-					check_items.attr('checked', true);
+					check_items.prop('checked', true);
 					//所有项都被选中
 					if (check_wrap.find('input.J_check').length === check_wrap.find('input.J_check:checked').length) {
-						check_wrap.find(total_check_all).attr('checked', true);
+						check_wrap.find(total_check_all).prop('checked', true);
 					}
 				} else {
 					//非全选状态
@@ -113,10 +147,10 @@ $(function(){
 			});
 			//点击非全选时判断是否全部勾选
 			check_items.change(function () {
-				if ($(this).attr('checked')) {
+				if ($(this).is(":checked")) {
 					if (check_items.filter(':checked').length === check_items.length) {
 						//已选择和未选择的复选框数相等
-						check_all.attr('checked', true);
+						check_all.prop('checked', true);
 					}
 				} else {
 					check_all.removeAttr('checked');
@@ -196,12 +230,12 @@ $(function(){
 function selectall(name) {
 	if ($("#check_box").is(":checked")) {
 		$("input[name='"+name+"']").each(function() {
-			$(this).attr("checked","checked");
+			$(this).prop("checked", true);
 			$(this).parents('tr').addClass("active");
 		});
 	} else {
 		$("input[name='"+name+"']").each(function() {
-			$(this).removeAttr("checked");
+			$(this).prop("checked", false);
 			$(this).parents('tr').removeClass("active");
 		});
 	}

@@ -3,21 +3,20 @@ defined('IS_ADMIN') or exit('No permission resources.');
 $show_dialog = 1;
 include $this->admin_tpl('header', 'admin');
 ?>
-<div class="pad-lr-10"> 
-<table width="100%" cellspacing="0" class="search-form">
-    <tbody>
-		<tr>
-		<td><div class="explain-col"> 
-		<?php echo L('all_type')?>: &nbsp;&nbsp; <a href="?m=import&c=import&a=init"><?php echo L('all_import')?></a> &nbsp;&nbsp;
-		<a href="?m=import&c=import&a=init&type=content"><?php echo L('content_import')?></a>&nbsp;
-		<a href="?m=import&c=import&a=init&type=member"><?php echo L('member_import')?></a>&nbsp;
-		<a href="?m=import&c=import&a=init&type=other"><?php echo L('other_import')?></a>&nbsp;
-				</div>
-		</td>
-		</tr>
-    </tbody>
-</table>
-
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="right-card-box">
+<div class="row table-search-tool">
+<div class="col-md-12 col-sm-12">
+		<label><?php echo L('all_type')?></label>
+		<label><i class="fa fa-caret-right"></i></label>
+		<label><a href="?m=import&c=import&a=init"><?php echo L('all_import')?></a></label>
+		<label><a href="?m=import&c=import&a=init&type=content"><?php echo L('content_import')?></a></label>
+		<label><a href="?m=import&c=import&a=init&type=member"><?php echo L('member_import')?></a></label>
+		<label><a href="?m=import&c=import&a=init&type=other"><?php echo L('other_import')?></a></label>
+</div>
+</div>
 <form name="myform" id="myform" action="?m=import&c=import&a=delete" method="post" >
 <input name="dosubmit" type="hidden" value="1">
 <div class="table-list">
@@ -65,17 +64,20 @@ if(is_array($infos)){
 </tbody>
 </table>
 </div>
-<div class="list-footer table-checkable clear">
-    <div class="col-md-5 col-sm-5 table-footer-button">
+<div class="row list-footer table-checkable">
+    <div class="col-md-5 list-select">
         <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
             <input type="checkbox" class="group-checkable" data-set=".checkboxes">
             <span></span>
         </label>
         <label><button type="button" onclick="Dialog.confirm('<?php echo L('delete_confirm')?>',function(){$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete_select')?></button></label>
     </div>
-    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
+    <div class="col-md-7 list-page"><?php echo $pages?></div>
 </div>
 </form>
+</div>
+</div>
+</div>
 </div>
 </body>
 </html>

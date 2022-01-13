@@ -30,11 +30,10 @@ include $this->admin_tpl('header','admin');
 
     </div>
     <div class="col-2 col-auto">
-        <div class="content" style="padding:1px;overflow-x:hidden;overflow-y:auto;height:480px;">
-		<table width="100%" class="table-list">
+        <div class="table-list">
+		<table width="100%">
 			  <thead>
-				<tr>
-				  <th width="25" class="myselect">
+				<tr class="heading">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                         <input type="checkbox" class="group-checkable" value="" id="check_box" onclick="selectall('ids[]');" onmouseover="layer.tips('<?php echo L('selected_all');?>',this,{tips: [1, '#fff']});" onmouseout="layer.closeAll();" />
                         <span></span>

@@ -14,7 +14,7 @@
         <label><a href="?m=member&c=member_modelfield&a=manage&modelid=<?php echo $modelid?>&menuid=<?php echo $_GET['menuid']?>" class="btn green"> <i class="fa fa-reorder"></i> <?php if($modelid==-1) {echo L('category').L('field_manage');} else if($modelid==-2) {echo L('category_page').L('field_manage');} else if($modelid) {echo L('会员模型字段管理');} else {echo L('sites').L('field_manage');}?></a></label>
     </div>
 </div>
-<div class="note note-danger my-content-top-tool">
+<div class="note note-danger">
     <p><a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=init&pc_hash='+pc_hash+'&is_ajax=1',1);"><?php echo L('update_cache_all');?></a></p>
 </div>
 <form action="" class="form-horizontal" method="post" name="myform" id="myform">

@@ -1,7 +1,10 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header');?>
-<div class="pad-lr-10">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="right-card-box">
 <form name="myform" id="myform" action="" method="post">
 <div class="table-list">
     <table width="100%" cellspacing="0">
@@ -33,7 +36,7 @@ if(is_array($list)){
     </tbody>
     </table>
 </div>
-<div class="list-footer table-checkable clear">
+<div class="row list-footer table-checkable">
 <?php if($list){?>
     <div class="col-md-5 col-sm-5 table-footer-button">
         <label><button type="button" onclick="ajax_option('?m=admin&c=index&a=public_error_del', '<?php echo L('你确定要清空全部记录吗？')?>')" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('清空全部')?></button></label>
@@ -42,6 +45,9 @@ if(is_array($list)){
     <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
 </div>
 </form>
+</div>
+</div>
+</div>
 </div>
 </body>
 </html>

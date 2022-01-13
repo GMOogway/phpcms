@@ -1,7 +1,10 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header');?>
-<div class="pad_10">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="right-card-box">
 <form name="myform" action="?m=admin&c=role&a=listorder" method="post">
 <div class="table-list">
     <table width="100%" cellspacing="0">
@@ -54,11 +57,13 @@ foreach($info['role'] as $c){
 </tbody>
 </table>
 </div>
-<div class="list-footer table-checkable clear">
-    <div class="col-md-5 col-sm-5 table-footer-button"></div>
-    <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 text-right"><?php echo $pages?></div>
 </div>
 </form>
+</div>
+</div>
+</div>
 </div>
 </body>
 </html>

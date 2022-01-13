@@ -8,7 +8,7 @@ include $this->admin_tpl('header');?>
 </style>
 <form name="myform" action="?m=admin&c=category&a=batch_edit" method="post">
 <div class="pad_10">
-<div class="note note-danger my-content-top-tool">
+<div class="note note-danger">
     <p><a href="?m=admin&c=category&a=init&menuid=<?php echo $this->input->get('menuid');?>"><?php echo L('category_manage');?></a></p>
 </div>
 <div class="explain-col">
@@ -16,15 +16,17 @@ include $this->admin_tpl('header');?>
 </div>
 <div class="bk10"></div>
 <div class="myfbody">
-<div id="table-lists">
-    <table cellspacing="0" class="table-list">
-        <thead >
+<div id="table-lists" class="table-scrollable">
+    <table cellspacing="0" class="table table-striped table-bordered table-hover table-checkable dataTable">
+        <thead>
+     <tr class="heading">
 		<?php
 		foreach($batch_array as $catid=>$cat) {
 			$batch_array[$catid]['setting'] = string2array($cat['setting']);
 			echo "<th width='300' align='left'><strong>{$cat['catname']} （catid: <font color='red'>{$catid}</font>）</strong></th>";
 		}
 		?>
+     </tr>
         </thead>
     <tbody>
      <tr>
@@ -235,13 +237,12 @@ include $this->admin_tpl('header');?>
 <script language="JavaScript">
 <!--
 $(document).keydown(function(event) {
-	   if(event.keyCode==37) {
-		   window.scrollBy(-100,0);
-	   } else if(event.keyCode==39) {
-		  window.scrollBy(100,0);
-	   }
-	});
-
+	if(event.keyCode==37) {
+		window.scrollBy(-100,0);
+	} else if(event.keyCode==39) {
+		window.scrollBy(100,0);
+	}
+});
 function change_radio(oEvent,boxid,value,type) {
 	altKey = oEvent.altKey;
 	if(altKey) {
@@ -254,8 +255,6 @@ function change_radio(oEvent,boxid,value,type) {
 		}
 	}	
 }
-
-window.top.$('#display_center_id').css('display','none');
 function urlrule(type,html,catid) {
 	if(type=='category') {
 		if(html) {

@@ -573,8 +573,8 @@ class member extends admin {
 	 */
 	function move() {
 		if(isset($_POST['dosubmit'])) {
-			$uidarr = isset($_POST['userid']) ? $_POST['userid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
-			$groupid = isset($_POST['groupid']) && !empty($_POST['groupid']) ? $_POST['groupid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
+			$uidarr = isset($_POST['userid']) ? $_POST['userid'] : dr_admin_msg(0,L('please_select').L('member'), HTTP_REFERER);
+			$groupid = isset($_POST['groupid']) && !empty($_POST['groupid']) ? $_POST['groupid'] : dr_admin_msg(0,L('please_select').L('member_group'), HTTP_REFERER);
 			
 			$where = to_sqls($uidarr, '', 'userid');
 			$this->db->update(array('groupid'=>$groupid), $where);

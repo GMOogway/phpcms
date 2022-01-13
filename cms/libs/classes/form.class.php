@@ -294,7 +294,7 @@ class form {
 			'attachment' => $attachment,
 			'image_reduce' => $image_reduce,
 		), 'ENCODE');
-		return $str."<label><input type=\"text\" name=\"$name\" id=\"$id\" value=\"$value\" size=\"$size\" class=\"".($class ? $class : 'form-control input-xlarge')."\" $ext/></label> <label><button type=\"button\" onclick=\"javascript:h5upload('".SELF."', '{$id}_images', '".L('attachmentupload')."','{$id}','submit_images','{$p}','{$moudle}','{$catid}','{$authkey}',".SYS_EDITOR.")\" class=\"btn green\"> <i class=\"fa fa-plus\"></i> ".L('imagesupload')."</button></label>";
+		return $str."<label><input type=\"text\" name=\"$name\" id=\"$id\" value=\"$value\" size=\"$size\" class=\"".($class ? $class : 'form-control')."\" $ext/></label> <label><button type=\"button\" onclick=\"javascript:h5upload('".SELF."', '{$id}_images', '".L('attachmentupload')."','{$id}','submit_images','{$p}','{$moudle}','{$catid}','{$authkey}',".SYS_EDITOR.")\" class=\"btn btn-sm green\"> <i class=\"fa fa-plus\"></i> ".L('imagesupload')."</button></label>";
 	}
 
 	/**
@@ -338,7 +338,7 @@ class form {
 			'attachment' => $attachment,
 			'image_reduce' => $image_reduce,
 		), 'ENCODE');
-		return $str."<label><input type=\"text\" name=\"$name\" id=\"$id\" value=\"$value\" size=\"$size\" class=\"".($class ? $class : 'form-control input-xlarge')."\" $ext/></label><label><button type=\"button\" onclick=\"javascript:h5upload('".SELF."', '{$id}_files', '".L('attachmentupload')."','{$id}','submit_attachment','{$p}','{$moudle}','{$catid}','{$authkey}',".SYS_EDITOR.")\" class=\"btn green\"> <i class=\"fa fa-plus\"></i> ".L('filesupload')."</button></label>";
+		return $str."<label><input type=\"text\" name=\"$name\" id=\"$id\" value=\"$value\" size=\"$size\" class=\"".($class ? $class : 'form-control')."\" $ext/></label><label><button type=\"button\" onclick=\"javascript:h5upload('".SELF."', '{$id}_files', '".L('attachmentupload')."','{$id}','submit_attachment','{$p}','{$moudle}','{$catid}','{$authkey}',".SYS_EDITOR.")\" class=\"btn btn-sm green\"> <i class=\"fa fa-plus\"></i> ".L('filesupload')."</button></label>";
 	}
 	
 	/**

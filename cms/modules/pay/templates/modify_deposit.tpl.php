@@ -65,10 +65,10 @@ $(function(){
 <input name="dosubmit" type="submit" value="<?php echo L('submit')?>" class="button" id="dosubmit">
 </form>
 </div>
+</div>
 </body>
 </html>
 <script type="text/javascript">
-
 $(document).ready(function() {
 	$("#paymethod input[type='radio']").click( function () {
 		if($(this).val()== 0){

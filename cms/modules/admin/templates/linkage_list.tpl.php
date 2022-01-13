@@ -1,8 +1,10 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header');?>
-<div class="page-content main-content">
-<div class="note note-danger my-content-top-tool">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="note note-danger">
     <p><?php echo L('联动菜单可以作为地区、行业、类型等，也可以按站点来设置联动菜单值');?></p>
 </div>
 <div class="right-card-box">
@@ -79,6 +81,8 @@ include $this->admin_tpl('header');?>
      </div>
 
 </form>
+</div>
+</div>
 </div>
 </div>
 </body>
