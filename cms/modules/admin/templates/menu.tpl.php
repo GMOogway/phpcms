@@ -103,10 +103,13 @@ include $this->admin_tpl('header');?>
                         dataType: 'json',
                         success: function(res) {
                             if (res.code == 1) {
-                                layer.msg(res.msg,{time:1000,icon:1});
-                                obj.del();
+                                layer.msg(res.msg, {time: 1000, icon: 1}, function () {
+                                    location.reload(true);
+                                });
                             }else{
                                 dr_tips(0, res.msg);
+                                treeGrid.render;
+                                return false;
                             }
                         }
                     });

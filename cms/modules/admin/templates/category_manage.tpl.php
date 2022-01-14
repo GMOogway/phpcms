@@ -74,7 +74,7 @@ include $this->admin_tpl('header');?>
     <a href="?m=admin&c=category&a=remove&catid={{d.id}}&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo $this->input->get('pc_hash');?>" class="btn btn-xs yellow"><i class="fa fa-arrows"></i> <?php echo L('remove','','content');?></a>
 </script>
 <script type="text/html" id="topBtn">
-   <a href="javascript:dr_iframe('add', '?m=admin&c=category&a=add&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token();?>&s=0', '<?php echo L('add_category')?>')" class="layui-btn layui-btn-sm"><?php echo L('add_category');?></a>
+   <a href="javascript:dr_iframe('add', '?m=admin&c=category&a=add&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token();?>&s=0', '80%', '80%')" class="layui-btn layui-btn-sm"><?php echo L('add_category');?></a>
 </script>
 <script>
     var pc_file = '<?php echo JS_PATH;?>';
@@ -87,7 +87,7 @@ include $this->admin_tpl('header');?>
         var $=layui.jquery;
         treeGrid = layui.treeGrid;
         layer=layui.layer;
-		form = layui.form;
+        form = layui.form;
         ptable=treeGrid.render({
             id:tableId
             ,elem: '#'+tableId
@@ -122,7 +122,7 @@ include $this->admin_tpl('header');?>
             ,page:false
         });
         treeGrid.on('tool('+tableId+')',function (obj) {
-			var data = obj.data;
+            var data = obj.data;
             if(obj.event === 'del'){
                 Dialog.confirm('您确定要删除该记录吗？', function() {
                     $.ajax({
@@ -132,10 +132,13 @@ include $this->admin_tpl('header');?>
                         dataType: 'json',
                         success: function(res) {
                             if (res.code == 1) {
-                                layer.msg(res.msg,{time:1000,icon:1});
-                                obj.del();
+                                layer.msg(res.msg, {time: 1000, icon: 1}, function () {
+                                    location.reload(true);
+                                });
                             }else{
                                 dr_tips(0, res.msg);
+                                treeGrid.render;
+                                return false;
                             }
                         }
                     });

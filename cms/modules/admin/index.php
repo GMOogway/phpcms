@@ -41,7 +41,7 @@ class index extends admin {
 					dr_json(4, L('code_error'));
 				}
 			}
-			if(!is_username($username)){
+			if (is_badword($username)) {
 				dr_json(2, L('username_illegal'));
 			}
 			//密码错误剩余重试次数
@@ -293,7 +293,6 @@ class index extends admin {
 	}
 	public function public_main() {
 		pc_base::load_app_func('global');
-		pc_base::load_app_func('admin');
 		define('PC_VERSION', pc_base::load_config('version','pc_version'));
 		define('PC_RELEASE', pc_base::load_config('version','pc_release'));
 		define('CMS_VERSION', pc_base::load_config('version','cms_version'));
@@ -342,7 +341,7 @@ class index extends admin {
 		include $this->admin_tpl('main');
 		$data = ob_get_contents();
 		ob_end_clean();
-		system_information($data);
+		echo $data;
 	}
 	// 版本检查
 	public function public_version_cms() {

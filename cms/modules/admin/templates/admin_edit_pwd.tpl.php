@@ -1,33 +1,6 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');
 $show_validator = true;include $this->admin_tpl('header');?>
-<script type="text/javascript">
-  $(document).ready(function() {
-	$.formValidator.initConfig({autotip:true,formid:"myform",onerror:function(msg){}});
-	$("#old_password").formValidator({empty:true,onshow:"<?php echo L('not_change_the_password_please_leave_a_blank')?>",onfocus:"<?php echo L('password').L('between_6_to_20')?>",oncorrect:"<?php echo L('old_password_right')?>"}).inputValidator({min:6,max:20,onerror:"<?php echo L('password').L('between_6_to_20')?>"}).ajaxValidator({
-	    type : "get",
-		url : "",
-		data :"m=admin&c=admin_manage&a=public_password_ajx",
-		datatype : "html",
-		async:'false',
-		success : function(data){	
-            if( data == "1" )
-			{
-                return true;
-			}
-            else
-			{
-                return false;
-			}
-		},
-		buttons: $("#dosubmit"),
-		onerror : "<?php echo L('old_password_wrong')?>",
-		onwait : "<?php echo L('connecting_please_wait')?>"
-	});
-	$("#new_password").formValidator({empty:true,onshow:"<?php echo L('not_change_the_password_please_leave_a_blank')?>",onfocus:"<?php echo L('password').L('between_6_to_20')?>"}).inputValidator({min:6,max:20,onerror:"<?php echo L('password').L('between_6_to_20')?>"});
-	$("#new_pwdconfirm").formValidator({empty:true,onshow:"<?php echo L('not_change_the_password_please_leave_a_blank')?>",onfocus:"<?php echo L('input').L('passwords_not_match')?>",oncorrect:"<?php echo L('passwords_match')?>"}).compareValidator({desid:"new_password",operateor:"=",onerror:"<?php echo L('input').L('passwords_not_match')?>"});
-  })
-</script>
 <div class="page-content main-content">
 <div class="note note-danger">
     <p><a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=init&pc_hash='+pc_hash+'&is_ajax=1',1);"><?php echo L('update_cache_all');?></a></p>
@@ -67,19 +40,19 @@ $show_validator = true;include $this->admin_tpl('header');?>
                     <div class="form-group" id="dr_row_old_password">
                         <label class="col-md-2 control-label"><?php echo L('old_password')?></label>
                         <div class="col-md-9">
-                            <input class="form-control input-large" type="password" id="old_password" name="old_password" value="">
+                            <input class="form-control input-large" type="password" id="dr_old_password" name="old_password" value="">
                         </div>
                     </div>
                     <div class="form-group" id="dr_row_new_password">
                         <label class="col-md-2 control-label"><?php echo L('new_password')?></label>
                         <div class="col-md-9">
-                            <input class="form-control input-large" type="password" id="new_password" name="new_password" value="">
+                            <input class="form-control input-large" type="password" id="dr_new_password" name="new_password" value="">
                         </div>
                     </div>
                     <div class="form-group" id="dr_row_new_pwdconfirm">
                         <label class="col-md-2 control-label"><?php echo L('new_pwdconfirm')?></label>
                         <div class="col-md-9">
-                            <input class="form-control input-large" type="password" id="new_pwdconfirm" name="new_pwdconfirm" value="">
+                            <input class="form-control input-large" type="password" id="dr_new_pwdconfirm" name="new_pwdconfirm" value="">
                         </div>
                     </div>
 

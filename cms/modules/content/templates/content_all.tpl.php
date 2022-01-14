@@ -7,7 +7,6 @@ include $this->admin_tpl('header','admin');?>
 jQuery(document).ready(function() {
     if (jQuery().datepicker) {
         $('.date-picker').datepicker({
-            format: "yyyy-mm-dd",
             orientation: "left",
             autoclose: true
         });
@@ -90,13 +89,13 @@ if(is_array($infos)){
         <label><input type="text" class="form-control" placeholder="" value="<?php echo $param['keyword'];?>" name="keyword" /></label>
         </div>
         <div class="col-md-12 col-sm-12">
-        <label><div class="formdate">
-            <div class="input-group input-medium date-picker input-daterange">
+        <label>
+            <div class="input-group input-medium date-picker input-daterange" data-date="" data-date-format="yyyy-mm-dd">
                 <input type="text" class="form-control" value="<?php echo $param['start_time'];?>" name="start_time" id="start_time">
                 <span class="input-group-addon"> - </span>
                 <input type="text" class="form-control" value="<?php echo $param['end_time'];?>" name="end_time" id="end_time">
             </div>
-        </div></label>
+        </label>
         </div>
         <div class="col-md-12 col-sm-12">
         <label><button type="submit" class="btn blue btn-sm onloading"><i class="fa fa-search"></i> <?php echo L('search');?></button></label>
@@ -172,11 +171,11 @@ if(is_array($datas)){
 </div>
 <script type="text/javascript"> 
 function view_comment(id, name) {
-	var w = 800;
-	var h = 500;
-	if (is_mobile()) {
-		w = h = '100%';
-	}
+    var w = 800;
+    var h = 500;
+    if (is_mobile()) {
+        w = h = '100%';
+    }
     var diag = new Dialog({
         id:'view_comment',
         title:'<?php echo L('view_comment');?>：'+name,

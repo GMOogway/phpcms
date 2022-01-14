@@ -18,7 +18,10 @@ function dr_isEllipsis(dom) {
 	parent.removeChild(checkDom);
 	return flag;
 };
-$(function(){
+jQuery(document).ready(function() {
+	$('.onloading').click(function(){
+		var index = layer.load(2,{time:5E3})
+	});
 	/*if ($(document).width() < 600) {
 		$('.table-list table').attr('style', 'table-layout: inherit!important;');
 	}*/

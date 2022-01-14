@@ -25,16 +25,16 @@ jQuery(document).ready(function() {
 <input type="hidden" value="<?php echo $_GET['menuid']?>" name="menuid">
 
 <div class="explain-col search-form">
-<?php echo L('username')?> <label><input type="text" value="<?php echo $username?>" class="input-text" name="info[username]"></label>
-<?php echo L('addtime')?> <label><div class="formdate">
-            <div class="input-group input-medium date-picker input-daterange">
-                <input type="text" class="form-control" value="<?php echo $start_addtime;?>" name="info[start_addtime]">
-                <span class="input-group-addon"> <?php echo L('to')?> </span>
-                <input type="text" class="form-control" value="<?php echo $end_addtime;?>" name="info[end_addtime]">
-            </div>
-        </div></label>
-<?php echo form::select($trade_status,$status,'name="info[status]"', L('all_status'))?>
-<label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('search')?></button></label>
+    <?php echo L('username')?> <label><input type="text" value="<?php echo $username?>" class="input-text" name="info[username]"></label>
+    <?php echo form::select($trade_status,$status,'name="info[status]"', L('all_status'))?>
+    <label><div class="formdate">
+        <div class="input-group input-medium date-picker input-daterange">
+            <input type="text" class="form-control" value="<?php echo $start_addtime;?>" name="info[start_addtime]">
+            <span class="input-group-addon"> <?php echo L('to')?> </span>
+            <input type="text" class="form-control" value="<?php echo $end_addtime;?>" name="info[end_addtime]">
+        </div>
+    </div></label>
+    <label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('search')?></button></label>
 </div>
 
 </form>

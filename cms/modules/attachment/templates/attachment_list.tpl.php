@@ -10,7 +10,6 @@ include $this->admin_tpl('header', 'admin');
 jQuery(document).ready(function() {
     if (jQuery().datepicker) {
         $('.date-picker').datepicker({
-            format: "yyyy-mm-dd",
             orientation: "left",
             autoclose: true
         });
@@ -22,30 +21,40 @@ jQuery(document).ready(function() {
 </style>
 <script type="text/javascript" src="<?php echo JS_PATH;?>layui/layui.js"></script>
 <div class="admin-main layui-anim layui-anim-upbit">
-    <div class="note note-danger">
-        <?php if ($remote) {?>
-        <label><select name="remote" id="remote" class="form-control">
-            <option value=""> - </option>
-            <?php 
-            if (is_array($remote)) {
-            foreach ($remote as $t) {
-            ?>
-            <option value="<?php echo $t['id'];?>"<?php if ($this->input->get('remote')==$t['id']) {?> selected<?php }?>><?php echo $t['name'];?></option>
-            <?php }} ?>
-        </select></label>
-        <?php }?>
-        <label><input class="form-control" name="fileext" id="fileext" <?php if(isset($fileext)) echo $fileext;?> placeholder="<?php echo L('filetype')?>"></label>
-        <label><input class="form-control" name="keyword" id="keyword" <?php if(isset($keyword)) echo $keyword;?> placeholder="<?php echo L('name')?>"></label>
-        <label><div class="formdate">
-            <div class="input-group input-medium date-picker input-daterange">
-                <input type="text" class="form-control" value="<?php echo $this->input->get('start_uploadtime');?>" name="start_uploadtime" id="start_uploadtime">
-                <span class="input-group-addon"> <?php echo L('to')?> </span>
-                <input type="text" class="form-control" value="<?php echo $this->input->get('end_uploadtime');?>" name="end_uploadtime" id="end_uploadtime">
+    <div class="right-card-box">
+        <div class="row table-search-tool">
+            <?php if ($remote) {?>
+            <div class="col-md-12 col-sm-12">
+                <label><select name="remote" id="remote" class="form-control">
+                    <option value=""> - </option>
+                    <?php 
+                    if (is_array($remote)) {
+                    foreach ($remote as $t) {
+                    ?>
+                    <option value="<?php echo $t['id'];?>"<?php if ($this->input->get('remote')==$t['id']) {?> selected<?php }?>><?php echo $t['name'];?></option>
+                    <?php }} ?>
+                </select></label>
             </div>
-        </div></label>
-        <label><button class="btn blue btn-sm onloading" id="search" data-type="reload"><i class="fa fa-search"></i> <?php echo L('search');?></button></label>
+            <?php }?>
+            <div class="col-md-12 col-sm-12">
+                <label><input class="form-control" name="fileext" id="fileext" <?php if(isset($fileext)) echo $fileext;?> placeholder="<?php echo L('filetype')?>"></label>
+                <label><input class="form-control" name="keyword" id="keyword" <?php if(isset($keyword)) echo $keyword;?> placeholder="<?php echo L('name')?>"></label>
+            </div>
+            <div class="col-md-12 col-sm-12">
+                <label>
+                    <div class="input-group input-medium date-picker input-daterange" data-date="" data-date-format="yyyy-mm-dd">
+                        <input type="text" class="form-control" value="<?php echo $this->input->get('start_uploadtime');?>" name="start_uploadtime" id="start_uploadtime">
+                        <span class="input-group-addon"> <?php echo L('to')?> </span>
+                        <input type="text" class="form-control" value="<?php echo $this->input->get('end_uploadtime');?>" name="end_uploadtime" id="end_uploadtime">
+                    </div>
+                </label>
+            </div>
+            <div class="col-md-12 col-sm-12">
+                <label><button class="btn blue btn-sm" id="search" data-type="reload"><i class="fa fa-search"></i> <?php echo L('search');?></button></label>
+            </div>
+        </div>
+        <table id="list" lay-filter="list"></table>
     </div>
-    <table class="layui-table" id="list" lay-filter="list"></table>
 </div>
 <script type="text/html" id="action">
     <a href="javascript:preview('{{d.filepath}}')" class="layui-btn layui-btn-xs layui-btn-normal"><i class="fa fa-eye"></i> <?php echo L('preview');?></a>

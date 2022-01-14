@@ -1,7 +1,6 @@
 <?php
 defined('IN_CMS') or exit('No permission resources.');
 pc_base::load_app_class('admin','admin',0);
-pc_base::load_app_func('admin');
 class admin_manage extends admin {
 	private $db,$role_db;
 	function __construct() {
@@ -40,7 +39,6 @@ class admin_manage extends admin {
 	// 修改账号
 	public function username_edit() {
 		$show_header = true;
-
 		$userid = intval($this->input->get('userid'));
 		$info = $this->db->get_one(array('userid'=>$userid));
 		extract($info);	
@@ -106,12 +104,12 @@ class admin_manage extends admin {
 			if(!$this->check_email($info['email'])){
 				dr_json(0, L('email').L('格式不正确'), array('field' => 'email'));
 			}
+			$check = $this->db->get_one(array('email'=>$info['email']));
+			if ($check){
+				dr_json(0, L('email').L('email_already_exists'), array('field' => 'email'));
+			}
 			if (!$info['roleid']) {
 				dr_json(0, L('至少要选择一个角色组'), array('field' => 'roleid'));
-			}
-			$info = checkuserinfo($info);
-			if(!checkpasswd($info['password'])){
-				dr_json(0, L('pwd_incorrect'), array('field' => 'password'));
 			}
 			$passwordinfo = password($info['password']);
 			$info['password'] = $passwordinfo['password'];
@@ -153,10 +151,13 @@ class admin_manage extends admin {
 			if(!$this->check_email($info['email'])){
 				dr_json(0, L('email').L('格式不正确'), array('field' => 'email'));
 			}
+			$check = $this->db->get_one(array('email'=>$info['email']),'userid');
+			if ($check && $check['userid']!=$info['userid']){
+				dr_json(0, L('email').L('email_already_exists'), array('field' => 'email'));
+			}
 			if (!$info['roleid']) {
 				dr_json(0, L('至少要选择一个角色组'), array('field' => 'roleid'));
 			}
-			$info = checkuserinfo($info);
 			if(isset($info['password']) && !empty($info['password'])){
 				$rs = $this->check_password($info['password'], $info['username']);
 				if (!$rs['code']) {
@@ -293,6 +294,19 @@ class admin_manage extends admin {
 			$admin_fields = array('email','realname','lang');
 			$info = array();
 			$info = $this->input->post('info');
+			if(!$info['realname']){
+				dr_json(0, L('realname').L('empty'), array('field' => 'realname'));
+			}
+			if(!$info['email']){
+				dr_json(0, L('email').L('empty'), array('field' => 'email'));
+			}
+			if(!$this->check_email($info['email'])){
+				dr_json(0, L('email').L('格式不正确'), array('field' => 'email'));
+			}
+			$check = $this->db->get_one(array('email'=>$info['email']),'userid');
+			if ($check && $check['userid']!=$userid){
+				dr_json(0, L('email').L('email_already_exists'), array('field' => 'email'));
+			}
 			if(trim($info['lang'])=='') $info['lang'] = 'zh-cn';
 			foreach ($info as $k=>$value) {
 				if (!in_array($k, $admin_fields)){

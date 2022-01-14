@@ -1,32 +1,6 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');
 $show_validator = true;include $this->admin_tpl('header');?>
-<script type="text/javascript">
-  $(document).ready(function() {
-    $.formValidator.initConfig({autotip:true,formid:"myform",onerror:function(msg){}});
-    $("#realname").formValidator({onshow:"<?php echo L('input').L('realname')?>",onfocus:"<?php echo L('realname').L('between_2_to_20')?>"}).inputValidator({min:2,max:20,onerror:"<?php echo L('realname').L('between_2_to_20')?>"})
-    $("#email").formValidator({onshow:"<?php echo L('input').L('email')?>",onfocus:"<?php echo L('input').L('email')?>",oncorrect:"<?php echo L('email').L('format_right')?>"}).regexValidator({regexp:"email",datatype:"enum",onerror:"<?php echo L('email').L('format_incorrect')?>"}).ajaxValidator({
-        type : "get",
-        url : "",
-        data :"m=admin&c=admin_manage&a=public_email_ajx",
-        datatype : "html",
-        async:'false',
-        success : function(data){    
-            if( data == "1" )
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        },
-        buttons: $("#dosubmit"),
-        onerror : "<?php echo L('email_already_exists')?>",
-        onwait : "<?php echo L('connecting_please_wait')?>"
-    }).defaultPassed();
-  })
-</script>
 <div class="page-content main-content">
 <div class="note note-danger">
     <p><a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=init&pc_hash='+pc_hash+'&is_ajax=1',1);"><?php echo L('update_cache_all');?></a></p>
@@ -34,13 +8,8 @@ $show_validator = true;include $this->admin_tpl('header');?>
 <form action="?m=admin&c=admin_manage&a=public_edit_info" class="form-horizontal" method="post" name="myform" id="myform">
 <input name="page" id="dr_page" type="hidden" value="<?php echo $page;?>">
 <input name="menuid" type="hidden" value="<?php echo $this->input->get('menuid');?>">
-
-<input type="hidden" name="info[userid]" value="<?php echo $userid?>"></input>
-<input type="hidden" name="info[username]" value="<?php echo $username?>"></input>
-
-
-<input type="hidden" name="info[userid]" value="<?php echo $userid?>"></input>
-<input type="hidden" name="info[username]" value="<?php echo $username?>"></input>
+<input type="hidden" name="info[userid]" value="<?php echo $userid?>">
+<input type="hidden" name="info[username]" value="<?php echo $username?>">
 <input type="hidden" name="info[admin_manage_code]" value="<?php echo $admin_manage_code?>" id="admin_manage_code">
 <div class="portlet light bordered myfbody">
     <div class="portlet-title tabbable-line">
@@ -77,19 +46,13 @@ $show_validator = true;include $this->admin_tpl('header');?>
                     <div class="form-group" id="dr_row_realname">
                         <label class="col-md-2 control-label"><?php echo L('realname')?></label>
                         <div class="col-md-9">
-                            <input class="form-control input-large" type="text" id="realname" name="info[realname]" value="<?php echo $realname?>">
+                            <input class="form-control input-large" type="text" id="dr_realname" name="info[realname]" value="<?php echo $realname?>">
                         </div>
                     </div>
                     <div class="form-group" id="dr_row_email">
                         <label class="col-md-2 control-label"><?php echo L('email')?></label>
                         <div class="col-md-9">
-                            <input class="form-control input-large" type="text" id="email" name="info[email]" value="<?php echo $email?>" >
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-2 control-label"><?php echo L('realname')?></label>
-                        <div class="col-md-9">
-                            <input class="form-control input-large" type="text" id="realname" name="info[realname]" value="<?php echo $realname?>" >
+                            <input class="form-control input-large" type="text" id="dr_email" name="info[email]" value="<?php echo $email?>" >
                         </div>
                     </div>
                     <div class="form-group">

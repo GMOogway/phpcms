@@ -80,13 +80,12 @@ function input_font_bold() {
 	}
 }
 function ruselinkurl() {
-        if($('#islink').attr('checked')=='checked') {
-                $('#linkurl').attr('disabled',false);
-                //UE.getEditor('content').execCommand('insertHtml', '　');
-                return false;
-        } else {
-                $('#linkurl').attr('disabled','true');
-        }
+	if($('#islink').is(":checked")) {
+		$('#linkurl').prop('disabled',false);
+		return false;
+	} else {
+		$('#linkurl').prop('disabled',true);
+	}
 }
 
 function ChangeInput (objSelect,objInput) {

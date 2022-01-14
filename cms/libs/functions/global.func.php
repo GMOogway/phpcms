@@ -2839,8 +2839,9 @@ function create_randomstr($lenth = 10) {
 function is_password($password) {
 	$member_setting = getcache('member_setting', 'member');
 	$strlen = mb_strlen($password);
-	if($member_setting['config']['pwdlen'] && $strlen >= $member_setting['config']['pwdlen'] || $member_setting['config']['pwdmax'] && $strlen <= $member_setting['config']['pwdmax']) return true;
-	return false;
+	if($member_setting['config']['pwdpreg'] && !preg_match(trim($member_setting['config']['pwdpreg']), $password)) return false;
+	if(($member_setting['config']['pwdlen'] && $strlen < $member_setting['config']['pwdlen']) || ($member_setting['config']['pwdmax'] && $strlen > $member_setting['config']['pwdmax'])) return false;
+	return true;
 }
 
  /**
@@ -2868,9 +2869,9 @@ function is_badword($string) {
 function is_username($username) {
 	$member_setting = getcache('member_setting', 'member');
 	$strlen = mb_strlen($username);
-	if(is_badword($username) || !preg_match("/^[a-zA-Z0-9_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]+$/", $username)){
+	if(is_badword($username) || ($member_setting['config']['preg'] && !preg_match($member_setting['config']['preg'], $username))){
 		return false;
-	} elseif (($member_setting['config']['userlenmax'] && $member_setting['config']['userlenmax'] < $strlen) || ($member_setting['config']['userlen'] && $strlen < $member_setting['config']['userlen'])) {
+	} elseif (($member_setting['config']['userlen'] && $strlen < $member_setting['config']['userlen']) || ($member_setting['config']['userlenmax'] && $strlen > $member_setting['config']['userlenmax'])) {
 		return false;
 	}
 	return true;

@@ -48,7 +48,7 @@ include $this->admin_tpl('header', 'admin');?>
                 </div>
             </div>
             <div class="portlet-body">
-                <div class="form-body fc-yun-list">
+                <div class="form-body yun-list">
 
 
                     <div class="form-group">

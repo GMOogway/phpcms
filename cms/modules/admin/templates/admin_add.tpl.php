@@ -55,7 +55,7 @@ jQuery(document).ready(function() {
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('realname')?></label>
                         <div class="col-md-9">
-                            <input class="form-control input-large" type="text" id="realname" name="info[realname]" value="" >
+                            <input class="form-control input-large" type="text" id="dr_realname" name="info[realname]" value="" >
                         </div>
                     </div>
                     <div class="form-group" id="dr_row_roleid">

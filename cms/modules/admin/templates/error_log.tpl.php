@@ -26,7 +26,7 @@ jQuery(document).ready(function() {
 <input type="hidden" value="public_error_log" name="a">
             <div class="col-md-12" style="padding-right: 0">
                 <label>
-                    <div class="input-group fc-input-time date date-picker" data-date-format="yyyy-mm-dd">
+                    <div class="input-group input-time date date-picker" data-date-format="yyyy-mm-dd">
                         <input type="text" class="form-control" name="time" value="<?php echo $time;?>">
                         <span class="input-group-btn">
                             <button class="btn default" type="button">

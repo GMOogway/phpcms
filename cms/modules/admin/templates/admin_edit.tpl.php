@@ -2,14 +2,6 @@
 defined('IS_ADMIN') or exit('No permission resources.');
 $show_validator = true;include $this->admin_tpl('header');?>
 <script type="text/javascript">
-  $(document).ready(function() {
-	$.formValidator.initConfig({autotip:true,formid:"myform",onerror:function(msg){}});
-	$("#dr_password").formValidator({empty:true,onshow:"<?php echo L('not_change_the_password_please_leave_a_blank')?>",onfocus:"<?php echo L('password').L('between_6_to_20')?>"}).inputValidator({min:6,max:20,onerror:"<?php echo L('password').L('between_6_to_20')?>"});
-	$("#dr_pwdconfirm").formValidator({empty:true,onshow:"<?php echo L('not_change_the_password_please_leave_a_blank')?>",onfocus:"<?php echo L('input').L('passwords_not_match')?>",oncorrect:"<?php echo L('passwords_match')?>"}).compareValidator({desid:"password",operateor:"=",onerror:"<?php echo L('input').L('passwords_not_match')?>"});
-	$("#dr_email").formValidator({onshow:"<?php echo L('input').L('email')?>",onfocus:"<?php echo L('email').L('format_incorrect')?>",oncorrect:"<?php echo L('email').L('format_right')?>"}).regexValidator({regexp:"email",datatype:"enum",onerror:"<?php echo L('email').L('format_incorrect')?>"});
-  })
-</script>
-<script type="text/javascript">
 jQuery(document).ready(function() {
     $(":text").removeClass('input-text');
 });
@@ -27,8 +19,8 @@ jQuery(document).ready(function() {
 <form action="?m=admin&c=admin_manage&a=edit" class="form-horizontal" method="post" name="myform" id="myform">
 <input name="page" id="dr_page" type="hidden" value="<?php echo $page;?>">
 <input name="menuid" type="hidden" value="<?php echo $this->input->get('menuid');?>">
-<input type="hidden" name="info[userid]" value="<?php echo $userid?>"></input>
-<input type="hidden" name="info[username]" value="<?php echo $username?>"></input>
+<input type="hidden" name="info[userid]" value="<?php echo $userid?>">
+<input type="hidden" name="info[username]" value="<?php echo $username?>">
 <input type="hidden" name="info[admin_manage_code]" value="<?php echo $admin_manage_code?>" id="admin_manage_code">
 <div class="portlet light bordered myfbody">
     <div class="portlet-title tabbable-line">
@@ -44,7 +36,7 @@ jQuery(document).ready(function() {
 
                 <div class="form-body">
 
-                    <div class="form-group" id="dr_row_username">
+                    <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('username')?></label>
                         <div class="col-md-9">
                             <div class="input-group" style="width: 300px;">
@@ -76,7 +68,7 @@ jQuery(document).ready(function() {
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('realname')?></label>
                         <div class="col-md-9">
-                            <input class="form-control input-large" type="text" id="realname" name="info[realname]" value="<?php echo $realname?>" >
+                            <input class="form-control input-large" type="text" id="dr_realname" name="info[realname]" value="<?php echo $realname?>" >
                         </div>
                     </div>
                     <?php if (cleck_admin($_SESSION['roleid'])) {?>

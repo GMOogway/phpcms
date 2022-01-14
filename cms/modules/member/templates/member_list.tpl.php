@@ -10,7 +10,6 @@
 jQuery(document).ready(function() {
     if (jQuery().datepicker) {
         $('.date-picker').datepicker({
-            format: "yyyy-mm-dd",
             orientation: "left",
             autoclose: true
         });
@@ -41,7 +40,7 @@ jQuery(document).ready(function() {
 				<?php echo form::select($grouplist, $groupid, 'name="groupid[]" class="form-control bs-select" data-title="'.L('member_group').'" multiple="multiple" data-actions-box="true"')?>
 				</div>
 				<div class="col-md-12 col-sm-12">
-				<label><select name="type">
+				<label><select name="type" class="form-control">
 					<option value='1' <?php if(isset($_GET['type']) && $_GET['type']==1){?>selected<?php }?>><?php echo L('username')?></option>
 					<option value='2' <?php if(isset($_GET['type']) && $_GET['type']==2){?>selected<?php }?>><?php echo L('uid')?></option>
 					<option value='3' <?php if(isset($_GET['type']) && $_GET['type']==3){?>selected<?php }?>><?php echo L('email')?></option>
@@ -52,13 +51,13 @@ jQuery(document).ready(function() {
 				<label><input name="keyword" type="text" value="<?php if(isset($_GET['keyword'])) {echo $_GET['keyword'];}?>" class="form-control input-text" /></label>
 				</div>
 				<div class="col-md-12 col-sm-12">
-				<label><div class="formdate">
-					<div class="input-group input-medium date-picker input-daterange">
+				<label>
+					<div class="input-group input-medium date-picker input-daterange" data-date="" data-date-format="yyyy-mm-dd">
 						<input type="text" class="form-control" value="<?php echo $start_time;?>" name="start_time" id="start_time">
 						<span class="input-group-addon"> - </span>
 						<input type="text" class="form-control" value="<?php echo $end_time;?>" name="end_time" id="end_time">
 					</div>
-				</div></label>
+				</label>
 				</div>
 				<div class="col-md-12 col-sm-12">
 				<label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('search')?></button></label>

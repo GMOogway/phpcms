@@ -192,7 +192,7 @@ fieldset{margin-top: 10px;background: #fff;}
 .right-card-box .portlet.light {padding: 0;}
 
 /*部分表格属性修改*/
-body .table_form tbody td,body .table_form tbody th,body .table_form tbody tr{border-bottom:1px dashed #f1f1f1;line-height: 22px;}
+body .table_form tbody td,body .table_form tbody th,body .table_form tbody tr{border-bottom:1px dashed #f1f1f1;padding:8px;}
 body .table-list {width: 100%;overflow-x: auto;overflow-y: hidden;margin: 10px 0!important;border: 1px solid #e7ecf1;border-radius: 4px;}
 body .table-list table{width: 100%!important;margin: 0!important;background-color: #fff;border: 0;table-layout: fixed;}
 body .table-list table>tbody>tr:last-child>td,body .table-list table>tbody>tr:last-child>th,body .table-list table>tfoot>tr:last-child>td,body .table-list table>tfoot>tr:last-child>th,body .table-list table>thead>tr:last-child>td,body .table-list table>thead>tr:last-child>th,.table.table-bordered thead>tr>th {border-bottom: 0;}
@@ -225,7 +225,18 @@ body .y-bg .radio-label tr td{border-bottom:1px solid #e4e2e2;}
 .bk15{height: 15px;}
 #upfile tr .y-bg .input-text{height: auto;width: 210px;}
 #upfile tr .y-bg input[name="file"]{width: 220px;}
-.form-control{width: 100%;height:34px;padding:6px 12px;font-size:14px;line-height:1.42857143;color:#555;background-color:#fff;background-image:none;border:1px solid #ccc;border-radius:4px;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075);box-shadow:inset 0 1px 1px rgba(0,0,0,.075);-webkit-transition:border-color ease-in-out .15s,box-shadow ease-in-out .15s;-o-transition:border-color ease-in-out .15s,box-shadow ease-in-out .15s;-webkit-transition:border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;transition:border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;transition:border-color ease-in-out .15s,box-shadow ease-in-out .15s;transition:border-color ease-in-out .15s,box-shadow ease-in-out .15s,-webkit-box-shadow ease-in-out .15s}
+.form-control {width: 100%;height: 34px;padding: 6px 12px;background-color: #fff;border: 1px solid #E4E6EF;color: #3F4254;background-clip: padding-box;border-radius: 4px;-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);-webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;-o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;}
+.form-control:focus {border-color: #93a1bb;outline: 0;-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(147,161,187,.6);box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(147,161,187,.6);}
+.form-control::-moz-placeholder {color: #999;opacity: 1;}
+.form-control:-ms-input-placeholder {color: #999;}
+.form-control::-webkit-input-placeholder {color: #999;}
+.has-success .checkbox,.has-success .checkbox-inline,.has-success .control-label,.has-success .form-control-feedback,.has-success .help-block,.has-success .radio,.has-success .radio-inline,.has-success.checkbox label,.has-success.checkbox-inline label,.has-success.radio label,.has-success.radio-inline label {color: #27a4b0;}
+.form-control::-ms-expand {border: 0;background-color: transparent;}
+.form-control[disabled],.form-control[readonly],fieldset[disabled] .form-control {background-color: #eef1f5;opacity: 1;}
+.form-control[disabled],fieldset[disabled] .form-control {cursor: not-allowed;}
+textarea.form-control {height: auto;}
+.btn,.form-control {box-shadow: none!important;}
+.form-control {outline: 0!important;}
 
 /*内容页菜单按钮修改*/
 .treelistmain a{color: #676a6c;}
@@ -754,19 +765,9 @@ form .portlet.light .portlet-body {padding-top: 20px;padding-bottom: 20px;}
 .input-group-addon {padding: 6px 12px;font-size: 14px;font-weight: 400;line-height: 1;color: #555;background-color: #eee;border: 1px solid #ccc;border-radius: 4px;}
 .input-group-addon.input-sm,.input-group-sm>.input-group-addon,.input-group-sm>.input-group-btn>.input-group-addon.btn {padding: 5px 10px;font-size: 12px;border-radius: 3px;}
 .input-group-addon.input-lg,.input-group-lg>.input-group-addon,.input-group-lg>.input-group-btn>.input-group-addon.btn {padding: 10px 16px;font-size: 18px;border-radius: 6px;}
-.input-group-addon input[type=checkbox],.input-group-addon input[type=radio] {margin-top: 0;}
-.input-group .form-control:first-child,.input-group-addon:first-child,.input-group-btn:first-child>.btn,.input-group-btn:first-child>.btn-group>.btn,.input-group-btn:first-child>.dropdown-toggle,.input-group-btn:last-child>.btn-group:not(:last-child)>.btn,.input-group-btn:last-child>.btn:not(:last-child):not(.dropdown-toggle) {border-bottom-right-radius: 0;border-top-right-radius: 0;}
-.input-group-addon:first-child {border-right: 0;}
-.input-group .form-control:last-child,.input-group-addon:last-child,.input-group-btn:first-child>.btn-group:not(:first-child)>.btn,.input-group-btn:first-child>.btn:not(:first-child),.input-group-btn:last-child>.btn,.input-group-btn:last-child>.btn-group>.btn,.input-group-btn:last-child>.dropdown-toggle {border-bottom-left-radius: 0;border-top-left-radius: 0;}
-.input-group-addon:last-child {border-left: 0;}
 .input-group-btn {font-size: 0;white-space: nowrap;}
-.input-group-btn>.btn+.btn {margin-left: -1px;}
-.input-group-btn>.btn:active,.input-group-btn>.btn:focus,.input-group-btn>.btn:hover {z-index: 2;}
-.input-group-btn:first-child>.btn,.input-group-btn:first-child>.btn-group {margin-right: -1px;}
-.input-group-btn:last-child>.btn,.input-group-btn:last-child>.btn-group {z-index: 2;margin-left: -1px;}
-.input-group .form-control:not(:first-child):not(:last-child),.input-group-addon:not(:first-child):not(:last-child),.input-group-btn:not(:first-child):not(:last-child) {border-radius: 0;}
 .input-daterange {width: 100%;}
-.input-daterange .input-group-addon {width: auto;min-width: 16px;padding: 4px 5px;line-height: 1.42857143;border-width: 1px 0;margin-left: -5px;margin-right: -5px;}
+.input-daterange .input-group-addon{width:auto;min-width:16px;padding:4px 5px;font-weight:400;line-height:1.42857143;text-align:center; border-radius:0;vertical-align:middle;background-color:#eee;border:solid #e4e6ef;border-width:1px 0;margin-left:-5px;margin-right:-5px}
 .table-condensed>tbody>tr>td,.table-condensed>tbody>tr>th,.table-condensed>tfoot>tr>td,.table-condensed>tfoot>tr>th,.table-condensed>thead>tr>td,.table-condensed>thead>tr>th {padding: 5px;}
 .datepicker table th {color: #333;font-weight: 400!important;}
 .datepicker table td {color: #000;font-weight: 300!important;}

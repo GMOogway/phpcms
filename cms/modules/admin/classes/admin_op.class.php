@@ -12,11 +12,7 @@ class admin_op {
 	public function edit_password($userid, $password){
 		$userid = intval($userid);
 		if($userid < 1) return false;
-		if(!is_password($password))
-		{
-			dr_admin_msg(0,L('pwd_incorrect'));
-			return false;
-		}
+		if(!$password) return false;
 		$passwordinfo = password($password);
 		return $this->db->update($passwordinfo,array('userid'=>$userid));
 	}
