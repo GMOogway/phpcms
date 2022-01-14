@@ -23,31 +23,29 @@
 		}
 		$value = str_replace(array('&lt;iframe', '&gt;&lt;/iframe&gt;'), array('<iframe', '></iframe>'), $value);
 		// 去除站外链接
-		if (isset($_POST['is_remove_a_'.$field]) && $_POST['is_remove_a_'.$field]) {
-			if (preg_match_all("/<a(.*)href=(.+)>(.*)<\/a>/Ui", $value, $arrs)) {
-				//$sites = require CACHE_PATH.'caches_commons/caches_data/domain_site.cache.php';
-				$this->sitedb = pc_base::load_model('site_model');
-				$sitedb_data = $this->sitedb->select();
-				$sites = array();
-				foreach ($sitedb_data as $t) {
-					$domain = parse_url($t['domain']);
-					if ($domain['port']) {
-						$sites[$domain['host'].':'.$domain['port']] = $t['siteid'];
-					} else {
-						$sites[$domain['host']] = $t['siteid'];
-					}
+		if (isset($_POST['is_remove_a_'.$field]) && $_POST['is_remove_a_'.$field] && preg_match_all("/<a (.*)href=(.+)>(.*)<\/a>/Ui", $value, $arrs)) {
+			//$sites = require CACHE_PATH.'caches_commons/caches_data/domain_site.cache.php';
+			$this->sitedb = pc_base::load_model('site_model');
+			$sitedb_data = $this->sitedb->select();
+			$sites = array();
+			foreach ($sitedb_data as $t) {
+				$domain = parse_url($t['domain']);
+				if ($domain['port']) {
+					$sites[$domain['host'].':'.$domain['port']] = $t['siteid'];
+				} else {
+					$sites[$domain['host']] = $t['siteid'];
 				}
-				foreach ($arrs[2] as $i => $a) {
-					if (strpos($a, ' ') !== false) {
-						list($a) = explode(' ', $a);
-					}
-					$a = trim($a, '"');
-					$a = trim($a, '\'');
-					$arr = parse_url($a);
-					if ($arr && $arr['host'] && !isset($sites[$arr['host']])) {
-						// 去除a标签
-						$value = str_replace($arrs[0][$i], $arrs[3][$i], $value);
-					}
+			}
+			foreach ($arrs[2] as $i => $a) {
+				if (strpos($a, ' ') !== false) {
+					list($a) = explode(' ', $a);
+				}
+				$a = trim($a, '"');
+				$a = trim($a, '\'');
+				$arr = parse_url($a);
+				if ($arr && $arr['host'] && !isset($sites[$arr['host']])) {
+					// 去除a标签
+					$value = str_replace($arrs[0][$i], $arrs[3][$i], $value);
 				}
 			}
 		}

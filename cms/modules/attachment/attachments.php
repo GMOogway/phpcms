@@ -201,13 +201,30 @@ class attachments {
 	public function download(){
 		$grouplist = getcache('grouplist','member');
 		if($this->isadmin==0 && !$grouplist[$this->groupid]['allowattachment']) dr_json(0, L('att_no_permission'));
-		if(empty($this->input->post('filename'))) dr_json(0, L('文件地址不能为空'));
-		if (strpos($this->input->post('filename'), 'http') !== 0 ) {
+		$filename = $this->input->post('filename');
+		if(empty($filename)) dr_json(0, L('文件地址不能为空'));
+		if (strpos($filename, 'http') !== 0 ) {
 			dr_json(0, L('下载文件地址必须是https或者http开头'));
-		} elseif (strpos($this->input->post('filename'), '?') !== false) {
-			dr_json(0, L('下载文件地址中不能包含？号'));
-		} elseif (strpos($this->input->post('filename'), '#') !== false) {
-			dr_json(0, L('下载文件地址中不能包含#号'));
+		}
+		// 获取扩展名
+		$ext = str_replace('.', '', trim(strtolower(strrchr($filename, '.')), '.'));
+		if (strlen($ext) > 6) {
+			foreach (array('jpg', 'jpeg', 'png', 'gif', 'webp') as $i) {
+				if (strpos($filename, $i) !== false) {
+					$ext = $i;
+					break;
+				}
+			}
+			if (strlen($ext) > 6) {
+				$ext2 = str_replace('#', '', trim(strtolower(strrchr($filename, '#')), '#'));
+				if ($ext2) {
+					$ext = $ext2;
+					$filename = substr($filename, 0, strlen($filename)-strlen($ext2)-1);
+				}
+			}
+			if (strlen($ext) > 6 || !$ext) {
+				dr_json(0, L('无法获取到文件扩展名，请在URL后方加入扩展名字符串，例如：#jpg'));
+			}
 		}
 		pc_base::load_sys_class('upload','',0);
 		$args = $this->input->post('args');
@@ -226,7 +243,8 @@ class attachments {
 		$upload->set_userid($this->userid);
 		// 下载远程文件
 		$rt = $upload->down_file(array(
-			'url' => $this->input->post('filename'),
+			'url' => $filename,
+			'file_ext' => $ext,
 			'attachment' => $upload->get_attach_info(intval($attachment), intval($image_reduce)),
 		));
 		if (!$rt['code']) {

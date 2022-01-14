@@ -27,11 +27,11 @@
                 <div id="nameTip" class="onShow"><?php echo L('upload_up_to')?><font color="red"> <?php echo $file_upload_limit?></font> <?php echo L('attachments')?>,<?php echo L('largest')?> <font color="red"><?php echo $file_size_limit;?> MB</font></div>
                 <div class="bk3"></div>
                 <div class="lh24"><?php echo L('supported')?> <font style="font-family: Arial, Helvetica, sans-serif"><?php echo str_replace('|','、',$file_types_post)?></font> <?php echo L('formats')?></div>
-				<div id="progress" class="fileupload-progress fade" style="display:none">
-					<div class="layui-progress layui-progress-big progress progress-striped active" lay-showpercent="yes" lay-filter="progress">
-				        <div class="layui-progress-bar progress-bar progress-bar-success" lay-percent=""></div>
-					</div>
-				</div>
+                <div id="progress" class="fileupload-progress fade" style="display:none">
+                    <div class="layui-progress layui-progress-big progress progress-striped active" lay-showpercent="yes" lay-filter="progress">
+                        <div class="layui-progress-bar progress-bar progress-bar-success" lay-percent=""></div>
+                    </div>
+                </div>
             </div>
             <div class="bk10"></div>
             <fieldset class="blue pad-10" id="h5upload">
@@ -40,9 +40,18 @@
                 <div class="files" id="fsUpload"></div>
             </fieldset>
         </div>
-        <div id="div_h5_2" class="contentList pad-10 hidden">
+        <div id="div_h5_2" class="row contentList pad-10 hidden">
             <div class="bk10"></div>
-            <?php echo L('enter_address')?><div class="bk3"></div><input type="text" id="dr_filename" name="info[filename]" class="input-text filename" value="" onblur="addonlinefile(this)"><button type="button" onclick="dr_download('filename');" class="button"> <i class="fa fa-download"></i> <?php echo L('下载文件')?></button><br><?php echo L('当目标文件过大或者对方服务器拒绝下载时会导致下载失败')?>
+            <div class="col-md-12 col-sm-12">
+                <label><?php echo L('enter_address')?></label>
+            </div>
+            <div class="bk3"></div>
+            <div class="col-md-12 col-sm-12">
+                <label><input type="text" id="dr_filename" name="info[filename]" class="input-text filename" value="" onblur="addonlinefile(this)"></label> <label><button type="button" onclick="dr_download('filename');" class="button"> <i class="fa fa-download"></i> <?php echo L('下载文件')?></button></label>
+            </div>
+            <div class="col-md-12 col-sm-12">
+                <label><?php echo L('当目标文件过大或者对方服务器拒绝下载时会导致下载失败')?></label>
+            </div>
             <div class="bk10"></div>
         </div>
         <?php if($allowupload && $this->admin_username && $_SESSION['userid']) {?>
@@ -76,17 +85,9 @@
 </div>
 </body>
 <script type="text/javascript">
-if ($.browser.mozilla) {
-    window.onload=function(){
-      if (location.href.indexOf("&rand=")<0) {
-            location.href=location.href+"&rand="+Math.random();
-        }
-    }
-}
 function imgWrap(obj){
     $(obj).hasClass('on') ? $(obj).removeClass("on") : $(obj).addClass("on");
 }
-
 function SwapTab(name,cls_show,cls_hide,cnt,cur) {
     for(i=1;i<=cnt;i++){
         if(i==cur){
@@ -102,17 +103,15 @@ function SwapTab(name,cls_show,cls_hide,cnt,cur) {
         }
     }
 }
-
 function addonlinefile(obj) {
     var strs = $(obj).val() ? '|'+ $(obj).val() :'';
     $('#att-status').html(strs);
 }
-
 function dr_download(obj) {
     $.ajax({
         type: 'POST',
         dataType: 'json',
-        url: '<?php echo APP_PATH.SELF;?>?m=attachment&c=attachments&a=download',
+        url: '<?php echo SELF;?>?m=attachment&c=attachments&a=download',
         data: {module:'<?php echo $this->input->get('module');?>',catid:'<?php echo $this->input->get('catid');?>',args:'<?php echo $args;?>',authkey:'<?php echo $authkey;?>',filename:$('#dr_'+obj).val()},
         success: function(json) {
             if (json.code) {
@@ -129,7 +128,6 @@ function dr_download(obj) {
         }
     });
 }
-
 function set_iframe(id,src){
     $("#"+id).attr("src",src); 
 }
