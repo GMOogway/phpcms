@@ -66,15 +66,12 @@
 </div>
 </form>
 <script language="JavaScript">
-<!--
 function edit(id, name) {
 	artdialog('edit','?m=member&c=member_model&a=edit&modelid='+id,'<?php echo L('edit').L('member_model')?>《'+name+'》',700,500);
 }
-
 function move(id, name) {
 	artdialog('move','?m=member&c=member_model&a=move&modelid='+id,'<?php echo L('move')?>《'+name+'》',700,500);
 }
-
 function check() {
 	if(myform.action == '?m=member&c=member_model&a=delete') {
 		var ids='';
@@ -88,15 +85,6 @@ function check() {
 	}
 	myform.submit();
 }
-
-//修改菜单地址栏
-function _M(menuid) {
-	$.get("?m=admin&c=index&a=public_current_pos&menuid="+menuid, function(data){
-		parent.$("#current_pos").html(data);
-	});
-}
-
-//-->
 </script>
 </div>
 </div>

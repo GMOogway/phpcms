@@ -181,22 +181,6 @@ class index extends admin {
 		dr_admin_msg(1,L('logout_success'),'?m=admin&c=index&a='.SYS_ADMIN_PATH);
 	}
 	
-	//左侧菜单
-	public function public_menu_left() {
-		$menuid = intval($this->input->get('menuid'));
-		$datas = admin::admin_menu($menuid);
-		if ($this->input->get('parentid') && $parentid = intval($this->input->get('parentid')) ? intval($this->input->get('parentid')) : 10) {
-			foreach($datas as $_value) {
-				if($parentid==$_value['id']) {
-					echo '<li id="_M'.$_value['id'].'" class="on top_menu"><a href="javascript:_M('.$_value['id'].',\'?m='.$_value['m'].'&c='.$_value['c'].'&a='.$_value['a'].'\')" hidefocus="true" style="outline:none;">'.L($_value['name']).'</a></li>';
-				} else {
-					echo '<li id="_M'.$_value['id'].'" class="top_menu"><a href="javascript:_M('.$_value['id'].',\'?m='.$_value['m'].'&c='.$_value['c'].'&a='.$_value['a'].'\')"  hidefocus="true" style="outline:none;">'.L($_value['name']).'</a></li>';
-				}  	
-			}
-		} else {
-			include $this->admin_tpl('left');
-		}
-	}
 	public function public_menu() {
 		$currentsite = $this->get_siteinfo(param::get_cookie('siteid'));
 		//$logoInfo['href'] = $currentsite['domain'];
@@ -222,7 +206,9 @@ class index extends admin {
 			$i++;
 		}
 		$menu .= ']}';
-		echo $menu;
+		if (IS_AJAX) {
+			exit($menu);
+		}
 	}
 	
 	//初始化菜单
@@ -337,11 +323,7 @@ class index extends admin {
  		$qqgroup = '551419699';
  		$qq = '297885395';
  		$tel = '17684313488';
-		ob_start();
 		include $this->admin_tpl('main');
-		$data = ob_get_contents();
-		ob_end_clean();
-		echo $data;
 	}
 	// 版本检查
 	public function public_version_cms() {
