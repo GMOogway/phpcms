@@ -1081,6 +1081,24 @@ function dr_html2text($str, $cn = false) {
 
 	return $text;
 }
+/**
+ * 检查目录权限
+ * $dir 目录地址
+ */
+function dr_check_put_path($dir) {
+	if (!$dir) {
+		return 0;
+	} elseif (!is_dir($dir)) {
+		return 0;
+	}
+	$size = file_put_contents($dir.'test.html', 'test');
+	if ($size === false) {
+		return 0;
+	} else {
+		unlink($dir.'test.html');
+		return 1;
+	}
+}
 if (! function_exists('clearhtml')) {
 	/**
 	 * 清除HTML标记
@@ -1467,6 +1485,42 @@ function random($length, $chars = '0123456789') {
 		$hash .= $chars[mt_rand(0, $max)];
 	}
 	return substr(md5($hash), 0, $length);
+}
+
+/**
+ * 能用的随机数生成
+ * @param string $type 类型 alpha/alnum/numeric/nozero/unique/md5/encrypt/sha1
+ * @param int    $len  长度
+ * @return string
+ */
+function build($type = 'alnum', $len = 10) {
+	switch ($type) {
+		case 'alpha':
+		case 'alnum':
+		case 'numeric':
+		case 'nozero':
+			switch ($type) {
+				case 'alpha':
+					$pool = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+					break;
+				case 'alnum':
+					$pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+					break;
+				case 'numeric':
+					$pool = '0123456789';
+					break;
+				case 'nozero':
+					$pool = '123456789';
+					break;
+			}
+			return substr(str_shuffle(str_repeat($pool, ceil($len / strlen($pool)))), 0, $len);
+		case 'unique':
+		case 'md5':
+			return md5(uniqid(mt_rand()));
+		case 'encrypt':
+		case 'sha1':
+			return sha1(uniqid(mt_rand(), true));
+	}
 }
 
 /**

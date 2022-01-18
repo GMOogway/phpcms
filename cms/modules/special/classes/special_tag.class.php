@@ -1,7 +1,6 @@
 <?php
 /**
  * special_tag.class.php 专题标签调用类
- * @author 
  *
  */
 class special_tag {

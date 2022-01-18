@@ -205,7 +205,7 @@ class admin {
 	
 	final public static function return_siteid() {
 		$sites = pc_base::load_app_class('sites', 'admin');
-		$siteid = explode(',',$sites->get_role_siteid((is_array(dr_string2array($_SESSION['roleid'])) ? dr_string2array($_SESSION['roleid']) : $_SESSION['roleid'])));
+		$siteid = explode(',',$sites->get_role_siteid($_SESSION['roleid']));
 		return current($siteid);
 	}
 	/**

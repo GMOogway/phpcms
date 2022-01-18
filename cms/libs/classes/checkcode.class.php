@@ -1,7 +1,6 @@
 <?php
 /**
  * 生成验证码
- * @author chenzhouyu
  * 类用法
  * $checkcode = new checkcode();
  * $checkcode->show_code();

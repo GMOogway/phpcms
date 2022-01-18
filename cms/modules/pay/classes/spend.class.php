@@ -2,7 +2,6 @@
 defined('IN_CMS') or exit('No permission resources.'); 
 /**
  * 消费记录类使用说明
- * @author chenzhouyu
  * 
  * 直接使用pc_base::load_app_class('spend', 'pay', 0);
  * 进行加载。

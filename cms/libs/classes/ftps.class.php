@@ -1,7 +1,6 @@
 <?php
 /**
  * FTP操作类
- * @author chenzhouyu
  *
  *使用$ftps = pc_base::load_sys_class('ftps');进行初始化。
  *首先通过　$ftps->connect($host,$username,$password,$post,$pasv,$ssl,$timeout);进行FTP服务器连接。

@@ -44,11 +44,11 @@
                                 <th class="col2">所需状态</th>
                                 <th class="col3">当前状态</th>
                             </tr>
-                            <?php foreach ($filesmod as $filemod) {?>
+                            <?php foreach ($path as $name=>$code) {?>
                             <tr>
-                                <td><?php echo $filemod['file']?></td>
+                                <td><?php echo str_replace(array(CMS_PATH, '\\'), array('', '/'), $name) ? str_replace(array(CMS_PATH, '\\'), array('', '/'), $name) : '网站根目录';?></td>
                                 <td><span><img src="images/correct.png" />&nbsp;可写</span></td>
-                                <td><?php echo $filemod['is_writable'] ? '<span><img src="images/correct.png" />&nbsp;可写</span>' : '<font class="red"><img src="images/error.png" />&nbsp;不可写</font>'?></td>
+                                <td><?php echo $code ? '<span><img src="images/correct.png" />&nbsp;可写</span>' : '<font class="red"><img src="images/error.png" />&nbsp;不可写</font>'?></td>
                             </tr>
                             <?php } ?>
                         </table>

@@ -1,8 +1,6 @@
 <?php
 /**
  * 站点对外接口
- * @author chenzhouyu
- *
  */
 class sites {
 	//数据库连接
@@ -19,7 +17,7 @@ class sites {
 	 * 获取站点列表
 	 * @param string $roleid 角色ID 留空为获取所有站点列表
 	 */
-	public function get_list($roleid=array()) {
+	public function get_list($roleid='') {
 		if(empty($roleid)) {
 			if ($data = getcache('sitelist', 'commons')) {
 				return $data;
@@ -28,7 +26,7 @@ class sites {
 				return $this->db->select();
 			}			
 		} else {
-			$site_arr = $this->get_role_siteid((is_array(dr_string2array($roleid)) ? dr_string2array($roleid) : $roleid));
+			$site_arr = $this->get_role_siteid($roleid);
 			$sql = "`siteid` in($site_arr)";
 			return $this->db->select($sql);
 		}
@@ -114,7 +112,8 @@ class sites {
 			}
 		} else {
 			$sitelist = getcache('role_siteid', 'commons');
-			if (is_array($roleid)) {
+			if (is_array(dr_string2array($roleid))) {
+				$roleid = dr_string2array($roleid);
 				$sitelist = $sitelist[$roleid[0]];
 			} else {
 				$sitelist = $sitelist[$roleid];

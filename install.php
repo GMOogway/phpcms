@@ -4,6 +4,7 @@
  * 安装程序
  */
 
+defined('IN_CMS') or exit('No permission resources.');
 header('Content-Type: text/html; charset=utf-8');
 error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING ^ E_STRICT);
 ini_set('display_errors', 1);
@@ -18,16 +19,6 @@ if (version_compare(PHP_VERSION, $max) >= 0) {
     $rt[] = echo_msg('PHP版本过高，请在".$max."以下的环境使用，当前".PHP_VERSION."，高版本需要等待官方对CMS版本的更新升级！~');
 } elseif (version_compare(PHP_VERSION, $min) < 0) {
     $rt[] = echo_msg('PHP版本要求：7.1及以上，当前'.PHP_VERSION);
-}
-
-if (preg_match('/[\x{4e00}-\x{9fff}]+/u', WEBPATH)) {
-    $rt[] = echo_msg('WEB目录['.WEBPATH.']不允许出现中文或全角符号');
-}
-
-foreach (array(' ', '[', ']') as $t) {
-    if (strpos(WEBPATH, $t) !== false) {
-        $rt[] = echo_msg('WEB目录'.WEBPATH.'不允许出现'.($t ? $t : '空格').'符号');
-    }
 }
 
 // GD库判断
@@ -107,6 +98,8 @@ foreach (array(
              WRITEPATH.'caches_attach/',
              WRITEPATH.'caches_commons/',
              WRITEPATH.'caches_content/',
+			 WRITEPATH.'caches_data/',
+			 WRITEPATH.'caches_file/',
              WRITEPATH.'caches_linkage/',
              WRITEPATH.'caches_member/',
              WRITEPATH.'caches_model/',
@@ -118,6 +111,7 @@ foreach (array(
              WRITEPATH.'sessions/',
              WEBPATH.'html/',
              WEBPATH.'uploadfile/',
+             WEBPATH,
          ) as $t) {
     if (!dr_check_put_path($t)) {
         $rt[] = echo_msg('目录（'.$t.'）不可写');
@@ -137,22 +131,6 @@ if ($rt) {
     }
 } else {
     header('Location: install', TRUE, 0);
-}
-
-// 检查目录权限
-function dr_check_put_path($dir) {
-    if (!$dir) {
-        return 0;
-    } elseif (!is_dir($dir)) {
-        return 0;
-    }
-    $size = @file_put_contents($dir.'test.html', 'test');
-    if ($size === false) {
-        return 0;
-    } else {
-        @unlink($dir.'test.html');
-        return 1;
-    }
 }
 
 /**
@@ -177,6 +155,7 @@ function safe_replace_path($path) {
                  WRITEPATH.'sessions/',
                  WEBPATH.'html/',
                  WEBPATH.'uploadfile/',
+                 WEBPATH,
              ) as $t) {
         $path = str_replace('（'.$t.'）', '', $path);
     }

@@ -1,7 +1,6 @@
 <?php
 /**
  * 中文分词操作类
- * @author wangcanjia
  *
  */
 class segment {

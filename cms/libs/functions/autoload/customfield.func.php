@@ -4,7 +4,6 @@ defined('IN_CMS') or exit('No permission resources.');
  * 获取自定义变量
  *
  * @name   customField
- * @author frontLon
  * 
  * @example $allFields = customField(); //使用当前站点的变量（必须）
  * @example $cm = $allFields[$siteid]; //使用当前站点的变量（可选）

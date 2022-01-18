@@ -1,8 +1,6 @@
 <?php
 /**
  * 评论操作类
- * @author chenzhouyu
- *
  */
 class comment {
 	//数据库连接

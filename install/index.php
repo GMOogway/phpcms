@@ -170,49 +170,38 @@ switch($step)
 		$selectmod = isset($selectmod) ? ','.implode(',', $selectmod) : '';
 		$needmod = 'admin';
 		
-		$chmod_file = 'chmod.txt';
 		$selectmod = $needmod.$selectmod;
-		$selectmods = explode(',',$selectmod);
-		$files = file(CMS_PATH."install/".$chmod_file);		
-		foreach($files as $_k => $file) {
-			$file = str_replace('*','',$file);
-			$file = trim($file);
-			if(is_dir(CMS_PATH.$file)) {
-				$is_dir = '1';
-				$cname = '目录';
-				//继续检查子目录权限，新加函数
-				$write_able = writable_check(CMS_PATH.$file);
-			} else {
-				$is_dir = '0';
-				$cname = '文件';
+		$error = 0;
+		// 目录权限检查
+		$dir = array(
+			CACHE_PATH,
+			CACHE_PATH.'configs/',
+			CACHE_PATH.'caches_admin/',
+			CACHE_PATH.'caches_attach/',
+			CACHE_PATH.'caches_commons/',
+			CACHE_PATH.'caches_content/',
+			CACHE_PATH.'caches_data/',
+			CACHE_PATH.'caches_file/',
+			CACHE_PATH.'caches_linkage/',
+			CACHE_PATH.'caches_member/',
+			CACHE_PATH.'caches_model/',
+			CACHE_PATH.'caches_scan/',
+			CACHE_PATH.'caches_template/',
+			CACHE_PATH.'caches_tpl_data/',
+			CACHE_PATH.'poster_js/',
+			CACHE_PATH.'vote_js/',
+			CACHE_PATH.'sessions/',
+			CMS_PATH.'html/',
+			CMS_PATH.'uploadfile/',
+			CMS_PATH,
+		);
+		$path = array();
+		foreach ($dir as $t) {
+			$path[$t] = dr_check_put_path($t);
+			if (!$path[$t]) {
+				$error = 1;
 			}
-			//新的判断
-			if($is_dir =='0' && is_writable(CMS_PATH.$file)) {
-				$is_writable = 1;
-			} elseif($is_dir =='1' && dir_writeable(CMS_PATH.$file)){
-				$is_writable = $write_able;
-				if($is_writable=='0'){
-					$no_writablefile = 1;
-				}
-			}else{
-				$is_writable = 0;
- 				$no_writablefile = 1;
-  			}
-			
-			$filesmod[$_k]['file'] = $file;
-			$filesmod[$_k]['is_dir'] = $is_dir;
-			$filesmod[$_k]['cname'] = $cname;			
-			$filesmod[$_k]['is_writable'] = $is_writable;
 		}
-		if(dir_writeable(CMS_PATH)) {
-			$is_writable = 1;
-		} else {
-			$is_writable = 0;
-		}
-		$filesmod[$_k+1]['file'] = '网站根目录';
-		$filesmod[$_k+1]['is_dir'] = '1';
-		$filesmod[$_k+1]['cname'] = '目录';			
-		$filesmod[$_k+1]['is_writable'] = $is_writable;						
 		include CMS_PATH."install/step/step".$step.".tpl.php";
 		break;
 
@@ -428,24 +417,18 @@ switch($step)
 }
 
 function format_textarea($string) {
-	$chars = 'utf-8';
-	if(CHARSET=='gbk') $chars = 'gb2312';
-	return nl2br(str_replace(' ', '&nbsp;', htmlspecialchars($string,ENT_COMPAT,$chars)));
+	return nl2br(str_replace(' ', '&nbsp;', htmlspecialchars($string,ENT_COMPAT,'utf-8')));
 }
 
 function _sql_execute($mysqli,$sql,$r_tablepre = '',$s_tablepre = 'cms_') {
 	$sqls = _sql_split($mysqli,$sql,$r_tablepre,$s_tablepre);
 	if(is_array($sqls)){
-		foreach($sqls as $sql)
-		{
-			if(trim($sql) != '')
-			{
+		foreach($sqls as $sql){
+			if(trim($sql) != ''){
 				mysqli_query($mysqli,$sql);
 			}
 		}
-	}
-	else
-	{
+	}else{
 		mysqli_query($mysqli,$sqls);
 	}
 	return true;
@@ -464,58 +447,17 @@ function _sql_split($mysqli,$sql,$r_tablepre = '',$s_tablepre='cms_') {
 	$num = 0;
 	$queriesarray = explode(";\n", trim($sql));
 	unset($sql);
-	foreach($queriesarray as $query)
-	{
+	foreach($queriesarray as $query){
 		$ret[$num] = '';
 		$queries = explode("\n", trim($query));
 		$queries = array_filter($queries);
-		foreach($queries as $query)
-		{
+		foreach($queries as $query){
 			$str1 = substr($query, 0, 1);
 			if($str1 != '#' && $str1 != '-') $ret[$num] .= $query;
 		}
 		$num++;
 	}
 	return $ret;
-}
-
-function dir_writeable($dir) {
-	$writeable = 0;
-	if(is_dir($dir)) {  
-		if($fp = @fopen("$dir/chkdir.test", 'w')) {
-			@fclose($fp);  
-			@unlink("$dir/chkdir.test"); 
-			$writeable = 1;
-		} else {
-			$writeable = 0; 
-		} 
-	}
-	return $writeable;
-}
-
-function writable_check($path){
-	$dir = '';
-	$is_writable = '1';
-	if(!is_dir($path)){return '0';}
-	$dir = opendir($path);
- 	while (($file = readdir($dir)) !== false){
-		if($file!='.' && $file!='..'){
-			if(is_file($path.'/'.$file)){
-				//是文件判断是否可写，不可写直接返回0，不向下继续
-				if(!is_writable($path.'/'.$file)){
- 					return '0';
-				}
-			}else{
-				//目录，循环此函数,先判断此目录是否可写，不可写直接返回0 ，可写再判断子目录是否可写 
-				$dir_wrt = dir_writeable($path.'/'.$file);
-				if($dir_wrt=='0'){
-					return '0';
-				}
-   				$is_writable = writable_check($path.'/'.$file);
- 			}
-		}
- 	}
-	return $is_writable;
 }
 
 function set_config($config,$cfgfile) {
@@ -540,40 +482,5 @@ function remote_file_exists($url_file){
 		return false;
 	}
 	return true;
-}
-/**
- * 能用的随机数生成
- * @param string $type 类型 alpha/alnum/numeric/nozero/unique/md5/encrypt/sha1
- * @param int    $len  长度
- * @return string
- */
-function build($type = 'alnum', $len = 10) {
-	switch ($type) {
-		case 'alpha':
-		case 'alnum':
-		case 'numeric':
-		case 'nozero':
-			switch ($type) {
-				case 'alpha':
-					$pool = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-					break;
-				case 'alnum':
-					$pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-					break;
-				case 'numeric':
-					$pool = '0123456789';
-					break;
-				case 'nozero':
-					$pool = '123456789';
-					break;
-			}
-			return substr(str_shuffle(str_repeat($pool, ceil($len / strlen($pool)))), 0, $len);
-		case 'unique':
-		case 'md5':
-			return md5(uniqid(mt_rand()));
-		case 'encrypt':
-		case 'sha1':
-			return sha1(uniqid(mt_rand(), true));
-	}
 }
 ?>

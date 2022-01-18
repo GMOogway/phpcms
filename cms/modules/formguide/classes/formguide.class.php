@@ -6,8 +6,6 @@ define('FORMGUIDE_MODEL_PATH',PC_PATH.'modules'.DIRECTORY_SEPARATOR.'formguide'.
 define('FORMGUIDE_CACHE_MODEL_PATH',CMS_PATH.'caches'.DIRECTORY_SEPARATOR.'caches_model'.DIRECTORY_SEPARATOR.'caches_data'.DIRECTORY_SEPARATOR);
 /**
  * 更新form表单模型类
- * @author 
- *
  */
 class formguide {
 
