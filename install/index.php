@@ -46,8 +46,6 @@ if (is_file(CACHE_PATH.'configs/version.php')) {
 	define('CMS_RELEASE', '');
 }
 
-$mode = 0777;
-
 switch($step)
 {
 	case '1': //安装许可协议
