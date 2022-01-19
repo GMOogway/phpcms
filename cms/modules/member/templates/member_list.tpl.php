@@ -101,7 +101,7 @@ jQuery(document).ready(function() {
 		if(is_array($list_field)){
 		foreach($list_field as $i=>$tt){
 		?>
-		<td<?php if($tt['center']){?> style="text-align:center"<?php }?>><?php echo dr_list_function($tt['func'], $v[$i], $param, $v, $field[$i], $i);?></td>
+		<td<?php if($tt['center']){?> class="table-center" style="text-align:center"<?php }?>><?php echo dr_list_function($tt['func'], $v[$i], $param, $v, $field[$i], $i);?></td>
 		<?php }}?>
 		<td>
 			<a href="javascript:edit(<?php echo $v['userid']?>, '<?php echo $v['username']?>')" class="btn btn-xs green"><?php echo L('edit')?></a>

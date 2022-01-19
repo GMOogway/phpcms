@@ -58,22 +58,13 @@ class content_model extends model {
  			$systeminfo['inputtime'] = date('Y-m-d H:i:s');
 		}
 
-		// 不更新时间
-		//if ($id && $this->input->post('no_time')) {
-			//if(!$this->input->post('old_updatetime')) {
-				//$systeminfo['updatetime'] = SYS_TIME;
-			//} else {
-				//$systeminfo['updatetime'] = strtotime($this->input->post('old_updatetime'));
-			//}
-		//} else {
-			if($data['updatetime'] && !is_numeric($data['updatetime'])) {
-				$systeminfo['updatetime'] = strtotime($data['updatetime']);
-			} elseif(!$data['updatetime']) {
-				$systeminfo['updatetime'] = SYS_TIME;
-			} else {
-				$systeminfo['updatetime'] = $data['updatetime'];
-			}
-		//}
+		if($data['updatetime'] && !is_numeric($data['updatetime'])) {
+			$systeminfo['updatetime'] = strtotime($data['updatetime']);
+		} elseif(!$data['updatetime']) {
+			$systeminfo['updatetime'] = SYS_TIME;
+		} else {
+			$systeminfo['updatetime'] = $data['updatetime'];
+		}
 		$inputinfo['system']['username'] = $systeminfo['username'] = $data['username'] ? $data['username'] : param::get_cookie('admin_username');
 		$systeminfo['sysadd'] = IS_ADMIN ? 1 : 0;
 		
@@ -478,6 +469,9 @@ class content_model extends model {
 		$sitemodel_datas = $this->sitemodel_db->select(array('type'=>0,'disabled'=>0));
 		$model_array = array();
 		foreach ($sitemodel_datas as $r) {
+			$this->set_model($r['modelid']);
+			$total = $this->count();
+			$this->sitemodel_db->update(array('items'=>$total),array('modelid'=>$r['modelid']));
 			$model_array[$r['modelid']] = $r;
 		}
 		setcache('model', $model_array, 'commons');

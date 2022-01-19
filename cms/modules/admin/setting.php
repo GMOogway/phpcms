@@ -94,6 +94,7 @@ class setting extends admin {
 			$setconfig['admin_log'] = intval($setconfig['admin_log']);
 			$setconfig['errorlog'] = intval($setconfig['errorlog']);
 			$setconfig['gzip'] = intval($setconfig['gzip']);
+			$setconfig['tpl_edit'] = intval($setconfig['tpl_edit']);
 			if(!$setconfig['baidu_skey'] || !$setconfig['baidu_arcretkey']) {
 				delcache('baidu_api_access_token','commons');
 			}

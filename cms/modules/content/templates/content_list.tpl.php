@@ -115,7 +115,7 @@ if(is_array($datas)){
     if(is_array($list_field)){
     foreach($list_field as $i=>$tt){
     ?>
-    <td<?php if($tt['center']){?> style="text-align:center"<?php }?>><?php echo dr_list_function($tt['func'], $r[$i], $param, $r, $field[$i], $i);?></td>
+    <td<?php if($tt['center']){?> class="table-center" style="text-align:center"<?php }?>><?php echo dr_list_function($tt['func'], $r[$i], $param, $r, $field[$i], $i);?></td>
     <?php }}?>
     <td align="center"><a href="<?php
         $sitelist = getcache('sitelist','commons');

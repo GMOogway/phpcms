@@ -41,7 +41,7 @@ if(is_array($datas)){
 	if(is_array($list_field)){
 	foreach($list_field as $i=>$tt){
 	?>
-	<td<?php if($tt['center']){?> style="text-align:center"<?php }?>><?php echo dr_list_function($tt['func'], $d[$i], $param, $d, $field[$i], $i);?></td>
+	<td<?php if($tt['center']){?> class="table-center" style="text-align:center"<?php }?>><?php echo dr_list_function($tt['func'], $d[$i], $param, $d, $field[$i], $i);?></td>
 	<?php }}?>
 	<td align="center"><a class="btn btn-xs blue" href="javascript:check('<?php echo $formid?>', '<?php echo $d['dataid']?>', '<?php echo safe_replace($d['username'])?>');void(0);"><?php echo L('check')?></a><a class="btn btn-xs red" href="###" onClick="Dialog.confirm('<?php echo L('confirm', array('message' => L('delete')))?>',function(){redirect('?m=formguide&c=formguide_info&a=public_delete&formid=<?php echo $formid?>&did=<?php echo $d['dataid']?>&pc_hash='+pc_hash);});"><?php echo L('del')?></a></td>
 	</tr>
