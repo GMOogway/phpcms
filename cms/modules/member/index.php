@@ -49,33 +49,33 @@ class index extends foreground {
 		$sms_setting = $sms_setting_arr[$siteid];
 		
 		header("Cache-control: private");
-		if(isset($_POST['dosubmit'])) {
+		if($this->input->post('dosubmit')) {
 			if($member_setting['enablcodecheck']=='1'){//开启验证码
 				if (empty($_SESSION['connectid']) && !check_captcha('code')) {
 					showmessage(L('code_error'));
 				}
 			}
-			
+			$info = $this->input->post('info');
 			$userinfo = array();
 			$userinfo['encrypt'] = create_randomstr(10);
 
-			$userinfo['username'] = $_POST['username'];
+			$userinfo['username'] = $this->input->post('username');
 			$rt = $this->check_username($userinfo['username']);
 			if (!$rt['code']) {
 				showmessage($rt['msg'], HTTP_REFERER);
 			}
-			$userinfo['nickname'] = (isset($_POST['nickname']) && is_username($_POST['nickname'])) ? $_POST['nickname'] : '';
+			$userinfo['nickname'] = ($this->input->post('nickname') && is_username($this->input->post('nickname'))) ? $this->input->post('nickname') : '';
 			
-			$userinfo['email'] = (isset($_POST['email']) && is_email($_POST['email'])) ? $_POST['email'] : exit('0');
-			$userinfo['password'] = dr_safe_password($_POST['password']);
+			$userinfo['email'] = ($this->input->post('email') && is_email($this->input->post('email'))) ? $this->input->post('email') : exit('0');
+			$userinfo['password'] = dr_safe_password($this->input->post('password'));
 			$rt = $this->check_password($userinfo['password'], $userinfo['username']);
 			if (!$rt['code']) {
 				showmessage($rt['msg'], HTTP_REFERER);
 			}
 			
-			$userinfo['email'] = (isset($_POST['email']) && is_email($_POST['email'])) ? $_POST['email'] : exit('0');
+			$userinfo['email'] = ($this->input->post('email') && is_email($this->input->post('email'))) ? $this->input->post('email') : exit('0');
 
-			$userinfo['modelid'] = isset($_POST['modelid']) ? intval($_POST['modelid']) : 10;
+			$userinfo['modelid'] = $this->input->post('modelid') ? intval($this->input->post('modelid')) : 10;
 			$userinfo['regip'] = ip_info();
 			$userinfo['point'] = $member_setting['defualtpoint'] ? $member_setting['defualtpoint'] : 0;
 			$userinfo['amount'] = $member_setting['defualtamount'] ? $member_setting['defualtamount'] : 0;
@@ -87,7 +87,7 @@ class index extends foreground {
 			
 			if($member_setting['mobile_checktype']=='1'){
 				//取用户手机号
-				$mobile_verify = $this->input->post('mobile_verify') ? intval($_POST['mobile_verify']) : '';
+				$mobile_verify = $this->input->post('mobile_verify') ? intval($this->input->post('mobile_verify')) : '';
 				if($mobile_verify=='') showmessage('请提供正确的手机验证码！', HTTP_REFERER);
  				$sms_report_db = pc_base::load_model('sms_report_model');
 				$posttime = SYS_TIME-360;
@@ -100,7 +100,7 @@ class index extends foreground {
 				}
  			}elseif($member_setting['mobile_checktype']=='2'){
 				//获取验证码，直接通过POST，取mobile值
-				$userinfo['mobile'] = isset($_POST['mobile']) ? $_POST['mobile'] : '';
+				$userinfo['mobile'] = $this->input->post('mobile') ? $this->input->post('mobile') : '';
 			} 
 			if($userinfo['mobile']!=""){
 				if(!preg_match('/^1([0-9]{10})$/',$userinfo['mobile'])) {
@@ -112,7 +112,7 @@ class index extends foreground {
 			if($member_setting['enablemailcheck']) {	//是否需要邮件验证
 				$userinfo['groupid'] = 7;
 			} elseif($member_setting['registerverify']) {	//是否需要管理员审核
-				$modelinfo_str = $userinfo['modelinfo'] = isset($_POST['info']) ? array2string(array_map("safe_replace", new_html_special_chars($_POST['info']))) : '';
+				$modelinfo_str = $userinfo['modelinfo'] = $info ? array2string(array_map("safe_replace", new_html_special_chars($info))) : '';
 				$this->verify_db = pc_base::load_model('member_verify_model');
 				unset($userinfo['lastdate'],$userinfo['connectid'],$userinfo['from']);
 				$userinfo['modelinfo'] = $modelinfo_str;
@@ -122,7 +122,7 @@ class index extends foreground {
 				//查看当前模型是否开启了短信验证功能
 				$model_field_cache = getcache('model_field_'.$userinfo['modelid'],'model');
 				if(isset($model_field_cache['mobile']) && $model_field_cache['mobile']['disabled']==0) {
-					$mobile = $this->input->post('info')['mobile'];
+					$mobile = $info['mobile'];
 					if(!preg_match('/^1([0-9]{10})$/',$mobile)) showmessage(L('input_right_mobile'));
 					$sms_report_db = pc_base::load_model('sms_report_model');
 					$posttime = SYS_TIME-300;
@@ -137,10 +137,10 @@ class index extends foreground {
 				require_once CACHE_MODEL_PATH.'member_input.class.php';
 		        require_once CACHE_MODEL_PATH.'member_update.class.php';
 				$member_input = new member_input($userinfo['modelid']);
-				if ($_POST['info']) {
-					$_POST['info'] = array_map('new_html_special_chars',$_POST['info']);
+				if ($info) {
+					$info = array_map('new_html_special_chars',$info);
 				}
-				$user_model_info = $member_input->get($_POST['info']);				        				
+				$user_model_info = $member_input->get($info);				        				
 			}
 			$password = $userinfo['password'];
 			$userinfo['password'] = password($userinfo['password'], $userinfo['encrypt']);
@@ -190,8 +190,8 @@ class index extends foreground {
 			}
 			showmessage(L('register').L('success'), 'index.php?m=member&c=index');
 		} else {
-			if(!empty($_GET['verify'])) {
-				$code = isset($_GET['code']) ? trim($_GET['code']) : showmessage(L('operation_failure'), 'index.php?m=member&c=index');
+			if(!empty($this->input->get('verify'))) {
+				$code = $this->input->get('code') ? trim($this->input->get('code')) : showmessage(L('operation_failure'), 'index.php?m=member&c=index');
 				$code_res = sys_auth($code, 'DECODE', get_auth_key('email'));
 				$code_arr = explode('|', $code_res);
 				$userid = isset($code_arr[0]) ? $code_arr[0] : '';
@@ -199,8 +199,7 @@ class index extends foreground {
 
 				$this->db->update(array('groupid'=>$this->_get_usergroup_bypoint()), array('userid'=>$userid));
 				showmessage(L('operation_success'), 'index.php?m=member&c=index');
-			} elseif(!empty($_GET['protocol'])) {
-
+			} elseif(!empty($this->input->get('protocol'))) {
 				include template('member', 'protocol');
 			} else {
 				//过滤非当前站点会员模型
@@ -216,7 +215,7 @@ class index extends foreground {
 				//是否开启选择会员模型选项
 				if($member_setting['choosemodel']) {
 					$first_model = array_pop(array_reverse($modellist));
-					$modelid = isset($_GET['modelid']) && in_array($_GET['modelid'], array_keys($modellist)) ? intval($_GET['modelid']) : $first_model['modelid'];
+					$modelid = $this->input->get('modelid') && in_array($this->input->get('modelid'), array_keys($modellist)) ? intval($this->input->get('modelid')) : $first_model['modelid'];
 
 					if(array_key_exists($modelid, $modellist)) {
 						//获取会员模型表单
@@ -372,7 +371,7 @@ class index extends foreground {
 		$upload = new upload('member',0,$siteid);
 		$upload->set_userid($this->memberinfo['userid']);
 		header("content-type:text/html;charset=utf-8");
-		$base64_img = trim($_POST['img']);
+		$base64_img = trim($this->input->post('img'));
 		if(preg_match('/^(data:\s*image\/(\w+);base64,)/i', $base64_img, $result)){
 			$type = $result[2];
 			if(in_array($type,array('pjpeg','jpeg','jpg','gif','bmp','png'))){
@@ -416,9 +415,9 @@ class index extends foreground {
 	
 	public function account_manage_info() {
 		$member_setting = getcache('member_setting');
-		if(isset($_POST['dosubmit'])) {
+		if($this->input->post('dosubmit')) {
 			//更新用户昵称
-			$nickname = isset($_POST['nickname']) && is_username(trim($_POST['nickname'])) ? trim($_POST['nickname']) : '';
+			$nickname = $this->input->post('nickname') && is_username(trim($this->input->post('nickname'))) ? trim($this->input->post('nickname')) : '';
 			$nickname = safe_replace($nickname);
 			if($nickname) {
 				$this->db->update(array('nickname'=>$nickname), array('userid'=>$this->memberinfo['userid']));
@@ -428,7 +427,7 @@ class index extends foreground {
 			require_once CACHE_MODEL_PATH.'member_input.class.php';
 			require_once CACHE_MODEL_PATH.'member_update.class.php';
 			$member_input = new member_input($this->memberinfo['modelid']);
-			$modelinfo = $member_input->get($_POST['info']);
+			$modelinfo = $member_input->get($info);
 
 			$this->db->set_model($this->memberinfo['modelid']);
 			$membermodelinfo = $this->db->get_one(array('userid'=>$this->memberinfo['userid']));
@@ -473,26 +472,27 @@ class index extends foreground {
 	}
 	
 	public function account_manage_password() {
-		if(isset($_POST['dosubmit'])) {
+		if($this->input->post('dosubmit')) {
+			$info = $this->input->post('info');
 			$updateinfo = array();
-			if($this->memberinfo['password'] != password($_POST['info']['password'], $this->memberinfo['encrypt'])) {
+			if($this->memberinfo['password'] != password($info['password'], $this->memberinfo['encrypt'])) {
 				showmessage(L('old_password_incorrect'), HTTP_REFERER);
 			}
-			if ($_POST['info']['password'] == $_POST['info']['newpassword']) {
+			if ($info['password'] == $info['newpassword']) {
                 showmessage(L('原密码不能与新密码相同'));
             }
 			//修改会员邮箱
-			if($this->memberinfo['email'] != $this->input->post('info')['email'] && is_email($_POST['info']['email'])) {
-				$email = $this->input->post('info')['email'];
-				$updateinfo['email'] = $this->input->post('info')['email'];
+			if($this->memberinfo['email'] != $info['email'] && is_email($info['email'])) {
+				$email = $info['email'];
+				$updateinfo['email'] = $info['email'];
 			} else {
 				$email = '';
 			}
-			$rt = $this->check_password($_POST['info']['newpassword'], $this->memberinfo['username']);
+			$rt = $this->check_password($info['newpassword'], $this->memberinfo['username']);
 			if (!$rt['code']) {
 				showmessage($rt['msg'], HTTP_REFERER);
 			}
-			$newpassword = password($_POST['info']['newpassword'], $this->memberinfo['encrypt']);
+			$newpassword = password($info['newpassword'], $this->memberinfo['encrypt']);
 			$updateinfo['password'] = $newpassword;
 			
 			if($this->db->update($updateinfo, array('userid'=>$this->memberinfo['userid']))) {
@@ -510,11 +510,11 @@ class index extends foreground {
 	//更换手机号码
 	public function account_change_mobile() {
 		$memberinfo = $this->memberinfo;
-		if(isset($_POST['dosubmit'])) {
-			if(!is_password($_POST['password'])) {
+		if($this->input->post('dosubmit')) {
+			if(!is_password($this->input->post('password'))) {
 				showmessage(L('password_format_incorrect'), HTTP_REFERER);
 			}
-			if($this->memberinfo['password'] != password($_POST['password'], $this->memberinfo['encrypt'])) {
+			if($this->memberinfo['password'] != password($this->input->post('password'), $this->memberinfo['encrypt'])) {
 				showmessage(L('old_password_incorrect'));
 			}
 			$sms_report_db = pc_base::load_model('sms_report_model');
@@ -542,7 +542,7 @@ class index extends foreground {
 
 	//选择密码找回方式
 	public function public_get_password_type() {
-		$siteid = intval($_GET['siteid']);
+		$siteid = intval($this->input->get('siteid'));
 		include template('member', 'get_password_type');
 	}
 
@@ -552,19 +552,19 @@ class index extends foreground {
 		if(empty($grouplist[$memberinfo['groupid']]['allowupgrade'])) {
 			showmessage(L('deny_upgrade'), HTTP_REFERER);
 		}
-		if(isset($_POST['upgrade_type']) && intval($_POST['upgrade_type']) < 0) {
+		if($this->input->post('upgrade_type') && intval($this->input->post('upgrade_type')) < 0) {
 			showmessage(L('operation_failure'), HTTP_REFERER);
 		}
 
-		if(isset($_POST['upgrade_date']) && intval($_POST['upgrade_date']) < 0) {
+		if($this->input->post('upgrade_date') && intval($this->input->post('upgrade_date')) < 0) {
 			showmessage(L('operation_failure'), HTTP_REFERER);
 		}
 
-		if(isset($_POST['dosubmit'])) {
-			$groupid = isset($_POST['groupid']) ? intval($_POST['groupid']) : showmessage(L('operation_failure'), HTTP_REFERER);
+		if($this->input->post('dosubmit')) {
+			$groupid = $this->input->post('groupid') ? intval($this->input->post('groupid')) : showmessage(L('operation_failure'), HTTP_REFERER);
 			
-			$upgrade_type = isset($_POST['upgrade_type']) ? intval($_POST['upgrade_type']) : showmessage(L('operation_failure'), HTTP_REFERER);
-			$upgrade_date = !empty($_POST['upgrade_date']) ? intval($_POST['upgrade_date']) : showmessage(L('operation_failure'), HTTP_REFERER);
+			$upgrade_type = $this->input->post('upgrade_type') ? intval($this->input->post('upgrade_type')) : showmessage(L('operation_failure'), HTTP_REFERER);
+			$upgrade_date = !empty($this->input->post('upgrade_date')) ? intval($this->input->post('upgrade_date')) : showmessage(L('operation_failure'), HTTP_REFERER);
 
 			//消费类型，包年、包月、包日，价格
 			$typearr = array($grouplist[$groupid]['price_y'], $grouplist[$groupid]['price_m'], $grouplist[$groupid]['price_d']);
@@ -587,7 +587,7 @@ class index extends foreground {
 			}
 
 		} else {
-			$groupid = isset($_GET['groupid']) ? intval($_GET['groupid']) : '';
+			$groupid = $this->input->get('groupid') ? intval($this->input->get('groupid')) : '';
 			//获取头像数组
 			$avatar = get_memberavatar($this->memberinfo['userid']);
 			$memberinfo['groupname'] = $grouplist[$memberinfo['groupid']]['name'];
@@ -614,21 +614,21 @@ class index extends foreground {
  		$sms_setting_arr = getcache('sms','sms');
 		$sms_setting = $sms_setting_arr[$siteid];
 		
-		if(isset($_POST['dosubmit'])) {
+		if($this->input->post('dosubmit')) {
 			if($member_setting['enablcodecheck']=='1'){//开启验证码
 				if (empty($_SESSION['connectid']) && !check_captcha('code')) {
 					showmessage(L('code_error'));
 				}
 			}
 			
-			$username = $_POST['username'];
+			$username = $this->input->post('username');
 			foreground::member_login_before($username);
 			$rt = $this->check_username($username);
 			if (!$rt['code']) {
 				showmessage($rt['msg'], HTTP_REFERER);
 			}
-			$password = isset($_POST['password']) && trim($_POST['password']) ? urldecode(trim($_POST['password'])) : showmessage(L('password_empty'), HTTP_REFERER);
-			is_badword($_POST['password'])==false ? trim($_POST['password']) : showmessage(L('password_format_incorrect'), HTTP_REFERER);
+			$password = $this->input->post('password') && trim($this->input->post('password')) ? urldecode(trim($this->input->post('password'))) : showmessage(L('password_empty'), HTTP_REFERER);
+			is_badword($this->input->post('password'))==false ? trim($this->input->post('password')) : showmessage(L('password_format_incorrect'), HTTP_REFERER);
 			
 			//密码错误剩余重试次数
 			$this->times_db = pc_base::load_model('times_model');
@@ -729,11 +729,11 @@ class index extends foreground {
 			if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
 				$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME, 1);
 			}
-			$forward = isset($_POST['forward']) && !empty($_POST['forward']) ? urldecode($_POST['forward']) : 'index.php?m=member&c=index';
+			$forward = $this->input->post('forward') && !empty($this->input->post('forward')) ? urldecode($this->input->post('forward')) : 'index.php?m=member&c=index';
 			showmessage(L('login_success'), $forward);
 		} else {
 			$setting = pc_base::load_config('system');
-			$forward = isset($_GET['forward']) && trim($_GET['forward']) ? urlencode($_GET['forward']) : '';
+			$forward = $this->input->get('forward') && trim($this->input->get('forward')) ? urlencode($this->input->get('forward')) : '';
 			
 			$siteid = $this->input->request('siteid') && trim($this->input->request('siteid')) ? intval($this->input->request('siteid')) : 1;
 			$siteinfo = siteinfo($siteid);
@@ -792,7 +792,7 @@ class index extends foreground {
 		//snda退出
 		if($setting['snda_enable'] && param::get_cookie('_from')=='snda') {
 			param::set_cookie('_from', '');
-			$forward = isset($_GET['forward']) && trim($_GET['forward']) ? urlencode($_GET['forward']) : '';
+			$forward = $this->input->get('forward') && trim($this->input->get('forward')) ? urlencode($this->input->get('forward')) : '';
 			$logouturl = 'https://cas.sdo.com/cas/logout?url='.urlencode(APP_PATH.'index.php?m=member&c=index&a=logout&forward='.$forward);
 			header('Location: '.$logouturl);
 		} else {
@@ -807,7 +807,7 @@ class index extends foreground {
 			param::set_cookie('_groupid', '');
 			param::set_cookie('_nickname', '');
 			
-			$forward = isset($_GET['forward']) && trim($_GET['forward']) ? $_GET['forward'] : 'index.php?m=member&c=index&a=login';
+			$forward = $this->input->get('forward') && trim($this->input->get('forward')) ? $this->input->get('forward') : 'index.php?m=member&c=index&a=login';
 			showmessage(L('logout_success'), $forward);
 		}
 	}
@@ -819,11 +819,11 @@ class index extends foreground {
 	public function favorite() {
 		$this->favorite_db = pc_base::load_model('favorite_model');
 		$memberinfo = $this->memberinfo;
-		if(isset($_GET['id']) && trim($_GET['id'])) {
-			$this->favorite_db->delete(array('userid'=>$memberinfo['userid'], 'id'=>intval($_GET['id'])));
+		if($this->input->get('id') && trim($this->input->get('id'))) {
+			$this->favorite_db->delete(array('userid'=>$memberinfo['userid'], 'id'=>intval($this->input->get('id'))));
 			showmessage(L('operation_success'), HTTP_REFERER);
 		} else {
-			$page = isset($_GET['page']) && trim($_GET['page']) ? intval($_GET['page']) : 1;
+			$page = $this->input->get('page') && trim($this->input->get('page')) ? intval($this->input->get('page')) : 1;
 			$favoritelist = $this->favorite_db->listinfo(array('userid'=>$memberinfo['userid']), 'id DESC', $page, 10);
 			$pages = $this->favorite_db->pages;
 
@@ -837,13 +837,13 @@ class index extends foreground {
 	public function friend() {
 		$memberinfo = $this->memberinfo;
 		$this->friend_db = pc_base::load_model('friend_model');
-		if(isset($_GET['friendid'])) {
-			$this->friend_db->delete(array('userid'=>$memberinfo['userid'], 'friendid'=>intval($_GET['friendid'])));
+		if($this->input->get('friendid')) {
+			$this->friend_db->delete(array('userid'=>$memberinfo['userid'], 'friendid'=>intval($this->input->get('friendid'))));
 			showmessage(L('operation_success'), HTTP_REFERER);
 		} else {
 	
 			//我的好友列表userid
-			$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+			$page = $this->input->get('page') ? intval($this->input->get('page')) : 1;
 			$friendids = $this->friend_db->listinfo(array('userid'=>$memberinfo['userid']), '', $page, 10);
 			$pages = $this->friend_db->pages;
 			foreach($friendids as $k=>$v) {
@@ -862,12 +862,12 @@ class index extends foreground {
 		//加载用户模块配置
 		$member_setting = getcache('member_setting');
 		
-		if(isset($_POST['dosubmit'])) {
+		if($this->input->post('dosubmit')) {
 			//本系统积分兑换数
-			$fromvalue = intval($_POST['fromvalue']);
+			$fromvalue = intval($this->input->post('fromvalue'));
 			//本系统积分类型
 			$from = $this->input->post('from');
-			$toappid_to = explode('_', $_POST['to']);
+			$toappid_to = explode('_', $this->input->post('to'));
 			//目标系统appid
 			$toappid = $toappid_to[0];
 			//目标系统积分类型
@@ -883,11 +883,11 @@ class index extends foreground {
 			} else {
 				showmessage(L('credit_setting_error'), HTTP_REFERER);
 			}
-		} elseif(isset($_POST['buy'])) {
-			if(!is_numeric($_POST['money']) || $_POST['money'] < 0) {
+		} elseif($this->input->post('buy')) {
+			if(!is_numeric($this->input->post('money')) || $this->input->post('money') < 0) {
 				showmessage(L('money_error'), HTTP_REFERER);
 			} else {
-				$money = intval($_POST['money']);
+				$money = intval($this->input->post('money'));
 			}
 			
 			if($memberinfo['amount'] < $money) {
@@ -911,7 +911,7 @@ class index extends foreground {
 	public function mini() {
 		$_username = param::get_cookie('_username');
 		$_userid = param::get_cookie('_userid');
-		$siteid = isset($_GET['siteid']) ? intval($_GET['siteid']) : '';
+		$siteid = $this->input->get('siteid') ? intval($this->input->get('siteid')) : '';
 		//定义站点id常量
 		if (!defined('SITEID')) {
 		   define('SITEID', $siteid);
@@ -972,7 +972,7 @@ class index extends foreground {
 	 * @return $status {-4：用户名禁止注册;-1:用户名已经存在 ;1:成功}
 	 */
 	public function public_checkname_ajax() {
-		$username = isset($_GET['username']) && trim($_GET['username']) && is_username(trim($_GET['username'])) ? trim($_GET['username']) : exit(0);
+		$username = $this->input->get('username') && trim($this->input->get('username')) && is_username(trim($this->input->get('username'))) ? trim($this->input->get('username')) : exit(0);
 		if(CHARSET != 'utf-8') {
 			$username = iconv('utf-8', CHARSET, $username);
 		}
@@ -992,7 +992,7 @@ class index extends foreground {
 	 * @return $status {0:已存在;1:成功}
 	 */
 	public function public_checknickname_ajax() {
-		$nickname = isset($_GET['nickname']) && trim($_GET['nickname']) && is_username(trim($_GET['nickname'])) ? trim($_GET['nickname']) : exit('0');
+		$nickname = $this->input->get('nickname') && trim($this->input->get('nickname')) && is_username(trim($this->input->get('nickname'))) ? trim($this->input->get('nickname')) : exit('0');
 		if(CHARSET != 'utf-8') {
 			$nickname = iconv('utf-8', CHARSET, $nickname);
 		} 
@@ -1001,8 +1001,8 @@ class index extends foreground {
 		if($this->verify_db->get_one(array('nickname'=>$nickname))) {
 			exit('0');
 		}
-		if(isset($_GET['userid'])) {
-			$userid = intval($_GET['userid']);
+		if($this->input->get('userid')) {
+			$userid = intval($this->input->get('userid'));
 			//如果是会员修改，而且NICKNAME和原来优质一致返回1，否则返回0
 			$info = get_memberinfo($userid);
 			if($info['nickname'] == $this->db->escape($nickname)){//未改变
@@ -1031,12 +1031,12 @@ class index extends foreground {
 	 * @return $status {-1:email已经存在 ;-5:邮箱禁止注册;1:成功}
 	 */
 	public function public_checkemail_ajax() {
-		$email = isset($_GET['email']) && trim($_GET['email']) && is_email(trim($_GET['email']))  ? trim($_GET['email']) : exit(0);
+		$email = $this->input->get('email') && trim($this->input->get('email')) && is_email(trim($this->input->get('email')))  ? trim($this->input->get('email')) : exit(0);
 		if (!$this->check_email($email)) {
 			exit('-1');
 		}
-		if(isset($_GET['userid'])) {
-			$userid = intval($_GET['userid']);
+		if($this->input->get('userid')) {
+			$userid = intval($this->input->get('userid'));
 			//如果是会员修改，而且NICKNAME和原来优质一致返回1，否则返回0
 			$info = get_memberinfo($userid);
 			if($info['email'] == $email){//未改变
@@ -1058,7 +1058,7 @@ class index extends foreground {
 		pc_base::load_app_class('saetv2.ex', '' ,0);
 		$this->_session_start();
 		$member_setting = getcache('member_setting');
-		if(isset($_GET['callback']) && trim($_GET['callback'])) {
+		if($this->input->get('callback') && trim($this->input->get('callback'))) {
 			$o = new SaeTOAuthV2(WB_AKEY, WB_SKEY);
 			if ($this->input->request('code')) {
 				$keys = array();
@@ -1116,7 +1116,7 @@ class index extends foreground {
 					if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
 						$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME, 1);
 					}
-					$forward = isset($_GET['forward']) && !empty($_GET['forward']) ? $_GET['forward'] : 'index.php?m=member&c=index';
+					$forward = $this->input->get('forward') && !empty($this->input->get('forward')) ? $this->input->get('forward') : 'index.php?m=member&c=index';
 					showmessage(L('login_success'), $forward);
 					
 				} else {
@@ -1194,7 +1194,7 @@ class index extends foreground {
 		pc_base::load_app_class('OauthSDK', '' ,0);
 		$this->_session_start();
 		$member_setting = getcache('member_setting');
-		if(isset($_GET['callback']) && trim($_GET['callback'])) {
+		if($this->input->get('callback') && trim($this->input->get('callback'))) {
 			$o = new OauthSDK(SNDA_AKEY, SNDA_SKEY, SNDA_CALLBACK);
 			$code = $this->input->request('code');
 			$accesstoken = $o->getAccessToken($code);
@@ -1238,7 +1238,7 @@ class index extends foreground {
 						$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME, 1);
 					}
 					param::set_cookie('_from', 'snda');
-					$forward = isset($_GET['forward']) && !empty($_GET['forward']) ? $_GET['forward'] : 'index.php?m=member&c=index';
+					$forward = $this->input->get('forward') && !empty($this->input->get('forward')) ? $this->input->get('forward') : 'index.php?m=member&c=index';
 					showmessage(L('login_success'), $forward);
 				} else {				
 					//弹出绑定注册页面
@@ -1272,7 +1272,7 @@ class index extends foreground {
 		$info = new qqapi($appid,$appkey,$callback);
 		$this->_session_start();
 		$member_setting = getcache('member_setting');
-		if(!isset($_GET['code'])){
+		if(!$this->input->get('code')){
 			$info->redirect_to_login();
 		}else{
 			$code = $this->input->get('code');
@@ -1302,7 +1302,7 @@ class index extends foreground {
 					if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
 						$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME, 1);
 					}
-					$forward = isset($_GET['forward']) && !empty($_GET['forward']) ? $_GET['forward'] : 'index.php?m=member&c=index';
+					$forward = $this->input->get('forward') && !empty($this->input->get('forward')) ? $this->input->get('forward') : 'index.php?m=member&c=index';
 					showmessage(L('login_success'), $forward);
 				}else{	
 					//未存在于数据库中，跳去完善资料页面。页面预置用户名（QQ返回是UTF8编码，如有需要进行转码）
@@ -1329,7 +1329,7 @@ class index extends foreground {
 		pc_base::load_app_class('qqoauth', '' ,0);
 		$this->_session_start();
 		$member_setting = getcache('member_setting');
-		if(isset($_GET['callback']) && trim($_GET['callback'])) {
+		if($this->input->get('callback') && trim($this->input->get('callback'))) {
 			$o = new WeiboOAuth(QQ_AKEY, QQ_SKEY, $_SESSION['keys']['oauth_token'], $_SESSION['keys']['oauth_token_secret']);
 			$_SESSION['last_key'] = $o->getAccessToken($this->input->request('oauth_verifier'));
 			
@@ -1365,7 +1365,7 @@ class index extends foreground {
 						$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME, 1);
 					}
 					param::set_cookie('_from', 'snda');
-					$forward = isset($_GET['forward']) && !empty($_GET['forward']) ? $_GET['forward'] : 'index.php?m=member&c=index';
+					$forward = $this->input->get('forward') && !empty($this->input->get('forward')) ? $this->input->get('forward') : 'index.php?m=member&c=index';
 					showmessage(L('login_success'), $forward);
 				} else {				
 					//弹出绑定注册页面
@@ -1459,15 +1459,15 @@ class index extends foreground {
 		}
 		$this->_session_start();
 		$member_setting = getcache('member_setting');
-		if(isset($_POST['dosubmit'])) {
+		if($this->input->post('dosubmit')) {
 			if (!check_captcha('code')) {
 				showmessage(L('code_error'), HTTP_REFERER);
 			}
 			//邮箱验证
-			if(!is_email($_POST['email'])){
+			if(!is_email($this->input->post('email'))){
 				showmessage(L('email_error'), HTTP_REFERER);
 			}
-			$memberinfo = $this->db->get_one(array('email'=>$_POST['email']));
+			$memberinfo = $this->db->get_one(array('email'=>$this->input->post('email')));
 			if(!empty($memberinfo['email'])) {
 				$email = $memberinfo['email'];
 			} else {
@@ -1489,9 +1489,9 @@ class index extends foreground {
 			}
 			$this->email->send($email, L('forgetpassword'), $message, $sitename);
 			showmessage(L('operation_success'), 'index.php?m=member&c=index&a=login');
-		} elseif($_GET['code']) {
+		} elseif($this->input->get('code')) {
 			$hour = date('y-m-d h', SYS_TIME);
-			$code = sys_auth($_GET['code'], 'DECODE', get_auth_key('email'));
+			$code = sys_auth($this->input->get('code'), 'DECODE', get_auth_key('email'));
 			$code = explode("\t", $code);
 
 			if(is_array($code) && is_numeric($code[0]) && date('y-m-d h', SYS_TIME) == date('y-m-d h', $code[1])) {
@@ -1590,20 +1590,20 @@ class index extends foreground {
 	 * 手机短信方式找回密码
 	 */
 	public function public_forget_password_mobile () {
-		$step = intval($_POST['step']);
+		$step = intval($this->input->post('step'));
 		$step = max($step,1);
 		$this->_session_start();
 		
-		if(isset($_POST['dosubmit']) && $step==2) {
+		if($this->input->post('dosubmit') && $step==2) {
 		//处理提交申请，以手机号为准
 			if (!check_captcha('code')) {
 				showmessage(L('code_error'), HTTP_REFERER);
 			}
 			//验证
-			if(!is_username($_POST['username'])){
+			if(!is_username($this->input->post('username'))){
 				showmessage(L('username_format_incorrect'), HTTP_REFERER);
 			}
-			$username = safe_replace($_POST['username']);
+			$username = safe_replace($this->input->post('username'));
 
 			$r = $this->db->get_one(array('username'=>$username),'userid,mobile');
 			if($r['mobile']=='') {
@@ -1614,7 +1614,7 @@ class index extends foreground {
 			$_SESSION['mobile'] = $r['mobile'];
 			$_SESSION['userid'] = $r['userid'];
 			include template('member', 'forget_password_mobile');
-		} elseif(isset($_POST['dosubmit']) && $step==3) {
+		} elseif($this->input->post('dosubmit') && $step==3) {
 			$sms_report_db = pc_base::load_model('sms_report_model');
 			$mobile_verify = $this->input->post('mobile_verify');
 			$mobile = $_SESSION['mobile'];
@@ -1654,20 +1654,20 @@ class index extends foreground {
 	}
 	//通过用户名找回密码
 	public function public_forget_password_username() {
-		$step = intval($_POST['step']);
+		$step = intval($this->input->post('step'));
 		$step = max($step,1);
 		$this->_session_start();
 		
-		if(isset($_POST['dosubmit']) && $step==2) {
+		if($this->input->post('dosubmit') && $step==2) {
 		//处理提交申请，以手机号为准
 			if (!check_captcha('code')) {
 				showmessage(L('code_error'), HTTP_REFERER);
 			}
 			//验证
-			if(!is_username($_POST['username'])){
+			if(!is_username($this->input->post('username'))){
 				showmessage(L('username_format_incorrect'), HTTP_REFERER);
 			}
-			$username = safe_replace($_POST['username']);
+			$username = safe_replace($this->input->post('username'));
 
 			$r = $this->db->get_one(array('username'=>$username),'userid,email');
 			if($r['email']=='') {
@@ -1681,7 +1681,7 @@ class index extends foreground {
 			$_SESSION['emc_times']=0;
 			$email_arr = explode('@',$r['email']);
 			include template('member', 'forget_password_username');
-		} elseif(isset($_POST['dosubmit']) && $step==3) {
+		} elseif($this->input->post('dosubmit') && $step==3) {
 			$sms_report_db = pc_base::load_model('sms_report_model');
 			$mobile_verify = $this->input->post('mobile_verify');
 			$email = $_SESSION['email'];
@@ -1691,7 +1691,7 @@ class index extends foreground {
 					showmessage("验证次数超过5次,验证码失效，请重新获取邮箱验证码！",HTTP_REFERER,3000);
 				}
 				$_SESSION['emc_times'] = $_SESSION['emc_times']-1;
-				if($_SESSION['emc']!='' && $_POST['email_verify']==$_SESSION['emc']) {
+				if($_SESSION['emc']!='' && $this->input->post('email_verify')==$_SESSION['emc']) {
 					
 					$userid = $_SESSION['userid'];
 					$updateinfo = array();
