@@ -176,6 +176,7 @@ function creat_url($action) {
 function visualization($html, $style = '', $dir = '', $file = '') {
 	$change = "<link rel=\"stylesheet\" type=\"text/css\" href=\"".CSS_PATH."admin_visualization.css\" />
 		<script language=\"javascript\" type=\"text/javascript\" src=\"".JS_PATH."Dialog/main.js\"></script>
+		<script language=\"javascript\" type=\"text/javascript\" src=\"".JS_PATH."admin_common.js\"></script>
 		<script type='text/javascript'>
 		var pc_hash = '".dr_get_csrf_token()."';
 		$(function(){

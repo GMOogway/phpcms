@@ -200,7 +200,6 @@ class block_admin extends admin {
 	}
 	
 	public function public_visualization() {
-		echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
 		$catid = isset($_GET['catid']) && intval($_GET['catid']) ? intval($_GET['catid']) : 0;
 		$type = isset($_GET['type']) && trim($_GET['type']) ? trim($_GET['type']) : 'list';
 		$siteid = $GLOBALS['siteid'] = $this->get_siteid();

@@ -18,53 +18,65 @@ jQuery(document).ready(function() {
 <style type="text/css">
 body {background: #f5f6f8;}
 </style>
-<div class="page-container" style="margin-bottom: 0px !important;">
+<div class="page-content-white page-container" style="margin-bottom: 0px !important;">
     <div class="page-content-wrapper">
         <div class="page-content page-content3 mybody-nheader main-content  ">
-<div class="note note-danger">
-    <p style='margin-bottom: 10px;'><?php 
-        foreach($datas2 as $r) {
-            echo "<a href=\"?m=content&c=content&a=initall&modelid=".$r['modelid']."&menuid=".$param['menuid']."&pc_hash=".dr_get_csrf_token()."\" class=\"btn btn-sm";
-            if($r['modelid']==$modelid) {echo " green";} else {echo " blue";}
-            if ($r['modelid']==2) {
-                echo "\"><i class=\"fa fa-download\"></i> ".$r['name']."(".$r['items'].")</a>".PHP_EOL;
-            } else if ($r['modelid']==3) {
-                echo "\"><i class=\"fa fa-image\"></i> ".$r['name']."(".$r['items'].")</a>".PHP_EOL;
-            } else {
-                echo "\"><i class=\"fa fa-list\"></i> ".$r['name']."(".$r['items'].")</a>".PHP_EOL;
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li class="dropdown"> <a href="javascript:;" class="on"> <i class="fa fa-gears"></i>  <?php echo L('模型');?></a> <a class="dropdown-toggle on" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="false"><i class="fa fa-angle-double-down"></i></a>
+            <ul class="dropdown-menu">
+            <?php 
+            foreach($datas2 as $r) {
+                echo "<li><a href=\"?m=content&c=content&a=initall&modelid=".$r['modelid']."&menuid=".$param['menuid']."&pc_hash=".dr_get_csrf_token()."\" class=\"";
+                if($r['modelid']==$modelid) {echo "on";}
+                if ($r['modelid']==2) {
+                    echo "\"><i class=\"fa fa-download\"></i> ".$r['name']."(".$r['items'].")</a></li>".PHP_EOL;
+                } else if ($r['modelid']==3) {
+                    echo "\"><i class=\"fa fa-image\"></i> ".$r['name']."(".$r['items'].")</a></li>".PHP_EOL;
+                } else {
+                    echo "\"><i class=\"fa fa-list\"></i> ".$r['name']."(".$r['items'].")</a></li>".PHP_EOL;
+                }
             }
-        }
-        ?>
-        <a href="javascript:;" onclick="javascript:$('#searchid').toggle();" class="btn btn-sm yellow">
-            <i class="fa fa-search"></i> <?php echo L('search');?>
-        </a>
-<?php
-echo "</p><p style='margin-bottom: 10px;'>";
-if(is_array($infos)){
-    foreach($infos as $info){
-        $total = $this->db->count(array('status'=>99,'username'=>$info['username']));
-        echo "<a href=\"?m=content&c=content&a=initall&modelid=".$modelid."&menuid=".$param['menuid']."&start_time=&end_time=&posids=&searchtype=2&keyword=".$info['username']."&pc_hash=".dr_get_csrf_token()."\" class=\"btn btn-sm";
-        if($info['username']==$param['keyword'] && !$param['start_time'] && !$param['end_time']) {echo ' green';} else {echo " blue";}
-        echo "\">";
-        echo $info['realname'] ? $info['realname'] : $info['username'];
-        echo "(总".$total.")</a>".PHP_EOL;
-    }
-}
-echo "</p><p>";
-if(is_array($infos)){
-    foreach($infos as $info){
-        $total2 = $this->db->count("status=99 and username='".$info['username']."' and `inputtime` > '".strtotime(date("Ymd", time()))."' and `inputtime` < '".strtotime(date("Ymd", strtotime('+1 day',time())))."'");
-        echo "<a href=\"?m=content&c=content&a=initall&modelid=".$modelid."&menuid=".$param['menuid']."&start_time=".dr_date(SYS_TIME,'Y-m-d')."&end_time=".dr_date(SYS_TIME,'Y-m-d')."&posids=&searchtype=2&keyword=".$info['username']."&pc_hash=".dr_get_csrf_token()."\" class=\"btn btn-sm";
-        if($info['username']==$param['keyword'] && dr_date(SYS_TIME,'Y-m-d')==$param['start_time'] && dr_date(SYS_TIME,'Y-m-d')==$param['end_time']) {echo ' green';} else {echo " blue";}
-        echo "\">";
-        echo $info['realname'] ? $info['realname'] : $info['username'];
-        echo "(今".$total2.")</a>".PHP_EOL;
-    }
-}
-?></p>
+            ?>
+            </ul> <i class="fa fa-circle"></i>
+        </li>
+        <li class="dropdown"> <a href="javascript:;" class="on"> <i class="fa fa-users"></i>  <?php echo L('用户（总）');?></a> <a class="dropdown-toggle on" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="false"><i class="fa fa-angle-double-down"></i></a>
+            <ul class="dropdown-menu">
+            <?php 
+            if(is_array($infos)){
+                foreach($infos as $info){
+                    $total = $this->db->count(array('status'=>99,'username'=>$info['username']));
+                    echo "<li><a href=\"?m=content&c=content&a=initall&modelid=".$modelid."&menuid=".$param['menuid']."&start_time=&end_time=&posids=&searchtype=2&keyword=".$info['username']."&pc_hash=".dr_get_csrf_token()."\" class=\"";
+                    if($info['username']==$param['keyword'] && !$param['start_time'] && !$param['end_time']) {echo ' on';}
+                    echo "\">";
+                    echo $info['realname'] ? $info['realname'] : $info['username'];
+                    echo "(总".$total.")</a></li>".PHP_EOL;
+                }
+            }
+            ?>
+            </ul> <i class="fa fa-circle"></i>
+        </li>
+        <li class="dropdown"> <a href="javascript:;" class="on"> <i class="fa fa-user"></i>  <?php echo L('用户（今）');?></a> <a class="dropdown-toggle on" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="false"><i class="fa fa-angle-double-down"></i></a>
+            <ul class="dropdown-menu">
+            <?php 
+            if(is_array($infos)){
+                foreach($infos as $info){
+                    $total2 = $this->db->count("status=99 and username='".$info['username']."' and `inputtime` > '".strtotime(date("Ymd", time()))."' and `inputtime` < '".strtotime(date("Ymd", strtotime('+1 day',time())))."'");
+                    echo "<li><a href=\"?m=content&c=content&a=initall&modelid=".$modelid."&menuid=".$param['menuid']."&start_time=".dr_date(SYS_TIME,'Y-m-d')."&end_time=".dr_date(SYS_TIME,'Y-m-d')."&posids=&searchtype=2&keyword=".$info['username']."&pc_hash=".dr_get_csrf_token()."\" class=\"";
+                    if($info['username']==$param['keyword'] && dr_date(SYS_TIME,'Y-m-d')==$param['start_time'] && dr_date(SYS_TIME,'Y-m-d')==$param['end_time']) {echo ' on';}
+                    echo "\">";
+                    echo $info['realname'] ? $info['realname'] : $info['username'];
+                    echo "(今".$total2.")</a></li>".PHP_EOL;
+                }
+            }
+            ?>
+            </ul>
+        </li>
+    </ul>
 </div>
+<div class="page-body" style="margin-top: 20px;margin-bottom:30px;padding-top:15px;">
 <div class="right-card-box">
-    <div class="row table-search-tool" id="searchid"<?php if (!$param['search']) {?> style="display:none;"<?php }?>>
+    <div class="row table-search-tool" id="searchid">
         <form name="searchform" action="" method="get" >
         <input type="hidden" value="content" name="m">
         <input type="hidden" value="content" name="c">
@@ -168,6 +180,7 @@ if(is_array($datas)){
     <div class="col-md-12 col-sm-12 text-right"><?php echo $pages?></div>
 </div>
 </form>
+</div>
 </div>
 <script type="text/javascript"> 
 function view_comment(id, name) {

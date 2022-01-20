@@ -540,6 +540,26 @@ class page {
                 .L($this->last_link).'</a>'.$this->last_tag_close;
         }
 
+        if (IS_ADMIN && !defined('IS_HTML')) {
+            $output .= '<li class="input-page"><div class="input-group">
+                    <input type="text" id="dr_pagination_input_pageid" value="'.$this->cur_page.'" class="form-control" placeholder="'.L('页').'">
+                    <span class="input-group-btn">
+                        <button onclick="dr_page_go_url()" class="btn" type="button">'.L('跳转').'</button>
+                    </span>
+                    <script>
+                    function dr_page_go_url() {
+                        var u = "'.$this->base_url.'";
+                        var p = $(\'#dr_pagination_input_pageid\').val();
+                        if (!p || p == \'\') {
+                            dr_tips(0, \''.L('输入页码').'\');
+                            return false;
+                        }
+                        window.location.href= u.replace(/\{page\}/i, p);
+                    }
+                    </script>
+                </div></li>';
+        }
+
         // Kill double slashes. Note: Sometimes we can end up with a double slash
         // in the penultimate link so we'll kill all double slashes.
         $output = preg_replace('#([^:])//+#', '\\1/', $output);
