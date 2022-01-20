@@ -38,6 +38,7 @@ class create_all_html extends admin {
 	* 生成内容页
 	*/
 	public function show() {
+		$show_header = $show_dialog  = true;
 		$modelid = $this->input->get('modelid');
 		$ids = $this->input->get('catids');
 		if ($ids && is_array($ids)) {
@@ -90,6 +91,7 @@ class create_all_html extends admin {
 		if (!dr_html_auth()) {
 			dr_json(0, '权限验证超时，请重新执行生成');
 		}
+		$show_header = $show_dialog  = true;
 		$cache_class = pc_base::load_sys_class('cache');
 		$this->html = pc_base::load_app_class('html');
 		$this->url = pc_base::load_app_class('url');
@@ -172,6 +174,7 @@ class create_all_html extends admin {
 	* 生成栏目页
 	*/
 	public function category() {
+		$show_header = $show_dialog  = true;
 		$cache_class = pc_base::load_sys_class('cache');
 		$ids = $this->input->get('ids');
 		if ($ids && is_array($ids)) {
@@ -215,6 +218,7 @@ class create_all_html extends admin {
 		if (!dr_html_auth()) {
 			dr_json(0, '权限验证超时，请重新执行生成');
 		}
+		$show_header = $show_dialog  = true;
 		$cache_class = pc_base::load_sys_class('cache');
 		$this->html = pc_base::load_app_class('html');
 		$page = max(1, intval($this->input->get('pp')));

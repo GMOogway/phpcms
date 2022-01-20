@@ -112,14 +112,10 @@ class content extends admin {
 			$pc_hash = dr_get_csrf_token();
 			for($i=1;$i<=$workflow_steps;$i++) {
 				if(!cleck_admin($_SESSION['roleid']) && !in_array($i,$admin_privs)) continue;
-				$current = $steps==$i ? ' layui-btn-danger' : '';
-				$r = $this->db->get_one(array('catid'=>$catid,'status'=>$i));
-				$newimg = $r ? '<img src="'.IMG_PATH.'icon/new.png" style="padding-bottom:2px" onclick="window.location.href=\'?m=content&c=content&a=&menuid='.intval($this->input->get('menuid')).'&catid='.$catid.'&steps='.$i.'&pc_hash='.$pc_hash.'\'">' : '';
-				$workflow_menu .= '<a href="?m=content&c=content&a=&menuid='.intval($this->input->get('menuid')).'&catid='.$catid.'&steps='.$i.'&pc_hash='.$pc_hash.'" class="layui-btn layui-btn-sm'.$current.'"><i class="fa fa-check"></i>'.L('workflow_'.$i).$newimg.'</a>';
+				$workflow_menu .= '<li><a href="?m=content&c=content&a=&menuid='.intval($this->input->get('menuid')).'&catid='.$catid.'&steps='.$i.'&pc_hash='.$pc_hash.'"><i class="fa fa-check"></i>'.L('workflow_'.$i).'</a></li>';
 			}
 			if($workflow_menu) {
-				$current = $this->input->get('reject') ? ' layui-btn-danger' : '';
-				$workflow_menu .= '<a href="?m=content&c=content&a=&menuid='.intval($this->input->get('menuid')).'&catid='.$catid.'&pc_hash='.$pc_hash.'&reject=1" class="layui-btn layui-btn-sm'.$current.'"><i class="fa fa-check"></i>'.L('reject').'</a>';
+				$workflow_menu .= '<li><a href="?m=content&c=content&a=&menuid='.intval($this->input->get('menuid')).'&catid='.$catid.'&pc_hash='.$pc_hash.'&reject=1"><i class="fa fa-check"></i>'.L('reject').'</a></li>';
 			}
 			$template = $MODEL['admin_list_template'] ? $MODEL['admin_list_template'] : 'content_list';
 			include $this->admin_tpl($template);

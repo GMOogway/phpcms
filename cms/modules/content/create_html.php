@@ -55,6 +55,7 @@ class create_html extends admin {
 		if (!dr_html_auth(1)) {
 			dr_admin_msg(0, L('/cache/html/ 无法写入文件'));
 		}
+		$show_header = $show_dialog  = true;
 		if($this->input->get('dosubmit')) {
 			$modelid = intval($this->input->get('modelid'));
 			$catids = $this->input->get('catids');
@@ -73,7 +74,6 @@ class create_html extends admin {
 			$todo_url = '?m=content&c=create_html&a=public_show_add&pagesize='.$pagesize.'&modelid='.$modelid.'&catids='.$catids.'&fromdate='.$fromdate.'&todate='.$todate.'&fromid='.$fromid.'&toid='.$toid;
 			include $this->admin_tpl('show_html');
 		} else {
-			$show_header = $show_dialog  = true;
 			$admin_username = param::get_cookie('admin_username');
 			$this->model_db = pc_base::load_model('sitemodel_model');
 			$module = $this->model_db->get_one(array('siteid'=>$this->siteid,'type'=>0,'disabled'=>0),'modelid','modelid');
@@ -102,6 +102,7 @@ class create_html extends admin {
 	}
 	// 断点内容
 	public function public_show_point() {
+		$show_header = $show_dialog  = true;
 		$cache_class = pc_base::load_sys_class('cache');
 		$modelid = intval($this->input->get('modelid'));
 		$catids = $this->input->get('catids');
@@ -163,6 +164,7 @@ class create_html extends admin {
 		if (!dr_html_auth(1)) {
 			dr_admin_msg(0, L('/cache/html/ 无法写入文件'));
 		}
+		$show_header = $show_dialog  = true;
 		if($this->input->get('dosubmit')) {
 			$catids = $this->input->get('catids');
 			if ($catids && is_array($catids)) {
@@ -174,7 +176,6 @@ class create_html extends admin {
 			$todo_url = '?m=content&c=create_html&a=public_category_add&maxsize='.$maxsize.'&catids='.$catids;
 			include $this->admin_tpl('show_html');
 		} else {
-			$show_header = $show_dialog  = true;
 			$admin_username = param::get_cookie('admin_username');
 			$modelid = $this->input->get('modelid') ? intval($this->input->get('modelid')) : 0;
 			
@@ -201,6 +202,7 @@ class create_html extends admin {
 	}
 	// 断点生成栏目
 	public function public_category_point() {
+		$show_header = $show_dialog  = true;
 		$cache_class = pc_base::load_sys_class('cache');
 		$name = 'category-html-file';
 		$page = $cache_class->get_auth_data($name.'-error'); // 设置断点
@@ -260,6 +262,7 @@ class create_html extends admin {
 	}
 	//生成首页
 	public function public_index() {
+		$show_header = $show_dialog  = true;
 		$this->site_db = pc_base::load_model('site_model');
 		$data = $this->site_db->get_one(array('siteid'=>$this->siteid));
 		$ishtml = $data['ishtml'];
@@ -417,6 +420,7 @@ class create_html extends admin {
 		if (!dr_html_auth()) {
 			dr_json(0, '权限验证超时，请重新执行生成');
 		}
+		$show_header = $show_dialog  = true;
 		$cache_class = pc_base::load_sys_class('cache');
 		$this->html = pc_base::load_app_class('html');
 		$page = max(1, intval($this->input->get('pp')));
@@ -470,6 +474,7 @@ class create_html extends admin {
 		if (!dr_html_auth()) {
 			dr_json(0, '权限验证超时，请重新执行生成');
 		}
+		$show_header = $show_dialog  = true;
 		$cache_class = pc_base::load_sys_class('cache');
 		$this->html = pc_base::load_app_class('html');
 		$this->url = pc_base::load_app_class('url');
