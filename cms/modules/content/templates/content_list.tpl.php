@@ -30,7 +30,7 @@ body {background: #f5f6f8;}
                 <?php echo $workflow_menu;?>
                 <?php if($category['ishtml']) {?>
                 <li class="divider"> </li>
-                <li><a href="javascript:;" onclick="dr_bfb('<?php echo L('update_htmls',array('catname'=>$category['catname']));?>', 'myform', '?m=content&c=create_html&a=category&pagesize=30&dosubmit=1&modelid=0&catids[0]=<?php echo $catid;?>&pc_hash=<?php echo dr_get_csrf_token();?>&referer=<?php echo urlencode($_SERVER['QUERY_STRING']);?>')"> <i class="fa fa-html5"></i> <?php echo L('生成栏目');?> </a></li>
+                <li><a href="javascript:;" onclick="dr_bfb('<?php echo L('update_htmls',array('catname'=>$category['catname']));?>', 'myform', '?m=content&c=create_html&a=category&dosubmit=1&modelid=0&catids[0]=<?php echo $catid;?>&pc_hash=<?php echo dr_get_csrf_token();?>&referer=<?php echo urlencode($_SERVER['QUERY_STRING']);?>')"> <i class="fa fa-html5"></i> <?php echo L('生成栏目');?> </a></li>
                 <?php }?>
             </ul> <i class="fa fa-circle"></i>
         </li>
