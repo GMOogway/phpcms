@@ -23,13 +23,13 @@ body {background: #f5f6f8;}
         <div class="page-content page-content3 mybody-nheader main-content  ">
 <div class="page-bar">
     <ul class="page-breadcrumb">
-        <li class="dropdown"> <a href="?m=content&c=content&a=init&catid=<?php echo $catid;?>&pc_hash=<?php echo dr_get_csrf_token();?>" class="on"> <i class="fa fa-check"></i>  <?php echo L('check_passed');?></a> <a class="dropdown-toggle on" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="false"><i class="fa fa-angle-double-down"></i></a>
+        <li class="dropdown"> <a href="?m=content&c=content&a=recycle_init&catid=<?php echo $catid;?>&pc_hash=<?php echo dr_get_csrf_token();?>" class="on"> <i class="fa fa-trash-o"></i>  <?php echo L('recycle');?></a> <a class="dropdown-toggle on" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="false"><i class="fa fa-angle-double-down"></i></a>
             <ul class="dropdown-menu">
                 <li><a href="?m=content&c=content&a=init&catid=<?php echo $catid;?>&pc_hash=<?php echo dr_get_csrf_token();?>"> <i class="fa fa-check"></i> <?php echo L('check_passed');?> </a></li>
                 <li><a href="?m=content&c=content&a=recycle_init&catid=<?php echo $catid;?>&pc_hash=<?php echo dr_get_csrf_token();?>"> <i class="fa fa-trash-o"></i> <?php echo L('recycle');?> </a></li>
             </ul> <i class="fa fa-circle"></i>
         </li>
-        <li> <a href="?m=content&c=content&a=init&catid=<?php echo $catid;?>&pc_hash=<?php echo dr_get_csrf_token();?>" class=""> <i class="fa fa-reply"></i> 返回</a> <i class="fa fa-circle"></i> </li>
+        <li> <a href="?m=content&c=content&a=init&catid=<?php echo $catid;?>&pc_hash=<?php echo dr_get_csrf_token();?>" class=""> <i class="fa fa-reply"></i> <?php echo L('返回');?></a> <i class="fa fa-circle"></i> </li>
         <li> <a href="javascript:;" onclick="javascript:dr_content_submit('?m=content&c=content&a=add&menuid=<?php echo $this->input->get('menuid');?>&catid=<?php echo $catid;?>&pc_hash=<?php echo dr_get_csrf_token();?>','add');"> <i class="fa fa-plus"></i> <?php echo L('add_content');?></a> </li>
     </ul>
 </div>
