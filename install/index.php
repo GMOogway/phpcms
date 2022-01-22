@@ -348,9 +348,11 @@ switch($step)
 			dr_json(0, '后台登录口地址不能使用CMS默认目录名（admin，api，caches，cms，login，html，mobile，statics，uploadfile），请重新设置！');
 		}
 		if (is_numeric($dbname)) {
-			dr_json(0, '数据库名称不能是数字');
+			dr_json(0, '数据库名称（'.$dbname.'）不能是数字');
+		} elseif (is_numeric(substr($dbname, 0, 1))) {
+			dr_json(0, '数据库名称（'.$dbname.'）不能是数字开头');
 		} elseif (strpos($dbname, '.') !== false) {
-			dr_json(0, '数据库名称不能存在.号');
+			dr_json(0, '数据库名称（'.$dbname.'）不能存在.号');
 		}
 		$mysqli = function_exists('mysqli_init') ? mysqli_init() : 0;
 		if (!$mysqli) {
