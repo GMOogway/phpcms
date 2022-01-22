@@ -126,11 +126,18 @@ class admin {
 				$_s = !empty($_value['data']) ? str_replace('=', '', strstr($_value['data'], '=')) : '';
 				$classname = ROUTE_M == $_value['m'] && ROUTE_C == $_value['c'] && ROUTE_A == $_value['a'] && $input->get('s') == $_s ? 'class="on"' : '';
 			}
+			if ($_value['data']) {
+				if (strstr($_value['data'], '&') && substr($_value['data'], 0, 1)=='&') {
+					$_valuedata = $_value['data'];
+				} else {
+					$_valuedata = '&'.$_value['data'];
+				}
+			}
 			if($_value['parentid'] == 0 || $_value['m']=='') continue;
 			if(is_mobile(0)) {
-				$string .= "<li><a href='?m=".$_value['m']."&c=".$_value['c']."&a=".$_value['a']."&menuid=$parentid&pc_hash=$pc_hash".'&'.$_value['data']."' $classname><i class=\"".$_value['icon']."\"></i> ".L($_value['name'])."</a></li><div class=\"dropdown-line\"></div>";
+				$string .= "<li><a href='?m=".$_value['m']."&c=".$_value['c']."&a=".$_value['a'].$_valuedata."&menuid=$parentid&pc_hash=$pc_hash' $classname><i class=\"".$_value['icon']."\"></i> ".L($_value['name'])."</a></li><div class=\"dropdown-line\"></div>";
 			} else {
-				$string .= "<a href='?m=".$_value['m']."&c=".$_value['c']."&a=".$_value['a']."&menuid=$parentid&pc_hash=$pc_hash".'&'.$_value['data']."' $classname><i class=\"".$_value['icon']."\"></i> ".L($_value['name'])."</a><i class=\"fa fa-circle\"></i>";
+				$string .= "<a href='?m=".$_value['m']."&c=".$_value['c']."&a=".$_value['a'].$_valuedata."&menuid=$parentid&pc_hash=$pc_hash' $classname><i class=\"".$_value['icon']."\"></i> ".L($_value['name'])."</a><i class=\"fa fa-circle\"></i>";
 			}
 		}
 		$string = substr($string,0,is_mobile(0) ? -33 : -28);

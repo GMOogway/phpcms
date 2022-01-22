@@ -9,9 +9,10 @@ include $this->admin_tpl('header','admin');?>
 <input type="hidden" name="a" value="createindex">
 <input type="hidden" name="menuid" value="63">
 <input type="hidden" name="dosubmit" value="1">
-<?php echo L('re_index_note');?> 
-<label><input type="text" name="pagesize" value="100" size="5"> <?php echo L('tiao');?></label>
-<label><button type="submit" class="btn green btn-sm onloading" name="submit"> <i class="fa fa-refresh"></i> <?php echo L('confirm_reindex')?></button></label>
+    <?php echo L('re_index_note');?> 
+    <label><input type="text" name="pagesize" value="100" size="5"></label>
+    <label><?php echo L('tiao');?></label>
+    <label><button type="submit" class="btn green btn-sm onloading" name="submit"> <i class="fa fa-refresh"></i> <?php echo L('confirm_reindex')?></button></label>
 </form>
 </div>
 </body>

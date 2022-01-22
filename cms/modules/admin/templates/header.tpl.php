@@ -50,10 +50,12 @@ if(isset($show_dialog)) {?>
 		for(var i=0;i<num;i++) {
 			var href = html_a[i].href;
 			if(href && href.indexOf('javascript:') == -1) {
-				if(href.indexOf('?') != -1) {
-					html_a[i].href = href+'&pc_hash='+pc_hash;
-				} else {
-					html_a[i].href = href+'?pc_hash='+pc_hash;
+				if(href.indexOf('pc_hash') == -1) {
+					if(href.indexOf('?') != -1) {
+						html_a[i].href = href+'&pc_hash='+pc_hash;
+					} else {
+						html_a[i].href = href+'?pc_hash='+pc_hash;
+					}
 				}
 			}
 		}

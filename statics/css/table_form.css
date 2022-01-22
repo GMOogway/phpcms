@@ -18,15 +18,15 @@ a.close-own:hover{background-position: left -46px}
 .common-form div.contentWrap{padding-right:20px}
 .common-form ul li{color:#444; clear:both; vertical-align:middle}
 .common-form ul li span.text{width:60px}
-.common-form .set{border:1px dashed #e0e7ed;zoom:1; background:#f2f7fb; padding:10px; font-size:12px; margin-bottom:10px}
+.common-form .set{border:1px dashed #e0e7ed;zoom:1; background:#f2f7fb; padding:10px; font-size:14px; margin-bottom:10px}
 .common-form .set table td,.common-form .set table th{padding-left:12px}
 .common-form .set table th{font-weight:normal; text-align:left;padding:0 8px}
 .common-form .set table td{ padding:3px 0 3px 5px}
 .common-form .set table td.y-bg{background: url(../images/admin_img/set_y_line.png) repeat-y right top}
-.common-form .set table td input{ background-image:none; height:34px; font-size:12px}
+.common-form .set table td input{background-image:none; height:34px; font-size:14px}
 .input-text,.measure-input,textarea,input.date,input.endDate,.input-focus{width: 100%;height: 34px;padding: 6px 12px;background-color: #fff;border: 1px solid #E4E6EF;color: #3F4254;background-clip: padding-box;border-radius: 4px;-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);-webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;-o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;box-shadow: none!important;outline: 0!important;}
 .input-text:focus,.measure-input:focus,textarea:focus,input.date:focus,input.endDate:focus,.input-focus:focus {border-color: #93a1bb;outline: 0;-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(147,161,187,.6);box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(147,161,187,.6);}
-input.date,input.endDate{background: #fff url(../images/admin_img/input_date.png) no-repeat right 6px; padding-right:18px;font-size:12px;}
+input.date,input.endDate{background: #fff url(../images/admin_img/input_date.png) no-repeat right 6px; padding-right:18px;font-size:14px;}
 textarea{min-height:80px; height:auto; padding: 6px 12px !important; margin:0;display:block;}
 select{vertical-align:middle;height: 34px;margin-right: 5px;padding: 6px 12px;background-color: #fff;border: 1px solid #E4E6EF;color: #3F4254;background-clip: padding-box;border-radius: 4px;-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);-webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;-o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;font-size: 14px;line-height: 1.42857;box-shadow: none!important;outline: 0!important;}
 .input-text[disabled], .input-text[readonly], fieldset[disabled] .input-text, select[disabled] {background-color: #eee;opacity: 1;}
@@ -35,7 +35,7 @@ select{vertical-align:middle;height: 34px;margin-right: 5px;padding: 6px 12px;ba
 .search-form{ margin-bottom:10px}
 
 /*表格表单*/
-.table_form{font-size:12px;background:#fff;}
+.table_form{font-size:14px;background:#fff;}
 .table_form td{padding:8px}
 .table_form th{font-weight:normal; text-align:right;padding:8px; color:#777}
 .table_form td label{ vertical-align:middle}

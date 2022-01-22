@@ -101,7 +101,6 @@ $(function(){
 </tr>
 	</table>
 </fieldset>
-
     <div class="bk15"></div>
 	<input type="hidden"  name="pay_name" value="<?php echo $pay_name?>" />
 	<input type="hidden"  name="pay_id" value=<?php echo $pay_id?> />
@@ -115,7 +114,6 @@ $(function(){
 </body>
 </html>
 <script type="text/javascript">
-
 $(document).ready(function() {
 	$("#paymethod input[type='radio']").click( function () {
 		if($(this).val()== 0){
@@ -137,5 +135,3 @@ function category_load(obj)
 		  });
 }
 </script>
-
-

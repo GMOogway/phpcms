@@ -15,25 +15,31 @@ jQuery(document).ready(function() {
     }
 });
 </script>
-<div class="pad_10">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="right-card-box">
+<div class="row table-search-tool">
 <form name="searchform" action="" method="get" >
 <input type="hidden" value="pay" name="m">
 <input type="hidden" value="spend" name="c">
 <input type="hidden" value="init" name="a">
 <input type="hidden" name="dosubmit" value="1">
 <input type="hidden" value="<?php echo $_GET['menuid']?>" name="menuid">
-<table width="100%" cellspacing="0" class="search-form">
-    <tbody>
-		<tr>
-		<td>
-		<div class="explain-col">
+<div class="col-md-12 col-sm-12">
 		<?php echo  form::select(array('1'=>L('username'), '2'=>L('userid')), $user_type, 'name="user_type"')?>
 		<label><i class="fa fa-caret-right"></i></label>
 		<label><input type="text" value="<?php echo $username?>" class="input-text" name="username"></label>
+</div>
+<div class="col-md-12 col-sm-12">
 		<?php echo form::select(array(''=>L('op'), '1'=>L('username'), '2'=>L('userid')), $op_type, 'name="op_type"')?>
 		<label><i class="fa fa-caret-right"></i></label>
 		<label><input type="text" value="<?php echo $op?>" class="input-text" name="op"></label>
+</div>
+<div class="col-md-12 col-sm-12">
 		<?php echo form::select(array(''=>L('expenditure_patterns'), '1'=>L('money'), '2'=>L('point')), $type, 'name="type"')?>
+</div>
+<div class="col-md-12 col-sm-12">
 		<label><div class="formdate">
             <div class="input-group input-medium date-picker input-daterange">
                 <input type="text" class="form-control" value="<?php echo ($starttime ? format::date($starttime) : '');?>" name="starttime">
@@ -41,13 +47,12 @@ jQuery(document).ready(function() {
                 <input type="text" class="form-control" value="<?php echo ($endtime ? format::date($endtime) : '');?>" name="endtime">
             </div>
         </div></label>
+</div>
+<div class="col-md-12 col-sm-12">
 		<label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('search')?></button></label>
-		</div>
-		</td>
-		</tr>
-    </tbody>
-</table>
+</div>
 </form>
+</div>
 <div class="table-list">
     <table width="100%" cellspacing="0">
         <thead>
@@ -84,8 +89,11 @@ if(is_array($list)){
 <div class="row">
     <div class="col-md-12 col-sm-12 text-right"><?php echo $pages?></div>
 </div>
-</div>
 </form>
+</div>
+</div>
+</div>
+</div>
 </body>
 </html>
 <script type="text/javascript">
