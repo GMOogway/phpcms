@@ -142,13 +142,13 @@ class admin {
 				$url = '?m='.$_value['m'].'&c='.$_value['c'].'&a='.substr($uri, 6).$_valuedata.'&menuid='.$parentid.'&pc_hash='.$pc_hash.'" target="_blank';
 			} elseif (strpos($uri, 'add:') === 0) {
 				list($a, $b, $c) = explode(',', $uri);
-                $w = isset($b) ? (is_numeric($b) ? $b : '\''.$b.'\'') : '';
-                $h = isset($c) ? (is_numeric($c) ? $c : '\''.$c.'\'') : '';
+				$w = isset($b) ? (is_numeric($b) ? $b : '\''.$b.'\'') : '';
+				$h = isset($c) ? (is_numeric($c) ? $c : '\''.$c.'\'') : '';
 				$url = 'javascript:dr_iframe(\''.L($_value['name']).'\', \'' . '?m='.$_value['m'].'&c='.$_value['c'].'&a='.substr($a, 4).$_valuedata.'&menuid='.$parentid.'&pc_hash='.$pc_hash . '\', ' . $w . ', ' . $h . ');';
 			} elseif (strpos($uri, 'show:') === 0) {
 				list($a, $b, $c) = explode(',', $uri);
-                $w = isset($b) ? (is_numeric($b) ? $b : '\''.$b.'\'') : '';
-                $h = isset($c) ? (is_numeric($c) ? $c : '\''.$c.'\'') : '';
+				$w = isset($b) ? (is_numeric($b) ? $b : '\''.$b.'\'') : '';
+				$h = isset($c) ? (is_numeric($c) ? $c : '\''.$c.'\'') : '';
 				$url = 'javascript:dr_iframe_show(\''.L($_value['name']).'\', \'' . '?m='.$_value['m'].'&c='.$_value['c'].'&a='.substr($a, 5).$_valuedata.'&menuid='.$parentid.'&pc_hash='.$pc_hash . '\', ' . $w . ', ' . $h . ');';
 			} elseif (strpos($uri, 'help:') === 0) {
 				if (CI_DEBUG) {
