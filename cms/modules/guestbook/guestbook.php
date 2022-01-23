@@ -76,19 +76,19 @@ class guestbook extends admin {
 	
 	//添加留言板分类
  	public function add_type() {
-		if($this->input->post('dosubmit')) {
+		if(IS_AJAX_POST) {
 			$type = $this->input->post('type');
 			if(empty($type['name'])) {
-				dr_admin_msg(0,L('typename_noempty'),HTTP_REFERER);
+				dr_admin_msg(0,L('typename_noempty'), array('field' => 'name'));
 			}
 			$type['siteid'] = $this->get_siteid(); 
 			$type['module'] = ROUTE_M;
  			$this->db2 = pc_base::load_model('type_model');
 			$typeid = $this->db2->insert($type,true);
 			if(!$typeid) return FALSE;
-			dr_admin_msg(1,L('operation_success'),HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'));
 		} else {
-			$show_validator = $show_scroll = true; 
+			$show_validator = $show_scroll = $show_header = true; 
  			include $this->admin_tpl('guestbook_type_add');
 		}
 
@@ -220,15 +220,15 @@ class guestbook extends admin {
 		$data = $m_db->select(array('module'=>'guestbook'));
 		$setting = string2array($data[0]['setting']);
 		$now_seting = $setting[$siteid]; //当前站点配置
-		if($this->input->post('dosubmit')) {
+		if(IS_AJAX_POST) {
 			//多站点存储配置文件
  			$setting[$siteid] = $this->input->post('setting');
-  			setcache('guestbook', $setting, 'commons');  
+  			setcache('guestbook', $setting, 'commons'); 
 			//更新模型数据库,重设setting 数据. 
   			$m_db = pc_base::load_model('module_model'); //调用模块数据模型
 			$set = array2string($setting);
 			$m_db->update(array('setting'=>$set), array('module'=>ROUTE_M));
-			dr_admin_msg(1,L('setting_updates_successful'), '?m=guestbook&c=guestbook&a=init');
+			dr_json(1,L('setting_updates_successful'), array('url' => '?m=guestbook&c=guestbook&a=init&pc_hash='.dr_get_csrf_token()));
 		} else {
 			@extract($now_seting);
  			include $this->admin_tpl('setting');

@@ -8,53 +8,42 @@ class index extends admin {
 	public function __construct() {
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
+		$this->file = pc_base::load_sys_class('file');
 		$this->db = pc_base::load_model('module_model');
 	}
 	
 	public function init() {
+		$show_header = true;
 		$plugin_menus = array();
 		$info = $this->db->get_one(array('module'=>'sqltoolplus'));
 		extract($info);
-		$plugin_menus[] =array('name'=>$info['name'],'url'=>'init','status'=>'1');
-		$meun_total = count($plugin_menus);
-		$setting = string2array($info['setting']);
-		if(is_array($setting)) {
-			foreach($setting as $m) {
-				$plugin_menus[] = array('name'=>$m['name'],'extend'=>1,'url'=>$m['url']);
-				$mods[] = $m['url'];
-			}
+		$sql_cache = $this->file->get_sql_cache();
+		$tables = array();
+		$table_list = $this->db->query('show table status');
+		foreach ($table_list as $t) {
+			$tables[$t['Name']] = $t;
 		}
-		include $this->admin_tpl('plugin_setting');
+		$model = getcache('model','commons');
+		$model_array=array();
+		foreach($model as $_m) {
+			$db = new sqltoolplus($_m['tablename']);
+			$model_array[$_m['modelid']] = $_m['name'] . '(' . $_m['tablename'] . ')'.($db->is_patitioned()&&($pt=$db->get_patition_info())?'已有分区:每个分区'.$pt['descr'].'条记录':'');
+		}
+		$page = intval($this->input->get('page'));
+		include $this->admin_tpl('sqltoolplus');
 	}
 
 	public function sqlquery() {
-		$plugin_menus = array();
-		$info = $this->db->get_one(array('module'=>'sqltoolplus'));
-		extract($info);
-		$plugin_menus[] =array('name'=>$info['name'],'url'=>'init','status'=>'1');
-		$meun_total = count($plugin_menus);
-		$setting = string2array($info['setting']);
-		if(is_array($setting)) {
-			foreach($setting as $m) {
-				$plugin_menus[] = array('name'=>$m['name'],'extend'=>1,'url'=>$m['url']);
-				$mods[] = $m['url'];
-			}
-		}
-		$database = pc_base :: load_config('database');
-		//echo '<pre>';var_dump(get_class_methods('mysql'));
-		if ($this->input->post('pluginsubmit')) {
-			$pdo_name = $this->input->post('pdo_select');
-			$this -> db_charset = $database[$pdo_name]['charset'];
-			$this -> db_tablepre = $database[$pdo_name]['tablepre'];
-			$this -> db = db_factory :: get_instance($database) -> get_database($pdo_name);
+		if (IS_AJAX_POST) {
+			$database = pc_base::load_config('database');
+			$this -> db_charset = $database['default']['charset'];
+			$this -> db_tablepre = $database['default']['tablepre'];
+			$this -> db = db_factory :: get_instance($database)->get_database('default');
 			$sqls = new_stripslashes($this->input->post('sqls'));
 			$replace = array();
 			$replace[0][] = '{tablepre}';
 			$replace[1][] = $this -> db_tablepre;
 			$sql_data = explode(';SQL_CMS_EOL', trim(str_replace(array(PHP_EOL, chr(13), chr(10)), 'SQL_CMS_EOL', str_replace($replace[0], $replace[1], $sqls))));
-			if ($pdo_name == '') {
-				dr_json(0, L('select_pdo'));
-			}
 			if ($sql_data) {
 				foreach($sql_data as $query){
 					if (!$query) {
@@ -107,41 +96,33 @@ class index extends admin {
 			} else {
 				dr_json(0, L('sql_empty'));
 			}
-		} else {
-			foreach($database as $name => $value) {
-				$pdos[$name] = $value['database'] . '[' . $value['hostname'] . ']';
-			} 
-			include $this->admin_tpl('sqlquery_admin');
-		} 
+		}
 	} 
 
 	public function sqlreplace() {
-		$plugin_menus = array();
-		$info = $this->db->get_one(array('module'=>'sqltoolplus'));
-		extract($info);
-		$plugin_menus[] =array('name'=>$info['name'],'url'=>'init','status'=>'1');
-		$meun_total = count($plugin_menus);
-		$setting = string2array($info['setting']);
-		if(is_array($setting)) {
-			foreach($setting as $m) {
-				$plugin_menus[] = array('name'=>$m['name'],'extend'=>1,'url'=>$m['url']);
-				$mods[] = $m['url'];
+		$database = pc_base::load_config('database');
+		if (IS_AJAX_POST) {
+			$db_table = $this->input->post('db_table');
+			$db_field = dr_safe_replace($this->input->post('db_field'));
+			if (!$db_table) {
+				dr_json(0, L('表名不能为空'));
 			}
-		}
-		$database = pc_base :: load_config('database');
-		if ($this->input->post('pluginsubmit')) {
-			$pdo_name = $this->input->post('pdo_select');
-			$this -> db_charset = $database[$pdo_name]['charset'];
-			$this -> db_tablepre = $database[$pdo_name]['tablepre'];
-			$this -> db = db_factory :: get_instance($database) -> get_database($pdo_name);
+			if (!$db_field) {
+				dr_json(0, L('待替换字段必须填写'));
+			} elseif ($db_field == 'id') {
+				dr_json(0, L('ID主键不支持替换'));
+			}
+			$this -> db_charset = $database['default']['charset'];
+			$this -> db_tablepre = $database['default']['tablepre'];
+			$this -> db = db_factory :: get_instance($database)->get_database('default');
 			if (!strlen($this->input->post('search_rule'))) {
-				dr_admin_msg(0,L('select_where'), HTTP_REFERER);
+				dr_json(0,L('select_where'));
 			} 
-			if (!$this->input->post('db_table') || !preg_match('/^[\w]+$/', $this->input->post('db_table'))) {
-				dr_admin_msg(0,L('select_table'), HTTP_REFERER);
+			if (!$db_table || !preg_match('/^[\w]+$/', $db_table)) {
+				dr_json(0,L('select_table'));
 			} 
-			if (!$this->input->post('db_field') || !preg_match('/^[\w]+$/', $this->input->post('db_field'))) {
-				dr_admin_msg(0,L('select_field'), HTTP_REFERER);
+			if (!$db_field || !preg_match('/^[\w]+$/', $db_field)) {
+				dr_json(0,L('select_field'));
 			} 
 			if ($this->input->post('sql_where')) {
 				$_sql = ' AND ' . new_stripslashes($this->input->post('sql_where'));
@@ -149,21 +130,21 @@ class index extends admin {
 				$_sql = '';
 			} 
 			if ($this->input->post('replace_type') == 2) {
-				$sql = "UPDATE `{$this->input->post('db_table')}` SET `{$this->input->post('db_field')}`=REPLACE(`{$this->input->post('db_field')}`,'{$this->input->post('search_rule')}','{$this->input->post('replace_data')}') WHERE `{$this->input->post('db_field')}` LIKE '%{$this->input->post('search_rule')}%'$_sql;";
+				$sql = "UPDATE `{$db_table}` SET `{$db_field}`=REPLACE(`{$db_field}`,'{$this->input->post('search_rule')}','{$this->input->post('replace_data')}') WHERE `{$db_field}` LIKE '%{$this->input->post('search_rule')}%'$_sql;";
 
 				$handle = $this -> _sql_execute($sql);
 				if ($handle) {
-					dr_admin_msg(1,L('replace_success'), HTTP_REFERER);
+					dr_json(1,L('replace_success'));
 				} else {
-					dr_admin_msg(0,L('replace_failure'), HTTP_REFERER);
+					dr_json(0,L('replace_failure'));
 				} 
 			} else {
 				if (!$this->input->post('db_pr_field') || !preg_match('/^[\w]+$/', $this->input->post('db_pr_field'))) {
-					dr_admin_msg(0,L('select_pr_field'), HTTP_REFERER);
+					dr_json(0,L('select_pr_field'));
 				} 
-				$ck_pr = $this -> db -> get_primary($this->input->post('db_table'));
+				$ck_pr = $this -> db -> get_primary($db_table);
 				if ($ck_pr && $ck_pr != $this->input->post('db_pr_field')) {
-					dr_admin_msg(0,L('select_is_fieldfield') . $ck_pr . L('pleasereselect'), HTTP_REFERER);
+					dr_json(0,L('select_is_fieldfield') . $ck_pr . L('pleasereselect'));
 				} 
 				if ($this->input->post('replace_type') == 1) {
 					$search_rule = str_replace(array('\\\\%', '\\\\_'), array('\\%', '\\_'),$this->input->post('search_rule'));
@@ -172,7 +153,7 @@ class index extends admin {
 					$search_rule = str_replace(array('\\', '\'', '.*?', '.+?'), array('\\\\', '\\\'', '.*', '.+'), $this->input->post('search_rule'));
 					$sql = "REGEXP '{$search_rule}'";
 				} 
-				$sql = "SELECT `{$this->input->post('db_pr_field')}`,`{$this->input->post('db_field')}` FROM `{$this->input->post('db_table')}` WHERE `{$this->input->post('db_field')}` {$sql}$_sql";
+				$sql = "SELECT `{$this->input->post('db_pr_field')}`,`{$db_field}` FROM `{$db_table}` WHERE `{$db_field}` {$sql}$_sql";
 				$handle = $this -> db -> query($sql);
 				$success = $failse = 0;
 				if ($handle) {
@@ -185,52 +166,33 @@ class index extends admin {
 					} 
 					$replace_data = new_stripslashes($this->input->post('replace_data'));
 					while ($r = $this -> db -> fetch_next()) {
-						$preg = preg_replace('/' . $search_rule . '/i', $replace_data, $r[$this->input->post('db_field')]);
-						//var_dump(preg_match('/' . $search_rule . '/i',$r[$this->input->post('db_field')]));exit;
+						$preg = preg_replace('/' . $search_rule . '/i', $replace_data, $r[$db_field]);
 						$preg = new_addslashes($preg);
 						$id = $r[$this->input->post('db_pr_field')];
-						$sql = "UPDATE `{$this->input->post('db_table')}` SET `{$this->input->post('db_field')}`='$preg' WHERE `{$this->input->post('db_pr_field')}`='$id'$_sql;";
+						$sql = "UPDATE `{$db_table}` SET `{$db_field}`='$preg' WHERE `{$this->input->post('db_pr_field')}`='$id'$_sql;";
 						if ($this -> _sql_execute($sql)) {
 							$success++;
 						} else {
 							$failse++;
-						} 
+						}
 						$this -> db -> lastqueryid = $handle;
-					} 
-				} 
-				dr_admin_msg(1,L('replacefinished') . $success . L('replace_successmonths') . $failse . L('months'), HTTP_REFERER);
-			} 
-		} else {
-			foreach($database as $name => $value) {
-				$pdos[$name] = $value['database'] . '[' . $value['hostname'] . ']';
-			} 
-			include $this->admin_tpl('sqlreplace_admin');
-		} 
+					}
+				}
+				dr_json(1,L('replacefinished') . $success . L('replace_successmonths') . $failse . L('months'));
+			}
+		}
 	} 
 
 	public function dbtpatition() {
-		$plugin_menus = array();
-		$info = $this->db->get_one(array('module'=>'sqltoolplus'));
-		extract($info);
-		$plugin_menus[] =array('name'=>$info['name'],'url'=>'init','status'=>'1');
-		$meun_total = count($plugin_menus);
-		$setting = string2array($info['setting']);
-		if(is_array($setting)) {
-			foreach($setting as $m) {
-				$plugin_menus[] = array('name'=>$m['name'],'extend'=>1,'url'=>$m['url']);
-				$mods[] = $m['url'];
-			}
-		}
-		//$database = pc_base :: load_config('database');
-		$model = getcache('model','commons');//var_dump($model);exit;
-		if ($this->input->post('pluginsubmit')) {
+		if (IS_AJAX_POST) {
 			if($this->input->post('modelid')){
+				$model = getcache('model','commons');
 				$modelid = intval($this->input->post('modelid'));
 				$dbtp_range = intval($this->input->post('dbtp_range'));
 				$dbtp_num = intval($this->input->post('dbtp_num'));
-				if(!isset($model[$modelid]))dr_admin_msg(0,L('modelnotexist'), HTTP_REFERER);
-				$m	=&	$model[$modelid];
-				$db =	new sqltoolplus($m['tablename']);
+				if(!isset($model[$modelid]))dr_json(0,L('modelnotexist'));
+				$m =$model[$modelid];
+				$db = new sqltoolplus($m['tablename']);
 				
 				$sql="SHOW VARIABLES LIKE '%partition%';";
 				$handle = $db -> query($sql);
@@ -243,12 +205,12 @@ class index extends admin {
 						}
 					}
 				}
-				if(!$enabled)dr_admin_msg(0,L('unfortunately'), HTTP_REFERER);
+				if(!$enabled)dr_json(0,L('unfortunately'));
 				if(!$db->is_patitioned()){
 					if($dbtp_num<1){
-						$r	=	$db -> get_one('', 'MAX(`id`) AS max');
-						$end=	ceil($r['max']/$dbtp_range);
-					}else{//$end=5;$dbtp_range=30;
+						$r = $db -> get_one('', 'MAX(`id`) AS max');
+						$end = ceil($r['max']/$dbtp_range);
+					}else{
 						$end= $dbtp_num;
 					}
 					$sql="ALTER TABLE `{$db->db_tablepre}{$m['tablename']}` PARTITION BY RANGE (`id`)(";
@@ -261,14 +223,12 @@ class index extends admin {
 					$_sql.=');';
 				}else{
 					$pt=$db -> get_patition_info();
-					//$pt["part"]="p0"  $pt["expr"]="`id`" $pt["descr"]="100000" $pt["table_rows"]="0"
 					$number = preg_replace('|^p|i','',end(explode(',',str_replace(',pmax','',$pt['partitions']))));
 					$db -> query("EXPLAIN PARTITIONS SELECT * FROM `{$db->db_tablepre}{$m['tablename']}` WHERE `id`=(SELECT MAX(`id`) FROM `{$db->db_tablepre}{$m['tablename']}` LIMIT 1)");
-					$r	=	$db->fetch_next();
-					//var_dump($r);var_dump($pt['partitions']);exit($number);
+					$r = $db->fetch_next();
 					
 					if($r['partitions']!='pmax'){
-						dr_admin_msg(0,L('createanew'), HTTP_REFERER,6);
+						dr_json(0,L('createanew'));
 					}
 
 					$sql="ALTER TABLE `{$db->db_tablepre}{$m['tablename']}` REORGANIZE PARTITION pmax INTO (";
@@ -282,21 +242,13 @@ class index extends admin {
 					$_sql.="PARTITION pmax VALUES LESS THAN MAXVALUE";
 					$_sql.=");";
 				}
-				//exit;
 				if($db -> query($sql.$_sql) && $db -> query($sql2.$_sql)){
-					dr_admin_msg(1,L('success'), HTTP_REFERER);
+					dr_json(1,L('success'));
 				}else{
-					dr_admin_msg(0,L('failure'), HTTP_REFERER);
+					dr_json(0,L('failure'));
 				}
 			}
-		} else {
-			$model_array=array();
-			foreach($model as $_m) {
-				$db =	new sqltoolplus($_m['tablename']);
-				$model_array[$_m['modelid']] = $_m['name'] . '(' . $_m['tablename'] . ')'.($db->is_patitioned()&&($pt=$db->get_patition_info())?'已有分区:每个分区'.$pt['descr'].'条记录':'');
-			}
-			include $this->admin_tpl('dbtpatition_admin');
-		} 
+		}
 	}
 	/**
 	 * 执行SQL
@@ -345,68 +297,33 @@ class index extends admin {
 			$num++;
 		} 
 		return($ret);
-	} 
+	}
 
-	public function ajax_get_dbtable() {
-		$name = preg_replace('/[\W]+/', '', $this->input->get('name'));
-		if (empty($name)) $name = 'MM_LOCALHOST';
-		$dbsrc = getcache('dbsource', 'commons');
-		pc_base :: load_model('get_model', 0);
-		$table_list = array();
-		if (!empty($name) && $name != 'MM_LOCALHOST' && isset($dbsrc[$name])) {
-			$get_db = new get_model($dbsrc, $name);
-			$s = $get_db -> list_tables();
-			foreach ($s as $key => $val) {
-				$table_list[$val]['tablename'] = $val;
-			} 
-		} elseif ($name == 'MM_LOCALHOST') {
-			$get_db = new get_model();
-			$r = $get_db -> list_tables();
-			foreach ($r as $key => $val) {
-				$table_list[$val]['tablename'] = $val;
-			} 
-		} 
-		$results = json_encode($table_list);
-		if ($this->input->get('callback')) {
-			echo $this->input->get('callback'), '(', $results, ')';
-		} else {
-			echo $results;
-		} 
-	} 
+	// 联动加载字段
+	public function public_field_index() {
+		$table = dr_safe_replace($this->input->get('table'));
+		$table = str_replace($this->db->db_tablepre, '', $table);
+		if (!$table) {
+			dr_json(0, L('表参数不能为空'));
+		} elseif (!$this->db->table_exists($table)) {
+			dr_json(0, L('表['.$table.']不存在'));
+		}
 
-	public function ajax_get_fields() {
-		$name = preg_replace('/[\W]+/', '', $this->input->get('name'));
-		$table = preg_replace('/[\W]+/', '', $this->input->get('tables'));
-		if (empty($name)) $name = 'MM_LOCALHOST';
-		$dbsrc = getcache('dbsource', 'commons');
-		pc_base :: load_model('get_model', 0);
-		$fields = array();
-		if (!empty($name) && $name != 'MM_LOCALHOST' && isset($dbsrc[$name])) {
-			$get_db = new get_model($dbsrc, $name);
-			$get_db -> sql_query('SHOW COLUMNS FROM `' . $table . '`');
-			while ($d = $get_db -> fetch_next()) {
-				$d['field'] = $d['Field'];
-				$d['Type'] = preg_split('/[\s()]+/', $d['Type']);
-				$d['type'] = $d['Type'][0];
-				$fields[$d['Field']] = $d;
-			} 
-		} elseif ($name == 'MM_LOCALHOST') {
-			$get_db = new get_model();
-			$get_db -> sql_query('SHOW COLUMNS FROM ' . $table);
-			while ($d = $get_db -> fetch_next()) {
-				$d['field'] = $d['Field'];
-				$d['Type'] = preg_split('/[\s()]+/', $d['Type']);
-				$d['type'] = $d['Type'][0];
-				$fields[$d['Field']] = $d;
-			} 
-		} 
-		$results = json_encode($fields);
-		if ($this->input->get('callback')) {
-			echo $this->input->get('callback'), '(', $results, ')';
-		} else {
-			echo $results;
-		} 
-	} 
+		$fields = $this->db->query('SHOW FULL COLUMNS FROM `'.$this->db->db_tablepre.$table.'`');
+		if (!$fields) {
+			dr_json(0, L('表['.$table.']没有可用字段'));
+		}
+
+		$msg = '<select id="db_field" name="db_field" class="form-control">';
+		foreach ($fields as $t) {
+			if ($t['Field'] != 'id') {
+				$msg.= '<option value="'.$t['Field'].'">'.$t['Field'].($t['Comment'] ? '（'.$t['Comment'].'）' : '').'</option>';
+			}
+		}
+		$msg.= '</select>';
+
+		dr_json(1, $msg);
+	}
 }
 
 class sqltoolplus extends model {

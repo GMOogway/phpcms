@@ -6,7 +6,7 @@ $menu_db->insert(array('name'=>'add_guestbook', 'parentid'=>$parentid, 'm'=>'gue
 $menu_db->insert(array('name'=>'edit_guestbook', 'parentid'=>$parentid, 'm'=>'guestbook', 'c'=>'guestbook', 'a'=>'edit', 'data'=>'', 'icon'=>'fa fa-edit', 'listorder'=>0, 'display'=>'0'));
 $menu_db->insert(array('name'=>'delete_guestbook', 'parentid'=>$parentid, 'm'=>'guestbook', 'c'=>'guestbook', 'a'=>'delete', 'data'=>'', 'icon'=>'fa fa-trash-o', 'listorder'=>0, 'display'=>'0'));
 $menu_db->insert(array('name'=>'guestbook_setting', 'parentid'=>$parentid, 'm'=>'guestbook', 'c'=>'guestbook', 'a'=>'setting', 'data'=>'', 'icon'=>'fa fa-cog', 'listorder'=>0, 'display'=>'1'));
-$menu_db->insert(array('name'=>'add_type', 'parentid'=>$parentid, 'm'=>'guestbook', 'c'=>'guestbook', 'a'=>'add_type', 'data'=>'', 'icon'=>'fa fa-plus', 'listorder'=>0, 'display'=>'1'));
+$menu_db->insert(array('name'=>'add_type', 'parentid'=>$parentid, 'm'=>'guestbook', 'c'=>'guestbook', 'a'=>'add:add_type,500,280', 'data'=>'', 'icon'=>'fa fa-plus', 'listorder'=>0, 'display'=>'1'));
 $menu_db->insert(array('name'=>'edit_type', 'parentid'=>$parentid, 'm'=>'guestbook', 'c'=>'guestbook', 'a'=>'edit_type', 'data'=>'', 'icon'=>'fa fa-edit', 'listorder'=>0, 'display'=>'0'));
 $menu_db->insert(array('name'=>'list_type', 'parentid'=>$parentid, 'm'=>'guestbook', 'c'=>'guestbook', 'a'=>'list_type', 'data'=>'', 'icon'=>'fa fa-reorder', 'listorder'=>0, 'display'=>'1'));
 $menu_db->insert(array('name'=>'check_register', 'parentid'=>$parentid, 'm'=>'guestbook', 'c'=>'guestbook', 'a'=>'check_register', 'data'=>'', 'icon'=>'fa fa-check', 'listorder'=>0, 'display'=>'1'));

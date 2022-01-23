@@ -134,10 +134,44 @@ class admin {
 				}
 			}
 			if($_value['parentid'] == 0 || $_value['m']=='') continue;
-			if(is_mobile(0)) {
-				$string .= "<li><a href='?m=".$_value['m']."&c=".$_value['c']."&a=".$_value['a'].$_valuedata."&menuid=$parentid&pc_hash=$pc_hash' $classname><i class=\"".$_value['icon']."\"></i> ".L($_value['name'])."</a></li><div class=\"dropdown-line\"></div>";
+			// 获取URL
+			$uri = $_value['a'];
+			if (strpos($uri, 'ajax:') === 0 || strpos($uri, 'ajax_') === 0) {
+				$url = 'javascript:dr_admin_menu_ajax(\'?m='.$_value['m'].'&c='.$_value['c'].'&a='.substr($uri, 5).$_valuedata.'&menuid='.$parentid.'&pc_hash='.$pc_hash.'\');';
+			} elseif (strpos($uri, 'blank:') === 0) {
+				$url = '?m='.$_value['m'].'&c='.$_value['c'].'&a='.substr($uri, 6).$_valuedata.'&menuid='.$parentid.'&pc_hash='.$pc_hash.'" target="_blank';
+			} elseif (strpos($uri, 'add:') === 0) {
+				list($a, $b, $c) = explode(',', $uri);
+                $w = isset($b) ? (is_numeric($b) ? $b : '\''.$b.'\'') : '';
+                $h = isset($c) ? (is_numeric($c) ? $c : '\''.$c.'\'') : '';
+				$url = 'javascript:dr_iframe(\''.L($_value['name']).'\', \'' . '?m='.$_value['m'].'&c='.$_value['c'].'&a='.substr($a, 4).$_valuedata.'&menuid='.$parentid.'&pc_hash='.$pc_hash . '\', ' . $w . ', ' . $h . ');';
+			} elseif (strpos($uri, 'show:') === 0) {
+				list($a, $b, $c) = explode(',', $uri);
+                $w = isset($b) ? (is_numeric($b) ? $b : '\''.$b.'\'') : '';
+                $h = isset($c) ? (is_numeric($c) ? $c : '\''.$c.'\'') : '';
+				$url = 'javascript:dr_iframe_show(\''.L($_value['name']).'\', \'' . '?m='.$_value['m'].'&c='.$_value['c'].'&a='.substr($a, 5).$_valuedata.'&menuid='.$parentid.'&pc_hash='.$pc_hash . '\', ' . $w . ', ' . $h . ');';
+			} elseif (strpos($uri, 'help:') === 0) {
+				if (CI_DEBUG) {
+					$url = 'javascript:dr_help(\''.'?m='.$_value['m'].'&c='.$_value['c'].'&a='.substr($uri, 5).$_valuedata.'&menuid='.$parentid.'&pc_hash='.$pc_hash.'\');';
+				} else {
+					continue;
+				}
+			} elseif (strpos($uri, 'js:') === 0) {
+				$url = 'javascript:'.substr($uri, 3).'();';
+			} elseif (strpos($uri, 'hide:') === 0) {
+				$url = dr_now_url();
+			} elseif (strpos($uri, 'url:') === 0) {
+				$url = substr($uri, 4);
+				if (!$url) {
+					continue;
+				}
 			} else {
-				$string .= "<a href='?m=".$_value['m']."&c=".$_value['c']."&a=".$_value['a'].$_valuedata."&menuid=$parentid&pc_hash=$pc_hash' $classname><i class=\"".$_value['icon']."\"></i> ".L($_value['name'])."</a><i class=\"fa fa-circle\"></i>";
+				$url = '?m='.$_value['m'].'&c='.$_value['c'].'&a='.$uri.$_valuedata.'&menuid='.$parentid.'&pc_hash='.$pc_hash;
+			}
+			if(is_mobile(0)) {
+				$string .= "<li><a href=\"".$url."\" $classname><i class=\"".$_value['icon']."\"></i> ".L($_value['name'])."</a></li><div class=\"dropdown-line\"></div>";
+			} else {
+				$string .= "<a href=\"".$url."\" $classname><i class=\"".$_value['icon']."\"></i> ".L($_value['name'])."</a><i class=\"fa fa-circle\"></i>";
 			}
 		}
 		$string = substr($string,0,is_mobile(0) ? -33 : -28);

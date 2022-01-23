@@ -84,9 +84,9 @@ include $this->admin_tpl('header','admin');?>
                         <div class="form-group row">
                             <label class="col-md-2 control-label"><?php echo L('待替换字段')?></label>
                             <div class="col-md-9">
-                                <label id="dr_fd"><label><select class="form-control">
+                                <label id="dr_fd"><select class="form-control">
                                     <option value="0"><?php echo L('没有选择表')?></option>
-                                </select></label></label>
+                                </select></label>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -130,11 +130,11 @@ include $this->admin_tpl('header','admin');?>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-md-2 control-label"><?php echo L('待替换字段')?></label>
+                            <label class="col-md-2 control-label"><?php echo L('待设置字段')?></label>
                             <div class="col-md-9">
-                                <label id="dr_sz"><label><select class="form-control">
+                                <label id="dr_sz"><select class="form-control">
                                     <option value="0"><?php echo L('没有选择表')?></option>
-                                </select></label></label>
+                                </select></label>
                             </div>
                         </div>
                         <div class="form-group row">

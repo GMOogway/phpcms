@@ -6,7 +6,7 @@ $menu_db->insert(array('name'=>'add_link', 'parentid'=>$parentid, 'm'=>'link', '
 $menu_db->insert(array('name'=>'edit_link', 'parentid'=>$parentid, 'm'=>'link', 'c'=>'link', 'a'=>'edit', 'data'=>'', 'icon'=>'fa fa-edit', 'listorder'=>0, 'display'=>'0'));
 $menu_db->insert(array('name'=>'delete_link', 'parentid'=>$parentid, 'm'=>'link', 'c'=>'link', 'a'=>'delete', 'data'=>'', 'icon'=>'fa fa-trash-o', 'listorder'=>0, 'display'=>'0'));
 $menu_db->insert(array('name'=>'link_setting', 'parentid'=>$parentid, 'm'=>'link', 'c'=>'link', 'a'=>'setting', 'data'=>'', 'icon'=>'fa fa-cog', 'listorder'=>0, 'display'=>'1'));
-$menu_db->insert(array('name'=>'add_type', 'parentid'=>$parentid, 'm'=>'link', 'c'=>'link', 'a'=>'add_type', 'data'=>'', 'icon'=>'fa fa-plus', 'listorder'=>0, 'display'=>'1'));
+$menu_db->insert(array('name'=>'add_type', 'parentid'=>$parentid, 'm'=>'link', 'c'=>'link', 'a'=>'add:add_type,500,280', 'data'=>'', 'icon'=>'fa fa-plus', 'listorder'=>0, 'display'=>'1'));
 $menu_db->insert(array('name'=>'list_type', 'parentid'=>$parentid, 'm'=>'link', 'c'=>'link', 'a'=>'list_type', 'data'=>'', 'icon'=>'fa fa-reorder', 'listorder'=>0, 'display'=>'1'));
 $menu_db->insert(array('name'=>'check_register', 'parentid'=>$parentid, 'm'=>'link', 'c'=>'link', 'a'=>'check_register', 'data'=>'', 'icon'=>'fa fa-check', 'listorder'=>0, 'display'=>'1'));
 

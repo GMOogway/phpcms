@@ -11,6 +11,7 @@ body{padding: 20px 20px 0px 20px;}
 <div class="note note-danger">
     <p><?php echo L('邮件发送失败时返回的错误代码，格式为：时间 [邮件服务器 - 服务器账号 - 发送给的邮箱] 错误代码');?></p>
 </div>
+<div class="right-card-box">
 <form name="myform" id="myform" action="" method="post">
 <div class="table-list">
     <table width="100%" cellspacing="0">
@@ -38,6 +39,7 @@ if(is_array($list)){
     <div class="col-md-7 col-sm-7 text-right"><?php echo $pages?></div>
 </div>
 </form>
+</div>
 </div>
 </div>
 </div>

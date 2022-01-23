@@ -2,36 +2,36 @@
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');
 ?>
-<script type="text/javascript">
-<!--
-	$(function(){
-	$.formValidator.initConfig({formid:"myform",autotip:true,onerror:function(msg,obj){Dialog.alert(msg,function(){$(obj).focus();})}});
-	$("#type_name").formValidator({onshow:"<?php echo L("input").L('type_name')?>",onfocus:"<?php echo L("input").L('type_name')?>"}).inputValidator({min:1,onerror:"<?php echo L("input").L('type_name')?>"}).ajaxValidator({type : "get",url : "",data :"m=link&c=link&a=public_check_name",datatype : "html",async:'false',success : function(data){	if( data == "1" ){return true;}else{return false;}},buttons: $("#dosubmit"),onerror : "<?php echo L('type_name').L('exists')?>",onwait : "<?php echo L('connecting')?>"});
-	 
-	})
-//-->
-</script>
-<div class="pad-lr-10">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content   main-content2">
+                            <div class="page-body">
 <form action="?m=link&c=link&a=add_type" method="post" name="myform" id="myform">
-<table cellpadding="2" cellspacing="1" class="table_form" width="100%">
-	<tr>
-		<th width="100"><?php echo L('type_name')?>：</th>
-		<td><input type="text" name="type[name]" id="type_name" size="30" class="input-text"></td>
-	</tr>
-	<tr>
-		<th><?php echo L('link_type_listorder')?>：</th>
-		<td><input type="text" name="type[listorder]" id="listorder" size="5" class="input-text" value="0"></td>
-	</tr>
-	<tr>
-		<th><?php echo L('type_description')?>：</th>
-		<td><textarea name="type[description]" id="description" cols="50" rows="6"></textarea></td>
-	</tr>
-	<tr>
-		<th></th>
-		<td><input type="hidden" name="forward" value="?m=link&c=link&a=add_type"> <input type="submit" name="dosubmit" id="dosubmit" class="button" value=" <?php echo L('submit')?> "></td>
-	</tr>
-</table>
+    <div class="form-body">
+                <div class="form-group" id="dr_row_name">
+            <label class="control-label col-md-2"><?php echo L('type_name')?></label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" id="name" name="type[name]" value="">
+            </div>
+        </div>
+                <div class="form-group">
+            <label class="control-label col-md-2"><?php echo L('link_type_listorder')?></label>
+            <div class="col-md-10">
+                <input type="text" id="listorder" class="form-control" name="type[listorder]" value="0">
+                <span class="help-block"> 排序值由小到大排列，范围为0-255 </span>
+            </div>
+        </div>
+        <div class="form-group" id="dr_row_description">
+            <label class="control-label col-md-2"><?php echo L('type_description')?></label>
+            <div class="col-md-10">
+                <textarea class="form-control" style="height:60px;" name="type[description]" id="dr_description"></textarea>
+            </div>
+        </div>
+    </div>
 </form>
+</div>
+</div>
+</div>
 </div>
 </body>
 </html>

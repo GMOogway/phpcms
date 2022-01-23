@@ -13,6 +13,7 @@ class log extends admin {
 	}
 	
 	function init () {
+        $show_header = true;
 		if ($this->input->get('search')){
 			extract($this->input->get('search'),EXTR_SKIP);
 		}
@@ -23,9 +24,7 @@ class log extends admin {
 			$where[] = "module='$module'";
 		}
 		if($start_time) {
-			$start = $start_time;
-			$end = $end_time;
-			$where[] = "`time` >= '".$start." 00:00:00' AND `time` <= '".$end." 23:59:59'";
+			$where[] = '`time` BETWEEN ' . max((int)strtotime(strpos($start_time, ' ') ? $start_time : $start_time.' 00:00:00'), 1) . ' AND ' . ($end_time ? (int)strtotime(strpos($end_time, ' ') ? $end_time : $end_time.' 23:59:59') : SYS_TIME);
 		}
  
 		$page = $this->input->get('page') && intval($this->input->get('page')) ? intval($this->input->get('page')) : 1; 

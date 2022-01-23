@@ -4,6 +4,9 @@ include $this->admin_tpl('header');?>
 <div class="page-container" style="margin-bottom: 0px !important;">
     <div class="page-content-wrapper">
         <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="note note-danger">
+    <p><a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=init&pc_hash='+pc_hash+'&is_ajax=1',1);"><?php echo L('操作之前请更新下全站缓存');?></a></p>
+</div>
 <div class="right-card-box">
 <form name="myform" action="?m=admin&c=role&a=listorder" method="post">
 <input name="dosubmit" type="hidden" value="1">
