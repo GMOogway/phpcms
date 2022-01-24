@@ -76,7 +76,7 @@ jQuery(document).ready(function() {
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('host')?></label>
                         <div class="col-md-9">
-                            <input class="form-control input-large" type="text" id="sphinxhost" name="setting[sphinxhost]" value="<?php echo $sphinxhost?>" >
+                            <label><input class="form-control input-large" type="text" id="sphinxhost" name="setting[sphinxhost]" value="<?php echo $sphinxhost?>" ></label>
                         </div>
                     </div>
                     <div class="form-group">

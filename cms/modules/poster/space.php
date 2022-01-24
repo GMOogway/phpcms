@@ -164,12 +164,11 @@ class space extends admin {
 			$setting[$this->get_siteid()] = $this->input->post('setting');
 			setcache('poster', $setting, 'commons'); //设置缓存
 			$m_db = pc_base::load_model('module_model'); //调用模块数据模型
-			$setting = array2string($this->input->post('setting'));  
-			
+			$setting = array2string($this->input->post('setting'));
 			$m_db->update(array('setting'=>$setting), array('module'=>ROUTE_M)); //将配置信息存入数据表中
-			
 			dr_admin_msg(1,L('setting_updates_successful'), HTTP_REFERER, '', 'setting');
 		} else {
+			$show_dialog = $show_header = true;
 			@extract($this->setting); 
     		include $this->admin_tpl('setting');
 		}

@@ -228,7 +228,7 @@ class vote extends admin {
  			$set = array2string($setting);
 			$m_db->update(array('setting'=>$set), array('module'=>ROUTE_M));
 			$this->cache_api->cache('vote_setting');
-			dr_admin_msg(1,L('setting_updates_successful'), '?m=vote&c=vote&a=init');
+			dr_json(1, L('setting_updates_successful'), array('url' => HTTP_REFERER));
 		} else {
 			@extract($now_seting);
 			pc_base::load_sys_class('form', '', 0);
@@ -320,19 +320,18 @@ class vote extends admin {
 	 * @param $subjectid 投票ID
 	 */
 	function update_votejs($subjectid){
- 			if(!isset($subjectid)||intval($subjectid) < 1) return false;
-			//解出投票内容
-			$info = $this->db->get_subject($subjectid);
-			if(!$info) dr_admin_msg(0,L('not_vote'));
-			extract($info);
- 			//解出投票选项
-			$options = $this->db2->get_options($subjectid);
- 			ob_start();
- 			include template('vote', $template);
-			$voteform = ob_get_contents();
-			ob_clean() ;
-	        @file_put_contents(CACHE_PATH.'vote_js/vote_'.$subjectid.'.js', $this->format_js($voteform));
-	        
+		if(!isset($subjectid)||intval($subjectid) < 1) return false;
+		//解出投票内容
+		$info = $this->db->get_subject($subjectid);
+		if(!$info) dr_admin_msg(0,L('not_vote'));
+		extract($info);
+		//解出投票选项
+		$options = $this->db2->get_options($subjectid);
+		ob_start();
+		include template('vote', $template);
+		$voteform = ob_get_contents();
+		ob_clean() ;
+		@file_put_contents(CACHE_PATH.'vote_js/vote_'.$subjectid.'.js', $this->format_js($voteform));
 	}
 	
 	/**
@@ -345,7 +344,7 @@ class vote extends admin {
 				$this->update_votejs($subjectid_arr['subjectid']);
 			}
 		}
-		dr_admin_msg(1,L('operation_success'),'?m=vote&c=vote');
+		dr_admin_msg(1,L('operation_success'));
 	}
 	
 	/**

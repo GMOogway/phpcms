@@ -6,12 +6,6 @@ jQuery(document).ready(function() {
     $(":text").removeClass('input-text');
 });
 </script>
-<div class="subnav">
-    <div class="content-menu ib-a blue">
-        <a href='?m=admin&c=admin_manage&a=init&menuid=<?php echo $this->input->get('menuid');?>'><i class="fa fa-shield"></i> 管理员管理</a>
-    </div>
-</div>
-<div class="content-header"></div>
 <div class="page-content main-content">
 <div class="note note-danger">
     <p><?php echo L('管理员账号允许同时拥有多个角色组');?></p>

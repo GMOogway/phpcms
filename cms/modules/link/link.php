@@ -155,7 +155,7 @@ class link extends admin {
 	 * 删除分类
 	 */
 	public function delete_type() {
-		if((!isset($_GET['typeid']) || empty($_GET['typeid'])) && (!isset($_POST['typeid']) || empty($_POST['typeid']))) {
+		if((!$this->input->get('typeid') || empty($this->input->get('typeid'))) && (!$this->input->post('typeid') || empty($this->input->post('typeid')))) {
 			dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		} else {
 			if(is_array($_POST['typeid'])){

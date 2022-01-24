@@ -59,7 +59,6 @@ class role extends admin {
 			$this->_cache();
 			dr_json(1,L('operation_success'), array('url' => '?m=admin&c=role&a=init&menuid='.$this->input->post('menuid').'&page='.(int)$this->input->post('page').'&pc_hash='.dr_get_csrf_token()));
 		} else {
-			$show_header = true;
 			$info = $this->db->get_one(array('roleid'=>$this->input->get('roleid')));
 			extract($info);
 			include $this->admin_tpl('role_edit');		

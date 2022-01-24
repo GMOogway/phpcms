@@ -192,7 +192,6 @@ class admin_manage extends admin {
 			}
 			extract($info);
 			$roles = $this->role_db->select(array('disabled'=>'0'));
-			$show_header = true;
 			$admin_manage_code = $this->get_admin_manage_code();
 			include $this->admin_tpl('admin_edit');		
 		}

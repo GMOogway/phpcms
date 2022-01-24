@@ -131,7 +131,7 @@ class slider extends admin {
 	 * 删除分类
 	 */
 	public function delete_type() {
-		if(!$this->input->get('typeid') || empty($this->input->get('typeid')) && !$this->input->post('typeid') || empty($this->input->post('typeid'))) {
+		if((!$this->input->get('typeid') || empty($this->input->get('typeid'))) && (!$this->input->post('typeid') || empty($this->input->post('typeid')))) {
 			dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		} else {
 			if(is_array($this->input->post('typeid'))){
@@ -260,20 +260,19 @@ class slider extends admin {
 	
     //添加幻灯片分类
  	public function add_type() {
-		if($this->input->post('dosubmit')) {
+		if(IS_AJAX_POST) {
 			$type = $this->input->post('type');
 			if(empty($type['name'])) {
-				dr_admin_msg(0,L('slider_postion_noempty'),HTTP_REFERER);
+				dr_admin_msg(0,L('slider_postion_noempty'), array('field' => 'name'));
 			}
 			$type['siteid'] = $this->get_siteid(); 
 			$type['module'] = ROUTE_M;
  			$this->db2 = pc_base::load_model('type_model');
 			$typeid = $this->db2->insert($type,true);
 			if(!$typeid) return FALSE;
-			dr_admin_msg(1,L('operation_success'),HTTP_REFERER);
+			dr_admin_msg(1,L('operation_success'));
 		} else {
-			$show_validator = $show_scroll = true;
-			$big_menu = array('javascript:artdialog(\'add\',\'?m=slider&c=slider&a=add\',\''.L('slider_add').'\',700,450);void(0);', L('slider_add'));
+			$show_validator = $show_scroll = $show_header = true;
  			include $this->admin_tpl('slider_type_add');
 		}
 

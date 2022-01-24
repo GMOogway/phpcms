@@ -160,6 +160,7 @@ class admin {
 				$url = 'javascript:'.substr($uri, 3).'();';
 			} elseif (strpos($uri, 'hide:') === 0) {
 				$url = dr_now_url();
+				$_li_class = substr($uri, 5) == $input->get('a') ? '' : 'hidden';
 			} elseif (strpos($uri, 'url:') === 0) {
 				$url = substr($uri, 4);
 				if (!$url) {
@@ -169,9 +170,13 @@ class admin {
 				$url = '?m='.$_value['m'].'&c='.$_value['c'].'&a='.$uri.$_valuedata.'&menuid='.$parentid.'&pc_hash='.$pc_hash;
 			}
 			if(is_mobile(0)) {
-				$string .= "<li><a href=\"".$url."\" $classname><i class=\"".$_value['icon']."\"></i> ".L($_value['name'])."</a></li><div class=\"dropdown-line\"></div>";
+				$string .= "<li".($_li_class ? " class=\"" . $_li_class . "\"" : "")."><a href=\"".$url."\" $classname><i class=\"".$_value['icon']."\"></i> ".L($_value['name'])."</a></li><div class=\"dropdown-line\"></div>";
 			} else {
-				$string .= "<a href=\"".$url."\" $classname><i class=\"".$_value['icon']."\"></i> ".L($_value['name'])."</a><i class=\"fa fa-circle\"></i>";
+				if($_li_class) {
+					$string .= "<span class=\"" . $_li_class . "\"><a href=\"".$url."\" $classname><i class=\"".$_value['icon']."\"></i> ".L($_value['name'])."</a></span><i class=\"fa fa-circle\"></i>";
+				} else {
+					$string .= "<a href=\"".$url."\" $classname><i class=\"".$_value['icon']."\"></i> ".L($_value['name'])."</a><i class=\"fa fa-circle\"></i>";
+				}
 			}
 		}
 		$string = substr($string,0,is_mobile(0) ? -33 : -28);
@@ -205,7 +210,7 @@ class admin {
 					}
 				}
 				$i ++;
-	        }
+			}
 			$child .= ']';
 		}
 		return $child;

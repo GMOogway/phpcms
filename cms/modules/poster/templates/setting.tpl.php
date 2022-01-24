@@ -1,30 +1,41 @@
-<?php 
+<?php
 defined('IS_ADMIN') or exit('No permission resources.');
-$show_header = true;
-include $this->admin_tpl('header', 'admin');
+include $this->admin_tpl('header','admin');
 ?>
-<form method="post" action="?m=poster&c=space&a=setting" id="myform" name="myform">
-<table width="100%" cellpadding="0" cellspacing="1" class="table_form">
-	<tr>
-		<th width="130"><?php echo L('ads_show_time')?></th>
-		<td><div class="mt-radio-inline">
-          <label class="mt-radio mt-radio-outline"><input type='radio' name='setting[enablehits]' value='1' <?php if($enablehits == 1) {?>checked<?php }?>> <?php echo L('yes')?> <span></span></label>
-          <label class="mt-radio mt-radio-outline"><input type='radio' name='setting[enablehits]' value='0' <?php if($enablehits == 0) {?>checked<?php }?>> <?php echo L('no')?> <span></span></label>
-        </div></td>
-	</tr>
-	<tr>
-		<th><?php echo L('upload_file_ext')?>：</th>
-		<td><input name='setting[ext]' type='text' id='ext' value='<?php echo $ext?>' size='40' maxlength='70'></td>
-	</tr>
-	<tr>
-		<th><?php echo L('file_size')?>：</th>
-		<td><input name='setting[maxsize]' type='text' id='maxsize' value='<?php echo $maxsize?>' size='12'> M</td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td>
-		<td><input type="submit" name="dosubmit" id="dosubmit" class="dialog" value=" <?php echo L('ok')?> ">&nbsp;<input type="reset" class="dialog" value=" <?php echo L('clear')?> "></td>
-	</tr>
-</table>
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content   main-content2">
+                            <div class="page-body">
+<form class="form-horizontal" action="?m=poster&c=space&a=setting" method="post" name="myform" id="myform">
+    <div class="form-body">
+                <div class="form-group">
+            <label class="col-xs-3 control-label ajax_name"><?php echo L('ads_show_time')?></label>
+            <div class="col-xs-8">
+                <div class="mt-radio-inline">
+                    <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[enablehits]" value="1"<?php echo ($enablehits) ? ' checked' : ''?>> <?php echo L('yes');?> <span></span></label>
+                    <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[enablehits]" value="0"<?php echo (!$enablehits) ? ' checked' : ''?>> <?php echo L('no');?> <span></span></label>
+                </div>
+            </div>
+        </div>
+                <div class="form-group">
+            <label class="col-xs-3 control-label ajax_name"><?php echo L('upload_file_ext')?></label>
+            <div class="col-xs-8">
+                <input type="text" id="ext" class="form-control" name="setting[ext]" value="<?php echo $ext?>">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-3 control-label ajax_name"><?php echo L('file_size')?></label>
+            <div class="col-xs-8">
+                <input type="text" id="maxsize" class="form-control" name="setting[maxsize]" value="<?php echo $maxsize?>">
+                <span class="help-block"> M </span>
+            </div>
+        </div>
+    </div>
+<input type="submit" name="dosubmit" id="dosubmit" class="dialog" value=" <?php echo L('ok')?> ">
 </form>
+</div>
+</div>
+</div>
+</div>
 </body>
 </html>
