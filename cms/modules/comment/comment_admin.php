@@ -80,7 +80,7 @@ class comment_admin extends admin {
 			$searchtype = intval($_GET['searchtype']);
 			switch ($searchtype) {
 				case '0':
-					$sql = "SELECT `commentid` FROM `cms_comment` WHERE `siteid` = '$this->siteid' AND `title` LIKE '%".$this->db->escape($keywords)."%' AND `tableid` = '$tableid' ";
+					$sql = "SELECT `commentid` FROM `cms_comment` WHERE `siteid` = '$this->siteid' AND `title` LIKE '%".$this->comment_db->escape($keywords)."%' AND `tableid` = '$tableid' ";
 				
 					$this->comment_db->query($sql);	
 					$data = $this->comment_db->fetch_array();
@@ -108,7 +108,7 @@ class comment_admin extends admin {
  				break;
 
 				case '2':
-					$where = "`username` = '".$this->db->escape($keywords)."'";
+					$where = "`username` = '".$this->comment_db->escape($keywords)."'";
 				break;
 			}
 		}

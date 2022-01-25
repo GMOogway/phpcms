@@ -258,41 +258,14 @@ class backup {
                 }
             }
         }
-        if ($this->link) {
-            $this->link->close();
-        }
-        $this->link = null;
         $sqldump = "/*\ncms bakfile\nversion:CMS V9\ntime:".date('Y-m-d H:i:s')."\ntype:cms\ncms:\n*/\n\nSET NAMES utf8mb4;\nSET FOREIGN_KEY_CHECKS = 0;\n\n".$sqldump."\nSET FOREIGN_KEY_CHECKS = 1;\n";
         return $sqldump;
 
     }
 
-    public function connect() {
-        $this->link = new mysqli($this->host, $this->user, $this->pass, $this->name, $this->port);
-        if(mysqli_connect_error()){
-            return false;
-        }
-        if($this->version() > '4.1') {
-            $charset = 'utf8mb4';
-            $serverset = $charset ? "character_set_connection='$charset',character_set_results='$charset',character_set_client=binary" : '';
-            $serverset .= $this->version() > '5.0.1' ? ((empty($serverset) ? '' : ',')." sql_mode='' ") : '';
-            $serverset && $this->link->query("SET $serverset");
-        }
-        return $this->link;
-    }
-
-    public function version() {
-        if(!is_object($this->link)) {
-            $this->connect();
-        }
-        return $this->link->server_info;
-    }
-
     public function escape($str){
-        if(!is_object($this->link)) {
-            $this->connect();
-        }
-        return $this->link->real_escape_string($str);
+        pc_base::load_sys_class('db_factory', '', 0);
+        return db_factory::get_instance($this->db_config)->get_database('default')->escape($str);
     }
 
 }
