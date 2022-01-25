@@ -63,7 +63,7 @@ class category extends admin {
 							} else {
 								$catdir = $prefix.'/'.$sitelist[$this->siteid]['dirname'].$html_root.'/'.$catdir;
 							}
-							if($r['type']==0 && $setting['ishtml'] && strpos($r['url'], '?')===false && substr_count($r['url'],'/')<4) $rs['help'] = '<img src="'.IMG_PATH.'icon/help.png" onmouseover="layer.tips(\''.L('tips_domain').$r['url'].'<br>'.L('directory_binding').'<br>'.$catdir.'/\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();">';
+							if($r['type']==0 && $setting['ishtml'] && strpos($r['url'], '?')===false && substr_count($r['url'],'/')<4) $rs['help'] = '<span class="layui-btn layui-btn-xs layui-btn-green"><i class="fa fa-question-circle-o" onmouseover="layer.tips(\''.L('tips_domain').$r['url'].'<br>'.L('directory_binding').'<br>'.$catdir.'/\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"></i></span>';
 							$rs['url'] = $r['url'];
 						} else {
 							$rs['url'] = substr($sitelist[$this->siteid]['domain'],0,-1).$r['url'];
@@ -76,7 +76,12 @@ class category extends admin {
 					$rs['iscatpos'] = $setting['iscatpos'];
 					$rs['isleft'] = $setting['isleft'];
 					$rs['listorder'] = $r['listorder'];
-					$rs['manage'] = '<a href="javascript:dr_iframe(\'add\', \'?m=admin&c=category&a=add&parentid='.$r['catid'].'&menuid='.$this->input->get('menuid').'&s='.$r['type'].'&pc_hash='.$this->input->get('pc_hash').'\', \'80%\', \'80%\')" class="btn btn-xs blue"><i class="fa fa-plus"></i> '.L('add_sub_category').'</a><a href="javascript:dr_iframe(\'edit\', \'?m=admin&c=category&a=edit&catid='.$r['catid'].'&menuid='.$this->input->get('menuid').'&type='.$r['type'].'&pc_hash='.$this->input->get('pc_hash').'\', \'80%\', \'80%\')" class="btn btn-xs green"><i class="fa fa-edit"></i> '.L('edit').'</a><a class="btn btn-xs red" lay-event="del"><i class="fa fa-trash-o"></i> '.L('delete').'</a><a href="?m=admin&c=category&a=remove&catid='.$r['catid'].'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash').'" class="btn btn-xs yellow"><i class="fa fa-arrows"></i> '.L('remove','','content').'</a>';
+					if ($r['url']) {
+						$vistor = '<a href="'.$r['url'].'" target="_blank" class="btn btn-xs blue"><i class="fa fa-eye"></i> '.L('vistor').'</a>';
+					} else {
+						$vistor = '<a href="?m=admin&c=category&a=public_cache&menuid='.$this->input->get('menuid').'" class="layui-btn layui-btn-xs layui-btn-danger"><i class="fa fa-refresh"></i> '.L('update_backup').'</a>';
+					}
+					$rs['manage'] = '<a href="javascript:dr_iframe(\'add\', \'?m=admin&c=category&a=add&parentid='.$r['catid'].'&menuid='.$this->input->get('menuid').'&s='.$r['type'].'&pc_hash='.$this->input->get('pc_hash').'\', \'80%\', \'80%\')" class="btn btn-xs blue"><i class="fa fa-plus"></i> '.L('add_sub_category').'</a> <a href="javascript:dr_iframe(\'edit\', \'?m=admin&c=category&a=edit&catid='.$r['catid'].'&menuid='.$this->input->get('menuid').'&type='.$r['type'].'&pc_hash='.$this->input->get('pc_hash').'\', \'80%\', \'80%\')" class="btn btn-xs green"><i class="fa fa-edit"></i> '.L('edit').'</a> <a class="btn btn-xs red" lay-event="del"><i class="fa fa-trash-o"></i> '.L('delete').'</a> <a href="?m=admin&c=category&a=remove&catid='.$r['catid'].'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash').'" class="btn btn-xs yellow"><i class="fa fa-arrows"></i> '.L('remove','','content').'</a>';
 					$array[] = $rs;
 				}
 			}
@@ -204,7 +209,7 @@ class category extends admin {
 				if($r) extract($r,EXTR_SKIP);
 				$setting = string2array($setting);
 			} else {
-				$setting = array('ishtml'=>'', 'category_ruleid'=>'', 'content_ishtml'=>'', 'create_to_html_root'=>'', 'template_list'=>$sitelist['default_style']);
+				$setting = array('ishtml'=>'', 'category_ruleid'=>'', 'content_ishtml'=>'', 'show_ruleid'=>'', 'create_to_html_root'=>'', 'template_list'=>$sitelist['default_style']);
 			}
 			
 			pc_base::load_sys_class('form','',0);

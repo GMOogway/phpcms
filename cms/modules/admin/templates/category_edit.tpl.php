@@ -210,10 +210,10 @@ include $this->admin_tpl('header');?>
                         <label class="col-md-2 control-label"><?php echo L('show_urlrules')?></label>
                         <div class="col-md-9">
                             <label id="show_php_ruleid" style="display:<?php if($setting['content_ishtml']) echo 'none';?>">
-                                <?php echo form::urlrule('content','show',0,$setting['category_ruleid'],'name="show_php_ruleid"');?>
+                                <?php echo form::urlrule('content','show',0,$setting['show_ruleid'],'name="show_php_ruleid"');?>
                             </label>
                             <label id="show_html_ruleid" style="display:<?php if(!$setting['content_ishtml']) echo 'none';?>">
-                                <?php echo form::urlrule('content','show',1,$setting['category_ruleid'],'name="show_html_ruleid"');?>
+                                <?php echo form::urlrule('content','show',1,$setting['show_ruleid'],'name="show_html_ruleid"');?>
                             </label>
                         </div>
                     </div>

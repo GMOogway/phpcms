@@ -63,7 +63,7 @@ class cache_api {
 			}
 		}
 		$array = array();
-		$categorys = $this->db->select('`module`=\'content\'','catid,siteid',20000,'listorder ASC');
+		$categorys = $this->db->select(array('module'=>'content'),'catid,siteid',20000,'listorder ASC');
 		foreach ($categorys as $r) {
 			$array[$r['catid']] = $r['siteid'];
 		}

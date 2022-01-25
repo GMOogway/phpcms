@@ -49,7 +49,7 @@ include $this->admin_tpl('header');?>
     {{# if(d.url){ }}
     <a href="{{d.url}}" target="_blank" class="btn btn-xs blue"><i class="fa fa-eye"></i> <?php echo L('vistor');?></a>
     {{# } else { }}
-    <a href="?m=admin&c=category&a=public_cache&menuid=<?php echo $this->input->get('menuid');?>&module=admin" class="layui-btn layui-btn-xs layui-btn-danger"><?php echo L('update_backup');?></a>
+    <a href="?m=admin&c=category&a=public_cache&menuid=<?php echo $this->input->get('menuid');?>" class="layui-btn layui-btn-xs layui-btn-danger"><i class="fa fa-refresh"></i> <?php echo L('update_backup');?></a>
     {{# } }}
 </script>
 <script type="text/html" id="ismenu">
@@ -110,14 +110,14 @@ include $this->admin_tpl('header');?>
                 {field: 'typename',align: 'center', title: '<?php echo L('category_type')?>', width: 100},
                 {field: 'modelname',align: 'center', title: '<?php echo L('modelname')?>', width: 100},
                 {field: 'items',align: 'center', title: '<?php echo L('items')?>', width: 80},
-                {field: 'url',align: 'center', title: '<?php echo L('vistor')?>', width: 80, templet: '#url'},
-                {field: 'help',align: 'center', title: '<?php echo L('domain_help')?>', width: 90},
+                {field: 'url',align: 'center', title: '<?php echo L('vistor')?>', width: 100, templet: '#url'},
+                {field: 'help',align: 'center', title: '<?php echo L('绑定')?>', width: 60},
                 {field: 'ismenu',align: 'center', title: '<?php echo L('menu_nav')?>', width: 90,toolbar: '#ismenu'},
                 {field: 'disabled',align: 'center', title: '<?php echo L('可用')?>', width: 85,toolbar: '#disabled'},
                 {field: 'iscatpos',align: 'center', title: '<?php echo L('display')?>', width: 85,toolbar: '#iscatpos'},
                 {field: 'isleft',align: 'center', title: '<?php echo L('左侧')?>', width: 85,toolbar: '#isleft'},
                 {field: 'listorder',align: 'center', title: '<?php echo L('listorder');?>', width: 80, templet: '#listorder'},
-                {field: 'manage',title: '<?php echo L('operations_manage');?>',width: 325,align: 'center', toolbar: '#action'<?php if(!is_mobile(0)) {?>, fixed: 'right'<?php }?>}
+                {field: 'manage',title: '<?php echo L('operations_manage');?>',width: 310,align: 'center', toolbar: '#action'<?php if(!is_mobile(0)) {?>, fixed: 'right'<?php }?>}
             ]]
             ,page:false
         });
