@@ -3,7 +3,7 @@
         uiUtils = baidu.editor.ui.uiUtils,
         EventBase = baidu.editor.EventBase,
         UIBase = baidu.editor.ui.UIBase = function () {
-        };
+    };
 
     UIBase.prototype = {
         className:'',
@@ -69,6 +69,9 @@
                 .replace(/%%-/g, this.uiName ? prefix + '-' : '')
                 .replace(/%%/g, (this.uiName ? prefix : '') + ' ' + this.className)
                 .replace(/\$\$/g, this._globalKey));
+        },
+        getUid:function () {
+            return this.id;
         },
         renderHtml:function () {
             return this.formatHtml(this.getHtmlTpl());

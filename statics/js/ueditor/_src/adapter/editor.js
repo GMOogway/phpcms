@@ -235,7 +235,7 @@
           if (editor.ui._dialogs.insertframeDialog && /iframe/ig.test(el.tagName)) {
             var html = popup.formatHtml(
               '<nobr>' + editor.getLang("property") + ': <span onclick=$$._setIframeAlign(-2) class="edui-clickable">' + editor.getLang("default") + '</span>&nbsp;&nbsp;<span onclick=$$._setIframeAlign(-1) class="edui-clickable">' + editor.getLang("justifyleft") + '</span>&nbsp;&nbsp;<span onclick=$$._setIframeAlign(1) class="edui-clickable">' + editor.getLang("justifyright") + '</span>&nbsp;&nbsp;' +
-                ' <span onclick="$$._updateIframe( this);" class="edui-clickable">' + editor.getLang("modify") + '</span></nobr>');
+                ' <span onclick="$$._updateIframe(this);" class="edui-clickable">' + editor.getLang("modify") + '</span></nobr>');
             if (html) {
               popup.getDom('content').innerHTML = html;
               popup.anchorEl = el;
@@ -282,6 +282,10 @@
               dialogName = "";
             }
             if (!dialogs[dialogName]) {
+              return;
+            }
+            if (dialogName == 'insertimageDialog' || dialogName == 'insertvideoDialog') {
+              eval('$EDITORUI[\"'+popup.getUid()+'\"]._onImgEditButtonClick(\''+dialogName+'\')');
               return;
             }
             str = '<nobr>' + editor.getLang("property") + ': '+
