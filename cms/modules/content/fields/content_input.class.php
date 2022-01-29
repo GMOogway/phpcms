@@ -14,11 +14,10 @@ class content_input {
 		pc_base::load_sys_class('upload','',0);
 		pc_base::load_sys_class('download','',0);
 		$this->siteid = param::get_cookie('siteid');
-		$this->upload = new upload('content',$this->input->post('info')['catid'],$this->siteid);
-		$this->download = new download('content',$this->input->post('info')['catid'],$this->siteid);
+		$this->download = new download('content','0',$this->siteid);
 		$this->site_config = getcache('sitelist','commons');
 		$this->site_config = $this->site_config[$this->siteid];
-        $this->rid = md5(FC_NOW_URL.$this->input->get_user_agent().$this->input->ip_address().intval($this->userid));
+		$this->rid = md5(FC_NOW_URL.$this->input->get_user_agent().$this->input->ip_address().intval($this->userid));
 	}
 
 	function get($data,$isimport = 0) {
@@ -93,6 +92,7 @@ class content_input {
 				$watermark = $site_setting['ueditor'] || $watermark ? 1 : 0;
 				$auto_thumb_length = intval($_POST['auto_thumb_'.$field])-1;
 				if(preg_match_all("/(src)=([\"|']?)([^ \"'>]+)\\2/i", code2html($content), $matches)) {
+					$this->upload = new upload('content',$this->input->post('info')['catid'],$this->siteid);
 					foreach ($matches[3] as $img) {
 						$ext = get_image_ext($img);
 						if (!$ext) {

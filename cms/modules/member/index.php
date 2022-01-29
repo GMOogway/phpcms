@@ -361,7 +361,7 @@ class index extends foreground {
 	public function uploadavatar() {
 		//获取用户siteid
 		$siteid = $this->memberinfo['siteid'] ? $this->memberinfo['siteid'] : 1;
-        $this->rid = md5(FC_NOW_URL.$this->input->get_user_agent().$this->input->ip_address().intval($this->memberinfo['userid']));
+		$this->rid = md5(FC_NOW_URL.$this->input->get_user_agent().$this->input->ip_address().intval($this->memberinfo['userid']));
 		//定义站点id常量
 		if (!defined('SITEID')) {
 		   define('SITEID', $siteid);
