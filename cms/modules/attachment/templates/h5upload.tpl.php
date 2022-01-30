@@ -3,106 +3,133 @@
 <link href="<?php echo JS_PATH?>h5upload/h5upload.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="<?php echo JS_PATH?>layui/css/layui.css" media="all" />
 <script type="text/javascript" src="<?php echo JS_PATH?>layui/layui.js"></script>
-<script language="JavaScript" type="text/javascript" src="<?php echo JS_PATH?>h5upload/handlers.js"></script>
 <script type="text/javascript">
 <?php echo initupload($this->input->get('module'),$this->input->get('catid'),$args,$this->userid,$this->groupid,$this->isadmin)?>
 </script>
-<div class="pad-10">
-    <div class="col-tab">
-        <ul class="tabBut cu-li">
-            <li id="tab_h5_1"<?php echo $tab_status?> onclick="SwapTab('h5','on','',5,1);"><?php echo L('upload_attachment')?></li>
-            <li id="tab_h5_2" onclick="SwapTab('h5','on','',5,2);"><?php echo L('net_file')?></li>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+    $(":text").removeClass('input-text');
+});
+</script>
+<div class="page-content main-content">
+<form action="" class="form-horizontal" method="post" name="myform" id="myform">
+<input name="page" id="dr_page" type="hidden" value="<?php echo $page;?>">
+<div class="portlet light bordered">
+    <div class="portlet-title tabbable-line">
+        <ul class="nav nav-tabs" style="float:left;">
+            <li<?php if ($page==0) {?> class="active"<?php }?>>
+                <a data-toggle="tab_0" onclick="$('#dr_page').val('0')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('upload_attachment').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-upload"></i> <?php if (!is_mobile(0)) {echo L('upload_attachment');}?> </a>
+            </li>
+            <li<?php if ($page==1) {?> class="active"<?php }?>>
+                <a data-toggle="tab_1" onclick="$('#dr_page').val('1')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('net_file').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-download"></i> <?php if (!is_mobile(0)) {echo L('net_file');}?> </a>
+            </li>
             <?php if($allowupload && $this->admin_username && $_SESSION['userid']) {?>
-            <li id="tab_h5_3" onclick="SwapTab('h5','on','',5,3);set_iframe('album_list','<?php echo SELF;?>?m=attachment&c=attachments&a=album_load&args=<?php echo $args?>&authkey=<?php echo $authkey;?>');"><?php echo L('gallery')?></li>
-            <li id="tab_h5_4" onclick="SwapTab('h5','on','',5,4);set_iframe('album_dir','<?php echo SELF;?>?m=attachment&c=attachments&a=album_dir&args=<?php echo $args?>&authkey=<?php echo $authkey;?>');"><?php echo L('directory_browse')?></li>
+            <li<?php if ($page==2) {?> class="active"<?php }?>>
+                <a data-toggle="tab_2" onclick="$('#dr_page').val('2');"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('gallery').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-photo"></i> <?php if (!is_mobile(0)) {echo L('gallery');}?> </a>
+            </li>
+            <li<?php if ($page==3) {?> class="active"<?php }?>>
+                <a data-toggle="tab_3" onclick="$('#dr_page').val('3');"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('directory_browse').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-folder-open"></i> <?php if (!is_mobile(0)) {echo L('directory_browse');}?> </a>
+            </li>
             <?php }?>
             <?php if($att_not_used!='') {?>
-            <li id="tab_h5_5" class="on icon" onclick="SwapTab('h5','on','',5,5);set_iframe('att_not','<?php echo SELF;?>?m=attachment&c=attachments&a=att_not&args=<?php echo $args?>&authkey=<?php echo $authkey;?>');"><?php echo L('att_not_used')?></li>
+            <li<?php if ($page==4) {?> class="active"<?php }?>>
+                <a data-toggle="tab_4" onclick="$('#dr_page').val('4');"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('att_not_used').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-ban"></i> <?php if (!is_mobile(0)) {echo L('att_not_used');}?> </a>
+            </li>
             <?php }?>
         </ul>
-        <div id="div_h5_1" class="content pad-10<?php echo isset($div_status) && $div_status ? $div_status : ''?>">
-            <div>
-                <div id="queue"></div>
-                <button type="button" class="layui-btn" id="file_upload"><i class="layui-icon">&#xe67c;</i><?php echo L('select_file')?></button>
-                <div id="nameTip" class="onShow"><?php echo L('upload_up_to')?><font color="red"> <?php echo $file_upload_limit?></font> <?php echo L('attachments')?>,<?php echo L('largest')?> <font color="red"><?php echo $file_size_limit;?> MB</font></div>
-                <div class="bk3"></div>
-                <div class="lh24"><?php echo L('supported')?> <font style="font-family: Arial, Helvetica, sans-serif"><?php echo str_replace('|','、',$file_types_post)?></font> <?php echo L('formats')?></div>
-                <div id="progress" class="fileupload-progress fade" style="display:none">
-                    <div class="layui-progress layui-progress-big progress progress-striped active" lay-showpercent="yes" lay-filter="progress">
-                        <div class="layui-progress-bar progress-bar progress-bar-success" lay-percent=""></div>
+    </div>
+    <div class="portlet-body form">
+        <div class="tab-content">
+            <div class="tab-pane<?php if ($page==0) {?> active<?php }?>" id="tab_0">
+
+                <div class="form-body">
+
+                    <div>
+                        <div id="queue"></div>
+                        <button type="button" class="layui-btn" id="file_upload"><i class="layui-icon">&#xe67c;</i><?php echo L('select_file')?></button>
+                        <div id="nameTip" class="onShow"><?php echo L('upload_up_to')?><font color="red"> <?php echo $file_upload_limit?></font> <?php echo L('attachments')?>,<?php echo L('largest')?> <font color="red"><?php echo $file_size_limit;?> MB</font></div>
+                        <div class="bk3"></div>
+                        <div class="lh24"><?php echo L('supported')?> <font style="font-family: Arial, Helvetica, sans-serif"><?php echo str_replace('|','、',$file_types_post)?></font> <?php echo L('formats')?></div>
+                        <div id="progress" class="fileupload-progress fade" style="display:none">
+                            <div class="layui-progress layui-progress-big progress progress-striped active" lay-showpercent="yes" lay-filter="progress">
+                                <div class="layui-progress-bar progress-bar progress-bar-success" lay-percent=""></div>
+                            </div>
+                        </div>
                     </div>
+                    <div class="bk10"></div>
+                    <fieldset class="blue pad-10" id="h5upload">
+                        <legend><?php echo L('lists')?></legend>
+                        <div id="fsUploadProgress"></div>
+                        <div class="files" id="fsUpload"></div>
+                    </fieldset>
+
                 </div>
             </div>
-            <div class="bk10"></div>
-            <fieldset class="blue pad-10" id="h5upload">
-                <legend><?php echo L('lists')?></legend>
-                <div id="fsUploadProgress"></div>
-                <div class="files" id="fsUpload"></div>
-            </fieldset>
-        </div>
-        <div id="div_h5_2" class="row contentList pad-10 hidden">
-            <div class="bk10"></div>
-            <div class="col-md-12 col-sm-12">
-                <label><?php echo L('enter_address')?></label>
+            <div class="tab-pane<?php if ($page==1) {?> active<?php }?>" id="tab_1">
+                <div class="form-body">
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('enter_address')?></label>
+                        <div class="col-md-9">
+                            <input type="text" id="dr_filename" name="info[filename]" class="form-control" value="" onblur="addonlinefile(this)">
+                            <span class="help-block"><?php echo L('当目标文件过大或者对方服务器拒绝下载时会导致下载失败')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"></label>
+                        <div class="col-md-9">
+                            <label><button type="button" onclick="dr_download('filename');" class="button"> <i class="fa fa-download"></i> <?php echo L('下载文件')?></button></label>
+                        </div>
+                    </div>
+
+                </div>
             </div>
-            <div class="bk3"></div>
-            <div class="col-md-12 col-sm-12">
-                <label><input type="text" id="dr_filename" name="info[filename]" class="input-text filename" value="" onblur="addonlinefile(this)"></label> <label><button type="button" onclick="dr_download('filename');" class="button"> <i class="fa fa-download"></i> <?php echo L('下载文件')?></button></label>
+            <?php if($allowupload && $this->admin_username && $_SESSION['userid']) {?>
+            <div class="tab-pane<?php if ($page==2) {?> active<?php }?>" id="tab_2">
+                <div class="form-body">
+
+                    <ul class="attachment-list">
+                        <iframe name="album-list" src="<?php echo SELF;?>?m=attachment&c=attachments&a=album_load&args=<?php echo $args?>&authkey=<?php echo $authkey;?>" frameborder="false" scrolling="auto" style="overflow-x:hidden;border:none" width="100%" height="380" allowtransparency="true" id="album_list"></iframe>
+                    </ul>
+
+                </div>
             </div>
-            <div class="col-md-12 col-sm-12">
-                <label><?php echo L('当目标文件过大或者对方服务器拒绝下载时会导致下载失败')?></label>
+            <div class="tab-pane<?php if ($page==3) {?> active<?php }?>" id="tab_3">
+                <div class="form-body">
+
+                    <ul class="attachment-list">
+                        <iframe name="album-dir" src="<?php echo SELF;?>?m=attachment&c=attachments&a=album_dir&args=<?php echo $args?>&authkey=<?php echo $authkey;?>" frameborder="false" scrolling="auto" style="overflow-x:hidden;border:none" width="100%" height="380" allowtransparency="true" id="album_dir"></iframe>
+                    </ul>
+
+                </div>
             </div>
-            <div class="bk10"></div>
+            <?php }?>
+            <?php if($att_not_used!='') {?>
+            <div class="tab-pane<?php if ($page==4) {?> active<?php }?>" id="tab_4">
+                <div class="form-body">
+
+                    <ul class="attachment-list">
+                        <iframe name="att-not" src="<?php echo SELF;?>?m=attachment&c=attachments&a=att_not&args=<?php echo $args?>&authkey=<?php echo $authkey;?>" frameborder="false" scrolling="auto" style="overflow-x:hidden;border:none" width="100%" height="380" allowtransparency="true" id="att_not"></iframe>
+                    </ul>
+
+                </div>
+            </div>
+            <?php }?>
+            <div id="att-status" class="hidden"></div>
+            <div id="att-status-del" class="hidden"></div>
+            <div id="att-name" class="hidden"></div>
         </div>
-        <?php if($allowupload && $this->admin_username && $_SESSION['userid']) {?>
-        <div id="div_h5_3" class="contentList pad-10 hidden">
-            <ul class="attachment-list">
-                <iframe name="album-list" src="#" frameborder="false" scrolling="auto" style="overflow-x:hidden;border:none" width="100%" height="450" allowtransparency="true" id="album_list"></iframe>
-            </ul>
-        </div>
-        <div id="div_h5_4" class="contentList pad-10 hidden">
-            <ul class="attachment-list">
-             <iframe name="album-dir" src="#" frameborder="false" scrolling="auto" style="overflow-x:hidden;border:none" width="100%" height="450" allowtransparency="true" id="album_dir"></iframe>
-            </ul>
-        </div>
-        <?php }?>
-        <?php if($att_not_used!='') {?>
-        <div role="presentation" id="div_h5_5" class="contentList pad-10">
-            <script type="text/javascript">
-            $(document).ready(function(){
-                set_iframe('att_not','<?php echo SELF;?>?m=attachment&c=attachments&a=att_not&args=<?php echo $args?>&authkey=<?php echo $authkey;?>');
-            })
-            </script>
-            <ul class="attachment-list">
-             <iframe name="att-not" src="#" frameborder="false" scrolling="auto" style="overflow-x:hidden;border:none" width="100%" height="450" allowtransparency="true" id="att_not"></iframe>
-            </ul>
-        </div>   
-        <?php }?>     
-    <div id="att-status" class="hidden"></div>
-    <div id="att-status-del" class="hidden"></div>
-    <div id="att-name" class="hidden"></div>
-<!-- h5 -->
+    </div>
 </div>
-</body>
-<script type="text/javascript">
-function imgWrap(obj){
-    $(obj).hasClass('on') ? $(obj).removeClass("on") : $(obj).addClass("on");
-}
-function SwapTab(name,cls_show,cls_hide,cnt,cur) {
-    for(i=1;i<=cnt;i++){
-        if(i==cur){
-             $('#div_'+name+'_'+i).show();
-             $('#div_'+name+'_'+i).removeClass('hidden');
-             $('#tab_'+name+'_'+i).addClass(cls_show);
-             $('#tab_'+name+'_'+i).removeClass(cls_hide);
-        }else{
-             $('#div_'+name+'_'+i).hide();
-             $('#div_'+name+'_'+i).addClass('hidden');
-             $('#tab_'+name+'_'+i).removeClass(cls_show);
-             $('#tab_'+name+'_'+i).addClass(cls_hide);
-        }
-    }
-}
+</form>
+</div>
+<script>
+$('.nav-tabs a').click(function (e) {
+    $('.nav-tabs').find('li').removeClass('active');
+    $('.tab-pane').removeClass('active');
+    $(this).parent().addClass('active');
+    $('#'+$(this).attr("data-toggle")).addClass('active');
+})
 function addonlinefile(obj) {
     var strs = $(obj).val() ? '|'+ $(obj).val() :'';
     $('#att-status').html(strs);
@@ -128,8 +155,6 @@ function dr_download(obj) {
         }
     });
 }
-function set_iframe(id,src){
-    $("#"+id).attr("src",src); 
-}
 </script>
+</body>
 </html>

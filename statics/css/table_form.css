@@ -28,7 +28,7 @@ a.close-own:hover{background-position: left -46px}
 .input-text:focus,.measure-input:focus,textarea:focus,input.date:focus,input.endDate:focus,.input-focus:focus {border-color: #93a1bb;outline: 0;-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(147,161,187,.6);box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(147,161,187,.6);}
 input.date,input.endDate{background: #fff url(../images/admin_img/input_date.png) no-repeat right 6px; padding-right:18px;font-size:14px;}
 textarea{min-height:80px; height:auto; padding: 6px 12px !important; margin:0;display:block;}
-select{vertical-align:middle;height: 34px;margin-right: 5px;padding: 6px 12px;background-color: #fff;border: 1px solid #E4E6EF;color: #3F4254;background-clip: padding-box;border-radius: 4px;-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);-webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;-o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;font-size: 14px;line-height: 1.42857;box-shadow: none!important;outline: 0!important;}
+select{width: 100%;height: 34px;padding: 6px 12px;background-color: #fff;border: 1px solid #E4E6EF;color: #3F4254;background-clip: padding-box;border-radius: 4px;-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);-webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;-o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;}
 .input-text[disabled], .input-text[readonly], fieldset[disabled] .input-text, select[disabled] {background-color: #eee;opacity: 1;}
 .input-text[disabled],fieldset[disabled] .input-text,select[disabled] {cursor: not-allowed;}
 .checkbox-inline.disabled,.checkbox.disabled label,.radio-inline.disabled,.radio.disabled label,fieldset[disabled] .checkbox label,fieldset[disabled] .checkbox-inline,fieldset[disabled] .radio label,fieldset[disabled] .radio-inline,fieldset[disabled] input[type=checkbox],fieldset[disabled] input[type=radio],input[type=checkbox].disabled,input[type=checkbox][disabled],input[type=radio].disabled,input[type=radio][disabled] {cursor: not-allowed;}
@@ -38,7 +38,7 @@ select{vertical-align:middle;height: 34px;margin-right: 5px;padding: 6px 12px;ba
 .table_form{font-size:14px;background:#fff;}
 .table_form td{padding:8px}
 .table_form th{font-weight:normal; text-align:right;padding:8px; color:#777}
-.table_form td label{ vertical-align:middle}
+.table_form td label{vertical-align:middle}
 .table_form td,.table_form th{padding:4px 0 4px 8px}
 .table_form tbody td,.table_form tbody th{border-bottom:1px solid #eee; }
 .colorpanel tbody td,.colorpanel tbody th{ padding:0;border-bottom: none;}

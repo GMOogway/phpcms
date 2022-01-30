@@ -190,8 +190,8 @@ class attachments {
 			if(upload_key($argskey) != $authkey) showmessage(L('attachment_parameter_error'));
 			extract(geth5init($args));
 			$att_not_used = $this->cache->get_data('att_json');
-			if(empty($att_not_used) || !isset($att_not_used)) $tab_status = ' class="on"';
-			if(!empty($att_not_used)) $div_status = ' hidden';
+			if(empty($att_not_used) || !isset($att_not_used)) $page = 0;
+			if(!empty($att_not_used)) $page = 4;
 			include $this->admin_tpl('h5upload');
 		}
 	}
@@ -340,7 +340,7 @@ class attachments {
 		}
 		pc_base::load_sys_class('form');
 		$page = $this->input->get('page') ? $this->input->get('page') : '1';
-		$infos = $this->att_db->listinfo($where, 'aid DESC', $page, 16);
+		$infos = $this->att_db->listinfo($where, 'aid DESC', $page, 18);
 		foreach($infos as $n=>$v){
 			$ext = fileext($v['filepath']);
 			if(in_array($ext,$this->imgext)) {

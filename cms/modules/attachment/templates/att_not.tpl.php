@@ -10,19 +10,41 @@ jQuery(document).ready(function() {
 <!--上传组件js-->
 <script src="<?php echo JS_PATH?>assets/ds.min.js"></script>
 <link href="<?php echo JS_PATH?>h5upload/h5upload.css" rel="stylesheet" type="text/css" />
-<div style="margin-bottom:10px;"><span id="all" class="btn blue" style="color: #fff;background-color: #32c5d2;border-color: #32c5d2;line-height: 1.44;outline: 0!important;box-shadow: none!important;display: inline-block;margin-bottom: 0;vertical-align: middle;cursor: pointer;border: 1px solid transparent;white-space: nowrap;padding: 6px 12px;font-size: 14px;line-height: 1.42857;border-radius: 4px;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;margin-left: 10px;">全选</span><span id="allno" class="btn blue" style="color: #fff;background-color: #32c5d2;border-color: #32c5d2;line-height: 1.44;outline: 0!important;box-shadow: none!important;display: inline-block;margin-bottom: 0;vertical-align: middle;cursor: pointer;border: 1px solid transparent;white-space: nowrap;padding: 6px 12px;font-size: 14px;line-height: 1.42857;border-radius: 4px;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;margin-left: 10px;">全不选</span><span id="other" class="btn blue" style="color: #fff;background-color: #32c5d2;border-color: #32c5d2;line-height: 1.44;outline: 0!important;box-shadow: none!important;display: inline-block;margin-bottom: 0;vertical-align: middle;cursor: pointer;border: 1px solid transparent;white-space: nowrap;padding: 6px 12px;font-size: 14px;line-height: 1.42857;border-radius: 4px;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;margin-left: 10px;">反选</span></div>
-<div class="explain-col"><?php echo L('att_not_used_desc')?></div>
-<div class="bk20 hr"></div>
-<div class="files clear">
+<style type="text/css">
+body{background: #fff;}
+</style>
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content   main-content2">
+                            <div class="page-body">
+<div class="row">
+    <div class="col-md-12 margin-bottom-20">
+        <label><span id="all" class="btn green btn-sm" style="margin-right:10px;">全选</span></label><label><span id="allno" class="btn red btn-sm" style="margin-right:10px;">全不选</span></label><label><span id="other" class="btn dark btn-sm">反选</span></label>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 margin-bottom-20">
+        <div class="explain-col"><?php echo L('att_not_used_desc')?></div>
+    </div>
+</div>
+<form class="form-horizontal" method="post" role="form" id="myform">
+<div class="files row">
 <?php if(is_array($att) && !empty($att)){ foreach ($att as $_v) {?>
+<div class="col-md-2 col-sm-2 col-xs-6">
     <div class="files_row tooltips" data-original-title="<?php echo $_v['filename']?>&nbsp;&nbsp;<?php echo format_file_size($_v['size'])?>">
         <span class="checkbox"></span>
         <input type="checkbox" class="checkboxes" name="ids[]" value="<?php echo $_v['aid']?>" />
-        <a class="off"><img width="<?php echo $_v['width']?>" id="<?php echo $_v['aid']?>" path="<?php echo $_v['src']?>" src="<?php echo $_v['fileimg']?>" filename="<?php echo $_v['filename']?>" size="<?php echo $_v['size']?>"></a>
+        <a><img width="<?php echo $_v['width']?>" id="<?php echo $_v['aid']?>" path="<?php echo $_v['src']?>" src="<?php echo $_v['fileimg']?>" filename="<?php echo $_v['filename']?>" size="<?php echo $_v['size']?>"></a>
         <i class="size"><?php echo $_v['size']?></i>
         <i class="name" title="<?php echo $_v['filename']?>"><?php echo $_v['filename']?></i>
     </div>
+</div>
 <?php }}?>
+</div>
+</form>
+</div>
+</div>
+</div>
 </div>
 <script type="text/javascript">
 $(document).ready(function(){

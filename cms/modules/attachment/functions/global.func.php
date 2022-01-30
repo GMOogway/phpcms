@@ -84,12 +84,12 @@
 								return false;
 							}
 							if(data.ext == 1) {
-								var img = '<div onmouseover=\"layer.tips(\''+data.name+'&nbsp;&nbsp;'+data.size+'\',this,{tips: [1, \'#fff\']});\" onmouseout=\"layer.closeAll();\"><span class=\"checkbox\"></span><input type=\"checkbox\" class=\"checkboxes\" name=\"ids[]\" value=\"'+data.id+'\" /><a href=\"javascript:;\" class=\"on\"><div class=\"icon\"></div><img src=\"'+data.url+'\" width=\"80\" id=\"'+data.id+'\" path=\"'+data.url+'\" filename=\"'+data.name+'\"/><i class=\"size\">'+data.size+'</i><i class=\"name\" title=\"'+data.name+'\">'+data.name+'</i></a></div>';
+								var img = '<div onmouseover=\"layer.tips(\''+data.name+'&nbsp;&nbsp;'+data.size+'\',this,{tips: [1, \'#fff\']});\" onmouseout=\"layer.closeAll();\"><span class=\"checkbox\"></span><input type=\"checkbox\" class=\"checkboxes\" name=\"ids[]\" value=\"'+data.id+'\" /><a class=\"on\"><div class=\"icon\"></div><img src=\"'+data.url+'\" width=\"80\" id=\"'+data.id+'\" path=\"'+data.url+'\" filename=\"'+data.name+'\"/><i class=\"size\">'+data.size+'</i><i class=\"name\" title=\"'+data.name+'\">'+data.name+'</i></a></div>';
 							} else {
-								var img = '<div onmouseover=\"layer.tips(\''+data.name+'&nbsp;&nbsp;'+data.size+'\',this,{tips: [1, \'#fff\']});\" onmouseout=\"layer.closeAll();\"><span class=\"checkbox\"></span><input type=\"checkbox\" class=\"checkboxes\" name=\"ids[]\" value=\"'+data.id+'\" /><a href=\"javascript:;\" class=\"on\"><div class=\"icon\"></div><img src=\"".IMG_PATH."ext/'+data.ext+'.png\" width=\"80\" id=\"'+data.id+'\" path=\"'+data.url+'\" filename=\"'+data.name+'\"/><i class=\"size\">'+data.size+'</i><i class=\"name\" title=\"'+data.name+'\">'+data.name+'</i></a></div>';
+								var img = '<div onmouseover=\"layer.tips(\''+data.name+'&nbsp;&nbsp;'+data.size+'\',this,{tips: [1, \'#fff\']});\" onmouseout=\"layer.closeAll();\"><span class=\"checkbox\"></span><input type=\"checkbox\" class=\"checkboxes\" name=\"ids[]\" value=\"'+data.id+'\" /><a class=\"on\"><div class=\"icon\"></div><img src=\"".IMG_PATH."ext/'+data.ext+'.png\" width=\"80\" id=\"'+data.id+'\" path=\"'+data.url+'\" filename=\"'+data.name+'\"/><i class=\"size\">'+data.size+'</i><i class=\"name\" title=\"'+data.name+'\">'+data.name+'</i></a></div>';
 							}
 							$.get('".SELF."?m=attachment&c=attachments&a=h5upload_json&aid='+data.id+'&src='+data.url+'&filename='+data.name+'&size='+data.size);
-							$('#fsUpload').append('<div id=\"attachment_'+data.id+'\" class=\"files_row on\" onclick=\"javascript:att_cancel(this,'+data.id+',\'upload\')\"></div>');
+							$('#fsUpload').append('<div class=\"col-md-2 col-sm-2 col-xs-6\"><div id=\"attachment_'+data.id+'\" class=\"files_row on\"></div></div>');
 							$('#attachment_'+data.id).html(img);
 							$('#att-status').append('|'+data.url);
 							$('#att-name').append('|'+data.name);

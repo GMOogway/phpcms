@@ -60,7 +60,7 @@ a.badge:link,a.badge:focus,a.badge:hover {color: #fff;text-decoration: none;curs
 img{border:none;}
 h1,h2,h3,h4,h5{font-weight:normal;color: #888;}
 table{border-collapse:collapse;}
-input,img,th {vertical-align: middle;}
+img,th {vertical-align: middle;}
 button[disabled],html input[disabled] {cursor: default;}
 input.dialog{height:0; font-size:0; line-height:0; border:none}
 label{font-weight:400;}
@@ -336,7 +336,6 @@ body .showMsg .bottom{padding: 10px;text-align: center;border-top: 1px solid #E9
 .list-page {text-align: right;}
 .list-page .pagination {margin: 0;}
 .breadcrumb>li,.pagination {display: inline-block;}
-.label,.pagination>li {display: inline;}
 .pagination {padding-left: 0;border-radius: 4px;}
 .pagination>li>a,.pagination>li>span {position: relative;float: left;padding: 6px 12px;line-height: 1.42857;text-decoration: none;color: #7E8299;background-color: #fff;border: 1px solid #ddd;border-radius: .42rem;margin-left: .4rem!important;}
 .close,.list-group-item>.badge {float: right;}
@@ -736,8 +735,6 @@ form .portlet.light .portlet-body {padding-top: 20px;padding-bottom: 20px;}
 .form {padding: 0!important;}
 .myfooter .form-actions {background-color: #ecf0f1 !important;padding: 15px !important;}
 .form .form-actions,.portlet-form .form-actions {padding: 20px;margin: 0;background-color: #f5f5f5;border-top: 1px solid #e7ecf1;}
-.margin-bottom-20 {margin-bottom: 20px!important;}
-.text-center {text-align: center;}
 .minicolors {width: 28px;height: 28px;display: inline-block;}
 .minicolors-theme-bootstrap .minicolors-swatch {width: 28px;height: 28px;}
 .minicolors-theme-bootstrap .minicolors-swatch .minicolors-swatch-color {width: 28px;height: 28px;}

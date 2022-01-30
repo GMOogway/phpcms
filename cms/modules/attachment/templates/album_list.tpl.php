@@ -19,8 +19,15 @@ jQuery(document).ready(function() {
 <!--上传组件js-->
 <script src="<?php echo JS_PATH?>assets/ds.min.js"></script>
 <link href="<?php echo JS_PATH?>h5upload/h5upload.css" rel="stylesheet" type="text/css" />
-<div style="float: left;">
-<form name="myform" action="" method="get" >
+<style type="text/css">
+body{background: #fff;}
+</style>
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content   main-content2">
+                            <div class="page-body">
+<div class="row">
+<form name="myform" action="" method="get">
 <input type="hidden" value="attachment" name="m">
 <input type="hidden" value="attachments" name="c">
 <input type="hidden" value="album_load" name="a">
@@ -29,45 +36,57 @@ jQuery(document).ready(function() {
 <input type="hidden" value="<?php echo $this->input->get('authkey');?>" name="authkey">
 <input type="hidden" value="<?php echo $file_types_post?>" name="site_allowext">
 <input type="hidden" value="<?php echo $file_upload_limit?>" name="info[file_upload_limit]">
-<div class="lh26" style="padding:0 0 10px">
-<label><?php echo L('name')?></label>
-<label><input type="text" value="<?php echo isset($filename) && $filename ? $filename : '';?>" class="input-text" name="info[filename]"></label>
-<label><?php echo L('date')?></label>
-<label><div class="formdate">
-<div class="form-date input-group">
-<div class="input-group input-time date date-picker">
-<input type="text" class="form-control" name="info[uploadtime]" value="<?php echo $uploadtime;?>">
-<span class="input-group-btn">
-<button class="btn default" type="button">
-<i class="fa fa-calendar"></i>
-</button>
-</span>
-</div>
-</div>
-</div></label>
-<label><button type="submit" class="btn green btn-sm" name="submit"> <i class="fa fa-search"></i> <?php echo L('search')?></button></label>
-</div>
+    <div class="col-md-9 margin-bottom-20">
+        <label><?php echo L('name')?></label>
+        <label>
+            <input type="text" class="form-control" value="<?php echo isset($filename) && $filename ? $filename : '';?>" name="info[filename]">
+        </label>
+        <label><?php echo L('date')?></label>
+        <label><div class="formdate">
+            <div class="form-date input-group">
+                <div class="input-group input-time date date-picker">
+                <input type="text" class="form-control" name="info[uploadtime]" value="<?php echo $uploadtime;?>">
+                <span class="input-group-btn">
+                    <button class="btn default" type="button">
+                        <i class="fa fa-calendar"></i>
+                    </button>
+                </span>
+                </div>
+            </div>
+        </div></label>
+        <label><button type="submit" class="btn green btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('search')?></button></label>
+    </div>
 </form>
+    <div class="col-md-3 text-right margin-bottom-20">
+        <label><span id="all" class="btn green btn-sm" style="margin-right:10px;">全选</span></label><label><span id="allno" class="btn red btn-sm" style="margin-right:10px;">全不选</span></label><label><span id="other" class="btn dark btn-sm">反选</span></label>
+    </div>
 </div>
-<div style="float: right;margin-right:10px;"><label><span id="all" class="btn green btn-sm" style="margin-right:10px;">全选</span></label><label><span id="allno" class="btn red btn-sm" style="margin-right:10px;">全不选</span></label><label><span id="other" class="btn dark btn-sm">反选</span></label></div>
-<div class="bk20 hr"></div>
-<div class="files clear">
+<form class="form-horizontal" method="post" role="form" id="myform">
+<div class="files row">
 <?php foreach($infos as $r) {?>
-	<div class="files_row tooltips" data-original-title="<?php echo $r['filename']?>&nbsp;&nbsp;<?php echo format_file_size($r['filesize'])?>">
-		<span class="checkbox"></span>
-		<input type="checkbox" class="checkboxes" name="ids[]" value="<?php echo $r['aid']?>" />
-		<a><img src="<?php echo $r['src']?>" id="<?php echo $r['aid']?>" width="<?php echo $r['width']?>" path="<?php echo dr_get_file_url($r)?>" size="<?php echo format_file_size($r['filesize'])?>" filename="<?php echo $r['filename']?>"/></a>
-		<i class="size"> <?php echo format_file_size($r['filesize'])?> </i>
-		<i class="name" title="<?php echo $r['filename']?>"><?php echo $r['filename']?></i>
-	</div>
+<div class="col-md-2 col-sm-2 col-xs-6">
+    <div class="files_row tooltips" data-original-title="<?php echo $r['filename']?>&nbsp;&nbsp;<?php echo format_file_size($r['filesize'])?>">
+        <span class="checkbox"></span>
+        <input type="checkbox" class="checkboxes" name="ids[]" value="<?php echo $r['aid']?>" />
+        <a><img src="<?php echo $r['src']?>" id="<?php echo $r['aid']?>" width="<?php echo $r['width']?>" path="<?php echo dr_get_file_url($r)?>" size="<?php echo format_file_size($r['filesize'])?>" filename="<?php echo $r['filename']?>"/></a>
+        <i class="size"> <?php echo format_file_size($r['filesize'])?> </i>
+        <i class="name" title="<?php echo $r['filename']?>"><?php echo $r['filename']?></i>
+    </div>
+</div>
 <?php } ?>
 </div>
-<div class="clear"></div>
+</form>
+<div class="row right-card-box">
 <div class="col-md-12 text-center margin-bottom-20"><?php echo $pages?></div>
+</div>
+</div>
+</div>
+</div>
+</div>
 <script type="text/javascript">
 $(document).ready(function(){
 	set_status_empty();
-});	
+});
 function set_status_empty(){
 	parent.window.$('#att-status').html('');
 	parent.window.$('#att-name').html('');
