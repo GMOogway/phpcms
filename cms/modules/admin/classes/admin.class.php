@@ -517,13 +517,13 @@ class admin {
 			return true;
 		} else {
 			if (!HTTP_REFERER) {
-				CI_DEBUG && log_message('error', '直接地址输入访问后台');
+				CI_DEBUG && log_message('error', '直接地址输入访问后台: （'.FC_NOW_URL.'）');
 				echo '<!DOCTYPE html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>提示信息</title><meta name="author" content="zhaoxunzhiyin" /><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"></head><body><div style="margin-top:30px;text-align:center"><font color="red">对不起，为了系统安全，不允许直接输入地址访问本系统的后台管理页面。</font></div></body></html>';
 				exit();
 			} else {
 				$curl = trim(trim(FC_NOW_HOST, '/'));
 				if (strtolower(substr(HTTP_REFERER, 0, strlen($curl))) != strtolower($curl)) {
-					CI_DEBUG && log_message('error', '外部链接访问后台');
+					CI_DEBUG && log_message('error', '外部链接: （'.HTTP_REFERER.'）访问后台: （'.FC_NOW_URL.'）');
 					echo '<!DOCTYPE html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>提示信息</title><meta name="author" content="zhaoxunzhiyin" /><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"></head><body><div style="margin-top:30px;text-align:center"><font color="red">对不起，为了系统安全，不允许从外部链接地址访问本系统的后台管理页面。</font></div></body></html>';
 					exit();
 				}
