@@ -67,5 +67,5 @@ $mobile = explode(',',$mobile);
 $tplid = 1;
 $sent_time = intval($input->post('sendtype')) == 2 && !empty($input->post('sendtime'))  ? trim($input->post('sendtime')) : date('Y-m-d H:i:s',SYS_TIME);
 $smsapi->send_sms($mobile, $send_txt, $sent_time, CHARSET,$id_code,$tplid); //发送短信
-echo 0;
+exit(0);
 ?>

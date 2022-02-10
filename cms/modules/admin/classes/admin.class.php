@@ -391,7 +391,7 @@ class admin {
 		$admin_login_db = pc_base::load_model('admin_login_model');
 		$member_db = pc_base::load_model('member_lock_model');
 		$member_login_db = pc_base::load_model('member_login_model');
-		$userid = $_SESSION['userid'];
+		$userid = isset($_SESSION['userid']) ? $_SESSION['userid'] : '';
 		$config = getcache('common','commons');
 		if ($config) {
 			if (isset($config['safe_use']) && dr_in_array('admin', $config['safe_use'])) {
@@ -414,9 +414,9 @@ class admin {
 				if (isset($config['safe_wdl']) && $config['safe_wdl']) {
 					$time = $config['safe_wdl'] * 3600 * 24;
 					$where = 'logintime < '.(SYS_TIME - $time);
-					$log_lock = $member_login_db->select($where);
-					if ($log_lock) {
-						foreach ($log_lock as $t) {
+					$member_log_lock = $member_login_db->select($where);
+					if ($member_log_lock) {
+						foreach ($member_log_lock as $t) {
 							$member_db->update(array('islock'=>1), array('userid'=>$t['uid']));
 						}
 					}

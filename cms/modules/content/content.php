@@ -716,7 +716,7 @@ class content extends admin {
 					$r['icon_type'] = $r['vs_show'] = '';
 					$r['category_edit'] = '';
 					$r['type'] = 'init';
-					$r['add_icon'] = "<a target='right' href='?m=content&c=content&menuid=".intval($this->input->get('menuid'))."&catid=".$r['catid']."' onclick=\"javascript:dr_content_submit('?m=content&c=content&a=add&menuid=".intval($this->input->get('menuid'))."&catid=".$r['catid']."&hash_page=".$_SESSION['hash_page']."','add')\"><img src='".IMG_PATH."add_content.png' alt='".L('add')."'></a> ";
+					$r['add_icon'] = "<a target='right' href='?m=content&c=content&menuid=".intval($this->input->get('menuid'))."&catid=".$r['catid']."' onclick=\"javascript:dr_content_submit('?m=content&c=content&a=add&menuid=".intval($this->input->get('menuid'))."&catid=".$r['catid']."','add')\"><img src='".IMG_PATH."add_content.png' alt='".L('add')."'></a> ";
 				}
 				$categorys[$r['catid']] = $r;
 			}
@@ -1323,7 +1323,7 @@ class content extends admin {
 				} else {
 					$r['icon_type'] = $r['vs_show'] = '';
 					$r['type'] = 'init';
-					$r['add_icon'] = "<a target='right' href='?m=content&c=content&menuid=".intval($this->input->get('menuid'))."&catid=".$r['catid']."' onclick=javascript:dr_content_submit('?m=content&c=content&a=add&menuid=".intval($this->input->get('menuid'))."&catid=".$r['catid']."&hash_page=".$_SESSION['hash_page']."','add')><img src='".IMG_PATH."add_content.gif' alt='".L('add')."'></a> ";
+					$r['add_icon'] = "<a target='right' href='?m=content&c=content&menuid=".intval($this->input->get('menuid'))."&catid=".$r['catid']."' onclick=javascript:dr_content_submit('?m=content&c=content&a=add&menuid=".intval($this->input->get('menuid'))."&catid=".$r['catid']."','add')><img src='".IMG_PATH."add_content.gif' alt='".L('add')."'></a> ";
 				}
 				$categorys[$r['catid']] = $r;
 			}

@@ -23,7 +23,7 @@ if($input->get('modelid') && $input->get('categoryid')) {
 		} else {
 			$url='<a href="'.$release_siteurl.$r['url'].'">';
 		}
-		echo '<li>'.$url.'<span class="state tody date">'.mdate($r['updatetime']).'</span><span class="title">'.str_cut($r['title'],100).'</span></a></li>';
+		exit('<li>'.$url.'<span class="state tody date">'.mdate($r['updatetime']).'</span><span class="title">'.str_cut($r['title'],100).'</span></a></li>');
 	}
 }
 ?>

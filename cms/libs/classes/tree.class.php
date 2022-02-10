@@ -8,6 +8,7 @@ class tree {
 	* @var array
 	*/
 	public $arr = array();
+	public $str = '';
 
 	/**
 	* 生成树型结构所需修饰符号，可以换成图片
@@ -211,7 +212,7 @@ class tree {
         } else {
            $effected = '';
         }
-		$placeholder = 	'<ul><li><span class="placeholder"></span></li></ul>';
+		$placeholder = '<ul><li><span class="placeholder"></span></li></ul>';
         if(!$recursion) $this->str .='<ul'.$effected.'  class="'.$style.'">';
         foreach($child as $id=>$a) {
 

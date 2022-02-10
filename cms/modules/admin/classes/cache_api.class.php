@@ -73,12 +73,12 @@ class cache_api {
 		foreach($this->categorys as $r) {
 			unset($r['module']);
 			$setting = string2array($r['setting']);
-			$r['create_to_html_root'] = $setting['create_to_html_root'];
+			$r['create_to_html_root'] = isset($setting['create_to_html_root']) ? $setting['create_to_html_root'] : 0;
 			$r['ishtml'] = $setting['ishtml'];
-			$r['content_ishtml'] = $setting['content_ishtml'];
+			$r['content_ishtml'] = isset($setting['content_ishtml']) ? $setting['content_ishtml'] : 0;
 			$r['category_ruleid'] = $setting['category_ruleid'];
-			$r['show_ruleid'] = $setting['show_ruleid'];
-			$r['workflowid'] = $setting['workflowid'];
+			$r['show_ruleid'] = isset($setting['show_ruleid']) ? $setting['show_ruleid'] : '';
+			$r['workflowid'] = isset($setting['workflowid']) ? $setting['workflowid'] : '';
 			$r['isdomain'] = '0';
 			if(!preg_match('/^(http|https):\/\//', $r['url'])) {
 				$r['url'] = siteurl($r['siteid']).$r['url'];
@@ -89,6 +89,16 @@ class cache_api {
 		}
 		setcache('category_content_'.$this->siteid,$categorys,'commons');
 		return true;
+	}
+	
+	// 清理缩略图
+	public function update_thumb() {
+		if (strpos(CMS_PATH, SYS_THUMB_PATH) !== false || is_file(SYS_THUMB_PATH.'index.php')) {
+			// 防止误删除
+			dr_json(0, L('缩略图目录异常，请手动清理：'.SYS_THUMB_PATH));
+		}
+		dr_file_delete(SYS_THUMB_PATH, true, true);
+		dr_json(1, L('清理完成'), 1);
 	}
 	
 	// 远程附件缓存
@@ -104,6 +114,39 @@ class cache_api {
 			}
 		}
 		setcache('attachment', $cache, 'commons');
+		return true;
+	}
+	
+	// 更新附件缓存
+	public function attachment() {
+		$page = intval($this->input->get('page'));
+        if (!$page) {
+			dr_file_delete(CACHE_PATH.'caches_attach/caches_data', true, true);
+            /*不清理缩略图文件是因为静态页面会导致缩略图404的悲剧
+            dr_dir_delete(SYS_THUMB_PATH);
+            create_folder(SYS_THUMB_PATH);*/
+            dr_json(1, L('正在检查附件'), 1);
+        }
+
+        $total = $this->db->count();
+        if (!$total) {
+            dr_json(1, L('无可用附件更新'), 0);
+        }
+
+        $psize = 300;
+        $tpage = ceil($total/$psize);
+        $result = $this->db->listinfo('','aid ASC',$page,$psize);
+        if ($result) {
+            foreach ($result as $t) {
+                get_attachment($t['aid']);
+            }
+        }
+
+        if ($page > $tpage) {
+            dr_json(1, L('已更新'.$total.'个附件'), 0);
+        }
+
+        dr_json(1, L('正在更新中（'.$page.'/'.$tpage.'）'), $page + 1);
 	}
 	
 	/**
@@ -111,6 +154,7 @@ class cache_api {
 	 */
 	public function downservers() {
 		$infos = $this->db->select();
+		$servers = array();
 		foreach ($infos as $info){
 			$servers[$info['id']] = $info;
 		}
@@ -156,6 +200,7 @@ class cache_api {
 	 */
 	public function position() {
 		$infos = $this->db->select('','*',1000,'listorder DESC');
+		$positions = array();
 		foreach ($infos as $info){
 			$positions[$info['posid']] = $info;
 		}
@@ -169,7 +214,11 @@ class cache_api {
 	public function vote_setting() {
 		$m_db = pc_base::load_model('module_model');
 		$data = $m_db->select(array('module'=>'vote'));
-		$setting = string2array($data[0]['setting']);
+		if ($data) {
+			$setting = string2array($data[0]['setting']);
+		} else {
+			$setting = array();
+		}
 		setcache('vote', $setting, 'commons');
 	}
 	
@@ -179,7 +228,11 @@ class cache_api {
 	public function link_setting() {
 		$m_db = pc_base::load_model('module_model');
 		$data = $m_db->select(array('module'=>'link'));
-		$setting = string2array($data[0]['setting']);
+		if ($data) {
+			$setting = string2array($data[0]['setting']);
+		} else {
+			$setting = array();
+		}
 		setcache('link', $setting, 'commons');
 	}
 	
@@ -188,6 +241,7 @@ class cache_api {
 	 */
 	public function admin_role() {
 		$infos = $this->db->select(array('disabled'=>'0'), $data = '`roleid`,`rolename`', '', 'roleid ASC');
+		$role = array();
 		foreach ($infos as $info){
 			$role[$info['roleid']] = $info['rolename'];
 		}
@@ -274,7 +328,7 @@ class cache_api {
 				$t['field'] = array();
 				$t['setting'] = dr_string2array($t['setting']);
 				// 排列table字段顺序
-				$t['setting']['list_field'] = dr_list_field_order($t['setting']['list_field']);
+				$t['setting']['list_field'] = isset($t['setting']['list_field']) ? dr_list_field_order($t['setting']['list_field']) : '';
 
 				// 当前表单的自定义字段
 				$this->sitemodel_field_db = pc_base::load_model('sitemodel_field_model');

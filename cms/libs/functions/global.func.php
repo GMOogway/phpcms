@@ -747,6 +747,26 @@ function check_member_auth($groupid, $catid, $action) {
 	return 1;
 }
 /**
+ * 删除目录下面的所有文件
+ */
+function dr_file_delete($path, $delDir = false, $htdocs = false, $_level = 0) {
+	$path = rtrim($path, '/\\');
+	if (! $currentDir = @opendir($path)) {
+		return false;
+	}
+	while (false !== ($filename = @readdir($currentDir))) {
+		if ($filename !== '.' && $filename !== '..') {
+			if (is_dir($path . DIRECTORY_SEPARATOR . $filename) && $filename[0] !== '.') {
+				dr_file_delete($path . DIRECTORY_SEPARATOR . $filename, $delDir, $htdocs, $_level + 1);
+			} elseif ($htdocs !== true || ! preg_match('/^(\.htaccess|index\.(html|htm|php)|web\.config)$/i', $filename)) {
+				@unlink($path . DIRECTORY_SEPARATOR . $filename);
+			}
+		}
+	}
+	closedir($currentDir);
+	return ($delDir === true && $_level > 0) ? @rmdir($path) : true;
+}
+/**
  * 删除目录及目录下面的所有文件
  *
  * @param   string  $dir        路径
@@ -3628,7 +3648,7 @@ function show_error($msg, $file = '') {
  */
 function dr_form_hidden($data = array()) {
 	$form = '<input name="is_form" type="hidden" value="1">'.PHP_EOL;
-	$form.= '<input name="is_admin" type="hidden" value="'.(IS_ADMIN && $_SESSION['roleid'] && cleck_admin($_SESSION['roleid']) ? 1 : 0).'">'.PHP_EOL;
+	$form.= '<input name="is_admin" type="hidden" value="'.(IS_ADMIN && isset($_SESSION['roleid']) && $_SESSION['roleid'] && cleck_admin($_SESSION['roleid']) ? 1 : 0).'">'.PHP_EOL;
 	$form.= '<input name="csrf_test_name" type="hidden" value="'.csrf_hash().'">'.PHP_EOL;
 	if ($data) {
 		foreach ($data as $name => $value) {

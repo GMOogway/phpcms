@@ -4,5 +4,5 @@
  */
 defined('IN_CMS') or exit('No permission resources.');
 
-echo dr_get_keywords($input->post('data'));
+exit(dr_get_keywords(dr_safe_replace($input->post('data'))));
 ?>

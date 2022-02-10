@@ -68,5 +68,6 @@ if($input->get('modelid') && $input->get('categoryid')) {
 		echo '{"id":"'.$r['id'].'","url":"'.$url.'","name":"'.$r['title'].'","logo":"'.$thumb.'","tag":"","score_type":"400,500","browse_number":"'.$hitsr['views'].'","focus_number":"824","subscript":"'.$subscript.'"},';
 	}
 	echo '{"max":"'.$countr['num'].'"}]';
+	exit;
 }
 ?>

@@ -57,9 +57,9 @@ function open_list(obj) {
     <a href="#"><img src="<?php echo IMG_PATH;?>minus.gif" /> <img src="<?php echo IMG_PATH;?>application_side_expand.png" /> 展开/收缩</a>
 </div>
 <?php
- if($_GET['from']=='block') {
+ if($this->input->get('from')=='block') {
 ?>
-<ul class="filetree  treeview"><li class="collapsable"><div class="hitarea collapsable-hitarea"></div><span><img src="<?php echo IMG_PATH.'icon/home.png';?>" width="15" height="14">&nbsp;<a href='?m=block&c=block_admin&a=public_visualization&type=index' target='<?php echo $_GET['from'];?>_right'><?php echo L('block_site_index');?></a></span></li></ul>
+<ul class="filetree  treeview"><li class="collapsable"><div class="hitarea collapsable-hitarea"></div><span><img src="<?php echo IMG_PATH.'icon/home.png';?>" width="15" height="14">&nbsp;<a href='?m=block&c=block_admin&a=public_visualization&type=index' target='<?php echo $this->input->get('from');?>_right'><?php echo L('block_site_index');?></a></span></li></ul>
 <?php } else { ?>
 <ul class="filetree  treeview"><li class="collapsable"><div class="hitarea collapsable-hitarea"></div><span><img src="<?php echo IMG_PATH.'icon/home.png';?>" width="15" height="14">&nbsp;<a href='?m=content&c=content&a=initall&menuid=<?php echo $this->input->get('menuid');?>' target='right'><?php echo L('allcontent');?></a></span></li></ul>
 <ul class="filetree  treeview"><li class="collapsable"><div class="hitarea collapsable-hitarea"></div><span><img src="<?php echo IMG_PATH.'box-exclaim.png';?>" width="15" height="14">&nbsp;<a href='?m=content&c=content&a=public_checkall&menuid=<?php echo $this->input->get('menuid');?>' target='right'><?php echo L('checkall_content');?></a></span></li></ul>
