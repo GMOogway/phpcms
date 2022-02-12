@@ -224,7 +224,7 @@ function load_file_list(id) {
     $.getJSON('?m=admin&c=category&a=public_tpl_file_list&style='+id, function(data){$('#category_template').html(data.category_template);$('#list_template').html(data.list_template);$('#show_template').html(data.show_template);});
 }
 $("#other").click(function() {
-    if ($('#other').attr('checked')) {
+    if ($('#other').is(':checked')) {
         $('#other_tab').show();
         $('#other_tab2').show();
     } else {
@@ -232,7 +232,7 @@ $("#other").click(function() {
         $('#other_tab2').hide();
     }
 })
-if ($('#other').attr('checked')) {
+if ($('#other').is(':checked')) {
     $('#other_tab').show();
     $('#other_tab2').show();
 } else {

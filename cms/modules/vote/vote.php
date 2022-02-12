@@ -64,6 +64,8 @@ class vote extends admin {
 		if($this->input->post('dosubmit')) {
 			$subject = $this->input->post('subject');
 			$subject['addtime'] = SYS_TIME;
+			if(!$subject['fromdate']) $subject['fromdate'] = dr_date(SYS_TIME, 'Y-m-d');
+			if(!$subject['todate']) $subject['todate'] = dr_date(SYS_TIME, 'Y-m-d');
 			$subject['siteid'] = $this->get_siteid();
 			if(empty($subject['subject'])) {
 				dr_admin_msg(0,L('vote_title_noempty'),'?m=vote&c=vote&a=add');
@@ -370,6 +372,7 @@ class vote extends admin {
 	 * 信息选择投票接口
 	 */
 	public function public_get_votelist() {
+		$show_header = true;
 		$infos = $this->db->listinfo(array('siteid'=>$this->get_siteid()),'subjectid DESC',$page,SYS_ADMIN_PAGESIZE);
 		$target = $this->input->get('target') ? $this->input->get('target') : '';
 		include $this->admin_tpl('get_votelist');

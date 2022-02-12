@@ -149,15 +149,6 @@ function AdsType(adstype) {
 		$('#SizeFormat').css('display', '');
 	}
 }
-$('#AlignBox').click( function (){
-	if($('#AlignBox').attr('checked')) {
-		$('#PaddingLeft').attr('disabled', true);
-		$('#PaddingTop').attr('disabled', true);
-	} else {
-		$('#PaddingLeft').attr('disabled', false);
-		$('#PaddingTop').attr('disabled', false);
-	}
-}); 
 </script>
 
 <script language="javascript">

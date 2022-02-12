@@ -357,7 +357,7 @@ function change_radio(oEvent,boxid,value,type) {
 	altKey = oEvent.altKey;
 	if(altKey) {
 		var obj = $("input[boxid="+boxid+"][value="+value+"]");
-		obj.attr('checked',true);
+		obj.prop('checked',true);
 		if(type){
 			obj.each(function(){	
 				urlrule(type,value,$(this).attr('catid'));			

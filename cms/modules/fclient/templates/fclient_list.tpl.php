@@ -149,16 +149,11 @@ function edit(id, name) {
 	artdialog('edit','?m=fclient&c=fclient&a=edit&id='+id,'<?php echo L('edit')?> '+name+' ',700,450);
 }
 function confirm_delete(){
-	var str = 0;
-	var id = tag = '';
-	$("input[name='id[]']").each(function() {
-		if($(this).attr('checked')=='checked') {
-			str = 1;
-			id += tag+$(this).val();
-			tag = '|';
-		}
+	var ids='';
+	$("input[name='id[]']:checked").each(function(i, n){
+		ids += $(n).val() + ',';
 	});
-	if(str==0) {
+	if(ids=='') {
 		Dialog.alert('<?php echo L('checked_the_info')?>');
 		return false;
 	}

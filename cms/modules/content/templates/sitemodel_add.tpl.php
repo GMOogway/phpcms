@@ -90,7 +90,7 @@ include $this->admin_tpl('header','admin');
 		$.getJSON('?m=admin&c=category&a=public_tpl_file_list&style='+id+'&catid=', function(data){$('#category_template').html(data.category_template);$('#list_template').html(data.list_template);$('#show_template').html(data.show_template);});
 	}
 	$("#other").click(function() {
-		if ($('#other').attr('checked')) {
+		if ($('#other').is(':checked')) {
 			$('#other_tab').show();
 		} else {
 			$('#other_tab').hide();

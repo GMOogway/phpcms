@@ -43,12 +43,12 @@ body .table-list table tr>td:first-child, body .table-list table tr>th:first-chi
 	$('#model').click(function (){
 		if ($('#models').attr('class') == 'hidden'){
 			$("[name='model[]']").each(function (i) {
-				$(this).attr('checked', true);
+				$(this).prop('checked', true);
 			});
 			$('#models').removeClass('hidden');
 		} else {
 			$("[name='model[]']").each(function (i) {
-				$(this).attr('checked', false);
+				$(this).prop('checked', false);
 			});
 			$('#models').addClass('hidden');
 		}

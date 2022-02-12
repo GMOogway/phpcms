@@ -41,7 +41,7 @@ if(is_array($infos)){
 <!--
 	function return_id(voteid, title) {
 	<?php if ($target=='dialog') {?>
-	$('#voteid_'+voteid).attr('checked', 'true');
+	$('#voteid_'+voteid).prop('checked', 'true');
 	$('#msg_id').val('vote|'+voteid+'|'+title);
 	dialogOpener.$('#voteid').val(voteid);<?php if(!$target) {?>ownerDialog.close(); <?php }?>
 	<?php } else{?>

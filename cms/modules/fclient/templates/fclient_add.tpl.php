@@ -17,29 +17,29 @@ include $this->admin_tpl('header','admin');
 <form action="?m=fclient&c=fclient&a=add" method="post" name="myform" id="myform">
 <table cellpadding="2" cellspacing="1" class="table_form" width="100%">
 	<tr>
-		<th width="100"><?php echo L('username')?>：</th>
+		<th width="120"><?php echo L('username')?>：</th>
 		<td>
 		<input type="text" name="fclient[username]" id="fclient_username" value="" class="input-text" />
 		</td>
 	</tr>
 	
 	<tr>
-		<th width="100"><?php echo L('name')?>：</th>
+		<th><?php echo L('name')?>：</th>
 		<td><input type="text" name="fclient[name]" id="fclient_name" size="30" class="input-text"></td>
 	</tr>
 	
 	<tr>
-		<th width="100"><?php echo L('domain')?>：</th>
+		<th><?php echo L('domain')?>：</th>
 		<td><input type="text" name="fclient[domain]" id="fclient_domain" size="30" class="input-text"></td>
 	</tr>
 	
 	<tr>
-		<th width="100"><?php echo L('sn')?>：</th>
-		<td><input type="text" name="fclient[sn]" id="fclient_sn" size="30" class="input-text" readonly="readonly"><button class="button" type="button" onclick="dr_to_aeskey()"><?php echo L('aeskey')?></button></td>
+		<th><?php echo L('sn')?>：</th>
+		<td><label><input type="text" name="fclient[sn]" id="fclient_sn" size="30" class="input-text" readonly="readonly"></label> <label><button class="button" type="button" onclick="dr_to_aeskey()"><?php echo L('aeskey')?></button></label></td>
 	</tr>
 	
 	<tr>
-		<th width="100"><?php echo L('access_model')?>：</th>
+		<th><?php echo L('access_model')?>：</th>
 		<td><div class="mt-radio-inline">
 			<label class="mt-radio mt-radio-outline"><input type="radio" onclick="$('.dr_mode_0').show();$('.dr_mode_1').hide()" name="fclient[setting][mode]" value="0" checked /> <?php echo L('remote_server')?> <span></span></label>
 			<label class="mt-radio mt-radio-outline"><input type="radio" onclick="$('.dr_mode_1').show();$('.dr_mode_0').hide()" name="fclient[setting][mode]" value="1" /> <?php echo L('local_server')?> <span></span></label>
@@ -47,23 +47,28 @@ include $this->admin_tpl('header','admin');
 	</tr>
 	
 	<tr class="dr_mode_0">
-		<th width="100"><?php echo L('special_tips')?>：</th>
+		<th><?php echo L('special_tips')?>：</th>
 		<td><?php echo L('remote_server_no_cms')?></td>
 	</tr>
 	
 	<tr class="dr_mode_1" style="display: none;">
-		<th width="100"><?php echo L('local_web_path')?>：</th>
-		<td><input type="text" name="fclient[setting][webpath]" id="dr_html_dir" value="" size="30" class="input-text"><button class="button" onclick="dr_check_domain('dr_html_dir')" type="button"><i class="fa fa-code"></i> <?php echo L('test')?></button></td>
+		<th><?php echo L('local_web_path')?>：</th>
+		<td><div class="input-group">
+		    <input type="text" name="fclient[setting][webpath]" id="dr_html_dir" value="" class="form-control">
+		    <span class="input-group-btn">
+		        <button class="btn blue" onclick="dr_check_domain('dr_html_dir')" type="button"><i class="fa fa-code"></i> <?php echo L('test')?></button>
+		    </span>
+		</div></td>
 	</tr>
 	
 	<tr>
-		<th width="100"><?php echo L('money')?>：</th>
+		<th><?php echo L('money')?>：</th>
 		<td><input type="text" name="fclient[money]" id="fclient_money" size="30" class="input-text"></td>
 	</tr>
 	
 	<tr>
-		<th width="100"><?php echo L('site_note')?>：</th>
-		<td><textarea style="width: 200px;height:100px" name="fclient[setting][mark]"></textarea></td>
+		<th><?php echo L('site_note')?>：</th>
+		<td><textarea style="height:100px" name="fclient[setting][mark]"></textarea></td>
 	</tr>
 	
 	<tr>
@@ -77,17 +82,17 @@ include $this->admin_tpl('header','admin');
 	</tr>
 	
 	<tr>
-		<th width="100"><?php echo L('note')?>：</th>
+		<th><?php echo L('note')?>：</th>
 		<td><input type="text" name="fclient[setting][note]" id="fclient_note" size="30" class="input-text"></td>
 	</tr>
 	
 	<tr>
-		<th width="100"><?php echo L('inputtime')?>：</th>
+		<th><?php echo L('inputtime')?>：</th>
 		<td><?php echo form::date('fclient[inputtime]','',0,0,'true',0,0,1);?></td>
 	</tr>
 	
 	<tr>
-		<th width="100"><?php echo L('endtime')?>：</th>
+		<th><?php echo L('endtime')?>：</th>
 		<td><?php echo form::date('fclient[endtime]','',0,0,'true',0,0,1);?></td>
 	</tr>
 

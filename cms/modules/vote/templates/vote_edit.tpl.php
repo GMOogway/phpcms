@@ -73,11 +73,11 @@ include $this->admin_tpl('header','admin');
     
     <tr>
 		<th><?php echo L('fromdate')?>：</th>
-		<td><?php echo form::date('subject[fromdate]',$fromdate)?></td>
+		<td><?php echo form::date('subject[fromdate]',dr_date(strtotime($fromdate), 'Y-m-d'))?></td>
 	</tr>
 	<tr>
 		<th><?php echo L('todate')?> ：</th>
-		<td><?php echo form::date('subject[todate]',$todate)?></td>
+		<td><?php echo form::date('subject[todate]',dr_date(strtotime($todate), 'Y-m-d'))?></td>
 	</tr>
     <tr>  
       <th> <?php echo L('vote_description')?> </th>
@@ -151,15 +151,6 @@ function AdsType(adstype) {
 		$('#SizeFormat').css('display', '');
 	}
 }
-$('#AlignBox').click( function (){
-	if($('#AlignBox').attr('checked')) {
-		$('#PaddingLeft').attr('disabled', true);
-		$('#PaddingTop').attr('disabled', true);
-	} else {
-		$('#PaddingLeft').attr('disabled', false);
-		$('#PaddingTop').attr('disabled', false);
-	}
-}); 
 </script>
                
 <script language="javascript">
