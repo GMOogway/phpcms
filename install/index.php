@@ -87,7 +87,7 @@ switch($step)
 				'value' => '√',
 				'error_value' => '必须开启',
 				'code' => extension_loaded('json') && function_exists('json_decode') && function_exists('json_encode'),
-				'help' => '&nbsp;不只持json,<a href="http://pecl.php.net/package/json" target="_blank">安装 PECL扩展</a>',
+				'help' => '&nbsp;不支持json,<a href="http://pecl.php.net/package/json" target="_blank">安装 PECL扩展</a>',
 				'error' => 1,
 			),
 			array(
@@ -328,7 +328,7 @@ switch($step)
 			}							
 		} else {
 			//安装可选模块
-			if(in_array($module,array('announce','comment','link','vote','message','mood','poster','formguide','tag','sms'))) {
+			if(in_array($module,array('announce','comment','link','vote','message','mood','poster','formguide','tag','sms','404','bdts','custom','customfield','fclient','guestbook','import','slider','sqltoolplus','taglist'))) {
 				$install_module = pc_base::load_app_class('module_api','admin');
 				$install_module->install($module);
 			}
