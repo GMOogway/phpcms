@@ -17,8 +17,9 @@
 		}
 		if(intval($local_img)) {
 			$value = str_replace(' src="'.WEB_PATH.'statics/js/ueditor/themes/default/images/spacer.gif"', '', $value);
-			$value = preg_replace(array('/(<img.*?)((style)=[\'"]+(.*?)+[\'"]+)/'), array('$1'), $value);
+			$value = preg_replace(array('/(<img.*?)((style)=[\'"]background+(.*?)+[\'"]+)/'), array('$1'), $value);
 			$value = str_replace('word_img=', 'src=', $value);
+			$value = str_replace('img=', 'src=', $value);
 			$value = $this->download->upload_local($value, $local_watermark, $local_attachment, $local_image_reduce, 0);
 		}
 		$value = str_replace(array('&lt;iframe', '&gt;&lt;/iframe&gt;'), array('<iframe', '></iframe>'), $value);

@@ -284,10 +284,10 @@
             if (!dialogs[dialogName]) {
               return;
             }
-            if (dialogName == 'insertimageDialog' || dialogName == 'insertvideoDialog') {
+            /*if (dialogName == 'insertimageDialog' || dialogName == 'insertvideoDialog') {
               eval('$EDITORUI[\"'+popup.getUid()+'\"]._onImgEditButtonClick(\''+dialogName+'\')');
               return;
-            }
+            }*/
             str = '<nobr>' + editor.getLang("property") + ': '+
               '<span onclick=$$._onImgSetFloat("none") class="edui-clickable">' + editor.getLang("default") + '</span>&nbsp;&nbsp;' +
               '<span onclick=$$._onImgSetFloat("left") class="edui-clickable">' + editor.getLang("justifyleft") + '</span>&nbsp;&nbsp;' +
