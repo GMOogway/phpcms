@@ -1132,6 +1132,7 @@ if (! function_exists('clearhtml')) {
 			return '';
 		}
 
+		$str = strip_tags($str);
 		$str = code2html($str);
 		$str = str_replace(
 			array('&nbsp;', '&amp;', '&quot;', '&#039;', '&ldquo;', '&rdquo;', '&mdash;', '&lt;', '&gt;', '&middot;', '&hellip;'),
@@ -1141,7 +1142,6 @@ if (! function_exists('clearhtml')) {
 		$str = preg_replace("/\<[a-z]+(.*)\>/iU", "", $str);
 		$str = preg_replace("/\<\/[a-z]+\>/iU", "", $str);
 		$str = str_replace(array(PHP_EOL, chr(13), chr(10), '&nbsp;'), '', $str);
-		$str = strip_tags($str);
 
 		return trim($str);
 	}
