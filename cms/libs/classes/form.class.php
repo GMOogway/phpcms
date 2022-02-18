@@ -236,14 +236,14 @@ class form {
 		}
 		$ext_str .= "<div class='cke_footer'>";
 		if ($show_page=="true") {
-			$ext_str .= "<a href='javascript:insert_page(\"$textareaid\")'>".L('pagebreak')."</a><a href='javascript:insert_page_title(\"$textareaid\")'>".L('subtitle')."</a>";
+			$ext_str .= "<a href='javascript:insert_page(\"$textareaid\")' class=\"btn blue btn-sm\"> <i class=\"fa fa-plus\"></i> ".L('pagebreak')."</a><a href='javascript:insert_page_title(\"$textareaid\")' class=\"btn green btn-sm\"> <i class=\"fa fa-indent\"></i> ".L('subtitle')."</a>";
 		}
 		if($allowupload) {
-			$ext_str.="<a onclick=\"h5upload('".SELF."', 'h5upload', '".L('attachmentupload')."','{$textareaid}','','{$p}','{$module}','{$catid}','{$authkey}',".SYS_EDITOR.");return false;\" href=\"javascript:void(0);\">".L('attachmentupload')."</a>";
+			$ext_str.="<a onclick=\"h5upload('".SELF."', 'h5upload', '".L('attachmentupload')."','{$textareaid}','','{$p}','{$module}','{$catid}','{$authkey}',".SYS_EDITOR.");return false;\" href=\"javascript:void(0);\" class=\"btn red btn-sm\"> <i class=\"fa fa-plus\"></i> ".L('attachmentupload')."</a>";
 		}
 		$ext_str .= "</div>";
 		if ($show_page=="true") {
-			$ext_str .= "<div id='page_title_div'><div class='title'>".L('subtitle')."<span id='msg_page_title_value'></span><a class='close' href='javascript:;' onclick='javascript:$(\"#page_title_div\").hide();'><span>×</span></a></div><div class='page_content'><input name='page_title_value' id='page_title_value' class='input-text' value='' size='28'>&nbsp;<input type='button' class='button' value='".L('submit')."' onclick=insert_page_title(\"$textareaid\",1)></div></div>";
+			$ext_str .= "<div id='page_title_div'><div class='title'>".L('subtitle')."<span id='msg_page_title_value'></span><a class='close' href='javascript:;' onclick='javascript:$(\"#page_title_div\").hide();'><span>×</span></a></div><div class='page_content'><label><input name='page_title_value' id='page_title_value' class='input-text' value='' size='28'></label>&nbsp;<label><input type='button' class='button' value='".L('submit')."' onclick=insert_page_title(\"$textareaid\",1)></label></div></div>";
 		}
 		$ext_str .= "</div>";
 		if(is_ie()) $ext_str .= "<div style='display:none'><OBJECT id='PC_Capture' classid='clsid:021E8C6F-52D4-42F2-9B36-BCFBAD3A0DE4'><PARAM NAME='_Version' VALUE='0'><PARAM NAME='_ExtentX' VALUE='0'><PARAM NAME='_ExtentY' VALUE='0'><PARAM NAME='_StockProps' VALUE='0'></OBJECT></div>";

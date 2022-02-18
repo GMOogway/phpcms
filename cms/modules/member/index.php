@@ -623,10 +623,7 @@ class index extends foreground {
 			
 			$username = $this->input->post('username');
 			foreground::member_login_before($username);
-			$rt = $this->check_username($username);
-			if (!$rt['code']) {
-				showmessage($rt['msg'], HTTP_REFERER);
-			}
+			$username = isset($username) ? dr_safe_username($username) : showmessage(L('username_empty'), HTTP_REFERER);
 			$password = $this->input->post('password') && trim($this->input->post('password')) ? urldecode(trim($this->input->post('password'))) : showmessage(L('password_empty'), HTTP_REFERER);
 			is_badword($this->input->post('password'))==false ? trim($this->input->post('password')) : showmessage(L('password_format_incorrect'), HTTP_REFERER);
 			
