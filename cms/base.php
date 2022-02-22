@@ -17,6 +17,9 @@ define('IN_PHPCMS', IN_CMS);
 // 移动入口标识
 !defined('IS_MOBILE') && define('IS_MOBILE', FALSE);
 
+// 采集入口标识
+!defined('IS_COLLAPI') && define('IS_COLLAPI', FALSE);
+
 //CMS框架路径
 !defined('PC_PATH') && define('PC_PATH', dirname(__FILE__).DIRECTORY_SEPARATOR);
 

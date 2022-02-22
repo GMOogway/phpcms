@@ -1901,7 +1901,7 @@ function sys_auth($string, $operation = 'ENCODE', $key = '', $expiry = 0) {
 		$result .= chr(ord($string[$i]) ^ ($box[($box[$a] + $box[$j]) % 256]));
 	}
 
-	if($operation == 'DECODE') {
+	if($result && $operation == 'DECODE') {
 		if((substr($result, 0, 10) == 0 || substr($result, 0, 10) - SYS_TIME > 0) && substr($result, 10, 16) == substr(md5(substr($result, 26).$keyb), 0, 16)) {
 			return substr($result, 26);
 		} else {
