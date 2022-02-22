@@ -64,7 +64,7 @@ img,th {vertical-align: middle;}
 button[disabled],html input[disabled] {cursor: default;}
 input.dialog{height:0; font-size:0; line-height:0; border:none}
 label{font-weight:400;}
-li [class*=" fa-"],li [class*=" glyphicon-"],li [class*=" icon-"],li [class^=fa-],li [class^=glyphicon-],li [class^=icon-] {display: inline-block;width: 1.25em;text-align: center;}
+li [class*=" fa-"],li [class*=" glyphicon-"],li [class*=" icon-"],li [class^=fa-],li [class^=glyphicon-],li [class^=icon-] {display: inline-block;text-align: center;}
 .layui-field-title legend{width: auto!important;}
 pre,textarea{overflow: auto;}
 .alert {border-width: 1px;}
