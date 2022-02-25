@@ -227,6 +227,7 @@ $LANG['setting_adminaccessip'] = '允许访问后台的IP列表';
 $LANG['setting_admin_code'] = '后台登录验证码';
 $LANG['setting_admin_code_model'] = '后台验证码模式';
 $LANG['setting_code_character'] = '后台验证码字符集';
+$LANG['setting_character_letters'] = '不能包含特殊字符，只能由数字和26个英文字母组成的字符串';
 $LANG['setting_voice_model'] = '后台验证码语音模式';
 $LANG['setting_confusion'] = '数字字母混淆';
 $LANG['setting_digital'] = '纯数字';

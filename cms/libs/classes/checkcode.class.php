@@ -24,7 +24,7 @@ class checkcode {
 	public $code;
 
 	//验证码的随机种子
-	public $code_string = 'abcdefghkmnprstuvwyzABCDEFGHKLMNPRSTUVWYZ23456789';
+	public $code_string = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
 	//验证码长度
 	public $code_len = 4;

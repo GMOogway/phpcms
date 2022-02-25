@@ -257,8 +257,8 @@ jQuery(document).ready(function() {
                         <label class="col-md-2 control-label"><?php echo L('setting_admin_code')?></label>
                         <div class="col-md-9">
                             <div class="mt-radio-inline">
-                                <label class="mt-radio mt-radio-outline"><input name="setting[sysadmincode]" value="0" type="radio" <?php echo (!$sysadmincode) ? ' checked' : ''?> onclick="$('#sysadmincodemodel').removeClass('hidden');$('#sysadmincodelen').removeClass('hidden');"> <?php echo L('open')?> <span></span></label>
-                                <label class="mt-radio mt-radio-outline"><input name="setting[sysadmincode]" value="1" type="radio" <?php echo ($sysadmincode) ? ' checked' : ''?> onclick="$('#sysadmincodemodel').addClass('hidden');$('#captcha_charset').addClass('hidden');$('#sysadmincodevoicemodel').addClass('hidden');$('#sysadmincodelen').addClass('hidden');"> <?php echo L('close')?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input name="setting[sysadmincode]" value="0" type="radio" <?php echo (!$sysadmincode) ? ' checked' : ''?> onclick="dr_code(this);"> <?php echo L('open')?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input name="setting[sysadmincode]" value="1" type="radio" <?php echo ($sysadmincode) ? ' checked' : ''?> onclick="dr_code(this);"> <?php echo L('close')?> <span></span></label>
                             </div>
                         </div>
                     </div>
@@ -266,17 +266,17 @@ jQuery(document).ready(function() {
                         <label class="col-md-2 control-label"><?php echo L('setting_admin_code_model')?></label>
                         <div class="col-md-9">
                             <div class="mt-radio-inline">
-                                <label class="mt-radio mt-radio-outline"><input name="setting[sysadmincodemodel]" value="0" type="radio" <?php echo (!$sysadmincodemodel) ? ' checked' : ''?> onclick="$('#captcha_charset').addClass('hidden');$('#sysadmincodevoicemodel').addClass('hidden');"> <?php echo L('setting_confusion')?> <span></span></label>
-                                <label class="mt-radio mt-radio-outline"><input name="setting[sysadmincodemodel]" value="1" type="radio" <?php echo ($sysadmincodemodel==1) ? ' checked' : ''?> onclick="$('#captcha_charset').addClass('hidden');$('#sysadmincodevoicemodel').addClass('hidden');"> <?php echo L('setting_digital')?> <span></span></label>
-                                <label class="mt-radio mt-radio-outline"><input name="setting[sysadmincodemodel]" value="2" type="radio" <?php echo ($sysadmincodemodel==2) ? ' checked' : ''?> onclick="$('#captcha_charset').addClass('hidden');$('#sysadmincodevoicemodel').removeClass('hidden');"> <?php echo L('setting_letters')?> <span></span></label>
-                                <label class="mt-radio mt-radio-outline"><input name="setting[sysadmincodemodel]" value="3" type="radio" <?php echo ($sysadmincodemodel==3) ? ' checked' : ''?> onclick="$('#captcha_charset').removeClass('hidden');$('#sysadmincodevoicemodel').addClass('hidden');"> <?php echo L('setting_character')?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input name="setting[sysadmincodemodel]" value="0" type="radio" <?php echo (!$sysadmincodemodel) ? ' checked' : ''?> onclick="$('#dr_row_captcha_charset').addClass('hidden');$('#sysadmincodevoicemodel').addClass('hidden');"> <?php echo L('setting_confusion')?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input name="setting[sysadmincodemodel]" value="1" type="radio" <?php echo ($sysadmincodemodel==1) ? ' checked' : ''?> onclick="$('#dr_row_captcha_charset').addClass('hidden');$('#sysadmincodevoicemodel').addClass('hidden');"> <?php echo L('setting_digital')?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input name="setting[sysadmincodemodel]" value="2" type="radio" <?php echo ($sysadmincodemodel==2) ? ' checked' : ''?> onclick="$('#dr_row_captcha_charset').addClass('hidden');$('#sysadmincodevoicemodel').removeClass('hidden');"> <?php echo L('setting_letters')?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input name="setting[sysadmincodemodel]" value="3" type="radio" <?php echo ($sysadmincodemodel==3) ? ' checked' : ''?> onclick="$('#dr_row_captcha_charset').removeClass('hidden');$('#sysadmincodevoicemodel').addClass('hidden');"> <?php echo L('setting_character')?> <span></span></label>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group<?php echo ($sysadmincode || $sysadmincodemodel=='0' || $sysadmincodemodel=='1' || $sysadmincodemodel=='2') ? ' hidden' : ''?>" id="captcha_charset">
+                    <div class="form-group<?php echo ($sysadmincode || $sysadmincodemodel=='0' || $sysadmincodemodel=='1' || $sysadmincodemodel=='2') ? ' hidden' : ''?>" id="dr_row_captcha_charset">
                         <label class="col-md-2 control-label"><?php echo L('setting_code_character')?></label>
                         <div class="col-md-9">
-                            <input class="form-control input-large" type="text" id="captcha_charset" name="setting[captcha_charset]" value="<?php echo $captcha_charset;?>" >
+                            <input class="form-control input-large" type="text" id="dr_captcha_charset" name="setting[captcha_charset]" value="<?php echo $captcha_charset;?>" >
                         </div>
                     </div>
                     <div class="form-group<?php echo ($sysadmincode || $sysadmincodemodel=='0' || $sysadmincodemodel=='1' || $sysadmincodemodel=='3') ? ' hidden' : ''?>" id="sysadmincodevoicemodel">
@@ -289,12 +289,12 @@ jQuery(document).ready(function() {
                             </div>
                         </div>
                     </div>
-                    <div class="form-group<?php echo ($sysadmincode) ? ' hidden' : ''?>" id="sysadmincodelen">
+                    <div class="form-group<?php echo ($sysadmincode) ? ' hidden' : ''?>" id="dr_row_sysadmincodelen">
                         <label class="col-md-2 control-label"><?php echo L('setting_admin_code_len')?></label>
                         <div class="col-md-9">
                             <div class="input-inline input-medium">
                                 <div class="input-group">
-                                    <input type="text" name="setting[sysadmincodelen]" id="sysadmincodelen" value="<?php echo intval($sysadmincodelen) ? intval($sysadmincodelen) : 4;?>" class="form-control">
+                                    <input type="text" name="setting[sysadmincodelen]" id="dr_sysadmincodelen" value="<?php echo intval($sysadmincodelen) ? intval($sysadmincodelen) : 4;?>" class="form-control">
                                     <span class="input-group-addon">
                                         <?php echo L('setting_code_position')?>
                                     </span>
@@ -477,8 +477,8 @@ jQuery(document).ready(function() {
                         <label class="col-md-2 control-label"><?php echo L('mail_type')?></label>
                         <div class="col-md-9">
                             <div class="mt-radio-inline">
-                                <label class="mt-radio mt-radio-outline"><input name="setting[mail_type]" checkbox="mail_type" value="1" onclick="showsmtp(this)" type="radio" <?php echo $mail_type ? ' checked' : ''?>> <?php echo L('mail_type_smtp')?> <span></span></label>
-                                <label class="mt-radio mt-radio-outline"><input name="setting[mail_type]" checkbox="mail_type" value="0" onclick="showsmtp(this)" type="radio" <?php echo !$mail_type ? ' checked' : ''?> <?php if(substr(strtolower(PHP_OS), 0, 3) == 'win') echo 'disabled'; ?>/> <?php echo L('mail_type_mail')?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input name="setting[mail_type]" value="1" onclick="showsmtp(this,'smtpcfg')" type="radio" <?php echo $mail_type ? ' checked' : ''?>> <?php echo L('mail_type_smtp')?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input name="setting[mail_type]" value="0" onclick="showsmtp(this,'smtpcfg')" type="radio" <?php echo !$mail_type ? ' checked' : ''?> <?php if(substr(strtolower(PHP_OS), 0, 3) == 'win') echo 'disabled'; ?>/> <?php echo L('mail_type_mail')?> <span></span></label>
                             </div>
                         </div>
                     </div>
@@ -696,14 +696,13 @@ $('.nav-tabs a').click(function (e) {
     $('#'+$(this).attr("data-toggle")).addClass('active');
 })
 function showsmtp(obj,hiddenid){
-    hiddenid = hiddenid ? hiddenid : 'smtpcfg';
     var status = $(obj).val();
     if(status == 1) $("#"+hiddenid).show();
     else  $("#"+hiddenid).hide();
 }
 function test_mail() {
-    var mail_type = $('input[checkbox=mail_type][checked]').val();
-    var mail_auth = $('input[name="setting[mail_auth]"][checked]').val();
+    var mail_type = $('input[name="setting[mail_type]"]:checked').val();
+    var mail_auth = $('input[name="setting[mail_auth]"]:checked').val();
     $("#dr_sending").html(" <i class='fa fa-send'></i> <?php echo L('发送中...');?>");
     $.ajax({type: "POST",dataType:"json", url: "?m=admin&c=setting&a=public_test_mail&mail_to="+$('#mail_to').val()+"&"+Math.random(), data: {mail_type:mail_type,mail_server:$('#mail_server').val(),mail_port:$('#mail_port').val(),mail_user:$('#mail_user').val(),mail_password:$('#mail_password').val(),mail_auth:mail_auth,mail_from:$('#mail_from').val()},
         success: function(json) {
@@ -714,6 +713,23 @@ function test_mail() {
             dr_ajax_alert_error(HttpRequest, this, thrownError);
         }
     });
+}
+function dr_code(obj) {
+    if($(obj).val() == 1) {
+        $('#sysadmincodemodel').addClass('hidden');
+        $('#dr_row_captcha_charset').addClass('hidden');
+        $('#sysadmincodevoicemodel').addClass('hidden');
+        $('#dr_row_sysadmincodelen').addClass('hidden');
+    } else {
+        $('#sysadmincodemodel').removeClass('hidden');
+        if ($('input[name="setting[sysadmincodemodel]"]:checked').val()=="3") {
+            $('#dr_row_captcha_charset').removeClass('hidden');
+        }
+        if ($("input[name='setting[sysadmincodemodel]']:checked").val()=="2") {
+            $('#sysadmincodevoicemodel').removeClass('hidden');
+        }
+        $('#dr_row_sysadmincodelen').removeClass('hidden');
+    }
 }
 function to_key() {
    $.get('?m=admin&c=setting&a=public_syskey&pc_hash='+pc_hash, function(data){

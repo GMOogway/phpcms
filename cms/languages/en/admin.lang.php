@@ -226,6 +226,7 @@ $LANG['setting_adminaccessip'] = 'IP list for allow to access backend';
 $LANG['setting_admin_code'] = 'The background login authentication code';
 $LANG['setting_admin_code_model'] = 'The background verification code model';
 $LANG['setting_code_character'] = 'The background verification code character set';
+$LANG['setting_character_letters'] = 'Cannot contain special characters, only a string consisting of numbers and 26 English letters';
 $LANG['setting_voice_model'] = 'The background verification code speech patterns';
 $LANG['setting_confusion'] = 'Alphanumeric confusion';
 $LANG['setting_digital'] = 'The pure digital';

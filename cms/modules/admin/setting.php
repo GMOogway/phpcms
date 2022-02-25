@@ -68,6 +68,15 @@ class setting extends admin {
 			if ($setconfig['sys_max_category']>10000) {
 				dr_json(0, L('setting_max_category_not'), array('field' => 'sys_max_category'));
 			}
+			if (!$setting['captcha_charset'] && $setting['sysadmincodemodel']==3) {
+				dr_json(0, L('setting_code_character').L('empty'), array('field' => 'captcha_charset'));
+			}
+			if (!preg_match('/^[A-Za-z0-9]+$/i', $setting['captcha_charset']) && $setting['sysadmincodemodel']==3) {
+				dr_json(0, L('setting_code_character').L('setting_character_letters'), array('field' => 'captcha_charset'));
+			}
+			if ($setting['captcha_charset'] && $setting['sysadmincodemodel']!=3) {
+				$setting['captcha_charset'] = '';
+			}
 			$setting['sysadmincode'] = intval($setting['sysadmincode']);
 			$setting['maxloginfailedtimes'] = intval($setting['maxloginfailedtimes']);
 			$setting['sysadminlogintimes'] = intval($setting['sysadminlogintimes']);

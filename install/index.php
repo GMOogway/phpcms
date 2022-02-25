@@ -61,8 +61,8 @@ switch($step)
 			array(
 				'name' => 'PHP 版本',
 				'value' => 'PHP '.PHP_VERSION,
-				'error_value' => 'PHP 7.1.0 及以上不得高于8.1.0',
-				'code' => PHP_VERSION >= '7.1.0' && PHP_VERSION < '8.1.0',
+				'error_value' => 'PHP 7.1 及以上不得高于'.$max,
+				'code' => PHP_VERSION >= $min && PHP_VERSION < $max,
 				'help' => '&nbsp;无法安装',
 				'error' => 1,
 			),

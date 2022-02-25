@@ -277,6 +277,20 @@ function dr_count($array_or_countable, $mode = COUNT_NORMAL){
 }
 
 /**
+ * 字符是否包含
+ */
+function dr_strpos($string, $key) {
+	return strpos((string)$string, $key);
+}
+
+/**
+ * 字符是否包含
+ */
+function dr_stripos($string, $key) {
+	return stripos((string)$string, $key);
+}
+
+/**
  * 完整的文件路径
  *
  * @param   string  $url
@@ -1100,6 +1114,23 @@ function dr_html2text($str, $cn = false) {
 	}
 
 	return $text;
+}
+/**
+ * 批量 htmlspecialchars
+ */
+function dr_htmlspecialchars($param) {
+	if (!$param) {
+		return '';
+	} elseif (is_array($param)) {
+		foreach ($param as $a => $t) {
+			if ($t && !is_array($t)) {
+				$param[$a] = htmlspecialchars($t);
+			}
+		}
+	} else {
+		$param = htmlspecialchars($param);
+	}
+	return $param;
 }
 /**
  * 检查目录权限
