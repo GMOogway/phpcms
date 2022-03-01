@@ -51,7 +51,7 @@ include $this->admin_tpl('header','admin');?>
                                 <?php echo form::select($all_field,'','name="info[formtype]" id="formtype" onchange="javascript:field_setting(this.value);"',L('select_fieldtype'));?>
                             </div>
                         </div>
-                        <div class="form-group<?php if(!$modelid || $modelid==-1 || $modelid==-2) {echo 'hide';}?>">
+                        <div class="form-group<?php if(!$modelid || $modelid==-1 || $modelid==-2) {echo ' hide';}?>">
                             <label class="col-md-2 control-label"><?php echo L('issystem_field')?></label>
                             <div class="col-md-9">
                                 <input type="hidden" name="issystem" id="issystem" value="0">
@@ -154,7 +154,7 @@ include $this->admin_tpl('header','admin');?>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group<?php if(!$modelid || $modelid==-1 || $modelid==-2) {echo 'hide';}?>">
+                        <div class="form-group<?php if(!$modelid || $modelid==-1 || $modelid==-2) {echo ' hide';}?>">
                             <label class="col-md-2 control-label"><?php echo L('basic_field')?></label>
                             <div class="col-md-9">
                                 <div class="mt-radio-inline">
@@ -164,7 +164,7 @@ include $this->admin_tpl('header','admin');?>
                                 <span class="help-block"><?php echo L('basic_field_tips')?></span>
                             </div>
                         </div>
-                        <div class="form-group<?php if(!$modelid || $modelid==-1 || $modelid==-2) {echo 'hide';}?>">
+                        <div class="form-group<?php if(!$modelid || $modelid==-1 || $modelid==-2) {echo ' hide';}?>">
                             <label class="col-md-2 control-label"><?php echo L('as_search_field')?></label>
                             <div class="col-md-9">
                                 <div class="mt-radio-inline">
@@ -173,7 +173,7 @@ include $this->admin_tpl('header','admin');?>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group<?php if(!$modelid || $modelid==-1 || $modelid==-2) {echo 'hide';}?>">
+                        <div class="form-group<?php if(!$modelid || $modelid==-1 || $modelid==-2) {echo ' hide';}?>">
                             <label class="col-md-2 control-label"><?php echo L('allow_contributor')?></label>
                             <div class="col-md-9">
                                 <div class="mt-radio-inline">
@@ -182,7 +182,7 @@ include $this->admin_tpl('header','admin');?>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group<?php if(!$modelid || $modelid==-1 || $modelid==-2) {echo 'hide';}?>">
+                        <div class="form-group<?php if(!$modelid || $modelid==-1 || $modelid==-2) {echo ' hide';}?>">
                             <label class="col-md-2 control-label"><?php echo L('as_fulltext_field')?></label>
                             <div class="col-md-9">
                                 <div class="mt-radio-inline">
@@ -191,7 +191,7 @@ include $this->admin_tpl('header','admin');?>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group<?php if(!$modelid || $modelid==-1 || $modelid==-2) {echo 'hide';}?>">
+                        <div class="form-group<?php if(!$modelid || $modelid==-1 || $modelid==-2) {echo ' hide';}?>">
                             <label class="col-md-2 control-label"><?php echo L('as_omnipotent_field')?></label>
                             <div class="col-md-9">
                                 <div class="mt-radio-inline">
@@ -201,7 +201,7 @@ include $this->admin_tpl('header','admin');?>
                                 <span class="help-block"><?php echo L('as_omnipotent_field_tips')?></span>
                             </div>
                         </div>
-                        <div class="form-group<?php if(!$modelid || $modelid==-1 || $modelid==-2) {echo 'hide';}?>">
+                        <div class="form-group<?php if(!$modelid || $modelid==-1 || $modelid==-2) {echo ' hide';}?>">
                             <label class="col-md-2 control-label"><?php echo L('as_postion_info')?></label>
                             <div class="col-md-9">
                                 <div class="mt-radio-inline">
@@ -210,7 +210,7 @@ include $this->admin_tpl('header','admin');?>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group<?php if(!$modelid || $modelid==-1 || $modelid==-2) {echo 'hide';}?>">
+                        <div class="form-group<?php if(!$modelid || $modelid==-1 || $modelid==-2) {echo ' hide';}?>">
                             <label class="col-md-2 control-label"><?php echo L('disabled_groups_field')?></label>
                             <div class="col-md-9">
                                 <label style="min-width: 200px;">
@@ -223,7 +223,7 @@ include $this->admin_tpl('header','admin');?>
                                 </label>
                             </div>
                         </div>
-                        <div class="form-group<?php if(!$modelid || $modelid==-1 || $modelid==-2) {echo 'hide';}?>">
+                        <div class="form-group<?php if(!$modelid || $modelid==-1 || $modelid==-2) {echo ' hide';}?>">
                             <label class="col-md-2 control-label"><?php echo L('disabled_role_field')?></label>
                             <div class="col-md-9">
                                 <label style="min-width: 200px;">

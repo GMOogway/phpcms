@@ -257,7 +257,7 @@ class content extends admin {
 				$modelid = $this->categorys[$catid]['modelid'];
 				require_once CACHE_MODEL_PATH.'content_input.class.php';
 				require_once CACHE_MODEL_PATH.'content_update.class.php';
-				$content_input = new content_input(0);
+				$content_input = new content_input(-2);
 				$inputinfo = $content_input->get($info);
 				$systeminfo = $inputinfo['system'];
 				if($this->input->post('edit')) {
