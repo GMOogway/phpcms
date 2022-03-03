@@ -83,7 +83,7 @@ function checkuid() {
 		Dialog.alert("<?php echo L('至少选择一条信息')?>");
 		return false;
 	} else {
-		myform.submit();
+		Dialog.confirm('<?php echo L('confirm_delete')?>',function(){myform.submit();});
 	}
 }
 </script>

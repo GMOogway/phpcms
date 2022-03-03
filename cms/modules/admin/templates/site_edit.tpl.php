@@ -90,7 +90,7 @@ include $this->admin_tpl('header');
 	<legend><?php echo L('seo_configuration')?></legend>
 	<table width="100%"  class="table_form">
   <tr>
-    <th width="80"><?php echo L('site_title')?>：</th>
+    <th width="100"><?php echo L('site_title')?>：</th>
     <td class="y-bg"><label><input type="text" class="input-text" name="info[site_title]" id="site_title" size="80" value="<?php echo $data['site_title']?>" /></label></td>
   </tr>
   <tr>
@@ -104,6 +104,7 @@ include $this->admin_tpl('header');
 </table>
 </fieldset>
 <div class="bk10"></div>
+<?php if($forminfos && is_array($forminfos['base'])) {?>
 <fieldset>
 	<legend><?php echo L('field_manage')?></legend>
 	<table width="100%"  class="table_form">
@@ -135,6 +136,7 @@ if($forminfos && is_array($forminfos['base'])) {
 </table>
 </fieldset>
 <div class="bk10"></div>
+<?php }?>
 <fieldset>
 	<legend><?php echo L('release_point_configuration')?></legend>
 	<table width="100%"  class="table_form">
@@ -154,7 +156,7 @@ if($forminfos && is_array($forminfos['base'])) {
 	<legend><?php echo L('template_style_configuration')?></legend>
 	<table width="100%"  class="table_form">
   <tr id="dr_row_template">
-    <th width="80" valign="top"><?php echo L('style_name')?>：</th>
+    <th width="100" valign="top"><?php echo L('style_name')?>：</th>
     <td class="y-bg"> <select name="template[]" size="3" id="template" multiple title="<?php echo L('ctrl_more_selected')?>" onchange="default_list()">
     
     	<?php 
@@ -173,7 +175,7 @@ if($forminfos && is_array($forminfos['base'])) {
 		</select></td>
   </tr>
   <tr id="dr_row_default_style">
-    <th width="80" valign="top"><?php echo L('default_style')?>：<input type="hidden" name="info[default_style]" id="default_style_input" value="<?php echo $data['default_style']?>"></th>
+    <th width="100" valign="top"><?php echo L('default_style')?>：<input type="hidden" name="info[default_style]" id="default_style_input" value="<?php echo $data['default_style']?>"></th>
     <td class="y-bg"><span id="default_style">
 	<?php 
 		if(is_array($dirname) && !empty($dirname)) foreach ($dirname as $v) {

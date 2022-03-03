@@ -6,11 +6,8 @@ include $this->admin_tpl('header', 'admin');
     <div class="page-content-wrapper">
         <div class="page-content page-content3 mybody-nheader main-content  ">
 <div class="right-card-box">
-<form id="myform" name="myform" action="" method="post">
+<form id="myform" name="myform" action="?m=tag&c=tag&a=del" method="post" onsubmit="checkuid();return false;">
 <input name="dosubmit" type="hidden" value="1">
-<input type="hidden" name="m" value="tag" />
-<input type="hidden" name="c" value="tag" />
-<input type="hidden" name="a" value="del" />
 <div class="table-list">
     <table width="100%" cellspacing="0">
         <thead>
@@ -55,7 +52,7 @@ endif;
             <input type="checkbox" class="group-checkable" data-set=".checkboxes">
             <span></span>
         </label>
-        <label><button type="button" onclick="Dialog.confirm('<?php echo L('sure_deleted')?>',function(){$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete')?></button></label>
+        <label><button type="submit" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete')?></button></label>
     </div>
     <div class="col-md-7 list-page"><?php echo $pages?></div>
 </div>
@@ -65,18 +62,28 @@ endif;
 </div>
 </div>
 <script type="text/javascript">
-<!--
 function edit(id, name) {
 	artdialog('edit','?m=tag&c=tag&a=edit&id='+id,'<?php echo L('editing_data_sources_call')?>《'+name+'》',700,500);
 }
-
-function copy_text(matter){
-	matter.select();
-	js1=matter.createTextRange();
-	js1.execCommand("Copy");
-	Dialog.alert('<?php echo L('copy_code');?>');
+function checkuid() {
+	var ids='';
+	$("input[name='id[]']:checked").each(function(i, n){
+		ids += $(n).val() + ',';
+	});
+	if(ids=='') {
+		Dialog.alert("<?php echo L('至少选择一条信息')?>");
+		return false;
+	} else {
+		Dialog.confirm('<?php echo L('sure_deleted')?>',function(){myform.submit();});
+	}
 }
-//-->
+function copy_text(matter){
+    matter.select();
+    // 执行浏览器复制命令
+    document.execCommand("Copy");
+    //提示已复制
+    dr_tips(1, '<?php echo L('copy_code');?>');
+}
 </script>
 </body>
 </html>

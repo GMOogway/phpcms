@@ -27,7 +27,7 @@ include $this->admin_tpl('header', 'admin');
 	<legend><?php echo L('tag_call_setting')?></legend>
 	<table width="100%"  class="table_form">
     <tr>
-		<th width="80"><?php echo L('stdcall')?>：</th>
+		<th width="100"><?php echo L('stdcall')?>：</th>
 		<td class="y-bg"><?php echo form::radio(array('0'=>L('model_configuration'), '1'=>L('custom_sql'), '2'=> L('block')), $type ? $type : 0, 'name="type" onclick="location.href=\''.dr_now_url().'&type=\'+this.value"')?></td>
 	</tr>
   <?php if ($type==0) :?>
@@ -48,7 +48,7 @@ include $this->admin_tpl('header', 'admin');
 	</tr>
 	<?php if(isset($v['ajax']['name'])  && !empty($v['ajax']['name'])) {?>
   	  <tr>
-  	  	<th width="80"><?php echo $v['ajax']['name']?>：<?php if(isset($_GET[$v['ajax']['id']]) && !empty($_GET[$v['ajax']['id']])) echo '<script type="text/javascript">$.get(\'?m=template&c=file&a=public_ajax_get\', { html: \''.$_GET[$k].'\', id:\''.$v['ajax']['id'].'\', value:\''.$_GET[$v['ajax']['id']].'\', action: \''.$v['ajax']['action'].'\', op: \''.$module.'\', style: \'default\'}, function(data) {$(\'#'.$k.'_td\').html(data)});</script>'?></th>
+  	  	<th width="100"><?php echo $v['ajax']['name']?>：<?php if(isset($_GET[$v['ajax']['id']]) && !empty($_GET[$v['ajax']['id']])) echo '<script type="text/javascript">$.get(\'?m=template&c=file&a=public_ajax_get\', { html: \''.$_GET[$k].'\', id:\''.$v['ajax']['id'].'\', value:\''.$_GET[$v['ajax']['id']].'\', action: \''.$v['ajax']['action'].'\', op: \''.$module.'\', style: \'default\'}, function(data) {$(\'#'.$k.'_td\').html(data)});</script>'?></th>
   	  	<td class="y-bg"><input type="text" size="20" value="<?php echo $_GET[$v['ajax']['id']]?>" id="<?php echo $v['ajax']['id']?>" name="<?php echo $v['ajax']['id']?>" class="input-text"><span id="<?php echo $k?>_td"></span></td>
   	 </tr>
   <?php }?>
@@ -75,23 +75,23 @@ include $this->admin_tpl('header', 'admin');
 	<legend><?php echo L('vlan')?></legend>
 	<table width="100%"  class="table_form">
 	<tr>
-		<th width="80"><?php echo L('name')?>：</th>
+		<th width="100"><?php echo L('name')?>：</th>
 		<td class="y-bg"><input type="text" class="input-text" name="name" id="name" size="30" value="<?php echo $edit_data['name']?>" /></td>
 	</tr>
 	<tr>
-		<th width="80"><?php echo L('ispage')?>：</th>
+		<th width="100"><?php echo L('ispage')?>：</th>
 		<td class="y-bg"><input type="text" name="page" id='page' value="<?php echo $edit_data['page']?>"/> <?php echo L('common_variables')?>:<a href="javascript:void(0);" onclick="javascript:$('#page').val('$_GET[page]');"><font color="red">$_GET[page]</font></a>、<a href="javascript:void(0);" onclick="javascript:$('#page').val('$page');"><font color="red">$page</font></a>，<?php echo L('no_input_no_page')?></td>
 	</tr>
     <tr>
-		<th width="80"><?php echo L('num')?>：</th>
+		<th width="100"><?php echo L('num')?>：</th>
 		<td class="y-bg"><input type="text" name="num" id="num" size="30" value="<?php echo $edit_data['num']?>" /></td>
 	</tr>
 	<tr>
-		<th width="80"><?php echo L('data_return')?>：</th>
+		<th width="100"><?php echo L('data_return')?>：</th>
 		<td class="y-bg"><input type="text" name="return" id="return" size="30" value="<?php echo $edit_data['return']?>" /> </td>
 	</tr>
 	<tr>
-		<th width="80"><?php echo L('cache_times')?>：</th>
+		<th width="100"><?php echo L('cache_times')?>：</th>
 		<td class="y-bg"><input type="text" name="cache" id="cache" size="30" value="<?php echo $edit_data['cache']?>" /> </td>
 	</tr>
 

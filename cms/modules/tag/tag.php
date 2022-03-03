@@ -247,7 +247,8 @@ class tag extends admin {
 	 * 删除标签向导
 	 */
 	public function del() {
-		$id = $this->input->post('id') ? $this->input->post('id') : '';
+		$id = $this->input->post('id') ? $this->input->post('id') : ($this->input->get('id') ? $this->input->get('id') : '');
+		if(empty($id)) dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		if (is_array($id)) {
 			foreach ($id as $key => $v) {
 				if (intval($v)) {
@@ -261,7 +262,6 @@ class tag extends admin {
 			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		} else {
 			$id = intval($id);
-			if(empty($id)) dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			if ($this->db->delete(array('id'=>$id))) {
 				dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 			} else {
