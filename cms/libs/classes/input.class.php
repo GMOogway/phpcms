@@ -36,6 +36,15 @@ class input {
 
         return $in;
     }
+    
+    public function set_cookie($name, $value = '', $expire = '') {
+        param::set_cookie(md5(SYS_KEY).'_'.dr_safe_replace($name), (string)$value, $expire);
+    }
+    
+    public function get_cookie($name) {
+        $name = md5(SYS_KEY).'_'.dr_safe_replace($name);
+        return param::get_cookie($name);
+    }
 
     // inputip存储信息
     public function ip_info() {

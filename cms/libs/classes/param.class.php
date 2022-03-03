@@ -120,7 +120,7 @@ class param {
 	 * @param string $default 默认值 
 	 * @return mixed 成功则返回cookie 值，否则返回 false
 	 */
-	public static function get_cookie($var, $default = '') {
+	public static function get_cookie($var, $default = false) {
 		$var = COOKIE_PRE.$var;
 		$value = isset($_COOKIE[$var]) ? sys_auth($_COOKIE[$var], 'DECODE', md5(PC_PATH.'cookie'.$var).SYS_KEY) : $default;
 		if(in_array($var,array('_userid','userid','siteid','_groupid','_roleid'))) {

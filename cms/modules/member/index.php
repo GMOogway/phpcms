@@ -416,6 +416,7 @@ class index extends foreground {
 	public function account_manage_info() {
 		$member_setting = getcache('member_setting');
 		if($this->input->post('dosubmit')) {
+			$info = $this->input->post('info');
 			//更新用户昵称
 			$nickname = $this->input->post('nickname') && is_username(trim($this->input->post('nickname'))) ? trim($this->input->post('nickname')) : '';
 			$nickname = safe_replace($nickname);
