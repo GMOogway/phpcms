@@ -267,8 +267,8 @@ class content extends admin {
 				}
 				$this->page_db->update($systeminfo,array('catid'=>$catid));
 				$this->page_db->create_html($catid,$info);
+				dr_json(1, $this->input->post('edit') ? L('update_success') : L('add_success'));
 			}
-			dr_json(1, $this->input->post('edit') ? L('update_success') : L('add_success'));
 		} else {
 			$show_header = $show_dialog = $show_validator = true;
 			//设置cookie 在附件添加处调用
