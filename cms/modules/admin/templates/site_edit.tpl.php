@@ -109,7 +109,6 @@ include $this->admin_tpl('header');
 	<legend><?php echo L('field_manage')?></legend>
 	<table width="100%"  class="table_form">
 <?php
-if($forminfos && is_array($forminfos['base'])) {
  foreach($forminfos['base'] as $field=>$info) {
 	 if($info['isomnipotent']) continue;
 	 if($info['formtype']=='omnipotent') {
@@ -130,9 +129,7 @@ if($forminfos && is_array($forminfos['base'])) {
 	  </th>
       <td class="y-bg"><?php echo $info['form']?>  <?php echo $info['tips']?></td>
     </tr>
-<?php
-} }
-?>
+<?php }?>
 </table>
 </fieldset>
 <div class="bk10"></div>
