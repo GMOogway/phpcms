@@ -40,7 +40,7 @@ echo_msg(1, '客户端信息：'.$_SERVER['HTTP_USER_AGENT']);
 
 // 判断环境
 $min = '7.1.0';
-$max = '8.1.0';
+$max = '8.2.0';
 if (version_compare(PHP_VERSION, $max) >= 0) {
     echo_msg(0, "PHP版本过高，请在".$max."以下的环境使用，当前".PHP_VERSION."，高版本需要等待官方对CMS版本的更新升级！~");exit;
 } elseif (version_compare(PHP_VERSION, $min) < 0) {

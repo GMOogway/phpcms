@@ -9,7 +9,7 @@ defined('IN_CMS') or exit('No permission resources.');
 if (is_file(CACHE_PATH.'install.lock')) exit('安装程序已经被锁定，重新安装请删除：caches/install.lock');
 // 判断环境
 $min = '7.1.0';
-$max = '8.1.0';
+$max = '8.2.0';
 if (version_compare(PHP_VERSION, $max) >= 0) {
 	exit("<font color=red>PHP版本过高，请在".$max."以下的环境使用，当前".PHP_VERSION."，高版本需要等待官方对CMS版本的更新升级！~</font>");
 } elseif (version_compare(PHP_VERSION, $min) < 0) {
@@ -217,7 +217,7 @@ switch($step)
 
 	case '7': //完成安装
 		//设置cms 报错信息
-		set_config(array('errorlog'=>'1'),'system');			
+		set_config(array('errorlog'=>'1'),'system');
 		file_put_contents(CACHE_PATH.'install.lock', time());
 		include CMS_PATH."install/step/step".$step.".tpl.php";
 		break;
@@ -325,7 +325,7 @@ switch($step)
 				}
 			} else {
 				exit('2');//数据库文件不存在
-			}							
+			}
 		} else {
 			//安装可选模块
 			if(in_array($module,array('announce','comment','link','vote','message','mood','poster','formguide','tag','sms','404','bdts','custom','customfield','fclient','guestbook','import','slider','sqltoolplus','taglist'))) {
@@ -355,23 +355,25 @@ switch($step)
 			dr_json(0, '数据库名称（'.$dbname.'）不能存在.号');
 		}
 		$mysqli = function_exists('mysqli_init') ? mysqli_init() : 0;
-		if (!$mysqli) {
-			dr_json(0, 'PHP环境必须启用Mysqli扩展！');
-		} elseif (!mysqli_real_connect($mysqli, $dbhost, $dbuser, $dbpw, null, $dbport)) {
-			dr_json(0, '['.mysqli_connect_errno().'] - 无法连接到数据库服务器（'.$dbhost.'），请检查端口（'.$dbport.'）和用户名（'.$dbuser.'）和密码（'.$dbpw.'）是否正确！');
-		} elseif (!mysqli_select_db($mysqli, $dbname)) {
-			if (!mysqli_query($mysqli, 'CREATE DATABASE '.$dbname.' CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci')) {
-				dr_json(0, '指定的数据库（'.$dbname.'）不存在，系统尝试创建失败，请先通过其他方式建立好数据库！');
-			}
+		$conn = mysqli_connect($dbhost, $dbuser, $dbpw, null, $dbport);
+		if (!$conn) {
+			dr_json(0, '['.mysqli_connect_error().'] - 无法连接到数据库服务器（'.$dbhost.'），请检查端口（'.$dbport.'）和用户名（'.$dbuser.'）和密码（'.$dbpw.'）是否正确！');
 		}
-		if (!mysqli_set_charset($mysqli, "utf8mb4")) {
-			dr_json(0, '当前MySQL不支持utf8mb4编码（'.mysqli_error($mysqli).'）！');
+		if (!mysqli_set_charset($conn, "utf8mb4")) {
+			dr_json(0, '当前MySQL不支持utf8mb4编码（'.mysqli_error($conn).'）！');
 		}
-		if (mysqli_get_server_version($mysqli) < 50600) {
+		if (mysqli_get_server_version($conn) < 50600) {
 			dr_json(0, '数据库版本低于Mysql 5.6，无法安装CMS，请升级数据库版本！');
 		}
+		if (!$mysqli) {
+			dr_json(0, 'PHP环境必须启用Mysqli扩展！');
+		} elseif (!$conn) {
+			dr_json(0, '['.mysqli_connect_error().'] - 无法连接到数据库服务器（'.$dbhost.'），请检查端口（'.$dbport.'）和用户名（'.$dbuser.'）和密码（'.$dbpw.'）是否正确！');
+		} elseif (!mysqli_query($conn, 'CREATE DATABASE IF NOT EXISTS '.$dbname.' CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci')) {
+			dr_json(0, '指定的数据库（'.$dbname.'）不存在，系统尝试创建失败，请先通过其他方式建立好数据库！');
+		}
 		$tables = array();
-		$query = mysqli_query($mysqli,"SHOW TABLES FROM `$dbname`");
+		$query = mysqli_query($conn, "SHOW TABLES FROM `$dbname`");
 		while($r = mysqli_fetch_row($query)) {
 			$tables[] = $r[0];
 		}
@@ -385,7 +387,7 @@ switch($step)
 	case 'cache_all':
 		$cache = pc_base::load_app_class('cache_api','admin');
 		$cache->cache('category');
-		$cache->cache('cache_site');		 
+		$cache->cache('cache_site');
 		$cache->cache('downservers');
 		$cache->cache('badword');
 		$cache->cache('ipbanned');
@@ -469,11 +471,11 @@ function set_config($config,$cfgfile) {
 		$v = trim($v);
 		$configs[$k] = $v;
 		$pattern[$k] = "/'".$k."'\s*=>\s*([']?)[^']*([']?)(\s*),/is";
-		$replacement[$k] = "'".$k."' => \${1}".$v."\${2}\${3},";							
+		$replacement[$k] = "'".$k."' => \${1}".$v."\${2}\${3},";
 	}
 	$str = file_get_contents($configfile);
 	$str = preg_replace($pattern, $replacement, $str);
-	return file_put_contents($configfile, $str);		
+	return file_put_contents($configfile, $str);
 }
 
 function remote_file_exists($url_file){
