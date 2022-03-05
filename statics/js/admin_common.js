@@ -114,6 +114,30 @@ jQuery(document).ready(function() {
 			}
 		});
 	}
+	var d, f = false;
+	window.onunloadcancel = function(){
+		clearTimeout(d);
+	}
+	window.onbeforeunload = function(){
+		if (f) {
+			return (
+				setTimeout(function(){
+					d = setTimeout(onunloadcancel, 0);
+				}, 0),
+				'数据未保存，你确定要离开吗？'
+			);
+		}
+	}
+	$("[type='submit'], [type='button']").click(function(){
+		f = false;
+	});
+	$("select").change(function(){
+		f = true;
+	});
+	$(document).keydown(function(a){
+		if (40 <= a.keyCode || 0 == a.keyCode) f = true;
+		if (16 == a.keyCode || 82 == a.keyCode || 91 == a.keyCode) f = false;
+	});
 	/*复选框全选(支持多个，纵横双控全选)。
 	 *实例：版块编辑-权限相关（双控），验证机制-验证策略（单控）
 	 *说明：
