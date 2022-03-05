@@ -1120,7 +1120,7 @@ function dr_html2text($str, $cn = false) {
  */
 function dr_htmlspecialchars($param) {
 	if (!$param) {
-		return '';
+		return is_array($param) ? array() : '';
 	} elseif (is_array($param)) {
 		foreach ($param as $a => $t) {
 			if ($t && !is_array($t)) {

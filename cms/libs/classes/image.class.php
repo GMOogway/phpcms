@@ -1701,20 +1701,14 @@ class image {
     public function info($img) {
         $imageinfo = getimagesize($img);
         if($imageinfo === false) return false;
-        $imagetype = strtolower(substr(image_type_to_extension($imageinfo[2]),1));
-        $imagesize = filesize($img);
         $info = array(
             'width'=>$imageinfo[0],
             'height'=>$imageinfo[1],
-            'type'=>$imagetype,
-            'size'=>$imagesize,
+            'type'=>strtolower(substr(image_type_to_extension($imageinfo[2]),1)),
+            'size'=>filesize($img),
             'mime'=>$imageinfo['mime']
         );
         return $info;
-    }
-
-    public function check($image) {
-        return extension_loaded('gd') && preg_match("/\.(jpg|jpeg|gif|png|webp)/i", $image, $m) && file_exists($image) && function_exists('imagecreatefrom'.($m[1] == 'jpg' ? 'jpeg' : $m[1]));
     }
 
     /**
@@ -1727,45 +1721,70 @@ class image {
      * @param   integer   $y           裁剪区域y坐标
      */
     public function crops($image, $filename = '', $w = 0, $h = 0, $x = 0, $y = 0 ){
-        if(!$this->check($image)) dr_json(0, L('只支持jpg|jpeg|gif|png|webp裁切'));
+        if(!dr_is_image($image)) dr_json(0, L('只支持jpg|jpeg|gif|png|webp裁切'));
         $filename = $filename ? $filename : $image;
         $filepath = rtrim(dirname($filename), '/').'/';
         if(!is_dir($filepath)){
             create_folder($filepath);
         }
-        $info  = $this->info($image);
+        $info = self::info($image);
         if($info === false) return false;
         $pathinfo = pathinfo($image);
-        $type = $info['type'];
-        if(!$type) $type =  $pathinfo['extension'];
-        $type = strtolower($type);
+        $source_width = $info['width'];
+        $source_height = $info['height'];
+        $source_mime  = $info['mime'];
+        if(!$source_mime) $source_mime = $pathinfo['extension'];
+        $source_mime = strtolower($source_mime);
         unset($info);
 
-        $createfun = 'imagecreatefrom'.($type=='jpg' ? 'jpeg' : $type);
-        $srcimg = $createfun($image);
-        if($type != 'gif' && function_exists('imagecreatetruecolor'))
-            $thumbimg = imagecreatetruecolor($w, $h);
-        else
-            $thumbimg = imagecreate($w, $h); 
- 
-        imagecopyresampled($thumbimg, $srcimg, 0, 0, $x, $y, $w, $h, $w, $h);
+        switch ($source_mime){
+            case 'image/gif':
+                $source_image = imagecreatefromgif($image);
+                break;
+            case 'image/jpeg':
+                $source_image = imagecreatefromjpeg($image);
+                break;
+            case 'image/png':
+                $source_image = imagecreatefrompng($image);
+                break;
+            case 'image/webp':
+                $source_image = imagecreatefromwebp($image);
+                break;
+            default:
+                return ;
+                break;
+        }
 
-        if($type=='jpg' || $type=='jpeg') imageinterlace($thumbimg, $this->interlace);
-        $imagefun = 'image'.($type=='jpg' ? 'jpeg' : $type);
-        if(empty($filename)) $filename  = substr($image, 0, strrpos($image, '.')).$suffix.'.'.$type;
-        $imagefun($thumbimg, $filename);
-        imagedestroy($thumbimg);
-        imagedestroy($srcimg);
+        $target_image = imagecreatetruecolor($w, $h);
 
-        return $this->info($filename);
+        $color = imagecolorallocate($target_image, 255, 255, 255); //2.上色
+        imagecolortransparent($target_image, $color); //3.设置透明色
+        imagefill($target_image, 0, 0, $color); //4.填充透明色
+
+        $color = imagecolorallocate($target_image, 255, 255, 255); //2.上色
+        imagecolortransparent($target_image, $color); //3.设置透明色
+        imagefill($target_image, 0, 0, $color); //4.填充透明色
+
+        // copy
+        imagecopy($target_image, $source_image, 0, 0, $x, $y, $w, $h);
+        // zoom
+        imagecopyresampled($target_image, $source_image, 0, 0, $x, $y, $w, $h, $w, $h);
+
+        header('Content-Type:image/png');
+        imagejpeg($target_image, $filename, 100);
+        imagedestroy($source_image);
+        imagedestroy($target_image);
+        imagedestroy($target_image);
+
+        return self::info($filename);
     }
 
     protected function imageCropper_size($target_width, $target_height) {
 
         $source_width = $this->image_info[0];
         $source_height = $this->image_info[1];
-        $source_ratio = $source_height / $source_width;
-        $target_ratio = $target_height / $target_width;
+        $source_ratio = intval($source_height / $source_width);
+        $target_ratio = intval($target_height / $target_width);
         if ($source_ratio > $target_ratio) {
             // image-to-height
             $cropped_width = $source_width;
@@ -1789,8 +1808,8 @@ class image {
         $source_width = $this->image_info[0];
         $source_height = $this->image_info[1];
         $source_mime  = $this->image_info['mime'];
-        $source_ratio = $source_height / $source_width;
-        $target_ratio = $target_height / $target_width;
+        $source_ratio = intval($source_height / $source_width);
+        $target_ratio = intval($target_height / $target_width);
         if ($source_ratio > $target_ratio) {
             // image-to-height
             $cropped_width = $source_width;
@@ -1861,8 +1880,8 @@ class image {
 
         if ($width > $cw) {
             $per = $cw / $width;//计算比例
-            $new_width = $width * $per; //压缩后的图片宽
-            $new_height = $height * $per; //压缩后的图片高
+            $new_width = intval($width * $per); //压缩后的图片宽
+            $new_height = intval($height * $per); //压缩后的图片高
             switch ($type) {
                 case 1:
                     // gif
