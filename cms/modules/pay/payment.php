@@ -234,6 +234,7 @@ class payment extends admin {
 					$op = $this->input->post('pay_unit') ? $value: '-'.$value;
 					$op = $this->input->post('pay_type') ? $op.L('yuan') : $op.L('point');
 					$msg = L('account_changes_notice_tips',array('username'=>$username,'time'=>date('Y-m-d H:i:s',SYS_TIME),'op'=>$op,'note'=>$usernote,'amount'=>$userinfo['amount'],'point'=>$userinfo['point']));
+					$this->email->set();
 					$this->email->send($userinfo['email'],L('send_account_changes_notice'),$msg);
 				}
 				dr_admin_msg(1,L('public_discount_succ'),HTTP_REFERER);	

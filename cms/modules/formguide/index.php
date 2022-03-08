@@ -87,6 +87,7 @@ class index {
 					$mails = explode(',', $setting['mails']);
 					if (is_array($mails)) {
 						foreach ($mails as $m) {
+							$this->email->set();
 							$email->send($m, L('tips'), $this->setting['mailmessage']);
 						}
 					}

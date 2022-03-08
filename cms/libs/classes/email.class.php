@@ -11,27 +11,8 @@ class email {
     /**
      * 样式配置文件
      */
-    public function set($config) {
-        if($config && is_array($config)) {
-            if(!$config['sitename']) {
-                $siteid = get_siteid();
-                $siteinfo = siteinfo($siteid);
-                $config['sitename'] = $siteinfo['site_title'];
-            }
-            $this->config = array(
-                'port' => $config['port'],
-                'auth' => $config['auth'],
-                'type' => $config['type'],
-                'from' => $config['from'],
-                'server' => $config['host'],
-                'mailsend' => 2,
-                'mailusername' => 1,
-                'maildelimiter' => 1,
-                'auth_username' => $config['user'],
-                'auth_password' => $config['pass'],
-                'sitename' => $config['sitename'],
-            );
-        } else {
+    public function set($config = '') {
+        if(!$config) {
             $config = getcache('common','commons');
             if(!$config['sitename']) {
                 $siteid = get_siteid();
@@ -49,6 +30,25 @@ class email {
                 'maildelimiter' => 1,
                 'auth_username' => $config['mail_user'],
                 'auth_password' => $config['mail_password'],
+                'sitename' => $config['sitename'],
+            );
+        } else {
+            if(!$config['sitename']) {
+                $siteid = get_siteid();
+                $siteinfo = siteinfo($siteid);
+                $config['sitename'] = $siteinfo['site_title'];
+            }
+            $this->config = array(
+                'port' => $config['port'],
+                'auth' => $config['auth'],
+                'type' => $config['type'],
+                'from' => $config['from'],
+                'server' => $config['host'],
+                'mailsend' => 2,
+                'mailusername' => 1,
+                'maildelimiter' => 1,
+                'auth_username' => $config['user'],
+                'auth_password' => $config['pass'],
                 'sitename' => $config['sitename'],
             );
         }

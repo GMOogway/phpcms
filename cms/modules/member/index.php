@@ -64,7 +64,7 @@ class index extends foreground {
 			if (!$rt['code']) {
 				showmessage($rt['msg'], HTTP_REFERER);
 			}
-			$userinfo['nickname'] = ($this->input->post('nickname') && is_username($this->input->post('nickname'))) ? $this->input->post('nickname') : '';
+			$userinfo['nickname'] = $this->input->post('nickname') ? $this->input->post('nickname') : '';
 			
 			$userinfo['email'] = ($this->input->post('email') && is_email($this->input->post('email'))) ? $this->input->post('email') : exit('0');
 			$userinfo['password'] = dr_safe_password($this->input->post('password'));
@@ -182,6 +182,7 @@ class index extends foreground {
 				$url = APP_PATH."index.php?m=member&c=index&a=register&code=$code&verify=1";
 				$message = $member_setting['registerverifymessage'];
 				$message = str_replace(array('{click}','{url}','{username}','{email}','{password}'), array('<a href="'.$url.'">'.L('please_click').'</a>',$url,$userinfo['username'],$userinfo['email'],$password), $message);
+				$this->email->set();
 				$this->email->send($userinfo['email'], L('reg_verify_email'), $message);
 				//设置当前注册账号COOKIE，为第二步重发邮件所用
 				$_SESSION['_regusername'] = $userinfo['username'];
@@ -277,7 +278,7 @@ class index extends foreground {
 		$member_setting = getcache('member_setting');
 		$message = $member_setting['registerverifymessage'];
 		$message = str_replace(array('{click}','{url}','{username}','{email}','{password}'), array('<a href="'.$url.'">'.L('please_click').'</a>',$url,$_username,$newemail,$password), $message);
-		
+		$this->email->set();
  		if($this->email->send($newemail, L('reg_verify_email'), $message)){
 			//更新新的邮箱，用来验证
  			$this->db->update(array('email'=>$newemail), array('userid'=>$_userid));
@@ -418,7 +419,7 @@ class index extends foreground {
 		if($this->input->post('dosubmit')) {
 			$info = $this->input->post('info');
 			//更新用户昵称
-			$nickname = $this->input->post('nickname') && is_username(trim($this->input->post('nickname'))) ? trim($this->input->post('nickname')) : '';
+			$nickname = $this->input->post('nickname') ? trim($this->input->post('nickname')) : '';
 			$nickname = safe_replace($nickname);
 			if($nickname) {
 				$this->db->update(array('nickname'=>$nickname), array('userid'=>$this->memberinfo['userid']));
@@ -990,7 +991,7 @@ class index extends foreground {
 	 * @return $status {0:已存在;1:成功}
 	 */
 	public function public_checknickname_ajax() {
-		$nickname = $this->input->get('nickname') && trim($this->input->get('nickname')) && is_username(trim($this->input->get('nickname'))) ? trim($this->input->get('nickname')) : exit('0');
+		$nickname = $this->input->get('nickname') && trim($this->input->get('nickname')) ? trim($this->input->get('nickname')) : exit('0');
 		if(CHARSET != 'utf-8') {
 			$nickname = iconv('utf-8', CHARSET, $nickname);
 		} 
@@ -1485,6 +1486,7 @@ class index extends foreground {
 			} else {
 				$sitename = 'CMS_V9_MAIL';
 			}
+			$this->email->set();
 			$this->email->send($email, L('forgetpassword'), $message, $sitename);
 			showmessage(L('operation_success'), 'index.php?m=member&c=index&a=login');
 		} elseif($this->input->get('code')) {
@@ -1511,6 +1513,7 @@ class index extends foreground {
 				} else {
 					$sitename = 'CMS_V9_MAIL';
 				}
+				$this->email->set();
 				$this->email->send($email, L('forgetpassword'), "New password:".$password, $sitename);
 				showmessage(L('operation_success').L('newpassword').':'.$password);
 
@@ -1703,6 +1706,7 @@ class index extends foreground {
 					$_SESSION['email'] = '';
 					$_SESSION['userid'] = '';
 					$_SESSION['emc'] = '';
+					$this->email->set();
 					$this->email->send($email, '密码重置通知', "您在".date('Y-m-d H:i:s')."通过密码找回功能，重置了本站密码。");
 					include template('member', 'forget_password_username');
 					exit;

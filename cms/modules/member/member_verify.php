@@ -108,6 +108,7 @@ class member_verify extends admin {
 			if($_POST['sendemail']) {
 				$memberinfo = $this->db->select($where);
 				foreach ($memberinfo as $v) {
+					$this->email->set();
 					$this->email->send($v['email'], L('reg_pass'), $_POST['message']);
 				}
 			}
@@ -147,6 +148,7 @@ class member_verify extends admin {
 				if($_POST['sendemail']) {
 					$memberinfo = $this->db->select($where);
 					foreach ($memberinfo as $v) {
+						$this->email->set();
 						$this->email->send($v['email'], L('reg_reject'), $_POST['message']);
 					}
 				}
@@ -171,6 +173,7 @@ class member_verify extends admin {
 				if($_POST['sendemail']) {
 					$memberinfo = $this->db->select($where);
 					foreach ($memberinfo as $v) {
+						$this->email->set();
 						$this->email->send($v['email'], L('reg_ignore'), $_POST['message']);
 					}
 				}
