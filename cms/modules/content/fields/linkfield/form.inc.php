@@ -5,8 +5,8 @@
 		$get_db = pc_base::load_model("get_model");
 
 		$sel_tit=$setting['select_title']?$setting['select_title']:'*';
-
-		$sql = "SELECT ".$sel_tit." FROM `".$setting['table_name']."`";
+		$sel_where = $setting['select_where'] ? safe_replace($setting['select_where']) : '';
+		$sql = "SELECT ".$sel_tit." FROM `".$setting['table_name']."`" . ($sel_where ? ' WHERE '.$sel_where : '');
 		$r= $get_db->query($sql);
 		while(($s = $get_db->fetch_next()) != false) {
 			$dataArr[] = $s;
@@ -14,17 +14,21 @@
 
 		if($fieldinfo['link_type']){
 			$value = str_replace('&amp;','&',$value);
-
+			if(!defined('BOOTSTRAP_SELECT')) {
+				$data = '<script type="text/javascript">var bs_selectAllText = \'全选\';var bs_deselectAllText = \'全删\';var bs_noneSelectedText = \'没有选择\'; var bs_noneResultsText = \'没有找到 {0}\';</script>
+				<link href="'.JS_PATH.'bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet">
+				<script type="text/javascript" src="'.JS_PATH.'bootstrap-select/js/bootstrap-select.min.js"></script>
+				<script type="text/javascript">jQuery(document).ready(function(){$(\'.bs-select\').selectpicker();});</script>';
+				define('BOOTSTRAP_SELECT', 1);
+			} else {
+				$data = '';
+			}
 			if($fieldinfo['insert_type'] == "multiple_id"){
-				$data = '<link href="statics/plugin/multiple_select/multiple-select.css" rel="stylesheet">
-				<script type="text/javascript" src="statics/plugin/multiple_select/multiple-select.js"></script>
-				<script>$(function() {
-						$("#'.$fieldinfo['field'].'").multipleSelect({width:"100%", filter: true, minimumCountSelected: 4, placeholder:"≡请选择≡", selectAll:false, allSelected:"全部被选中", countSelected: "# / % 已选择"});
-					});</script>';
+				
 				$data1 = $data2 = '';
-				$data .= '<input type="hidden" name="info['.$fieldinfo['field'].'][]" value="-99"><select name="info['.$fieldinfo['field'].'][]" id="'.$fieldinfo['field'].'" multiple="multiple">';
+				$data .= '<input type="hidden" name="info['.$fieldinfo['field'].'][]" value="-99"><label><select name="info['.$fieldinfo['field'].'][]" id="'.$fieldinfo['field'].'" multiple="multiple" class="form-control bs-select" data-title="'.L('请选择').'" data-live-search="true" data-actions-box="true">';
 			}else{
-				$data = '<select name="info['.$fieldinfo['field'].']" id="'.$fieldinfo['field'].'"><option>≡请选择≡</option>';
+				$data .= '<label><select name="info['.$fieldinfo['field'].']" id="'.$fieldinfo['field'].'" class="form-control bs-select" data-title="'.L('请选择').'" data-live-search="true" data-actions-box="true">';
 			}
 
 			foreach($dataArr as $v) {
@@ -53,7 +57,7 @@
 			}
 			if($fieldinfo['insert_type'] == "multiple_id" && $value)
 				$data .= $data1.$data2;
-			$data .= '</select>';
+			$data .= '</select></label>';
 
 		}else{
 			$multiple_field_value = '';
@@ -97,7 +101,7 @@
 			#search_view{$field} li.search_view span{margin-right: 30px;}
 			</style>
 			<div class="content_div">
-				<input type="text" size="41" id="cat_search{$field}" value="{$cat_field_value}" onfocus="if(this.value == this.defaultValue) this.value = ''" onblur="if(this.value.replace(' ','') == '') this.value = this.defaultValue;" class='form-control'><input name="info[{$fieldinfo['field']}]" id="{$fieldinfo['field']}" type="hidden" class='form-control' value="{$value}" size="41"/>
+				<label><input type="text" id="cat_search{$field}" value="{$cat_field_value}" onfocus="if(this.value == this.defaultValue) this.value = ''" onblur="if(this.value.replace(' ','') == '') this.value = this.defaultValue;" class='form-control'><input name="info[{$fieldinfo['field']}]" id="{$fieldinfo['field']}" type="hidden" class='form-control' value="{$value}" size="41"/></label>
 				<ul id="search_div{$field}"></ul>
 				<ul id="search_view{$field}" class="list-dot">{$multiple_field_value}</ul>
 			</div>
@@ -132,7 +136,7 @@
 							$('#search_view{$field}').html(str_title);
 						}
 					}
-					$("#cat_search{$field}").val(title);
+					$("#cat_search{$field}").val('');
 					$('#search_div{$field}').hide();
 				}
 				

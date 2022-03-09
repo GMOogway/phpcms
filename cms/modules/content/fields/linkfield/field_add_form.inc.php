@@ -163,6 +163,13 @@ $db->free_result($tbl_show);
       </div>
 	</div>
 	<div class="form-group">
+		<label class="col-md-2 control-label">查询条件</label>
+      <div class="col-md-9">
+            <label><input type="text" name="setting[select_where]" id="select_where" value="" size="40" class="form-control"></label>
+            <span class="help-block">请填写查询的条件如：catid=1</span>
+      </div>
+	</div>
+	<div class="form-group">
 		<label class="col-md-2 control-label">存入数据方式</label>
       <div class="col-md-9">
             <div class="mt-radio-inline">

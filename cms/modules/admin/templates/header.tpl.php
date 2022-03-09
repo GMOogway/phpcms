@@ -18,6 +18,14 @@ if(isset($show_dialog)) {?>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>Dialog/main.js"></script>
 <script type="text/javascript" src="<?php echo CSS_PATH?>bootstrap/js/bootstrap.min.js"></script>
 <script src='<?php echo JS_PATH?>bootstrap-tagsinput.min.js' type='text/javascript'></script>
+<script type="text/javascript">
+<?php
+if(in_array(ROUTE_M, array('content', 'special')) && in_array(ROUTE_C, array('content', 'sitemodel_field')) && in_array(ROUTE_A, array('add', 'edit', 'public_priview'))) {?>
+var is_admin = 0;
+<?php } else { ?>
+var is_admin = 1;
+<?php } ?>
+</script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>admin_common.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>styleswitch.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>layer/layer.js"></script>

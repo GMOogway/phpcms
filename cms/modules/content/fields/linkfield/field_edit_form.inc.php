@@ -178,6 +178,13 @@ $db->free_result($tbl_show);
             <label><input type="text" name="setting[select_title]" id="select_title" value="<?php echo $setting['select_title'];?>" size="40" class="form-control"></label>
             <span class="help-block">请填写字段名如：id,title (为空则表示全部查询。非空时必须包含like字段、赋值字段、主键)</span>
       </div>
+	</div>	
+	<div class="form-group">
+		<label class="col-md-2 control-label">查询条件</label>
+      <div class="col-md-9">
+            <label><input type="text" name="setting[select_where]" id="select_where" value="<?php echo $setting['select_where'];?>" size="40" class="form-control"></label>
+            <span class="help-block">请填写查询的条件如：catid=1</span>
+      </div>
 	</div>
 	<div class="form-group">
 		<label class="col-md-2 control-label">存入数据方式</label>
