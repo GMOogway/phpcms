@@ -1,5 +1,22 @@
 <?php defined('IS_ADMIN') or exit('No permission resources.');?>
 <?php include $this->admin_tpl('header', 'admin');?>
+<div class="subnav">
+    <?php if(is_mobile(0)) {?>
+    <div class="content-menu ib-a">
+        <li class="dropdown">
+            <a href="javascript:void(0);" class="dropdown-toggle on" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-th-large"></i> 菜单 <i class="fa fa-angle-double-down"></i></a>
+            <ul class="dropdown-menu">
+                <?php echo admin::submenu(115); ?>
+            </ul>
+        </li>
+    </div>
+    <?php } else {?>
+    <div class="content-menu ib-a">
+    <?php echo admin::submenu(115); ?>
+    </div>
+    <?php }?>
+</div>
+<div class="content-header"></div>
 <div class="page-container" style="margin-bottom: 0px !important;">
     <div class="page-content-wrapper">
         <div class="page-content page-content3 mybody-nheader main-content  ">

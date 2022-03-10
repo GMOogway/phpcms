@@ -466,15 +466,9 @@ class content_model extends model {
 			if($r['type']==0) $array[$r['catid']] = $r['items'];
 		}
 		setcache('category_items_'.$this->modelid, $array,'commons');
-		$sitemodel_datas = $this->sitemodel_db->select(array('type'=>0,'disabled'=>0));
-		$model_array = array();
-		foreach ($sitemodel_datas as $r) {
-			$this->set_model($r['modelid']);
-			$total = $this->count();
-			$this->sitemodel_db->update(array('items'=>$total),array('modelid'=>$r['modelid']));
-			$model_array[$r['modelid']] = $r;
-		}
-		setcache('model', $model_array, 'commons');
+		$this->set_model($this->modelid);
+		$total = $this->count();
+		$this->sitemodel_db->update(array('items'=>$total),array('modelid'=>$this->modelid));
 	}
 }
 ?>

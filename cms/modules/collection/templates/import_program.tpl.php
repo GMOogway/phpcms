@@ -1,5 +1,22 @@
 <?php defined('IS_ADMIN') or exit('No permission resources.');?>
 <?php include $this->admin_tpl('header', 'admin');?>
+<div class="subnav">
+    <?php if(is_mobile(0)) {?>
+    <div class="content-menu ib-a">
+        <li class="dropdown">
+            <a href="javascript:void(0);" class="dropdown-toggle on" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-th-large"></i> 菜单 <i class="fa fa-angle-double-down"></i></a>
+            <ul class="dropdown-menu">
+                <?php echo admin::submenu(115); ?>
+            </ul>
+        </li>
+    </div>
+    <?php } else {?>
+    <div class="content-menu ib-a">
+    <?php echo admin::submenu(115); ?>
+    </div>
+    <?php }?>
+</div>
+<div class="content-header"></div>
 <div class="pad-lr-10">
 <fieldset>
 	<legend><?php echo L('the_new_publication_solutions')?></legend>
@@ -20,7 +37,7 @@
 	<input type="hidden" name="type" value="<?php echo $type?>">
 	<input type="hidden" name="ids" value="<?php echo $ids?>">
 	<input type="hidden" name="dosubmit" value="1">
-	<label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('search')?></button></label>
+	<label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-save"></i> <?php echo L('submit')?></button></label>
 	</form>
 </fieldset>
 <div class="bk15"></div>
@@ -44,7 +61,8 @@
 	<input type="hidden" name="nodeid" value="<?php if(isset($nodeid)) echo $nodeid?>">
 	<input type="hidden" name="type" value="<?php echo $type?>">
 	<input type="hidden" name="ids" value="<?php echo $ids?>">
-	<input type="submit" class="button" name="dosubmit" value="<?php echo L('submit')?>"/>
+	<input type="hidden" name="dosubmit" value="1">
+	<label><button type="submit" class="btn green btn-sm onloading" name="submit"> <i class="fa fa-save"></i> <?php echo L('submit')?></button></label>
 </div>
 </form>
 </div>

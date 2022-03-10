@@ -14,6 +14,7 @@ class content extends foreground {
 	function __construct() {
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
+		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 		$this->priv_db = pc_base::load_model('category_priv_model'); //加载栏目权限表数据模型
 	}
 	public function publish() {
@@ -81,6 +82,7 @@ class content extends foreground {
 			$this->content_db->siteid = $siteid;
 			
 			$id = $this->content_db->add_content($info);
+			$this->cache_api->cache('sitemodels');
 			//检查投稿奖励或扣除积分
 			if ($info['status']==99) {
 				$flag = $catid.'_'.$id;

@@ -93,7 +93,7 @@ function test_spider(id) {
 }
 
 function copy_spider(id) {
-	artdialog('test','?m=collection&c=node&a=copy&nodeid='+id,'<?php echo L('copy_node')?>',200,220);
+	artdialog('test','?m=collection&c=node&a=copy&nodeid='+id,'<?php echo L('copy_node')?>',500,220);
 }
 
 function import_spider() {

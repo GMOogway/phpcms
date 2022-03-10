@@ -347,6 +347,19 @@ class cache_api {
 	}
 	
 	/**
+	 * 更新模型缓存方法
+	 */
+	public function sitemodels() {
+		$this->sitemodel_db = pc_base::load_model('sitemodel_model');
+		$sitemodel_datas = $this->sitemodel_db->select(array('type'=>0,'disabled'=>0));
+		$model_array = array();
+		foreach ($sitemodel_datas as $r) {
+			$model_array[$r['modelid']] = $r;
+		}
+		setcache('model', $model_array, 'commons');
+	}
+	
+	/**
 	 * 更新模型字段缓存方法
 	 */
 	public function sitemodel_field($modelid) {

@@ -18,7 +18,7 @@ for ($j=0;$j<5;$j++) {
         </ul>
     </div>
     <?php } else {?>
-<div class="content-menu ib-a blue">
+<div class="content-menu ib-a">
 <?php if($super_admin) {?>
 <a href='?m=content&c=content&a=public_checkall&menuid=<?php echo $this->input->get('menuid');?>' class="on"><i class="fa fa-check"></i> <?php echo L('all_check_list');?></a>
 <?php } else {

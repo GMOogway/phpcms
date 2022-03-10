@@ -11,8 +11,8 @@ class do_import {
 	
 	public function __construct() {
 		$this->input = pc_base::load_sys_class('input');
+		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 		$this->import_db = pc_base::load_model('import_model');
-		
 	}
 	
 	/**
@@ -448,7 +448,7 @@ class do_import {
    			$content = pc_base::load_model('content_model');
  			$content->set_model($import_info['modelid']);//设置要导入的模型id
 			$contentid = $content->add_content($val, 1);
-			
+			$this->cache_api->cache('sitemodels');
  		}
  		$finished = 0;
 		if($number && ($importnum < $number)){//如果有每次执行多少条，而且当前要插入的条数已经小于设定值，则说明已是最后的执行

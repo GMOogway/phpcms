@@ -12,7 +12,7 @@ include $this->admin_tpl('header','admin');
         </ul>
     </div>
     <?php } else {?>
-    <div class="content-menu ib-a blue"><a class="add fb" href="?m=poster&c=poster&a=init&spaceid=<?php echo $info['spaceid'];?>"><i class="fa fa-plus"></i> <?php echo L('ad_list')?></a><i class="fa fa-circle"></i><a class="on" href="?m=poster&c=space"><i class="fa fa-reorder"></i> <?php echo L('space_list')?></a></div>
+    <div class="content-menu ib-a"><a class="add fb" href="?m=poster&c=poster&a=init&spaceid=<?php echo $info['spaceid'];?>"><i class="fa fa-plus"></i> <?php echo L('ad_list')?></a><i class="fa fa-circle"></i><a class="on" href="?m=poster&c=space"><i class="fa fa-reorder"></i> <?php echo L('space_list')?></a></div>
     <?php }?>
 </div>
 <div class="content-header"></div>

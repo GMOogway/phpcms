@@ -141,8 +141,7 @@ class badword extends admin {
 		        header('Pragma: no-cache');
 		        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
 		    }
-		echo $str;
-		exit();
+		exit($str);
  	}
 	
 	/**

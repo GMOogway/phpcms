@@ -19,6 +19,7 @@ class content extends admin {
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
 		$this->cache = pc_base::load_sys_class('cache');
+		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 		$this->db = pc_base::load_model('content_model');
 		$this->f_db = pc_base::load_model('sitemodel_model');
 		$this->field_db = pc_base::load_model('sitemodel_field_model');
@@ -246,6 +247,7 @@ class content extends admin {
 					$info['status'] = 99;
 				}
 				$this->db->add_content($info);
+				$this->cache_api->cache('sitemodels');
 				dr_json(1, L('add_success'));
 			} else {
 				//单网页

@@ -19,6 +19,7 @@ class node extends admin {
 	function __construct() {
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
+		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 		$this->db = pc_base::load_model('collection_node_model');
 		$this->siteid = get_siteid();
 		$this->url_list_type = array('1'=>L('sequence'), '2'=>L('multiple_pages'), '3'=>L('single_page'), '4'=>'RSS');
@@ -189,7 +190,7 @@ class node extends admin {
 			}
 			header("Content-type: application/octet-stream");
 		    header("Content-Disposition: attachment; filename=pc_collection_".$nodeid.'.txt');
-		    echo base64_encode(json_encode($data));
+		    exit(base64_encode(json_encode($data)));
 		} else {
 			dr_admin_msg(0,L('notfound'));
 		}
@@ -384,6 +385,7 @@ class node extends admin {
 		$program_db = pc_base::load_model('collection_program_model');
 		$program_list = $program_db->select(array('nodeid'=>$nodeid, 'siteid'=>$this->get_siteid()), 'id, catid');
 		$cat = getcache('category_content_'.$this->siteid, 'commons');
+		$show_header = true;
 		include $this->admin_tpl('import_program');
 	}
 	
@@ -489,6 +491,7 @@ class node extends admin {
 	
 	//导入文章到模型
 	public function import_content() {
+		define('IS_COLL', TRUE);
 		$nodeid = isset($_GET['nodeid']) ? intval($_GET['nodeid']) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		$programid = isset($_GET['programid']) ? intval($_GET['programid']) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		$ids = isset($_GET['ids']) ? $_GET['ids'] : '';
@@ -576,6 +579,7 @@ class node extends admin {
 			$str = L('are_imported_the_import_process').(($page-1)*20+$i).'/'.$total.'<script type="text/javascript">location.href="?m=collection&c=node&a=import_content&nodeid='.$nodeid.'&programid='.$programid.'&type=all&page='.($page+1).'&total='.$total.'&pc_hash='.dr_get_csrf_token().'"</script>';
 			$url = '';
 		}
+		$this->cache_api->cache('sitemodels');
 		dr_admin_msg(1,$str, $url);
 	}
 }

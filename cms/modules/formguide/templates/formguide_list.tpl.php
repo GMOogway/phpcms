@@ -14,7 +14,7 @@ include $this->admin_tpl('header', 'admin');
         </ul>
     </div>
     <?php } else {?>
-    <div class="content-menu ib-a blue">
+    <div class="content-menu ib-a">
     <?php if(isset($big_menu)) { echo '<a class="add fb" href="'.$big_menu[0].'"><i class="fa fa-plus"></i> '.$big_menu[1].'</a><i class="fa fa-circle"></i>';} else {$big_menu = '';} ?>
     <?php echo admin::submenu($this->input->get('menuid'),$big_menu); ?><i class="fa fa-circle"></i><a href="javascript:artdialog('setting','?m=formguide&c=formguide&a=setting','<?php echo L('module_setting')?>',540,350);void(0);"><i class="fa fa-cogs"></i> <?php echo L('module_setting')?></a>
     </div>

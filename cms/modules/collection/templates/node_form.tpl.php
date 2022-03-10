@@ -49,7 +49,7 @@ $(document).ready(function() {
 		<tr>
 			<td width="120"><?php echo L('url_configuration')?>：</td> 
 			<td>
-			 <input type="text" name="urlpage1" id="urlpage_1" size="100" value="<?php if(isset($data['sourcetype']) && $data['sourcetype'] == 1 && isset($data['urlpage'])) echo $data['urlpage'];?>"> <input type="button" class="button" onclick="show_url()" value="<?php echo L('test')?>"><br /> 
+			 <label><input type="text" name="urlpage1" id="urlpage_1" size="100" value="<?php if(isset($data['sourcetype']) && $data['sourcetype'] == 1 && isset($data['urlpage'])) echo $data['urlpage'];?>"></label> <label><input type="button" class="button" onclick="show_url()" value="<?php echo L('test')?>"></label><br /> 
 			<?php echo L('url_msg')?><br />
 			 <?php echo L('page_from')?>: <input type="text" name="data[pagesize_start]" value="<?php if(isset($data['sourcetype']) && $data['sourcetype'] == 1 && isset($data['pagesize_start'])) { echo $data['pagesize_start'];} else { echo '1';}?>" size="4"> <?php echo L('to')?> <input type="text" name="data[pagesize_end]" value="<?php if(isset($data['sourcetype']) && $data['sourcetype'] == 1 && isset($data['pagesize_end'])) { echo $data['pagesize_end'];} else { echo '10';}?>" size="4"> <?php echo L('increment_by')?><input type="text" name="data[par_num]" size="4" value="<?php if(isset($data['sourcetype']) && $data['sourcetype'] == 1 && isset($data['par_num'])) { echo $data['par_num'];} else { echo '1';}?>">
 			</td>

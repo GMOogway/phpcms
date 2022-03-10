@@ -172,7 +172,7 @@ class member_model extends admin {
 
 		$res = var_export($modelinfoarr, TRUE);
 		header('Content-Disposition: attachment; filename="'.$modelarr[$modelid]['tablename'].'.model"');
-		echo $res;exit;
+		exit($res);
 	}
 	
 	/**

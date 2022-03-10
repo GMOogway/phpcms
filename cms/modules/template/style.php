@@ -61,7 +61,7 @@ class style extends admin {
 			$data = base64_encode(json_encode($arr));
 		    header("Content-type: application/octet-stream");
 		    header("Content-Disposition: attachment; filename=pc_template_".$style.'.txt');
-		    echo $data;
+		    exit($data);
 		} else {
 			dr_admin_msg(0,L('file_does_not_exists'), HTTP_REFERER);
 		}

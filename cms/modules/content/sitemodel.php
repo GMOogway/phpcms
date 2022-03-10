@@ -238,7 +238,7 @@ class sitemodel extends admin {
 		}
 		$res = var_export($modelinfoarr, TRUE);
 		header('Content-Disposition: attachment; filename="'.$modelarr[$modelid]['tablename'].'.model"');
-		echo $res;exit;
+		exit($res);
 	}
 	/**
 	 * 导入模型
