@@ -482,6 +482,7 @@ class content extends admin {
  			}
 			//更新栏目统计
 			$this->db->cache_items();
+			$this->cache_api->cache('sitemodels');
 			dr_json(1, L('operation_success'));
 		} else {
 			dr_json(0, L('operation_failure'));
