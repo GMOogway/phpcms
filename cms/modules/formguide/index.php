@@ -46,7 +46,7 @@ class index {
 		}
 		$setting = string2array($r['setting']);
 		if ($setting['enabletime']) {
-			if ($setting['starttime']>SYS_TIME || ($setting['endtime']+3600*24)<SYS_TIME) {
+			if (($setting['starttime'] && $setting['starttime']>SYS_TIME) || ($setting['endtime'] && ($setting['endtime']+3600*24)<SYS_TIME)) {
 				$this->input->get('action') ? exit : showmessage(L('form_expired'), APP_PATH.'index.php?m=formguide&c=index&a=index');
 			}
 		}
@@ -82,12 +82,12 @@ class index {
 			$data['ip'] = ip();
 			$dataid = $this->m_db->insert($data, true);
 			if ($dataid) {
-				if ($setting['sendmail']) {
+				if ($setting['sendmail'] && $setting['mails']) {
 					$email = pc_base::load_sys_class('email');
 					$mails = explode(',', $setting['mails']);
 					if (is_array($mails)) {
 						foreach ($mails as $m) {
-							$this->email->set();
+							$email->set();
 							$email->send($m, L('tips'), $this->setting['mailmessage']);
 						}
 					}
