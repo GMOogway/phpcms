@@ -380,7 +380,7 @@ class content_model extends model {
 		//重置默认表
 		$this->table_name = $this->db_tablepre.$this->model_tablename;
 		//更新栏目统计
-		$this->update_category_items($catid,'delete');
+		$this->update_category_items($catid,'delete',1);
 	}
 	
 	

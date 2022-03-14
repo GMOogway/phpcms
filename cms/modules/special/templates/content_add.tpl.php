@@ -58,7 +58,7 @@ $p = dr_authcode(array(
 		<input type="hidden" name="style_font_weight" id="style_font_weight" value="">
 		<input type="button" class="button" id="check_title_alt" value="<?php echo L('check_exist')?>" onclick="$.get('?m=special&c=content&a=public_check_title&sid='+Math.random()*5, {data:$('#title').val(), specialid:'<?php echo $_GET['specialid']?>'}, function(data){ if(data=='1') {$('#check_title_alt').val('<?php echo L('title_exist')?>');$('#check_title_alt').css('background-color','#E7505A');} else if(data=='0') {$('#check_title_alt').val('<?php echo L('title_no_exist')?>');$('#check_title_alt').css('background-color','#1E9FFF')}})"/> <input type="hidden" name="style_color" id="style_color" value=""> <script type="text/javascript">$(function(){$("#style_color").minicolors({control:$("#style_color").attr("data-control")||"hue",defaultValue:$("#style_color").attr("data-defaultValue")||"",inline:"true"===$("#style_color").attr("data-inline"),letterCase:$("#style_color").attr("data-letterCase")||"lowercase",opacity:$("#style_color").attr("data-opacity"),position:$("#style_color").attr("data-position")||"bottom left",change:function(t,o){t&&(o&&(t+=", "+o),"object"==typeof console&&console.log(t));$("#title").css("color",$("#style_color").val())},theme:"bootstrap"})});</script>
 		<a href="javascript:;" onclick="set_title_color('');$('.minicolors-swatch-color').css('background','');"><?php echo L('清空');?></a>
-		<img src="<?php echo IMG_PATH;?>icon/bold.png" width="10" height="10" onclick="input_font_bold()" style="cursor:hand"/>
+		<i class="fa fa-bold" onclick="input_font_bold()" style="cursor:pointer"></i>
                                 </div>
                             </div>
                             <div class="form-group">

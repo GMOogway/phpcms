@@ -20,24 +20,39 @@ $rt = $upload->upload_file(array(
 	'path' => '',
 	'form_name' => 'file_upload',
 	'file_exts' => explode('|', strtolower('docx')),
-	'file_size' => ($upload_maxsize/1024) * 1024 * 1024,
+	'file_size' => $upload_maxsize * 1024 * 1024,
 	'attachment' => $upload->get_attach_info(intval($input->get('attachment')), 0),
 ));
-if (!$rt['code']) {
-	exit(dr_array2string($rt));
+$data = array();
+if (defined('SYS_ATTACHMENT_CF') && SYS_ATTACHMENT_CF && $rt['data']['md5']) {
+	$att_db = pc_base::load_model('attachment_model');
+	$att = $att_db->get_one(array('userid'=>intval($userid),'filemd5'=>$rt['data']['md5'],'fileext'=>$rt['data']['ext'],'filesize'=>$rt['data']['size']));
+	if ($att) {
+		$data = dr_return_data($att['aid'], 'ok');
+		// 删除现有附件
+		// 开始删除文件
+		$storage = new storage($module,$catid,$siteid);
+		$storage->delete($upload->get_attach_info((int)$input->get('attachment')), $rt['data']['file']);
+		$rt['data'] = get_attachment($att['aid']);
+	}
 }
 
-// 附件归档
-$data = $upload->save_data($rt['data'], 'word:'.$rid);
-if (!$data['code']) {
-	exit(dr_array2string($data));
+if (!$data) {
+	$data = $upload->save_data($rt['data'], 'word:'.$rid);
+	if ($data['code']) {
+		// 归档成功
+		// 标记附件
+		upload_json($data['code'],$rt['data']['url'],$rt['data']['name'],format_file_size($rt['data']['size']));
+	}
 }
 
 if ($rt && $data) {
-	$title = $rt['data']['name'];
-	upload_json($data['code'],$rt['data']['url'],$title,format_file_size($rt['data']['size']));
+	$title = $rt['data']['filename'] ? $rt['data']['filename'] : $rt['data']['name'];
 } else {
 	dr_json(0, L('文件上传失败'));
+}
+if (!$rt['data']['path'] && $rt['data']['file']) {
+	$rt['data']['path'] = $rt['data']['file'];
 }
 if (!$rt['data']['path']) {
 	dr_json(0, L('没有获取到文件内容'));
@@ -126,15 +141,28 @@ function readWordToHtml($source) {
 							'watermark' => intval($input->get('watermark')),
 							'attachment' => $upload->get_attach_info(intval($input->get('attachment')), intval($input->get('image_reduce'))),
 						));
-						if ($rt['code']) {
-							$att = $upload->save_data($rt['data'], 'word:'.$rid);
-							if ($att['code']) {
-								// 归档成功
-								$html .= '<img src="'.$rt['data']['url'].'" title="'.$rt['data']['name'].'" alt="'.$rt['data']['name'].'"/>';
-								// 标记附件
-								upload_json($att['code'],$rt['data']['url'],$rt['data']['name'],format_file_size($rt['data']['size']));
+						$data = array();
+						if (defined('SYS_ATTACHMENT_CF') && SYS_ATTACHMENT_CF && $rt['data']['md5']) {
+							$att_db = pc_base::load_model('attachment_model');
+							$att = $att_db->get_one(array('userid'=>intval($userid),'filemd5'=>$rt['data']['md5'],'fileext'=>$rt['data']['ext'],'filesize'=>$rt['data']['size']));
+							if ($att) {
+								$data = dr_return_data($att['aid'], 'ok');
+								// 删除现有附件
+								// 开始删除文件
+								$storage = new storage($module,$catid,$siteid);
+								$storage->delete($upload->get_attach_info((int)$input->get('attachment')), $rt['data']['file']);
+								$rt['data'] = get_attachment($att['aid']);
 							}
 						}
+						if (!$data) {
+							$data = $upload->save_data($rt['data'], 'word:'.$rid);
+							if ($data['code']) {
+								// 归档成功
+								// 标记附件
+								upload_json($data['code'],$rt['data']['url'],$rt['data']['name'],format_file_size($rt['data']['size']));
+							}
+						}
+						$html .= '<img src="'.$rt['data']['url'].'" title="'.$rt['data']['name'].'" alt="'.$rt['data']['name'].'"/>';
 					}
 				}
 			}

@@ -78,15 +78,28 @@ if (preg_match('/'.$preg.'(.+)<\/div>/sU', $html, $mt)) {
 								'attachment' => $upload->get_attach_info(intval($input->get('attachment')), intval($input->get('image_reduce'))),
 								'file_ext' => $ext,
 							));
-							if ($rt['code']) {
-								$att = $upload->save_data($rt['data'], 'weixin:'.$rid);
-								if ($att['code']) {
-									// 归档成功
-									$body = str_replace($img, $rt['data']['url'], $body);
-									// 标记附件
-									upload_json($att['code'],$rt['data']['url'],$rt['data']['name'],format_file_size($rt['data']['size']));
+							$data = array();
+							if (defined('SYS_ATTACHMENT_CF') && SYS_ATTACHMENT_CF && $rt['data']['md5']) {
+								$att_db = pc_base::load_model('attachment_model');
+								$att = $att_db->get_one(array('userid'=>intval($userid),'filemd5'=>$rt['data']['md5'],'fileext'=>$rt['data']['ext'],'filesize'=>$rt['data']['size']));
+								if ($att) {
+									$data = dr_return_data($att['aid'], 'ok');
+									// 删除现有附件
+									// 开始删除文件
+									$storage = new storage($input->get('module'),intval($input->get('catid')),$siteid);
+									$storage->delete($upload->get_attach_info((int)$input->get('attachment')), $rt['data']['file']);
+									$rt['data'] = get_attachment($att['aid']);
 								}
 							}
+							if (!$data) {
+								$data = $upload->save_data($rt['data'], 'weixin:'.$rid);
+								if ($data['code']) {
+									// 归档成功
+									// 标记附件
+									upload_json($data['code'],$rt['data']['url'],$rt['data']['name'],format_file_size($rt['data']['size']));
+								}
+							}
+							$body = str_replace($img, $rt['data']['url'], $body);
 						}
 					}
 				}
