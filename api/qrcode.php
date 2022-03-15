@@ -18,9 +18,16 @@ if ($value) {
 		$QR = imagecreatefrompng($file);
 	} else {
 		QRcode::png($value, $file, $errorCorrectionLevel, $matrixPointSize, 3);
+		if (!is_file($file)) {
+			exit('二维码生成失败');
+		}
 		$QR = imagecreatefromstring(file_get_contents($file));
 		if ($thumb) {
-			$logo = imagecreatefromstring(dr_catcher_data($thumb));
+			$code = dr_catcher_data($thumb);
+			if (!$code) {
+				exit('图片参数不规范');
+			}
+			$logo = imagecreatefromstring($code);
 			$QR_width = imagesx($QR);//二维码图片宽度
 			$QR_height = imagesy($QR);//二维码图片高度
 			$logo_width = imagesx($logo);//logo图片宽度
@@ -39,7 +46,7 @@ if ($value) {
 	ob_start();
 	ob_clean();
 	header("Content-type: image/png");
-	ImagePng($QR);
+	$QR && imagepng($QR);
 	exit;
 }
 ?>

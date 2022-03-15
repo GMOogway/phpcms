@@ -35,7 +35,7 @@
 	 * @param $filename 要配置的文件名称
 	 */
 	function set_config($config, $filename="system") {
-		$configfile = CACHE_PATH.'configs'.DIRECTORY_SEPARATOR.$filename.'.php';
+		$configfile = CONFIGPATH.$filename.'.php';
 		if(!is_writable($configfile)) showmessage('Please chmod '.$configfile.' to 0777 !');
 		$pattern = $replacement = array();
 		foreach($config as $k=>$v) {

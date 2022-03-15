@@ -116,13 +116,13 @@ class input {
         $page = pc_base::load_sys_class('page');
         if (defined('IS_ADMIN') && IS_ADMIN && strpos($url, '.php')) {
             // 使用后台分页规则
-            $config = require CACHE_PATH.'configs/apage.php';
+            $config = require CONFIGPATH.'apage.php';
         } else {
             // 这里要支持移动端分页条件
             !$name && $name = 'page';
-            $file = 'configs/page/'.(is_mobile(0) ? 'mobile' : 'pc').'/'.(dr_safe_filename($name)).'.php';
-            if (is_file(CACHE_PATH.$file)) {
-                $config = require CACHE_PATH.$file;
+            $file = 'page/'.(is_mobile(0) ? 'mobile' : 'pc').'/'.(dr_safe_filename($name)).'.php';
+            if (is_file(CONFIGPATH.$file)) {
+                $config = require CONFIGPATH.$file;
             } else {
                 exit('无法找到分页配置文件【'.$file.'】');
             }

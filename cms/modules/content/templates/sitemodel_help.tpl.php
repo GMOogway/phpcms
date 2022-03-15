@@ -5,6 +5,7 @@ include $this->admin_tpl('header', 'admin');?>
         <h2>后台显示字段回调</h2>
         <div class="content-text">
     <p>回调是用于在列表显示时对其值进行格式化，如果不填写回调函数，那么就会原样显示数据库储存内容。<br/></p><p>CMS默认的回调函数有：</p><pre class="brush:html;toolbar:false">标题：title
+标题带推荐位：position
 栏目：catid
 日期时间：datetime
 日期：date
@@ -17,6 +18,7 @@ userid会员：userid
 用于列表显示用户组：group
 用于列表关联主题：ctitle
 用于列表显示状态：status
+文本显示：text
 实时存储时间值：save_time_value
 实时存储文本值：save_text_value
 实时存储选择值：save_select_value</pre></div>

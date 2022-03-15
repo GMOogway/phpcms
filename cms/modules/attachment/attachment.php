@@ -52,6 +52,12 @@ class attachment extends admin {
 					dr_json(0, L('头像存储目录不能与缩略图存储目录相同'));
 				}
 			}
+			foreach (array('sys_attachment_path' => '附件上传', 'sys_avatar_path' => '头像上传', 'sys_thumb_path' => '缩略图上传') as $key => $name) {
+				if (isset($post[$key]) && $post[$key] &&
+					(strpos($post[$key], 'config') !== false || strpos($post[$key], CONFIGPATH) !== false)) {
+					dr_json(0, L($name.'目录不能包含config目录'));
+				}
+			}
 			$post['sys_attachment_save_id'] = intval($post['sys_attachment_save_id']);
 			$post['sys_attachment_save_type'] = intval($post['sys_attachment_save_type']);
 			$post['sys_attachment_path'] = addslashes($post['sys_attachment_path']);
@@ -62,7 +68,7 @@ class attachment extends admin {
 			$post['attachment_del'] = (int)$post['attachment_del'];
 			$post['sys_attachment_cf'] = (int)$post['sys_attachment_cf'];
 			$post['sys_attachment_safe'] = (int)$post['sys_attachment_safe'];
-			$this->set_config($post);	 //保存进config文件
+			$this->set_config($post);//保存进config文件
 			$this->setcache();
 			dr_json(1, L('修改成功'), array('url' => '?m=attachment&c=attachment&a=init&page='.(int)$this->input->post('page').'&pc_hash='.dr_get_csrf_token()));
 		}
@@ -79,7 +85,7 @@ class attachment extends admin {
 	 * @param $filename 要配置的文件名称
 	 */
 	public function set_config($config, $filename="system") {
-		$configfile = CACHE_PATH.'configs'.DIRECTORY_SEPARATOR.$filename.'.php';
+		$configfile = CONFIGPATH.$filename.'.php';
 		if(!is_writable($configfile)) dr_json(0, 'Please chmod '.$configfile.' to 0777 !');
 		$pattern = $replacement = array();
 		foreach($config as $k=>$v) {
@@ -107,17 +113,6 @@ class attachment extends admin {
 	 * 存储策略
 	 */
 	public function remote() {
-		$tablename = $this->db->db_tablepre.'attachment_remote';
-		if (!$this->db->table_exists('attachment_remote')) {
-			$this->db->query('CREATE TABLE `'.$tablename.'` (
-			`id` tinyint(2) unsigned NOT NULL AUTO_INCREMENT,
-			`type` tinyint(2) NOT NULL COMMENT \'类型\',
-			`name` varchar(50) NOT NULL COMMENT \'名称\',
-			`url` varchar(255) NOT NULL COMMENT \'访问地址\',
-			`value` text NOT NULL COMMENT \'参数值\',
-			PRIMARY KEY (`id`)
-			) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci');
-		}
 		if (IS_POST) {
 			$pagesize = $this->input->post('limit') ? $this->input->post('limit') : SYS_ADMIN_PAGESIZE;
 			$page = $this->input->post('page') ? $this->input->post('page') : '1';

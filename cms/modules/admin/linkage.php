@@ -86,7 +86,7 @@ class linkage extends admin {
 		
 		$id = (int)$this->input->get('id');
 		$code = (int)$this->input->get('code');
-		if (!is_file(CACHE_PATH.'configs/linkage/'.$code.'.php')) {
+		if (!is_file(CONFIGPATH.'linkage/'.$code.'.php')) {
 			dr_admin_msg(0, L('数据文件不存在无法导入'));
 		}
 
@@ -96,7 +96,7 @@ class linkage extends admin {
 		$this->db->query('TRUNCATE `'.$this->db->table_name.'`');
 
 		// 开始导入
-		$data = require CACHE_PATH.'configs/linkage/'.$code.'.php';
+		$data = require CONFIGPATH.'linkage/'.$code.'.php';
 		$this->db->query('BEGIN');
 		foreach ($data as $t) {
 			if (is_numeric($t['cname'])) {

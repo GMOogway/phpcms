@@ -579,7 +579,7 @@ $LANG['mobile_html_show'] = '手机内容页生成Html';
 $LANG['mobile_category_urlrules'] = '手机栏目页URL规则';
 $LANG['mobile_show_urlrules'] = '手机内容页URL规则';
 $LANG['create_to_rootdir'] = '是否生成到根目录';
-$LANG['create_to_rootdir_tips'] = '当设置了 caches/configs/system.php 中的 html_root 时，将生成到该目录';
+$LANG['create_to_rootdir_tips'] = '当设置了 system.php 中的 html_root 时，将生成到该目录';
 $LANG['available_styles'] = '可用风格';
 $LANG['category_index_tpl'] = '栏目首页模板';
 $LANG['category_list_tpl'] = '栏目列表页模板';
@@ -916,7 +916,7 @@ $LANG['not_display_in_menu'] = '不在导航显示';
 
 $LANG['apply_to_child'] = '应用到子栏目：';
 $LANG['admin_url'] = '后台访问域名';
-$LANG['admin_url_tips'] = '例如：admin.domain.com，绑定后，只能通过该域名登录，配置保存在 /caches/configs/system.php中，修改参数admin_url可手动取消绑定';
+$LANG['admin_url_tips'] = '例如：admin.domain.com，绑定后，只能通过该域名登录，配置保存在 system.php中，修改参数admin_url可手动取消绑定';
 
 $LANG['setting_connect_qqnew'] = 'QQ号码登录';
 $LANG['setting_connect_qqcallback'] = '回调地址';

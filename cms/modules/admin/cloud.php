@@ -103,11 +103,11 @@ class cloud extends admin {
             $text .= '\'cms_name\' => \'CMS\','.PHP_EOL;
             $text .= '\'cms_url\' => \'https://gitee.com/zhaoxunzhiyin/phpcms\',';
             $text .= PHP_EOL.');'.PHP_EOL.'?>';
-            if (file_put_contents(CACHE_PATH.'configs/license.php', $text)) {
+            if (file_put_contents(CONFIGPATH.'license.php', $text)) {
                 dr_json(1, '绑定成功');
             }
 
-            dr_json(0, '本站：caches/configs/目录无法写入文件，请给于777权限');
+            dr_json(0, '本站：'.str_replace(CMS_PATH, '', CONFIGPATH).'目录无法写入文件，请给于777权限');
         }
 
         dr_json(0, '提交验证失败');

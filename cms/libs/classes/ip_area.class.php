@@ -12,6 +12,10 @@ class ip_area {
      */
     public function set($ip) {
 
+        if (!$ip) {
+            return '';
+        }
+
         $ip = dr_safe_replace($ip);
         $this->address = '';
 
@@ -35,6 +39,9 @@ class ip_area {
      * IP地址解析详细地址
      */
     public function address($ip) {
+        if (!$ip) {
+            return '';
+        }
         if ($ip == '127.0.0.1') {
             return '本地';
         }
@@ -46,7 +53,9 @@ class ip_area {
      * IP地址解析城市
      */
     public function city($ip) {
-        if ($ip == '127.0.0.1') {
+        if (!$ip) {
+            return '';
+        } elseif ($ip == '127.0.0.1') {
             return '本地';
         }
         $this->set($ip);
@@ -70,7 +79,9 @@ class ip_area {
      * IP地址解析省
      */
     public function province($ip) {
-        if ($ip == '127.0.0.1') {
+        if (!$ip) {
+            return '';
+        } elseif ($ip == '127.0.0.1') {
             return '本地';
         }
         $this->set($ip);

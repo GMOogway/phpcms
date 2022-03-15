@@ -240,10 +240,10 @@ function dr_get_merge($code) {
  * 安全url过滤
  */
 function dr_safe_url($url, $is_html = false) {
-	$security = pc_base::load_sys_class('security');
 	if (!$url) {
 		return '';
 	}
+	$security = pc_base::load_sys_class('security');
 	$url = trim($security->xss_clean($url, true));
 	if ($is_html) {
 		$url = htmlspecialchars($url);
@@ -267,6 +267,8 @@ function dr_in_array($var, $array) {
 function dr_strlen($string) {
 	if (is_array($string)) {
 		return dr_count($string);
+	} elseif (!$string) {
+		return 0;
 	}
 	return strlen($string);
 }
@@ -298,7 +300,7 @@ function dr_stripos($string, $key) {
  */
 function dr_file($url) {
 	if (!$url || dr_strlen($url) == 1) {
-		return NULL;
+		return '';
 	} elseif (substr($url, 0, 7) == 'http://' || substr($url, 0, 8) == 'https://') {
 		return $url;
 	} elseif (substr($url, 0, 1) == '/') {
@@ -1599,6 +1601,9 @@ function array2string($data, $isformdata = 1) {
  * 根据文件扩展名获取文件预览信息
  */
 function dr_file_preview_html($value, $target = 0) {
+	if (!$value) {
+		return '';
+	}
 	$ext = trim(strtolower(strrchr($value, '.')), '.');
 	if (dr_is_image($ext)) {
 		$value = dr_file($value);
@@ -3537,6 +3542,9 @@ function is_mobile($siteid) {
 if (! function_exists('dr_is_image')) {
 	// 文件是否是图片
 	function dr_is_image($value) {
+		if (!$value) {
+			return false;
+		}
 		return in_array(
 			strpos($value, '.') !== false ? trim(strtolower(strrchr($value, '.')), '.') : $value,
 			array('jpg', 'gif', 'png', 'jpeg', 'webp')

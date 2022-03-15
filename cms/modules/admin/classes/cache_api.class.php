@@ -591,9 +591,8 @@ class cache_api {
 				}
 			}
 		}
-		$filepath = CACHE_PATH.'configs/';
 		$module = "<?php\nreturn ".var_export($module, true).";\n?>";
-		return $file_size = pc_base::load_config('system','lock_ex') ? file_put_contents($filepath.'modules.php', $module, LOCK_EX) : file_put_contents($filepath.'modules.php', $module);
+		return $file_size = pc_base::load_config('system','lock_ex') ? file_put_contents(CONFIGPATH.'modules.php', $module, LOCK_EX) : file_put_contents(CONFIGPATH.'modules.php', $module);
 	}
 	
 	/**

@@ -186,7 +186,7 @@ class index extends admin {
 		//$logoInfo['href'] = $currentsite['domain'];
 		$array = admin::admin_menu(0);
 		$app = pc_base::load_config('version');
-		if ($app['update'] || !is_file(CACHE_PATH.'configs/version.php')) {
+		if ($app['update'] || !is_file(CONFIGPATH.'version.php')) {
 			$menu_home = '?m=admin&c=check&a=init&menuid=248&pc_hash='.dr_get_csrf_token();
 		} else {
 			$menu_home = '?m=admin&c=index&a=public_main';

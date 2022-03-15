@@ -28,12 +28,18 @@
 			}
 			$str .= '</style>';
 		}
+		$xs = 0;
+		if (strpos($setting['step'], '.')) {
+			list($a, $b) = explode('.', $setting['step']);
+			$xs = dr_strlen($b);
+		}
 		$js = '<script type="text/javascript">
     $(function(){
         $("#dr_'.$field.'").TouchSpin({
             buttondown_class: "btn down",
             buttonup_class: "btn up",
             verticalbuttons: '.(!$setting['show'] ?  'true' : 'false').',
+            decimals: '.$xs.',
             step: '.$setting['step'].',
             min: '.$setting['minnumber'].',
             max: '.$setting['maxnumber'].'

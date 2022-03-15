@@ -103,7 +103,7 @@ class check extends admin {
                 $dir = array(
                     CACHE_PATH => '无法生成系统缓存文件',
                     SYS_AVATAR_PATH => '无法上传头像',
-                    CACHE_PATH.'configs/' => '无法生成系统配置文件，会导致系统配置无效',
+                    CONFIGPATH => '无法生成系统配置文件，会导致系统配置无效',
                     CACHE_PATH.'caches_commons/' => '无法生成系统缓存文件，会导致系统无法运行',
                     SYS_THUMB_PATH => '无法生成缩略图缓存文件',
                     SYS_UPLOAD_PATH => '无法上传附件',
@@ -147,7 +147,7 @@ class check extends admin {
 
             case '06':
 
-                $rt = CACHE_PATH.'configs/database.php';
+                $rt = CONFIGPATH.'database.php';
                 $my = pc_base::load_config('database');
                 $my = $my['default'];
                 $database = file_get_contents($rt);
@@ -592,7 +592,7 @@ class check extends admin {
 
             case '10':
 
-                $version = CACHE_PATH.'configs/version.php';
+                $version = CONFIGPATH.'version.php';
                 if (is_file($version)) {
                     $app_version = file_get_contents($version);
                 }
@@ -611,7 +611,7 @@ class check extends admin {
                     file_put_contents($version,$version_data);
                 }
 
-                $rt = CACHE_PATH.'configs/system.php';
+                $rt = CONFIGPATH.'system.php';
                 $system = file_get_contents($rt);
                 if (strstr($system, 'PHPCMS_PATH')) {
                     $system = str_replace("PHPCMS_PATH","CMS_PATH",$system);

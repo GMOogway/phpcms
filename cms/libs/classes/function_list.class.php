@@ -24,7 +24,7 @@ class function_list {
         $title = ($data['thumb'] ? '<i class="fa fa-photo"></i> ' : '').dr_keyword_highlight(str_cut($value, 30), $param['keyword']);
         !$title && $title = '...';
 
-        return isset($data['url']) && $data['url'] ? ('<a href="'.$data['url'].'" target="_blank" class="tooltips" data-container="body" data-placement="top" data-original-title="'.$value.'" title="'.$value.'">'.$title.'</a>') : $title;
+        return isset($data['url']) && $data['url'] ? ('<a href="'.$data['url'].'" target="_blank" class="tooltips" data-container="body" data-placement="top" data-original-title="'.$value.'" title="'.$value.'">'.$title.'</a>'.($data['islink'] > 0 ? '  <i class="fa fa-link font-green tooltips" data-container="body" data-placement="top" data-original-title="'.L('转向链接').'" title="'.L('转向链接').'"></i>' : '')) : $title;
     }
 
     // 用于列表显示内容
@@ -61,11 +61,17 @@ class function_list {
 
     // 用于列表显示时间日期格式
     public function datetime($value, $param = array(), $data = array()) {
+        if (!$value) {
+            return '';
+        }
         return dr_date($value, null, 'red');
     }
 
     // 用于列表显示日期格式
     public function date($value, $param = array(), $data = array()) {
+        if (!$value) {
+            return '';
+        }
         return dr_date($value, 'Y-m-d', 'red');
     }
 
@@ -102,7 +108,6 @@ class function_list {
 
     // 用于列表关联主题
     public function ctitle($cid, $param = array(), $data = array()) {
-        // 查询username
         if (!$cid) {
             return L('未关联');
         }
@@ -118,6 +123,32 @@ class function_list {
         return $this->cid_data[$cid] ? $this->title($this->cid_data[$cid]['title'], $param, $this->cid_data[$cid]) : L('关联主题不存在');
     }
 
+    // 标题带推荐位
+    public function position($value, $param = array(), $data = array()) {
+        if (!$value) {
+            return '';
+        }
+        
+        $value = htmlspecialchars(clearhtml($value));
+        $title = ($data['thumb'] ? '<i class="fa fa-photo"></i> ' : '').dr_keyword_highlight(str_cut($value, 30), $param['keyword']);
+        !$title && $title = '...';
+
+        $html = isset($data['url']) && $data['url'] ? ('<a href="'.$data['url'].'" target="_blank" class="tooltips" data-container="body" data-placement="top" data-original-title="'.$value.'" title="'.$value.'">'.$title.'</a>'.($data['link_id'] > 0 ? '  <i class="fa fa-link font-green tooltips" data-original-title="'.L('转向链接').'" title="'.L('转向链接').'"></i>' : '')) : $title;
+        if ($data['id']) {
+            $position_db = pc_base::load_model('position_model');
+            $position_data_db = pc_base::load_model('position_data_model');
+            $flag = $position_data_db->select(array('id'=>$data['id'], 'catid'=>$data['catid']));
+            if ($flag) {
+                $arr = $position_db->select();
+                $ico = array(1 => 'success', 2 => 'danger', 3 => 'info', 4 => 'warning');
+                foreach($flag as $t) {
+                    $html .= '&nbsp;<span class="label label-'.($ico[$t['posid']] ? $ico[$t['posid']] : 'default').'">'.$arr[$t['posid']-1]['name'].'</span>';
+                }
+            }
+        }
+        return $html;
+    }
+
     // 用于列表显示ip地址
     public function ip($value, $param = array(), $data = array()) {
         $ip_area = pc_base::load_sys_class('ip_area');
@@ -130,6 +161,9 @@ class function_list {
 
     // url链接输出
     public function url($value, $param = array(), $data = array()) {
+        if (!$value) {
+            return '';
+        }
         return '<a href="'.$value.'" target="_blank">'.$value.'</a>';
     }
 
@@ -223,21 +257,34 @@ class function_list {
 
     // 用于列表显示价格
     public function price($value, $param = array(), $data = array()) {
+        if (!$value) {
+            return '';
+        }
         return '<span style="color:#ef4c2f">￥'.number_format($value, 2).'</span>';
     }
 
     // 用于列表显示价格
     public function money($value, $param = array(), $data = array(), $field = array()) {
+        if (!$value) {
+            return '';
+        }
         return '<span style="color:#ef4c2f">'.number_format($value, 2).'</span>';
     }
 
     // 用于列表显示积分
     public function score($value, $param = array(), $data = array(), $field = array()) {
+        if (!$value) {
+            return '';
+        }
         return '<span style="color:#2f5fef">'.intval($value).'</span>';
     }
 
     // 单选字段name
     public function radio_name($value, $param = array(), $data = array(), $field = array()) {
+
+        if (!$value) {
+            return '';
+        }
 
         if ($field) {
             $options = dr_format_option_array($field['setting']['option']['options']);
@@ -252,6 +299,10 @@ class function_list {
     // 下拉字段name值
     public function select_name($value, $param = array(), $data = array(), $field = array()) {
 
+        if (!$value) {
+            return '';
+        }
+
         if ($field) {
             $options = dr_format_option_array($field['setting']['option']['options']);
             if ($options && isset($options[$value])) {
@@ -264,6 +315,10 @@ class function_list {
 
     // checkbox字段name值
     public function checkbox_name($value, $param = array(), $data = array(), $field = array()) {
+
+        if (!$value) {
+            return '';
+        }
 
         $arr = dr_string2array($value);
         if ($field && is_array($arr)) {
@@ -283,7 +338,7 @@ class function_list {
     }
 
     // 联动字段name值
-    public function linkage_name($value, $param = [], $data = [], $field = []) {
+    public function linkage_name($value, $param = array(), $data = array(), $field = array()) {
 
         if (!$value) {
             return '';
@@ -338,5 +393,15 @@ class function_list {
         $cache->set_auth_data('function_list_save_text_value', $_SESSION['userid'], 1);
 
         return $html;
+    }
+
+    // 文本显示
+    public function text($value, $param = array(), $data = array(), $field = array()) {
+
+        if (!$value) {
+            return '';
+        }
+
+        return clearhtml($value);
     }
 }

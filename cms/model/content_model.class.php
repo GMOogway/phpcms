@@ -33,7 +33,7 @@ class content_model extends model {
 		$this->search_db = pc_base::load_model('search_model');
 		$modelid = $this->modelid;
 		require_once CACHE_MODEL_PATH.'content_input.class.php';
-        require_once CACHE_MODEL_PATH.'content_update.class.php';
+		require_once CACHE_MODEL_PATH.'content_update.class.php';
 		$content_input = new content_input($this->modelid);
 		$inputinfo = $content_input->get($data,$isimport);
 
@@ -236,7 +236,7 @@ class content_model extends model {
 		$this->search_db = pc_base::load_model('search_model');
 													
 		require_once CACHE_MODEL_PATH.'content_input.class.php';
-        require_once CACHE_MODEL_PATH.'content_update.class.php';
+		require_once CACHE_MODEL_PATH.'content_update.class.php';
 		$content_input = new content_input($this->modelid);
 		$inputinfo = $content_input->get($data);
 

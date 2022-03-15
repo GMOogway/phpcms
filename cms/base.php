@@ -28,6 +28,8 @@ define('IN_PHPCMS', IN_CMS);
 
 //缓存文件夹地址
 !defined('CACHE_PATH') && define('CACHE_PATH', CMS_PATH.'caches'.DIRECTORY_SEPARATOR);
+//主配置目录
+!defined('CONFIGPATH') && define('CONFIGPATH', CACHE_PATH.'configs'.DIRECTORY_SEPARATOR);
 //来源
 define('HTTP_REFERER', isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '');
 
@@ -118,8 +120,8 @@ define('ROOT_URL', siteurl(1).'/');
 	'XUNFEI_SKEY' => '',
 	'ADMIN_LOGIN_PATH' => '',
 );
-if (is_file(CACHE_PATH.'configs/system.php')) {
-	$my = require CACHE_PATH.'configs/system.php';
+if (is_file(CONFIGPATH.'system.php')) {
+	$my = require CONFIGPATH.'system.php';
 } else {
 	$my = array();
 }
@@ -610,7 +612,7 @@ class pc_base {
 				return $default;
 			}
 		}
-		$path = CACHE_PATH.'configs'.DIRECTORY_SEPARATOR.$file.'.php';
+		$path = CONFIGPATH.$file.'.php';
 		if (file_exists($path)) {
 			$configs[$file] = include $path;
 		}

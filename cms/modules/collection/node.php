@@ -551,11 +551,7 @@ class node extends admin {
 					$GLOBALS['field'] = $a;
 					$sql[$a] = $program['config']['funcs'][$a]($v['data'][$b]);
 				} else {
-					if (isset($v['data'][$b])) {
-						$sql[$a] = $v['data'][$b];
-					} else {
-						$sql[$a] = '';
-					}
+					$sql[$a] = isset($v['data'][$b]) && $v['data'][$b] ? $v['data'][$b] : '';
 				}
 			}
 			if ($node['content_page'] == 1) $sql['paginationtype'] = 2;

@@ -145,7 +145,7 @@ class sitemodel extends admin {
 			}
 			
 			$this->db->update($info,array('modelid'=>$modelid,'siteid'=>$this->siteid));
-			dr_json(1, L('update_success'), array('url' => '?m=content&c=sitemodel&a=init&pc_hash='.dr_get_csrf_token()));
+			dr_json(1, L('update_success'), array('url' => '?m=content&c=sitemodel&a=init&menuid='.$this->input->post('menuid').'&pc_hash='.dr_get_csrf_token()));
 		} else {
 			pc_base::load_sys_class('form','',0);
 			$show_validator = true;

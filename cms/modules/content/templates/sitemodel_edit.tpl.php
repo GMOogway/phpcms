@@ -17,6 +17,7 @@ jQuery(document).ready(function() {
 <form action="?m=content&c=sitemodel&a=edit" class="form-horizontal" method="post" name="myform" id="myform">
 <input name="page" id="dr_page" type="hidden" value="<?php echo $page;?>">
 <input type="hidden" name="modelid" value="<?php echo $modelid;?>" />
+<input type="hidden" name="menuid" value="<?php echo $this->input->get('menuid');?>" />
 <div class="portlet light bordered myfbody">
     <div class="portlet-title tabbable-line">
         <ul class="nav nav-tabs" style="float:left;">
