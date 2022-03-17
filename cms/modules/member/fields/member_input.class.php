@@ -19,7 +19,7 @@ class member_input {
 	}
 
 	function get($data) {
-		$this->data = $data = trim_script($data);
+		$this->data = $data;
 		$model_cache = getcache('member_model', 'commons');
 		$this->db->table_name = $this->db_pre.$model_cache[$this->modelid]['tablename'];
 
@@ -35,7 +35,7 @@ class member_input {
 				$pattern = $this->fields[$field]['pattern'];
 				$errortips = $this->fields[$field]['errortips'];
 				if(empty($errortips)) $errortips = "$name 不符合要求！";
-				$length = empty($value) ? 0 : mb_strlen($value);
+				$length = empty($value) ? 0 : (is_string($value) ? mb_strlen($value) : dr_strlen($value));
 				if($minlength && $length < $minlength && !$isimport) {
 					if (IS_ADMIN) {
 						dr_admin_msg(0, "$name 不得少于 $minlength 个字符！", array('field' => $field));

@@ -22,7 +22,6 @@
 			$value = str_replace('img=', 'src=', $value);
 			$value = $this->download->upload_local($value, $local_watermark, $local_attachment, $local_image_reduce, $this->input->post('info')['catid'] ? $this->input->post('info')['catid'] : (param::get_cookie('catid') ? param::get_cookie('catid') : 0));
 		}
-		$value = str_replace(array('&lt;iframe', '&gt;&lt;/iframe&gt;'), array('<iframe', '></iframe>'), $value);
 		// 去除站外链接
 		if (isset($_POST['is_remove_a_'.$field]) && $_POST['is_remove_a_'.$field] && preg_match_all("/<a (.*)href=(.+)>(.*)<\/a>/Ui", $value, $arrs)) {
 			//$sites = require CACHE_PATH.'caches_commons/caches_data/domain_site.cache.php';

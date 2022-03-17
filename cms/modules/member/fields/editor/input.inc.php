@@ -22,6 +22,5 @@
 			$value = str_replace('img=', 'src=', $value);
 			$value = $this->download->upload_local($value, $local_watermark, $local_attachment, $local_image_reduce, 0);
 		}
-		$value = str_replace(array('&lt;iframe', '&gt;&lt;/iframe&gt;'), array('<iframe', '></iframe>'), $value);
 		return html2code($value);
 	}

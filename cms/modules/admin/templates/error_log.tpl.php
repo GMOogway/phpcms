@@ -62,7 +62,7 @@ if(is_array($list)){
 	<td><?php echo $t['id'];?></td>
 	<td><?php echo $t['time'];?></td>
 	<td style="text-align: center"><?php echo $t['type'];?></td>
-	<td><a href="javascript:show_file_code()" style="color:#ff0000;"><?php echo $t['message'];?></a></td>
+	<td><a href="javascript:show_file_code()"><?php echo $t['message'];?></a></td>
 	</tr>
 <?php 
 	}

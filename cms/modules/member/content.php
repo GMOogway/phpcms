@@ -58,7 +58,7 @@ class content extends foreground {
 			$info = array();
 			foreach($_POST['info'] as $_k=>$_v) {
 				if($_k == 'content') {
-					$info[$_k] = remove_xss(clearhtml($_v, '<p><a><br><img><ul><li><div>'));
+					$info[$_k] = remove_xss(strip_tags($_v, '<p><a><br><img><ul><li><div>'));
 				} elseif(in_array($_k, $fields)) {
 					$info[$_k] = new_html_special_chars(trim_script($_v));
 				}
@@ -233,7 +233,7 @@ class content extends foreground {
 				$info = array();
 				foreach($_POST['info'] as $_k=>$_v) {
 					if($_k == 'content') {
-						$_POST['info'][$_k] = clearhtml($_v, '<p><a><br><img><ul><li><div>');
+						$_POST['info'][$_k] = strip_tags($_v, '<p><a><br><img><ul><li><div>');
 					} elseif($fields && in_array($_k, $fields)) {
 						$_POST['info'][$_k] = new_html_special_chars(trim_script($_v));
 					}

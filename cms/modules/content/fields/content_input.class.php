@@ -21,7 +21,7 @@ class content_input {
 	}
 
 	function get($data,$isimport = 0) {
-		$this->data = $data = trim_script($data);
+		$this->data = $data;
 		$info = array();
 		foreach($data as $field=>$value) {
 			if(!isset($this->fields[$field]) && !check_in($field,'paytype,paginationtype,maxcharperpage,id')) continue;
@@ -37,7 +37,7 @@ class content_input {
 			$pattern = $this->fields[$field]['pattern'];
 			$errortips = $this->fields[$field]['errortips'];
 			if(empty($errortips)) $errortips = $name.' '.L('not_meet_the_conditions');
-			$length = empty($value) ? 0 : (is_string($value) ? mb_strlen($value) : count($value));
+			$length = empty($value) ? 0 : (is_string($value) ? mb_strlen($value) : dr_strlen($value));
 
 			if($minlength && $length < $minlength) {
 				if($isimport) {
