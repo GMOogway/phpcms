@@ -4,45 +4,40 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit1f35471046a2e79fe38a358c58d926e9
+class ComposerStaticInit3932c2aa64b0eab9f9bf0053fd6a39b8
 {
     public static $prefixLengthsPsr4 = array (
-        'Z' => 
-        array (
-            'Zend\\Escaper\\' => 13,
-        ),
         'P' => 
         array (
             'PhpOffice\\PhpWord\\' => 18,
-            'PhpOffice\\Common\\' => 17,
+        ),
+        'L' => 
+        array (
+            'Laminas\\Escaper\\' => 16,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Zend\\Escaper\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/zendframework/zend-escaper/src',
-        ),
         'PhpOffice\\PhpWord\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpoffice/phpword/src/PhpWord',
         ),
-        'PhpOffice\\Common\\' => 
+        'Laminas\\Escaper\\' => 
         array (
-            0 => __DIR__ . '/..' . '/phpoffice/common/src/Common',
+            0 => __DIR__ . '/..' . '/laminas/laminas-escaper/src',
         ),
     );
 
     public static $classMap = array (
-        'PclZip' => __DIR__ . '/..' . '/pclzip/pclzip/pclzip.lib.php',
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit1f35471046a2e79fe38a358c58d926e9::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit1f35471046a2e79fe38a358c58d926e9::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit1f35471046a2e79fe38a358c58d926e9::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit3932c2aa64b0eab9f9bf0053fd6a39b8::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit3932c2aa64b0eab9f9bf0053fd6a39b8::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit3932c2aa64b0eab9f9bf0053fd6a39b8::$classMap;
 
         }, null, ClassLoader::class);
     }
