@@ -14,7 +14,6 @@ class cache_api {
 		$this->input = pc_base::load_sys_class('input');
 		$this->config = pc_base::load_sys_class('config');
 		$this->cache = pc_base::load_sys_class('cache');
-		$this->cache->clean();
 		$this->db = '';
 		$this->siteid = get_siteid() ? get_siteid() : 1 ;
 	}
