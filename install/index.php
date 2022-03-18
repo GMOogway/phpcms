@@ -355,20 +355,16 @@ switch($step)
 			dr_json(0, '数据库名称（'.$dbname.'）不能存在.号');
 		}
 		$mysqli = function_exists('mysqli_init') ? mysqli_init() : 0;
+		if (!$mysqli) {
+			dr_json(0, 'PHP环境必须启用Mysqli扩展！');
+		}
 		$conn = mysqli_connect($dbhost, $dbuser, $dbpw, null, $dbport);
 		if (!$conn) {
 			dr_json(0, '['.mysqli_connect_error().'] - 无法连接到数据库服务器（'.$dbhost.'），请检查端口（'.$dbport.'）和用户名（'.$dbuser.'）和密码（'.$dbpw.'）是否正确！');
-		}
-		if (!mysqli_set_charset($conn, "utf8mb4")) {
+		} elseif (!mysqli_set_charset($conn, "utf8mb4")) {
 			dr_json(0, '当前MySQL不支持utf8mb4编码（'.mysqli_error($conn).'）！');
-		}
-		if (mysqli_get_server_version($conn) < 50600) {
+		} elseif (mysqli_get_server_version($conn) < 50600) {
 			dr_json(0, '数据库版本低于Mysql 5.6，无法安装CMS，请升级数据库版本！');
-		}
-		if (!$mysqli) {
-			dr_json(0, 'PHP环境必须启用Mysqli扩展！');
-		} elseif (!$conn) {
-			dr_json(0, '['.mysqli_connect_error().'] - 无法连接到数据库服务器（'.$dbhost.'），请检查端口（'.$dbport.'）和用户名（'.$dbuser.'）和密码（'.$dbpw.'）是否正确！');
 		} elseif (!mysqli_query($conn, 'CREATE DATABASE IF NOT EXISTS '.$dbname.' CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci')) {
 			dr_json(0, '指定的数据库（'.$dbname.'）不存在，系统尝试创建失败，请先通过其他方式建立好数据库！');
 		}

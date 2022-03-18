@@ -1,5 +1,5 @@
 <?php 
-$CMS_VERSION_NAME = 'CMS V9';
+$CMS_VERSION_NAME = 'CMS V10';
 
 $CMS_MODULES = array(
 'name'=>array('announce','comment','link','vote','message','mood','poster','formguide','tag','sms','404','bdts','custom','customfield','fclient','guestbook','import','slider','sqltoolplus','taglist'),

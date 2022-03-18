@@ -16,7 +16,7 @@ include $this->admin_tpl('header', 'admin');
 	if(is_array($type_arr)){
 	foreach($type_arr as $typeid => $type){
 		?>
-            <label><a href="?m=link&c=link&typeid=<?php echo $typeid;?>"><?php echo $type;?></a><label>
+            <label><a href="?m=link&c=link&typeid=<?php echo $typeid;?>"><?php echo $type;?></a></label>
             <?php }}?>
 
 </div>
