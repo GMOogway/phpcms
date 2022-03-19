@@ -414,17 +414,20 @@ class check extends admin {
                 }
 
                 $this->db->table_name = $prefix.'model';
-                $model = $this->db->get_one(array('modelid' => 11, 'siteid' => 1, 'name' => '视频模型', 'tablename' => 'video'));
-                if ($model) {
-                    $this->db->delete(array('modelid' => 11, 'siteid' => 1, 'name' => '视频模型', 'tablename' => 'video'));
-                    $this->db->query('DROP TABLE IF EXISTS `'.$prefix.'video`');
-                    $this->db->query('DROP TABLE IF EXISTS `'.$prefix.'video_data`');
-                    $this->db->table_name = $prefix.'model_field';
-                    $this->db->delete(array('modelid' => 11));
-                }
                 $models = $this->db->select();
                 foreach ($models as $r) {
                     $this->db->update(array('setting'=>dr_array2string($this->string2array($r['setting']))),array('modelid'=>$r['modelid']));
+                }
+                $model = $this->db->get_one(array('modelid' => 11, 'siteid' => 1, 'name' => '视频模型', 'tablename' => 'video'));
+                if ($model) {
+                    $video_count = $this->_table_counts('video');
+                    if (!$video_count) {
+                        $this->db->delete(array('modelid' => 11, 'siteid' => 1, 'name' => '视频模型', 'tablename' => 'video'));
+                        $this->db->query('DROP TABLE IF EXISTS `'.$prefix.'video`');
+                        $this->db->query('DROP TABLE IF EXISTS `'.$prefix.'video_data`');
+                        $this->db->table_name = $prefix.'model_field';
+                        $this->db->delete(array('modelid' => 11));
+                    }
                 }
 
                 $this->db->table_name = $prefix.'linkage';
@@ -464,9 +467,24 @@ class check extends admin {
 
                 $this->db->table_name = $prefix.'model_field';
                 $this->db->update(array('tips'=>'', 'setting'=>'{"width":"","height":"","toolbar":"full","toolvalue":"\'Bold\', \'Italic\', \'Underline\'","defaultvalue":"","enablekeylink":"1","replacenum":"2","link_mode":"0","show_bottom_boot":"1","tool_select_1":"1","tool_select_2":"1","tool_select_3":"1","tool_select_4":"1","color":"","theme":"default","autofloat":"0","div2p":"1","autoheight":"0","enter":"0","simpleupload":"0","watermark":"1","attachment":"0","image_reduce":"","allowupload":"0","upload_number":"","upload_maxsize":"","enablesaveimage":"0","local_img":"1","local_watermark":"1","local_attachment":"0","local_image_reduce":"","disabled_page":"0"}'),array('tips'=>'<div class="mt-checkbox-inline" style="margin-top: 10px;"><label style="margin-bottom: 5px;" class="mt-checkbox mt-checkbox-outline"><input name="auto_thumb" type="checkbox" checked value="1"> 提取第 <span></span></label><label style="width: 80px;margin-right: 15px;"><input type="text" name="auto_thumb_no" value="1" class="input-text" style="width: 80px;"></label><label style="margin-right: 15px;">个图片为缩略图</label><label style="margin-bottom: 5px;" class="mt-checkbox mt-checkbox-outline"><input name="add_introduce" type="checkbox" checked value="1"> 提取内容 <span></span></label><label style="width: 80px;margin-right: 15px;"><input type="text" name="introcude_length" value="200" class="input-text" style="width: 80px;"></label><label style="margin-right: 15px;">作为描述信息</label><label style="margin-bottom: 5px;" class="mt-checkbox mt-checkbox-outline"><input name="is_remove_a" type="checkbox" checked value="1"> 去除站外链接 <span></span></label></div>', 'formtype'=>'editor'));
+                $this->db->update(array('tips'=>'多关键词之间用“,”隔开', 'formattribute'=>'data-role=\'tagsinput\''),array('formtype'=>'keyword', 'formattribute'=>''));
+                $this->db->update(array('setting'=>'{"width":"","fieldtype":"int","format":"1","format2":"0","is_left":"0","defaultvalue":"","color":""}'),array('formtype'=>'datetime', 'field'=>'inputtime'));
+                $this->db->update(array('setting'=>'{"width":"","fieldtype":"int","format":"1","format2":"0","is_left":"0","defaultvalue":"","color":""}', 'iscore'=>0, 'isbase'=>0),array('formtype'=>'datetime', 'field'=>'updatetime'));
+                $this->db->update(array('setting'=>'{"width":"","fieldtype":"int","format":"0","format2":"0","is_left":"0","defaultvalue":"","color":""}'),array('formtype'=>'datetime', 'field'=>'birthday'));
                 $fields = $this->db->select();
                 foreach ($fields as $r) {
                     $this->db->update(array('setting'=>dr_array2string($this->string2array($r['setting']))),array('fieldid'=>$r['fieldid']));
+                }
+                $field_datetime = $this->db->select(array('formtype'=>'datetime'));
+                foreach ($field_datetime as $r) {
+                    $field_setting = dr_string2array($r['setting']);
+                    if (isset($field_setting['defaulttype'])) {
+                        if ($field_setting['fieldtype']=='date') {
+                            $this->db->update(array('setting'=>'{"width":"","fieldtype":"int","format":"0","format2":"0","is_left":"0","defaultvalue":"","color":""}'),array('fieldid'=>$r['fieldid']));
+                        } else {
+                            $this->db->update(array('setting'=>'{"width":"","fieldtype":"int","format":"1","format2":"0","is_left":"0","defaultvalue":"","color":""}'),array('fieldid'=>$r['fieldid']));
+                        }
+                    }
                 }
 
                 break;
@@ -786,6 +804,16 @@ class check extends admin {
         if ($counts > 100000) {
             return '<font color="green">数据表【'.$name.'/'.$this->db->db_tablepre.$table.'】数据量超过10万，会影响加载速度，建议对其进行数据优化</font>';
         }
+    }
+
+    private function _table_counts($table) {
+        $this->content_db = pc_base::load_model('content_model');
+        $this->content_db->table_name = $this->content_db->db_tablepre.$table;
+        if (!$this->content_db->table_exists($table)) {
+            return 0;
+        }
+        $counts = $this->content_db->count();
+        return isset($counts) && $counts ? $counts : 0;
     }
 
     private function delete_child($id) {
