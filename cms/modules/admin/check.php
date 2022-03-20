@@ -416,7 +416,11 @@ class check extends admin {
                 $this->db->table_name = $prefix.'model';
                 $models = $this->db->select();
                 foreach ($models as $r) {
-                    $this->db->update(array('setting'=>dr_array2string($this->string2array($r['setting']))),array('modelid'=>$r['modelid']));
+                    if (isset($r['setting']) && $r['setting']) {
+                        $this->db->update(array('setting'=>dr_array2string($this->string2array($r['setting']))),array('modelid'=>$r['modelid']));
+                    } else {
+                        $this->db->update(array('setting'=>'{"updatetime_select":"0","order":"updatetime DESC","search_time":"updatetime","list_field":{"title":{"use":"1","name":"主题","width":"","func":"title"},"username":{"use":"1","name":"用户名","width":"100","func":"author"},"updatetime":{"use":"1","name":"更新时间","width":"180","func":"datetime"},"listorder":{"use":"1","name":"排序","width":"100","center":"1","func":"save_text_value"}},"category_template":"category","list_template":"list","show_template":"show","admin_list_template":"","member_add_template":""}'),array('modelid'=>$r['modelid'], 'type'=>0));
+                    }
                 }
                 $model = $this->db->get_one(array('modelid' => 11, 'siteid' => 1, 'name' => '视频模型', 'tablename' => 'video'));
                 if ($model) {
@@ -466,24 +470,34 @@ class check extends admin {
                 }
 
                 $this->db->table_name = $prefix.'model_field';
-                $this->db->update(array('tips'=>'', 'setting'=>'{"width":"","height":"","toolbar":"full","toolvalue":"\'Bold\', \'Italic\', \'Underline\'","defaultvalue":"","enablekeylink":"1","replacenum":"2","link_mode":"0","show_bottom_boot":"1","tool_select_1":"1","tool_select_2":"1","tool_select_3":"1","tool_select_4":"1","color":"","theme":"default","autofloat":"0","div2p":"1","autoheight":"0","enter":"0","simpleupload":"0","watermark":"1","attachment":"0","image_reduce":"","allowupload":"0","upload_number":"","upload_maxsize":"","enablesaveimage":"0","local_img":"1","local_watermark":"1","local_attachment":"0","local_image_reduce":"","disabled_page":"0"}'),array('tips'=>'<div class="mt-checkbox-inline" style="margin-top: 10px;"><label style="margin-bottom: 5px;" class="mt-checkbox mt-checkbox-outline"><input name="auto_thumb" type="checkbox" checked value="1"> 提取第 <span></span></label><label style="width: 80px;margin-right: 15px;"><input type="text" name="auto_thumb_no" value="1" class="input-text" style="width: 80px;"></label><label style="margin-right: 15px;">个图片为缩略图</label><label style="margin-bottom: 5px;" class="mt-checkbox mt-checkbox-outline"><input name="add_introduce" type="checkbox" checked value="1"> 提取内容 <span></span></label><label style="width: 80px;margin-right: 15px;"><input type="text" name="introcude_length" value="200" class="input-text" style="width: 80px;"></label><label style="margin-right: 15px;">作为描述信息</label><label style="margin-bottom: 5px;" class="mt-checkbox mt-checkbox-outline"><input name="is_remove_a" type="checkbox" checked value="1"> 去除站外链接 <span></span></label></div>', 'formtype'=>'editor'));
-                $this->db->update(array('tips'=>'多关键词之间用“,”隔开', 'formattribute'=>'data-role=\'tagsinput\''),array('formtype'=>'keyword', 'formattribute'=>''));
-                $this->db->update(array('setting'=>'{"width":"","fieldtype":"int","format":"1","format2":"0","is_left":"0","defaultvalue":"","color":""}'),array('formtype'=>'datetime', 'field'=>'inputtime'));
-                $this->db->update(array('setting'=>'{"width":"","fieldtype":"int","format":"1","format2":"0","is_left":"0","defaultvalue":"","color":""}', 'iscore'=>0, 'isbase'=>0),array('formtype'=>'datetime', 'field'=>'updatetime'));
-                $this->db->update(array('setting'=>'{"width":"","fieldtype":"int","format":"0","format2":"0","is_left":"0","defaultvalue":"","color":""}'),array('formtype'=>'datetime', 'field'=>'birthday'));
+                $this->db->update(array('setting'=>'{"width":"","fieldtype":"int","format":"1","format2":"0","is_left":"0","defaultvalue":"","color":""}', 'iscore'=>0, 'isbase'=>0),array('formtype'=>'datetime', 'field'=>'updatetime', 'iscore'=>1));
                 $fields = $this->db->select();
                 foreach ($fields as $r) {
                     $this->db->update(array('setting'=>dr_array2string($this->string2array($r['setting']))),array('fieldid'=>$r['fieldid']));
                 }
                 $field_datetime = $this->db->select(array('formtype'=>'datetime'));
                 foreach ($field_datetime as $r) {
-                    $field_setting = dr_string2array($r['setting']);
-                    if (isset($field_setting['defaulttype'])) {
-                        if ($field_setting['fieldtype']=='date') {
-                            $this->db->update(array('setting'=>'{"width":"","fieldtype":"int","format":"0","format2":"0","is_left":"0","defaultvalue":"","color":""}'),array('fieldid'=>$r['fieldid']));
-                        } else {
-                            $this->db->update(array('setting'=>'{"width":"","fieldtype":"int","format":"1","format2":"0","is_left":"0","defaultvalue":"","color":""}'),array('fieldid'=>$r['fieldid']));
+                    if (isset($r['setting']) && (strstr($r['setting'], 'Y-m-d') || strstr($r['setting'], 'H:i:s') || strstr($r['setting'], 'Ah') || strstr($r['setting'], 'm-d') || strstr($r['setting'], 'defaulttype'))) {
+                        $field_setting = dr_string2array($r['setting']);
+                        if (isset($field_setting)) {
+                            if ($field_setting['fieldtype']=='date') {
+                                $this->db->update(array('setting'=>'{"width":"","fieldtype":"int","format":"0","format2":"0","is_left":"0","defaultvalue":"","color":""}'),array('fieldid'=>$r['fieldid']));
+                            } else {
+                                $this->db->update(array('setting'=>'{"width":"","fieldtype":"int","format":"1","format2":"0","is_left":"0","defaultvalue":"","color":""}'),array('fieldid'=>$r['fieldid']));
+                            }
                         }
+                    }
+                }
+                $field_editor = $this->db->select(array('formtype'=>'editor'));
+                foreach ($field_editor as $r) {
+                    if (isset($r['setting']) && (strstr($r['setting'], 'add_introduce') || strstr($r['setting'], 'introcude_length') || strstr($r['setting'], 'auto_thumb') || strstr($r['setting'], 'is_remove_a'))) {
+                        $this->db->update(array('tips'=>'', 'setting'=>'{"width":"","height":"","toolbar":"full","toolvalue":"\'Bold\', \'Italic\', \'Underline\'","defaultvalue":"","enablekeylink":"1","replacenum":"2","link_mode":"0","show_bottom_boot":"1","tool_select_1":"1","tool_select_2":"1","tool_select_3":"1","tool_select_4":"1","color":"","theme":"default","autofloat":"0","div2p":"1","autoheight":"0","enter":"0","simpleupload":"0","watermark":"1","attachment":"0","image_reduce":"","allowupload":"0","upload_number":"","upload_maxsize":"","enablesaveimage":"0","local_img":"1","local_watermark":"1","local_attachment":"0","local_image_reduce":"","disabled_page":"0"}'),array('modelid'=>$r['modelid']));
+                    }
+                }
+                $field_keyword = $this->db->select(array('formtype'=>'keyword'));
+                foreach ($field_keyword as $r) {
+                    if (isset($r['tips']) && strstr($r['tips'], '空格或者')) {
+                        $this->db->update(array('tips'=>'多关键词之间用“,”隔开', 'formattribute'=>'data-role=\'tagsinput\''),array('modelid'=>$r['modelid']));
                     }
                 }
 
