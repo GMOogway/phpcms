@@ -387,6 +387,12 @@ class check extends admin {
                 if (!$this->db->field_exists('style')) {
                     $this->db->query('ALTER TABLE `'.$this->db->table_name.'` ADD `style` varchar(5) NOT NULL COMMENT \'\' AFTER `setting`');
                 }
+                $sites = $this->db->select();
+                foreach ($sites as $r) {
+                    if (isset($r['setting']) && $r['setting']) {
+                        $this->db->update(array('setting'=>dr_array2string($this->string2array($r['setting']))),array('siteid'=>$r['siteid']));
+                    }
+                }
 
                 $this->db->table_name = $prefix.'attachment';
                 if (!$this->db->field_exists('filemd5')) {
@@ -410,7 +416,9 @@ class check extends admin {
                 $this->db->update(array('iscore'=>1),array('module'=>'scan', 'iscore'=>0));
                 $modules = $this->db->select();
                 foreach ($modules as $r) {
-                    $this->db->update(array('setting'=>dr_array2string($this->string2array($r['setting']))),array('module'=>$r['module']));
+                    if (isset($r['setting']) && $r['setting']) {
+                        $this->db->update(array('setting'=>dr_array2string($this->string2array($r['setting']))),array('module'=>$r['module']));
+                    }
                 }
 
                 $this->db->table_name = $prefix.'model';
@@ -473,7 +481,9 @@ class check extends admin {
                 $this->db->update(array('setting'=>'{"width":"","fieldtype":"int","format":"1","format2":"0","is_left":"0","defaultvalue":"","color":""}', 'iscore'=>0, 'isbase'=>0),array('formtype'=>'datetime', 'field'=>'updatetime', 'iscore'=>1));
                 $fields = $this->db->select();
                 foreach ($fields as $r) {
-                    $this->db->update(array('setting'=>dr_array2string($this->string2array($r['setting']))),array('fieldid'=>$r['fieldid']));
+                    if (isset($r['setting']) && $r['setting']) {
+                        $this->db->update(array('setting'=>dr_array2string($this->string2array($r['setting']))),array('fieldid'=>$r['fieldid']));
+                    }
                 }
                 $field_datetime = $this->db->select(array('formtype'=>'datetime'));
                 foreach ($field_datetime as $r) {
