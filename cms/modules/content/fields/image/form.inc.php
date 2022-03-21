@@ -36,6 +36,6 @@
 			<p><a href='javascript:void(0);' onclick=\"h5upload('".SELF."', '{$field}_images', '".L('attachment_upload', '', 'content')."','{$field}','thumb_images','{$p}','content','$this->catid','$authkey',".SYS_EDITOR.");return false;\">
 			<img src='$preview_img' id='{$field}_preview' width='135' height='113' style='cursor:hand' /></a></p>".$html."</div>";
 		} else {
-			return $str."<label><input type='text' name='info[$field]' id='$field' value='$value' size='$size' class='form-control' /></label> <label><button type=\"button\" onclick=\"h5upload('".SELF."', '{$field}_images', '".L('attachment_upload', '', 'content')."','{$field}','submit_images','{$p}','content','$this->catid','$authkey',".SYS_EDITOR.")\" class=\"btn green\"> <i class=\"fa fa-plus\"></i> ".L('upload_pic', '', 'content')."</button></label>".$html;
+			return $str."<label><input type='text' name='info[$field]' id='$field' value='$value' size='$size' class='form-control' /></label> <label><button type=\"button\" onclick=\"h5upload('".SELF."', '{$field}_images', '".L('attachment_upload', '', 'content')."','{$field}','submit_images','{$p}','content','$this->catid','$authkey',".SYS_EDITOR.")\" class=\"btn green btn-sm\"> <i class=\"fa fa-plus\"></i> ".L('upload_pic', '', 'content')."</button></label> ".$html;
 		}
 	}

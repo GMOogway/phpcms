@@ -78,7 +78,7 @@ jQuery(document).ready(function() {
                     <div class="form-group">
                         <label class="col-md-2 control-label"></label>
                         <div class="col-md-9">
-                            <label><button type="button" onclick="dr_download('filename');" class="button"> <i class="fa fa-download"></i> <?php echo L('下载文件')?></button></label>
+                            <label><button type="button" onclick="dr_download('filename');" class="btn green btn-sm"> <i class="fa fa-download"></i> <?php echo L('下载文件')?></button></label>
                         </div>
                     </div>
 

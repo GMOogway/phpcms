@@ -44,4 +44,5 @@ $LANG['data_return']								=	'数据返回值';
 $LANG['cache_times']								=	'缓存时间';
 $LANG['click_copy_code']							=	'双击复制文本框中的代码';
 $LANG['return_value']								=	'请输入数据返回值，默认为：data。';
+$LANG['the_module_will_not_support_the_operation']	=	'该模块不支持，本次操作！';
 ?>
