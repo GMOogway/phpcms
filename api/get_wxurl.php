@@ -92,7 +92,7 @@ if (preg_match('/'.$preg.'(.+)<\/div>/sU', $html, $mt)) {
 								}
 							}
 							if (!$data) {
-								$data = $upload->save_data($rt['data'], 'weixin:'.$rid);
+								$data = $upload->save_data($rt['data'], 'ueditor:'.$rid);
 								if ($data['code']) {
 									// 归档成功
 									// 标记附件

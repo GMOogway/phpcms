@@ -15,7 +15,7 @@ body{background: #fff;}
 </style>
 <div class="page-container" style="margin-bottom: 0px !important;">
     <div class="page-content-wrapper">
-        <div class="page-content page-content3 mybody-nheader main-content   main-content2">
+        <div class="page-content page-content3 mybody-nheader main-content   main-content2" style="padding-top: 0px;">
                             <div class="page-body">
 <div class="row">
     <div class="col-md-12 margin-bottom-20">
@@ -24,7 +24,9 @@ body{background: #fff;}
 </div>
 <div class="row">
     <div class="col-md-12 margin-bottom-20">
-        <div class="explain-col"><?php echo L('att_not_used_desc')?></div>
+        <div class="note note-danger">
+            <p><?php echo L('att_not_used_desc')?></p>
+        </div>
     </div>
 </div>
 <form class="form-horizontal" method="post" role="form" id="myform">

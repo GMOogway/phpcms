@@ -38,7 +38,7 @@ if (defined('SYS_ATTACHMENT_CF') && SYS_ATTACHMENT_CF && $rt['data']['md5']) {
 }
 
 if (!$data) {
-	$data = $upload->save_data($rt['data'], 'word:'.$rid);
+	$data = $upload->save_data($rt['data'], 'ueditor:'.$rid);
 	if ($data['code']) {
 		// 归档成功
 		// 标记附件
@@ -60,7 +60,7 @@ if (!$rt['data']['path']) {
 if (!$title) {
 	dr_json(0, L('没有获取到文件标题'));
 }
-$body = readWordToHtml($rt['data']['path']);
+$body = readWordToHtml($rt['data']['path'], $rid);
 if (!$body) {
 	dr_json(0, L('没有获取到Word内容'));
 }
@@ -99,7 +99,7 @@ function upload_json($aid,$src,$filename,$size) {
 		return true;
 	}
 }
-function readWordToHtml($source) {
+function readWordToHtml($source, $rid) {
 	include_once PC_PATH."plugin/vendor/autoload.php";
 	$input = pc_base::load_sys_class('input');
 	$phpWord = \PhpOffice\PhpWord\IOFactory::load($source);
@@ -155,7 +155,7 @@ function readWordToHtml($source) {
 							}
 						}
 						if (!$data) {
-							$data = $upload->save_data($rt['data'], 'word:'.$rid);
+							$data = $upload->save_data($rt['data'], 'ueditor:'.$rid);
 							if ($data['code']) {
 								// 归档成功
 								// 标记附件
