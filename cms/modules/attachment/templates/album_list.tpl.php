@@ -70,7 +70,7 @@ body{background: #fff;}
         <input type="checkbox" class="checkboxes" name="ids[]" value="<?php echo $r['aid']?>" />
         <a><img src="<?php echo $r['src']?>" id="<?php echo $r['aid']?>" width="<?php echo $r['width']?>" path="<?php echo dr_get_file_url($r)?>" size="<?php echo format_file_size($r['filesize'])?>" filename="<?php echo $r['filename']?>"/></a>
         <i class="size"> <?php echo format_file_size($r['filesize'])?> </i>
-        <i class="name" title="<?php echo $r['filename']?>"><?php echo $r['filename']?></i>
+        <i class="name"><?php echo $r['filename']?></i>
     </div>
 </div>
 <?php } ?>

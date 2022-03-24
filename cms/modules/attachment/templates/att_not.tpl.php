@@ -33,12 +33,12 @@ body{background: #fff;}
 <div class="files row">
 <?php if(is_array($att) && !empty($att)){ foreach ($att as $_v) {?>
 <div class="col-md-2 col-sm-2 col-xs-6">
-    <div class="files_row tooltips" data-original-title="<?php echo $_v['filename']?>&nbsp;&nbsp;<?php echo format_file_size($_v['size'])?>">
+    <div class="files_row tooltips" data-original-title="<?php echo $_v['filename']?>&nbsp;&nbsp;<?php echo $_v['size']?>">
         <span class="checkbox"></span>
         <input type="checkbox" class="checkboxes" name="ids[]" value="<?php echo $_v['aid']?>" />
         <a><img width="<?php echo $_v['width']?>" id="<?php echo $_v['aid']?>" path="<?php echo $_v['src']?>" src="<?php echo $_v['fileimg']?>" filename="<?php echo $_v['filename']?>" size="<?php echo $_v['size']?>"></a>
         <i class="size"><?php echo $_v['size']?></i>
-        <i class="name" title="<?php echo $_v['filename']?>"><?php echo $_v['filename']?></i>
+        <i class="name"><?php echo $_v['filename']?></i>
     </div>
 </div>
 <?php }}?>
