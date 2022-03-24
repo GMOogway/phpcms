@@ -36,7 +36,7 @@
 		<td align="left"><?php echo $v['username']?></td>
 		<td align="left"><?php echo $v['email']?></td>
 		<td align="left" title="<?php echo $v['regip']?>"><?php echo format::date($v['regdate'], 1);?></td>
-		<td align="left"><a href="javascript:member_verify(<?php echo $v['userid']?>, '<?php echo $v['modelid']?>', '')"><?php echo $member_model[$v['modelid']]['name']?><img src="<?php echo IMG_PATH?>admin_img/detail.png"></a></td>
+		<td align="left"><a href="javascript:dr_iframe_show('<?php echo L('member_verify')?>', '?m=member&c=member_verify&a=modelinfo&userid=<?php echo $v['userid']?>&modelid=<?php echo $v['modelid']?>', '50%')"><?php echo $member_model[$v['modelid']]['name']?></a></td>
 		<td align="left"><?php echo $v['message']?></td>
 		<td align="left"><?php $verify_status = array('5'=>L('nerver_pass'), '4'=>L('reject'), '3'=>L('delete'), '2'=>L('ignore'), '0'=>L('need_verify'), '1'=>L('pass')); echo $verify_status[$v['status']]?></td>
     </tr>
@@ -80,10 +80,6 @@ function checkuid() {
 	} else {
 		myform.submit();
 	}
-}
-
-function member_verify(userid, modelid, name) {
-	artdialog('modelinfo','?m=member&c=member_verify&a=modelinfo&userid='+userid+'&modelid='+modelid,'<?php echo L('member_verify')?>',700,500);
 }
 //-->
 </script>

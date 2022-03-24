@@ -75,7 +75,6 @@ jQuery(document).ready(function() {
                         <input type="checkbox" class="group-checkable" value="" id="check_box" onclick="selectall('userid[]');" />
                         <span></span>
                     </label></th>
-			<th width="60" class="<?php echo dr_sorting('userid');?>" name="userid"><?php echo L('头像')?></th>
             <?php 
             if(is_array($list_field)){
             foreach($list_field as $i=>$t){
@@ -96,7 +95,6 @@ jQuery(document).ready(function() {
                         <input type="checkbox" class="checkboxes" value="<?php echo $v['userid']?>" name="userid[]" />
                         <span></span>
                     </label></td>
-		<td><a href="javascript:member_infomation(<?php echo $v['userid']?>, '<?php echo $v['modelid']?>', '')"><img src="<?php echo $v['avatar']?>" height="30" width="30" onerror="this.src='<?php echo IMG_PATH?>member/nophoto.gif'"></a></td>
 		<?php 
 		if(is_array($list_field)){
 		foreach($list_field as $i=>$tt){
@@ -162,11 +160,6 @@ function checkuid() {
 		myform.submit();
 	}
 }
-
-function member_infomation(userid, modelid, name) {
-	omnipotent('modelinfo','?m=member&c=member&a=memberinfo&userid='+userid+'&modelid='+modelid,'<?php echo L('memberinfo')?>',1,700,500);
-}
-
 //-->
 </script>
 </body>

@@ -14,7 +14,7 @@
 		</tr>
 		<tr>
 			<td><?php echo L('avatar')?></td> 
-			<td><img src="<?php echo $memberinfo['avatar']?>" onerror="this.src='<?php echo IMG_PATH?>member/nophoto.gif'" height=90 width=90></td>
+			<td><img class="img-circle" src="<?php echo $memberinfo['avatar']?>" height="90" width="90"></td>
 		</tr>
 		<tr>
 			<td><?php echo L('nickname')?></td> 

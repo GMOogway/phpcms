@@ -40,6 +40,7 @@ class member_verify extends admin {
 	}
 	
 	function modelinfo() {
+		$show_header = true;
 		$userid = !empty($_GET['userid']) ? intval($_GET['userid']) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		$modelid = !empty($_GET['modelid']) ? intval($_GET['modelid']) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		

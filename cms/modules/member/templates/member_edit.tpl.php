@@ -64,7 +64,7 @@
 		</tr>
 		<tr>
 			<td><?php echo L('avatar')?></td> 
-			<td><img src="<?php echo $memberinfo['avatar']?>" onerror="this.src='<?php echo IMG_PATH?>member/nophoto.gif'" width="90" height="90"><label class="mt-checkbox mt-checkbox-outline" style="margin-top: 15px;margin-left: 15px;"><input type="checkbox" name="delavatar" id="delavatar" class="input-text" value="1"><?php echo L('delete').L('avatar')?><span></span></label></td>
+			<td><img class="img-circle" src="<?php echo $memberinfo['avatar']?>" width="90" height="90"><label class="mt-checkbox mt-checkbox-outline" style="margin-top: 15px;margin-left: 15px;"><input type="checkbox" name="delavatar" id="delavatar" class="input-text" value="1"><?php echo L('delete').L('avatar')?><span></span></label></td>
 		</tr>
 		<tr>
 			<td><?php echo L('password')?></td> 

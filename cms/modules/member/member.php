@@ -219,10 +219,6 @@ class member extends admin {
 
 		$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
 		$memberlist = $this->db->listinfo(($where ? implode(' AND ', $where) : ''), $this->input->get('order') ? $this->input->get('order') : 'userid DESC', $page, SYS_ADMIN_PAGESIZE);
-		//查询会员头像
-		foreach($memberlist as $k=>$v) {
-			$memberlist[$k]['avatar'] = get_memberavatar($v['userid']);
-		}
 		$pages = $this->db->pages;
 		$list_field = $this->list_field;
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=member&c=member&a=add\',\''.L('member_add').'\',700,500);void(0);', L('member_add'));

@@ -135,12 +135,12 @@ class index extends foreground {
 			//附表信息验证 通过模型获取会员信息
 			if($member_setting['choosemodel']) {
 				require_once CACHE_MODEL_PATH.'member_input.class.php';
-		        require_once CACHE_MODEL_PATH.'member_update.class.php';
+				require_once CACHE_MODEL_PATH.'member_update.class.php';
 				$member_input = new member_input($userinfo['modelid']);
 				if ($info) {
 					$info = array_map('new_html_special_chars',$info);
 				}
-				$user_model_info = $member_input->get($info);				        				
+				$user_model_info = $member_input->get($info);
 			}
 			$password = $userinfo['password'];
 			$userinfo['password'] = password($userinfo['password'], $userinfo['encrypt']);
@@ -481,8 +481,8 @@ class index extends foreground {
 				showmessage(L('old_password_incorrect'), HTTP_REFERER);
 			}
 			if ($info['password'] == $info['newpassword']) {
-                showmessage(L('原密码不能与新密码相同'));
-            }
+				showmessage(L('原密码不能与新密码相同'));
+			}
 			//修改会员邮箱
 			if($this->memberinfo['email'] != $info['email'] && is_email($info['email'])) {
 				$email = $info['email'];
@@ -1317,7 +1317,7 @@ class index extends foreground {
 				}
 			}
 		}
-    }
+	}
 	
 	/**
 	 * QQ微博登录
@@ -1721,8 +1721,8 @@ class index extends foreground {
 		}
 	}
 
-    // 查询会员信息
-    protected function _find_member_info($username) {
+	// 查询会员信息
+	protected function _find_member_info($username) {
 		$member_setting = getcache('member_setting');
 
 		$data = $this->db->get_one(array('username'=>$username));
@@ -1739,8 +1739,6 @@ class index extends foreground {
 		if (!$data) {
 			return array();
 		}
-
-		$data['userid'] = $data['userid'];
 
 		return $data;
 	}

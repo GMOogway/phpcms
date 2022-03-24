@@ -82,6 +82,13 @@ class member_setting extends admin {
  			
 			if (!isset($data['setting']['list_field']) || !$data['setting']['list_field']) {
 				$data['setting']['list_field'] = array (
+					'avatar' =>
+						array (
+							'use' => '1',
+							'name' => '头像',
+							'width' => '60',
+							'func' => 'avatar',
+						),
 					'username' =>
 						array (
 							'use' => '1',
@@ -166,6 +173,12 @@ class member_setting extends admin {
 	 */
 	public function member_list_field() {
 		return array(
+			'avatar' => array(
+				'name' => L('头像'),
+				'formtype' => 'text',
+				'field' => 'avatar',
+				'setting' => array()
+			),
 			'userid' => array(
 				'name' => L('用户ID'),
 				'formtype' => 'text',

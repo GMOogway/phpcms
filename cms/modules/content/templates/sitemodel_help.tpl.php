@@ -21,7 +21,8 @@ userid会员：userid
 文本显示：text
 实时存储时间值：save_time_value
 实时存储文本值：save_text_value
-实时存储选择值：save_select_value</pre></div>
+实时存储选择值：save_select_value
+头像：avatar</pre></div>
 
 
     <p> &nbsp;&nbsp;</p>

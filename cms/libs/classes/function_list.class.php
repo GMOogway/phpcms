@@ -83,7 +83,7 @@ class function_list {
         $m = defined('ROUTE_M') && ROUTE_M ? ROUTE_M : '';
         $c = defined('ROUTE_C') && ROUTE_C ? ROUTE_C : '';
         if (IS_ADMIN && ($m=='content' && $c=='content' && !$data['sysadd']) || $m=='member' && $c=='member') {
-            return $value ? '<a href="javascript:dr_iframe_show(\'用户信息\', \'?m=member&c=member&a=memberinfo&username='.urlencode($value).'&pc_hash='.dr_get_csrf_token().'\', \'50%\')">'.str_cut($value, 10).'</a>' : L('游客');
+            return $value ? '<a href="javascript:dr_iframe_show(\'用户信息\', \'?m=member&c=member&a=memberinfo&username='.urlencode($value).'\', \'50%\')">'.str_cut($value, 10).'</a>' : L('游客');
         }
         return $value ? str_cut($value, 10) : L('游客');
     }
@@ -104,6 +104,11 @@ class function_list {
         }
         $this->uid_data[$userid] = isset($this->uid_data[$userid]) && $this->uid_data[$userid] ? $this->uid_data[$userid] : $username;
         return $this->uid_data[$userid] ? str_cut($this->uid_data[$userid], 10) : L('游客');
+    }
+
+    // 头像
+    public function avatar($value, $param = array(), $data = array(), $field = array()) {
+        return '<a href="javascript:dr_iframe_show(\'用户信息\', \'?m=member&c=member&a=memberinfo&userid='.intval($data['userid']).'\', \'50%\')"><img class="img-circle" src="'.get_memberavatar(intval($data['userid'])).'" style="width:30px;height:30px"></a>';
     }
 
     // 用于列表关联主题
