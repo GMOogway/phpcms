@@ -237,16 +237,13 @@ include $this->admin_tpl('header');?>
         </div></td>
       </tr>
 </table>
-<!--table_form_off-->
-</div>
 </div>
 	<div class="portlet-body form myfooter">
     <div class="form-actions text-center"><input type="submit" id="dosubmit" class="button" name="dosubmit" value="<?php echo L('submit')?>"/></div>
     </div>
-</div>
 
 </form>
-
+</div>
 <?php } elseif(ROUTE_A=='edit') {?>
 <script type="text/javascript">
 <!--
@@ -262,6 +259,7 @@ include $this->admin_tpl('header');?>
 </script>
 <div class="pad_10">
 <form name="myform" id="myform" action="?m=admin&c=menu&a=edit" method="post">
+<div class="myfbody">
 <table width="100%" class="table_form contentWrap">
       <tr>
         <th width="200"><?php echo L('menu_parentid')?>：</th>
@@ -311,18 +309,15 @@ include $this->admin_tpl('header');?>
           <?php foreach($models as $_k => $_m) {?><label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="info[<?php echo $_k?>]" value="1"<?php if (${$_k}) {?> checked<?php }?>> <?php echo $_m?> <span></span></label><?php }?>
         </div></td>
       </tr>
-
 </table>
-<!--table_form_off-->
 </div>
     <div class="bk15"></div>
 	<input name="id" type="hidden" value="<?php echo $id?>">
     <div class="portlet-body form myfooter">
     <div class="form-actions text-center"><input type="submit" id="dosubmit" class="button" name="dosubmit" value="<?php echo L('submit')?>"/></div>
     </div>
-</div>
-
 </form>
+</div>
 <?php }?>
 </body>
 </html>
