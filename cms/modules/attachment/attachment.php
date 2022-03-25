@@ -72,6 +72,7 @@ class attachment extends admin {
 			$this->setcache();
 			dr_json(1, L('修改成功'), array('url' => '?m=attachment&c=attachment&a=init&page='.(int)$this->input->post('page').'&pc_hash='.dr_get_csrf_token()));
 		}
+		$show_header = true;
 		$setconfig = pc_base::load_config('system');
 		extract($setconfig);
 		$remote = getcache('attachment', 'commons');
@@ -142,7 +143,7 @@ class attachment extends admin {
 			$this->db->insert($data);
 			// 自动更新缓存
 			$this->public_cache_remote();
-			dr_admin_msg(1,L('operation_success'),'?m=attachment&c=attachment&a=remote&menuid='.$this->input->get('menuid'));
+			dr_admin_msg(1, L('operation_success'), array('url' => '?m=attachment&c=attachment&a=remote&menuid='.$this->input->post('menuid').'&pc_hash='.dr_get_csrf_token()));
 		}
 		include $this->admin_tpl('remote_add');
 	}
@@ -158,7 +159,7 @@ class attachment extends admin {
 			$this->db->update($data,array('id'=>$id));
 			// 自动更新缓存
 			$this->public_cache_remote();
-			dr_admin_msg(1,L('operation_success'),'?m=attachment&c=attachment&a=remote&menuid='.$this->input->get('menuid'));
+			dr_admin_msg(1, L('operation_success'), array('url' => '?m=attachment&c=attachment&a=remote&menuid='.$this->input->post('menuid').'&pc_hash='.dr_get_csrf_token()));
 		}
 		$data = $this->db->get_one(array('id'=>$this->input->get('id')));
 		$data['value'] = dr_string2array($data['value']);

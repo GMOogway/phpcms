@@ -262,32 +262,23 @@ class function_list {
 
     // 用于列表显示价格
     public function price($value, $param = array(), $data = array()) {
-        if (!$value) {
-            return '';
-        }
         return '<span style="color:#ef4c2f">￥'.number_format($value, 2).'</span>';
     }
 
     // 用于列表显示价格
     public function money($value, $param = array(), $data = array(), $field = array()) {
-        if (!$value) {
-            return '';
-        }
         return '<span style="color:#ef4c2f">'.number_format($value, 2).'</span>';
     }
 
     // 用于列表显示积分
     public function score($value, $param = array(), $data = array(), $field = array()) {
-        if (!$value) {
-            return '';
-        }
         return '<span style="color:#2f5fef">'.intval($value).'</span>';
     }
 
     // 单选字段name
     public function radio_name($value, $param = array(), $data = array(), $field = array()) {
 
-        if (!$value) {
+        if (dr_is_empty($value)) {
             return '';
         }
 
@@ -304,7 +295,7 @@ class function_list {
     // 下拉字段name值
     public function select_name($value, $param = array(), $data = array(), $field = array()) {
 
-        if (!$value) {
+        if (dr_is_empty($value)) {
             return '';
         }
 
@@ -321,7 +312,7 @@ class function_list {
     // checkbox字段name值
     public function checkbox_name($value, $param = array(), $data = array(), $field = array()) {
 
-        if (!$value) {
+        if (dr_is_empty($value)) {
             return '';
         }
 

@@ -7,14 +7,11 @@ include $this->admin_tpl('header', 'admin');
 <script type="text/javascript" src="<?php echo JS_PATH;?>layui/layui.js"></script>
 <div class="admin-main layui-anim layui-anim-upbit">
     <div class="note note-danger">
-        <a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=init&pc_hash='+pc_hash+'&is_ajax=1',1);" class="layui-btn layui-btn-sm">
-            <i class="fa fa-refresh"></i> <?php echo L('update_cache_all');?>
-        </a>
-        <a href="?m=attachment&c=attachment&a=remote_add&menuid=<?php echo $this->input->get('menuid');?>" class="layui-btn layui-btn-sm">
-            <i class="fa fa-plus"></i> <?php echo L('add');?>
-        </a>
+        <p><a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=init&pc_hash='+pc_hash+'&is_ajax=1',1);"><?php echo L('update_cache_all');?></a></p>
     </div>
-    <table class="layui-table" id="list" lay-filter="list"></table>
+    <div class="right-card-box">
+        <table id="list" lay-filter="list"></table>
+    </div>
 </div>
 <script type="text/html" id="action">
     <a href="?m=attachment&c=attachment&a=remote_edit&id={{d.id}}&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo $this->input->get('pc_hash');?>" class="layui-btn layui-btn-xs"><i class="fa fa-edit"></i> <?php echo L('edit');?></a>

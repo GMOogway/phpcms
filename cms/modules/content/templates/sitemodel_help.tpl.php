@@ -11,7 +11,6 @@ include $this->admin_tpl('header', 'admin');?>
 日期：date
 userid会员：userid
 会员信息：author
-地区联动：linkage_address
 用于列表显示缩略图：image
 用于列表显示单文件：file
 用于列表显示多文件：files
@@ -19,9 +18,17 @@ userid会员：userid
 用于列表关联主题：ctitle
 用于列表显示状态：status
 文本显示：text
+地区联动：linkage_address
+联动菜单名称：linkage_name
+单选字段名称：radio_name
+下拉字段名称：select_name
+复选框字段名称：checkbox_name
 实时存储时间值：save_time_value
 实时存储文本值：save_text_value
 实时存储选择值：save_select_value
+用于列表显示价格：price
+用于列表显示价格：money
+用于列表显示积分：score
 头像：avatar</pre></div>
 
 

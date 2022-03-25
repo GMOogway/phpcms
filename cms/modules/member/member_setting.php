@@ -14,6 +14,7 @@ class member_setting extends admin {
 	function __construct() {
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
+		$this->cache = pc_base::load_sys_class('cache');
 		$this->db = pc_base::load_model('module_model');
 		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 	}
@@ -42,6 +43,64 @@ class member_setting extends admin {
 				}
 			}
 			$member_setting['list_field'] = dr_list_field_order($setting['list_field']);
+			if (!isset($member_setting['list_field']) || !$member_setting['list_field']) {
+				$member_setting['list_field'] = array (
+					'avatar' =>
+						array (
+							'use' => '1',
+							'name' => '头像',
+							'width' => '60',
+							'func' => 'avatar',
+						),
+					'username' =>
+						array (
+							'use' => '1',
+							'name' => '账号',
+							'width' => '110',
+							'func' => 'author',
+						),
+					'groupid' =>
+						array (
+							'func' => 'group',
+							'center' => '1',
+						),
+					'nickname' =>
+						array (
+							'use' => '1',
+							'name' => '昵称',
+							'width' => '120',
+							'func' => '',
+						),
+					'amount' =>
+						array (
+							'use' => '1',
+							'name' => '余额',
+							'width' => '120',
+							'func' => 'money',
+						),
+					'point' =>
+						array (
+							'use' => '1',
+							'name' => '积分',
+							'width' => '120',
+							'func' => 'score',
+						),
+					'regip' =>
+						array (
+							'use' => '1',
+							'name' => '注册IP',
+							'width' => '140',
+							'func' => 'ip',
+						),
+					'regdate' =>
+						array (
+							'use' => '1',
+							'name' => '注册时间',
+							'width' => '160',
+							'func' => 'datetime',
+						),
+				);
+			}
 			if (!preg_match('/^\\d{1,8}$/i', $member_setting['rmb_point_rate'])) {
 				dr_json(0, L('rmb_point_rate').L('between_1_to_8_num'), array('field' => 'rmb_point_rate'));
 			}
@@ -53,6 +112,7 @@ class member_setting extends admin {
 			}
 			$this->db->update(array('module'=>'member', 'setting'=>array2string($member_setting)), array('module'=>'member'));
 			$this->cache_api->cache('member_setting');
+			$this->cache->clean();
 			dr_json(1, L('operation_success'), array('url' => '?m=member&c=member_setting&a=manage&page='.(int)($this->input->post('page')).'&pc_hash='.dr_get_csrf_token()));
 		} else {
 			$show_scroll = true;

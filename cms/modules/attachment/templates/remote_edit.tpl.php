@@ -10,7 +10,8 @@ jQuery(document).ready(function() {
 <div class="note note-danger">
     <p><a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=init&pc_hash='+pc_hash+'&is_ajax=1',1);"><?php echo L('update_cache_all');?></a></p>
 </div>
-<form action="?m=attachment&c=attachment&a=remote_edit&id=<?php echo $data['id']?>&menuid=<?php echo $this->input->get('menuid');?>" class="form-horizontal" method="post" name="myform" id="myform">
+<form action="?m=attachment&c=attachment&a=remote_edit&id=<?php echo $data['id']?>" class="form-horizontal" method="post" name="myform" id="myform">
+<input name="menuid" type="hidden" value="<?php echo $this->input->get('menuid');?>">
 <div class="portlet light bordered myfbody">
     <div class="portlet-title tabbable-line">
         <ul class="nav nav-tabs" style="float:left;">
@@ -72,7 +73,7 @@ jQuery(document).ready(function() {
         </div>
         <div class="portlet-body form myfooter">
             <div class="form-actions text-center">
-                <button name="dosubmit" type="submit" class="btn green"> <i class="fa fa-save"></i> <?php echo L('保存');?></button>
+                <button type="button" onclick="dr_ajax_submit('?m=attachment&c=attachment&a=remote_edit&id=<?php echo $data['id']?>', 'myform', '2000')" class="btn green"> <i class="fa fa-save"></i> <?php echo L('保存');?></button>
                 <button type="button" onclick="dr_test_attach()" class="btn red"> <i class="fa fa-cloud"></i> <?php echo L('测试');?></button>
             </div>
         </div>

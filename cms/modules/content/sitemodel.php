@@ -87,6 +87,7 @@ class sitemodel extends admin {
 			$this->type_db->insert(array('name'=>$info['name'],'module'=>'search','modelid'=>$modelid,'siteid'=>$this->siteid));
 			$this->cache_api->cache('sitemodel');
 			$this->cache_api->cache('type', 'search');
+			$this->cache->clean();
 			dr_admin_msg(1,L('add_success'), '', '', 'add');
 		} else {
 			pc_base::load_sys_class('form','',0);
@@ -120,6 +121,33 @@ class sitemodel extends admin {
 				}
 			}
 			$setting['list_field'] = dr_list_field_order($setting['list_field']);
+			!$setting['list_field'] && $setting['list_field'] = array(
+				'title' => array(
+					'use' => 1,
+					'name' => L('主题'),
+					'width' => '',
+					'func' => 'title',
+				),
+				'username' => array(
+					'use' => 1,
+					'name' => L('用户名'),
+					'width' => '100',
+					'func' => 'author',
+				),
+				'updatetime' => array(
+					'use' => 1,
+					'name' => L('更新时间'),
+					'width' => '160',
+					'func' => 'datetime',
+				),
+				'listorder' => array(
+					'use' => 1,
+					'name' => L('排序'),
+					'width' => '100',
+					'center' => 1,
+					'func' => 'save_text_value',
+				),
+			);
 			if ($setting['search_time'] && !isset($field[$setting['search_time']])) {
 				dr_json(0, L('后台列表时间搜索字段'.$setting['search_time'].'不存在'));
 			}
@@ -145,6 +173,9 @@ class sitemodel extends admin {
 			}
 			
 			$this->db->update($info,array('modelid'=>$modelid,'siteid'=>$this->siteid));
+			$this->cache_api->cache('sitemodel');
+			$this->cache_api->cache('type', 'search');
+			$this->cache->clean();
 			dr_json(1, L('update_success'), array('url' => '?m=content&c=sitemodel&a=init&menuid='.$this->input->post('menuid').'&pc_hash='.dr_get_csrf_token()));
 		} else {
 			pc_base::load_sys_class('form','',0);
@@ -211,6 +242,7 @@ class sitemodel extends admin {
 		$this->type_db->delete(array('module'=>'search','modelid'=>$modelid,'siteid'=>$this->siteid));
 		$this->cache_api->cache('sitemodel');
 		$this->cache_api->cache('type', 'search');
+		$this->cache->clean();
 		exit('1');
 	}
 	public function disabled() {
@@ -343,6 +375,8 @@ class sitemodel extends admin {
 					}
 				}
 				$this->cache_api->cache('sitemodel');
+				$this->cache_api->cache('type', 'search');
+				$this->cache->clean();
 				dr_admin_msg(1,L('operation_success'),'?m=content&c=sitemodel&a=init');
 			}
 		} else {

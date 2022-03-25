@@ -123,6 +123,32 @@ class formguide extends admin {
 				}
 			}
 			$setting['list_field'] = dr_list_field_order($setting['list_field']);
+			!$setting['list_field'] && $setting['list_field'] = array(
+				'dataid' => array(
+					'use' => 1,
+					'name' => L('Id'),
+					'width' => '',
+					'func' => '',
+				),
+				'username' => array(
+					'use' => 1,
+					'name' => L('用户名'),
+					'width' => '',
+					'func' => 'author',
+				),
+				'ip' => array(
+					'use' => 1,
+					'name' => L('用户ip'),
+					'width' => '140',
+					'func' => 'ip',
+				),
+				'datetime' => array(
+					'use' => 1,
+					'name' => L('时间'),
+					'width' => '160',
+					'func' => 'datetime',
+				),
+			);
 			if ($setting['starttime']) {
 				$setting['starttime'] = strtotime($setting['starttime']);
 			}
@@ -402,6 +428,7 @@ class formguide extends admin {
 			}
 		}
 		$this->cache->set_file('sitemodel', $cache);
+		$this->cache->clean();
     }
 }
 ?>

@@ -237,6 +237,17 @@ function dr_get_merge($code) {
 }
 
 /**
+ * 是否为空白
+ * @return 是否空白
+ */
+function dr_is_empty($value) {
+	if (is_array($value)) {
+		return $value ? 1 : 0;
+	}
+	return strlen($value) ? 1 : 0;
+}
+
+/**
  * 安全url过滤
  */
 function dr_safe_url($url, $is_html = false) {
