@@ -312,7 +312,8 @@ UE.plugins['autotypeset'] = function(){
             if(opt.pasteFilter){
                 me.addListener('beforepaste',autotype);
             }
-            autotype.call(me)
+            autotype.call(me);
+            me.sync();
         }
 
     };

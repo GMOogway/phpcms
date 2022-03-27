@@ -253,6 +253,7 @@ class database extends admin {
 			$show_header = true;
 			include $this->admin_tpl('database_show');
 		} elseif ($tables && $operation == 'ut') {
+			$this->db->query('ALTER DATABASE '.$database['database'].' CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
 			foreach ($this->input->post('tables') as $table) {
 				$this->db->query('ALTER TABLE `'.$table.'` DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;');
 			}
@@ -332,6 +333,9 @@ class database extends admin {
 		$data = $cache[$page];
 		if ($data) {
 			$html = '';
+			if ($operation=='ut') {
+				$this->db->query('ALTER DATABASE '.$database['database'].' CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
+			}
 			foreach ($data as $table) {
 				$ok = L('database_success');
 				$class = '';
