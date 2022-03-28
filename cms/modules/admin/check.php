@@ -781,7 +781,14 @@ class check extends admin {
             case '11':
                 // 服务器环境
                 if (is_file(CMS_PATH.'test.php')) {
-                    dr_json(0, '当网站正式上线后，根目录的test.php建议删除');
+                    $error[] = '当网站正式上线后，根目录的test.php建议删除';
+                }
+                if (IS_DEV) {
+                    $error[] = '当网站正式上线后，根目录的index.php中的开发者默认参数，建议关闭';
+                }
+
+                if ($error) {
+                    dr_json(0, implode('<br>', $error));
                 }
 
                 dr_json(1, '完成');
