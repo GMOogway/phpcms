@@ -13,6 +13,7 @@ class content_form {
 		$this->categorys = $categorys;
 		$this->fields = getcache('model_field_'.$modelid,'model');
 		$this->siteid = get_siteid();
+		$this->userid = $_SESSION['userid'] ? $_SESSION['userid'] : (param::get_cookie('_userid') ? param::get_cookie('_userid') : param::get_cookie('userid'));
     }
 
 	function get($data = array()) {

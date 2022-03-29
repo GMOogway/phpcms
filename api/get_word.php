@@ -4,9 +4,9 @@
  */
 defined('IN_CMS') or exit('No permission resources.');
 
-$userid = $_SESSION['userid'] ? $_SESSION['userid'] : (param::get_cookie('_userid') ? param::get_cookie('_userid') : param::get_cookie('userid'));
-$siteid = param::get_cookie('siteid');
-$rid = md5(FC_NOW_URL.$input->get_user_agent().$input->ip_address().intval($userid));
+$userid = intval($input->get('userid'));
+$siteid = intval($input->get('siteid'));
+$rid = md5(FC_NOW_URL.$input->get_user_agent().$input->ip_address().$userid);
 if(!$siteid) $siteid = get_siteid() ? get_siteid() : 1 ;
 
 pc_base::load_sys_class('upload','',0);
@@ -26,7 +26,7 @@ $rt = $upload->upload_file(array(
 $data = array();
 if (defined('SYS_ATTACHMENT_CF') && SYS_ATTACHMENT_CF && $rt['data']['md5']) {
 	$att_db = pc_base::load_model('attachment_model');
-	$att = $att_db->get_one(array('userid'=>intval($userid),'filemd5'=>$rt['data']['md5'],'fileext'=>$rt['data']['ext'],'filesize'=>$rt['data']['size']));
+	$att = $att_db->get_one(array('userid'=>$userid,'filemd5'=>$rt['data']['md5'],'fileext'=>$rt['data']['ext'],'filesize'=>$rt['data']['size']));
 	if ($att) {
 		$data = dr_return_data($att['aid'], 'ok');
 		// 删除现有附件
@@ -60,7 +60,7 @@ if (!$rt['data']['path']) {
 if (!$title) {
 	dr_json(0, L('没有获取到文件标题'));
 }
-$body = readWordToHtml($rt['data']['path'], $rid);
+$body = readWordToHtml($rt['data']['path'], $userid, $siteid, $rid);
 if (!$body) {
 	dr_json(0, L('没有获取到Word内容'));
 }
@@ -99,7 +99,7 @@ function upload_json($aid,$src,$filename,$size) {
 		return true;
 	}
 }
-function readWordToHtml($source, $rid) {
+function readWordToHtml($source, $userid, $siteid, $rid) {
 	include_once PC_PATH."plugin/vendor/autoload.php";
 	$input = pc_base::load_sys_class('input');
 	$phpWord = \PhpOffice\PhpWord\IOFactory::load($source);
@@ -128,8 +128,6 @@ function readWordToHtml($source, $rid) {
 							mb_convert_encoding($ele2->getText(), 'GBK', 'UTF-8')
 						);
 					} elseif ($ele2 instanceof \PhpOffice\PhpWord\Element\Image) {
-						$siteid = param::get_cookie('siteid');
-						if(!$siteid) $siteid = get_siteid() ? get_siteid() : 1 ;
 						$imageData = $ele2->getImageStringData(true);
 						//$imageData = 'data:' . $ele2->getImageType() . ';base64,' . $imageData;
 						$module = trim($input->get('module'));
@@ -144,7 +142,7 @@ function readWordToHtml($source, $rid) {
 						$data = array();
 						if (defined('SYS_ATTACHMENT_CF') && SYS_ATTACHMENT_CF && $rt['data']['md5']) {
 							$att_db = pc_base::load_model('attachment_model');
-							$att = $att_db->get_one(array('userid'=>intval($userid),'filemd5'=>$rt['data']['md5'],'fileext'=>$rt['data']['ext'],'filesize'=>$rt['data']['size']));
+							$att = $att_db->get_one(array('userid'=>$userid,'filemd5'=>$rt['data']['md5'],'fileext'=>$rt['data']['ext'],'filesize'=>$rt['data']['size']));
 							if ($att) {
 								$data = dr_return_data($att['aid'], 'ok');
 								// 删除现有附件

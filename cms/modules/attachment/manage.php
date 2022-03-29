@@ -39,7 +39,7 @@ class manage extends admin {
 			if(isset($module) && $module!='') $where .= "AND `module`='$module' ";		
 			$where .="AND `siteid`='".$this->siteid."'";
 			if($where) $where = substr($where, 3);
-			$datas = $this->db->listinfo($where, 'uploadtime DESC', $page, $pagesize);
+			$datas = $this->db->listinfo($where, 'uploadtime desc', $page, $pagesize);
 			$total = $this->db->count($where);
 			$pages = $this->db->pages;
 			if(!empty($datas)) {

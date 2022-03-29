@@ -4,9 +4,9 @@
  */
 defined('IN_CMS') or exit('No permission resources.');
 
-$userid = $_SESSION['userid'] ? $_SESSION['userid'] : (param::get_cookie('_userid') ? param::get_cookie('_userid') : param::get_cookie('userid'));
-$siteid = param::get_cookie('siteid');
-$rid = md5(FC_NOW_URL.$input->get_user_agent().$input->ip_address().intval($userid));
+$userid = intval($input->get('userid'));
+$siteid = intval($input->get('siteid'));
+$rid = md5(FC_NOW_URL.$input->get_user_agent().$input->ip_address().$userid);
 if(!$siteid) $siteid = get_siteid() ? get_siteid() : 1 ;
 $field = $input->get('field');
 $fieldname = $input->get('fieldname');
@@ -81,7 +81,7 @@ if (preg_match('/'.$preg.'(.+)<\/div>/sU', $html, $mt)) {
 							$data = array();
 							if (defined('SYS_ATTACHMENT_CF') && SYS_ATTACHMENT_CF && $rt['data']['md5']) {
 								$att_db = pc_base::load_model('attachment_model');
-								$att = $att_db->get_one(array('userid'=>intval($userid),'filemd5'=>$rt['data']['md5'],'fileext'=>$rt['data']['ext'],'filesize'=>$rt['data']['size']));
+								$att = $att_db->get_one(array('userid'=>$userid,'filemd5'=>$rt['data']['md5'],'fileext'=>$rt['data']['ext'],'filesize'=>$rt['data']['size']));
 								if ($att) {
 									$data = dr_return_data($att['aid'], 'ok');
 									// 删除现有附件

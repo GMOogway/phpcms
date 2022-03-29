@@ -14,6 +14,7 @@ class content_input {
 		pc_base::load_sys_class('upload','',0);
 		pc_base::load_sys_class('download','',0);
 		$this->siteid = param::get_cookie('siteid');
+		$this->userid = $_SESSION['userid'] ? $_SESSION['userid'] : (param::get_cookie('_userid') ? param::get_cookie('_userid') : param::get_cookie('userid'));
 		$this->download = new download('content','0',$this->siteid);
 		$this->site_config = getcache('sitelist','commons');
 		$this->site_config = $this->site_config[$this->siteid];

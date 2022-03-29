@@ -91,7 +91,7 @@ $end = $start + $size;
 /* 获取文件列表 */
 $thisdb = pc_base::load_model('attachment_model');
 $where = array('fileext'=>$allowFiles, 'module<>'=>'member', 'siteid'=>$siteid, 'userid'=>(int)$userid);
-$data = $thisdb->select($where,'*','','aid desc');
+$data = $thisdb->select($where,'*','','uploadtime desc');
 $total = $thisdb->count($where);
 $files = array();
 if ($data) {

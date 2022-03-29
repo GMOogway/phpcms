@@ -12,7 +12,7 @@
 		$str .= '		elem:\'#'.$field.'\',';
 		$str .= '		accept:\'file\',';
 		$str .= '		field:\'file_upload\',';
-		$str .= '		url: \''.WEB_PATH.'api.php?op=get_word&module=content&catid='.intval($this->input->get('catid')).'&watermark='.$watermark.'&attachment='.$attachment.'&image_reduce='.$image_reduce.'\',';
+		$str .= '		url: \''.WEB_PATH.'api.php?op=get_word&module=content&catid='.intval($this->input->get('catid')).'&userid='.$this->userid.'&siteid='.$this->siteid.'&watermark='.$watermark.'&attachment='.$attachment.'&image_reduce='.$image_reduce.'\',';
 		$str .= '		exts: \'docx\',';
 		$str .= '		done: function(data){';
 		$str .= '			if(data.code == 1){';

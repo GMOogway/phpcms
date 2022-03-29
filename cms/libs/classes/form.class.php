@@ -208,6 +208,7 @@ class form {
 			$str .= "var editor = new baidu.editor.ui.Editor({UEDITOR_HOME_URL:'".WEB_PATH."statics/js/ueditor/',serverUrl:'".WEB_PATH."api.php?op=controller&module=".$module."&catid=".$catid."&is_wm=".intval($watermark)."&is_esi=".intval($enablesaveimage)."&attachment=".intval($attachment)."&image_reduce=".intval($image_reduce)."&siteid=".intval($siteid)."',".join(",",$opt)."});editor.render('$textareaid');\n";
 			$str .= '</script>';
 		}
+		$ext_str = '';
 		if (isset($show_bottom_boot) && $show_bottom_boot) {
 			$ext_str .= '<div class="mt-checkbox-inline" style="margin-top: 10px;">';
 			$ext_str .= '
