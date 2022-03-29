@@ -133,7 +133,12 @@ class upload {
             return dr_return_data(0, $rt['msg']);
         }
 
-        $url = $config['attachment']['url'].$file_path;
+        // 上传成功
+        if ($diy) {
+            $url = '自定义存储地址不提供URL';
+        } else {
+            $url = $config['attachment']['url'].$file_path;
+        }
 
         // 文件预览
         $preview = dr_file_preview_html($url);
@@ -230,10 +235,15 @@ class upload {
         }
 
         // 上传成功
-        $url = $config['attachment']['url'].$file_path;
+        if ($diy) {
+            $url = '自定义存储地址不提供URL';
+        } else {
+            $url = $config['attachment']['url'].$file_path;
+        }
 
         // 文件预览
         $preview = dr_file_preview_html($url);
+
         return dr_return_data(1, 'ok', array(
             'ext' => $file_ext,
             'url' => $url,
@@ -271,10 +281,15 @@ class upload {
         }
 
         // 上传成功
-        $url = $config['attachment']['url'].$file_path;
+        if ($diy) {
+            $url = '自定义存储地址不提供URL';
+        } else {
+            $url = $config['attachment']['url'].$file_path;
+        }
 
         // 文件预览
         $preview = dr_file_preview_html($url);
+
         return dr_return_data(1, 'ok', array(
             'ext' => $file_ext,
             'url' => $url,
