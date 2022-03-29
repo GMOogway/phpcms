@@ -256,7 +256,7 @@ class attachment extends admin {
 		if (!$rt['code']) {
 			dr_json(0, $rt['msg']);
 		} elseif (strpos(dr_catcher_data($rt['data']['url']), 'cms') !== false) {
-			dr_json(1, L('测试成功'));
+			dr_json(1, L('测试成功：'.$rt['data']['url']));
 		}
 
 		dr_json(0, L('无法访问到附件: '.$rt['data']['url']));

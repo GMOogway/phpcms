@@ -125,7 +125,7 @@ class upload {
         }
 
         // 保存目录名称
-        list($file_path, $config) = $this->_rand_save_file_path($config, $file_ext, $file);
+        list($file_path, $config, $diy) = $this->_rand_save_file_path($config, $file_ext, $file);
 
         // 开始上传存储文件
         $rt = $this->save_file('upload', $file["tmp_name"], $file_path, $config['attachment'], (int)$config['watermark']);
@@ -219,7 +219,7 @@ class upload {
         }
 
         // 保存目录名称
-        list($file_path, $config) = $this->_rand_save_file_path($config, $file_ext, $data);
+        list($file_path, $config, $diy) = $this->_rand_save_file_path($config, $file_ext, $data);
 
         $file_name = $file_name ? $file_name : $this->_file_name($file_path); // 文件实际名字
 
@@ -262,7 +262,7 @@ class upload {
         }
 
         // 保存目录名称
-        list($file_path, $config) = $this->_rand_save_file_path($config, $file_ext, $data);
+        list($file_path, $config, $diy) = $this->_rand_save_file_path($config, $file_ext, $data);
 
         // 开始上传存储文件
         $rt = $this->save_file('content', $data, $file_path, $config['attachment'], (int)$config['watermark']);
@@ -472,6 +472,7 @@ class upload {
     protected function _rand_save_file_path($config, $file_ext, $file) {
         $pinyin = pc_base::load_sys_class('pinyin');
 
+        $diy = 0;
         $name = '';
         if (isset($config['save_name']) && $config['save_name']) {
             if ($config['save_name'] == 'null') {
@@ -489,12 +490,14 @@ class upload {
 
         if (isset($config['save_file']) && $config['save_file']) {
             // 指定存储名称
+            $diy = 1;
             $file_path = $config['save_file'];
             $config['save_file'] = dirname($file_path);
             $config['attachment']['value']['path'] = 'null';
         } else {
             if (isset($config['save_path']) && $config['save_path']) {
                 // 指定存储路径
+                $diy = 1;
                 $path = $config['save_path'];
                 $config['save_file'] = $path;
                 $config['attachment']['value']['path'] = 'null';
@@ -519,7 +522,7 @@ class upload {
             $file_path = (SYS_ATTACHMENT_FILE ? $this->siteid.'/' : '').$path.$name.'.'.$file_ext;
         }
 
-        return array($file_path, $config);
+        return array($file_path, $config, $diy);
     }
 }
 
