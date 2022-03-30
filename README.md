@@ -44,7 +44,7 @@ QQ、微信：297885395  QQ讨论群：551419699  联系电话：17684313488
 39. 后台登录密码传输改为加密模式
 40. 增加生成静态页进度条
 41. 编辑器增加本地图片自动上传
-42. 升级为CK4.16.1编辑器
+42. 升级为CK4.18.0编辑器
 43. 无用文件清理
 44. 修改生成缩略图函数thumb
 45. 修改获取用户头像函数get_memberavatar
@@ -202,8 +202,8 @@ QQ、微信：297885395  QQ讨论群：551419699  联系电话：17684313488
 ![](http://ceshi.kaixin100.cn/upload/images/add_content.png "添加内容")
 ### 后台附件H5上传
 ![](http://ceshi.kaixin100.cn/upload/images/h5.png "后台附件H5上传")
-### 升级为CK4.16.1编辑器
-![](http://ceshi.kaixin100.cn/upload/images/ckeditor.png "升级为CK4.16.1编辑器")
+### 升级为CK4.18.0编辑器
+![](http://ceshi.kaixin100.cn/upload/images/ckeditor.png "升级为CK4.18.0编辑器")
 ### 升级为Ueditor编辑器
 ![](http://ceshi.kaixin100.cn/upload/images/ueditor.png "升级为Ueditor编辑器")
 ### Ueditor上传视频
