@@ -37,7 +37,7 @@ class function_list {
         return isset($data['url']) && $data['url'] ? '<a href="'.$data['url'].'" target="_blank" class="tooltips" data-container="body" data-placement="top" data-original-title="'.$value.'" title="'.$value.'">'.$title.'</a>' : $title;
     }
 
-    // 用于列表显示点击量
+    // 用于列表显示浏览数
     public function hits($value, $param = array(), $data = array()) {
 
         $this->hits_db = pc_base::load_model('hits_model');
