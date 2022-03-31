@@ -685,6 +685,7 @@ function dr_list_function($func, $value, $param = array(), $data = array(), $fie
 			'title' => 'title',
 			'catid' => 'catid',
 			'author' => 'author',
+			'hits' => 'hits',
 			'listorder' => 'save_text_value',
 		);
 		if ($name && isset($dname[$name]) && $dname[$name]) {

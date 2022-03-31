@@ -37,6 +37,22 @@ class function_list {
         return isset($data['url']) && $data['url'] ? '<a href="'.$data['url'].'" target="_blank" class="tooltips" data-container="body" data-placement="top" data-original-title="'.$value.'" title="'.$value.'">'.$title.'</a>' : $title;
     }
 
+    // 用于列表显示点击量
+    public function hits($value, $param = array(), $data = array()) {
+
+        $this->hits_db = pc_base::load_model('hits_model');
+        $siteids = getcache('category_content','commons');
+        $siteid = $siteids[$data['catid']];
+        $categorys = getcache('category_content_'.$siteid,'commons');
+        $category = $categorys[$data['catid']];
+        $modelid = $category['modelid'];
+        $hits_r = $this->hits_db->get_one(array('hitsid'=>'c-'.$modelid.'-'.$data['id']));
+        $value = L('today_hits', 'content').'：'.$hits_r['dayviews'].'<br>'.L('yestoday_hits').'：'.$hits_r['yesterdayviews'].'<br>'.L('week_hits').'：'.$hits_r['weekviews'].'<br>'.L('month_hits').'：'.$hits_r['monthviews'];
+        $title = $hits_r['views'];
+
+        return '<span class="tooltips" data-container="body" data-placement="top" data-html="true" data-original-title="'.$value.'" title="'.$value.'">'.$title.'</span>';
+    }
+
     // 用于列表显示联动菜单值
     public function linkage_address($value, $param = array(), $data = array()) {
         if (!$value) {

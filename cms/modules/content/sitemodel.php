@@ -106,7 +106,7 @@ class sitemodel extends admin {
 			$modelid = intval($this->input->post('modelid'));
 			$this->m_db = pc_base::load_model('sitemodel_field_model');
 			$this->field = $this->m_db->select(array('siteid'=>$this->siteid, 'modelid'=>$modelid, 'issystem'=>1),'*','','listorder ASC,fieldid ASC');
-			$sys_field = sys_field(array('id', 'title', 'username', 'updatetime', 'listorder'));
+			$sys_field = sys_field(array('id', 'title', 'username', 'updatetime', 'hits', 'listorder'));
 			$data = $this->db->get_one(array('modelid'=>$modelid));
 			$data['setting'] = dr_string2array($data['setting']);
 			$field = dr_list_field_value($data['setting']['list_field'], $sys_field, $this->field);
@@ -188,7 +188,7 @@ class sitemodel extends admin {
 			$modelid = intval($this->input->get('modelid'));
 			$this->m_db = pc_base::load_model('sitemodel_field_model');
 			$this->field = $this->m_db->select(array('siteid'=>$this->siteid, 'modelid'=>$modelid, 'issystem'=>1),'*','','listorder ASC,fieldid ASC');
-			$sys_field = sys_field(array('id', 'title', 'username', 'updatetime', 'listorder'));
+			$sys_field = sys_field(array('id', 'title', 'username', 'updatetime', 'hits', 'listorder'));
 			$r = $this->db->get_one(array('modelid'=>$modelid));
 			extract($r);
 			if ($r['setting']) {
