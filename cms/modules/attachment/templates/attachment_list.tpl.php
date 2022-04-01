@@ -206,7 +206,7 @@ function preview(file) {
     if(IsImg(file)) {
         var width = 400;
         var height = 300;
-        var att = 'height: 260px;';
+        var att = 'width: 350px;height: 260px;';
         if (is_mobile()) {
             width = height = '90%';
             var att = 'height: 90%;';
@@ -245,7 +245,7 @@ function preview(file) {
     } else {
         var diag = new Dialog({
             title:'<?php echo L('preview')?>',
-            html:'<style type="text/css">a{text-shadow: none; color: #337ab7; text-decoration:none;}a:hover{cursor: pointer; color: #23527c; text-decoration: underline;}</style><p style="text-align: center;word-break: break-all;margin-bottom: 20px;"><a href="'+file+'" target="_blank">'+file+'</a></p><p style="text-align: center;"><a href="'+file+'" target="_blank"><img src="<?php echo IMG_PATH?>admin_img/down.gif"><?php echo L('click_open')?></a></p>',
+            html:'<style type="text/css">a{text-shadow: none; color: #337ab7; text-decoration:none;}a:hover{cursor: pointer; color: #23527c; text-decoration: underline;}</style><p style="text-align: center;word-break: break-all;margin-bottom: 20px;"><a href="'+file+'" target="_blank">'+file+'</a></p><p style="text-align: center;"><a href="'+file+'" target="_blank"><i class="fa fa-download"></i> <?php echo L('click_open')?></a></p>',
             modal:true
         });
         diag.show();
