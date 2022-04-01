@@ -76,7 +76,7 @@ class Uploader
         $config = siteinfo($this->siteid);
         $site_setting = string2array($config['setting']);
         $this->rid = md5(FC_NOW_URL.$this->input->get_user_agent().$this->input->ip_address().$this->userid);
-        $this->watermark = $site_setting['ueditor'] ? 1 : intval(intval($this->is_wm));
+        $this->watermark = $site_setting['ueditor'] ? 1 : intval($this->is_wm);
         $this->attachment_info = $this->upload->get_attach_info((int)$this->attachment, (int)$this->image_reduce);
 
         if (!$this->userid) {
