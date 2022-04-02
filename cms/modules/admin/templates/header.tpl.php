@@ -20,7 +20,7 @@ if(isset($show_dialog)) {?>
 <script src='<?php echo JS_PATH?>bootstrap-tagsinput.min.js' type='text/javascript'></script>
 <script type="text/javascript">
 <?php
-if(in_array(ROUTE_M, array('content', 'special')) && in_array(ROUTE_C, array('content', 'sitemodel_field')) && in_array(ROUTE_A, array('add', 'edit', 'public_priview'))) {?>
+if(in_array(ROUTE_M, array('admin', 'content', 'special')) && in_array(ROUTE_C, array('category', 'content', 'sitemodel_field')) && in_array(ROUTE_A, array('add', 'edit', 'public_priview'))) {?>
 var is_admin = 0;
 <?php } else { ?>
 var is_admin = 1;

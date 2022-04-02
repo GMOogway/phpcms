@@ -605,7 +605,7 @@ class content extends admin {
    								$html->show($urls[1],$urls['data'],0);
  							}
 							//更新到全站搜索
-							$inputinfo = '';
+							$inputinfo = array();
 							$inputinfo['system'] = $content_info;
 							$this->db->search_api($id,$inputinfo);
 						}
@@ -627,7 +627,7 @@ class content extends admin {
 						$html->show($urls[1],$urls['data'],0);
 						}
 						//更新到全站搜索
-						$inputinfo = '';
+						$inputinfo = array();
 						$inputinfo['system'] = $content_info;
 						$this->db->search_api($id,$inputinfo);
 					}
@@ -1077,7 +1077,7 @@ class content extends admin {
 				} else if(type==2) {
 					$.get('?m=content&c=content&a=pass&ajax_preview=1&reject=1&catid=".$catid."&steps=".$steps."&id=".$id."&pc_hash=".$pc_hash."');
 				} else if(type==3) {
-					$.get('?m=content&c=content&a=delete&ajax_preview=1&dosubmit=1&catid=".$catid."&steps=".$steps."&id=".$id."&pc_hash=".$pc_hash."');
+					$.post('?m=content&c=content&a=delete&ajax_preview=1&catid=".$catid."&steps=".$steps."&id=".$id."&pc_hash=".$pc_hash."',{dosubmit:1});
 				}
 				$('#cloading').html('<font color=red>".L('operation_success')."<span id=\"secondid\">2</span>".L('after_a_few_seconds_left')."</font>');
 				setInterval('set_time()', 1000);
@@ -1095,7 +1095,7 @@ class content extends admin {
 				if(type==1) {
 					$.get('?m=content&c=content&a=ajax_pass&ajax_preview=1&catid=".$catid."&id=".$id."&pc_hash=".$pc_hash."');
 				} else if(type==2) {
-					$.get('?m=content&c=content&a=delete&ajax_preview=1&dosubmit=1&catid=".$catid."&steps=".$steps."&id=".$id."&pc_hash=".$pc_hash."');
+					$.post('?m=content&c=content&a=delete&ajax_preview=1&catid=".$catid."&steps=".$steps."&id=".$id."&pc_hash=".$pc_hash."',{dosubmit:1});
 				}
 				$('#cloading').html('<font color=red>".L('operation_success')."<span id=\"secondid\">2</span>".L('after_a_few_seconds_left')."</font>');
 				setInterval('set_time()', 1000);

@@ -125,7 +125,7 @@ if(is_array($datas)){
         } else {
             echo '?m=content&c=content&a=public_preview&catid='.$r['catid'].'&id='.$r['id'].'';
         }?>" target="_blank" class="btn btn-xs blue"><i class="fa fa-eye"></i> <?php echo L('preview');?></a>
-        <a class="btn btn-xs green" lay-event="restore"><i class="fa fa-window-restore"></i> <?php echo L('restore');?></a></td>
+        <a class="btn btn-xs green" id="restore" data-id="<?php echo $r['id'];?>"><i class="fa fa-window-restore"></i> <?php echo L('restore');?></a></td>
     </tr>
 <?php 
     }
@@ -150,6 +150,25 @@ if(is_array($datas)){
 </div>
 <script>
 $(function() {
+    $('body').on('click','#restore',function() {
+        var data = this;
+        Dialog.confirm('确定要还原此内容吗？', function() {
+            var loading = layer.load(1, {shade: [0.1, '#fff']});
+            $.ajax({
+                type: 'post',
+                url: '?m=content&c=content&a=recycle&recycle=0&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&pc_hash='+pc_hash,
+                data: {id:$(data).data('id'),dosubmit:1},
+                dataType: 'json',
+                success: function(res) {
+                    layer.close(loading);
+                    if (res.code==1) {
+                        setTimeout("window.location.reload(true)", 2000);
+                    }
+                    dr_tips(res.code, res.msg);
+                }
+            });
+        });
+    });
     $('body').on('click','#delAll',function() {
         var ids = [];
         $('input[name="id[]"]:checked').each(function() {

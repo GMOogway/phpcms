@@ -65,11 +65,13 @@ class function_list {
     public function status($value, $param = array(), $data = array()) {
 
         if (!$value) {
-            $html = '<span class="label label-sm label-danger">'.L('待审核');
+            $html = '<span class="label label-sm label-warning">'.L('未通过') ;
         } elseif ($value == 99) {
             $html = '<span class="label label-sm label-success">'.L('已通过');
+        } elseif ($value == 100) {
+            $html = '<span class="label label-sm label-danger">'.L('回收站');
         } else {
-            $html = '<span class="label label-sm label-warning">'.L('未通过') ;
+            $html = '<span class="label label-sm label-danger">'.L('待审核');
         }
 
         return '<label>'.$html.'</span></label>';
