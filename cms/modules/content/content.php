@@ -635,7 +635,7 @@ class content extends admin {
 				if($this->input->get('ajax_preview')) {
 					$ids = $this->input->get('id');
 				}
-				$this->db->status(($ids ? $ids : $this->input->post('ids')),$status);
+				$this->db->status((isset($ids) && $ids ? $ids : $this->input->post('ids')),$status);
 		}
 		dr_json(1, L('operation_success'));
 	}

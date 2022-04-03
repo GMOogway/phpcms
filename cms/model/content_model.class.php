@@ -330,7 +330,7 @@ class content_model extends model {
 				$del = false;
 				$r = $this->get_one(array('id'=>$id));
 				if($status==0) {
-				//退稿发送短消息、邮件
+					//退稿发送短消息、邮件
 					$message = L('reject_message_tips').$r['title']."<BR><a href=\'index.php?m=member&c=content&a=edit&catid={$r['catid']}&id={$r['id']}\'><font color=red>".L('click_edit')."</font></a><br>";
 					if($this->input->post('reject_c') && $this->input->post('reject_c') != L('reject_msg')) {
 						$message .= $this->input->post('reject_c');
