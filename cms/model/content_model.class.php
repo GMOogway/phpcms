@@ -331,13 +331,15 @@ class content_model extends model {
 				$r = $this->get_one(array('id'=>$id));
 				if($status==0) {
 				//退稿发送短消息、邮件
-					$message = L('reject_message_tips').$r['title']."<BR><a href=\'index.php?m=member&c=content&a=edit&catid={$r[catid]}&id={$r[id]}\'><font color=red>".L('click_edit')."</font></a><br>";
+					$message = L('reject_message_tips').$r['title']."<BR><a href=\'index.php?m=member&c=content&a=edit&catid={$r['catid']}&id={$r['id']}\'><font color=red>".L('click_edit')."</font></a><br>";
 					if($this->input->post('reject_c') && $this->input->post('reject_c') != L('reject_msg')) {
 						$message .= $this->input->post('reject_c');
 					} elseif($this->input->get('reject_c') && $this->input->get('reject_c') != L('reject_msg')) {
 						$message .= $this->input->get('reject_c');
 					}
-					$this->message_db->add_message($r['username'],'SYSTEM',L('reject_message'),$message);
+					if (module_exists('message')) {
+						$this->message_db->add_message($r['username'],'SYSTEM',L('reject_message'),$message);
+					}
 				} elseif($status==99 && $r['sysadd']) {
 					$this->content_check_db->delete(array('checkid'=>'c-'.$id.'-'.$this->modelid));
 					$del = true;
@@ -350,13 +352,15 @@ class content_model extends model {
 			$r = $this->get_one(array('id'=>$ids));
 			if($status==0) {
 				//退稿发送短消息、邮件
-				$message = L('reject_message_tips').$r['title']."<BR><a href=\'index.php?m=member&c=content&a=edit&catid={$r[catid]}&id={$r[id]}\'><font color=red>".L('click_edit')."</font></a><br>";
+				$message = L('reject_message_tips').$r['title']."<BR><a href=\'index.php?m=member&c=content&a=edit&catid={$r['catid']}&id={$r['id']}\'><font color=red>".L('click_edit')."</font></a><br>";
 				if($this->input->post('reject_c') && $this->input->post('reject_c') != L('reject_msg')) {
 					$message .= $this->input->post('reject_c');
 				} elseif($this->input->get('reject_c') && $this->input->get('reject_c') != L('reject_msg')) {
 					$message .= $this->input->get('reject_c');
 				}
-				$this->message_db->add_message($r['username'],'SYSTEM',L('reject_message'),$message);
+				if (module_exists('message')) {
+					$this->message_db->add_message($r['username'],'SYSTEM',L('reject_message'),$message);
+				}
 			} elseif($status==99 && $r['sysadd']) {
 				$this->content_check_db->delete(array('checkid'=>'c-'.$ids.'-'.$this->modelid));
 				$del = true;

@@ -113,10 +113,10 @@ class content extends admin {
 			$pc_hash = dr_get_csrf_token();
 			for($i=1;$i<=$workflow_steps;$i++) {
 				if(!cleck_admin($_SESSION['roleid']) && !in_array($i,$admin_privs)) continue;
-				$workflow_menu .= '<li><a href="?m=content&c=content&a=&menuid='.intval($this->input->get('menuid')).'&catid='.$catid.'&steps='.$i.'&pc_hash='.$pc_hash.'"><i class="fa fa-check"></i>'.L('workflow_'.$i).'</a></li>';
+				$workflow_menu .= '<li><a href="?m=content&c=content&a=init&catid='.$catid.'&steps='.$i.'&pc_hash='.$pc_hash.'"><i class="fa fa-check"></i>'.L('workflow_'.$i).'</a></li>';
 			}
 			if($workflow_menu) {
-				$workflow_menu .= '<li><a href="?m=content&c=content&a=&menuid='.intval($this->input->get('menuid')).'&catid='.$catid.'&pc_hash='.$pc_hash.'&reject=1"><i class="fa fa-check"></i>'.L('reject').'</a></li>';
+				$workflow_menu .= '<li><a href="?m=content&c=content&a=init&catid='.$catid.'&reject=1&pc_hash='.$pc_hash.'"><i class="fa fa-times"></i>'.L('reject').'</a></li>';
 			}
 			$template = $MODEL['admin_list_template'] ? $MODEL['admin_list_template'] : 'content_list';
 			include $this->admin_tpl($template);
@@ -635,7 +635,7 @@ class content extends admin {
 				if($this->input->get('ajax_preview')) {
 					$ids = $this->input->get('id');
 				}
-				$this->db->status($ids,$status);
+				$this->db->status(($ids ? $ids : $this->input->post('ids')),$status);
 		}
 		dr_json(1, L('operation_success'));
 	}
