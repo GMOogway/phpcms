@@ -53,12 +53,12 @@ return array(
 'timezone' => '8', //网站时区（只对php 5.1以上版本有效），Etc/GMT-8 实际表示的是 GMT+8
 'sys_time_format' => '', //网站时间显示格式与date函数一致，默认Y-m-d H:i:s
 'debug' => 1, //是否显示调试信息
-'sys_csrf' => '0', //是否跨站验证，1为启用，0为禁用
+'sys_csrf' => '0', //开启跨站验证
 'needcheckcomeurl' => '1', //是否需要检查外部访问，1为启用，0为禁用
 'admin_log' => 1, //是否记录后台操作日志
 'errorlog' => 1, //1、保存错误日志到 cache/error_log.php | 0、在页面直接显示
 'gzip' => 1, //是否Gzip压缩后输出
-'auth_key' => 'CMSa278236734ef2f4dda55c7de9aa2a96d', //安全密匙
+'auth_key' => 'CMSa278236734ef2f4dda55c7de9aa2a96d', //安全密钥
 'lang' => 'zh-cn', //网站语言包
 'lock_ex' => '1', //写入缓存时是否建立文件互斥锁定（如果使用nfs建议关闭）
 

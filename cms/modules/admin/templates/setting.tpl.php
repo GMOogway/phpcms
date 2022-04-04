@@ -209,7 +209,11 @@ jQuery(document).ready(function() {
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('setting_csrf')?></label>
                         <div class="col-md-9">
-                            <input type="checkbox" name="setconfig[sys_csrf]" value="1" <?php echo $sys_csrf ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setconfig[sys_csrf]" value="2"<?php echo $sys_csrf==2 ? ' checked' : ''?> /> <?php echo L('strict_mode')?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setconfig[sys_csrf]" value="1"<?php echo $sys_csrf==1 ? ' checked' : ''?> /> <?php echo L('loose_pattern')?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setconfig[sys_csrf]" value="0"<?php echo empty($sys_csrf) ? ' checked' : ''?> /> <?php echo L('close')?> <span></span></label>
+                            </div>
                             <span class="help-block"><?php echo L('setting_csrf_desc')?></span>
                         </div>
                     </div>

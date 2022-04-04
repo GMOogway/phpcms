@@ -631,6 +631,8 @@ class pc_base {
 	public static function verify() {
 		if (defined('SYS_CSRF') && !SYS_CSRF) {
 			return '';
+		} elseif (defined('SYS_CSRF') && SYS_CSRF == 1 && IS_ADMIN) {
+			return '';
 		} elseif (defined('IS_API') && IS_API) {
 			return '';
 		} elseif (in_array($_GET['c'], array('attachments'))) {

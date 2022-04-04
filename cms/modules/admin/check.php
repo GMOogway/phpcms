@@ -713,12 +713,12 @@ class check extends admin {
 \'timezone\' => \''.(pc_base::load_config('system','timezone')=='Etc/GMT-8' ? 8 : (pc_base::load_config('system','timezone') ? pc_base::load_config('system','timezone') : 8)).'\', //网站时区（只对php 5.1以上版本有效），Etc/GMT-8 实际表示的是 GMT+8
 \'sys_time_format\' => \''.pc_base::load_config('system','sys_time_format').'\', //网站时间显示格式与date函数一致，默认Y-m-d H:i:s
 \'debug\' => '.(pc_base::load_config('system','debug') ? pc_base::load_config('system','debug') : 1).', //是否显示调试信息
-\'sys_csrf\' => \''.(pc_base::load_config('system','sys_csrf') ? pc_base::load_config('system','sys_csrf') : 0).'\', //是否跨站验证，1为启用，0为禁用
+\'sys_csrf\' => \''.(pc_base::load_config('system','sys_csrf') ? pc_base::load_config('system','sys_csrf') : 0).'\', //开启跨站验证
 \'needcheckcomeurl\' => \''.(pc_base::load_config('system','needcheckcomeurl') ? pc_base::load_config('system','needcheckcomeurl') : 1).'\', //是否需要检查外部访问，1为启用，0为禁用
 \'admin_log\' => '.(pc_base::load_config('system','admin_log') ? pc_base::load_config('system','admin_log') : 1).', //是否记录后台操作日志
 \'errorlog\' => '.(pc_base::load_config('system','errorlog') ? pc_base::load_config('system','errorlog') : 1).', //1、保存错误日志到 cache/error_log.php | 0、在页面直接显示
 \'gzip\' => '.(pc_base::load_config('system','gzip') ? pc_base::load_config('system','gzip') : 1).', //是否Gzip压缩后输出
-\'auth_key\' => \''.pc_base::load_config('system','auth_key').'\', //安全密匙
+\'auth_key\' => \''.pc_base::load_config('system','auth_key').'\', //安全密钥
 \'lang\' => \''.pc_base::load_config('system','lang').'\', //网站语言包
 \'lock_ex\' => \''.pc_base::load_config('system','lock_ex').'\', //写入缓存时是否建立文件互斥锁定（如果使用nfs建议关闭）
 
