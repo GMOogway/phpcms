@@ -88,6 +88,9 @@ $(function () {
                                         <?php if(SELF == 'admin.php') {?>
                                         <p><?php echo L('※ 为了系统安全，请修改根目录admin.php的文件名')?></p>
                                         <?php } ?>
+                                        <?php if(IS_DEV) {?>
+                                        <p><?php echo L('※ 当前环境参数已经开启开发者模式，网站上线后建议关闭开发者模式')?></p>
+                                        <?php } ?>
                                         <?php if($pc_writeable) {?>
                                         <p><?php echo L('main_safety_permissions')?></p>
                                         <?php } ?>

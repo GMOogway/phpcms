@@ -499,12 +499,16 @@ function dr_safe_password($string) {
 function dr_safe_replace_path($path) {
 	return str_replace(
 		array(
+			CONFIGPATH,
 			CACHE_PATH,
+			TPLPATH,
 			PC_PATH,
 			CMS_PATH,
 		),
 		array(
+			'CONFIGPATH/',
 			'CACHE_PATH/',
+			'TPLPATH/',
 			'PC_PATH/',
 			'CMS_PATH/',
 		),
@@ -2347,6 +2351,28 @@ function getcacheinfo($name, $filepath='', $type='file', $config='') {
 		$cache = cache_factory::get_instance()->get_cache($type);
 	}
 	return $cache->cacheinfo($name, '', '', $filepath);
+}
+
+
+// 获取应用目录
+function dr_get_app_list() {
+	$apps = array();
+	$source_dir = PC_PATH.'modules/';
+	if ($fp = opendir($source_dir)) {
+		$source_dir	= rtrim($source_dir, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
+		while (FALSE !== ($file = readdir($fp))) {
+			if ($file === '.' OR $file === '..'
+				OR $file[0] === '.'
+				OR !is_dir($source_dir.$file)) {
+				continue;
+			}
+			if (is_dir($source_dir.$file)) {
+				$apps[$file] = PC_PATH.'modules/'.$file.'/';
+			}
+		}
+		closedir($fp);
+	}
+	return $apps;
 }
 
 /**

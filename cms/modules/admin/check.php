@@ -9,12 +9,14 @@ class check extends admin {
         '03' => '目录权限检测',
         '04' => '后台入口名称检测',
         '05' => '数据库权限检测',
-        '06' => '数据库表结构检测',
-        '07' => '网站安全性检测',
-        '08' => '数据负载优化检测',
-        '09' => '域名绑定检测',
-        '10' => '配置文件检测',
-        '11' => '服务器环境检测',
+        '06' => '模板完整性检测',
+        '07' => '数据库表结构检测',
+        '08' => '网站安全性检测',
+        '09' => '数据负载优化检测',
+        '10' => '域名绑定检测',
+        '11' => '配置文件检测',
+        '12' => '服务器环境检测',
+        '13' => '模块兼容性检测',
     );
 
     function __construct() {
@@ -91,6 +93,13 @@ class check extends admin {
                 if (!class_exists('ZipArchive')) {
                     $rt[] = 'php_zip扩展未开启，无法使用解压缩功能';
                 }
+                $url = 'http://ceshi.kaixin100.cn/';
+                if ($this->cmf_license['cloud']) {
+                    $url = $this->cmf_license['cloud'];
+                }
+                if (!fopen($url, "rb")) {
+                    $rt[] = 'fopen无法获取远程数据，无法使用在线升级';
+                }
 
                 if ($rt) {
                     $this->halt(implode('<br>', $rt), 0);
@@ -100,27 +109,37 @@ class check extends admin {
 
             case '03':
 
+                $rt = array();
                 $dir = array(
                     CACHE_PATH => '无法生成系统缓存文件',
                     SYS_AVATAR_PATH => '无法上传头像',
                     CONFIGPATH => '无法生成系统配置文件，会导致系统配置无效',
                     CACHE_PATH.'caches_commons/' => '无法生成系统缓存文件，会导致系统无法运行',
+                    CACHE_PATH.'caches_file/' => '无法生成系统缓存文件，会导致系统无法运行',
                     SYS_THUMB_PATH => '无法生成缩略图缓存文件',
                     SYS_UPLOAD_PATH => '无法上传附件',
+                    TPLPATH => '无法创建模块模板和模型模板',
                 );
 
                 foreach ($dir as $path => $note) {
+                    if (!is_dir($path)) {
+                       create_folder($path);
+                    }
                     if (!$this->check_put_path($path)) {
-                        dr_json(0, $note.'【'.$path.'】');
+                        $rt[] = $note.'【'.(IS_DEV ? $path : dr_safe_replace_path($path)).'】';
                     }
                 }
 
                 if (!is_file(CMS_PATH.'api/controller.php')) {
-                    $this->halt('百度编辑器配置文件不存在：'.CMS_PATH.'api/controller.php', 0);
+                    $rt[] = '百度编辑器配置文件不存在：'.CMS_PATH.'api/controller.php';
                 }
 
                 if (!is_dir(CMS_PATH.'api/ueditor/')) {
-                    $this->halt('百度编辑器目录不存在：'.CMS_PATH.'api/ueditor/', 0);
+                    $rt[] = '百度编辑器目录不存在：'.CMS_PATH.'api/ueditor/';
+                }
+
+                if ($rt) {
+                    $this->halt(implode('<br>', $rt), 0);
                 }
 
                 break;
@@ -129,6 +148,7 @@ class check extends admin {
                 if (SELF == 'admin.php') {
                     $this->halt('为了系统安全，请修改根目录admin.php的文件名', 0);
                 }
+
                 break;
 
             case '05':
@@ -146,6 +166,38 @@ class check extends admin {
                 break;
 
             case '06':
+
+                $rt = array();
+
+                // 模板文件
+                define('SITE_TEMPLATE', dr_site_info('default_style', SITE_ID));
+                if (!is_file(TPLPATH.SITE_TEMPLATE.'/content/index.html')) {
+                    $rt[] = '前端模板【电脑版】不存在：TPLPATH/'.SITE_TEMPLATE.'/content/index.html';
+                }
+                if (!is_file(TPLPATH.SITE_TEMPLATE.'/member/index.html')) {
+                    $rt[] = '用户中心模板【电脑版】不存在：TPLPATH/'.SITE_TEMPLATE.'/member/index.html';
+                }
+                // 必备模板检测
+                foreach (array('message.html', 'msg.html') as $tt) {
+                    if (!is_file(TPLPATH.SITE_TEMPLATE.'/content/'.$tt)) {
+                        $rt[] = '前端模板【电脑版】不存在：TPLPATH/'.SITE_TEMPLATE.'/home/'.$tt;
+                    }
+                }
+                
+                if ($rt) {
+                    $this->halt(implode('<br>', $rt), 0);
+                }
+
+                // 移动端模板检测
+                if (!is_file(TPLPATH.SITE_TEMPLATE.'/mobile/index.html')) {
+                    $this->halt('前端模板【手机版】不存在：TPLPATH/'.SITE_TEMPLATE.'/mobile/index.html', 1);
+                }
+                
+                dr_json(1,'完成');
+
+                break;
+
+            case '07':
 
                 $rt = CONFIGPATH.'database.php';
                 $my = pc_base::load_config('database');
@@ -513,7 +565,7 @@ class check extends admin {
 
                 break;
 
-            case '07':
+            case '08':
 
                 $rt = array();
                 // 搜索根目录
@@ -533,9 +585,10 @@ class check extends admin {
                 }
                 
                 dr_json(1,'完成');
+
                 break;
 
-            case '08':
+            case '09':
 
                 // 数据负载
                 $rt = array();
@@ -556,9 +609,10 @@ class check extends admin {
                 }
 
                 dr_json(1,'正常');
+
                 break;
 
-            case '09':
+            case '10':
 
                 // 域名检测
                 if (!function_exists('stream_context_create')) {
@@ -632,7 +686,7 @@ class check extends admin {
 
                 break;
 
-            case '10':
+            case '11':
 
                 $version = CONFIGPATH.'version.php';
                 if (is_file($version)) {
@@ -776,9 +830,10 @@ class check extends admin {
                 }
 
                 dr_json(1,'完成');
+
                 break;
 
-            case '11':
+            case '12':
                 // 服务器环境
                 if (is_file(CMS_PATH.'test.php')) {
                     $error[] = '当网站正式上线后，根目录的test.php建议删除';
@@ -792,6 +847,44 @@ class check extends admin {
                 }
 
                 dr_json(1, '完成');
+
+                break;
+
+            case '13':
+                // 应用插件
+                $func = array();
+                $local = dr_get_app_list();
+                $extention = file_get_contents(PC_PATH.'libs/functions/extention.func.php');
+                foreach ($local as $dir => $path) {
+                    if (is_file($path.'install/config.inc.php')) {
+                        // 变量重定义
+                        if (is_file($path.'functions/global.func.php')) {
+                            $code = file_get_contents($path.'functions/global.func.php');
+                            if (preg_match_all("/\s+function (.+)\(/", $code, $arr)) {
+                                foreach ($arr[1] as $a) {
+                                    $name = trim($a);
+                                    if (strpos($name, "'") !== false) {
+                                        continue;
+                                    }
+                                    if (isset($func[$name]) && $func[$name]) {
+                                        dr_json(0,'模块['.$dir.']中的函数['.$name.']存在于'.$func[$name].'之中，不能被重复定义');
+                                    }
+                                    $func[$name] = $dir;
+                                    if (function_exists($name)) {
+                                        if (preg_match("/\s+function ".$name."\(/", $extention)) {
+                                            // 存在于自定义函数库中
+                                        } else {
+                                            dr_json(0,'模块['.$dir.']中的函数['.$name.']是系统函数，不能定义');
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                dr_json(1, '完成');
+
                 break;
 
             case '99':
