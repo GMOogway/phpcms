@@ -2359,7 +2359,7 @@ function dr_get_app_list() {
 	$apps = array();
 	$source_dir = PC_PATH.'modules/';
 	if ($fp = opendir($source_dir)) {
-		$source_dir	= rtrim($source_dir, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
+		$source_dir = rtrim($source_dir, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
 		while (FALSE !== ($file = readdir($fp))) {
 			if ($file === '.' OR $file === '..'
 				OR $file[0] === '.'
