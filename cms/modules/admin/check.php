@@ -94,9 +94,6 @@ class check extends admin {
                     $rt[] = 'php_zip扩展未开启，无法使用解压缩功能';
                 }
                 $url = 'http://ceshi.kaixin100.cn/';
-                if ($this->cmf_license['cloud']) {
-                    $url = $this->cmf_license['cloud'];
-                }
                 if (!fopen($url, "rb")) {
                     $rt[] = 'fopen无法获取远程数据，无法使用在线升级';
                 }
