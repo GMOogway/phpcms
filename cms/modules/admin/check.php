@@ -167,7 +167,7 @@ class check extends admin {
                 $rt = array();
 
                 // 模板文件
-                define('SITE_TEMPLATE', dr_site_info('default_style', SITE_ID));
+                define('SITE_TEMPLATE', dr_site_info('default_style', $this->siteid));
                 if (!is_file(TPLPATH.SITE_TEMPLATE.'/content/index.html')) {
                     $rt[] = '前端模板【电脑版】不存在：TPLPATH/'.SITE_TEMPLATE.'/content/index.html';
                 }
