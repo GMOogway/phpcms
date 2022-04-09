@@ -2354,7 +2354,7 @@ function getcacheinfo($name, $filepath='', $type='file', $config='') {
 }
 
 
-// 获取应用目录
+// 获取模块目录
 function dr_get_app_list() {
 	$apps = array();
 	$source_dir = PC_PATH.'modules/';
