@@ -729,7 +729,7 @@ class check extends admin {
 \'tpl_name\' => \''.pc_base::load_config('system','tpl_name').'\', //当前模板方案目录
 \'tpl_css\' => \''.pc_base::load_config('system','tpl_css').'\', //当前样式目录
 \'tpl_referesh\' => '.(pc_base::load_config('system','tpl_referesh') ? pc_base::load_config('system','tpl_referesh') : 1).',
-\'tpl_edit\'=> '.(pc_base::load_config('system','tpl_edit') ? pc_base::load_config('system','tpl_edit') : 0).', //是否允许在线编辑模板
+\'tpl_edit\' => '.(pc_base::load_config('system','tpl_edit') ? pc_base::load_config('system','tpl_edit') : 0).', //是否允许在线编辑模板
 
 //附件相关配置
 \'attachment_stat\' => \''.pc_base::load_config('system','attachment_stat').'\', //是否记录附件使用状态 0 统计 1 统计， 注意: 本功能会加重服务器负担
