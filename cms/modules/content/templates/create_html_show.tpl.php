@@ -84,7 +84,7 @@ jQuery(document).ready(function() {
                     <div class="col-md-9">
                         <label><button type="button" onclick="dr_bfb('<?php echo L('生成内容页面');?>', 'myform_category_show', '?m=content&c=create_html&a=show')" class="btn dark"> <i class="fa fa-th-large"></i> <?php echo L('开始生成静态');?> </button></label>
                         <label><button type="button" onclick="dr_bfb('<?php echo L('生成内容页面');?>', 'myform_category_show', '?m=content&c=create_html&a=public_show_point')" class="btn red"> <i class="fa fa-th-large"></i> <?php echo L('上次未执行完毕时继续执行');?> </button></label>
-                        <label><button type="button" onclick="dr_submit_todo('', '?m=content&c=create_html&a=public_show_url&modelid=<?php echo $modelid;?>')" class="btn default"> <i class="fa fa-link"></i> <?php echo L('批量更新全部内容URL');?> </button></label>
+                        <label><button type="button" onclick="iframe_show('批量更新全部内容URL', '?m=content&c=create_html&a=public_show_url&modelid=<?php echo $modelid;?>')" class="btn default"> <i class="fa fa-link"></i> <?php echo L('批量更新全部内容URL');?> </button></label>
                     </div>
                 </div>
             </form>

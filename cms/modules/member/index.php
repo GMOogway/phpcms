@@ -918,6 +918,7 @@ class index extends foreground {
 		
 		$snda_enable = pc_base::load_config('system', 'snda_enable');
 		include template('member', 'mini');
+		exit();
 	}
 	
 	protected function _checkname($username) {
