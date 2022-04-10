@@ -124,7 +124,6 @@ function reloads() {
                     $('#hiddenop').load('?step=cache_all&sid='+Math.random()*5);                        
                     $('#installmessage').append("<font color='yellow'>缓存更新成功</font><br>");
                     $('#installmessage').append("<font color='yellow'>安装完成</font>");
-                    $('#finish').removeClass('pre');
                     $('#finish').html('安装完成');
                     setTimeout("$('#install').submit();",1000);                         
                 }
