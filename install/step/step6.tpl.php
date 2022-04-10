@@ -46,7 +46,7 @@
         </div>
         <div class="btn_box">
             <a href="javascript:history.back();" class="btn btn-success"> 返回上一步 </a>
-            <a href="javascript:void(0);" onClick="$('#install').submit();return false;" class="btn default" id="finish">正在执行安装程序</a>
+            <a href="javascript:void(0);" class="btn default" id="finish">正在执行安装程序</a>
         </div>            
     </div>
 </div>

@@ -58,7 +58,7 @@
         </div>
         <div class="bg_b"></div>
     </div>
-    <div class="btn_box"><?php if($no_writablefile == 0) {?>
+    <div class="btn_box"><?php if(!$error) {?>
     <a href="javascript:void(0);"  onClick="$('#install').submit();return false;" class="btn btn-success">下一步安装</a>
     <?php } else {?>
     <a onClick="Dialog.alert('存在不可写目录或者文件');" class="btn default">无法进行下一步安装</a>
