@@ -25,7 +25,6 @@ foreach (array(' ', '[', ']') as $t) {
 }
 pc_base::load_sys_class('param','','','0');
 pc_base::load_sys_func('global');
-pc_base::load_sys_func('dir');
 $steps = include CMS_PATH.'install/step.inc.php';
 $step = trim($_REQUEST['step']) ? trim($_REQUEST['step']) : 1;
 if(strrpos(strtolower(PHP_OS),"win") === FALSE) {
@@ -298,18 +297,18 @@ switch($step)
 					$adminpath = trim($adminpath);
 					if(pc_base::load_config('system','admin_login_path')) {
 						//建立自定义后台登录目录
-						dir_create(CMS_PATH.$adminpath);
+						create_folder(CMS_PATH.$adminpath);
 						$admin = file_get_contents(CMS_PATH.pc_base::load_config('system','admin_login_path').'/index.php');
 						file_put_contents(CMS_PATH.$adminpath.'/index.php',$admin);
 						//删除原后台登录地址
-						dir_delete(CMS_PATH.pc_base::load_config('system','admin_login_path'));
+						dr_dir_delete(CMS_PATH.pc_base::load_config('system','admin_login_path'), TRUE);
 						$index = file_get_contents(CMS_PATH.'cms/modules/admin/index.php');
 						$index = str_replace("public function ".pc_base::load_config('system','admin_login_path'),"public function ".$adminpath,$index);
 						$index = str_replace("m=admin&c=index&a=".pc_base::load_config('system','admin_login_path'),"m=admin&c=index&a=".$adminpath,$index);
 						file_put_contents(CMS_PATH."cms/modules/admin/index.php",$index);
 					} else {
 						//建立自定义后台登录目录
-						dir_create(CMS_PATH.$adminpath);
+						create_folder(CMS_PATH.$adminpath);
 						$admin = file_get_contents(CMS_PATH.'admin.php');
 						$admin = str_replace("index.php","../index.php",$admin);
 						file_put_contents(CMS_PATH.$adminpath.'/index.php',$admin);
