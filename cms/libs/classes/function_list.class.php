@@ -65,11 +65,11 @@ class function_list {
     public function status($value, $param = array(), $data = array()) {
 
         if (!$value) {
-            $html = '<span class="label label-sm label-warning">'.L('未通过') ;
+            $html = '<span class="label label-sm label-default">'.L('未通过') ;
         } elseif ($value == 99) {
             $html = '<span class="label label-sm label-success">'.L('已通过');
         } elseif ($value == 100) {
-            $html = '<span class="label label-sm label-danger">'.L('回收站');
+            $html = '<span class="label label-sm label-warning">'.L('回收站');
         } else {
             $html = '<span class="label label-sm label-danger">'.L('待审核');
         }
@@ -78,17 +78,23 @@ class function_list {
     }
 
     // 用于列表显示时间日期格式
-    public function datetime($value, $param = array(), $data = array()) {
+    public function datetime($value, $param = array(), $data = array(), $field = array()) {
         if (!$value) {
             return '';
+        }
+        if ($field && $field['setting']['fieldtype']=='varchar') {
+            return $value;
         }
         return dr_date($value, null, 'red');
     }
 
     // 用于列表显示日期格式
-    public function date($value, $param = array(), $data = array()) {
+    public function date($value, $param = array(), $data = array(), $field = array()) {
         if (!$value) {
             return '';
+        }
+        if ($field && $field['setting']['fieldtype']=='varchar') {
+            return $value;
         }
         return dr_date($value, 'Y-m-d', 'red');
     }
@@ -280,12 +286,12 @@ class function_list {
 
     // 用于列表显示价格
     public function price($value, $param = array(), $data = array()) {
-        return '<span style="color:#ef4c2f">￥'.number_format($value, 2).'</span>';
+        return '<span style="color:#ef4c2f">￥'.number_format(floatval($value), 2).'</span>';
     }
 
     // 用于列表显示价格
     public function money($value, $param = array(), $data = array(), $field = array()) {
-        return '<span style="color:#ef4c2f">'.number_format($value, 2).'</span>';
+        return '<span style="color:#ef4c2f">'.number_format(floatval($value), 2).'</span>';
     }
 
     // 用于列表显示积分
@@ -301,7 +307,7 @@ class function_list {
         }
 
         if ($field) {
-            $options = dr_format_option_array($field['setting']['option']['options']);
+            $options = dr_format_option_array($field['setting']['options']);
             if ($options && isset($options[$value])) {
                 return $options[$value];
             }
@@ -318,7 +324,7 @@ class function_list {
         }
 
         if ($field) {
-            $options = dr_format_option_array($field['setting']['option']['options']);
+            $options = dr_format_option_array($field['setting']['options']);
             if ($options && isset($options[$value])) {
                 return $options[$value];
             }
@@ -335,8 +341,11 @@ class function_list {
         }
 
         $arr = dr_string2array($value);
+        if (!is_array($arr)) {
+            $arr = explode(',',$arr);
+        }
         if ($field && is_array($arr)) {
-            $options = dr_format_option_array($field['setting']['option']['options']);
+            $options = dr_format_option_array($field['setting']['options']);
             if ($options) {
                 $rt = array();
                 foreach ($options as $i => $v) {

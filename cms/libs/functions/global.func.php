@@ -242,9 +242,9 @@ function dr_get_merge($code) {
  */
 function dr_is_empty($value) {
 	if (is_array($value)) {
-		return $value ? 1 : 0;
+		return $value ? 0 : 1;
 	}
-	return strlen($value) ? 1 : 0;
+	return strlen($value) ? 0 : 1;
 }
 
 /**
