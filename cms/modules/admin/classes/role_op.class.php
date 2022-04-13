@@ -37,6 +37,7 @@ class role_op {
 	 */
 	public function get_menuinfo($menuid,$menu_info) {
 		$menuid = intval($menuid);
+		$menu_info[$menuid]['menuid'] = $menu_info[$menuid]['id'];
 		unset($menu_info[$menuid]['id']);
 		return $menu_info[$menuid];
 	}
@@ -47,13 +48,15 @@ class role_op {
 	 * @param int $roleid 需要检查的角色ID
 	 */
 	public function is_checked($data,$roleid,$siteid,$priv_data) {
-		$priv_arr = array('m','c','a','data');
+		$priv_arr = array('id','m','c','a','data');
 		if($data['m'] == '') return false;
 		foreach($data as $key=>$value){
 			if(!in_array($key,$priv_arr)) unset($data[$key]);
 		}
+		$data['menuid'] = $data['id'];
 		$data['roleid'] = $roleid;
 		$data['siteid'] = $siteid;
+		unset($data['id']);
 		$info = in_array($data, $priv_data);
 		if($info){
 			return true;

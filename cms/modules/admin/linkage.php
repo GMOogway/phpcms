@@ -27,7 +27,7 @@ class linkage extends admin {
 		$infos = $this->db->select();
 		$items = array();
 		foreach ($infos as $k=>$r) {
-			$this->db->table_name = $this->db->table_name.'_data_'.$r['id'];
+			$this->db->table_name = $this->db->db_tablepre.'linkage_data_'.$r['id'];
 			$number = $this->db->count();
 			$infos[$k]['count'] = $number;
 		}
@@ -92,7 +92,7 @@ class linkage extends admin {
 
 		// 清空数据
 		$count = 0;
-		$this->db->table_name = $this->db->table_name.'_data_'.$id;
+		$this->db->table_name = $this->db->db_tablepre.'linkage_data_'.$id;
 		$this->db->query('TRUNCATE `'.$this->db->table_name.'`');
 
 		// 开始导入
@@ -130,7 +130,7 @@ class linkage extends admin {
 			}
 			$this->db->delete(array('id' => $id));
 			// 删除表数据
-			$table = $this->db->table_name.'_data_'.$id;
+			$table = $this->db->db_tablepre.'linkage_data_'.$id;
 			$this->db->query('DROP TABLE IF EXISTS `'.$table.'`');
 		}
 		dr_admin_msg(1, L('operation_success'), HTTP_REFERER);
@@ -170,7 +170,7 @@ class linkage extends admin {
 		$id = intval($insert_id);
 
 		// 创建数据表
-		$table = $this->db->table_name.'_data_'.$id;
+		$table = $this->db->db_tablepre.'linkage_data_'.$id;
 		$this->db->query('DROP TABLE IF EXISTS `'.$table.'`');
 		$this->db->query(trim("CREATE TABLE IF NOT EXISTS `{$table}` (
 		  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -249,7 +249,7 @@ class linkage extends admin {
 		$this->categorys = $categorys = [];
 		
 		// 站点独立 // 共享共享
-		$this->db->table_name = $this->db->table_name.'_data_'.$link['id'];
+		$this->db->table_name = $this->db->db_tablepre.'linkage_data_'.$link['id'];
 		$_data = $link['type']
 			? $this->db->select(array('site'=>$link['type']),'*','','displayorder ASC,id ASC')
 			: $this->db->select('','*','','displayorder ASC,id ASC');
@@ -395,6 +395,25 @@ class linkage extends admin {
 		include $this->admin_tpl('linkage_submenu');
 	}
 
+	// 变更分类
+	public function pid_edit() {
+
+		$ids = $this->input->get_post_ids();
+		$key = (int)$this->input->get('key');
+		$info = $this->input->post('info');
+		$pid = (int)$info['pid'];
+		if (!$ids) {
+			dr_json(0, L('你还没有选择呢'));
+		}
+
+		$rt = $this->edit_pid_all($key, $pid, $ids);
+		if (!$rt['code']) {
+			dr_json(0, $rt['msg']);
+		}
+
+		dr_json(1, L('操作成功'), array('ids' => $ids));
+	}
+
 	/**
 	 * 全部子菜单数据
 	 *
@@ -412,7 +431,7 @@ class linkage extends admin {
 			if ($data) {
 				return $data;
 			}
-			$this->db->table_name = $this->db->table_name.'_data_'.$key;
+			$this->db->table_name = $this->db->db_tablepre.'linkage_data_'.$key;
 			// 获取菜单数据
 			$menu = $this->db->select('','*','','displayorder ASC,id ASC');
 			if (!$menu) {
@@ -425,7 +444,7 @@ class linkage extends admin {
 			}
 			$this->cache->set_data($name, $data);
 		} else {
-			$this->db->table_name = $this->db->table_name.'_data_'.$key;
+			$this->db->table_name = $this->db->db_tablepre.'linkage_data_'.$key;
 			// 站点查询
 			$link['type'] && $where = array('site'=>$link['type']);
 			$where = array('pid'=>(int)$pid);
@@ -451,7 +470,7 @@ class linkage extends admin {
 			$key = (int)$this->input->post('key');
 			$all = (int)$this->input->post('all');
 			$data = $this->input->post('data');
-			$this->db->table_name = $this->db->table_name.'_data_'.$key;
+			$this->db->table_name = $this->db->db_tablepre.'linkage_data_'.$key;
 			$pid = intval($data['pid']);
 
 			if ($all) {
@@ -539,7 +558,7 @@ class linkage extends admin {
 			}
 			$select = '';
 			if ($pid) {
-				$this->db->table_name = $this->db->table_name.'_data_'.$key;
+				$this->db->table_name = $this->db->db_tablepre.'linkage_data_'.$key;
 				$top = $this->db->get_one(array('id'=>$pid));
 				if ($top) {
 					$select = '<input type="hidden" name="data[pid]" value="'.$pid.'">';
@@ -564,7 +583,7 @@ class linkage extends admin {
 			$key = (int)$this->input->post('key');
 			$post = $this->input->post('data');
 			$post['name'] = trim($post['name']);
-			$this->db->table_name = $this->db->table_name.'_data_'.$key;
+			$this->db->table_name = $this->db->db_tablepre.'linkage_data_'.$key;
 			$where = 'id<>'.$id.' and cname=\''.$post['cname'].'\'';
 			$info = $this->db->get_one($where);
 			if (!$post['name']) {
@@ -586,7 +605,7 @@ class linkage extends admin {
 			if (!$link) {
 				dr_admin_msg(0, L('联动菜单不存在'));
 			}
-			$this->db->table_name = $this->db->table_name.'_data_'.$key;
+			$this->db->table_name = $this->db->db_tablepre.'linkage_data_'.$key;
 			$data = $this->db->get_one(array('id'=>$id));
 			if (!$data) {
 				dr_admin_msg(0, L('联动菜单数据#'.$id.'不存在'));
@@ -613,7 +632,7 @@ class linkage extends admin {
 		// 查询数据
 		$id = (int)$this->input->get('id');
 		$key = (int)$this->input->get('key');
-		$this->db->table_name = $this->db->table_name.'_data_'.$key;
+		$this->db->table_name = $this->db->db_tablepre.'linkage_data_'.$key;
 		$row = $this->db->get_one(array('id'=>$id));
 		if (!$row) {
 			dr_json(0, L('数据#'.$id.'不存在'));
@@ -629,7 +648,7 @@ class linkage extends admin {
 
 		$id = (int)$this->input->get('id');
 		$key = (int)$this->input->get('key');
-		$this->db->table_name = $this->db->table_name.'_data_'.$key;
+		$this->db->table_name = $this->db->db_tablepre.'linkage_data_'.$key;
 		$row = $this->db->get_one(array('id'=>$id));
 		if (!$row) {
 			dr_json(0, L('数据#'.$id.'不存在'));
@@ -641,6 +660,28 @@ class linkage extends admin {
 		dr_json(1, L($v ? '此菜单已被禁用' : '此菜单已被启用'), ['value' => $v]);
 
 	}
+
+	// 批量移动分类
+	public function edit_pid_all($key, $pid, $ids) {
+
+		$this->db->table_name = $this->db->db_tablepre.'linkage_data_'.$key;
+		foreach ($ids as $id) {
+			$row = $this->db->get_one(array('id'=>intval($id)));
+			if (!$row) {
+				return dr_return_data(0, L('数据不存在(id:'.$id.')'));
+			}
+
+			$this->db->update(array('pid' => $pid),array('id'=>$id));
+		}
+
+		$this->repair(array(
+			'id' => $key,
+			'type' => 0
+		));
+
+		return dr_return_data(1, '');
+	}
+
 	/**
 	 * 汉字转换拼音
 	 */

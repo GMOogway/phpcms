@@ -95,7 +95,7 @@ class admin {
 				$array[] = $v;
 			} else {
 				if(preg_match('/^ajax_([a-z]+)_/',$action,$_match)) $action = $_match[1];
-				$r = $privdb->get_one(array('m'=>$v['m'],'c'=>$v['c'],'a'=>$action,'roleid'=>is_array(dr_string2array($_SESSION['roleid'])) ? dr_string2array($_SESSION['roleid']) : $_SESSION['roleid'],'siteid'=>$siteid));
+				$r = $privdb->get_one(array('menuid'=>$v['id'],'m'=>$v['m'],'c'=>$v['c'],'a'=>$action,'roleid'=>is_array(dr_string2array($_SESSION['roleid'])) ? dr_string2array($_SESSION['roleid']) : $_SESSION['roleid'],'siteid'=>$siteid));
 				if($r) $array[] = $v;
 			}
 		}
@@ -203,10 +203,29 @@ class admin {
 						$child .= ',{"id": "'.$value['id'].'","title": "'.L($value['name']).'","href": "","icon": "'.$value['icon'].'","target": "_self"'.self::child_menu($value['id']).'}';
 					}
 				} else {
-					if ($i==0) {
-						$child .= '{"id": "'.$value['id'].'","title": "'.L($value['name']).'","href": "?m='.$value['m'].'&c='.$value['c'].'&a='.$value['a'].$valuedata.'&menuid='.$value['id'].'&pc_hash='.dr_get_csrf_token().'","icon": "'.$value['icon'].'","target": "_self"}';
+					// 获取URL
+					$uri = $value['a'];
+					if (strpos($uri, 'ajax:') === 0 || strpos($uri, 'ajax_') === 0 || strpos($uri, 'hide:') === 0 || strpos($uri, 'help:') === 0) {
+						$url = substr($uri, 5);
+					} elseif (strpos($uri, 'blank:') === 0) {
+						$url = substr($uri, 6);
+					} elseif (strpos($uri, 'add:') === 0) {
+						list($a, $b, $c) = explode(',', $uri);
+						$url = substr($a, 4);
+					} elseif (strpos($uri, 'show:') === 0) {
+						list($a, $b, $c) = explode(',', $uri);
+						$url = substr($a, 5);
+					} elseif (strpos($uri, 'url:') === 0) {
+						$url = substr($uri, 4);
+					} elseif (strpos($uri, 'js:') === 0) {
+						$url = substr($uri, 3);
 					} else {
-						$child .= ',{"id": "'.$value['id'].'","title": "'.L($value['name']).'","href": "?m='.$value['m'].'&c='.$value['c'].'&a='.$value['a'].$valuedata.'&menuid='.$value['id'].'&pc_hash='.dr_get_csrf_token().'","icon": "'.$value['icon'].'","target": "_self"}';
+						$url = $uri;
+					}
+					if ($i==0) {
+						$child .= '{"id": "'.$value['id'].'","title": "'.L($value['name']).'","href": "?m='.$value['m'].'&c='.$value['c'].'&a='.$url.$valuedata.'&menuid='.$value['id'].'&pc_hash='.dr_get_csrf_token().'","icon": "'.$value['icon'].'","target": "_self"}';
+					} else {
+						$child .= ',{"id": "'.$value['id'].'","title": "'.L($value['name']).'","href": "?m='.$value['m'].'&c='.$value['c'].'&a='.$url.$valuedata.'&menuid='.$value['id'].'&pc_hash='.dr_get_csrf_token().'","icon": "'.$value['icon'].'","target": "_self"}';
 					}
 				}
 				$i ++;

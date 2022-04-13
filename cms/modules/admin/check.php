@@ -291,6 +291,11 @@ class check extends admin {
                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT=\'账号记录\''));
                 }
 
+                $this->db->table_name = $prefix.'admin_role_priv';
+                if (!$this->db->field_exists('menuid')) {
+                    $this->db->query('ALTER TABLE `'.$this->db->table_name.'` ADD `menuid` mediumint(8) UNSIGNED NOT NULL COMMENT \'菜单id\' AFTER `roleid`');
+                }
+
                 $this->db->table_name = $prefix.'member';
                 if (!$this->db->field_exists('login_attr')) {
                     $this->db->query('ALTER TABLE `'.$this->db->table_name.'` ADD `login_attr` varchar(100) NOT NULL DEFAULT \'\' COMMENT \'登录附加验证字符\' AFTER `password`');

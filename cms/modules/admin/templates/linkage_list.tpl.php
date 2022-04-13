@@ -77,7 +77,6 @@ include $this->admin_tpl('header');?>
             </label>
             <button type="button" onclick="Dialog.confirm('<?php echo L('confirm', array('message' => L('selected')));?>',function(){document.myform.action='?m=admin&c=linkage&a=delete';$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete');?></button>
         </div>
-         <div class="col-md-7 list-page"><?php echo $pages;?></div>
      </div>
 
 </form>

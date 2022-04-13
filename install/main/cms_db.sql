@@ -42,7 +42,7 @@ CREATE TABLE `cms_admin_login` (
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_admin_panel`;
 CREATE TABLE `cms_admin_panel` (
-  `menuid` mediumint(8) unsigned NOT NULL,
+  `menuid` mediumint(8) unsigned NOT NULL COMMENT '菜单id',
   `userid` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '管理员userid',
   `name` char(32) DEFAULT NULL COMMENT '名称',
   `icon` varchar(255) NULL DEFAULT NULL COMMENT '图标标示',
@@ -72,12 +72,13 @@ CREATE TABLE `cms_admin_role` (
 DROP TABLE IF EXISTS `cms_admin_role_priv`;
 CREATE TABLE `cms_admin_role_priv` (
   `roleid` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `menuid` mediumint(8) unsigned NOT NULL COMMENT '菜单id',
   `m` char(20) NOT NULL,
   `c` char(20) NOT NULL,
   `a` char(20) NOT NULL,
   `data` char(30) NOT NULL DEFAULT '',
   `siteid` smallint(5) unsigned NOT NULL DEFAULT '0',
-  KEY `roleid` (`roleid`,`m`,`c`,`a`,`siteid`)
+  KEY `roleid` (`roleid`,`menuid`,`m`,`c`,`a`,`siteid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- ----------------------------
