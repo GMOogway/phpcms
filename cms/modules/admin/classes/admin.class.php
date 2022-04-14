@@ -134,8 +134,8 @@ class admin {
 					$_valuedata = '&'.$_value['data'];
 				}
 			} else {
-                $_valuedata = '';
-            }
+				$_valuedata = '';
+			}
 			if($_value['parentid'] == 0 || $_value['m']=='') continue;
 			// 获取URL
 			$uri = $_value['a'];

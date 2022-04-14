@@ -405,17 +405,17 @@ class linkage extends admin {
 		if (!$link) {
 			dr_admin_msg(0, L('联动菜单不存在'));
 		}
-        $linkage = dr_linkage_list($link['code'], 0);
+		$linkage = dr_linkage_list($link['code'], 0);
 		$list = $this->getList($link, $pid);
 		if (!$linkage) {
-		    if (CI_DEBUG) {
-		        $select = '<div class="form-control-static" style="color:red">联动菜单【'.$link['code'].'】没有数据</div>';
-            } else {
-                $select = '';
-            }
-        } else {
-            $select = dr_rp(menu_linkage($link['code'], 'pid', 0), 'info[pid]', 'pid');
-        }
+			if (CI_DEBUG) {
+				$select = '<div class="form-control-static" style="color:red">联动菜单【'.$link['code'].'】没有数据</div>';
+			} else {
+				$select = '';
+			}
+		} else {
+			$select = dr_rp(menu_linkage($link['code'], 'pid', 0), 'info[pid]', 'pid');
+		}
 		$big_menu = array('?m=admin&c=linkage&a=init&menuid=269', L('linkage'));		
 		include $this->admin_tpl('linkage_submenu');
 	}
