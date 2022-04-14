@@ -86,34 +86,49 @@ class linkage extends admin {
 		
 		$id = (int)$this->input->get('id');
 		$code = (int)$this->input->get('code');
-		if (!is_file(CONFIGPATH.'linkage/'.$code.'.php')) {
-			dr_admin_msg(0, L('数据文件不存在无法导入'));
+		$page = (int)$this->input->get('page');
+		$tpage = (int)$this->input->get('tpage');
+
+		$path = CONFIGPATH.'linkage/import-file-'.$code.'/';
+		$this->db->table_name = $this->db->db_tablepre.'linkage_data_'.$id;
+
+		if (!$page) {
+			$files = dr_file_map($path);
+			if (!$files) {
+				html_msg(0, '文件分析失败');
+			}
+			foreach ($files as $t) {
+				if (stripos($t, '.php')) {
+					@unlink($path.$t);
+				}
+			}
+			$this->db->query('TRUNCATE `'.$this->db->table_name.'`');
+			html_msg(1, L('正在准备导入数据'), '?m=admin&c=linkage&a=public_import&code='.$code.'&id='.$id.'&page=1&tpage='.dr_count($files));
 		}
 
-		// 清空数据
-		$count = 0;
-		$this->db->table_name = $this->db->db_tablepre.'linkage_data_'.$id;
-		$this->db->query('TRUNCATE `'.$this->db->table_name.'`');
+		if (!is_file($path.$page.'.json')) {
+			$nums = $this->db->count();
+			html_msg(1, L('导入完毕，共计'.$nums.'条数据'), '', L('请关闭本窗口'));
+		}
 
 		// 开始导入
-		$data = require CONFIGPATH.'linkage/'.$code.'.php';
-		$this->db->query('BEGIN');
+		$data = dr_string2array(file_get_contents($path.$page.'.json'));
+		if (!is_array($data)) {
+			html_msg(0, L('导入信息验证失败'));
+		}
 		foreach ($data as $t) {
 			if (is_numeric($t['cname'])) {
 				$t['cname'] = 'a'.$t['cname'];
+			} elseif (!preg_match('/^[a-z]+[a-z0-9\_]+$/i', $t['cname'])) {
+				$t['cname'] = dr_safe_filename($t['cname']);
 			}
-			$insert_id = $this->db->insert($t, true);
-			if($insert_id){
+			$rt = $this->db->insert($t, true);
+			if ($rt) {
 				$count++;
-				if($count%10000==0){
-					$this->db->query('COMMIT');
-					$this->db->query('BEGIN');
-				}
 			}
 		}
-		$this->db->query('COMMIT');
 
-		dr_admin_msg(1, L('共'.dr_count($data).'条数据，导入成功'.$count.'条'));
+		html_msg(1, L('正在导入数据【'.$tpage.'/'.$page.'】...'),  '?m=admin&c=linkage&a=public_import&code='.$code.'&id='.$id.'&page='.($page+1).'&tpage='.$tpage);
 	}
 	/**
 	 * 删除菜单
@@ -196,7 +211,7 @@ class linkage extends admin {
 		$key = (int)$this->input->get('key');
 		$link = $this->db->get_one(array('id'=>$key));
 		if (!$link) {
-			html_msg(L('联动菜单不存在'));
+			html_msg(0, L('联动菜单不存在'));
 		}
 
 		$page = (int)$this->input->get('page');
@@ -221,7 +236,7 @@ class linkage extends admin {
 		if (!$pids) {
 			html_msg(0, L('临时数据读取失败'));
 		} elseif (!isset($pids[$page-1])) {
-			html_msg(0, L('更新完成'));
+			html_msg(1, L('更新完成'));
 		}
 
 		$tpage = ceil($total / $psize); // 总页数
@@ -390,7 +405,17 @@ class linkage extends admin {
 		if (!$link) {
 			dr_admin_msg(0, L('联动菜单不存在'));
 		}
+        $linkage = dr_linkage_list($link['code'], 0);
 		$list = $this->getList($link, $pid);
+		if (!$linkage) {
+		    if (CI_DEBUG) {
+		        $select = '<div class="form-control-static" style="color:red">联动菜单【'.$link['code'].'】没有数据</div>';
+            } else {
+                $select = '';
+            }
+        } else {
+            $select = dr_rp(menu_linkage($link['code'], 'pid', 0), 'info[pid]', 'pid');
+        }
 		$big_menu = array('?m=admin&c=linkage&a=init&menuid=269', L('linkage'));		
 		include $this->admin_tpl('linkage_submenu');
 	}

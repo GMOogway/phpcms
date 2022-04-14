@@ -119,6 +119,7 @@ class admin {
 		if($numbers==1 && !$big_menu) return '';
 		$string = '';
 		$pc_hash = dr_get_csrf_token();
+		$_li_class = '';
 		foreach($array as $_value) {
 			if (!$input->get('s')) {
 				$classname = ROUTE_M == $_value['m'] && ROUTE_C == $_value['c'] && ROUTE_A == $_value['a'] ? 'class="on"' : '';
@@ -126,13 +127,15 @@ class admin {
 				$_s = !empty($_value['data']) ? str_replace('=', '', strstr($_value['data'], '=')) : '';
 				$classname = ROUTE_M == $_value['m'] && ROUTE_C == $_value['c'] && ROUTE_A == $_value['a'] && $input->get('s') == $_s ? 'class="on"' : '';
 			}
-			if ($_value['data']) {
+			if (isset($_value['data']) && $_value['data']) {
 				if (strstr($_value['data'], '&') && substr($_value['data'], 0, 1)=='&') {
 					$_valuedata = $_value['data'];
 				} else {
 					$_valuedata = '&'.$_value['data'];
 				}
-			}
+			} else {
+                $_valuedata = '';
+            }
 			if($_value['parentid'] == 0 || $_value['m']=='') continue;
 			// 获取URL
 			$uri = $_value['a'];

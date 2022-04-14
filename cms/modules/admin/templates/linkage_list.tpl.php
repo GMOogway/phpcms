@@ -59,7 +59,7 @@ include $this->admin_tpl('header');?>
                     foreach($dt_data as $i=>$n){
                     ?>
                     <label>
-                        <a class="btn btn-xs red" href="javascript:confirmurl('?m=admin&c=linkage&a=public_import&code=<?php echo $i;?>&id=<?php echo $info['id'];?>', '<?php echo L('操作将会现有的数据覆盖掉，您确定吗？');?>');" > <i class="fa fa-sign-in"></i> <?php echo L($n);?></a>
+                        <a class="btn btn-xs red" href="javascript:confirmiframe('?m=admin&c=linkage&a=public_import&code=<?php echo $i;?>&id=<?php echo $info['id'];?>', '<?php echo L('导入');?>', '<?php echo L('操作将会现有的数据覆盖掉，您确定吗？');?>', '500px', '280px');" > <i class="fa fa-sign-in"></i> <?php echo L($n);?></a>
                     </label>
                     <?php }}?>
                 </td>

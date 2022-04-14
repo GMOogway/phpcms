@@ -11,7 +11,7 @@ include $this->admin_tpl('header');?>
 <div class="right-card-box">
     <form class="form-horizontal" role="form" id="myform" name="myform" action="?m=admin&c=linkage&a=public_list_del" method="post">
         <div class="table-list">
-            <table width="100%" cellspacing="0">
+            <table width="100%" cellspacing="0" class="table-checkable">
                 <thead>
                 <tr class="heading">
                     <th class="myselect">
@@ -66,7 +66,7 @@ include $this->admin_tpl('header');?>
                     <span></span>
                 </label>
                 <label><button type="button" onclick="Dialog.confirm('<?php echo L('confirm', array('message' => L('selected')));?>',function(){document.myform.action='?m=admin&c=linkage&a=public_list_del&key=<?php echo $key;?>';$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete');?></button></label>
-                <label><?php echo dr_rp(menu_linkage($link['code'], 'pid', 0), 'info[pid]', 'pid');?></label>
+                <label><?php echo $select;?></label>
                 <label><button type="button" onclick="dr_ajax_option('?m=admin&c=linkage&a=pid_edit&key=<?php echo $key;?>', '<?php echo L('你确定要批量移动它们吗？');?>', 1)" class="btn green btn-sm"> <i class="fa fa-edit"></i> <?php echo L('变更分类');?></button></label>
             </div>
          </div>

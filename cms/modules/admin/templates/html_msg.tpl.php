@@ -1,16 +1,18 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');
-if($url) {?>
+?>
 <div class="alert">
-    <a href="<?php echo $url;?>"><?php echo $msg;?></a>
-    <p><?php echo $note;?></p>
+    <?php if($code) {?>
+    <h5><?php echo $msg;?></h5>
+    <?php } else {?>
+    <h5 style="color: red"><?php echo $msg;?></h5>
+    <?php }?>
+    <?php if($url) {?>
+    <a href="<?php echo $url;?>"><?php echo L('如果您的浏览器没有自动跳转，请点击这里');?></a>
+    <meta http-equiv="refresh" content="0; url=<?php echo $url;?>">
+    <?php }?>
+    <?php if($note) {?><p><?php echo $note;?></p><?php }?>
 </div>
-<meta http-equiv="refresh" content="0; url=<?php echo $url;?>">
-<?php } else {?>
-<div class="alert">
-    <?php echo $msg;?>
-</div>
-<?php }?>
 <style>
 @charset "utf-8";
 ::-webkit-scrollbar {
@@ -67,8 +69,12 @@ if($url) {?>
     text-align: center;
     margin-top: 70px;
 }
+.alert h5 {
+    margin-bottom: 10px;
+    font-size: 16px;
+}
 .alert p {
-    margin-top: 10px;
+    margin-top: 6px;
     font-size: 12px;
     color: rgba(2, 1, 1, 0.41);
 }
@@ -76,5 +82,6 @@ if($url) {?>
     text-shadow: none;
     color: #337ab7;
     text-decoration: none;
+    font-size: 12px;
 }
 </style>

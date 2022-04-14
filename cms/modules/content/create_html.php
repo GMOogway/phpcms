@@ -1520,7 +1520,7 @@ class create_html extends admin {
 		if (!$value) {
 			html_msg(0, L('临时数据读取失败'));
 		} elseif (!isset($replace[$page+1])) {
-			html_msg(0, L('替换完成'));
+			html_msg(1, L('替换完成'));
 		}
 
 		// 更新完成
