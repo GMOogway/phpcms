@@ -400,8 +400,7 @@ class linkage extends admin {
 
 		$ids = $this->input->get_post_ids();
 		$key = (int)$this->input->get('key');
-		$info = $this->input->post('info');
-		$pid = (int)$info['pid'];
+		$pid = (int)$this->input->post('pid');
 		if (!$ids) {
 			dr_json(0, L('你还没有选择呢'));
 		}

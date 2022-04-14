@@ -1783,15 +1783,17 @@ class image {
 
         $source_width = $this->image_info[0];
         $source_height = $this->image_info[1];
-        $source_ratio = intval($source_height / $source_width);
-        $target_ratio = intval($target_height / $target_width);
+        $target_width = (int)$target_width;
+        $target_height = (int)$target_height;
+        $source_ratio = max(intval($source_height / $source_width), 1);
+        $target_ratio = max(intval($target_height / $target_width), 1);
         if ($source_ratio > $target_ratio) {
             // image-to-height
             $cropped_width = $source_width;
             $cropped_height = $source_width * $target_ratio;
-        } elseif ($source_ratio < $target_ratio){
+        } elseif ($source_ratio < $target_ratio) {
             //image-to-widht
-            $cropped_width = $source_height / $target_ratio;
+            $cropped_width = max(intval($source_height / $target_ratio),1);
             $cropped_height = $source_height;
         } else {
             //image-size-ok
@@ -1808,19 +1810,21 @@ class image {
         $source_width = $this->image_info[0];
         $source_height = $this->image_info[1];
         $source_mime  = $this->image_info['mime'];
-        $source_ratio = intval($source_height / $source_width);
-        $target_ratio = intval($target_height / $target_width);
+        $target_width = (int)$target_width;
+        $target_height = (int)$target_height;
+        $source_ratio = max(intval($source_height / $source_width), 1);
+        $target_ratio = max(intval($target_height / $target_width), 1);
         if ($source_ratio > $target_ratio) {
             // image-to-height
             $cropped_width = $source_width;
             $cropped_height = $source_width * $target_ratio;
             $source_x = 0;
-            $source_y = ($source_height - $cropped_height) / 2;
-        } elseif ($source_ratio < $target_ratio) {
+            $source_y = max(intval(($source_height - $cropped_height) / 2), 1);
+        } elseif ($source_ratio < $target_ratio){
             //image-to-widht
-            $cropped_width = $source_height / $target_ratio;
+            $cropped_width = max(intval($source_height / $target_ratio), 1);
             $cropped_height = $source_height;
-            $source_x = ($source_width - $cropped_width) / 2;
+            $source_x = max(intval(($source_width - $cropped_width) / 2), 1);
             $source_y = 0;
         } else {
             //image-size-ok

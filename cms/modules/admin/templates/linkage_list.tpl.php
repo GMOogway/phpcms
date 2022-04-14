@@ -70,7 +70,7 @@ include $this->admin_tpl('header');?>
     </div>
 
      <div class="row list-footer table-checkable">
-         <div class="col-md-5 list-select">
+         <div class="col-md-12 list-select">
             <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
                 <input type="checkbox" class="group-checkable" data-set=".checkboxes" />
                 <span></span>
