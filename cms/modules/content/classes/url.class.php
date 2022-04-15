@@ -221,10 +221,7 @@ class url{
 				}
 			}
 			$category_dir = $this->get_categorydir($catid);
-			$year = date('Y',$time);
-			$month = date('m',$time);
-			$day = date('d',$time);
-			$urls = str_replace(array('{$categorydir}','{$catdir}','{$year}','{$month}','{$day}','{$catid}','{$page}'),array($category_dir,$category['catdir'],$year,$month,$day,$catid,$page),$urlrule);
+			$urls = str_replace(array('{$categorydir}','{$catdir}','{$catid}','{$page}'),array($category_dir,$category['catdir'],$catid,$page),$urlrule);
 			if (strpos($urls, '\\')!==false) {
 				$urls = APP_PATH.str_replace('\\', '/', $urls);
 			}
