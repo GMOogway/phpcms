@@ -51,10 +51,9 @@ include $this->admin_tpl('header');
     </tr>
 	<tr> 
       <th width="20%"><?php echo L('urlrule_func')?> :</th>
-       <td><?php echo L('complete_part_path');?>： <input type="text" name="f1" value="{$categorydir}" size="15" class="input-botton">，<?php echo L('category_path');?>：<input type="text" name="f1" value="{$catdir}" size="10" class="input-botton">
+       <td><?php echo L('complete_part_path');?>：<label><input type="text" name="f1" value="{$categorydir}" size="15" class="input-botton"></label>，<?php echo L('category_path');?>：<label><input type="text" name="f1" value="{$catdir}" size="10" class="input-botton"></label>
 	   <div class="bk6"></div>
-
-<?php echo L('year');?>：<input type="text" name="f1" value="{$year}" size="7" class="input-botton"> <?php echo L('month');?>：<input type="text" name="f1" value="{$month}" size="9" class="input-botton">，<?php echo L('day');?>：<input type="text" name="f1" value="{$day}" size="7" class="input-botton"> ID：<input type="text" name="f1" value="{$id}" size="4" class="input-botton">， <?php echo L('paging');?>：<input type="text" name="f1" value="{$page}" size="7" class="input-botton">
+<?php echo L('year');?>：<label><input type="text" name="f1" value="{$year}" size="7" class="input-botton"></label> <?php echo L('month');?>：<label><input type="text" name="f1" value="{$month}" size="9" class="input-botton"></label>，<?php echo L('day');?>：<label><input type="text" name="f1" value="{$day}" size="7" class="input-botton"></label> ID：<label><input type="text" name="f1" value="{$id}" size="4" class="input-botton"></label>，<?php echo L('paging');?>：<label><input type="text" name="f1" value="{$page}" size="7" class="input-botton"></label>
 	</td>
     </tr>
 	  <input type="submit" name="dosubmit" id="dosubmit" class="dialog" value=" <?php echo L('submit')?> ">

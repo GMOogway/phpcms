@@ -63,6 +63,9 @@ class index {
 	//内容页
 	public function show() {
 		$catid = intval($this->input->get('catid'));
+		if(!$catid){
+			$catid = $this->_getCategoryId($this->input->get('catdir') ? $this->input->get('catdir') : $this->input->get('categorydir'));
+		}
 		$id = intval($this->input->get('id'));
 
 		if(!$catid || !$id) showmessage(L('information_does_not_exist'),'blank');
@@ -264,6 +267,9 @@ class index {
 	//列表页
 	public function lists() {
 		$catid = intval($this->input->get('catid'));
+		if(!$catid){
+			$catid = $this->_getCategoryId($this->input->get('catdir') ? $this->input->get('catdir') : $this->input->get('categorydir'));
+		}
 		$_priv_data = $this->_category_priv($catid);
 		if($_priv_data=='-1') {
 			$forward = urlencode(dr_now_url());
@@ -338,7 +344,7 @@ class index {
 				}
 			}
 			define('URLRULE', $urlrules);
-			$GLOBALS['URL_ARRAY']['categorydir'] = $categorydir;
+			$GLOBALS['URL_ARRAY']['categorydir'] = $this->get_categorydir($catid);
 			$GLOBALS['URL_ARRAY']['catdir'] = $catdir;
 			$GLOBALS['URL_ARRAY']['catid'] = $catid;
 			if (is_mobile($siteid) && $sitelist[$siteid]['mobileauto'] || defined('IS_MOBILE') && IS_MOBILE) {
@@ -509,6 +515,52 @@ class index {
 		} else {
 			return '1';
 		}
-	 }
+	}
+	
+	private function _getCategoryId($catdir){
+		if(!strpos($catdir,'/')){
+			$dirname = $catdir;
+		}else{
+			$dirname = end(explode('/',$catdir));
+			$dirlist = explode('/',$catdir);
+		}
+		$this->category_db = pc_base::load_model('category_model');
+		$this->siteid = get_siteid();
+		$CATEGORYS = getcache('category_content_' . $this->siteid, 'commons');
+		$res = $this->category_db->select(array('catdir'=>$dirname),'*','','listorder desc');
+		if(count($res) > 1){
+			$end2 = $dirlist[count($dirlist)-2];
+			$res2 = $this->category_db->get_one(array('catdir'=>$end2));
+			foreach($res as $k =>$r){
+				$pid = $r['parentid'];
+				if($CATEGORYS[$pid]['catdir'] == $end2){
+					$catid = $r['catid'];
+					break;
+				}
+			}
+		}else{
+			$catid = $res[0]['catid'];
+		}
+		return $catid;
+	}
+	
+	/**
+	 * 获取父栏目路径
+	 * @param $catid
+	 * @param $dir
+	 */
+	private function get_categorydir($catid, $dir = '') {
+		$setting = array();
+		$siteids = getcache('category_content','commons');
+		$siteid = $siteids[$catid];
+		$categorys = getcache('category_content_'.$siteid,'commons');
+		$setting = string2array($categorys[$catid]['setting']);
+		if ($setting['create_to_html_root']) return $dir;
+		if ($categorys[$catid]['parentid']) {
+			$dir = $categorys[$categorys[$catid]['parentid']]['catdir'].'/'.$dir;
+			$dir = $this->get_categorydir($categorys[$catid]['parentid'], $dir);
+		}
+		return '/'.ltrim($dir, '/');
+	}
 }
 ?>

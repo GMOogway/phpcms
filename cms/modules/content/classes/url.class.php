@@ -209,10 +209,26 @@ class url{
 		}
 		if (!$setting['ishtml']) { //如果不生成静态
 			
-			$url = str_replace(array('{$catid}', '{$page}'), array($catid, $page), $urlrule);
-			if (strpos($url, '\\')!==false) {
-					$url = APP_PATH.str_replace('\\', '/', $url);
+			$domain_dir = '';
+			foreach ($parentids as $pid) {
+				$r = $this->categorys[$pid];
+				if (strpos(strtolower($r['url']), '://')!==false && strpos($r['url'], '?')===false) {
+					$r['url'] = preg_replace('/([(http|https):\/\/]{0,})([^\/]*)([\/]{1,})/i', '$1$2/', $r['url'], -1);
+					if (substr_count($r['url'], '/')==3 && substr($r['url'],-1,1)=='/') {
+						$url = $r['url'];
+						$domain_dir = $this->get_categorydir($pid).$this->categorys[$pid]['catdir'].'/';
+					}
+				}
 			}
+			$category_dir = $this->get_categorydir($catid);
+			$year = date('Y',$time);
+			$month = date('m',$time);
+			$day = date('d',$time);
+			$urls = str_replace(array('{$categorydir}','{$catdir}','{$year}','{$month}','{$day}','{$catid}','{$page}'),array($category_dir,$category['catdir'],$year,$month,$day,$catid,$page),$urlrule);
+			if (strpos($urls, '\\')!==false) {
+				$urls = APP_PATH.str_replace('\\', '/', $urls);
+			}
+			$url = $domain_dir.$urls;
 		}  else { //生成静态
 			if ($category['arrparentid']) {
 				$parentids = explode(',', $category['arrparentid']);
@@ -231,7 +247,10 @@ class url{
 			}
 			
 			$category_dir = $this->get_categorydir($catid);
-			$urls = str_replace(array('{$categorydir}','{$catdir}','{$catid}','{$page}'),array($category_dir,$category['catdir'],$catid,$page),$urlrule);
+			$year = date('Y',$time);
+			$month = date('m',$time);
+			$day = date('d',$time);
+			$urls = str_replace(array('{$categorydir}','{$catdir}','{$year}','{$month}','{$day}','{$catid}','{$page}'),array($category_dir,$category['catdir'],$year,$month,$day,$catid,$page),$urlrule);
 			if ($url && $domain_dir) { //如果存在设置二级域名的情况
 				if (strpos($urls, $domain_dir)===0) {
 					$url = str_replace(array($domain_dir, '\\'), array($url, '/'), $urls);

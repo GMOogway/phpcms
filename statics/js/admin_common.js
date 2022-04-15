@@ -233,6 +233,18 @@ function confirmurl(url,message) {
 		redirect(url);
 	});
 }
+function confirmiframe(url,title,message,width,height) {
+	if (typeof pc_hash == 'string') url += (url.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
+	Dialog.confirm(message,function() {
+		iframe_show(title, url, width, height);
+	});
+}
+function confirmdriframe(url,title,message,width,height) {
+	if (typeof pc_hash == 'string') url += (url.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
+	Dialog.confirm(message,function() {
+		dr_iframe_show(title, url, width, height);
+	});
+}
 function redirect(url) {
 	location.href = url;
 }
