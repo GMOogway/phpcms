@@ -560,7 +560,7 @@ class index {
 			$dir = $categorys[$categorys[$catid]['parentid']]['catdir'].'/'.$dir;
 			$dir = $this->get_categorydir($categorys[$catid]['parentid'], $dir);
 		}
-		return '/'.ltrim($dir, '/');
+		return WEB_PATH.ltrim($dir, '/');
 	}
 }
 ?>

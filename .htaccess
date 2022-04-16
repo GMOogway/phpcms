@@ -4,3 +4,14 @@ RewriteRule ^content-([0-9]+)-([0-9]+)-([0-9]+).html index.php?m=content&c=index
 RewriteRule ^show-([0-9]+)-([0-9]+)-([0-9]+).html index.php?m=content&c=index&a=show&catid=$1&id=$2&page=$3
 #栏目页
 RewriteRule ^list-([0-9]+)-([0-9]+).html index.php?m=content&c=index&a=lists&catid=$1&page=$2
+
+#内容页
+#RewriteRule ^([0-9A-Za-z_/]*)/([0-9]+)-([0-9]+)\.(html)$ index.php?m=content&c=index&a=show&categorydir=$1&id=$2&page=$3
+#RewriteRule ^([0-9A-Za-z_/]*)/([0-9]+)\.(html)$ index.php?m=content&c=index&a=show&categorydir=$1&id=$2
+RewriteRule ^([0-9A-Za-z_/]*)/([0-9]+)-([0-9]+)\.(html)$ index.php?m=content&c=index&a=show&catdir=$1&id=$2&page=$3
+RewriteRule ^([0-9A-Za-z_/]*)/([0-9]+)\.(html)$ index.php?m=content&c=index&a=show&catdir=$1&id=$2
+#栏目页
+#RewriteRule ^([0-9A-Za-z_/]*)-([0-9]+)\.(html)$ index.php?m=content&c=index&a=lists&categorydir=$1&page=$2
+#RewriteRule ^([0-9A-Za-z_/]*)\.(html)$ index.php?m=content&c=index&a=lists&categorydir=$1
+RewriteRule ^([0-9A-Za-z_/]*)-([0-9]+)\.(html)$ index.php?m=content&c=index&a=lists&catdir=$1&page=$2
+RewriteRule ^([0-9A-Za-z_/]*)\.(html)$ index.php?m=content&c=index&a=lists&catdir=$1
