@@ -5,15 +5,17 @@ RewriteRule ^show-([0-9]+)-([0-9]+)-([0-9]+).html index.php?m=content&c=index&a=
 #栏目页
 RewriteRule ^list-([0-9]+)-([0-9]+).html index.php?m=content&c=index&a=lists&catid=$1&page=$2
 
-#首页
-#RewriteRule ^index\.(html) index.php
 #内容页
-#RewriteRule ^([0-9A-Za-z_/]*)/([0-9]+)-([0-9]+)\.(html) index.php?m=content&c=index&a=show&categorydir=$1&id=$2&page=$3
-#RewriteRule ^([0-9A-Za-z_/]*)/([0-9]+)\.(html) index.php?m=content&c=index&a=show&categorydir=$1&id=$2
-#RewriteRule ^([0-9A-Za-z_/]*)/([0-9]+)-([0-9]+)\.(html) index.php?m=content&c=index&a=show&catdir=$1&id=$2&page=$3
-#RewriteRule ^([0-9A-Za-z_/]*)/([0-9]+)\.(html) index.php?m=content&c=index&a=show&catdir=$1&id=$2
+#RewriteRule ^html/show-([0-9A-Za-z_/]*)-([0-9]+)-([0-9]+).html index.php?m=content&c=index&a=show&categorydir=$1&id=$2&page=$3
+#RewriteRule ^html/show-([0-9A-Za-z_/]*)-([0-9]+).html index.php?m=content&c=index&a=show&categorydir=$1&id=$2
+#RewriteRule ^html/show-([0-9A-Za-z_/]*)-([0-9]+)-([0-9]+).html index.php?m=content&c=index&a=show&catdir=$1&id=$2&page=$3
+#RewriteRule ^html/show-([0-9A-Za-z_/]*)-([0-9]+).html index.php?m=content&c=index&a=show&catdir=$1&id=$2
 #栏目页
-#RewriteRule ^([0-9A-Za-z_/]*)-([0-9]+)\.(html) index.php?m=content&c=index&a=lists&categorydir=$1&page=$2
-#RewriteRule ^([0-9A-Za-z_/]*)\.(html) index.php?m=content&c=index&a=lists&categorydir=$1
-#RewriteRule ^([0-9A-Za-z_/]*)-([0-9]+)\.(html) index.php?m=content&c=index&a=lists&catdir=$1&page=$2
-#RewriteRule ^([0-9A-Za-z_/]*)\.(html) index.php?m=content&c=index&a=lists&catdir=$1
+#RewriteRule ^html/list-([0-9A-Za-z_/]*)-([0-9]+).html index.php?m=content&c=index&a=lists&categorydir=$1&page=$2
+#RewriteRule ^html/list-([0-9A-Za-z_/]*).html index.php?m=content&c=index&a=lists&categorydir=$1
+#RewriteRule ^html/list-([0-9A-Za-z_/]*)-([0-9]+).html index.php?m=content&c=index&a=lists&catdir=$1&page=$2
+#RewriteRule ^html/list-([0-9A-Za-z_/]*).html index.php?m=content&c=index&a=lists&catdir=$1
+#搜索页
+#RewriteRule ^search-([0-9]+)-([0-9]+)-([0-9A-Za-z_/]*)-([0-9]+).html index.php?m=search&c=index&a=init&typeid=$1&siteid=$2&q=$3&page=$2
+#RewriteRule ^search-([0-9]+)-([0-9]+)-([0-9A-Za-z_/]*).html index.php?m=search&c=index&a=init&typeid=$1&siteid=$2&q=$3
+#RewriteRule ^search.html index.php?m=search

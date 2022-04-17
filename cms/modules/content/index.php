@@ -528,8 +528,8 @@ class index {
 		$this->siteid = get_siteid();
 		$CATEGORYS = getcache('category_content_' . $this->siteid, 'commons');
 		$res = $this->category_db->select(array('catdir'=>$dirname),'*','','listorder desc');
-		if(count($res) > 1){
-			$end2 = $dirlist[count($dirlist)-2];
+		if(dr_count($res) > 1){
+			$end2 = $dirlist[dr_count($dirlist)-2];
 			$res2 = $this->category_db->get_one(array('catdir'=>$end2));
 			foreach($res as $k =>$r){
 				$pid = $r['parentid'];
