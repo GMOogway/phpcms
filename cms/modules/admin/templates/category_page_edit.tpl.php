@@ -73,7 +73,7 @@ include $this->admin_tpl('header');?>
                             <label><input class="form-control input-large" type="text" name="info[catname]" id="catname" value="<?php echo $catname;?>" onblur="topinyin('catdir','catname','?m=admin&c=category&a=public_ajax_pinyin');"></label>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="dr_row_catdir">
                         <label class="col-md-2 control-label"><?php echo L('catdir')?></label>
                         <div class="col-md-9">
                             <label><input class="form-control input-large" type="text" id="catdir" name="info[catdir]" value="<?php echo $catdir;?>"></label>

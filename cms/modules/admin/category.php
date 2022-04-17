@@ -110,7 +110,7 @@ class category extends admin {
 					if (strlen($info['catdir']) > 12) {
 						$info['catdir'] = $pinyin->result($info['catname'], 0);
 					}
-					if(!$this->public_check_catdir(0,$info['catdir'])) dr_json(0, L('catname_have_exists'));
+					if(!$this->public_check_catdir(0,$info['catdir'])) dr_json(0, L('catname_have_exists'), array('field' => 'catdir'));
 				}
 			}
 			

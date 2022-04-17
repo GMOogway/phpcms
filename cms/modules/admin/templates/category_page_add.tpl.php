@@ -80,7 +80,7 @@ include $this->admin_tpl('header');?>
                             </span>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="dr_row_catdir">
                         <label class="col-md-2 control-label"><?php echo L('catdir')?></label>
                         <div class="col-md-9">
                             <label><input class="form-control input-large" type="text" id="catdir" name="info[catdir]" value=""></label>
