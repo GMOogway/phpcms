@@ -2904,7 +2904,7 @@ function menu_linkage($code = '', $id = 'linkid', $defaultvalue = 0) {
 		}
 		$(function(){
 			var $ld5 = $(".select-'.$id.'");					  
-			$ld5.ld({ajaxOptions:{"url": "'.APP_PATH.'api.php?op=get_linkage&code='.$code.'"},inputId:"dr_linkage_'.$id.'_html",defaultParentId:0});
+			$ld5.ld({ajaxOptions:{"url": "'.WEB_PATH.'api.php?op=get_linkage&code='.$code.'"},inputId:"dr_linkage_'.$id.'_html",defaultParentId:0});
 			var ld5_api = $ld5.ld("api");
 			ld5_api.selected('.$default.');
 			$ld5.bind("change", function(e){
