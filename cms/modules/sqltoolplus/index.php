@@ -35,10 +35,6 @@ class index extends admin {
 
 	public function sqlquery() {
 		if (IS_AJAX_POST) {
-			$database = pc_base::load_config('database');
-			$this -> db_charset = $database['default']['charset'];
-			$this -> db_tablepre = $database['default']['tablepre'];
-			$this -> db = db_factory :: get_instance($database)->get_database('default');
 			$sqls = new_stripslashes($this->input->post('sqls'));
 			$replace = array();
 			$replace[0][] = '{tablepre}';
@@ -61,6 +57,9 @@ class index extends admin {
 					$ck = 0;
 					foreach (array('select', 'create', 'drop', 'alter', 'insert', 'replace', 'update', 'delete') as $key) {
 						if (strpos(strtolower($sql), $key) === 0) {
+							if (!IS_DEV && in_array($key, ['create', 'drop', 'delete', 'alter'])) {
+								dr_json(0, L('为了安全起见，在开发者模式下才能运行'.$key.'语句'), -1);
+							}
 							$ck = 1;
 							break;
 						}
@@ -78,8 +77,7 @@ class index extends admin {
 						$handle = $this -> _sql_execute($sql);
 						if ($handle) {
 							if(preg_match('/^SELECT /i',$sqls)){
-								$msg .= L('sql_successfully').'<br /><pre>'.var_export($this -> db -> fetch_next(),true).'</pre>';
-								$this -> db -> lastqueryid = null;
+								$msg .= L('sql_successfully').'<br /><pre>'.var_export($this -> db -> fetch_array(),true).'</pre>';
 							}
 						} else {
 							dr_json(0, L('sql_failure'));
@@ -102,6 +100,9 @@ class index extends admin {
 	public function sqlreplace() {
 		$database = pc_base::load_config('database');
 		if (IS_AJAX_POST) {
+			$this -> db_charset = $database['default']['charset'];
+			$this -> db_tablepre = $database['default']['tablepre'];
+			$this -> db = db_factory :: get_instance($database)->get_database('default');
 			$db_table = $this->input->post('db_table');
 			$db_field = dr_safe_replace($this->input->post('db_field'));
 			if (!$db_table) {
@@ -109,12 +110,9 @@ class index extends admin {
 			}
 			if (!$db_field) {
 				dr_json(0, L('待替换字段必须填写'));
-			} elseif ($db_field == 'id') {
-				dr_json(0, L('ID主键不支持替换'));
+			} elseif ($db_field == $this -> db -> get_primary($db_table)) {
+				dr_json(0, $this -> db -> get_primary($db_table).L('主键不支持替换'));
 			}
-			$this -> db_charset = $database['default']['charset'];
-			$this -> db_tablepre = $database['default']['tablepre'];
-			$this -> db = db_factory :: get_instance($database)->get_database('default');
 			if (!strlen($this->input->post('search_rule'))) {
 				dr_json(0,L('select_where'));
 			} 
@@ -132,12 +130,14 @@ class index extends admin {
 			if ($this->input->post('replace_type') == 2) {
 				$sql = "UPDATE `{$db_table}` SET `{$db_field}`=REPLACE(`{$db_field}`,'{$this->input->post('search_rule')}','{$this->input->post('replace_data')}') WHERE `{$db_field}` LIKE '%{$this->input->post('search_rule')}%'$_sql;";
 
-				$handle = $this -> _sql_execute($sql);
-				if ($handle) {
-					dr_json(1,L('replace_success'));
-				} else {
-					dr_json(0,L('replace_failure'));
-				} 
+				$this -> db -> query($sql);
+				$count = $this->db->affected_rows();
+
+				if (!$count) {
+					dr_json(0,L('执行错误'));
+				}
+
+				dr_json(1,L('本次替换'.$count.'条数据'));
 			} else {
 				if (!$this->input->post('db_pr_field') || !preg_match('/^[\w]+$/', $this->input->post('db_pr_field'))) {
 					dr_json(0,L('select_pr_field'));
@@ -316,9 +316,7 @@ class index extends admin {
 
 		$msg = '<select id="db_field" name="db_field" class="form-control">';
 		foreach ($fields as $t) {
-			if ($t['Field'] != 'id') {
-				$msg.= '<option value="'.$t['Field'].'">'.$t['Field'].($t['Comment'] ? '（'.$t['Comment'].'）' : '').'</option>';
-			}
+			$msg.= '<option value="'.$t['Field'].'">'.$t['Field'].($t['Comment'] ? '（'.$t['Comment'].'）' : '').'</option>';
 		}
 		$msg.= '</select>';
 
