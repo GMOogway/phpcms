@@ -130,7 +130,7 @@ class index extends admin {
 			if ($this->input->post('replace_type') == 2) {
 				$sql = "UPDATE `{$db_table}` SET `{$db_field}`=REPLACE(`{$db_field}`,'{$this->input->post('search_rule')}','{$this->input->post('replace_data')}') WHERE `{$db_field}` LIKE '%{$this->input->post('search_rule')}%'$_sql;";
 
-				$this -> db -> query($sql);
+				$handle = $this -> _sql_execute($sql);
 				$count = $this->db->affected_rows();
 
 				if (!$count) {
