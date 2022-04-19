@@ -40,6 +40,17 @@ class content_input {
 			if(empty($errortips)) $errortips = $name.' '.L('not_meet_the_conditions');
 			$length = empty($value) ? 0 : (is_string($value) ? mb_strlen($value) : dr_strlen($value));
 
+			if(isset($_POST['info']['islink']) && $_POST['info']['islink']==1 && !$_POST['linkurl']) {
+				if($isimport) {
+					return false;
+				} else {
+					if (IS_ADMIN) {
+						dr_admin_msg(0, L('islink_url').L('empty'), array('field' => 'islink'));
+					} else {
+						dr_msg(0, L('islink_url').L('empty'), array('field' => 'islink'));
+					}
+				}
+			}
 			if($minlength && $length < $minlength) {
 				if($isimport) {
 					return false;

@@ -24,7 +24,25 @@ class function_list {
         $title = ($data['thumb'] ? '<i class="fa fa-photo"></i> ' : '').dr_keyword_highlight(str_cut($value, 30), $param['keyword']);
         !$title && $title = '...';
 
-        return isset($data['url']) && $data['url'] ? ('<a href="'.$data['url'].'" target="_blank" class="tooltips" data-container="body" data-placement="top" data-original-title="'.$value.'" title="'.$value.'">'.$title.'</a>'.($data['islink'] > 0 ? '  <i class="fa fa-link font-green tooltips" data-container="body" data-placement="top" data-original-title="'.L('转向链接').'" title="'.L('转向链接').'"></i>' : '')) : $title;
+        $siteids = getcache('category_content','commons');
+        $siteid = $siteids[$data['catid']];
+        $sitelist = getcache('sitelist','commons');
+        $release_siteurl = $sitelist[$siteid]['url'];
+        $path_len = -strlen(WEB_PATH);
+        $release_siteurl = substr($release_siteurl,0,$path_len);
+        if($data['status']==99) {
+            if($data['islink']) {
+                $url = $data['url'];
+            } elseif(strpos($data['url'],'http://')!==false || strpos($data['url'],'https://')!==false) {
+                $url = $data['url'];
+            } else {
+                $url = $release_siteurl.$data['url'];
+            }
+        } else {
+            $url = '?m=content&c=content&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'';
+        }
+
+        return isset($data['url']) && $data['url'] && $url ? ('<a href="'.$url.'" target="_blank"'.($data['status']!=99 ? ' onclick=\'window.open("?m=content&c=content&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'","manage")\'' : '').' class="tooltips" data-container="body" data-placement="top" data-original-title="'.$value.'" title="'.$value.'">'.$title.'</a>'.($data['islink'] > 0 ? '  <i class="fa fa-link font-green tooltips" data-container="body" data-placement="top" data-original-title="'.L('转向链接').'" title="'.L('转向链接').'"></i>' : '')) : $title;
     }
 
     // 用于列表显示内容
@@ -34,7 +52,25 @@ class function_list {
         $title = dr_keyword_highlight(str_cut($value, 30), $param['keyword']);
         !$title && $title = '...';
 
-        return isset($data['url']) && $data['url'] ? '<a href="'.$data['url'].'" target="_blank" class="tooltips" data-container="body" data-placement="top" data-original-title="'.$value.'" title="'.$value.'">'.$title.'</a>' : $title;
+        $siteids = getcache('category_content','commons');
+        $siteid = $siteids[$data['catid']];
+        $sitelist = getcache('sitelist','commons');
+        $release_siteurl = $sitelist[$siteid]['url'];
+        $path_len = -strlen(WEB_PATH);
+        $release_siteurl = substr($release_siteurl,0,$path_len);
+        if($data['status']==99) {
+            if($data['islink']) {
+                $url = $data['url'];
+            } elseif(strpos($data['url'],'http://')!==false || strpos($data['url'],'https://')!==false) {
+                $url = $data['url'];
+            } else {
+                $url = $release_siteurl.$data['url'];
+            }
+        } else {
+            $url = '?m=content&c=content&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'';
+        }
+
+        return isset($data['url']) && $data['url'] && $url ? '<a href="'.$url.'" target="_blank"'.($data['status']!=99 ? ' onclick=\'window.open("?m=content&c=content&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'","manage")\'' : '').' class="tooltips" data-container="body" data-placement="top" data-original-title="'.$value.'" title="'.$value.'">'.$title.'</a>' : $title;
     }
 
     // 用于列表显示浏览数
@@ -162,7 +198,25 @@ class function_list {
         $title = ($data['thumb'] ? '<i class="fa fa-photo"></i> ' : '').dr_keyword_highlight(str_cut($value, 30), $param['keyword']);
         !$title && $title = '...';
 
-        $html = isset($data['url']) && $data['url'] ? ('<a href="'.$data['url'].'" target="_blank" class="tooltips" data-container="body" data-placement="top" data-original-title="'.$value.'" title="'.$value.'">'.$title.'</a>'.($data['link_id'] > 0 ? '  <i class="fa fa-link font-green tooltips" data-original-title="'.L('转向链接').'" title="'.L('转向链接').'"></i>' : '')) : $title;
+        $siteids = getcache('category_content','commons');
+        $siteid = $siteids[$data['catid']];
+        $sitelist = getcache('sitelist','commons');
+        $release_siteurl = $sitelist[$siteid]['url'];
+        $path_len = -strlen(WEB_PATH);
+        $release_siteurl = substr($release_siteurl,0,$path_len);
+        if($data['status']==99) {
+            if($data['islink']) {
+                $url = $data['url'];
+            } elseif(strpos($data['url'],'http://')!==false || strpos($data['url'],'https://')!==false) {
+                $url = $data['url'];
+            } else {
+                $url = $release_siteurl.$data['url'];
+            }
+        } else {
+            $url = '?m=content&c=content&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'';
+        }
+
+        $html = isset($data['url']) && $data['url'] && $url ? ('<a href="'.$url.'" target="_blank"'.($data['status']!=99 ? ' onclick=\'window.open("?m=content&c=content&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'","manage")\'' : '').' class="tooltips" data-container="body" data-placement="top" data-original-title="'.$value.'" title="'.$value.'">'.$title.'</a>'.($data['islink'] > 0 ? '  <i class="fa fa-link font-green tooltips" data-original-title="'.L('转向链接').'" title="'.L('转向链接').'"></i>' : '')) : $title;
         if ($data['id']) {
             $position_db = pc_base::load_model('position_model');
             $position_data_db = pc_base::load_model('position_data_model');

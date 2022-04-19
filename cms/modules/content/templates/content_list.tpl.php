@@ -132,7 +132,7 @@ if(is_array($datas)){
             }
         } else {
             echo '?m=content&c=content&a=public_preview&catid='.$r['catid'].'&id='.$r['id'].'';
-        }?>" target="_blank" class="btn btn-xs blue"><i class="fa fa-eye"></i> <?php echo L('preview');?></a>
+        }?>" target="_blank"<?php if($r['status']!=99) {?> onclick='window.open("?m=content&c=content&a=public_preview&catid=<?php echo $r['catid'];?>&id=<?php echo $r['id'];?>","manage")'<?php }?> class="btn btn-xs blue"><i class="fa fa-eye"></i> <?php echo L('preview');?></a>
         <a href="javascript:;" onclick="javascript:dr_content_submit('?m=content&c=content&a=edit&catid=<?php echo $r['catid'];?>&id=<?php echo $r['id'];?>','edit')" class="btn btn-xs green"><i class="fa fa-edit"></i> <?php echo L('edit');?></a>
         <a href="javascript:view_comment('<?php echo id_encode('content_'.$r['catid'],$r['id'],$this->siteid);?>','<?php echo safe_replace($r['title']);?>')" class="btn btn-xs yellow"><i class="fa fa-comment"></i> <?php echo L('comment');?></a></td>
     </tr>
