@@ -20,7 +20,7 @@
 ?>
     <tr>
 		<td align="left"><?php echo $k?></td>
-		<td align="left"><?php if(isset($v['func'])){echo count($v['func']);}else{echo '0';}?></td>
+		<td align="left"><?php if(isset($v['func'])){echo dr_count($v['func']);}else{echo '0';}?></td>
 		<td align="left"><?php if(isset($v['func'])){
 	foreach ($v['func'] as $keys=>$vs)
 	{
@@ -32,7 +32,7 @@
 		echo "<font color='red'>".$vs."</font>  ";
 	}
 }?></td>
-		<td align="left"><?php if(isset($v['code'])){echo count($v['code']);}else{echo '0';}?></td>
+		<td align="left"><?php if(isset($v['code'])){echo dr_count($v['code']);}else{echo '0';}?></td>
 		<td align="left"><?php if(isset($v['code'])){
 	foreach ($v['code'] as $keys=>$vs)
 	{

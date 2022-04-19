@@ -111,7 +111,7 @@ class site extends admin {
 				dr_json(0, L('site_domain').L('exists'), array('field' => 'mobile_domain'));
 			}
 			if (!empty($info['release_point']) && is_array($info['release_point'])) {
-				if (count($info['release_point']) > 4) {
+				if (dr_count($info['release_point']) > 4) {
 					dr_json(0, L('release_point_configuration').L('most_choose_four'), array('field' => 'release_point'));
 				}
 				$s = '';
@@ -277,7 +277,7 @@ class site extends admin {
 					dr_json(0, L('site_domain').L('exists'), array('field' => 'mobile_domain'));
 				}
 				if (!empty($info['release_point']) && is_array($info['release_point'])) {
-					if (count($info['release_point']) > 4) {
+					if (dr_count($info['release_point']) > 4) {
 						dr_json(0, L('release_point_configuration').L('most_choose_four'), array('field' => 'release_point'));
 					}
 					$s = '';

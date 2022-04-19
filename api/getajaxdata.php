@@ -3,7 +3,7 @@ defined('IN_CMS') or exit('No permission resources.');
 
 $db = '';
 $db = pc_base::load_model('content_model');
-if($input->get('modelid') && $input->get('categoryid')) {
+if($input->get('modelid') && $input->get('catid')) {
 	$model_arr = array();
 	$model_arr = getcache('model','commons');
 	$catid = intval($input->get('catid'));
@@ -12,7 +12,7 @@ if($input->get('modelid') && $input->get('categoryid')) {
 	$steps = $input->get('steps') ? intval($input->get('steps')) : 0;
 	$status = $steps ? $steps : 99;
 	if($input->get('reject')) $status = 0;
-	$where = 'catid='.$input->get('categoryid').' AND status='.$status;
+	$where = 'catid='.$input->get('catid').' AND status='.$status;
 	$datas = $db->listinfo($where,'id desc',$input->get('page'),$input->get('pagelength'));
 	$pages = $db->pages;
 	foreach ($datas as $r) {

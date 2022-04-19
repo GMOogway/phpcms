@@ -71,7 +71,7 @@ class vote extends admin {
 				dr_admin_msg(0,L('vote_title_noempty'),'?m=vote&c=vote&a=add');
 			}
  			//记录选项条数 optionnumber 
-			$subject['optionnumber'] = count($this->input->post('option'));
+			$subject['optionnumber'] = dr_count($this->input->post('option'));
 			$subject['template'] = $this->input->post('vote_subject')['vote_tp_template'];
 			
 			$subjectid = $this->db->insert($subject,true);
@@ -124,7 +124,7 @@ class vote extends admin {
 				//模版 
 				$subject['template'] = $this->input->post('vote_subject')['vote_tp_template'];
 				if ($this->input->post('newoption')) {
-					$subject['optionnumber'] = count($this->input->post('option'))+count($this->input->post('newoption'));
+					$subject['optionnumber'] = dr_count($this->input->post('option'))+dr_count($this->input->post('newoption'));
 				}
 	 			$this->db->update($subject,array('subjectid'=>$subjectid));//更新投票选项总数
 				$this->update_votejs($subjectid);//生成JS文件

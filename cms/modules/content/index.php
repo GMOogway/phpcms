@@ -178,7 +178,7 @@ class index {
 			if($CONTENT_POS !== false) {
 				$this->url = pc_base::load_app_class('url', 'content');
 				$contents = array_filter(explode('[page]', $content));
-				$pagenumber = count($contents);
+				$pagenumber = dr_count($contents);
 				if (strpos($content, '[/page]')!==false && ($CONTENT_POS<7)) {
 					$pagenumber--;
 				}
@@ -464,7 +464,7 @@ class index {
 						if($rs['id']==$id) continue;
 						$data[] = $rs;
 					}
-					if(count($data)==0) exit('0');
+					if(dr_count($data)==0) exit('0');
 					echo json_encode($data);
 				} else {
 					//没有数据

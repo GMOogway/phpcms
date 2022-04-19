@@ -108,7 +108,7 @@ class special_api {
 		$c = pc_base::load_model('content_model');
 		if(!$modelid) return '';
 		$c->set_model($modelid);
-		$data = $c->listinfo($where, '`id`  DESC', $page);
+		$data = $c->listinfo($where, '`id` DESC', $page);
 		$this->pages = $c->pages;
 		return $data;
 	}

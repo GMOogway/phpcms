@@ -116,7 +116,7 @@ class content extends foreground {
 			$show_header = $show_dialog = $show_validator = true;
 			$temp_language = L('news','','content');
 			$sitelist = getcache('sitelist','commons');
-			if(!isset($_GET['siteid']) && count($sitelist)>1) {
+			if(!isset($_GET['siteid']) && dr_count($sitelist)>1) {
 				include template('member', 'content_publish_select_model');
 				exit;
 			}
@@ -174,7 +174,7 @@ class content extends foreground {
 	public function published() {
 		$memberinfo = $this->memberinfo;
 		$sitelist = getcache('sitelist','commons');
-		if(!isset($_GET['siteid']) && count($sitelist)>1) {
+		if(!isset($_GET['siteid']) && dr_count($sitelist)>1) {
 			include template('member', 'content_publish_select_model');
 			exit;
 		}

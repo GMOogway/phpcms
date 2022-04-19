@@ -37,7 +37,7 @@ class index extends admin {
 		if (!empty($ids)) {
 			$ids = explode(',', $ids);
 			if (empty($total)) {
-				$total = count($ids);
+				$total = dr_count($ids);
 			}
 			$sql = "siteid = '".$this->get_siteid()."' AND status".($id+1)." = $statuses AND id in ('".implode('\',\'', $ids)."')";
 			$data = $queue->select($sql, 'id, type, path');

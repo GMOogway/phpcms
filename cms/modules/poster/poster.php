@@ -67,7 +67,7 @@ class poster extends admin {
 			$sinfo = $this->s_db->get_one(array('spaceid' => $spaceid, 'siteid'=>$this->get_siteid()), 'name, type');
 			$setting = $this->get_setting($sinfo['type']);
 			$TYPES = get_types();
-			$default = count($setting)>0 ? L('please_select').'&nbsp;&nbsp;&nbsp;&nbsp;' : '';
+			$default = dr_count($setting)>0 ? L('please_select').'&nbsp;&nbsp;&nbsp;&nbsp;' : '';
 		}
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=poster&c=space&a=add\',\''.L('add_space').'\',540,320);void(0);', L('add_space'));
 		pc_base::load_sys_class('form', '', 0);
@@ -100,7 +100,7 @@ class poster extends admin {
 			$setting = $this->get_setting($sinfo['type']);
 			$TYPES = get_types();
 			$info['setting'] = string2array($info['setting']);
-			$default = count($setting)>0 ? L('please_select').'&nbsp;&nbsp;&nbsp;&nbsp;' : '';
+			$default = dr_count($setting)>0 ? L('please_select').'&nbsp;&nbsp;&nbsp;&nbsp;' : '';
 
 			$big_menu = array('javascript:artdialog(\'add\',\'?m=poster&c=space&a=add\',\''.L('add_space').'\',540,320);void(0);', L('add_space'));
 

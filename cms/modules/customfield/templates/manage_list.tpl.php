@@ -30,7 +30,7 @@ include $this->admin_tpl('header','admin');?>
 		</tr>
     </tbody>
 </table>
-<?php if(count($root) > 0){ ?>
+<?php if(dr_count($root) > 0){ ?>
 <div class="col-tab">
 <ul class="tabBut cu-li">
 <?php

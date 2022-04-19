@@ -17,8 +17,7 @@ class role extends admin {
 	 * 角色管理列表
 	 */
 	public function init() {
-		$infos = $this->db->select($where = '', $data = '*', $limit = '', $order = 'listorder DESC, roleid DESC', $group = '');
-		
+		$infos = $this->db->select('', '*', '', 'listorder DESC, roleid DESC', '');
 		include $this->admin_tpl('role_list');
 	}
 	

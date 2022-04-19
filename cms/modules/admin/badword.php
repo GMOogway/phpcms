@@ -121,7 +121,7 @@ class badword extends admin {
 	 */
 	function export() {
 		$result = $s = '';
-		$result = $this->db->select($where = '', $data = '*', $limit = '', $order = 'badid DESC', $group = '');
+		$result = $this->db->select('', '*', '', 'badid DESC', '');
 		if(!is_array($result) || empty($result)){
 			dr_admin_msg(0,'暂无敏感词设置，正在返回！','?m=admin&c=badword');
 		}

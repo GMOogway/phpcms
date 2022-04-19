@@ -115,7 +115,7 @@ class admin {
 		}
 		$array = self::admin_menu($parentid,1);
 		
-		$numbers = count($array);
+		$numbers = dr_count($array);
 		if($numbers==1 && !$big_menu) return '';
 		$string = '';
 		$pc_hash = dr_get_csrf_token();

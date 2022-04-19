@@ -117,7 +117,7 @@ class html {
 			if($CONTENT_POS !== false) {
 				$this->url = pc_base::load_app_class('url', 'content');	
 				$contents = array_filter(explode('[page]', $content));
-				$pagenumber = count($contents);
+				$pagenumber = dr_count($contents);
 				if (strpos($content, '[/page]')!==false && ($CONTENT_POS<7)) {
 					$pagenumber--;
 				}
@@ -142,7 +142,7 @@ class html {
 				//生成分页
 				foreach ($pageurls as $page=>$urls) {
 					$pages = content_pages($pagenumber,$page,$pageurls,$showurls);
-					$mobilepages = mobile_content_pages($pagenumber,$page,$pageurls,$showurls,$this->siteid , $CAT['setting']['content_ishtml']);
+					$mobilepages = mobile_content_pages($pagenumber,$page,$pageurls,$showurls,$this->siteid,$CAT['setting']['content_ishtml']);
 					//判断[page]出现的位置是否在第一位 
 					if($CONTENT_POS<7) {
 						$content = $contents[$page];

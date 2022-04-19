@@ -38,7 +38,7 @@ class contentpage {
 		//判断是否存在html标记，不存在直接按字符数分页；如果存在HTML标记，需要补全缺失的HTML标记
 		if (strpos($content, '<')!==false) {
 			$content_arr = explode('<', $content); //将字符串按‘<’分割成数组
-			$this->total = count($content_arr); //计算数组值的个数，便于计算是否执行到字符串的尾部
+			$this->total = dr_count($content_arr); //计算数组值的个数，便于计算是否执行到字符串的尾部
 			foreach ($content_arr as $t => $c) {
 				if ($c) {
 					$s = strtolower($c); //大小写不区分

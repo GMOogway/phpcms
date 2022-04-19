@@ -17,7 +17,7 @@ class customfield extends admin {
 	/* 字段管理（普通管理员） */
 	public function init() {
         $root = $this->db->select(array('siteid'=>$this->siteid,'pid'=>0),"*","","listorder ASC");
-        $count = count($root);
+        $count = dr_count($root);
         $j = 0;
         foreach ($root as $key =>$r) {
             $field = $this->db->select(array('pid'=>$r['id']),"*","","listorder ASC");
@@ -48,7 +48,7 @@ class customfield extends admin {
 	public function manage_list() {
 			$siteid = $this->siteid;
             $root = $this->db->select(array('siteid'=>$this->siteid,'pid'=>0),"*","","listorder ASC");
-            $count = count($root); //分类数量
+            $count = dr_count($root); //分类数量
             $field = array();
             foreach($root as $key =>$r) {
                 $field = $this->db->select(array('pid'=>$r['id'],'siteid'=>$siteid),'*','','listorder ASC');

@@ -95,7 +95,7 @@ class database extends admin {
 					dr_dir_delete($dir, true);
 					/*$sqls = $this->sql_split($sql);
 					$cache = array();
-					$count = count($sqls);
+					$count = dr_count($sqls);
 					if ($count > 100) {
 						$pagesize = ceil($count/100);
 						for ($i = 1; $i <= 100; $i ++) {
@@ -297,7 +297,7 @@ class database extends admin {
 			dr_json(0, L('database_no_table'));
 		}
 		$cache = array();
-		$count = count($ids);
+		$count = dr_count($ids);
 		if ($count > 100) {
 			$pagesize = ceil($count/100);
 			for ($i = 1; $i <= 100; $i ++) {

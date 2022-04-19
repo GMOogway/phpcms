@@ -280,7 +280,7 @@ class node extends admin {
 		if ($data = $this->db->get_one(array('nodeid'=>$nodeid))) {
 			pc_base::load_app_class('collection', '', 0);
 			$urls = collection::url_list($data);
-			$total_page = count($urls);
+			$total_page = dr_count($urls);
 			if ($total_page > 0) {
 				$page = isset($_GET['page']) ? intval($_GET['page']) : 0;
 				$url_list = $urls[$page];
@@ -524,7 +524,7 @@ class node extends admin {
 			$ids = explode(',', $ids);
 			$ids = implode('\',\'', $ids);
 			$data = $collection_content_db->select("siteid='".$this->get_siteid()."' AND id in ('$ids') AND nodeid = '$nodeid' AND status = '1'", 'id, data', '', $order);
-			$total = count($data);
+			$total = dr_count($data);
 			$str = L('operation_success').$total.L('article_was_imported');
 		}
 		$program = $program_db->get_one(array('id'=>$programid));

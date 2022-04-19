@@ -286,7 +286,7 @@ function InsetSymbol(elementId,values) {
 }
 
 function show_url_type(obj) {
-	var num = <?php echo count($this->url_list_type);?>;
+	var num = <?php echo dr_count($this->url_list_type);?>;
 	for (var i=1; i<=num; i++){
 		if (obj==i){ 
 			$('#url_type_'+i).show();

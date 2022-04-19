@@ -48,7 +48,7 @@ class rss {
 			$CATEGORYS = getcache('category_content_'.$this->siteid,'commons');
 			$SITEINFO = getcache('sitelist','commons');
 			$CAT = $CATEGORYS[$this->rssid];
-			if(count($CAT) == 0) showmessage(L('missing_part_parameters'),'blank');
+			if(dr_count($CAT) == 0) showmessage(L('missing_part_parameters'),'blank');
 			$siteid = $CAT['siteid'];
 			$sitedomain = $SITEINFO[$siteid]['domain'];  //获取站点域名
 			$MODEL = getcache('model','commons');
@@ -67,7 +67,7 @@ class rss {
 		    $date       =  date('r');
 		    $rssfile->addDCdata($publisher, $creator, $date);
 		    $ids = explode(",",$CAT['arrchildid']);
-		    if(count($ids) == 1 && in_array($this->rssid, $ids)) {
+		    if(dr_count($ids) == 1 && in_array($this->rssid, $ids)) {
 		        $sql .= "`catid` = '$this->rssid' AND `status` = '99'";
 		    } else {
 		        $sql .= get_sql_catid('category_content_'.$siteid,$this->rssid)." AND `status` = '99'";

@@ -11,13 +11,13 @@ class ipbanned extends admin {
 	}
 	
 	function init () {
-		$where = '';
+		$where = array();
 		if($this->input->get('search')) extract($this->input->get('search'));
 		if($ip){
-			$where .= $where ?  " AND ip LIKE '%$ip%'" : " ip LIKE '%$ip%'";
+			$where[] = "ip LIKE '%$ip%'";
 		}
 		$page = $this->input->get('page') && intval($this->input->get('page')) ? intval($this->input->get('page')) : 1;
-		$infos = $this->db->listinfo($where,'ipbannedid DESC',$page,SYS_ADMIN_PAGESIZE);
+		$infos = $this->db->listinfo(($where ? implode(' AND ', $where) : ''),'ipbannedid DESC',$page,SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=admin&c=ipbanned&a=add\',\''.L('add_ipbanned').'\',500,320);void(0);', L('add_ipbanned'));
 		include $this->admin_tpl('ipbanned_list');

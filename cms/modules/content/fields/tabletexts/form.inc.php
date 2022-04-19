@@ -12,7 +12,7 @@
 			if(is_array($value)) {
 				foreach($value as $_k=>$_v) {
 					$list_str .= "<tr>";
-					for ($x=1; $x<=count($columns); $x++) {
+					for ($x=1; $x<=dr_count($columns); $x++) {
 						$list_str .="<td><input type='text' name='".$field."_".$x."[]' value='".$_v[$field."_".$x]."' class='form-control' style='width:100%; padding:6px 0;'></td>";
 					}
 					$list_str .= "<td><button type='button' class='btn blue btn-xs' onclick='moveUp(this)'> <i class='fa fa-arrow-up'></i> </button> <button type='button' class='btn blue btn-xs' onclick='moveDown(this)'> <i class='fa fa-arrow-down'></i> </button> <button type='button' class='btn red btn-xs' onclick='delThisAttr(this)'> <i class='fa fa-trash'></i> </button></td></tr>";
@@ -29,7 +29,7 @@
 		$string .= '<script type=text/javascript>
 		function add'.$field.'(id){
 			var html = "<tr>';
-			for($cols=1; $cols<=count($columns); $cols++){
+			for($cols=1; $cols<=dr_count($columns); $cols++){
 				$string .='<td><input type=\'text\' name=\''.$field.'_'.$cols.'[]\' value=\'\' class=\'form-control\' style=\'width:100%; padding:6px 0;\'></td>';
 			}
 			$string .='<td><button type=\'button\' class=\'btn blue btn-xs\' onclick=\'moveUp(this)\'> <i class=\'fa fa-arrow-up\'></i> </button> <button type=\'button\' class=\'btn blue btn-xs\' onclick=\'moveDown(this)\'> <i class=\'fa fa-arrow-down\'></i> </button> <button type=\'button\' class=\'btn red btn-xs\' onclick=\'delThisAttr(this)\'> <i class=\'fa fa-trash\'></i> </button></td></tr>";

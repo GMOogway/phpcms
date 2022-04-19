@@ -5,7 +5,7 @@
 			$value = implode(',', $value);
 			return $value;
 		} elseif($this->fields[$field]['boxtype'] == 'multiple') {
-			if(is_array($value) && count($value)>1) {
+			if(is_array($value) && dr_count($value)>1) {
 				$value = implode(',', $value);
 				return $value;
 			}

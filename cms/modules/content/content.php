@@ -199,11 +199,11 @@ class content extends admin {
 		$date_field = $this->form_cache['setting']['search_time'] ? $this->form_cache['setting']['search_time'] : 'updatetime';
 		$this->db->set_model($modelid);
 		if($this->db->table_name==$this->db->db_tablepre) dr_admin_msg(0,L('model_table_not_exists'));
-		$where = 'status=99';
+		$where = array();
 		//搜索
 		$param = $this->input->get();
 		if($param['start_time']) {
-			$where .= ' AND '.$date_field.' BETWEEN ' . max((int)strtotime(strpos($param['start_time'], ' ') ? $param['start_time'] : $param['start_time'].' 00:00:00'), 1) . ' AND ' . ($param['end_time'] ? (int)strtotime(strpos($param['end_time'], ' ') ? $param['end_time'] : $param['end_time'].' 23:59:59') : SYS_TIME);
+			$where[] = ' AND '.$date_field.' BETWEEN ' . max((int)strtotime(strpos($param['start_time'], ' ') ? $param['start_time'] : $param['start_time'].' 00:00:00'), 1) . ' AND ' . ($param['end_time'] ? (int)strtotime(strpos($param['end_time'], ' ') ? $param['end_time'] : $param['end_time'].' 23:59:59') : SYS_TIME);
 		}
 		if($param['keyword']) {
 			$type_array = array('title','description','username');
@@ -211,19 +211,19 @@ class content extends admin {
 			if($searchtype < 3) {
 				$searchtype = $type_array[$searchtype];
 				$keyword = clearhtml(trim($param['keyword']));
-				$where .= " AND `$searchtype` like '%".$this->db->escape($keyword)."%'";
+				$where[] = " AND `$searchtype` like '%".$this->db->escape($keyword)."%'";
 			} elseif($searchtype==3) {
 				$keyword = intval($param['keyword']);
-				$where .= " AND `id`='$keyword'";
+				$where[] = " AND `id`='$keyword'";
 			}
 		}
 		if($param['posids'] && !empty($param['posids'])) {
 			$posids = $param['posids']==1 ? intval($param['posids']) : 0;
-			$where .= " AND `posids` = '$posids'";
+			$where[] = " AND `posids` = '$posids'";
 		}
 		$pagesize = $param['limit'] ? $param['limit'] : SYS_ADMIN_PAGESIZE;
 		$order = $param['order'] ? $param['order'] : ($this->form_cache['setting']['order'] ? dr_safe_replace($this->form_cache['setting']['order']) : 'id desc');
-		$datas = $this->db->listinfo($where,$order,$this->input->get('page'),$pagesize);
+		$datas = $this->db->listinfo(($where ? implode(' AND ', $where) : ''),$order,$this->input->get('page'),$pagesize);
 		$pages = $this->db->pages;
 		include $this->admin_tpl('content_all');
 	}
@@ -915,25 +915,25 @@ class content extends admin {
 			
 			$modelid = intval($this->input->get('modelid'));
 			$this->db->set_model($modelid);
-			$where = '';
+			$where = array();
 			if($this->input->get('catid')) {
 				$catid = intval($this->input->get('catid'));
-				$where .= "catid='$catid'";
+				$where[] = "catid='$catid'";
 			}
-			$where .= $where ?  ' AND status=99' : 'status=99';
+			$where[] = 'status=99';
 			
 			if($this->input->get('keywords')) {
 				$keywords = trim($this->input->get('keywords'));
 				$field = $this->input->get('field');
 				if(in_array($field, array('id','title','keywords','description'))) {
 					if($field=='id') {
-						$where .= " AND `id` ='$keywords'";
+						$where[] = "`id` ='$keywords'";
 					} else {
-						$where .= " AND `$field` like '%$keywords%'";
+						$where[] = "`$field` like '%$keywords%'";
 					}
 				}
 			}
-			$infos = $this->db->listinfo($where,'',$page,SYS_ADMIN_PAGESIZE);
+			$infos = $this->db->listinfo(($where ? implode(' AND ', $where) : ''),'',$page,SYS_ADMIN_PAGESIZE);
 			$pages = $this->db->pages;
 			include $this->admin_tpl('relationlist');
 		}
@@ -1020,12 +1020,13 @@ class content extends admin {
 			if($CONTENT_POS !== false) {
 				$this->url = pc_base::load_app_class('url', 'content');
 				$contents = array_filter(explode('[page]', $content));
-				$pagenumber = count($contents);
+				$pagenumber = dr_count($contents);
 				if (strpos($content, '[/page]')!==false && ($CONTENT_POS<7)) {
 					$pagenumber--;
 				}
 				for($i=1; $i<=$pagenumber; $i++) {
 					$pageurls[$i][0] = SELF.'?m=content&c=content&a=public_preview&steps='.intval($this->input->get('steps')).'&catid='.$catid.'&id='.$id.'&page='.$i;
+					$showurls[$i] = '';
 				}
 				$END_POS = strpos($content, '[/page]');
 				if($END_POS !== false) {
@@ -1041,7 +1042,7 @@ class content extends admin {
 					}
 				}
 				//当不存在 [/page]时，则使用下面分页
-				$pages = content_pages($pagenumber,$page, $pageurls);
+				$pages = content_pages($pagenumber,$page,$pageurls,$showurls);
 				//判断[page]出现的位置是否在第一位 
 				if($CONTENT_POS<7) {
 					$content = $contents[$page];

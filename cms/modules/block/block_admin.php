@@ -187,7 +187,7 @@ class block_admin extends admin {
 		} else {
 			if (!empty($data['data'])) {
 				if ($data['type'] == 2) $data['data'] = string2array($data['data']);
-				$total = count($data['data']);
+				$total = dr_count($data['data']);
 			}
 			pc_base::load_sys_class('form');
 			pc_base::load_sys_class('format', '', 0);

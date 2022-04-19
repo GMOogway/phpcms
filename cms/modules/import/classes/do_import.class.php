@@ -562,7 +562,7 @@ class do_import {
  		
   		
 		//统计要查询的数据总数
- 		if(count($table_array)>1){
+ 		if(dr_count($table_array)>1){
  			//如多表，用left join 来生成查询语句
  			$left_join ='';
  			foreach ($table_array as $k=>$table){

@@ -311,7 +311,7 @@ class formguide extends admin {
 		$result = $m_db->select(array('modelid'=>$formid, 'formtype'=>'box'), 'field, setting');
 		$m_db->change_table($tablename);
 		$datas = $m_db->select(array(), '*');
-		$total = count($datas);
+		$total = dr_count($datas);
 		include $this->admin_tpl('formguide_stat');
 	}
 	

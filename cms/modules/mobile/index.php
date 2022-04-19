@@ -263,7 +263,7 @@ class index {
 			if($CONTENT_POS !== false) {
 				$this->url = pc_base::load_app_class('mobile_url', 'mobile');
 				$contents = array_filter(explode('[page]', $content));
-				$pagenumber = count($contents);
+				$pagenumber = dr_count($contents);
 				if (strpos($content, '[/page]')!==false && ($CONTENT_POS<7)) {
 					$pagenumber--;
 				}

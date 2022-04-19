@@ -134,7 +134,7 @@ class payment extends admin {
 		
 		$infos = $this->account_db->listinfo($where, $order = 'addtime DESC,id DESC', $page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->account_db->pages;
-		$number = count($infos);
+		$number = dr_count($infos);
 		include $this->admin_tpl('pay_list');	
 	}
 	
@@ -156,7 +156,7 @@ class payment extends admin {
 			if($status) $where .= "AND `status` LIKE '%$status%' ";			
 			if($where) $where = substr($where, 3);
 			$infos = $this->account_db->select($where);
-			$num= count($infos);
+			$num = dr_count($infos);
 			foreach ($infos as $_v) {
 				if($_v['type'] == 1) {
 					$amount_num++;
@@ -171,7 +171,7 @@ class payment extends admin {
 		}		
 		foreach(L('select') as $key=>$value) $trade_status[$key] = $value;		
 		$total_infos = $this->account_db->select();
-		$total_num= count($total_infos);
+		$total_num= dr_count($total_infos);
 		foreach ($total_infos as $_v) {
 			if($_v['type'] == 1) {
 				$total_amount_num++;

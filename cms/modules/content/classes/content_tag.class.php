@@ -174,7 +174,7 @@ class content_tag {
 			foreach ($keywords_arr as $_k) {
 				$sql2 = $sql." AND `keywords` LIKE '%$_k%'".(isset($data['id']) && intval($data['id']) ? " AND `id` != '".abs(intval($data['id']))."'" : '');
 				$r = $this->db->select($sql2, '*', $limit, '','','id');
-				$number += count($r);
+				$number += dr_count($r);
 				foreach ($r as $id=>$v) {
 					if($i<= $data['limit'] && !in_array($id, $key_array)) $key_array[$id] = $v;
 					$i++;

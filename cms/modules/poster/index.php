@@ -29,7 +29,7 @@ class index {
 		}
 		$this->db->update(array('clicks'=>'+=1'), array('id'=>$id));
 		$setting = string2array($r['setting']);
-		if (count($setting)==1) {
+		if (dr_count($setting)==1) {
 			$url = $setting['1']['linkurl'];
 		} else {
 			$url = isset($_GET['url']) ? $_GET['url'] : $setting['1']['linkurl'];
