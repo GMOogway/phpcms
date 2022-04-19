@@ -58,7 +58,7 @@ class index extends admin {
 					foreach (array('select', 'create', 'drop', 'alter', 'insert', 'replace', 'update', 'delete') as $key) {
 						if (strpos(strtolower($sql), $key) === 0) {
 							if (!IS_DEV && in_array($key, ['create', 'drop', 'delete', 'alter'])) {
-								dr_json(0, L('为了安全起见，在开发者模式下才能运行'.$key.'语句'), -1);
+								dr_json(0, L('为了安全起见，在开发者模式下才能运行'.$key.'语句'));
 							}
 							$ck = 1;
 							break;
