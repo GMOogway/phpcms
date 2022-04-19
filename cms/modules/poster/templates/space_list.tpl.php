@@ -40,7 +40,7 @@ include $this->admin_tpl('header', 'admin');
 			<th width="100" align="center"><?php echo L('ads_type')?></th>
 			<th width='120' align="center"><?php echo L('size_format')?></th>
 			<th width="80" align="center"><?php echo L('ads_num')?></th>
-			<th align="center"><?php echo L('description')?></th>
+			<th width="200" align="center"><?php echo L('description')?></th>
 			<th align="center"><?php echo L('operations_manage')?></th>
             </tr>
         </thead>

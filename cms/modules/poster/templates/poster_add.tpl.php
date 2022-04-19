@@ -38,6 +38,7 @@ $p = dr_authcode(array(
 </div>
 <div class="content-header"></div>
 <form method="post" action="?m=poster&c=poster&a=add" id="myform">
+<input name="menuid" type="hidden" value="<?php echo $this->input->get('menuid');?>">
 <table class="table_form" width="100%" cellspacing="0">
 <tbody>
 	<tr>

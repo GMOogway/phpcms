@@ -58,9 +58,9 @@ class poster extends admin {
 					$this->attachment_db = pc_base::load_model('attachment_model');
 					$this->attachment_db->api_update($imgs, 'poster-'.$id, 1);
 				}
-				dr_admin_msg(1,L('add_ads_success'), SELF.'?m=poster&c=space&a=init');
+				dr_admin_msg(1,L('add_ads_success'), SELF.'?m=poster&c=space&a=init&s=3&menuid='.$this->input->post('menuid'));
 			} else {
-				dr_admin_msg(0,L('operation_failure'), SELF.'?m=poster&c=space&a=init');
+				dr_admin_msg(0,L('operation_failure'), SELF.'?m=poster&c=space&a=init&s=3&menuid='.$this->input->post('menuid'));
 			}
 		} else {
 			$spaceid = intval($this->input->get('spaceid'));
@@ -92,7 +92,7 @@ class poster extends admin {
 				$this->attachment_db = pc_base::load_model('attachment_model');
 				$this->attachment_db->api_update($imgs, 'poster-'.$this->input->get('id'), 1);
 			}
-			dr_admin_msg(1,L('edit_ads_success'), SELF.'?m=poster&c=poster&a=init&spaceid='.$this->input->get('spaceid'));
+			dr_admin_msg(1,L('edit_ads_success'), SELF.'?m=poster&c=poster&a=init&spaceid='.$this->input->get('spaceid').'&menuid='.$this->input->post('menuid'));
 		} else {
 			
 			$info = $this->db->get_one(array('id'=>$this->input->get('id'), 'siteid'=>$this->get_siteid()));

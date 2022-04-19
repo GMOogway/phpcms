@@ -22,7 +22,7 @@ include $this->admin_tpl('header', 'admin');
 <fieldset>
 	<legend><?php echo L('one_way')?></legend>
     <?php echo L('js_code')?><font color='red'><?php echo L('this_way_stat_show')?></font><br />
-<input name="jscode1" id="jscode1" value='<script language="javascript" src="{APP_PATH.SELF;}?m=poster&c=index&a=show_poster&id=<?php echo $r['spaceid']?>"></script>' style="width:400px"><button class="btn green" data-clipboard-action="copy" data-clipboard-target="#jscode1"><?php echo L('copy_code')?></button>
+<input name="jscode1" id="jscode1" value='<script language="javascript" src="{APP_PATH}{SELF}?m=poster&c=index&a=show_poster&id=<?php echo $r['spaceid']?>"></script>' style="width:400px"><button class="btn green" data-clipboard-action="copy" data-clipboard-target="#jscode1"><?php echo L('copy_code')?></button>
 </fieldset>
 <div class="bk10"></div>
 <fieldset>

@@ -6,7 +6,7 @@ include $this->admin_tpl('header', 'admin');
 <table class="table_form" width="100%" cellspacing="0">
 <tbody>
 	<tr>
-		<th width="80"><strong><?php echo L('boardtype')?>：</strong></th>
+		<th width="120"><strong><?php echo L('boardtype')?>：</strong></th>
 		<td><input name="space[name]" class="input-text" id="name" type="text" value="<?php echo new_html_special_chars($info['name'])?>" size="25"></td>
 	</tr>
 	<tr>
@@ -17,13 +17,13 @@ include $this->admin_tpl('header', 'admin');
 	<tr id="trPosition" style="display:none;">
     	<th align="right"  valign="top"><strong><?php echo L('position')?>：</strong></th>
         <td valign="top" colspan="2">
-        <?php echo L('left_margin')?>：<input name='setting[paddleft]' id='PaddingLeft' type='text' size='5' value='<?php echo $setting['paddleft']?>' class="input-text"> px&nbsp;&nbsp;
-        <?php echo L('top_margin')?>：<input name='setting[paddtop]' id='PaddingTop' type='text' size='5' value='<?php echo $setting['paddtop']?>' class="input-text" /> px</div>
+        <?php echo L('left_margin')?>：<label><input name='setting[paddleft]' id='PaddingLeft' type='text' size='5' value='<?php echo $setting['paddleft']?>' class="input-text"></label> px&nbsp;&nbsp;
+        <?php echo L('top_margin')?>：<label><input name='setting[paddtop]' id='PaddingTop' type='text' size='5' value='<?php echo $setting['paddtop']?>' class="input-text" /></label> px</div>
         </td>
     </tr>
 	<tr id="SizeFormat">
 		<th><strong><?php echo L('size_format')?>：</strong></th>
-		<td><label><?php echo L('plate_width')?></label><input name="space[width]" id="s_width" class="input-text" type="text" value="<?php echo $info['width']?>" size="10"> px &nbsp;&nbsp;&nbsp;&nbsp; <label><?php echo L('plate_height')?></label><input name="space[height]" id="h_height" type="text" class="input-text" value="<?php echo $info['height']?>" size="10"> px<div id="w_hTip"></div></td>
+		<td><?php echo L('plate_width')?><label><input name="space[width]" id="s_width" class="input-text" type="text" value="<?php echo $info['width']?>" size="10"></label> px &nbsp;&nbsp;&nbsp;&nbsp; <?php echo L('plate_height')?><label><input name="space[height]" id="h_height" type="text" class="input-text" value="<?php echo $info['height']?>" size="10"></label> px<div id="w_hTip"></div></td>
 	</tr>
 	<tr>
 		<th><strong><?php echo L('description')?>：</strong></th>

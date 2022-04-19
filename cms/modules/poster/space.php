@@ -108,7 +108,7 @@ class space extends admin {
 					$data = $d['code'];
 				}
 			} else {
-				$path = APP_PATH.'caches/'.$r['path'];
+				$path = APP_PATH.'index.php?m=poster&c=index&a=show_poster&id='.$r['spaceid'];
 			}
 			include $this->admin_tpl('space_preview');
 		}
