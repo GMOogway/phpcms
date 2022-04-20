@@ -327,7 +327,7 @@ switch($step)
 			}
 		} else {
 			//安装可选模块
-			if(in_array($module,array('announce','comment','link','vote','message','mood','poster','formguide','tag','sms','404','bdts','custom','customfield','fclient','guestbook','import','slider','sqltoolplus','taglist'))) {
+			if(in_array($module,array('announce','comment','link','vote','message','mood','poster','formguide','tag','404','bdts','custom','customfield','fclient','guestbook','import','slider','sqltoolplus','taglist'))) {
 				$install_module = pc_base::load_app_class('module_api','admin');
 				$install_module->install($module);
 			}

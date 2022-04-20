@@ -1,5 +1,6 @@
 <?php defined('IS_ADMIN') or exit('No permission resources.');
-include $this->admin_tpl('header', 'admin');?>
+include $this->admin_tpl('header', 'admin');
+$menu_data = $this->menu_db->get_one(array('name' => 'sms', 'm' => 'sms', 'c' => 'sms', 'a' => 'init'));?>
 <link rel="stylesheet" href="<?php echo JS_PATH;?>bootstrap-switch/css/bootstrap-switch.min.css" media="all" />
 <script type="text/javascript" src="<?php echo JS_PATH;?>bootstrap-switch/js/bootstrap-switch.min.js"></script>
 <link href="<?php echo JS_PATH;?>bootstrap-touchspin/bootstrap.touchspin.css" rel="stylesheet" type="text/css" />
@@ -124,7 +125,7 @@ jQuery(document).ready(function() {
                                 <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobile_checktype]" value="2"<?php echo ($member_setting['mobile_checktype']=='2') ? ' checked' : ''?><?php echo ($sms_disabled) ? ' disabled' : ''?> onclick="$('#sendsms_titleid').hide();"> <?php echo L('yes');?> <span></span></label>
                                 <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobile_checktype]" value="0"<?php echo (!$member_setting['mobile_checktype']) ? ' checked' : ''?> onclick="$('#sendsms_titleid').hide();"> <?php echo L('no');?> <span></span></label>
                             </div>
-                            <label><a class="btn btn-sm red" href="?m=sms&c=sms&a=sms_setting"> <?php echo L('短信平台配置');?> </a></label>
+                            <label><a class="btn btn-sm red" href="javascript:;" layuimini-content-href="?m=sms&c=sms&a=sms_setting&menuid=<?php echo $menu_data['id']?>&pc_hash=<?php echo dr_get_csrf_token()?>" data-title="<?php echo L('短信平台配置');?>" data-icon="fa fa-cog"> <?php echo L('短信平台配置');?> </a></label>
                         </div>
                     </div>
                     <div class="form-group" id="sendsms_titleid" <?php if($member_setting['mobile_checktype']!='1'){?> style="display: none; " <?php }?>>
@@ -402,6 +403,19 @@ function dr_call_alert() {
         content: '?m=content&c=sitemodel&a=public_help&pc_hash='+pc_hash
     });
 }
+</script>
+<script src="http://localhost:82/statics/js/layui/layui.js" charset="utf-8"></script>
+<script src="http://localhost:82/statics/css/layuimini/js/lay-config.js?v=2.0.0" charset="utf-8"></script>
+<script src="http://localhost:82/statics/js/main.js" charset="utf-8"></script>
+<script>
+    layui.use(['layer', 'miniTab','echarts'], function () {
+        var $ = layui.jquery,
+            layer = layui.layer,
+            miniTab = layui.miniTab,
+            echarts = layui.echarts;
+
+        miniTab.listen();
+    });
 </script>
 </body>
 </html>

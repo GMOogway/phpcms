@@ -40,23 +40,27 @@
 				var isinerval;
 				function get_verify() {
 					var mobile = $("#mobile").val();
-					var partten = /^1[3-9]\d{9}$/;
-					if(!partten.test(mobile)){
+					var partten = /^[0-9]+.?[0-9]*/;
+					if(!partten.test(mobile) || mobile.length != 11){
 						Dialog.alert("'.L('input_right_mobile').'");
 						return false;
 					}
-					$.get("api.php?op=sms",{ mobile: mobile,random:Math.random()}, function(data){
-						if(data=="0") {
-							$("#mobile_send").html(mobile);
-							$("#mobile_div").css("display","none");
-							$("#mobile_send_div").css("display","");
-							times = 90;
-							$("#GetVerify").attr("disabled", true);
-							isinerval = setInterval("CountDown()", 1000);
-						} else if(data=="-1") {
-							Dialog.alert("'.L('sms_have_reached_the_limit').'");
-						} else {
-							Dialog.alert("'.L('sms_send_fail').'");
+					$.ajax({
+						type: "GET",
+						dataType: "json",
+						url: "api.php?op=sms",
+						data: {mobile: mobile,session_code:session_code,random:Math.random()},
+						success: function(json) {
+							if (json.code) {
+								$("#mobile_send").html(mobile);
+								$("#mobile_div").css("display","none");
+								$("#mobile_send_div").css("display","");
+								times = 120;
+								$("#GetVerify").attr("disabled", true);
+								isinerval = setInterval("CountDown()", 1000);
+							} else {
+								alert(json.msg);
+							}
 						}
 					});
 					

@@ -253,6 +253,25 @@ if (CI_DEBUG) {
 	ini_set('display_errors', 0);
 }
 
+// 缓存变量
+$cache = [];
+if (is_file(CACHE_PATH.'caches_sms/caches_data/cache.php')) {
+	$cache = require CACHE_PATH.'caches_sms/caches_data/cache.php';
+	IS_DEV && $cache['SYS_CACHE'] = 0; // 开发者模式下关闭缓存
+}
+foreach (array(
+		'SYS_CACHE',
+		'SYS_CACHE_TYPE',
+		'SYS_CACHE_SHOW',
+		'SYS_CACHE_PAGE',
+		'SYS_CACHE_LIST',
+		'SYS_CACHE_SEARCH',
+		'SYS_CACHE_SMS',
+	) as $name) {
+	define($name, floatval($cache[$name]));
+}
+unset($cache);
+
 // API接口项目标识
 !defined('IS_API') && define('IS_API', FALSE);
 

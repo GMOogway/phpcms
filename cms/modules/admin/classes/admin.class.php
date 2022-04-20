@@ -187,17 +187,18 @@ class admin {
 	}
 	final public static function child_menu($parentid, $self = 0) {
 		$datas = self::admin_menu($parentid);
-		$valuedata = '';
 		if($datas) {
 			$i = 0;
 			$child = ',"child": [';
 			foreach($datas as $value) {
-				if ($value['data']) {
+				if (isset($value['data']) && $value['data']) {
 					if (strstr($value['data'], '&') && substr($value['data'], 0, 1)=='&') {
 						$valuedata = $value['data'];
 					} else {
 						$valuedata = '&'.$value['data'];
 					}
+				} else {
+					$valuedata = '';
 				}
 				if ($self==1) {
 					if ($i==0) {

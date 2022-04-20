@@ -1624,6 +1624,11 @@ function execute_time() {
 	return number_format(($etime [1] + $etime [0] - $stime [1] - $stime [0]), 6);
 }
 
+// 生成随机验证码
+function get_rand_value() {
+	return rand(100000, 999999);
+}
+
 /**
 * 产生随机字符串
 *
@@ -1638,7 +1643,7 @@ function random($length, $chars = '0123456789') {
 	for($i = 0; $i < $length; $i++) {
 		$hash .= $chars[mt_rand(0, $max)];
 	}
-	return substr(md5($hash), 0, $length);
+	return $hash;
 }
 
 /**
@@ -3059,8 +3064,38 @@ function password($password, $encrypt='') {
  * @param string $lenth 长度
  * @return string 字符串
  */
-function create_randomstr($lenth = 10) {
-	return random($lenth, '123456789abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ');
+function create_randomstr($lenth = 10, $chars = '123456789abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ') {
+	$hash = '';
+	$max = strlen($chars) - 1;
+	mt_srand();
+	for($i = 0; $i < $lenth; $i++) {
+		$hash .= $chars[mt_rand(0, $max)];
+	}
+	return substr(md5($hash), 0, $lenth);
+}
+
+// 验证手机号码
+function check_phone($value) {
+	if (!$value) {
+		return false;
+	} elseif (!is_numeric($value)) {
+		return false;
+	} elseif (strlen($value) != 11) {
+		return false;
+	}
+	return true;
+}
+
+// 验证邮件地址
+function check_email($value) {
+	if (!$value) {
+		return false;
+	} elseif (!preg_match('/^[\w\-\.]+@[\w\-\.]+(\.\w+)+$/', $value)) {
+		return false;
+	} elseif (strpos($value, '"') !== false || strpos($value, '\'') !== false) {
+		return false;
+	}
+	return true;
 }
 
 /**
@@ -3844,6 +3879,24 @@ function dr_get_csrf_token($key = 'pc_hash') {
 		$code = bin2hex(random_bytes(16));
 		$cache->set_auth_data(COOKIE_PRE.ip().$key, $code, 1);
 	}
+	return $code;
+}
+// 获取已发短信验证码
+function get_mobile_code($phone) {
+	$cache = pc_base::load_sys_class('cache');
+	return $cache->get_auth_data('phone-code-'.$phone, 1, defined('SYS_CACHE_SMS') && SYS_CACHE_SMS ? SYS_CACHE_SMS : 300);
+}
+
+// 储存已发短信验证码
+function set_mobile_code($phone, $code) {
+	$cache = pc_base::load_sys_class('cache');
+	return $cache->set_auth_data('phone-code-'.$phone, $code, 1);
+}
+// 验证码类
+function get_captcha() {
+	$input = pc_base::load_sys_class('input');
+	$cache = pc_base::load_sys_class('cache');
+	$code = $cache->get_auth_data('web-captcha-'.md5($input->ip_address().$input->get_user_agent()), 1);
 	return $code;
 }
 // 验证码类

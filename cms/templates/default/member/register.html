@@ -28,6 +28,73 @@
                 <li>{$v['form']}</li>
                 {/loop}
                 {/if}
+                {if $sms_setting['sms_enable']=='1'}
+                <li><input type="text" class="input code" name="code" id="code" placeholder="请输入{L('checkcode')}">{form::checkcode('code_img', '5', '20', 126, 40)}</li>
+
+                <div class="input"><label> 手机号码：</label><div class="form"><div id="mobile_div"><input type="text" name="mobile" id="mobile" value="" size="15" class="input-text" title="此服务免费,验证码将以短信免费发送到您的手机"> 
+                    <div class="submit"><button onclick="get_verify()" type="button" class="hqyz">获取短信验证码</button></div> <span id="mobileTip"></span>
+                    <br>
+                    </div>
+                    <div id="mobile_send_div" style="display:none">此服务免费,验证码已发送到<span id="mobile_send"></span>，<span id="edit_mobile" style="display:none"><a href="javascript:void();" onclick="edit_mobile()">修改号码</a>，</span> 如果超过120秒未收到验证码，您可以免费重新获取。<br><br>
+                    <div class="submit"><button type="button" id="GetVerify" onclick="get_verify()" class="hqyz">重获短信验证码</button></div> <br><br></div> 
+                    <script language="JavaScript">
+                    <!--
+                        var times = 120;
+                        var isinerval;
+                        function get_verify() {
+                            var session_code = $('#code').val();
+                            if(session_code=='') {
+                                alert('请输入验证码');
+                                $('#code').focus();
+                                return false;
+                            }
+                            var mobile = $("#mobile").val();
+                            var partten = /^[0-9]+.?[0-9]*/;
+                            if(!partten.test(mobile) || mobile.length != 11){
+                                alert("请输入正确的手机号码");
+                                $('#mobile').focus();
+                                return false;
+                            }
+                            
+                            $.ajax({
+                                type: "GET",
+                                dataType: "json",
+                                url: "api.php?op=sms",
+                                data: {mobile: mobile,session_code:session_code,random:Math.random()},
+                                success: function(json) {
+                                    if (json.code) {
+                                        $("#mobile_send").html(mobile);
+                                        $("#mobile_div").css("display","none");
+                                        $("#mobile_send_div").css("display","");
+                                        times = 120;
+                                        $("#GetVerify").attr("disabled", true);
+                                        isinerval = setInterval("CountDown()", 1000);
+                                    } else {
+                                        alert(json.msg);
+                                    }
+                                }
+                            });
+                            
+                        }
+                        function CountDown() {
+                            if (times < 1) {
+                                $("#GetVerify").html("获取短信验证码").attr("disabled", false);
+                                $("#edit_mobile").css("display","");
+                                clearInterval(isinerval);
+                                return;
+                            }
+                            $("#GetVerify").html(times+"秒后重获验证码");
+                            times--;
+                        }
+                        function edit_mobile() {
+                            $("#mobile_div").css("display","");
+                            $("#mobile_send_div").css("display","none");
+                        }
+                    //-->
+                    </script>
+                    </div></div>
+                    <div class="input"><label>短信校验码：</label><input type="text" name="mobile_verify" id="mobile_verify" value="" size="14" class="input-text"></div>    
+                {/if}
                 {if $member_setting['enablcodecheck']=='1' && $sms_setting['sms_enable']!='1'}
                 <li><input type="text" class="input code" name="code" id="code" placeholder="请输入{L('checkcode')}">{form::checkcode('code_img', '5', '20', 126, 40)}</li>
                 {/if}

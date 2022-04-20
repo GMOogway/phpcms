@@ -101,7 +101,7 @@ class admin_manage extends admin {
 			if(!$info['email']){
 				dr_json(0, L('email').L('empty'), array('field' => 'email'));
 			}
-			if(!$this->check_email($info['email'])){
+			if(!check_email($info['email'])){
 				dr_json(0, L('email').L('格式不正确'), array('field' => 'email'));
 			}
 			$check = $this->db->get_one(array('email'=>$info['email']));
@@ -148,7 +148,7 @@ class admin_manage extends admin {
 			if(!$info['email']){
 				dr_json(0, L('email').L('empty'), array('field' => 'email'));
 			}
-			if(!$this->check_email($info['email'])){
+			if(!check_email($info['email'])){
 				dr_json(0, L('email').L('格式不正确'), array('field' => 'email'));
 			}
 			$check = $this->db->get_one(array('email'=>$info['email']),'userid');
@@ -299,7 +299,7 @@ class admin_manage extends admin {
 			if(!$info['email']){
 				dr_json(0, L('email').L('empty'), array('field' => 'email'));
 			}
-			if(!$this->check_email($info['email'])){
+			if(!check_email($info['email'])){
 				dr_json(0, L('email').L('格式不正确'), array('field' => 'email'));
 			}
 			$check = $this->db->get_one(array('email'=>$info['email']),'userid');
@@ -418,20 +418,6 @@ class admin_manage extends admin {
 		}
 
 		return dr_return_data(1, 'ok');
-	}
-
-	// 验证邮件地址
-	public function check_email($value) {
-
-		if (!$value) {
-			return false;
-		} elseif (!preg_match('/^[\w\-\.]+@[\w\-\.]+(\.\w+)+$/', $value)) {
-			return false;
-		} elseif (strpos($value, '"') !== false || strpos($value, '\'') !== false) {
-			return false;
-		}
-
-		return true;
 	}
 
 	// 获取角色组

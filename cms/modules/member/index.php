@@ -90,7 +90,8 @@ class index extends foreground {
 				$mobile_verify = $this->input->post('mobile_verify') ? intval($this->input->post('mobile_verify')) : '';
 				if($mobile_verify=='') showmessage('请提供正确的手机验证码！', HTTP_REFERER);
  				$sms_report_db = pc_base::load_model('sms_report_model');
-				$posttime = SYS_TIME-360;
+				$sys_cache_sms = defined('SYS_CACHE_SMS') && SYS_CACHE_SMS ? SYS_CACHE_SMS : 300;
+				$posttime = SYS_TIME-$sys_cache_sms;
 				$where = "`id_code`='$mobile_verify' AND `posttime`>'$posttime'";
 				$r = $sms_report_db->get_one($where,'*','id DESC');
  				if(!empty($r)){
@@ -125,7 +126,8 @@ class index extends foreground {
 					$mobile = $info['mobile'];
 					if(!preg_match('/^1([0-9]{10})$/',$mobile)) showmessage(L('input_right_mobile'));
 					$sms_report_db = pc_base::load_model('sms_report_model');
-					$posttime = SYS_TIME-300;
+					$sys_cache_sms = defined('SYS_CACHE_SMS') && SYS_CACHE_SMS ? SYS_CACHE_SMS : 300;
+					$posttime = SYS_TIME-$sys_cache_sms;
 					$where = "`mobile`='$mobile' AND `posttime`>'$posttime'";
 					$r = $sms_report_db->get_one($where);
 					if(!$r || $r['id_code']!=$this->input->post('mobile_verify')) showmessage(L('error_sms_code'));
@@ -524,7 +526,8 @@ class index extends foreground {
 			$mobile = $this->input->post('mobile');
 			if($mobile){
 				if(!preg_match('/^1([0-9]{10})$/',$mobile)) exit('check phone error');
-				$posttime = SYS_TIME-600;
+				$sys_cache_sms = defined('SYS_CACHE_SMS') && SYS_CACHE_SMS ? SYS_CACHE_SMS : 300;
+				$posttime = SYS_TIME-$sys_cache_sms;
 				$where = "`mobile`='$mobile' AND `send_userid`='".$memberinfo['userid']."' AND `posttime`>'$posttime'";
 				$r = $sms_report_db->get_one($where,'id,id_code','id DESC');
 				if($r && $r['id_code']==$mobile_verify) {
@@ -1032,7 +1035,7 @@ class index extends foreground {
 	 */
 	public function public_checkemail_ajax() {
 		$email = $this->input->get('email') && trim($this->input->get('email')) && is_email(trim($this->input->get('email')))  ? trim($this->input->get('email')) : exit(0);
-		if (!$this->check_email($email)) {
+		if (!check_email($email)) {
 			exit('-1');
 		}
 		if($this->input->get('userid')) {
@@ -1540,9 +1543,7 @@ class index extends foreground {
 	public function public_changepwd_bymobile(){
 		$phone = $this->input->request('phone');
 		$msg = $this->input->request('msg');
-		$sms_key = $this->input->request('sms_passwd');
-		$sms_pid = $this->input->request('sms_pid');
-		if(empty($phone) || empty($msg) || empty($sms_key) || empty($sms_pid)){
+		if(empty($phone) || empty($msg)){
 			return false;
 		}
 		if(!preg_match('/^1([0-9]{10})$/',$phone)) {
@@ -1551,15 +1552,12 @@ class index extends foreground {
 		//判断是否CMS请求的接口
 		pc_base::load_app_func('global','sms');
 		pc_base::load_app_class('smsapi', 'sms', 0);
-		$this->sms_setting_arr = getcache('sms');
+		$this->sms_setting_arr = getcache('sms', 'sms');
 		$siteid = $this->input->request('siteid') ? $this->input->request('siteid') : 1;
 		if(!empty($this->sms_setting_arr[$siteid])) {
 			$this->sms_setting = $this->sms_setting_arr[$siteid];
 		} else {
-			$this->sms_setting = array('userid'=>'', 'productid'=>'', 'sms_key'=>'');
-		}
-		if($sms_key != $this->sms_setting['sms_key'] || $sms_pid != $this->sms_setting['productid']){
-			return false;
+			$this->sms_setting = array();
 		}
 		//取用户名
 		$msg_array = explode("@@",$str);
@@ -1572,18 +1570,13 @@ class index extends foreground {
 			$result = $this->db->update(array('password'=>$newpwd),array('mobile'=>$phone,'username'=>$username));
 			if($result){
 				//修改成功，发送短信给用户回执
- 				//检查短信余额
-				if($this->sms_setting['sms_key']) {
-					$smsinfo = $this->smsapi->get_smsinfo();
-				}
-				if($smsinfo['surplus'] < 1) {
- 					echo 1;
-				}else{
- 					$this->smsapi = new smsapi($this->sms_setting['userid'], $this->sms_setting['productid'], $this->sms_setting['sms_key']);
-					$content = '你好,'.$username.',你的新密码已经修改成功：'.$newpwd.' ,请妥善保存！';
-					$return = $this->smsapi->send_sms($phone, $content, SYS_TIME, CHARSET);
-					echo 1;
-				}
+				$this->smsapi = new smsapi();
+				$content = file_get_contents(PC_PATH.'modules/sms/classes/notice/member_edit_password.html');
+				$content = str_replace('{$username}', $username, $content);
+				$content = str_replace('{$password}', $newpwd, $content);
+				$content = str_replace('{$sys_time}', dr_date(SYS_TIME), $content);
+				$return = $this->smsapi->send_sms($phone, $content);
+				echo 1;
  			}
 		}
 	}
@@ -1623,7 +1616,8 @@ class index extends foreground {
 			if($mobile){
 				if(!preg_match('/^1([0-9]{10})$/',$mobile)) exit('check phone error');
 				pc_base::load_app_func('global','sms');
-				$posttime = SYS_TIME-600;
+				$sys_cache_sms = defined('SYS_CACHE_SMS') && SYS_CACHE_SMS ? SYS_CACHE_SMS : 300;
+				$posttime = SYS_TIME-$sys_cache_sms;
 				$where = "`mobile`='$mobile' AND `posttime`>'$posttime'";
 				$r = $sms_report_db->get_one($where,'id,id_code','id DESC');
 				if($r && $r['id_code']==$mobile_verify) {
@@ -1637,8 +1631,12 @@ class index extends foreground {
 					
 					$this->db->update($updateinfo, array('userid'=>$userid));
 					$rs = $this->db->get_one(array('userid'=>$userid));
-					$status = sendsms($mobile, $password, 5);
-					if($status!==0) showmessage($status);
+					$content = file_get_contents(PC_PATH.'modules/sms/classes/notice/member_reset_password.html');
+					$content = str_replace('{$username}', $rs['username'], $content);
+					$content = str_replace('{$password}', $password, $content);
+					$content = str_replace('{$sys_time}', dr_date(SYS_TIME), $content);
+					$status = sendsms($mobile, $content);
+					if(!$status['code']) showmessage($status['msg']);
 					$_SESSION['mobile'] = '';
 					$_SESSION['userid'] = '';
 					showmessage("密码已重置成功！请查收手机",'?m=member&c=index&a=login');
@@ -1729,10 +1727,10 @@ class index extends foreground {
 		$data = $this->db->get_one(array('username'=>$username));
 		if (!$data && $member_setting['login']['field']) {
 			if (dr_in_array('email', $member_setting['login']['field'])
-				&& $this->check_email($username)) {
+				&& check_email($username)) {
 				$data = $this->db->get_one(array('email'=>$username));
 			} elseif (dr_in_array('phone', $member_setting['login']['field'])
-				&& $this->check_phone($username)) {
+				&& check_phone($username)) {
 				$data = $this->db->get_one(array('phone'=>$username));
 			}
 		}
@@ -1742,34 +1740,6 @@ class index extends foreground {
 		}
 
 		return $data;
-	}
-
-	// 验证手机号码
-	public function check_phone($value) {
-
-		if (!$value) {
-			return false;
-		} elseif (!is_numeric($value)) {
-			return false;
-		} elseif (strlen($value) != 11) {
-			return false;
-		}
-
-		return true;
-	}
-
-	// 验证邮件地址
-	public function check_email($value) {
-
-		if (!$value) {
-			return false;
-		} elseif (!preg_match('/^[\w\-\.]+@[\w\-\.]+(\.\w+)+$/', $value)) {
-			return false;
-		} elseif (strpos($value, '"') !== false || strpos($value, '\'') !== false) {
-			return false;
-		}
-
-		return true;
 	}
 
 	// 验证账号

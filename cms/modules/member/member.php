@@ -811,20 +811,6 @@ class member extends admin {
 		}
 	}
 
-	// 验证邮件地址
-	public function check_email($value) {
-
-		if (!$value) {
-			return false;
-		} elseif (!preg_match('/^[\w\-\.]+@[\w\-\.]+(\.\w+)+$/', $value)) {
-			return false;
-		} elseif (strpos($value, '"') !== false || strpos($value, '\'') !== false) {
-			return false;
-		}
-
-		return true;
-	}
-
 	// 验证账号
 	public function check_username($value) {
 		$member_setting = getcache('member_setting', 'member');

@@ -16,6 +16,7 @@ class member_setting extends admin {
 		$this->input = pc_base::load_sys_class('input');
 		$this->cache = pc_base::load_sys_class('cache');
 		$this->db = pc_base::load_model('module_model');
+		$this->menu_db = pc_base::load_model('menu_model');
 		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 	}
 
@@ -129,12 +130,8 @@ class member_setting extends admin {
 			
 			if(!empty($this->sms_setting_arr[$siteid])) {
  				$this->sms_setting = $this->sms_setting_arr[$siteid];
-				if($this->sms_setting['sms_enable']=='0'){
+				if(!$this->sms_setting['sms_enable']){
 					$sms_disabled = 1;
-				}else{
-					if(empty($this->sms_setting['userid']) || empty($this->sms_setting['productid']) || empty($this->sms_setting['sms_key'])){
-					$sms_disabled = 1;
-					}
 				}
  			} else {
 				$sms_disabled = 1;
