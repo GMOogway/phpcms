@@ -1813,6 +1813,25 @@ function dr_array2string($data) {
 	return $data ? json_encode($data, JSON_UNESCAPED_UNICODE) : '';
 }
 /**
+ * 将对象转换为数组
+ *
+ * @param   object  $obj    数组对象
+ * @return  array
+ */
+function dr_object2array($obj) {
+	if (!$obj) {
+		return array();
+	}
+	$_arr = is_object($obj) ? get_object_vars($obj) : $obj;
+	if ($_arr && is_array($_arr)) {
+		foreach ($_arr as $key => $val) {
+			$val = (is_array($val) || is_object($val)) ? dr_object2array($val) : $val;
+			$arr[$key] = $val;
+		}
+	}
+	return $arr;
+}
+/**
  * 数组截取
  */
 function dr_arraycut($arr, $limit) {
