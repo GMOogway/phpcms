@@ -1,6 +1,7 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');
-include $this->admin_tpl('header', 'admin');?>
+include $this->admin_tpl('header', 'admin');
+$menu_data = $this->menu_db->get_one(array('name' => 'version_update', 'm' => 'admin', 'c' => 'cloud', 'a' => 'upgrade'));?>
 <div class="page-content main-content">
 <form class="form-horizontal" role="form" id="myform">
 <div class="row">
@@ -18,8 +19,8 @@ include $this->admin_tpl('header', 'admin');?>
                     <div class="form-group">
                         <label class="col-md-3 control-label"><?php echo L('系统版本');?></label>
                         <div class="col-md-9">
-                            <div class="form-control-static"><a href="javascript:;" layuimini-content-href="?m=admin&c=cloud&a=upgrade&menuid=277&pc_hash=<?php echo dr_get_csrf_token();?>" data-title="版本升级" data-icon="fa fa-refresh"><?php echo CMS_VERSION?></a>
-                                <a id="dr_cms_update" href="javascript:;" layuimini-content-href="?m=admin&c=cloud&a=upgrade&menuid=277&pc_hash=<?php echo dr_get_csrf_token();?>" data-title="版本升级" data-icon="fa fa-refresh" style="margin-left: 10px;display: none" class="badge badge-danger badge-roundless">  </a>
+                            <div class="form-control-static"><a href="javascript:;" layuimini-content-href="?m=admin&c=cloud&a=upgrade&menuid=<?php echo $menu_data['id']?>&pc_hash=<?php echo dr_get_csrf_token();?>" data-title="版本升级" data-icon="fa fa-refresh"><?php echo CMS_VERSION?></a>
+                                <a id="dr_cms_update" href="javascript:;" layuimini-content-href="?m=admin&c=cloud&a=upgrade&menuid=<?php echo $menu_data['id']?>&pc_hash=<?php echo dr_get_csrf_token();?>" data-title="版本升级" data-icon="fa fa-refresh" style="margin-left: 10px;display: none" class="badge badge-danger badge-roundless">  </a>
                             </div>
                         </div>
                     </div>
@@ -54,25 +55,25 @@ include $this->admin_tpl('header', 'admin');?>
                     <div class="form-group">
                         <label class="col-md-3 control-label"><?php echo L('上传最大值');?></label>
                         <div class="col-md-9">
-                            <div class="form-control-static"><a href="javascript:dr_iframe_show('show', '?m=admin&c=cloud&a=config&menuid=277');"><?php echo @ini_get("upload_max_filesize");?></a></div>
+                            <div class="form-control-static"><a href="javascript:dr_iframe_show('show', '?m=admin&c=cloud&a=config');"><?php echo @ini_get("upload_max_filesize");?></a></div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label"><?php echo L('POST最大值');?></label>
                         <div class="col-md-9">
-                            <div class="form-control-static"><a href="javascript:dr_iframe_show('show', '?m=admin&c=cloud&a=config&menuid=277');"><?php echo @ini_get("post_max_size");?></a></div>
+                            <div class="form-control-static"><a href="javascript:dr_iframe_show('show', '?m=admin&c=cloud&a=config');"><?php echo @ini_get("post_max_size");?></a></div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label"><?php echo L('PHP内存上限');?></label>
                         <div class="col-md-9">
-                            <div class="form-control-static"><a href="javascript:dr_iframe_show('show', '?m=admin&c=cloud&a=config&menuid=277');"><?php echo @ini_get("memory_limit");?></a></div>
+                            <div class="form-control-static"><a href="javascript:dr_iframe_show('show', '?m=admin&c=cloud&a=config');"><?php echo @ini_get("memory_limit");?></a></div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label"><?php echo L('提交表单数量');?></label>
                         <div class="col-md-9">
-                            <div class="form-control-static"><a href="javascript:dr_iframe_show('show', '?m=admin&c=cloud&a=config&menuid=277');"><?php echo @ini_get("max_input_vars");?></a></div>
+                            <div class="form-control-static"><a href="javascript:dr_iframe_show('show', '?m=admin&c=cloud&a=config');"><?php echo @ini_get("max_input_vars");?></a></div>
                         </div>
                     </div>
                     <div class="form-group">

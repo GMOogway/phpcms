@@ -340,10 +340,12 @@ $(document).ready(function() {
                     <a href="javascript:;"><?php echo $admin_username;?></a>
                     <dl class="layui-nav-child">
                         <dd>
-                            <a href="javascript:;" layuimini-content-href="?m=admin&c=admin_manage&a=public_edit_info&menuid=3&pc_hash=<?php echo dr_get_csrf_token()?>" data-title="<?php echo L('基本资料');?>" data-icon="fa fa-gears"><?php echo L('基本资料');?><span class="layui-badge-dot"></span></a>
+                            <?php $menu_data = $this->menu_db->get_one(array('name' => 'editinfo', 'm' => 'admin', 'c' => 'admin_manage', 'a' => 'public_edit_info'));?>
+                            <a href="javascript:;" layuimini-content-href="?m=admin&c=admin_manage&a=public_edit_info&menuid=<?php echo $menu_data['id']?>&pc_hash=<?php echo dr_get_csrf_token()?>" data-title="<?php echo L('基本资料');?>" data-icon="fa fa-gears"><?php echo L('基本资料');?><span class="layui-badge-dot"></span></a>
                         </dd>
                         <dd>
-                            <a href="javascript:;" layuimini-content-href="?m=admin&c=admin_manage&a=public_edit_pwd&menuid=4&pc_hash=<?php echo dr_get_csrf_token()?>" data-title="<?php echo L('修改密码');?>" data-icon="fa fa-gears"><?php echo L('修改密码');?></a>
+                            <?php $menu_data = $this->menu_db->get_one(array('name' => 'editpwd', 'm' => 'admin', 'c' => 'admin_manage', 'a' => 'public_edit_pwd'));?>
+                            <a href="javascript:;" layuimini-content-href="?m=admin&c=admin_manage&a=public_edit_pwd&menuid=<?php echo $menu_data['id']?>&pc_hash=<?php echo dr_get_csrf_token()?>" data-title="<?php echo L('修改密码');?>" data-icon="fa fa-gears"><?php echo L('修改密码');?></a>
                         </dd>
                         <dd>
                             <hr>

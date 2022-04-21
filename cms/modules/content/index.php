@@ -445,6 +445,15 @@ class index {
 		}
 	}
 	
+	//test
+	function test() {
+		if (IS_AJAX) {
+			dr_jsonp(1, '服务器支持伪静态功能，可以自定义URL规则和解析规则了');
+		} else {
+			redirect(WEB_PATH, 'location', '301');
+		}
+	}
+	
 	//JSON 输出
 	public function json_list() {
 		if($this->input->get('type')=='keyword' && $this->input->get('modelid') && $this->input->get('keywords')) {
@@ -558,9 +567,10 @@ class index {
 		if ($setting['create_to_html_root']) return $dir;
 		if ($categorys[$catid]['parentid']) {
 			$dir = $categorys[$categorys[$catid]['parentid']]['catdir'].'/'.$dir;
-			$dir = $this->get_categorydir($categorys[$catid]['parentid'], $dir);
+			return $this->get_categorydir($categorys[$catid]['parentid'], $dir);
+		} else {
+			return $dir;
 		}
-		return WEB_PATH.ltrim($dir, '/');
 	}
 }
 ?>

@@ -10,6 +10,7 @@ class category extends admin {
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
 		$this->db = pc_base::load_model('category_model');
+		$this->menu_db = pc_base::load_model('menu_model');
 		$this->siteid = $this->get_siteid();
 	}
 	/**
@@ -184,7 +185,8 @@ class category extends admin {
 				}
 			}
 			$this->cache();
-			dr_json(1, L('add_success'), array('tourl' => '?m=admin&c=category&a=public_cache&module=admin&menuid=141&pc_hash='.dr_get_csrf_token()));
+			$menu_data = $this->menu_db->get_one(array('name' => 'category_manage', 'm' => 'admin', 'c' => 'category', 'a' => 'init'));
+			dr_json(1, L('add_success'), array('tourl' => '?m=admin&c=category&a=public_cache&module=admin&menuid='.$menu_data['id'].'&pc_hash='.dr_get_csrf_token()));
 		} else {
 			$show_header = $show_dialog = true;
 			$catid = 0;
@@ -220,6 +222,7 @@ class category extends admin {
  			$formValidator = $content_form->formValidator;
  			$checkall = $content_form->checkall;
 			if($type==0) {
+				$menu_data = $this->menu_db->get_one(array('name' => 'model_manage', 'm' => 'content', 'c' => 'sitemodel', 'a' => 'init'));
 				$exists_model = false;
 				$models = getcache('model','commons');	
 				foreach($models as $_m) {
@@ -228,7 +231,7 @@ class category extends admin {
 						break;
 					}
 				}
-				if(!$exists_model) dr_admin_msg(0,L('please_add_model'),'?m=content&c=sitemodel&a=init&menuid=151',5);
+				if(!$exists_model) dr_admin_msg(0,L('please_add_model'),'?m=content&c=sitemodel&a=init&menuid='.$menu_data['id'],5);
 				include $this->admin_tpl('category_add');
 			} elseif ($type==1) {
 				include $this->admin_tpl('category_page_add');
@@ -350,7 +353,8 @@ class category extends admin {
 				$this->attachment_db = pc_base::load_model('attachment_model');
 				$this->attachment_db->api_update($info['image'],'catid-'.$catid,1);
 			}
-			dr_json(1, L('operation_success'), array('tourl' => '?m=admin&c=category&a=public_cache&module=admin&menuid=141&pc_hash='.dr_get_csrf_token()));
+			$menu_data = $this->menu_db->get_one(array('name' => 'category_manage', 'm' => 'admin', 'c' => 'category', 'a' => 'init'));
+			dr_json(1, L('operation_success'), array('tourl' => '?m=admin&c=category&a=public_cache&module=admin&menuid='.$menu_data['id'].'&pc_hash='.dr_get_csrf_token()));
 		} else {
 			$show_header = $show_dialog = true;
 			//获取站点模板信息
@@ -1135,6 +1139,7 @@ class category extends admin {
 	// 统一设置
 	public function public_batch_category() {
 		$show_header = $show_dialog  = true;
+		$menu_data = $this->menu_db->get_one(array('name' => 'category_manage', 'm' => 'admin', 'c' => 'category', 'a' => 'init'));
 		$this->content_db = pc_base::load_model('content_model');
 		if(IS_AJAX_POST) {
 			$info = $this->input->post('info');
@@ -1156,7 +1161,7 @@ class category extends admin {
 				$r['setting']['isleft'] = $setting['isleft'];
 				$this->db->update(array('ismenu'=>$info['ismenu'], 'setting'=>dr_array2string($r['setting'])), array('catid'=>$r['catid']));
 			}
-			dr_json(1, L('operation_success'), array('tourl' => '?m=admin&c=category&a=public_cache&module=admin&menuid=141&pc_hash='.dr_get_csrf_token()));
+			dr_json(1, L('operation_success'), array('tourl' => '?m=admin&c=category&a=public_cache&module=admin&menuid='.$menu_data['id'].'&pc_hash='.dr_get_csrf_token()));
 		} else {
 			include $this->admin_tpl('category_batch_save');
 		}

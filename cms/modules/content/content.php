@@ -21,6 +21,7 @@ class content extends admin {
 		$this->cache = pc_base::load_sys_class('cache');
 		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 		$this->db = pc_base::load_model('content_model');
+		$this->menu_db = pc_base::load_model('menu_model');
 		$this->f_db = pc_base::load_model('sitemodel_model');
 		$this->field_db = pc_base::load_model('sitemodel_field_model');
 		$this->siteid = $this->get_siteid();

@@ -79,11 +79,13 @@ $(function () {
                             <div class="layui-card-body">
                                 <div class="welcome-module">
                                     <div class="layui-row layui-col-space10 layuimini-qiuck" style="color:#ff0000;">
-                                        <?php if(is_file(CACHE_PATH.'caches_error/caches_data/log-'.date('Y-m-d',SYS_TIME).'.php')) {?>
-                                        <p><?php echo L('※ 错误日志，<a href="javascript:;" layuimini-content-href="?m=admin&c=index&a=public_error_log&menuid=249&pc_hash='.dr_get_csrf_token().'" data-title="错误日志" data-icon="fa fa-list-alt"><i class="fa fa-list-alt"></i><cite>点击查看</cite></a>')?></p>
+                                        <?php if(is_file(CACHE_PATH.'caches_error/caches_data/log-'.date('Y-m-d',SYS_TIME).'.php')) {
+                                        $menu_data = $this->menu_db->get_one(array('name' => 'public_error_log', 'm' => 'admin', 'c' => 'index', 'a' => 'public_error_log'));?>
+                                        <p><?php echo L('※ 错误日志，<a href="javascript:;" layuimini-content-href="?m=admin&c=index&a=public_error_log&menuid='.$menu_data['id'].'&pc_hash='.dr_get_csrf_token().'" data-title="错误日志" data-icon="fa fa-list-alt"><i class="fa fa-list-alt"></i><cite>点击查看</cite></a>')?></p>
                                         <?php } ?>
-                                        <?php if(is_file(CACHE_PATH.'error_log.php')) {?>
-                                        <p><?php echo L('※ 系统错误，<a href="javascript:;" layuimini-content-href="?m=admin&c=index&a=public_error&menuid=246&pc_hash='.dr_get_csrf_token().'" data-title="系统错误" data-icon="fa fa-list-alt"><i class="fa fa-list-alt"></i><cite>点击查看</cite></a>')?></p>
+                                        <?php if(is_file(CACHE_PATH.'error_log.php')) {
+                                        $menu_data = $this->menu_db->get_one(array('name' => 'public_error', 'm' => 'admin', 'c' => 'index', 'a' => 'public_error'));?>
+                                        <p><?php echo L('※ 系统错误，<a href="javascript:;" layuimini-content-href="?m=admin&c=index&a=public_error&menuid='.$menu_data['id'].'&pc_hash='.dr_get_csrf_token().'" data-title="系统错误" data-icon="fa fa-list-alt"><i class="fa fa-list-alt"></i><cite>点击查看</cite></a>')?></p>
                                         <?php } ?>
                                         <?php if(SELF == 'admin.php') {?>
                                         <p><?php echo L('※ 为了系统安全，请修改根目录admin.php的文件名')?></p>

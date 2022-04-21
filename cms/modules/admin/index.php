@@ -182,12 +182,13 @@ class index extends admin {
 	}
 	
 	public function public_menu() {
+		$menu_data = $this->menu_db->get_one(array('name' => 'check', 'm' => 'admin', 'c' => 'check', 'a' => 'init'));
 		$currentsite = $this->get_siteinfo(param::get_cookie('siteid'));
 		//$logoInfo['href'] = $currentsite['domain'];
 		$array = admin::admin_menu(0);
 		$app = pc_base::load_config('version');
 		if ($app['update'] || !is_file(CONFIGPATH.'version.php')) {
-			$menu_home = '?m=admin&c=check&a=init&menuid=248&pc_hash='.dr_get_csrf_token();
+			$menu_home = '?m=admin&c=check&a=init&menuid='.$menu_data['id'].'&pc_hash='.dr_get_csrf_token();
 		} else {
 			$menu_home = '?m=admin&c=index&a=public_main';
 		}
@@ -214,10 +215,9 @@ class index extends admin {
 	//初始化菜单
 	private function menu_init($parentid,$menuid) {
 		$parentid = intval($parentid);
-		$menudb = pc_base::load_model('menu_model');
 		$menu2db = pc_base::load_model('menu2_model');
 		$where = array('parentid'=>$parentid);
-		$result = $menudb->select($where,'*',1000,'listorder ASC,id ASC');
+		$result = $this->menu_db->select($where,'*',1000,'listorder ASC,id ASC');
 		$j = 0;
 		$pid = 0;
 		foreach($result as $v) {
@@ -231,7 +231,7 @@ class index extends admin {
 			$info['listorder'] = $j;
 			$info['display'] = $v['display'];
 			$pid = $menu2db->insert($info, true);
-			$this->menu($v['id'],$pid);
+			$this->menu_init($v['id'],$pid);
 			$j++;
 		}
 	}

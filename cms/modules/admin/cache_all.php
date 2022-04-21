@@ -7,6 +7,7 @@ class cache_all extends admin {
 	function __construct() {
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
+		$this->menu_db = pc_base::load_model('menu_model');
 		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 	}
 

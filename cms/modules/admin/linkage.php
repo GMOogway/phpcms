@@ -9,6 +9,7 @@ class linkage extends admin {
 		$this->input = pc_base::load_sys_class('input');
 		$this->cache = pc_base::load_sys_class('cache');
 		$this->db = pc_base::load_model('linkage_model');
+		$this->menu_db = pc_base::load_model('menu_model');
 		$this->sites = pc_base::load_app_class('sites');
 		$this->siteid = $this->get_siteid();
 		pc_base::load_sys_class('form', '', 0);
@@ -416,7 +417,8 @@ class linkage extends admin {
 		} else {
 			$select = dr_rp(menu_linkage($link['code'], 'pid', 0), 'info[pid]', 'pid');
 		}
-		$big_menu = array('?m=admin&c=linkage&a=init&menuid=269', L('linkage'));		
+		$menu_data = $this->menu_db->get_one(array('name' => 'linkage', 'm' => 'admin', 'c' => 'linkage', 'a' => 'init'));
+		$big_menu = array('?m=admin&c=linkage&a=init&menuid='.$menu_data['id'], L('linkage'));		
 		include $this->admin_tpl('linkage_submenu');
 	}
 

@@ -14,6 +14,7 @@ class cloud extends admin {
         $this->cache = pc_base::load_sys_class('cache');
         $this->file = pc_base::load_sys_class('file');
         $this->db = pc_base::load_model('site_model');
+		$this->menu_db = pc_base::load_model('menu_model');
         // 不是超级管理员
         if (!cleck_admin($_SESSION['roleid'])) {
             dr_admin_msg(0,L('需要超级管理员账号操作'));

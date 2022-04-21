@@ -392,6 +392,55 @@ if (is_cli()) {
 
 	// 当前URI
 	define('CMSURI', $uri);
+
+	// 根据自定义URL规则来识别路由
+	if (!IS_ADMIN && CMSURI && !IS_API) {
+		// 自定义URL解析规则
+		$routes = [];
+		$routes['index\.html(.*)'] = 'index.php?m=content&c=index';
+		$routes['404\.html(.*)'] = 'index.php?m=404&uri='.CMSURI;
+		$routes['rewrite-test.html(.*)'] = 'index.php?m=content&c=index&a=test';
+		if (is_file(CONFIGPATH.'rewrite.php')) {
+			$my = require CONFIGPATH.'rewrite.php';
+			$my && $routes = array_merge($routes, $my);
+		}
+		// 正则匹配路由规则
+		$is_404 = 1;
+		foreach ($routes as $key => $val) {
+			$rewrite = $match = []; //(defined('SYS_URL_PREG') && SYS_URL_PREG ? '' : '$')
+			if ($key == CMSURI || preg_match('/^'.$key.'$/U', CMSURI, $match)) {
+				unset($match[0]);
+				// 开始匹配
+				$is_404 = 0;
+				// 开始解析路由 URL参数模式
+				$_GET = [];
+				$queryParts = explode('&', str_replace(['index.php?', '/index.php?'], '', $val));
+				if ($queryParts) {
+					foreach ($queryParts as $param) {
+						$item = explode('=', $param);
+						$_GET[$item[0]] = $item[1];
+						if (strpos($item[1], '$') !== FALSE) {
+							$id = (int)substr($item[1], 1);
+							$_GET[$item[0]] = isset($match[$id]) ? $match[$id] : $item[1];
+						}
+					}
+				}
+				!$_GET['m'] && $_GET['m'] = 'content';
+				!$_GET['c'] && $_GET['c'] = 'index';
+				// 结束匹配
+				break;
+			}
+		}
+		// 自定义路由模式
+		if (is_file(CONFIGPATH.'router.php')) {
+			require CONFIGPATH.'router.php';
+		}
+		// 说明是404
+		if ($is_404) {
+			$_GET['m'] = '404';
+			$_GET['uri'] = CMSURI;
+		}
+	}
 }
 
 pc_base::verify();

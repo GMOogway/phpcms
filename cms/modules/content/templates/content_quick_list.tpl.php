@@ -1,6 +1,7 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');
-include $this->admin_tpl('header','admin');?>
+include $this->admin_tpl('header','admin');
+$menu_data = $this->menu_db->get_one(array('name' => 'content_manage', 'm' => 'content', 'c' => 'content', 'a' => 'init'));?>
 <style type="text/css">
 body {background: #f5f6f8;}
 #search_div{ position:absolute; top:23px; border:1px solid #dfdfdf; text-align:left; padding:1px; left:89px;*left:88px; width:263px;*width:260px; background-color:#FFF; display:none; font-size:12px}
@@ -29,9 +30,9 @@ $().ready(function(){
 					var str = '';
 					$.each(data, function(i,n){
 						if(n.type=='0') {
-							str += '<li><a href="?m=content&c=content&a=init&menuid=72&catid='+n.catid+'&pc_hash='+pc_hash+'">'+n.catname+'</a></li>';
+							str += '<li><a href="?m=content&c=content&a=init&menuid=<?php echo $menu_data['id']?>&catid='+n.catid+'&pc_hash='+pc_hash+'">'+n.catname+'</a></li>';
 						} else {
-							str += '<li><a href="?m=content&c=content&a=add&menuid=72&catid='+n.catid+'&pc_hash='+pc_hash+'">'+n.catname+'</a></li>';
+							str += '<li><a href="?m=content&c=content&a=add&menuid=<?php echo $menu_data['id']?>&catid='+n.catid+'&pc_hash='+pc_hash+'">'+n.catname+'</a></li>';
 						}
 					});
 					$('#search_div').html(str);
