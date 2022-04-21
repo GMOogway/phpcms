@@ -5,6 +5,8 @@ include $this->admin_tpl('header');?>
 hr, p {margin: 20px 0;}
 .portlet>.portlet-title>.caption>.caption-helper {padding: 0;margin: 0;line-height: 13px;color: #9eacb4;font-size: 13px;font-weight: 400;}
 textarea {min-height: auto;}
+.alert>p {margin: 0;}
+.alert>p, .alert>ul {margin-bottom: 0;}
 </style>
 <script type="text/javascript">
 function dr_test(obj, name, domain) {
@@ -85,7 +87,6 @@ function dr_rewrite_config() {
             <a href="javascript:;" class="btn green" onClick="dr_rewrite_config()"> <?php echo L('生成解析规则');?> </a>
         </p>
     </div>
-</div>
 
 <div class="portlet light bordered" id="dr_write" style="display: none">
     <div class="portlet-title">
