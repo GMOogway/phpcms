@@ -107,29 +107,27 @@ include $this->admin_tpl('header', 'admin');?>
 </form>
 </div>
 <script>
-    $(function () {
-        $.ajax({type: "GET",dataType:"json", url: "?m=admin&c=index&a=public_version_cms",
-            success: function(json) {
-                if (json.code) {
-                    $('#dr_cms_update').show();
-                    $('#dr_cms_update').html(json.msg);
-                }
+$(function () {
+    $.ajax({type: "GET",dataType:"json", url: "?m=admin&c=index&a=public_version_cms",
+        success: function(json) {
+            if (json.code) {
+                $('#dr_cms_update').show();
+                $('#dr_cms_update').html(json.msg);
             }
-        });
+        }
     });
+});
 </script>
 <script src="<?php echo JS_PATH?>layui/layui.js" charset="utf-8"></script>
 <script src="<?php echo CSS_PATH?>layuimini/js/lay-config.js?v=2.0.0" charset="utf-8"></script>
-<script src="<?php echo JS_PATH?>main.js" charset="utf-8"></script>
 <script>
-    layui.use(['layer', 'miniTab','echarts'], function () {
-        var $ = layui.jquery,
-            layer = layui.layer,
-            miniTab = layui.miniTab,
-            echarts = layui.echarts;
-
-        miniTab.listen();
-    });
+layui.use(['layer', 'miniTab','echarts'], function () {
+    var $ = layui.jquery,
+        layer = layui.layer,
+        miniTab = layui.miniTab,
+        echarts = layui.echarts;
+    miniTab.listen();
+});
 </script>
 </body>
 </html>

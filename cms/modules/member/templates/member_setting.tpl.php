@@ -404,18 +404,16 @@ function dr_call_alert() {
     });
 }
 </script>
-<script src="http://localhost:82/statics/js/layui/layui.js" charset="utf-8"></script>
-<script src="http://localhost:82/statics/css/layuimini/js/lay-config.js?v=2.0.0" charset="utf-8"></script>
-<script src="http://localhost:82/statics/js/main.js" charset="utf-8"></script>
+<script src="<?php echo JS_PATH;?>layui/layui.js" charset="utf-8"></script>
+<script src="<?php echo CSS_PATH;?>layuimini/js/lay-config.js?v=2.0.0" charset="utf-8"></script>
 <script>
-    layui.use(['layer', 'miniTab','echarts'], function () {
-        var $ = layui.jquery,
-            layer = layui.layer,
-            miniTab = layui.miniTab,
-            echarts = layui.echarts;
-
-        miniTab.listen();
-    });
+layui.use(['layer', 'miniTab','echarts'], function () {
+    var $ = layui.jquery,
+        layer = layui.layer,
+        miniTab = layui.miniTab,
+        echarts = layui.echarts;
+    miniTab.listen();
+});
 </script>
 </body>
 </html>

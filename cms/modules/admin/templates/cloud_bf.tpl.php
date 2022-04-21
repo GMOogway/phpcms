@@ -56,85 +56,84 @@ body {background-color: #f5f6f8;}
 <script src="<?php echo JS_PATH?>layui/layui.js" charset="utf-8"></script>
 <script src="<?php echo CSS_PATH?>layuimini/js/lay-config.js?v=2.0.0" charset="utf-8"></script>
 <script>
-    function dr_checking() {
-        $('#dr_check_button').attr('disabled', true);
-        $('#dr_check_button').html('<i class="fa fa-refresh"></i> 准备中');
-        $('#dr_check_bf').html("");
-        $('#dr_check_html').html("正在准备中");
-        $.ajax({
-            type: "GET",
-            dataType: "json",
-            url: "?m=admin&c=cloud&a=bf_count&pc_hash="+pc_hash,
-            success: function (json) {
-                if (json.code == 0) {
-                    dr_tips(0, json.msg);
-                    $('#dr_check_div').show();
-                    $('#dr_check_result').show();
-                    $('#dr_check_button').attr('disabled', false);
-                    $('#dr_check_button').html('<i class="fa fa-refresh"></i> 重新对比');
-                    $('#dr_check_html').append('<p style="color: red">'+json.msg+'</p>');
-                } else {
-                    $('#dr_check_bf').html("");
-                    $('#dr_check_html').html("");
-                    $('#dr_check_result').html($('#dr_check_ing').html());
-                    $('#dr_check_div').show();
-                    $('#dr_check_result').show();
-                    $('#dr_check_button').attr('disabled', true);
-                    $('#dr_check_bf').append('<p style="color: green">本网站程序下载时间：<?php echo CMS_DOWNTIME;?></p>');
-                    $('#dr_check_bf').append('<p style="color: green">服务端最近更新时间：'+json.msg+'</p>');
-                    dr_ajax2ajax(1);
-                }
-            },
-            error: function(HttpRequest, ajaxOptions, thrownError) {
-                dr_ajax_alert_error(HttpRequest, ajaxOptions, thrownError)
+function dr_checking() {
+    $('#dr_check_button').attr('disabled', true);
+    $('#dr_check_button').html('<i class="fa fa-refresh"></i> 准备中');
+    $('#dr_check_bf').html("");
+    $('#dr_check_html').html("正在准备中");
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: "?m=admin&c=cloud&a=bf_count&pc_hash="+pc_hash,
+        success: function (json) {
+            if (json.code == 0) {
+                dr_tips(0, json.msg);
+                $('#dr_check_div').show();
+                $('#dr_check_result').show();
+                $('#dr_check_button').attr('disabled', false);
+                $('#dr_check_button').html('<i class="fa fa-refresh"></i> 重新对比');
+                $('#dr_check_html').append('<p style="color: red">'+json.msg+'</p>');
+            } else {
+                $('#dr_check_bf').html("");
+                $('#dr_check_html').html("");
+                $('#dr_check_result').html($('#dr_check_ing').html());
+                $('#dr_check_div').show();
+                $('#dr_check_result').show();
+                $('#dr_check_button').attr('disabled', true);
+                $('#dr_check_bf').append('<p style="color: green">本网站程序下载时间：<?php echo CMS_DOWNTIME;?></p>');
+                $('#dr_check_bf').append('<p style="color: green">服务端最近更新时间：'+json.msg+'</p>');
+                dr_ajax2ajax(1);
             }
-        });
-    }
-    function dr_ajax2ajax(page) {
-        $.ajax({
-            type: "GET",
-            dataType: "json",
-            url: "?m=admin&c=cloud&a=bf_check&page="+page+"&pc_hash="+pc_hash,
-            success: function (json) {
+        },
+        error: function(HttpRequest, ajaxOptions, thrownError) {
+            dr_ajax_alert_error(HttpRequest, ajaxOptions, thrownError)
+        }
+    });
+}
+function dr_ajax2ajax(page) {
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: "?m=admin&c=cloud&a=bf_check&page="+page+"&pc_hash="+pc_hash,
+        success: function (json) {
 
-                $('#dr_check_html').append(json.msg);
-                document.getElementById('dr_check_html').scrollTop = document.getElementById('dr_check_html').scrollHeight;
+            $('#dr_check_html').append(json.msg);
+            document.getElementById('dr_check_html').scrollTop = document.getElementById('dr_check_html').scrollHeight;
 
-                if (json.code == 0) {
+            if (json.code == 0) {
+                $('#dr_check_button').attr('disabled', false);
+                $('#dr_check_button').html('<i class="fa fa-refresh"></i> 重新对比');
+                dr_tips(0, '发现异常');
+            } else {
+                $('#dr_check_result .progress-bar-success').attr('style', 'width:'+json.code+'%');
+                if (json.code == 100) {
                     $('#dr_check_button').attr('disabled', false);
                     $('#dr_check_button').html('<i class="fa fa-refresh"></i> 重新对比');
-                    dr_tips(0, '发现异常');
-                } else {
-                    $('#dr_check_result .progress-bar-success').attr('style', 'width:'+json.code+'%');
-                    if (json.code == 100) {
-                        $('#dr_check_button').attr('disabled', false);
-                        $('#dr_check_button').html('<i class="fa fa-refresh"></i> 重新对比');
-                        // 对比结果
-                        var isxs = 0;
-                        $("#dr_check_html .rbf").each(function(){
-                            $('#dr_check_bf').append('<p>'+$(this).html()+'</p>');
-                            isxs = 1;
-                        });
-                        if (isxs == 1) {
-                            $('#dr_check_bf').append('<p style="text-align: center"><a class="btn green" href="javascript:;" layuimini-content-href="?m=admin&c=cloud&a=upgrade&menuid=277&pc_hash=<?php echo dr_get_csrf_token()?>" data-title="版本升级" data-icon="fa fa-refresh">前往下载升级包</a> <a class="btn red" href="https://gitee.com/zhaoxunzhiyin/phpcms/" target="_blank">前往下载完整包，然后手动替换以上红色的文件</a></p>');
-                        }
-                    } else {
-                        $('#dr_check_button').html('<i class="fa fa-refresh"></i> 文件对比中 '+json.code+'%');
-                        dr_ajax2ajax(json.code);
+                    // 对比结果
+                    var isxs = 0;
+                    $("#dr_check_html .rbf").each(function(){
+                        $('#dr_check_bf').append('<p>'+$(this).html()+'</p>');
+                        isxs = 1;
+                    });
+                    if (isxs == 1) {
+                        $('#dr_check_bf').append('<p style="text-align: center"><a class="btn green" href="javascript:;" layuimini-content-href="?m=admin&c=cloud&a=upgrade&menuid=277&pc_hash=<?php echo dr_get_csrf_token()?>" data-title="版本升级" data-icon="fa fa-refresh">前往下载升级包</a> <a class="btn red" href="https://gitee.com/zhaoxunzhiyin/phpcms/" target="_blank">前往下载完整包，然后手动替换以上红色的文件</a></p>');
                     }
+                } else {
+                    $('#dr_check_button').html('<i class="fa fa-refresh"></i> 文件对比中 '+json.code+'%');
+                    dr_ajax2ajax(json.code);
                 }
-            },
-            error: function(HttpRequest, ajaxOptions, thrownError) {
-                dr_ajax_alert_error(HttpRequest, ajaxOptions, thrownError)
             }
-        });
-    }
+        },
+        error: function(HttpRequest, ajaxOptions, thrownError) {
+            dr_ajax_alert_error(HttpRequest, ajaxOptions, thrownError)
+        }
+    });
+}
 layui.use(['layer', 'miniTab','echarts'], function () {
     var $ = layui.jquery,
         layer = layui.layer,
         miniTab = layui.miniTab,
         echarts = layui.echarts;
-
     miniTab.listen();
 });
 $(function() {

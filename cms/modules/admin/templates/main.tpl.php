@@ -22,24 +22,24 @@ defined('IS_ADMIN') or exit('No permission resources.');
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>layer/layer.js"></script>
 <script type="text/javascript">
 handlegotop = function() {
-	navigator.userAgent.match(/iPhone|iPad|iPod/i) ? $(window).bind("touchend touchcancel touchleave", function(a) {
-		100 < $(this).scrollTop() ? $(".scroll-to-top").fadeIn(500) : $(".scroll-to-top").fadeOut(500)
-	}) : $(window).scroll(function() {
-		100 < $(this).scrollTop() ? $(".scroll-to-top").fadeIn(500) : $(".scroll-to-top").fadeOut(500)
-	});
-	$(".scroll-to-top").click(function(a) {
-		a.preventDefault();
-		$("html, body").animate({
-			scrollTop: 0
-		}, 500);
-		return !1
-	})
+    navigator.userAgent.match(/iPhone|iPad|iPod/i) ? $(window).bind("touchend touchcancel touchleave", function(a) {
+        100 < $(this).scrollTop() ? $(".scroll-to-top").fadeIn(500) : $(".scroll-to-top").fadeOut(500)
+    }) : $(window).scroll(function() {
+        100 < $(this).scrollTop() ? $(".scroll-to-top").fadeIn(500) : $(".scroll-to-top").fadeOut(500)
+    });
+    $(".scroll-to-top").click(function(a) {
+        a.preventDefault();
+        $("html, body").animate({
+            scrollTop: 0
+        }, 500);
+        return !1
+    })
 }
 $(function () {
-	handlegotop();
-	<?php $sitelist_ccache = getcache('sitelist', 'commons');
-	$ccache = getcache('category_content_1','commons');
-	if(!module_exists('member') && (!is_array($sitelist_ccache) || !is_array($ccache))) { ?>
+    handlegotop();
+    <?php $sitelist_ccache = getcache('sitelist', 'commons');
+    $ccache = getcache('category_content_1','commons');
+    if(!module_exists('member') && (!is_array($sitelist_ccache) || !is_array($ccache))) { ?>
     $.ajax({type: "GET",dataType:"json", url: "?m=admin&c=cache_all&a=init&pc_hash=<?php echo dr_get_csrf_token();?>&is_ajax=1",
         success: function(json) {
             if (json.code) {
@@ -47,7 +47,7 @@ $(function () {
             }
         }
     });
-	<?php }?>
+    <?php }?>
 });
 </script>
 </head>
@@ -235,14 +235,13 @@ $(function () {
 <script src="<?php echo CSS_PATH?>layuimini/js/lay-config.js?v=2.0.0" charset="utf-8"></script>
 <script src="<?php echo JS_PATH?>main.js" charset="utf-8"></script>
 <script>
-    layui.use(['layer', 'miniTab','echarts'], function () {
-        var $ = layui.jquery,
-            layer = layui.layer,
-            miniTab = layui.miniTab,
-            echarts = layui.echarts;
-
-        miniTab.listen();
-    });
+layui.use(['layer', 'miniTab','echarts'], function () {
+    var $ = layui.jquery,
+        layer = layui.layer,
+        miniTab = layui.miniTab,
+        echarts = layui.echarts;
+    miniTab.listen();
+});
 </script>
 </body>
 </html>
