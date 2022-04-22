@@ -15,7 +15,7 @@ class setting extends admin {
 	 * 配置信息
 	 */
 	public function init() {
-		$show_header = $show_validator = true;
+		$show_header = $show_pc_hash = $show_validator = true;
 		if(IS_AJAX_POST) {
 			$setconfig = $this->input->post('setconfig');
 			$setting = $this->input->post('setting');
@@ -172,6 +172,18 @@ class setting extends admin {
 		} else {
 			dr_json(0, L('test_email_faild_to'). $dmail->error());
 		}
+	}
+
+	public function public_test_index() {
+		$kw = trim($this->input->get('kw'));
+		if (!$kw) {
+			$kw = 'iphone手机出现“白苹果”原因及解决办法，用苹果手机的可以看下';
+		}
+		$rt = dr_get_data($kw, 'cms');
+		if (!$rt['code']) {
+			exit('失败：'.$rt['msg'].'<hr><pre>'.var_export($rt['data'], true).'</pre>');
+		}
+		exit('原文：'.$kw.'<hr>结果：'.$rt['msg']);
 	}
 	
 	/**

@@ -50,9 +50,12 @@ var is_admin = 1;
 	}
 	window.focus();
 	var pc_hash = '<?php echo dr_get_csrf_token();?>';
+	<?php if(SYS_CSRF) { ?>
 	var csrf_hash = '<?php echo csrf_hash();?>';
-	<?php if(!isset($show_pc_hash)) { ?>
+	<?php } ?>
+	<?php if(!isset($show_pc_hash) || SYS_CSRF) { ?>
 		window.onload = function(){
+	<?php if(!isset($show_pc_hash)) { ?>
 		var html_a = document.getElementsByTagName('a');
 		var num = html_a.length;
 		for(var i=0;i<num;i++) {
@@ -77,6 +80,8 @@ var is_admin = 1;
 			newNode.value = pc_hash;
 			html_form[i].appendChild(newNode);
 		}
+	<?php } ?>
+	<?php if(SYS_CSRF) { ?>
 		var html_form2 = document.forms;
 		var num2 = html_form2.length;
 		for(var i=0;i<num2;i++) {
@@ -86,6 +91,7 @@ var is_admin = 1;
 			csrfNode.value = csrf_hash;
 			html_form2[i].appendChild(csrfNode);
 		}
+	<?php } ?>
 	}
 <?php } ?>
 $(function(){

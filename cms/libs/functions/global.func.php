@@ -129,32 +129,44 @@ function dr_rp($str, $o, $t) {
 /**
  * 提取关键字
  */
-function dr_get_keywords($kw) {
-	if (!$kw) {
-		return '';
+function dr_get_data($title, $content) {
+	if (!$title) {
+		log_message('error', '分词接口-没有获取标题');
+		return dr_return_data(0, '分词接口-没有获取标题');
 	}
 	$cfg_bdqc_qcnum = pc_base::load_config('system', 'baidu_qcnum') ? pc_base::load_config('system', 'baidu_qcnum') : 10;
 	if (pc_base::load_config('system', 'keywordapi')==1) {
-		$baiduapi = pc_base::load_sys_class('baiduapi');
-		$data = array(
-			'title' => $kw,
-			'content' => $kw,
-		);
-		$data = mb_convert_encoding(json_encode($data), 'GBK', 'UTF8');
-		$baidu = $baiduapi->get_data('https://aip.baidubce.com/rpc/2.0/nlp/v1/keyword', $data, 1);
-		if ($baidu && $baidu['data']['items']) {
+		$cfg = array('id'=>pc_base::load_config('system', 'baidu_aid'), 'ak'=>pc_base::load_config('system', 'baidu_skey'), 'sk'=>pc_base::load_config('system', 'baidu_arcretkey'));
+		if (!isset($cfg['id']) || !isset($cfg['ak']) || !isset($cfg['sk'])) {
+			log_message('error', '百度ai插件-分词接口配置没有成功');
+			return dr_return_data(0, '百度ai插件-分词接口配置没有成功');
+		}
+		require_once PC_PATH.'plugin/baiduapi/AipNlp.php';
+		$client = new AipNlp($cfg['id'], $cfg['ak'], $cfg['sk']);
+		$rt = $client->keyword(str_cut($title, 30), $content);
+		if (isset($rt['error_code']) && $rt['error_code']) {
+			CI_DEBUG && log_message('error', '错误代码（'.$rt['error_code'].'）：'.$rt['error_msg']);
+			return dr_return_data(0, '错误代码（'.$rt['error_code'].'）：'.$rt['error_msg']);
+		} elseif ($rt && $rt['items']) {
 			$n = 0;
-			$resultstr = '';
-			foreach ($baidu['data']['items'] as $t) {
-				$resultstr .= ','.$t['tag'];
+			$tag = array();
+			foreach ($rt['items'] as $t) {
+				$tag[] = $t['tag'];
 				$n++;
 				if( $n >= $cfg_bdqc_qcnum ) break;
 			}
+			return dr_return_data(1, implode(',', $tag));
+			
 		}
-		return trim($resultstr, ',');
+		log_message('error', '百度ai插件-没有分析出关键词');
+		return dr_return_data(0, '百度ai插件-没有分析出关键词', $rt);
 	} else if (pc_base::load_config('system', 'keywordapi')==2) {
 		$XAppid = pc_base::load_config('system', 'xunfei_aid');
 		$Apikey = pc_base::load_config('system', 'xunfei_skey');
+		if (!isset($XAppid) || !isset($Apikey)) {
+			log_message('error', '百度ai插件-分词接口配置没有成功');
+			return dr_return_data(0, '百度ai插件-分词接口配置没有成功');
+		}
 		$fix = 0; //如果错误日志提示【time out|ilegal X-CurTime】，需要把$fix变量改为 100 、200、300、等等，按实际情况调试，只要是数字都行
 		$XParam = base64_encode(json_encode(array(
 			"type"=>"dependent",
@@ -172,17 +184,17 @@ function dr_get_keywords($kw) {
 				'method' => 'POST',
 				'header' => $headers,
 				'content' => http_build_query(array(
-					'text' => $kw,
+					'text' => $title,
 				)),
 				'timeout' => 15*60
 			)
 		))), true);
 		if (!$rt) {
 			log_message('error', '讯飞接口访问失败');
-			return '';
+			return dr_return_data(0, '讯飞接口访问失败');
 		} elseif ($rt['code']) {
 			log_message('error', '讯飞接口: '.$rt['desc']);
-			return '';
+			return dr_return_data(0, '讯飞接口: '.$rt['desc']);
 		} else {
 			$n = 0;
 			$resultstr = '';
@@ -191,17 +203,31 @@ function dr_get_keywords($kw) {
 				$n++;
 				if( $n >= $cfg_bdqc_qcnum ) break;
 			}
-			return trim($resultstr, ',');
+			return dr_return_data(1, trim($resultstr, ','));
 		}
+		log_message('error', '讯飞接口-没有分析出关键词');
+		return dr_return_data(0, '讯飞接口-没有分析出关键词', $rt);
 	} else {
 		$phpanalysis = pc_base::load_sys_class('phpanalysis');
 		$phpanalysis = new phpanalysis('utf-8', 'utf-8', false);
 		$phpanalysis->LoadDict();
-		$phpanalysis->SetSource($kw);
+		$phpanalysis->SetSource($title);
 		$phpanalysis->StartAnalysis(true);
-		return $phpanalysis->GetFinallyKeywords($cfg_bdqc_qcnum);
+		return dr_return_data(1, $phpanalysis->GetFinallyKeywords($cfg_bdqc_qcnum));
 	}
-	return '';
+	log_message('error', '本地接口-没有分析出关键词');
+	return dr_return_data(0, '本地接口-没有分析出关键词', $rt);
+}
+
+/**
+ * 提取关键字
+ */
+function dr_get_keywords($kw) {
+	$rt = dr_get_data($kw, $kw);
+	if (!$rt['code']) {
+		return '';
+	}
+	return $rt['msg'];
 }
 
 /**

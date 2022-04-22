@@ -30,6 +30,7 @@ jQuery(document).ready(function() {
 </div>
 <form action="?m=admin&c=setting&a=init" class="form-horizontal" method="post" name="myform" id="myform">
 <input name="page" id="dr_page" type="hidden" value="<?php echo $page;?>">
+<input name="pc_hash" type="hidden" value="<?php echo dr_get_csrf_token();?>">
 <div class="portlet light bordered myfbody">
     <div class="portlet-title tabbable-line">
         <ul class="nav nav-tabs" style="float:left;">
@@ -638,7 +639,7 @@ jQuery(document).ready(function() {
                     <div class="form-group<?php echo ($keywordapi=='2' || $keywordapi=='0') ? ' hidden' : ''?>" id="baidu">
                         <label class="col-md-2 control-label"><?php echo L('setting_baidu_enable')?></label>
                         <div class="col-md-9">
-                            <div class="input-inline input-large hidden">
+                            <div class="input-inline input-large">
                                 <div class="input-group">
                                     <span class="input-group-addon"><?php echo L('setting_keyword_appid')?></span>
                                     <input type="text" id="baidu_aid" name="setconfig[baidu_aid]" value="<?php echo $baidu_aid;?>" class="form-control" placeholder="">
@@ -656,7 +657,7 @@ jQuery(document).ready(function() {
                                     <input type="text" id="baidu_arcretkey" name="setconfig[baidu_arcretkey]" value="<?php echo $baidu_arcretkey;?>" class="form-control" placeholder="">
                                 </div>
                             </div>
-                            <span class="help-block"><a class="btn btn-sm blue" href="https://cloud.baidu.com/" target="_blank"> <?php echo L('setting_keyword_register');?> </a></span>
+                            <span class="help-block"><a class="btn btn-sm blue" href="https://console.bce.baidu.com/ai/#/ai/nlp/overview/index" target="_blank"> <?php echo L('setting_keyword_register');?> </a></span>
                             <span class="help-block"><?php echo L('setting_baidu_keyword')?></span>
                         </div>
                     </div>
@@ -677,6 +678,13 @@ jQuery(document).ready(function() {
                             </div>
                             <span class="help-block"><a class="btn btn-sm blue" href="https://console.xfyun.cn/services/ke" target="_blank"> <?php echo L('setting_keyword_register');?> </a></span>
                             <span class="help-block"><?php echo L('setting_xunfei_keyword')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('setting_keyword_test')?></label>
+                        <div class="col-md-9">
+                            <label><input class="form-control input-xlarge" type="text" id="mykw" name="data[mykw]" value="" ></label>
+                            <label><a class="btn btn-sm red" href="javascript:iframe_show('<?php echo L('setting_keyword_word')?>', '?m=admin&c=setting&a=public_test_index&kw='+$('#mykw').val());"> <?php echo L('setting_keyword_participle')?> </a></label>
                         </div>
                     </div>
 
