@@ -27,6 +27,10 @@ pc_base::load_sys_class('param','','','0');
 pc_base::load_sys_func('global');
 $steps = include CMS_PATH.'install/step.inc.php';
 $step = trim($_REQUEST['step']) ? trim($_REQUEST['step']) : 1;
+$PHP_SELF = isset($_SERVER['PHP_SELF']) ? $_SERVER['PHP_SELF'] : (isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : $_SERVER['ORIG_PATH_INFO']);
+$rootpath = str_replace('\\','\/',dirname($PHP_SELF));
+$rootpath = substr($rootpath,0,-7);
+$rootpath = strlen($rootpath)>1 ? $rootpath : "/";
 if(strrpos(strtolower(PHP_OS),"win") === FALSE) {
 	define('ISUNIX', TRUE);
 } else {
@@ -224,24 +228,20 @@ switch($step)
 	case 'installmodule': //执行SQL
 		extract($_POST);
 		$GLOBALS['dbcharset'] = $dbcharset;
-		$PHP_SELF = isset($_SERVER['PHP_SELF']) ? $_SERVER['PHP_SELF'] : (isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : $_SERVER['ORIG_PATH_INFO']);
-		$rootpath = str_replace('\\','/',dirname($PHP_SELF));	
-		$rootpath = substr($rootpath,0,-7);
-		$rootpath = strlen($rootpath)>1 ? $rootpath : "/";	
 
 		if($module == 'admin') {
 			$sys_config = array('cookie_pre'=>token().'_',
 				'auth_key'=>token($name),
 				'web_path'=>$rootpath,
 				'errorlog'=>'0',
-				'js_path'=>FC_NOW_HOST.'statics/js/',
-				'css_path'=>FC_NOW_HOST.'statics/css/',
-				'img_path'=>FC_NOW_HOST.'statics/images/',
-				'mobile_js_path'=>FC_NOW_HOST.'mobile/statics/js/',
-				'mobile_css_path'=>FC_NOW_HOST.'mobile/statics/css/',
-				'mobile_img_path'=>FC_NOW_HOST.'mobile/statics/images/',
-				'app_path'=>FC_NOW_HOST,
-				'mobile_path'=>FC_NOW_HOST.'mobile/',
+				'js_path'=>FC_NOW_HOST.ltrim($rootpath, '/').'statics/js/',
+				'css_path'=>FC_NOW_HOST.ltrim($rootpath, '/').'statics/css/',
+				'img_path'=>FC_NOW_HOST.ltrim($rootpath, '/').'statics/images/',
+				'mobile_js_path'=>FC_NOW_HOST.ltrim($rootpath, '/').'mobile/statics/js/',
+				'mobile_css_path'=>FC_NOW_HOST.ltrim($rootpath, '/').'mobile/statics/css/',
+				'mobile_img_path'=>FC_NOW_HOST.ltrim($rootpath, '/').'mobile/statics/images/',
+				'app_path'=>FC_NOW_HOST.ltrim($rootpath, '/'),
+				'mobile_path'=>FC_NOW_HOST.ltrim($rootpath, '/').'mobile/',
 			);
 			$db_config = array('hostname'=>$dbhost,
 				'port'=>$dbport,
@@ -284,7 +284,7 @@ switch($step)
 			if(file_exists(CMS_PATH."install/main/".$dbfile)) {
 				$sql = file_get_contents(CMS_PATH."install/main/".$dbfile);
 				$sql = str_replace('CMS演示站', $name , $sql);
-				$sql = str_replace('http://www.kaixin100.cn/', FC_NOW_HOST , $sql);
+				$sql = str_replace('http://www.kaixin100.cn/', FC_NOW_HOST.ltrim($rootpath, '/'), $sql);
 				_sql_execute($mysqli,$sql);
 				//创建网站创始人
 				$password_arr = password($password);

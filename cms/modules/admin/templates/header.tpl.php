@@ -50,9 +50,7 @@ var is_admin = 1;
 	}
 	window.focus();
 	var pc_hash = '<?php echo dr_get_csrf_token();?>';
-	<?php if(SYS_CSRF) { ?>
 	var csrf_hash = '<?php echo csrf_hash();?>';
-	<?php } ?>
 	<?php if(!isset($show_pc_hash) || SYS_CSRF) { ?>
 		window.onload = function(){
 	<?php if(!isset($show_pc_hash)) { ?>
