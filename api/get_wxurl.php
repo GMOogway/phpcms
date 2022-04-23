@@ -21,8 +21,7 @@ if (!$html) {
 	dr_json(0, L('没有获取到任何内容'));
 }
 
-$preg = '<div class="rich_media_content                                                                     " 
-            id="js_content" style="visibility: hidden;">';
+$preg = 'id="js_content" style="visibility: hidden;">';
 if (preg_match('/'.$preg.'(.+)<\/div>/sU', $html, $mt)) {
 	pc_base::load_sys_class('upload','',0);
 	$upload = new upload($input->get('module'),intval($input->get('catid')),$siteid);
