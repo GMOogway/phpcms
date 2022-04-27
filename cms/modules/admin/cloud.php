@@ -14,7 +14,7 @@ class cloud extends admin {
         $this->cache = pc_base::load_sys_class('cache');
         $this->file = pc_base::load_sys_class('file');
         $this->db = pc_base::load_model('site_model');
-		$this->menu_db = pc_base::load_model('menu_model');
+        $this->menu_db = pc_base::load_model('menu_model');
         // 不是超级管理员
         if (!cleck_admin($_SESSION['roleid'])) {
             dr_admin_msg(0,L('需要超级管理员账号操作'));
@@ -25,6 +25,8 @@ class cloud extends admin {
         define('CMS_LICENSE', pc_base::load_config('license','cms_license') ? pc_base::load_config('license','cms_license') : 'dev');
         define('CMS_UPDATETIME', pc_base::load_config('version','cms_updatetime'));
         define('CMS_DOWNTIME', pc_base::load_config('version','cms_downtime'));
+        $this->cloud = CACHE_PATH.'cloud/';
+        create_folder($this->cloud);
         $this->site = siteinfo(1);
         $this->sitename = $this->site['name'];
         $this->siteurl = $this->site['domain'];
@@ -262,7 +264,7 @@ class cloud extends admin {
         }
 
         // 执行下载文件
-        $file = CACHE_PATH.'temp/'.$id.'.zip';
+        $file = $this->cloud.$id.'.zip';
 
         set_time_limit(0);
         touch($file);
@@ -301,7 +303,7 @@ class cloud extends admin {
         }
 
         // 执行下载文件
-        $file = CACHE_PATH.'temp/'.$id.'.zip';
+        $file = $this->cloud.$id.'.zip';
         if (is_file($file)) {
             $now = max(1, filesize($file));
             $jd = max(1, round($now / $cache['size'] * 100, 0)); // 进度百分百
@@ -324,13 +326,13 @@ class cloud extends admin {
             dr_json(0, '本站：授权验证缓存过期，请重试');
         }
 
-        $file = CACHE_PATH.'temp/'.$id.'.zip';
+        $file = $this->cloud.$id.'.zip';
         if (!is_file($file)) {
             dr_json(0, '本站：文件还没有被下载');
         }
 
         // 解压目录
-        $cmspath = CACHE_PATH.'temp/'.$id.'/';
+        $cmspath = $this->cloud.$id.'/';
         if (!$this->file->unzip($file, $cmspath)) {
             cloud_msg(0, '本站：文件解压失败');
         }
