@@ -113,6 +113,7 @@ class check extends admin {
                     CONFIGPATH => '无法生成系统配置文件，会导致系统配置无效',
                     CACHE_PATH.'caches_commons/' => '无法生成系统缓存文件，会导致系统无法运行',
                     CACHE_PATH.'caches_file/' => '无法生成系统缓存文件，会导致系统无法运行',
+                    CACHE_PATH.'cloud/' => '无法在线升级',
                     SYS_THUMB_PATH => '无法生成缩略图缓存文件',
                     SYS_UPLOAD_PATH => '无法上传附件',
                     TPLPATH => '无法创建模块模板和模型模板',

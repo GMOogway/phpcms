@@ -4271,6 +4271,24 @@ function create_folder($dir, $mode = 0777){
 }
 
 /**
+ * 递归创建目录
+ *
+ * @param   string  $dir    目录名称
+ * @return  bool|void
+ */
+function dr_mkdirs($dir, $null = true) {
+	if (!$dir) {
+		return false;
+	}
+	if (!is_dir($dir)) {
+		dr_mkdirs(dirname($dir));
+		if (!is_dir($dir)) {
+			mkdir($dir, 0777, true);
+		}
+	}
+}
+
+/**
  * 二维码调用
  */
 function qrcode($text, $thumb = '', $level = 'H', $size = 5) {
