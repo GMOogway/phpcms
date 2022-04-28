@@ -33,6 +33,15 @@ include $this->admin_tpl('header','admin');?>
                         <label><input type="text" name="id2" class="form-control"></label>
                     </div>
                 </div>
+                <div class="col-md-12">
+                    <div class="form-group" style="margin-bottom:5px">
+                        <label> <?php echo L('自定义条件')?> </label>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" style="height:100px" name="sql"></textarea>
+                        <p style="padding-top:9px;" class="help-block"> <?php echo L('支持自定义条件的SQL语句')?> </p>
+                    </div>
+                </div>
                 <div class="col-md-12" style="text-align:center;padding-top:20px">
                     <button type="button" onclick="dr_content_submit_todo()" class="btn red"> <i class="fa fa-trash"></i> <?php echo L('立即执行')?></button>
                 </div>

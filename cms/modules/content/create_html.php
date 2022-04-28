@@ -1223,6 +1223,18 @@ class create_html extends admin {
 			$url.= '&id1='.$id1.'&id2='.$id2;
 		}
 
+		$sql = $this->input->get('sql', true);
+		if ($sql) {
+			// 防范sql注入后期需要加强
+			foreach (array('outfile', 'dumpfile', '.php', 'union', ';') as $kw) {
+				if (strpos(strtolower($sql), $kw) !== false) {
+					html_msg(0, L('存在非法SQL关键词：'.$kw));
+				}
+			}
+			$where[] = $this->db->escape($sql);
+			$url.= '&sql='.$sql;
+		}
+
 		if (!$where) {
 			html_msg(0, L('没有设置条件'));
 		}
