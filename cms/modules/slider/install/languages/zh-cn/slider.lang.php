@@ -3,6 +3,7 @@ $LANG['slider'] 							='幻灯片管理';
 $LANG['slider_add'] 						=	'添加幻灯片';
 $LANG['slider_name'] 						= 	'名称';
 $LANG['image'] 							= 	'图片';
+$LANG['pic'] 							= 	'手机图片';
 $LANG['icon'] 							= 	'图标';
 $LANG['choose_icon'] 					= 	'选择图标';
 $LANG['url'] 							= 	'链接网址';

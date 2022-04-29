@@ -40,6 +40,11 @@ include $this->admin_tpl('header','admin');
 	</tr>
 	
 	<tr>
+		<th width="100"><?php echo L('pic')?>：</th>
+		<td><?php echo form::images('slider[pic]', 'pic', '', 'slider')?></td>
+	</tr>
+	
+	<tr>
 		<th width="100"><?php echo L('icon')?>：</th>
 		<td><label><input type="text" id="menu_icon" name="slider[icon]" class="input-text" ></label> <label><input type="button" name="icon" id="icon" value="<?php echo L('choose_icon')?>" class="button" onclick="menuicon('icons','?m=admin&c=menu&a=public_icon&value='+$('#menu_icon').val(),'<?php echo L('choose_icon')?>','80%','80%')"></label></td>
 	</tr>

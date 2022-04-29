@@ -38,6 +38,11 @@ include $this->admin_tpl('header','admin');
 		<th width="100"><?php echo L('image')?>：</th>
 		<td><?php echo form::images('slider[image]', 'image', $info['image'], 'slider')?></td>
 	</tr>
+
+	<tr>
+		<th width="100"><?php echo L('pic')?>：</th>
+		<td><?php echo form::images('slider[pic]', 'pic', $info['pic'], 'slider')?></td>
+	</tr>
 	
 	<tr>
 		<th width="100"><?php echo L('icon')?>：</th>

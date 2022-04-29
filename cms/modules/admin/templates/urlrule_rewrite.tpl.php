@@ -25,11 +25,10 @@ function dr_test(obj, name, domain) {
         } else {
             alert('域名【'+name+'】不支持伪静态，首先需要确定服务器支持rewrite模块并开启了，其次需要正确配置上面的方法');
         }
-    }) .fail(function() {
+    }).fail(function() {
         $(obj).html('<?php echo L('环境检测');?>');
         alert('域名【'+name+'】不支持伪静态，首先需要确定服务器支持rewrite模块并开启了，其次需要正确配置上面的方法');
     });
-
 }
 function dr_rewrite_config() {
     $('#dr_write').hide();

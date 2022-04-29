@@ -11,12 +11,13 @@ include $this->admin_tpl('header','admin');
 <div style="margin-top:6px;"></div>
 <textarea id="lable" rows="12" cols="80">{pc:slider action="lists" postion="<?php echo $typeid;?>" siteid="$siteid" order="desc" num="4"}
     {loop $data $r}
-    <p>排序编号：{$r[listorder]}</p>
-	<p>描述：{$r[name]}</p>
-	<p>链接地址：{$r[url]}</p>
-	<p>图片：{$r[image]}</p>
-	<p>图标标示：{$r[icon]}</p>
-	<p>描述：{$r[description]}</p>
+    <p>排序编号：{$r['listorder']}</p>
+	<p>名称：{$r['name']}</p>
+	<p>链接地址：{$r['url']}</p>
+	<p>图片：{$r['image']}</p>
+	<p>手机图片：{$r['pic']}</p>
+	<p>图标标示：{$r['icon']}</p>
+	<p>描述：{$r['description']}</p>
     {/loop}
 {/pc}</textarea>
 <p style="margin-top:6px;"><button class="btn green" data-clipboard-action="copy" data-clipboard-target="#lable" id="copy_btn">点击复制</button></p>

@@ -91,6 +91,6 @@ function checkuid() {
 	}
 }
 function view(id, name) {
-	omnipotent('tag','?m=slider&c=slider&a=view_lable&typeid='+id,name+' 对应的标签调用',1,650,350)
+	omnipotent('tag','?m=slider&c=slider&a=view_lable&typeid='+id,name+' 对应的标签调用',1,650,450)
 }
 </script>

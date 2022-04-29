@@ -73,6 +73,8 @@ class slider extends admin {
  	public function add() {
  		if($this->input->post('dosubmit')) {
 			$slider = $this->input->post('slider');
+			if((!$slider['name']) || empty($slider['name'])) dr_admin_msg(1,L('slider_name').L('empty'));
+			if((!$slider['image']) || empty($slider['image'])) dr_admin_msg(1,L('image').L('empty'));
 			$slider['addtime'] = SYS_TIME;
 			$slider['siteid'] = $this->get_siteid();
 			if ($slider['image']) {
@@ -168,7 +170,8 @@ class slider extends admin {
 			if($id < 1) return false;
 			$slider = $this->input->post('slider');
 			if(!is_array($slider) || empty($slider)) return false;
-			if((!$slider['name']) || empty($slider['name'])) return false;
+			if((!$slider['name']) || empty($slider['name'])) dr_admin_msg(1,L('slider_name').L('empty'));
+			if((!$slider['image']) || empty($slider['image'])) dr_admin_msg(1,L('image').L('empty'));
 			$this->db->update($slider,array('id'=>$id));
 			//更新附件状态
 			if(SYS_ATTACHMENT_STAT & $slider['image']) {

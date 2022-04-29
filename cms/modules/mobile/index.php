@@ -365,11 +365,7 @@ class index {
 	
 	//test
 	function test() {
-		if (IS_AJAX) {
-			dr_jsonp(1, '服务器支持伪静态功能，可以自定义URL规则和解析规则了');
-		} else {
-			redirect(WEB_PATH, 'location', '301');
-		}
+		dr_jsonp(1, '服务器支持伪静态功能，可以自定义URL规则和解析规则了');
 	}
 	
 	/**
