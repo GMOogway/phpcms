@@ -48,16 +48,16 @@ include $this->admin_tpl('header', 'admin');
 </html>
 <script type="text/javascript">
 $("input:radio[name='setting[allowmultisubmit]']").click(function (){
-	if($("input:radio[name='setting[allowmultisubmit]'][checked]").val()==0) {
+	if($("input:radio[name='setting[allowmultisubmit]']:checked").val()==0) {
 		$("#setting").hide();
-	} else if($("input:radio[name='setting[allowmultisubmit]'][checked]").val()==1) {
+	} else if($("input:radio[name='setting[allowmultisubmit]']:checked").val()==1) {
 		$("#setting").show();
 	}
 });
 $("input:radio[name='setting[code]']").click(function (){
-	if($("input:radio[name='setting[code]'][checked]").val()==0) {
+	if($("input:radio[name='setting[code]']:checked").val()==0) {
 		$("#codelen").hide();
-	} else if($("input:radio[name='setting[code]'][checked]").val()==1) {
+	} else if($("input:radio[name='setting[code]']:checked").val()==1) {
 		$("#codelen").show();
 	}
 });

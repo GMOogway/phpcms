@@ -16,7 +16,7 @@ include $this->admin_tpl('header', 'admin');
 		<tbody>
 			<tr>
 				<th width="200"><?php echo L('special_title')?>：</th>
-				<td><input name="special[title]" id="title" class="input-text" value="<?php echo new_html_special_chars($info['title']);?>" type="text" size="40"></td>
+				<td><label><input name="special[title]" id="title" class="form-control input-text" value="<?php echo new_html_special_chars($info['title']);?>" type="text" size="40"></label></td>
 			</tr>
 			<tr>
 				<th><?php echo L('special_banner')?>：</th>
@@ -28,7 +28,7 @@ include $this->admin_tpl('header', 'admin');
 			</tr>
 			<tr>
 				<th><?php echo L('special_intro')?>：</th>
-				<td><textarea name="special[description]" id="description" cols="50" rows="6"><?php echo $info['description'];?></textarea></td>
+				<td><textarea name="special[description]" id="description" cols="50" rows="6" class="form-control"><?php echo $info['description'];?></textarea></td>
 			</tr>
 			<tr>
 		    	<th align="right" valign="top"><?php echo L('ishtml')?>：</th>
@@ -37,15 +37,14 @@ include $this->admin_tpl('header', 'admin');
 		    </tr>
 		    <tr id="file_div" style="display:<?php if($info['ishtml']) {?> <?php } else {?>none<?php }?>;">
 		    	<th align="right" valign="top"><?php echo L('special_filename')?>：</th>
-		        <td valign="top"><input type="text" name="special[filename]" id="filename" class="input-text"<?php if($info['ishtml']) {?> readonly<?php }?> value="<?php echo $info['filename']?>" size="20">
-		        </td>
+		        <td valign="top"><label><input type="text" name="special[filename]" id="filename" class="form-control input-text"<?php if($info['ishtml']) {?> readonly<?php }?> value="<?php echo $info['filename']?>" size="40"></label></td>
 		    </tr>
 		    <tr>
 		    	<th width="200"><?php echo L('special_type')?>：<a href="javascript:addItem()" title="<?php echo L('add')?>"><span style="color:red;" >+</span></a></th>
 		        <td valign="top">
 		        <div id="option_list">
 		        <?php if(is_array($types)) { $k = 1; foreach($types as $t) {?>
-		        	<div class="mb6"><span><?php echo L('type_id')?>：<?php echo $t['typeid']?>&nbsp;&nbsp;<?php echo L('type_name')?>：<input type="hidden" name="type[<?php echo $k?>][typeid]" value="<?php echo $t['typeid']?>"><input type="text" name="type[<?php echo $k?>][name]" <?php if ($k==1) {?>id="type_name"<?php }?> value="<?php echo new_html_special_chars($t['name'])?>" class="input-text" size="15">&nbsp;&nbsp;<?php echo L('type_path')?>：<input type="text" name="type[<?php echo $k?>][typedir]" <?php if ($k==1) {?>id="type_path"<?php }?> value="<?php echo $t['typedir']?>" class="input-text" size="15">&nbsp;&nbsp;<?php echo L('listorder')?>：<input type="text" name="type[<?php echo $k?>][listorder]" value="<?php echo $t['listorder']?>" size="6" class="input-text" ></span>&nbsp;<?php if ($k!=1) {?><a href="javascript:;" onclick="descItem(this, <?php echo $k?>);"><?php echo L('remove')?></a><?php }?></div>
+		        	<div class="mb6"><span><?php echo L('type_id')?>：<?php echo $t['typeid']?>&nbsp;&nbsp;<?php echo L('type_name')?>：<input type="hidden" name="type[<?php echo $k?>][typeid]" value="<?php echo $t['typeid']?>"><label><input type="text" name="type[<?php echo $k?>][name]" <?php if ($k==1) {?>id="type_name"<?php }?> value="<?php echo new_html_special_chars($t['name'])?>" class="input-text" size="15"></label>&nbsp;&nbsp;<?php echo L('type_path')?>：<label><input type="text" name="type[<?php echo $k?>][typedir]" <?php if ($k==1) {?>id="type_path"<?php }?> value="<?php echo $t['typedir']?>" class="input-text" size="15"></label>&nbsp;&nbsp;<?php echo L('listorder')?>：<label><input type="text" name="type[<?php echo $k?>][listorder]" value="<?php echo $t['listorder']?>" size="6" class="input-text"></label></span>&nbsp;<?php if ($k!=1) {?><a href="javascript:;" onclick="descItem(this, <?php echo $k?>);"><?php echo L('remove')?></a><?php }?>&nbsp;<span id="typeTip"></span></div>
 		        <?php $k++; } }?>
 		        </div>
 		        </td>
@@ -143,7 +142,7 @@ function load_file_list(id) {
 
 function addItem() {
 	var n = $('#option_list').find('input[type="text"]').length/3+1;
-	var newOption =  '<div class="mb6"><span style="padding-left:76px"><?php echo L('type_name')?>：<input type="text" name="type['+n+'][name]" class="input-text" size="15">&nbsp;&nbsp;<?php echo L('type_path')?>：<input type="text" name="type['+n+'][typedir]" class="input-text" size="15">&nbsp;&nbsp;<?php echo L('listorder')?>：<input type="text" name="type['+n+'][listorder]" value="'+n+'" size="6" class="input-text" ></span>&nbsp;<a href="javascript:;" onclick="descItem(this);"><?php echo L('remove')?></a></div>';
+	var newOption =  '<div class="mb6"><span style="padding-left:76px"><?php echo L('type_name')?>：<label><input type="text" name="type['+n+'][name]" class="input-text" size="15"></label>&nbsp;&nbsp;<?php echo L('type_path')?>：<label><input type="text" name="type['+n+'][typedir]" class="input-text" size="15"></label>&nbsp;&nbsp;<?php echo L('listorder')?>：<label><input type="text" name="type['+n+'][listorder]" value="'+n+'" size="6" class="input-text"></label></span>&nbsp;<a href="javascript:;" onclick="descItem(this);"><?php echo L('remove')?></a></div>';
 	$('#option_list').append(newOption);
 }
 
@@ -184,9 +183,9 @@ $(document).ready(function(){
 	$('#thumb').formValidator({autotip:true,onshow:"<?php echo L('please_upload_thumb')?>",oncorrect:"<?php echo L('true')?>"}).inputValidator({min:1,onerror:"<?php echo L('please_upload_thumb')?>"}).defaultPassed();
 	$('#filename').formValidator({autotip:true,onshow:"<?php echo L('special_file')?>",onfocus:'<?php echo L('use_letters')?>',oncorrect:"<?php echo L('true')?>"}).functionValidator({
 	    fun:function(val,elem){
-        if($("input:radio[type='radio'][checked]").val()==0){
+        if($("input:radio[type='radio']:checked").val()==0){
 		    return true;
-	    }else if($("input:radio[type='radio'][checked]").val()==1 && val==''){
+	    }else if($("input:radio[type='radio']:checked").val()==1 && val==''){
 		    return "<?php echo L('please_input_name')?>"
 	    }  else {
 			return true;
@@ -197,9 +196,9 @@ $(document).ready(function(){
 	$('#type_path').formValidator({tipid:"typeTip",onshow:"<?php echo L('input_type_path')?>",onfocus:"<?php echo L('input_type_path')?>",oncorrect:"<?php echo L('true')?>"}).inputValidator({min:2,onerror:"<?php echo L('input_type_path')?>"}).regexValidator({regexp:"^\\w*$", onerror:"<?php echo L('error')?>"}).defaultPassed();
 });
 $("input:radio[name='special[ishtml]']").click(function (){
-	if($("input:radio[name='special[ishtml]'][checked]").val()==0) {
+	if($("input:radio[name='special[ishtml]']:checked").val()==0) {
 		$("#file_div").hide();
-	} else if($("input:radio[type='radio'][checked]").val()==1) {
+	} else if($("input:radio[name='special[ishtml]']:checked").val()==1) {
 		$("#file_div").show();
 	}
 });
