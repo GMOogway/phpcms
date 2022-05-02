@@ -89,16 +89,6 @@
             <span class="help-block"><?php echo L('选择回车换行的符号，默认是p标签换行')?></span>
         </div>
     </div>
-    <div class="form-group"<?php if (SYS_EDITOR) {?> style="display: none;"<?php }?>> 
-      <label class="col-md-2 control-label">是否取消单图上传按钮</label>
-        <div class="col-md-9">
-            <div class="mt-radio-inline">
-          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[simpleupload]" value="1" <?php if($setting['simpleupload']) echo 'checked';?>> 开启 <span></span></label>
-          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[simpleupload]" value="0" <?php if(!$setting['simpleupload']) echo 'checked';?>> 关闭 <span></span></label>
-        </div>
-            <span class="help-block"><?php echo L('单图上传按钮对某些浏览器不被支持，兼容性较差')?></span>
-        </div>
-    </div>
     <div class="form-group">
       <label class="col-md-2 control-label">是否保存远程图片</label>
         <div class="col-md-9">

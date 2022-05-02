@@ -26,5 +26,5 @@
 				return false;
 			}';
 		}
-		return "<div id='{$field}_tip'></div>".'<textarea class="dr_ueditor" name="info['.$field.']" id="'.$field.'" boxid="'.$field.'">'.$value.'</textarea>'.form::editor($field,$toolbar,$toolvalue,'content',$this->catid,$color,$allowupload,1,'',$height,$disabled_page,$autofloat,$autoheight,$theme,$watermark,$attachment,$image_reduce,$div2p,$enter,$simpleupload,$enablesaveimage,$width,$upload_number,$upload_maxsize,$show_bottom_boot,$tool_select_1,$tool_select_2,$tool_select_3,$tool_select_4);
+		return "<div id='{$field}_tip'></div>".'<textarea class="dr_ueditor" name="info['.$field.']" id="'.$field.'" boxid="'.$field.'">'.$value.'</textarea>'.form::editor($field,$toolbar,$toolvalue,'content',$this->catid,$color,$allowupload,1,'',$height,$disabled_page,$autofloat,$autoheight,$theme,$watermark,$attachment,$image_reduce,$div2p,$enter,$enablesaveimage,$width,$upload_number,$upload_maxsize,$show_bottom_boot,$tool_select_1,$tool_select_2,$tool_select_3,$tool_select_4);
 	}

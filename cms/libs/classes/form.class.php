@@ -30,7 +30,7 @@ class form {
 	 * @param string $tool_select_3
 	 * @param string $tool_select_4
 	 */
-	public static function editor($textareaid = 'content', $toolbar = 'basic', $toolvalue = '', $module = '', $catid = '', $color = '', $allowupload = 0, $allowbrowser = 1,$alowuploadexts = '',$height = 300,$disabled_page = 0, $autofloat = 0, $autoheight = 0, $theme = '', $watermark = 1, $attachment = 0, $image_reduce = '', $div2p = 0, $enter = 0, $simpleupload = 0, $enablesaveimage = 1, $width = '100%', $allowuploadnum = '10', $upload_maxsize = 0, $show_bottom_boot = 0, $tool_select_1 = 0, $tool_select_2 = 0, $tool_select_3 = 0, $tool_select_4 = 0) {
+	public static function editor($textareaid = 'content', $toolbar = 'basic', $toolvalue = '', $module = '', $catid = '', $color = '', $allowupload = 0, $allowbrowser = 1,$alowuploadexts = '',$height = 300,$disabled_page = 0, $autofloat = 0, $autoheight = 0, $theme = '', $watermark = 1, $attachment = 0, $image_reduce = '', $div2p = 0, $enter = 0, $enablesaveimage = 1, $width = '100%', $allowuploadnum = '10', $upload_maxsize = 0, $show_bottom_boot = 0, $tool_select_1 = 0, $tool_select_2 = 0, $tool_select_3 = 0, $tool_select_4 = 0) {
 		$input = pc_base::load_sys_class('input');
 		$siteid = $input->get('siteid') ? $input->get('siteid') : param::get_cookie('siteid');
 		if(!$siteid) $siteid = get_siteid() ? get_siteid() : 1 ;
@@ -148,13 +148,13 @@ class form {
 				} else {
 					$tool = '[';
 				}
-				$tool .= "'FullScreen', 'Undo', 'Redo', '|', 'Bold', 'Italic', 'Underline', 'StrikeThrough', 'Superscript', 'Subscript', 'RemoveFormat', 'FormatMatch', 'AutoTypeSet', '|', 'BlockQuote', '|', 'PastePlain', '|', 'ForeColor', 'BackColor', 'InsertOrderedList', 'InsertUnorderedList', 'SelectAll', 'ClearDoc', '|', 'CustomStyle', 'Paragraph', '|', 'RowSpacingTop', 'RowSpacingBottom', 'LineHeight', '|', 'FontFamily', 'FontSize', '|', 'DirectionalityLtr', 'DirectionalityRtl', '|', '', 'Indent', '|', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyJustify', '|', 'Link', 'Unlink', 'Anchor', '|', 'ImageNone', 'ImageLeft', 'ImageRight', 'ImageCenter', '|', 'SimpleUpload', 'InsertImage', 'Emotion', 'Scrawl', 'InsertVideo', 'Attachment', 'Map', 'InsertFrame'";
+				$tool .= "'FullScreen', 'Undo', 'Redo', '|', 'Bold', 'Italic', 'Underline', 'StrikeThrough', 'Superscript', 'Subscript', 'RemoveFormat', 'FormatMatch', 'AutoTypeSet', '|', 'BlockQuote', '|', 'PastePlain', '|', 'ForeColor', 'BackColor', 'InsertOrderedList', 'InsertUnorderedList', 'SelectAll', 'ClearDoc', '|', 'CustomStyle', 'Paragraph', '|', 'RowSpacingTop', 'RowSpacingBottom', 'LineHeight', '|', 'FontFamily', 'FontSize', '|', 'DirectionalityLtr', 'DirectionalityRtl', '|', '', 'Indent', '|', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyJustify', '|', 'Link', 'Unlink', 'Anchor', '|', 'ImageNone', 'ImageLeft', 'ImageRight', 'ImageCenter', '|', 'InsertImage', 'Emotion', 'Scrawl', 'InsertVideo', 'Attachment', 'Map', 'InsertFrame'";
 				if ($show_page=="true") {
 					$tool .= ", 'PageBreak'";
 				}
 				$tool .= ", 'HighlightCode', '|', 'Horizontal', 'Date', 'Time', 'Spechars', '|', 'InsertTable', 'DeleteTable', 'InsertParagraphBeforeTable', 'InsertRow', 'DeleteRow', 'InsertCol', 'DeleteCol', 'MergeCells', 'MergeRight', 'MergeDown', 'SplittoCells', 'SplittoRows', 'SplittoCols', '|', 'Print', 'Preview', 'SearchReplace', 'Help']";
 			} elseif($toolbar == 'desc') {
-				$tool = "['Bold', 'Italic', '|', 'InsertOrderedList', 'InsertUnorderedList', '|', 'Link', 'Unlink', '|', 'SimpleUpload', 'InsertImage', '|', 'Source']";
+				$tool = "['Bold', 'Italic', '|', 'InsertOrderedList', 'InsertUnorderedList', '|', 'Link', 'Unlink', '|', 'InsertImage', '|', 'Source']";
 			} elseif($toolbar == 'full') {
 				if(defined('IS_ADMIN') && IS_ADMIN) {
 					$tool = "['Source',";
@@ -168,7 +168,7 @@ class form {
 				'Directionalityltr', 'Directionalityrtl', 'Indent', '|',
 				'Justifyleft', 'Justifycenter', 'Justifyright', 'Justifyjustify', '|', 'Touppercase', 'Tolowercase', '|',
 				'Link', 'Unlink', 'Anchor', '|', 'Imagenone', 'Imageleft', 'Imageright', 'Imagecenter', '|',
-				'Simpleupload', 'Insertimage', 'Emotion', 'Scrawl', 'Insertvideo', 'Attachment', 'Map', 'Insertframe', 'Insertcode'";
+				'Insertimage', 'Emotion', 'Scrawl', 'Insertvideo', 'Attachment', 'Map', 'Insertframe', 'Insertcode'";
 				if ($show_page=="true") {
 					$tool .= ", 'PageBreak', 'Subtitle'";
 				}
@@ -184,17 +184,7 @@ class form {
 				}
 				$tool .= "'Fullscreen', '|', " . $toolvalue . "]";
 			}
-			// 低版本浏览器关闭单图上传
-			if (preg_match('/Chrome\/([0-9]+)\./iU', $_SERVER['HTTP_USER_AGENT'], $mt)) {
-				$chrome = intval($mt[1]);
-				if ($chrome && $chrome < 78) {
-					$tool = str_replace(['"Simpleupload", ', ', "Simpleupload"',"'Simpleupload', ", ", 'Simpleupload'", '"Simpleupload",', ',"Simpleupload"',"'Simpleupload',", ",'Simpleupload'"], '', $tool);
-				}
-			}
-			// 后台设置的关闭单图上传
-			if (isset($simpleupload) && $simpleupload) {
-				$tool = str_replace(['"Simpleupload", ', ', "Simpleupload"',"'Simpleupload', ", ", 'Simpleupload'", '"Simpleupload",', ',"Simpleupload"',"'Simpleupload',", ",'Simpleupload'"], '', $tool);
-			}
+			$tool = str_ireplace(array('"Simpleupload", ', ', "Simpleupload"',"'Simpleupload', ", ", 'Simpleupload'", '"Simpleupload",', ',"Simpleupload"',"'Simpleupload',", ",'Simpleupload'"), '', $tool);
 			$str .= "<script type=\"text/javascript\">\r\n";
 			$opt = array();
 			if($tool) {$opt[] = "toolbars:[".$tool."]";}
