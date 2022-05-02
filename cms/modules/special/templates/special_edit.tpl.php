@@ -183,9 +183,9 @@ $(document).ready(function(){
 	$('#thumb').formValidator({autotip:true,onshow:"<?php echo L('please_upload_thumb')?>",oncorrect:"<?php echo L('true')?>"}).inputValidator({min:1,onerror:"<?php echo L('please_upload_thumb')?>"}).defaultPassed();
 	$('#filename').formValidator({autotip:true,onshow:"<?php echo L('special_file')?>",onfocus:'<?php echo L('use_letters')?>',oncorrect:"<?php echo L('true')?>"}).functionValidator({
 	    fun:function(val,elem){
-        if($("input:radio[type='radio']:checked").val()==0){
+        if($("input:radio[name='special[ishtml]']:checked").val()==0){
 		    return true;
-	    }else if($("input:radio[type='radio']:checked").val()==1 && val==''){
+	    }else if($("input:radio[name='special[ishtml]']:checked").val()==1 && val==''){
 		    return "<?php echo L('please_input_name')?>"
 	    }  else {
 			return true;
