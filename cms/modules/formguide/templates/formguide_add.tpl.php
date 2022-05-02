@@ -203,16 +203,16 @@ $(document).ready(function(){
     $('#style').formValidator({onshow:"<?php echo L('select_style')?>",onfocus:"<?php echo L('select_style')?>",oncorrect:"<?php echo L('right')?>"}).inputValidator({min:1,onerror:"<?php echo L('select_style')?>"});
 });
 $("input:radio[name='setting[enabletime]']").click(function (){
-    if($("input:radio[name='setting[enabletime]'][checked]").val()==0) {
+    if($("input:radio[name='setting[enabletime]']:checked").val()==0) {
         $("#time").hide();
-    } else if($("input:radio[name='setting[enabletime]'][checked]").val()==1) {
+    } else if($("input:radio[name='setting[enabletime]']:checked").val()==1) {
         $("#time").show();
     }
 });
 $("input:radio[name='setting[sendmail]']").click(function (){
-    if($("input:radio[name='setting[sendmail]'][checked]").val()==0) {
+    if($("input:radio[name='setting[sendmail]']:checked").val()==0) {
         $("#mailaddress").hide();
-    } else if($("input:radio[name='setting[sendmail]'][checked]").val()==1) {
+    } else if($("input:radio[name='setting[sendmail]']:checked").val()==1) {
         $("#mailaddress").show();
     }
 });
