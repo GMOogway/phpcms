@@ -162,7 +162,7 @@ input { border:none;}
 .main .list li .pic { margin-right:15px; float:left;}
 .main .list li .time { color:#19b955;}
 /* pages */
-#pages { margin-top:10px; padding-left:20px;white-space: nowrap;line-height: 30px;}
+#pages {margin-top:10px; margin-bottom:60px; padding-left:20px;white-space: nowrap;line-height: 30px;}
 .pagination {padding-left: 0;margin: 20px 0;border-radius: 4px;}
 .pagination>li {display: inline;}
 .pagination>li>a,.pagination>li>span {position: relative;float: left;padding: 6px 12px;line-height: 1.42857;text-decoration: none;color: #19b955;background-color: #fff;border: 1px solid #ddd;margin-left: -1px;}
@@ -184,7 +184,7 @@ input { border:none;}
 .pagination>li>a,.pagination>li>span {color: #000;}
 .pagination>li>a:hover {cursor: pointer;color: #23527c;}
 /*底部样式*/
-.footer {/*position:fixed; bottom:0px; */padding:5px 0; width:100%; line-height:24px; color:#ddd; font-size:12px; text-align:center;}
+.footer {position:fixed; bottom:0px; padding:5px 0; width:100%; line-height:24px; color:#ddd; font-size:12px; text-align:center;}
 .footerlist {bottom:0px; padding:5px 0; width:100%; line-height:24px; color:#ddd; font-size:12px; text-align:center;}
 .footer a { margin:0 5px; color:#666;}
 .footer p { color:#666;}
