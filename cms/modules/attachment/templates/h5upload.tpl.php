@@ -1,5 +1,4 @@
 <?php $show_header = $show_validator = $show_scroll = true; include $this->admin_tpl('header', 'attachment');?>
-<script src="<?php echo JS_PATH?>assets/ds.min.js"></script>
 <link href="<?php echo JS_PATH?>h5upload/h5upload.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="<?php echo JS_PATH?>layui/css/layui.css" media="all" />
 <script type="text/javascript" src="<?php echo JS_PATH?>layui/layui.js"></script>
@@ -154,6 +153,35 @@ function dr_download(obj) {
             dr_ajax_admin_alert_error(HttpRequest, ajaxOptions, thrownError)
         }
     });
+}
+function att_cancel(obj,id,source){
+    var src = $(obj).children("img").attr("path");
+    var filename = $(obj).children("img").attr("filename");
+    if($(obj).hasClass('on')){
+        $(obj).removeClass("on");
+        $('#attachment_'+id).removeClass('on').find('input[type="checkbox"]').prop('checked', false);
+        var imgstr = $("#att-status").html();
+        var length = $("a[class='on']").children("img").length;
+        var strs = filenames = '';
+        for(var i=0;i<length;i++){
+            strs += '|'+$("a[class='on']").children("img").eq(i).attr('path');
+            filenames += '|'+$("a[class='on']").children("img").eq(i).attr('filename');
+        }
+        $('#att-status').html(strs);
+        $('#att-name').html(filenames);
+        if(source=='upload') $('#att-status-del').append('|'+id);
+    } else {
+        $(obj).addClass("on");
+        $('#attachment_'+id).addClass('on').find('input[type="checkbox"]').prop('checked', true);
+        $('#att-status').append('|'+src);
+        $('#att-name').append('|'+filename);
+        var imgstr_del = $("#att-status-del").html();
+        var imgstr_del_obj = $("a[class!='on']").children("img")
+        var length_del = imgstr_del_obj.length;
+        var strs_del='';
+        for(var i=0;i<length_del;i++){strs_del += '|'+imgstr_del_obj.eq(i).attr('id');}
+        if(source=='upload') $('#att-status-del').html(strs_del);
+    }
 }
 </script>
 </body>

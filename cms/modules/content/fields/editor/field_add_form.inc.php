@@ -81,6 +81,7 @@
                 <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[show_bottom_boot]" value="1" onclick="$('#sdmrx').show()"> 开启 <span></span></label>
                 <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[show_bottom_boot]" value="0" onclick="$('#sdmrx').hide()" checked> 关闭 <span></span></label>
             </div>
+            <span class="help-block">编辑器底部工具栏，有提取描述、提取缩略图、下载远程图等控制按钮</span>
         </div>
     </div>
     <div class="form-group" id="sdmrx" style="display:none">
@@ -189,6 +190,7 @@
           <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[watermark]" value="1" checked> 开启 <span></span></label>
           <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[watermark]" value="0"> 关闭 <span></span></label>
         </div>
+        <span class="help-block">上传的图片会加上水印图</span>
         </div>
     </div>
     <?php }?>
@@ -203,7 +205,7 @@
         </div>
     </div>
 	<div class="form-group">
-      <label class="col-md-2 control-label">允许同时上传的个数</label>
+      <label class="col-md-2 control-label">上传数量</label>
       <div class="col-md-9">
             <label><input type="text" name="setting[upload_number]" value="10" class="form-control"></label>
       </div>

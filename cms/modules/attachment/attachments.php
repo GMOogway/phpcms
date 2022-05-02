@@ -168,6 +168,7 @@ class attachments {
 				if($upload->uploadedfiles[0]['isimage'] || $rt['data']['isimage']) {
 					$rt['data']['ext'] = 1;
 				}
+				!$rt['data']['ext'] && $rt['data']['ext'] = $rt['data']['fileext'];
 				$rt['data']['id'] = $data['code'];
 				$rt['data']['filename'] && $rt['data']['name'] = $rt['data']['filename'];
 				$rt['data']['size'] = $rt['data']['size'] ? format_file_size($rt['data']['size']) : format_file_size($rt['data']['filesize']);

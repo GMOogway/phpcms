@@ -123,6 +123,7 @@
           <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[watermark]" value="1" <?php if($setting['watermark']) echo 'checked';?>> 开启 <span></span></label>
           <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[watermark]" value="0" <?php if(!$setting['watermark']) echo 'checked';?>> 关闭 <span></span></label>
         </div>
+        <span class="help-block">上传的图片会加上水印图</span>
         </div>
     </div>
     <?php }?>
@@ -137,7 +138,7 @@
         </div>
     </div>
     <div class="form-group">
-      <label class="col-md-2 control-label">允许同时上传的个数</label>
+      <label class="col-md-2 control-label">上传数量</label>
       <div class="col-md-9">
             <label><input type="text" name="setting[upload_number]" value="<?php echo $setting['upload_number'];?>" class="form-control"></label>
       </div>
