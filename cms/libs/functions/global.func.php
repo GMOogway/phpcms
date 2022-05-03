@@ -163,8 +163,8 @@ function dr_get_data($title, $content) {
 		$XAppid = pc_base::load_config('system', 'xunfei_aid');
 		$Apikey = pc_base::load_config('system', 'xunfei_skey');
 		if (!isset($XAppid) || !isset($Apikey)) {
-			log_message('error', '百度ai插件-分词接口配置没有成功');
-			return dr_return_data(0, '百度ai插件-分词接口配置没有成功');
+			log_message('error', '讯飞接口-分词接口配置没有成功');
+			return dr_return_data(0, '讯飞接口-分词接口配置没有成功');
 		}
 		$fix = 0; //如果错误日志提示【time out|ilegal X-CurTime】，需要把$fix变量改为 100 、200、300、等等，按实际情况调试，只要是数字都行
 		$XParam = base64_encode(json_encode(array(
