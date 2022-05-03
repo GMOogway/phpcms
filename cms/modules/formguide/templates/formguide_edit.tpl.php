@@ -27,7 +27,8 @@ jQuery(document).ready(function() {
 </div>
 <form action="?m=formguide&c=formguide&a=edit" class="form-horizontal" method="post" name="myform" id="myform">
 <input name="page" id="dr_page" type="hidden" value="<?php echo $page;?>">
-<input name="formid" id="formid" type="hidden" value="<?php echo $_GET['formid']?>">
+<input name="formid" id="formid" type="hidden" value="<?php echo $this->input->get('formid')?>">
+<input name="menuid" type="hidden" value="<?php echo $this->input->get('menuid')?>">
 <div class="portlet light bordered myfbody">
     <div class="portlet-title tabbable-line">
         <ul class="nav nav-tabs" style="float:left;">
@@ -98,6 +99,36 @@ jQuery(document).ready(function() {
                         <div class="col-md-9">
                             <input class="form-control input-large" type="text" id="mails" name="setting[mails]" value="<?php echo $data['setting']['mails'];?>" >
                             <span class="help-block"><?php echo L('multiple_with_commas')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group" id="mailcontent"<?php echo (!$data['setting']['sendmail']) ? ' style="display:none;"' : ''?>>
+                        <label class="col-md-2 control-label"><?php echo L('mailmessage');?></label>
+                        <div class="col-md-9">
+                            <textarea id="mailmessage" name="setting[mailmessage]" style="height:100px"><?php echo $data['setting']['mailmessage'];?></textarea>
+                            <span class="help-block"><?php echo L('setting_message')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('allowed_send_sms');?></label>
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[sendsms]" value="1"<?php echo ($data['setting']['sendsms']) ? ' checked' : ''?>> <?php echo L('yes');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[sendsms]" value="0"<?php echo (!$data['setting']['sendsms']) ? ' checked' : ''?>> <?php echo L('no');?> <span></span></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" id="smsaddress"<?php echo (!$data['setting']['sendsms']) ? ' style="display:none;"' : ''?>>
+                        <label class="col-md-2 control-label"><?php echo L('sms_address');?></label>
+                        <div class="col-md-9">
+                            <input class="form-control input-large" type="text" id="mobiles" name="setting[mobiles]" value="<?php echo $data['setting']['mobiles'];?>" >
+                            <span class="help-block"><?php echo L('multiple_with_commas')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group" id="smscontent"<?php echo (!$data['setting']['sendsms']) ? ' style="display:none;"' : ''?>>
+                        <label class="col-md-2 control-label"><?php echo L('smsmessage');?></label>
+                        <div class="col-md-9">
+                            <textarea id="smsmessage" name="setting[smsmessage]" style="height:100px"><?php echo $data['setting']['smsmessage'];?></textarea>
+                            <span class="help-block"><?php echo L('setting_message')?></span>
                         </div>
                     </div>
                     <div class="form-group">
@@ -272,8 +303,19 @@ $("input:radio[name='setting[enabletime]']").click(function (){
 $("input:radio[name='setting[sendmail]']").click(function (){
     if($("input:radio[name='setting[sendmail]']:checked").val()==0) {
         $("#mailaddress").hide();
+        $("#mailcontent").hide();
     } else if($("input:radio[name='setting[sendmail]']:checked").val()==1) {
         $("#mailaddress").show();
+        $("#mailcontent").show();
+    }
+});
+$("input:radio[name='setting[sendsms]']").click(function (){
+    if($("input:radio[name='setting[sendsms]']:checked").val()==0) {
+        $("#smsaddress").hide();
+        $("#smscontent").hide();
+    } else if($("input:radio[name='setting[sendsms]']:checked").val()==1) {
+        $("#smsaddress").show();
+        $("#smscontent").show();
     }
 });
 function dr_call_alert() {

@@ -88,13 +88,39 @@ class index {
 					if (is_array($mails)) {
 						foreach ($mails as $m) {
 							$email->set();
-							$email->send($m, L('tips'), $this->setting['mailmessage']);
+							$mailmessage = $setting['mailmessage'] ? $setting['mailmessage'] : $this->setting['mailmessage'];
+							$mailmessage = str_replace('$', '', $mailmessage);
+							if (preg_match_all("/\{(.+)\}/U", $mailmessage, $value)) {
+								foreach ($value[1] as $t) {
+									$mailmessage = str_replace($t, $data[$t], $mailmessage);
+								}
+							}
+							$mailmessage = str_replace(array('{', '}'), '', $mailmessage);
+							$email->send($m, L('tips'), $mailmessage);
+						}
+					}
+				}
+				if ($setting['sendsms'] && $setting['mobiles'] && module_exists('sms')) {
+					pc_base::load_app_class('smsapi', 'sms', 0);
+					$mobiles = explode(',', $setting['mobiles']);
+					if (is_array($mobiles)) {
+						foreach ($mobiles as $m) {
+							$smsmessage = $setting['smsmessage'] ? $setting['smsmessage'] : $this->setting['smsmessage'];
+							$smsmessage = str_replace('$', '', $smsmessage);
+							if (preg_match_all("/\{(.+)\}/U", $smsmessage, $value)) {
+								foreach ($value[1] as $t) {
+									$smsmessage = str_replace($t, $this->input->post($t), $smsmessage);
+								}
+							}
+							$smsmessage = str_replace(array('{', '}'), '', $smsmessage);
+							$smsapi = new smsapi();
+							$rt = $smsapi->send_sms($m, $smsmessage);
 						}
 					}
 				}
 				$this->db->update(array('items'=>'+=1'), array('modelid'=>$formid, 'siteid'=>$this->siteid));
 			}
-			showmessage($setting['rt_text'] && isset($setting['rt_text']) ? $setting['rt_text'] : L('thanks'), $setting['rt_url'] && isset($setting['rt_url']) ? str_replace(array('{APP_PATH}', '{formid}', '{siteid}'), array(APP_PATH, $formid, $this->siteid), $setting['rt_url']) : APP_PATH);
+			showmessage((isset($setting['rt_text']) && $setting['rt_text'] ? $setting['rt_text'] : L('thanks')).($setting['sendsms'] && $setting['mobiles'] && module_exists('sms') ? $rt['msg'] : ''), isset($setting['rt_url']) && $setting['rt_url'] ? str_replace(array('{APP_PATH}', '{formid}', '{siteid}'), array(APP_PATH, $formid, $this->siteid), $setting['rt_url']) : APP_PATH);
 		} else {
 			if ($setting['allowunreg']==0 && !$userid && $this->input->get('action')=='js') {
 				$no_allowed = 1;

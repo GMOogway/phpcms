@@ -44,6 +44,52 @@ jQuery(document).ready(function() {
                             </div>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('allowed_send_mail');?></label>
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[sendmail]" value="1"<?php echo ($sendmail) ? ' checked' : ''?>> <?php echo L('yes');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[sendmail]" value="0"<?php echo (!$sendmail) ? ' checked' : ''?>> <?php echo L('no');?> <span></span></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" id="mailaddress"<?php echo (!$sendmail) ? ' style="display:none;"' : ''?>>
+                        <label class="col-md-2 control-label"><?php echo L('e-mail_address');?></label>
+                        <div class="col-md-9">
+                            <input class="form-control input-large" type="text" id="mails" name="setting[mails]" value="<?php echo $mails;?>" >
+                            <span class="help-block"><?php echo L('multiple_with_commas')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group" id="mailcontent"<?php echo (!$sendmail) ? ' style="display:none;"' : ''?>>
+                        <label class="col-md-2 control-label"><?php echo L('mailmessage');?></label>
+                        <div class="col-md-9">
+                            <textarea id="mailmessage" name="setting[mailmessage]" style="height:100px"><?php echo $mailmessage;?></textarea>
+                            <span class="help-block"><?php echo L('setting_message')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('allowed_send_sms');?></label>
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[sendsms]" value="1"<?php echo ($sendsms) ? ' checked' : ''?>> <?php echo L('yes');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[sendsms]" value="0"<?php echo (!$sendsms) ? ' checked' : ''?>> <?php echo L('no');?> <span></span></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" id="smsaddress"<?php echo (!$sendsms) ? ' style="display:none;"' : ''?>>
+                        <label class="col-md-2 control-label"><?php echo L('sms_address');?></label>
+                        <div class="col-md-9">
+                            <input class="form-control input-large" type="text" id="mobiles" name="setting[mobiles]" value="<?php echo $mobiles;?>" >
+                            <span class="help-block"><?php echo L('multiple_with_commas')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group" id="smscontent"<?php echo (!$sendsms) ? ' style="display:none;"' : ''?>>
+                        <label class="col-md-2 control-label"><?php echo L('smsmessage');?></label>
+                        <div class="col-md-9">
+                            <textarea id="smsmessage" name="setting[smsmessage]" style="height:100px"><?php echo $smsmessage;?></textarea>
+                            <span class="help-block"><?php echo L('setting_message')?></span>
+                        </div>
+                    </div>
 
                 </div>
             </div>
@@ -64,6 +110,24 @@ $('.nav-tabs a').click(function (e) {
     $(this).parent().addClass('active');
     $('#'+$(this).attr("data-toggle")).addClass('active');
 })
+$("input:radio[name='setting[sendmail]']").click(function (){
+    if($("input:radio[name='setting[sendmail]']:checked").val()==0) {
+        $("#mailaddress").hide();
+        $("#mailcontent").hide();
+    } else if($("input:radio[name='setting[sendmail]']:checked").val()==1) {
+        $("#mailaddress").show();
+        $("#mailcontent").show();
+    }
+});
+$("input:radio[name='setting[sendsms]']").click(function (){
+    if($("input:radio[name='setting[sendsms]']:checked").val()==0) {
+        $("#smsaddress").hide();
+        $("#smscontent").hide();
+    } else if($("input:radio[name='setting[sendsms]']:checked").val()==1) {
+        $("#smsaddress").show();
+        $("#smscontent").show();
+    }
+});
 </script>
 </body>
 </html>

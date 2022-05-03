@@ -135,6 +135,7 @@ $LANG['formguide_setting']			=	'表单向导模块配置';
 $LANG['allows_more_ip']				=	'允许同一IP多次提交';
 $LANG['allowunreg']					=	'允许游客提交表单';
 $LANG['mailmessage']				=	'发送邮件的内容';
+$LANG['setting_mailmessage']		=	'可以变量，例如：{$username}或{username}';
 $LANG['not_meet_the_conditions'] 	=	'不符合要求';
 $LANG['not_less_than'] 				=	'不得少于';
 $LANG['not_more_than'] 				=	'不得多于';
@@ -144,7 +145,7 @@ $LANG['minute']						=	'分';
 $LANG['code']						=	'验证码';
 $LANG['codelen']					=	'验证码位数';
 $LANG['setting_noe_code_len']		=	'验证码位数不能小于2位或超过8位';
-$LANG['setting_updates_successful']	=	'配置更新完成!';
+$LANG['setting_updates_successful']	=	'配置更新完成！';
 
 //index
 $LANG['formguide_list']				=	'表单向导列表';

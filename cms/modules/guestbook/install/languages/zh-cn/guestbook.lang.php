@@ -56,4 +56,13 @@ $LANG['application_or_not']				=	'是否允许留言';
 $LANG['code_or_not']					=	'是否开启验证码';
 $LANG['choose_true_type']				=	'请选择正确的分类！';
 $LANG['application_guestbook']			=	'提交留言';
+$LANG['tips']							=	'用户提交留言数据提醒';
+$LANG['allowed_send_mail']				=	'允许发送邮件';
+$LANG['e-mail_address']					=	'接受邮件的地址';
+$LANG['multiple_with_commas']			=	'多个请用逗号隔开';
+$LANG['mailmessage']					=	'发送邮件的内容';
+$LANG['allowed_send_sms']				=	'允许发送短信';
+$LANG['sms_address']					=	'接受短信的手机';
+$LANG['smsmessage']						=	'发送短信的内容';
+$LANG['setting_message']				=	'可以变量，例如：{$username}或{username}';
 ?>

@@ -25,7 +25,6 @@ $LANG['listorder']					=	'Ordering';
 $LANG['contribute']					=	'Contribute';
 $LANG['field_enabled']				=	'<font color="red"> Enable</font>';
 $LANG['field_disabled'] 			=	'Disable';
-$LANG['fieldname']					=	'Field type';
 $LANG['between_1_to_20']			=	'the length between 1 and 20';
 $LANG['fieldname_was_wrong']		=	'Name is invalid';
 $LANG['already_exist'] 				=	'Already exists';
@@ -136,12 +135,17 @@ $LANG['formguide_setting']			=	'Module wizard';
 $LANG['allows_more_ip']				=	'Allow the same IP repeatedly submitted  ';
 $LANG['allowunreg']					=	'Allow visitor to submit form';
 $LANG['mailmessage']				=	'Content';
+$LANG['setting_mailmessage']		=	'Can be variable, for example: {$username} or {username}';
 $LANG['not_meet_the_conditions'] 	=	'is invalid';
 $LANG['not_less_than'] 				=	'not less than';
 $LANG['not_more_than'] 				=	'not more than';
 $LANG['the_value_must_not_repeat'] 	=	'value cannot duplicate';
 $LANG['interval']					=	'Interval';
 $LANG['minute']						=	'minute';
+$LANG['code']						=	'Code';
+$LANG['codelen']					=	'Verification code digits';
+$LANG['setting_noe_code_len']		=	'The number of verification code cannot be less than 2 or more than 8';
+$LANG['setting_updates_successful']	=	'Configuration update complete!';
 
 //index
 $LANG['formguide_list']				=	'A list of wizards';

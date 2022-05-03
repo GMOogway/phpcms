@@ -27,15 +27,105 @@ function check_content(obj) {
 	return true;
 }
 
-function image_priview(img) {
-	var diag = new Dialog({
-		id:'image_priview',
-		title:'图片查看',
-		html:'<img src="'+img+'" />',
-		modal:true,
-		autoClose:5
-	});
-	diag.show();
+function image_priview(file) {
+    if(IsImg(file)) {
+        var width = 400;
+        var height = 300;
+        var att = 'width: 350px;height: 260px;';
+        if (is_mobile()) {
+            width = height = '90%';
+            var att = 'height: 90%;';
+        }
+        var diag = new Dialog({
+            title:'预览',
+            html:'<style type="text/css">a{text-shadow: none; color: #337ab7; text-decoration:none;}a:hover{cursor: pointer; color: #23527c; text-decoration: underline;}</style><div style="'+att+'line-height: 24px;word-break: break-all;overflow: hidden auto;"><p style="word-break: break-all;text-align: center;margin-bottom: 20px;"><a href="'+file+'" target="_blank">'+file+'</a></p><p style="text-align: center;"><a href="'+file+'" target="_blank"><img style="max-width:100%" src="'+file+'"></a></p></div>',
+            width:width,
+            height:height,
+            modal:true
+        });
+        diag.show();
+    } else if(IsMp4(file)) {
+        var width = 500;
+        var height = 320;
+        var att = 'width="420" height="238"';
+        if (is_mobile()) {
+            width = height = '90%';
+            var att = 'width="90%" height="200"';
+        }
+        var diag = new Dialog({
+            title:'预览',
+            html:'<style type="text/css">a{text-shadow: none; color: #337ab7; text-decoration:none;}a:hover{cursor: pointer; color: #23527c; text-decoration: underline;}</style><p style="word-break: break-all;text-align: center;margin-bottom: 20px;"><a href="'+file+'" target="_blank">'+file+'</a></p><p style="text-align: center;"> <video class="video-js vjs-default-skin" controls="true" preload="auto" '+att+'><source src="'+file+'" type="video/mp4"/></video>\n</p>',
+            width:width,
+            height:height,
+            modal:true
+        });
+        diag.show();
+    } else if(IsMp3(file)) {
+        var diag = new Dialog({
+            title:'预览',
+            html:'<style type="text/css">a{text-shadow: none; color: #337ab7; text-decoration:none;}a:hover{cursor: pointer; color: #23527c; text-decoration: underline;}</style><p style="text-align: center;word-break: break-all;margin-bottom: 20px;"><a href="'+file+'" target="_blank">'+file+'</a></p><p style="text-align: center;"><audio src="'+file+'" controls="controls"></audio></p>',
+            modal:true
+        });
+        diag.show();
+    } else {
+        var diag = new Dialog({
+            title:'预览',
+            html:'<style type="text/css">a{text-shadow: none; color: #337ab7; text-decoration:none;}a:hover{cursor: pointer; color: #23527c; text-decoration: underline;}</style><p style="text-align: center;word-break: break-all;margin-bottom: 20px;"><a href="'+file+'" target="_blank">'+file+'</a></p><p style="text-align: center;"><a href="'+file+'" target="_blank"><i class="fa fa-download"></i> 单击打开</a></p>',
+            modal:true
+        });
+        diag.show();
+    }
+}
+
+function IsImg(url){
+	var sTemp;
+	var b=false;
+	var opt="jpg|gif|png|bmp|jpeg|webp";
+	var s=opt.toUpperCase().split("|");
+	for (var i=0;i<s.length ;i++ ){
+		sTemp=url.substr(url.length-s[i].length-1);
+		sTemp=sTemp.toUpperCase();
+		s[i]="."+s[i];
+		if (s[i]==sTemp){
+			b=true;
+			break;
+		}
+	}
+	return b;
+}
+
+function IsMp4(url){
+	var sTemp;
+	var b=false;
+	var opt="mp4";
+	var s=opt.toUpperCase().split("|");
+	for (var i=0;i<s.length ;i++ ){
+		sTemp=url.substr(url.length-s[i].length-1);
+		sTemp=sTemp.toUpperCase();
+		s[i]="."+s[i];
+		if (s[i]==sTemp){
+			b=true;
+			break;
+		}
+	}
+	return b;
+}
+
+function IsMp3(url){
+	var sTemp;
+	var b=false;
+	var opt="mp3";
+	var s=opt.toUpperCase().split("|");
+	for (var i=0;i<s.length ;i++ ){
+		sTemp=url.substr(url.length-s[i].length-1);
+		sTemp=sTemp.toUpperCase();
+		s[i]="."+s[i];
+		if (s[i]==sTemp){
+			b=true;
+			break;
+		}
+	}
+	return b;
 }
 
 function remove_div(id) {

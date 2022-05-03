@@ -131,7 +131,6 @@ function dr_rp($str, $o, $t) {
  */
 function dr_get_data($title, $content) {
 	if (!$title) {
-		log_message('error', '分词接口-没有获取标题');
 		return dr_return_data(0, '分词接口-没有获取标题');
 	}
 	$cfg_bdqc_qcnum = pc_base::load_config('system', 'baidu_qcnum') ? pc_base::load_config('system', 'baidu_qcnum') : 10;
@@ -213,10 +212,14 @@ function dr_get_data($title, $content) {
 		$phpanalysis->LoadDict();
 		$phpanalysis->SetSource($title);
 		$phpanalysis->StartAnalysis(true);
-		return dr_return_data(1, $phpanalysis->GetFinallyKeywords($cfg_bdqc_qcnum));
+		$rt = $phpanalysis->GetFinallyKeywords($cfg_bdqc_qcnum);
+		if (!$rt) {
+			log_message('error', '本地接口-没有分析出关键词');
+			return dr_return_data(0, '本地接口-没有分析出关键词');
+		} else {
+			return dr_return_data(1, $rt);
+		}
 	}
-	log_message('error', '本地接口-没有分析出关键词');
-	return dr_return_data(0, '本地接口-没有分析出关键词', $rt);
 }
 
 /**

@@ -109,7 +109,7 @@ jQuery(document).ready(function() {
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('register_email_auth')?></label>
                         <div class="col-md-9">
-                            <input type="checkbox" name="info[enablemailcheck]" value="1" <?php echo $member_setting['enablemailcheck'] ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+                            <input type="checkbox" name="info[enablemailcheck]" value="1"<?php if($mail_disabled) {echo ' disabled';}else{echo $member_setting['enablemailcheck'] ? ' checked' : '';}?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
                         </div>
                     </div>
                     <div class="form-group">

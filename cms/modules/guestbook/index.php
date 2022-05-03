@@ -5,7 +5,7 @@ class index {
 	function __construct() {
 		pc_base::load_app_func('global');
 		$this->input = pc_base::load_sys_class('input');
-		$siteid = isset($_GET['siteid']) ? intval($_GET['siteid']) : get_siteid();
+		$siteid = $this->input->get('siteid') ? intval($this->input->get('siteid')) : get_siteid();
   		define("SITEID",$siteid);
 	}
 	
@@ -21,7 +21,7 @@ class index {
 	 */
 	public function list_type() {
 		$siteid = SITEID;
-  		$type_id = trim(urldecode($_GET['type_id']));
+  		$type_id = trim(urldecode($this->input->get('type_id')));
 		$type_id = intval($type_id);
   		if($type_id==""){
  			$type_id ='0';
@@ -36,35 +36,73 @@ class index {
 	 */
 	public function register() { 
  		$siteid = SITEID;
- 		if(isset($_POST['dosubmit'])){
- 			if($_POST['name']==""){
+		$setting = getcache('guestbook', 'commons');
+		$setting = $setting[$siteid];
+		if(!$setting['is_post']){
+			showmessage(L('suspend_application'), HTTP_REFERER);
+		}
+ 		if($this->input->post('dosubmit')){
+ 			if(!$this->input->post('name')){
  				showmessage(L('usename_noempty'),"?m=guestbook&c=index&a=register&siteid=$siteid");
  			}
- 			if($_POST['lxqq']==""){
+ 			if(!$this->input->post('lxqq')){
  				showmessage(L('email_not_empty'),"?m=guestbook&c=index&a=register&siteid=$siteid");
  			}
- 			if($_POST['email']==""){
+ 			if(!$this->input->post('email')){
  				showmessage(L('email_not_empty'),"?m=guestbook&c=index&a=register&siteid=$siteid");
  			}
-			if($_POST['shouji']==""){
+			if(!$this->input->post('shouji')){
  				showmessage(L('shouji_not_empty'),"?m=guestbook&c=index&a=register&siteid=$siteid");
  			}
  			$guestbook_db = pc_base::load_model('guestbook_model');
  			 
 			 /*添加用户数据*/
- 			$sql = array('siteid'=>$siteid,'typeid'=>$_POST['typeid'],'name'=>$_POST['name'],'sex'=>$_POST['sex'],'lxqq'=>$_POST['lxqq'],'email'=>$_POST['email'],'shouji'=>$_POST['shouji'],'introduce'=>$_POST['introduce'],'addtime'=>time());
+ 			$sql = array('siteid'=>$siteid,'typeid'=>$this->input->post('typeid'),'name'=>$this->input->post('name'),'sex'=>$this->input->post('sex'),'lxqq'=>$this->input->post('lxqq'),'email'=>$this->input->post('email'),'shouji'=>$this->input->post('shouji'),'introduce'=>$this->input->post('introduce'),'addtime'=>SYS_TIME);
  			 
- 			$guestbook_db->insert($sql);
- 			showmessage(L('add_success'), "?m=guestbook&c=index&siteid=$siteid");
+ 			$dataid = $guestbook_db->insert($sql, true);
+			if ($dataid) {
+				if ($setting['sendmail'] && $setting['mails']) {
+					$email = pc_base::load_sys_class('email');
+					$mails = explode(',', $setting['mails']);
+					if (is_array($mails)) {
+						foreach ($mails as $m) {
+							$email->set();
+							$mailmessage = $setting['mailmessage'];
+							$mailmessage = str_replace('$', '', $mailmessage);
+							if (preg_match_all("/\{(.+)\}/U", $mailmessage, $value)) {
+								foreach ($value[1] as $t) {
+									$mailmessage = str_replace($t, $this->input->post($t), $mailmessage);
+								}
+							}
+							$mailmessage = str_replace(array('{', '}'), '', $mailmessage);
+							$email->send($m, L('tips'), $mailmessage);
+						}
+					}
+				}
+				if ($setting['sendsms'] && $setting['mobiles'] && module_exists('sms')) {
+					pc_base::load_app_class('smsapi', 'sms', 0);
+					$mobiles = explode(',', $setting['mobiles']);
+					if (is_array($mobiles)) {
+						foreach ($mobiles as $m) {
+							$smsmessage = $setting['smsmessage'];
+							$smsmessage = str_replace('$', '', $smsmessage);
+							if (preg_match_all("/\{(.+)\}/U", $smsmessage, $value)) {
+								foreach ($value[1] as $t) {
+									$smsmessage = str_replace($t, $this->input->post($t), $smsmessage);
+								}
+							}
+							$smsmessage = str_replace(array('{', '}'), '', $smsmessage);
+							$smsapi = new smsapi();
+							$rt = $smsapi->send_sms($m, $smsmessage);
+						}
+					}
+				}
+			}
+ 			showmessage(L('add_success').($setting['sendsms'] && $setting['mobiles'] && module_exists('sms') ? $rt['msg'] : ''), "?m=guestbook&c=index&siteid=$siteid");
  		}else {
-  			$setting = getcache('guestbook', 'commons');
- 			if($setting[$siteid]['is_post']=='0'){
- 				showmessage(L('suspend_application'), HTTP_REFERER);
- 			}
  			$this->type = pc_base::load_model('type_model');
  			$types = $this->type->get_types($siteid);//获取站点下所有留言板分类
  			pc_base::load_sys_class('form', '', 0);
- 			$setting = getcache('guestbook', 'commons');
  			$SEO = seo(SITEID, '', L('application_guestbook'), '', '');
    			include template('guestbook', 'register');
  		}

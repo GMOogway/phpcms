@@ -96,6 +96,36 @@ jQuery(document).ready(function() {
                             <span class="help-block"><?php echo L('multiple_with_commas')?></span>
                         </div>
                     </div>
+                    <div class="form-group" id="mailcontent" style="display:none;">
+                        <label class="col-md-2 control-label"><?php echo L('mailmessage');?></label>
+                        <div class="col-md-9">
+                            <textarea id="mailmessage" name="setting[mailmessage]" style="height:100px"></textarea>
+                            <span class="help-block"><?php echo L('setting_message')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('allowed_send_sms');?></label>
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[sendsms]" value="1"> <?php echo L('yes');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[sendsms]" value="0" checked> <?php echo L('no');?> <span></span></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" id="smsaddress" style="display:none;">
+                        <label class="col-md-2 control-label"><?php echo L('sms_address');?></label>
+                        <div class="col-md-9">
+                            <input class="form-control input-large" type="text" id="mobiles" name="setting[mobiles]" value="" >
+                            <span class="help-block"><?php echo L('multiple_with_commas')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group" id="smscontent" style="display:none;">
+                        <label class="col-md-2 control-label"><?php echo L('smsmessage');?></label>
+                        <div class="col-md-9">
+                            <textarea id="smsmessage" name="setting[smsmessage]" style="height:100px"></textarea>
+                            <span class="help-block"><?php echo L('setting_message')?></span>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('allows_more_ip');?></label>
                         <div class="col-md-9">
@@ -212,8 +242,19 @@ $("input:radio[name='setting[enabletime]']").click(function (){
 $("input:radio[name='setting[sendmail]']").click(function (){
     if($("input:radio[name='setting[sendmail]']:checked").val()==0) {
         $("#mailaddress").hide();
+        $("#mailcontent").hide();
     } else if($("input:radio[name='setting[sendmail]']:checked").val()==1) {
         $("#mailaddress").show();
+        $("#mailcontent").show();
+    }
+});
+$("input:radio[name='setting[sendsms]']").click(function (){
+    if($("input:radio[name='setting[sendsms]']:checked").val()==0) {
+        $("#smsaddress").hide();
+        $("#smscontent").hide();
+    } else if($("input:radio[name='setting[sendsms]']:checked").val()==1) {
+        $("#smsaddress").show();
+        $("#smscontent").show();
     }
 });
 function dr_call_alert() {
