@@ -12,8 +12,7 @@ include $this->admin_tpl('header', 'admin');
 //-->
 </script>
 <div class="pad-10">
-<div class="col-tab">
-
+<div>
 <ul class="tabBut cu-li">
 <li<?php if ($_GET['order']==3) {?> class="on"<?php }?>><a href="?m=content&c=copy&a=init&module=content&classname=push_api&action=category_list_copy&order=3&tpl=copy_to_category&modelid=<?php echo $_GET['modelid']?>&catid=<?php echo $_GET['catid']?>&id=<?php echo $_GET['id']?>"><?php echo L('copy_to_category');?></a></li>
 </ul>
@@ -26,23 +25,6 @@ include $this->admin_tpl('header', 'admin');
 <input type="hidden" value="public_relationlist" name="a">
 <input type="hidden" value="<?php echo $modelid;?>" name="modelid">
 <?php
-/*$server = '127.0.0.1:7896506'; 
-$user = 'root'; 
-$pass = 'J9IJhf8IE15F'; 
-mysql_connect($server,$user,$pass);
-$dbs = mysql_list_dbs();
-echo "服务器上所有数据库名称: <br />";
-while (list($db) = mysql_fetch_row($dbs)) {
-	$conn = mysql_connect($server,$user,$pass);
-	if(!$conn) die("数据库系统连接失败！");
-	mysql_select_db($db) or die("数据库连接失败！");
-	$result = mysql_query("SHOW TABLES");
-	while($row = mysql_fetch_array($result))
-	{
-	echo $row[0]."<br />";
-	}
-	mysql_free_result($result);
-}*/
 $sitelist = getcache('sitelist','commons');
 $siteid = $this->siteid;
 echo '<div class="mt-radio-inline">';
@@ -56,7 +38,7 @@ echo '</div>';
 <input type="hidden" value="<?php echo $siteid;?>" name="siteid" id="siteid">
 </div>
 </div>
-    <div style="width:500px; padding:2px; border:1px solid #d8d8d8; float:left; margin-top:10px; margin-right:10px">
+    <div style="width:500px; float:left; margin-right:10px">
     <div class="table-list"><table width="100%" cellspacing="0">
             <thead>
                 <tr>
@@ -71,7 +53,7 @@ echo '</div>';
         </table></div>
     </div>
 
-    <div style="overflow:hidden;_float:left;margin-top:10px;*margin-top:0;_margin-top:0">
+    <div style="overflow:hidden;_float:left;">
     <fieldset>
         <legend><?php echo L('category_checked');?></legend>
     <ul class='list-dot-othors' id='catname'>

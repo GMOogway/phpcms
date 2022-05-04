@@ -35,7 +35,7 @@ body {background: #f5f6f8;}
 </div>
 <div class="page-body" style="margin-top: 20px;margin-bottom:30px;padding-top:15px;">
 <div class="right-card-box">
-    <div class="row table-search-tool" id="searchid"<?php if (!$param['search']) {?> style="display:none;"<?php }?>>
+    <div class="row table-search-tool">
         <form name="searchform" action="" method="get" >
         <input type="hidden" value="content" name="m">
         <input type="hidden" value="content" name="c">
@@ -125,7 +125,7 @@ if(is_array($datas)){
         } else {
             echo '?m=content&c=content&a=public_preview&catid='.$r['catid'].'&id='.$r['id'].'';
         }?>" target="_blank" class="btn btn-xs blue"><i class="fa fa-eye"></i> <?php echo L('preview');?></a>
-        <a class="btn btn-xs green" id="restore" data-id="<?php echo $r['id'];?>"><i class="fa fa-window-restore"></i> <?php echo L('restore');?></a></td>
+        <a class="btn btn-xs green" id="restore" data-id="<?php echo $r['id'];?>"><i class="fa fa-reply"></i> <?php echo L('recover');?></a></td>
     </tr>
 <?php 
     }
@@ -140,8 +140,9 @@ if(is_array($datas)){
             <input type="checkbox" class="group-checkable" data-set=".checkboxes">
             <span></span>
         </label>
+        <label><button type="button" id="recycle" class="btn green btn-sm"> <i class="fa fa-reply"></i> <?php echo L('recover');?></button></label>
         <label><button type="button" id="delAll" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('thorough').L('delete');?></button></label>
-        <label><button type="button" id="recycle" class="btn green btn-sm"> <i class="fa fa-window-restore"></i> <?php echo L('还原');?></button></label>
+        <label><button type="button" onclick="ajax_confirm_url('?m=content&c=content&a=public_recycle_del&catid=<?php echo $catid;?>', '你确定要清空回收站吗？', '')" class="btn red btn-sm"> <i class="fa fa-close"></i> <?php echo L('empty').L('recycle');?></button></label>
     </div>
     <div class="col-md-7 list-page"><?php echo $pages?></div>
 </div>

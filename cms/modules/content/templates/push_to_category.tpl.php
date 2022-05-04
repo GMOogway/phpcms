@@ -12,8 +12,7 @@ include $this->admin_tpl('header', 'admin');
 //-->
 </script>
 <div class="pad-10">
-<div class="col-tab">
-
+<div>
 <ul class="tabBut cu-li">
 <li<?php if ($_GET['order']==1 || !isset($_GET['order'])) {?> class="on"<?php }?>><a href="?m=content&c=push&a=init&classname=position_api&action=position_list&order=1&modelid=<?php echo $_GET['modelid']?>&catid=<?php echo $_GET['catid']?>&id=<?php echo $_GET['id']?>"><?php echo L('push_to_position');?></a></li>
 <li<?php if ($_GET['order']==2) {?> class="on"<?php }?>><a href="?m=content&c=push&a=init&module=special&action=_push_special&order=2&modelid=<?php echo $_GET['modelid']?>&catid=<?php echo $_GET['catid']?>&id=<?php echo $_GET['id']?>"><?php echo L('push_to_special');?></a></li>
@@ -41,7 +40,7 @@ echo '</div>';
 <input type="hidden" value="<?php echo $siteid;?>" name="siteid" id="siteid">
 </div>
 </div>
-    <div style="width:500px; padding:2px; border:1px solid #d8d8d8; float:left; margin-top:10px; margin-right:10px">
+    <div style="width:500px; float:left; margin-right:10px">
     <div class="table-list"><table width="100%" cellspacing="0">
             <thead>
                 <tr>
@@ -56,7 +55,7 @@ echo '</div>';
         </table></div>
     </div>
 
-    <div style="overflow:hidden;_float:left;margin-top:10px;*margin-top:0;_margin-top:0">
+    <div style="overflow:hidden;_float:left;">
     <fieldset>
         <legend><?php echo L('category_checked');?></legend>
     <ul class='list-dot-othors' id='catname'>

@@ -821,7 +821,7 @@ class create_html extends admin {
 
 		$url = '?m=content&c=create_html&a=public_tag_edit&modelid='.$modelid;
 
-		// 获取生成栏目
+		// 获取栏目
 		if ($catid) {
 			$cat = array();
 			foreach ($catid as $i) {
@@ -904,7 +904,7 @@ class create_html extends admin {
 
 		$url = '?m=content&c=create_html&a=public_thumb_edit&modelid='.$modelid;
 
-		// 获取生成栏目
+		// 获取栏目
 		if ($catid) {
 			$cat = array();
 			foreach ($catid as $i) {
@@ -988,7 +988,7 @@ class create_html extends admin {
 
 		$url = '?m=content&c=create_html&a=public_desc_edit&modelid='.$modelid;
 
-		// 获取生成栏目
+		// 获取栏目
 		if ($catid) {
 			$cat = array();
 			foreach ($catid as $i) {
@@ -1094,7 +1094,7 @@ class create_html extends admin {
 		$url.= '&toid='.$toid;
 		$where = '';
 
-		// 获取生成栏目
+		// 获取栏目
 		$catid = $this->input->get('catid');
 		if ($catid) {
 			$cat = array();
@@ -1185,7 +1185,7 @@ class create_html extends admin {
 
 		$url = '?m=content&c=create_html&a=public_del_edit&modelid='.$modelid;
 
-		// 获取生成栏目
+		// 获取栏目
 		if ($catid) {
 			$cat = array();
 			foreach ($catid as $i) {
@@ -1197,7 +1197,7 @@ class create_html extends admin {
 					$url.= '&catid[]='.intval($i);
 				}
 			}
-			$cat && $where[] = ' catid IN ('.implode(',', $cat).')';
+			$cat && $where[] = 'catid IN ('.implode(',', $cat).')';
 		}
 
 		$author = $this->input->get('author');

@@ -85,11 +85,12 @@ class content extends admin {
 			if($this->db->table_name==$this->db->db_tablepre) dr_admin_msg(0,L('model_table_not_exists'));
 			$status = $steps ? $steps : 99;
 			if($this->input->get('reject')) $status = 0;
-			$where = 'catid='.$catid.' AND status='.$status;
+			$where = array();
+			$where[] = 'catid='.$catid.' AND status='.$status;
 			//搜索
 			$param = $this->input->get();
 			if($param['start_time']) {
-				$where .= ' AND '.$date_field.' BETWEEN ' . max((int)strtotime(strpos($param['start_time'], ' ') ? $param['start_time'] : $param['start_time'].' 00:00:00'), 1) . ' AND ' . ($param['end_time'] ? (int)strtotime(strpos($param['end_time'], ' ') ? $param['end_time'] : $param['end_time'].' 23:59:59') : SYS_TIME);
+				$where[] = $date_field.' BETWEEN ' . max((int)strtotime(strpos($param['start_time'], ' ') ? $param['start_time'] : $param['start_time'].' 00:00:00'), 1) . ' AND ' . ($param['end_time'] ? (int)strtotime(strpos($param['end_time'], ' ') ? $param['end_time'] : $param['end_time'].' 23:59:59') : SYS_TIME);
 			}
 			if($param['keyword']) {
 				$type_array = array('title','description','username');
@@ -97,19 +98,19 @@ class content extends admin {
 				if($searchtype < 3) {
 					$searchtype = $type_array[$searchtype];
 					$keyword = clearhtml(trim($param['keyword']));
-					$where .= " AND `$searchtype` like '%".$this->db->escape($keyword)."%'";
+					$where[] = "`$searchtype` like '%".$this->db->escape($keyword)."%'";
 				} elseif($searchtype==3) {
 					$keyword = intval($param['keyword']);
-					$where .= " AND `id`='$keyword'";
+					$where[] = "`id`='$keyword'";
 				}
 			}
 			if($param['posids'] && !empty($param['posids'])) {
 				$posids = $param['posids']==1 ? intval($param['posids']) : 0;
-				$where .= " AND `posids` = '$posids'";
+				$where[] = "`posids` = '$posids'";
 			}
 			$pagesize = $param['limit'] ? $param['limit'] : SYS_ADMIN_PAGESIZE;
 			$order = $param['order'] ? $param['order'] : ($this->form_cache['setting']['order'] ? dr_safe_replace($this->form_cache['setting']['order']) : 'id desc');
-			$datas = $this->db->listinfo($where,$order,$this->input->get('page'),$pagesize);
+			$datas = $this->db->listinfo(($where ? implode(' AND ', $where) : ''),$order,$this->input->get('page'),$pagesize);
 			$pages = $this->db->pages;
 			$pc_hash = dr_get_csrf_token();
 			for($i=1;$i<=$workflow_steps;$i++) {
@@ -145,11 +146,12 @@ class content extends admin {
 			$date_field = $this->form_cache['setting']['search_time'] ? $this->form_cache['setting']['search_time'] : 'updatetime';
 			$this->db->set_model($modelid);
 			if($this->db->table_name==$this->db->db_tablepre) dr_admin_msg(0,L('model_table_not_exists'));
-			$where = 'catid='.$catid.' AND status=100';
+			$where = array();
+			$where[] = 'catid='.$catid.' AND status=100';
 			//搜索
 			$param = $this->input->get();
 			if($param['start_time']) {
-				$where .= ' AND '.$date_field.' BETWEEN ' . max((int)strtotime(strpos($param['start_time'], ' ') ? $param['start_time'] : $param['start_time'].' 00:00:00'), 1) . ' AND ' . ($param['end_time'] ? (int)strtotime(strpos($param['end_time'], ' ') ? $param['end_time'] : $param['end_time'].' 23:59:59') : SYS_TIME);
+				$where[] = $date_field.' BETWEEN ' . max((int)strtotime(strpos($param['start_time'], ' ') ? $param['start_time'] : $param['start_time'].' 00:00:00'), 1) . ' AND ' . ($param['end_time'] ? (int)strtotime(strpos($param['end_time'], ' ') ? $param['end_time'] : $param['end_time'].' 23:59:59') : SYS_TIME);
 			}
 			if($param['keyword']) {
 				$type_array = array('title','description','username');
@@ -157,19 +159,19 @@ class content extends admin {
 				if($searchtype < 3) {
 					$searchtype = $type_array[$searchtype];
 					$keyword = clearhtml(trim($param['keyword']));
-					$where .= " AND `$searchtype` like '%".$this->db->escape($keyword)."%'";
+					$where[] = "`$searchtype` like '%".$this->db->escape($keyword)."%'";
 				} elseif($searchtype==3) {
 					$keyword = intval($param['keyword']);
-					$where .= " AND `id`='$keyword'";
+					$where[] = "`id`='$keyword'";
 				}
 			}
 			if($param['posids'] && !empty($param['posids'])) {
 				$posids = $param['posids']==1 ? intval($param['posids']) : 0;
-				$where .= " AND `posids` = '$posids'";
+				$where[] = "`posids` = '$posids'";
 			}
 			$pagesize = $param['limit'] ? $param['limit'] : SYS_ADMIN_PAGESIZE;
 			$order = $param['order'] ? $param['order'] : ($this->form_cache['setting']['order'] ? dr_safe_replace($this->form_cache['setting']['order']) : 'id desc');
-			$datas = $this->db->listinfo($where,$order,$this->input->get('page'),$pagesize);
+			$datas = $this->db->listinfo(($where ? implode(' AND ', $where) : ''),$order,$this->input->get('page'),$pagesize);
 			$pages = $this->db->pages;
 			include $this->admin_tpl('content_recycle');
 		} else {
@@ -204,7 +206,7 @@ class content extends admin {
 		//搜索
 		$param = $this->input->get();
 		if($param['start_time']) {
-			$where[] = ' AND '.$date_field.' BETWEEN ' . max((int)strtotime(strpos($param['start_time'], ' ') ? $param['start_time'] : $param['start_time'].' 00:00:00'), 1) . ' AND ' . ($param['end_time'] ? (int)strtotime(strpos($param['end_time'], ' ') ? $param['end_time'] : $param['end_time'].' 23:59:59') : SYS_TIME);
+			$where[] = $date_field.' BETWEEN ' . max((int)strtotime(strpos($param['start_time'], ' ') ? $param['start_time'] : $param['start_time'].' 00:00:00'), 1) . ' AND ' . ($param['end_time'] ? (int)strtotime(strpos($param['end_time'], ' ') ? $param['end_time'] : $param['end_time'].' 23:59:59') : SYS_TIME);
 		}
 		if($param['keyword']) {
 			$type_array = array('title','description','username');
@@ -212,15 +214,15 @@ class content extends admin {
 			if($searchtype < 3) {
 				$searchtype = $type_array[$searchtype];
 				$keyword = clearhtml(trim($param['keyword']));
-				$where[] = " AND `$searchtype` like '%".$this->db->escape($keyword)."%'";
+				$where[] = "`$searchtype` like '%".$this->db->escape($keyword)."%'";
 			} elseif($searchtype==3) {
 				$keyword = intval($param['keyword']);
-				$where[] = " AND `id`='$keyword'";
+				$where[] = "`id`='$keyword'";
 			}
 		}
 		if($param['posids'] && !empty($param['posids'])) {
 			$posids = $param['posids']==1 ? intval($param['posids']) : 0;
-			$where[] = " AND `posids` = '$posids'";
+			$where[] = "`posids` = '$posids'";
 		}
 		$pagesize = $param['limit'] ? $param['limit'] : SYS_ADMIN_PAGESIZE;
 		$order = $param['order'] ? $param['order'] : ($this->form_cache['setting']['order'] ? dr_safe_replace($this->form_cache['setting']['order']) : 'id desc');
@@ -540,6 +542,136 @@ class content extends admin {
 		}
 	}
 	/**
+	 * 回收站清空
+	 */
+	public function public_recycle_del() {
+		$page = (int)$this->input->get('page');
+		$catid = intval($this->input->get('catid'));
+		$modelid = $this->categorys[$catid]['modelid'];
+		$sethtml = $this->categorys[$catid]['sethtml'];
+		$siteid = $this->categorys[$catid]['siteid'];
+		
+		$html_root = SYS_HTML_ROOT;
+		if($sethtml) $html_root = '';
+		
+		$setting = string2array($this->categorys[$catid]['setting']);
+		$content_ishtml = $setting['content_ishtml'];
+		$this->db->set_model($modelid);
+		$this->hits_db = pc_base::load_model('hits_model');
+		$this->queue = pc_base::load_model('queue_model');
+
+		//附件初始化
+		$attachment = pc_base::load_model('attachment_model');
+		$this->content_check_db = pc_base::load_model('content_check_model');
+		$this->position_data_db = pc_base::load_model('position_data_model');
+		$this->search_db = pc_base::load_model('search_model');
+		$this->comment = pc_base::load_app_class('comment', 'comment');
+		$search_model = getcache('search_model_'.$this->siteid,'search');
+		$typeid = $search_model[$modelid]['typeid'];
+		$this->url = pc_base::load_app_class('url', 'content');
+		$sitelist = getcache('sitelist','commons');
+
+		$psize = 20;
+		if (!$page) {
+			$nums = $this->db->count(array('catid'=>$catid, 'status'=>100));
+			if (!$nums) {
+				dr_json(0, L('数据为空'));
+			}
+			$tpage = ceil($nums / $psize); // 总页数
+			dr_json(1, L('即将执行清空回收站命令'), [
+				'jscode' => 'iframe_show(\''.L('清空回收站').'\', \'?m=content&c=content&a=public_recycle_del&catid='.$catid.'&page=1&total='.$nums.'&tpage='.$tpage.'\', \'500px\', \'300px\', \'load\')'
+			]);
+		}
+
+		$tpage = (int)$this->input->get('tpage');
+		$total = (int)$this->input->get('total');
+
+		$data = $this->db->listinfo(array('catid'=>$catid, 'status'=>100),'id DESC',1,$psize);
+		if (!$data) {
+			html_msg(1, L('共删除'.$total.'条数据'));
+		}
+
+		$ids = array();
+		foreach ($data as $t) {
+			$ids[] = $t['id'];
+		}
+
+		foreach($ids as $id) {
+			$r = $this->db->get_one(array('id'=>$id));
+			if($content_ishtml && !$r['islink']) {
+				$urls = $this->url->show($id, 0, $r['catid'], $r['inputtime']);
+				$fileurl = $urls[1];
+				if($this->siteid != 1) {
+					$fileurl = $html_root.'/'.$sitelist[$this->siteid]['dirname'].$fileurl;
+				}
+				$mobilefileurl = SYS_MOBILE_ROOT.$fileurl;
+				//删除静态文件，排除htm/html/shtml外的文件
+				$lasttext = strrchr($fileurl,'.');
+				$len = -strlen($lasttext);
+				$path = substr($fileurl,0,$len);
+				$path = ltrim($path,'/');
+				$filelist = glob(CMS_PATH.$path.'{_,-,.}*',GLOB_BRACE);
+				$mobilelasttext = strrchr($mobilefileurl,'.');
+				$mobilelen = -strlen($mobilelasttext);
+				$mobilepath = substr($mobilefileurl,0,$mobilelen);
+				$mobilepath = ltrim($mobilepath,'/');
+				$mobilefilelist = glob(CMS_PATH.$mobilepath.'{_,-,.}*',GLOB_BRACE);
+				foreach ($filelist as $delfile) {
+					$lasttext = strrchr($delfile,'.');
+					if(!in_array($lasttext, array('.htm','.html','.shtml'))) continue;
+					@unlink($delfile);
+					//删除发布点队列数据
+					$delfile = str_replace(CMS_PATH, '/', $delfile);
+					$this->queue->add_queue('del',$delfile,$this->siteid);
+				}
+				if($sitelist[$this->siteid]['mobilehtml']==1) {
+					foreach ($mobilefilelist as $mobiledelfile) {
+						$mobilelasttext = strrchr($mobiledelfile,'.');
+						if(!in_array($mobilelasttext, array('.htm','.html','.shtml'))) continue;
+						@unlink($mobiledelfile);
+					}
+				}
+			} else {
+				$fileurl = 0;
+			}
+			//删除内容
+			$this->db->delete_content($id,$fileurl,$catid);
+			//删除统计表数据
+			$this->hits_db->delete(array('hitsid'=>'c-'.$modelid.'-'.$id));
+			//删除附件
+			$attachment->api_delete('c-'.$catid.'-'.$id);
+			//删除审核表数据
+			$this->content_check_db->delete(array('checkid'=>'c-'.$id.'-'.$modelid));
+			//删除推荐位数据
+			$this->position_data_db->delete(array('id'=>$id,'catid'=>$catid,'module'=>'content'));
+			//删除全站搜索中数据
+			$this->search_db->delete_search($typeid,$id);
+			//删除关键词和关键词数量重新统计
+			$keyword_db = pc_base::load_model('keyword_model');
+			$keyword_data_db = pc_base::load_model('keyword_data_model');
+			$keyword_arr = $keyword_data_db->select(array('siteid'=>$siteid,'contentid'=>$id.'-'.$modelid));
+			if($keyword_arr){
+				foreach ($keyword_arr as $val){
+					$keyword_db->update(array('videonum'=>'-=1'),array('id'=>$val['tagid']));
+				}
+				$keyword_data_db->delete(array('siteid'=>$siteid,'contentid'=>$id.'-'.$modelid));
+				$keyword_db->delete(array('videonum'=>'0'));
+			}
+
+			//删除相关的评论,删除前应该判断是否还存在此模块
+			if(module_exists('comment')){
+				$commentid = id_encode('content_'.$catid, $id, $siteid);
+				$this->comment->del($commentid, $siteid, $id, $catid);
+			}
+
+		}
+		//更新栏目统计
+		$this->db->cache_items();
+		$this->cache_api->cache('sitemodels');
+
+		html_msg(1, L('正在执行中【'.$tpage.'/'.($page+1).'】...'), '?m=content&c=content&a=public_recycle_del&catid='.$catid.'&total='.$total.'&tpage='.$tpage.'&page='.($page+1));
+	}
+	/**
 	 * 过审内容
 	 */
 	public function pass() {
@@ -650,12 +782,12 @@ class content extends admin {
 		} elseif ($_SESSION['userid'] != $cache_uid) {
 			dr_json(0, L('权限认证失败，请重试'));
 		}
-        $id = intval($this->input->get('id'));
+		$id = intval($this->input->get('id'));
 		$catid = intval($this->input->get('catid'));
-        $name = dr_safe_filename($this->input->get('name'));
-        $value = $this->input->get('value');
-        $after = dr_safe_filename($this->input->get('after'));
-        $before = dr_safe_filename($this->input->get('before'));
+		$name = dr_safe_filename($this->input->get('name'));
+		$value = $this->input->get('value');
+		$after = dr_safe_filename($this->input->get('after'));
+		$before = dr_safe_filename($this->input->get('before'));
 		if($id && $catid) {
 			if(!$catid) dr_json(0, L('missing_part_parameters'));
 			$modelid = $this->categorys[$catid]['modelid'];
@@ -742,7 +874,7 @@ class content extends admin {
 		} else {
 			$categorys = L('please_add_category');
 		}
-        include $this->admin_tpl('category_tree');
+		include $this->admin_tpl('category_tree');
 		exit;
 	}
 	/**

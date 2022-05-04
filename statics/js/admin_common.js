@@ -868,6 +868,76 @@ function dr_ajax_list_open_close(e, url) {
 		}
 	});
 }
+// ajax 操作确认 并跳转
+function ajax_confirm_url(url, msg, tourl) {
+	Dialog.confirm(msg, function(){
+		var loading = layer.load(2, {
+			shade: [0.3,'#fff'], //0.1透明度的白色背景
+			time: 100000000
+		});
+		$.ajax({
+			type: "GET",
+			dataType: "json",
+			url: url,
+			success: function(json) {
+				layer.close(loading);
+				if (json.code) {
+					if (json.data.jscode) {
+						eval(json.data.jscode);
+						return;
+					}
+					if (json.data.url) {
+						setTimeout("window.location.href = '"+json.data.url+"'", 2000);
+					} else if (tourl) {
+						setTimeout("window.location.href = '"+tourl+"'", 2000);
+					}
+				}
+				dr_tips(json.code, json.msg);
+			},
+			error: function(HttpRequest, ajaxOptions, thrownError) {
+				dr_ajax_alert_error(HttpRequest, ajaxOptions, thrownError)
+			}
+		});
+	});
+}
+// ajax 操作确认 并跳转
+function dr_ajax_confirm_url(url, msg, tourl) {
+	layer.confirm(msg, {
+		icon: 3,
+		shade: 0,
+		title: '提示',
+		btn: ['确定', '取消']
+	}, function(index){
+		layer.close(index);
+		var loading = layer.load(2, {
+			shade: [0.3,'#fff'], //0.1透明度的白色背景
+			time: 100000000
+		});
+		$.ajax({
+			type: "GET",
+			dataType: "json",
+			url: url,
+			success: function(json) {
+				layer.close(loading);
+				if (json.code) {
+					if (json.data.jscode) {
+						eval(json.data.jscode);
+						return;
+					}
+					if (json.data.url) {
+						setTimeout("window.location.href = '"+json.data.url+"'", 2000);
+					} else if (tourl) {
+						setTimeout("window.location.href = '"+tourl+"'", 2000);
+					}
+				}
+				dr_tips(json.code, json.msg);
+			},
+			error: function(HttpRequest, ajaxOptions, thrownError) {
+				dr_ajax_alert_error(HttpRequest, ajaxOptions, thrownError)
+			}
+		});
+	});
+}
 // ajax 批量操作确认
 function ajax_option(url, msg, remove) {
 	Dialog.confirm(msg, function(){
@@ -909,7 +979,7 @@ function ajax_option(url, msg, remove) {
 }
 // ajax 批量操作确认
 function dr_ajax_option(url, msg, remove) {
-	layer.confirm(msg,{
+	layer.confirm(msg, {
 		icon: 3,
 		shade: 0,
 		title: '提示',
