@@ -142,7 +142,7 @@ if(is_array($datas)){
         </label>
         <label><button type="button" id="recycle" class="btn green btn-sm"> <i class="fa fa-reply"></i> <?php echo L('recover');?></button></label>
         <label><button type="button" id="delAll" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('thorough').L('delete');?></button></label>
-        <label><button type="button" onclick="ajax_confirm_url('?m=content&c=content&a=public_recycle_del&catid=<?php echo $catid;?>', '你确定要清空回收站吗？', '')" class="btn red btn-sm"> <i class="fa fa-close"></i> <?php echo L('empty').L('recycle');?></button></label>
+        <label><button type="button" onclick="ajax_confirm_url('?m=content&c=content&a=public_recycle_del&catid=<?php echo $catid;?>', '你确定要清空回收站吗？', '')" class="btn red btn-sm"> <i class="fa fa-close"></i> <?php echo L('empty_recycle').L('recycle');?></button></label>
     </div>
     <div class="col-md-7 list-page"><?php echo $pages?></div>
 </div>
