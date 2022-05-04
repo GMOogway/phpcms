@@ -263,7 +263,6 @@ $LANG['public_error'] = '系统错误';
 $LANG['public_error_log'] = '错误日志';
 $LANG['public_email_log'] = '邮件日志';
 $LANG['setting_keyword_enable'] = '关键词提取API';
-$LANG['recycle'] = '回收站';
 $LANG['safe'] = '账号安全';
 $LANG['import_wxurl'] = '一键导入';
 $LANG['import_wxurl_publish'] = '此功能后台管理员拥有权限';
