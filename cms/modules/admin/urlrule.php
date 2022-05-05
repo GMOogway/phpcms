@@ -285,7 +285,7 @@ class urlrule extends admin {
 						} elseif (isset($rname['{categorydir}'])) {
 							$rule = 'index.php?m=content&c=index&a=show&catdir=$'.$rname['{categorydir}'].'$id=$'.$rname['{id}'].'&page=$'.$rname['{page}'];
 						} else {
-							$rule = 'index.php?m=content&c=index&a=show&$catid=$'.$rname['{catid}'].'$id=$'.$rname['{id}'].'&page=$'.$rname['{page}'];
+							$rule = 'index.php?m=content&c=index&a=show&catid=$'.$rname['{catid}'].'$id=$'.$rname['{id}'].'&page=$'.$rname['{page}'];
 						}
 						if (isset($write[$preg])) {
 							$error.= "<p>".$cname."与".$write[$preg]."规则存在冲突</p>";
@@ -309,7 +309,7 @@ class urlrule extends admin {
 						} elseif (isset($rname['{categorydir}'])) {
 							$rule = 'index.php?m=content&c=index&a=show&catdir=$'.$rname['{categorydir}'].'$id=$'.$rname['{id}'];
 						} else {
-							$rule = 'index.php?m=content&c=index&a=show&$catid=$'.$rname['{catid}'].'$id=$'.$rname['{id}'];
+							$rule = 'index.php?m=content&c=index&a=show&catid=$'.$rname['{catid}'].'$id=$'.$rname['{id}'];
 						}
 						if (isset($write[$preg])) {
 							$error.= "<p>".$cname."与".$write[$preg]."规则存在冲突</p>";
@@ -340,7 +340,7 @@ class urlrule extends admin {
 								$rule = 'index.php?m=content&c=index&a=lists&catdir=$'.$rname['{categorydir}'].'&page=$'.$rname['{page}'];
 							} else {
 								// id模式
-								$rule = 'index.php?m=content&c=index&a=lists&$catid=$'.$rname['{catid}'].'&page=$'.$rname['{page}'];
+								$rule = 'index.php?m=content&c=index&a=lists&catid=$'.$rname['{catid}'].'&page=$'.$rname['{page}'];
 							}
 							if (isset($write[$preg])) {
 								$error.= "<p>".$cname."与".$write[$preg]."规则存在冲突</p>";
@@ -366,7 +366,7 @@ class urlrule extends admin {
 								$rule = 'index.php?m=content&c=index&a=lists&catdir=$'.$rname['{categorydir}'];
 							} else {
 								// id模式
-								$rule = 'index.php?m=content&c=index&a=lists&$catid=$'.$rname['{catid}'];
+								$rule = 'index.php?m=content&c=index&a=lists&catid=$'.$rname['{catid}'];
 							}
 							if (isset($write[$preg])) {
 								$error.= "<p>".$cname."与".$write[$preg]."规则存在冲突</p>";
@@ -394,7 +394,7 @@ class urlrule extends admin {
 							} elseif (isset($rname['{categorydir}'])) {
 								$rule = 'index.php?m=content&c=index&a=show&catdir=$'.$rname['{categorydir}'].'$id=$'.$rname['{id}'].'&page=$'.$rname['{page}'];
 							} else {
-								$rule = 'index.php?m=content&c=index&a=show&$catid=$'.$rname['{catid}'].'$id=$'.$rname['{id}'].'&page=$'.$rname['{page}'];
+								$rule = 'index.php?m=content&c=index&a=show&catid=$'.$rname['{catid}'].'$id=$'.$rname['{id}'].'&page=$'.$rname['{page}'];
 							}
 							if (isset($write[$preg])) {
 								$error.= "<p>".$cname."与".$write[$preg]."规则存在冲突</p>";
@@ -417,7 +417,7 @@ class urlrule extends admin {
 							} elseif (isset($rname['{categorydir}'])) {
 								$rule = 'index.php?m=content&c=index&a=show&catdir=$'.$rname['{categorydir}'].'$id=$'.$rname['{id}'];
 							} else {
-								$rule = 'index.php?m=content&c=index&a=show&$catid=$'.$rname['{catid}'].'$id=$'.$rname['{id}'];
+								$rule = 'index.php?m=content&c=index&a=show&catid=$'.$rname['{catid}'].'$id=$'.$rname['{id}'];
 							}
 							if (isset($write[$preg])) {
 								$error.= "<p>".$cname."与".$write[$preg]."规则存在冲突</p>";
