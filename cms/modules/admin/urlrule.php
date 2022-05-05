@@ -297,7 +297,7 @@ class urlrule extends admin {
 				}
 				if ($r['file']=='show' && $urlrule[0]) {
 					$rule = $urlrule[0];
-					$cname = "内容页(分页)（{$rule}）";
+					$cname = "内容页（{$rule}）";
 					list($preg, $rname) = $this->_rule_preg_value($rule);
 					if (!$preg || !$rname) {
 						$error.= "<p>".$cname."格式不正确</p>";
@@ -321,57 +321,110 @@ class urlrule extends admin {
 				}
 			} else {
 				if ($r['file']=='category') {
-					$rule = $urlrule;
-					$cname = "栏目列表(分页)（{$rule}）";
-					list($preg, $rname) = $this->_rule_preg_value($rule);
-					if (!$preg || !$rname) {
-						$error.= "<p>".$cname."格式不正确</p>";
-					} elseif (!isset($rname['{page}'])) {
-						$error.= "<p>".$cname."缺少{page}标签</p>";
-					} elseif (!isset($rname['{catdir}']) && !isset($rname['{catid}']) && !isset($rname['{categorydir}'])) {
-						$error.= "<p>".$cname."缺少{catdir}或{catid}或{categorydir}标签</p>";
-					} else {
-						if (isset($rname['{catdir}'])) {
-							// 目录格式
-							$rule = 'index.php?m=content&c=index&a=lists&catdir=$'.$rname['{catdir}'].'&page=$'.$rname['{page}'];
-						} elseif (isset($rname['{categorydir}'])) {
-							// 层次目录格式
-							$rule = 'index.php?m=content&c=index&a=lists&catdir=$'.$rname['{categorydir}'].'&page=$'.$rname['{page}'];
+					if (strstr($urlrule, '{page}')) {
+						$rule = $urlrule;
+						$cname = "栏目列表(分页)（{$rule}）";
+						list($preg, $rname) = $this->_rule_preg_value($rule);
+						if (!$preg || !$rname) {
+							$error.= "<p>".$cname."格式不正确</p>";
+						} elseif (!isset($rname['{page}'])) {
+							$error.= "<p>".$cname."缺少{page}标签</p>";
+						} elseif (!isset($rname['{catdir}']) && !isset($rname['{catid}']) && !isset($rname['{categorydir}'])) {
+							$error.= "<p>".$cname."缺少{catdir}或{catid}或{categorydir}标签</p>";
 						} else {
-							// id模式
-							$rule = 'index.php?m=content&c=index&a=lists&$catid=$'.$rname['{catid}'].'&page=$'.$rname['{page}'];
+							if (isset($rname['{catdir}'])) {
+								// 目录格式
+								$rule = 'index.php?m=content&c=index&a=lists&catdir=$'.$rname['{catdir}'].'&page=$'.$rname['{page}'];
+							} elseif (isset($rname['{categorydir}'])) {
+								// 层次目录格式
+								$rule = 'index.php?m=content&c=index&a=lists&catdir=$'.$rname['{categorydir}'].'&page=$'.$rname['{page}'];
+							} else {
+								// id模式
+								$rule = 'index.php?m=content&c=index&a=lists&$catid=$'.$rname['{catid}'].'&page=$'.$rname['{page}'];
+							}
+							if (isset($write[$preg])) {
+								$error.= "<p>".$cname."与".$write[$preg]."规则存在冲突</p>";
+							} else {
+								$write[$preg] = $cname;
+								$code.= '<textarea class="form-control" rows="1">    "'.$preg.'" => "'.$rule.'",  //'.$cname."</textarea>";
+							}
 						}
-						if (isset($write[$preg])) {
-							$error.= "<p>".$cname."与".$write[$preg]."规则存在冲突</p>";
+					} else {
+						$rule = $urlrule;
+						$cname = "栏目列表（{$rule}）";
+						list($preg, $rname) = $this->_rule_preg_value($rule);
+						if (!$preg || !$rname) {
+							$error.= "<p>".$cname."格式不正确</p>";
+						} elseif (!isset($rname['{catdir}']) && !isset($rname['{catid}']) && !isset($rname['{categorydir}'])) {
+							$error.= "<p>".$cname."缺少{catdir}或{catid}或{categorydir}标签</p>";
 						} else {
-							$write[$preg] = $cname;
-							$code.= '<textarea class="form-control" rows="1">    "'.$preg.'" => "'.$rule.'",  //'.$cname."</textarea>";
+							if (isset($rname['{catdir}'])) {
+								// 目录格式
+								$rule = 'index.php?m=content&c=index&a=lists&catdir=$'.$rname['{catdir}'];
+							} elseif (isset($rname['{categorydir}'])) {
+								// 层次目录格式
+								$rule = 'index.php?m=content&c=index&a=lists&catdir=$'.$rname['{categorydir}'];
+							} else {
+								// id模式
+								$rule = 'index.php?m=content&c=index&a=lists&$catid=$'.$rname['{catid}'];
+							}
+							if (isset($write[$preg])) {
+								$error.= "<p>".$cname."与".$write[$preg]."规则存在冲突</p>";
+							} else {
+								$write[$preg] = $cname;
+								$code.= '<textarea class="form-control" rows="1">    "'.$preg.'" => "'.$rule.'",  //'.$cname."</textarea>";
+							}
 						}
 					}
 				}
 				if ($r['file']=='show') {
-					$rule = $urlrule;
-					$cname = "内容页(分页)（{$rule}）";
-					list($preg, $rname) = $this->_rule_preg_value($rule);
-					if (!$preg || !$rname) {
-						$error.= "<p>".$cname."格式不正确</p>";
-					} elseif (!isset($rname['{page}'])) {
-						$error.= "<p>".$cname."缺少{page}标签</p>";
-					} elseif (!isset($rname['{catdir}']) && !isset($rname['{catid}']) && !isset($rname['{categorydir}']) && !isset($rname['{id}'])) {
-						$error.= "<p>".$cname."缺少{catdir}或{catid}或{categorydir}或{id}标签</p>";
-					} else {
-						if (isset($rname['{catdir}'])) {
-							$rule = 'index.php?m=content&c=index&a=show&catdir=$'.$rname['{catdir}'].'$id=$'.$rname['{id}'].'&page=$'.$rname['{page}'];
-						} elseif (isset($rname['{categorydir}'])) {
-							$rule = 'index.php?m=content&c=index&a=show&catdir=$'.$rname['{categorydir}'].'$id=$'.$rname['{id}'].'&page=$'.$rname['{page}'];
+					if (strstr($urlrule, '{page}')) {
+						$rule = $urlrule;
+						$cname = "内容页(分页)（{$rule}）";
+						list($preg, $rname) = $this->_rule_preg_value($rule);
+						if (!$preg || !$rname) {
+							$error.= "<p>".$cname."格式不正确</p>";
+						} elseif (!isset($rname['{page}'])) {
+							$error.= "<p>".$cname."缺少{page}标签</p>";
+						} elseif (!isset($rname['{catdir}']) && !isset($rname['{catid}']) && !isset($rname['{categorydir}']) && !isset($rname['{id}'])) {
+							$error.= "<p>".$cname."缺少{catdir}或{catid}或{categorydir}或{id}标签</p>";
 						} else {
-							$rule = 'index.php?m=content&c=index&a=show&$catid=$'.$rname['{catid}'].'$id=$'.$rname['{id}'].'&page=$'.$rname['{page}'];
+							if (isset($rname['{catdir}'])) {
+								$rule = 'index.php?m=content&c=index&a=show&catdir=$'.$rname['{catdir}'].'$id=$'.$rname['{id}'].'&page=$'.$rname['{page}'];
+							} elseif (isset($rname['{categorydir}'])) {
+								$rule = 'index.php?m=content&c=index&a=show&catdir=$'.$rname['{categorydir}'].'$id=$'.$rname['{id}'].'&page=$'.$rname['{page}'];
+							} else {
+								$rule = 'index.php?m=content&c=index&a=show&$catid=$'.$rname['{catid}'].'$id=$'.$rname['{id}'].'&page=$'.$rname['{page}'];
+							}
+							if (isset($write[$preg])) {
+								$error.= "<p>".$cname."与".$write[$preg]."规则存在冲突</p>";
+							} else {
+								$write[$preg] = $cname;
+								$code.= '<textarea class="form-control" rows="1">    "'.$preg.'" => "'.$rule.'",  //'.$cname."</textarea>";
+							}
 						}
-						if (isset($write[$preg])) {
-							$error.= "<p>".$cname."与".$write[$preg]."规则存在冲突</p>";
+					} else {
+						$rule = $urlrule;
+						$cname = "内容页（{$rule}）";
+						list($preg, $rname) = $this->_rule_preg_value($rule);
+						if (!$preg || !$rname) {
+							$error.= "<p>".$cname."格式不正确</p>";
+						} elseif (!isset($rname['{catdir}']) && !isset($rname['{catid}']) && !isset($rname['{categorydir}']) && !isset($rname['{id}'])) {
+							$error.= "<p>".$cname."缺少{catdir}或{catid}或{categorydir}或{id}标签</p>";
 						} else {
-							$write[$preg] = $cname;
-							$code.= '<textarea class="form-control" rows="1">    "'.$preg.'" => "'.$rule.'",  //'.$cname."</textarea>";
+							if (isset($rname['{catdir}'])) {
+								$rule = 'index.php?m=content&c=index&a=show&catdir=$'.$rname['{catdir}'].'$id=$'.$rname['{id}'];
+							} elseif (isset($rname['{categorydir}'])) {
+								$rule = 'index.php?m=content&c=index&a=show&catdir=$'.$rname['{categorydir}'].'$id=$'.$rname['{id}'];
+							} else {
+								$rule = 'index.php?m=content&c=index&a=show&$catid=$'.$rname['{catid}'].'$id=$'.$rname['{id}'];
+							}
+							if (isset($write[$preg])) {
+								$error.= "<p>".$cname."与".$write[$preg]."规则存在冲突</p>";
+							} else {
+								$write[$preg] = $cname;
+								$code.= '<textarea class="form-control" rows="1">    "'.$preg.'" => "'.$rule.'",  //'.$cname."</textarea>";
+							}
 						}
 					}
 				}
