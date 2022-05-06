@@ -42,7 +42,7 @@ class member_import {
  		$uid = $this->member_db->insert_id();
 		if(!$uid) return FALSE; 
 		
-		//插入v9_member基本表,只需加入phpuid值
+		//插入v10_member基本表,只需加入phpuid值
 		$info['uid'] = $uid;
 		$userid = $this->member_db->insert($info);
 		if($userid){

@@ -161,7 +161,7 @@ include $this->admin_tpl('header', 'admin');
 	</tr> 
 	
  	<tr>
-		<th width="150"><?php echo L('v9_catid')?> :</th>
+		<th width="150"><?php echo L('v10_catid')?> :</th>
 		<td><?php echo L('old_catid')?></td>
 	</tr> 
 	<?php

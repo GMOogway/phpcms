@@ -7,6 +7,7 @@
 <link href="{CSS_PATH}member-login.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="{JS_PATH}Dialog/main.js"></script>
 <script type="text/javascript" src="{JS_PATH}jquery.min.js"></script>
+<script type="text/javascript" src="{JS_PATH}member_common.js"></script>
 </head>
 <body>
 <div class="member-container login">
@@ -53,6 +54,11 @@
                 height:310,
                 modal:true
             });
+            diag.cancelText = '{L('close')}';
+            diag.onCancel=function() {
+                $DW.close();
+            };
+            diag.show();
         } else if(site == 'snda') {
             var diag = new Dialog({
                 id:'protocoliframe',
@@ -62,21 +68,14 @@
                 height:310,
                 modal:true
             });
+            diag.cancelText = '{L('close')}';
+            diag.onCancel=function() {
+                $DW.close();
+            };
+            diag.show();
         } else if(site == 'qq') {
-            var diag = new Dialog({
-                id:'protocoliframe',
-                title:'{L('qq_login')}',
-                url:'index.php?m=member&c=index&a=public_qq_loginnew',
-                width:500,
-                height:310,
-                modal:true
-            });
+            redirect('index.php?m=member&c=index&a=public_qq_loginnew');
         }
-        diag.cancelText = '{L('close')}';
-        diag.onCancel=function() {
-            $DW.close();
-        };
-        diag.show();
     }
 //-->
 </script>

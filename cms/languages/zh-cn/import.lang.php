@@ -32,7 +32,7 @@ $LANG['condition'] 						=	'数据提取条件';
 $LANG['keyid'] 							=	'主键字段指定';
 $LANG['maxid'] 							=	'上次导入最大ID';
 
-$LANG['condition_info'] 				=	'（常用于多表联合查询时设置，例：v9_news.id=v9_news_data.id）';
+$LANG['condition_info'] 				=	'（常用于多表联合查询时设置，例：v10_news.id=v10_news_data.id）';
 
 
 $LANG['select_localhost_db'] 			=	'请选择本机数据库';
@@ -55,7 +55,7 @@ $LANG['import_type_other'] 				=	'数据导入规则- 通用导入';
 /*信息导入*/
 $LANG['import_type_content'] 			=	'数据导入规则- 内容导入';
 $LANG['defaultcatid'] 					=	'默认导入栏目';
-$LANG['v9_catid'] 						=	'现运行系统栏目';
+$LANG['v10_catid'] 						=	'现运行系统栏目';
 $LANG['old_catid'] 						=	'原系统栏目ID';
 
 
@@ -63,7 +63,7 @@ $LANG['old_catid'] 						=	'原系统栏目ID';
 $LANG['import_type_member'] 			=	'数据导入规则- 会员导入';
 $LANG['import_lanmu_dy'] 				=	'栏目对应设置';
 $LANG['defaultgroupid'] 				=	'默认导入到用户组';
-$LANG['v9_group'] 						=	'V9 会员组';
+$LANG['v10_group'] 						=	'V10 会员组';
 $LANG['old_group'] 						=	'原系统会员组 ID';
 $LANG['membercheck'] 					=	'是否检查同名帐号或邮件';
 $LANG['keyid_info'] 					=	'（用于多表联合查询时设置，例：ID）';

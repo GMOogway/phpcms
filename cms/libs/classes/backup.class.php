@@ -258,7 +258,7 @@ class backup {
                 }
             }
         }
-        $sqldump = "/*\ncms bakfile\nversion:CMS V9\ntime:".date('Y-m-d H:i:s')."\ntype:cms\ncms:\n*/\n\nSET NAMES utf8mb4;\nSET FOREIGN_KEY_CHECKS = 0;\n\n".$sqldump."\nSET FOREIGN_KEY_CHECKS = 1;\n";
+        $sqldump = "/*\ncms bakfile\nversion:CMS V10\ntime:".date('Y-m-d H:i:s')."\ntype:cms\ncms:\n*/\n\nSET NAMES utf8mb4;\nSET FOREIGN_KEY_CHECKS = 0;\n\n".$sqldump."\nSET FOREIGN_KEY_CHECKS = 1;\n";
         return $sqldump;
 
     }

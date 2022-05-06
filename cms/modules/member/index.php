@@ -1488,7 +1488,7 @@ class index extends foreground {
 			if(isset($sitelist[$memberinfo['siteid']]['name'])) {
 				$sitename = $sitelist[$memberinfo['siteid']]['name'];
 			} else {
-				$sitename = 'CMS_V9_MAIL';
+				$sitename = 'CMS_V10_MAIL';
 			}
 			$this->email->set();
 			$this->email->send($email, L('forgetpassword'), $message, $sitename);
@@ -1515,7 +1515,7 @@ class index extends foreground {
 				if(isset($sitelist[$memberinfo['siteid']]['name'])) {
 					$sitename = $sitelist[$memberinfo['siteid']]['name'];
 				} else {
-					$sitename = 'CMS_V9_MAIL';
+					$sitename = 'CMS_V10_MAIL';
 				}
 				$this->email->set();
 				$this->email->send($email, L('forgetpassword'), "New password:".$password, $sitename);

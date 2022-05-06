@@ -160,7 +160,7 @@ include $this->admin_tpl('header', 'admin');
 	</tr> 
 	
  	<tr>
-		<th width="150"><?php echo L('v9_group')?> :</th>
+		<th width="150"><?php echo L('v10_group')?> :</th>
 		<td><?php echo L('old_group')?></td>
 	</tr> 
 	<?php

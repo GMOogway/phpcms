@@ -184,6 +184,11 @@
             <div class="input">
                 <label>{L('password')}：</label><input type="password" id="password" name="password" size="22" class="input-text">
             </div>
+            {if $member_setting['enablcodecheck']=='1'}
+            <div class="input">
+                <label>{L('checkcode')}：</label><input type="text" class="input code" required name="code" placeholder="请输入{L('checkcode')}">{form::checkcode('code_img', '5', '20', 126, 40)}
+            </div>
+            {/if}
             <div class="input">
                 <label>&nbsp;</label><div class="submit"><input type="submit" name="dosubmit" id="dosubmit" value="{L('login')}"></div>
             </div>
