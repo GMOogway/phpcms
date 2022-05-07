@@ -389,13 +389,13 @@ function dr_content_submit(url,type,w,h) {
 	}
 	var title = '';
 	if (type == 'add') {
-		title = '<i class="fa fa-plus"></i> '+'添加';
+		title = '<i class="fa fa-plus"></i> 添加';
 	} else if (type == 'edit') {
-		title = '<i class="fa fa-edit"></i> '+'修改';
+		title = '<i class="fa fa-edit"></i> 修改';
 	} else if (type == 'send') {
-		title = '<i class="fa fa-send"></i> '+'推送';
+		title = '<i class="fa fa-send"></i> 推送';
 	} else if (type == 'save') {
-		title = '<i class="fa fa-save"></i> '+'保存';
+		title = '<i class="fa fa-save"></i> 保存';
 	} else {
 		title = type;
 	}
@@ -613,13 +613,13 @@ function dr_iframe(type, url, width, height, rt) {
 	}
 	var title = '';
 	if (type == 'add') {
-		title = '<i class="fa fa-plus"></i> '+'添加';
+		title = '<i class="fa fa-plus"></i> 添加';
 	} else if (type == 'edit') {
-		title = '<i class="fa fa-edit"></i> '+'修改';
+		title = '<i class="fa fa-edit"></i> 修改';
 	} else if (type == 'send') {
-		title = '<i class="fa fa-send"></i> '+'推送';
+		title = '<i class="fa fa-send"></i> 推送';
 	} else if (type == 'save') {
-		title = '<i class="fa fa-save"></i> '+'保存';
+		title = '<i class="fa fa-save"></i> 保存';
 	} else {
 		title = type;
 	}
@@ -652,10 +652,14 @@ function dr_iframe(type, url, width, height, rt) {
 		$.ajax({type: "POST",dataType:"json", url: url, data: $(body).find('#myform').serialize(),
 			success: function(json) {
 				if (json.code) {
-					if (json.data.tourl) {
+					if (json.data.jscode) {
+						eval(json.data.jscode);
+						return;
+					} else if (json.data.tourl) {
 						setTimeout("window.location.href = '"+json.data.tourl+"'", 2000);
 					} else {
 						if (rt == 'nogo') {
+
 						} else {
 							setTimeout("window.location.reload(true)", 2000);
 						}
@@ -682,6 +686,102 @@ function dr_iframe(type, url, width, height, rt) {
 		$DW.close();
 	};
 	diag.show();
+}
+// 窗口提交
+function driframe(type, url, width, height, rt) {
+	if (typeof pc_hash == 'string') url += (url.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
+	if (url.toLowerCase().indexOf("http://") != -1 || url.toLowerCase().indexOf("https://") != -1) {
+	} else {
+		url = geturlpathname()+url;
+	}
+	var title = '';
+	if (type == 'add') {
+		title = '<i class="fa fa-plus"></i> 添加';
+	} else if (type == 'edit') {
+		title = '<i class="fa fa-edit"></i> 修改';
+	} else if (type == 'send') {
+		title = '<i class="fa fa-send"></i> 推送';
+	} else if (type == 'save') {
+		title = '<i class="fa fa-save"></i> 保存';
+	} else {
+		title = type;
+	}
+	if (!width) {
+		width = '500px';
+	}
+	if (!height) {
+		height = '70%';
+	}
+	if (is_mobile()) {
+		width = '95%';
+		height = '90%';
+	}
+	layer.open({
+		type: 2,
+		title: title,
+		fix:true,
+		scrollbar: false,
+		maxmin: false,
+		resize: true,
+		shadeClose: true,
+		shade: 0,
+		area: [width, height],
+		btn: ['确定', '取消'],
+		yes: function(index, layero){
+			var body = layer.getChildFrame('body', index);
+			$(body).find('.form-group').removeClass('has-error');
+			// 延迟加载
+			var loading = layer.load(2, {
+				shade: [0.3,'#fff'], //0.1透明度的白色背景
+				time: 100000000
+			});
+			$.ajax({type: "POST",dataType:"json", url: url, data: $(body).find('#myform').serialize(),
+				success: function(json) {
+					layer.close(loading);
+					// token 更新
+					if (json.token) {
+						var token = json.token;
+						$(body).find("#myform input[name='"+token.name+"']").val(token.value);
+					}
+					if (json.code) {
+						layer.close(index);
+						if (json.data.jscode) {
+							eval(json.data.jscode);
+							return;
+						} else if (json.data.tourl) {
+							setTimeout("window.location.href = '"+json.data.tourl+"'", 2000);
+						} else {
+							if (rt == 'nogo') {
+
+							} else {
+								setTimeout("window.location.reload(true)", 2000);
+							}
+						}
+						dr_tips(1, json.msg);
+					} else {
+						$(body).find('#dr_row_'+json.data.field).addClass('has-error');
+						dr_tips(0, json.msg, json.data.time);
+					}
+					return false;
+				},
+				error: function(HttpRequest, ajaxOptions, thrownError) {
+					dr_ajax_alert_error(HttpRequest, this, thrownError);
+				}
+			});
+			return false;
+		},
+		success: function(layero, index){
+			// 主要用于后台权限验证
+			var body = layer.getChildFrame('body', index);
+			var json = $(body).html();
+			if (json.indexOf('"code":0') > 0 && json.length < 500){
+				var obj = JSON.parse(json);
+				layer.close(index);
+				dr_tips(0, obj.msg);
+			}
+		},
+		content: url+'&is_iframe=1'
+	});
 }
 // ajax 显示内容
 function dr_iframe_show(type, url, width, height) {

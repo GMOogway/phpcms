@@ -2,8 +2,6 @@
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header', 'admin');
 ?>
-<link rel="stylesheet" href="<?php echo JS_PATH;?>layui/css/layui.css" media="all" />
-<link rel="stylesheet" href="<?php echo CSS_PATH;?>admin/css/global.css" media="all" />
 <link href="<?php echo JS_PATH;?>bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
 <script src="<?php echo JS_PATH;?>bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
 <script type="text/javascript">
@@ -20,9 +18,29 @@ jQuery(document).ready(function() {
 .btn-group {margin-left: 10px;}
 </style>
 <script type="text/javascript" src="<?php echo JS_PATH;?>layui/layui.js"></script>
-<div class="admin-main layui-anim layui-anim-upbit">
+<div class="page-content-white page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
     <div class="right-card-box">
         <div class="row table-search-tool">
+            <form name="searchform" action="" method="get" >
+            <input type="hidden" value="attachment" name="m">
+            <input type="hidden" value="manage" name="c">
+            <input type="hidden" value="init" name="a">
+            <div class="col-md-12 col-sm-12">
+                <label><div class="btn-group dropdown-btn-group">
+                    <a class="btn blue btn-sm dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="false" href="javascript:;"><i class="fa fa-th-large"></i> <?php echo L('moudle')?> <i class="fa fa-angle-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <?php $i = 0;
+                        foreach ($modules as $module) {
+                        if(in_array($module['module'], array('pay','digg','search','scan','attachment','block','dbsource','template','release','cnzz','comment','mood'))) continue;
+                        if (isset($i) && $i) echo '<div class="dropdown-line"></div>';
+                        echo '<li><a href='.url_par('module='.$module['module']).' class="dropdown-item"><i class="fa fa-chain"></i> '.$module['name'].'</a></li>';
+                        $i++;
+                        }?>
+                    </ul>
+                </div></label>
+            </div>
             <?php if ($remote) {?>
             <div class="col-md-12 col-sm-12">
                 <label><select name="remote" id="remote" class="form-control">
@@ -31,151 +49,115 @@ jQuery(document).ready(function() {
                     if (is_array($remote)) {
                     foreach ($remote as $t) {
                     ?>
-                    <option value="<?php echo $t['id'];?>"<?php if ($this->input->get('remote')==$t['id']) {?> selected<?php }?>><?php echo $t['name'];?></option>
+                    <option value="<?php echo $t['id'];?>"<?php if ($param['remote']==$t['id']) {?> selected<?php }?>><?php echo $t['name'];?></option>
                     <?php }} ?>
                 </select></label>
             </div>
             <?php }?>
             <div class="col-md-12 col-sm-12">
-                <label><input class="form-control" name="fileext" id="fileext" <?php if(isset($fileext)) echo $fileext;?> placeholder="<?php echo L('filetype')?>"></label>
-                <label><input class="form-control" name="keyword" id="keyword" <?php if(isset($keyword)) echo $keyword;?> placeholder="<?php echo L('name')?>"></label>
+                <label><input class="form-control" name="fileext" id="fileext" value="<?php if(isset($param['fileext'])) echo $param['fileext'];?>" placeholder="<?php echo L('filetype')?>"></label>
+                <label><input class="form-control" name="keyword" id="keyword" value="<?php if(isset($param['keyword'])) echo $param['keyword'];?>" placeholder="<?php echo L('name')?>"></label>
             </div>
             <div class="col-md-12 col-sm-12">
                 <label>
                     <div class="input-group input-medium date-picker input-daterange" data-date="" data-date-format="yyyy-mm-dd">
-                        <input type="text" class="form-control" value="<?php echo $this->input->get('start_uploadtime');?>" name="start_uploadtime" id="start_uploadtime">
+                        <input type="text" class="form-control" value="<?php echo $param['start_uploadtime'];?>" name="start_uploadtime" id="start_uploadtime">
                         <span class="input-group-addon"> <?php echo L('to')?> </span>
-                        <input type="text" class="form-control" value="<?php echo $this->input->get('end_uploadtime');?>" name="end_uploadtime" id="end_uploadtime">
+                        <input type="text" class="form-control" value="<?php echo $param['end_uploadtime'];?>" name="end_uploadtime" id="end_uploadtime">
                     </div>
                 </label>
             </div>
             <div class="col-md-12 col-sm-12">
-                <label><button class="btn blue btn-sm" id="search" data-type="reload"><i class="fa fa-search"></i> <?php echo L('search');?></button></label>
+                <label><button type="submit" class="btn blue btn-sm onloading"><i class="fa fa-search"></i> <?php echo L('search');?></button></label>
             </div>
+            </form>
         </div>
-        <table id="list" lay-filter="list"></table>
+        <form class="form-horizontal" role="form" id="myform">
+            <div class="table-list">
+                <table width="100%" cellspacing="0">
+                    <thead>
+                    <tr class="heading">
+                        <th class="myselect table-checkable">
+                            <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
+                                <input type="checkbox" class="group-checkable" data-set=".checkboxes" />
+                                <span></span>
+                            </label>
+                        </th>
+                        <th style="text-align:center" width="90" class="<?php echo dr_sorting('aid');?>" name="aid"><?php echo L('number');?></th>
+                        <th style="text-align:center" width="90" class="<?php echo dr_sorting('remote');?>" name="remote"><?php echo L('类型');?></th>
+                        <th width="150" class="<?php echo dr_sorting('module');?>" name="module"><?php echo L('moudle');?></th>
+                        <th width="120" class="<?php echo dr_sorting('catid');?>" name="catid"><?php echo L('catname');?></th>
+                        <th class="<?php echo dr_sorting('filename');?>" name="filename"><?php echo L('filename');?></th>
+                        <th style="text-align:center" width="90" class="<?php echo dr_sorting('fileext');?>" name="fileext"><?php echo L('fileext');?></th>
+                        <th width="100" class="<?php echo dr_sorting('filesize');?>" name="filesize"><?php echo L('filesize');?></th>
+                        <th width="160" class="<?php echo dr_sorting('uploadtime');?>" name="uploadtime"><?php echo L('uploadtime');?></th>
+                        <th><?php echo L('附件归属');?></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach($array as $t) {?>
+                    <tr class="odd gradeX" id="dr_row_<?php echo $t['aid'];?>">
+                        <td class="myselect">
+                            <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
+                                <input type="checkbox" class="checkboxes" name="ids[]" value="<?php echo $t['aid'];?>" />
+                                <span></span>
+                            </label>
+                        </td>
+                        <td style="text-align:center">
+                            <?php echo $t['aid'];?>
+                        </td>
+                        <td style="text-align:center">
+                            <?php echo $t['type'];?>
+                        </td>
+                        <td><?php echo $t['module'];?></td>
+                        <td><?php echo $t['catname'];?></td>
+                        <td>
+                            <a href="javascript:preview('<?php echo $t['filepath'];?>')"><?php echo $t['filename'];?></a>
+                            <a class="btn blue btn-xs" href="javascript:driframe('<?php echo L('改名');?>', '?m=attachment&c=manage&a=pulic_name_edit&aid=<?php echo $t['aid'];?>', 350, 220);"><?php echo L('改名');?></a>
+                        </td>
+                        <td style="text-align:center"><?php echo $t['fileext'];?></td>
+                        <td><?php echo $t['filesize'];?></td>
+                        <td><?php echo $t['uploadtime'];?></td>
+                        <td><?php echo $t['related'];?></td>
+                    </tr>
+                    <?php }?>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row list-footer table-checkable">
+                <div class="col-md-5 list-select">
+                    <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
+                        <input type="checkbox" class="group-checkable" data-set=".checkboxes" />
+                        <span></span>
+                    </label>
+                    <button type="button" id="delAll" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete');?></button>
+                    <label>
+                        <div class="btn-group dropup">
+                            <a class="btn blue btn-sm dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="false" href="javascript:;"><i class="fa fa-files-o"></i> <?php echo L('附件状态')?> <i class="fa fa-angle-up"></i></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="<?php echo url_par('status=0')?>" class="dropdown-item"><i class="fa fa-chain"></i> <?php echo L('not_used');?></a></li>
+                                <div class="dropdown-line"></div>
+                                <li><a href="<?php echo url_par('status=1')?>" class="dropdown-item"><i class="fa fa-chain"></i> <?php echo L('used');?></a></li>
+                            </ul>
+                        </div>
+                    </label>
+                </div>
+                <div class="col-md-7 list-page">
+                    <?php echo $pages;?>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
-<script type="text/html" id="action">
-    <a href="javascript:preview('{{d.filepath}}')" class="layui-btn layui-btn-xs layui-btn-normal"><i class="fa fa-eye"></i> <?php echo L('preview');?></a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><i class="fa fa-trash-o"></i> <?php echo L('delete')?></a>
-</script>
-<script type="text/html" id="topBtn">
-    <button type="button" class="layui-btn layui-btn-danger layui-btn-sm" id="delAll"><i class="fa fa-trash-o"></i> <?php echo L('thorough');?><?php echo L('delete');?></button>
-    <div class="btn-group dropdown-btn-group">
-        <button type="button" class="btn blue btn-sm dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="false"><i class="fa fa-th-large"></i> <?php echo L('moudle')?> <i class="fa fa-angle-down"></i></button>
-        <ul class="dropdown-menu">
-            <?php $i = 0;
-            foreach ($modules as $module) {
-            if(in_array($module['module'], array('pay','digg','search','scan','attachment','block','dbsource','template','release','cnzz','comment','mood'))) continue;
-            if (isset($i) && $i) echo '<div class="dropdown-line"></div>';
-            echo '<li><a href='.url_par('module='.$module['module']).' class="dropdown-item" id="link"><i class="fa fa-chain"></i> '.$module['name'].'</a></li>';
-            $i++;
-            }?>
-        </ul>
-    </div>
-    <div class="btn-group dropdown-btn-group">
-        <button type="button" class="btn blue btn-sm dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="false"><i class="fa fa-files-o"></i> <?php echo L('附件状态')?> <i class="fa fa-angle-down"></i></button>
-        <ul class="dropdown-menu">
-            <li><a href="<?php echo url_par('status=0')?>" class="dropdown-item"><i class="fa fa-chain"></i> <?php echo L('not_used');?></a></li>
-            <div class="dropdown-line"></div>
-            <li><a href="<?php echo url_par('status=1')?>" class="dropdown-item"><i class="fa fa-chain"></i> <?php echo L('used');?></a></li>
-        </ul>
-    </div>
-</script>
+</div>
+</div>
 <script>
-layui.use(['table'], function(){
-    var table = layui.table, $ = layui.jquery;
-    var tableIn = table.render({
-        id: 'content',
-        elem: '#list',
-        url:'?m=attachment&c=manage&a=init&module=<?php echo $this->input->get('module');?>&status=<?php echo $this->input->get('status');?>&pc_hash='+pc_hash,
-        method: 'post',
-        where: {csrf_test_name:csrf_hash},
-        toolbar: '#topBtn',
-        cellMinWidth: 80,
-        page: true,
-        cols: [[
-            {type: "checkbox", fixed: 'left'},
-            {field: 'aid', title: '<?php echo L('number');?>', width: 80, sort: true},
-            {field: 'type', title: '<?php echo L('类型');?>', width: 80, align: 'center', sort: true},
-            {field: 'module', title: '<?php echo L('moudle');?>', width:120, sort: true},
-            {field: 'catname', title: '<?php echo L('catname');?>', width:120, sort: true},
-            {field: 'filename', title: '<?php echo L('filename');?>', minWidth:200, sort: true, edit: 'text'},
-            {field: 'fileext', title: '<?php echo L('fileext');?>', width:120, align: 'center', sort: true},
-            {field: 'related', title: '<?php echo L('附件归属');?>', width:180},
-            {field: 'filesize', title: '<?php echo L('filesize');?>', width:120, sort: true},
-            {field: 'uploadtime', title: '<?php echo L('uploadtime');?>', width:180, sort: true},
-            {width: 160, align: 'center', toolbar: '#action',title:'<?php echo L('operations_manage');?>'<?php if(!is_mobile(0)) {?>, fixed: 'right'<?php }?>}
-        ]],
-        limit: 10
-    });
-    //搜索
-    $('#search').on('click', function () {
-        var remote = $('#remote').val();
-        var keyword = $('#keyword').val();
-        var start_uploadtime = $('#start_uploadtime').val();
-        var end_uploadtime = $('#end_uploadtime').val();
-        var fileext = $('#fileext').val();
-        /*if ($.trim(keyword) === '') {
-            layer.msg('请输入<?php echo L('name')?>！', {icon: 0});
-            return;
-        }*/
-        tableIn.reload({ page: {page: 1}, where: {remote: remote,keyword: keyword,start_uploadtime: start_uploadtime,end_uploadtime: end_uploadtime,fileext: fileext} });
-    });
-    //监听单元格编辑
-    table.on('edit(list)',function(obj) {
-        var value = obj.value, data = obj.data, field = obj.field;
-        if (field=='filename' && value=='') {
-            layer.tips('<?php echo L('attachment_name_not')?>',this,{tips: [1, '#fff']});
-            return false;
-        }else{
-            $.ajax({
-                type: 'post',
-                url: '?m=attachment&c=manage&a=update&pc_hash='+pc_hash,
-                data: {aid:data.aid,field:field,value:value,dosubmit:1},
-                dataType: 'json',
-                success: function(res) {
-                    if (res.code == 1) {
-                        layer.msg(res.msg, {time: 1000, icon: 1}, function () {
-                            tableIn.reload();
-                        });
-                    }else{
-                        dr_tips(0, res.msg);
-                    }
-                }
-            });
-        }
-    });
-    table.on('tool(list)', function(obj) {
-        var data = obj.data;
-        if(obj.event === 'delete'){
-            Dialog.confirm('<?php echo L('del_confirm')?>', function() {
-                var loading = layer.load(1, {shade: [0.1, '#fff']});
-                $.ajax({
-                    type: 'post',
-                    url: '?m=attachment&c=manage&a=delete&pc_hash='+pc_hash,
-                    data: {aid:data.aid},
-                    dataType: 'json',
-                    success: function(res) {
-                        layer.close(loading);
-                        if (res.code==1) {
-                            layer.msg(res.msg,{icon: 1, time: 1000},function(){
-                                tableIn.reload();
-                            });
-                        }else{
-                            dr_tips(0, res.msg);
-                        }
-                    }
-                });
-            });
-        }
-    });
+$(function() {
     $('body').on('click','#delAll',function() {
-        var checkStatus = table.checkStatus('content'); //content即为参数id设定的值
         var ids = [];
-        $(checkStatus.data).each(function (i, o) {
-            ids.push(o.aid);
+        $('input[name="ids[]"]:checked').each(function() {
+            ids.push($(this).val());
         });
         if (ids.toString()=='') {
             layer.msg('\u81f3\u5c11\u9009\u62e9\u4e00\u6761\u4fe1\u606f',{time:1000,icon:2});
@@ -190,12 +172,9 @@ layui.use(['table'], function(){
                     success: function(res) {
                         layer.close(loading);
                         if (res.code==1) {
-                            layer.msg(res.msg,{icon: 1, time: 1000},function(){
-                                tableIn.reload();
-                            });
-                        }else{
-                            dr_tips(0, res.msg);
+                            setTimeout("window.location.reload(true)", 2000);
                         }
+                        dr_tips(res.code, res.msg);
                     }
                 });
             });

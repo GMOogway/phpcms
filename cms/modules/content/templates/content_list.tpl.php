@@ -255,9 +255,9 @@ $(function() {
         }
     })
     $('body').on('click','#copy',function() {
-        var ids='';
-        $("input[name='id[]']:checked").each(function(i, n){
-            ids += $(n).val() + ',';
+        var ids = [];
+        $('input[name="id[]"]:checked').each(function() {
+            ids.push($(this).val());
         });
         if (ids.toString()=='') {
             layer.msg('\u81f3\u5c11\u9009\u62e9\u4e00\u6761\u4fe1\u606f',{time:1000,icon:2});

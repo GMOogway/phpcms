@@ -23,53 +23,77 @@ class manage extends admin {
 		$modules = getcache('modules','commons');
 		$category = getcache('category_content_'.$this->siteid,'commons');
 		$remote = $this->remote_db->select();
-		if (IS_POST) {
-			$pagesize = $this->input->post('limit') ? $this->input->post('limit') : SYS_ADMIN_PAGESIZE;
-			$page = $this->input->post('page') ? $this->input->post('page') : '1';
-			$where = '';
-			if($this->input->post('remote')) $where .= "AND `remote` = '".$this->input->post('remote')."' ";
-			if($this->input->post('keyword')) $where .= "AND `filename` LIKE '%".$this->db->escape($this->input->post('keyword'))."%' ";
-			if($this->input->post('start_uploadtime')) {
-				$where .= 'AND uploadtime BETWEEN ' . max((int)strtotime(strpos($this->input->post('start_uploadtime'), ' ') ? $this->input->post('start_uploadtime') : $this->input->post('start_uploadtime').' 00:00:00'), 1) . ' AND ' . ($this->input->post('end_uploadtime') ? (int)strtotime(strpos($this->input->post('end_uploadtime'), ' ') ? $this->input->post('end_uploadtime') : $this->input->post('end_uploadtime').' 23:59:59') : SYS_TIME).' ';
-			}
-			if($this->input->post('fileext')) $where .= "AND `fileext`='".$this->db->escape($this->input->post('fileext'))."' ";
-			$status =  trim($this->input->get('status'));
-			if($status!='' && ($status==1 ||$status==0)) $where .= "AND `status`='$status' ";
-			$module =  trim($this->input->get('module'));
-			if(isset($module) && $module!='') $where .= "AND `module`='$module' ";		
-			$where .="AND `siteid`='".$this->siteid."'";
-			if($where) $where = substr($where, 3);
-			$datas = $this->db->listinfo($where, 'uploadtime desc', $page, $pagesize);
-			$total = $this->db->count($where);
-			$pages = $this->db->pages;
-			if(!empty($datas)) {
-				foreach($datas as $r) {
-					$thumb = glob(dirname(SYS_UPLOAD_PATH.$r['filepath']).'/thumb_*'.basename($r['filepath']));
-					$rs['aid'] = $r['aid'];
-					$rs['type'] = '<label>'.(!$r['remote'] ? '<span class="label label-sm label-danger">'.L('默认').'</span>' : '<span class="label label-sm label-warning">'.L('自定义').'</span>').'</label>';
-					$rs['module'] = $modules[$r['module']]['name'];
-					if ($r['module']=='member' && $r['catid']==0) {
-						$rs['catname'] = '头像';
-						$rs['filepath'] = SYS_ATTACHMENT_SAVE_ID ? dr_get_file_url($r) : dr_file(SYS_AVATAR_URL.$r['filepath']);
-					} else if ($r['module']=='cloud' && $r['catid']==0) {
-						$rs['catname'] = '云服务';
-						$rs['filepath'] = dr_get_file_url($r);
-					} else {
-						$rs['catname'] = $category[$r['catid']]['catname'];
-						$rs['filepath'] = dr_get_file_url($r);
-					}
-					$rs['filename'] = $r['filename'];
-					$rs['fileext'] = $r['fileext'].'<img src="'.file_icon('.'.$r['fileext'],'gif').'" />'.($thumb ? '<img title="'.L('att_thumb_manage').'" src="'.IMG_PATH.'admin_img/havthumb.png" onclick="showthumb('.$r['aid'].', \''.$r['filename'].'\')"/>':'').($r['status'] ? ' <img src="'.IMG_PATH.'admin_img/link.png"':'');
-					$rs['related'] = $r['related'];
-					$rs['status'] = $r['status'];
-					$rs['filesize'] = format_file_size($r['filesize']);
-					$rs['uploadtime'] = dr_date($r['uploadtime'],null,'red');
-					$array[] = $rs;
+		$param = $this->input->get();
+		$pagesize = $param['limit'] ? $param['limit'] : SYS_ADMIN_PAGESIZE;
+		$order = $param['order'] ? $param['order'] : 'uploadtime desc';
+		$page = $param['page'] ? $param['page'] : '1';
+		$where = '';
+		if($param['remote']) $where .= "AND `remote` = '".$param['remote']."' ";
+		if($param['keyword']) $where .= "AND `filename` LIKE '%".$this->db->escape($param['keyword'])."%' ";
+		if($param['start_uploadtime']) {
+			$where .= 'AND uploadtime BETWEEN ' . max((int)strtotime(strpos($param['start_uploadtime'], ' ') ? $param['start_uploadtime'] : $param['start_uploadtime'].' 00:00:00'), 1) . ' AND ' . ($param['end_uploadtime'] ? (int)strtotime(strpos($param['end_uploadtime'], ' ') ? $param['end_uploadtime'] : $param['end_uploadtime'].' 23:59:59') : SYS_TIME).' ';
+		}
+		if($param['fileext']) $where .= "AND `fileext`='".$this->db->escape($param['fileext'])."' ";
+		$status =  trim($param['status']);
+		if($status!='' && ($status==1 ||$status==0)) $where .= "AND `status`='$status' ";
+		$module =  trim($param['module']);
+		if(isset($module) && $module!='') $where .= "AND `module`='$module' ";		
+		$where .="AND `siteid`='".$this->siteid."'";
+		if($where) $where = substr($where, 3);
+		$datas = $this->db->listinfo($where, $order, $page, $pagesize);
+		$total = $this->db->count($where);
+		$pages = $this->db->pages;
+		if(!empty($datas)) {
+			foreach($datas as $r) {
+				$thumb = glob(dirname(SYS_UPLOAD_PATH.$r['filepath']).'/thumb_*'.basename($r['filepath']));
+				$rs['aid'] = $r['aid'];
+				$rs['type'] = '<label>'.(!$r['remote'] ? '<span class="label label-sm label-danger">'.L('默认').'</span>' : '<span class="label label-sm label-warning">'.L('自定义').'</span>').'</label>';
+				$rs['module'] = $modules[$r['module']]['name'];
+				if ($r['module']=='member' && $r['catid']==0) {
+					$rs['catname'] = '头像';
+					$rs['filepath'] = SYS_ATTACHMENT_SAVE_ID ? dr_get_file_url($r) : dr_file(SYS_AVATAR_URL.$r['filepath']);
+				} else if ($r['module']=='cloud' && $r['catid']==0) {
+					$rs['catname'] = '云服务';
+					$rs['filepath'] = dr_get_file_url($r);
+				} else {
+					$rs['catname'] = $category[$r['catid']]['catname'];
+					$rs['filepath'] = dr_get_file_url($r);
 				}
+				$rs['filename'] = dr_keyword_highlight($r['filename'], $param['keyword']);
+				$rs['fileext'] = dr_keyword_highlight($r['fileext'], $param['fileext']).'<img src="'.file_icon('.'.$r['fileext'],'gif').'" />'.($thumb ? '<img title="'.L('att_thumb_manage').'" src="'.IMG_PATH.'admin_img/havthumb.png" onclick="showthumb('.$r['aid'].', \''.$r['filename'].'\')"/>':'').($r['status'] ? ' <img src="'.IMG_PATH.'admin_img/link.png"':'');
+				$rs['related'] = $r['related'];
+				$rs['status'] = $r['status'];
+				$rs['filesize'] = format_file_size($r['filesize']);
+				$rs['uploadtime'] = dr_date($r['uploadtime'],null,'red');
+				$array[] = $rs;
 			}
-			exit(json_encode(array('code'=>0,'msg'=>L('to_success'),'count'=>$total,'data'=>$array,'rel'=>1)));
 		}
 		include $this->admin_tpl('attachment_list');
+	}
+	
+	/**
+	 * 附件改名
+	 */
+	public function pulic_name_edit() {
+		$show_header = true; 
+		$aid = (int)$this->input->get('aid');
+        if (!$aid) {
+            dr_json(0, L('附件id不能为空'));
+        }
+        $data = $this->db->get_one(array('aid'=>$aid));
+        if (!$data) {
+            dr_json(0, L('附件'.$id.'不存在'));
+        }
+        if (IS_POST) {
+            $name = $this->input->post('name');
+            if (!$name) {
+                dr_json(0, L('附件名称不能为空'));
+            }
+            $this->db->update(array('filename' => $name),array('aid'=>$aid));
+            dr_json(1, L('操作成功'));
+        }
+		$filename = $data['filename'];
+		include $this->admin_tpl('attachment_edit');exit;
 	}
 	
 	/**
@@ -114,22 +138,6 @@ class manage extends admin {
 		} else {
 			dr_json(0, L('operation_failure'));
 		}
-	}
-	
-	/**
-	 * 删除附件
-	 */
-	public function delete() {
-		$aid = $this->input->post('aid');
-		$data = $this->db->get_one(array('aid'=>$aid));
-		if (!$data) {
-			dr_json(0, L('所选附件不存在'));
-		}
-		$rt = $this->upload->_delete_file($data);
-		if (!$rt['code']) {
-			return dr_return_data(0, $rt['msg']);
-		}
-		dr_json(1, L('delete').L('success'));
 	}
 	
 	/**
