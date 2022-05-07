@@ -27,21 +27,20 @@ class manage extends admin {
 		$pagesize = $param['limit'] ? $param['limit'] : SYS_ADMIN_PAGESIZE;
 		$order = $param['order'] ? $param['order'] : 'uploadtime desc';
 		$page = $param['page'] ? $param['page'] : '1';
-		$where = '';
-		if($param['remote']) $where .= "AND `remote` = '".$param['remote']."' ";
-		if($param['keyword']) $where .= "AND `filename` LIKE '%".$this->db->escape($param['keyword'])."%' ";
-		if($param['start_uploadtime']) {
-			$where .= 'AND uploadtime BETWEEN ' . max((int)strtotime(strpos($param['start_uploadtime'], ' ') ? $param['start_uploadtime'] : $param['start_uploadtime'].' 00:00:00'), 1) . ' AND ' . ($param['end_uploadtime'] ? (int)strtotime(strpos($param['end_uploadtime'], ' ') ? $param['end_uploadtime'] : $param['end_uploadtime'].' 23:59:59') : SYS_TIME).' ';
+		$where = array();
+		$where[] = "`siteid`='".$this->siteid."'";
+		if(isset($param['remote']) && $param['remote']) $where[] = "`remote` = '".$param['remote']."'";
+		if(isset($param['keyword']) && $param['keyword']) $where[] = "`filename` LIKE '%".$this->db->escape($param['keyword'])."%'";
+		if(isset($param['start_uploadtime']) && $param['start_uploadtime']) {
+			$where[] = 'uploadtime BETWEEN ' . max((int)strtotime(strpos($param['start_uploadtime'], ' ') ? $param['start_uploadtime'] : $param['start_uploadtime'].' 00:00:00'), 1) . ' AND ' . ($param['end_uploadtime'] ? (int)strtotime(strpos($param['end_uploadtime'], ' ') ? $param['end_uploadtime'] : $param['end_uploadtime'].' 23:59:59') : SYS_TIME);
 		}
-		if($param['fileext']) $where .= "AND `fileext`='".$this->db->escape($param['fileext'])."' ";
+		if(isset($param['fileext']) && $param['fileext']) $where[] = "`fileext`='".$this->db->escape($param['fileext'])."'";
 		$status =  trim($param['status']);
-		if($status!='' && ($status==1 ||$status==0)) $where .= "AND `status`='$status' ";
+		if(isset($status) && ($status==1 || $status==0)) $where[] = "`status`='$status'";
 		$module =  trim($param['module']);
-		if(isset($module) && $module!='') $where .= "AND `module`='$module' ";		
-		$where .="AND `siteid`='".$this->siteid."'";
-		if($where) $where = substr($where, 3);
-		$datas = $this->db->listinfo($where, $order, $page, $pagesize);
-		$total = $this->db->count($where);
+		if(isset($module) && $module) $where[] = "`module`='$module'";
+		$datas = $this->db->listinfo(($where ? implode(' AND ', $where) : ''), $order, $page, $pagesize);
+		$total = $this->db->count(($where ? implode(' AND ', $where) : ''));
 		$pages = $this->db->pages;
 		if(!empty($datas)) {
 			foreach($datas as $r) {
@@ -77,21 +76,21 @@ class manage extends admin {
 	public function pulic_name_edit() {
 		$show_header = true; 
 		$aid = (int)$this->input->get('aid');
-        if (!$aid) {
-            dr_json(0, L('附件id不能为空'));
-        }
-        $data = $this->db->get_one(array('aid'=>$aid));
-        if (!$data) {
-            dr_json(0, L('附件'.$id.'不存在'));
-        }
-        if (IS_POST) {
-            $name = $this->input->post('name');
-            if (!$name) {
-                dr_json(0, L('附件名称不能为空'));
-            }
-            $this->db->update(array('filename' => $name),array('aid'=>$aid));
-            dr_json(1, L('操作成功'));
-        }
+		if (!$aid) {
+			dr_json(0, L('附件id不能为空'));
+		}
+		$data = $this->db->get_one(array('aid'=>$aid));
+		if (!$data) {
+			dr_json(0, L('附件'.$id.'不存在'));
+		}
+		if (IS_POST) {
+			$name = $this->input->post('name');
+			if (!$name) {
+				dr_json(0, L('附件名称不能为空'));
+			}
+			$this->db->update(array('filename' => $name),array('aid'=>$aid));
+			dr_json(1, L('操作成功'));
+		}
 		$filename = $data['filename'];
 		include $this->admin_tpl('attachment_edit');exit;
 	}
