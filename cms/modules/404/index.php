@@ -1,6 +1,5 @@
 <?php
 defined('IN_CMS') or exit('No permission resources.');
-if (!module_exists(ROUTE_M)) showmessage(L('module_not_exists'));
 class index {
 	private $db;
 	function __construct() {
@@ -9,10 +8,10 @@ class index {
 		$this->_username = param::get_cookie('_username');
 		$this->_groupid = param::get_cookie('_groupid');
 	}
-	//首页
+	//404
 	public function init() {
-		if(isset($_GET['siteid'])) {
-			$siteid = intval($_GET['siteid']);
+		if($this->input->get('siteid')) {
+			$siteid = intval($this->input->get('siteid'));
 		} else {
 			$siteid = 1;
 		}
@@ -22,9 +21,15 @@ class index {
 		$_username = $this->_username;
 		$_groupid = $this->_groupid;
 		//SEO
-		$SEO = seo($siteid);
+		$SEO = seo($siteid, 0, L('你访问的页面不存在'));
 		$sitelist  = getcache('sitelist','commons');
 		$default_style = $sitelist[$siteid]['default_style'];
+		if (IS_DEV) {
+			$uri = $this->input->get('uri', true);
+			$msg = '没有找到这个页面: '.$uri;
+		} else {
+			$msg = L('没有找到这个页面');
+		}
 		include template('404','index',$default_style);
 	}
 }
