@@ -8,7 +8,7 @@
 			{loop $data $r}
 			<li>
 				<span class="date">[{date('m-d',$r['inputtime'])}]</span>
-				<a href="{show_url($r['url'], $r['catid'], $r['id'])}">
+				<a href="{show_url($r['url'], $r['catid'])}">
 					{if $n<4}<em class="flag">顶</em>{/if}
 					<span class="title_color"{title_style($r['style'])}>{$r['title']}</span>
 				</a>
@@ -25,7 +25,7 @@
 			{loop $data $r}
 			<li>
 				<span class="date">[{date('m-d',$r['inputtime'])}]</span>
-				<a href="{show_url($r['url'], $r['catid'], $r['id'])}"><span class="title_color"{title_style($r['style'])}>{$r['title']}</span></a>
+				<a href="{show_url($r['url'], $r['catid'])}"><span class="title_color"{title_style($r['style'])}>{$r['title']}</span></a>
 			</li>
 			{/loop}
 		</ul>

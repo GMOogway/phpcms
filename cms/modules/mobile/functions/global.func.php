@@ -10,7 +10,7 @@ function wmlHeader() {
  */
 function mobile_tag_url($keyword, $siteid){
 	$sitelist = getcache('sitelist','commons');
-	$siteid = isset($_GET['siteid']) && (intval($_GET['siteid']) > 0) ? intval(trim($_GET['siteid'])) : (param::get_cookie('siteid') ? param::get_cookie('siteid') : 1);
+	!$siteid && $siteid = isset($_GET['siteid']) && (intval($_GET['siteid']) > 0) ? intval(trim($_GET['siteid'])) : (param::get_cookie('siteid') ? param::get_cookie('siteid') : 1);
 	return $sitelist[$siteid]['mobile_domain'].'index.php?m=mobile&c=tag&a=lists&tag='.urlencode($keyword).'&siteid='.$siteid;
 }
 /**
@@ -18,84 +18,24 @@ function mobile_tag_url($keyword, $siteid){
  */
 function list_url($url, $catid = '') {
 	$sitelist = getcache('sitelist','commons');
-	$siteid = isset($_GET['siteid']) && (intval($_GET['siteid']) > 0) ? intval(trim($_GET['siteid'])) : (param::get_cookie('siteid') ? param::get_cookie('siteid') : 1);
-	$categorys = getcache('category_content_'.$siteid,'commons');
-	$CAT = $categorys[$catid];
-	$setting = string2array($CAT['setting']);
-	$ishtml = $setting['ishtml'];
-	if ($sitelist[$siteid]['mobilehtml']==1) {
-		if ($sitelist[$siteid]['mobile_domain']) {
-			if ($ishtml==1) {
-				return str_replace($sitelist[$siteid]['domain'],$sitelist[$siteid]['mobile_domain'],$url);
-			} else {
-				//if (defined('IS_MOBILE') && IS_MOBILE) {
-					return $sitelist[$siteid]['mobile_domain'].'index.php?m=mobile&c=index&a=lists&catid='.$catid;
-				//} else {
-					//return APP_PATH.'index.php?m=mobile&c=index&a=lists&catid='.$catid;
-				//}
-			}
-		} else {
-			if ($ishtml==1) {
-				return str_replace($sitelist[$siteid]['domain'],'/mobile/',$url);
-			} else {
-				//if (defined('IS_MOBILE') && IS_MOBILE) {
-					return $sitelist[$siteid]['mobile_domain'].'index.php?m=mobile&c=index&a=lists&catid='.$catid;
-				//} else {
-					//return APP_PATH.'index.php?m=mobile&c=index&a=lists&catid='.$catid;
-				//}
-			}
-		}
-	} else {
-		//if (defined('IS_MOBILE') && IS_MOBILE) {
-			return $sitelist[$siteid]['mobile_domain'].'index.php?m=mobile&c=index&a=lists&catid='.$catid;
-		//} else {
-			//return APP_PATH.'index.php?m=mobile&c=index&a=lists&catid='.$catid;
-		//}
-	}
+	$siteids = getcache('category_content','commons');
+	$catid && $siteid = $siteids[$catid];
+	!$catid && $siteid = isset($_GET['siteid']) && (intval($_GET['siteid']) > 0) ? intval(trim($_GET['siteid'])) : (param::get_cookie('siteid') ? param::get_cookie('siteid') : 1);
+	return str_replace(array($sitelist[$siteid]['domain'], 'm=content'), array($sitelist[$siteid]['mobile_domain'], 'm=mobile'), $url);
 }
 
 /**
  * 解析手机内容url路径
  */
-function show_url($url, $catid = '', $id = '') {
+function show_url($url, $catid = '') {
 	$sitelist = getcache('sitelist','commons');
-	$siteid = isset($_GET['siteid']) && (intval($_GET['siteid']) > 0) ? intval(trim($_GET['siteid'])) : (param::get_cookie('siteid') ? param::get_cookie('siteid') : 1);
-	$categorys = getcache('category_content_'.$siteid,'commons');
-	$CAT = $categorys[$catid];
-	$setting = string2array($CAT['setting']);
-	$content_ishtml = $setting['content_ishtml'];
+	$siteids = getcache('category_content','commons');
+	$catid && $siteid = $siteids[$catid];
+	!$catid && $siteid = isset($_GET['siteid']) && (intval($_GET['siteid']) > 0) ? intval(trim($_GET['siteid'])) : (param::get_cookie('siteid') ? param::get_cookie('siteid') : 1);
 	if (strstr($url, 'javascript:alert')) {
 		return $url;
 	}
-	if ($sitelist[$siteid]['mobilehtml']==1) {
-		if ($sitelist[$siteid]['mobile_domain']) {
-			if ($content_ishtml==1) {
-				return str_replace($sitelist[$siteid]['domain'],$sitelist[$siteid]['mobile_domain'],$url);
-			} else {
-				//if (defined('IS_MOBILE') && IS_MOBILE) {
-					return $sitelist[$siteid]['mobile_domain'].'index.php?m=mobile&c=index&a=show&catid='.$catid.'&id='.$id;
-				//} else {
-					//return APP_PATH.'index.php?m=mobile&c=index&a=show&catid='.$catid.'&id='.$id;
-				//}
-			}
-		} else {
-			if ($content_ishtml==1) {
-				return str_replace($sitelist[$siteid]['domain'],'/mobile/',$url);
-			} else {
-				//if (defined('IS_MOBILE') && IS_MOBILE) {
-					return $sitelist[$siteid]['mobile_domain'].'index.php?m=mobile&c=index&a=show&catid='.$catid.'&id='.$id;
-				//} else {
-					//return APP_PATH.'index.php?m=mobile&c=index&a=show&catid='.$catid.'&id='.$id;
-				//}
-			}
-		}
-	} else {
-		//if (defined('IS_MOBILE') && IS_MOBILE) {
-			return $sitelist[$siteid]['mobile_domain'].'index.php?m=mobile&c=index&a=show&catid='.$catid.'&id='.$id;
-		//} else {
-			//return APP_PATH.'index.php?m=mobile&c=index&a=show&catid='.$catid.'&id='.$id;
-		//}
-	}
+	return str_replace(array($sitelist[$siteid]['domain'], 'm=content'), array($sitelist[$siteid]['mobile_domain'], 'm=mobile'), $url);
 }
 
 /**
@@ -123,24 +63,12 @@ function strip_selected_tags($text) {
  * 生成文章分页方法
  */
 
-function mobile_content_pages($num, $curr_page, $pageurls, $showurls, $siteid = 0, $ishtml = 0,$showremain = 1) {
+function mobile_content_pages($num, $curr_page, $pageurls, $showurls) {
 	$input = pc_base::load_sys_class('input');
-	if(!$siteid) {
-		$siteid = param::get_cookie('siteid');
-	}
-	if (!$siteid) $siteid = 1;
-	$sitelist = getcache('sitelist','commons');
-	if ($sitelist[$siteid]['mobilehtml']==1 && $ishtml) {
-		//if (substr($sitelist[$siteid]['mobile_domain'],0,-1)) {
-			$mobile_root = substr($sitelist[$siteid]['mobile_domain'],0,-1);
-		//} else {
-			//$mobile_root = SYS_MOBILE_ROOT;
-		//}
-	}
 	$multipage = '';
-	$first_url = $mobile_root.$showurls[1][1];
-	$multipage = $input->page($mobile_root.$showurls[2][1], $num, 1, $curr_page, $first_url);
-	if($showremain && $sitelist[$siteid]['mobilehtml']==0 || !$ishtml) $multipage .="| <a href='".$mobile_root.$showurls[1][1]."&remains=true'>剩余全文</a>";
+	$first_url = $showurls[1][1];
+	$multipage = $input->page($showurls[2][1], $num, 1, $curr_page, $first_url);
+	if(strstr($first_url, '.php')) $multipage .="| <a href='".$showurls[1][1]."&remains=true'>剩余全文</a>";
 	return $multipage;
 }
 ?>

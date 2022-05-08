@@ -26,9 +26,6 @@ class mobile_url{
 		}
 		if (!$siteid) $siteid = 1;
 		$sitelist = getcache('sitelist','commons');
-		if ($sitelist[$siteid]['mobilehtml']==1 && $content_ishtml) {
-			$mobile_root = $this->mobile_root;
-		}
 		//当内容为转换或升级时
 		if($upgrade || ($this->input->post('upgrade') && defined('IS_ADMIN') && IS_ADMIN && $this->input->post('upgrade'))) {
 			if($this->input->post('upgrade')) $upgrade = $this->input->post('upgrade');
@@ -43,11 +40,7 @@ class mobile_url{
 			}
 		} else {
 			$show_ruleid = $setting['show_ruleid'];
-			if ($sitelist[$siteid]['mobilehtml']==1 && $content_ishtml) {
-				$urlrules = $this->urlrules[$show_ruleid];
-			} else {
-				$urlrules = 'index.php?m=mobile&c=index&a=show&catid={$catid}&id={$id}|index.php?m=mobile&c=index&a=show&catid={$catid}&id={$id}&page={$page}';
-			}
+			$urlrules = $this->urlrules[$show_ruleid];
 			if(!$time) $time = SYS_TIME;
 			$urlrules_arr = explode('|',$urlrules);
 			if($page==1) {
@@ -75,26 +68,24 @@ class mobile_url{
 			$urls = str_replace(array('{$categorydir}','{$catdir}','{$year}','{$month}','{$day}','{$catid}','{$id}','{$page}'),array($categorydir,$catdir,$year,$month,$day,$catid,$id,$page),$urlrule);
 			$create_to_html_root = $category['create_to_html_root'];
 			
-			if ($sitelist[$siteid]['mobilehtml']==1 && $content_ishtml) {
-				if($create_to_html_root || $category['sethtml']) {
-					$html_root = '';
-				} else {
-					$html_root = $this->html_root;
-				}
+			if($create_to_html_root || $category['sethtml']) {
+				$html_root = '';
+			} else {
+				$html_root = $this->html_root;
 			}
 			if($content_ishtml && $url) {
 				if ($domain_dir && $category['isdomain']) {
-					$url_arr[1] = $mobile_root.$html_root.'/'.$domain_dir.$urls;
-					$url_arr[0] = $mobile_root.$url.$urls;
+					$url_arr[1] = $html_root.'/'.$domain_dir.$urls;
+					$url_arr[0] = $url.$urls;
 				} else {
-					$url_arr[1] = $mobile_root.$html_root.'/'.$urls;
-					$url_arr[0] = WEB_PATH == '/' ? $match_url.$mobile_root.$html_root.'/'.$urls : $match_url.rtrim(WEB_PATH,'/').$mobile_root.$html_root.'/'.$urls;
+					$url_arr[1] = $html_root.'/'.$urls;
+					$url_arr[0] = WEB_PATH == '/' ? $match_url.$html_root.'/'.$urls : $match_url.rtrim(WEB_PATH,'/').$html_root.'/'.$urls;
 				}
 			} elseif($content_ishtml) {
-				$url_arr[0] = WEB_PATH == '/' ?  $mobile_root.$html_root.'/'.$urls : rtrim(WEB_PATH,'/').$mobile_root.$html_root.'/'.$urls;
-				$url_arr[1] = $mobile_root.$html_root.'/'.$urls;
+				$url_arr[0] = WEB_PATH == '/' ? $html_root.'/'.$urls : rtrim(WEB_PATH,'/').$html_root.'/'.$urls;
+				$url_arr[1] = $html_root.'/'.$urls;
 			} else {
-				$url_arr[0] = $url_arr[1] = $mobile_root.$urls;
+				$url_arr[0] = $url_arr[1] = APP_PATH.$urls;
 			}
 		}
 		//生成静态 ,在添加文章的时候，同时生成静态，不在批量更新URL处调用
@@ -103,6 +94,7 @@ class mobile_url{
 			$url_arr['content_ishtml'] = 1;
 			$url_arr['data'] = $data;
 		}
+		$url_arr = str_replace(array($sitelist[$siteid]['domain'], 'm=content'), array($sitelist[$siteid]['mobile_domain'], 'm=mobile'), $url_arr);
 		return $url_arr;
 	}
 	/**
@@ -121,9 +113,6 @@ class mobile_url{
 		}
 		if (!$siteid) $siteid = 1;
 		$sitelist = getcache('sitelist','commons');
-		if ($sitelist[$siteid]['mobilehtml']==1 && $content_ishtml) {
-			$mobile_root = $this->mobile_root;
-		}
 		//当内容为转换或升级时
 		if($upgrade || ($this->input->post('upgrade') && defined('IS_ADMIN') && IS_ADMIN && $this->input->post('upgrade'))) {
 			if($this->input->post('upgrade')) $upgrade = $this->input->post('upgrade');
@@ -138,11 +127,7 @@ class mobile_url{
 			}
 		} else {
 			$show_ruleid = $setting['show_ruleid'];
-			if ($sitelist[$siteid]['mobilehtml']==1 && $content_ishtml) {
-				$urlrules = $this->urlrules[$show_ruleid];
-			} else {
-				$urlrules = 'index.php?m=mobile&c=index&a=show&catid={$catid}&id={$id}|index.php?m=mobile&c=index&a=show&catid={$catid}&id={$id}&page={$page}';
-			}
+			$urlrules = $this->urlrules[$show_ruleid];
 			if(!$time) $time = SYS_TIME;
 			$urlrules_arr = explode('|',$urlrules);
 			if($page==1) {
@@ -170,26 +155,24 @@ class mobile_url{
 			$urls = str_replace(array('{$categorydir}','{$catdir}','{$year}','{$month}','{$day}','{$catid}','{$id}','{$page}'),array($categorydir,$catdir,$year,$month,$day,$catid,$id,'{page}'),$urlrule);
 			$create_to_html_root = $category['create_to_html_root'];
 			
-			if ($sitelist[$siteid]['mobilehtml']==1 && $content_ishtml) {
-				if($create_to_html_root || $category['sethtml']) {
-					$html_root = '';
-				} else {
-					$html_root = $this->html_root;
-				}
+			if($create_to_html_root || $category['sethtml']) {
+				$html_root = '';
+			} else {
+				$html_root = $this->html_root;
 			}
 			if($content_ishtml && $url) {
 				if ($domain_dir && $category['isdomain']) {
-					$url_arr[1] = $mobile_root.$html_root.'/'.$domain_dir.$urls;
-					$url_arr[0] = $mobile_root.$url.$urls;
+					$url_arr[1] = $html_root.'/'.$domain_dir.$urls;
+					$url_arr[0] = $url.$urls;
 				} else {
-					$url_arr[1] = $mobile_root.$html_root.'/'.$urls;
-					$url_arr[0] = WEB_PATH == '/' ? $match_url.$mobile_root.$html_root.'/'.$urls : $match_url.rtrim(WEB_PATH,'/').$mobile_root.$html_root.'/'.$urls;
+					$url_arr[1] = $html_root.'/'.$urls;
+					$url_arr[0] = WEB_PATH == '/' ? $match_url.$html_root.'/'.$urls : $match_url.rtrim(WEB_PATH,'/').$html_root.'/'.$urls;
 				}
 			} elseif($content_ishtml) {
-				$url_arr[0] = WEB_PATH == '/' ?  $mobile_root.$html_root.'/'.$urls : rtrim(WEB_PATH,'/').$mobile_root.$html_root.'/'.$urls;
-				$url_arr[1] = $mobile_root.$html_root.'/'.$urls;
+				$url_arr[0] = WEB_PATH == '/' ? $html_root.'/'.$urls : rtrim(WEB_PATH,'/').$html_root.'/'.$urls;
+				$url_arr[1] = $html_root.'/'.$urls;
 			} else {
-				$url_arr[0] = $url_arr[1] = $mobile_root.$urls;
+				$url_arr[0] = $url_arr[1] = APP_PATH.$urls;
 			}
 		}
 		//生成静态 ,在添加文章的时候，同时生成静态，不在批量更新URL处调用
@@ -198,6 +181,7 @@ class mobile_url{
 			$url_arr['content_ishtml'] = 1;
 			$url_arr['data'] = $data;
 		}
+		$url_arr = str_replace(array($sitelist[$siteid]['domain'], 'm=content'), array($sitelist[$siteid]['mobile_domain'], 'm=mobile'), $url_arr);
 		return $url_arr;
 	}
 	/**

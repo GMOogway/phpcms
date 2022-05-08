@@ -6,7 +6,7 @@ class rss {
 	function __construct() {
 		$this->input = pc_base::load_sys_class('input');
 		$this->db = pc_base::load_model('content_model');
-		pc_base::load_app_class('rssbuilder','','','0');
+		pc_base::load_app_class('rssbuilder','content','','0');
 		$this->siteid = $this->input->get('siteid') ? intval($this->input->get('siteid')) : '1';
 		$this->rssid = intval($this->input->get('rssid'));
 		define('SITEID', $this->siteid);

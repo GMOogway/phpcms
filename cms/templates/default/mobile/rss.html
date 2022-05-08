@@ -10,7 +10,7 @@
 		<ul>
 			{pc:content action="lists" catid="$r['catid']" num="5" order="id DESC" return="info"}
 			{loop $info $v}
-			<li><a href="{if strpos($v['url'],'http')===false}{$siteurl}{/if}{show_url($v['url'], $v['catid'], $v['id'])}"><span class="title_color"{title_style($r['style'])}>{str_cut($v['title'],40)}</span></a></li>
+			<li><a href="{if strpos($v['url'],'http')===false}{$siteurl}{/if}{show_url($v['url'], $v['catid'])}"><span class="title_color"{title_style($r['style'])}>{str_cut($v['title'],40)}</span></a></li>
 			{/loop}
             {/pc}
 		</ul>

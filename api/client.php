@@ -4,6 +4,7 @@
  */
 defined('IN_CMS') or exit('No permission resources.');
 define('ROUTE_M', '');
+header('Access-Control-Allow-Origin: *');
 
 $siteid = $input->post('siteid');
 $ismobile = $input->post('ismobile');
