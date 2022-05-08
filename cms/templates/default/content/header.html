@@ -24,7 +24,7 @@ if (is_mobile()) {
 		layer.confirm('当前界面是电脑端界面，需要访问移动端网站吗？', {
 			btn: ['访问移动端','关闭'] //按钮
 		}, function(){
-			pc_or_mobile('{APP_PATH}api.php?op=client', '{now_url($url, $siteid, ISMOBILE, IS_HTML)}', {$siteid}, {ISMOBILE}, {IS_HTML})
+			pc_or_mobile('{APP_PATH}api.php?op=client', '{now_url($url, $siteid, 0, IS_HTML)}', {$siteid}, 0, {IS_HTML})
 		}, function(){
 			return true;
 		});

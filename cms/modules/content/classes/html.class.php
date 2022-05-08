@@ -50,6 +50,7 @@ class html {
 		define('STYLE',$CAT['setting']['template_list']);
 		define('SITEID', $this->siteid);
 		define('ISHTML', $CAT['setting']['content_ishtml']);
+		define('IS_HTML', $CAT['setting']['content_ishtml']);
 		if(!$CAT['setting']['content_ishtml']) return false;
 
 		//最顶级栏目ID
@@ -142,7 +143,6 @@ class html {
 				//生成分页
 				foreach ($pageurls as $page=>$urls) {
 					$pages = content_pages($pagenumber,$page,$pageurls,$showurls);
-					$mobilepages = mobile_content_pages($pagenumber,$page,$pageurls,$showurls);
 					//判断[page]出现的位置是否在第一位 
 					if($CONTENT_POS<7) {
 						$content = $contents[$page];
@@ -171,18 +171,11 @@ class html {
 					$pagefile = CMS_PATH.$pagefile;
 					$mobilepagefile = CMS_PATH.$this->mobile_root.'/'.str_replace(CMS_PATH,'',$pagefile);
 					ob_start();
-					define('ISMOBILE', 0);
-					define('IS_HTML', $CAT['setting']['content_ishtml']);
 					include template('content', $template);
 					$this->createhtml($pagefile);
 					if($this->sitelist[$this->siteid]['mobilehtml']==1) {
 						ob_start();
-						define('ISMOBILE', 1);
-						if($CAT['setting']['content_ishtml'] && $this->sitelist[$this->siteid]['mobilehtml']) {
-							define('IS_HTML', 1);
-						} else {
-							define('IS_HTML', 0);
-						}
+						$url = str_replace(array($this->sitelist[$this->siteid]['domain'], 'm=content'), array($this->sitelist[$this->siteid]['mobile_domain'], 'm=mobile'), $url);
 						include template('mobile', $template);
 						$this->createhtml($mobilepagefile);
 					}
@@ -191,24 +184,18 @@ class html {
 			}
 		}
 		//分页处理结束
+		$file = CMS_PATH.$file;
+		ob_start();
+		include template('content', $template);
+		$this->createhtml($file);
 		if($this->sitelist[$this->siteid]['mobilehtml']==1) {
 			$mobilefile = CMS_PATH.$this->mobile_root.'/'.str_replace(CMS_PATH,'',$file);
 			ob_start();
-			define('ISMOBILE', 1);
-			if($CAT['setting']['content_ishtml'] && $this->sitelist[$this->siteid]['mobilehtml']) {
-				define('IS_HTML', 1);
-			} else {
-				define('IS_HTML', 0);
-			}
+			$url = str_replace(array($this->sitelist[$this->siteid]['domain'], 'm=content'), array($this->sitelist[$this->siteid]['mobile_domain'], 'm=mobile'), $url);
 			include template('mobile', $template);
 			$this->createhtml($mobilefile);
 		}
-		$file = CMS_PATH.$file;
-		ob_start();
-		define('ISMOBILE', 0);
-		define('IS_HTML', $CAT['setting']['content_ishtml']);
-		include template('content', $template);
-		return $this->createhtml($file);
+		return true;
 	}
 
 	/**
@@ -240,6 +227,7 @@ class html {
 		define('STYLE',$setting['template_list']);
 		define('SITEID', $siteid);
 		define('ISHTML', $setting['ishtml']);
+		define('IS_HTML', $setting['ishtml']);
 
 		$page = intval($page);
 		$parentdir = $CAT['parentdir'];
@@ -368,22 +356,16 @@ class html {
 			$keywords = $keywords ? $keywords : $setting['meta_keywords'];
 			$SEO = seo($siteid, 0, $setting['meta_title'] ? $setting['meta_title'] : $title,$setting['meta_description'],$keywords);
 		}
+		ob_start();
+		include template('content',$template);
+		$this->createhtml($file, $copyjs);
 		if($this->sitelist[$this->siteid]['mobilehtml']==1) {
 			ob_start();
-			define('ISMOBILE', 1);
-			if($setting['ishtml'] && $this->sitelist[$this->siteid]['mobilehtml']) {
-				define('IS_HTML', 1);
-			} else {
-				define('IS_HTML', 0);
-			}
+			$url = str_replace(array($this->sitelist[$this->siteid]['domain'], 'm=content'), array($this->sitelist[$this->siteid]['mobile_domain'], 'm=mobile'), $url);
 			include template('mobile',$template);
 			$this->createhtml($mobilefile);
 		}
-		ob_start();
-		define('ISMOBILE', 0);
-		define('IS_HTML', $setting['ishtml']);
-		include template('content',$template);
-		return $this->createhtml($file, $copyjs);
+		return true;
 	}
 	/**
 	 * 更新首页
@@ -412,24 +394,19 @@ class html {
 		$siteid = $this->siteid;
 		$CATEGORYS = $this->categorys;
 		$style = $this->sitelist[$siteid]['default_style'];
+		define('IS_HTML', $this->sitelist[$siteid]['ishtml']);
+		if($this->sitelist[$siteid]['ishtml']==1) {
+			ob_start();
+			include template('content','index',$style);
+			$pc = $this->createhtml($file, 1);
+		}
 		if($this->sitelist[$siteid]['mobilehtml']==1) {
 			ob_start();
-			define('ISMOBILE', 1);
-			define('IS_HTML', $this->sitelist[$siteid]['mobilehtml']);
 			include template('mobile','maps',$style);
 			$this->createhtml($mapfile);
 			ob_start();
-			define('ISMOBILE', 1);
-			define('IS_HTML', $this->sitelist[$siteid]['mobilehtml']);
 			include template('mobile','index',$style);
 			$mobile = $this->createhtml($mobilefile);
-		}
-		if($this->sitelist[$siteid]['ishtml']==1) {
-			ob_start();
-			define('ISMOBILE', 0);
-			define('IS_HTML', $this->sitelist[$siteid]['ishtml']);
-			include template('content','index',$style);
-			$pc = $this->createhtml($file, 1);
 		}
 		return L('电脑端 （'.format_file_size($pc).'），移动端 （'.format_file_size($mobile).'）');
 	}

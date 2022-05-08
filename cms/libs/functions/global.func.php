@@ -2575,59 +2575,6 @@ function pages($num, $curr_page, $perpage = 10, $urlrule = '', $array = array(),
 }
 
 /**
- * 分页函数
- *
- * @param $num 信息总数
- * @param $curr_page 当前分页
- * @param $perpage 每页显示数
- * @param $urlrule URL规则
- * @param $array 需要传递的数组，用于增加额外的方法
- * @return 分页
- */
-function mobilepages($num, $curr_page, $perpage = 10, $urlrule = '', $array = array(),$setpages = 10) {
-	$input = pc_base::load_sys_class('input');
-	if(defined('URLRULE') && $urlrule == '') {
-		$urlrule = URLRULE;
-		$array = $GLOBALS['URL_ARRAY'];
-	} elseif($urlrule == '') {
-		$urlrule = url_par('page={$page}');
-	}
-	if(defined('SITEID')) {
-		$siteid = SITEID;
-	} else {
-		$siteid = param::get_cookie('siteid');
-	}
-	if (!$siteid) $siteid = 1;
-	$sitelist = siteinfo($siteid);
-	$mobile_root = '';
-	if ($sitelist['mobilehtml']==1 && defined('ISHTML')) {
-		//if (substr($sitelist['mobile_domain'],0,-1)) {
-			$mobile_root = substr($sitelist['mobile_domain'],0,-1);
-		//} else {
-			//$mobile_root = SYS_MOBILE_ROOT;
-		//}
-	}
-	$first_url = '';
-	if(strpos($urlrule, '~')) {
-		$urlrules = explode('~', $urlrule);
-		$first_url = $mobile_root.$urlrules[0];
-		$findme = array();
-		$replaceme = array();
-		if (is_array($array)) foreach ($array as $k=>$v) {
-			$findme[] = '{$'.$k.'}';
-			$replaceme[] = $v;
-		}
-		$first_url = str_replace($findme, $replaceme, $first_url);
-		$first_url = str_replace(array('http://','https://','//','~'), array('~','~','/',SITE_PROTOCOL), $first_url);
-	}
-	$multipage = '';
-	if($num > $perpage) {
-		$pages = ceil($num / $perpage);
-		$multipage = $input->page($mobile_root.pageurl($urlrule, $curr_page, $array), $num, $perpage, $curr_page, $first_url);
-	}
-	return $multipage;
-}
-/**
  * 返回分页路径
  *
  * @param $urlrule 分页规则

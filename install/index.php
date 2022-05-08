@@ -234,14 +234,14 @@ switch($step)
 				'auth_key'=>token($name),
 				'web_path'=>$rootpath,
 				'errorlog'=>'0',
-				'js_path'=>FC_NOW_HOST.ltrim($rootpath, '/').'statics/js/',
-				'css_path'=>FC_NOW_HOST.ltrim($rootpath, '/').'statics/css/',
-				'img_path'=>FC_NOW_HOST.ltrim($rootpath, '/').'statics/images/',
-				'mobile_js_path'=>FC_NOW_HOST.ltrim($rootpath, '/').'mobile/statics/js/',
-				'mobile_css_path'=>FC_NOW_HOST.ltrim($rootpath, '/').'mobile/statics/css/',
-				'mobile_img_path'=>FC_NOW_HOST.ltrim($rootpath, '/').'mobile/statics/images/',
-				'app_path'=>FC_NOW_HOST.ltrim($rootpath, '/'),
-				'mobile_path'=>FC_NOW_HOST.ltrim($rootpath, '/').'mobile/',
+				'js_path'=>FC_NOW_HOST.substr($rootpath, 1).'statics/js/',
+				'css_path'=>FC_NOW_HOST.substr($rootpath, 1).'statics/css/',
+				'img_path'=>FC_NOW_HOST.substr($rootpath, 1).'statics/images/',
+				'mobile_js_path'=>FC_NOW_HOST.substr($rootpath, 1).'mobile/statics/js/',
+				'mobile_css_path'=>FC_NOW_HOST.substr($rootpath, 1).'mobile/statics/css/',
+				'mobile_img_path'=>FC_NOW_HOST.substr($rootpath, 1).'mobile/statics/images/',
+				'app_path'=>FC_NOW_HOST.substr($rootpath, 1),
+				'mobile_path'=>FC_NOW_HOST.substr($rootpath, 1).'mobile/',
 			);
 			$db_config = array('hostname'=>$dbhost,
 				'port'=>$dbport,
@@ -284,7 +284,7 @@ switch($step)
 			if(file_exists(CMS_PATH."install/main/".$dbfile)) {
 				$sql = file_get_contents(CMS_PATH."install/main/".$dbfile);
 				$sql = str_replace('CMS演示站', $name , $sql);
-				$sql = str_replace('http://www.kaixin100.cn/', FC_NOW_HOST.ltrim($rootpath, '/'), $sql);
+				$sql = str_replace('http://www.kaixin100.cn/', FC_NOW_HOST.substr($rootpath, 1), $sql);
 				_sql_execute($mysqli,$sql);
 				//创建网站创始人
 				$password_arr = password($password);

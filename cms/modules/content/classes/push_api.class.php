@@ -192,7 +192,7 @@ class push_api {
 						$linkurl = str_replace('{$catid}',$catid,$linkurl);
 						$linkurl = str_replace('{$id}',$newid,$linkurl);
 						if ($setting['content_ishtml']=='1') {
-							$linkurl = SYS_HTML_ROOT.'/'.$linkurl;
+							$linkurl = substr(SYS_HTML_ROOT, 1).'/'.$linkurl;
 						}
 						$linkurl = siteurl($category['siteid']).'/'.$linkurl;
 						// 站长工具

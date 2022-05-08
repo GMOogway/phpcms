@@ -41,12 +41,12 @@
                         <div class="gxwc"><h1>恭喜您，安装成功！</h1></div>
                         <div class="clj">
                             <ul>
-                                <li><a href="<?php echo FC_NOW_HOST.ltrim($rootpath, '/').(pc_base::load_config('system','admin_login_path') ? pc_base::load_config('system','admin_login_path') : 'admin.php')?>" class="btn btn-success">后台管理</a></li>
+                                <li><a href="<?php echo FC_NOW_HOST.substr($rootpath, 1).(pc_base::load_config('system','admin_login_path') ? pc_base::load_config('system','admin_login_path') : 'admin.php')?>" class="btn btn-success">后台管理</a></li>
                             </ul>
                         </div>                    
                         <div class="txt_c">
                         <?php if(pc_base::load_config('system','admin_login_path')){ ?>
-                        <div class="warmtips">温馨提示：请将以下后台登录入口添加到你的收藏夹，为了你的安全，不要泄漏或发送给他人！如有泄漏请及时修改！<a href="<?php echo FC_NOW_HOST.ltrim($rootpath, '/').pc_base::load_config('system','admin_login_path')?>"><?php echo FC_NOW_HOST.ltrim($rootpath, '/').pc_base::load_config('system','admin_login_path')?></a></div>
+                        <div class="warmtips">温馨提示：请将以下后台登录入口添加到你的收藏夹，为了你的安全，不要泄漏或发送给他人！如有泄漏请及时修改！<a href="<?php echo FC_NOW_HOST.substr($rootpath, 1).pc_base::load_config('system','admin_login_path')?>"><?php echo FC_NOW_HOST.substr($rootpath, 1).pc_base::load_config('system','admin_login_path')?></a></div>
                         <?php }?>
                         <span style="margin-right:8px;">*</span>安装完毕请登录后台生成首页，更新缓存<br/>
                         <span style="margin-right:8px;">*</span>为了您站点的安全，安装完成后即可将网站根目录下的“install”文件夹删除。</div>

@@ -285,7 +285,7 @@ class index {
 					}
 				}
 				//当不存在 [/page]时，则使用下面分页
-				$mobilepages = mobile_content_pages($pagenumber,$page,$pageurls,$showurls);
+				$pages = mobile_content_pages($pagenumber,$page,$pageurls,$showurls);
 				//判断[page]出现的位置是否在第一位 
 				if($CONTENT_POS<7) {
 					$content = $contents[$page];

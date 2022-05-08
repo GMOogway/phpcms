@@ -58,7 +58,6 @@ class model {
 		$page = max(intval($page), 1);
 		$offset = $pagesize*($page-1);
 		$this->pages = pages($this->number, $page, $pagesize, $urlrule, $array, $setpages);
-		$this->mobilepages = mobilepages($this->number, $page, $pagesize, $urlrule, $array, $setpages);
 		$array = array();
 		if ($this->number > 0) {
 			return $this->select($where, $data, "$offset, $pagesize", $order, '', $key);
