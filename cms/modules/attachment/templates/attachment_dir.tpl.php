@@ -5,18 +5,13 @@ include $this->admin_tpl('header','admin');
 <style type="text/css">
 body .table-list table tr>td:first-child, body .table-list table tr>th:first-child {text-align: left;padding: 8px;}
 </style>
-<div class="bk15"></div>
-<div class="pad-lr-10">
-<table width="100%" cellspacing="0" class="search-form">
-    <tbody>
-		<tr>
-		<td><div class="explain-col">
-		<a href="?m=attachment&c=manage<?php echo '&menuid='.$this->input->get('menuid')?>"><?php echo L('database_schema')?></a>
-		</div>
-		</td>
-		</tr>
-    </tbody>
-</table>
+<div class="page-content-white page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="note note-danger">
+    <p><a href="?m=attachment&c=manage&a=init<?php echo '&menuid='.$this->input->get('menuid')?>"><?php echo L('database_schema')?></a></p>
+</div>
+    <div class="right-card-box">
 <div class="table-list">
 <table width="100%" cellspacing="0">
 <thead>
@@ -50,7 +45,9 @@ if(is_array($list)) {
 </table>
 </div>
 </div>
-</body>
+</div>
+</div>
+</div>
 <script type="text/javascript">
 function preview(file) {
 	if(IsImg(file)) {
@@ -153,4 +150,5 @@ function IsMp3(url){
     return b;
 }
 </script>
+</body>
 </html>
