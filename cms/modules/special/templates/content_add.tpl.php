@@ -29,7 +29,7 @@ $p = dr_authcode(array(
 <div class="page-container" style="margin-bottom: 0px !important;">
     <div class="page-content-wrapper">
         <div class="page-content page-content3 mybody-nheader main-content">
-                <div class="page-body" style="padding-top:15px;">
+                <div class="page-body">
 <form name="myform" id="myform" action="?m=special&c=content&a=add&specialid=<?php echo $_GET['specialid']?>" class="form-horizontal" onsubmit="return checkall()" method="post" enctype="multipart/form-data">
 <input value="1" type="hidden" name="dosubmit">
     <div class="">

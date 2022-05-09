@@ -7,7 +7,7 @@ include $this->admin_tpl('header');?>
 <div class="page-container" style="margin-bottom: 0px !important;">
     <div class="page-content-wrapper">
         <div class="page-content page-content3 mybody-nheader main-content main-content2">
-                            <div class="page-body" style="padding-top:17px;margin-bottom:30px;">
+                            <div class="page-body" style="margin-top:20px;margin-bottom:30px;">
                 <div style="margin-top: -20px"><span style="padding-left: 10px"><?php echo $tables;?></span></div>
     <div class="table-list">
         <table class="table table-striped table-bordered table-hover table-checkable dataTable">

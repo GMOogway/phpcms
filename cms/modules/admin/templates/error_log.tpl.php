@@ -17,7 +17,7 @@ jQuery(document).ready(function() {
 <div class="page-container" style="margin-bottom: 0px !important;">
     <div class="page-content-wrapper">
         <div class="page-content page-content3 mybody-nheader main-content  ">
-                <div class="page-body" style="padding-top:15px;">
+                <div class="page-body">
 <div class="right-card-box">
     <div class="row table-search-tool">
 <form name="searchform" action="?m=admin&c=index&a=public_error_log" method="get" >

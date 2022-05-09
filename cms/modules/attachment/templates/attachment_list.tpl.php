@@ -17,7 +17,6 @@ jQuery(document).ready(function() {
 <style type="text/css">
 .btn-group {margin-left: 10px;}
 </style>
-<script type="text/javascript" src="<?php echo JS_PATH;?>layui/layui.js"></script>
 <div class="page-content-white page-container" style="margin-bottom: 0px !important;">
     <div class="page-content-wrapper">
         <div class="page-content page-content3 mybody-nheader main-content  ">
@@ -113,7 +112,7 @@ jQuery(document).ready(function() {
                         <td><?php echo $t['catname'];?></td>
                         <td>
                             <a href="javascript:preview('<?php echo $t['filepath'];?>')"><?php echo $t['filename'];?></a>
-                            <a class="btn blue btn-xs" href="javascript:driframe('<?php echo L('改名');?>', '?m=attachment&c=manage&a=pulic_name_edit&aid=<?php echo $t['aid'];?>', 350, 220);"><?php echo L('改名');?></a>
+                            <a class="btn blue btn-xs" href="javascript:driframe('<?php echo L('改名');?>', '?m=attachment&c=manage&a=pulic_name_edit&aid=<?php echo $t['aid'];?>', '350px', '220px');"><?php echo L('改名');?></a>
                         </td>
                         <td style="text-align:center"><?php echo $t['fileext'];?></td>
                         <td><?php echo $t['filesize'];?></td>
