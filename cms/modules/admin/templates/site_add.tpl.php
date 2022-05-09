@@ -63,8 +63,8 @@ include $this->admin_tpl('header');
     <th><?php echo L('html_mobile')?>：</th>
     <td class="y-bg">
       <div class="mt-radio-inline">
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilehtml]" value="1" checked> <?php echo L('open');?> <span></span></label>
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilehtml]" value="0"> <?php echo L('close');?> <span></span></label><br><?php echo L('html_mobile_desc')?>
+        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilehtml]" value="1"> <?php echo L('open');?> <span></span></label>
+        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilehtml]" value="0" checked> <?php echo L('close');?> <span></span></label><br><?php echo L('html_mobile_desc')?>
       </div>
     </td>
   </tr>
