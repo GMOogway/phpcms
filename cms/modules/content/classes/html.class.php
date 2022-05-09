@@ -31,6 +31,7 @@ class html {
 		if($upgrade) $file = '/'.ltrim($file,WEB_PATH);
 		$allow_visitor = 1;
 		$id = $data['id'];
+		$remains = true;
 		if($array_merge) {
 			$data = new_stripslashes($data);
 			$data = array_merge($data['system'],$data['model']);
@@ -125,7 +126,6 @@ class html {
 				for($i=1; $i<=$pagenumber; $i++) {
 					$upgrade = $upgrade ? '/'.ltrim($file,WEB_PATH) : '';
 					$pageurls[$i] = $this->url->show($id, $i, $catid, $data['inputtime'],'','','edit',$upgrade);
-					$showurls[$i] = $this->url->pageshow($id, $i, $catid, $rs['inputtime']);
 				}
 				$END_POS = strpos($content, '[/page]');
 				if($END_POS !== false) {
@@ -142,7 +142,7 @@ class html {
 				}
 				//生成分页
 				foreach ($pageurls as $page=>$urls) {
-					$pages = content_pages($pagenumber,$page,$pageurls,$showurls);
+					$pages = content_pages($pagenumber,$page,$pageurls,$pageurls);
 					//判断[page]出现的位置是否在第一位 
 					if($CONTENT_POS<7) {
 						$content = $contents[$page];
@@ -399,14 +399,14 @@ class html {
 			ob_start();
 			include template('content','index',$style);
 			$pc = $this->createhtml($file, 1);
-		}
-		if($this->sitelist[$siteid]['mobilehtml']==1) {
-			ob_start();
-			include template('mobile','maps',$style);
-			$this->createhtml($mapfile);
-			ob_start();
-			include template('mobile','index',$style);
-			$mobile = $this->createhtml($mobilefile);
+			if($this->sitelist[$siteid]['mobilehtml']==1) {
+				ob_start();
+				include template('mobile','maps',$style);
+				$this->createhtml($mapfile);
+				ob_start();
+				include template('mobile','index',$style);
+				$mobile = $this->createhtml($mobilefile);
+			}
 		}
 		return L('电脑端 （'.format_file_size($pc).'），移动端 （'.format_file_size($mobile).'）');
 	}

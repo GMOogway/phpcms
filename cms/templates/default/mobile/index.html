@@ -7,7 +7,7 @@
 				{pc:content action="position" posid="2" order="listorder DESC" num="3"}
 				{loop $data $r}
 				<li>
-					<a href="{show_url($r['url'], $r['catid'])}"><img src="{thumb($r['thumb'],640,250)}" alt="{$r['title']}" title="{$r['title']}"></a>
+					<a href="{show_url($r['url'], $r['catid'], $r['id'])}"><img src="{thumb($r['thumb'],640,250)}" alt="{$r['title']}" title="{$r['title']}"></a>
 					<p>{str_cut($r['title'],26,'')}</p>
 				</li>
 				{/loop}
@@ -30,7 +30,7 @@
 		<ul>
 			{pc:content action="position" posid="1" order="listorder DESC" num="20"}
 			{loop $data $r}
-			<li><a href="{show_url($r['url'], $r['catid'])}"><span class="title_color"{title_style($r['style'])}>{str_cut($r['title'],80)}</span></a></li>
+			<li><a href="{show_url($r['url'], $r['catid'], $r['id'])}"><span class="title_color"{title_style($r['style'])}>{str_cut($r['title'],80)}</span></a></li>
 			{/loop}
             {/pc}
 		</ul>
@@ -40,7 +40,7 @@
 		<ul>
 			{pc:content action="lists" catid="6" num="10" order="listorder DESC"}
 			{loop $data $r}
-			<li><a href="{show_url($r['url'], $r['catid'])}"><span class="title_color"{title_style($r['style'])}>{str_cut($r['title'],80)}</span></a></li>
+			<li><a href="{show_url($r['url'], $r['catid'], $r['id'])}"><span class="title_color"{title_style($r['style'])}>{str_cut($r['title'],80)}</span></a></li>
 			{/loop}
             {/pc}
 		</ul>
@@ -51,7 +51,7 @@
 			{pc:content action="lists" catid="7" thumb="1" order="listorder DESC" num="8"}
 			{loop $data $r}
 			<li>
-				<a href="{show_url($r['url'], $r['catid'])}">
+				<a href="{show_url($r['url'], $r['catid'], $r['id'])}">
 					<i><img src="{thumb($r['thumb'],300,90)}" alt="{$r['title']}" title="{$r['title']}"></i>
 					<p>{str_cut($r['title'],80)}</p>
 				</a>
@@ -67,7 +67,7 @@
 		<ul>
 			{pc:content action="lists" catid="$r['catid']" num="10" order="listorder DESC"}
 			{loop $data $r}
-			<li><a href="{show_url($r['url'], $r['catid'])}"><span class="title_color"{title_style($r['style'])}>{str_cut($r['title'],80)}</span></a></li>
+			<li><a href="{show_url($r['url'], $r['catid'], $r['id'])}"><span class="title_color"{title_style($r['style'])}>{str_cut($r['title'],80)}</span></a></li>
 			{/loop}
             {/pc}
 		</ul>

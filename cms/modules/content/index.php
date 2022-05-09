@@ -67,6 +67,7 @@ class index {
 			$catid = $this->_getCategoryId($this->input->get('catdir') ? $this->input->get('catdir') : $this->input->get('categorydir'));
 		}
 		$id = intval($this->input->get('id'));
+		$remains = true;
 
 		if(!$catid || !$id) showmessage(L('information_does_not_exist'),'blank');
 		$_userid = $this->_userid;
@@ -184,7 +185,6 @@ class index {
 				}
 				for($i=1; $i<=$pagenumber; $i++) {
 					$pageurls[$i] = $this->url->show($id, $i, $catid, $rs['inputtime']);
-					$showurls[$i] = $this->url->pageshow($id, $i, $catid, $rs['inputtime']);
 				}
 				$END_POS = strpos($content, '[/page]');
 				if($END_POS !== false) {
@@ -200,7 +200,7 @@ class index {
 					}
 				}
 				//当不存在 [/page]时，则使用下面分页
-				$pages = content_pages($pagenumber,$page,$pageurls,$showurls);
+				$pages = content_pages($pagenumber,$page,$pageurls,$pageurls);
 				//判断[page]出现的位置是否在第一位 
 				if($CONTENT_POS<7) {
 					$content = $contents[$page];

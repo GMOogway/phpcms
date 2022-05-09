@@ -4,11 +4,11 @@
 <div id="main">
 	<div class="news-list">
 		<ul>
-			{pc:content action="lists" catid="$catid" num="20" order="id DESC" page="$page"}
+			{pc:content action="lists" catid="$catid" num="1" order="id DESC" page="$page"}
 			{loop $data $r}
 			<li>
 				<span class="date">[{date('m-d',$r['inputtime'])}]</span>
-				<a href="{show_url($r['url'], $r['catid'])}">
+				<a href="{show_url($r['url'], $r['catid'], $r['id'])}">
 					{if $n<4}<em class="flag">顶</em>{/if}
 					<span class="title_color"{title_style($r['style'])}>{$r['title']}</span>
 				</a>
@@ -16,7 +16,7 @@
 			{/loop}
 		</ul>
 	</div>
-	<div class="search-pagination">{$mobilepages}</div>
+	<div class="search-pagination">{$pages}</div>
 	<div class="clearfix"></div>
 	<div class="news-list">
 		<h3 class="title">【点击排行】</h3>
@@ -25,7 +25,7 @@
 			{loop $data $r}
 			<li>
 				<span class="date">[{date('m-d',$r['inputtime'])}]</span>
-				<a href="{show_url($r['url'], $r['catid'])}"><span class="title_color"{title_style($r['style'])}>{$r['title']}</span></a>
+				<a href="{show_url($r['url'], $r['catid'], $r['id'])}"><span class="title_color"{title_style($r['style'])}>{$r['title']}</span></a>
 			</li>
 			{/loop}
 		</ul>

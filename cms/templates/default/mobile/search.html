@@ -27,12 +27,12 @@
             {loop $datas $r}
             <li>
                 <span class="date">[{date('m-d',$r['inputtime'])}]</span>
-                <a href="{show_url($r['url'], $r['catid'])}">
+                <a href="{show_url($r['url'], $r['catid'], $r['id'])}">
                 <span class="title_color"{title_style($r['style'])}>{$r['title']}</span></a>
             </li>
             {/loop}
         </ul>
     </div>
-    <div id="page">{$mobilepages}</div>
+    <div id="page">{$pages}</div>
 </div>
 {template "mobile","footer"}

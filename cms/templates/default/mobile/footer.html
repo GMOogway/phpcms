@@ -31,11 +31,12 @@ $(function() {
 		}
 	});
 	//点击跳转链接，滚动条跳到0的位置，页面移动速度是1000
-	$("#back-top").click(function() {
-		$('body').animate({
-			scrollTop: '0'
+	$("#back-top").click(function(a) {
+		a.preventDefault();
+		$("html, body").animate({
+			scrollTop: 0
 		}, 1000);
-		return false; //防止默认事件行为
+		return false;
 	})
 })
 </script>

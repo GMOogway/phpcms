@@ -39,8 +39,8 @@ include $this->admin_tpl('header');
     <th><?php echo L('html_home')?>：</th>
     <td class="y-bg">
       <div class="mt-radio-inline">
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[ishtml]" value="1" checked> <?php echo L('yes');?> <span></span></label>
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[ishtml]" value="0"> <?php echo L('no');?> <span></span></label>
+        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[ishtml]" value="1"> <?php echo L('open');?> <span></span></label>
+        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[ishtml]" value="0" checked> <?php echo L('close');?> <span></span></label>
       </div>
     </td>
   </tr>
@@ -54,8 +54,8 @@ include $this->admin_tpl('header');
     <th><?php echo L('mobile_auto')?>：</th>
     <td class="y-bg">
       <div class="mt-radio-inline">
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobileauto]" value="1"> <?php echo L('yes');?> <span></span></label>
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobileauto]" value="0" checked> <?php echo L('no');?> <span></span></label><br><?php echo L('mobile_auto_desc')?>
+        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobileauto]" value="1"> <?php echo L('open');?> <span></span></label>
+        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobileauto]" value="0" checked> <?php echo L('close');?> <span></span></label><br><?php echo L('mobile_auto_desc')?>
       </div>
     </td>
   </tr>
@@ -63,8 +63,8 @@ include $this->admin_tpl('header');
     <th><?php echo L('html_mobile')?>：</th>
     <td class="y-bg">
       <div class="mt-radio-inline">
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilehtml]" value="1"> <?php echo L('yes');?> <span></span></label>
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilehtml]" value="0" checked> <?php echo L('no');?> <span></span></label><br><?php echo L('html_mobile_desc')?>
+        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilehtml]" value="1" checked> <?php echo L('open');?> <span></span></label>
+        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilehtml]" value="0"> <?php echo L('close');?> <span></span></label><br><?php echo L('html_mobile_desc')?>
       </div>
     </td>
   </tr>
@@ -72,8 +72,8 @@ include $this->admin_tpl('header');
     <th><?php echo L('mobile_not_pad')?>：</th>
     <td class="y-bg">
       <div class="mt-radio-inline">
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[not_pad]" value="1"> <?php echo L('yes');?> <span></span></label>
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[not_pad]" value="0" checked> <?php echo L('no');?> <span></span></label><br><?php echo L('mobile_not_pad_desc')?>
+        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[not_pad]" value="1"> <?php echo L('open');?> <span></span></label>
+        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[not_pad]" value="0" checked> <?php echo L('close');?> <span></span></label><br><?php echo L('mobile_not_pad_desc')?>
       </div>
     </td>
   </tr>

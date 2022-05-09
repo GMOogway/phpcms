@@ -243,6 +243,7 @@ class check extends admin {
                 $this->db->query('ALTER TABLE `'.$prefix.'member` CHANGE `email` `email` char(50) NOT NULL COMMENT \'邮箱地址\';');
                 $this->db->query('ALTER TABLE `'.$prefix.'member` CHANGE `regip` `regip` char(200) NOT NULL COMMENT \'注册Ip\';');
                 $this->db->query('ALTER TABLE `'.$prefix.'member` CHANGE `lastip` `lastip` char(200) NOT NULL COMMENT \'登录Ip\';');
+                $this->db->query('ALTER TABLE `'.$prefix.'member` CHANGE `connectid` `connectid` char(255) NOT NULL DEFAULT \'\' COMMENT \'快捷登陆\';');
                 $this->db->query('ALTER TABLE `'.$prefix.'member_verify` CHANGE `encrypt` `encrypt` VARCHAR(50) NOT NULL COMMENT \'随机加密码\';');
                 $this->db->query('ALTER TABLE `'.$prefix.'member_verify` CHANGE `regip` `regip` char(200) NOT NULL COMMENT \'注册Ip\';');
                 $this->db->query('ALTER TABLE `'.$prefix.'attachment` CHANGE `filename` `filename` VARCHAR(255) NOT NULL COMMENT \'原文件名\';');

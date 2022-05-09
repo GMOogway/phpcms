@@ -1107,6 +1107,7 @@ class content extends admin {
 		
 		if(!isset($CATEGORYS[$catid]) || $CATEGORYS[$catid]['type']!=0) dr_admin_msg(0,L('missing_part_parameters'));
 		define('HTML', true);
+		define('IS_HTML', true);
 		$CAT = $CATEGORYS[$catid];
 		
 		$siteid = $CAT['siteid'];

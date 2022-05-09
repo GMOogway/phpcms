@@ -119,7 +119,7 @@ class index {
 			}
 			$arrchildid = implode(',', $array_child);
 			$sitelist = getcache('sitelist','commons');
-			if ($sitelist[$siteid]['mobilehtml']==1 && ISHTML) {
+			if ($sitelist[$siteid]['mobilehtml']==1) {
 				//URL规则
 				$urlrules = getcache('urlrules','commons');
 				$urlrules = str_replace('|', '~',$urlrules[$category_ruleid]);
@@ -152,6 +152,7 @@ class index {
 			$catid = $this->_getCategoryId($this->input->get('catdir') ? $this->input->get('catdir') : $this->input->get('categorydir'));
 		}
 		$id = intval($this->input->get('id'));
+		$remains = $this->input->get('remains');
 
 		if(!$catid || !$id) showmessage(L('information_does_not_exist'),'blank');
 		$_userid = $this->_userid;
@@ -269,7 +270,6 @@ class index {
 				}
 				for($i=1; $i<=$pagenumber; $i++) {
 					$pageurls[$i] = $this->url->show($id, $i, $catid, $rs['inputtime']);
-					$showurls[$i] = $this->url->pageshow($id, $i, $catid, $rs['inputtime']);
 				}
 				$END_POS = strpos($content, '[/page]');
 				if($END_POS !== false) {
@@ -285,7 +285,7 @@ class index {
 					}
 				}
 				//当不存在 [/page]时，则使用下面分页
-				$pages = mobile_content_pages($pagenumber,$page,$pageurls,$showurls);
+				$pages = mobile_content_pages($pagenumber,$page,$pageurls,$pageurls);
 				//判断[page]出现的位置是否在第一位 
 				if($CONTENT_POS<7) {
 					$content = $contents[$page];
@@ -296,7 +296,7 @@ class index {
 						$content = $contents[$page-1];
 					}
 				}
-				if($this->input->get('remains')=='true') {
+				if($remains=='true') {
 					$content = $pages ='';
 					for($i=$page;$i<=$pagenumber;$i++) {
 						$content .=$contents[$i-1];
@@ -312,6 +312,7 @@ class index {
 						$content = $content.'</p>';
 					}
 				}
+				if(!strstr(dr_now_url(), '.php')) $remains = true;
 			}
 		}
 		$this->db->table_name = $tablename;
