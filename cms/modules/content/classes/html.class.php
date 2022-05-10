@@ -258,7 +258,7 @@ class html {
 	 * @param $catid 栏目id
 	 * @param $page 当前页数
 	 */
-	public function category($catid, $page = 0, $mobile = 0) {
+	public function category($catid, $page = 0) {
 		$CAT = $this->categorys[$catid];
 		if (strpos($CAT['url'], 'index.php?')!==false) return false;
 		if (is_array($CAT)) {
@@ -336,11 +336,11 @@ class html {
 			if($CAT['isdomain']) {
 				$second_domain = 1;
 				foreach ($urlrules as $_k=>$_v) {
-					$urlrules[$_k] = (!$this->sitelist[$this->siteid]['mobilemode'] && $mobile ? $this->mobile_root : '').$_v;
+					$urlrules[$_k] = $_v;
 				}
 			} else {
 				foreach ($urlrules as $_k=>$_v) {
-					$urlrules[$_k] = (!$this->sitelist[$this->siteid]['mobilemode'] && $mobile ? $this->mobile_root : '').'/'.$_v;
+					$urlrules[$_k] = '/'.$_v;
 				}
 			}
 		} else {
@@ -354,7 +354,7 @@ class html {
 				$this->queue->add_queue('add',$this->html_root.$base_file,$this->siteid);
 			}		
 			//URLRULES
-			$htm_prefix = $root_domain ? '' : (!$this->sitelist[$this->siteid]['mobilemode'] && $mobile ? $this->mobile_root : '').$this->html_root;
+			$htm_prefix = $root_domain ? '' : $this->html_root;
 			$htm_prefix = rtrim(WEB_PATH,'/').$htm_prefix;
 			if($CAT['isdomain']) {
 				$second_domain = 1;
@@ -394,15 +394,7 @@ class html {
 			//URL规则
 			$urlrules = implode('~', $urlrules);
 			
-			if (!$mobile) {
-				define('URLRULE', $urlrules);
-			} else {
-				if (!$this->sitelist[$this->siteid]['mobilemode']) {
-					define('URLRULES', $urlrules);
-				} else {
-					define('URLRULE', $urlrules);
-				}
-			}
+			define('URLRULE', $urlrules);
 			//绑定域名时，设置$catdir 为空
 			if($root_domain) $parentdir = $catdir = '';
 			if($second_domain) {
@@ -422,13 +414,11 @@ class html {
 		ob_start();
 		include template('content',$template);
 		$this->createhtml($file, $copyjs);
-		if($mobile && $this->sitelist[$this->siteid]['mobilehtml']==1) {
+		if($this->sitelist[$this->siteid]['mobilehtml']==1) {
 			ob_start();
 			$url = str_replace(array($this->sitelist[$this->siteid]['domain'], 'm=content'), array($this->sitelist[$this->siteid]['mobile_domain'], 'm=mobile'), $url);
 			include template('mobile',$template);
 			$this->createhtml($mobilefile);
-		} else {
-			$this->category($catid, $page, 1);
 		}
 		return true;
 	}

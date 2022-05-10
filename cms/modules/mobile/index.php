@@ -124,9 +124,9 @@ class index {
 				//URL规则
 				$urlrules = getcache('urlrules','commons');
 				if (!$this->sitelist[$this->siteid]['mobilemode']) {
-					$urlrules = str_replace('|', '~'.SYS_MOBILE_ROOT,SYS_MOBILE_ROOT.$urlrules[$category_ruleid]);
+					$urlrules = str_replace('|', '~'.SYS_MOBILE_ROOT.'/', SYS_MOBILE_ROOT.'/'.$urlrules[$category_ruleid]);
 				} else {
-					$urlrules = str_replace('|', '~',$urlrules[$category_ruleid]);
+					$urlrules = str_replace('|', '~', $urlrules[$category_ruleid]);
 				}
 			} else {
 				$urlrules = 'index.php?m=mobile&c=index&a=lists&catid={$catid}~index.php?m=mobile&c=index&a=lists&catid={$catid}&page={$page}';
