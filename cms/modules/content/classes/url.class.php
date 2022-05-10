@@ -34,11 +34,13 @@ class url{
 			$upgrade = '/'.ltrim($upgrade,WEB_PATH);
 			if($page==1) {
 				$url_arr[0] = $url_arr[1] = $upgrade;
+				$showurl_arr[0] = $showurl_arr[1] = $upgrade;
 			} else {
 				$lasttext = strrchr($upgrade,'.');
 				$len = -strlen($lasttext);
 				$path = substr($upgrade,0,$len);
 				$url_arr[0] = $url_arr[1] = $path.'_'.$page.$lasttext;
+				$showurl_arr[0] = $showurl_arr[1] = $path.'_'.$page.$lasttext;
 			}
 		} else {
 			$show_ruleid = $setting['show_ruleid'];
