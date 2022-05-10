@@ -24,7 +24,7 @@ class foreground {
 		$cms_auth = param::get_cookie('auth');
 		if(ROUTE_M =='member' && ROUTE_C =='index' && in_array(ROUTE_A, array('login', 'alogin', 'register', 'mini', 'send_newmail'))) {
 			if ($cms_auth && ROUTE_A != 'mini' && ROUTE_A != 'alogin') {
-				showmessage(L('login_success', '', 'member'), 'index.php?m=member&c=index');
+				showmessage(L('login_success', '', 'member'), APP_PATH.'index.php?m=member&c=index');
 			} else {
 				return true;
 			}
@@ -60,7 +60,7 @@ class foreground {
 						param::set_cookie('_login_attr', '');
 						param::set_cookie('_username', '');
 						param::set_cookie('_groupid', '');
-						redirect('index.php?m=member&c=index&a=login');
+						redirect(APP_PATH.'index.php?m=member&c=index&a=login');
 					}
 					
 					if (!defined('SITEID')) {
@@ -73,7 +73,7 @@ class foreground {
 						param::set_cookie('_login_attr', '');
 						param::set_cookie('_username', '');
 						param::set_cookie('_groupid', '');
-						showmessage(L('userid_banned_by_administrator', '', 'member'), 'index.php?m=member&c=index&a=login');
+						showmessage(L('userid_banned_by_administrator', '', 'member'), APP_PATH.'index.php?m=member&c=index&a=login');
 					} elseif($this->memberinfo['groupid'] == 7) {
 						param::set_cookie('auth', '');
 						param::set_cookie('_userid', '');
@@ -85,7 +85,7 @@ class foreground {
 						param::set_cookie('_reguserid', $this->memberinfo['userid']);
 						
 						param::set_cookie('email', $this->memberinfo['email']);
-						showmessage(L('need_emial_authentication', '', 'member'), 'index.php?m=member&c=index&a=register&t=2');
+						showmessage(L('need_emial_authentication', '', 'member'), APP_PATH.'index.php?m=member&c=index&a=register&t=2');
 					}
 				} else {
 					param::set_cookie('auth', '');
@@ -93,12 +93,12 @@ class foreground {
 					param::set_cookie('_login_attr', '');
 					param::set_cookie('_username', '');
 					param::set_cookie('_groupid', '');
-					redirect('index.php?m=member&c=index&a=login');
+					redirect(APP_PATH.'index.php?m=member&c=index&a=login');
 				}
 				unset($userid, $password, $cms_auth, $auth_key);
 			} else {
 				$forward= $this->input->get('forward') ?  urlencode($this->input->get('forward')) : urlencode(dr_now_url());
-				showmessage(L('please_login', '', 'member'), 'index.php?m=member&c=index&a=login&forward='.$forward);
+				showmessage(L('please_login', '', 'member'), APP_PATH.'index.php?m=member&c=index&a=login&forward='.$forward);
 			}
 		}
 	}

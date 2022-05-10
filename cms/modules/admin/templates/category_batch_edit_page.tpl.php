@@ -17,7 +17,7 @@ include $this->admin_tpl('header');?>
 <div class="bk10"></div>
 <div class="myfbody">
 <div id="table-lists" class="table-scrollable">
-    <table cellspacing="0" class="table table-striped table-bordered table-hover table-checkable dataTable">
+    <table cellspacing="0" class="table table-striped table-bordered table-hover dataTable">
         <thead>
      <tr class="heading">
 		<?php

@@ -49,7 +49,20 @@ include $this->admin_tpl('header');
 	<legend><?php echo L('mobile_configuration')?></legend>
 	<table width="100%"  class="table_form">
   <tr>
-    <th width="120"><?php echo L('mobile_auto')?>：</th>
+    <th width="120"><?php echo L('access_mode')?>：</th>
+    <td class="y-bg">
+      <div class="mt-radio-inline">
+        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilemode]" value="0" onclick="$('.dr_mode').hide();"<?php if(!$data['mobilemode']) echo ' checked';?>> <?php echo L('directory_mode');?> <span></span></label>
+        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilemode]" value="1" onclick="$('.dr_mode').show();"<?php if($data['mobilemode']) echo ' checked';?>> <?php echo L('domain_mode');?> <span></span></label>
+      </div>
+    </td>
+  </tr>
+  <tr class="dr_mode"<?php if(!$data['mobilemode']) echo ' style="display: none"';?>>
+    <th><?php echo L('mobile_domain')?>：</th>
+    <td class="y-bg"><label><input type="text" class="input-text" name="info[mobile_domain]" id="mobile_domain" size="70" value="<?php if($data['mobilemode']) echo $data['mobile_domain']?>" /></label> <button type="button" onclick="dr_test_domain('mobile_domain','mobile');" class="button"> <i class="fa fa-send"></i> <?php echo L('测试')?></button><div id="dr_mobile_domian_error" style="color: red;display: none"></div></td>
+  </tr>
+  <tr>
+    <th><?php echo L('mobile_auto')?>：</th>
     <td class="y-bg">
       <div class="mt-radio-inline">
         <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobileauto]" value="1"<?php if($data['mobileauto']) echo ' checked';?>> <?php echo L('open');?> <span></span></label>
@@ -74,10 +87,6 @@ include $this->admin_tpl('header');
         <label class="mt-radio mt-radio-outline"><input type="radio" name="info[not_pad]" value="0"<?php if(!$data['not_pad']) echo ' checked';?>> <?php echo L('close');?> <span></span></label><br><?php echo L('mobile_not_pad_desc')?>
       </div>
     </td>
-  </tr>
-  <tr>
-    <th><?php echo L('mobile_domain')?>：</th>
-    <td class="y-bg"><label><input type="text" class="input-text" name="info[mobile_domain]" id="mobile_domain" size="70" value="<?php echo $data['mobile_domain']?>" /></label> <button type="button" onclick="dr_test_domain('mobile_domain','mobile');" class="button"> <i class="fa fa-send"></i> <?php echo L('测试')?></button><div id="dr_mobile_domian_error" style="color: red;display: none"></div></td>
   </tr>
   <tr>
     <th><?php echo L('mobile_template')?>：</th>

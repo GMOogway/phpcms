@@ -2547,7 +2547,10 @@ function to_sqls($data, $front = ' AND ', $in_column = false) {
  */
 function pages($num, $curr_page, $perpage = 10, $urlrule = '', $array = array(),$setpages = 10) {
 	$input = pc_base::load_sys_class('input');
-	if(defined('URLRULE') && $urlrule == '') {
+	if(defined('URLRULES') && $urlrule == '') {
+		$urlrule = URLRULES;
+		$array = $GLOBALS['URL_ARRAY'];
+	} elseif(defined('URLRULE') && $urlrule == '') {
 		$urlrule = URLRULE;
 		$array = $GLOBALS['URL_ARRAY'];
 	} elseif($urlrule == '') {

@@ -94,13 +94,13 @@ class urlrule extends admin {
 
 			// 子目录
 			$code.= '###当存在多个子目录格式的域名时，需要多写几组RewriteBase标签：RewriteBase /目录/ '.PHP_EOL;
-			if (dr_site_value('dirname', $this->siteid)) {
+			if (!dr_site_value('mobilemode', $this->siteid)) {
 				$code.= 'RewriteEngine On'.PHP_EOL.PHP_EOL;
-				$code.= 'RewriteBase /'.dr_site_value('dirname', $this->siteid).'/'.PHP_EOL
+				$code.= 'RewriteBase '.$root.'mobile/'.PHP_EOL
 					.'RewriteCond %{REQUEST_FILENAME} !-f'.PHP_EOL
 					.'RewriteCond %{REQUEST_FILENAME} !-d'.PHP_EOL
-					.'RewriteRule !.(js|ico|gif|jpe?g|bmp|png|css)$ /'.dr_site_value('dirname', $this->siteid).'/index.php [NC,L]'.PHP_EOL.PHP_EOL;
-				$code.= '####以上目录需要单独保持到/'.dr_site_value('dirname', $this->siteid).'/.htaccess文件中';
+					.'RewriteRule !.(js|ico|gif|jpe?g|bmp|png|css)$ '.$root.'mobile/index.php [NC,L]'.PHP_EOL.PHP_EOL;
+				$code.= '####以上目录需要单独保持到'.$root.'mobile/.htaccess文件中';
 			}
 			// 主目录
 			$code.= 'RewriteEngine On'.PHP_EOL.PHP_EOL;
@@ -113,8 +113,8 @@ class urlrule extends admin {
 			$note = '<font color=red><b>将以下代码放到Nginx配置文件中去（如果是绑定了域名，所绑定目录也要配置下面的代码）</b></font>';
 			// 子目录
 			$code = '###当存在多个子目录格式的域名时，需要多写几组location标签：location /目录/ '.PHP_EOL;
-			if (dr_site_value('dirname', $this->siteid)) {
-				$code.= 'location '.$root.dr_site_value('dirname', $this->siteid).'/ { '.PHP_EOL
+			if (!dr_site_value('mobilemode', $this->siteid)) {
+				$code.= 'location '.$root.'mobile/ { '.PHP_EOL
 					.'    if (-f $request_filename) {'.PHP_EOL
 					.'           break;'.PHP_EOL
 					.'    }'.PHP_EOL
@@ -122,7 +122,7 @@ class urlrule extends admin {
 					.'        break;'.PHP_EOL
 					.'    }'.PHP_EOL
 					.'    if (!-e $request_filename) {'.PHP_EOL
-					.'        rewrite . '.$root.dr_site_value('dirname', $this->siteid).'/index.php last;'.PHP_EOL
+					.'        rewrite . '.$root.'mobile/index.php last;'.PHP_EOL
 					.'    }'.PHP_EOL
 					.'}'.PHP_EOL.PHP_EOL;
 			}

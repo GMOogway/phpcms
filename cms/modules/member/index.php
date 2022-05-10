@@ -42,7 +42,7 @@ class index extends foreground {
 		//加载用户模块配置
 		$member_setting = getcache('member_setting');
 		if(!$member_setting['allowregister']) {
-			showmessage(L('deny_register'), 'index.php?m=member&c=index&a=login');
+			showmessage(L('deny_register'), APP_PATH.'index.php?m=member&c=index&a=login');
 		}
 		//加载短信模块配置
  		$sms_setting_arr = getcache('sms','sms');
@@ -118,7 +118,7 @@ class index extends foreground {
 				unset($userinfo['lastdate'],$userinfo['connectid'],$userinfo['from']);
 				$userinfo['modelinfo'] = $modelinfo_str;
 				$this->verify_db->insert($userinfo);
-				showmessage(L('operation_success'), 'index.php?m=member&c=index&a=register&t=3');
+				showmessage(L('operation_success'), APP_PATH.'index.php?m=member&c=index&a=register&t=3');
 			} else {
 				//查看当前模型是否开启了短信验证功能
 				$model_field_cache = getcache('model_field_'.$userinfo['modelid'],'model');
@@ -189,19 +189,19 @@ class index extends foreground {
 				//设置当前注册账号COOKIE，为第二步重发邮件所用
 				$_SESSION['_regusername'] = $userinfo['username'];
 				$_SESSION['_reguserid'] = $userid;
-				showmessage(L('operation_success'), 'index.php?m=member&c=index&a=register&t=2');
+				showmessage(L('operation_success'), APP_PATH.'index.php?m=member&c=index&a=register&t=2');
 			}
-			showmessage(L('register').L('success'), 'index.php?m=member&c=index');
+			showmessage(L('register').L('success'), APP_PATH.'index.php?m=member&c=index');
 		} else {
 			if(!empty($this->input->get('verify'))) {
-				$code = $this->input->get('code') ? trim($this->input->get('code')) : showmessage(L('operation_failure'), 'index.php?m=member&c=index');
+				$code = $this->input->get('code') ? trim($this->input->get('code')) : showmessage(L('operation_failure'), APP_PATH.'index.php?m=member&c=index');
 				$code_res = sys_auth($code, 'DECODE', get_auth_key('email'));
 				$code_arr = explode('|', $code_res);
 				$userid = isset($code_arr[0]) ? $code_arr[0] : '';
-				$userid = is_numeric($userid) ? $userid : showmessage(L('operation_failure'), 'index.php?m=member&c=index');
+				$userid = is_numeric($userid) ? $userid : showmessage(L('operation_failure'), APP_PATH.'index.php?m=member&c=index');
 
 				$this->db->update(array('groupid'=>$this->_get_usergroup_bypoint()), array('userid'=>$userid));
-				showmessage(L('operation_success'), 'index.php?m=member&c=index');
+				showmessage(L('operation_success'), APP_PATH.'index.php?m=member&c=index');
 			} elseif(!empty($this->input->get('protocol'))) {
 				include template('member', 'protocol');
 			} else {
@@ -586,7 +586,7 @@ class index extends foreground {
 				//消费记录
 				pc_base::load_app_class('spend','pay',0);
 				spend::amount($cost, L('allowupgrade'), $memberinfo['userid'], $memberinfo['username']);
-				showmessage(L('operation_success'), 'index.php?m=member&c=index&a=init');
+				showmessage(L('operation_success'), APP_PATH.'index.php?m=member&c=index&a=init');
 			} else {
 				showmessage(L('operation_failure'), HTTP_REFERER);
 			}
@@ -653,7 +653,7 @@ class index extends foreground {
 			//查询帐号
 			$r = $this->_find_member_info($username);
 
-			if(!$r) showmessage(L('user_not_exist'),'index.php?m=member&c=index&a=login');
+			if(!$r) showmessage(L('user_not_exist'),APP_PATH.'index.php?m=member&c=index&a=login');
 			
 			//如果用户被锁定
 			if($r['islock']) {
@@ -673,9 +673,9 @@ class index extends foreground {
 						$this->times_db->insert(array('username'=>$username,'ip'=>$ip,'isadmin'=>0,'logintime'=>SYS_TIME,'times'=>1));
 						$times = $maxloginfailedtimes;
 					}
-					showmessage(L('密码错误，您还有'.$times.'次尝试机会！'), 'index.php?m=member&c=index&a=login', 3000);
+					showmessage(L('密码错误，您还有'.$times.'次尝试机会！'), APP_PATH.'index.php?m=member&c=index&a=login', 3000);
 				} else {
-					showmessage(L('password_error'), 'index.php?m=member&c=index&a=login', 3000);
+					showmessage(L('password_error'), APP_PATH.'index.php?m=member&c=index&a=login', 3000);
 				}
 			}
 			$this->times_db->delete(array('username'=>$username,'isadmin'=>0));
@@ -731,7 +731,7 @@ class index extends foreground {
 			if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
 				$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME, 1);
 			}
-			$forward = $this->input->post('forward') && !empty($this->input->post('forward')) ? urldecode($this->input->post('forward')) : 'index.php?m=member&c=index';
+			$forward = $this->input->post('forward') && !empty($this->input->post('forward')) ? urldecode($this->input->post('forward')) : APP_PATH.'index.php?m=member&c=index';
 			showmessage(L('login_success'), $forward);
 		} else {
 			$setting = pc_base::load_config('system');
@@ -786,7 +786,7 @@ class index extends foreground {
 			}
 		}
 		$this->cache->del_auth_data('admin_login_member', 1);
-		redirect('index.php?m=member&c=index');
+		redirect(APP_PATH.'index.php?m=member&c=index');
 	}
   	
 	public function logout() {
@@ -809,7 +809,7 @@ class index extends foreground {
 			param::set_cookie('_groupid', '');
 			param::set_cookie('_nickname', '');
 			
-			$forward = $this->input->get('forward') && trim($this->input->get('forward')) ? $this->input->get('forward') : 'index.php?m=member&c=index&a=login';
+			$forward = $this->input->get('forward') && trim($this->input->get('forward')) ? $this->input->get('forward') : APP_PATH.'index.php?m=member&c=index&a=login';
 			showmessage(L('logout_success'), $forward);
 		}
 	}
@@ -1119,7 +1119,7 @@ class index extends foreground {
 					if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
 						$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME, 1);
 					}
-					$forward = $this->input->get('forward') && !empty($this->input->get('forward')) ? $this->input->get('forward') : 'index.php?m=member&c=index';
+					$forward = $this->input->get('forward') && !empty($this->input->get('forward')) ? $this->input->get('forward') : APP_PATH.'index.php?m=member&c=index';
 					showmessage(L('login_success'), $forward);
 					
 				} else {
@@ -1132,7 +1132,7 @@ class index extends foreground {
 					//加载用户模块配置
 					$member_setting = getcache('member_setting');
 					if(!$member_setting['allowregister']) {
-						showmessage(L('deny_register'), 'index.php?m=member&c=index&a=login');
+						showmessage(L('deny_register'), APP_PATH.'index.php?m=member&c=index&a=login');
 					}
 					
 					//获取用户siteid
@@ -1177,7 +1177,7 @@ class index extends foreground {
 					include template('member', 'connect');
 				}
 			} else {
-				showmessage(L('login_failure'), 'index.php?m=member&c=index&a=login');
+				showmessage(L('login_failure'), APP_PATH.'index.php?m=member&c=index&a=login');
 			}
 		} else {
 			$o = new SaeTOAuthV2(WB_AKEY, WB_SKEY);
@@ -1205,7 +1205,7 @@ class index extends foreground {
 			if(is_numeric($accesstoken['sdid'])) {
 				$userid = $accesstoken['sdid'];
 			} else {
-				showmessage(L('login_failure'), 'index.php?m=member&c=index&a=login');
+				showmessage(L('login_failure'), APP_PATH.'index.php?m=member&c=index&a=login');
 			}
 
 			if(!empty($userid)) {
@@ -1241,7 +1241,7 @@ class index extends foreground {
 						$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME, 1);
 					}
 					param::set_cookie('_from', 'snda');
-					$forward = $this->input->get('forward') && !empty($this->input->get('forward')) ? $this->input->get('forward') : 'index.php?m=member&c=index';
+					$forward = $this->input->get('forward') && !empty($this->input->get('forward')) ? $this->input->get('forward') : APP_PATH.'index.php?m=member&c=index';
 					showmessage(L('login_success'), $forward);
 				} else {				
 					//弹出绑定注册页面
@@ -1305,7 +1305,7 @@ class index extends foreground {
 					if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
 						$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME, 1);
 					}
-					$forward = $this->input->get('forward') && !empty($this->input->get('forward')) ? $this->input->get('forward') : 'index.php?m=member&c=index';
+					$forward = $this->input->get('forward') && !empty($this->input->get('forward')) ? $this->input->get('forward') : APP_PATH.'index.php?m=member&c=index';
 					showmessage(L('login_success'), $forward);
 				}else{	
 					//未存在于数据库中，跳去完善资料页面。页面预置用户名（QQ返回是UTF8编码，如有需要进行转码）
@@ -1368,7 +1368,7 @@ class index extends foreground {
 						$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME, 1);
 					}
 					param::set_cookie('_from', 'snda');
-					$forward = $this->input->get('forward') && !empty($this->input->get('forward')) ? $this->input->get('forward') : 'index.php?m=member&c=index';
+					$forward = $this->input->get('forward') && !empty($this->input->get('forward')) ? $this->input->get('forward') : APP_PATH.'index.php?m=member&c=index';
 					showmessage(L('login_success'), $forward);
 				} else {				
 					//弹出绑定注册页面
@@ -1380,7 +1380,7 @@ class index extends foreground {
 					//加载用户模块配置
 					$member_setting = getcache('member_setting');
 					if(!$member_setting['allowregister']) {
-						showmessage(L('deny_register'), 'index.php?m=member&c=index&a=login');
+						showmessage(L('deny_register'), APP_PATH.'index.php?m=member&c=index&a=login');
 					}
 					
 					//获取用户siteid
@@ -1425,7 +1425,7 @@ class index extends foreground {
 					include template('member', 'connect');
 				}
 			} else {
-				showmessage(L('login_failure'), 'index.php?m=member&c=index&a=login');
+				showmessage(L('login_failure'), APP_PATH.'index.php?m=member&c=index&a=login');
 			}
 		} else {
 			$oauth_callback = APP_PATH.'index.php?m=member&c=index&a=public_qq_login&callback=1';
@@ -1492,7 +1492,7 @@ class index extends foreground {
 			}
 			$this->email->set();
 			$this->email->send($email, L('forgetpassword'), $message, $sitename);
-			showmessage(L('operation_success'), 'index.php?m=member&c=index&a=login');
+			showmessage(L('operation_success'), APP_PATH.'index.php?m=member&c=index&a=login');
 		} elseif($this->input->get('code')) {
 			$hour = date('y-m-d h', SYS_TIME);
 			$code = sys_auth($this->input->get('code'), 'DECODE', get_auth_key('email'));
@@ -1502,7 +1502,7 @@ class index extends foreground {
 				$memberinfo = $this->db->get_one(array('userid'=>$code[0]));
 				
 				if(empty($memberinfo['userid'])) {
-					showmessage(L('operation_failure'), 'index.php?m=member&c=index&a=login');
+					showmessage(L('operation_failure'), APP_PATH.'index.php?m=member&c=index&a=login');
 				}
 				$updateinfo = array();
 				$password = random(8,"23456789abcdefghkmnrstwxy");
@@ -1522,7 +1522,7 @@ class index extends foreground {
 				showmessage(L('operation_success').L('newpassword').':'.$password);
 
 			} else {
-				showmessage(L('operation_failure'), 'index.php?m=member&c=index&a=login');
+				showmessage(L('operation_failure'), APP_PATH.'index.php?m=member&c=index&a=login');
 			}
 
 		} else {

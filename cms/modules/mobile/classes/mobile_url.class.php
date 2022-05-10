@@ -1,14 +1,13 @@
 <?php
 defined('IN_CMS') or exit('No permission resources.');
 class mobile_url{
-	private $urlrules,$categorys,$html_root,$mobile_root;
+	private $urlrules,$categorys,$html_root;
 	public function __construct() {
 		$this->input = pc_base::load_sys_class('input');
 		$this->urlrules = getcache('urlrules','commons');
 		self::set_siteid();
 		$this->categorys = getcache('category_content_'.$this->siteid,'commons');
 		$this->html_root = SYS_HTML_ROOT;
-		$this->mobile_root = SYS_MOBILE_ROOT;
 	}
 	/**
 	* 手机内容页链接

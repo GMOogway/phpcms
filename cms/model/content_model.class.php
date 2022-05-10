@@ -81,7 +81,7 @@ class content_model extends model {
 			
 			$urls[0] = str_replace(array('select ',')','\\','#',"'"),' ',$urls[0]);
 		} else {
-			$urls = $this->url->show($id, 0, $systeminfo['catid'], $systeminfo['inputtime'], $data['prefix'],$inputinfo,'add');
+			list($urls) = $this->url->show($id, 0, $systeminfo['catid'], $systeminfo['inputtime'], $data['prefix'],$inputinfo,'add');
 			// 站长工具
 			if (module_exists('bdts')) {
 				$this->bdts = pc_base::load_app_class('admin_bdts','bdts');

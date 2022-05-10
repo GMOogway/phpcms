@@ -23,13 +23,13 @@ class site extends admin {
 			'center-bottom' => L('site_att_watermark_pos_8'),
 			'right-bottom' => L('site_att_watermark_pos_9'),
 		);
-		$files = $this->file_map(CMS_PATH.'statics/images/water/font/', 1);
+		$files = dr_file_map(CMS_PATH.'statics/images/water/font/', 1);
 		foreach ($files as $t) {
 			if (substr($t, -3) == 'ttf') {
 				$this->waterfont[] = $t;
 			}
 		}
-		$waterfiles = $this->file_map(CMS_PATH.'statics/images/water/', 1);
+		$waterfiles = dr_file_map(CMS_PATH.'statics/images/water/', 1);
 		foreach ($waterfiles as $t) {
 			if (substr($t, -3) == 'png' || substr($t, -3) == 'gif' || substr($t, -3) == 'jpg' || substr($t, -3) == 'jpeg') {
 				$this->waterfile[] = $t;
@@ -104,11 +104,18 @@ class site extends admin {
 			if (!empty($info['domain']) && $this->db->get_one(array('domain'=>$info['domain']), 'siteid')) {
 				dr_json(0, L('site_domain').L('exists'), array('field' => 'domain'));
 			}
-			if (!empty($info['mobile_domain']) && !preg_match('/http(s?):\/\/(.+)\/$/i', $info['mobile_domain'])) {
-				dr_json(0, L('site_domain').L('site_domain_ex2'), array('field' => 'mobile_domain'));
-			}
-			if (!empty($info['mobile_domain']) && $this->db->get_one(array('mobile_domain'=>$info['mobile_domain']), 'siteid')) {
-				dr_json(0, L('site_domain').L('exists'), array('field' => 'mobile_domain'));
+			if (!$info['mobilemode']) {
+				$info['mobile_domain'] = $info['domain'].'mobile/';
+			} else {
+				if (!empty($info['mobile_domain']) && !preg_match('/http(s?):\/\/(.+)\/$/i', $info['mobile_domain'])) {
+					dr_json(0, L('site_domain').L('site_domain_ex2'), array('field' => 'mobile_domain'));
+				}
+				if (!empty($info['mobile_domain']) && $this->db->get_one(array('mobile_domain'=>$info['mobile_domain']), 'siteid')) {
+					dr_json(0, L('site_domain').L('exists'), array('field' => 'mobile_domain'));
+				}
+				if ($info['mobile_domain']==$info['domain']) {
+					dr_json(0, L('site_domain').L('exists'), array('field' => 'mobile_domain'));
+				}
 			}
 			if (!empty($info['release_point']) && is_array($info['release_point'])) {
 				if (dr_count($info['release_point']) > 4) {
@@ -153,13 +160,19 @@ class site extends admin {
 					} else {
 						$dst = CMS_PATH.$info['dirname'].'/'.$file;
 					}
+					$fix_web_dir = isset($info['dirname']) && $info['dirname'] ? $info['dirname'] : '';
+                    if (strpos($file, 'mobile/') !== false) {
+                        $fix_web_dir .= '/mobile';
+                    }
 					dir_create(dirname($dst));
 					$size = file_put_contents($dst, str_replace(array(
 						'{CMS_PATH}',
-						'{SITE_ID}'
+						'{SITE_ID}',
+						'{FIX_WEB_DIR}'
 					), array(
 						CMS_PATH,
-						$siteid
+						$siteid,
+						$fix_web_dir
 					), file_get_contents(TEMPPATH.'web/'.$file)));
 					if (!$size) {
 						dr_json(0, L('文件['.$dst.']无法写入'));
@@ -270,11 +283,18 @@ class site extends admin {
 				if (!empty($info['domain']) && $data['domain'] != $info['domain'] && $this->db->get_one(array('domain'=>$info['domain']), 'siteid')) {
 					dr_json(0, L('site_domain').L('exists'), array('field' => 'domain'));
 				}
-				if (!empty($info['mobile_domain']) && !preg_match('/http(s?):\/\/(.+)\/$/i', $info['mobile_domain'])) {
-					dr_json(0, L('site_domain').L('site_domain_ex2'), array('field' => 'mobile_domain'));
-				}
-				if (!empty($info['mobile_domain']) && $data['mobile_domain'] != $info['mobile_domain'] && $this->db->get_one(array('mobile_domain'=>$info['mobile_domain']), 'siteid')) {
-					dr_json(0, L('site_domain').L('exists'), array('field' => 'mobile_domain'));
+				if (!$info['mobilemode']) {
+					$info['mobile_domain'] = $info['domain'].'mobile/';
+				} else {
+					if (!empty($info['mobile_domain']) && !preg_match('/http(s?):\/\/(.+)\/$/i', $info['mobile_domain'])) {
+						dr_json(0, L('site_domain').L('site_domain_ex2'), array('field' => 'mobile_domain'));
+					}
+					if (!empty($info['mobile_domain']) && $data['mobile_domain'] != $info['mobile_domain'] && $this->db->get_one(array('mobile_domain'=>$info['mobile_domain']), 'siteid')) {
+						dr_json(0, L('site_domain').L('exists'), array('field' => 'mobile_domain'));
+					}
+					if ($info['mobile_domain']==$info['domain']) {
+						dr_json(0, L('site_domain').L('exists'), array('field' => 'mobile_domain'));
+					}
 				}
 				if (!empty($info['release_point']) && is_array($info['release_point'])) {
 					if (dr_count($info['release_point']) > 4) {
@@ -507,33 +527,5 @@ class site extends admin {
 			$gd = L('gd_support');
 		}
 		return $gd;
-	}
-	
-	/**
-	 * 文件扫描
-	 *
-	 * @param	string	$source_dir		Path to source
-	 * @param	int	$directory_depth	Depth of directories to traverse
-	 *						(0 = fully recursive, 1 = current dir, etc)
-	 * @param	bool	$hidden			Whether to show hidden files
-	 * @return	array
-	 */
-	public function file_map($source_dir) {
-		if ($fp = @opendir($source_dir)) {
-			$filedata = array();
-			$source_dir	= rtrim($source_dir, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
-
-			while (FALSE !== ($file = readdir($fp))) {
-				if ($file === '.' OR $file === '..'
-					OR $file[0] === '.'
-					OR !@is_file($source_dir.$file)) {
-					continue;
-				}
-				$filedata[] = $file;
-			}
-			closedir($fp);
-			return $filedata;
-		}
-		return FALSE;
 	}
 }

@@ -428,8 +428,11 @@ class check extends admin {
                 if (!$this->db->field_exists('ishtml')) {
                     $this->db->query('ALTER TABLE `'.$this->db->table_name.'` ADD `ishtml` tinyint(1) unsigned NOT NULL DEFAULT \'1\' COMMENT \'首页静态\' AFTER `domain`');
                 }
+                if (!$this->db->field_exists('mobilemode')) {
+                    $this->db->query('ALTER TABLE `'.$this->db->table_name.'` ADD `mobilemode` tinyint(1) unsigned NOT NULL DEFAULT \'0\' COMMENT \'访问模式\' AFTER `ishtml`');
+                }
                 if (!$this->db->field_exists('mobileauto')) {
-                    $this->db->query('ALTER TABLE `'.$this->db->table_name.'` ADD `mobileauto` tinyint(1) unsigned NOT NULL DEFAULT \'0\' COMMENT \'自动识别\' AFTER `ishtml`');
+                    $this->db->query('ALTER TABLE `'.$this->db->table_name.'` ADD `mobileauto` tinyint(1) unsigned NOT NULL DEFAULT \'0\' COMMENT \'自动识别\' AFTER `mobilemode`');
                 }
                 if (!$this->db->field_exists('mobilehtml')) {
                     $this->db->query('ALTER TABLE `'.$this->db->table_name.'` ADD `mobilehtml` tinyint(1) unsigned NOT NULL DEFAULT \'0\' COMMENT \'生成静态\' AFTER `mobileauto`');

@@ -169,15 +169,70 @@ class html {
 					}
 					$this->queue->add_queue($action,$pagefile,$this->siteid);
 					$pagefile = CMS_PATH.$pagefile;
-					$mobilepagefile = CMS_PATH.$this->mobile_root.'/'.str_replace(CMS_PATH,'',$pagefile);
 					ob_start();
 					include template('content', $template);
 					$this->createhtml($pagefile);
-					if($this->sitelist[$this->siteid]['mobilehtml']==1) {
+					if($this->sitelist[$this->siteid]['mobilemode']==1 && $this->sitelist[$this->siteid]['mobilehtml']==1) {
+						$mobilepagefile = CMS_PATH.$this->mobile_root.'/'.str_replace(CMS_PATH,'',$pagefile);
 						ob_start();
 						$url = str_replace(array($this->sitelist[$this->siteid]['domain'], 'm=content'), array($this->sitelist[$this->siteid]['mobile_domain'], 'm=mobile'), $url);
 						include template('mobile', $template);
 						$this->createhtml($mobilepagefile);
+					}
+				}
+				//生成手机分页
+				if (!$this->sitelist[$this->siteid]['mobilemode']) {
+					for($i=1; $i<=$pagenumber; $i++) {
+						$upgrade = $upgrade ? '/'.ltrim($file,WEB_PATH) : '';
+						list($pageurls[$i], $showurls[$i]) = $this->url->show($id, $i, $catid, $data['inputtime'],'','','edit',$upgrade,1);
+					}
+					$titles = array();
+					$END_POS = strpos($content, '[/page]');
+					if($END_POS !== false) {
+						if($CONTENT_POS>7) {
+							$content = '[page]'.$title.'[/page]'.$content;
+						}
+						if(preg_match_all("|\[page\](.*)\[/page\]|U", $content, $m, PREG_PATTERN_ORDER)) {
+							foreach($m[1] as $k=>$v) {
+								$p = $k+1;
+								$titles[$p]['title'] = clearhtml($v);
+								$titles[$p]['url'] = $pageurls[$p][0];
+							}
+						}
+					}
+					foreach ($pageurls as $page=>$urls) {
+						$pages = content_pages($pagenumber,$page,$showurls);
+						//判断[page]出现的位置是否在第一位 
+						if($CONTENT_POS<7) {
+							$content = $contents[$page];
+						} else {
+							if ($page==1 && !empty($titles)) {
+								$content = $title.'[/page]'.$contents[$page-1];
+							} else {
+								$content = $contents[$page-1];
+							}
+						}
+						if($titles) {
+							list($title, $content) = explode('[/page]', $content);
+							$content = trim($content);
+							if(strpos($content,'</p>')===0) {
+								$content = '<p>'.$content;
+							}
+							if(stripos($content,'<p>')===0) {
+								$content = $content.'</p>';
+							}
+						}
+						$pagefile = $urls[1];
+						if($this->siteid!=1) {
+							$pagefile = $this->html_root.'/'.$site_dir.$pagefile;
+						}
+						$pagefile = CMS_PATH.$pagefile;
+						if($this->sitelist[$this->siteid]['mobilehtml']==1) {
+							ob_start();
+							$url = str_replace(array($this->sitelist[$this->siteid]['domain'], 'm=content'), array($this->sitelist[$this->siteid]['mobile_domain'], 'm=mobile'), $url);
+							include template('mobile', $template);
+							$this->createhtml($pagefile);
+						}
 					}
 				}
 				return true;
@@ -203,7 +258,7 @@ class html {
 	 * @param $catid 栏目id
 	 * @param $page 当前页数
 	 */
-	public function category($catid, $page = 0) {
+	public function category($catid, $page = 0, $mobile = 0) {
 		$CAT = $this->categorys[$catid];
 		if (strpos($CAT['url'], 'index.php?')!==false) return false;
 		if (is_array($CAT)) {
@@ -281,11 +336,11 @@ class html {
 			if($CAT['isdomain']) {
 				$second_domain = 1;
 				foreach ($urlrules as $_k=>$_v) {
-					$urlrules[$_k] = $_v;
+					$urlrules[$_k] = (!$this->sitelist[$this->siteid]['mobilemode'] && $mobile ? $this->mobile_root : '').$_v;
 				}
 			} else {
 				foreach ($urlrules as $_k=>$_v) {
-					$urlrules[$_k] = '/'.$_v;
+					$urlrules[$_k] = (!$this->sitelist[$this->siteid]['mobilemode'] && $mobile ? $this->mobile_root : '').'/'.$_v;
 				}
 			}
 		} else {
@@ -299,7 +354,7 @@ class html {
 				$this->queue->add_queue('add',$this->html_root.$base_file,$this->siteid);
 			}		
 			//URLRULES
-			$htm_prefix = $root_domain ? '' : $this->html_root;
+			$htm_prefix = $root_domain ? '' : (!$this->sitelist[$this->siteid]['mobilemode'] && $mobile ? $this->mobile_root : '').$this->html_root;
 			$htm_prefix = rtrim(WEB_PATH,'/').$htm_prefix;
 			if($CAT['isdomain']) {
 				$second_domain = 1;
@@ -339,7 +394,15 @@ class html {
 			//URL规则
 			$urlrules = implode('~', $urlrules);
 			
-			define('URLRULE', $urlrules);
+			if (!$mobile) {
+				define('URLRULE', $urlrules);
+			} else {
+				if (!$this->sitelist[$this->siteid]['mobilemode']) {
+					define('URLRULES', $urlrules);
+				} else {
+					define('URLRULE', $urlrules);
+				}
+			}
 			//绑定域名时，设置$catdir 为空
 			if($root_domain) $parentdir = $catdir = '';
 			if($second_domain) {
@@ -359,11 +422,13 @@ class html {
 		ob_start();
 		include template('content',$template);
 		$this->createhtml($file, $copyjs);
-		if($this->sitelist[$this->siteid]['mobilehtml']==1) {
+		if($mobile && $this->sitelist[$this->siteid]['mobilehtml']==1) {
 			ob_start();
 			$url = str_replace(array($this->sitelist[$this->siteid]['domain'], 'm=content'), array($this->sitelist[$this->siteid]['mobile_domain'], 'm=mobile'), $url);
 			include template('mobile',$template);
 			$this->createhtml($mobilefile);
+		} else {
+			$this->category($catid, $page, 1);
 		}
 		return true;
 	}

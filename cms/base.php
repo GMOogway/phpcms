@@ -378,13 +378,11 @@ if (is_cli()) {
 
 	// 伪静态字符串
 	$uu = isset($_SERVER['HTTP_X_REWRITE_URL']) || trim($_SERVER['REQUEST_URI'], '/') == SELF ? trim($_SERVER['HTTP_X_REWRITE_URL'], '/') : ($_SERVER['REQUEST_URI'] ? trim($_SERVER['REQUEST_URI'], '/') : NULL);
-	if (defined('WEB_PATH') && WEB_PATH && strpos($uu, WEB_PATH) !== false &&  strpos($uu, WEB_PATH) === 0) {
-		$uu = trim(substr($uu, strlen(WEB_PATH)), '/');
-		define('WEB_DIR', WEB_PATH);
-	} else if (defined('WEB_PATH') && WEB_PATH) {
-		define('WEB_DIR', WEB_PATH);
+	if (defined('FIX_WEB_DIR') && FIX_WEB_DIR && strpos($uu, FIX_WEB_DIR) !== false &&  strpos($uu, FIX_WEB_DIR) === 0) {
+		$uu = trim(substr($uu, strlen(FIX_WEB_DIR)), '/');
+		define('WEB_DIR', WEB_PATH.trim(FIX_WEB_DIR, '/').'/');
 	} else {
-		define('WEB_DIR', '/');
+		define('WEB_DIR', WEB_PATH);
 	}
 
 	// 以index.php或者?开头的uri不做处理

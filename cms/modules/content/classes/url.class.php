@@ -1,13 +1,14 @@
 <?php
 defined('IN_CMS') or exit('No permission resources.');
 class url{
-	private $urlrules,$categorys,$html_root;
+	private $urlrules,$categorys,$html_root,$mobile_root;
 	public function __construct() {
 		$this->input = pc_base::load_sys_class('input');
 		$this->urlrules = getcache('urlrules','commons');
 		self::set_siteid();
 		$this->categorys = getcache('category_content_'.$this->siteid,'commons');
 		$this->html_root = SYS_HTML_ROOT;
+		$this->mobile_root = SYS_MOBILE_ROOT;
 	}
 
 	/**
@@ -22,7 +23,7 @@ class url{
 	 * @param $upgrade 是否是升级数据
 	 * @return array 0=>url , 1=>生成路径
 	 */
-	public function show($id, $page = 0, $catid = 0, $time = 0, $prefix = '',$data = '',$action = 'edit',$upgrade = 0) {
+	public function show($id, $page = 0, $catid = 0, $time = 0, $prefix = '',$data = '',$action = 'edit',$upgrade = 0,$mobile = 0) {
 		$page = max($page,1);
 		$urls = $showurls = $catdir = '';
 		$category = $this->categorys[$catid];
@@ -80,21 +81,21 @@ class url{
 			}
 			if($content_ishtml && $url) {
 				if ($domain_dir && $category['isdomain']) {
-					$url_arr[1] = $html_root.'/'.$domain_dir.$urls;
+					$url_arr[1] = ($mobile ? $this->mobile_root : '').$html_root.'/'.$domain_dir.$urls;
 					$url_arr[0] = $url.$urls;
-					$showurl_arr[1] = $html_root.'/'.$domain_dir.$showurls;
+					$showurl_arr[1] = ($mobile ? $this->mobile_root : '').$html_root.'/'.$domain_dir.$showurls;
 					$showurl_arr[0] = $url.$showurls;
 				} else {
-					$url_arr[1] = $html_root.'/'.$urls;
-					$url_arr[0] = WEB_PATH == '/' ? $match_url.$html_root.'/'.$urls : $match_url.rtrim(WEB_PATH,'/').$html_root.'/'.$urls;
-					$showurl_arr[1] = $html_root.'/'.$showurls;
-					$showurl_arr[0] = WEB_PATH == '/' ? $match_url.$html_root.'/'.$showurls : $match_url.rtrim(WEB_PATH,'/').$html_root.'/'.$showurls;
+					$url_arr[1] = ($mobile ? $this->mobile_root : '').$html_root.'/'.$urls;
+					$url_arr[0] = WEB_PATH == '/' ? $match_url.($mobile ? $this->mobile_root : '').$html_root.'/'.$urls : $match_url.rtrim(WEB_PATH,'/').($mobile ? $this->mobile_root : '').$html_root.'/'.$urls;
+					$showurl_arr[1] = ($mobile ? $this->mobile_root : '').$html_root.'/'.$showurls;
+					$showurl_arr[0] = WEB_PATH == '/' ? $match_url.($mobile ? $this->mobile_root : '').$html_root.'/'.$showurls : $match_url.rtrim(WEB_PATH,'/').($mobile ? $this->mobile_root : '').$html_root.'/'.$showurls;
 				}
 			} elseif($content_ishtml) {
-				$url_arr[0] = WEB_PATH == '/' ? $html_root.'/'.$urls : rtrim(WEB_PATH,'/').$html_root.'/'.$urls;
-				$url_arr[1] = $html_root.'/'.$urls;
-				$showurl_arr[0] = WEB_PATH == '/' ? $html_root.'/'.$showurls : rtrim(WEB_PATH,'/').$html_root.'/'.$showurls;
-				$showurl_arr[1] = $html_root.'/'.$showurls;
+				$url_arr[0] = WEB_PATH == '/' ? ($mobile ? $this->mobile_root : '').$html_root.'/'.$urls : rtrim(WEB_PATH,'/').($mobile ? $this->mobile_root : '').$html_root.'/'.$urls;
+				$url_arr[1] = ($mobile ? $this->mobile_root : '').$html_root.'/'.$urls;
+				$showurl_arr[0] = WEB_PATH == '/' ? ($mobile ? $this->mobile_root : '').$html_root.'/'.$showurls : rtrim(WEB_PATH,'/').($mobile ? $this->mobile_root : '').$html_root.'/'.$showurls;
+				$showurl_arr[1] = ($mobile ? $this->mobile_root : '').$html_root.'/'.$showurls;
 			} else {
 				$url_arr[0] = $url_arr[1] = APP_PATH.$urls;
 				$showurl_arr[0] = $showurl_arr[1] = APP_PATH.$showurls;
