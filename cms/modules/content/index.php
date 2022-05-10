@@ -184,7 +184,7 @@ class index {
 					$pagenumber--;
 				}
 				for($i=1; $i<=$pagenumber; $i++) {
-					$pageurls[$i] = $this->url->show($id, $i, $catid, $rs['inputtime']);
+					list($pageurls[$i], $showurls[$i]) = $this->url->show($id, $i, $catid, $rs['inputtime']);
 				}
 				$END_POS = strpos($content, '[/page]');
 				if($END_POS !== false) {
@@ -200,7 +200,7 @@ class index {
 					}
 				}
 				//当不存在 [/page]时，则使用下面分页
-				$pages = content_pages($pagenumber,$page,$pageurls,$pageurls);
+				$pages = content_pages($pagenumber,$page,$showurls);
 				//判断[page]出现的位置是否在第一位 
 				if($CONTENT_POS<7) {
 					$content = $contents[$page];

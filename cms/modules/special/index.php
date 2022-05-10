@@ -116,7 +116,7 @@ class index {
 				$pagenumber--;
 			}
 			for ($i=1; $i<=$pagenumber; $i++) {
-				$pageurls[$i] = content_url($id, $i, $inputtime, 'php');
+				list($pageurls[$i], $showurls[$i]) = content_url($id, $i, $inputtime, 'php');
 			}
 			if ($END_POS !== false) {
 				if($CONTENT_POS>7) {
@@ -151,7 +151,7 @@ class index {
 				}
 			}
 			pc_base::load_app_func('util', 'content');
-			$title_pages = content_pages($pagenumber,$page, $pageurls);
+			$title_pages = content_pages($pagenumber,$page,$showurls);
 		}
 		$_special = $this->db->get_one(array('id'=>$specialid), '`title`, `url`, `show_template`, `isvideo`');
 		pc_base::load_sys_class('format', '', 0);

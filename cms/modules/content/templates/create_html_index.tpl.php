@@ -21,7 +21,7 @@ jQuery(document).ready(function() {
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-2 control-label"><?php echo L('手机静态');?></label>
+                <label class="col-md-2 control-label"><?php echo L('移动端与PC端URL同步');?></label>
                 <div class="col-md-9">
                     <label><a href="javascript:;" onclick="dr_ajax_open_close(this, '?m=content&c=create_html&a=public_index_edit&share=0&pc_hash='+pc_hash, 0)" class="badge badge-<?php echo (!$mobilehtml ? 'no' : 'yes');?>"> <i class="fa fa-<?php echo (!$mobilehtml ? 'times' : 'check');?>"></i> </a></label>
                 </div>

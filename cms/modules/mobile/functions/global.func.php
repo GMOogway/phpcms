@@ -63,16 +63,4 @@ function strip_selected_tags($text) {
     }
     return $text;
 }
-
-/**
- * 生成文章分页方法
- */
-
-function mobile_content_pages($num, $curr_page, $pageurls, $showurls) {
-	$input = pc_base::load_sys_class('input');
-	$multipage = '';
-	$first_url = $showurls[1][1];
-	$multipage = $input->page($showurls[2][1], $num, 1, $curr_page, $first_url);
-	return $multipage;
-}
 ?>

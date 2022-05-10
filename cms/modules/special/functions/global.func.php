@@ -32,6 +32,7 @@ function get_css($param = array()) {
 function content_url($contentid = 0, $page = 1, $addtime, $type = 'html', $site_info = '') {
 	if (!$contentid) return '';
 	$url = array();
+	$showurl = array();
 	$page = max(intval($page), 1);
 	$app_path = substr(APP_PATH, 0, -1);
 	switch ($type) {
@@ -40,17 +41,25 @@ function content_url($contentid = 0, $page = 1, $addtime, $type = 'html', $site_
 				if ($page==1) {
 					$url[0] = $site_info['domain'].'special/'.date('Y', $addtime).'/'.date('md', $addtime).'/'.$contentid.'.html';
 					$url[1] = SYS_HTML_ROOT.'/'.$site_info['dirname'].'/special/'.date('Y', $addtime).'/'.date('md', $addtime).'/'.$contentid.'.html';
+					$showurl[0] = $site_info['domain'].'special/'.date('Y', $addtime).'/'.date('md', $addtime).'/'.$contentid.'.html';
+					$showurl[1] = SYS_HTML_ROOT.'/'.$site_info['dirname'].'/special/'.date('Y', $addtime).'/'.date('md', $addtime).'/'.$contentid.'.html';
 				} else {
 					$url[0] = $site_info['domain'].'special/'.date('Y', $addtime).'/'.date('md', $addtime).'/'.$contentid.'-'.$page.'.html';
 					$url[1] = SYS_HTML_ROOT.'/'.$site_info['dirname'].'/special/'.date('Y', $addtime).'/'.date('md', $addtime).'/'.$contentid.'-'.$page.'.html';
+					$showurl[0] = $site_info['domain'].'special/'.date('Y', $addtime).'/'.date('md', $addtime).'/'.$contentid.'-'.$page.'.html';
+					$showurl[1] = SYS_HTML_ROOT.'/'.$site_info['dirname'].'/special/'.date('Y', $addtime).'/'.date('md', $addtime).'/'.$contentid.'-'.$page.'.html';
 				}
 			} else {
 				if ($page==1) {
 					$url[0] = $url[1] = SYS_HTML_ROOT.'/special/'.date('Y', $addtime).'/'.date('md', $addtime).'/'.$contentid.'.html';
 					$url[0] = $app_path.$url[0];
+					$showurl[0] = $url[1] = SYS_HTML_ROOT.'/special/'.date('Y', $addtime).'/'.date('md', $addtime).'/'.$contentid.'.html';
+					$showurl[0] = $app_path.$url[0];
 				} else {
 					$url[0] = $url[1] = SYS_HTML_ROOT.'/special/'.date('Y', $addtime).'/'.date('md', $addtime).'/'.$contentid.'-'.$page.'.html';
 					$url[0] = $app_path.$url[0];
+					$showurl[0] = $url[1] = SYS_HTML_ROOT.'/special/'.date('Y', $addtime).'/'.date('md', $addtime).'/'.$contentid.'-'.$page.'.html';
+					$showurl[0] = $app_path.$url[0];
 				}
 			}
 			break;
@@ -58,12 +67,14 @@ function content_url($contentid = 0, $page = 1, $addtime, $type = 'html', $site_
 		case 'php':
 			if ($page==1) {
 				$url[0] = APP_PATH.'index.php?m=special&c=index&a=show&id='.$contentid;
+				$showurl[0] = APP_PATH.'index.php?m=special&c=index&a=show&id='.$contentid;
 			} else {
 				$url[0] = APP_PATH.'index.php?m=special&c=index&a=show&id='.$contentid.'&page='.$page;
+				$showurl[0] = APP_PATH.'index.php?m=special&c=index&a=show&id='.$contentid.'&page='.$page;
 			}
 			break;
 	}
-	return $url;
+	return array($url,$showurl);
 }
 
 function get_pic_content($pics) {

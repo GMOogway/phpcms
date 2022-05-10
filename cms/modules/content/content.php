@@ -417,7 +417,7 @@ class content extends admin {
 			foreach($ids as $id) {
 				$r = $this->db->get_one(array('id'=>$id));
 				if($content_ishtml && !$r['islink']) {
-					$urls = $this->url->show($id, 0, $r['catid'], $r['inputtime']);
+					list($urls) = $this->url->show($id, 0, $r['catid'], $r['inputtime']);
 					$fileurl = $urls[1];
 					if($this->siteid != 1) {
 						$fileurl = $html_root.'/'.$sitelist[$this->siteid]['dirname'].$fileurl;
@@ -599,7 +599,7 @@ class content extends admin {
 		foreach($ids as $id) {
 			$r = $this->db->get_one(array('id'=>$id));
 			if($content_ishtml && !$r['islink']) {
-				$urls = $this->url->show($id, 0, $r['catid'], $r['inputtime']);
+				list($urls) = $this->url->show($id, 0, $r['catid'], $r['inputtime']);
 				$fileurl = $urls[1];
 				if($this->siteid != 1) {
 					$fileurl = $html_root.'/'.$sitelist[$this->siteid]['dirname'].$fileurl;
@@ -734,7 +734,7 @@ class content extends admin {
 								spend::point($setting['presentpoint'], L('contribute_del_point'), $memberinfo['userid'], $memberinfo['username'], '', '', $flag);
 							}
 							if($setting['content_ishtml'] == '1'){//栏目有静态配置
-  								$urls = $this->url->show($id, 0, $content_info['catid'], $content_info['inputtime'], '',$content_info,'add');
+  								list($urls) = $this->url->show($id, 0, $content_info['catid'], $content_info['inputtime'], '',$content_info,'add');
    								$html->show($urls[1],$urls['data'],0);
  							}
 							//更新到全站搜索
@@ -756,7 +756,7 @@ class content extends admin {
 						}
 						//单篇审核，生成静态
 						if($setting['content_ishtml'] == '1'){//栏目有静态配置
-						$urls = $this->url->show($id, 0, $content_info['catid'], $content_info['inputtime'], '',$content_info,'add');
+						list($urls) = $this->url->show($id, 0, $content_info['catid'], $content_info['inputtime'], '',$content_info,'add');
 						$html->show($urls[1],$urls['data'],0);
 						}
 						//更新到全站搜索
@@ -1159,7 +1159,7 @@ class content extends admin {
 					$pagenumber--;
 				}
 				for($i=1; $i<=$pagenumber; $i++) {
-					$pageurls[$i][0] = SELF.'?m=content&c=content&a=public_preview&steps='.intval($this->input->get('steps')).'&catid='.$catid.'&id='.$id.'&page='.$i;
+					list($pageurls[$i][0]) = SELF.'?m=content&c=content&a=public_preview&steps='.intval($this->input->get('steps')).'&catid='.$catid.'&id='.$id.'&page='.$i;
 					$showurls[$i] = '';
 				}
 				$END_POS = strpos($content, '[/page]');
@@ -1176,7 +1176,7 @@ class content extends admin {
 					}
 				}
 				//当不存在 [/page]时，则使用下面分页
-				$pages = content_pages($pagenumber,$page,$pageurls,$showurls);
+				$pages = content_pages($pagenumber,$page,$showurls);
 				//判断[page]出现的位置是否在第一位 
 				if($CONTENT_POS<7) {
 					$content = $contents[$page];

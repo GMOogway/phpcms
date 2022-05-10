@@ -151,7 +151,7 @@ class content_model extends model {
 						$urls = $this->input->post('linkurl');
 						$urls = str_replace(array('select ',')','\\','#',"'"),' ',$urls);
 					} else {
-						$urls = $this->url->show($newid, 0, $cid, $systeminfo['inputtime'], $data['prefix'],$inputinfo,'add');
+						list($urls) = $this->url->show($newid, 0, $cid, $systeminfo['inputtime'], $data['prefix'],$inputinfo,'add');
 					}
 					$this->table_name = $tablename;
 					$this->update(array('url'=>$urls[0]),array('id'=>$newid));
@@ -271,7 +271,7 @@ class content_model extends model {
 			$systeminfo['url'] = str_replace(array('select ',')','\\','#',"'"),' ',$systeminfo['url']);
 		} else {
 			//更新URL地址
-			$urls = $this->url->show($id, 0, $systeminfo['catid'], $systeminfo['inputtime'], $data['prefix'],$inputinfo,'edit');
+			list($urls) = $this->url->show($id, 0, $systeminfo['catid'], $systeminfo['inputtime'], $data['prefix'],$inputinfo,'edit');
 			$systeminfo['url'] = $urls[0];
 			// 站长工具
 			if (module_exists('bdts')) {

@@ -51,7 +51,7 @@ include $this->admin_tpl('header');
 	<legend><?php echo L('mobile_configuration')?></legend>
 	<table width="100%"  class="table_form">
   <tr>
-    <th><?php echo L('mobile_auto')?>：</th>
+    <th width="120"><?php echo L('mobile_auto')?>：</th>
     <td class="y-bg">
       <div class="mt-radio-inline">
         <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobileauto]" value="1"> <?php echo L('open');?> <span></span></label>
@@ -63,8 +63,8 @@ include $this->admin_tpl('header');
     <th><?php echo L('html_mobile')?>：</th>
     <td class="y-bg">
       <div class="mt-radio-inline">
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilehtml]" value="1"> <?php echo L('open');?> <span></span></label>
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilehtml]" value="0" checked> <?php echo L('close');?> <span></span></label><br><?php echo L('html_mobile_desc')?>
+        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilehtml]" value="1"> <?php echo L('html_mobile_url');?> <span></span></label>
+        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilehtml]" value="0" checked> <?php echo L('dynamic_address');?> <span></span></label><br><?php echo L('html_mobile_desc')?>
       </div>
     </td>
   </tr>

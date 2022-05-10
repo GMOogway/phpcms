@@ -68,7 +68,7 @@ class html {
 				$pagenumber--;
 			}
 			for ($i=1; $i<=$pagenumber; $i++) {
-				$pageurls[$i] = content_url($contentid, $i, $inputtime, 'html', $site_info); 
+				list($pageurls[$i], $showurls[$i]) = content_url($contentid, $i, $inputtime, 'html', $site_info); 
 			}
 			if ($END_POS !== false) {
 				if($CONTENT_POS>7) {
@@ -108,7 +108,7 @@ class html {
 				$file_url = content_url($contentid, $currentpage, $inputtime, 'html', $site_info);
 				if ($currentpage==1) $urls = $file_url;
 				pc_base::load_app_func('util', 'content');
-				$title_pages = content_pages($pagenumber,$currentpage, $pageurls);
+				$title_pages = content_pages($pagenumber,$currentpage,$showurls);
 				$SEO = seo($s_info['siteid'], '', $title);
 				$file = $file_url[1];
 				

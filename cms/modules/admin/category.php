@@ -587,7 +587,7 @@ class category extends admin {
 		if (is_array($result) && !empty($result)) {
 			foreach ($result as $key=>$val) {
 				if($content_ishtml && !$val['islink']) {
-					$urls = $this->url->show($val['id'], 0, $catid, $val['inputtime']);
+					list($urls) = $this->url->show($val['id'], 0, $catid, $val['inputtime']);
 					$fileurl = $urls[1];
 					if($this->siteid != 1) {
 						$fileurl = $html_root.'/'.$sitelist[$this->siteid]['dirname'].$fileurl;

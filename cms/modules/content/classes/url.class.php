@@ -24,7 +24,7 @@ class url{
 	 */
 	public function show($id, $page = 0, $catid = 0, $time = 0, $prefix = '',$data = '',$action = 'edit',$upgrade = 0) {
 		$page = max($page,1);
-		$urls = $catdir = '';
+		$urls = $showurls = $catdir = '';
 		$category = $this->categorys[$catid];
 		$setting = string2array($category['setting']);
 		$content_ishtml = $setting['content_ishtml'];
@@ -68,6 +68,7 @@ class url{
 			$day = date('d',$time);
 			
 			$urls = str_replace(array('{$categorydir}','{$catdir}','{$year}','{$month}','{$day}','{$catid}','{$id}','{$page}'),array($categorydir,$catdir,$year,$month,$day,$catid,$id,$page),$urlrule);
+			$showurls = str_replace(array('{$categorydir}','{$catdir}','{$year}','{$month}','{$day}','{$catid}','{$id}','{$page}'),array($categorydir,$catdir,$year,$month,$day,$catid,$id,'{page}'),$urlrule);
 			$create_to_html_root = $category['create_to_html_root'];
 			
 			if($create_to_html_root || $category['sethtml']) {
@@ -79,15 +80,22 @@ class url{
 				if ($domain_dir && $category['isdomain']) {
 					$url_arr[1] = $html_root.'/'.$domain_dir.$urls;
 					$url_arr[0] = $url.$urls;
+					$showurl_arr[1] = $html_root.'/'.$domain_dir.$showurls;
+					$showurl_arr[0] = $url.$showurls;
 				} else {
 					$url_arr[1] = $html_root.'/'.$urls;
 					$url_arr[0] = WEB_PATH == '/' ? $match_url.$html_root.'/'.$urls : $match_url.rtrim(WEB_PATH,'/').$html_root.'/'.$urls;
+					$showurl_arr[1] = $html_root.'/'.$showurls;
+					$showurl_arr[0] = WEB_PATH == '/' ? $match_url.$html_root.'/'.$showurls : $match_url.rtrim(WEB_PATH,'/').$html_root.'/'.$showurls;
 				}
 			} elseif($content_ishtml) {
 				$url_arr[0] = WEB_PATH == '/' ? $html_root.'/'.$urls : rtrim(WEB_PATH,'/').$html_root.'/'.$urls;
 				$url_arr[1] = $html_root.'/'.$urls;
+				$showurl_arr[0] = WEB_PATH == '/' ? $html_root.'/'.$showurls : rtrim(WEB_PATH,'/').$html_root.'/'.$showurls;
+				$showurl_arr[1] = $html_root.'/'.$showurls;
 			} else {
 				$url_arr[0] = $url_arr[1] = APP_PATH.$urls;
+				$showurl_arr[0] = $showurl_arr[1] = APP_PATH.$showurls;
 			}
 		}
 		//生成静态 ,在添加文章的时候，同时生成静态，不在批量更新URL处调用
@@ -95,8 +103,10 @@ class url{
 			$data['id'] = $id;
 			$url_arr['content_ishtml'] = 1;
 			$url_arr['data'] = $data;
+			$showurl_arr['content_ishtml'] = 1;
+			$showurl_arr['data'] = $data;
 		}
-		return $url_arr;
+		return array($url_arr, $showurl_arr);
 	}
 	
 	/**

@@ -40,7 +40,7 @@ class create_html extends admin {
 
 	private function urls($id, $catid= 0, $inputtime = 0, $prefix = ''){
 		$this->url = pc_base::load_app_class('url');
-		$urls = $this->url->show($id, 0, $catid, $inputtime, $prefix,'','edit');
+		list($urls) = $this->url->show($id, 0, $catid, $inputtime, $prefix,'','edit');
 		//更新到数据库
 		$url = $urls[0];
 		$this->db->update(array('url'=>$url),array('id'=>$id));
@@ -360,7 +360,7 @@ class create_html extends admin {
 						if($r2) $rs = array_merge($rs,$r2);
 						//判断是否为升级或转换过来的数据
 						if(!$rs['upgrade']) {
-							$urls = $this->url->show($rs['id'], '', $rs['catid'], $rs['inputtime']);
+							list($urls) = $this->url->show($rs['id'], '', $rs['catid'], $rs['inputtime']);
 						} else {
 							$urls[1] = $rs['url'];
 						}
@@ -531,7 +531,7 @@ class create_html extends admin {
 						if($r['upgrade']) {
 							$urls[1] = $t['url'];
 						} else {
-							$urls = $this->url->show($t['id'], '', $t['catid'], $t['inputtime']);
+							list($urls) = $this->url->show($t['id'], '', $t['catid'], $t['inputtime']);
 						}
 						if (strpos($t['url'], 'index.php?')!==false) {
 							$class = 'p_error';
@@ -1265,7 +1265,7 @@ class create_html extends admin {
 				if($sethtml) $html_root = '';
 				$setting = string2array($this->categorys[$row['catid']]['setting']);
 				if($setting['content_ishtml'] && !$row['islink']) {
-					$urls = $this->url->show($row['id'], 0, $row['catid'], $row['inputtime']);
+					list($urls) = $this->url->show($row['id'], 0, $row['catid'], $row['inputtime']);
 					$fileurl = $urls[1];
 					if($this->siteid != 1) {
 						$fileurl = $html_root.'/'.$sitelist[$this->siteid]['dirname'].$fileurl;

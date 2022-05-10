@@ -21,9 +21,15 @@ jQuery(document).ready(function() {
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-2 control-label"><?php echo L('手机静态');?></label>
+                <label class="col-md-2 control-label"><?php echo L('移动端与PC端URL同步');?></label>
                 <div class="col-md-9">
                     <label><a href="javascript:;" onclick="dr_ajax_open_close(this, '?m=content&c=create_html&a=public_index_edit&share=0&pc_hash='+pc_hash, 0)" class="badge badge-<?php echo (!$mobilehtml ? 'no' : 'yes');?>"> <i class="fa fa-<?php echo (!$mobilehtml ? 'times' : 'check');?>"></i> </a></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label"><?php echo L('网站首页');?></label>
+                <div class="col-md-9">
+                    <label><button type="button" onclick="dr_admin_menu_ajax('?m=content&c=create_html&a=public_index_ajax', 1)" class="btn blue"> <i class="fa fa-file-o"></i> <?php echo L('生成首页静态文件');?> </button></label>
                 </div>
             </div>
             <div class="form-group">
@@ -34,12 +40,6 @@ jQuery(document).ready(function() {
                     <label><a href="javascript:iframe_show('<?php echo L('一键更新')?>', '?m=content&c=create_html&a=public_sync_index&pc_hash='+pc_hash, '500px', '300px')" class="btn blue"> <i class="fa fa-cog"></i> <?php echo L('一键开启栏目静态')?> </a></label>
                     <label><a href="javascript:iframe_show('<?php echo L('一键更新')?>', '?m=content&c=create_html&a=public_sync2_index&pc_hash='+pc_hash, '500px', '300px')" class="btn red"> <i class="fa fa-cog"></i> <?php echo L('一键关闭栏目静态')?> </a></label>
                     <label><a href="javascript:dr_admin_menu_ajax('?m=admin&c=category&a=public_cache&pc_hash='+pc_hash+'&is_ajax=1',1);" class="btn default"> <i class="fa fa-refresh"></i> <?php echo L('一键更新栏目URL');?> </a></label>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-md-2 control-label"><?php echo L('网站首页');?></label>
-                <div class="col-md-9">
-                    <label><button type="button" onclick="dr_admin_menu_ajax('?m=content&c=create_html&a=public_index_ajax', 1)" class="btn blue"> <i class="fa fa-file-o"></i> <?php echo L('生成首页静态文件');?> </button></label>
                 </div>
             </div>
             <div class="form-group">

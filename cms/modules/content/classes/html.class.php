@@ -125,7 +125,7 @@ class html {
 				}
 				for($i=1; $i<=$pagenumber; $i++) {
 					$upgrade = $upgrade ? '/'.ltrim($file,WEB_PATH) : '';
-					$pageurls[$i] = $this->url->show($id, $i, $catid, $data['inputtime'],'','','edit',$upgrade);
+					list($pageurls[$i], $showurls[$i]) = $this->url->show($id, $i, $catid, $data['inputtime'],'','','edit',$upgrade);
 				}
 				$END_POS = strpos($content, '[/page]');
 				if($END_POS !== false) {
@@ -142,7 +142,7 @@ class html {
 				}
 				//生成分页
 				foreach ($pageurls as $page=>$urls) {
-					$pages = content_pages($pagenumber,$page,$pageurls,$pageurls);
+					$pages = content_pages($pagenumber,$page,$showurls);
 					//判断[page]出现的位置是否在第一位 
 					if($CONTENT_POS<7) {
 						$content = $contents[$page];
