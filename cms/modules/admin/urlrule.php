@@ -11,6 +11,7 @@ class urlrule extends admin {
 		$this->module_db = pc_base::load_model('module_model');
 		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 		$this->siteid = $this->get_siteid();
+		$this->sitelist = getcache('sitelist','commons');
 	}
 	
 	function init () {
@@ -82,8 +83,8 @@ class urlrule extends admin {
 		
 		$show_header = true;
 		$domain = array();
-		$domain[siteurl($this->siteid)] = L('本站电脑域名');
-		sitemobileurl($this->siteid) && $domain[sitemobileurl($this->siteid)] = L('本站手机域名');
+		$domain[$this->sitelist[$this->siteid]['domain']] = L('本站电脑域名');
+		$this->sitelist[$this->siteid]['mobile_domain'] && $domain[$this->sitelist[$this->siteid]['mobile_domain']] = L('本站手机域名');
 
 		$root = WEB_PATH;
 		$server = strtolower($_SERVER['SERVER_SOFTWARE']);
@@ -94,7 +95,7 @@ class urlrule extends admin {
 
 			// 子目录
 			$code.= '###当存在多个子目录格式的域名时，需要多写几组RewriteBase标签：RewriteBase /目录/ '.PHP_EOL;
-			if (!dr_site_value('mobilemode', $this->siteid)) {
+			if (!$this->sitelist[$this->siteid]['mobilemode']) {
 				$code.= 'RewriteEngine On'.PHP_EOL.PHP_EOL;
 				$code.= 'RewriteBase '.$root.'mobile/'.PHP_EOL
 					.'RewriteCond %{REQUEST_FILENAME} !-f'.PHP_EOL
@@ -113,7 +114,7 @@ class urlrule extends admin {
 			$note = '<font color=red><b>将以下代码放到Nginx配置文件中去（如果是绑定了域名，所绑定目录也要配置下面的代码）</b></font>';
 			// 子目录
 			$code = '###当存在多个子目录格式的域名时，需要多写几组location标签：location /目录/ '.PHP_EOL;
-			if (!dr_site_value('mobilemode', $this->siteid)) {
+			if (!$this->sitelist[$this->siteid]['mobilemode']) {
 				$code.= 'location '.$root.'mobile/ { '.PHP_EOL
 					.'    if (-f $request_filename) {'.PHP_EOL
 					.'           break;'.PHP_EOL

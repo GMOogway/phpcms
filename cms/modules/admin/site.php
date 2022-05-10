@@ -107,14 +107,15 @@ class site extends admin {
 			if (!$info['mobilemode']) {
 				$info['mobile_domain'] = $info['domain'].'mobile/';
 			} else {
+				$info['mobile_domain'] = isset($info['mobile_domain']) && trim($info['mobile_domain']) ? trim($info['mobile_domain']) : dr_json(0, L('mobile_domain').L('empty'), array('field' => 'mobile_domain'));
 				if (!empty($info['mobile_domain']) && !preg_match('/http(s?):\/\/(.+)\/$/i', $info['mobile_domain'])) {
-					dr_json(0, L('site_domain').L('site_domain_ex2'), array('field' => 'mobile_domain'));
+					dr_json(0, L('mobile_domain').L('site_domain_ex2'), array('field' => 'mobile_domain'));
 				}
 				if (!empty($info['mobile_domain']) && $this->db->get_one(array('mobile_domain'=>$info['mobile_domain']), 'siteid')) {
-					dr_json(0, L('site_domain').L('exists'), array('field' => 'mobile_domain'));
+					dr_json(0, L('mobile_domain').L('exists'), array('field' => 'mobile_domain'));
 				}
 				if ($info['mobile_domain']==$info['domain']) {
-					dr_json(0, L('site_domain').L('exists'), array('field' => 'mobile_domain'));
+					dr_json(0, L('mobile_domain').L('exists'), array('field' => 'mobile_domain'));
 				}
 			}
 			if (!empty($info['release_point']) && is_array($info['release_point'])) {
@@ -286,14 +287,15 @@ class site extends admin {
 				if (!$info['mobilemode']) {
 					$info['mobile_domain'] = $info['domain'].'mobile/';
 				} else {
+					$info['mobile_domain'] = isset($info['mobile_domain']) && trim($info['mobile_domain']) ? trim($info['mobile_domain']) : dr_json(0, L('mobile_domain').L('empty'), array('field' => 'mobile_domain'));
 					if (!empty($info['mobile_domain']) && !preg_match('/http(s?):\/\/(.+)\/$/i', $info['mobile_domain'])) {
-						dr_json(0, L('site_domain').L('site_domain_ex2'), array('field' => 'mobile_domain'));
+						dr_json(0, L('mobile_domain').L('site_domain_ex2'), array('field' => 'mobile_domain'));
 					}
 					if (!empty($info['mobile_domain']) && $data['mobile_domain'] != $info['mobile_domain'] && $this->db->get_one(array('mobile_domain'=>$info['mobile_domain']), 'siteid')) {
-						dr_json(0, L('site_domain').L('exists'), array('field' => 'mobile_domain'));
+						dr_json(0, L('mobile_domain').L('exists'), array('field' => 'mobile_domain'));
 					}
 					if ($info['mobile_domain']==$info['domain']) {
-						dr_json(0, L('site_domain').L('exists'), array('field' => 'mobile_domain'));
+						dr_json(0, L('mobile_domain').L('exists'), array('field' => 'mobile_domain'));
 					}
 				}
 				if (!empty($info['release_point']) && is_array($info['release_point'])) {
