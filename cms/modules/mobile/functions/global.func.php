@@ -33,10 +33,22 @@ function show_url($url, $catid = '', $id = '') {
 	$siteids = getcache('category_content','commons');
 	$catid && $siteid = $siteids[$catid];
 	!$catid && $siteid = $input->get('siteid') && (intval($input->get('siteid')) > 0) ? intval(trim($input->get('siteid'))) : (param::get_cookie('siteid') ? param::get_cookie('siteid') : 1);
+	$categorys = getcache('category_content_'.$siteid,'commons');
+	$CAT = $categorys[$catid];
+	$setting = string2array($CAT['setting']);
+	$ishtml = $setting['ishtml'];
+	$content_ishtml = $setting['content_ishtml'];
 	if (strstr($url, 'javascript:alert')) {
 		return $url;
 	}
 	if ($sitelist[$siteid]['mobilehtml']==1) {
+		if (!$ishtml && $content_ishtml) {
+			if (!$sitelist[$siteid]['mobilemode']) {
+				return SYS_MOBILE_ROOT.$url;
+			} else {
+				return substr($sitelist[$siteid]['mobile_domain'], 0, -1).$url;
+			}
+		}
 		return str_replace(array($sitelist[$siteid]['domain'], 'm=content'), array($sitelist[$siteid]['mobile_domain'], 'm=mobile'), $url);
 	} else {
 		return $sitelist[$siteid]['mobile_domain'].'index.php?m=mobile&c=index&a=show&catid='.$catid.'&id='.$id;
