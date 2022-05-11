@@ -8,6 +8,7 @@ class mobile_url{
 		self::set_siteid();
 		$this->categorys = getcache('category_content_'.$this->siteid,'commons');
 		$this->html_root = SYS_HTML_ROOT;
+		$this->mobile_root = SYS_MOBILE_ROOT;
 	}
 	/**
 	* 手机内容页链接
@@ -79,6 +80,7 @@ class mobile_url{
 			} else {
 				$html_root = $this->html_root;
 			}
+			!$sitelist[$siteid]['mobilemode'] && $html_root = $this->mobile_root.$this->html_root;
 			if($content_ishtml && $url) {
 				if ($domain_dir && $category['isdomain']) {
 					$url_arr[1] = $html_root.'/'.$domain_dir.$urls;

@@ -52,6 +52,7 @@ class index {
 	//展示列表页
 	public function lists() {
 		$catid = intval($this->input->get('catid'));
+		$sitelist  = getcache('sitelist','commons');
 		if(!$catid){
 			$catid = $this->_getCategoryId($this->input->get('catdir') ? $this->input->get('catdir') : $this->input->get('categorydir'));
 		}
@@ -119,11 +120,10 @@ class index {
 				}
 			}
 			$arrchildid = implode(',', $array_child);
-			$sitelist = getcache('sitelist','commons');
 			if ($sitelist[$siteid]['mobilehtml']==1) {
 				//URL规则
 				$urlrules = getcache('urlrules','commons');
-				if (!$this->sitelist[$this->siteid]['mobilemode']) {
+				if (!$sitelist[$siteid]['mobilemode']) {
 					$urlrules = str_replace('|', '~'.SYS_MOBILE_ROOT.'/', SYS_MOBILE_ROOT.'/'.$urlrules[$category_ruleid]);
 				} else {
 					$urlrules = str_replace('|', '~', $urlrules[$category_ruleid]);
