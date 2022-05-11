@@ -415,6 +415,7 @@ class html {
 			$url_arr[0] = $categoryurl[0];
 			$url_arr[1] = $categoryurl[1];
 			$pagesize = (int)$setting['pagesize'];
+			!$pagesize && $pagesize = 10;
 			$pages = category_pages($pagenumber,$page,$pagesize,$url_arr);
 		} else {
 		//单网页
