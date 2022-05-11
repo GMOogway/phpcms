@@ -210,9 +210,10 @@ final class template_cache {
 					$str .= '$offset = ($page - 1) * $pagesize;';
 					$datas['limit'] = '$offset.",".$pagesize';
 					$datas['action'] = $action;
+					$str .= 'if (!(int)$setting[\'ishtml\']) {';
 					$str .= '$'.$op.'_total = $'.$op.'_tag->count('.self::arr_to_html($datas).');';
 					$str .= '$pages = pages($'.$op.'_total, $page, $pagesize, $urlrule);';
-					$str .= '$mobilepages = mobilepages($'.$op.'_total, $page, $pagesize, $urlrule);';
+					$str .= '}';
 				}
 				$str .= '$'.$return.' = $'.$op.'_tag->'.$action.'('.self::arr_to_html($datas).');';
 				$str .= '}';

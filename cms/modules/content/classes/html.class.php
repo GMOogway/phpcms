@@ -393,8 +393,13 @@ class html {
 			$arrchildid = implode(',', $array_child);
 			//URL规则
 			$urlrules = implode('~', $urlrules);
+			$urlrules_arr = explode('~',$urlrules);
+			$year = date('Y',$time);
+			$month = date('m',$time);
+			$day = date('d',$time);
+			$category_dir = $this->get_categorydir($catid);
+			$categoryurl = str_replace(array('{$categorydir}','{$catdir}','{$year}','{$month}','{$day}','{$catid}','{$page}'),array($category_dir,$CAT['catdir'],$year,$month,$day,$catid,'{page}'),$urlrules_arr);
 			
-			define('URLRULE', $urlrules);
 			//绑定域名时，设置$catdir 为空
 			if($root_domain) $parentdir = $catdir = '';
 			if($second_domain) {
@@ -403,6 +408,14 @@ class html {
 			}
 			
 			$GLOBALS['URL_ARRAY'] = array('categorydir'=>$parentdir, 'catdir'=>$catdir, 'catid'=>$catid);
+			
+			$this->db = pc_base::load_model('content_model');
+			$this->db->set_model($modelid);
+			$pagenumber = $this->db->count(array('catid'=>$catid));
+			$url_arr[0] = $categoryurl[0];
+			$url_arr[1] = $categoryurl[1];
+			$pagesize = (int)$setting['pagesize'];
+			$pages = category_pages($pagenumber,$page,$pagesize,$url_arr);
 		} else {
 		//单网页
 			$datas = $this->page($catid);
@@ -415,6 +428,12 @@ class html {
 		include template('content',$template);
 		$this->createhtml($file, $copyjs);
 		if($this->sitelist[$this->siteid]['mobilehtml']==1) {
+			if($type==0) {
+				$mobile_category = !$this->sitelist[$this->siteid]['mobilemode'] ? $this->mobile_root : '';
+				$url_arr[0] = $mobile_category.$categoryurl[0];
+				$url_arr[1] = $mobile_category.$categoryurl[1];
+				$pages = category_pages($pagenumber,$page,$pagesize,$url_arr);
+			}
 			ob_start();
 			$url = str_replace(array($this->sitelist[$this->siteid]['domain'], 'm=content'), array($this->sitelist[$this->siteid]['mobile_domain'], 'm=mobile'), $url);
 			include template('mobile',$template);
@@ -498,6 +517,22 @@ class html {
 		return $strlen;
 	}
 
+	/**
+	 * 获取父栏目路径
+	 * @param $catid
+	 * @param $dir
+	 */
+	private function get_categorydir($catid, $dir = '') {
+		$setting = array();
+		$setting = string2array($this->categorys[$catid]['setting']);
+		if ($setting['create_to_html_root']) return $dir;
+		if ($this->categorys[$catid]['parentid']) {
+			$dir = $this->categorys[$this->categorys[$catid]['parentid']]['catdir'].'/'.$dir;
+			return $this->get_categorydir($this->categorys[$catid]['parentid'], $dir);
+		} else {
+			return $dir;
+		}
+	}
 	/**
 	 * 设置当前站点id
 	 */
