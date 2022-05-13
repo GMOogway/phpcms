@@ -1329,12 +1329,12 @@ function dr_msg($code, $msg, $url = '', $time = 3, $dialog = '') {
  * 当前URL
  */
 function now_url($url, $siteid = 1, $ismobile = 1, $ishtml = 1) {
-	$siteinfo = siteinfo($siteid);
+	$sitelist = siteinfo($siteid);
 	if ($ishtml) {
 		if ($ismobile) {
-			return $url ? $url : $siteinfo['mobile_domain'];
+			return $url ? $url : $sitelist['mobile_domain'];
 		} else {
-			return $url ? $url : $siteinfo['domain'];
+			return $url ? $url : $sitelist['domain'];
 		}
 	} else {
 		return FC_NOW_URL;
@@ -3755,24 +3755,10 @@ function siteurl($siteid) {
  * @param $siteid   站点id
  */
 function sitemobileurl($siteid) {
-	if(!$siteid) return WEB_PATH.'index.php?m=mobile';
+	if(!$siteid) return WEB_PATH.'mobile';
 	if(empty($sitelist)) $sitelist = siteinfo($siteid);
 	if (!$sitelist) return '';
-	if(!substr($sitelist['mobile_domain'],0,-1)) return substr($sitelist['domain'],0,-1).WEB_PATH.'index.php?m=mobile';
-	/*if ($sitelist['mobilehtml']==1 || $sitelist['mobile_domain']) {
-		return substr($sitelist['mobile_domain'],0,-1);
-	} else {
-		return substr($sitelist['domain'],0,-1).WEB_PATH.'index.php?m=mobile';
-	}*/
-	//if ($sitelist['mobilehtml']==1) {
-		return substr($sitelist['mobile_domain'],0,-1);
-	//} else {
-		//if (defined('IS_MOBILE') && IS_MOBILE) {
-			//return substr($sitelist['mobile_domain'],0,-1);
-		//} else {
-			//return substr($sitelist['domain'],0,-1).WEB_PATH.'index.php?m=mobile';
-		//}
-	//}
+	return substr($sitelist['mobile_domain'],0,-1);
 }
 /**
  * 全局返回消息

@@ -83,8 +83,8 @@ class urlrule extends admin {
 		
 		$show_header = true;
 		$domain = array();
-		$domain[$this->sitelist[$this->siteid]['domain']] = L('本站电脑域名');
-		$this->sitelist[$this->siteid]['mobile_domain'] && $domain[$this->sitelist[$this->siteid]['mobile_domain']] = L('本站手机域名');
+		$domain[siteurl($this->siteid)] = L('本站电脑域名');
+		sitemobileurl($this->siteid) && $domain[sitemobileurl($this->siteid)] = L('本站手机域名');
 
 		$root = WEB_PATH;
 		$server = strtolower($_SERVER['SERVER_SOFTWARE']);
