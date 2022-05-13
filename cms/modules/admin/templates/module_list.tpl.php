@@ -19,6 +19,7 @@ include $this->admin_tpl('header', 'admin');
             <th width="60"></th>
             <th width="330"><?php echo L('modulename')?></th>
 			<th><?php echo L('modulepath')?></th>
+			<th width='150'><?php echo L('moduleauthor')?></th>
 			<th width="80"><?php echo L('versions')?></th>
 			<th width='150'><?php echo L('installdate')?></th>
 			<th width="150"><?php echo L('updatetime')?></th>
@@ -35,6 +36,7 @@ if (is_array($directory)){
 	<td><span class="badge badge-success"> <?php echo $i+1;?> </span></td>
 	<td><?php echo $modules[$d]['name']?></td>
 	<td><?php echo $d?></td>
+	<td><?php echo $modules[$d]['author'] ? $modules[$d]['author'] : '系统';?></td>
 	<td><?php echo $modules[$d]['version']?></td>
 	<td><?php echo dr_date(strtotime($modules[$d]['installdate']), 'Y-m-d', 'red')?></td>
 	<td><?php echo dr_date(strtotime($modules[$d]['updatedate']), 'Y-m-d', 'red')?></td>
@@ -57,6 +59,7 @@ if (is_array($directory)){
 	<td><span class="badge badge-success"> <?php echo $i+1;?> </span></td>
 	<td><?php echo $modulename?></td>
 	<td><?php echo $d?></td>
+	<td><?php echo $author ? $author : '系统';?></td>
 	<td><?php echo $version?></td>
 	<td><?php echo L('uninstall_now')?></td>
 	<td><?php echo L('uninstall_now')?></td>

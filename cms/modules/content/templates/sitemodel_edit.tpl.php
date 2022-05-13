@@ -126,7 +126,7 @@ jQuery(document).ready(function() {
                                         </td>
                                         <td> <div class="input-group" style="width:250px">
                                                 <span class="input-group-btn">
-                                                    <a class="btn btn-success" href="javascript:dr_call_alert();"><?php echo L('回调');?></a>
+                                                    <a class="btn btn-success" href="javascript:help('?m=content&c=sitemodel&a=public_help&pc_hash='+pc_hash);"><?php echo L('回调');?></a>
                                                 </span>
                                             <input class="form-control" type="text" name="setting[list_field][<?php echo $t['field'];?>][func]" value="<?php echo htmlspecialchars($list_field[$t['field']]['func']);?>" />
                                         </div></td>
@@ -239,17 +239,6 @@ if ($('#other').is(':checked')) {
 } else {
     $('#other_tab').hide();
     $('#other_tab2').hide();
-}
-function dr_call_alert() {
-    layer.open({
-        type: 2,
-        title: '<i class="fa fa-question-circle"></i> 在线帮助',
-        shadeClose: true,
-        scrollbar: false,
-        shade: 0,
-        area: ['80%', '90%'],
-        content: '?m=content&c=sitemodel&a=public_help&pc_hash='+pc_hash
-    });
 }
 </script>
 </body>

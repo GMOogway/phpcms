@@ -257,17 +257,6 @@ $("input:radio[name='setting[sendsms]']").click(function (){
         $("#smscontent").show();
     }
 });
-function dr_call_alert() {
-    layer.open({
-        type: 2,
-        title: '<i class="fa fa-question-circle"></i> 在线帮助',
-        shadeClose: true,
-        scrollbar: false,
-        shade: 0,
-        area: ['80%', '90%'],
-        content: '?m=formguide&c=formguide&a=help&pc_hash='+pc_hash
-    });
-}
 </script>
 </body>
 </html>

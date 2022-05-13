@@ -359,7 +359,7 @@ jQuery(document).ready(function() {
                                 </td>
                                 <td> <div class="input-group" style="width:250px">
                                         <span class="input-group-btn">
-                                            <a class="btn btn-success" href="javascript:dr_call_alert();"><?php echo L('回调');?></a>
+                                            <a class="btn btn-success" href="javascript:help('?m=content&c=sitemodel&a=public_help&pc_hash='+pc_hash);"><?php echo L('回调');?></a>
                                         </span>
                                     <input class="form-control" type="text" name="setting[list_field][<?php echo $t['field'];?>][func]" value="<?php echo htmlspecialchars($data['setting']['list_field'][$t['field']]['func']);?>" />
                                 </div></td>
@@ -392,17 +392,6 @@ $(function() {
     $(".field-sort-items").sortable();
     $(".make-switch").bootstrapSwitch();
 });
-function dr_call_alert() {
-    layer.open({
-        type: 2,
-        title: '<i class="fa fa-question-circle"></i> 在线帮助',
-        shadeClose: true,
-        scrollbar: false,
-        shade: 0,
-        area: ['80%', '90%'],
-        content: '?m=content&c=sitemodel&a=public_help&pc_hash='+pc_hash
-    });
-}
 </script>
 <script src="<?php echo JS_PATH;?>layui/layui.js" charset="utf-8"></script>
 <script src="<?php echo CSS_PATH;?>layuimini/js/lay-config.js?v=2.0.0" charset="utf-8"></script>

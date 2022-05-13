@@ -24,6 +24,14 @@ class module extends admin {
 		}
 		define('INSTALL', true);
 		$modules = $this->db->select('', '*', '', '', '', 'module');
+		foreach ($modules as $dir => $path) {
+			if (is_file(PC_PATH.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.$dir.DIRECTORY_SEPARATOR.'install'.DIRECTORY_SEPARATOR.'config.inc.php')) {
+				$cfg = require PC_PATH.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.$dir.DIRECTORY_SEPARATOR.'install'.DIRECTORY_SEPARATOR.'config.inc.php';
+				if ($author) {
+					$modules[$dir]['author'] = $author;
+				}
+			}
+		}
 		$directory = $dirs_arr;
 		include $this->admin_tpl('module_list');
 	}

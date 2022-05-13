@@ -32,7 +32,7 @@ jQuery(document).ready(function() {
                     <ul class="dropdown-menu">
                         <?php $i = 0;
                         foreach ($modules as $module) {
-                        if(in_array($module['module'], array('pay','digg','search','scan','attachment','block','dbsource','template','release','cnzz','comment','mood'))) continue;
+                        if(in_array($module['module'], array('404','bdts','pay','digg','search','scan','attachment','block','dbsource','template','release','cnzz','comment','mood','mobile'))) continue;
                         if (isset($i) && $i) echo '<div class="dropdown-line"></div>';
                         echo '<li><a href='.url_par('module='.$module['module']).' class="dropdown-item"><i class="fa fa-chain"></i> '.$module['name'].'</a></li>';
                         $i++;
@@ -112,7 +112,7 @@ jQuery(document).ready(function() {
                         <td><?php echo $t['catname'];?></td>
                         <td>
                             <a href="javascript:preview('<?php echo $t['filepath'];?>')"><?php echo $t['filename'];?></a>
-                            <a class="btn blue btn-xs" href="javascript:driframe('<?php echo L('改名');?>', '?m=attachment&c=manage&a=pulic_name_edit&aid=<?php echo $t['aid'];?>', '350px', '220px');"><?php echo L('改名');?></a>
+                            <a class="btn blue btn-xs" href="javascript:iframe('<?php echo L('改名');?>', '?m=attachment&c=manage&a=pulic_name_edit&aid=<?php echo $t['aid'];?>', '350px', '220px');"><?php echo L('改名');?></a>
                         </td>
                         <td style="text-align:center"><?php echo $t['fileext'];?></td>
                         <td><?php echo $t['filesize'];?></td>

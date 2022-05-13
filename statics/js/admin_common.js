@@ -688,7 +688,7 @@ function dr_iframe(type, url, width, height, rt) {
 	diag.show();
 }
 // 窗口提交
-function driframe(type, url, width, height, rt) {
+function iframe(type, url, width, height, rt) {
 	if (typeof pc_hash == 'string') url += (url.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
 	if (url.toLowerCase().indexOf("http://") != -1 || url.toLowerCase().indexOf("https://") != -1) {
 	} else {
@@ -1497,6 +1497,39 @@ function dr_ajax_alert_error(HttpRequest, ajaxOptions, thrownError) {
 			content: "<div style=\"padding:10px;\">"+msg+"</div>"
 		});
 	}
+}
+function help(url) {
+	if (typeof pc_hash == 'string') url += (url.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
+	if (url.toLowerCase().indexOf("http://") != -1 || url.toLowerCase().indexOf("https://") != -1) {
+	} else {
+		url = geturlpathname()+url;
+	}
+	layer.open({
+		type: 2,
+		title: '<i class="fa fa-question-circle"></i> 在线帮助',
+		shadeClose: true,
+		scrollbar: false,
+		shade: 0,
+		area: ['80%', '90%'],
+		content: url
+	});
+}
+function dr_help(url) {
+	if (typeof pc_hash == 'string') url += (url.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
+	if (url.toLowerCase().indexOf("http://") != -1 || url.toLowerCase().indexOf("https://") != -1) {
+	} else {
+		url = geturlpathname()+url;
+	}
+	var diag = new Dialog({
+		id:'content_help',
+		title:'<i class="fa fa-question-circle"></i> 在线帮助',
+		url:url,
+		width:'80%',
+		height:'90%',
+		modal:true,
+		draggable:true
+	});
+	diag.show();
 }
 function check_title(linkurl,title) {
 	if (typeof pc_hash == 'string') linkurl += (linkurl.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;

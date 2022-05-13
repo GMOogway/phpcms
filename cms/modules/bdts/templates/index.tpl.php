@@ -12,11 +12,11 @@ include $this->admin_tpl('header','admin');?>
 <div class="right-card-box">
 <form action="?m=bdts&c=bdts&a=del&menuid=<?php echo $this->input->get('menuid');?>" class="form-horizontal" method="post" name="myform" id="myform">
     <div class="table-list">
-        <table class="table" width="100%">
+        <table width="100%">
             <tbody>
             <?php foreach ($list as $t) {?>
             <tr>
-                <td style="text-align:left;padding: 8px;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;"><?php echo $t;?></td>
+                <td><?php echo $t;?></td>
             </tr>
             <?php }?>
             </tbody>
