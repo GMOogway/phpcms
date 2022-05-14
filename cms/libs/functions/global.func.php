@@ -682,24 +682,6 @@ function sys_field($field) {
 	return $rt;
 }
 /**
- * 调用会员详细信息（自定义字段需要手动格式化）
- *
- * @param   intval  $userid    会员userid
- * @param   intval  $name   输出字段
- * @return  string
- */
-function dr_member_info($userid, $name = '') {
-	$member_db = pc_base::load_model('member_model');
-	$data = $member_db->get_one(array('userid'=>$userid));
-	return $name ? $data[$name] : $data;
-}
-
-function dr_member_username_info($username, $name = '') {
-	$member_db = pc_base::load_model('member_model');
-	$data = $member_db->get_one(array('username'=>$username));
-	return $name ? $data[$name] : $data;
-}
-/**
  * 执行函数
  */
 function dr_list_function($func, $value, $param = array(), $data = array(), $field = array(), $name = '') {
@@ -2710,6 +2692,11 @@ function get_nickname($userid='', $field='') {
 	if(is_numeric($userid)) {
 		$member_db = pc_base::load_model('member_model');
 		$memberinfo = $member_db->get_one(array('userid'=>$userid));
+		$member_db->set_model($memberinfo['modelid']);
+		$member_modelinfo = $member_db->get_one(array('userid'=>$userid));
+		if(is_array($member_modelinfo)) {
+			$memberinfo = array_merge($memberinfo, $member_modelinfo);
+		}
 		if(!empty($field) && $field != 'nickname' && isset($memberinfo[$field]) &&!empty($memberinfo[$field])) {
 			$return = $memberinfo[$field];
 		} else {
@@ -2734,10 +2721,14 @@ function get_memberinfo($userid, $field='') {
 	if(!is_numeric($userid)) {
 		return false;
 	} else {
-		static $memberinfo;
 		if (!isset($memberinfo[$userid])) {
 			$member_db = pc_base::load_model('member_model');
 			$memberinfo[$userid] = $member_db->get_one(array('userid'=>$userid));
+			$member_db->set_model($memberinfo[$userid]['modelid']);
+			$member_modelinfo[$userid] = $member_db->get_one(array('userid'=>$userid));
+			if(is_array($member_modelinfo[$userid])) {
+				$memberinfo[$userid] = array_merge($memberinfo[$userid], $member_modelinfo[$userid]);
+			}
 		}
 		if(!empty($field) && !empty($memberinfo[$userid][$field])) {
 			return $memberinfo[$userid][$field];
@@ -2755,16 +2746,49 @@ function get_memberinfo($userid, $field='') {
  */
 function get_memberinfo_buyusername($username, $field='') {
 	if(empty($username)){return false;}
-	static $memberinfo;
 	if (!isset($memberinfo[$username])) {
 		$member_db = pc_base::load_model('member_model');
 		$memberinfo[$username] = $member_db->get_one(array('username'=>$username));
+		$member_db->set_model($memberinfo[$username]['modelid']);
+		$member_modelinfo[$username] = $member_db->get_one(array('userid'=>$memberinfo[$username]['userid']));
+		if(is_array($member_modelinfo[$username])) {
+			$memberinfo[$username] = array_merge($memberinfo[$username], $member_modelinfo[$username]);
+		}
 	}
 	if(!empty($field) && !empty($memberinfo[$username][$field])) {
 		return $memberinfo[$username][$field];
 	} else {
 		return $memberinfo[$username];
 	}
+}
+
+/**
+ * 调用会员详细信息（自定义字段需要手动格式化）
+ *
+ * @param   intval  $userid    会员userid
+ * @param   intval  $name   输出字段
+ * @return  string
+ */
+function dr_member_info($userid, $name = '') {
+	$member_db = pc_base::load_model('member_model');
+	$data = $member_db->get_one(array('userid'=>$userid));
+	$member_db->set_model($data['modelid']);
+	$member_modelinfo = $member_db->get_one(array('userid'=>$userid));
+	if(is_array($member_modelinfo)) {
+		$data = array_merge($data, $member_modelinfo);
+	}
+	return $name && $data[$name] ? $data[$name] : $data;
+}
+
+function dr_member_username_info($username, $name = '') {
+	$member_db = pc_base::load_model('member_model');
+	$data = $member_db->get_one(array('username'=>$username));
+	$member_db->set_model($data['modelid']);
+	$member_modelinfo = $member_db->get_one(array('userid'=>$data['userid']));
+	if(is_array($member_modelinfo)) {
+		$data = array_merge($data, $member_modelinfo);
+	}
+	return $name && $data[$name] ? $data[$name] : $data;
 }
 
 if (!function_exists('dr_letter_avatar')) {
