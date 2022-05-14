@@ -73,6 +73,10 @@ class attachments {
 				$storage = new storage($module,$catid,$siteid);
 				$storage->delete($upload->get_attach_info((int)$p['attachment']), $rt['data']['file']);
 				$rt['data'] = get_attachment($att['aid']);
+				if ($rt['data']) {
+					$rt['data']['name'] = $rt['data']['filename'];
+					$rt['data']['size'] = $rt['data']['filesize'];
+				}
 			}
 		}
 		
@@ -87,9 +91,7 @@ class attachments {
 		
 		if($rt && $data){
 			$fn = intval($this->input->get('CKEditorFuncNum'));
-			$rt['data']['filename'] && $rt['data']['name'] = $rt['data']['filename'];
-			$rt['data']['size'] = $rt['data']['size'] ? format_file_size($rt['data']['size']) : format_file_size($rt['data']['filesize']);
-			$this->upload_json($data['code'],$rt['data']['url'],$rt['data']['name'],$rt['data']['size']);
+			$this->upload_json($data['code'],$rt['data']['url'],$rt['data']['name'],format_file_size($rt['data']['size']));
 			$result = array("uploaded"=>true,
 				"fileName"=>$rt['data']['name'],
 				"url"=>$rt['data']['url'],
@@ -148,6 +150,11 @@ class attachments {
 					$storage = new storage($this->input->post('module'),$this->input->post('catid'),$this->input->post('siteid'));
 					$storage->delete($upload->get_attach_info((int)$p['attachment']), $rt['data']['file']);
 					$rt['data'] = get_attachment($att['aid']);
+					if ($rt['data']) {
+						$rt['data']['name'] = $rt['data']['filename'];
+						$rt['data']['size'] = $rt['data']['filesize'];
+						$rt['data']['ext'] = $rt['data']['fileext'];
+					}
 				}
 			}
 
@@ -165,13 +172,11 @@ class attachments {
 			}
 			
 			if($rt && $data) {
-				if($upload->uploadedfiles[0]['isimage'] || $rt['data']['isimage']) {
+				if($upload->uploadedfiles[0]['isimage'] || $rt['data']['isimage'] || dr_in_array($rt['data']['ext'], array('gif', 'jpg', 'jpeg', 'png', 'bmp', 'webp'))) {
 					$rt['data']['ext'] = 1;
 				}
-				!$rt['data']['ext'] && $rt['data']['ext'] = $rt['data']['fileext'];
 				$rt['data']['id'] = $data['code'];
-				$rt['data']['filename'] && $rt['data']['name'] = $rt['data']['filename'];
-				$rt['data']['size'] = $rt['data']['size'] ? format_file_size($rt['data']['size']) : format_file_size($rt['data']['filesize']);
+				$rt['data']['size'] = format_file_size($rt['data']['size']);
 				dr_json(1, L('att_upload_succ'), $rt['data']);
 			} else {
 				dr_json(0, $rt['msg']);
@@ -262,6 +267,10 @@ class attachments {
 				$storage = new storage($this->input->post('module'),$this->input->post('catid'),$siteid);
 				$storage->delete($upload->get_attach_info((int)$p['attachment']), $rt['data']['file']);
 				$rt['data'] = get_attachment($att['aid']);
+				if ($rt['data']) {
+					$rt['data']['name'] = $rt['data']['filename'];
+					$rt['data']['size'] = $rt['data']['filesize'];
+				}
 			}
 		}
 		
@@ -273,9 +282,7 @@ class attachments {
 			}
 		}
 		
-		$rt['data']['filename'] && $rt['data']['name'] = $rt['data']['filename'];
-		$rt['data']['size'] = $rt['data']['size'] ? format_file_size($rt['data']['size']) : format_file_size($rt['data']['filesize']);
-		$this->upload_json($data['code'],$rt['data']['url'],$rt['data']['name'],$rt['data']['size']);
+		$this->upload_json($data['code'],$rt['data']['url'],$rt['data']['name'],format_file_size($rt['data']['size']));
 		exit(dr_array2string(array('code' => 1, 'msg' => L('上传成功'), 'id' => $data['code'], 'info' => $rt['data'])));
 	}
 	/**

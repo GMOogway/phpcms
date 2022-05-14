@@ -34,6 +34,9 @@ if (defined('SYS_ATTACHMENT_CF') && SYS_ATTACHMENT_CF && $rt['data']['md5']) {
 		$storage = new storage($module,$catid,$siteid);
 		$storage->delete($upload->get_attach_info((int)$input->get('attachment')), $rt['data']['file']);
 		$rt['data'] = get_attachment($att['aid']);
+		if ($rt['data']) {
+			$rt['data']['name'] = $rt['data']['filename'];
+		}
 	}
 }
 
@@ -47,7 +50,7 @@ if (!$data) {
 }
 
 if ($rt && $data) {
-	$title = $rt['data']['filename'] ? $rt['data']['filename'] : $rt['data']['name'];
+	$title = $rt['data']['name'];
 } else {
 	dr_json(0, L('文件上传失败'));
 }
@@ -150,6 +153,9 @@ function readWordToHtml($source, $userid, $siteid, $rid) {
 								$storage = new storage($module,$catid,$siteid);
 								$storage->delete($upload->get_attach_info((int)$input->get('attachment')), $rt['data']['file']);
 								$rt['data'] = get_attachment($att['aid']);
+								if ($rt['data']) {
+									$rt['data']['name'] = $rt['data']['filename'];
+								}
 							}
 						}
 						if (!$data) {
