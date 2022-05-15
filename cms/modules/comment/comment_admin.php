@@ -14,7 +14,7 @@ class comment_admin extends admin {
 	
 	public function init() {
 		$data = $this->comment_setting_db->get_one(array('siteid'=>$this->siteid));
-		if (isset($_POST['dosubmit'])) {
+		if (IS_AJAX_POST) {
 			$guest = isset($_POST['guest']) && intval($_POST['guest']) ? intval($_POST['guest']) : 0;
 			$check = isset($_POST['check']) && intval($_POST['check']) ? intval($_POST['check']) : 0;
 			$code = isset($_POST['code']) && intval($_POST['code']) ? intval($_POST['code']) : 0;
@@ -27,7 +27,7 @@ class comment_admin extends admin {
 				$sql['siteid'] = $this->siteid;
 				$this->comment_setting_db->insert($sql);
 			}
-			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
+			dr_json(1, L('operation_success'), array('url' => '?m=comment&c=comment_admin&a=init&page='.$this->input->post('page').'&pc_hash='.dr_get_csrf_token()));
 		} else {
 			$show_header = true;
 			include $this->admin_tpl('comment_setting');

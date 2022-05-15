@@ -22,10 +22,10 @@
 	 					<li>
 	 						<a class="user_pic"><img src="{get_memberavatar($r['userid'])}" height="35" width="35"></a>
 	 						<div class="comm-right">
-	 							<a class="user_name">{if $r['userid']}{get_nickname($r['userid'])}{else}{$r[username]}{/if}</a>
-	 							<p>{stripcslashes($r[content])}</p>
-	 							<p>{direction($r['direction'])}<span class="comm_time">{format::date($r['creat_at'], 1)}</span> <a href="javascript:reply('{$r[id]}', '{$commentid}');" class="comm_a">回复</a> <a href="javascript:void(0)" onclick="support({$r[id]}, '{$commentid}')" class="comm_a">支持</a>（<font id="support_{$r[id]}">{$r[support]}</font>）</p>
-	 							<div id="reply_{$r[id]}" class="none"></div>
+	 							<a class="user_name">{if $r['userid']}{get_nickname($r['userid'])}{else}{$r['username']}{/if}</a>
+	 							<p>{stripcslashes($r['content'])}</p>
+	 							<p>{direction($r['direction'])}<span class="comm_time">{format::date($r['creat_at'], 1)}</span> <a href="javascript:reply('{$r['id']}', '{$commentid}');" class="comm_a">回复</a> <a href="javascript:void(0)" onclick="support({$r['id']}, '{$commentid}')" class="comm_a">支持</a>（<font id="support_{$r['id']}">{$r['support']}</font>）</p>
+	 							<div id="reply_{$r['id']}" class="none"></div>
 	 						</div>
 	 					</li>
 	 					{/loop}
@@ -55,7 +55,7 @@
 						<div id="yzm" class="yzm">{form::checkcode()}<br />点击图片更换</a></div>
 						<div class="line"></div>
 						{/if}
-	 					<p><input type="submit" class="comment-submit" name="dosubmit" value="发表评论">&nbsp;&nbsp;&nbsp;&nbsp;{if $userid}{get_nickname()} <a href="{APP_PATH}index.php?m=member&c=index&a=logout&forward={urlencode(get_url())}">退出</a>{else}<a href="{APP_PATH}index.php?m=member&c=index&a=login&forward={urlencode(get_url())}" class="blue">登录</a><span> | </span><a href="{APP_PATH}index.php?m=member&c=index&a=register" class="blue">注册</a>  {if !$setting['guest']}<span style="color:red">需要登陆才可发布评论</span>{/if}{/if}</p>
+	 					<p><input type="submit" class="comment-submit" name="dosubmit" value="发表评论">&nbsp;&nbsp;&nbsp;&nbsp;{if $userid}{get_nickname()} <a href="{APP_PATH}index.php?m=member&c=index&a=logout&forward={urlencode(trim(FC_NOW_HOST, '/').WEB_PATH)}">退出</a>{else}<a href="{APP_PATH}index.php?m=member&c=index&a=login&forward={urlencode(trim(FC_NOW_HOST, '/').WEB_PATH)}" class="blue">登录</a><span> | </span><a href="{APP_PATH}index.php?m=member&c=index&a=register" class="blue">注册</a>  {if !$setting['guest']}<span style="color:red">需要登陆才可发布评论</span>{/if}{/if}</p>
 	 					</form>
 	 					</div>
 	 				</div>
@@ -90,7 +90,7 @@ function support(id, commentid) {
 }
 
 function reply(id,commentid) {
-	var str = '<form action="{APP_PATH}index.php?m=comment&c=index&a=post&commentid='+commentid+'&id='+id+'" method="post"><textarea class="textarea" id="content" name="content" placeholder="我来说两句~"></textarea>{if $setting['code']}<div class="line"></div><label>验证码：<input type="text" name="code"  class="input-text" onfocus="var offset = $(this).offset();$(\'#yzm\').css({\'left\': +offset.left-190, \'top\': +offset.top-810});$(\'#yzm\').show();$(\'#yzmText\').data(\'hide\', 1)" onblur=\'$("#yzmText").data("hide", 0);setTimeout("hide_code()", 3000)\' /></label><div class="line"></div>{/if}  <p><input type="submit" class="comment-submit" name="dosubmit" value="发表评论">&nbsp;&nbsp;&nbsp;&nbsp;{if $userid}{get_nickname()} <a href="{APP_PATH}index.php?m=member&c=index&a=logout&forward={urlencode(get_url())}">退出</a>{else}<a href="{APP_PATH}index.php?m=member&c=index&a=login&forward={urlencode(get_url())}" class="blue">登录</a> | <a href="{APP_PATH}index.php?m=member&c=index&a=register" class="blue">注册</a>  {if !$setting['guest']}<span style="color:red">需要登陆才可发布评论</span>{/if}{/if}</p></form>';
+	var str = '<form action="{APP_PATH}index.php?m=comment&c=index&a=post&commentid='+commentid+'&id='+id+'" method="post"><textarea class="textarea" id="content" name="content" placeholder="我来说两句~"></textarea>{if $setting['code']}<div class="line"></div><label>验证码：<input type="text" name="code"  class="input-text" onfocus="var offset = $(this).offset();$(\'#yzm\').css({\'left\': +offset.left-190, \'top\': +offset.top-810});$(\'#yzm\').show();$(\'#yzmText\').data(\'hide\', 1)" onblur=\'$("#yzmText").data("hide", 0);setTimeout("hide_code()", 3000)\' /></label><div class="line"></div>{/if}  <p><input type="submit" class="comment-submit" name="dosubmit" value="发表评论">&nbsp;&nbsp;&nbsp;&nbsp;{if $userid}{get_nickname()} <a href="{APP_PATH}index.php?m=member&c=index&a=logout&forward={urlencode(trim(FC_NOW_HOST, '/').WEB_PATH)}">退出</a>{else}<a href="{APP_PATH}index.php?m=member&c=index&a=login&forward={urlencode(trim(FC_NOW_HOST, '/').WEB_PATH)}" class="blue">登录</a> | <a href="{APP_PATH}index.php?m=member&c=index&a=register" class="blue">注册</a>  {if !$setting['guest']}<span style="color:red">需要登陆才可发布评论</span>{/if}{/if}</p></form>';
 	$('#reply_'+id).html(str).toggle();
 }
 

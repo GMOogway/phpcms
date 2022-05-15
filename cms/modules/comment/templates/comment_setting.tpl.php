@@ -2,36 +2,83 @@
 defined('IS_ADMIN') or exit('No permission resources.'); 
 include $this->admin_tpl('header', 'admin');
 ?>
-<div class="pad-10">
-<form action="?m=comment&c=comment_admin&a=init" method="post" id="myform">
-<fieldset>
-	<legend><?php echo L('comments_module_configuration')?></legend>
-	<table width="100%"  class="table_form">
-    <tr>
-    <th width="130"><?php echo L('comment_on_whether_to_allow_visitors')?>：</th>
-    <td class="y-bg"><label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="guest" value="1" <?php if ($data['guest']){echo 'checked';}?> /><span></span></label></td>
-  </tr>
-    <tr>
-    <th><?php echo L("check_comment")?>：</th>
-    <td class="y-bg"><label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="check" value="1" <?php if ($data['check']){echo 'checked';}?> /><span></span></label></td>
-  </tr>
-    <tr>
-    <th><?php echo L('whether_to_validate')?>：</th>
-    <td class="y-bg"><label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="code" value="1" <?php if ($data['code']){echo 'checked';}?> /><span></span></label></td>
-  </tr>
-  <tr>
-    <th><?php echo L('comments_on_points_awards')?>：</th>
-    <td class="y-bg"><input type="text" name="add_point" value="<?php echo  isset($data['add_point']) ? $data['add_point'] : '0'?>" /> <?php echo L('to_operate')?></td>
-  </tr>
-  <tr>
-    <th><?php echo L('be_deleted_from_the_review_points')?>：</th>
-    <td class="y-bg"><input type="text" name="del_point" value="<?php echo  isset($data['del_point']) ? $data['del_point'] : '0'?>" /> <?php echo L('to_operate')?></td>
-  </tr>
-</table>
-<div class="bk15"></div>
-<input type="submit" id="dosubmit" name="dosubmit" class="button" value="<?php echo L('submit')?>" />
-</fieldset>
+<link rel="stylesheet" href="<?php echo JS_PATH;?>bootstrap-switch/css/bootstrap-switch.min.css" media="all" />
+<script type="text/javascript" src="<?php echo JS_PATH;?>bootstrap-switch/js/bootstrap-switch.min.js"></script>
+<div class="page-content main-content">
+<div class="note note-danger">
+    <p><a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=init&pc_hash='+pc_hash+'&is_ajax=1',1);"><?php echo L('update_cache_all');?></a></p>
+</div>
+<form action="?m=comment&c=comment_admin&a=init" class="form-horizontal" method="post" name="myform" id="myform">
+<input name="page" id="dr_page" type="hidden" value="<?php echo $page;?>">
+<div class="portlet light bordered">
+    <div class="portlet-title tabbable-line">
+        <ul class="nav nav-tabs" style="float:left;">
+            <li<?php if ($page==0) {?> class="active"<?php }?>>
+                <a data-toggle="tab_0" onclick="$('#dr_page').val('0')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('comments_module_configuration').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-cog"></i> <?php if (!is_mobile(0)) {echo L('comments_module_configuration');}?> </a>
+            </li>
+        </ul>
+    </div>
+    <div class="portlet-body form">
+        <div class="tab-content">
+            <div class="tab-pane<?php if ($page==0) {?> active<?php }?>" id="tab_0">
+
+                <div class="form-body">
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('comment_on_whether_to_allow_visitors');?></label>
+                        <div class="col-md-9">
+                            <input type="checkbox" name="guest" value="1"<?php if ($data['guest']){echo ' checked';}?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('check_comment');?></label>
+                        <div class="col-md-9">
+                            <input type="checkbox" name="check" value="1"<?php if ($data['check']){echo ' checked';}?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('whether_to_validate');?></label>
+                        <div class="col-md-9">
+                            <input type="checkbox" name="code" value="1"<?php if ($data['code']){echo ' checked';}?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('comments_on_points_awards');?></label>
+                        <div class="col-md-9">
+                            <label><input class="form-control input-large" type="text" id="add_point" name="add_point" value="<?php echo isset($data['add_point']) ? $data['add_point'] : '0'?>"></label>
+                            <span class="help-block"><?php echo L('to_operate')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('be_deleted_from_the_review_points');?></label>
+                        <div class="col-md-9">
+                            <label><input class="form-control input-large" type="text" id="del_point" name="del_point" value="<?php echo isset($data['del_point']) ? $data['del_point'] : '0'?>"></label>
+                            <span class="help-block"><?php echo L('to_operate')?></span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="portlet-body form myfooter">
+            <div class="form-actions text-center">
+                <button type="button" onclick="dr_ajax_submit('?m=comment&c=comment_admin&a=init&page='+$('#dr_page').val(), 'myform', '2000')" class="btn green"> <i class="fa fa-save"></i> <?php echo L('submit')?></button>
+            </div>
+        </div>
+    </div>
+</div>
 </form>
 </div>
+<script type="text/javascript">
+$('.nav-tabs a').click(function (e) {
+    $('.nav-tabs').find('li').removeClass('active');
+    $('.tab-pane').removeClass('active');
+    $(this).parent().addClass('active');
+    $('#'+$(this).attr("data-toggle")).addClass('active');
+})
+$(function() {
+    $(".make-switch").bootstrapSwitch();
+});
+</script>
 </body>
 </html>
