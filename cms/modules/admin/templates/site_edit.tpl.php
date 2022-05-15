@@ -15,6 +15,7 @@ include $this->admin_tpl('header');
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>hotkeys.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>cookie.js"></script>
 <script type="text/javascript" src="<?php echo JS_PATH?>layui/layui.js"></script>
+<script type="text/javascript">var catid=0</script>
 <div class="pad-10">
 <form action="?m=admin&c=site&a=edit&siteid=<?php echo $siteid?>" method="post" id="myform">
 <input name="dosubmit" type="hidden" value="1">
