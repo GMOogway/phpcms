@@ -3916,7 +3916,7 @@ function check_captcha($id) {
 	}
 	$code = $cache->get_auth_data('web-captcha-'.md5($input->ip_address().$input->get_user_agent()), 1, 300);
 	if ($code && strtolower($data) == strtolower($code)) {
-		$cache->del_auth_data('web-captcha', 1);
+		$cache->del_auth_data('web-captcha-'.md5($input->ip_address().$input->get_user_agent()), 1);
 		return true;
 	}
 	IS_DEV && log_message('debug', '图片验证码验证失败：你输入的是（'.$data.'），正确的是（'.$code.'）');
@@ -3933,7 +3933,7 @@ function check_get_captcha($id) {
 	}
 	$code = $cache->get_auth_data('web-captcha-'.md5($input->ip_address().$input->get_user_agent()), 1, 300);
 	if ($code && strtolower($data) == strtolower($code)) {
-		$cache->del_auth_data('web-captcha', 1);
+		$cache->del_auth_data('web-captcha-'.md5($input->ip_address().$input->get_user_agent()), 1);
 		return true;
 	}
 	IS_DEV && log_message('debug', '图片验证码验证失败：你输入的是（'.$data.'），正确的是（'.$code.'）');

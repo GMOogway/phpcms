@@ -140,6 +140,13 @@ $LANG['alipay_key'] = 'Transaction key';
 $LANG['alipay_partner'] = 'Parter ID';
 $LANG['service_type'] = 'Select interface type';
 
+$LANG['wxpay'] = 'WeChat Pay';
+$LANG['appid'] = 'WeChat public account AppID (AppID)';
+$LANG['wxpay_tip'] = 'WeChat Pay is a third-party payment platform under Tencent Group, dedicated to providing users and enterprises with safe, convenient and professional online payment services.';
+$LANG['appseret'] = 'WeChat Official Account Key (AppSecret)';
+$LANG['machid'] = 'Merchant Account Number (Merchant ID)';
+$LANG['mach_key'] = 'Merchant ID Key (Payment Key)';
+
 $LANG['tenpay_account'] = 'Tenpay client ID';
 $LANG['tenpay_privateKey'] = 'Tenpay private key';
 $LANG['tenpay_authtype'] = 'Select interface type';

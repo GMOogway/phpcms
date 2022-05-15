@@ -13,22 +13,41 @@ class respond {
 	 * return_url get形式响应
 	 */
 	public function respond_get() {
-		if ($_GET['code']){
-			$payment = $this->get_by_code($_GET['code']);
+		if ($this->input->get('code')){
+			$payment = $this->get_by_code($this->input->get('code'));
 			if(!$payment) showmessage(L('payment_failed'));
 			$cfg = unserialize_config($payment['config']);
 			$pay_name = ucwords($payment['pay_code']);
 			pc_base::load_app_class('pay_factory','',0);
 			$payment_handler = new pay_factory($pay_name, $cfg);
-			$return_data = $payment_handler->receive();
-			if($return_data) {
-				if($return_data['order_status'] == 0) {				
-					$this->update_member_amount_by_sn($return_data['order_id']);
+			$return_data = $payment_handler->receive();//获取订单的信息
+			//判断支付方式 进行不同的方式修改
+			if($pay_name=="Wxpay"){
+				if($return_data) {
+					//支付成功
+					if($return_data['status'] == 'succ') {				//$return_data['status'] == 'succ'
+						$this->update_member_amount_by_sn($return_data['trade_sn']);//更新账户余额
+						//修改支付的状态
+						$a = $this->update_recode_status_by_sn($return_data['trade_sn'],$return_data['status']);
+						//删除二维码支付图片
+						unlink(WEB_PATH.$return_data['trade_sn'].'pay.png');
+						//返回成功的通知
+						$tips['code']=0;
+						$tips['tips']="恭喜您，支付成功";
+						echo json_encode($tips);
+					}
 				}
-				$this->update_recode_status_by_sn($return_data['order_id'],$return_data['order_status']);
-				showmessage(L('pay_success'),APP_PATH.'index.php?m=pay&c=deposit');
-			} else {
-				showmessage(L('pay_failed'),APP_PATH.'index.php?m=pay&c=deposit');
+			}else{
+				if($return_data) {
+					if($return_data['order_status'] == 0) {				
+						$this->update_member_amount_by_sn($return_data['order_id']);//更新账户余额
+					}
+					//修改支付的状态
+					$this->update_recode_status_by_sn($return_data['order_id'],$return_data['order_status']);
+					showmessage(L('pay_success'),APP_PATH.'index.php?m=pay&c=deposit');
+				} else {
+					showmessage(L('pay_failed'),APP_PATH.'index.php?m=pay&c=deposit');
+				}
 			}
 		} else {
 			showmessage(L('pay_success'));
@@ -39,10 +58,10 @@ class respond {
 	 * 服务器端 POST形式响应
 	 */
 	public function respond_post() {
-		$_POST['code'] = $this->input->post('code') ? $_POST['code'] : $_GET['code'];
-		if ($_POST['code']){
-			$payment = $this->get_by_code($_POST['code']);
-			if(!$payment) error_log(date('m-d H:i:s',SYS_TIME).'| POST: payment is null |'."\r\n", 3, CACHE_PATH.'pay_error_log.php');
+		$code = $this->input->post('code') ? $this->input->post('code') : $this->input->get('code');
+		if ($code){
+			$payment = $this->get_by_code($code);
+			if(!$payment) error_log(date('m-d H:i:s',SYS_TIME).'| POST: payment is null |'."\r\n", 3, CACHE_PATH.'pay_error_log.php');;
 			$cfg = unserialize_config($payment['config']);
 			$pay_name = ucwords($payment['pay_code']);
 			pc_base::load_app_class('pay_factory','',0);
@@ -84,6 +103,7 @@ class respond {
 		$data = $userinfo = array();
 		$this->member_db = pc_base::load_model('member_model');
 		$orderinfo = $this->get_userinfo_by_sn($trade_sn);
+	
 		$userinfo = $this->member_db->get_one(array('userid'=>$orderinfo['userid']));
 		if($orderinfo){
 			$money = floatval($orderinfo['money']);
@@ -104,8 +124,16 @@ class respond {
 		$trade_sn = trim($trade_sn);
 		$this->account_db = pc_base::load_model('pay_account_model');
 		$result = $this->account_db->get_one(array('trade_sn'=>$trade_sn));
-		$status_arr = array('succ','failed','error','timeout','cancel');
-		return ($result && !in_array($result['status'],$status_arr)) ? $result : false;
+	    //根据payid来获取支付的类型
+	    $db = pc_base::load_model('pay_payment_model');
+	    $info = $db->get_one(array('pay_id'=>$result['pay_id']));
+	    if($info['pay_code']=="Wxpay"){
+		    return $result? $result : false;
+	    }else{
+	        $status_arr = array('succ','failed','error','timeout','cancel');
+		    return ($result && !in_array($result['status'],$status_arr)) ? $result : false;
+	    }
+		
 	}
 	
 	/**

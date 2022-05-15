@@ -146,6 +146,13 @@ $LANG['alipay_key'] = '交易安全校验码(key)';
 $LANG['alipay_partner'] = '合作者身份(parterID)';
 $LANG['service_type'] = '选择接口类型';
 
+$LANG['wxpay'] = '微信支付';
+$LANG['appid'] = '微信公众号AppID(AppID)';
+$LANG['wxpay_tip'] = '微信支付是腾讯集团旗下的第三方支付平台，致力于为用户和企业提供安全、便捷、专业的在线支付服务。';
+$LANG['appseret'] = '微信公众号密钥(AppSecret)';
+$LANG['machid'] = '商户账号(商户ID)';
+$LANG['mach_key'] = '商户号密钥(支付Key)';
+
 $LANG['tenpay_account'] = '财付通客户号';
 $LANG['tenpay_privateKey'] = '财付通私钥';
 $LANG['tenpay_authtype'] = '选择接口类型';

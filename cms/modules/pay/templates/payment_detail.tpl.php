@@ -76,7 +76,7 @@ $(function(){
 </tr>
 <tr>
 <td  width="120"><?php echo L('listorder')?></td> 
-<td><input type="text" name="pay_order" value="<?php echo $pay_order?>" class="input-text" id="pay_order" size="3"></input></td>
+<td><label><input type="text" name="pay_order" value="<?php echo $pay_order?>" class="input-text" id="pay_order"></label></td>
 </tr>
 <tr>
 <td  width="120"><?php echo L('online')?>?</td> 
@@ -92,10 +92,10 @@ $(function(){
 <tr><td></td>
 <td>
 <div id="rate" <?php echo ($pay_method == 0) ? '': 'class="hidden"'?>>
-<?php echo L('pay_rate')?><input type="text" size="3" value="<?php echo $pay_fee?>" name="pay_rate">&nbsp;%&nbsp;&nbsp;&nbsp;&nbsp;<?php echo L('pay_method_rate_desc')?>
+<?php echo L('pay_rate')?><label><input type="text" size="3" value="<?php echo $pay_fee?>" name="pay_rate"></label>&nbsp;%&nbsp;&nbsp;&nbsp;&nbsp;<?php echo L('pay_method_rate_desc')?>
 </div>
 <div id="fix" <?php echo ($pay_method == 1) ? '': 'class="hidden"'?>>
-<?php echo L('pay_fix')?><input type="text" name="pay_fix" size="3" value="<?php echo $pay_fee?>">&nbsp;&nbsp;&nbsp;&nbsp; <?php echo L('pay_method_fix_desc')?>
+<?php echo L('pay_fix')?><label><input type="text" name="pay_fix" size="3" value="<?php echo $pay_fee?>"></label>&nbsp;&nbsp;&nbsp;&nbsp; <?php echo L('pay_method_fix_desc')?>
 </div>
 </td>
 </tr>
