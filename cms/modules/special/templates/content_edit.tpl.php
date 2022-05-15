@@ -15,17 +15,17 @@ $p = dr_authcode(array(
 	'image_reduce' => '',
 ), 'ENCODE');
 ?>
-<link rel="stylesheet" href="<?php echo JS_PATH?>layui/css/layui.css" media="all" />
+<?php echo load_css(JS_PATH.'layui/css/layui.css');?>
 <script type="text/javascript">
 <!--
 	var charset = '<?php echo CHARSET?>';
 	var uploadurl = '<?php echo SYS_UPLOAD_URL;?>';
 //-->
 </script>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>content_addtop.js"></script>
-<link href="<?php echo JS_PATH?>jquery-minicolors/jquery.minicolors.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="<?php echo JS_PATH?>jquery-minicolors/jquery.minicolors.min.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>cookie.js"></script>
+<?php echo load_js(JS_PATH.'content_addtop.js');?>
+<?php echo load_css(JS_PATH.'jquery-minicolors/jquery.minicolors.css');?>
+<?php echo load_js(JS_PATH.'jquery-minicolors/jquery.minicolors.min.js');?>
+<?php echo load_js(JS_PATH.'cookie.js');?>
 <div class="page-container" style="margin-bottom: 0px !important;">
     <div class="page-content-wrapper">
         <div class="page-content page-content3 mybody-nheader main-content">

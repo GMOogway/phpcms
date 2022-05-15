@@ -62,10 +62,7 @@ class form {
 		}
 		$str ='';
 		if (SYS_EDITOR) {
-			if(!defined('EDITOR_INIT')) {
-				$str = '<script type="text/javascript" src="'.JS_PATH.'ckeditor/ckeditor.js"></script>';
-				define('EDITOR_INIT', 1);
-			}
+			$str = load_js(JS_PATH.'ckeditor/ckeditor.js');
 			if($toolbar == 'basic') {
 				$tool = defined('IS_ADMIN') && IS_ADMIN ? "['Source']," : '';
 				$tool .= "['Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink' ],['Maximize'],\r\n";
@@ -134,11 +131,8 @@ class form {
 			$str .= "});\r\n";
 			$str .= '</script>';
 		} else {
-			if(!defined('EDITOR_INIT')) {
-				$str .= '<script type="text/javascript" src="'.JS_PATH.'ueditor/ueditor.config.js"></script>';
-				$str .= '<script type="text/javascript" src="'.JS_PATH.'ueditor/ueditor.all.js"></script>';
-				define('EDITOR_INIT', 1);
-			}
+			$str .= load_js(JS_PATH.'ueditor/ueditor.config.js');
+			$str .= load_js(JS_PATH.'ueditor/ueditor.all.js');
 			if($toolbar == 'basic') {
 				$tool = defined('IS_ADMIN') && IS_ADMIN ? "['Source'," : '[';
 				$tool .= "'Bold', 'Italic', '|', 'InsertOrderedList', 'InsertUnorderedList', '|', 'Link', 'Unlink' ]";
@@ -221,10 +215,7 @@ class form {
 			$ext_str .= '</div>';
 		}
 		$ext_str .= "<div class='editor_bottom'>";
-		if(!defined('IMAGES_INIT')) {
-			$ext_str .= '<script type="text/javascript" src="'.JS_PATH.'h5upload/h5editor.js"></script>';
-			define('IMAGES_INIT', 1);
-		}
+		$ext_str .= load_js(JS_PATH.'h5upload/h5editor.js');
 		$ext_str .= "<div class='cke_footer'>";
 		if ($show_page=="true") {
 			$ext_str .= "<a href='javascript:insert_page(\"$textareaid\")' class=\"btn blue btn-sm\"> <i class=\"fa fa-plus\"></i> ".L('pagebreak')."</a><a href='javascript:insert_page_title(\"$textareaid\")' class=\"btn green btn-sm\"> <i class=\"fa fa-indent\"></i> ".L('subtitle')."</a>";
@@ -267,10 +258,7 @@ class form {
 		if(!empty($thumb_setting) && count($thumb_setting)) $thumb_ext = $thumb_setting[0].','.$thumb_setting[1];
 		else $thumb_ext = ',';
 		if(!$alowexts) $alowexts = 'jpg|jpeg|gif|bmp|png';
-		if(!defined('IMAGES_INIT')) {
-			$str = '<script type="text/javascript" src="'.JS_PATH.'h5upload/h5editor.js"></script>';
-			define('IMAGES_INIT', 1);
-		}
+		$str = load_js(JS_PATH.'h5upload/h5editor.js');
 		$value = new_html_special_chars($value);
 		$authkey = upload_key("$siteid,1,$alowexts,$upload_maxsize,1,$thumb_ext,$watermark_setting,$attachment,$image_reduce");
 		$p = dr_authcode(array(
@@ -312,10 +300,7 @@ class form {
 		if(!empty($file_setting) && count($file_setting)) $file_ext = $file_setting[0].','.$file_setting[1];
 		else $file_ext = ',';
 		if(!$alowexts) $alowexts = 'rar|zip';
-		if(!defined('IMAGES_INIT')) {
-			$str = '<script type="text/javascript" src="'.JS_PATH.'h5upload/h5editor.js"></script>';
-			define('IMAGES_INIT', 1);
-		}
+		$str = load_js(JS_PATH.'h5upload/h5editor.js');
 		$authkey = upload_key("$siteid,1,$alowexts,$upload_maxsize,1,$file_ext,,$attachment,$image_reduce");
 		$p = dr_authcode(array(
 			'siteid' => $siteid,
@@ -350,15 +335,10 @@ class form {
 			$width = is_mobile(0) ? '100%' : ($width ? $width : 200);
 			// 风格
 			$style = 'style="width:'.$width.(is_numeric($width) ? 'px' : '').';"';
-			if($loadjs || !defined('CALENDAR_INIT')) {
-				if(!defined('CALENDAR_INIT')) {
-					define('CALENDAR_INIT', 1);
-				}
-				$str .= '<link href="'.JS_PATH.'bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
-				<link href="'.JS_PATH.'bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css" />
-				<script src="'.JS_PATH.'bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
-				<script src="'.JS_PATH.'bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>';
-			}
+			$str .= load_css(JS_PATH.'bootstrap-datepicker/css/bootstrap-datepicker.min.css');
+			$str .= load_css(JS_PATH.'bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css');
+			$str .= load_js(JS_PATH.'bootstrap-datepicker/js/bootstrap-datepicker.min.js');
+			$str .= load_js(JS_PATH.'bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js');
 			$model_db = pc_base::load_model('sitemodel_model');
 			$model = $model_db->get_one(array('modelid'=>$modelid));
 			$module_setting = dr_string2array($model['setting']);
@@ -428,13 +408,8 @@ class form {
 			if ($value == 'SYS_TIME') {
 				$value = dr_date(SYS_TIME, $format);
 			}
-			if($loadjs || !defined('CALENDAR_INIT')) {
-				if(!defined('CALENDAR_INIT')) {
-					define('CALENDAR_INIT', 1);
-				}
-				$str .= '<link href="'.JS_PATH.'bootstrap-timepicker/css/bootstrap-timepicker.min.css" rel="stylesheet" type="text/css" />
-				<script src="'.JS_PATH.'bootstrap-timepicker/js/bootstrap-timepicker.min.js" type="text/javascript"></script>';
-			}
+			$str .= load_css(JS_PATH.'bootstrap-timepicker/css/bootstrap-timepicker.min.css');
+			$str .= load_js(JS_PATH.'bootstrap-timepicker/js/bootstrap-timepicker.min.js');
 			$shuru = '<input type="text" name="'.$name.'" id="'.$id.'" '.$style.' value="'.$value.'" class="form-control timepicker dateright field_time_'.$id.'">';
 			$tubiao = '<span class="input-group-btn">
 				<button class="btn default"'.($color ? ' style="color: '.$color.';"' : '').' type="button">

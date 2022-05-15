@@ -19,13 +19,8 @@
 				}
 			}
 		}
-		if(!defined('JQUERYUI_INIT')) {
-			$string = '<link rel="stylesheet" href="'.JS_PATH.'jquery-ui/jquery-ui.min.css">
-			<script type="text/javascript" src="'.JS_PATH.'jquery-ui/jquery-ui.min.js"></script>';
-			define('JQUERYUI_INIT', 1);
-		} else {
-			$string = '';
-		}
+		$string = load_css(JS_PATH.'jquery-ui/jquery-ui.min.css');
+		$string .= load_js(JS_PATH.'jquery-ui/jquery-ui.min.js');
 		$string .= '<script type=text/javascript>
 		function add'.$field.'(id){
 			var html = "<tr>';

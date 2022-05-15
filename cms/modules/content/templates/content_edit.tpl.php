@@ -1,18 +1,18 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');?>
-<link rel="stylesheet" href="<?php echo JS_PATH?>layui/css/layui.css" media="all" />
+<?php echo load_css(JS_PATH.'layui/css/layui.css');?>
 <script type="text/javascript">
 <!--
 	var charset = '<?php echo CHARSET;?>';
 	var uploadurl = '<?php echo SYS_UPLOAD_URL;?>';
 //-->
 </script>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>content_addtop.js"></script>
-<link href="<?php echo JS_PATH?>jquery-minicolors/jquery.minicolors.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="<?php echo JS_PATH?>jquery-minicolors/jquery.minicolors.min.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>hotkeys.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>cookie.js"></script>
+<?php echo load_js(JS_PATH.'content_addtop.js');?>
+<?php echo load_css(JS_PATH.'jquery-minicolors/jquery.minicolors.css');?>
+<?php echo load_js(JS_PATH.'jquery-minicolors/jquery.minicolors.min.js');?>
+<?php echo load_js(JS_PATH.'hotkeys.js');?>
+<?php echo load_js(JS_PATH.'cookie.js');?>
 <script type="text/javascript">var catid=<?php echo $catid;?></script>
 <div class="page-container" style="margin-bottom: 0px !important;">
     <div class="page-content-wrapper">

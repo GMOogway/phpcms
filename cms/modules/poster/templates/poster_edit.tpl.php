@@ -180,4 +180,4 @@ $(document).ready(function(){
 	<?php } }?>
 });
 </script>
-<script type="text/javascript" src="<?php echo JS_PATH?>h5upload/h5editor.js"></script>
+<?php echo load_js(JS_PATH.'h5upload/h5editor.js');?>

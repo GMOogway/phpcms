@@ -15,13 +15,8 @@
 		} else {
 			$list_str .= "<center><div class='onShow' id='nameTip'>".L('upload_pic_max', '', 'content')." <font color='red'>{$upload_number}</font> ".L('tips_pics', '', 'content')."</div></center>";
 		}
-		if(!defined('JQUERYUI_INIT')) {
-			$string = '<link rel="stylesheet" href="'.JS_PATH.'jquery-ui/jquery-ui.min.css">
-			<script type="text/javascript" src="'.JS_PATH.'jquery-ui/jquery-ui.min.js"></script>';
-			define('JQUERYUI_INIT', 1);
-		} else {
-			$string = '';
-		}
+		$string = load_css(JS_PATH.'jquery-ui/jquery-ui.min.css');
+		$string .= load_js(JS_PATH.'jquery-ui/jquery-ui.min.js');
 		$string .= '<input name="info['.$field.']" type="hidden" value="1">
 		<fieldset class="blue pad-10">
         <legend>'.L('pic_list').'</legend>';
@@ -33,12 +28,7 @@
 		$string .= '</fieldset><script type="text/javascript">$("#'.$field.'").sortable();</script>
 		<div class="bk10"></div>
 		';
-		if(!defined('IMAGES_INIT')) {
-			$str = '<script type="text/javascript" src="'.JS_PATH.'h5upload/h5editor.js"></script>';
-			define('IMAGES_INIT', 1);
-		} else {
-			$str = '';
-		}
+		$str = load_js(JS_PATH.'h5upload/h5editor.js');
 		$authkey = upload_key($this->input->get('siteid').",$upload_number,$upload_allowext,$upload_maxsize,$isselectimage,,,,$attachment,$image_reduce");
 		$p = dr_authcode(array(
 			'siteid' => $this->input->get('siteid'),

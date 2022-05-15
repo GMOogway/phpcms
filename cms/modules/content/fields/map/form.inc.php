@@ -11,11 +11,8 @@
 		$level = $setting['level'] ? $setting['level'] : 15;
 		$errortips = $this->fields[$field]['errortips'];
 		$modelid = $this->fields[$field]['modelid'];
-		if(!defined('BAIDUMAP_INIT')) {
-            $str = '<script type="text/javascript" src="'.(strpos(FC_NOW_URL, 'https') === 0 ? 'https' : 'http').'://api.map.baidu.com/api?v=2.0&ak='.SYS_BDMAP_API.'"></script>
-			<script type="text/javascript" src="'.JS_PATH.'baidumap.js"></script>';
-            define('BAIDUMAP_INIT', 1);
-        }
+		$str = load_js((strpos(FC_NOW_URL, 'https') === 0 ? 'https' : 'http').'://api.map.baidu.com/api?v=2.0&ak='.SYS_BDMAP_API);
+		$str .= load_js(JS_PATH.'baidumap.js');
 		// 获取当前坐标
 		$default = '';
 		if (!$value) {

@@ -1,10 +1,7 @@
 	function word($field, $value, $fieldinfo) {
 		extract($fieldinfo);
 		$setting = string2array($setting);
-		if(!defined('LAYUI_INIT')) {
-			$str = '<script type="text/javascript" src="'.JS_PATH.'layui/layui.js"></script>';
-			define('LAYUI_INIT', 1);
-		}
+		$str = load_js(JS_PATH.'layui/layui.js');
 		$str .= '<script>';
 		$str .= 'layui.use(\'upload\', function () {';
 		$str .= '	var upload = layui.upload;';

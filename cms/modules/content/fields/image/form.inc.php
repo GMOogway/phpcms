@@ -1,12 +1,7 @@
 	function image($field, $value, $fieldinfo) {
 		$setting = string2array($fieldinfo['setting']);
 		extract($setting);
-		if(!defined('IMAGES_INIT')) {
-			$str = '<script type="text/javascript" src="'.JS_PATH.'h5upload/h5editor.js"></script>';
-			define('IMAGES_INIT', 1);
-		} else {
-			$str = '';
-		}
+		$str = load_js(JS_PATH.'h5upload/h5editor.js');
 		$html = '';
 		if (defined('IS_ADMIN') && IS_ADMIN) {
 			$html = "<label><button type=\"button\" onclick=\"crop_cut_".$field."($('#$field').val());return false;\" class=\"btn blue btn-sm\"> <i class=\"fa fa-cut\"></i> ".L('cut_the_picture','','content')."</button></label> <label><button type=\"button\" onclick=\"$('#".$field."_preview').attr('src','".IMG_PATH."icon/upload-pic.png');$('#".$field."').val('');return false;\" class=\"btn red btn-sm\"> <i class=\"fa fa-trash\"></i> ".L('cancel_the_picture','','content')."</button></label><script type=\"text/javascript\">function crop_cut_".$field."(id){

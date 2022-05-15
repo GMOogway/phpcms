@@ -44,7 +44,7 @@ class xml {
 			ob_start();
 			echo "<?xml version=\"1.0\" encoding=\"".CHARSET."\"?>\n<root>","\n";
 		}
-		while(list($key, $value) = each($data)) {
+		foreach ($data as $key => $value) {
 			if(!strpos($key, ' attr')) {
 				if(is_array($value) and array_key_exists(0, $value)) {
 					$this->xml_serialize($value, $level, $key);    
@@ -52,7 +52,7 @@ class xml {
 					$tag = $prior_key ? $prior_key : (is_numeric($key) ? 'item' : $key);
 					echo str_repeat("\t", $level),'<',$tag;
 					if(array_key_exists("$key attr", $data)) {
-						while(list($attr_name, $attr_value) = each($data["$key attr"])) {
+						foreach ($data["$key attr"] as $attr_name => $attr_value) {
 							echo ' ',$attr_name,'="',new_html_special_chars($attr_value),'"';
 						}
 						reset($data["$key attr"]);   

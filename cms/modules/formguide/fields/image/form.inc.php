@@ -1,12 +1,8 @@
 	function image($field, $value, $fieldinfo) {
 		$setting = string2array($fieldinfo['setting']);
 		extract($setting);
-		if(!defined('IMAGES_INIT')) {
-			$str = '<script type="text/javascript" src="'.JS_PATH.'h5upload/h5editor.js"></script><script language="javascript" type="text/javascript" src="'.JS_PATH.'content_addtop.js"></script>';
-			define('IMAGES_INIT', 1);
-		} else {
-			$str = '';
-		}
+		$str = load_js(JS_PATH.'h5upload/h5editor.js');
+		$str = load_js(JS_PATH.'content_addtop.js');
 		$authkey = upload_key($this->input->get('siteid').",1,$upload_allowext,$upload_maxsize,$isselectimage,$images_width,$images_height,,$attachment,$image_reduce");
 		$p = dr_authcode(array(
 			'siteid' => $this->input->get('siteid'),

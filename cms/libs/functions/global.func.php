@@ -840,13 +840,8 @@ function dr_dir_delete($path, $del_dir = FALSE, $htdocs = FALSE, $_level = 0) {
 // 颜色选取
 function color_select($name, $color) {
 	$id = preg_match("/\[(.*)\]/", $name, $m) ? $m[1] : $name;
-	if(!defined('MINICOLORS_INIT')) {
-		$str = '<link href="'.JS_PATH.'jquery-minicolors/jquery.minicolors.css" rel="stylesheet" type="text/css" />';
-		$str.= '<script type="text/javascript" src="'.JS_PATH.'jquery-minicolors/jquery.minicolors.min.js"></script>';
-		define('MINICOLORS_INIT', 1);
-	} else {
-		$str = '';
-	}
+	$str = load_css(JS_PATH.'jquery-minicolors/jquery.minicolors.css');
+	$str .= load_js(JS_PATH.'jquery-minicolors/jquery.minicolors.min.js');
 	$str.= '
 	<input type="text" class="form-control color input-text" name="'.$name.'" id="dr_'.$id.'" value="'.$color.'">';
 	$str.= '
@@ -1351,12 +1346,21 @@ function dr_sorting($name) {
 	}
 	return 'order_sorting';
 }
+// 动态加载css
+function load_css($css) {
+	if (!defined($css)) {
+		define($css, 1);
+		return '<link href=\''.$css.'\' rel=\'stylesheet\' type=\'text/css\' />'.PHP_EOL;
+	}
+	return '';
+}
 // 动态加载js
 function load_js($js) {
 	if (!defined($js)) {
 		define($js, 1);
-		return '<script type=\'text/javascript\' src=\''.$js.'\'></script>';
+		return '<script type=\'text/javascript\' src=\''.$js.'\'></script>'.PHP_EOL;
 	}
+	return '';
 }
 /**
  * 百度地图调用
@@ -2892,10 +2896,7 @@ function menu_linkage($code = '', $id = 'linkid', $defaultvalue = 0) {
 	// 最大几层
 	$linklevel = dr_linkage_level($code) + 1;
 	$string = $defaultvalue && (ROUTE_A=='edit' || ROUTE_A=='account_manage_info'  || ROUTE_A=='info_publish') ? '<input type="hidden" name="info['.$id.']"  id="dr_'.$id.'" value="'.$defaultvalue.'">' : '<input type="hidden" name="info['.$id.']"  id="dr_'.$id.'" value="">';
-	if(!defined('LINKAGE_INIT_1')) {
-		define('LINKAGE_INIT_1', 1);
-		$string .= '<script type="text/javascript" src="'.JS_PATH.'jquery.ld.js"></script>';
-	}
+	$string .= load_js(JS_PATH.'jquery.ld.js');
 	$level = 1;
 	$default = '';
 	if ($defaultvalue) {

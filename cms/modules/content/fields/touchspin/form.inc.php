@@ -11,13 +11,8 @@
 		!$setting['maxnumber'] && $setting['maxnumber'] = 999999999999999;
 		!$setting['minnumber'] && $setting['minnumber'] = 0;
 		if(!$value) $value = $defaultvalue;
-		if(!defined('TOUCHSPIN_INIT')) {
-			$str = '<link href="'.JS_PATH.'bootstrap-touchspin/bootstrap.touchspin.css" rel="stylesheet" type="text/css" />
-			<script src="'.JS_PATH.'bootstrap-touchspin/bootstrap.touchspin.js" type="text/javascript"></script>';
-			define('TOUCHSPIN_INIT', 1);
-		} else {
-			$str = '';
-		}
+		$str = load_css(JS_PATH.'bootstrap-touchspin/bootstrap.touchspin.css');
+		$str .= load_js(JS_PATH.'bootstrap-touchspin/bootstrap.touchspin.js');
 		if($up || $down) {
 			$str .= '<style type="text/css">';
 			if($up && $up!='#ffffff' && $up!='#fff') {

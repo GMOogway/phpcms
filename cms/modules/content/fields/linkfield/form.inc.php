@@ -16,13 +16,13 @@
 			$value = str_replace('&amp;','&',$value);
 			if(!defined('BOOTSTRAP_SELECT')) {
 				$data = '<script type="text/javascript">var bs_selectAllText = \'全选\';var bs_deselectAllText = \'全删\';var bs_noneSelectedText = \'没有选择\'; var bs_noneResultsText = \'没有找到 {0}\';</script>
-				<link href="'.JS_PATH.'bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet">
-				<script type="text/javascript" src="'.JS_PATH.'bootstrap-select/js/bootstrap-select.min.js"></script>
 				<script type="text/javascript">jQuery(document).ready(function(){$(\'.bs-select\').selectpicker();});</script>';
 				define('BOOTSTRAP_SELECT', 1);
 			} else {
 				$data = '';
 			}
+			$data .= load_css(JS_PATH.'bootstrap-select/css/bootstrap-select.min.css');
+			$data .= load_js(JS_PATH.'bootstrap-select/js/bootstrap-select.min.js');
 			if($fieldinfo['insert_type'] == "multiple_id"){
 				
 				$data1 = $data2 = '';

@@ -22,7 +22,7 @@ $p = dr_authcode(array(
 a.close{background: url(<?php echo IMG_PATH?>cross.png) no-repeat left -46px; display:block; width:16px;height:16px;display:inline-block;display:-moz-inline-stack;zoom:1;*display:inline;}
 .forms{display:none;}
 </style>
-<script type="text/javascript" src="<?php echo JS_PATH?>h5upload/h5editor.js"></script>
+<?php echo load_js(JS_PATH.'h5upload/h5editor.js');?>
 <?php endif;?>
 
 <div class="pad-10">

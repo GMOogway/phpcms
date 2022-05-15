@@ -1,16 +1,10 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');?>
-<?php if (SYS_EDITOR) {?>
-<script type="text/javascript" src="<?php echo JS_PATH;?>ckeditor/ckeditor.js"></script>
-<?php } else {?>
-<script type="text/javascript" src="<?php echo JS_PATH;?>ueditor/ueditor.config.js"></script>
-<script type="text/javascript" src="<?php echo JS_PATH;?>ueditor/ueditor.all.js"></script>
-<?php }?>
-<script type="text/javascript" src="<?php echo JS_PATH;?>h5upload/h5editor.js"></script>
-<?php define('EDITOR_INIT', 1);
-define('IMAGES_INIT', 1);?>
-<link rel="stylesheet" href="<?php echo JS_PATH?>layui/css/layui.css" media="all" />
+<?php echo load_css(JS_PATH.'layui/css/layui.css');?>
+<?php echo load_js(JS_PATH.'content_addtop.js');?>
+<?php echo load_css(JS_PATH.'jquery-minicolors/jquery.minicolors.css');?>
+<?php echo load_js(JS_PATH.'jquery-minicolors/jquery.minicolors.min.js');?>
 <div class="page-content main-content">
 <div class="row my-content-top-tool">
     <div class="col-md-12 col-sm-12">
@@ -104,9 +98,6 @@ if(is_array($forminfos['base'])) {
     </div>
 </form>
 </div>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>content_addtop.js"></script>
-<link href="<?php echo JS_PATH?>jquery-minicolors/jquery.minicolors.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="<?php echo JS_PATH?>jquery-minicolors/jquery.minicolors.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
     $('#my_submit').click(function () {
