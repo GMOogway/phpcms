@@ -521,7 +521,7 @@ class index extends admin {
 		dr_json(1, L('operation_success'));
 	}
 	/**
-	 * 维持 session 登陆状态
+	 * 维持 session 登录状态
 	 */
 	public function public_session_life() {
 		$userid = $_SESSION['userid'];

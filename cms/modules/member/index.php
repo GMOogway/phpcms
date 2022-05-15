@@ -156,7 +156,7 @@ class index extends foreground {
 			}
 			
 			if($userid > 0) {
-				//执行登陆操作
+				//执行登录操作
 				$cookietime = $member_setting['logintime'] ? SYS_TIME+intval($member_setting['logintime']) : SYS_TIME+86400;
 				
 				if($userinfo['groupid'] == 7) {
@@ -909,7 +909,7 @@ class index extends foreground {
 		}
 	}
 	
-	//mini登陆条
+	//mini登录条
 	public function mini() {
 		$_username = param::get_cookie('_username');
 		$_userid = param::get_cookie('_userid');
@@ -1187,7 +1187,7 @@ class index extends foreground {
 	}
 	
 	/**
-	 * 盛大通行证登陆
+	 * 盛大通行证登录
 	 */
 	public function public_snda_login() {
 		define('SNDA_AKEY', pc_base::load_config('system', 'snda_akey'));
@@ -1283,7 +1283,7 @@ class index extends foreground {
 			if(!empty($openid)){
 				$r = $this->db->get_one(array('connectid'=>$openid,'from'=>'qq'));
 				if(!empty($r)){
-					//QQ已存在于数据库，则直接转向登陆操作
+					//QQ已存在于数据库，则直接转向登录操作
 					$password = $r['password'];
 					$userid = $r['userid'];
 					$groupid = $r['groupid'];

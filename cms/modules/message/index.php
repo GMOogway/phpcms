@@ -1,7 +1,7 @@
 <?php
 defined('IN_CMS') or exit('No permission resources.');
 if (!module_exists(ROUTE_M)) showmessage(L('module_not_exists'));
-pc_base::load_app_class('foreground','member');//加载foreground 应用类. 自动判断是否登陆.
+pc_base::load_app_class('foreground','member');//加载foreground 应用类. 自动判断是否登录.
 pc_base::load_sys_class('format', '', 0);
 pc_base::load_sys_class('form', '', 0);
 

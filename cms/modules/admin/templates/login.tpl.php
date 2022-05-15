@@ -57,7 +57,7 @@
                                 </div>
                                 <?php }?>
                                 <div class="layui-form-item">
-                                    <button type="button" onclick="dr_login()" class="layui-btn btn-submit btn-blog">立即登陆</button>
+                                    <button type="button" onclick="dr_login()" class="layui-btn btn-submit btn-blog">立即登录</button>
                                 </div>
                             </form>
                         </div>

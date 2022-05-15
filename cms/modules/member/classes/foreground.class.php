@@ -18,7 +18,7 @@ class foreground {
 	}
 	
 	/**
-	 * 判断用户是否已经登陆
+	 * 判断用户是否已经登录
 	 */
 	final public function check_member() {
 		$cms_auth = param::get_cookie('auth');
@@ -112,7 +112,7 @@ class foreground {
  	}
 
 	/**
-	 * 获取登陆信息
+	 * 获取登录信息
 	 */
 	final public function member_get_log($uid) {
 		if ($uid) {

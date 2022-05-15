@@ -9,7 +9,7 @@ class log extends admin {
 		$this->db = pc_base::load_model('log_model');
 		pc_base::load_sys_class('form');
 		$admin_username = param::get_cookie('admin_username');//管理员COOKIE
-		$userid = $_SESSION['userid'];//登陆USERID　
+		$userid = $_SESSION['userid'];//登录USERID　
 	}
 	
 	function init () {

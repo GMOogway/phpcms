@@ -25,7 +25,7 @@ class admin {
 	}
 	
 	/**
-	 * 判断用户是否已经登陆
+	 * 判断用户是否已经登录
 	 */
 	final public function check_admin() {
 		if(ROUTE_M =='admin' && ROUTE_C =='index' && in_array(ROUTE_A, array(SYS_ADMIN_PATH, 'fclient'))) {
@@ -295,7 +295,7 @@ class admin {
 	}
 
 	/**
-	 * 获取登陆信息
+	 * 获取登录信息
 	 */
 	final public static function admin_get_log($uid) {
 		$admin_login_db = pc_base::load_model('admin_login_model');
