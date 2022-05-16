@@ -4582,7 +4582,17 @@ function dr_fdate($sTime, $formt = 'Y-m-d') {
  * @return	string
  */
 function dr_date($time = '', $format = SYS_TIME_FORMAT, $color = NULL) {
-	$time = (int)$time;
+	if (!$time) {
+		return '';
+	}
+	if (!is_numeric($time)) {
+		$new = strtotime(clearhtml($time));
+		if (is_numeric($new)) {
+			$time = $new;
+		} else {
+			return IS_DEV ? '参数不是时间戳格式' : '';
+		}
+	}
 	if (!$time) {
 		return '';
 	}
