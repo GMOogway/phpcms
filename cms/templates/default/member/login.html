@@ -59,22 +59,8 @@
                 $DW.close();
             };
             diag.show();
-        } else if(site == 'snda') {
-            var diag = new Dialog({
-                id:'protocoliframe',
-                title:'{L('snda_login')}',
-                url:'index.php?m=member&c=index&a=public_snda_login',
-                width:500,
-                height:310,
-                modal:true
-            });
-            diag.cancelText = '{L('close')}';
-            diag.onCancel=function() {
-                $DW.close();
-            };
-            diag.show();
         } else if(site == 'qq') {
-            redirect('index.php?m=member&c=index&a=public_qq_loginnew');
+            redirect('index.php?m=member&c=index&a=public_qq_login');
         }
     }
 //-->

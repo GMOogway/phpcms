@@ -7,7 +7,6 @@ pc_base::load_app_func('global');
 class payment extends admin {
 	private $db, $account_db, $member_db;
 	function __construct() {
-		if (!module_exists(ROUTE_M)) dr_admin_msg(0,L('module_not_exists')); 
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
 		$this->email = pc_base::load_sys_class('email');
@@ -30,12 +29,12 @@ class payment extends admin {
 	 * 增加支付模块
 	 */
 	public function add() {
-		if(isset($_POST['dosubmit'])) {
+		if($this->input->post('dosubmit')) {
 			$info = $infos = array();
-			$infos = $this->method->get_payment($_POST['pay_code']);
+			$infos = $this->method->get_payment($this->input->post('pay_code'));
 			$config = $infos['config'];
-			foreach ($_POST['config_name'] as $key => $value) {
-				$config[$value]['value'] = trim($_POST['config_value'][$key]);
+			foreach ($this->input->post('config_name') as $key => $value) {
+				$config[$value]['value'] = trim($this->input->post('config_value')[$key]);
 			}
 			$info['config'] = array2string($config);
 			$info['name'] = $this->input->post('name');
@@ -45,9 +44,9 @@ class payment extends admin {
 			$info['pay_code'] = $this->input->post('pay_code');
 			$info['is_cod'] = $this->input->post('is_cod');
 			$info['is_online'] = $this->input->post('is_online');
-			$info['pay_fee'] = intval($_POST['pay_fee']);
-			$info['pay_method'] = intval($_POST['pay_method']);
-			$info['pay_order'] = intval($_POST['pay_order']);
+			$info['pay_fee'] = intval($this->input->post('pay_fee'));
+			$info['pay_method'] = intval($this->input->post('pay_method'));
+			$info['pay_order'] = intval($this->input->post('pay_order'));
 			$info['enabled'] = '1';
 			$info['author'] = $infos['author'];
 			$info['website'] = $infos['website'];
@@ -57,7 +56,7 @@ class payment extends admin {
 				dr_admin_msg(1,L('operation_success'), '', '', 'add');
 			}		
 		} else {
-			$infos = $this->method->get_payment($_GET['code']);
+			$infos = $this->method->get_payment($this->input->get('code'));
 			extract($infos);
 			$show_header = $show_validator = true;
 			include $this->admin_tpl('payment_detail');			
@@ -67,23 +66,23 @@ class payment extends admin {
 	 * 编辑支付模块
 	 */
 	public function edit() {
-		if(isset($_POST['dosubmit'])) {
-			$infos = $this->method->get_payment($_POST['pay_code']);
+		if($this->input->post('dosubmit')) {
+			$infos = $this->method->get_payment($this->input->post('pay_code'));
 			$config = $infos['config'];
-			foreach ($_POST['config_name'] as $key => $value) {
-				$config[$value]['value'] = trim($_POST['config_value'][$key]);
+			foreach ($this->input->post('config_name') as $key => $value) {
+				$config[$value]['value'] = trim($this->input->post('config_value')[$key]);
 			}
 			$info['config'] = array2string($config);
-			$info['name'] = trim($_POST['name']);
-			$info['pay_name'] = trim($_POST['pay_name']);
-			$info['pay_desc'] = trim($_POST['description']);
+			$info['name'] = trim($this->input->post('name'));
+			$info['pay_name'] = trim($this->input->post('pay_name'));
+			$info['pay_desc'] = trim($this->input->post('description'));
 			$info['pay_id'] = $this->input->post('pay_id');
-			$info['pay_code'] = trim($_POST['pay_code']);
-			$info['pay_order'] = intval($_POST['pay_order']);
-			$info['pay_method'] = intval($_POST['pay_method']);	
-			$info['pay_fee']  = (intval($_POST['pay_method'])==0) ? intval($_POST['pay_rate']) : intval($_POST['pay_fix']);		
-			$info['is_cod'] = trim($_POST['is_cod']);
-			$info['is_online'] = trim($_POST['is_online']);
+			$info['pay_code'] = trim($this->input->post('pay_code'));
+			$info['pay_order'] = intval($this->input->post('pay_order'));
+			$info['pay_method'] = intval($this->input->post('pay_method'));	
+			$info['pay_fee']  = (intval($this->input->post('pay_method'))==0) ? intval($this->input->post('pay_rate')) : intval($this->input->post('pay_fix'));		
+			$info['is_cod'] = trim($this->input->post('is_cod'));
+			$info['is_online'] = trim($this->input->post('is_online'));
 			$info['enabled'] = '1';
 			$info['author'] = $infos['author'];
 			$info['website'] = $infos['website'];
@@ -91,7 +90,7 @@ class payment extends admin {
 			$infos = $this->db->update($info,array('pay_id'=>$info['pay_id']));
 			dr_admin_msg(1,L('edit').L('succ'), '', '', 'edit');						
 		} else {
-			$pay_id = intval($_GET['id']);
+			$pay_id = intval($this->input->get('id'));
 			$infos = $this->db->get_one(array('pay_id'=>$pay_id));
 			extract($infos);
 			$config = string2array($config);
@@ -104,9 +103,9 @@ class payment extends admin {
 	 * 卸载支付模块
 	 */
 	public function delete() {
-		$pay_id = intval($_GET['id']);
+		$pay_id = intval($this->input->get('id'));
 		$this->db->delete(array('pay_id'=>$pay_id));
-		dr_admin_msg(1,L('delete_succ'),'?m=pay&c=payment');
+		dr_admin_msg(1,L('delete_succ'),'?m=pay&c=payment&menuid='.$this->input->get('menuid'));
 	}
 	
 	/**
@@ -114,8 +113,8 @@ class payment extends admin {
 	 */
 	public function pay_list() {
 		$where = '';
-		if($_GET['dosubmit']){
-			extract($_GET['info']);
+		if($this->input->get('dosubmit')){
+			extract($this->input->get('info'));
 			if($trade_sn) $where = "AND `trade_sn` LIKE '%$trade_sn%' ";
 			if($username) $where = "AND `username` LIKE '%$username%' ";
 			if($start_addtime && $end_addtime) {
@@ -130,7 +129,7 @@ class payment extends admin {
 		foreach(L('select') as $key=>$value) {
 			$trade_status[$key] = $value;
 		}
-		$page = $this->input->get('page') ? $_GET['page'] : '1';
+		$page = $this->input->get('page') ? $this->input->get('page') : '1';
 		
 		$infos = $this->account_db->listinfo($where, $order = 'addtime DESC,id DESC', $page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->account_db->pages;
@@ -145,8 +144,8 @@ class payment extends admin {
 	public function pay_stat() {
 		$where = '';
 		$infos = array();
-		if($_GET['dosubmit']){
-			extract($_GET['info']);
+		if($this->input->get('dosubmit')){
+			extract($this->input->get('info'));
 			if($username) $where = "AND `username` LIKE '%$username%' ";
 			if($start_addtime && $end_addtime) {
 				$start = strtotime($start_addtime.' 00:00:00');
@@ -191,14 +190,14 @@ class payment extends admin {
 	 * Enter description here ...
 	 */
 	public function discount() {
-		if(isset($_POST['dosubmit'])) {
-			$discount = floatval($_POST['discount']);
-			$id = intval($_POST['id']);
+		if($this->input->post('dosubmit')) {
+			$discount = floatval($this->input->post('discount'));
+			$id = intval($this->input->post('id'));
 			$infos = $this->account_db->update(array('discount'=>$discount),array('id'=>$id));
 			dr_admin_msg(1,L('public_discount_succ'), '', '', 'discount');			
 		} else {
 			$show_header = $show_validator = true;
-			$id = intval($_GET['id']);
+			$id = intval($this->input->get('id'));
 			$infos = $this->account_db->get_one(array('id'=>$id));
 			extract($infos);
 			include $this->admin_tpl('pay_discount');			
@@ -210,27 +209,27 @@ class payment extends admin {
 	 * Enter description here ...
 	 */
 	public function modify_deposit() {
-		if(isset($_POST['dosubmit'])) {
-			$username = isset($_POST['username']) && trim($_POST['username']) ? trim($_POST['username']) : dr_admin_msg(0,L('username').L('error'));
-			$usernote = isset($_POST['usernote']) && trim($_POST['usernote']) ? trim($_POST['usernote']) : dr_admin_msg(0,L('usernote').L('error'));	
+		if($this->input->post('dosubmit')) {
+			$username = $this->input->post('username') && trim($this->input->post('username')) ? trim($this->input->post('username')) : dr_admin_msg(0,L('username').L('error'));
+			$usernote = $this->input->post('usernote') && trim($this->input->post('usernote')) ? trim($this->input->post('usernote')) : dr_admin_msg(0,L('usernote').L('error'));	
 			$userinfo = $this->get_useid($username);
 			if($userinfo) {	
 				//如果增加金钱或点数，想pay_account 中记录数据
-				if($_POST['pay_unit']) {
-					$value = floatval($_POST['unit']);
+				if($this->input->post('pay_unit')) {
+					$value = floatval($this->input->post('unit'));
 					$payment = L('admin_recharge');
 					$receipts = pc_base::load_app_class('receipts');
 					$func = $this->input->post('pay_type') == '1' ? 'amount' :'point';
 					$receipts->$func($value, $userinfo['userid'] , $username, create_sn(), 'offline', $payment, param::get_cookie('admin_username'), $status = 'succ',$usernote);					
 					
 				} else {
-					$value = floatval($_POST['unit']);
+					$value = floatval($this->input->post('unit'));
 					$msg = L('background_operation').$usernote;
 					$spend = pc_base::load_app_class('spend');
 					$func = $this->input->post('pay_type') == '1' ? 'amount' :'point';
 					$spend->$func($value,$msg,$userinfo['userid'],$username,param::get_cookie('userid'),param::get_cookie('admin_username'));
 				}
-				if(intval($_POST['sendemail'])) {
+				if(intval($this->input->post('sendemail'))) {
 					$op = $this->input->post('pay_unit') ? $value: '-'.$value;
 					$op = $this->input->post('pay_type') ? $op.L('yuan') : $op.L('point');
 					$msg = L('account_changes_notice_tips',array('username'=>$username,'time'=>date('Y-m-d H:i:s',SYS_TIME),'op'=>$op,'note'=>$usernote,'amount'=>$userinfo['amount'],'point'=>$userinfo['point']));
@@ -250,16 +249,16 @@ class payment extends admin {
 	 * 支付删除
 	 */
 	public function pay_del() {
-		$id = intval($_GET['id']);
+		$id = intval($this->input->get('id'));
 		$this->account_db->delete(array('id'=>$id));
-		dr_admin_msg(1,L('delete_succ'),'?m=pay&c=payment&a=pay_list&menuid='.$_GET['menuid']);
+		dr_admin_msg(1,L('delete_succ'),'?m=pay&c=payment&a=pay_list&menuid='.$this->input->get('menuid'));
 	}
 	
 	/*
 	 * 支付取消
 	 */
 	public function pay_cancel() {
-		$id = intval($_GET['id']);
+		$id = intval($this->input->get('id'));
 		$this->account_db->update(array('status'=>'cancel'),array('id'=>$id));
 		dr_admin_msg(1,L('state_change_succ'),HTTP_REFERER);
 	}
@@ -267,7 +266,7 @@ class payment extends admin {
 	 * 支付详情
 	 */
 	public function public_pay_detail() {
-		$id = intval($_GET['id']);
+		$id = intval($this->input->get('id'));
 		$infos = $this->account_db->get_one(array('id'=>$id));
 		extract($infos);
 		$show_header = true;
@@ -275,13 +274,13 @@ class payment extends admin {
 	}
 	
 	public function public_check() {
-		$id = intval($_GET['id']);
+		$id = intval($this->input->get('id'));
 		$infos = $this->account_db->get_one(array('id'=>$id));
 		$userinfo = $this->member_db->get_one(array('userid'=>$infos['userid']));
 		$amount = $userinfo['amount'] + $infos['money'];
 		$this->account_db->update(array('status'=>'succ','adminnote'=>param::get_cookie('admin_username')),array('id'=>$id));
 		$this->member_db->update(array('amount'=>$amount),array('userid'=>$infos['userid']));
-		dr_admin_msg(1,L('check_passed'),'?m=pay&c=payment&a=pay_list');
+		dr_admin_msg(1,L('check_passed'),'?m=pay&c=payment&a=pay_list&menuid='.$this->input->get('menuid'));
 	}
 		
 	private function get_useid($username) {
@@ -297,7 +296,7 @@ class payment extends admin {
 	 * @param string $username	用户名
 	 */
 	public function public_checkname_ajax() {
-		$username = isset($_GET['username']) && trim($_GET['username']) ? trim($_GET['username']) : exit(0);
+		$username = $this->input->get('username') && trim($this->input->get('username')) ? trim($this->input->get('username')) : exit(0);
 		if(CHARSET != 'utf-8') {
 			$username = iconv('utf-8', CHARSET, $username);
 		}

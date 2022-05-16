@@ -537,24 +537,6 @@ jQuery(document).ready(function() {
                 <div class="form-body">
 
                     <div class="form-group">
-                        <label class="col-md-2 control-label"><?php echo L('setting_snda_enable')?></label>
-                        <div class="col-md-9">
-                            <div class="input-inline input-large">
-                                <div class="input-group">
-                                    <span class="input-group-addon">APP key</span>
-                                    <input type="text" id="snda_akey" name="setconfig[snda_akey]" value="<?php echo $snda_akey;?>" class="form-control" placeholder="">
-                                </div>
-                            </div>
-                            <div class="input-inline input-large">
-                                <div class="input-group">
-                                    <span class="input-group-addon">APP secret key</span>
-                                    <input type="text" id="snda_skey" name="setconfig[snda_skey]" value="<?php echo $snda_skey;?>" class="form-control" placeholder="">
-                                </div>
-                            </div>
-                            <span class="help-block"><a class="btn btn-sm blue" href="http://code.snda.com/index/oauth" target="_blank"> <?php echo L('click_register');?> </a></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('setting_connect_sina')?></label>
                         <div class="col-md-9">
                             <div class="input-inline input-large">
@@ -574,24 +556,6 @@ jQuery(document).ready(function() {
                     </div>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('setting_connect_qq')?></label>
-                        <div class="col-md-9">
-                            <div class="input-inline input-large">
-                                <div class="input-group">
-                                    <span class="input-group-addon">APP key</span>
-                                    <input type="text" id="qq_akey" name="setconfig[qq_akey]" value="<?php echo $qq_akey;?>" class="form-control" placeholder="">
-                                </div>
-                            </div>
-                            <div class="input-inline input-large">
-                                <div class="input-group">
-                                    <span class="input-group-addon">APP secret key</span>
-                                    <input type="text" id="qq_skey" name="setconfig[qq_skey]" value="<?php echo $qq_skey;?>" class="form-control" placeholder="">
-                                </div>
-                            </div>
-                            <span class="help-block"><a class="btn btn-sm blue" href="http://open.t.qq.com/" target="_blank"> <?php echo L('click_register');?> </a></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-2 control-label"><?php echo L('setting_connect_qqnew')?></label>
                         <div class="col-md-9">
                             <div class="input-inline input-large">
                                 <div class="input-group">

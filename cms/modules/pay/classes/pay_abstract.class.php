@@ -48,66 +48,6 @@ abstract class paymentabstract
 		return $str;
 	}
 
-	public function get_png($orderinfo){
-		if(dr_count($orderinfo)>0){
-			//生成图片  引入支付文件
-			$input = pc_base::load_app_class('WxPayUnifiedOrder','pay');
-			$input->SetBody($orderinfo['payment']);
-			$input->SetAttach($orderinfo['contactname']);
-			$input->SetOut_trade_no($orderinfo['trade_sn']);
-			$input->SetTotal_fee($orderinfo['money']);
-			$input->SetTime_start($orderinfo['addtime']);
-			$input->SetTime_expire(date("YmdHis", $orderinfo['addtime'] + 600));
-			$input->SetGoods_tag("商品标签暂时没用");
-			$input->SetTrade_type("NATIVE");
-			$input->SetProduct_id("123456789");//商品编号 充值系统 暂时没用
-		 	$notify = pc_base::load_app_class('NativePay','pay');
-		 	//实例化lib/class/方法
-		 	$newconfig = pc_base::load_app_class('WxPayConfig','pay',true);
-		 	
-		 	$newconfig->index($this->config);
-
-			$result = $notify->GetPayUrl($input,$newconfig);
-			if($result['return_code']=="SUCCESS" && $result['return_msg']=="OK"){
-				//实例化图片类 生成支付图片
-				pc_base::load_sys_class('phpqrcode');
-				//生成唯一的支付图片 当支付完成后删除支付图片信息
-				//参数1  二维码生成主要参数
-				//参数2  图片生成的位置
-				QRcode::png($result["code_url"],$orderinfo['trade_sn'].'pay.png');
-				
-				$str ="<img src='".WEB_PATH.$orderinfo['trade_sn'].'pay.png'."' style='width:100px;height:100px;'>";
-				// 写一个微信扫码支付结果通知的ajax
-				$str .="<script type='text/javascript'>";
-					$str .="function  succ(){
-						$.ajax({
-							url:'".WEB_PATH."index.php?m=pay&c=respond&a=respond_get',
-							data:{'code':'Wxpay','trad_sn':'".$orderinfo['trade_sn']."'},
-							type:'get',
-							dataType:'json',
-							success:function(mes){
-								if(mes.code==0){
-									clearInterval(interval3);
-									if (confirm(mes.tips)) {
-									    window.location.href='".WEB_PATH."index.php?m=pay&c=deposit';
-								  	} else {
-									    window.location.href='".WEB_PATH."index.php?m=pay&c=deposit';
-								  	}
-								}
-							}
-						})
-					}
-					var interval3=setInterval(function(){succ();},2000);";
-				$str.="</script>";
-				return $str;
-			}else{
-				return "生成支付图片失败,请联系管理员";	
-			}
-		}else{
-			return "缺少订单信息";
-		}
-	}
-
 	protected function get_verify($url,$time_out = "60") {
         $urlarr     = parse_url($url);
         $errno      = "";

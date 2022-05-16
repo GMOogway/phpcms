@@ -793,12 +793,6 @@ class check extends admin {
 \'sina_akey\' => \''.pc_base::load_config('system','sina_akey').'\', //sina AKEY
 \'sina_skey\' => \''.pc_base::load_config('system','sina_skey').'\', //sina SKEY
 
-\'snda_akey\' => \''.pc_base::load_config('system','snda_akey').'\', //盛大通行证 akey
-\'snda_skey\' => \''.pc_base::load_config('system','snda_skey').'\', //盛大通行证 skey
-
-\'qq_akey\' => \''.pc_base::load_config('system','qq_akey').'\', //qq skey
-\'qq_skey\' => \''.pc_base::load_config('system','qq_skey').'\', //qq skey
-
 \'qq_appkey\' => \''.pc_base::load_config('system','qq_appkey').'\', //QQ号码登录 appkey
 \'qq_appid\' => \''.pc_base::load_config('system','qq_appid').'\', //QQ号码登录 appid
 \'qq_callback\' => \''.pc_base::load_config('system','qq_callback').'\', //QQ号码登录 callback

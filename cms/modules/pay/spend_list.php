@@ -8,20 +8,19 @@ class spend_list extends foreground {
 	private $spend_db;
 	
 	function __construct() {
-		if (!module_exists(ROUTE_M)) showmessage(L('module_not_exists'));
 		$this->input = pc_base::load_sys_class('input');
 		$this->spend_db = pc_base::load_model('pay_spend_model');
 		parent::__construct();
 	}
 	
 	public function init() {
-		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
+		$page = $this->input->get('page') && intval($this->input->get('page')) ? intval($this->input->get('page')) : 1;
 		$userid  = param::get_cookie('_userid');
 		$sql =  " `userid` = '$userid'";
-		if (isset($_GET['dosubmit'])) {
-			$type = isset($_GET['type']) && intval($_GET['type']) ? intval($_GET['type']) : '';
-			$endtime = isset($_GET['endtime'])  &&  trim($_GET['endtime']) ? strtotime(trim($_GET['endtime'])) : '';
-			$starttime = isset($_GET['starttime']) && trim($_GET['starttime']) ? strtotime(trim($_GET['starttime'])) : '';
+		if ($this->input->get('dosubmit')) {
+			$type = $this->input->get('type') && intval($this->input->get('type')) ? intval($this->input->get('type')) : '';
+			$endtime = $this->input->get('endtime')  &&  trim($this->input->get('endtime')) ? strtotime(trim($this->input->get('endtime'))) : '';
+			$starttime = $this->input->get('starttime') && trim($this->input->get('starttime')) ? strtotime(trim($this->input->get('starttime'))) : '';
 			
 			if (!empty($starttime) && empty($endtime)) {
 				$endtime = SYS_TIME;

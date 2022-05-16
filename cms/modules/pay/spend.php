@@ -13,16 +13,16 @@ class spend extends admin {
 	public function init() {
 		pc_base::load_sys_class('form', '', 0);
 		pc_base::load_sys_class('format', '', 0);
-		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
+		$page = $this->input->get('page') && intval($this->input->get('page')) ? intval($this->input->get('page')) : 1;
 		$sql =  "";
-		if (isset($_GET['dosubmit'])) {
-			$username = isset($_GET['username']) && trim($_GET['username']) ? trim($_GET['username']) : '';
-			$op = isset($_GET['op']) && trim($_GET['op']) ? trim($_GET['op']) : '';
-			$user_type = isset($_GET['user_type']) && intval($_GET['user_type']) ? intval($_GET['user_type']) : '';
-			$op_type = isset($_GET['op_type']) && intval($_GET['op_type']) ? intval($_GET['op_type']) : '';
-			$type = isset($_GET['type']) && intval($_GET['type']) ? intval($_GET['type']) : '';
-			$endtime = isset($_GET['endtime'])  &&  trim($_GET['endtime']) ? strtotime(trim($_GET['endtime'])) : '';
-			$starttime = isset($_GET['starttime']) && trim($_GET['starttime']) ? strtotime(trim($_GET['starttime'])) : '';
+		if ($this->input->get('dosubmit')) {
+			$username = $this->input->get('username') && trim($this->input->get('username')) ? trim($this->input->get('username')) : '';
+			$op = $this->input->get('op') && trim($this->input->get('op')) ? trim($this->input->get('op')) : '';
+			$user_type = $this->input->get('user_type') && intval($this->input->get('user_type')) ? intval($this->input->get('user_type')) : '';
+			$op_type = $this->input->get('op_type') && intval($this->input->get('op_type')) ? intval($this->input->get('op_type')) : '';
+			$type = $this->input->get('type') && intval($this->input->get('type')) ? intval($this->input->get('type')) : '';
+			$endtime = $this->input->get('endtime')  &&  trim($this->input->get('endtime')) ? strtotime(trim($this->input->get('endtime'))) : '';
+			$starttime = $this->input->get('starttime') && trim($this->input->get('starttime')) ? strtotime(trim($this->input->get('starttime'))) : '';
 			
 			if (!empty($starttime) && empty($endtime)) {
 				$endtime = SYS_TIME;

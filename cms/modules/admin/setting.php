@@ -93,8 +93,6 @@ class setting extends admin {
 			$setting = array2string($setting);
 			$this->db->update(array('setting'=>$setting), array('module'=>'admin')); //存入admin模块setting字段
 			
-			//如果开始盛大通行证接入，判断服务器是否支持curl
-			$snda_error = '';
 			$setconfig['sys_max_category'] = intval($setconfig['sys_max_category']);
 			$setconfig['sys_admin_pagesize'] = intval($setconfig['sys_admin_pagesize']);
 			$setconfig['debug'] = intval($setconfig['debug']);
@@ -104,15 +102,6 @@ class setting extends admin {
 			$setconfig['errorlog'] = intval($setconfig['errorlog']);
 			$setconfig['gzip'] = intval($setconfig['gzip']);
 			$setconfig['tpl_edit'] = intval($setconfig['tpl_edit']);
-			if(!$setconfig['baidu_skey'] || !$setconfig['baidu_arcretkey']) {
-				delcache('baidu_api_access_token','commons');
-			}
-			if($setconfig['snda_akey'] || $setconfig['snda_skey']) {
-				if(function_exists('curl_init') == FALSE) {
-					$snda_error = L('snda_need_curl_init');
-					$setconfig['snda_enable'] = 0;
-				}
-			}
 			if(cleck_admin($_SESSION['roleid']) && dr_in_array($_SESSION['userid'], ADMIN_FOUNDERS)) {
 				if(!$setconfig['admin_founders']) {
 					$setconfig['admin_founders'] = 1;
@@ -133,7 +122,7 @@ class setting extends admin {
 
 			set_config($setconfig);	 //保存进config文件
 			$this->setcache();
-			dr_json(1, L('setting_succ').$snda_error, array('url' => '?m=admin&c=setting&a=init&tab='.(int)($this->input->post('page')+1).'&pc_hash='.dr_get_csrf_token()));
+			dr_json(1, L('setting_succ'), array('url' => '?m=admin&c=setting&a=init&tab='.(int)($this->input->post('page')+1).'&pc_hash='.dr_get_csrf_token()));
 		}
 		$setconfig = pc_base::load_config('system');
 		extract($setconfig);

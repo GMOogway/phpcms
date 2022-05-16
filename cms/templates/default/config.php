@@ -127,7 +127,6 @@
       'connect.html' => '',
       'connect_qq.html' => '',
       'connect_sina.html' => '新浪账号登陆',
-      'connect_snda.html' => '',
       'content_publish.html' => '投稿页面',
       'content_publish_select_model.html' => '投稿模型选择',
       'content_published.html' => '已投稿管理',

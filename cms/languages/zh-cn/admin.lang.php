@@ -891,7 +891,8 @@ $LANG['connect_enable_notice'] = '如关闭，前台不显示所有connect登录
 $LANG['setting_connect'] = 'connect';
 $LANG['setting_connect_enable'] = '开启connect';
 $LANG['setting_connect_sina'] = '新浪微博';
-$LANG['setting_connect_qq'] = '腾讯微博';
+$LANG['setting_connect_qq'] = 'QQ号码登录';
+$LANG['setting_connect_qqcallback'] = '回调地址';
 
 $LANG['setting_snda_enable'] = '盛大连接';
 $LANG['snda_need_curl_init'] = '，但盛大通行证需服务器支持curl扩展';
@@ -928,8 +929,6 @@ $LANG['apply_to_child'] = '应用到子栏目：';
 $LANG['admin_url'] = '后台访问域名';
 $LANG['admin_url_tips'] = '例如：admin.domain.com，绑定后，只能通过该域名登录，配置保存在 system.php中，修改参数admin_url可手动取消绑定';
 
-$LANG['setting_connect_qqnew'] = 'QQ号码登录';
-$LANG['setting_connect_qqcallback'] = '回调地址';
 $LANG['priview'] = '查看演示';
 $LANG['no_priview'] = '无演示图';
 $LANG['panel_switch'] = '面板切换';

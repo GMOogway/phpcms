@@ -791,27 +791,19 @@ class index extends foreground {
   	
 	public function logout() {
 		$setting = pc_base::load_config('system');
-		//snda退出
-		if($setting['snda_enable'] && param::get_cookie('_from')=='snda') {
-			param::set_cookie('_from', '');
-			$forward = $this->input->get('forward') && trim($this->input->get('forward')) ? urlencode($this->input->get('forward')) : '';
-			$logouturl = 'https://cas.sdo.com/cas/logout?url='.urlencode(APP_PATH.'index.php?m=member&c=index&a=logout&forward='.$forward);
-			header('Location: '.$logouturl);
-		} else {
-			$config = getcache('common', 'commons');
-			if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
-				$this->cache->del_auth_data('member_option_'.param::get_cookie('_userid'), 1);
-			}
-			param::set_cookie('auth', '');
-			param::set_cookie('_userid', '');
-			param::set_cookie('_login_attr', '');
-			param::set_cookie('_username', '');
-			param::set_cookie('_groupid', '');
-			param::set_cookie('_nickname', '');
-			
-			$forward = $this->input->get('forward') && trim($this->input->get('forward')) ? $this->input->get('forward') : APP_PATH.'index.php?m=member&c=index&a=login';
-			showmessage(L('logout_success'), $forward);
+		$config = getcache('common', 'commons');
+		if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
+			$this->cache->del_auth_data('member_option_'.param::get_cookie('_userid'), 1);
 		}
+		param::set_cookie('auth', '');
+		param::set_cookie('_userid', '');
+		param::set_cookie('_login_attr', '');
+		param::set_cookie('_username', '');
+		param::set_cookie('_groupid', '');
+		param::set_cookie('_nickname', '');
+		
+		$forward = $this->input->get('forward') && trim($this->input->get('forward')) ? $this->input->get('forward') : APP_PATH.'index.php?m=member&c=index&a=login';
+		showmessage(L('logout_success'), $forward);
 	}
 
 	/**
@@ -919,7 +911,6 @@ class index extends foreground {
 		   define('SITEID', $siteid);
 		}
 		
-		$snda_enable = pc_base::load_config('system', 'snda_enable');
 		include template('member', 'mini');
 		exit();
 	}
@@ -1186,88 +1177,12 @@ class index extends foreground {
 		}
 	}
 	
-	/**
-	 * 盛大通行证登录
-	 */
-	public function public_snda_login() {
-		define('SNDA_AKEY', pc_base::load_config('system', 'snda_akey'));
-		define('SNDA_SKEY', pc_base::load_config('system', 'snda_skey'));
-		define('SNDA_CALLBACK', urlencode(APP_PATH.'index.php?m=member&c=index&a=public_snda_login&callback=1'));
-		
-		pc_base::load_app_class('OauthSDK', '' ,0);
-		$this->_session_start();
-		$member_setting = getcache('member_setting');
-		if($this->input->get('callback') && trim($this->input->get('callback'))) {
-			$o = new OauthSDK(SNDA_AKEY, SNDA_SKEY, SNDA_CALLBACK);
-			$code = $this->input->request('code');
-			$accesstoken = $o->getAccessToken($code);
-		
-			if(is_numeric($accesstoken['sdid'])) {
-				$userid = $accesstoken['sdid'];
-			} else {
-				showmessage(L('login_failure'), APP_PATH.'index.php?m=member&c=index&a=login');
-			}
-
-			if(!empty($userid)) {
-				
-				//检查connect会员是否绑定，已绑定直接登录，未绑定提示注册/绑定页面
-				$where = array('connectid'=>$userid, 'from'=>'snda');
-				$r = $this->db->get_one($where);
-				
-				//connect用户已经绑定本站用户
-				if(!empty($r)) {
-					//读取本站用户信息，执行登录操作
-					$password = $r['password'];
-					$userid = $r['userid'];
-					$groupid = $r['groupid'];
-					$username = $r['username'];
-					$nickname = empty($r['nickname']) ? $username : $r['nickname'];
-					$login_attr = md5(SYS_KEY.$r['password'].(isset($r['login_attr']) ? $r['login_attr'] : ''));
-					$this->db->update(array('lastip'=>ip(), 'lastdate'=>SYS_TIME, 'nickname'=>$me['name']), array('userid'=>$userid));
-					$cookietime = $member_setting['logintime'] ? SYS_TIME+intval($member_setting['logintime']) : SYS_TIME+86400;
-					
-					$cms_auth = sys_auth($userid."\t".$password, 'ENCODE', get_auth_key('login'));
-					
-					param::set_cookie('auth', $cms_auth, $cookietime);
-					param::set_cookie('_userid', $userid, $cookietime);
-					param::set_cookie('_login_attr', $login_attr, $cookietime);
-					param::set_cookie('_username', $username, $cookietime);
-					param::set_cookie('_groupid', $groupid, $cookietime);
-					param::set_cookie('_nickname', $nickname, $cookietime);
-					$log = foreground::member_get_log($userid);
-					$this->member_login_db->update(array('logintime' => SYS_TIME,), array('uid'=>$userid));
-					$config = getcache('common', 'commons');
-					if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
-						$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME, 1);
-					}
-					param::set_cookie('_from', 'snda');
-					$forward = $this->input->get('forward') && !empty($this->input->get('forward')) ? $this->input->get('forward') : APP_PATH.'index.php?m=member&c=index';
-					showmessage(L('login_success'), $forward);
-				} else {				
-					//弹出绑定注册页面
-					$_SESSION = array();
-					$_SESSION['connectid'] = $userid;
-					$_SESSION['from'] = 'snda';
-					$connect_username = $userid;
-					include template('member', 'connect');
-				}
-			}	
-		} else {
-			$o = new OauthSDK(SNDA_AKEY, SNDA_SKEY, SNDA_CALLBACK);
-			$accesstoken = $o->getSystemToken();		
-			$aurl = $o->getAuthorizeURL();
-			
-			include template('member', 'connect_snda');
-		}
-		
-	}
-	
 	
 	/**
 	 * QQ号码登录
 	 * 该函数为QQ登录回调地址
 	 */
-	public function public_qq_loginnew(){
+	public function public_qq_login(){
 		$appid = pc_base::load_config('system', 'qq_appid');
 		$appkey = pc_base::load_config('system', 'qq_appkey');
 		$callback = pc_base::load_config('system', 'qq_callback');
@@ -1321,129 +1236,6 @@ class index extends foreground {
 				}
 			}
 		}
-	}
-	
-	/**
-	 * QQ微博登录
-	 */
-	public function public_qq_login() {
-		define('QQ_AKEY', pc_base::load_config('system', 'qq_akey'));
-		define('QQ_SKEY', pc_base::load_config('system', 'qq_skey'));
-		pc_base::load_app_class('qqoauth', '' ,0);
-		$this->_session_start();
-		$member_setting = getcache('member_setting');
-		if($this->input->get('callback') && trim($this->input->get('callback'))) {
-			$o = new WeiboOAuth(QQ_AKEY, QQ_SKEY, $_SESSION['keys']['oauth_token'], $_SESSION['keys']['oauth_token_secret']);
-			$_SESSION['last_key'] = $o->getAccessToken($this->input->request('oauth_verifier'));
-			
-			if(!empty($_SESSION['last_key']['name'])) {
-				//检查connect会员是否绑定，已绑定直接登录，未绑定提示注册/绑定页面
-				$where = array('connectid'=>$this->input->request('openid'), 'from'=>'qq');
-				$r = $this->db->get_one($where);
-				
-				//connect用户已经绑定本站用户
-				if(!empty($r)) {
-					//读取本站用户信息，执行登录操作
-					$password = $r['password'];
-					$userid = $r['userid'];
-					$groupid = $r['groupid'];
-					$username = $r['username'];
-					$nickname = empty($r['nickname']) ? $username : $r['nickname'];
-					$login_attr = md5(SYS_KEY.$r['password'].(isset($r['login_attr']) ? $r['login_attr'] : ''));
-					$this->db->update(array('lastip'=>ip(), 'lastdate'=>SYS_TIME, 'nickname'=>$me['name']), array('userid'=>$userid));
-					$cookietime = $member_setting['logintime'] ? SYS_TIME+intval($member_setting['logintime']) : SYS_TIME+86400;
-					
-					$cms_auth = sys_auth($userid."\t".$password, 'ENCODE', get_auth_key('login'));
-					
-					param::set_cookie('auth', $cms_auth, $cookietime);
-					param::set_cookie('_userid', $userid, $cookietime);
-					param::set_cookie('_login_attr', $login_attr, $cookietime);
-					param::set_cookie('_username', $username, $cookietime);
-					param::set_cookie('_groupid', $groupid, $cookietime);
-					param::set_cookie('_nickname', $nickname, $cookietime);
-					$log = foreground::member_get_log($userid);
-					$this->member_login_db->update(array('logintime' => SYS_TIME,), array('uid'=>$userid));
-					$config = getcache('common', 'commons');
-					if (isset($config['login_use']) && dr_in_array('member', $config['login_use'])) {
-						$this->cache->set_auth_data('member_option_'.$userid, SYS_TIME, 1);
-					}
-					param::set_cookie('_from', 'snda');
-					$forward = $this->input->get('forward') && !empty($this->input->get('forward')) ? $this->input->get('forward') : APP_PATH.'index.php?m=member&c=index';
-					showmessage(L('login_success'), $forward);
-				} else {				
-					//弹出绑定注册页面
-					$_SESSION = array();
-					$_SESSION['connectid'] = $this->input->request('openid');
-					$_SESSION['from'] = 'qq';
-					$connect_username = $_SESSION['last_key']['name'];
-
-					//加载用户模块配置
-					$member_setting = getcache('member_setting');
-					if(!$member_setting['allowregister']) {
-						showmessage(L('deny_register'), APP_PATH.'index.php?m=member&c=index&a=login');
-					}
-					
-					//获取用户siteid
-					$siteid = $this->input->request('siteid') && trim($this->input->request('siteid')) ? intval($this->input->request('siteid')) : 1;
-					//过滤非当前站点会员模型
-					$modellist = getcache('member_model', 'commons');
-					foreach($modellist as $k=>$v) {
-						if($v['siteid']!=$siteid || $v['disabled']) {
-							unset($modellist[$k]);
-						}
-					}
-					if(empty($modellist)) {
-						showmessage(L('site_have_no_model').L('deny_register'), HTTP_REFERER);
-					}
-					
-					$modelid = 10; //设定默认值
-					if(array_key_exists($modelid, $modellist)) {
-						//获取会员模型表单
-						require CACHE_MODEL_PATH.'member_form.class.php';
-						$member_form = new member_form($modelid);
-						$this->db->set_model($modelid);
-						$forminfos = $forminfos_arr = $member_form->get();
-
-						//万能字段过滤
-						foreach($forminfos as $field=>$info) {
-							if($info['isomnipotent']) {
-								unset($forminfos[$field]);
-							} else {
-								if($info['formtype']=='omnipotent') {
-									foreach($forminfos_arr as $_fm=>$_fm_value) {
-										if($_fm_value['isomnipotent']) {
-											$info['form'] = str_replace('{'.$_fm.'}',$_fm_value['form'], $info['form']);
-										}
-									}
-									$forminfos[$field]['form'] = $info['form'];
-								}
-							}
-						}
-						
-						$formValidator = $member_form->formValidator;
-					}	
-					include template('member', 'connect');
-				}
-			} else {
-				showmessage(L('login_failure'), APP_PATH.'index.php?m=member&c=index&a=login');
-			}
-		} else {
-			$oauth_callback = APP_PATH.'index.php?m=member&c=index&a=public_qq_login&callback=1';
-			$oauth_nonce = md5(SYS_TIME);
-			$oauth_signature_method = 'HMAC-SHA1';
-			$oauth_timestamp = SYS_TIME;
-			$oauth_version = '1.0';
-
-			$url = "https://open.t.qq.com/cgi-bin/request_token?oauth_callback=$oauth_callback&oauth_consumer_key=".QQ_AKEY."&oauth_nonce=$oauth_nonce&oauth_signature=".QQ_SKEY."&oauth_signature_method=HMAC-SHA1&oauth_timestamp=$oauth_timestamp&oauth_version=$oauth_version"; 
-			$o = new WeiboOAuth(QQ_AKEY, QQ_SKEY);
-			
-			$keys = $o->getRequestToken(array('callback'=>$oauth_callback));
-			$_SESSION['keys'] = $keys;
-			$aurl = $o->getAuthorizeURL($keys['oauth_token'] ,false , $oauth_callback);
-			
-			include template('member', 'connect_qq');	
-		}
-
 	}
 
 	/**

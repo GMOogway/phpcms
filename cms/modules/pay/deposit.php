@@ -10,7 +10,6 @@ pc_base::load_app_func('global');
 class deposit extends foreground {
 	private $pay_db,$member_db,$account_db;
 	function __construct() {
-		if (!module_exists(ROUTE_M)) showmessage(L('module_not_exists')); 
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
 		$this->pay_db = pc_base::load_model('pay_payment_model');
@@ -163,12 +162,7 @@ class deposit extends foreground {
 				pc_base::load_app_class('pay_factory','',0);
 				$payment_handler = new pay_factory($pay_name, $cfg);
 				$payment_handler->set_productinfo($product_info)->set_orderinfo($order_info)->set_customerinfo($customer_info);
-				//生成支付按钮  判断要是微信支付的话 就直接生成支付二维码 
-				if($payment['pay_code']=='Wxpay'){
-					$code=$payment_handler->get_png($surplus);
-				}else{
-					$code = $payment_handler->get_code('value="'.L('confirm_pay').'" class="button"');	
-				}
+				$code = $payment_handler->get_code('value="'.L('confirm_pay').'" class="button"');
 			} else {
 				$this->account_db->update(array('status'=>'waitting','pay_type'=>'offline'),array('id'=>$recordid));
 				$code = '<div class="point">'.L('pay_tip').'</div>';
@@ -178,7 +172,7 @@ class deposit extends foreground {
 	}	
 	
 	public function public_checkcode() {
-		if(!check_captcha_value(get_captcha())) {
+		if(!check_captcha_value($this->input->get('code'))) {
 			exit('0');
 		} else {
 			exit('1');

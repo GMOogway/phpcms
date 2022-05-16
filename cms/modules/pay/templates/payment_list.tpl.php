@@ -33,7 +33,7 @@ if(is_array($infos['data'])){
 	<td>
 	<?php if ($info['enabled']) {?>
 	<a href="javascript:edit('<?php echo $info['pay_id']?>', '<?php echo $info['pay_name']?>')"><?php echo L('configure')?></a> | 
-	<a href="javascript:confirmurl('?m=pay&c=payment&a=delete&id=<?php echo $info['pay_id']?>', '<?php echo L('confirm',array('message'=>$info['pay_name']))?>')"><?php echo L('plus_uninstall')?></a>
+	<a href="javascript:confirmurl('?m=pay&c=payment&a=delete&id=<?php echo $info['pay_id']?>&menuid=<?php echo $this->input->get('menuid');?>', '<?php echo L('confirm',array('message'=>$info['pay_name']))?>')"><?php echo L('plus_uninstall')?></a>
 	<?php } else {?>
 	<a class="btn btn-xs green" href="javascript:add('<?php echo $info['pay_code']?>', '<?php echo $info['pay_name']?>')"><?php echo L('plus_install')?></a>
 	<?php }?>

@@ -20,34 +20,15 @@ class respond {
 			$pay_name = ucwords($payment['pay_code']);
 			pc_base::load_app_class('pay_factory','',0);
 			$payment_handler = new pay_factory($pay_name, $cfg);
-			$return_data = $payment_handler->receive();//获取订单的信息
-			//判断支付方式 进行不同的方式修改
-			if($pay_name=="Wxpay"){
-				if($return_data) {
-					//支付成功
-					if($return_data['status'] == 'succ') {				//$return_data['status'] == 'succ'
-						$this->update_member_amount_by_sn($return_data['trade_sn']);//更新账户余额
-						//修改支付的状态
-						$a = $this->update_recode_status_by_sn($return_data['trade_sn'],$return_data['status']);
-						//删除二维码支付图片
-						unlink(WEB_PATH.$return_data['trade_sn'].'pay.png');
-						//返回成功的通知
-						$tips['code']=0;
-						$tips['tips']="恭喜您，支付成功";
-						echo json_encode($tips);
-					}
+			$return_data = $payment_handler->receive();
+			if($return_data) {
+				if($return_data['order_status'] == 0) {				
+					$this->update_member_amount_by_sn($return_data['order_id']);
 				}
-			}else{
-				if($return_data) {
-					if($return_data['order_status'] == 0) {				
-						$this->update_member_amount_by_sn($return_data['order_id']);//更新账户余额
-					}
-					//修改支付的状态
-					$this->update_recode_status_by_sn($return_data['order_id'],$return_data['order_status']);
-					showmessage(L('pay_success'),APP_PATH.'index.php?m=pay&c=deposit');
-				} else {
-					showmessage(L('pay_failed'),APP_PATH.'index.php?m=pay&c=deposit');
-				}
+				$this->update_recode_status_by_sn($return_data['order_id'],$return_data['order_status']);
+				showmessage(L('pay_success'),APP_PATH.'index.php?m=pay&c=deposit');
+			} else {
+				showmessage(L('pay_failed'),APP_PATH.'index.php?m=pay&c=deposit');
 			}
 		} else {
 			showmessage(L('pay_success'));
@@ -124,16 +105,8 @@ class respond {
 		$trade_sn = trim($trade_sn);
 		$this->account_db = pc_base::load_model('pay_account_model');
 		$result = $this->account_db->get_one(array('trade_sn'=>$trade_sn));
-	    //根据payid来获取支付的类型
-	    $db = pc_base::load_model('pay_payment_model');
-	    $info = $db->get_one(array('pay_id'=>$result['pay_id']));
-	    if($info['pay_code']=="Wxpay"){
-		    return $result? $result : false;
-	    }else{
-	        $status_arr = array('succ','failed','error','timeout','cancel');
-		    return ($result && !in_array($result['status'],$status_arr)) ? $result : false;
-	    }
-		
+		$status_arr = array('succ','failed','error','timeout','cancel');
+		return ($result && !in_array($result['status'],$status_arr)) ? $result : false;
 	}
 	
 	/**
