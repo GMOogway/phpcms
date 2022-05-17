@@ -194,12 +194,12 @@ class index extends admin {
 				$m =$model[$modelid];
 				$db = new sqltoolplus($m['tablename']);
 				
-				$sql="SHOW VARIABLES LIKE '%partition%';";
+				$sql="SHOW PLUGINS;";
 				$handle = $db -> query($sql);
 				$enabled = false;
 				if($handle){
 					while($r=$db -> fetch_next()){
-						if($r['Variable_name']=='have_partitioning' && $r['Value']=='YES'){
+						if($r['Name']=='partition'){
 							$enabled = true;
 							break;
 						}
@@ -247,6 +247,8 @@ class index extends admin {
 				}else{
 					dr_json(0,L('failure'));
 				}
+			}else{
+				dr_json(0,L('select').L('modelmx'));
 			}
 		}
 	}

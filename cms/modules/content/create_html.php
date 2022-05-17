@@ -292,29 +292,22 @@ class create_html extends admin {
 			$setting = string2array($this->categorys[$catid]['setting']);
 			$content_ishtml = $setting['content_ishtml'];
 			if(!$content_ishtml) dr_json(0, L('它是动态模式'));
+			$cache_class = pc_base::load_sys_class('cache');
+			$name = 'show-'.$modelid.'-html-file';
+			$cache_class->del_auth_data($name, $this->siteid);
 			if($content_ishtml) {
 				$ids = $this->input->get_post_ids();
 				if(empty($ids)) dr_json(0, L('you_do_not_check'));
-				$count = 0;
-				foreach($ids as $id) {
-					$insert['catid']=$catid;
-					$insert['id']=$id;
-					$count ++;
-					$cache_data[] = $insert;
-				}
-				$cache = array();
-				if ($count > 100) {
-					$pagesize = ceil($count/100);
-					for ($i = 1; $i <= 100; $i ++) {
-						$cache[$i] = array_slice($cache_data, ($i - 1) * $pagesize, $pagesize);
-					}
-				} else {
-					for ($i = 1; $i <= $count; $i ++) {
-						$cache[$i] = array_slice($cache_data, ($i - 1), 1);
-					}
-				}
-				setcache('update_html_show-'.$this->siteid.'-'.$_SESSION['userid'], $cache,'content');
-				dr_json(1, 'ok', array('url' => '?m=content&c=create_html&a=public_batch_show_add&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash')));
+				$count = dr_count($ids);
+				$this->db->set_model($modelid);
+				$sql = 'select id,catid,title,url,islink,inputtime from `'.$this->db->table_name.'` where id IN ('. implode(',', $ids).')';
+				$cache_class->set_auth_data($name, ceil($count/10), $this->siteid);
+				$cache_class->set_auth_data($name.'-data', array(
+					'sql' => $sql,
+					'pagesize' => 10,
+				), $this->siteid);
+				dr_json(1, 'ok', array('url' => '?m=content&c=create_html&a=public_batch_show_add&modelid='.$modelid.'&count='.$count.'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash')));
+				include $this->admin_tpl('show_html');
 			}
 		}
 	}
@@ -323,62 +316,18 @@ class create_html extends admin {
 	*/
 	public function public_batch_show_add() {
 		$show_header = $show_dialog = $show_pc_hash = true;
-		$todo_url = '?m=content&c=create_html&a=public_batch_show&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash');
-		include $this->admin_tpl('show_url');
+		$modelid = intval($this->input->get('modelid'));
+		$count = intval($this->input->get('count'));
+		$count_url = '?m=content&c=create_html&a=public_batch_show_count&count='.$count;
+		$todo_url = '?m=content&c=create_html&a=public_show_add&&modelid='.$modelid.'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash');
+		include $this->admin_tpl('show_html');
 	}
 	/**
-	* 批量生成内容页
+	* 内容数量统计
 	*/
-	public function public_batch_show() {
-		$this->html = pc_base::load_app_class('html');
-		$this->url = pc_base::load_app_class('url');
-		$page = max(1, intval($this->input->get('page')));
-		$update_html_show = getcache('update_html_show-'.$this->siteid.'-'.$_SESSION['userid'], 'content');
-		if (!$update_html_show) {
-			dr_json(0, '临时缓存数据不存在');
-		}
-
-		$cache_data = $update_html_show[$page];
-		if ($cache_data) {
-			$html = '';
-			foreach ($cache_data as $insert) {
-				$ok = '完成';
-				$class = '';
-				$modelid = $this->categorys[$insert['catid']]['modelid'];
-				$setting = string2array($this->categorys[$insert['catid']]['setting']);
-				$content_ishtml = $setting['content_ishtml'];
-				$this->db->set_model($modelid);
-				$rs = $this->db->get_one(array('id'=>$insert['id']));
-				if($content_ishtml) {
-					if($rs['islink']) {
-						$class = 'p_error';
-						$ok = '<a class="error" href="'.$rs['url'].'" target="_blank">转向链接</a>';
-					} else {
-						//写入文件
-						$this->db->table_name = $this->db->table_name.'_data';
-						$r2 = $this->db->get_one(array('id'=>$rs['id']));
-						if($r2) $rs = array_merge($rs,$r2);
-						//判断是否为升级或转换过来的数据
-						if(!$rs['upgrade']) {
-							list($urls) = $this->url->show($rs['id'], '', $rs['catid'], $rs['inputtime']);
-						} else {
-							$urls[1] = $rs['url'];
-						}
-						$this->html->show($urls[1],$rs,0,'edit',$rs['upgrade']);
-						$class = 'ok';
-						$ok = '<a class="ok" href="'.$rs['url'].'" target="_blank">生成成功</a>';
-					}
-				} else {
-					$class = 'p_error';
-					$ok = '<a class="error" href="'.$rs['url'].'" target="_blank">它是动态模式</a>';
-				}
-				$html.= '<p class="'.$class.'"><label class="rleft">(#'.$rs['id'].')'.$rs['title'].'</label><label class="rright">'.$ok.'</label></p>';
-			}
-			dr_json($page + 1, $html);
-		}
-		// 完成
-		delcache('update_html_show-'.$this->siteid.'-'.$_SESSION['userid'], 'content');
-		dr_json(100, '');
+	public function public_batch_show_count() {
+		$count = intval($this->input->get('count'));
+		dr_json(1, '共'.$count.'条，分'.ceil($count/10).'页');
 	}
 	/**
 	* 批量批量更新URL
@@ -501,8 +450,7 @@ class create_html extends admin {
 		
 		if ($cache) {
 			$sql = $cache['sql']. ' order by id asc limit '.($cache['pagesize'] * ($page - 1)).','.$cache['pagesize'];
-			$this->db->query($sql);
-			$data = $this->db->fetch_array();
+			$data = $this->db->query($sql);
 			if (!$data) {
 				// 完成
 				$cache_class->del_auth_data($name, $this->siteid);

@@ -23,6 +23,10 @@ body {background: #f5f6f8;}
         <div class="page-content page-content3 mybody-nheader main-content  ">
 <div class="page-bar">
     <ul class="page-breadcrumb">
+        <?php if($param['recycle']){?>
+            <li><a href="?m=content&c=content&a=initall&modelid=<?php echo $modelid;?>&recycle=1&menuid=<?php echo $param['menuid'];?>&pc_hash=<?php echo dr_get_csrf_token();?>" class="on"> <i class="fa fa-trash-o"></i> <?php echo L('recycle');?> </a> <i class="fa fa-circle"></i> </li>
+            <li> <a href="?m=content&c=content&a=initall&modelid=<?php echo $modelid;?>&menuid=<?php echo $param['menuid'];?>&pc_hash=<?php echo dr_get_csrf_token();?>" class=""> <i class="fa fa-reply"></i> <?php echo L('返回');?></a> </li>
+        <?php } else {?>
         <li class="dropdown"> <a href="javascript:;" class="on"> <i class="fa fa-gears"></i>  <?php echo L('模型');?></a> <a class="dropdown-toggle on" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="false"><i class="fa fa-angle-double-down"></i></a>
             <ul class="dropdown-menu">
             <?php 
@@ -38,6 +42,9 @@ body {background: #f5f6f8;}
                 }
             }
             ?>
+                <?php if($recycle[$modelid]){?>
+                <li><a href="?m=content&c=content&a=initall&modelid=<?php echo $modelid;?>&recycle=1&menuid=<?php echo $param['menuid'];?>&pc_hash=<?php echo dr_get_csrf_token();?>"> <i class="fa fa-trash-o"></i> <?php echo L('recycle');?>(<?php echo $recycle[$modelid];?>) </a></li>
+                <?php }?>
             </ul> <i class="fa fa-circle"></i>
         </li>
         <li class="dropdown"> <a href="javascript:;" class="on"> <i class="fa fa-users"></i>  <?php echo L('用户（总）');?></a> <a class="dropdown-toggle on" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="false"><i class="fa fa-angle-double-down"></i></a>
@@ -72,6 +79,7 @@ body {background: #f5f6f8;}
             ?>
             </ul>
         </li>
+        <?php }?>
     </ul>
 </div>
 <div class="page-body" style="margin-top: 20px;margin-bottom:30px;padding-top:15px;">
@@ -166,8 +174,8 @@ if(is_array($datas)){
         } else {
             echo '?m=content&c=content&a=public_preview&catid='.$r['catid'].'&id='.$r['id'].'';
         }?>" target="_blank"<?php if($r['status']!=99) {?> onclick='window.open("?m=content&c=content&a=public_preview&catid=<?php echo $r['catid'];?>&id=<?php echo $r['id'];?>","manage")'<?php }?> class="btn btn-xs blue"><i class="fa fa-eye"></i> <?php echo L('preview');?></a>
-        <a href="javascript:;" onclick="javascript:dr_content_submit('?m=content&c=content&a=edit&catid=<?php echo $r['catid'];?>&id=<?php echo $r['id'];?>','edit')" class="btn btn-xs green"><i class="fa fa-edit"></i> <?php echo L('edit');?></a>
-        <a href="javascript:view_comment('<?php echo id_encode('content_'.$r['catid'],$r['id'],$this->siteid);?>','<?php echo safe_replace($r['title']);?>')" class="btn btn-xs yellow"><i class="fa fa-comment"></i> <?php echo L('comment');?></a></td>
+        <?php if($param['recycle']){?><a class="btn btn-xs green" id="restore" data-id="<?php echo $r['id'];?>"><i class="fa fa-reply"></i> <?php echo L('recover');?></a><?php } else {?><a href="javascript:;" onclick="javascript:dr_content_submit('?m=content&c=content&a=edit&catid=<?php echo $r['catid'];?>&id=<?php echo $r['id'];?>','edit')" class="btn btn-xs green"><i class="fa fa-edit"></i> <?php echo L('edit');?></a>
+        <a href="javascript:view_comment('<?php echo id_encode('content_'.$r['catid'],$r['id'],$this->siteid);?>','<?php echo safe_replace($r['title']);?>')" class="btn btn-xs yellow"><i class="fa fa-comment"></i> <?php echo L('comment');?><?php }?></a></td>
     </tr>
 <?php 
     }
@@ -176,13 +184,103 @@ if(is_array($datas)){
 </tbody>
     </table>
 </div>
-<div class="row">
+<div class="row list-footer table-checkable">
+    <div class="col-md-5 list-select">
+        <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
+            <input type="checkbox" class="group-checkable" data-set=".checkboxes">
+            <span></span>
+        </label>
+        <?php if($param['recycle']){?>
+        <label><button type="button" id="recycle" class="btn green btn-sm"> <i class="fa fa-reply"></i> <?php echo L('recover');?></button></label>
+        <?php }?>
+        <label><button type="button" id="delAll" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php if($param['recycle']){?><?php echo L('thorough');?><?php }?><?php echo L('delete');?></button></label>
+        <?php if($param['recycle']){?>
+        <label><button type="button" onclick="ajax_confirm_url('?m=content&c=content&a=public_recycle_del&modelid=<?php echo $modelid;?>', '你确定要清空回收站吗？', '')" class="btn red btn-sm"> <i class="fa fa-close"></i> <?php echo L('empty_recycle').L('recycle');?></button></label>
+        <?php } else {?>
+        <label><button type="button" id="recycle" class="btn blue btn-sm"> <i class="fa fa-trash-o"></i> <?php echo L('in_recycle');?></button></label>
+        <?php }?>
+    </div>
     <div class="col-md-12 col-sm-12 text-right"><?php echo $pages?></div>
 </div>
 </form>
 </div>
 </div>
-<script type="text/javascript"> 
+<script type="text/javascript">
+$(function() {
+    $('body').on('click','#delAll',function() {
+        var ids = [];
+        $('input[name="id[]"]:checked').each(function() {
+            ids.push($(this).val());
+        });
+        if (ids.toString()=='') {
+            layer.msg('\u81f3\u5c11\u9009\u62e9\u4e00\u6761\u4fe1\u606f',{time:1000,icon:2});
+        } else {
+            Dialog.confirm('确认要删除选中的内容吗？', function() {
+                var loading = layer.load(1, {shade: [0.1, '#fff']});
+                $.ajax({
+                    type: 'post',
+                    url: '?m=content&c=content&a=delete&modelid=<?php echo $modelid;?>&pc_hash='+pc_hash,
+                    data: {ids: ids,dosubmit:1,csrf_test_name:csrf_hash},
+                    dataType: 'json',
+                    success: function(res) {
+                        layer.close(loading);
+                        if (res.code==1) {
+                            setTimeout("window.location.reload(true)", 2000);
+                        }
+                        dr_tips(res.code, res.msg);
+                    }
+                });
+            });
+        }
+    })
+    $('body').on('click','#recycle',function() {
+        var ids = [];
+        $('input[name="id[]"]:checked').each(function() {
+            ids.push($(this).val());
+        });
+        if (ids.toString()=='') {
+            layer.msg('\u81f3\u5c11\u9009\u62e9\u4e00\u6761\u4fe1\u606f',{time:1000,icon:2});
+        } else {
+            Dialog.confirm('确认要删除选中的内容吗？您可以在回收站恢复！', function() {
+                var loading = layer.load(1, {shade: [0.1, '#fff']});
+                $.ajax({
+                    type: 'post',
+                    url: '?m=content&c=content&a=recycle&recycle=<?php if($param['recycle']){?>0<?php } else {?>1<?php }?>&modelid=<?php echo $modelid;?>&pc_hash='+pc_hash,
+                    data: {ids: ids,dosubmit:1,csrf_test_name:csrf_hash},
+                    dataType: 'json',
+                    success: function(res) {
+                        layer.close(loading);
+                        if (res.code==1) {
+                            setTimeout("window.location.reload(true)", 2000);
+                        }
+                        dr_tips(res.code, res.msg);
+                    }
+                });
+            });
+        }
+    })
+    <?php if($param['recycle']){?>
+    $('body').on('click','#restore',function() {
+        var data = this;
+        Dialog.confirm('确定要还原此内容吗？', function() {
+            var loading = layer.load(1, {shade: [0.1, '#fff']});
+            $.ajax({
+                type: 'post',
+                url: '?m=content&c=content&a=recycle&recycle=0&modelid=<?php echo $modelid;?>&pc_hash='+pc_hash,
+                data: {id:$(data).data('id'),dosubmit:1},
+                dataType: 'json',
+                success: function(res) {
+                    layer.close(loading);
+                    if (res.code==1) {
+                        setTimeout("window.location.reload(true)", 2000);
+                    }
+                    dr_tips(res.code, res.msg);
+                }
+            });
+        });
+    });
+    <?php }?>
+});
 function view_comment(id, name) {
     var w = 800;
     var h = 500;

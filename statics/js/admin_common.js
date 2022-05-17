@@ -784,7 +784,7 @@ function iframe(type, url, width, height, rt) {
 	});
 }
 // ajax 显示内容
-function dr_iframe_show(type, url, width, height) {
+function dr_iframe_show(type, url, width, height, is_close) {
 	if (typeof pc_hash == 'string') url += (url.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
 	if (url.toLowerCase().indexOf("http://") != -1 || url.toLowerCase().indexOf("https://") != -1) {
 	} else {
@@ -823,12 +823,21 @@ function dr_iframe_show(type, url, width, height) {
 	});
 	diag.cancelText = '关闭(X)';
 	diag.onCancel=function(){
+		if (is_close == "load") {
+			window.location.reload(true);
+		}
 		$DW.close();
 	};
+	if (is_close == "load") {
+		diag.onClose=function(){
+			window.location.reload(true);
+			$DW.close();
+		};
+	}
 	diag.show();
 }
 // ajax 显示内容
-function iframe_show(type, url, width, height) {
+function iframe_show(type, url, width, height, is_close) {
 	var title = '';
 	if (type == 'show') {
 		title = '<i class="fa fa-search"></i> 查看';
@@ -867,6 +876,10 @@ function iframe_show(type, url, width, height) {
 				var obj = JSON.parse(json);
 				layer.close(index);
 				dr_tips(0, obj.msg);
+			}
+		},end: function(){
+			if (is_close == "load") {
+				window.location.reload(true);
 			}
 		},
 		content: url+'&is_ajax=1'

@@ -191,6 +191,7 @@ class content extends admin {
 			$this->db->set_model($r['modelid']);
 			$number = $this->db->count();
 			$this->sitemodel_db->update(array('items'=>$number),array('modelid'=>$r['modelid']));
+			$recycle[$r['modelid']] = $this->db->count(array('status'=>100));
 		}
 		$modelid = intval($this->input->get('modelid'));
 		if (!$modelid) {$one = reset($datas2);$modelid = $one['modelid'];}
@@ -205,6 +206,9 @@ class content extends admin {
 		$where = array();
 		//搜索
 		$param = $this->input->get();
+		if($param['recycle']) {
+			$where[] = 'status=100';
+		}
 		if($param['start_time']) {
 			$where[] = $date_field.' BETWEEN ' . max((int)strtotime(strpos($param['start_time'], ' ') ? $param['start_time'] : $param['start_time'].' 00:00:00'), 1) . ' AND ' . ($param['end_time'] ? (int)strtotime(strpos($param['end_time'], ' ') ? $param['end_time'] : $param['end_time'].' 23:59:59') : SYS_TIME);
 		}
@@ -383,41 +387,341 @@ class content extends admin {
 	 */
 	public function delete() {
 		if($this->input->post('dosubmit')) {
+			$modelid = intval($this->input->get('modelid'));
 			$catid = intval($this->input->get('catid'));
-			if(!$catid) dr_json(0, L('missing_part_parameters'));
-			$modelid = $this->categorys[$catid]['modelid'];
-			$sethtml = $this->categorys[$catid]['sethtml'];
-			$siteid = $this->categorys[$catid]['siteid'];
-			
-			$html_root = SYS_HTML_ROOT;
-			if($sethtml) $html_root = '';
-			
-			$setting = string2array($this->categorys[$catid]['setting']);
-			$content_ishtml = $setting['content_ishtml'];
-			$this->db->set_model($modelid);
-			$this->hits_db = pc_base::load_model('hits_model');
-			$this->queue = pc_base::load_model('queue_model');
-			if($this->input->get('ajax_preview')) {
-				$ids = array(0=>intval($this->input->get('id')));
-			} else {
+			if ($modelid && !$catid) {
+				if(!$modelid) dr_json(0, L('choose_model'));
 				$ids = $this->input->get_post_ids();
+				if(empty($ids)) dr_json(0, L('you_do_not_check'));
+				$this->hits_db = pc_base::load_model('hits_model');
+				$this->queue = pc_base::load_model('queue_model');
+				//附件初始化
+				$attachment = pc_base::load_model('attachment_model');
+				$this->content_check_db = pc_base::load_model('content_check_model');
+				$this->position_data_db = pc_base::load_model('position_data_model');
+				$this->search_db = pc_base::load_model('search_model');
+				$this->comment = pc_base::load_app_class('comment', 'comment');
+				$this->url = pc_base::load_app_class('url', 'content');
+				$sitelist = getcache('sitelist','commons');
+				$this->db->set_model($modelid);
+				$data = $this->db->select(array('id'=>($ids)));
+				foreach($data as $r) {
+					$sethtml = $this->categorys[$r['catid']]['sethtml'];
+					$siteid = $this->categorys[$r['catid']]['siteid'];
+					
+					$html_root = SYS_HTML_ROOT;
+					if($sethtml) $html_root = '';
+					
+					$setting = string2array($this->categorys[$r['catid']]['setting']);
+					$content_ishtml = $setting['content_ishtml'];
+					$search_model = getcache('search_model_'.$this->siteid,'search');
+					$typeid = $search_model[$modelid]['typeid'];
+					
+					if($content_ishtml && !$r['islink']) {
+						list($urls) = $this->url->show($r['id'], 0, $r['catid'], $r['inputtime']);
+						$fileurl = $urls[1];
+						if($this->siteid != 1) {
+							$fileurl = $html_root.'/'.$sitelist[$this->siteid]['dirname'].$fileurl;
+						}
+						$mobilefileurl = SYS_MOBILE_ROOT.$fileurl;
+						//删除静态文件，排除htm/html/shtml外的文件
+						$lasttext = strrchr($fileurl,'.');
+						$len = -strlen($lasttext);
+						$path = substr($fileurl,0,$len);
+						$path = ltrim($path,'/');
+						$filelist = glob(CMS_PATH.$path.'{_,-,.}*',GLOB_BRACE);
+						$mobilelasttext = strrchr($mobilefileurl,'.');
+						$mobilelen = -strlen($mobilelasttext);
+						$mobilepath = substr($mobilefileurl,0,$mobilelen);
+						$mobilepath = ltrim($mobilepath,'/');
+						$mobilefilelist = glob(CMS_PATH.$mobilepath.'{_,-,.}*',GLOB_BRACE);
+						foreach ($filelist as $delfile) {
+							$lasttext = strrchr($delfile,'.');
+							if(!in_array($lasttext, array('.htm','.html','.shtml'))) continue;
+							@unlink($delfile);
+							//删除发布点队列数据
+							$delfile = str_replace(CMS_PATH, '/', $delfile);
+							$this->queue->add_queue('del',$delfile,$this->siteid);
+						}
+						if($sitelist[$this->siteid]['mobilehtml']==1) {
+							foreach ($mobilefilelist as $mobiledelfile) {
+								$mobilelasttext = strrchr($mobiledelfile,'.');
+								if(!in_array($mobilelasttext, array('.htm','.html','.shtml'))) continue;
+								@unlink($mobiledelfile);
+							}
+						}
+					} else {
+						$fileurl = 0;
+					}
+					//删除内容
+					$this->db->delete_content($r['id'],$fileurl,$r['catid']);
+					//删除统计表数据
+					$this->hits_db->delete(array('hitsid'=>'c-'.$modelid.'-'.$r['id']));
+					//删除附件
+					$attachment->api_delete('c-'.$r['catid'].'-'.$r['id']);
+					//删除审核表数据
+					$this->content_check_db->delete(array('checkid'=>'c-'.$r['id'].'-'.$modelid));
+					//删除推荐位数据
+					$this->position_data_db->delete(array('id'=>$r['id'],'catid'=>$r['catid'],'module'=>'content'));
+					//删除全站搜索中数据
+					$this->search_db->delete_search($typeid,$r['id']);
+					//删除关键词和关键词数量重新统计
+					$keyword_db = pc_base::load_model('keyword_model');
+					$keyword_data_db = pc_base::load_model('keyword_data_model');
+					$keyword_arr = $keyword_data_db->select(array('siteid'=>$siteid,'contentid'=>$r['id'].'-'.$modelid));
+					if($keyword_arr){
+						foreach ($keyword_arr as $val){
+							$keyword_db->update(array('videonum'=>'-=1'),array('id'=>$val['tagid']));
+						}
+						$keyword_data_db->delete(array('siteid'=>$siteid,'contentid'=>$r['id'].'-'.$modelid));
+						$keyword_db->delete(array('videonum'=>'0'));
+					}
+					
+					//删除相关的评论,删除前应该判断是否还存在此模块
+					if(module_exists('comment')){
+						$commentid = id_encode('content_'.$r['catid'], $r['id'], $siteid);
+						$this->comment->del($commentid, $siteid, $r['id'], $r['catid']);
+					}
+					
+				}
+			} else {
+				if(!$catid) dr_json(0, L('missing_part_parameters'));
+				$modelid = $this->categorys[$catid]['modelid'];
+				$sethtml = $this->categorys[$catid]['sethtml'];
+				$siteid = $this->categorys[$catid]['siteid'];
+				
+				$html_root = SYS_HTML_ROOT;
+				if($sethtml) $html_root = '';
+				
+				$setting = string2array($this->categorys[$catid]['setting']);
+				$content_ishtml = $setting['content_ishtml'];
+				$this->db->set_model($modelid);
+				$this->hits_db = pc_base::load_model('hits_model');
+				$this->queue = pc_base::load_model('queue_model');
+				if($this->input->get('ajax_preview')) {
+					$ids = array(0=>intval($this->input->get('id')));
+				} else {
+					$ids = $this->input->get_post_ids();
+				}
+				if(empty($ids)) dr_json(0, L('you_do_not_check'));
+				//附件初始化
+				$attachment = pc_base::load_model('attachment_model');
+				$this->content_check_db = pc_base::load_model('content_check_model');
+				$this->position_data_db = pc_base::load_model('position_data_model');
+				$this->search_db = pc_base::load_model('search_model');
+				$this->comment = pc_base::load_app_class('comment', 'comment');
+				$search_model = getcache('search_model_'.$this->siteid,'search');
+				$typeid = $search_model[$modelid]['typeid'];
+				$this->url = pc_base::load_app_class('url', 'content');
+				$sitelist = getcache('sitelist','commons');
+				
+				foreach($ids as $id) {
+					$r = $this->db->get_one(array('id'=>$id));
+					if($content_ishtml && !$r['islink']) {
+						list($urls) = $this->url->show($id, 0, $r['catid'], $r['inputtime']);
+						$fileurl = $urls[1];
+						if($this->siteid != 1) {
+							$fileurl = $html_root.'/'.$sitelist[$this->siteid]['dirname'].$fileurl;
+						}
+						$mobilefileurl = SYS_MOBILE_ROOT.$fileurl;
+						//删除静态文件，排除htm/html/shtml外的文件
+						$lasttext = strrchr($fileurl,'.');
+						$len = -strlen($lasttext);
+						$path = substr($fileurl,0,$len);
+						$path = ltrim($path,'/');
+						$filelist = glob(CMS_PATH.$path.'{_,-,.}*',GLOB_BRACE);
+						$mobilelasttext = strrchr($mobilefileurl,'.');
+						$mobilelen = -strlen($mobilelasttext);
+						$mobilepath = substr($mobilefileurl,0,$mobilelen);
+						$mobilepath = ltrim($mobilepath,'/');
+						$mobilefilelist = glob(CMS_PATH.$mobilepath.'{_,-,.}*',GLOB_BRACE);
+						foreach ($filelist as $delfile) {
+							$lasttext = strrchr($delfile,'.');
+							if(!in_array($lasttext, array('.htm','.html','.shtml'))) continue;
+							@unlink($delfile);
+							//删除发布点队列数据
+							$delfile = str_replace(CMS_PATH, '/', $delfile);
+							$this->queue->add_queue('del',$delfile,$this->siteid);
+						}
+						if($sitelist[$this->siteid]['mobilehtml']==1) {
+							foreach ($mobilefilelist as $mobiledelfile) {
+								$mobilelasttext = strrchr($mobiledelfile,'.');
+								if(!in_array($mobilelasttext, array('.htm','.html','.shtml'))) continue;
+								@unlink($mobiledelfile);
+							}
+						}
+					} else {
+						$fileurl = 0;
+					}
+					//删除内容
+					$this->db->delete_content($id,$fileurl,$catid);
+					//删除统计表数据
+					$this->hits_db->delete(array('hitsid'=>'c-'.$modelid.'-'.$id));
+					//删除附件
+					$attachment->api_delete('c-'.$catid.'-'.$id);
+					//删除审核表数据
+					$this->content_check_db->delete(array('checkid'=>'c-'.$id.'-'.$modelid));
+					//删除推荐位数据
+					$this->position_data_db->delete(array('id'=>$id,'catid'=>$catid,'module'=>'content'));
+					//删除全站搜索中数据
+					$this->search_db->delete_search($typeid,$id);
+					//删除关键词和关键词数量重新统计
+					$keyword_db = pc_base::load_model('keyword_model');
+					$keyword_data_db = pc_base::load_model('keyword_data_model');
+					$keyword_arr = $keyword_data_db->select(array('siteid'=>$siteid,'contentid'=>$id.'-'.$modelid));
+					if($keyword_arr){
+						foreach ($keyword_arr as $val){
+							$keyword_db->update(array('videonum'=>'-=1'),array('id'=>$val['tagid']));
+						}
+						$keyword_data_db->delete(array('siteid'=>$siteid,'contentid'=>$id.'-'.$modelid));
+						$keyword_db->delete(array('videonum'=>'0'));
+					}
+					
+					//删除相关的评论,删除前应该判断是否还存在此模块
+					if(module_exists('comment')){
+						$commentid = id_encode('content_'.$catid, $id, $siteid);
+						$this->comment->del($commentid, $siteid, $id, $catid);
+					}
+					
+				}
 			}
-			if(empty($ids)) dr_json(0, L('you_do_not_check'));
-			//附件初始化
-			$attachment = pc_base::load_model('attachment_model');
-			$this->content_check_db = pc_base::load_model('content_check_model');
-			$this->position_data_db = pc_base::load_model('position_data_model');
-			$this->search_db = pc_base::load_model('search_model');
-			$this->comment = pc_base::load_app_class('comment', 'comment');
-			$search_model = getcache('search_model_'.$this->siteid,'search');
-			$typeid = $search_model[$modelid]['typeid'];
-			$this->url = pc_base::load_app_class('url', 'content');
-			$sitelist = getcache('sitelist','commons');
-			
-			foreach($ids as $id) {
-				$r = $this->db->get_one(array('id'=>$id));
+			//更新栏目统计
+			$this->db->cache_items();
+			$this->cache_api->cache('sitemodels');
+			dr_json(1, L('operation_success'));
+		} else {
+			dr_json(0, L('operation_failure'));
+		}
+	}
+	/**
+	 * 更新
+	 */
+	public function recycle() {
+		if($this->input->post('dosubmit')) {
+			$modelid = intval($this->input->get('modelid'));
+			$catid = intval($this->input->get('catid'));
+			$recycle = intval($this->input->get('recycle'));
+			if ($modelid && !$catid) {
+				if(!$modelid) dr_json(0, L('choose_model'));
+				if($this->input->post('id')) {
+					$ids = array(0=>intval($this->input->post('id')));
+				} else {
+					$ids = $this->input->get_post_ids();
+				}
+				if(empty($ids)) dr_json(0, L('you_do_not_check'));
+				if ($modelid) {
+					$this->db->set_model($modelid);
+					foreach($ids as $id) {
+						if ($recycle) {
+							$this->db->update(array('status'=>100),array('id'=>$id));
+						} else {
+							$this->db->update(array('status'=>99),array('id'=>$id));
+						}
+					}
+					dr_json(1, L('operation_success'));
+				}
+			} else {
+				if(!$catid) dr_json(0, L('missing_part_parameters'));
+				if($this->input->post('id')) {
+					$ids = array(0=>intval($this->input->post('id')));
+				} else {
+					$ids = $this->input->get_post_ids();
+				}
+				if(empty($ids)) dr_json(0, L('you_do_not_check'));
+				if ($catid) {
+					$modelid = $this->categorys[$catid]['modelid'];
+					$this->db->set_model($modelid);
+					foreach($ids as $id) {
+						if ($recycle) {
+							$this->db->update(array('status'=>100),array('id'=>$id));
+						} else {
+							$this->db->update(array('status'=>99),array('id'=>$id));
+						}
+					}
+					dr_json(1, L('operation_success'));
+				}
+			}
+		} else {
+			dr_json(0, L('operation_failure'));
+		}
+	}
+	/**
+	 * 更新
+	 */
+	public function update() {
+		if($this->input->post('dosubmit')) {
+			$catid = intval($this->input->get('catid'));
+			if ($catid) {
+				$modelid = $this->categorys[$catid]['modelid'];
+				$this->db->set_model($modelid);
+				$this->db->update(array($this->input->post('field')=>$this->input->post('value')),array('id'=>$this->input->post('id')));
+				dr_json(1, L('operation_success'));
+			} else {
+				$modelid = intval($this->input->get('modelid'));
+				$this->db->set_model($modelid);
+				$this->db->update(array($this->input->post('field')=>$this->input->post('value')),array('id'=>$this->input->post('id')));
+				dr_json(1, L('operation_success'));
+			}
+		} else {
+			dr_json(0, L('operation_failure'));
+		}
+	}
+	/**
+	 * 回收站清空
+	 */
+	public function public_recycle_del() {
+		$page = (int)$this->input->get('page');
+		$catid = intval($this->input->get('catid'));
+		$modelid = intval($this->input->get('modelid'));
+		$catid = intval($this->input->get('catid'));
+		$this->hits_db = pc_base::load_model('hits_model');
+		$this->queue = pc_base::load_model('queue_model');
+
+		//附件初始化
+		$attachment = pc_base::load_model('attachment_model');
+		$this->content_check_db = pc_base::load_model('content_check_model');
+		$this->position_data_db = pc_base::load_model('position_data_model');
+		$this->search_db = pc_base::load_model('search_model');
+		$this->comment = pc_base::load_app_class('comment', 'comment');
+		$this->url = pc_base::load_app_class('url', 'content');
+		$sitelist = getcache('sitelist','commons');
+		if ($modelid && !$catid) {
+			if(!$modelid) dr_json(0, L('choose_model'));
+			$this->db->set_model($modelid);
+
+			$psize = 20;
+			if (!$page) {
+				$nums = $this->db->count(array('status'=>100));
+				if (!$nums) {
+					dr_json(0, L('数据为空'));
+				}
+				$tpage = ceil($nums / $psize); // 总页数
+				dr_json(1, L('即将执行清空回收站命令'), [
+					'jscode' => 'iframe_show(\''.L('清空回收站').'\', \'?m=content&c=content&a=public_recycle_del&modelid='.$modelid.'&page=1&total='.$nums.'&tpage='.$tpage.'\', \'500px\', \'300px\', \'load\')'
+				]);
+			}
+
+			$tpage = (int)$this->input->get('tpage');
+			$total = (int)$this->input->get('total');
+
+			$data = $this->db->listinfo(array('status'=>100),'id DESC',1,$psize);
+			if (!$data) {
+				html_msg(1, L('共删除'.$total.'条数据'));
+			}
+
+			foreach($data as $r) {
+				$sethtml = $this->categorys[$r['catid']]['sethtml'];
+				$siteid = $this->categorys[$r['catid']]['siteid'];
+				
+				$html_root = SYS_HTML_ROOT;
+				if($sethtml) $html_root = '';
+				
+				$setting = string2array($this->categorys[$r['catid']]['setting']);
+				$content_ishtml = $setting['content_ishtml'];
+				$search_model = getcache('search_model_'.$this->siteid,'search');
+				$typeid = $search_model[$modelid]['typeid'];
 				if($content_ishtml && !$r['islink']) {
-					list($urls) = $this->url->show($id, 0, $r['catid'], $r['inputtime']);
+					list($urls) = $this->url->show($r['id'], 0, $r['catid'], $r['inputtime']);
 					$fileurl = $urls[1];
 					if($this->siteid != 1) {
 						$fileurl = $html_root.'/'.$sitelist[$this->siteid]['dirname'].$fileurl;
@@ -453,223 +757,150 @@ class content extends admin {
 					$fileurl = 0;
 				}
 				//删除内容
-				$this->db->delete_content($id,$fileurl,$catid);
+				$this->db->delete_content($r['id'],$fileurl,$r['catid']);
 				//删除统计表数据
-				$this->hits_db->delete(array('hitsid'=>'c-'.$modelid.'-'.$id));
+				$this->hits_db->delete(array('hitsid'=>'c-'.$modelid.'-'.$r['id']));
 				//删除附件
-				$attachment->api_delete('c-'.$catid.'-'.$id);
+				$attachment->api_delete('c-'.$r['catid'].'-'.$r['id']);
 				//删除审核表数据
-				$this->content_check_db->delete(array('checkid'=>'c-'.$id.'-'.$modelid));
+				$this->content_check_db->delete(array('checkid'=>'c-'.$r['id'].'-'.$modelid));
 				//删除推荐位数据
-				$this->position_data_db->delete(array('id'=>$id,'catid'=>$catid,'module'=>'content'));
+				$this->position_data_db->delete(array('id'=>$r['id'],'catid'=>$r['catid'],'module'=>'content'));
 				//删除全站搜索中数据
-				$this->search_db->delete_search($typeid,$id);
+				$this->search_db->delete_search($typeid,$r['id']);
 				//删除关键词和关键词数量重新统计
 				$keyword_db = pc_base::load_model('keyword_model');
 				$keyword_data_db = pc_base::load_model('keyword_data_model');
-				$keyword_arr = $keyword_data_db->select(array('siteid'=>$siteid,'contentid'=>$id.'-'.$modelid));
+				$keyword_arr = $keyword_data_db->select(array('siteid'=>$siteid,'contentid'=>$r['id'].'-'.$modelid));
 				if($keyword_arr){
 					foreach ($keyword_arr as $val){
 						$keyword_db->update(array('videonum'=>'-=1'),array('id'=>$val['tagid']));
 					}
-					$keyword_data_db->delete(array('siteid'=>$siteid,'contentid'=>$id.'-'.$modelid));
+					$keyword_data_db->delete(array('siteid'=>$siteid,'contentid'=>$r['id'].'-'.$modelid));
 					$keyword_db->delete(array('videonum'=>'0'));
 				}
-				
+
 				//删除相关的评论,删除前应该判断是否还存在此模块
 				if(module_exists('comment')){
-					$commentid = id_encode('content_'.$catid, $id, $siteid);
-					$this->comment->del($commentid, $siteid, $id, $catid);
+					$commentid = id_encode('content_'.$r['catid'], $r['id'], $siteid);
+					$this->comment->del($commentid, $siteid, $r['id'], $r['catid']);
 				}
-				
- 			}
+
+			}
 			//更新栏目统计
 			$this->db->cache_items();
 			$this->cache_api->cache('sitemodels');
-			dr_json(1, L('operation_success'));
+
+			html_msg(1, L('正在执行中【'.$tpage.'/'.($page+1).'】...'), '?m=content&c=content&a=public_recycle_del&modelid='.$modelid.'&total='.$total.'&tpage='.$tpage.'&page='.($page+1));
 		} else {
-			dr_json(0, L('operation_failure'));
-		}
-	}
-	/**
-	 * 更新
-	 */
-	public function recycle() {
-		if($this->input->post('dosubmit')) {
-			$catid = intval($this->input->get('catid'));
-			$recycle = intval($this->input->get('recycle'));
-			if($this->input->post('id')) {
-				$ids = array(0=>intval($this->input->post('id')));
-			} else {
-				$ids = $this->input->get_post_ids();
+			if(!$catid) dr_json(0, L('missing_part_parameters'));
+			$modelid = $this->categorys[$catid]['modelid'];
+			$sethtml = $this->categorys[$catid]['sethtml'];
+			$siteid = $this->categorys[$catid]['siteid'];
+			
+			$html_root = SYS_HTML_ROOT;
+			if($sethtml) $html_root = '';
+			
+			$setting = string2array($this->categorys[$catid]['setting']);
+			$content_ishtml = $setting['content_ishtml'];
+			$this->db->set_model($modelid);
+			$search_model = getcache('search_model_'.$this->siteid,'search');
+			$typeid = $search_model[$modelid]['typeid'];
+
+			$psize = 20;
+			if (!$page) {
+				$nums = $this->db->count(array('catid'=>$catid, 'status'=>100));
+				if (!$nums) {
+					dr_json(0, L('数据为空'));
+				}
+				$tpage = ceil($nums / $psize); // 总页数
+				dr_json(1, L('即将执行清空回收站命令'), [
+					'jscode' => 'iframe_show(\''.L('清空回收站').'\', \'?m=content&c=content&a=public_recycle_del&catid='.$catid.'&page=1&total='.$nums.'&tpage='.$tpage.'\', \'500px\', \'300px\', \'load\')'
+				]);
 			}
-			if(empty($ids)) dr_json(0, L('you_do_not_check'));
-			if ($catid) {
-				$modelid = $this->categorys[$catid]['modelid'];
-				$this->db->set_model($modelid);
-				foreach($ids as $id) {
-					if ($recycle) {
-						$this->db->update(array('status'=>100),array('id'=>$id));
-					} else {
-						$this->db->update(array('status'=>99),array('id'=>$id));
+
+			$tpage = (int)$this->input->get('tpage');
+			$total = (int)$this->input->get('total');
+
+			$data = $this->db->listinfo(array('catid'=>$catid, 'status'=>100),'id DESC',1,$psize);
+			if (!$data) {
+				html_msg(1, L('共删除'.$total.'条数据'));
+			}
+
+			foreach($data as $r) {
+				if($content_ishtml && !$r['islink']) {
+					list($urls) = $this->url->show($r['id'], 0, $r['catid'], $r['inputtime']);
+					$fileurl = $urls[1];
+					if($this->siteid != 1) {
+						$fileurl = $html_root.'/'.$sitelist[$this->siteid]['dirname'].$fileurl;
 					}
-				}
-				dr_json(1, L('operation_success'));
-			}
-		} else {
-			dr_json(0, L('operation_failure'));
-		}
-	}
-	/**
-	 * 更新
-	 */
-	public function update() {
-		if($this->input->post('dosubmit')) {
-			$catid = intval($this->input->get('catid'));
-			if ($catid) {
-				$modelid = $this->categorys[$catid]['modelid'];
-				$this->db->set_model($modelid);
-				$this->db->update(array($this->input->post('field')=>$this->input->post('value')),array('id'=>$this->input->post('id')));
-				dr_json(1, L('operation_success'));
-			} else {
-				$modelid = intval($this->input->get('modelid'));
-				$this->db->set_model($modelid);
-				$this->db->update(array($this->input->post('field')=>$this->input->post('value')),array('id'=>$this->input->post('id')));
-				dr_json(1, L('operation_success'));
-			}
-		} else {
-			dr_json(0, L('operation_failure'));
-		}
-	}
-	/**
-	 * 回收站清空
-	 */
-	public function public_recycle_del() {
-		$page = (int)$this->input->get('page');
-		$catid = intval($this->input->get('catid'));
-		$modelid = $this->categorys[$catid]['modelid'];
-		$sethtml = $this->categorys[$catid]['sethtml'];
-		$siteid = $this->categorys[$catid]['siteid'];
-		
-		$html_root = SYS_HTML_ROOT;
-		if($sethtml) $html_root = '';
-		
-		$setting = string2array($this->categorys[$catid]['setting']);
-		$content_ishtml = $setting['content_ishtml'];
-		$this->db->set_model($modelid);
-		$this->hits_db = pc_base::load_model('hits_model');
-		$this->queue = pc_base::load_model('queue_model');
-
-		//附件初始化
-		$attachment = pc_base::load_model('attachment_model');
-		$this->content_check_db = pc_base::load_model('content_check_model');
-		$this->position_data_db = pc_base::load_model('position_data_model');
-		$this->search_db = pc_base::load_model('search_model');
-		$this->comment = pc_base::load_app_class('comment', 'comment');
-		$search_model = getcache('search_model_'.$this->siteid,'search');
-		$typeid = $search_model[$modelid]['typeid'];
-		$this->url = pc_base::load_app_class('url', 'content');
-		$sitelist = getcache('sitelist','commons');
-
-		$psize = 20;
-		if (!$page) {
-			$nums = $this->db->count(array('catid'=>$catid, 'status'=>100));
-			if (!$nums) {
-				dr_json(0, L('数据为空'));
-			}
-			$tpage = ceil($nums / $psize); // 总页数
-			dr_json(1, L('即将执行清空回收站命令'), [
-				'jscode' => 'iframe_show(\''.L('清空回收站').'\', \'?m=content&c=content&a=public_recycle_del&catid='.$catid.'&page=1&total='.$nums.'&tpage='.$tpage.'\', \'500px\', \'300px\', \'load\')'
-			]);
-		}
-
-		$tpage = (int)$this->input->get('tpage');
-		$total = (int)$this->input->get('total');
-
-		$data = $this->db->listinfo(array('catid'=>$catid, 'status'=>100),'id DESC',1,$psize);
-		if (!$data) {
-			html_msg(1, L('共删除'.$total.'条数据'));
-		}
-
-		$ids = array();
-		foreach ($data as $t) {
-			$ids[] = $t['id'];
-		}
-
-		foreach($ids as $id) {
-			$r = $this->db->get_one(array('id'=>$id));
-			if($content_ishtml && !$r['islink']) {
-				list($urls) = $this->url->show($id, 0, $r['catid'], $r['inputtime']);
-				$fileurl = $urls[1];
-				if($this->siteid != 1) {
-					$fileurl = $html_root.'/'.$sitelist[$this->siteid]['dirname'].$fileurl;
-				}
-				$mobilefileurl = SYS_MOBILE_ROOT.$fileurl;
-				//删除静态文件，排除htm/html/shtml外的文件
-				$lasttext = strrchr($fileurl,'.');
-				$len = -strlen($lasttext);
-				$path = substr($fileurl,0,$len);
-				$path = ltrim($path,'/');
-				$filelist = glob(CMS_PATH.$path.'{_,-,.}*',GLOB_BRACE);
-				$mobilelasttext = strrchr($mobilefileurl,'.');
-				$mobilelen = -strlen($mobilelasttext);
-				$mobilepath = substr($mobilefileurl,0,$mobilelen);
-				$mobilepath = ltrim($mobilepath,'/');
-				$mobilefilelist = glob(CMS_PATH.$mobilepath.'{_,-,.}*',GLOB_BRACE);
-				foreach ($filelist as $delfile) {
-					$lasttext = strrchr($delfile,'.');
-					if(!in_array($lasttext, array('.htm','.html','.shtml'))) continue;
-					@unlink($delfile);
-					//删除发布点队列数据
-					$delfile = str_replace(CMS_PATH, '/', $delfile);
-					$this->queue->add_queue('del',$delfile,$this->siteid);
-				}
-				if($sitelist[$this->siteid]['mobilehtml']==1) {
-					foreach ($mobilefilelist as $mobiledelfile) {
-						$mobilelasttext = strrchr($mobiledelfile,'.');
-						if(!in_array($mobilelasttext, array('.htm','.html','.shtml'))) continue;
-						@unlink($mobiledelfile);
+					$mobilefileurl = SYS_MOBILE_ROOT.$fileurl;
+					//删除静态文件，排除htm/html/shtml外的文件
+					$lasttext = strrchr($fileurl,'.');
+					$len = -strlen($lasttext);
+					$path = substr($fileurl,0,$len);
+					$path = ltrim($path,'/');
+					$filelist = glob(CMS_PATH.$path.'{_,-,.}*',GLOB_BRACE);
+					$mobilelasttext = strrchr($mobilefileurl,'.');
+					$mobilelen = -strlen($mobilelasttext);
+					$mobilepath = substr($mobilefileurl,0,$mobilelen);
+					$mobilepath = ltrim($mobilepath,'/');
+					$mobilefilelist = glob(CMS_PATH.$mobilepath.'{_,-,.}*',GLOB_BRACE);
+					foreach ($filelist as $delfile) {
+						$lasttext = strrchr($delfile,'.');
+						if(!in_array($lasttext, array('.htm','.html','.shtml'))) continue;
+						@unlink($delfile);
+						//删除发布点队列数据
+						$delfile = str_replace(CMS_PATH, '/', $delfile);
+						$this->queue->add_queue('del',$delfile,$this->siteid);
 					}
+					if($sitelist[$this->siteid]['mobilehtml']==1) {
+						foreach ($mobilefilelist as $mobiledelfile) {
+							$mobilelasttext = strrchr($mobiledelfile,'.');
+							if(!in_array($mobilelasttext, array('.htm','.html','.shtml'))) continue;
+							@unlink($mobiledelfile);
+						}
+					}
+				} else {
+					$fileurl = 0;
 				}
-			} else {
-				$fileurl = 0;
-			}
-			//删除内容
-			$this->db->delete_content($id,$fileurl,$catid);
-			//删除统计表数据
-			$this->hits_db->delete(array('hitsid'=>'c-'.$modelid.'-'.$id));
-			//删除附件
-			$attachment->api_delete('c-'.$catid.'-'.$id);
-			//删除审核表数据
-			$this->content_check_db->delete(array('checkid'=>'c-'.$id.'-'.$modelid));
-			//删除推荐位数据
-			$this->position_data_db->delete(array('id'=>$id,'catid'=>$catid,'module'=>'content'));
-			//删除全站搜索中数据
-			$this->search_db->delete_search($typeid,$id);
-			//删除关键词和关键词数量重新统计
-			$keyword_db = pc_base::load_model('keyword_model');
-			$keyword_data_db = pc_base::load_model('keyword_data_model');
-			$keyword_arr = $keyword_data_db->select(array('siteid'=>$siteid,'contentid'=>$id.'-'.$modelid));
-			if($keyword_arr){
-				foreach ($keyword_arr as $val){
-					$keyword_db->update(array('videonum'=>'-=1'),array('id'=>$val['tagid']));
+				//删除内容
+				$this->db->delete_content($r['id'],$fileurl,$catid);
+				//删除统计表数据
+				$this->hits_db->delete(array('hitsid'=>'c-'.$modelid.'-'.$r['id']));
+				//删除附件
+				$attachment->api_delete('c-'.$catid.'-'.$r['id']);
+				//删除审核表数据
+				$this->content_check_db->delete(array('checkid'=>'c-'.$r['id'].'-'.$modelid));
+				//删除推荐位数据
+				$this->position_data_db->delete(array('id'=>$r['id'],'catid'=>$catid,'module'=>'content'));
+				//删除全站搜索中数据
+				$this->search_db->delete_search($typeid,$r['id']);
+				//删除关键词和关键词数量重新统计
+				$keyword_db = pc_base::load_model('keyword_model');
+				$keyword_data_db = pc_base::load_model('keyword_data_model');
+				$keyword_arr = $keyword_data_db->select(array('siteid'=>$siteid,'contentid'=>$r['id'].'-'.$modelid));
+				if($keyword_arr){
+					foreach ($keyword_arr as $val){
+						$keyword_db->update(array('videonum'=>'-=1'),array('id'=>$val['tagid']));
+					}
+					$keyword_data_db->delete(array('siteid'=>$siteid,'contentid'=>$r['id'].'-'.$modelid));
+					$keyword_db->delete(array('videonum'=>'0'));
 				}
-				$keyword_data_db->delete(array('siteid'=>$siteid,'contentid'=>$id.'-'.$modelid));
-				$keyword_db->delete(array('videonum'=>'0'));
-			}
 
-			//删除相关的评论,删除前应该判断是否还存在此模块
-			if(module_exists('comment')){
-				$commentid = id_encode('content_'.$catid, $id, $siteid);
-				$this->comment->del($commentid, $siteid, $id, $catid);
-			}
+				//删除相关的评论,删除前应该判断是否还存在此模块
+				if(module_exists('comment')){
+					$commentid = id_encode('content_'.$catid, $r['id'], $siteid);
+					$this->comment->del($commentid, $siteid, $r['id'], $catid);
+				}
 
+			}
+			//更新栏目统计
+			$this->db->cache_items();
+			$this->cache_api->cache('sitemodels');
+
+			html_msg(1, L('正在执行中【'.$tpage.'/'.($page+1).'】...'), '?m=content&c=content&a=public_recycle_del&catid='.$catid.'&total='.$total.'&tpage='.$tpage.'&page='.($page+1));
 		}
-		//更新栏目统计
-		$this->db->cache_items();
-		$this->cache_api->cache('sitemodels');
-
-		html_msg(1, L('正在执行中【'.$tpage.'/'.($page+1).'】...'), '?m=content&c=content&a=public_recycle_del&catid='.$catid.'&total='.$total.'&tpage='.$tpage.'&page='.($page+1));
 	}
 	/**
 	 * 过审内容
