@@ -256,7 +256,7 @@ include $this->admin_tpl('header');?>
                         <label class="col-md-2 control-label">列表最大分页限制</label>
                         <div class="col-md-9">
                             <label><input class="form-control" type="text" value="0" id="maxsize" name="setting[maxsize]"></label>
-                            <span class="help-block">当栏目页数过多时，设置此数量可以生成指定的页数，后面页数就不会再生成，添加修改内容静态生成时调用此参数，0时默认</span>
+                            <span class="help-block">当栏目页数过多时，设置此数量可以生成指定的页数，后面页数就不会再生成，添加修改内容静态生成时调用此参数，0为默认</span>
                         </div>
                     </div>
                     <div class="form-group" id="dr_row_template_list">
