@@ -147,7 +147,7 @@ class function_list {
         if (!$value) {
             return L('游客');
         }
-        if (IS_ADMIN && ($m=='content' && $c=='content' && !$data['sysadd']) || $m=='member' && $c=='member') {
+        if (IS_ADMIN && ($this->m=='content' && $this->c=='content' && !$data['sysadd']) || $this->m=='member' && $this->c=='member') {
             return $value ? '<a href="javascript:dr_iframe_show(\'用户信息\', \'?m=member&c=member&a=memberinfo&username='.urlencode($value).'\', \'50%\')">'.str_cut($value, 10).'</a>' : L('游客');
         }
         return $value ? str_cut($value, 10) : L('游客');
