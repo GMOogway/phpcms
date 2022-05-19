@@ -97,6 +97,7 @@ class category extends admin {
 		if($this->input->post('dosubmit')) {
 			pc_base::load_sys_func('iconv');
 			$info = $this->input->post('info');
+			$setting = $this->input->post('setting');
 			$info['type'] = intval($this->input->post('type'));
 			if(!$info['type']) {
 				if(!$info['modelid']) dr_json(0, L('select_model'), array('field' => 'modelid'));
@@ -117,8 +118,9 @@ class category extends admin {
 			
 			$info['siteid'] = $this->siteid;
 			$info['module'] = 'content';
-			$setting = $this->input->post('setting');
 			$setting['pagesize'] = (int)$setting['pagesize'];
+			$setting['maxsize'] = (int)$setting['maxsize'];
+			$setting['maxsize'] && $setting['maxsize'] > 10 && dr_json(0, L('列表最大分页限制不能大于10'), array('field' => 'maxsize'));
 			if($info['type']!=2) {
 				if(!$setting['template_list']) dr_json(0, L('template_setting'), array('field' => 'template_list'));
 				//栏目生成静态配置
@@ -247,8 +249,8 @@ class category extends admin {
 		if($this->input->post('dosubmit')) {
 			pc_base::load_sys_func('iconv');
 			$catid = intval($this->input->post('catid'));
-			$setting = $this->input->post('setting');
 			$info = $this->input->post('info');
+			$setting = $this->input->post('setting');
 			if(!$info['catname']) dr_json(0, L('input_catname'), array('field' => 'catname'));
 			if($this->input->post('type')!=2) {
 				$pinyin = pc_base::load_sys_class('pinyin');
@@ -279,6 +281,8 @@ class category extends admin {
 				}
 			}
 			$setting['pagesize'] = (int)$setting['pagesize'];
+			$setting['maxsize'] = (int)$setting['maxsize'];
+			$setting['maxsize'] && $setting['maxsize'] > 10 && dr_json(0, L('列表最大分页限制不能大于10'), array('field' => 'maxsize'));
 			//栏目生成静态配置
 			if($this->input->post('type') != 2) {
 				if(!$setting['template_list']) dr_json(0, L('template_setting'), array('field' => 'template_list'));
