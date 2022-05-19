@@ -439,9 +439,6 @@ if (is_cli()) {
 
 pc_base::verify();
 
-//应用静态文件路径
-define('PLUGIN_STATICS_PATH',WEB_PATH.'statics/plugin/');
-
 if(SYS_GZIP && function_exists('ob_gzhandler')) {
 	ob_start('ob_gzhandler');
 } else {
@@ -564,47 +561,6 @@ class pc_base {
 		$m = empty($m) && defined('ROUTE_M') ? ROUTE_M : $m;
 		if (empty($m)) return false;
 		return self::_load_func($func, 'modules'.DIRECTORY_SEPARATOR.$m.DIRECTORY_SEPARATOR.'functions');
-	}
-	
-	/**
-	 * 加载插件类库
-	 */
-	public static function load_plugin_class($classname, $identification = '' ,$initialize = 1) {
-		$identification = empty($identification) && defined('PLUGIN_ID') ? PLUGIN_ID : $identification;
-		if (empty($identification)) return false;
-		return pc_base::load_sys_class($classname, 'plugin'.DIRECTORY_SEPARATOR.$identification.DIRECTORY_SEPARATOR.'classes', $initialize);
-	}
-	
-	/**
-	 * 加载插件函数库
-	 * @param string $func 函数文件名称
-	 * @param string $identification 插件标识
-	 */
-	public static function load_plugin_func($func,$identification) {
-		static $funcs = array();
-		$identification = empty($identification) && defined('PLUGIN_ID') ? PLUGIN_ID : $identification;
-		if (empty($identification)) return false;
-		$path = 'plugin'.DIRECTORY_SEPARATOR.$identification.DIRECTORY_SEPARATOR.'functions'.DIRECTORY_SEPARATOR.$func.'.func.php';
-		$key = md5($path);
-		if (isset($funcs[$key])) return true;
-		if (file_exists(PC_PATH.$path)) {
-			include PC_PATH.$path;
-		} else {
-			$funcs[$key] = false;
-			return false;
-		}
-		$funcs[$key] = true;
-		return true;
-	}
-	
-	/**
-	 * 加载插件数据模型
-	 * @param string $classname 类名
-	 */
-	public static function load_plugin_model($classname,$identification) {
-		$identification = empty($identification) && defined('PLUGIN_ID') ? PLUGIN_ID : $identification;
-		$path = 'plugin'.DIRECTORY_SEPARATOR.$identification.DIRECTORY_SEPARATOR.'model';
-		return self::_load_class($classname,$path);
 	}
 	
 	/**

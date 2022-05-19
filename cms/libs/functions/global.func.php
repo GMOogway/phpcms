@@ -2145,10 +2145,6 @@ function template($module = 'content', $template = 'index', $style = '') {
 	if(strpos($template, '..') !== false){
 		show_error('Template filename illegality.');
 	}
-	if(strpos($module, 'plugin/')!== false) {
-		$plugin = str_replace('plugin/', '', $module);
-		return p_template($plugin, $template,$style);
-	}
 	$module = str_replace('/', DIRECTORY_SEPARATOR, $module);
 	if(!empty($style) && preg_match('/([a-z0-9\-_]+)/is',$style)) {
 	} elseif (empty($style) && !defined('STYLE')) {
@@ -4009,73 +4005,12 @@ function get_pc_version($type='') {
 		return $version['cms_version'].' '.$version['cms_release'];
 	}
 }
-/**
- * 运行钩子（插件使用）
- */
-function runhook($method) {
-	$time_start = getmicrotime();
-	$data  = '';
-	$getpclass = FALSE;
-	$hook_appid = getcache('hook','plugins');
-	if(!empty($hook_appid)) {
-		foreach($hook_appid as $appid => $p) {
-			$pluginfilepath = PC_PATH.'plugin'.DIRECTORY_SEPARATOR.$p.DIRECTORY_SEPARATOR.'hook.class.php';
-			$getpclass = TRUE;
-			include_once $pluginfilepath;
-		}
-		$hook_appid = array_flip($hook_appid);
-		if($getpclass) {
-			$pclass = new ReflectionClass('hook');
-			foreach($pclass->getMethods() as $r) {
-				$legalmethods[] = $r->getName();
-			}
-		}
-		if(in_array($method,$legalmethods)) {
-			foreach (get_declared_classes() as $class){
-			   $refclass = new ReflectionClass($class);
-			   if($refclass->isSubclassOf('hook')){
-				  if ($_method = $refclass->getMethod($method)) {
-						  $classname = $refclass->getName();
-						if ($_method->isPublic() && $_method->isFinal()) {
-							plugin_stat($hook_appid[$classname]);
-							$data .= $_method->invoke(null);
-						}
-					}
-			   }
-			}
-		}
-		return $data;
-	}
-}
 
 function getmicrotime() {
 	list($usec, $sec) = explode(" ",microtime());
 	return ((float)$usec + (float)$sec);
 }
 
-/**
- * 插件前台模板加载
- * Enter description here ...
- * @param unknown_type $module
- * @param unknown_type $template
- * @param unknown_type $style
- */
-function p_template($plugin = 'content', $template = 'index',$style='default') {
-	if(!$style) $style = 'default';
-	$template_cache = pc_base::load_sys_class('template_cache');
-	$compiledtplfile = CMS_PATH.'caches'.DIRECTORY_SEPARATOR.'caches_template'.DIRECTORY_SEPARATOR.$style.DIRECTORY_SEPARATOR.'plugin'.DIRECTORY_SEPARATOR.$plugin.DIRECTORY_SEPARATOR.$template.'.php';
-
-	if(!file_exists($compiledtplfile) || (file_exists(PC_PATH.'plugin'.DIRECTORY_SEPARATOR.$plugin.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$template.'.html') && filemtime(PC_PATH.'plugin'.DIRECTORY_SEPARATOR.$plugin.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$template.'.html') > filemtime($compiledtplfile))) {
-		$template_cache->template_compile('plugin/'.$plugin, $template, 'default');
-	} elseif (!file_exists(PC_PATH.'plugin'.DIRECTORY_SEPARATOR.$plugin.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$template.'.html')) {
-		if (IS_DEV) {
-			log_message('error', '模板文件['.PC_PATH.'templates'.DIRECTORY_SEPARATOR.'plugin'.DIRECTORY_SEPARATOR.$plugin.DIRECTORY_SEPARATOR.$template.'.html]不存在');
-		}
-		show_error('模板文件不存在', PC_PATH.'templates'.DIRECTORY_SEPARATOR.'plugin'.DIRECTORY_SEPARATOR.$plugin.DIRECTORY_SEPARATOR.$template.'.html');
-	}
-
-	return $compiledtplfile;
-}
 /**
  * 读取缓存动态页面
  */

@@ -55,7 +55,6 @@ if (!is_mobile()) {
 		<li><a href="{list_url($r['url'],$r['catid'])}"{if $r['catid'] == $catid || $CATEGORYS[$CAT['parentid']]['catid']==$r['catid']} class="current"{/if}>{$r['catname']}</a></li>
 	{/loop}
 	{/pc}
-	{php echo runhook('glogal_menu')}
 	</ul>
 </nav>
 <script type="text/javascript">

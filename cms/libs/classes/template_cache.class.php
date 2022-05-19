@@ -19,10 +19,6 @@ final class template_cache {
 		} elseif (strpos($module, 'yp/') !== false) {
 			$module = str_replace('/', DIRECTORY_SEPARATOR, $module);
 			$tplfile = $_tpl = PC_PATH.'templates'.DIRECTORY_SEPARATOR.$style.DIRECTORY_SEPARATOR.$module.DIRECTORY_SEPARATOR.$template.'.html';
-		} else {
-			$plugin = str_replace('plugin/', '', $module);
-			$module = str_replace('/', DIRECTORY_SEPARATOR, $module);
-			$tplfile = $_tpl = PC_PATH.'plugin'.DIRECTORY_SEPARATOR.$plugin.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$template.'.html';
 		}
 		if ($style != 'default' && !file_exists ( $tplfile )) {
 			$style = 'default';
