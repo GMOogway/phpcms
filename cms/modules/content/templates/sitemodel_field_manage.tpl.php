@@ -6,9 +6,9 @@ include $this->admin_tpl('header','admin');?>
     <div class="content-menu btn-group dropdown-btn-group"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><i class="fa fa-th-large"></i> 菜单 <i class="fa fa-angle-down"></i></a>
         <ul class="dropdown-menu">
             <?php if($modelid==-1) {?>
-            <li><a href="?m=admin&c=category&a=init&module=admin&menuid=<?php echo $this->input->get('menuid')?>"><i class="fa fa-reorder"></i> <?php echo L('管理栏目');?></a></li>
+            <li><a href="?m=admin&c=category&a=init&menuid=<?php echo $this->input->get('menuid')?>"><i class="fa fa-reorder"></i> <?php echo L('管理栏目');?></a></li>
             <?php } else if($modelid==-2) {?>
-            <li><a href="?m=admin&c=category&a=init&module=admin&menuid=<?php echo $this->input->get('menuid')?>"><i class="fa fa-reorder"></i> <?php echo L('管理栏目');?></a></li>
+            <li><a href="?m=admin&c=category&a=init&menuid=<?php echo $this->input->get('menuid')?>"><i class="fa fa-reorder"></i> <?php echo L('管理栏目');?></a></li>
             <?php } else if($modelid) {?>
             <li><a href="?m=content&c=sitemodel&a=init&menuid=<?php echo $this->input->get('menuid')?>"><i class="fa fa-cogs"></i> <?php echo L('模型管理');?></a></li>
             <?php } else {?>
@@ -24,9 +24,9 @@ include $this->admin_tpl('header','admin');?>
     <?php } else {?>
     <div class="content-menu ib-a">
 <?php if($modelid==-1) {?>
-<a href="?m=admin&c=category&a=init&module=admin&menuid=<?php echo $this->input->get('menuid')?>"><i class="fa fa-reorder"></i> <?php echo L('管理栏目');?></a>
+<a href="?m=admin&c=category&a=init&menuid=<?php echo $this->input->get('menuid')?>"><i class="fa fa-reorder"></i> <?php echo L('管理栏目');?></a>
 <?php } else if($modelid==-2) {?>
-<a href="?m=admin&c=category&a=init&module=admin&menuid=<?php echo $this->input->get('menuid')?>"><i class="fa fa-reorder"></i> <?php echo L('管理栏目');?></a>
+<a href="?m=admin&c=category&a=init&menuid=<?php echo $this->input->get('menuid')?>"><i class="fa fa-reorder"></i> <?php echo L('管理栏目');?></a>
 <?php } else if($modelid) {?>
 <a href="?m=content&c=sitemodel&a=init&menuid=<?php echo $this->input->get('menuid')?>"><i class="fa fa-cogs"></i> <?php echo L('模型管理');?></a>
 <?php } else {?>

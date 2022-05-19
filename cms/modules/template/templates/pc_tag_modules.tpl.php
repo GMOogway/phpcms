@@ -24,11 +24,11 @@ include $this->admin_tpl('header', 'admin');
 	<legend><?php echo L("module_configuration")?></legend>
 <table width="100%"  class="table_form">
 	  <tr>
-    <th width="80"><?php echo L("module")?>：</th>
+    <th width="100"><?php echo L("module")?>：</th>
     <td class="y-bg"><?php echo $op?></td>
   </tr>
     <tr>
-    <th width="80"><?php echo L('operation')?>：</th>
+    <th><?php echo L('operation')?>：</th>
     <td class="y-bg"> <?php if(isset($html['action']) && is_array($html['action'])) {
 		echo '<div class="mt-radio-inline">';
 	    foreach($html['action'] as $key=>$value) {
@@ -43,12 +43,12 @@ include $this->admin_tpl('header', 'admin');
   if(isset($html[$_GET['action']]) && is_array($html[$_GET['action']])):
   foreach($html[$_GET['action']] as $k=>$v): ?>
   	  <tr>
-    <th width="80"><?php echo $v['name']?>：</th>
+    <th><?php echo $v['name']?>：</th>
     <td class="y-bg"><?php echo creat_form($k,$v,$_GET[$k], $op)?></td>
   </tr>
   <?php if(isset($v['ajax']['name'])  && !empty($v['ajax']['name'])) {?>
   	  <tr>
-  	  	<th width="80"><?php echo $v['ajax']['name']?>：<?php if(isset($_GET[$v['ajax']['id']]) && !empty($_GET[$v['ajax']['id']])) echo '<script type="text/javascript">$.get(\'?m=template&c=file&a=public_ajax_get\', { html: \''.$_GET[$k].'\', id:\''.$v['ajax']['id'].'\', value:\''.$_GET[$v['ajax']['id']].'\', action: \''.$v['ajax']['action'].'\', op: \''.$op.'\', style: \'default\'}, function(data) {$(\'#'.$k.'_td\').html(data)});</script>'?></th>
+  	  	<th><?php echo $v['ajax']['name']?>：<?php if(isset($_GET[$v['ajax']['id']]) && !empty($_GET[$v['ajax']['id']])) echo '<script type="text/javascript">$.get(\'?m=template&c=file&a=public_ajax_get\', { html: \''.$_GET[$k].'\', id:\''.$v['ajax']['id'].'\', value:\''.$_GET[$v['ajax']['id']].'\', action: \''.$v['ajax']['action'].'\', op: \''.$op.'\', style: \'default\'}, function(data) {$(\'#'.$k.'_td\').html(data)});</script>'?></th>
   	  	<td class="y-bg"><input type="text" size="20" value="<?php echo $_GET[$v['ajax']['id']]?>" id="<?php echo $v['ajax']['id']?>" name="<?php echo $v['ajax']['id']?>" class="input-text"><span id="<?php echo $k?>_td"></span></td>
   	 </tr>
   <?php }?>
@@ -61,22 +61,26 @@ include $this->admin_tpl('header', 'admin');
 	<legend><?php echo L('vlan')?></legend>
 		<table width="100%"  class="table_form">
 	  <tr>
-    <th width="80"><?php echo L("public_allowpageing")?>：</th>
+    <th width="150"><?php echo L("public_allowpageing")?>：</th>
     <td class="y-bg"><div class="mt-radio-inline">
           <label class="mt-radio mt-radio-outline"><input type="radio" name="page" value="$page"<?php if (isset($_GET['page'])) {echo ' checked';}?> /> <?php echo L("yes")?> <span></span></label>
           <label class="mt-radio mt-radio-outline"><input type="radio" name="page" value=""<?php if (!isset($_GET['page'])) {echo ' checked';}?> /> <?php echo L("no")?> <span></span></label>
         </div></td>
   </tr>
     <tr>
-    <th width="80"><?php echo L("num")?>：</th>
+    <th><?php echo L("num")?>：</th>
     <td class="y-bg"><input type="text" name="num" id="num" size="30" value="<?php echo $_GET['num']?>" /></td>
   </tr>
+    <tr>
+    <th><?php echo L("maxsize")?>：</th>
+    <td class="y-bg"><label><input type="text" name="maxsize" id="maxsize" size="30" value="<?php echo $_GET['maxsize']?>" /></label> <?php echo L('input_maxsize')?></td>
+  </tr>
    <tr>
-    <th width="80"><?php echo L("check")?>：</th>
+    <th><?php echo L("check")?>：</th>
     <td class="y-bg"><input type="text" name="return" id="return" size="30" value="<?php echo $_GET['return']?>" /> </td>
   </tr>
    <tr>
-    <th width="80"><?php echo L("buffer_time")?>：</th>
+    <th><?php echo L("buffer_time")?>：</th>
     <td class="y-bg"><input type="text" name="cache" id="cache" size="30" value="<?php echo $_GET['cache']?>" /> </td>
   </tr>
 </table>

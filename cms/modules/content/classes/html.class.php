@@ -258,7 +258,7 @@ class html {
 	 * @param $catid 栏目id
 	 * @param $page 当前页数
 	 */
-	public function category($catid, $page = 0) {
+	public function category($catid, $page = 0, $maxsize = 0) {
 		$CAT = $this->categorys[$catid];
 		if (strpos($CAT['url'], 'index.php?')!==false) return false;
 		if (is_array($CAT)) {
@@ -411,11 +411,16 @@ class html {
 			
 			$this->db = pc_base::load_model('content_model');
 			$this->db->set_model($modelid);
-			$pagenumber = $this->db->count(array('catid'=>$catid));
+			if ($arrchildid) {
+				$pagenumber = $this->db->count(array('catid'=>explode(',', $arrchildid)));
+			} else {
+				$pagenumber = $this->db->count(array('catid'=>$catid));
+			}
 			$url_arr[0] = $categoryurl[0];
 			$url_arr[1] = $categoryurl[1];
 			$pagesize = (int)$setting['pagesize'];
 			!$pagesize && $pagesize = 10;
+			isset($maxsize) && $maxsize && (int)$maxsize > 0 && $pagenumber = $pagesize * $maxsize;
 			if($pagenumber > $pagesize) {
 				$pages = category_pages($pagenumber,$page,$pagesize,$url_arr);
 			}
@@ -557,7 +562,27 @@ class html {
 	* @param $catid
 	*/
 	public function create_relation_html($catid) {
-		for($page = 1; $page < 6; $page++) {
+		$this->db = pc_base::load_model('content_model');
+		$CAT = $this->categorys[$catid];
+		$array_child = array();
+		$self_array = explode(',', $CAT['arrchildid']);
+		foreach ($self_array as $arr) {
+			if($arr!=$catid) $array_child[] = $arr;
+		}
+		$arrchildid = implode(',', $array_child);
+		$this->db->set_model($CAT['modelid']);
+		$setting = string2array($CAT['setting']);
+		$pagesize = (int)$setting['pagesize'];
+		!$pagesize && $pagesize = 10;
+		if ($arrchildid) {
+			$pagenumber = $this->db->count(array('catid'=>explode(',', $arrchildid)));
+		} else {
+			$pagenumber = $this->db->count(array('catid'=>$catid));
+		}
+		$maxsize = ceil($pagenumber/$pagesize)+1;
+		(int)$maxsize > 6 && $maxsize = 6;
+		!(int)$maxsize && $maxsize = 2;
+		for($page = 1; $page < $maxsize; $page++) {
 			$this->category($catid,$page);
 		}
 		//检查当前栏目的父栏目，如果存在则生成

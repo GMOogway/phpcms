@@ -221,6 +221,7 @@ class create_all_html extends admin {
 		$show_header = $show_dialog  = true;
 		$cache_class = pc_base::load_sys_class('cache');
 		$this->html = pc_base::load_app_class('html');
+		$maxsize = $this->input->get('maxsize');
 		$page = max(1, intval($this->input->get('pp')));
 		$name = 'category-html-file-'.$page;
 		$name2 = 'category-html-file';
@@ -252,7 +253,7 @@ class create_all_html extends admin {
 						$class = 'p_error';
 						$ok = '<a class="error" href="'.$t['url'].'" target="_blank">地址【'.$t['url'].'】是动态，请更新内容URL地址为静态模式</a>';
 					} else {
-						$this->html->category($t['catid'],$t['page']);
+						$this->html->category($t['catid'],$t['page'],$maxsize);
 						$cache_class->set_auth_data($name2.'-error', $page); // 设置断点
 						$class = 'ok';
 						$ok = '<a class="ok" href="'.$t['url'].'" target="_blank">生成成功</a>';

@@ -42,10 +42,19 @@ jQuery(document).ready(function() {
                     <label><a href="javascript:dr_admin_menu_ajax('?m=admin&c=category&a=public_cache&pc_hash='+pc_hash+'&is_ajax=1',1);" class="btn default"> <i class="fa fa-refresh"></i> <?php echo L('一键更新栏目URL');?> </a></label>
                 </div>
             </div>
+            <input type="hidden" name="dosubmit" value="1">
+            <div class="form-group" style="border-top: 1px dashed #eef1f5; padding-top: 10px;">
+                <label class="col-md-2 control-label"><?php echo L('最大分页限制');?></label>
+                <div class="col-md-9">
+                    <label><input type="text" class="form-control" value="" name="maxsize" id="maxsize"></label>
+
+                    <span class="help-block"><?php echo L('当栏目页数过多时，设置此数量可以生成指定的页数，后面页数就不会再生成');?></span>
+                </div>
+            </div>
             <div class="form-group">
                 <label class="col-md-2 control-label"><?php echo L('一键生成');?></label>
                 <div class="col-md-9">
-                    <label><button type="button" onclick="dr_bfb('<?php echo L('一键生成');?>', 'myform_category', '?m=content&c=create_all_html&a=category&go_url=1&pc_hash='+pc_hash)" class="btn dark"> <i class="fa fa-th-large"></i> <?php echo L('一键生成全站栏目和内容');?> </button></label>
+                    <label><button type="button" onclick="dr_bfb('<?php echo L('一键生成');?>', 'myform_category', '?m=content&c=create_all_html&a=category&maxsize='+$('#maxsize').val()+'&go_url=1&pc_hash='+pc_hash)" class="btn dark"> <i class="fa fa-th-large"></i> <?php echo L('一键生成全站栏目和内容');?> </button></label>
                 </div>
             </div>
         </div>

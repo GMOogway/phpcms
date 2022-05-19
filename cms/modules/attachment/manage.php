@@ -58,7 +58,7 @@ class manage extends admin {
 					$rs['catname'] = $category[$r['catid']]['catname'];
 					$rs['filepath'] = dr_get_file_url($r);
 				}
-				$rs['filename'] = dr_keyword_highlight($r['filename'], $param['keyword']);
+				$rs['filename'] = dr_keyword_highlight($r['filename'] ? $r['filename'] : '...', $param['keyword']);
 				$rs['fileext'] = dr_keyword_highlight($r['fileext'], $param['fileext']).'<img src="'.file_icon('.'.$r['fileext'],'gif').'" />'.($thumb ? '<img title="'.L('att_thumb_manage').'" src="'.IMG_PATH.'admin_img/havthumb.png" onclick="showthumb('.$r['aid'].', \''.$r['filename'].'\')"/>':'').($r['status'] ? ' <img src="'.IMG_PATH.'admin_img/link.png"':'');
 				$rs['related'] = $r['related'];
 				$rs['status'] = $r['status'];

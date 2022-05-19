@@ -2554,7 +2554,6 @@ function pages($num, $curr_page, $perpage = 10, $urlrule = '', $array = array(),
 	}
 	$multipage = '';
 	if($num > $perpage) {
-		$pages = ceil($num / $perpage);
 		$multipage = $input->page(pageurl($urlrule, $curr_page, $array), $num, $perpage, $curr_page, $first_url);
 	}
 	return $multipage;

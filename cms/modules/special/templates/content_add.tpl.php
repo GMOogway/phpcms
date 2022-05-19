@@ -110,7 +110,7 @@ $p = dr_authcode(array(
 	var w = 770;
 	var h = 510;
 	if (is_mobile()) {w = h = '100%';}
-	var diag = new Dialog({id:'crop',title:'<?php echo L('crop_thumb')?>',url:'<?php echo SELF;?>?m=content&c=content&a=public_crop&module=cms&spec=2&picurl='+window.btoa(unescape(encodeURIComponent(id)))+'&input=thumb&preview=thumb_preview',width:w,height:h,modal:true});diag.onOk = function(){$DW.dosbumit();return false;};diag.onCancel=function() {$DW.close();};diag.show();
+	var diag = new Dialog({id:'crop',title:'<?php echo L('crop_thumb')?>',url:'<?php echo SELF;?>?m=content&c=content&a=public_crop&module=special&spec=2&picurl='+window.btoa(unescape(encodeURIComponent(id)))+'&input=thumb&preview=thumb_preview',width:w,height:h,modal:true});diag.onOk = function(){$DW.dosbumit();return false;};diag.onCancel=function() {$DW.close();};diag.show();
 };</script> <label><button type="button" onclick="$('#thumb_preview').attr('src','<?php echo IMG_PATH;?>icon/upload-pic.png');$('#thumb').val('');return false;" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('cancel_thumb')?></button></label></div>
                                 </div>
                             </div>

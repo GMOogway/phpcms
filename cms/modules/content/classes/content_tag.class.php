@@ -50,6 +50,10 @@ class content_tag {
 					$sql = "status=99 AND catid='$catid'";
 				}
 			}
+			if(isset($data['maxsize']) && $data['maxsize'] && (int)$data['maxsize'] > 0) {
+				list($start, $pagesize) = explode(",", $data['limit']);
+				return min($pagesize * $data['maxsize'], $this->db->count($sql));
+			}
 			return $this->db->count($sql);
 		}
 	}

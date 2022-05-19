@@ -31,6 +31,7 @@ class tag extends admin {
 			$name = $this->input->post('name') && trim($this->input->post('name')) ? trim($this->input->post('name')) : dr_admin_msg(0,L('name').L('empty'));
 			$cache = $this->input->post('cache') && intval($this->input->post('cache')) ? intval($this->input->post('cache')) : 0;
 			$num = $this->input->post('num') && intval($this->input->post('num')) ? intval($this->input->post('num')) : 0;
+			$maxsize = $this->input->post('maxsize') && intval($this->input->post('maxsize')) ? intval($this->input->post('maxsize')) : 0;
 			$type = $this->input->post('type') && intval($this->input->post('type')) ? intval($this->input->post('type')) : 0;
 			$ac = $this->input->get('ac') && !empty($this->input->get('ac')) ? trim($this->input->get('ac')) : '';
 			//检查名称是否已经存在
@@ -87,6 +88,9 @@ class tag extends admin {
 				if ($num) {
 					$tag .= ' num="'.$num.'" ';
 				}
+				if ($maxsize) {
+					$tag .= ' maxsize="'.$maxsize.'" ';
+				}
 				if ($this->input->post('return')) {
 					$tag .= ' return="'.$this->input->post('return').'" ';
 				}
@@ -100,7 +104,7 @@ class tag extends admin {
 			}
 			$tag .= "\n".'{loop $data $n $r}'."\n".'<li><a href="{$r[\'url\']}" title="{$r[\'title\']}">{$r[\'title\']}</a></li>'."\n".'{/loop}'."\n".'{/pc}';
 			$data = is_array($data) ? array2string($data) : $data;
-			$this->db->insert(array('siteid'=>$siteid, 'tag'=>$tag, 'name'=>$name, 'type'=>$type, 'module'=>$module, 'action'=>$action, 'data'=>$data, 'page'=>$this->input->post('page'), 'return'=>$this->input->post('return'), 'cache'=>$cache, 'num'=>$num));
+			$this->db->insert(array('siteid'=>$siteid, 'tag'=>$tag, 'name'=>$name, 'type'=>$type, 'module'=>$module, 'action'=>$action, 'data'=>$data, 'page'=>$this->input->post('page'), 'return'=>$this->input->post('return'), 'cache'=>$cache, 'num'=>$num, 'maxsize'=>$maxsize));
 			if ($ac=='js') {
 				include $this->admin_tpl('tag_show');
 			} else {
@@ -140,6 +144,7 @@ class tag extends admin {
 			$name = $this->input->post('name') && trim($this->input->post('name')) ? trim($this->input->post('name')) : dr_admin_msg(0,L('name').L('empty'));
 			$cache = $this->input->post('cache') && intval($this->input->post('cache')) ? intval($this->input->post('cache')) : 0;
 			$num = $this->input->post('num') && intval($this->input->post('num')) ? intval($this->input->post('num')) : 0;
+			$maxsize = $this->input->post('maxsize') && intval($this->input->post('maxsize')) ? intval($this->input->post('maxsize')) : 0;
 			$type = $this->input->post('type') && intval($this->input->post('type')) ? intval($this->input->post('type')) : 0;
 			//检查名称是否已经存在
 			if ($edit_data['name'] != $name) {
@@ -197,6 +202,9 @@ class tag extends admin {
 				if ($num) {
 					$tag .= ' num="'.$num.'" ';
 				}
+				if ($maxsize) {
+					$tag .= ' maxsize="'.$maxsize.'" ';
+				}
 				if ($this->input->post('return')) {
 					$tag .= ' return="'.$this->input->post('return').'" ';
 				}
@@ -210,7 +218,7 @@ class tag extends admin {
 			}
 			$tag .= "\n".'{loop $data $n $r}'."\n".'<li><a href="{$r[\'url\']}" title="{$r[\'title\']}">{$r[\'title\']}</a></li>'."\n".'{/loop}'."\n".'{/pc}';
 			$data = is_array($data) ? array2string($data) : $data;
-			$this->db->update(array('siteid'=>$siteid, 'tag'=>$tag, 'name'=>$name, 'type'=>$type, 'module'=>$module, 'action'=>$action, 'data'=>$data, 'page'=>$this->input->post('page'), 'return'=>$this->input->post('return'), 'cache'=>$cache, 'num'=>$num), array('id'=>$id));
+			$this->db->update(array('siteid'=>$siteid, 'tag'=>$tag, 'name'=>$name, 'type'=>$type, 'module'=>$module, 'action'=>$action, 'data'=>$data, 'page'=>$this->input->post('page'), 'return'=>$this->input->post('return'), 'cache'=>$cache, 'num'=>$num, 'maxsize'=>$maxsize), array('id'=>$id));
 			dr_admin_msg(1,'', '', '', 'edit');
 		} else {
 			pc_base::load_sys_class('form','',0);

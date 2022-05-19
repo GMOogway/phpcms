@@ -89,7 +89,7 @@ function creat_form($id, $data, $value = '', $op = '') {
 			if($data['ajax']['name']) {
 				$ajax = 'onblur="'.$url.'"';
 			}
-			$str .= '<input type="text" name="'.$id.'" id="'.$id.'" value="'.$value.'" size="30" />';
+			$str .= '<label><input type="text" name="'.$id.'" id="'.$id.'" value="'.$value.'" /></label>';
 			
 			break;
 		case 'select':
@@ -115,14 +115,14 @@ function creat_form($id, $data, $value = '', $op = '') {
 			if($data['ajax']['name']) {
 				$ajax = ';'.$url;
 			}
-			$str .= '<input type="text" name="'.$id.'" id="'.$id.'" value="'.$value.'" size="30" />'.form::select($data['data'], $value, "name='select_$id' id='select_$id' onchange=\"$('#$id').val(this.value);$ajax\"");
+			$str .= '<label><input type="text" name="'.$id.'" id="'.$id.'" value="'.$value.'" /></label> '.form::select($data['data'], $value, "name='select_$id' id='select_$id' onchange=\"$('#$id').val(this.value);$ajax\"");
 			break;
 		
 		case 'input_select_category':
 			if($data['ajax']['name']) {
 				$ajax = ';'.$url;
 			}
-			$str .= '<input type="text" name="'.$id.'" id="'.$id.'" value="'.$value.'" size="30" />'.form::select_category('', $value, "name='select_$id' id='select_$id' onchange=\"$('#$id').val(this.value);$ajax\"", '', (isset($data['data']['modelid']) ? $data['data']['modelid'] : 0), (isset($data['data']['type']) ? $data['data']['type'] : -1), (isset($data['data']['onlysub']) ? $data['data']['onlysub'] : 0));
+			$str .= '<label><input type="text" name="'.$id.'" id="'.$id.'" value="'.$value.'"/></label> '.form::select_category('', $value, "name='select_$id' id='select_$id' onchange=\"$('#$id').val(this.value);$ajax\"", '', (isset($data['data']['modelid']) ? $data['data']['modelid'] : 0), (isset($data['data']['type']) ? $data['data']['type'] : -1), (isset($data['data']['onlysub']) ? $data['data']['onlysub'] : 0));
 			break;
 
 		case 'select_yp_model':
@@ -136,7 +136,7 @@ function creat_form($id, $data, $value = '', $op = '') {
 					$d[$k] = $v['name'];
 				}
 			}
-			$str .= '<input type="text" name="'.$id.'" id="'.$id.'" value="'.$value.'" size="30" />'.form::select($d, $value, "name='select_$id' id='select_$id' onchange=\"$('#$id').val(this.value);$ajax\"");
+			$str .= '<label><input type="text" name="'.$id.'" id="'.$id.'" value="'.$value.'" /></label> '.form::select($d, $value, "name='select_$id' id='select_$id' onchange=\"$('#$id').val(this.value);$ajax\"");
 			break;
 	}
 	if (!empty($data['validator'])) {

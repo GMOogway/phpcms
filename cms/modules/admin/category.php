@@ -186,7 +186,7 @@ class category extends admin {
 			}
 			$this->cache();
 			$menu_data = $this->menu_db->get_one(array('name' => 'category_manage', 'm' => 'admin', 'c' => 'category', 'a' => 'init'));
-			dr_json(1, L('add_success'), array('tourl' => '?m=admin&c=category&a=public_cache&module=admin&menuid='.$menu_data['id'].'&pc_hash='.dr_get_csrf_token()));
+			dr_json(1, L('add_success'), array('tourl' => '?m=admin&c=category&a=public_cache&menuid='.$menu_data['id'].'&pc_hash='.dr_get_csrf_token()));
 		} else {
 			$show_header = $show_dialog = true;
 			$catid = 0;
@@ -354,7 +354,7 @@ class category extends admin {
 				$this->attachment_db->api_update($info['image'],'catid-'.$catid,1);
 			}
 			$menu_data = $this->menu_db->get_one(array('name' => 'category_manage', 'm' => 'admin', 'c' => 'category', 'a' => 'init'));
-			dr_json(1, L('operation_success'), array('tourl' => '?m=admin&c=category&a=public_cache&module=admin&menuid='.$menu_data['id'].'&pc_hash='.dr_get_csrf_token()));
+			dr_json(1, L('operation_success'), array('tourl' => '?m=admin&c=category&a=public_cache&menuid='.$menu_data['id'].'&pc_hash='.dr_get_csrf_token()));
 		} else {
 			$show_header = $show_dialog = true;
 			//获取站点模板信息
@@ -669,7 +669,7 @@ class category extends admin {
 	public function public_cache() {
 		$this->repair();
 		$this->cache();
-		dr_admin_msg(1,L('operation_success'),'?m=admin&c=category&a=init&module=admin&menuid='.$this->input->get('menuid'));
+		dr_admin_msg(1,L('operation_success'),'?m=admin&c=category&a=init&menuid='.$this->input->get('menuid'));
 	}
 	/**
 	* 修复栏目数据
@@ -1079,7 +1079,7 @@ class category extends admin {
 				}
 			}
 			$this->public_cache();
-			dr_admin_msg(1,L('operation_success'),'?m=admin&c=category&a=init&module=admin&menuid='.$this->input->get('menuid'));
+			dr_admin_msg(1,L('operation_success'),'?m=admin&c=category&a=init&menuid='.$this->input->get('menuid'));
 		} else {
 			if($this->input->post('catids')) {
 				//获取站点模板信息
@@ -1161,7 +1161,7 @@ class category extends admin {
 				$r['setting']['isleft'] = $setting['isleft'];
 				$this->db->update(array('ismenu'=>$info['ismenu'], 'setting'=>dr_array2string($r['setting'])), array('catid'=>$r['catid']));
 			}
-			dr_json(1, L('operation_success'), array('tourl' => '?m=admin&c=category&a=public_cache&module=admin&menuid='.$menu_data['id'].'&pc_hash='.dr_get_csrf_token()));
+			dr_json(1, L('operation_success'), array('tourl' => '?m=admin&c=category&a=public_cache&menuid='.$menu_data['id'].'&pc_hash='.dr_get_csrf_token()));
 		} else {
 			include $this->admin_tpl('category_batch_save');
 		}

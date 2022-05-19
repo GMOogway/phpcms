@@ -7,11 +7,18 @@ class function_list {
 
     protected $uid_data = array();
     protected $cid_data = array();
+    protected $m;
+    protected $c;
+
+    public function __construct() {
+        $this->m = defined('ROUTE_M') && ROUTE_M ? ROUTE_M : 'content';
+        $this->c = defined('ROUTE_C') && ROUTE_C ? ROUTE_C : 'content';
+    }
 
     // 用于列表显示栏目
     public function catid($catid, $param = array(), $data = array()) {
 
-        $url = IS_ADMIN ? '' : dr_cat_value($catid, 'url').'" target="_blank';
+        $url = IS_ADMIN ? '?m='.$this->m.'&c='.$this->c.'&a=init&menuid='.$param['menuid'].'&catid='.$catid.'&pc_hash='.dr_get_csrf_token() : dr_cat_value($catid, 'url').'" target="_blank';
         $value = dr_cat_value($catid, 'catname');
 
         return '<a href="'.$url.'">'.str_cut($value, 10).'</a>';
@@ -39,10 +46,10 @@ class function_list {
                 $url = $release_siteurl.$data['url'];
             }
         } else {
-            $url = '?m=content&c=content&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'';
+            $url = '?m='.$this->m.'&c='.$this->c.'&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'';
         }
 
-        return isset($data['url']) && $data['url'] && $url ? ('<a href="'.$url.'" target="_blank"'.($data['status']!=99 ? ' onclick=\'window.open("?m=content&c=content&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'","manage")\'' : '').' class="tooltips" data-container="body" data-placement="top" data-original-title="'.$value.'" title="'.$value.'">'.$title.'</a>'.($data['islink'] > 0 ? '  <i class="fa fa-link font-green tooltips" data-container="body" data-placement="top" data-original-title="'.L('转向链接').'" title="'.L('转向链接').'"></i>' : '')) : $title;
+        return isset($data['url']) && $data['url'] && $url ? ('<a href="'.$url.'" target="_blank"'.($data['status']!=99 ? ' onclick=\'window.open("?m='.$this->m.'&c='.$this->c.'&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'","manage")\'' : '').' class="tooltips" data-container="body" data-placement="top" data-original-title="'.$value.'" title="'.$value.'">'.$title.'</a>'.($data['islink'] > 0 ? '  <i class="fa fa-link font-green tooltips" data-container="body" data-placement="top" data-original-title="'.L('转向链接').'" title="'.L('转向链接').'"></i>' : '')) : $title;
     }
 
     // 用于列表显示内容
@@ -67,10 +74,10 @@ class function_list {
                 $url = $release_siteurl.$data['url'];
             }
         } else {
-            $url = '?m=content&c=content&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'';
+            $url = '?m='.$this->m.'&c='.$this->c.'&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'';
         }
 
-        return isset($data['url']) && $data['url'] && $url ? '<a href="'.$url.'" target="_blank"'.($data['status']!=99 ? ' onclick=\'window.open("?m=content&c=content&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'","manage")\'' : '').' class="tooltips" data-container="body" data-placement="top" data-original-title="'.$value.'" title="'.$value.'">'.$title.'</a>' : $title;
+        return isset($data['url']) && $data['url'] && $url ? '<a href="'.$url.'" target="_blank"'.($data['status']!=99 ? ' onclick=\'window.open("?m='.$this->m.'&c='.$this->c.'&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'","manage")\'' : '').' class="tooltips" data-container="body" data-placement="top" data-original-title="'.$value.'" title="'.$value.'">'.$title.'</a>' : $title;
     }
 
     // 用于列表显示浏览数
@@ -140,8 +147,6 @@ class function_list {
         if (!$value) {
             return L('游客');
         }
-        $m = defined('ROUTE_M') && ROUTE_M ? ROUTE_M : '';
-        $c = defined('ROUTE_C') && ROUTE_C ? ROUTE_C : '';
         if (IS_ADMIN && ($m=='content' && $c=='content' && !$data['sysadd']) || $m=='member' && $c=='member') {
             return $value ? '<a href="javascript:dr_iframe_show(\'用户信息\', \'?m=member&c=member&a=memberinfo&username='.urlencode($value).'\', \'50%\')">'.str_cut($value, 10).'</a>' : L('游客');
         }
@@ -193,7 +198,7 @@ class function_list {
         if (!$value) {
             return '';
         }
-        
+
         $value = htmlspecialchars(clearhtml($value));
         $title = ($data['thumb'] ? '<i class="fa fa-photo"></i> ' : '').dr_keyword_highlight(str_cut($value, 30), $param['keyword']);
         !$title && $title = '...';
@@ -213,10 +218,10 @@ class function_list {
                 $url = $release_siteurl.$data['url'];
             }
         } else {
-            $url = '?m=content&c=content&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'';
+            $url = '?m='.$this->m.'&c='.$this->c.'&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'';
         }
 
-        $html = isset($data['url']) && $data['url'] && $url ? ('<a href="'.$url.'" target="_blank"'.($data['status']!=99 ? ' onclick=\'window.open("?m=content&c=content&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'","manage")\'' : '').' class="tooltips" data-container="body" data-placement="top" data-original-title="'.$value.'" title="'.$value.'">'.$title.'</a>'.($data['islink'] > 0 ? '  <i class="fa fa-link font-green tooltips" data-original-title="'.L('转向链接').'" title="'.L('转向链接').'"></i>' : '')) : $title;
+        $html = isset($data['url']) && $data['url'] && $url ? ('<a href="'.$url.'" target="_blank"'.($data['status']!=99 ? ' onclick=\'window.open("?m='.$this->m.'&c='.$this->c.'&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'","manage")\'' : '').' class="tooltips" data-container="body" data-placement="top" data-original-title="'.$value.'" title="'.$value.'">'.$title.'</a>'.($data['islink'] > 0 ? '  <i class="fa fa-link font-green tooltips" data-original-title="'.L('转向链接').'" title="'.L('转向链接').'"></i>' : '')) : $title;
         if ($data['id']) {
             $position_db = pc_base::load_model('position_model');
             $position_data_db = pc_base::load_model('position_data_model');
@@ -433,9 +438,7 @@ class function_list {
     public function save_time_value($value, $param = array(), $data = array(), $field = array()) {
         $cache = pc_base::load_sys_class('cache');
 
-        $m = defined('ROUTE_M') && ROUTE_M ? ROUTE_M : '';
-        $c = defined('ROUTE_C') && ROUTE_C ? ROUTE_C : '';
-        $url = '?m='.$m.'&c='.$c.'&a=public_save_value_edit&catid='.$data['catid'].'&id='.$data['id'].'&after='; //after是回调函数
+        $url = '?m='.$this->m.'&c='.$this->c.'&a=public_save_value_edit&catid='.$data['catid'].'&id='.$data['id'].'&after='; //after是回调函数
         $html = '<input type="text" class="form-control" placeholder="" value="'.dr_date($value).'" onblur="dr_ajax_save(dr_strtotime(this.value), \''.$url.'\', \''.$field['field'].'\')">';
 
         $cache->set_auth_data('function_list_save_text_value', $_SESSION['userid'], 1);
@@ -447,9 +450,7 @@ class function_list {
     public function save_text_value($value, $param = array(), $data = array(), $field = array()) {
         $cache = pc_base::load_sys_class('cache');
 
-        $m = defined('ROUTE_M') && ROUTE_M ? ROUTE_M : '';
-        $c = defined('ROUTE_C') && ROUTE_C ? ROUTE_C : '';
-        $url = '?m='.$m.'&c='.$c.'&a=public_save_value_edit&catid='.$data['catid'].'&id='.$data['id'].'&after='; //after是回调函数
+        $url = '?m='.$this->m.'&c='.$this->c.'&a=public_save_value_edit&catid='.$data['catid'].'&id='.$data['id'].'&after='; //after是回调函数
         $html = '<input type="text" class="form-control" placeholder="" value="'.htmlspecialchars($value).'" onblur="dr_ajax_save(this.value, \''.$url.'\', \''.$field['field'].'\')">';
 
         $cache->set_auth_data('function_list_save_text_value', $_SESSION['userid'], 1);
@@ -461,9 +462,7 @@ class function_list {
     public function save_select_value($value, $param = array(), $data = array(), $field = array()) {
         $cache = pc_base::load_sys_class('cache');
 
-        $m = defined('ROUTE_M') && ROUTE_M ? ROUTE_M : '';
-        $c = defined('ROUTE_C') && ROUTE_C ? ROUTE_C : '';
-        $url = '?m='.$m.'&c='.$c.'&a=public_save_value_edit&catid='.$data['catid'].'&name='.$field['field'].'&id='.$data['id'].'&after='; //after是回调函数
+        $url = '?m='.$this->m.'&c='.$this->c.'&a=public_save_value_edit&catid='.$data['catid'].'&name='.$field['field'].'&id='.$data['id'].'&after='; //after是回调函数
 
         $html = '<a href="javascript:;" onclick="dr_ajax_list_open_close(this, \''.$url.'\');" value="'.$value.'" class="badge badge-'.($value ? "yes" : "no").'"><i class="fa fa-'.($value ? "check" : "times").'"></i></a>';
 

@@ -18,7 +18,7 @@ include $this->admin_tpl('header');?>
         <a href="javascript:dr_iframe('add', '?m=admin&c=category&a=add&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token();?>&s=2', '80%', '80%')" class="btn btn-sm green">
             <i class="fa fa-plus-square-o"></i> <?php echo L('add_cat_link');?>
         </a>
-        <a href="?m=admin&c=category&a=public_cache&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token();?>&module=admin" class="btn btn-sm red">
+        <a href="?m=admin&c=category&a=public_cache&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token();?>" class="btn btn-sm red">
             <i class="fa fa-refresh"></i> <?php echo L('category_cache');?>
         </a>
         <a href="?m=admin&c=category&a=count_items&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token();?>" class="btn btn-sm yellow">
