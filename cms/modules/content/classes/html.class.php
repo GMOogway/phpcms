@@ -573,24 +573,27 @@ class html {
 		$this->db->set_model($CAT['modelid']);
 		$setting = string2array($CAT['setting']);
 		$pagesize = (int)$setting['pagesize'];
+		$maxsize = (int)$setting['maxsize'];
+		$maxsize && $maxsize = $maxsize;
 		!$pagesize && $pagesize = 10;
 		if ($arrchildid) {
 			$pagenumber = $this->db->count(array('catid'=>explode(',', $arrchildid)));
 		} else {
 			$pagenumber = $this->db->count(array('catid'=>$catid));
 		}
-		$maxsize = ceil($pagenumber/$pagesize)+1;
-		(int)$maxsize > 6 && $maxsize = 6;
-		!(int)$maxsize && $maxsize = 2;
-		for($page = 1; $page < $maxsize; $page++) {
-			$this->category($catid,$page);
+		!$maxsize && $maxsize = ceil($pagenumber/$pagesize);
+		$maxsize > 10 && $maxsize = 10;
+		!$setting['maxsize'] && $maxsize > 5 && $maxsize = 5;
+		!$maxsize && $maxsize = 2;
+		for($page = 1; $page < $maxsize + 1; $page++) {
+			$this->category($catid,$page,$setting['maxsize'] ? $maxsize : 0);
 		}
 		//检查当前栏目的父栏目，如果存在则生成
 		$arrparentid = $this->categorys[$catid]['arrparentid'];
 		if($arrparentid) {
 			$arrparentid = explode(',', $arrparentid);
 			foreach ($arrparentid as $catid) {
-				if($catid) $this->category($catid,1);
+				if($catid) $this->category($catid,1,$setting['maxsize'] ? $maxsize : 0);
 			}
 		}
 	}
