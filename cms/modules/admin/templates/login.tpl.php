@@ -50,9 +50,9 @@
                                     <label class="beg-login-icon fs1">
                                         <span class="layui-icon layui-icon-vercode"></span>
                                     </label>
-                                    <input type="text" id="captcha" name="code" placeholder="验证码" autocomplete="off" maxlength="4" class="layui-input">
+                                    <input type="text" id="captcha" name="code" placeholder="验证码" autocomplete="off" maxlength="<?php echo $setting['sysadmincodelen'];?>" class="layui-input">
                                     <div class="captcha">
-                                        <?php echo form::checkcode('code_img', $setting['sysadmincodelen'])?>
+                                        <?php echo form::checkcode('code_img', $setting['sysadmincodelen']);?>
                                     </div>
                                 </div>
                                 <?php }?>
