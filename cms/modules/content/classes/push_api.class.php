@@ -62,12 +62,16 @@ class push_api {
 						'catid'=>$catid,
 						'url'=>$linkurl,
 						'sysadd'=>1,
+						'tableid'=>0,
 						'username'=>$r['username'],
 						'inputtime'=>$r['inputtime'],
 						'updatetime'=>$r['updatetime'],
 						'islink'=>1
 					),true);
-					$this->db->table_name = $this->db->table_name.'_data';
+					$tnewid = get_table_id($newid);
+					is_data_table($this->db->table_name.'_data_', $tnewid);
+					$this->db->update(array('tableid'=>$tnewid),array('id'=>$newid));
+					$this->db->table_name = $this->db->table_name.'_data_'.$tnewid;
 					$this->db->insert(array('id'=>$newid));
 					$hitsid = 'c-'.$modelid.'-'.$newid;
 					$this->hits_db->insert(array('hitsid'=>$hitsid,'catid'=>$catid,'updatetime'=>SYS_TIME));
@@ -160,7 +164,7 @@ class push_api {
 			foreach(array_reverse($id_arr) as $id) {
 				$this->db->table_name = $tablename;
 				$r = $this->db->get_one(array('id'=>$id));
-				$this->db->table_name = $this->db->table_name.'_data';
+				$this->db->table_name = $this->db->table_name.'_data_'.$r['tableid'];
 				$r2 = $this->db->get_one(array('id'=>$id));
 				foreach($ids as $catid) {
 					$siteid = $siteids[$catid];
@@ -216,7 +220,10 @@ class push_api {
 							$modelinfo[$modelid][$r0['field']] = $r2[$r0['field']];
 						}
 					}
-					$this->db->table_name = $this->db->table_name.'_data';
+					$tnewid = get_table_id($newid);
+					is_data_table($this->db->table_name.'_data_', $tnewid);
+					$this->db->update(array('tableid'=>$tnewid),array('id'=>$newid));
+					$this->db->table_name = $this->db->table_name.'_data_'.$tnewid;
 					$this->db->insert($modelinfo[$modelid]);
 					$hitsid = 'c-'.$modelid.'-'.$newid;
 					$this->hits_db->insert(array('hitsid'=>$hitsid,'catid'=>$catid,'updatetime'=>SYS_TIME));

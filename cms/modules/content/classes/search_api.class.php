@@ -29,7 +29,7 @@ class search_api extends admin {
 			}
 		}
 		if(empty($system_keys)) return '';
-		$system_keys = 'id,inputtime,'.implode(',',$system_keys);
+		$system_keys = 'id,inputtime,tableid,'.implode(',',$system_keys);
 		$offset = $pagesize*($page-1);
 		$result = $this->db->select('',$system_keys,"$offset, $pagesize");
 
@@ -42,20 +42,21 @@ class search_api extends admin {
 		if(empty($model_keys)) return '';
 		$model_keys = 'id,'.implode(',',$model_keys);
 		
-		$this->db->table_name = $this->db->table_name.'_data';
-		$result_data = $this->db->select('',$model_keys,"$offset, $pagesize",'','','id');
+		foreach ($result as $v) {
+			if (isset($v['id']) && !empty($v['id'])) {
+				$this->db->table_name = $this->db->table_name.'_data_'.$v['tableid'];
+				$result[$v['id']] = $this->db->get_one(array('id'=>$v['id']), '*', 'id');
+				$this->set_model($this->modelid);
+			} else {
+				continue;
+			}
+		}
 		//处理结果
 		foreach($result as $r) {
 			$fulltextcontent = '';
 			foreach($r as $field=>$_r) {
 				if($field=='id') continue;
 				$fulltextcontent .= clearhtml($_r).' ';
-			}
-			if(!empty($result_data[$r['id']])) {
-				foreach($result_data[$r['id']] as $_r) {
-					if($field=='id') continue;
-					$fulltextcontent .= clearhtml($_r).' ';
-				}
 			}
 			$temp['fulltextcontent'] = str_replace("'",'',$fulltextcontent);
 			$temp['title'] = $r['title'];

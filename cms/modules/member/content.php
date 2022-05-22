@@ -50,7 +50,7 @@ class content extends foreground {
 			$this->content_db->set_model($modelid);
 			$table_name = $this->content_db->table_name;
 			$fields_sys = $this->content_db->get_fields();
-			$this->content_db->table_name = $table_name.'_data';
+			$this->content_db->table_name = $table_name.'_data_0';
 			
 			$fields_attr = $this->content_db->get_fields();
 			$fields = array_merge($fields_sys,$fields_attr);
@@ -268,7 +268,7 @@ class content extends foreground {
 					$r = $this->content_db->get_one(array('id'=>$id,'username'=>$_username,'sysadd'=>0));
 		
 					if(!$r) showmessage(L('illegal_operation'));
-					$this->content_db->table_name = $this->content_db->table_name.'_data';
+					$this->content_db->table_name = $this->content_db->table_name.'_data_'.$r['tableid'];
 					$r2 = $this->content_db->get_one(array('id'=>$id));
 					$data = array_merge($r,$r2);
 					require CACHE_MODEL_PATH.'content_form.class.php';

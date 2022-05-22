@@ -483,6 +483,9 @@ class check extends admin {
                 $this->db->table_name = $prefix.'model';
                 $models = $this->db->select();
                 foreach ($models as $r) {
+                    if (!$r['type']) {
+                        $this->_alter_table($r['tablename']);
+                    }
                     if (isset($r['setting']) && $r['setting']) {
                         $this->db->update(array('setting'=>dr_array2string($this->string2array($r['setting']))),array('modelid'=>$r['modelid']));
                     } else {
@@ -807,7 +810,7 @@ class check extends admin {
 
 \'admin_login_path\' => \''.pc_base::load_config('system','admin_login_path').'\', //自定义的后台登录地址';
                 $system_data.= PHP_EOL.');'.PHP_EOL.'?>';
-                if (!strstr($system, 'IN_CMS') || strstr($system, 'admin_url') || strstr($system, 'safe_card') || strstr($system, 'phpsso') || strstr($system, 'phpsso_appid') || strstr($system, 'phpsso_api_url') || strstr($system, 'phpsso_auth_key') || strstr($system, 'phpsso_version') || strstr($system, '\'timezone\' => \'Etc/GMT-8\'') || !strstr($system, 'sys_time_format') || !strstr($system, 'attachment_file') || !strstr($system, 'attachment_del') || !strstr($system, 'sys_attachment_save_id') || !strstr($system, 'sys_attachment_cf') || !strstr($system, 'sys_attachment_safe') || !strstr($system, 'sys_attachment_path') || !strstr($system, 'sys_attachment_save_type') || !strstr($system, 'sys_attachment_save_dir') || !strstr($system, 'sys_attachment_url') || !strstr($system, 'sys_avatar_path') || !strstr($system, 'sys_avatar_url') || !strstr($system, 'sys_thumb_path') || !strstr($system, 'sys_thumb_url') || !strstr($system, 'mobile_js_path') || !strstr($system, 'mobile_css_path') || !strstr($system, 'mobile_img_path') || !strstr($system, 'mobile_path') || !strstr($system, 'bdmap_api') || !strstr($system, 'sys_editor') || !strstr($system, 'sys_max_category') || !strstr($system, 'sys_admin_pagesize') || !strstr($system, 'sys_csrf') || !strstr($system, 'needcheckcomeurl') || !strstr($system, 'mobile_root') || !strstr($system, 'keywordapi') || !strstr($system, 'baidu_aid') || !strstr($system, 'baidu_skey') || !strstr($system, 'baidu_arcretkey') || !strstr($system, 'baidu_qcnum') || !strstr($system, 'xunfei_aid') || !strstr($system, 'xunfei_skey') || !strstr($system, 'admin_login_path')) {
+                if (!strstr($system, 'IN_CMS') || strstr($system, 'admin_url') || strstr($system, 'safe_card') || strstr($system, 'phpsso') || strstr($system, 'phpsso_appid') || strstr($system, 'phpsso_api_url') || strstr($system, 'phpsso_auth_key') || strstr($system, 'phpsso_version') || strstr($system, '\'timezone\' => \'Etc/GMT-8\'') || strstr($system, 'snda_akey') || strstr($system, 'snda_skey') || strstr($system, 'qq_akey') || strstr($system, 'qq_skey') || !strstr($system, 'sys_time_format') || !strstr($system, 'attachment_file') || !strstr($system, 'attachment_del') || !strstr($system, 'sys_attachment_save_id') || !strstr($system, 'sys_attachment_cf') || !strstr($system, 'sys_attachment_safe') || !strstr($system, 'sys_attachment_path') || !strstr($system, 'sys_attachment_save_type') || !strstr($system, 'sys_attachment_save_dir') || !strstr($system, 'sys_attachment_url') || !strstr($system, 'sys_avatar_path') || !strstr($system, 'sys_avatar_url') || !strstr($system, 'sys_thumb_path') || !strstr($system, 'sys_thumb_url') || !strstr($system, 'mobile_js_path') || !strstr($system, 'mobile_css_path') || !strstr($system, 'mobile_img_path') || !strstr($system, 'mobile_path') || !strstr($system, 'bdmap_api') || !strstr($system, 'sys_editor') || !strstr($system, 'sys_max_category') || !strstr($system, 'sys_admin_pagesize') || !strstr($system, 'sys_csrf') || !strstr($system, 'needcheckcomeurl') || !strstr($system, 'mobile_root') || !strstr($system, 'keywordapi') || !strstr($system, 'baidu_aid') || !strstr($system, 'baidu_skey') || !strstr($system, 'baidu_arcretkey') || !strstr($system, 'baidu_qcnum') || !strstr($system, 'xunfei_aid') || !strstr($system, 'xunfei_skey') || !strstr($system, 'admin_login_path')) {
                     file_put_contents($rt,$system_data);
                 }
 
@@ -928,6 +931,18 @@ class check extends admin {
         $counts = $this->db->count();
         if ($counts > 100000) {
             return '<font color="green">数据表【'.$name.'/'.$this->db->db_tablepre.$table.'】数据量超过10万，会影响加载速度，建议对其进行数据优化</font>';
+        }
+    }
+
+    private function _alter_table($table) {
+        $this->content_db = pc_base::load_model('content_model');
+        $this->content_db->table_name = $this->content_db->db_tablepre.$table;
+        if (!$this->content_db->field_exists('tableid')) {
+            $this->content_db->query('ALTER TABLE `'.$this->content_db->table_name.'` ADD `tableid` smallint(5) UNSIGNED NOT NULL COMMENT \'附表id\' AFTER `islink`');
+        }
+        $this->content_db->table_name = $this->content_db->db_tablepre.$table.'_data';
+        if ($this->content_db->table_exists($table.'_data')) {
+            $this->content_db->query('ALTER TABLE `'.$this->content_db->table_name.'` RENAME `'.$this->content_db->table_name.'_0`');
         }
     }
 

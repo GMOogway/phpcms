@@ -141,7 +141,7 @@ class create_all_html extends admin {
 						$ok = '<a class="error" href="'.$t['url'].'" target="_blank">转向链接</a>';
 					} else {
 						//写入文件
-						$this->db->table_name = $this->db->table_name.'_data';
+						$this->db->table_name = $this->db->table_name.'_data_'.$r['tableid'];
 						$r2 = $this->db->get_one(array('id'=>$t['id']));
 						if($r2) $r = array_merge($r, $r2);
 						//判断是否为升级或转换过来的数据

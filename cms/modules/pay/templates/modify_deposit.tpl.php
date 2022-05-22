@@ -1,7 +1,6 @@
 <?php 
-	defined('IS_ADMIN') or exit('No permission resources.');
-	include $this->admin_tpl('header', 'admin');
-?>
+defined('IS_ADMIN') or exit('No permission resources.');
+include $this->admin_tpl('header', 'admin');?>
 <script type="text/javascript">
 <!--
 $(function(){
@@ -33,62 +32,80 @@ $(function(){
 })
 //-->
 </script>
-<div class="pad-10">
-<div class="common-form">
-<form name="myform" action="?m=pay&c=payment&a=<?php echo $_GET['a']?>" method="post" id="myform">
-<table width="100%" class="table_form">
-<tr>
-<td  width="120"><?php echo L('recharge_type')?></td> 
-<td><input name="pay_type" value="1" type="radio" id="pay_type" checked> <?php echo L('money')?>  
-<input name="pay_type" value="2" type="radio" id="pay_type"> <?php echo L('point')?></td>
-</tr>
-<tr>
-<td  width="120"><?php echo L('username')?></td> 
-<td><input type="text" name="username" size="15" value="<?php echo $username?>" id="username"><span id="balance"><span></td>
-</tr>
-<tr>
-<td  width="120"><?php echo L('recharge_quota')?></td> 
-<td><input name="pay_unit" value="1" type="radio" checked> <?php echo L('increase')?>  <input name="pay_unit" value="0" type="radio"> <?php echo L('reduce')?> <input type="text" name="unit" size="10" value="<?php echo $unit?>" id="unit"></td>
-</tr>
-<tr>
-<td  width="120"><?php echo L('trading').L('usernote')?></td> 
-<td><textarea name="usernote"  id="usernote" rows="5" cols="50"></textarea></td>
-</tr>
-<tr>
-<td  width="120"><?php echo L('op_notice')?></td> 
-<td><div class="mt-checkbox-inline">
-<label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" id="sendemail" name="sendemail" value="1" checked> <?php echo L('op_sendemail')?> <span></span></label>
-</div></td>
-</tr>
-</table>
-<div class="bk15"></div>
-<input name="dosubmit" type="submit" value="<?php echo L('submit')?>" class="button" id="dosubmit">
+<div class="page-content-white page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+                <div class="page-body">
+<div class="note note-danger">
+    <p><?php echo L('为指定账户进行充值金额')?></p>
+</div>
+<form name="myform" class="form-horizontal" action="?m=pay&c=payment&a=<?php echo $_GET['a']?>" method="post" id="myform">
+
+    <div class="portlet bordered light myfbody">
+        <div class="portlet-title">
+            <div class="caption">
+                <span class="caption-subject font-green "><i class="fa fa-rmb"></i> <?php echo L('用户充值')?></span>
+            </div>
+        </div>
+        <div class="portlet-body form">
+            <div class="form-body">
+
+                <div class="form-group" id="dr_row_paytype">
+                    <label class="col-md-2 control-label"><?php echo L('recharge_type')?></label>
+                    <div class="col-md-9">
+                        <div class="mt-radio-inline">
+                            <label class="mt-radio mt-radio-outline"><input name="pay_type" checked type="radio" value="1" /> <?php echo L('money')?> <span></span></label>
+                            <label class="mt-radio mt-radio-outline"><input name="pay_type" type="radio" value="2" /> <?php echo L('point')?> <span></span></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" id="dr_row_username">
+                    <label class="col-md-2 control-label"><?php echo L('username')?></label>
+                    <div class="col-md-9">
+                        <label><input type="text" class="form-control" id="username" name="username" value="<?php echo $username?>"></label>
+                    </div>
+                </div>
+                <div class="form-group" id="dr_row_payunit">
+                    <label class="col-md-2 control-label"><?php echo L('处理方式')?></label>
+                    <div class="col-md-9">
+                        <div class="mt-radio-inline">
+                            <label class="mt-radio mt-radio-outline"><input name="pay_unit" checked type="radio"  value="1"  /> <?php echo L('increase')?> <span></span></label>
+                            <label class="mt-radio mt-radio-outline"><input name="pay_unit"  type="radio" value="0"  /> <?php echo L('reduce')?> <span></span></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" id="dr_row_unit">
+                    <label class="col-md-2 control-label"><?php echo L('recharge_quota')?></label>
+                    <div class="col-md-9">
+                        <label><input type="text" class="form-control input-large" id="unit" name="unit" value="<?php echo $unit?>"></label>
+                    </div>
+                </div>
+                <div class="form-group" id="dr_row_usernote">
+                    <label class="col-md-2 control-label"><?php echo L('trading').L('usernote')?></label>
+                    <div class="col-md-9">
+                        <textarea class="form-control" id="usernote" name="usernote" rows="4"></textarea>
+                    </div>
+                </div>
+                <div class="form-group" id="dr_row_sendemail">
+                    <label class="col-md-2 control-label"><?php echo L('op_notice')?></label>
+                    <div class="col-md-9">
+                        <div class="mt-checkbox-inline">
+                            <label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" id="sendemail" name="sendemail" value="1" checked> <?php echo L('op_sendemail')?> <span></span></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body form myfooter">
+        <div class="form-actions text-center">
+            <button name="dosubmit" id="dosubmit" type="submit" class="btn blue"> <i class="fa fa-save"></i> <?php echo L('submit')?></button>
+        </div>
+    </div>
 </form>
+</div>
+</div>
 </div>
 </div>
 </body>
 </html>
-<script type="text/javascript">
-$(document).ready(function() {
-	$("#paymethod input[type='radio']").click( function () {
-		if($(this).val()== 0){
-			$("#rate").removeClass('hidden');
-			$("#fix").addClass('hidden');
-			$("#rate input").val('0');
-		} else {
-			$("#fix").removeClass('hidden');
-			$("#rate").addClass('hidden');
-			$("#fix input").val('0');
-		}	
-	});
-});
-function category_load(obj)
-{
-	var modelid = $(obj).attr('value');
-	$.get('?m=admin&c=position&a=public_category_load&modelid='+modelid,function(data){
-			$('#load_catid').html(data);
-		  });
-}
-</script>
-
-

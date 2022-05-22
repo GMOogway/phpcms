@@ -75,7 +75,8 @@ function html_code($value, $fk = false, $flags = '') {
 function get_content($modelid, $id) {
 	$db = pc_base::load_model('content_model');
 	$db->set_model($modelid);
-	$db->table_name = $db->table_name.'_data';
+	$r = $db->get_one(array('id' => $id), 'tableid');
+	$db->table_name = $db->table_name.'_data_'.$r['tableid'];
 	$rt = $db->get_one(array('id' => $id), 'content');
 	return $rt['content'];
 }
@@ -3840,6 +3841,47 @@ function show_error($msg, $file = '') {
 		log_message('error', FC_NOW_URL.'：'.$msg);
 	}
 	dr_show_error($msg);
+}
+// 附表分表规则
+function get_table_id($id) {
+    return floor($id / 100000);
+}
+// 附表不存在时创建附表
+function is_data_table($table, $tid) {
+	if ($table && $tid) {
+		$content_db = pc_base::load_model('content_model');
+		$content_db->query("SHOW TABLES LIKE '".$table.$tid."'");
+		$table_exists = $content_db->fetch_array();
+		if ($tid > 0 && !$table_exists) {
+			// 附表不存在时创建附表
+			$sql = $content_db->query("SHOW CREATE TABLE `".$table."0`");
+			$sql = $content_db->fetch_array();
+			$content_db->query(str_replace(
+				array($sql[0]['Table'], 'CREATE TABLE '),
+				array($table.$tid, 'CREATE TABLE IF NOT EXISTS '),
+				$sql[0]['Create Table']
+			));
+		}
+	}
+}
+// 模块字段
+function sql_module($id, $tablename, $sql, $ismain = 0) {
+	if ($tablename && $sql) {
+		$content_db = pc_base::load_model('content_model');
+		// 更新站点模块
+		if (!$ismain) {
+			// 更新副表 格式: 名称_data_副表id
+			$tid = $id ? get_table_id($id) + 1 : 200;
+			for ($i = 0; $i < $tid; $i ++) {
+				$content_db->query("SHOW TABLES LIKE '".str_replace('_data_0', '_data_'.$i, $tablename)."'");
+				$table_exists = $content_db->fetch_array();
+				if (!$table_exists) {
+					continue;
+				}
+				$content_db->query(str_replace('_data_0', '_data_'.$i, $sql));
+			}
+		}
+	}
 }
 /**
  * 提交表单默认隐藏域

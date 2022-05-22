@@ -14,9 +14,6 @@ jQuery(document).ready(function() {
     }
 });
 </script>
-<style type="text/css">
-.btn-group {margin-left: 10px;}
-</style>
 <div class="page-content-white page-container" style="margin-bottom: 0px !important;">
     <div class="page-content-wrapper">
         <div class="page-content page-content3 mybody-nheader main-content  ">

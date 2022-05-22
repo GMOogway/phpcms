@@ -341,11 +341,11 @@ $(document).ready(function() {
                     <dl class="layui-nav-child">
                         <dd>
                             <?php $menu_data = $this->menu_db->get_one(array('name' => 'editinfo', 'm' => 'admin', 'c' => 'admin_manage', 'a' => 'public_edit_info'));?>
-                            <a href="javascript:;" layuimini-content-href="?m=admin&c=admin_manage&a=public_edit_info&menuid=<?php echo $menu_data['id']?>&pc_hash=<?php echo dr_get_csrf_token()?>" data-title="<?php echo L('基本资料');?>" data-icon="fa fa-gears"><?php echo L('基本资料');?><span class="layui-badge-dot"></span></a>
+                            <a href="javascript:;" layuimini-content-href="?m=admin&c=admin_manage&a=public_edit_info&menuid=<?php echo $menu_data['id']?>&pc_hash=<?php echo dr_get_csrf_token()?>" data-title="<?php echo L('基本资料');?>" data-icon="fa fa-user"> <i class="fa fa-user"></i> <?php echo L('基本资料');?><span class="layui-badge-dot"></span></a>
                         </dd>
                         <dd>
                             <?php $menu_data = $this->menu_db->get_one(array('name' => 'editpwd', 'm' => 'admin', 'c' => 'admin_manage', 'a' => 'public_edit_pwd'));?>
-                            <a href="javascript:;" layuimini-content-href="?m=admin&c=admin_manage&a=public_edit_pwd&menuid=<?php echo $menu_data['id']?>&pc_hash=<?php echo dr_get_csrf_token()?>" data-title="<?php echo L('修改密码');?>" data-icon="fa fa-gears"><?php echo L('修改密码');?></a>
+                            <a href="javascript:;" layuimini-content-href="?m=admin&c=admin_manage&a=public_edit_pwd&menuid=<?php echo $menu_data['id']?>&pc_hash=<?php echo dr_get_csrf_token()?>" data-title="<?php echo L('修改密码');?>" data-icon="fa fa-unlock-alt"> <i class="fa fa-unlock-alt"></i> <?php echo L('修改密码');?></a>
                         </dd>
                         <dd>
                             <hr>

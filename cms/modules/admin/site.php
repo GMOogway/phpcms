@@ -210,6 +210,7 @@ class site extends admin {
 				$model_db = pc_base::load_model('sitemodel_model');
 				$model_data = $model_db->select(array('siteid'=>$siteid));
 				$category_db = pc_base::load_model('category_model');
+				$content_db = pc_base::load_model('content_model');
 				$category_db->delete(array('siteid'=>$siteid));
 				$type_db = pc_base::load_model('type_model');
 				$type_db->delete(array('siteid'=>$siteid));
@@ -217,10 +218,20 @@ class site extends admin {
 					$category_db->delete(array('siteid'=>$siteid,'modelid'=>$r['modelid']));
 					$type_db->delete(array('siteid'=>$siteid,'modelid'=>$r['modelid']));
 					if ($r['tablename']) {
+						$content_db->set_model($r['modelid']);
+						$content_data = $content_db->get_one('', '*', 'id desc');
 						$tablename = $this->db->db_tablepre.$r['tablename'];
-						$tablename_data = $this->db->db_tablepre.$r['tablename'].'_data';
 						$this->db->query('DROP TABLE IF EXISTS `'.$tablename.'`;');
-						$this->db->query('DROP TABLE IF EXISTS `'.$tablename_data.'`;');
+						$tid = $content_data['id'] ? get_table_id($content_data['id']) + 1 : 200;
+						for ($i = 0; $i < $tid; $i ++) {
+							$tablename_data = $this->db->db_tablepre.$r['tablename'].'_data_'.$i;
+							$content_db->query("SHOW TABLES LIKE '".$tablename_data."'");
+							$table_exists = $content_db->fetch_array();
+							if (!$table_exists) {
+								continue;
+							}
+							$this->db->query('DROP TABLE IF EXISTS `'.$tablename_data.'`;');
+						}
 					}
 				}
 				$model_db->delete(array('siteid'=>$siteid));

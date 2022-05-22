@@ -147,7 +147,6 @@ class googlesitemap extends admin {
  						$this->content_db->set_model($modelid);
  						$result = $this->content_db->select(array('catid'=>$catid,'status'=>99), '*', $limit = "0,$baidunum", 'id desc');
  						//重设表前缀,for循环时用来查,文章正文 
- 						$this->content_db->table_name = $this->content_db->table_name.'_data';
  						foreach ($result as $arr){
  							//把每一条数据都装入数组中
  							extract($arr);
@@ -163,11 +162,13 @@ class googlesitemap extends admin {
 							$url = new_html_special_chars($url);
 							$description = new_html_special_chars(clearhtml($description));
 							//根据本条ID,从对应tablename_data取出正文内容
+							$this->content_db->table_name = $this->content_db->table_name.'_data_'.$arr['tableid'];
    							$content_arr = $this->content_db->get_one(array('id'=>$id),'content');
    							$content = new_html_special_chars(clearhtml($content_arr['content']));
    							//组合数据
    	 						$smi = $this->baidunews_item($title,$url,$description,$content,$thumb, $keywords,$category,$author,$source,date('Y-m-d', $inputtime));//推荐文件
 							$this->add_baidunews_item($smi);
+							$this->content_db->set_model($modelid);
   						} 
  					}
   					$baidunews_file = $dir.'baidunews.xml';

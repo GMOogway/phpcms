@@ -118,6 +118,7 @@ jQuery(document).ready(function() {
                             <input type="checkbox" name="info[enablcodecheck]" value="1" <?php echo $member_setting['enablcodecheck'] ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
                         </div>
                     </div>
+                    <?php if (!$sms_disabled) {?>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('mobile_checktype')?></label>
                         <div class="col-md-9">
@@ -125,9 +126,10 @@ jQuery(document).ready(function() {
                                 <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobile_checktype]" value="2"<?php echo ($member_setting['mobile_checktype']=='2') ? ' checked' : ''?><?php echo ($sms_disabled) ? ' disabled' : ''?> onclick="$('#sendsms_titleid').hide();"> <?php echo L('yes');?> <span></span></label>
                                 <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobile_checktype]" value="0"<?php echo (!$member_setting['mobile_checktype']) ? ' checked' : ''?> onclick="$('#sendsms_titleid').hide();"> <?php echo L('no');?> <span></span></label>
                             </div>
-                            <label><a class="btn btn-sm red" href="javascript:;" layuimini-content-href="?m=sms&c=sms&a=sms_setting&menuid=<?php echo $menu_data['id']?>&pc_hash=<?php echo dr_get_csrf_token()?>" data-title="<?php echo L('短信平台配置');?>" data-icon="fa fa-cog"> <?php echo L('短信平台配置');?> </a></label>
+                            <label><a class="btn btn-sm red" href="javascript:;" layuimini-content-href="?m=sms&c=sms&a=sms_setting&menuid=<?php echo $menu_data['id']?>&pc_hash=<?php echo dr_get_csrf_token()?>" data-title="<?php echo L('短信平台配置');?>" data-icon="fa fa-cog"> <i class="fa fa-envelope"></i> <?php echo L('短信平台配置');?> </a></label>
                         </div>
                     </div>
+                    <?php }?>
                     <div class="form-group" id="sendsms_titleid" <?php if($member_setting['mobile_checktype']!='1'){?> style="display: none; " <?php }?>>
                         <label class="col-md-2 control-label"><?php echo L('user_sendsms_title')?></label>
                         <div class="col-md-9">

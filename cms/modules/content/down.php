@@ -27,7 +27,8 @@ class down {
 		$catid  = intval($catid);
 		$MODEL = getcache('model','commons');
 		$tablename = $this->db->table_name = $this->db->db_tablepre.$MODEL[$modelid]['tablename'];
-		$this->db->table_name = $tablename.'_data';
+		$r = $this->db->get_one(array('id'=>$id));	
+		$this->db->table_name = $tablename.'_data_'.$r['tableid'];
 		$rs = $this->db->get_one(array('id'=>$id));	
 		$siteids = getcache('category_content','commons');
 		$siteid = $siteids[$catid];

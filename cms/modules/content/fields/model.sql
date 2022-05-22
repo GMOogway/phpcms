@@ -14,6 +14,7 @@ CREATE TABLE `$basic_table` (
   `status` tinyint(3) unsigned NOT NULL default '1',
   `sysadd` tinyint(1) unsigned NOT NULL default '0',
   `islink` tinyint(1) unsigned NOT NULL default '0',
+  `tableid` smallint(5) unsigned NOT NULL COMMENT '附表id',
   `username` char(50) NOT NULL,
   `inputtime` int(10) unsigned NOT NULL default '0',
   `updatetime` int(10) unsigned NOT NULL default '0',

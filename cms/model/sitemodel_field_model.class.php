@@ -13,11 +13,21 @@ class sitemodel_field_model extends model {
 	 * 删除字段
 	 * 
 	 */
-	public function drop_field($tablename,$field) {
+	public function drop_field($tablename,$field,$modelid = 0,$issystem = 1) {
+		if (!$issystem && $modelid && $modelid!=-1 && $modelid!=-2) {
+			$content_db = pc_base::load_model('content_model');
+			$content_db->set_model($modelid);
+			$content_data = $content_db->get_one('', '*', 'id desc');
+		}
 		$this->table_name = $this->db_tablepre.$tablename;
 		$fields = $this->get_fields();
+		$sql = "ALTER TABLE `$this->table_name` DROP `$field`;";
 		if(in_array($field, array_keys($fields))) {
-			return $this->db->query("ALTER TABLE `$this->table_name` DROP `$field`;");
+			if (!$issystem && $modelid && $modelid!=-1 && $modelid!=-2) {
+				return sql_module($content_data['id'], $this->table_name, $sql);
+			} else {
+				return $this->db->query($sql);
+			}
 		} else {
 			return false;
 		}

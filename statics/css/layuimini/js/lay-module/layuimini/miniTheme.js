@@ -377,6 +377,9 @@ layui.define(["jquery", "layer"], function (exports) {
                 '/**tab选项卡选中颜色 tabActiveColor */\n' +
                 '.layuimini-tab .layui-tab-title .layui-this .layuimini-tab-active {\n' +
                 '    background-color: ' + bgcolorData.tabActiveColor + ';\n' +
+                '}\n' +
+                '.layuimini-tab .layui-tab-title .layui-this .layuimini-tab-fa {\n' +
+                '    color: ' + bgcolorData.tabActiveColor + ';\n' +
                 '}\n';
             $('#layuimini-bg-color').html(styleHtml);
         },

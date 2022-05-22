@@ -191,8 +191,13 @@ class index extends admin {
 				$dbtp_range = intval($this->input->post('dbtp_range'));
 				$dbtp_num = intval($this->input->post('dbtp_num'));
 				if(!isset($model[$modelid]))dr_json(0,L('modelnotexist'));
-				$m =$model[$modelid];
+				$m = $model[$modelid];
 				$db = new sqltoolplus($m['tablename']);
+				
+				$content_db = pc_base::load_model('content_model');
+				$content_db->set_model($modelid);
+				$content_data = $content_db->get_one('', '*', 'id desc');
+				$tid = $content_data['id'] ? get_table_id($content_data['id']) + 1 : 200;
 				
 				$sql="SHOW PLUGINS;";
 				$handle = $db -> query($sql);
@@ -214,13 +219,23 @@ class index extends admin {
 						$end= $dbtp_num;
 					}
 					$sql="ALTER TABLE `{$db->db_tablepre}{$m['tablename']}` PARTITION BY RANGE (`id`)(";
-					$sql2="ALTER TABLE `{$db->db_tablepre}{$m['tablename']}_data` PARTITION BY RANGE (`id`)(";
+					$sql2="ALTER TABLE `{$db->db_tablepre}{$m['tablename']}_data_0` PARTITION BY RANGE (`id`)(";
 					$_sql='PARTITION p0 VALUES LESS THAN ('.($dbtp_range).'),';
 					for($i=1;$i<=$end;$i++) {
 						$_sql.='PARTITION p'.$i.' VALUES LESS THAN ('.($dbtp_range*($i+1)).'),';
 					}
 					$_sql.='PARTITION pmax VALUES LESS THAN MAXVALUE';
 					$_sql.=');';
+					for ($i = 1; $i < $tid; $i ++) {
+						$tablename_data = $db->db_tablepre.$m['tablename'].'_data_'.$i;
+						$db -> query("SHOW TABLES LIKE '".$tablename_data."'");
+						$table_exists = $db->fetch_next();
+						if (!$table_exists) {
+							continue;
+						}
+						$sql3="ALTER TABLE `".$tablename_data."` PARTITION BY RANGE (`id`)(";
+						$db -> query($sql3.$_sql);
+					}
 				}else{
 					$pt=$db -> get_patition_info();
 					$number = preg_replace('|^p|i','',end(explode(',',str_replace(',pmax','',$pt['partitions']))));
@@ -232,7 +247,7 @@ class index extends admin {
 					}
 
 					$sql="ALTER TABLE `{$db->db_tablepre}{$m['tablename']}` REORGANIZE PARTITION pmax INTO (";
-					$sql2="ALTER TABLE `{$db->db_tablepre}{$m['tablename']}_data` REORGANIZE PARTITION pmax INTO (";
+					$sql2="ALTER TABLE `{$db->db_tablepre}{$m['tablename']}_data_0` REORGANIZE PARTITION pmax INTO (";
 					$_sql='';
 					$start=$number+1;
 					$end=$start+$dbtp_num;
@@ -241,6 +256,16 @@ class index extends admin {
 					}
 					$_sql.="PARTITION pmax VALUES LESS THAN MAXVALUE";
 					$_sql.=");";
+					for ($i = 1; $i < $tid; $i ++) {
+						$tablename_data = $db->db_tablepre.$m['tablename'].'_data_'.$i;
+						$db -> query("SHOW TABLES LIKE '".$tablename_data."'");
+						$table_exists = $db->fetch_next();
+						if (!$table_exists) {
+							continue;
+						}
+						$sql3="ALTER TABLE `".$tablename_data."` PARTITION BY RANGE (`id`)(";
+						$db -> query($sql3.$_sql);
+					}
 				}
 				if($db -> query($sql.$_sql) && $db -> query($sql2.$_sql)){
 					dr_json(1,L('success'));

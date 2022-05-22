@@ -368,7 +368,7 @@ class content extends admin {
 			$modelid = $category['modelid'];
 			$this->db->table_name = $this->db->db_tablepre.$this->model[$modelid]['tablename'];
 			$r = $this->db->get_one(array('id'=>$id));
-			$this->db->table_name = $this->db->table_name.'_data';
+			$this->db->table_name = $this->db->table_name.'_data_'.$r['tableid'];
 			$r2 = $this->db->get_one(array('id'=>$id));
 			if(!$r2) dr_admin_msg(0,L('subsidiary_table_datalost'));
 			$data = array_merge($r,$r2);
@@ -1151,7 +1151,8 @@ class content extends admin {
 			$this->db->update(array($field=>$value), array('id'=>$id));
 			exit('200');
 		} else {
-			$this->db->table_name = $this->db->table_name.'_data';
+			$r = $this->db->get_one(array('id' => $id), 'tableid');
+			$this->db->table_name = $this->db->table_name.'_data_'.$r['tableid'];
 			if ($this->db->field_exists($field)) {
 				$this->db->update(array($field=>$value), array('id'=>$id));
 				exit('200');
@@ -1307,7 +1308,8 @@ class content extends admin {
 		$id = intval($this->input->get('id'));
 		$this->db->set_model($modelid);
 		$tablename = $this->db->table_name;
-		$this->db->table_name = $tablename.'_data';
+		$rt = $db->get_one(array('id' => $id), 'tableid');
+		$this->db->table_name = $tablename.'_data_'.$rt['tableid'];
 		$r = $this->db->get_one(array('id'=>$id),'relation');
 
 		if($r['relation']) {
@@ -1348,7 +1350,7 @@ class content extends admin {
 		$this->db->table_name = $this->db->db_tablepre.$MODEL[$modelid]['tablename'];
 		$r = $this->db->get_one(array('id'=>$id));
 		if(!$r) dr_admin_msg(0,L('information_does_not_exist'));
-		$this->db->table_name = $this->db->table_name.'_data';
+		$this->db->table_name = $this->db->table_name.'_data_'.$r['tableid'];
 		$r2 = $this->db->get_one(array('id'=>$id));
 		$rs = $r2 ? array_merge($r,$r2) : $r;
 
@@ -1735,17 +1737,22 @@ class content extends admin {
 							$model_arr = getcache('model', 'commons');
 							foreach ($model as $modelid) {
 								$db->set_model($modelid);
+								$content_data = $db->get_one('', '*', 'id desc');
+								$tid = $content_data['id'] ? get_table_id($content_data['id']) + 1 : 200;
 								if ($r = $db->count()) { //判断模型下是否有数据
 									$sql_file = CACHE_PATH.'bakup'.DIRECTORY_SEPARATOR.'default'.DIRECTORY_SEPARATOR.$model_arr[$modelid]['tablename'].'.sql';
 									$result = $data = $db->select();
 									$this->create_sql_file($result, $db->db_tablepre.$model_arr[$modelid]['tablename'], $sql_file);
 									$db->query('TRUNCATE TABLE `cms_'.$model_arr[$modelid]['tablename'].'`');
 									//开始清理模型data表数据
-									$db->table_name = $db->table_name.'_data';
-									$sql_file = CACHE_PATH.'bakup'.DIRECTORY_SEPARATOR.'default'.DIRECTORY_SEPARATOR.$model_arr[$modelid]['tablename'].'_data.sql';
-									$result = $db->select();
-									$this->create_sql_file($result, $db->db_tablepre.$model_arr[$modelid]['tablename'].'_data', $sql_file);
-									$db->query('TRUNCATE TABLE `cms_'.$model_arr[$modelid]['tablename'].'_data`');
+									for ($i = 0; $i < $tid; $i ++) {
+										$db->table_name = $db->table_name.'_data_'.$i;
+										$sql_file = CACHE_PATH.'bakup'.DIRECTORY_SEPARATOR.'default'.DIRECTORY_SEPARATOR.$model_arr[$modelid]['tablename'].'_data_'.$i.'.sql';
+										$result = $db->select();
+										$this->create_sql_file($result, $db->db_tablepre.$model_arr[$modelid]['tablename'].'_data_'.$i.'', $sql_file);
+										$db->query('TRUNCATE TABLE `cms_'.$model_arr[$modelid]['tablename'].'_data_'.$i.'`');
+										$db->set_model($modelid);
+									}
 									//删除该模型中在hits表的数据
 									$hits_db = pc_base::load_model('hits_model');
 									$hitsid = 'c-'.$modelid.'-';

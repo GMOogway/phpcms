@@ -33,7 +33,7 @@ class comment_api {
 		}
 		
 		$this->db->set_catid($catid);
-		$r = $this->db->get_one(array('catid'=>$catid, 'id'=>$contentid), '`title`');
+		$r = $this->db->get_one(array('catid'=>$catid, 'id'=>$contentid), '`title`,`tableid`');
 		$category = getcache('category_content_'.$siteid, 'commons');
 		$model = getcache('model', 'commons');
 		
@@ -41,7 +41,7 @@ class comment_api {
 		$data_info = array();
 		if ($cat['type']==0) {
 			if ($model[$cat['modelid']]['tablename']) {
-				$this->db->table_name = $this->db->db_tablepre.$model[$cat['modelid']]['tablename'].'_data';
+				$this->db->table_name = $this->db->db_tablepre.$model[$cat['modelid']]['tablename'].'_data_'.$r['tableid'];
 				$data_info = $this->db->get_one(array('id'=>$contentid));
 			}
 		}

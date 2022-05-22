@@ -114,22 +114,13 @@ class attachment extends admin {
 	 * 存储策略
 	 */
 	public function remote() {
-		if (IS_POST) {
-			$pagesize = $this->input->post('limit') ? $this->input->post('limit') : SYS_ADMIN_PAGESIZE;
-			$page = $this->input->post('page') ? $this->input->post('page') : '1';
-			$datas = $this->db->listinfo('', 'id ASC', $page, $pagesize);
-			$total = $this->db->count();
-			$pages = $this->db->pages;
-			if(!empty($datas)) {
-				foreach($datas as $r) {
-					$rs['id'] = $r['id'];
-					$rs['type'] = $this->type[$r['type']]['name'];
-					$rs['name'] = $r['name'];
-					$array[] = $rs;
-				}
-			}
-			exit(json_encode(array('code'=>0,'msg'=>L('to_success'),'count'=>$total,'data'=>$array,'rel'=>1)));
-		}
+		$pagesize = $this->input->get('limit') ? $this->input->get('limit') : SYS_ADMIN_PAGESIZE;
+		$order = $this->input->get('order') ? $this->input->get('order') : 'id ASC';
+		$page = $this->input->get('page') ? $this->input->get('page') : '1';
+		$datas = $this->db->listinfo('', $order, $page, $pagesize);
+		$total = $this->db->count();
+		$pages = $this->db->pages;
+		$color = array(0 => '', 1 => 'primary', 2 => 'info', 3 => 'success', 4 => 'danger', 5 => 'warning');
 		include $this->admin_tpl('attachment_remote');
 	}
 	
@@ -183,29 +174,16 @@ class attachment extends admin {
 	}
 	
 	/**
-	 * 删除
-	 */
-	public function delete() {
-		$id = $this->input->post('id');
-		if($this->db->delete(array('id'=>$id))) {
-			// 自动更新缓存
-			$this->public_cache_remote();
-			dr_json(1, L('operation_success'));
-		} else {
-			dr_json(0, L('operation_failure'));
-		}
-	}
-	
-	/**
 	 * 批量删除
 	 */
-	public function public_delete_all() {
-		$del_arr = array();
-		$del_arr = $this->input->get_post_ids() ? $this->input->get_post_ids() : dr_json(0, L('illegal_parameters'));
-		$attachment_index = pc_base::load_model('attachment_index_model');
-		if(is_array($del_arr)){
-			foreach($del_arr as $v){
-				$id = intval($v);
+	public function remote_delete() {
+		$ids = $this->input->get_post_ids();
+        if (!$ids) {
+            dr_json(0, L('illegal_parameters'));
+        }
+		if(is_array($ids)){
+			foreach($ids as $id){
+				$id = intval($id);
 				$this->db->delete(array('id'=>$id));
 			}
 			// 自动更新缓存

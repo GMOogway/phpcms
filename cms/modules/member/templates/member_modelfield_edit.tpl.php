@@ -10,7 +10,7 @@
                             <div class="page-body" style="padding-top:0px;margin-bottom:30px;">
 <div class="row my-content-top-tool">
     <div class="col-md-12 col-sm-12">
-        <label style="margin-right:10px"><a href="javascript:;" class="btn red"> <i class="fa fa-plus"></i> <?php echo L('添加模型字段');?></a></label>
+        <label style="margin-right:10px"><a href="javascript:;" class="btn red"> <i class="fa fa-plus"></i> <?php echo L('修改模型字段');?></a></label>
         <label><a href="?m=member&c=member_modelfield&a=manage&modelid=<?php echo $modelid?>&menuid=<?php echo $_GET['menuid']?>" class="btn green"> <i class="fa fa-reorder"></i> <?php if($modelid==-1) {echo L('category').L('field_manage');} else if($modelid==-2) {echo L('category_page').L('field_manage');} else if($modelid) {echo L('会员模型字段管理');} else {echo L('sites').L('field_manage');}?></a></label>
     </div>
 </div>

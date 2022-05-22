@@ -473,7 +473,7 @@ class create_html extends admin {
 						$ok = '<a class="error" href="'.$t['url'].'" target="_blank">转向链接</a>';
 					} else {
 						//写入文件
-						$this->db->table_name = $this->db->table_name.'_data';
+						$this->db->table_name = $this->db->table_name.'_data_'.$r['tableid'];
 						$r2 = $this->db->get_one(array('id'=>$t['id']));
 						if($r2) $r = array_merge($r, $r2);
 						//判断是否为升级或转换过来的数据
@@ -1427,12 +1427,22 @@ class create_html extends admin {
 					if($m['siteid']!=$this->siteid) continue;
 					$mod = getcache('model_field_'.$m['modelid'], 'model');
 					if ($mod) {
+						$this->db->set_model($m['modelid']);
+						$content_data = $this->db->get_one('', '*', 'id desc');
 						$table = $prefix.$m['tablename'];
+						$tid = $content_data['id'] ? get_table_id($content_data['id']) + 1 : 200;
 						foreach ($mod as $t) {
 							if ($t['issystem']) {
 								$this->_is_rp_field($t, $table) && $data[] = [ $table, $t['field'] ];
 							} else {
-								$this->_is_rp_field($t, $table.'_data') && $data[] = [ $table.'_data', $t['field'] ];
+								for ($i = 0; $i < $tid; $i ++) {
+									$this->db->query("SHOW TABLES LIKE '".$table.'_data_'.$i."'");
+									$table_exists = $this->db->fetch_array();
+									if (!$table_exists) {
+										continue;
+									}
+									$this->_is_rp_field($t, $table.'_data_'.$i) && $data[] = [ $table.'_data_'.$i, $t['field'] ];
+								}
 							}
 						}
 					}

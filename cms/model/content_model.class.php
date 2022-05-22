@@ -69,6 +69,7 @@ class content_model extends model {
 		$systeminfo['sysadd'] = IS_ADMIN || IS_COLLAPI ? 1 : 0;
 		
 		$systeminfo['keywords'] = str_replace(array('/','\\','#','.',"'"),' ',$systeminfo['keywords']);
+		$systeminfo['tableid'] = 0;
 		
 		//主表
 		$tablename = $this->table_name = $this->db_tablepre.$this->model_tablename;
@@ -91,10 +92,11 @@ class content_model extends model {
 			}
 		}
 		$this->table_name = $tablename;
-		$this->update(array('url'=>$urls[0]),array('id'=>$id));
+		$tid = get_table_id($id);
+		is_data_table($this->table_name.'_data_', $tid);
+		$this->update(array('url'=>$urls[0],'tableid'=>$tid),array('id'=>$id));
 		//附属表
-		//$modelinfo['content'] = str_replace(array('&lt;iframe', '&gt;&lt;/iframe&gt;'), array('<iframe', '></iframe>'), $modelinfo['content']);
-		$this->table_name = $this->table_name.'_data';
+		$this->table_name = $this->table_name.'_data_'.$tid;
 		$this->insert($modelinfo);
 		//添加统计
 		$this->hits_db = pc_base::load_model('hits_model');
@@ -145,7 +147,9 @@ class content_model extends model {
 					//相同模型的栏目插入新的数据
 					$inputinfo['system']['catid'] = $systeminfo['catid'] = $cid;
 					$newid = $modelinfo['id'] = $this->insert($systeminfo,true);
-					$this->table_name = $tablename.'_data';
+					$tnewid = get_table_id($newid);
+					is_data_table($this->table_name.'_data_', $tnewid);
+					$this->table_name = $tablename.'_data_'.$tnewid;
 					$this->insert($modelinfo);
 					if($data['islink']==1) {
 						$urls = $this->input->post('linkurl');
@@ -154,7 +158,7 @@ class content_model extends model {
 						list($urls) = $this->url->show($newid, 0, $cid, $systeminfo['inputtime'], $data['prefix'],$inputinfo,'add');
 					}
 					$this->table_name = $tablename;
-					$this->update(array('url'=>$urls[0]),array('id'=>$newid));
+					$this->update(array('url'=>$urls[0],'tableid'=>$tnewid),array('id'=>$newid));
 					//发布到审核列表中
 					if($data['status']!=99) {
 						$check_data = array(
@@ -183,9 +187,13 @@ class content_model extends model {
 						'username'=>$systeminfo['username'],
 						'inputtime'=>$systeminfo['inputtime'],
 						'updatetime'=>$systeminfo['updatetime'],
-						'islink'=>1
+						'islink'=>1,
+						'tableid'=>0
 					),true);
-					$this->table_name = $this->table_name.'_data';
+					$tnewid = get_table_id($newid);
+					is_data_table($this->table_name.'_data_', $tnewid);
+					$this->update(array('tableid'=>$tnewid),array('id'=>$newid));
+					$this->table_name = $this->table_name.'_data_'.$tnewid;
 					$this->insert(array('id'=>$newid));
 					//发布到审核列表中
 					if($data['status']!=99) {
@@ -287,8 +295,8 @@ class content_model extends model {
 		$this->update($systeminfo,array('id'=>$id));
 
 		//附属表
-		$this->table_name = $this->table_name.'_data';
-		//$modelinfo['content'] = str_replace(array('&lt;iframe', '&gt;&lt;/iframe&gt;'), array('<iframe', '></iframe>'), $modelinfo['content']);
+		$r = $this->get_one(array('id'=>$id));
+		$this->table_name = $this->table_name.'_data_'.$r['tableid'];
 		$this->update($modelinfo,array('id'=>$id));
 		$this->search_api($id,$inputinfo);
 		//调用 update
@@ -376,10 +384,11 @@ class content_model extends model {
 	 * @param $catid 栏目id
 	 */
 	public function delete_content($id,$file,$catid = 0) {
+		$r = $this->get_one(array('id'=>$id));
 		//删除主表数据
 		$this->delete(array('id'=>$id));
 		//删除从表数据
-		$this->table_name = $this->table_name.'_data';
+		$this->table_name = $this->table_name.'_data_'.$r['tableid'];
 		$this->delete(array('id'=>$id));
 		//重置默认表
 		$this->table_name = $this->db_tablepre.$this->model_tablename;
@@ -421,7 +430,7 @@ class content_model extends model {
 			$this->set_model($modelid);
 			$r = $this->get_one(array('id'=>$id));
 			//附属表
-			$this->table_name = $this->table_name.'_data';
+			$this->table_name = $this->table_name.'_data_'.$r['tableid'];
 			$r2 = $this->get_one(array('id'=>$id));
 			if($r2) {
 				return array_merge($r,$r2);

@@ -13,6 +13,7 @@ class sitemodel_field extends admin {
 		$this->input = pc_base::load_sys_class('input');
 		$this->db = pc_base::load_model('sitemodel_field_model');
 		$this->model_db = pc_base::load_model('sitemodel_model');
+		$this->content_db = pc_base::load_model('content_model');
 		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 		$this->siteid = $this->get_siteid();
 	}
@@ -42,11 +43,12 @@ class sitemodel_field extends admin {
 				$info['issystem'] = 1;
 			} else if($modelid) {
 				$model_table = $model_cache[$modelid]['tablename'];
-				$tablename = $this->input->post('issystem') ? $this->db->db_tablepre.$model_table : $this->db->db_tablepre.$model_table.'_data';
+				$tablename = $this->input->post('issystem') ? $this->db->db_tablepre.$model_table : $this->db->db_tablepre.$model_table.'_data_0';
 			} else {
 				$tablename = $this->db->db_tablepre.'site';
 				$info['issystem'] = 1;
 			}
+			$issystem = $info['issystem'];
 
 			$field = $info['field'];
 			$cname = $info['name'];
@@ -124,7 +126,7 @@ class sitemodel_field extends admin {
 				$tablename = $this->db->db_tablepre.'page';
 			} else if($modelid) {
 				$model_table = $model_cache[$modelid]['tablename'];
-				$tablename = $this->input->post('issystem') ? $this->db->db_tablepre.$model_table : $this->db->db_tablepre.$model_table.'_data';
+				$tablename = $this->input->post('issystem') ? $this->db->db_tablepre.$model_table : $this->db->db_tablepre.$model_table.'_data_0';
 			} else {
 				$tablename = $this->db->db_tablepre.'site';
 			}
@@ -210,11 +212,11 @@ class sitemodel_field extends admin {
 			$tablename = 'page';
 		} else if($modelid) {
 			$model_table = $model_cache[$modelid]['tablename'];
-			$tablename = $r['issystem'] ? $model_table : $model_table.'_data';
+			$tablename = $r['issystem'] ? $model_table : $model_table.'_data_0';
 		} else {
 			$tablename = 'site';
 		}
-		$this->db->drop_field($tablename,$r['field']);
+		$this->db->drop_field($tablename,$r['field'],$modelid,$r['issystem']);
 		dr_admin_msg(1,L('operation_success'),HTTP_REFERER);
 	}
 	/**
@@ -260,7 +262,7 @@ class sitemodel_field extends admin {
 			if($issystem) {
 				$this->db->table_name = $this->db->db_tablepre.$tablename;
 			} else {
-				$this->db->table_name = $this->db->db_tablepre.$tablename.'_data';
+				$this->db->table_name = $this->db->db_tablepre.$tablename.'_data_0';
 			}
 		} else {
 			$this->db->table_name = $this->db->db_tablepre.$tablename;

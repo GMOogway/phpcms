@@ -75,7 +75,7 @@ class sitemodel extends admin {
 			$tablepre = $this->db->db_tablepre;
 			$tablename = $info['tablename'];
 			$model_sql = str_replace('$basic_table', $tablepre.$tablename, $model_sql);
-			$model_sql = str_replace('$table_data',$tablepre.$tablename.'_data', $model_sql);
+			$model_sql = str_replace('$table_data',$tablepre.$tablename.'_data_0', $model_sql);
 			$model_sql = str_replace('$table_model_field',$tablepre.'model_field', $model_sql);
 			$model_sql = str_replace('$modelid',$modelid,$model_sql);
 			$model_sql = str_replace('$siteid',$this->siteid,$model_sql);
@@ -234,7 +234,7 @@ class sitemodel extends admin {
 		$model_table = $model_cache[$modelid]['tablename'];
 		$this->sitemodel_field_db->delete(array('modelid'=>$modelid,'siteid'=>$this->siteid));
 		$this->db->drop_table($model_table);
-		$this->db->drop_table($model_table.'_data');
+		$this->db->drop_table($model_table.'_data_0');
 		
 		$this->db->delete(array('modelid'=>$modelid,'siteid'=>$this->siteid));
 		//删除全站搜索接口数据
@@ -311,7 +311,7 @@ class sitemodel extends admin {
 			//主表表名
 			$basic_table = $info['tablename'];
 			//从表表名
-			$table_data = $basic_table.'_data';
+			$table_data = $basic_table.'_data_0';
 			$info['description'] = $info['description'];
 			$info['setting'] = array2string($setting);
 			$info['type'] = 0;

@@ -83,8 +83,31 @@ class content_input {
 				}
 			}
 			$MODEL = getcache('model', 'commons');
-			$this->db->table_name = $this->fields[$field]['issystem'] ? $this->db_pre.$MODEL[$this->modelid]['tablename'] : $this->db_pre.$MODEL[$this->modelid]['tablename'].'_data';
-			if($this->fields[$field]['isunique'] && $this->db->get_one(array($field=>$value),$field) && ROUTE_A != 'edit') {
+			$this->db->table_name = $this->db_pre.$MODEL[$this->modelid]['tablename'];
+			if (!$this->fields[$field]['issystem'] && $this->modelid && $this->modelid!=-1 && $this->modelid!=-2) {
+				$content_data = $this->db->get_one('', '*', 'id desc');
+				$tid = $content_data['id'] ? get_table_id($content_data['id']) + 1 : 200;
+				for ($i = 0; $i < $tid; $i ++) {
+					$this->db->table_name = $this->db_pre.$MODEL[$this->modelid]['tablename'].'_data_'.$i;
+					$this->db->query("SHOW TABLES LIKE '".$this->db->table_name."'");
+					$table_exists = $this->db->fetch_array();
+					if (!$table_exists) {
+						continue;
+					}
+					$isunique_value = $this->db->get_one(array($field=>$value),$field);
+					$this->db->table_name = $this->db_pre.$MODEL[$this->modelid]['tablename'];
+				}
+			} else {
+				$isunique_value = $this->db->get_one(array($field=>$value),$field);
+			}
+			if($this->fields[$field]['isunique'] && !$value) {
+				if (IS_ADMIN) {
+					dr_admin_msg(0, $name.L('empty'), array('field' => $field));
+				} else {
+					dr_msg(0, $name.L('empty'), array('field' => $field));
+				}
+			}
+			if($this->fields[$field]['isunique'] && $isunique_value) {
 				if (IS_ADMIN) {
 					dr_admin_msg(0, $name.L('the_value_must_not_repeat'), array('field' => $field));
 				} else {

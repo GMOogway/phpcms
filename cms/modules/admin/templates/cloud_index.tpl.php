@@ -19,7 +19,7 @@ $menu_data = $this->menu_db->get_one(array('name' => 'version_update', 'm' => 'a
                     <div class="form-group">
                         <label class="col-md-3 control-label"><?php echo L('系统版本');?></label>
                         <div class="col-md-9">
-                            <div class="form-control-static"><a href="javascript:;" layuimini-content-href="?m=admin&c=cloud&a=upgrade&menuid=<?php echo $menu_data['id']?>&pc_hash=<?php echo dr_get_csrf_token();?>" data-title="版本升级" data-icon="fa fa-refresh"><?php echo CMS_VERSION?></a>
+                            <div class="form-control-static"><a href="javascript:;" layuimini-content-href="?m=admin&c=cloud&a=upgrade&menuid=<?php echo $menu_data['id']?>&pc_hash=<?php echo dr_get_csrf_token();?>" data-title="版本升级" data-icon="fa fa-refresh"> <i class="fa fa-refresh"></i> <?php echo CMS_VERSION?></a>
                                 <a id="dr_cms_update" href="javascript:;" layuimini-content-href="?m=admin&c=cloud&a=upgrade&menuid=<?php echo $menu_data['id']?>&pc_hash=<?php echo dr_get_csrf_token();?>" data-title="版本升级" data-icon="fa fa-refresh" style="margin-left: 10px;display: none" class="badge badge-danger badge-roundless">  </a>
                             </div>
                         </div>
@@ -113,7 +113,7 @@ $(function () {
         success: function(json) {
             if (json.code) {
                 $('#dr_cms_update').show();
-                $('#dr_cms_update').html(json.msg);
+                $('#dr_cms_update').html('<i class="fa fa-refresh"></i> '+json.msg);
             }
         }
     });

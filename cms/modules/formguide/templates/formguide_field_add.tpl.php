@@ -179,7 +179,7 @@ function field_setting(fieldtype) {
                 $('#field_allow_search0').attr("disabled",false);
                 $('#field_allow_search1').attr("disabled",false);
             } else {
-                $('#field_allow_search0').attr("checked",true);
+                $('#field_allow_search0').prop("checked",true);
                 $('#field_allow_search0').attr("disabled",true);
                 $('#field_allow_search1').attr("disabled",true);
             }
@@ -187,7 +187,7 @@ function field_setting(fieldtype) {
                 $('#field_allow_isunique0').attr("disabled",false);
                 $('#field_allow_isunique1').attr("disabled",false);
             } else {
-                $('#field_allow_isunique0').attr("checked",true);
+                $('#field_allow_isunique0').prop("checked",true);
                 $('#field_allow_isunique0').attr("disabled",true);
                 $('#field_allow_isunique1').attr("disabled",true);
             }

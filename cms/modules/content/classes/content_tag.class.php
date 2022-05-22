@@ -81,25 +81,17 @@ class content_tag {
 		$order = $data['order'];
 
 		$return = $this->db->select($sql, '*', $data['limit'], $order, '', 'id');
-						
+
 		//调用副表的数据
 		if (isset($data['moreinfo']) && intval($data['moreinfo']) == 1) {
 			$ids = array();
 			foreach ($return as $v) {
 				if (isset($v['id']) && !empty($v['id'])) {
-					$ids[] = $v['id'];
+					$this->db->table_name = $this->db->table_name.'_data_'.$v['tableid'];
+					$return[$v['id']] = $this->db->get_one(array('id'=>$v['id']), '*', 'id');
+					$this->set_modelid($catid);
 				} else {
 					continue;
-				}
-			}
-			if (!empty($ids)) {
-				$this->db->table_name = $this->db->table_name.'_data';
-				$ids = implode('\',\'', $ids);
-				$r = $this->db->select("`id` IN ('$ids')", '*', '', '', '', 'id');
-				if (!empty($r)) {
-					foreach ($r as $k=>$v) {
-						if (isset($return[$k])) $return[$k] = array_merge($v, $return[$k]);
-					}
 				}
 			}
 		}

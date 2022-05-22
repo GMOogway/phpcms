@@ -1250,6 +1250,7 @@ CREATE TABLE IF NOT EXISTS `cms_download` (
   `status` tinyint(3) unsigned NOT NULL DEFAULT '1',
   `sysadd` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `islink` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `tableid` smallint(5) unsigned NOT NULL COMMENT '附表id',
   `username` char(50) NOT NULL,
   `inputtime` int(10) unsigned NOT NULL DEFAULT '0',
   `updatetime` int(10) unsigned NOT NULL DEFAULT '0',
@@ -1267,10 +1268,10 @@ CREATE TABLE IF NOT EXISTS `cms_download` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- ----------------------------
--- Table structure for `cms_download_data`
+-- Table structure for `cms_download_data_0`
 -- ----------------------------
-DROP TABLE IF EXISTS `cms_download_data`;
-CREATE TABLE IF NOT EXISTS `cms_download_data` (
+DROP TABLE IF EXISTS `cms_download_data_0`;
+CREATE TABLE IF NOT EXISTS `cms_download_data_0` (
   `id` mediumint(8) unsigned DEFAULT '0',
   `content` text NOT NULL,
   `readpoint` smallint(5) unsigned NOT NULL DEFAULT '0',
@@ -1305,6 +1306,7 @@ CREATE TABLE IF NOT EXISTS `cms_news` (
   `status` tinyint(3) unsigned NOT NULL DEFAULT '1',
   `sysadd` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `islink` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `tableid` smallint(5) unsigned NOT NULL COMMENT '附表id',
   `username` char(50) NOT NULL,
   `inputtime` int(10) unsigned NOT NULL DEFAULT '0',
   `updatetime` int(10) unsigned NOT NULL DEFAULT '0',
@@ -1315,10 +1317,10 @@ CREATE TABLE IF NOT EXISTS `cms_news` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- ----------------------------
--- Table structure for `cms_news_data`
+-- Table structure for `cms_news_data_0`
 -- ----------------------------
-DROP TABLE IF EXISTS `cms_news_data`;
-CREATE TABLE IF NOT EXISTS `cms_news_data` (
+DROP TABLE IF EXISTS `cms_news_data_0`;
+CREATE TABLE IF NOT EXISTS `cms_news_data_0` (
   `id` mediumint(8) unsigned DEFAULT '0',
   `content` mediumtext NOT NULL,
   `readpoint` smallint(5) unsigned NOT NULL DEFAULT '0',
@@ -1353,6 +1355,7 @@ CREATE TABLE IF NOT EXISTS `cms_picture` (
   `status` tinyint(3) unsigned NOT NULL DEFAULT '1',
   `sysadd` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `islink` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `tableid` smallint(5) unsigned NOT NULL COMMENT '附表id',
   `username` char(50) NOT NULL,
   `inputtime` int(10) unsigned NOT NULL DEFAULT '0',
   `updatetime` int(10) unsigned NOT NULL DEFAULT '0',
@@ -1363,10 +1366,10 @@ CREATE TABLE IF NOT EXISTS `cms_picture` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- ----------------------------
--- Table structure for `cms_picture_data`
+-- Table structure for `cms_picture_data_0`
 -- ----------------------------
-DROP TABLE IF EXISTS `cms_picture_data`;
-CREATE TABLE IF NOT EXISTS `cms_picture_data` (
+DROP TABLE IF EXISTS `cms_picture_data_0`;
+CREATE TABLE IF NOT EXISTS `cms_picture_data_0` (
   `id` mediumint(8) unsigned DEFAULT '0',
   `content` text NOT NULL,
   `readpoint` smallint(5) unsigned NOT NULL DEFAULT '0',
@@ -1599,7 +1602,7 @@ INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`,
 INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('152', 'add_model', '151', 'content', 'sitemodel', 'add', '', 'fa fa-plus', '0', '0', '1', '1', '1', '1', '1');
 INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('153', 'sitemodel_import', '151', 'content', 'sitemodel', 'import', '', 'fa fa-upload', '0', '1', '1', '1', '1', '1', '1');
 INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('154', 'fields_manage', '151', 'content', 'sitemodel_field', 'init', '', 'fa fa-code', '0', '0', '1', '1', '1', '1', '1');
-INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('155', 'edit_model_content', '151', 'content', 'sitemodel', 'edit', '', 'fa fa-edit', '0', '0', '1', '1', '1', '1', '1');
+INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('155', 'edit_model_content', '151', 'content', 'sitemodel', 'hide:edit', '', 'fa fa-edit', '0', '1', '1', '1', '1', '1', '1');
 INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('156', 'disabled_model', '151', 'content', 'sitemodel', 'disabled', '', 'fa fa-ban', '0', '0', '1', '1', '1', '1', '1');
 INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('157', 'delete_model', '151', 'content', 'sitemodel', 'delete', '', 'fa fa-trash-o', '0', '0', '1', '1', '1', '1', '1');
 INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('158', 'export_model', '151', 'content', 'sitemodel', 'export', '', 'fa fa-upload', '0', '0', '1', '1', '1', '1', '1');
@@ -1632,7 +1635,7 @@ INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`,
 INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('185', 'operation_ignore', '177', 'member', 'member_verify', 'ignore', '', 'fa fa-code', '0', '0', '1', '1', '1', '1', '1');
 INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('186', 'operation_reject', '177', 'member', 'member_verify', 'reject', '', 'fa fa-ban', '0', '0', '1', '1', '1', '1', '1');
 INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('187', 'view_modelinfo', '177', 'member', 'member_verify', 'modelinfo', '', 'fa fa-eye', '0', '0', '1', '1', '1', '1', '1');
-INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('188', 'member_setting', '167', 'member', 'member_setting', 'manage', '', 'fa fa-search', '0', '1', '1', '1', '1', '1', '1');
+INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('188', 'member_setting', '167', 'member', 'member_setting', 'manage', '', 'fa fa-cog', '0', '1', '1', '1', '1', '1', '1');
 INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('189', 'manage_member_group', '166', 'member', 'member_group', 'manage', '', 'fa fa-users', '0', '1', '1', '1', '1', '1', '1');
 INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('190', 'member_group_manage', '189', 'member', 'member_group', 'manage', '', 'fa fa-users', '0', '1', '1', '1', '1', '1', '1');
 INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('191', 'member_group_add', '190', 'member', 'member_group', 'add', '', 'fa fa-plus', '0', '0', '1', '1', '1', '1', '1');

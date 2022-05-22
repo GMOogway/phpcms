@@ -184,7 +184,7 @@ class index {
 		$r = $this->db->get_one(array('id'=>$id));
 		if(!$r || $r['status'] != 99) showmessage(L('info_does_not_exists'),'blank');
 		
-		$this->db->table_name = $tablename.'_data';
+		$this->db->table_name = $tablename.'_data_'.$r['tableid'];
 		$r2 = $this->db->get_one(array('id'=>$id));
 		$rs = $r2 ? array_merge($r,$r2) : $r;
 
