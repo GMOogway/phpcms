@@ -316,13 +316,18 @@ $(document).ready(function() {
                     </dl>
                 </li>
                 <li class="layui-nav-item mobile layui-hide-xs" lay-unselect>
-                    <a href="<?php echo $currentsite['domain']?>" target="_blank" data-home="<?php echo L('site_homepage')?>"><i class="fa fa-home"></i></a>
-                </li>
-                <li class="layui-nav-item mobile layui-hide-xs" lay-unselect>
-                    <a href="<?php echo WEB_PATH;?>index.php?m=member" target="_blank" data-member="<?php echo L('member_center')?>"><i class="fa fa-user"></i></a>
-                </li>
-                <li class="layui-nav-item mobile layui-hide-xs" lay-unselect>
-                    <a href="<?php echo WEB_PATH;?>index.php?m=search" target="_blank" id="site_search" data-search="<?php echo L('search')?>"><i class="fa fa-search"></i></a>
+                    <a href="javascript:;"><i class="fa fa-list"></i></a>
+                    <dl class="layui-nav-child">
+                        <dd>
+                            <a href="<?php echo $currentsite['domain']?>" target="_blank" data-home="<?php echo L('site_homepage')?>"><i class="fa fa-home"></i> <?php echo L('site_homepage')?></a>
+                        </dd>
+                        <dd>
+                            <a href="<?php echo WEB_PATH;?>index.php?m=member" target="_blank" data-member="<?php echo L('member_center')?>"><i class="fa fa-user"></i> <?php echo L('member_center')?></a>
+                        </dd>
+                        <dd>
+                            <a href="<?php echo WEB_PATH;?>index.php?m=search" target="_blank" id="site_search" data-search="<?php echo L('search')?>"><i class="fa fa-search"></i> <?php echo L('站点').L('search')?></a>
+                        </dd>
+                    </dl>
                 </li>
                 <li class="layui-nav-item" lay-unselect>
                     <a href="javascript:;" data-refresh="<?php echo L('刷新')?>"><i class="fa fa-refresh"></i></a>
@@ -402,16 +407,16 @@ $(document).ready(function() {
             <div class="layui-tab-content">
                 <div id="layuiminiHomeTabIframe" class="layui-tab-item layui-show"></div>
                 <div class="fav-nav">
-					<div id="panellist">
-						<?php foreach($adminpanel as $v) {?>
-								<span>
-								<a href="javascript:paneladdclass(this);" layuimini-content-href="<?php echo $v['url'].'&menuid='.$v['menuid'].'&pc_hash='.dr_get_csrf_token();?>" data-title="<?php echo L($v['name'])?>" data-icon="<?php echo $v['icon'];?>"><i class="<?php echo $v['icon'];?>"></i><cite><?php echo L($v['name'])?></cite></a>
-								<a class="panel-delete" href="javascript:delete_panel(<?php echo $v['menuid']?>, this);"></a></span>
-						<?php }?>
-					</div>
-					<div id="paneladd"></div>
-					<input type="hidden" id="menuid" value="">
-				</div>
+                    <div id="panellist">
+                        <?php foreach($adminpanel as $v) {?>
+                                <span>
+                                <a href="javascript:paneladdclass(this);" layuimini-content-href="<?php echo $v['url'].'&menuid='.$v['menuid'].'&pc_hash='.dr_get_csrf_token();?>" data-title="<?php echo L($v['name'])?>" data-icon="<?php echo $v['icon'];?>"><i class="<?php echo $v['icon'];?>"></i><cite><?php echo L($v['name'])?></cite></a>
+                                <a class="panel-delete" href="javascript:delete_panel(<?php echo $v['menuid']?>, this);"></a></span>
+                        <?php }?>
+                    </div>
+                    <div id="paneladd"></div>
+                    <input type="hidden" id="menuid" value="">
+                </div>
             </div>
         </div>
 

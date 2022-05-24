@@ -62,13 +62,29 @@ body {
     line-height: 60px !important;
 }
 
+.layuimini-menu-header-pc > .layui-nav-item a {
+    padding: 10px !important;
+}
+
+.layuimini-menu-header-pc > .layui-nav-item .menu-top-icon {
+    text-align: center;
+    height: 20px !important;
+    line-height: 20px !important;
+}
+
+.layuimini-menu-header-pc > .layui-nav-item .menu-top-name {
+    text-align: center;
+    height: 20px !important;
+    line-height: 20px !important;
+}
+
 .layui-header > .layui-layout-right > .layui-nav-item {
     height: 60px !important;
     line-height: 60px !important;
 }
 
 .layui-layout-left {
-    left: 295px !important;
+    left: 240px !important;
 }
 
 .layui-nav.layui-layout-left.layuimini-header-menu.layuimini-pc-show {
@@ -108,8 +124,8 @@ body {
 .layuimini-tool {
     position: absolute !important;
     top: 0;
-    left: 235px;
-    width: 60px;
+    left: 205px;
+    width: 30px;
     height: 100%;
     line-height: 60px;
     text-align: center;
@@ -792,7 +808,7 @@ border-color: #ffffff;background-color: rgba(255, 255, 255, .3);}
 @media screen and (min-width: 1025px) {
     /**头部样式（缩放） */
     .layuimini-mini .layui-layout-left.layuimini-header-menu.layuimini-pc-show {
-        left: 155px !important;
+        left: 100px !important;
     }
 
     /**logo演示（缩放） */
@@ -834,7 +850,7 @@ border-color: #ffffff;background-color: rgba(255, 255, 255, .3);}
     }
 
     .layuimini-mini .layuimini-tool {
-        left: 95px !important;
+        left: 65px !important;
     }
 
     .layuimini-pc-show{
@@ -893,11 +909,11 @@ border-color: #ffffff;background-color: rgba(255, 255, 255, .3);}
     }
 
     .layui-layout-admin .layui-nav.layui-layout-right > li:not(.layuimini-setting) {
-        width: 40px !important;
+        width: 30px !important;
     }
 
     .layui-layout-admin .layui-nav.layui-layout-right > li:not(.layuimini-setting) a {
-        padding: 0 15px;
+        padding: 0 10px;
     }
 
     .layuimini-all .layui-layout-admin .layui-body {
