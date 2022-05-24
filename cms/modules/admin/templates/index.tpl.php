@@ -316,11 +316,8 @@ $(document).ready(function() {
                     </dl>
                 </li>
                 <li class="layui-nav-item mobile layui-hide-xs" lay-unselect>
-                    <a href="javascript:;"><i class="fa fa-list"></i></a>
+                    <a href="<?php echo $currentsite['domain']?>" target="_blank" data-home="<?php echo L('site_homepage')?>"><i class="fa fa-home"></i></a>
                     <dl class="layui-nav-child">
-                        <dd>
-                            <a href="<?php echo $currentsite['domain']?>" target="_blank" data-home="<?php echo L('site_homepage')?>"><i class="fa fa-home"></i> <?php echo L('site_homepage')?></a>
-                        </dd>
                         <dd>
                             <a href="<?php echo WEB_PATH;?>index.php?m=member" target="_blank" data-member="<?php echo L('member_center')?>"><i class="fa fa-user"></i> <?php echo L('member_center')?></a>
                         </dd>
