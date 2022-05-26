@@ -233,8 +233,20 @@ class sitemodel extends admin {
 		$model_cache = getcache('model','commons');
 		$model_table = $model_cache[$modelid]['tablename'];
 		$this->sitemodel_field_db->delete(array('modelid'=>$modelid,'siteid'=>$this->siteid));
+		$this->content_db->set_model($modelid);
+		$content_data = $this->content_db->get_one('', '*', 'id desc');
+		$tid = $content_data['id'] ? get_table_id($content_data['id']) + 1 : 200;
 		$this->db->drop_table($model_table);
-		$this->db->drop_table($model_table.'_data_0');
+		for ($i = 0; $i < $tid; $i ++) {
+			$tablename_data = $this->content_db->db_tablepre.$model_table.'_data_'.$i;
+			$this->content_db->query("SHOW TABLES LIKE '".$tablename_data."'");
+			$table_exists = $this->content_db->fetch_array();
+			if (!$table_exists) {
+				continue;
+			}
+			$tablename_data = '';
+			$this->db->drop_table($model_table.'_data_'.$i);
+		}
 		
 		$this->db->delete(array('modelid'=>$modelid,'siteid'=>$this->siteid));
 		//删除全站搜索接口数据
