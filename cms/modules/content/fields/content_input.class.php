@@ -82,37 +82,39 @@ class content_input {
 					dr_msg(0, $errortips, array('field' => $field));
 				}
 			}
-			if($this->fields[$field]['isunique']) {
-				$MODEL = getcache('model', 'commons');
-				$this->db->table_name = $this->db_pre.$MODEL[$this->modelid]['tablename'];
-				if (!$this->fields[$field]['issystem'] && $this->modelid && $this->modelid!=-1 && $this->modelid!=-2) {
-					$content_data = $this->db->get_one('', '*', 'id desc');
-					$tid = $content_data['id'] ? get_table_id($content_data['id']) + 1 : 200;
-					for ($i = 0; $i < $tid; $i ++) {
-						$this->db->table_name = $this->db_pre.$MODEL[$this->modelid]['tablename'].'_data_'.$i;
-						$this->db->query("SHOW TABLES LIKE '".$this->db->table_name."'");
-						$table_exists = $this->db->fetch_array();
-						if (!$table_exists) {
-							continue;
+			if ($this->modelid && $this->modelid!=-1 && $this->modelid!=-2) {
+				if($this->fields[$field]['isunique']) {
+					$MODEL = getcache('model', 'commons');
+					$this->db->table_name = $this->db_pre.$MODEL[$this->modelid]['tablename'];
+					if (!$this->fields[$field]['issystem']) {
+						$content_data = $this->db->get_one('', '*', 'id desc');
+						$tid = $content_data['id'] ? get_table_id($content_data['id']) + 1 : 200;
+						for ($i = 0; $i < $tid; $i ++) {
+							$this->db->table_name = $this->db_pre.$MODEL[$this->modelid]['tablename'].'_data_'.$i;
+							$this->db->query("SHOW TABLES LIKE '".$this->db->table_name."'");
+							$table_exists = $this->db->fetch_array();
+							if (!$table_exists) {
+								continue;
+							}
+							$isunique_value = $this->db->get_one(array($field=>$value,'id<>'=>(int)$data['id']),$field);
+							$this->db->table_name = $this->db_pre.$MODEL[$this->modelid]['tablename'];
 						}
-						$isunique_value = $this->db->get_one(array($field=>$value),$field);
-						$this->db->table_name = $this->db_pre.$MODEL[$this->modelid]['tablename'];
-					}
-				} else {
-					$isunique_value = $this->db->get_one(array($field=>$value),$field);
-				}
-				if(!$value) {
-					if (IS_ADMIN) {
-						dr_admin_msg(0, $name.L('empty'), array('field' => $field));
 					} else {
-						dr_msg(0, $name.L('empty'), array('field' => $field));
+						$isunique_value = $this->db->get_one(array($field=>$value,'id<>'=>(int)$data['id']),$field);
 					}
-				}
-				if($isunique_value) {
-					if (IS_ADMIN) {
-						dr_admin_msg(0, $name.L('the_value_must_not_repeat'), array('field' => $field));
-					} else {
-						dr_msg(0, $name.L('the_value_must_not_repeat'), array('field' => $field));
+					if(!$value) {
+						if (IS_ADMIN) {
+							dr_admin_msg(0, $name.L('empty'), array('field' => $field));
+						} else {
+							dr_msg(0, $name.L('empty'), array('field' => $field));
+						}
+					}
+					if($isunique_value) {
+						if (IS_ADMIN) {
+							dr_admin_msg(0, $name.L('the_value_must_not_repeat'), array('field' => $field));
+						} else {
+							dr_msg(0, $name.L('the_value_must_not_repeat'), array('field' => $field));
+						}
 					}
 				}
 			}
