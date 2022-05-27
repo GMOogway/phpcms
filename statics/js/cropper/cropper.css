@@ -303,8 +303,8 @@
   cursor: not-allowed;
 }
 
-.container_box{padding-top:8px;}
-.container{width:450px;height:450px;float:left;}
+.container_crop{padding:8px;}
+.container_img{width:450px;height:450px;float:left;}
 .con_right{float:left;margin-left:8px;width:260px;}
 .preview{margin-bottom:10px;max-height:370px;min-height:200px;overflow:hidden;}
 .preview_img{overflow:hidden;margin-bottom:15px;float:left;margin-right:10px;}
@@ -318,10 +318,10 @@
 .bottom_button{position:fixed;bottom:10px;right:20px;z-index:99999;}
 
 @media (max-width: 400px) {
-    .container {
+    .container_img {
         width: 320px;
         height: auto;
-        margin: 0px auto;
+        margin: 0px auto 10px auto;
         float: initial;
     }
     .con_right {

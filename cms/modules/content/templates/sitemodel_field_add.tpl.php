@@ -35,7 +35,7 @@ include $this->admin_tpl('header','admin');?>
                 <li<?php if ($page==2) {?> class="active"<?php }?>>
                     <a data-toggle="tab_2" onclick="$('#dr_page').val('2')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('数据验证').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-crop"></i> <?php if (!is_mobile(0)) {echo L('数据验证');}?> </a>
                 </li>
-                <li<?php if ($page==3) {?> class="active"<?php }?>>
+                <li class="<?php if(!$modelid || $modelid==-1 || $modelid==-2) {echo 'hide';}?><?php if ($page==3) {?> active<?php }?>">
                     <a data-toggle="tab_3" onclick="$('#dr_page').val('3')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('字段权限').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-user"></i> <?php if (!is_mobile(0)) {echo L('字段权限');}?> </a>
                 </li>
             </ul>
@@ -145,7 +145,7 @@ include $this->admin_tpl('header','admin');?>
                 </div>
                 <div class="tab-pane<?php if ($page==3) {?> active<?php }?>" id="tab_3">
                     <div class="form-body">
-                        <div class="form-group">
+                        <div class="form-group<?php if(!$modelid || $modelid==-1 || $modelid==-2) {echo ' hide';}?>">
                             <label class="col-md-2 control-label"><?php echo L('unique')?></label>
                             <div class="col-md-9">
                                 <div class="mt-radio-inline">

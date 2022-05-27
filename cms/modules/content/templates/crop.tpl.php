@@ -6,8 +6,8 @@ include $this->admin_tpl('header','admin');
 <script type="text/javascript" src="<?php echo JS_PATH;?>cropper/cropper.min.js"></script>
 </head>
 <body>
-<div class="container_box">
-    <div class="container">
+<div class="container_crop">
+    <div class="container_img">
         <img id="image" src="<?php echo WEB_PATH.$filepath;?>">
     </div>
 
@@ -60,10 +60,9 @@ include $this->admin_tpl('header','admin');
     <input type="hidden" name="new_filename" id="new_filename">
 </div>
 <script type="text/javascript">
-    init_crop();
-    function init_crop(){
+    jQuery(document).ready(function() {
         $(".preview_img").html('<img src="' + $("#image").attr('src')  + '">');
-        $('.container > img').cropper({
+        $('.container_img > img').cropper({
             aspectRatio: <?php echo $spec;?>,
             viewMode : 1,
             preview: '.preview_img', 
@@ -74,10 +73,10 @@ include $this->admin_tpl('header','admin');
                 $("input[name='h']").val(data.detail.height);
             }
         })
-    }
+    });
 
     function dosbumit(){
-		dr_tips('', '正在处理中……', 999999);
+        dr_tips('', '正在处理中……', 999999);
         $.ajax({
             type: 'POST',
             url: '<?php echo SELF;?>?m=content&c=content&a=public_crop&module=<?php echo $module;?>&catid=<?php echo $catid;?>', 

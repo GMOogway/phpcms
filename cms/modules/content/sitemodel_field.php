@@ -36,17 +36,20 @@ class sitemodel_field extends admin {
 			if (!$info['name']) dr_json(0, L('field_nickname').L('empty'), array('field' => 'name'));
 			$modelid = $info['modelid'];
 			if($modelid==-1) {
+				$this->siteid = 1;
+				$info['issystem'] = 1;
 				$tablename = $this->db->db_tablepre.'category';
-				$info['issystem'] = 1;
 			} else if($modelid==-2) {
-				$tablename = $this->db->db_tablepre.'page';
+				$this->siteid = 1;
 				$info['issystem'] = 1;
+				$tablename = $this->db->db_tablepre.'page';
 			} else if($modelid) {
 				$model_table = $model_cache[$modelid]['tablename'];
 				$tablename = $this->input->post('issystem') ? $this->db->db_tablepre.$model_table : $this->db->db_tablepre.$model_table.'_data_0';
 			} else {
-				$tablename = $this->db->db_tablepre.'site';
+				$this->siteid = 1;
 				$info['issystem'] = 1;
+				$tablename = $this->db->db_tablepre.'site';
 			}
 			$issystem = $info['issystem'];
 
@@ -121,13 +124,16 @@ class sitemodel_field extends admin {
 			if (!$info['name']) dr_json(0, L('field_nickname').L('empty'), array('field' => 'name'));
 			$modelid = $info['modelid'];
 			if($modelid==-1) {
+				$this->siteid = 1;
 				$tablename = $this->db->db_tablepre.'category';
 			} else if($modelid==-2) {
+				$this->siteid = 1;
 				$tablename = $this->db->db_tablepre.'page';
 			} else if($modelid) {
 				$model_table = $model_cache[$modelid]['tablename'];
 				$tablename = $this->input->post('issystem') ? $this->db->db_tablepre.$model_table : $this->db->db_tablepre.$model_table.'_data_0';
 			} else {
+				$this->siteid = 1;
 				$tablename = $this->db->db_tablepre.'site';
 			}
 
@@ -191,21 +197,35 @@ class sitemodel_field extends admin {
 		}
 	}
 	public function disabled() {
+		$modelid = intval($this->input->get('modelid'));
 		$fieldid = intval($this->input->get('fieldid'));
+		if($modelid==-1) {
+			$this->siteid = 1;
+		} else if($modelid==-2) {
+			$this->siteid = 1;
+		} else if(!$modelid) {
+			$this->siteid = 1;
+		}
 		$disabled = $this->input->get('disabled') ? 0 : 1;
 		$this->db->update(array('disabled'=>$disabled),array('fieldid'=>$fieldid,'siteid'=>$this->siteid));
-		$modelid = $this->input->get('modelid');
 		$this->cache_field($modelid);
 		dr_admin_msg(1,L('operation_success'),HTTP_REFERER);
 	}
 	public function delete() {
+		$modelid = intval($this->input->get('modelid'));
 		$fieldid = intval($this->input->get('fieldid'));
+		if($modelid==-1) {
+			$this->siteid = 1;
+		} else if($modelid==-2) {
+			$this->siteid = 1;
+		} else if(!$modelid) {
+			$this->siteid = 1;
+		}
 		$r = $this->db->get_one(array('fieldid'=>$this->input->get('fieldid'),'siteid'=>$this->siteid));
 		//必须放在删除字段前、在删除字段部分，重置了 tablename
 		$this->db->delete(array('fieldid'=>$this->input->get('fieldid'),'siteid'=>$this->siteid));
 
 		$model_cache = getcache('model','commons');
-		$modelid = intval($this->input->get('modelid'));
 		if($modelid==-1) {
 			$tablename = 'category';
 		} else if($modelid==-2) {

@@ -1203,9 +1203,11 @@ class content extends admin {
 				$uploadedfile['attachinfo'] = dr_array2string($info);
 				$uploadedfile['isimage'] = in_array($filetype, array('gif', 'jpg', 'jpeg', 'png', 'bmp', 'webp')) ? 1 : 0;
 				$uploadedfile['filepath'] = $filename.'.'.$filetype;
+				$uploadedfile['related'] = 'rand';
 				$uploadedfile['filename'] = file_name($this->input->post('filepath'));
 				$uploadedfile['filesize'] = $fileinfo['size'];
 				$uploadedfile['fileext'] = $filetype;
+				$uploadedfile['downloads'] = 0;
 				$aid = $this->att_db->api_add($uploadedfile);
 				$this->upload_json($aid,SYS_UPLOAD_URL.$filename.'.'.$filetype,file_name($this->input->post('filepath')),format_file_size($fileinfo['size']));
 				dr_json(1, L('operation_success'), array('filepath' => SYS_UPLOAD_URL.$filename.'.'.$filetype));
