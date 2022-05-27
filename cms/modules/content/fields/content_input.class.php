@@ -82,8 +82,8 @@ class content_input {
 					dr_msg(0, $errortips, array('field' => $field));
 				}
 			}
-			$MODEL = getcache('model', 'commons');
 			if($this->fields[$field]['isunique']) {
+				$MODEL = getcache('model', 'commons');
 				$this->db->table_name = $this->db_pre.$MODEL[$this->modelid]['tablename'];
 				if (!$this->fields[$field]['issystem'] && $this->modelid && $this->modelid!=-1 && $this->modelid!=-2) {
 					$content_data = $this->db->get_one('', '*', 'id desc');
@@ -101,19 +101,19 @@ class content_input {
 				} else {
 					$isunique_value = $this->db->get_one(array($field=>$value),$field);
 				}
-			}
-			if($this->fields[$field]['isunique'] && !$value) {
-				if (IS_ADMIN) {
-					dr_admin_msg(0, $name.L('empty'), array('field' => $field));
-				} else {
-					dr_msg(0, $name.L('empty'), array('field' => $field));
+				if(!$value) {
+					if (IS_ADMIN) {
+						dr_admin_msg(0, $name.L('empty'), array('field' => $field));
+					} else {
+						dr_msg(0, $name.L('empty'), array('field' => $field));
+					}
 				}
-			}
-			if($this->fields[$field]['isunique'] && $isunique_value) {
-				if (IS_ADMIN) {
-					dr_admin_msg(0, $name.L('the_value_must_not_repeat'), array('field' => $field));
-				} else {
-					dr_msg(0, $name.L('the_value_must_not_repeat'), array('field' => $field));
+				if($isunique_value) {
+					if (IS_ADMIN) {
+						dr_admin_msg(0, $name.L('the_value_must_not_repeat'), array('field' => $field));
+					} else {
+						dr_msg(0, $name.L('the_value_must_not_repeat'), array('field' => $field));
+					}
 				}
 			}
 			$func = $this->fields[$field]['formtype'];
