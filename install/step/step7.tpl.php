@@ -41,7 +41,7 @@
                         <div class="gxwc"><h1>恭喜您，安装成功！</h1></div>
                         <div class="clj">
                             <ul>
-                                <li><a href="<?php echo (pc_base::load_config('system','admin_login_path') ? FC_NOW_HOST.substr($rootpath, 1).pc_base::load_config('system','admin_login_path') : 'admin.php')?>" class="btn btn-success">后台管理</a></li>
+                                <li><a href="<?php echo FC_NOW_HOST.substr($rootpath, 1).(pc_base::load_config('system','admin_login_path') ? pc_base::load_config('system','admin_login_path') : 'admin.php')?>" class="btn btn-success">后台管理</a></li>
                             </ul>
                         </div>                    
                         <div class="txt_c">
