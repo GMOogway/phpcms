@@ -320,7 +320,7 @@
 @media (max-width: 400px) {
     .container_img {
         width: 320px;
-        height: auto;
+        height: 320px;
         margin: 0px auto 10px auto;
         float: initial;
     }
