@@ -88,7 +88,7 @@ class content_tag {
 			foreach ($return as $v) {
 				if (isset($v['id']) && !empty($v['id'])) {
 					$this->db->table_name = $this->db->table_name.'_data_'.$v['tableid'];
-					$return[$v['id']] = $this->db->get_one(array('id'=>$v['id']), '*', 'id');
+					$return[$v['id']][] = $this->db->get_one(array('id'=>$v['id']), '*', 'id');
 					$this->set_modelid($catid);
 				} else {
 					continue;

@@ -2,7 +2,10 @@
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header', 'admin');
 ?>
-<div class="pad_10">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="right-card-box">
 <form id="myform" name="myform" action="" method="post">
 <input type="hidden" name="m" value="tag" />
 <input type="hidden" name="c" value="tag" />
@@ -24,7 +27,7 @@ if(is_array($list)):
 <tr>
 <td align="center"><?php echo $v['name']?></td>
 <td align="center"><?php switch($v['type']){case 0:echo L('model_configuration');break;case 1:echo L('custom_sql');break;case 2:echo L('block');}?></td>
-<td align="center"><textarea ondblclick="copy_text(this)" style="width: 400px;height:30px" /><?php echo new_html_special_chars($v['tag'])?></textarea></td>
+<td align="center"><textarea ondblclick="copy_text(this)" style="width: 100%;height:30px" /><?php echo new_html_special_chars($v['tag'])?></textarea></td>
 </tr>
 <?php 
 	endforeach;
@@ -37,6 +40,9 @@ endif;
     <div class="col-md-12 col-sm-12 text-right"><?php echo $pages?></div>
 </div>
 </form>
+</div>
+</div>
+</div>
 </div>
 <script type="text/javascript">
 <!--

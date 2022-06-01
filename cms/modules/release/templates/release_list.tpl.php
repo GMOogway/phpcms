@@ -2,10 +2,14 @@
 defined('IS_ADMIN') or exit('No permission resources.'); 
 include $this->admin_tpl('header','admin');
 ?>
-<div class="bk15"></div>
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="note note-danger">
+    <p><?php echo L("peed_your_server")?></p>
+</div>
+<div class="right-card-box">
 <link href="<?php echo CSS_PATH?>progress_bar.css" rel="stylesheet" type="text/css" />
-<div class="pad-lr-10">
-<div id="msg"><?php echo L("peed_your_server")?></div>
 <?php 
 $i = 0;
 foreach ($this->point as $v) :
@@ -22,7 +26,9 @@ echo '<b>'.$r['name'].'</b><span class="progress_status" id="status_'.$i.'"><img
 <li><?php echo L("remind_message")?></li>
 </ul>
 </div>
-
+</div>
+</div>
+</div>
 <script type="text/javascript">
 function progress(id, val) {
 	var width = $('#progress_bar_'+id).parent('div').width();

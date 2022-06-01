@@ -1,8 +1,11 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');?>
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="right-card-box">
 <form name="myform" action="?m=content&c=type_manage&a=listorder" method="post">
-<div class="pad_10">
 <div class="table-list">
     <table width="100%" cellspacing="0" >
         <thead>
@@ -36,15 +39,15 @@ foreach($datas as $r) {
 <?php } ?>
 	</tbody>
     </table>
-
- </div>
 </div>
 <div class="row">
     <div class="col-md-12 col-sm-12 text-right"><?php echo $pages?></div>
 </div>
-</div>
 </form>
-
+</div>
+</div>
+</div>
+</div>
 <script type="text/javascript"> 
 <!--
 function edit(id, name) {

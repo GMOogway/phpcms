@@ -194,7 +194,7 @@ class index extends admin {
 		}
 		$i = 0;
 		$valuedata = '';
-		$menu = '{"homeInfo": {"title": "首页","href": "'.$menu_home.'"},"logoInfo": {"title": "后台管理系统","image": "'.IMG_PATH.'admin_img/logo.png","icon": "fa fa-cog","href": "'.ROOT_URL.'","target": "_blank"},"menuInfo": [';
+		$menu = '{"homeInfo": {"title": "首页","href": "'.$menu_home.'"},"logoInfo": {"title": "后台管理系统","image": "'.IMG_PATH.'admin_img/logo.png","icon": "fa fa-home","href": "'.ROOT_URL.'","target": "_blank"},"menuInfo": [';
 		foreach($array as $_value) {
 			if ($_value['data']) {
 				if (strstr($value['data'], '&') && substr($value['data'], 0, 1)=='&') {

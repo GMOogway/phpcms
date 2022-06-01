@@ -21,7 +21,7 @@ include $this->admin_tpl('header');
 	<legend><?php echo L('basic_configuration')?></legend>
 	<table width="100%"  class="table_form">
   <tr>
-    <th width="80"><?php echo L('release_point_name')?>：</th>
+    <th width="100"><?php echo L('release_point_name')?>：</th>
     <td class="y-bg"><input type="text" class="input-text" name="name" id="name" size="30" value="<?php echo $data['name']?>" /></td>
   </tr>
 </table>
@@ -31,11 +31,11 @@ include $this->admin_tpl('header');
 	<legend><?php echo L('ftp_server')?></legend>
 	<table width="100%"  class="table_form">
   <tr>
-    <th width="80"><?php echo L('server_address')?>：</th>
+    <th width="100"><?php echo L('server_address')?>：</th>
     <td class="y-bg"><input type="text" class="input-text" name="host" id="host" size="30" value="<?php echo $data['host']?>" /></td>
   </tr>
    <tr>
-    <th width="80"><?php echo L("server_port")?>：</th>
+    <th><?php echo L("server_port")?>：</th>
     <td class="y-bg"><input type="text" class="input-text" name="port" id="port" size="30" value="<?php echo $data['port']?>" /></td>
   </tr>
   <tr>

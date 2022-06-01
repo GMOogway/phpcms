@@ -1,7 +1,10 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header');?>
-<div class="pad_10">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="right-card-box">
 <table cellpadding="2" cellspacing="1" class="table_form" width="100%">
 <form action="?m=admin&c=badword&a=import" method="post" name="myform">
  	<tr> 
@@ -26,7 +29,10 @@ include $this->admin_tpl('header');?>
 	  </td>
     </tr>
 	</form>
-</table> 
+</table>
+</div>
+</div>
+</div>
 </div>
 </body>
 </html>

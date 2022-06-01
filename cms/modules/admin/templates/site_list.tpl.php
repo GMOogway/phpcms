@@ -2,7 +2,10 @@
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header');
 ?>
-<div class="pad_10">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="right-card-box">
 <div class="table-list">
     <table width="100%" cellspacing="0">
         <thead>
@@ -40,6 +43,9 @@ endif;
 </div>
 <div class="row">
     <div class="col-md-12 col-sm-12 text-right"><?php echo $pages?></div>
+</div>
+</div>
+</div>
 </div>
 </div>
 <script type="text/javascript">

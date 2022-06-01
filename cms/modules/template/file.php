@@ -70,19 +70,41 @@ class file extends admin {
 		if (is_writable($filepath)) {
 			$is_write = 1;
 		}
-		if ($_POST['dosubmit']) {
-			$code = isset($_POST['code']) ? stripslashes($_POST['code']) : dr_admin_msg(0,L('illegal_operation'), HTTP_REFERER);
-			$code = str_replace(array('<?','{php'),array('<？','{ php'),$code);
+		if (IS_AJAX_POST) {
+			$code = $this->input->post('code', false);
+			if (empty($this->tpl_edit)) {
+				dr_json(0, L('tpl_edit'));
+			} elseif (!$code) {
+				dr_json(0, L('内容不能为空'));
+			}
+			if (strstr($code, '{php')) {
+				dr_json(0, L('在线模板编辑禁止提交含有{php 的标签。'));
+			}
+			if (strstr($code, '<?php')) {
+				dr_json(0, '在线模板编辑禁止提交含有<\?php 的标签。');
+			}
 			if ($is_write == 1) {
 				pc_base::load_app_func('global');
 				creat_template_bak($filepath, $this->style, $dir);
-				file_put_contents($filepath,code2html($code));
-				dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
+				$size = file_put_contents($filepath,code2html($code));
+				if ($size === false) {
+					dr_json(0, L('模板目录无法写入'));
+				}
+				$cname = $this->input->post('cname');
+				$cname && $this->_save_name_ini($dir,$file,$cname);
+				dr_json(1, L('operation_success'));
 			} else{
-				dr_admin_msg(0,L("file_does_not_writable"), HTTP_REFERER);
+				dr_json(0, L("file_does_not_writable"));
 			}
 		} else {
 			if (file_exists($filepath)) {
+				if (file_exists($this->filepath.'config.php')) {
+					if (!isset($this->style_info['file_explan']['templates|'.$this->style.'|'.$dir][$file])) {
+						$cname = $file;
+					} else {
+						$cname = $this->style_info['file_explan']['templates|'.$this->style.'|'.$dir][$file];
+					}
+				}
 				$data = new_html_special_chars(file_get_contents($filepath));
 			} else {
 				dr_admin_msg(0,L('file_does_not_exists'));
@@ -149,6 +171,15 @@ class file extends admin {
 		$op_tag = pc_base::load_app_class($_GET['op']."_tag", $_GET['op']);
 		$html = $op_tag->{$_GET['action']}($_GET['html'], $_GET['value'], $_GET['id']);
 		echo $html;
+	}
+	
+	/**
+	 * 存储文件别名
+	 */
+	protected function _save_name_ini($dir,$file,$value) {
+		if (!isset($this->style_info['file_explan'])) $this->style_info['file_explan'] = array();
+		$this->style_info['file_explan']['templates|'.$this->style.'|'.$dir][$file] = $value;
+		@file_put_contents($this->filepath.'config.php', '<?php return '.var_export($this->style_info, true).';?>');
 	}
 	
 	public function edit_pc_tag() {

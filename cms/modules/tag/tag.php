@@ -245,6 +245,7 @@ class tag extends admin {
 	 * 标签向导列表
 	 */
 	public function lists() {
+		$show_header = true;
 		$page = $this->input->post('page') && intval($this->input->post('page')) ? intval($this->input->post('page')) : 1;
 		$list = $this->db->listinfo('','id desc', $page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
