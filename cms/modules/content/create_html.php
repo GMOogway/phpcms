@@ -286,6 +286,10 @@ class create_html extends admin {
 	*/
 	public function batch_show() {
 		if($this->input->post('dosubmit')) {
+			// 生成权限文件
+			if (!dr_html_auth(1)) {
+				dr_admin_msg(0, L('/cache/html/ 无法写入文件'));
+			}
 			$catid = intval($this->input->get('catid'));
 			if(!$catid) dr_json(0, L('missing_part_parameters'));
 			$modelid = $this->categorys[$catid]['modelid'];
@@ -355,9 +359,8 @@ class create_html extends admin {
 		}
 		$data = $this->db->listinfo(array('status' => 99), 'id DESC', $page, $psize);
 		foreach ($data as $t) {
-			if(!$t['islink'] || !$t['upgrade']) {
-				$urls = $this->urls($t['id'], $t['catid'], $t['inputtime'], $t['prefix']);
-			}
+			if($t['islink'] || $t['upgrade']) continue;
+			$urls = $this->urls($t['id'], $t['catid'], $t['inputtime'], $t['prefix']);
 		}
 		html_msg(1, L('正在执行中'.$tpage.'/'.$page.'...'), '?m=content&c=create_html&a=public_show_url&modelid='.$modelid.'&total='.$total.'&page='.($page+1));
 	}
