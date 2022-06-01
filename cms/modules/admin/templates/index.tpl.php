@@ -305,7 +305,7 @@ $(document).ready(function() {
             </ul>
 
             <ul class="layui-nav layui-layout-right">
-                <li class="layui-nav-item layuimini-setting mobile layui-hide-xs">
+                <li class="layui-nav-item mobile layui-hide-xs" lay-unselect>
                     <a href="javascript:;" data-share="<?php echo L('多站')?>"><i class="fa fa-share-alt"></i></a>
                     <dl class="layui-nav-child scroller" style="min-width: 160px;max-width: 275px;width: 275px;height:300px;overflow-x:hidden;overflow-y:auto;">
                         <?php foreach ($sitelist as $key=>$v):?>
@@ -353,7 +353,7 @@ $(document).ready(function() {
                             <hr>
                         </dd>
                         <dd>
-                            <a href="javascript:;" class="login-out"><?php echo L('exit_login');?></a>
+                            <a href="javascript:;" class="login-out"> <i class="fa fa-power-off"></i> <?php echo L('exit_login');?></a>
                         </dd>
                     </dl>
                 </li>

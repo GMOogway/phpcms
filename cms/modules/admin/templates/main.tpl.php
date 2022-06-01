@@ -59,7 +59,7 @@ $(function () {
                 <div class="layui-row layui-col-space15">
                     <div class="layui-col-md6">
                         <div class="layui-card">
-                            <div class="layui-card-header"><i class="fa fa-warning icon"></i><?php echo L('personal_information')?></div>
+                            <div class="layui-card-header"><i class="fa fa-user icon"></i><?php echo L('personal_information')?></div>
                             <div class="layui-card-body">
                                 <div class="welcome-module">
                                     <div class="layui-row layui-col-space10">
@@ -75,7 +75,7 @@ $(function () {
                     </div>
                     <div class="layui-col-md6">
                         <div class="layui-card">
-                            <div class="layui-card-header"><i class="fa fa-line-chart icon"></i><?php echo L('main_safety_tips')?></div>
+                            <div class="layui-card-header"><i class="fa fa-warning icon"></i><?php echo L('main_safety_tips')?></div>
                             <div class="layui-card-body">
                                 <div class="welcome-module">
                                     <div class="layui-row layui-col-space10 layuimini-qiuck" style="color:#ff0000;">
