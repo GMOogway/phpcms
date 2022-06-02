@@ -28,7 +28,7 @@ class index {
 		$default_style = $sitelist[$siteid]['default_style'];
 
         if($this->input->get('q')) {
-            if(trim($this->input->get('q'))=='') {
+            if(!trim($this->input->get('q'))) {
                 header('Location: '.APP_PATH.'index.php?m=search');exit;
             }
             $typeid = empty($this->input->get('typeid')) ? 0 : intval($this->input->get('typeid'));

@@ -35,16 +35,6 @@ class search {
 		$modelid = $this->categorys[$catid]['modelid'];
 		$modelid = intval($modelid);
 		if(!$modelid) showmessage(L('illegal_parameters'));
-		//搜索间隔
-		$minrefreshtime = getcache('common','commons');
-		$minrefreshtime = intval($minrefreshtime['minrefreshtime']);
-		$minrefreshtime = $minrefreshtime ? $minrefreshtime : 5;
-		if(param::get_cookie('search_cookie') && param::get_cookie('search_cookie')>SYS_TIME-$minrefreshtime) {
-			showmessage(L('search_minrefreshtime',array('min'=>$minrefreshtime)),'index.php?m=content&c=search&catid='.$catid,$minrefreshtime*1280);
-		} else {
-			param::set_cookie('search_cookie',SYS_TIME+$minrefreshtime);
-		}
-		//搜索间隔
 		
 		$CATEGORYS = $this->categorys;
 		//产生表单
@@ -52,14 +42,17 @@ class search {
 		$fields = getcache('model_field_'.$modelid,'model');
 		$forminfos = array();
 		foreach ($fields as $field=>$r) {
-			if($r['issearch']) {
+			if($r['issystem'] && $r['issearch']) {
 				if($r['formtype']=='catid') {
 					$r['form'] = form::select_category('',$catid,'name="info[catid]"',L('please_select_category'),$modelid,0,1);
 				} elseif($r['formtype']=='number') {
-					$r['form'] = "<input type='text' name='{$field}_start' id='{$field}_start' value='' size=5 class='input-text'/> - <input type='text' name='{$field}_end' id='{$field}_start' value='' size=5 class='input-text'/>";
+					$r['form'] = "<input type='text' name='{$field}_start' id='{$field}_start' value='' size=5 class='input-text'/> - <input type='text' name='{$field}_end' id='{$field}_end' value='' size=5 class='input-text'/>";
 				} elseif($r['formtype']=='datetime') {
 					$r['form'] = form::date("info[$field]");
 				} elseif($r['formtype']=='box') {
+					if(isset($info[$field]) && $info[$field]) {
+						$value[$field] = $info[$field];
+					}
 					$options = explode("\n",$r['options']);
 					$option = array();
 					foreach($options as $_k) {
@@ -68,19 +61,19 @@ class search {
 					}
 					switch($r['boxtype']) {
 						case 'radio':
-							$string = form::radio($option,$value,"name='info[$field]' id='$field'");
+							$string = form::radio($option,$value[$field],"name='info[$field]' id='$field'");
 						break;
 			
 						case 'checkbox':
-							$string = form::radio($option,$value,"name='info[$field]' id='$field'");
+							$string = form::radio($option,$value[$field],"name='info[$field]' id='$field'");
 						break;
 			
 						case 'select':
-							$string = form::select($option,$value,"name='info[$field]' id='$field'");
+							$string = form::select($option,$value[$field],"name='info[$field]' id='$field'");
 						break;
 			
 						case 'multiple':
-							$string = form::select($option,$value,"name='info[$field]' id='$field'");
+							$string = form::select($option,$value[$field],"name='info[$field]' id='$field'");
 						break;
 					}
 					$r['form'] = $string;
@@ -94,110 +87,116 @@ class search {
 				} elseif($r['formtype']=='linkage') {
 					$setting = string2array($r['setting']);
 					if(isset($info[$field]) && $info[$field]) {
-						$value = $info[$field];
+						$value[$field] = $info[$field];
 					}
-					$r['form'] = menu_linkage($setting['linkage'],$field,$value);
+					$r['form'] = menu_linkage($setting['linkage'],$field,$value[$field]);
 				} elseif(in_array($r['formtype'], array('text','keyword','textarea','editor','title','author','omnipotent'))) {
 					if(isset($info[$field]) && $info[$field]) {
-						$value = safe_replace($info[$field]);
+						$value[$field] = safe_replace($info[$field]);
 					}
-					$r['form'] = "<input type='text' name='info[$field]' id='$field' value='".$value."' class='input-text search-text'/>";
+					$r['form'] = "<input type='text' name='info[$field]' id='$field' value='".$value[$field]."' class='input-text search-text'/>";
 				} else {
 					continue;
 				}
 				$forminfos[$field] = $r;
 			}
 		}
-		//-----------
 		if($this->input->get('dosubmit')) {
+			//搜索间隔
+			$minrefreshtime = getcache('common','commons');
+			$minrefreshtime = intval($minrefreshtime['minrefreshtime']);
+			$minrefreshtime = $minrefreshtime ? $minrefreshtime : 5;
+			if(param::get_cookie('search_cookie') && param::get_cookie('search_cookie')>SYS_TIME-$minrefreshtime) {
+				showmessage(L('search_minrefreshtime',array('min'=>$minrefreshtime)),'index.php?m=content&c=search&catid='.$catid,$minrefreshtime*1280);
+			} else {
+				param::set_cookie('search_cookie',SYS_TIME+$minrefreshtime);
+			}
+			//搜索间隔
 			$siteid = $this->categorys[$catid]['siteid'];
 			$siteurl = siteurl($siteid);
 			$this->db->set_model($modelid);
-			$tablename = $this->db->table_name;
 			
 			$page = max(intval($this->input->get('page')), 1);
-			$sql  = "SELECT * FROM `{$tablename}` a,`{$tablename}_data` b WHERE a.id=b.id AND a.status=99";
-			$sql_count  = "SELECT COUNT(*) AS num FROM `{$tablename}` a,`{$tablename}_data` b WHERE a.id=b.id AND a.status=99";
 			//构造搜索SQL
-			$where = '';
+			$where = 'status=99';
 			foreach ($fields as $field=>$r) {
-				if($r['issearch']) {
-					$table_nickname = $r['issystem'] ? 'a' : 'b';
+				if($r['issystem'] && $r['issearch']) {
 					if($r['formtype']=='catid') {
-						if($info['catid']) $where .= " AND {$table_nickname}.catid='$catid'";
+						if($info['catid']) $where .= " AND catid='$catid'";
 					} elseif($r['formtype']=='number') {
 						$start = "{$field}_start";
 						$end = "{$field}_end";
 						if($this->input->get($start)) {
 							$start = intval($this->input->get($start));
-							$where .= " AND {$table_nickname}.{$field}>'$start'";
+							$where .= " AND {$field}>'$start'";
 						}
 						if($this->input->get($end)) {
 							$end = intval($this->input->get($end));
-							$where .= " AND {$table_nickname}.{$field}<'$end'";
+							$where .= " AND {$field}<'$end'";
 						}
 					} elseif($r['formtype']=='datetime') {
 						if($info[$field]) {
-							$start = strtotime($info[$field]);
-							if($start) $where .= " AND {$table_nickname}.{$field}>'$start'";
+							$start[$field] = strtotime($info[$field]);
+							if($start[$field]) $where .= " AND {$field}>'".$start[$field]."'";
 						}
 					} elseif($r['formtype']=='box') {
 						if($info[$field]) {
-							$field_value = safe_replace($info[$field]);
+							$field_value[$field] = safe_replace($info[$field]);
 							switch($r['boxtype']) {
 								case 'radio':
-									$where .= " AND {$table_nickname}.`$field`='".$this->db->escape($field_value)."'";
+									$where .= " AND `$field`='".$this->db->escape($field_value[$field])."'";
 								break;
 					
 								case 'checkbox':
-									$where .= " AND {$table_nickname}.`$field` LIKE '%,".$this->db->escape($field_value).",%'";
+									$where .= " AND `$field` LIKE '%,".$this->db->escape($field_value[$field]).",%'";
 								break;
 					
 								case 'select':
-									$where .= " AND {$table_nickname}.`$field`='".$this->db->escape($field_value)."'";
+									$where .= " AND `$field`='".$this->db->escape($field_value[$field])."'";
 								break;
 					
 								case 'multiple':
-									$where .= " AND {$table_nickname}.`$field` LIKE '%,".$this->db->escape($field_value).",%'";
+									$where .= " AND `$field` LIKE '%,".$this->db->escape($field_value[$field]).",%'";
 								break;
 							}
 						}
 					} elseif($r['formtype']=='typeid') {
 						if($info[$field]) {
-							$typeid = intval($info[$field]);
-							$where .= " AND {$table_nickname}.`$field`='$typeid'";
+							$typeid[$field] = intval($info[$field]);
+							$where .= " AND `$field`='".$typeid[$field]."'";
 						}
 					} elseif($r['formtype']=='linkage') {
 						if($info[$field]) {
-							$linkage = intval($info[$field]);
-							$where .= " AND {$table_nickname}.`$field`='$linkage'";
+							$linkage[$field] = intval($info[$field]);
+							$where .= " AND `$field`='".$linkage[$field]."'";
 						}
 					} elseif(in_array($r['formtype'], array('text','keyword','textarea','editor','title','author','omnipotent'))) {
 						if($info[$field]) {
-							$keywords = safe_replace($info[$field]);
-							$where .= " AND {$table_nickname}.`$field` LIKE '%".$this->db->escape($keywords)."%'";
+							$keywords[$field] = safe_replace($info[$field]);
+							$where .= " AND `$field` LIKE '%".$this->db->escape($keywords[$field])."%'";
 						}
 					} else {
 						continue;
 					}
 				}
 			}
-			//-----------
 			if($where=='') showmessage(L('please_enter_content_to_search'));
-			$pagesize = 20;
-			$offset = intval($pagesize*($page-1));
-			$sql_count .= $where;
-			$this->db->query($sql_count);
-			$total = $this->db->fetch_array();
-			$total = $total[0]['num'];
-			if($total!=0) {
-				$sql .= $where;
+			$pagesize = 10;
+			$total = $this->db->count($where);
+			if($total) {
 				$order = '';
-				$order = $this->input->get('orderby')=='a.id DESC' ? 'a.id DESC' : 'a.id ASC';
-				$sql .= ' ORDER BY '.$order;
-				$sql .= " LIMIT $offset,$pagesize";
-				$this->db->query($sql);
-				$datas = $this->db->fetch_array();
+				$order = $this->input->get('orderby')=='id DESC' ? 'id DESC' : 'id ASC';
+				$datas = $this->db->listinfo($where, $order, $page, $pagesize, 'id');
+				foreach ($datas as $k=>$v) {
+					if (isset($v['id']) && !empty($v['id'])) {
+						$this->db->table_name = $this->db->table_name.'_data_'.$v['tableid'];
+						$data_rs = $this->db->get_one(array('id'=>$v['id']));
+						if (isset($data_rs)) $datas[$k] = array_merge($datas[$k], $data_rs);
+						$this->db->set_model($modelid);
+					} else {
+						continue;
+					}
+				}
 				$pages = pages($total, $page, $pagesize);
 			} else {
 				$datas = array();

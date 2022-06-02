@@ -489,7 +489,7 @@ class create_html extends admin {
 							$class = 'p_error';
 							$ok = '<a class="error" href="'.$t['url'].'" target="_blank">地址【'.$t['url'].'】是动态，请更新内容URL地址为静态模式</a>';
 						} else {
-							$this->html->show($urls[1],$r,0,'edit',$t['upgrade']);
+							$this->html->show($urls[1],$r,0,'edit',$r['upgrade']);
 							$cache_class->set_auth_data($name2.'-error', $page); // 设置断点
 							$class = 'ok';
 							$ok = '<a class="ok" href="'.$t['url'].'" target="_blank">生成成功</a>';

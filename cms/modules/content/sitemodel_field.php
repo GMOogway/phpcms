@@ -73,6 +73,7 @@ class sitemodel_field extends admin {
 			$info['siteid'] = $this->siteid;
 			$info['unsetgroupids'] = $this->input->post('unsetgroupids') ? implode(',',$this->input->post('unsetgroupids')) : '';
 			$info['unsetroleids'] = $this->input->post('unsetroleids') ? implode(',',$this->input->post('unsetroleids')) : '';
+			!$issystem && $info['issearch'] = 0;
 			$this->db->insert($info);
 			$this->cache_field($modelid);
 			dr_json(1, L('add_success'), array('url' => '?m=content&c=sitemodel_field&a=init&modelid='.$modelid.'&menuid='.$this->input->post('menuid').'&pc_hash='.dr_get_csrf_token()));
@@ -161,6 +162,7 @@ class sitemodel_field extends admin {
 			
 			$info['unsetgroupids'] = $this->input->post('unsetgroupids') ? implode(',',$this->input->post('unsetgroupids')) : '';
 			$info['unsetroleids'] = $this->input->post('unsetroleids') ? implode(',',$this->input->post('unsetroleids')) : '';
+			!$this->input->post('issystem') && $info['issearch'] = 0;
 			$this->db->update($info,array('fieldid'=>$fieldid,'siteid'=>$this->siteid));
 			$this->cache_field($modelid);
 			dr_json(1, L('update_success'), array('url' => '?m=content&c=sitemodel_field&a=init&modelid='.$modelid.'&menuid='.$this->input->post('menuid').'&pc_hash='.dr_get_csrf_token()));
@@ -184,6 +186,7 @@ class sitemodel_field extends admin {
 			include MODEL_PATH.$formtype.DIRECTORY_SEPARATOR.'field_edit_form.inc.php';
 			$form_data = ob_get_contents();
 			ob_end_clean();
+			!$issystem && $field_allow_search = 0;
 			//角色缓存
 			$roles = getcache('role','commons');
 			$grouplist = array();

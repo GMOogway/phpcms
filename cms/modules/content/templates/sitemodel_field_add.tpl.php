@@ -272,6 +272,7 @@ function field_setting(fieldtype) {
                 $('#field_basic_table0').attr("disabled",false);
                 $('#field_basic_table1').attr("disabled",false);
             } else {
+                $('#issystem').val(0);
                 $('#field_basic_table0').prop("checked",true);
                 $('#field_basic_table0').attr("disabled",true);
                 $('#field_basic_table1').attr("disabled",true);

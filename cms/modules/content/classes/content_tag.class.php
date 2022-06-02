@@ -84,11 +84,11 @@ class content_tag {
 
 		//调用副表的数据
 		if (isset($data['moreinfo']) && intval($data['moreinfo']) == 1) {
-			$ids = array();
-			foreach ($return as $v) {
+			foreach ($return as $k=>$v) {
 				if (isset($v['id']) && !empty($v['id'])) {
 					$this->db->table_name = $this->db->table_name.'_data_'.$v['tableid'];
-					$return[$v['id']][] = $this->db->get_one(array('id'=>$v['id']), '*', 'id');
+					$data_rs = $this->db->get_one(array('id'=>$v['id']));
+					if (isset($data_rs)) $return[$k] = array_merge($return[$k], $data_rs);
 					$this->set_modelid($catid);
 				} else {
 					continue;
