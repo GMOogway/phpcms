@@ -41,7 +41,7 @@
 <div class="bk10"></div>
     <ul class="photo-list picbig">
 {loop $data $i $r}
-<li style="width:360px;height:255px;"><a target="_blank" href="{$r['url']}"><img src="{$r['thumb']}" style="width:350px;height:225px;margin-left:-11px;"></a><div class="img_info"><a class="img_link" href="{$r['url']}" target="_blank" title="{$r['title']}">{$r['title']}</a></div></li>
+<li style="width:360px;height:255px;"><a target="_blank" href="{$r['url']}"><img src="{$r['thumb']}" style="width:350px;height:225px;margin-left:-11px;"></a><div class="img_info"><a class="img_link" href="{$r['url']}" target="_blank" title="{$r['title']}">{dr_keyword_highlight($r['title'], $search_q)}</a></div></li>
 {/loop}
 {if empty($data)}没有找到你搜索的内容哦，请换个词试试！{/if}
     </ul>
@@ -56,7 +56,7 @@
       {loop $data $i $r}
       <li class="res-list">
 <h3 class="res-title ">
-<a href="{$r['url']}" target="_blank">{$r['title']}</a></h3>
+<a href="{$r['url']}" target="_blank">{dr_keyword_highlight($r['title'], $search_q)}</a></h3>
 {if $r['thumb']}<div class="res-rich so-rich-news clearfix"><div class="res-comm-img"><a href="{$r['url']}" target="_blank" data-type="img"><img src="{$r['thumb']}" width="120" height="75"></a></div>
 <div class="res-comm-con">{$r['description']}<p class="res-linkinfo"><cite>{$r['url']}</cite>22小时前 ({date('Y-m-d',$r['inputtime'])})</p></div></div>{else}
 <p class="res-desc">　　{$r['description']}</p>

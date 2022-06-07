@@ -8,7 +8,7 @@
 			<li>
 				<span class="date">[{date('m-d',$r['inputtime'])}]</span>
 				<a href="{show_url($r['url'], $r['catid'], $r['id'])}">
-					<span class="title_color"{title_style($r['style'])}>{$r['title']}</span>
+					<span class="title_color"{title_style($r['style'])}>{dr_keyword_highlight($r['title'], $tag)}</span>
 				</a>
 			</li>
 			{/loop}

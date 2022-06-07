@@ -70,7 +70,7 @@ class cloud extends admin {
             $surl = $this->service_url.'&action=update_login&username='.$post['username'].'&password='.md5($post['password']);
             $json = dr_catcher_data($surl);
             if (!$json) {
-                dr_json(0, '本站：没有从服务端获取到数据');
+                dr_json(0, '本站：没有从服务端获取到数据，建议尝试离线方式');
             }
             exit($json);
         }
@@ -89,7 +89,7 @@ class cloud extends admin {
 
             $json = dr_catcher_data($surl);
             if (!$json) {
-                dr_json(0, '本站：没有从服务端获取到数据');
+                dr_json(0, '本站：没有从服务端获取到数据，建议尝试离线方式');
             }
             $rt = dr_string2array($json);
             if (!$rt) {
@@ -230,7 +230,7 @@ class cloud extends admin {
         $surl = $this->service_url.'&action=update_file&ls='.dr_safe_replace($this->input->get('ls'));
         $json = dr_catcher_data($surl);
         if (!$json) {
-            dr_json(0, '本站：没有从服务端获取到数据', $surl);
+            dr_json(0, '本站：没有从服务端获取到数据，建议尝试离线方式', $surl);
         }
 
         $data = dr_string2array($json);
@@ -260,7 +260,7 @@ class cloud extends admin {
         } elseif (!$cache['size']) {
             dr_json(0, '本站：关键数据不存在，请重试');
         } elseif (!function_exists('fsockopen')) {
-            dr_json(0, '本站：PHP环境不支持fsockopen');
+            dr_json(0, '本站：PHP环境不支持fsockopen，建议尝试离线方式');
         }
 
         // 执行下载文件
@@ -287,7 +287,7 @@ class cloud extends admin {
             dr_json(1, 'ok');
         } else {
             unlink($file);
-            dr_json(0, '本站：fopen打开远程文件失败', $cache['url']);
+            dr_json(0, '本站：fopen打开远程文件失败，建议尝试离线方式', $cache['url']);
         }
     }
 
@@ -329,12 +329,14 @@ class cloud extends admin {
         $file = $this->cloud.$id.'.zip';
         if (!is_file($file)) {
             dr_json(0, '本站：文件还没有被下载');
+        } elseif (!class_exists('ZipArchive')) {
+            dr_json(0, '本站：php_zip扩展未开启，无法在线安装功能，建议尝试离线方式');
         }
 
         // 解压目录
         $cmspath = $this->cloud.$id.'/';
         if (!$this->file->unzip($file, $cmspath)) {
-            cloud_msg(0, '本站：文件解压失败');
+            dr_json(0, '本站：文件解压失败');
         }
 
         unlink($file);

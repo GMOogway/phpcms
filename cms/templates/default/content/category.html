@@ -27,8 +27,8 @@
 		 				<p>{str_cut($r['description'],80)}...</p>
 		 				<div class="news-tags">
 						{pc:content action="centent_tag" modelid="$modelid" siteid="$siteid" id="$r['id']" num="5"}
-			 	    	{loop $data $r}
-			 	    	    <a href="{tag_url($r['keyword'],$r['siteid'])}">{$r['keyword']}</a>
+			 	    	{loop $data $v}
+			 	    	    <a href="{tag_url($v['keyword'],$v['siteid'])}">{$v['keyword']}</a>
 			 	    	{/loop}
 			 	    	{/pc}
 						</div>

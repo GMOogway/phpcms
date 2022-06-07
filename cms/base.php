@@ -36,6 +36,11 @@ define('HTTP_REFERER', isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'
 //系统开始时间
 define('SYS_START_TIME', microtime(true));
 
+//PHP最低版本
+define('MIN_PHP_VERSION', '7.1.0');
+//PHP最高版本
+define('MAX_PHP_VERSION', '8.2.0');
+
 //加载公用函数库
 pc_base::load_sys_func('global');
 pc_base::load_sys_func('extention');

@@ -33,10 +33,7 @@ if (!is_file(CACHE_PATH.'install.lock')) {
 	require CMS_PATH.'install.php';
 	exit;
 }
-// 判断环境
-if (version_compare(PHP_VERSION, '7.1.0') < 0) {
-    echo "<font color=red>PHP版本必须在7.1及以上</font>";exit;
-}
+// 判断安装
 if (file_exists('install') && is_file(CACHE_PATH.'install.lock')) {
 	dr_dir_delete('install', TRUE);
 }

@@ -119,23 +119,6 @@ class index {
 
                 $pages = $this->db->pages;
                 $totalnums = $this->db->number;
-
-                //如果分词结果为空
-                if(!empty($segment_q)) {
-                    $replace = explode(' ', $segment_q);
-                    foreach($replace as $replace_arr_v) {
-                        $replace_arr[] =  '<font color=red>'.$replace_arr_v.'</font>';
-                    }
-                    foreach($data as $_k=>$_v) {
-                        $data[$_k]['title'] = str_replace($replace, $replace_arr, $_v['title']);
-                        $data[$_k]['description'] = str_replace($replace, $replace_arr, $_v['description']);
-                    }
-                } else {
-                    foreach($data as $_k=>$_v) {
-                        $data[$_k]['title'] = str_replace($q, '<font color=red>'.$q.'</font>', $_v['title']);
-                        $data[$_k]['description'] = str_replace($q, '<font color=red>'.$q.'</font>', $_v['description']);
-                    }
-                }
             }
             $execute_time = execute_time();
             $pages = isset($pages) ? $pages : '';

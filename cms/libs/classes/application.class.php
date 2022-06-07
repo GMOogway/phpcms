@@ -26,6 +26,12 @@ class application {
 	 * 调用件事
 	 */
 	private function init() {
+		//判断环境
+		if (version_compare(PHP_VERSION, MAX_PHP_VERSION) >= 0) {
+			exit("<font color=red>PHP版本过高，请在".MAX_PHP_VERSION."以下的环境使用，当前".PHP_VERSION."，高版本需要等待官方对CMS版本的更新升级！~</font>");
+		} elseif (version_compare(PHP_VERSION, MIN_PHP_VERSION) < 0) {
+			exit("<font color=red>PHP版本必须在".MIN_PHP_VERSION."及以上，当前".PHP_VERSION."</font>");
+		}
 		$controller = $this->load_controller();
 		if (method_exists($controller, ROUTE_A)) {
 			if (preg_match('/^[_]/i', ROUTE_A)) {

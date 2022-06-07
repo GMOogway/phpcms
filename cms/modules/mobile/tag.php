@@ -57,8 +57,6 @@ class tag {
 				list($contentid, $modelid) = explode('-', $info['contentid']);
 				$this->db->set_model($modelid);
 				$res = $this->db->get_one(array('id'=>$contentid), 'id, catid, thumb, title, description, url, inputtime, updatetime, style');
-				$res['title'] = str_replace($tag, '<font color="#f00">'.$tag.'</font>', $res['title']);
-				$res['description'] = str_replace($tag, '<font color="#f00">'.$tag.'</font>', $res['description']);
 				$datas[] = $res;
 			}
 		}

@@ -12,12 +12,12 @@
 		 			</a>
 		 			<div class="news-right">
 		 				{if $n<4}<em>顶</em>{/if} <!-- 内容属性 -->
-		 				<a href="{$r['url']}"{title_style($r['style'])}>{$r['title']}</a>
+		 				<a href="{$r['url']}"{title_style($r['style'])}>{dr_keyword_highlight($r['title'], $tag)}</a>
 		 				<p>{str_cut($r['description'],80)}...</p>
 		 				<div class="news-tags">
 		 					{pc:content action="centent_tag" modelid="$modelid" siteid="$siteid" id="$r['id']" num="5"}
-							{loop $data $r}
-								<a href="{tag_url($r['keyword'],$r['siteid'])}">{$r['keyword']}</a>
+							{loop $data $v}
+								<a href="{tag_url($v['keyword'],$v['siteid'])}">{$v['keyword']}</a>
 							{/loop}
 							{/pc}
 		 				</div>
