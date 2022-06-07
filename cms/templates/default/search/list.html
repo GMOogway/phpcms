@@ -58,9 +58,9 @@
 <h3 class="res-title ">
 <a href="{$r['url']}" target="_blank">{dr_keyword_highlight($r['title'], $search_q)}</a></h3>
 {if $r['thumb']}<div class="res-rich so-rich-news clearfix"><div class="res-comm-img"><a href="{$r['url']}" target="_blank" data-type="img"><img src="{$r['thumb']}" width="120" height="75"></a></div>
-<div class="res-comm-con">{$r['description']}<p class="res-linkinfo"><cite>{$r['url']}</cite>22小时前 ({date('Y-m-d',$r['inputtime'])})</p></div></div>{else}
+<div class="res-comm-con">{$r['description']}<p class="res-linkinfo"><cite>{$r['url']}</cite>{wordtime($r['inputtime'])} ({date('Y-m-d',$r['inputtime'])})</p></div></div>{else}
 <p class="res-desc">　　{$r['description']}</p>
-<p class="res-linkinfo"><cite>{$r['url']}</cite>22小时前 ({date('Y-m-d',$r['inputtime'])})</p>
+<p class="res-linkinfo"><cite>{$r['url']}</cite>{wordtime($r['inputtime'])} ({date('Y-m-d',$r['inputtime'])})</p>
 {/if}</li>
 {/loop}
     {if empty($data)}没有找到你搜索的内容哦，请换个词试试！{/if}
