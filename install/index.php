@@ -62,8 +62,8 @@ switch($step)
 			array(
 				'name' => 'PHP 版本',
 				'value' => 'PHP '.PHP_VERSION,
-				'error_value' => 'PHP 7.1 及以上不得高于'.$max,
-				'code' => PHP_VERSION >= $min && PHP_VERSION < $max,
+				'error_value' => 'PHP '.MIN_PHP_VERSION.' 及以上不得高于'.MAX_PHP_VERSION,
+				'code' => PHP_VERSION >= MIN_PHP_VERSION && PHP_VERSION < MAX_PHP_VERSION,
 				'help' => '&nbsp;无法安装',
 				'error' => 1,
 			),
@@ -134,7 +134,7 @@ switch($step)
 			array(
 				'name' => 'ZLIB 扩展',
 				'value' => '√',
-				'error_value' => '必须开启',
+				'error_value' => '建议开启',
 				'code' => extension_loaded('zlib'),
 				'help' => '&nbsp;不支持Gzip功能',
 				'error' => 0,
@@ -142,7 +142,7 @@ switch($step)
 			array(
 				'name' => 'FTP 扩展',
 				'value' => '√',
-				'error_value' => '必须开启',
+				'error_value' => '建议开启',
 				'code' => extension_loaded('ftp'),
 				'help' => '&nbsp;不支持FTP形式文件传送',
 				'error' => 0,
@@ -150,7 +150,7 @@ switch($step)
 			array(
 				'name' => 'DNS解析',
 				'value' => '√',
-				'error_value' => '必须开启',
+				'error_value' => '建议开启',
 				'code' => preg_match("/^[0-9.]{7,15}$/", @gethostbyname('www.baidu.com')) ? 1 : 0,
 				'help' => '&nbsp;不支持采集和保存远程图片',
 				'error' => 0,

@@ -62,7 +62,7 @@
                             <tr>
                                 <td><?php echo $t['name'];?></td>
                                 <td><?php if($t['code']){ ?><?php echo $t['value'];?><?php }else{ ?><?php if($t['error']){ ?><?php $error = 1;?><?php }?>×<?php }?></td>
-                                <td><?php if($t['error']){ ?><?php echo $t['error_value'];?><?php }else{ ?>建议开启<?php }?></td>
+                                <td><?php echo $t['error_value'];?></td>
                                 <td><?php if($t['code']){ ?><span><img src="images/correct.png" /></span><?php }else{ ?><font class="red"><img src="images/error.png" /><?php echo $t['help'];?></font><?php }?></td>
                             </tr>
                             <?php }}?>
