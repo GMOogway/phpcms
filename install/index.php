@@ -56,7 +56,7 @@ switch($step)
 
 		break;
 	
-	case '2':  //环境检测 (FTP帐号设置）
+	case '2':  //环境检测
 		$error = 0;
 		$php = array(
 			array(
