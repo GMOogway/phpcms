@@ -169,7 +169,7 @@ Apache、Nginx、IIS等Web服务器都可以
 安装教程
 1. 将代码下载到网站的根目录
 2. 运行环境检查程序 /test.php
-3. 环境通过后，运行安装文件 /install.php
+3. 环境通过后，运行安装文件 /index.php
 4. 默认后台入口文件是 /admin.php
 
 期待您的反馈：
