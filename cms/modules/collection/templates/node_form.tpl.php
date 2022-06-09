@@ -51,7 +51,7 @@ $(document).ready(function() {
 			<td>
 			 <label><input type="text" name="urlpage1" id="urlpage_1" size="100" value="<?php if(isset($data['sourcetype']) && $data['sourcetype'] == 1 && isset($data['urlpage'])) echo $data['urlpage'];?>"></label> <label><input type="button" class="button" onclick="show_url()" value="<?php echo L('test')?>"></label><br /> 
 			<?php echo L('url_msg')?><br />
-			 <?php echo L('page_from')?>: <input type="text" name="data[pagesize_start]" value="<?php if(isset($data['sourcetype']) && $data['sourcetype'] == 1 && isset($data['pagesize_start'])) { echo $data['pagesize_start'];} else { echo '1';}?>" size="4"> <?php echo L('to')?> <input type="text" name="data[pagesize_end]" value="<?php if(isset($data['sourcetype']) && $data['sourcetype'] == 1 && isset($data['pagesize_end'])) { echo $data['pagesize_end'];} else { echo '10';}?>" size="4"> <?php echo L('increment_by')?><input type="text" name="data[par_num]" size="4" value="<?php if(isset($data['sourcetype']) && $data['sourcetype'] == 1 && isset($data['par_num'])) { echo $data['par_num'];} else { echo '1';}?>">
+			 <?php echo L('page_from')?>: <label><input type="text" name="data[pagesize_start]" value="<?php if(isset($data['sourcetype']) && $data['sourcetype'] == 1 && isset($data['pagesize_start'])) { echo $data['pagesize_start'];} else { echo '1';}?>" size="4"></label> <?php echo L('to')?> <label><input type="text" name="data[pagesize_end]" value="<?php if(isset($data['sourcetype']) && $data['sourcetype'] == 1 && isset($data['pagesize_end'])) { echo $data['pagesize_end'];} else { echo '10';}?>" size="4"></label> <?php echo L('increment_by')?><label><input type="text" name="data[par_num]" size="4" value="<?php if(isset($data['sourcetype']) && $data['sourcetype'] == 1 && isset($data['par_num'])) { echo $data['par_num'];} else { echo '1';}?>"></label>
 			</td>
 		</tr>
 		</tbody>
@@ -82,7 +82,7 @@ $(document).ready(function() {
 		<tr>
 			<td width="120"><?php echo L('url_configuration')?>：</td> 
 			<td>
-			<?php echo L('site_must_contain')?><input type="text" name="data[url_contain]"  value="<?php if(isset($data['url_contain'])) echo $data['url_contain']?>"> <?php echo L('the_web_site_does_not_contain')?><input type="text" name="data[url_except]"  value="<?php if(isset($data['url_except'])) echo $data['url_except']?>">
+			<?php echo L('site_must_contain')?><label><input type="text" name="data[url_contain]"  value="<?php if(isset($data['url_contain'])) echo $data['url_contain']?>"></label> <?php echo L('the_web_site_does_not_contain')?><label><input type="text" name="data[url_except]"  value="<?php if(isset($data['url_except'])) echo $data['url_except']?>"></label>
 			</td>
 		</tr>
 			<tr>
@@ -210,7 +210,7 @@ $(document).ready(function() {
 		<tr>
 			<td width="120"><?php echo L('matching_rule')?>：</td> 
 			<td>
-			<?php echo L('from')?> <textarea rows="5" cols="40" name="data[content_page_start]" id="content_page_start"><?php if(isset($data['content_page_start'])) echo $data['content_page_start']?></textarea> <?php echo L('to')?> <textarea rows="5" cols="40" name="data[content_page_end]" id="content_page_end"><?php if(isset($data['content_page_end'])) echo $data['content_page_end']?></textarea>
+			<?php echo L('from')?> <label><textarea rows="5" cols="40" name="data[content_page_start]" id="content_page_start"><?php if(isset($data['content_page_start'])) echo $data['content_page_start']?></textarea></label> <?php echo L('to')?> <label><textarea rows="5" cols="40" name="data[content_page_end]" id="content_page_end"><?php if(isset($data['content_page_end'])) echo $data['content_page_end']?></textarea></label>
 			</td>
 			</tr>
 	</table>
