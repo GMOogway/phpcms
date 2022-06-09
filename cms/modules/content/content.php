@@ -1310,7 +1310,7 @@ class content extends admin {
 		$id = intval($this->input->get('id'));
 		$this->db->set_model($modelid);
 		$tablename = $this->db->table_name;
-		$rt = $db->get_one(array('id' => $id), 'tableid');
+		$rt = $this->db->get_one(array('id' => $id), 'tableid');
 		$this->db->table_name = $tablename.'_data_'.$rt['tableid'];
 		$r = $this->db->get_one(array('id'=>$id),'relation');
 
