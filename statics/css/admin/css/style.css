@@ -251,7 +251,7 @@ textarea.form-control {height: auto;}
 .content-menu a{color: #888;}
 .content-menu .on,.content-menu a:focus,.content-menu a:hover{color:#3ea9e2!important;text-decoration: none;}
 .content-menu a [class*=" fa-"],.content-menu a [class*=" glyphicon-"],.content-menu a [class*=" icon-"],.content-menu a [class^=fa-],.content-menu a [class^=glyphicon-],.content-menu a [class^=icon-] {display: inline-block;width: 1.25em;text-align: center;}
-.content-menu>i.fa-circle {font-size: 5px;margin: 0 10px;position: relative;top: -1px;opacity: .4;filter: alpha(opacity=40);}
+.content-menu>i.fa-circle {font-size: 5px;margin: 0 10px;position: relative;top: -1px;opacity: .4;filter: alpha(opacity=40);color: #aaa;}
 .tabBut li a{color: #fff;}
 .tabBut .on,.tabBut li:hover{background: #19aa8d;color:#fff;border: 1px solid #19aa8d;}
 .tabBut li{margin-left: -8px;padding: 7px 10px;border-radius: 2px;box-shadow: 0px 1px 2px rgba(0,0,0,0.1); background: #3498db;color:#fff;border: 1px solid #3498db;}
