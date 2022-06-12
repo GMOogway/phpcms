@@ -68,6 +68,11 @@ class param {
 	public function route_c() {
 		$c = $this->input->get('c') && !empty($this->input->get('c')) ? $this->input->get('c') : ($this->input->post('c') && !empty($this->input->post('c')) ? $this->input->post('c') : '');
 		$c = $this->safe_deal($c);
+		if (IS_ADMIN) {
+			if (!param::get_cookie('userid')) {
+				$c = 'index';
+			}
+		}
 		if (empty($c)) {
 			return $this->route_config['c'];
 		} else {
@@ -84,6 +89,13 @@ class param {
 		if (IS_ADMIN) {
 			if (!param::get_cookie('userid')) {
 				$a = SYS_ADMIN_PATH;
+			}
+		}
+		if (IS_SELF!='admin') {
+			if ($this->input->get('m') == 'admin') {
+				if ($a == 'login') {
+					$a = '';
+				}
 			}
 		}
 		if (empty($a)) {

@@ -80,43 +80,29 @@ include $this->admin_tpl('header','admin');?>
 </form>
 </body>
 <script type="text/javascript">
-	//添加行
-	var addnum = <?php echo $j+1 ?>;
-	function addTr(){
+//添加行
+var addnum = <?php echo $j+1 ?>;
+function addTr(){
 	var trHtml   =	"<tr id='ntr" + addnum + "'>";
-		trHtml  +=	"<td align='center'>";
-		trHtml  +=	"<input type='hidden' value='2' name='postdata[" + addnum + "][options]' class='dataoptions' />";
-		trHtml  +=	"<input name='postdata[" + addnum + "][listorder]' type='text' size='3' value='0' class='input-text-c' />";
-		trHtml  +=	"</td>";
-		trHtml  +=	"<td align='center'><input name='postdata[" + addnum + "][description]' type='text' value='' class='input-text' style='width:auto!important;' /></td>";
-		trHtml  +=	"<td align='center'><label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' name='postdata[" + addnum + "][conf][status]' value='1' checked='checked' /><span></span></label></td>";
-		trHtml  +=	"<td align='center'><a class=\"btn btn-xs red\" href='javascript:;' onclick=\"delTr('ntr"+ addnum +"')\"><?php echo L('delete');?></a></td>";
-		trHtml  +=	"</tr>";
+	trHtml  +=	"<td align='center'>";
+	trHtml  +=	"<input type='hidden' value='2' name='postdata[" + addnum + "][options]' class='dataoptions' />";
+	trHtml  +=	"<input name='postdata[" + addnum + "][listorder]' type='text' size='3' value='0' class='input-text-c' />";
+	trHtml  +=	"</td>";
+	trHtml  +=	"<td align='center'><input name='postdata[" + addnum + "][description]' type='text' value='' class='input-text' style='width:auto!important;' /></td>";
+	trHtml  +=	"<td align='center'><label class='mt-checkbox mt-checkbox-outline'><input type='checkbox' name='postdata[" + addnum + "][conf][status]' value='1' checked='checked' /><span></span></label></td>";
+	trHtml  +=	"<td align='center'><a class=\"btn btn-xs red\" href='javascript:;' onclick=\"delTr('ntr"+ addnum +"')\"><?php echo L('delete');?></a></td>";
+	trHtml  +=	"</tr>";
 	addnum++;
 	var $tr=$("#listtable tr").eq(-2);
 	if($tr.size() <= 1){
 		$tr=$("#listtable tr").eq(-1);
 		$tr.before(trHtml);
 	}else{$tr.after(trHtml);}
-	}
-	
-	//删除行
-	function delTr(trid){
-		$("#"+trid).hide();
-		$("#"+trid+" .dataoptions").val(3);
-	}
-
-	//切换选项卡
-	function SwapTab(name,cls_show,cls_hide,cnt,cur){
-	    for(i=1;i<=cnt;i++){
-			if(i==cur){
-				 $('#div_'+name+'_'+i).show();
-				 $('#tab_'+name+'_'+i).attr('class',cls_show);
-			}else{
-				 $('#div_'+name+'_'+i).hide();
-				 $('#tab_'+name+'_'+i).attr('class',cls_hide);
-			}
-		}
-	}
+}
+//删除行
+function delTr(trid){
+	$("#"+trid).hide();
+	$("#"+trid+" .dataoptions").val(3);
+}
 </script>
 </html>

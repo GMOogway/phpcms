@@ -1,101 +1,200 @@
-<?php 
-defined('IS_ADMIN') or exit('No permission resources.'); 
-$show_validator = $show_scroll = $show_dialog = 1; 
-include $this->admin_tpl('header', 'admin');
-?>
-<form method="post" action="?m=special&c=special&a=edit&specialid=<?php echo $_GET['specialid']?>" id="myform">
+<?php
+defined('IS_ADMIN') or exit('No permission resources.');
+$show_validator = $show_scroll = $show_dialog = 1;
+include $this->admin_tpl('header', 'admin');?>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+    $(":text").removeClass('input-text');
+});
+</script>
+<div class="page-content main-content">
+<form action="?m=special&c=special&a=edit&specialid=<?php echo $_GET['specialid']?>" class="form-horizontal" method="post" name="myform" id="myform">
+<input name="page" id="dr_page" type="hidden" value="<?php echo $page;?>">
+<input name="dosubmit" type="hidden" value="1">
 <input name="menuid" type="hidden" value="<?php echo $this->input->get('menuid');?>">
-<div class="pad-10">
-<div class="col-tab">
-	<ul class="tabBut cu-li">
-		<li id="tab_setting_1" class="on" onclick="SwapTab('setting','on','',6,1);"><?php echo L('catgory_basic', '', 'admin');?></li>
-		<li id="tab_setting_2" onclick="SwapTab('setting','on','',6,2);"><?php echo L('extend_setting')?></li>
-	</ul>
-<div id="div_setting_1" class="contentList pad-10">
-	<table class="table_form" width="100%" cellspacing="0">
-		<tbody>
-			<tr>
-				<th width="200"><?php echo L('special_title')?>：</th>
-				<td><label><input name="special[title]" id="title" class="form-control input-text" value="<?php echo new_html_special_chars($info['title']);?>" type="text" size="40"></label></td>
-			</tr>
-			<tr>
-				<th><?php echo L('special_banner')?>：</th>
-				<td><?php echo form::images('special[banner]', 'banner', $info['banner'], 'special', '', 40)?></td>
-			</tr>
-			<tr>
-				<th><?php echo L('sepcial_thumb')?>：</th>
-				<td><?php echo form::images('special[thumb]', 'thumb', $info['thumb'], 'special', '', 40, '', '', '', array(350, 350))?></td>
-			</tr>
-			<tr>
-				<th><?php echo L('special_intro')?>：</th>
-				<td><textarea name="special[description]" id="description" cols="50" rows="6" class="form-control"><?php echo $info['description'];?></textarea></td>
-			</tr>
-			<tr>
-		    	<th align="right" valign="top"><?php echo L('ishtml')?>：</th>
-		        <td valign="top"><?php echo form::radio(array('1'=>L('yes'), '0'=>L('no')), $info['ishtml'], 'name="special[ishtml]"');?>
-		        </td>
-		    </tr>
-		    <tr id="file_div" style="display:<?php if($info['ishtml']) {?> <?php } else {?>none<?php }?>;">
-		    	<th align="right" valign="top"><?php echo L('special_filename')?>：</th>
-		        <td valign="top"><label><input type="text" name="special[filename]" id="filename" class="form-control input-text"<?php if($info['ishtml']) {?> readonly<?php }?> value="<?php echo $info['filename']?>" size="40"></label></td>
-		    </tr>
-		    <tr>
-		    	<th width="200"><?php echo L('special_type')?>：<a href="javascript:addItem()" title="<?php echo L('add')?>"><span style="color:red;" >+</span></a></th>
-		        <td valign="top">
-		        <div id="option_list">
-		        <?php if(is_array($types)) { $k = 1; foreach($types as $t) {?>
-		        	<div class="mb6"><span><?php echo L('type_id')?>：<?php echo $t['typeid']?>&nbsp;&nbsp;<?php echo L('type_name')?>：<input type="hidden" name="type[<?php echo $k?>][typeid]" value="<?php echo $t['typeid']?>"><label><input type="text" name="type[<?php echo $k?>][name]" <?php if ($k==1) {?>id="type_name"<?php }?> value="<?php echo new_html_special_chars($t['name'])?>" class="input-text" size="15"></label>&nbsp;&nbsp;<?php echo L('type_path')?>：<label><input type="text" name="type[<?php echo $k?>][typedir]" <?php if ($k==1) {?>id="type_path"<?php }?> value="<?php echo $t['typedir']?>" class="input-text" size="15"></label>&nbsp;&nbsp;<?php echo L('listorder')?>：<label><input type="text" name="type[<?php echo $k?>][listorder]" value="<?php echo $t['listorder']?>" size="6" class="input-text"></label></span>&nbsp;<?php if ($k!=1) {?><a href="javascript:;" onclick="descItem(this, <?php echo $k?>);"><?php echo L('remove')?></a><?php }?>&nbsp;<span id="typeTip"></span></div>
-		        <?php $k++; } }?>
-		        </div>
-		        </td>
-    </tr>
-		</tbody>
-	</table>
+<div class="portlet light bordered myfbody">
+    <div class="portlet-title tabbable-line">
+        <ul class="nav nav-tabs" style="float:left;">
+            <li<?php if ($page==0) {?> class="active"<?php }?>>
+                <a data-toggle="tab_0" onclick="$('#dr_page').val('0')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('catgory_basic', '', 'admin').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-cog"></i> <?php if (!is_mobile(0)) {echo L('catgory_basic', '', 'admin');}?> </a>
+            </li>
+            <li<?php if ($page==1) {?> class="active"<?php }?>>
+                <a data-toggle="tab_1" onclick="$('#dr_page').val('1')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('extend_setting').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-cog"></i> <?php if (!is_mobile(0)) {echo L('extend_setting');}?> </a>
+            </li>
+        </ul>
+    </div>
+    <div class="portlet-body form">
+        <div class="tab-content">
+            <div class="tab-pane<?php if ($page==0) {?> active<?php }?>" id="tab_0">
+
+                <div class="form-body">
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('special_title')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control input-large" type="text" id="title" name="special[title]" value="<?php echo new_html_special_chars($info['title']);?>" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('special_banner')?></label>
+                        <div class="col-md-9">
+                            <?php echo form::images('special[banner]', 'banner', $info['banner'], 'special')?>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('sepcial_thumb')?></label>
+                        <div class="col-md-9">
+                            <?php echo form::images('special[thumb]', 'thumb', $info['thumb'], 'special', '', '', '', '', '', array(350, 350))?>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('special_intro')?></label>
+                        <div class="col-md-9">
+                            <textarea name="special[description]" id="description" class="form-control"><?php echo $info['description'];?></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('ishtml')?></label>
+                        <div class="col-md-9">
+                            <?php echo form::radio(array('1'=>L('yes'), '0'=>L('no')), $info['ishtml'], 'name="special[ishtml]"');?>
+                        </div>
+                    </div>
+                    <div class="form-group" id="file_div" style="display:<?php if($info['ishtml']) {?> <?php } else {?>none<?php }?>;">
+                        <label class="col-md-2 control-label"><?php echo L('special_filename')?></label>
+                        <div class="col-md-9">
+                            <input type="text" name="special[filename]" id="filename" class="form-control input-large" <?php if($info['ishtml']) {?> readonly<?php }?> value="<?php echo $info['filename']?>">
+                            <span class="help-block"><?php echo L('submit_no_edit')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2"><?php echo L('special_type')?></label>
+                        <div class="col-md-9">
+                            <div class="table-scrollable">
+                                <table class="table table-nomargin table-bordered table-striped table-bordered table-advance">
+                                    <thead>
+                                        <tr>
+                                            <th><?php echo L('type_id')?></th>
+                                            <th><?php echo L('type_name')?></th>
+                                            <th><?php echo L('type_path')?></th>
+                                            <th><?php echo L('listorder')?></th>
+                                            <th width="50" style="text-align: center"><button type="button" class="btn blue btn-xs" onClick="dr_add_table_type()"> <i class="fa fa-plus"></i> </button></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="dr_type_body">
+                                        <?php $ksids = [];
+                                        if(is_array($types)) {$k = 1; foreach($types as $t) {?>
+                                        <tr id="dr_ftable_type_row_<?php echo $k;?>">
+                                            <td><?php echo $t['typeid']?></td>
+                                            <td><input type="text" class="form-control" <?php if ($k==1) {?>id="type_name"<?php }?> name="type[<?php echo $k?>][name]" value="<?php echo new_html_special_chars($t['name'])?>"></td>
+                                            <td><input type="text" class="form-control" <?php if ($k==1) {?>id="type_path"<?php }?> name="type[<?php echo $k?>][typedir]" value="<?php echo $t['typedir']?>"></td>
+                                            <td><input type="text" class="form-control" name="type[<?php echo $k?>][listorder]" value="<?php echo $t['listorder']?>"></td>
+                                            <td style="text-align: center"></td>
+                                        </tr>
+                                        <?php $ksids[] = $k; $k++;
+                                        }
+                                        $ksid = is_array($ksids) && $ksids ? max($ksids) : 0;
+                                        }?>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <span class="help-block" id="typeTip"></span>
+                            <script>
+                            var special_type = {"tpl":" <tr id=\"dr_ftable_type_row_{hang}\"> <td></td><td><input type=\"text\" class=\"form-control\" name=\"type[{hang}][name]\" value=\"\"><\/td> <td><input type=\"text\" class=\"form-control\" name=\"type[{hang}][typedir]\" value=\"\"><\/td> <td><input type=\"text\" class=\"form-control\" name=\"type[{hang}][listorder]\" value=\"{hang}\"><\/td> <td style=\"text-align: center\"><button type=\"button\" class=\"btn red btn-xs\" onClick=\"dr_del_table_type(this)\"> <i class=\"fa fa-trash\"><\/i> <\/button><\/td> <\/tr>","id":<?php echo $ksid;?>};
+                            function dr_del_table_type(e) {
+                                layer.confirm('确定删除本条数据吗？', {
+                                shade: 0,
+                                title: '提示',
+                                }, function(index, layero){
+                                   layer.close(index);
+                                    $(e).parent().parent().remove();
+                                });
+                            }
+                            function dr_add_table_type() {
+                                var tpl = special_type.tpl;
+                                 special_type.id ++;
+                                tpl = tpl.replace(/\{hang\}/g, special_type.id);
+                                $('#dr_type_body').append(tpl);
+                            }
+                            </script>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="tab-pane<?php if ($page==1) {?> active<?php }?>" id="tab_1">
+
+                <div class="form-body">
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('pics_news')?></label>
+                        <div class="col-md-9">
+                            <span id="relation"><?php if ($info['pics']) {?><ul id="relation_relation" class="list-dot"><li><span><?php echo $pics['2']?></span><a onclick="remove_relation('relation', 'pics')" class="close" href="javascript:void(0);"></a></li></ul><?php }?></span><input type="button" value="<?php echo L('choose_pic_news')?>" class="button" onclick="import_info('?m=special&c=special&a=public_get_pics','<?php echo L('choose_pic_news')?>', 'msg_id', 'relation', 'pics');"><input type="hidden" name="special[pics]" value="<?php echo $info['pics']?>" id="pics"><span class="onShow">(<?php echo L('choose_pic_model')?>)</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('add_vote')?></label>
+                        <div class="col-md-9">
+                            <span id="vote_msg"><?php if ($info['voteid']) {?><ul id="relation_vote_msg" class="list-dot"><li><span><?php echo $vote_info['2']?></span><a onclick="remove_relation('vote_msg', 'voteid')" class="close" href="javascript:void(0);"></a></li></ul><?php }?></span><input type="button" class="button" value="<?php echo L('choose_exist_vote')?>" onclick="import_info('?m=vote&c=vote&a=public_get_votelist&from_api=1&target=dialog','<?php echo L('choose_vote')?>', 'msg_id', 'vote_msg', 'voteid');"><input type="hidden" name="special[voteid]" value="<?php echo $info['voteid']?>" id="voteid">&nbsp;<input type="button" class="button" value="<?php echo L('add_new_vote')?>" onclick="import_info('?m=vote&c=vote&a=add&from_api=1&target=dialog','<?php echo L('add_new_vote')?>', 'subject_title', 'vote_msg', 'voteid');">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('index_page')?></label>
+                        <div class="col-md-9">
+                            <?php echo form::radio(array('0'=>L('no'), '1'=>L('yes')), $info['ispage'], 'name="special[ispage]"');?>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('special_status')?></label>
+                        <div class="col-md-9">
+                            <?php echo form::radio(array('0'=>L('open'), '1'=>L('pause')), $info['disabled'], 'name="special[disabled]"');?>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('template_style')?></label>
+                        <div class="col-md-9">
+                            <?php echo form::select($template_list, $info['style'], 'name="special[style]" id="style" onchange="load_file_list(this.value)"', L('please_select'))?><?php if ($info['style']) {?><script type="text/javascript">$.getJSON('?m=admin&c=category&a=public_tpl_file_list&style=<?php echo $info['style']?>&module=special&templates=index|list|show&id=<?php echo $info['index_template']?>|<?php echo $info['list_template']?>|<?php echo $info['show_template']?>&name=special', function(data){$('#index_template').html(data.index_template);$('#list_template').html(data.list_template);$('#show_template').html(data.show_template);});</script><?php }?>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('special_template')?></label>
+                        <div class="col-md-9">
+                            <label id="index_template"><?php echo form::select_template('default', 'special', $info['index_template'], 'name="special[index_template]"', 'index');?></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('special_type_template')?></label>
+                        <div class="col-md-9">
+                            <label id="list_template"><?php echo form::select_template('default', 'special', $info['list_template'], 'name="special[list_template]"', 'list');?></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('special_content_template')?></label>
+                        <div class="col-md-9">
+                            <label id="show_template"><?php echo form::select_template('default', 'special', $info['show_template'], 'name="special[show_template]"', 'show');?></label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="portlet-body form myfooter">
+            <div class="form-actions text-center">
+                <button type="button" onclick="dr_ajax_submit('?m=special&c=special&a=edit&specialid=<?php echo $_GET['specialid']?>&page='+$('#dr_page').val(), 'myform', '2000')" class="btn green"> <i class="fa fa-save"></i> <?php echo L('submit')?></button>
+            </div>
+        </div>
+    </div>
 </div>
-<div id="div_setting_2" class="contentList pad-10 hidden">
-	<table width="100%" class="table_form ">
-		<tr>
-			<th width="200"><?php echo L('pics_news')?>：</th>
-			<td><span id="relation"><?php if ($info['pics']) {?><ul id="relation_relation" class="list-dot"><li><span><?php echo $pics['2']?></span><a onclick="remove_relation('relation', 'pics')" class="close" href="javascript:void(0);"></a></li></ul><?php }?></span><input type="button" value="<?php echo L('choose_pic_news')?>" class="button" onclick="import_info('?m=special&c=special&a=public_get_pics','<?php echo L('choose_pic_news')?>', 'msg_id', 'relation', 'pics');"><input type="hidden" name="special[pics]" value="<?php echo $info['pics']?>" id="pics"><span class="onShow">(<?php echo L('choose_pic_model')?>)</span></td>
-		</tr>
-		<tr>
-			<th><?php echo L('add_vote')?>：</th>
-			<td><span id="vote_msg"><?php if ($info['voteid']) {?><ul id="relation_vote_msg" class="list-dot"><li><span><?php echo $vote_info['2']?></span><a onclick="remove_relation('vote_msg', 'voteid')" class="close" href="javascript:void(0);"></a></li></ul><?php }?></span><input type="button" class="button" value="<?php echo L('choose_exist_vote')?>" onclick="import_info('?m=vote&c=vote&a=public_get_votelist&from_api=1&target=dialog','<?php echo L('choose_vote')?>', 'msg_id', 'vote_msg', 'voteid');"><input type="hidden" name="special[voteid]" value="<?php echo $info['voteid']?>" id="voteid">&nbsp;<input type="button" class="button" value="<?php echo L('add_new_vote')?>" onclick="import_info('?m=vote&c=vote&a=add&from_api=1&target=dialog','<?php echo L('add_new_vote')?>', 'subject_title', 'vote_msg', 'voteid');"></td>
-		</tr>
-		<tr>
-		    <th align="right"  valign="top"><?php echo L('template_style')?>：</th>
-		    <td valign="top"><?php echo form::select($template_list, $info['style'], 'name="special[style]" id="style" onchange="load_file_list(this.value)"', L('please_select'))?><?php if ($info['style']) {?><script type="text/javascript">$.getJSON('?m=admin&c=category&a=public_tpl_file_list&style=<?php echo $info['style']?>&module=special&templates=index|list|show&id=<?php echo $info['index_template']?>|<?php echo $info['list_template']?>|<?php echo $info['show_template']?>&name=special', function(data){$('#index_template').html(data.index_template);$('#list_template').html(data.list_template);$('#show_template').html(data.show_template);});</script><?php }?></td>
-		</tr>
-		<tr>
-			<th align="right"  valign="top"><?php echo L('special_template')?>：</th>
-			<td valign="top" id="index_template"><?php echo form::select_template('default', 'special', $info['index_template'], 'name="special[index_template]"', 'index');?></td>
-		</tr>
-		<tr>
-			<th align="right"  valign="top"><?php echo L('special_type_template')?>：</th>
-			<td valign="top" id="list_template"><?php echo form::select_template('default', 'special', $info['list_template'], 'name="special[list_template]"', 'list');?></td>
-		</tr>
-		<tr>
-			<th align="right"  valign="top"><?php echo L('special_content_template')?>：</th>
-			<td valign="top" id="show_template"><?php echo form::select_template('default', 'special', $info['show_template'], 'name="special[show_template]"', 'show');?></td>
-		</tr>
-		<tr>
-			<th align="right"  valign="top"><?php echo L('index_page')?>：</th>
-			<td valign="top"><?php echo form::radio(array('0'=>L('no'), '1'=>L('yes')), $info['ispage'], 'name="special[ispage]"');?></td>
-		</tr>
-		<tr>
-			<th align="right"  valign="top"><?php echo L('special_status')?>：</th>
-			<td valign="top"><?php echo form::radio(array('0'=>L('open'), '1'=>L('pause')), $info['disabled'], 'name="special[disabled]"');?></td>
-		</tr>
-	</table>
-</div>
-<div class="bk15"></div>
-    <input name="dosubmit" type="submit" value="<?php echo L('submit')?>" class="button">
-</div></div>
 </form>
+</div>
 </body>
 </html>
 <script type="text/javascript">
-
+$('.nav-tabs a').click(function (e) {
+    $('.nav-tabs').find('li').removeClass('active');
+    $('.tab-pane').removeClass('active');
+    $(this).parent().addClass('active');
+    $('#'+$(this).attr("data-toggle")).addClass('active');
+})
 function import_info(url, title, msgID, htmlID, valID) {
 	if (typeof pc_hash == 'string') url += (url.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
 	var w = 600;
@@ -138,29 +237,6 @@ function remove_relation(htmlID, valID) {
 
 function load_file_list(id) {
 	$.getJSON('?m=admin&c=category&a=public_tpl_file_list&style='+id+'&module=special&templates=index|list|show&name=special', function(data){$('#index_template').html(data.index_template);$('#list_template').html(data.list_template);$('#show_template').html(data.show_template);});
-}
-
-function addItem() {
-	var n = $('#option_list').find('input[type="text"]').length/3+1;
-	var newOption =  '<div class="mb6"><span style="padding-left:76px"><?php echo L('type_name')?>：<label><input type="text" name="type['+n+'][name]" class="input-text" size="15"></label>&nbsp;&nbsp;<?php echo L('type_path')?>：<label><input type="text" name="type['+n+'][typedir]" class="input-text" size="15"></label>&nbsp;&nbsp;<?php echo L('listorder')?>：<label><input type="text" name="type['+n+'][listorder]" value="'+n+'" size="6" class="input-text"></label></span>&nbsp;<a href="javascript:;" onclick="descItem(this);"><?php echo L('remove')?></a></div>';
-	$('#option_list').append(newOption);
-}
-
-function descItem(a, id) {
-	$(a).parent().append('<input type="hidden" name="type['+id+'][del]" value="1">');
-	$(a).parent().fadeOut();
-}
-
-function SwapTab(name,cls_show,cls_hide,cnt,cur){
-	for(i=1;i<=cnt;i++){
-		if(i==cur){
-			 $('#div_'+name+'_'+i).show();
-			 $('#tab_'+name+'_'+i).attr('class',cls_show);
-		}else{
-			 $('#div_'+name+'_'+i).hide();
-			 $('#tab_'+name+'_'+i).attr('class',cls_hide);
-		}
-	}
 }
 
 $(document).ready(function(){

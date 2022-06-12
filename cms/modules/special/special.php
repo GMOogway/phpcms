@@ -29,6 +29,12 @@ class special extends admin {
 	public function add() {
 		if (isset($_POST['dosubmit']) && !empty($_POST['dosubmit'])) {
 			$special = $this->check($_POST['special']);
+			if (!$_POST['type'][1]['name']) {
+				dr_json(0, L('type_name').L('empty'));
+			}
+			if (!$_POST['type'][1]['typedir']) {
+				dr_json(0, L('type_path').L('empty'));
+			}
 			$id = $this->db->insert($special, true);
 			if ($id) {
 				$this->special_api->_update_type($id, $_POST['type']);
@@ -58,7 +64,7 @@ class special extends admin {
 				}
 				$this->special_cache();
 			}
-			dr_admin_msg(1,L('add_special_success'), '?m=special&c=special&a=init&menuid='.$this->input->post('menuid'));
+			dr_json(1, L('add_special_success'), array('url' => '?m=special&c=special&a=init&menuid='.$this->input->post('menuid').'&pc_hash='.dr_get_csrf_token()));
 		} else {
 			//获取站点模板信息
 			pc_base::load_app_func('global', 'admin');
@@ -79,11 +85,17 @@ class special extends admin {
 	 */
 	public function edit() {
 		if (!isset($_GET['specialid']) || empty($_GET['specialid'])) {
-			dr_admin_msg(0,L('illegal_action'), HTTP_REFERER);
+			dr_json(0,L('illegal_action'), HTTP_REFERER);
 		}
 		$_GET['specialid'] = intval($_GET['specialid']);
 		if (isset($_POST['dosubmit']) && !empty($_POST['dosubmit'])) {
 			$special = $this->check($_POST['special'], 'edit');
+			if (!$_POST['type'][1]['name']) {
+				dr_json(0, L('type_name').L('empty'));
+			}
+			if (!$_POST['type'][1]['typedir']) {
+				dr_json(0, L('type_path').L('empty'));
+			}
 			$siteid = get_siteid();
 			$site = pc_base::load_app_class('sites', 'admin');
 			$site_info = $site->get_by_id($siteid);
@@ -115,7 +127,7 @@ class special extends admin {
 				$this->attachment_db->api_update(array($special['thumb'], $special['banner']),'special-'.$_GET['specialid'], 1);
 			}
 			$this->special_cache();
-			dr_admin_msg(1,L('edit_special_success'), '?m=special&c=special&a=init&menuid='.$this->input->post('menuid'));
+			dr_json(1, L('edit_special_success'), array('url' => '?m=special&c=special&a=init&menuid='.$this->input->post('menuid').'&pc_hash='.dr_get_csrf_token()));
 		} else {
 			$info = $this->db->get_one(array('id'=>$_GET['specialid'], 'siteid'=>$this->get_siteid()));
 			//获取站点模板信息

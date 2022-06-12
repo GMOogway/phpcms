@@ -1,4 +1,4 @@
-<?php defined('IS_ADMIN') or exit('No permission resources.'); ?>
+<?php defined('IS_ADMIN') or exit('No permission resources.');?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,15 +16,17 @@
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>hotkeys.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>jquery.sgallery.js"></script>
 <script src="<?php echo JS_PATH?>jquery.backstretch.min.js" type="text/javascript"></script>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>admin_common.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>jquery.nicescroll.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>layer/layer.js"></script>
 <script type="text/javascript">
+var is_admin = 0;
 var pc_hash = '<?php echo dr_get_csrf_token();?>';
+var csrf_hash = '<?php echo csrf_hash();?>';
 if (top.location!=self.location){
 top.location="<?php echo SELF;?>";
 }
 </script>
+<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>admin_common.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>jquery.nicescroll.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>layer/layer.js"></script>
 <!--[if lt IE 9]>
 <script src="<?php echo CSS_PATH?>layuimini/js/html5.min.js"></script>
 <script src="<?php echo CSS_PATH?>layuimini/js/respond.min.js"></script>

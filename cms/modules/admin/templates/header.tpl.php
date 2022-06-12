@@ -25,6 +25,8 @@ var is_admin = 0;
 <?php } else { ?>
 var is_admin = 1;
 <?php } ?>
+var pc_hash = '<?php echo dr_get_csrf_token();?>';
+var csrf_hash = '<?php echo csrf_hash();?>';
 </script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>admin_common.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>styleswitch.js"></script>
@@ -34,66 +36,59 @@ var is_admin = 1;
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>formvalidatorregex.js" charset="UTF-8"></script>
 <?php } ?>
 <script type="text/javascript">
-	handlegotop = function() {
-		navigator.userAgent.match(/iPhone|iPad|iPod/i) ? $(window).bind("touchend touchcancel touchleave", function(a) {
-			100 < $(this).scrollTop() ? $(".scroll-to-top").fadeIn(500) : $(".scroll-to-top").fadeOut(500)
-		}) : $(window).scroll(function() {
-			100 < $(this).scrollTop() ? $(".scroll-to-top").fadeIn(500) : $(".scroll-to-top").fadeOut(500)
-		});
-		$(".scroll-to-top").click(function(a) {
-			a.preventDefault();
-			$("html, body").animate({
-				scrollTop: 0
-			}, 500);
-			return !1
-		})
-	}
-	window.focus();
-	var pc_hash = '<?php echo dr_get_csrf_token();?>';
-	var csrf_hash = '<?php echo csrf_hash();?>';
-	<?php if(!isset($show_pc_hash) || SYS_CSRF) { ?>
-		window.onload = function(){
-	<?php if(!isset($show_pc_hash)) { ?>
-		var html_a = document.getElementsByTagName('a');
-		var num = html_a.length;
-		for(var i=0;i<num;i++) {
-			var href = html_a[i].href;
-			if(href && href.indexOf('javascript:') == -1) {
-				if(href.indexOf('pc_hash') == -1) {
-					if(href.indexOf('?') != -1) {
-						html_a[i].href = href+'&pc_hash='+pc_hash;
-					} else {
-						html_a[i].href = href+'?pc_hash='+pc_hash;
-					}
-				}
-			}
-		}
-
-		var html_form = document.forms;
-		var num = html_form.length;
-		for(var i=0;i<num;i++) {
-			var newNode = document.createElement("input");
-			newNode.name = 'pc_hash';
-			newNode.type = 'hidden';
-			newNode.value = pc_hash;
-			html_form[i].appendChild(newNode);
-		}
-	<?php } ?>
-	<?php if(SYS_CSRF) { ?>
-		var html_form2 = document.forms;
-		var num2 = html_form2.length;
-		for(var i=0;i<num2;i++) {
-			var csrfNode = document.createElement("input");
-			csrfNode.name = 'csrf_test_name';
-			csrfNode.type = 'hidden';
-			csrfNode.value = csrf_hash;
-			html_form2[i].appendChild(csrfNode);
-		}
-	<?php } ?>
-	}
-<?php } ?>
+handlegotop = function() {
+    navigator.userAgent.match(/iPhone|iPad|iPod/i) ? $(window).bind("touchend touchcancel touchleave", function(a) {
+        100 < $(this).scrollTop() ? $(".scroll-to-top").fadeIn(500) : $(".scroll-to-top").fadeOut(500)
+    }) : $(window).scroll(function() {
+        100 < $(this).scrollTop() ? $(".scroll-to-top").fadeIn(500) : $(".scroll-to-top").fadeOut(500)
+    });
+    $(".scroll-to-top").click(function(a) {
+        a.preventDefault();
+        $("html, body").animate({
+            scrollTop: 0
+        }, 500);
+        return !1
+    })
+}
 $(function(){
-	handlegotop();
+    handlegotop();
+<?php if(!isset($show_pc_hash)) { ?>
+    var html_a = document.getElementsByTagName('a');
+    var num = html_a.length;
+    for(var i=0;i<num;i++) {
+        var href = html_a[i].href;
+        if(href && href.indexOf('javascript:') == -1) {
+            if(href.indexOf('pc_hash') == -1) {
+                if(href.indexOf('?') != -1) {
+                    html_a[i].href = href+'&pc_hash='+pc_hash;
+                } else {
+                    html_a[i].href = href+'?pc_hash='+pc_hash;
+                }
+            }
+        }
+    }
+
+    var html_form = document.forms;
+    var num = html_form.length;
+    for(var i=0;i<num;i++) {
+        var newNode = document.createElement("input");
+        newNode.name = 'pc_hash';
+        newNode.type = 'hidden';
+        newNode.value = pc_hash;
+        html_form[i].appendChild(newNode);
+    }
+<?php } ?>
+<?php if(SYS_CSRF) { ?>
+    var html_form2 = document.forms;
+    var num2 = html_form2.length;
+    for(var i=0;i<num2;i++) {
+        var csrfNode = document.createElement("input");
+        csrfNode.name = 'csrf_test_name';
+        csrfNode.type = 'hidden';
+        csrfNode.value = csrf_hash;
+        html_form2[i].appendChild(csrfNode);
+    }
+<?php } ?>
 });
 </script>
 </head>

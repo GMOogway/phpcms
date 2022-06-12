@@ -8,6 +8,11 @@
 <link href="<?php echo CSS_PATH?>font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo CSS_PATH?>admin/css/style.css" rel="stylesheet" type="text/css" />
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>Dialog/main.js"></script>
+<script type="text/javascript">
+var is_admin = 0;
+var pc_hash = '<?php echo dr_get_csrf_token();?>';
+var csrf_hash = '<?php echo csrf_hash();?>';
+</script>
 <script language="JavaScript" src="<?php echo JS_PATH?>admin_common.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>styleswitch.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>layer/layer.js"></script>

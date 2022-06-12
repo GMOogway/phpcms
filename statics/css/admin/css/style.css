@@ -917,8 +917,13 @@ form .portlet.light .portlet-body {padding-top: 20px;padding-bottom: 20px;}
 .myfooter {margin: 0 -20px!important;font-size: 13px;position: fixed;left: 0;right: 0;z-index: 100;bottom: 0;}
 .form {padding: 0!important;}
 .table-scrollable {width: 100%;overflow-x: auto;overflow-y: hidden;border: 1px solid #e7ecf1;margin: 10px 0!important;}
+.table-scrollable.table-scrollable-borderless,.table-scrollable>.table-bordered {border: 0;}
+.table-scrollable>.table-bordered>tbody>tr:last-child>td,.table-scrollable>.table-bordered>tbody>tr:last-child>th,.table-scrollable>.table-bordered>tfoot>tr:last-child>td,.table-scrollable>.table-bordered>tfoot>tr:last-child>th,.table-scrollable>.table-bordered>thead>tr:last-child>td,.table-scrollable>.table-bordered>thead>tr:last-child>th,.table.table-bordered thead>tr>th {border-bottom: 0;}
 .table-scrollable>.table {width: 100%!important;margin: 0!important;background-color: #fff;}
 .table-scrollable>.table>tbody>tr>th,.table-scrollable>.table>tfoot>tr>td,.table-scrollable>.table>tfoot>tr>th,.table-scrollable>.table>thead>tr>th {white-space: nowrap;}
+.table-scrollable>.table-bordered>tbody>tr>td:first-child,.table-scrollable>.table-bordered>tbody>tr>th:first-child,.table-scrollable>.table-bordered>tfoot>tr>td:first-child,.table-scrollable>.table-bordered>tfoot>tr>th:first-child,.table-scrollable>.table-bordered>thead>tr>td:first-child,.table-scrollable>.table-bordered>thead>tr>th:first-child {border-left: 0;}
+.table-scrollable>.table-bordered>tbody>tr>td:last-child,.table-scrollable>.table-bordered>tbody>tr>th:last-child,.table-scrollable>.table-bordered>tfoot>tr>td:last-child,.table-scrollable>.table-bordered>tfoot>tr>th:last-child,.table-scrollable>.table-bordered>thead>tr>td:last-child,.table-scrollable>.table-bordered>thead>tr>th:last-child {border-right: 0;}
+.table-scrollable {border-radius: 4px;}
 .table {width: 100%;margin-bottom: 20px;table-layout: fixed;}
 .table>tbody>tr>td,.table>tbody>tr>th,.table>tfoot>tr>td,.table>tfoot>tr>th,.table>thead>tr>td,.table>thead>tr>th {padding: 8px;line-height: 1.42857;border-top: 1px solid #e7ecf1;}
 .table>thead>tr>th {border-bottom: 2px solid #e7ecf1;}
