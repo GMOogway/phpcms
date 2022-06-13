@@ -47,7 +47,7 @@ include $this->admin_tpl('header','admin');?>
                     <span class="badge badge-success"> <?php echo $id+2;?> </span>
                 </td>
                 <td style="color:blue">
-                    <?php echo L('当版本升级时必须操作');?>
+                    <?php echo L('更新CMS版本升级程序（当版本升级时必须操作）');?>
                 </td>
                 <td style="overflow:auto">
                     <label>
