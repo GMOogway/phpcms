@@ -1,10 +1,13 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header', 'admin');?>
+<style type="text/css">
+body {background-color: #fff;}
+</style>
 <div class="page-container" style="margin-bottom: 0px !important;">
     <div class="page-content-wrapper">
         <div class="page-content page-content3 mybody-nheader main-content   main-content2">
-                            <div class="page-body" style="margin-top:20px;margin-bottom:30px;">
+                            <div class="page-body">
 <form class="form-horizontal" method="post" role="form" id="myform">
     <div class="form-body">
 

@@ -1125,8 +1125,6 @@ class category extends admin {
 				$type = $this->input->get('select_type') ? intval($this->input->get('select_type')) : 0;
 				
 				$tree = pc_base::load_sys_class('tree');
-				$tree->icon = array('&nbsp;&nbsp;│ ','&nbsp;&nbsp;├─ ','&nbsp;&nbsp;└─ ');
-				$tree->nbsp = '&nbsp;&nbsp;';
 				$category = array();
 				foreach($categorys as $catid=>$r) {
 					if($this->siteid != $r['siteid'] || ($r['type']==2 && $r['child']==0)) continue;
@@ -1195,8 +1193,6 @@ class category extends admin {
  			
   			$modelid = $this->categorys[$catid]['modelid'];
   			$tree = pc_base::load_sys_class('tree');
-			$tree->icon = array('&nbsp;&nbsp;│ ','&nbsp;&nbsp;├─ ','&nbsp;&nbsp;└─ ');
-			$tree->nbsp = '&nbsp;&nbsp;';
  			foreach($this->categorys as $cid=>$r) {
 				if($this->siteid != $r['siteid'] || $r['type']) continue;
 				if($modelid && $modelid != $r['modelid']) continue;

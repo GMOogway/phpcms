@@ -1,7 +1,6 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');
-include $this->admin_tpl('header','admin');
-$menu_data = $this->menu_db->get_one(array('name' => 'public_error_log', 'm' => 'admin', 'c' => 'index', 'a' => 'public_error_log'));?>
+include $this->admin_tpl('header','admin');?>
 <div class="page-container" style="margin-bottom: 0px !important;">
     <div class="page-content-wrapper">
         <div class="page-content page-content3 mybody-nheader main-content  ">
@@ -13,7 +12,7 @@ $menu_data = $this->menu_db->get_one(array('name' => 'public_error_log', 'm' => 
 <div class="right-card-box">
     <div class="table-scrollable">
 
-        <table class="table table-fc-upload table-striped table-bordered table-hover table-checkable dataTable">
+        <table class="table table-striped table-bordered table-hover table-checkable dataTable">
             <thead>
             <tr class="heading">
                 <th width="55"> </th>
@@ -35,7 +34,7 @@ $menu_data = $this->menu_db->get_one(array('name' => 'public_error_log', 'm' => 
                 </td>
                 <td style="overflow:auto">
                     <label>
-                        <a href="javascript:;" onclick="my_update_cache('<?php echo $id;?>', '<?php echo $t['function'];?>', '<?php echo $t['mod'];?>', '<?php echo $t['file'];?>', '<?php echo $t['param'];?>');" class="btn red btn-xs"><i class="fa fa-refresh"></i> <?php echo L('立即更新');?> </a>
+                        <a href="javascript:;" onclick="my_update_cache('<?php echo $id;?>', '<?php echo $t['function'];?>', '<?php echo $t['mod'];?>', '<?php echo $t['file'];?>', '<?php echo $t['param'];?>');" class="btn red btn-xs update_cache"><i class="fa fa-refresh"></i> <?php echo L('立即更新');?> </a>
                     </label>
                     <label id="dr_<?php echo $id;?>_result" >
 
@@ -43,14 +42,31 @@ $menu_data = $this->menu_db->get_one(array('name' => 'public_error_log', 'm' => 
                 </td>
             </tr>
             <?php }}?>
-
+            <tr>
+                <td>
+                    <span class="badge badge-success"> <?php echo $id+2;?> </span>
+                </td>
+                <td style="color:blue">
+                    <?php echo L('当版本升级时必须操作');?>
+                </td>
+                <td style="overflow:auto">
+                    <label>
+                        <?php $menu_data = $this->menu_db->get_one(array('name' => 'check', 'm' => 'admin', 'c' => 'check', 'a' => 'init'));?>
+                        <a href="javascript:dr_iframe_show('<?php echo L('升级程序脚本');?>', '?m=admin&c=check&a=init&menuid=<?php echo $menu_data['id']?>&pc_hash='+pc_hash, '500px', '300px');" class="btn red btn-xs"><i class="fa fa-refresh"></i> <?php echo L('立即更新');?> </a>
+                    </label>
+                    <label>
+                        <a href="javascript:dr_load_ajax('<?php echo L('确定初始化后台菜单吗？');?>', '?m=admin&c=menu&a=public_init', 0);" class="btn blue btn-xs"><i class="fa fa-list"></i> <?php echo L('初始化后台菜单');?> </a>
+                    </label>
+                </td>
+            </tr>
             </tbody>
         </table>
     </div>
 </div>
+<?php $menu_data = $this->menu_db->get_one(array('name' => 'public_error_log', 'm' => 'admin', 'c' => 'index', 'a' => 'public_error_log'));?>
 <script>
 function dr_update_cache_all() {
-    $('.btn-xs').trigger('click');
+    $('.update_cache').trigger('click');
 }
 function my_update_cache(id, m, mod, file, param) {
     var obj = $('#dr_'+id+'_result');

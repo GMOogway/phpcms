@@ -87,8 +87,6 @@ class push_api {
 			$siteid = get_siteid();
 			$this->categorys = getcache('category_content_'.$siteid,'commons');
 			$tree = pc_base::load_sys_class('tree');
-			$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
-			$tree->nbsp = '&nbsp;&nbsp;&nbsp;';
 			$categorys = array();
 			$this->catids_string = array();
 			if(!cleck_admin($_SESSION['roleid'])) {
@@ -239,8 +237,6 @@ class push_api {
 			$siteid = get_siteid();
 			$this->categorys = getcache('category_content_'.$siteid,'commons');
 			$tree = pc_base::load_sys_class('tree');
-			$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
-			$tree->nbsp = '&nbsp;&nbsp;&nbsp;';
 			$categorys = array();
 			$this->catids_string = array();
 			if(!cleck_admin($_SESSION['roleid'])) {

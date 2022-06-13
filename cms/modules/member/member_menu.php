@@ -15,8 +15,6 @@ class member_menu extends admin {
 	
 	function manage() {
 		$tree = pc_base::load_sys_class('tree');
-		$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
-		$tree->nbsp = '&nbsp;&nbsp;&nbsp;';
 		$userid = $_SESSION['userid'];
 		$admin_username = param::get_cookie('admin_username');
 

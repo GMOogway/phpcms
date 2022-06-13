@@ -213,7 +213,7 @@ class index extends admin {
 	}
 	
 	//初始化菜单
-	private function menu_init($parentid,$menuid) {
+	private function menu_init($parentid = 0, $menuid = 0) {
 		$parentid = intval($parentid);
 		$menu2db = pc_base::load_model('menu2_model');
 		$where = array('parentid'=>$parentid);

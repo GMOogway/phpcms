@@ -1312,6 +1312,34 @@ function dr_install_confirm() {
 		window.top.$(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.location.reload(!0);
 	})
 }
+// 动态执行链接
+function dr_load_ajax(msg, url, go) {
+	layer.confirm(msg,{
+		icon: 3,
+		shade: 0,
+		title: '提示',
+		btn: ['确定', '取消']
+	}, function(index){
+		layer.close(index);
+		var index = layer.load(2, {
+			shade: [0.3,'#fff'], //0.1透明度的白色背景
+			time: 5000
+		});
+
+		$.ajax({type: "GET",dataType:"json", url: url,
+			success: function(json) {
+				layer.close(index);
+				dr_tips(json.code, json.msg);
+				if (go == 1 && json.code > 0) {
+					setTimeout("window.location.reload(true)", 2000)
+				}
+			},
+			error: function(HttpRequest, ajaxOptions, thrownError) {
+				dr_ajax_alert_error(HttpRequest, this, thrownError);
+			}
+		});
+	});
+}
 function dr_bfb(e, t, a) {
 	layer.load(2, {
 		shade: [.3, "#fff"],
@@ -1543,6 +1571,57 @@ function dr_help(url) {
 		draggable:true
 	});
 	diag.show();
+}
+function dr_slimScroll_init(a, b) {
+	if ($().slimScroll) {
+		var c = a + " .scroller",
+			e = a + " .scroller_body";
+		if ("1" === $(c).attr("data-inited")) {
+			$(c).removeAttr("data-inited");
+			$(c).removeAttr("style");
+			var d = {};
+			$(c).attr("data-handle-color") &&
+				(d["data-handle-color"] = $(c).attr("data-handle-color"));
+			$(c).attr("data-wrapper-class") &&
+				(d["data-wrapper-class"] = $(c).attr("data-wrapper-class"));
+			$(c).attr("data-rail-color") &&
+				(d["data-rail-color"] = $(c).attr("data-rail-color"));
+			$(c).attr("data-always-visible") &&
+				(d["data-always-visible"] = $(c).attr("data-always-visible"));
+			$(c).attr("data-rail-visible") &&
+				(d["data-rail-visible"] = $(c).attr("data-rail-visible"));
+			$(c).slimScroll({
+				wrapperClass: $(c).attr("data-wrapper-class")
+					? $(c).attr("data-wrapper-class")
+					: "slimScrollDiv",
+				destroy: !0
+			});
+			var f = $(c);
+			$.each(d, function (a, b) {
+				f.attr(a, b);
+			});
+		}
+		e = $(e).height() > b ? b : "auto";
+		$(c).slimScroll({
+			allowPageScroll: !1,
+			size: "7px",
+			color: $(c).attr("data-handle-color")
+				? $(c).attr("data-handle-color")
+				: "#bbb",
+			wrapperClass: $(c).attr("data-wrapper-class")
+				? $(c).attr("data-wrapper-class")
+				: "slimScrollDiv",
+			railColor: $(c).attr("data-rail-color")
+				? $(c).attr("data-rail-color")
+				: "#eaeaea",
+			position: "right",
+			height: e,
+			alwaysVisible: "1" == $(c).attr("data-always-visible") ? !0 : !1,
+			railVisible: "1" == $(c).attr("data-rail-visible") ? !0 : !1,
+			disableFadeOut: !0
+		});
+		$(c).attr("data-inited", "1");
+	}
 }
 function check_title(linkurl,title) {
 	if (typeof pc_hash == 'string') linkurl += (linkurl.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;

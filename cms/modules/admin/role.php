@@ -121,8 +121,6 @@ class role extends admin {
 			$roleid = intval($this->input->get('roleid'));
 			if ($siteid) {
 				$menu = pc_base::load_sys_class('tree');
-				$menu->icon = array('│ ','├─ ','└─ ');
-				$menu->nbsp = '&nbsp;&nbsp;&nbsp;';
 				$result = $this->menu_db->select();
 				$priv_data = $this->priv_db->select(); //获取权限表数据
 				$modules = 'admin,system';
@@ -133,7 +131,7 @@ class role extends admin {
 					$result[$n]['parentid_node'] = ($t['parentid'])? ' class="child-of-node-'.$t['parentid'].'"' : '';
 				}
 				$str  = "<tr id='node-\$id' \$parentid_node>
-							<td style='padding-left:30px;'>\$spacer<label class='mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline'><input type='checkbox' class='checkboxes' name='menuid[]' value='\$id' level='\$level' \$checked onclick='javascript:checknode(this);'> \$cname <span></span></label></td>
+							<td class='myselect'>\$spacer<label class='mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline'><input type='checkbox' class='checkboxes' name='menuid[]' value='\$id' level='\$level' \$checked onclick='javascript:checknode(this);'> \$cname <span></span></label></td>
 						</tr>";
 			
 				$menu->init($result);
@@ -211,19 +209,19 @@ class role extends admin {
 			}
 			$show_header = true;
 			$str = "<tr>
-				  <td align='center'><label class='mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline'><input type='checkbox' class='group-checkable' value='1' onclick='select_all(\$catid, this)'><span></span></label></td>
+				  <td class='myselect' align='center'><label class='mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline'><input type='checkbox' class='group-checkable' value='1' onclick='select_all(\$catid, this)'><span></span></label></td>
 				  <td>\$spacer\$catname</td>
-				  <td align='center'><label class='mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline'><input type='checkbox' class='checkboxes' name='priv[\$catid][]' \$init_check value='init'><span></span></label></td>
-				  <td align='center'><label class='mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline'><input type='checkbox' class='checkboxes' name='priv[\$catid][]' \$disabled \$add_check value='add'><span></span></label></td>
-				  <td align='center'><label class='mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline'><input type='checkbox' class='checkboxes' name='priv[\$catid][]' \$disabled \$edit_check value='edit'><span></span></label></td>
-				  <td align='center'><label class='mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline'><input type='checkbox' class='checkboxes' name='priv[\$catid][]' \$disabled \$delete_check  value='delete'><span></span></label></td>
-				  <td align='center'><label class='mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline'><input type='checkbox' class='checkboxes' name='priv[\$catid][]' \$disabled \$listorder_check value='listorder'><span></span></label></td>
-				  <td align='center'><label class='mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline'><input type='checkbox' class='checkboxes' name='priv[\$catid][]' \$disabled \$push_check value='push'><span></span></label></td>
-				  <td align='center'><label class='mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline'><input type='checkbox' class='checkboxes' name='priv[\$catid][]' \$disabled \$move_check value='remove'><span></span></label></td>
-				  <td align='center'><label class='mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline'><input type='checkbox' class='checkboxes' name='priv[\$catid][]' \$disabled \$copy_check value='copy'><span></span></label></td>
-				  <td align='center'><label class='mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline'><input type='checkbox' class='checkboxes' name='priv[\$catid][]' \$disabled \$recycle_init_check value='recycle_init'><span></span></label></td>
-				  <td align='center'><label class='mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline'><input type='checkbox' class='checkboxes' name='priv[\$catid][]' \$disabled \$recycle_check value='recycle'><span></span></label></td>
-				  <td align='center'><label class='mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline'><input type='checkbox' class='checkboxes' name='priv[\$catid][]' \$disabled \$update_check value='update'><span></span></label></td>
+				  <td class='myselect' align='center'><label class='mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline'><input type='checkbox' class='checkboxes' name='priv[\$catid][]' \$init_check value='init'><span></span></label></td>
+				  <td class='myselect' align='center'><label class='mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline'><input type='checkbox' class='checkboxes' name='priv[\$catid][]' \$disabled \$add_check value='add'><span></span></label></td>
+				  <td class='myselect' align='center'><label class='mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline'><input type='checkbox' class='checkboxes' name='priv[\$catid][]' \$disabled \$edit_check value='edit'><span></span></label></td>
+				  <td class='myselect' align='center'><label class='mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline'><input type='checkbox' class='checkboxes' name='priv[\$catid][]' \$disabled \$delete_check  value='delete'><span></span></label></td>
+				  <td class='myselect' align='center'><label class='mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline'><input type='checkbox' class='checkboxes' name='priv[\$catid][]' \$disabled \$listorder_check value='listorder'><span></span></label></td>
+				  <td class='myselect' align='center'><label class='mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline'><input type='checkbox' class='checkboxes' name='priv[\$catid][]' \$disabled \$push_check value='push'><span></span></label></td>
+				  <td class='myselect' align='center'><label class='mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline'><input type='checkbox' class='checkboxes' name='priv[\$catid][]' \$disabled \$move_check value='remove'><span></span></label></td>
+				  <td class='myselect' align='center'><label class='mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline'><input type='checkbox' class='checkboxes' name='priv[\$catid][]' \$disabled \$copy_check value='copy'><span></span></label></td>
+				  <td class='myselect' align='center'><label class='mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline'><input type='checkbox' class='checkboxes' name='priv[\$catid][]' \$disabled \$recycle_init_check value='recycle_init'><span></span></label></td>
+				  <td class='myselect' align='center'><label class='mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline'><input type='checkbox' class='checkboxes' name='priv[\$catid][]' \$disabled \$recycle_check value='recycle'><span></span></label></td>
+				  <td class='myselect' align='center'><label class='mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline'><input type='checkbox' class='checkboxes' name='priv[\$catid][]' \$disabled \$update_check value='update'><span></span></label></td>
 			  </tr>";
 			
 			$tree->init($category);

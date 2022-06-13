@@ -119,7 +119,6 @@ class admin {
 		if($numbers==1 && !$big_menu) return '';
 		$string = '';
 		$pc_hash = dr_get_csrf_token();
-		$_li_class = '';
 		foreach($array as $_value) {
 			if (!$input->get('s')) {
 				$classname = ROUTE_M == $_value['m'] && ROUTE_C == $_value['c'] && ROUTE_A == $_value['a'] ? 'class="on"' : '';
@@ -139,6 +138,7 @@ class admin {
 			if($_value['parentid'] == 0 || $_value['m']=='') continue;
 			// 获取URL
 			$uri = $_value['a'];
+			$_li_class = '';
 			if (strpos($uri, 'ajax:') === 0 || strpos($uri, 'ajax_') === 0) {
 				$url = 'javascript:dr_admin_menu_ajax(\'?m='.$_value['m'].'&c='.$_value['c'].'&a='.substr($uri, 5).$_valuedata.'&menuid='.$parentid.'&pc_hash='.$pc_hash.'\');';
 			} elseif (strpos($uri, 'blank:') === 0) {
@@ -163,7 +163,7 @@ class admin {
 				$url = 'javascript:'.substr($uri, 3).'();';
 			} elseif (strpos($uri, 'hide:') === 0) {
 				$url = dr_now_url();
-				$_li_class = substr($uri, 5) == $input->get('a') ? '' : 'hidden';
+				$_li_class = substr($uri, 5) == $input->get('a') ? '' : '{HIDE}';
 			} elseif (strpos($uri, 'url:') === 0) {
 				$url = substr($uri, 4);
 				if (!$url) {
@@ -176,14 +176,13 @@ class admin {
 				$string .= "<li".($_li_class ? " class=\"" . $_li_class . "\"" : "")."><a href=\"".$url."\" $classname><i class=\"".$_value['icon']."\"></i> ".L($_value['name'])."</a></li><div class=\"dropdown-line\"></div>";
 			} else {
 				if($_li_class) {
-					$string .= "<span class=\"" . $_li_class . "\"><a href=\"".$url."\" $classname><i class=\"".$_value['icon']."\"></i> ".L($_value['name'])."</a></span><i class=\"fa fa-circle\"></i>";
+					$string .= "<span class=\"" . $_li_class . "\"><a href=\"".$url."\" $classname><i class=\"".$_value['icon']."\"></i> ".L($_value['name'])."</a><i class=\"fa fa-circle\"></i></span>";
 				} else {
 					$string .= "<a href=\"".$url."\" $classname><i class=\"".$_value['icon']."\"></i> ".L($_value['name'])."</a><i class=\"fa fa-circle\"></i>";
 				}
 			}
 		}
-		$string = substr($string,0,is_mobile(0) ? -33 : -28);
-		return $string;
+		return str_replace('{HIDE}', 'hidden', $string);
 	}
 	final public static function child_menu($parentid, $self = 0) {
 		$datas = self::admin_menu($parentid);

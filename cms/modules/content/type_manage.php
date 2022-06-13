@@ -173,8 +173,6 @@ class type_manage extends admin {
 		$siteid = $this->siteid;
 		$this->categorys = getcache('category_content_'.$siteid,'commons');
 		$tree = pc_base::load_sys_class('tree');
-		$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
-		$tree->nbsp = '&nbsp;&nbsp;&nbsp;';
 		$categorys = array();
 		$this->catids_string = array();
 		foreach($this->categorys as $r) {

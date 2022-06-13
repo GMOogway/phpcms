@@ -16,7 +16,7 @@ jQuery(document).ready(function() {
     <div class="portlet-title tabbable-line">
         <ul class="nav nav-tabs" style="float:left;">
             <li<?php if ($page==0) {?> class="active"<?php }?>>
-                <a data-toggle="tab_0" onclick="$('#dr_page').val('0')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('catgory_basic', '', 'admin').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-cog"></i> <?php if (!is_mobile(0)) {echo L('catgory_basic', '', 'admin');}?> </a>
+                <a data-toggle="tab_0" onclick="$('#dr_page').val('0')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('catgory_basic', '', 'admin').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-th-list"></i> <?php if (!is_mobile(0)) {echo L('catgory_basic', '', 'admin');}?> </a>
             </li>
             <li<?php if ($page==1) {?> class="active"<?php }?>>
                 <a data-toggle="tab_1" onclick="$('#dr_page').val('1')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('extend_setting').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-cog"></i> <?php if (!is_mobile(0)) {echo L('extend_setting');}?> </a>
@@ -32,19 +32,22 @@ jQuery(document).ready(function() {
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('special_title')?></label>
                         <div class="col-md-9">
-                            <input class="form-control input-large" type="text" id="title" name="special[title]" value="<?php echo new_html_special_chars($info['title']);?>" >
+                            <label><input class="form-control input-large" type="text" id="title" name="special[title]" value="<?php echo new_html_special_chars($info['title']);?>" ></label>
+                            <span class="help-block" id="titleTip"></span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('special_banner')?></label>
                         <div class="col-md-9">
                             <?php echo form::images('special[banner]', 'banner', $info['banner'], 'special')?>
+                            <span class="help-block" id="bannerTip"></span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('sepcial_thumb')?></label>
                         <div class="col-md-9">
                             <?php echo form::images('special[thumb]', 'thumb', $info['thumb'], 'special', '', '', '', '', '', array(350, 350))?>
+                            <span class="help-block" id="thumbTip"></span>
                         </div>
                     </div>
                     <div class="form-group">
@@ -62,8 +65,8 @@ jQuery(document).ready(function() {
                     <div class="form-group" id="file_div" style="display:<?php if($info['ishtml']) {?> <?php } else {?>none<?php }?>;">
                         <label class="col-md-2 control-label"><?php echo L('special_filename')?></label>
                         <div class="col-md-9">
-                            <input type="text" name="special[filename]" id="filename" class="form-control input-large" <?php if($info['ishtml']) {?> readonly<?php }?> value="<?php echo $info['filename']?>">
-                            <span class="help-block"><?php echo L('submit_no_edit')?></span>
+                            <label><input type="text" name="special[filename]" id="filename" class="form-control input-large" <?php if($info['ishtml']) {?> readonly<?php }?> value="<?php echo $info['filename']?>"></label>
+                            <span class="help-block" id="filenameTip"></span>
                         </div>
                     </div>
                     <div class="form-group">
@@ -101,13 +104,7 @@ jQuery(document).ready(function() {
                             <script>
                             var special_type = {"tpl":" <tr id=\"dr_ftable_type_row_{hang}\"> <td></td><td><input type=\"text\" class=\"form-control\" name=\"type[{hang}][name]\" value=\"\"><\/td> <td><input type=\"text\" class=\"form-control\" name=\"type[{hang}][typedir]\" value=\"\"><\/td> <td><input type=\"text\" class=\"form-control\" name=\"type[{hang}][listorder]\" value=\"{hang}\"><\/td> <td style=\"text-align: center\"><button type=\"button\" class=\"btn red btn-xs\" onClick=\"dr_del_table_type(this)\"> <i class=\"fa fa-trash\"><\/i> <\/button><\/td> <\/tr>","id":<?php echo $ksid;?>};
                             function dr_del_table_type(e) {
-                                layer.confirm('确定删除本条数据吗？', {
-                                shade: 0,
-                                title: '提示',
-                                }, function(index, layero){
-                                   layer.close(index);
-                                    $(e).parent().parent().remove();
-                                });
+                                $(e).parent().parent().remove();
                             }
                             function dr_add_table_type() {
                                 var tpl = special_type.tpl;

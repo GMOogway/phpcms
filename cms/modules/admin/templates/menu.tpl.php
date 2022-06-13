@@ -2,171 +2,51 @@
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header');?>
 <?php if(ROUTE_A=='init') {?>
-<link rel="stylesheet" href="<?php echo JS_PATH;?>layui/css/layui.css" media="all" />
-<link rel="stylesheet" href="<?php echo CSS_PATH;?>admin/css/global.css" media="all" />
-<style type="text/css">
-.list_order {text-align: left;}
-</style>
-<script type="text/javascript" src="<?php echo JS_PATH;?>layui/layui.js"></script>
-<div class="admin-main layui-anim layui-anim-upbit">
-    <div class="note note-danger">
-        <a href="?m=admin&c=menu&a=add&menuid=<?php echo $this->input->get('menuid');?>" class="layui-btn layui-btn-sm">
-            <i class="fa fa-plus"></i> <?php echo L('add_menu');?>
-        </a>
-        <a class="layui-btn layui-btn-sm" onclick="Dialog.confirm('<?php echo L('confirm_refresh_menu');?>',function() {dr_admin_menu_ajax('?m=admin&c=menu&a=public_init');});">
-            <i class="fa fa-refresh"></i> <?php echo L('refresh_menu');?>
-        </a>
-        <a class="layui-btn layui-btn-normal layui-btn-sm" onclick="openAll();">
-            <i class="fa fa-folder-open-o"></i> <?php echo L('open_close');?>
-        </a>
-    </div>
-    <table class="layui-table" id="treeTable" lay-filter="treeTable"></table>
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+                <div class="page-body">
+<div class="note note-danger">
+    <p><a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=init&pc_hash='+pc_hash+'&is_ajax=1',1);"><?php echo L('update_cache_all');?></a></p>
 </div>
-<script type="text/html" id="icon">
-    {{# if(d.icon){ }}
-    <i class="{{d.icon}}"></i>
-    {{# } }}
-</script>
-<script type="text/html" id="display">
-    <input type="checkbox" name="display" value="{{d.id}}" lay-skin="switch" lay-text="<?php echo L('display');?>|<?php echo L('hidden');?>" lay-filter="display" {{ d.display == 1 ? 'checked' : '' }}>
-</script>
-<script type="text/html" id="listorder">
-    <input name="{{d.id}}" data-id="{{d.id}}" class="list_order layui-input" value="{{d.listorder}}" size="10"/>
-</script>
-<script type="text/html" id="action">
-    <a href="?m=admin&c=menu&a=add&parentid={{d.id}}&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo $this->input->get('pc_hash');?>" class="layui-btn layui-btn-xs"><i class="fa fa-plus"></i> <?php echo L('add_submenu');?></a>
-    <a href="?m=admin&c=menu&a=edit&id={{d.id}}&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo $this->input->get('pc_hash');?>" class="layui-btn layui-btn-xs"><i class="fa fa-edit"></i> <?php echo L('modify');?></a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="fa fa-trash-o"></i> <?php echo L('delete');?></a>
-</script>
-<script type="text/html" id="topBtn">
-   <a href="?m=admin&c=menu&a=add&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo $this->input->get('pc_hash');?>" class="layui-btn layui-btn-sm"><?php echo L('add_menu');?></a>
-</script>
-<script>
-    var pc_file = '<?php echo JS_PATH;?>';
-    var editObj=null,ptable=null,treeGrid=null,tableId='treeTable',layer=null;
-    layui.config({
-        base: pc_file + 'layui/extend/'
-    }).extend({
-        treeGrid:'treeGrid'
-    }).use(['jquery','treeGrid','layer','form'], function(){
-        var $=layui.jquery;
-        treeGrid = layui.treeGrid;
-        layer=layui.layer;
-        form = layui.form;
-        ptable=treeGrid.render({
-            id:tableId
-            ,elem: '#'+tableId
-            ,idField:'id'
-            ,url:'?m=admin&c=menu&a=init&pc_hash='+pc_hash
-            ,method: 'post'
-            ,where: {csrf_test_name:csrf_hash}
-            ,cellMinWidth: 100
-            ,treeId:'id'//树形id字段名称
-            ,treeManage:'manage'//树形manage字段名称
-            ,treeUpId:'pid'//树形父id字段名称
-            ,treeShowName:'title'//以树形式显示的字段
-            ,height:'full-140'
-            ,isFilter:false
-            ,iconOpen:true//是否显示图标【默认显示】
-            ,isOpenDefault:true//节点默认是展开还是折叠【默认展开】
-            ,cols: [[
-                {field: 'id', title: '<?php echo L('number')?>', width: 80, fixed: true},
-                {field: 'title', title: '<?php echo L('chinese_name')?>'},
-                {field: 'icon',align: 'center', title: '<?php echo L('菜单图标')?>', width: 100,toolbar: '#icon'},
-                {field: 'display',align: 'center', title: '<?php echo L('menu_display')?>', width: 150,toolbar: '#display'},
-                {field: 'listorder',align: 'center', title: '<?php echo L('listorder');?>', width: 80, templet: '#listorder'},
-                {
-                    field: 'type', width: 80, align: 'center', title: '<?php echo L('类型');?>', templet: function (d) {
-                        if (d.pid == 0) {
-                            return '<span class="layui-badge layui-bg-blue"><?php echo L('目录');?></span>';
-                        } else {
-                            if (d.display == 0) {
-                                return '<span class="layui-badge layui-bg-gray"><?php echo L('按钮');?></span>';
-                            } else {
-                                return '<span class="layui-badge layui-bg-cyan"><?php echo L('菜单');?></span>';
-                            }
-                        }
-                    }
-                },
-                {field: 'manage',title: '<?php echo L('operations_manage');?>',width: 240,align: 'center', toolbar: '#action'<?php if(!is_mobile(0)) {?>, fixed: 'right'<?php }?>}
-            ]]
-            ,page:false
-        });
-        treeGrid.on('tool('+tableId+')',function (obj) {
-            var data = obj.data;
-            if(obj.event === 'del'){
-                Dialog.confirm('您确定要删除该记录吗？', function() {
-                    $.ajax({
-                        type: 'post',
-                        url: '?m=admin&c=menu&a=delete&pc_hash='+pc_hash,
-                        data: {id:data.id,dosubmit:1,csrf_test_name:csrf_hash},
-                        dataType: 'json',
-                        success: function(res) {
-                            if (res.code == 1) {
-                                layer.msg(res.msg, {time: 1000, icon: 1}, function () {
-                                    location.reload(true);
-                                });
-                            }else{
-                                dr_tips(0, res.msg);
-                                treeGrid.render;
-                                return false;
-                            }
-                        }
-                    });
-                });
-            }
-        });
-        form.on('switch(display)', function(obj){
-            loading = layer.load(1, {shade: [0.1,'#fff']});
-            var id = this.value;
-            var display = obj.elem.checked===true?1:0;
-            $.ajax({
-                type: 'post',
-                url: '?m=admin&c=menu&a=display&pc_hash='+pc_hash,
-                data: {id:id,display:display,dosubmit:1,csrf_test_name:csrf_hash},
-                dataType: 'json',
-                success: function(res) {
-                    layer.close(loading);
-                    if(res.code == 1){
-                        layer.msg(res.msg, {time: 1000, icon: 1}, function () {
-                            location.reload(true);
-                        });
-                    }else{
-                        dr_tips(0, res.msg);
-                        treeGrid.render;
-                        return false;
-                    }
-                }
-            });
-        });
-        $('body').on('blur','.list_order',function() {
-            var id = $(this).attr('data-id');
-            var listorder = $(this).val();
-            var loading = layer.load(1, {shade: [0.1, '#fff']});
-            $.ajax({
-                type: 'post',
-                url: '?m=admin&c=menu&a=listorder&pc_hash='+pc_hash,
-                data: {id:id,listorder:listorder,dosubmit:1,csrf_test_name:csrf_hash},
-                dataType: 'json',
-                success: function(res) {
-                    layer.close(loading);
-                    if(res.code === 1){
-                        layer.msg(res.msg, {time: 1000, icon: 1}, function () {
-                            location.reload(true);
-                        });
-                    }else{
-                        dr_tips(0, res.msg);
-                        treeGrid.render;
-                    }
-                }
-            });
-        });
-    });
-    function openAll() {
-        var treedata=treeGrid.getDataTreeList(tableId);
-        treeGrid.treeOpenAll(tableId,!treedata[0][treeGrid.config.cols.isOpen]);
-    }
-</script>
+<div class="table-list">
+    <table width="100%" cellspacing="0">
+        <thead>
+		<tr class="heading">
+		<th width="70" style="text-align:center"><?php echo L('listorder')?></th>
+		<th width="60" style="text-align:center"> <?php echo L('可用')?> </th>
+		<th width="300"> <?php echo L('chinese_name')?> </th>
+		<th width="80" style="text-align:center"> <?php echo L('类型')?> </th>
+		<th><?php echo L('operations_manage')?></th>
+		</tr>
+        </thead>
+        <tbody>
+<?php 
+if(is_array($array)){
+	foreach($array as $info){
+?>
+<tr>
+<td style="text-align:center"> <input type="text" onblur="dr_ajax_save(this.value, '?m=admin&c=menu&a=listorder&id=<?php echo $info['id'];?>&pc_hash='+pc_hash, 'listorder')" value="<?php echo $info['listorder'];?>" class="displayorder form-control input-sm input-inline input-mini"> </td>
+<td style="text-align:center"><a href="javascript:;" onclick="dr_ajax_open_close(this, '?m=admin&c=menu&a=display&id=<?php echo $info['id'];?>&pc_hash='+pc_hash, 0);" class="badge badge-<?php if ($info['display']) {?>yes<?php } else { ?>no<?php }?>"><i class="fa fa-<?php if ($info['display']) {?>check<?php } else { ?>times<?php }?>"></i></a></td>
+<td><?php echo $info['spacer'].' '.$info['title'];?></td>
+<td style="text-align:center"><?php echo $info['type'];?></td>
+<td>
+<a href="?m=admin&c=menu&a=add&parentid=<?php echo $info['id'];?>&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo $this->input->get('pc_hash');?>" class="btn btn-xs blue"> <i class="fa fa-plus"></i> <?php echo L('add')?> </a>
+<a href="?m=admin&c=menu&a=edit&id=<?php echo $info['id'];?>&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo $this->input->get('pc_hash');?>" class="btn btn-xs green"> <i class="fa fa-edit"></i> <?php echo L('edit')?></a>
+<a href="javascript:confirmurl('?m=admin&c=menu&a=delete&id=<?php echo $info['id'];?>&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo $this->input->get('pc_hash');?>', '您确定要删除该菜单吗？')" class="btn btn-xs red"> <i class="fa fa-trash-o"></i> <?php echo L('delete');?></a>
+</td>
+</tr>
+<?php 
+	}
+}
+?>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
 </body>
 </html>
 
@@ -186,6 +66,7 @@ include $this->admin_tpl('header');?>
 </script>
 <div class="pad_10">
 <form name="myform" id="myform" action="?m=admin&c=menu&a=add" method="post">
+<input name="menuid" type="hidden" value="<?php echo $this->input->get('menuid');?>">
 <div class="myfbody">
 <table width="100%" class="table_form contentWrap">
       <tr>
@@ -259,6 +140,7 @@ include $this->admin_tpl('header');?>
 </script>
 <div class="pad_10">
 <form name="myform" id="myform" action="?m=admin&c=menu&a=edit" method="post">
+<input name="menuid" type="hidden" value="<?php echo $this->input->get('menuid');?>">
 <div class="myfbody">
 <table width="100%" class="table_form contentWrap">
       <tr>

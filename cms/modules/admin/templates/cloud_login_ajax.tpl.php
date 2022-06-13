@@ -3,7 +3,6 @@ defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header', 'admin');?>
 <style type="text/css">
 body {background-color: #fff;}
-.page-content-wrapper .page-content {padding: 25px 20px 10px;}
 </style>
 <div class="page-container" style="margin-bottom: 0px !important;">
     <div class="page-content-wrapper">

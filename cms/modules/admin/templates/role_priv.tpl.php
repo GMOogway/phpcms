@@ -40,27 +40,23 @@ include $this->admin_tpl('header');
   }
 </script>
 <?php if($siteid) {?>
-<div class="table-list" id="load_priv">
-<table width="100%" cellspacing="0">
-	<thead>
-	<tr>
-	<th><label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline"><input type="checkbox" class="group-checkable" id="check_box" onclick="selectall('menuid[]');"><span></span></label></th>
-	</tr>
-	</thead>
-</table>
-</div>
-<form name="myform" action="?m=admin&c=role&a=role_priv" method="post">
+<form class="form-horizontal" name="myform" id="myform" action="?m=admin&c=role&a=role_priv" method="post">
 <input type="hidden" name="roleid" value="<?php echo $roleid?>"></input>
 <input type="hidden" name="siteid" value="<?php echo $siteid?>"></input>
 <div class="myfbody">
-<div class="table-list">
-<table width="100%" cellspacing="0" id="dnd-example">
+<div class="table-scrollable">
+<table class="table table-nomargin table-bordered table-striped table-bordered table-advance" id="dnd-example">
+<thead>
+<tr class="heading">
+<th class="myselect">
+<label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline"><input type="checkbox" class="group-checkable" value="" id="check_box" onclick="selectall('menuid[]');" /><span></span></label></th>
+</tr>
+</thead>
 <tbody>
 <?php echo $categorys;?>
 </tbody>
-</table>
+    </table>
 </div>
-
 <div class="portlet-body form myfooter">
 <div class="form-actions text-center"><input type="submit"  class="button" name="dosubmit" id="dosubmit" value="<?php echo L('submit');?>" /></div>
 </div>

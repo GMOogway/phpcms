@@ -1,6 +1,10 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');?>
+<script type="text/javascript">var bs_selectAllText = '全选';var bs_deselectAllText = '全删';var bs_noneSelectedText = '没有选择'; var bs_noneResultsText = '没有找到 {0}';</script>
+<link href="<?php echo JS_PATH?>bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" type="text/css" />
+<script src="<?php echo JS_PATH?>bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
+<script type="text/javascript">jQuery(document).ready(function(){$('.bs-select').selectpicker();});</script>
 <div class="page-container" style="margin-bottom: 0px !important;">
     <div class="page-content-wrapper">
         <div class="page-content page-content3 mybody-nheader main-content main-content2">
@@ -10,8 +14,8 @@ include $this->admin_tpl('header','admin');?>
     <div class="form-body">
 
         <div class="form-group">
-            <select class="bs-select form-control" name='catid[]' id='catid' multiple="multiple" style="height:200px;" title="<?php echo L('push_ctrl_to_select');?>">
-            <option value='0' selected><?php echo L('no_limit_category');?></option>
+            <select class="bs-select form-control" name='catid[]' id='catid' multiple="multiple" style="height:200px;">
+            <option value='0'><?php echo L('全部栏目');?></option>
             <?php echo $string;?>
             </select>
         </div>

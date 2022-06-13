@@ -157,9 +157,12 @@ class guestbook extends admin {
 	 * 修改留言板 分类
 	 */
 	public function edit_type() {
-		if($this->input->post('dosubmit')){
+		if(IS_AJAX_POST){
 			$typeid = intval($this->input->get('typeid'));
 			$type = $this->input->post('type');
+			if(empty($type['name'])) {
+				dr_admin_msg(0,L('typename_noempty'), array('field' => 'name'));
+			}
 			if($typeid < 1) return false;
 			if(!is_array($type) || empty($type)) return false;
 			if((!$type['name']) || empty($type['name'])) return false;

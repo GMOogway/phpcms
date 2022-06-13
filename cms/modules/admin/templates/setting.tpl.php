@@ -4,22 +4,6 @@ include $this->admin_tpl('header');?>
 <link rel="stylesheet" href="<?php echo JS_PATH;?>bootstrap-switch/css/bootstrap-switch.min.css" media="all" />
 <script type="text/javascript" src="<?php echo JS_PATH;?>bootstrap-switch/js/bootstrap-switch.min.js"></script>
 <script type="text/javascript">
-<!--
-    $(function(){
-        $.formValidator.initConfig({formid:"myform",autotip:true,onerror:function(msg,obj){Dialog.alert(msg,function(){$(obj).focus();})}});
-        $("#dr_js_path").formValidator({onshow:"<?php echo L('setting_input').L('setting_js_path')?>",onfocus:"<?php echo L('setting_js_path').L('setting_end_with_x')?>"}).inputValidator({onerror:"<?php echo L('setting_js_path').L('setting_input_error')?>"}).regexValidator({regexp:"(.+)\/$",onerror:"<?php echo L('setting_js_path').L('setting_end_with_x')?>"});
-        $("#dr_css_path").formValidator({onshow:"<?php echo L('setting_input').L('setting_css_path')?>",onfocus:"<?php echo L('setting_css_path').L('setting_end_with_x')?>"}).inputValidator({onerror:"<?php echo L('setting_css_path').L('setting_input_error')?>"}).regexValidator({regexp:"(.+)\/$",onerror:"<?php echo L('setting_css_path').L('setting_end_with_x')?>"});
-
-        $("#dr_img_path").formValidator({onshow:"<?php echo L('setting_input').L('setting_img_path')?>",onfocus:"<?php echo L('setting_img_path').L('setting_end_with_x')?>"}).inputValidator({onerror:"<?php echo L('setting_img_path').L('setting_input_error')?>"}).regexValidator({regexp:"(.+)\/$",onerror:"<?php echo L('setting_img_path').L('setting_end_with_x')?>"});
-        $("#dr_mobile_js_path").formValidator({onshow:"<?php echo L('setting_input').L('setting_mobile_js_path')?>",onfocus:"<?php echo L('setting_mobile_js_path').L('setting_end_with_x')?>"}).inputValidator({onerror:"<?php echo L('setting_mobile_js_path').L('setting_input_error')?>"}).regexValidator({regexp:"(.+)\/$",onerror:"<?php echo L('setting_mobile_js_path').L('setting_end_with_x')?>"});
-        $("#dr_mobile_css_path").formValidator({onshow:"<?php echo L('setting_input').L('setting_mobile_css_path')?>",onfocus:"<?php echo L('setting_mobile_css_path').L('setting_end_with_x')?>"}).inputValidator({onerror:"<?php echo L('setting_mobile_css_path').L('setting_input_error')?>"}).regexValidator({regexp:"(.+)\/$",onerror:"<?php echo L('setting_mobile_css_path').L('setting_end_with_x')?>"});
-
-        $("#dr_mobile_img_path").formValidator({onshow:"<?php echo L('setting_input').L('setting_mobile_img_path')?>",onfocus:"<?php echo L('setting_mobile_img_path').L('setting_end_with_x')?>"}).inputValidator({onerror:"<?php echo L('setting_mobile_img_path').L('setting_input_error')?>"}).regexValidator({regexp:"(.+)\/$",onerror:"<?php echo L('setting_mobile_img_path').L('setting_end_with_x')?>"});
-
-        $("#dr_errorlog_size").formValidator({onshow:"<?php echo L('setting_errorlog_hint')?>",onfocus:"<?php echo L('setting_input').L('setting_error_log_size')?>"}).inputValidator({onerror:"<?php echo L('setting_error_log_size').L('setting_input_error')?>"}).regexValidator({regexp:"num",datatype:"enum",onerror:"<?php echo L('setting_errorlog_type')?>"});
-//-->
-</script>
-<script type="text/javascript">
 jQuery(document).ready(function() {
     $(":text").removeClass('input-text');
 });

@@ -1008,6 +1008,10 @@ table.dataTable tr.heading>th {background-color: #fbfcfd;}
 	.page-content-wrapper .page-content {
 		padding: 25px 5px 0 5px;
 	}
+	.main-content2 {
+		padding-left: 15px!important;
+		padding-right: 15px!important;
+	}
 	.page-bar .dropdown-menu,.page-bar .page-breadcrumb {
 		float: right;
 		right: 10px;

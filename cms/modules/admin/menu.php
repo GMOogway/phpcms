@@ -11,30 +11,28 @@ class menu extends admin {
 		$this->module_db = pc_base::load_model('module_model');
 	}
 	
-	function init () {
-		$show_header = true;
-		$tablename = $this->db->db_tablepre.'menu';
-		if (!$this->db->field_exists('icon')) {
-			$this->db->query('ALTER TABLE `'.$tablename.'` ADD `icon` varchar(255) NULL DEFAULT NULL COMMENT \'图标标示\' AFTER `data`');
-		}
-		$userid = $_SESSION['userid'];
-		$admin_username = param::get_cookie('admin_username');
-		$table_name = $this->db->table_name;
-		if (IS_POST) {
-			$list = $this->db->select('','*','','listorder ASC,id ASC');
-			$array = array();
-			foreach($list as $r) {
-				$rs['id'] = $r['id'];
-				$rs['title'] = L($r['name']);
-				$rs['pid'] = $r['parentid'];
-				$rs['icon'] = $r['icon'];
-				$rs['display'] = $r['display'];
-				$rs['listorder'] = $r['listorder'];
-				$rs['manage'] = '<a href="?m=admin&c=menu&a=add&parentid='.$r['id'].'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash').'" class="layui-btn layui-btn-xs"><i class="fa fa-plus"></i> '.L('add_submenu').'</a><a href="?m=admin&c=menu&a=edit&id='.$r['id'].'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash').'" class="layui-btn layui-btn-xs"><i class="fa fa-edit"></i> '.L('modify').'</a><a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="fa fa-trash-o"></i> '.L('delete').'</a>';
-				$array[] = $rs;
+	function init() {
+		$list = $this->db->select('','*','','listorder ASC,id ASC');
+		$array = array();
+		foreach($list as $r) {
+			$rs['id'] = $r['id'];
+			$rs['title'] = '<i class="'.$r['icon'].'"></i> '.L($r['name']);
+			$rs['parentid'] = $r['parentid'];
+			$rs['display'] = $r['display'];
+			$rs['listorder'] = $r['listorder'];
+			if ($r['parentid'] == 0) {
+				$rs['type'] = '<span class="btn btn-xs yellow">'.L('目录').'</span>';
+			} else {
+				if ($r['display'] == 0) {
+					$rs['type'] = '<span class="btn btn-xs btn-default">'.L('按钮').'</span>';
+				} else {
+					$rs['type'] = '<span class="btn btn-xs dark">'.L('菜单').'</span>';
+				}
 			}
-			exit(json_encode(array('code'=>0,'msg'=>L('to_success'),'data'=>$array,'rel'=>1)));
+			$array[] = $rs;
 		}
+		$tree = pc_base::load_sys_class('tree');
+		$array = $tree->get($array);
 		include $this->admin_tpl('menu');
 	}
 	function add() {
@@ -55,7 +53,7 @@ class menu extends admin {
 				file_put_contents($file,$data);
 			}
 			//结束
-			dr_admin_msg(1,L('add_success'), '?m=admin&c=menu&a=init');
+			dr_admin_msg(1,L('add_success'), '?m=admin&c=menu&a=init&menuid='.$this->input->post('menuid'));
 		} else {
 			$show_validator = '';
 			$tree = pc_base::load_sys_class('tree');
@@ -74,13 +72,13 @@ class menu extends admin {
 		}
 	}
 	function delete() {
-		if($this->input->post('dosubmit')) {
-			$id = intval($this->input->post('id'));
+		if($this->input->get('id')) {
+			$id = intval($this->input->get('id'));
 			$this->delete_child($id);
 			$this->db->delete(array('id'=>$id));
-			dr_json(1, L('operation_success'));
+			dr_admin_msg(1, L('operation_success'), '?m=admin&c=menu&a=init&menuid='.$this->input->get('menuid'));
 		} else {
-			dr_json(0, L('operation_failure'));
+			dr_admin_msg(0, L('operation_failure'), '?m=admin&c=menu&a=init&menuid='.$this->input->get('menuid'));
 		}
 	}
 	/**
@@ -120,7 +118,7 @@ class menu extends admin {
 			$this->update_menu_models($id, $r, $this->input->post('info'));
 			
 			//结束语言文件修改
-			dr_admin_msg(1,L('operation_success'), '?m=admin&c=menu&a=init');
+			dr_admin_msg(1,L('operation_success'), '?m=admin&c=menu&a=init&menuid='.$this->input->post('menuid'));
 		} else {
 			$show_validator = '';
 			$tree = pc_base::load_sys_class('tree');
@@ -209,28 +207,23 @@ class menu extends admin {
 		dr_json(1, L('refresh_menu_ok'));
 	}
 	
-	/**
-	 * 更新
-	 */
+	// 隐藏或者启用
 	function display() {
-		if($this->input->post('dosubmit')) {
-			$this->db->update(array('display'=>$this->input->post('display')),array('id'=>$this->input->post('id')));
-			dr_json(1, L('operation_success'));
-		} else {
-			dr_json(0, L('operation_failure'));
-		}
+		$i = intval($this->input->get('id'));
+		$v = $this->db->get_one(array('id'=>$i));
+		if (!$v) {
+		    dr_json(0, L('数据#'.$i.'不存在'));
+        }
+		$v = (int)$v['display'] ? 0 : 1;
+		$this->db->update(array('display'=>$v),array('id'=>$i));
+		dr_json(1, L($v ? '此菜单已被启用' : '此菜单已被隐藏'), array('value' => $v));
 	}
 	
-	/**
-	 * 排序
-	 */
-	function listorder() {
-		if($this->input->post('dosubmit')) {
-			$this->db->update(array('listorder'=>$this->input->post('listorder')),array('id'=>$this->input->post('id')));
-			dr_json(1, L('operation_success'));
-		} else {
-			dr_json(0, L('operation_failure'));
-		}
+	// 保存数据
+	public function listorder() {
+		$i = intval($this->input->get('id'));
+		$this->db->update(array(dr_safe_replace($this->input->get('name'))=>dr_safe_replace($this->input->get('value'))),array('id'=>$i));
+		dr_json(1, L('operation_success'));
 	}
 	
 	/**

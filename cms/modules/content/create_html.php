@@ -80,8 +80,6 @@ class create_html extends admin {
 			$modelid = $this->input->get('modelid') ? intval($this->input->get('modelid')) : $module['modelid'];
 			
 			$tree = pc_base::load_sys_class('tree');
-			$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
-			$tree->nbsp = '&nbsp;&nbsp;&nbsp;';
 			$categorys = array();
 			if(!empty($this->categorys)) {
 				foreach($this->categorys as $catid=>$r) {
@@ -180,8 +178,6 @@ class create_html extends admin {
 			$modelid = $this->input->get('modelid') ? intval($this->input->get('modelid')) : 0;
 			
 			$tree = pc_base::load_sys_class('tree');
-			$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
-			$tree->nbsp = '&nbsp;&nbsp;&nbsp;';
 			$categorys = array();
 			if(!empty($this->categorys)) {
 				foreach($this->categorys as $catid=>$r) {
@@ -540,8 +536,6 @@ class create_html extends admin {
 	public function public_html_index() {
 		$show_header = $show_dialog  = true;
 		$tree = pc_base::load_sys_class('tree');
-		$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
-		$tree->nbsp = '&nbsp;&nbsp;&nbsp;';
 		$categorys = array();
 		if(!empty($this->categorys)) {
 			foreach($this->categorys as $catid=>$r) {
@@ -741,8 +735,6 @@ class create_html extends admin {
 		$show_header = $show_dialog  = true;
 		$modelid = intval($this->input->get('modelid'));
 		$tree = pc_base::load_sys_class('tree');
-		$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
-		$tree->nbsp = '&nbsp;&nbsp;&nbsp;';
 		$categorys = array();
 		if(!empty($this->categorys)) {
 			foreach($this->categorys as $catid=>$r) {
@@ -824,8 +816,6 @@ class create_html extends admin {
 		$show_header = $show_dialog  = true;
 		$modelid = intval($this->input->get('modelid'));
 		$tree = pc_base::load_sys_class('tree');
-		$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
-		$tree->nbsp = '&nbsp;&nbsp;&nbsp;';
 		$categorys = array();
 		if(!empty($this->categorys)) {
 			foreach($this->categorys as $catid=>$r) {
@@ -908,8 +898,6 @@ class create_html extends admin {
 		$show_header = $show_dialog  = true;
 		$modelid = intval($this->input->get('modelid'));
 		$tree = pc_base::load_sys_class('tree');
-		$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
-		$tree->nbsp = '&nbsp;&nbsp;&nbsp;';
 		$categorys = array();
 		if(!empty($this->categorys)) {
 			foreach($this->categorys as $catid=>$r) {
@@ -996,8 +984,6 @@ class create_html extends admin {
 		$show_header = $show_dialog  = true;
 		$modelid = intval($this->input->get('modelid'));
 		$tree = pc_base::load_sys_class('tree');
-		$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
-		$tree->nbsp = '&nbsp;&nbsp;&nbsp;';
 		$categorys = array();
 		if(!empty($this->categorys)) {
 			foreach($this->categorys as $catid=>$r) {
@@ -1092,8 +1078,6 @@ class create_html extends admin {
 		$show_header = $show_dialog  = true;
 		$modelid = intval($this->input->get('modelid'));
 		$tree = pc_base::load_sys_class('tree');
-		$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
-		$tree->nbsp = '&nbsp;&nbsp;&nbsp;';
 		$categorys = array();
 		if(!empty($this->categorys)) {
 			foreach($this->categorys as $catid=>$r) {
@@ -1551,6 +1535,15 @@ class create_html extends admin {
 		$msg.= '</select>';
 
 		dr_json(1, $msg);
+	}
+
+	public function public_test_index() {
+		$kw = 'iphone手机出现“白苹果”原因及解决办法，用苹果手机的可以看下';
+		$rt = dr_get_keywords($kw);
+		if (!$rt) {
+			exit('测试失败：无法提取到关键词');
+		}
+		exit('原文：'.$kw.'<br>测试成功：'.$rt);
 	}
 }
 ?>

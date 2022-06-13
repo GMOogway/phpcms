@@ -221,8 +221,6 @@ class googlesitemap extends admin {
 			} else {
 				$show_header = $show_dialog = true;
 				$tree = pc_base::load_sys_class('tree');
-				$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
-				$tree->nbsp = '&nbsp;&nbsp;&nbsp;';
 				$categorys = array();
 				foreach($this->categorys as $catid=>$r) {
 					if($this->siteid != $r['siteid']) continue;

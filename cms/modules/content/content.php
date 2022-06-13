@@ -1593,8 +1593,6 @@ class content extends admin {
 			$catid = intval($this->input->get('catid'));
 			$modelid = $this->categorys[$catid]['modelid'];
 			$tree = pc_base::load_sys_class('tree');
-			$tree->icon = array('&nbsp;&nbsp;│ ','&nbsp;&nbsp;├─ ','&nbsp;&nbsp;└─ ');
-			$tree->nbsp = '&nbsp;&nbsp;';
 			$categorys = array();
 			foreach($this->categorys as $cid=>$r) {
 				if($this->siteid != $r['siteid'] || $r['type']) continue;
@@ -1634,8 +1632,6 @@ class content extends admin {
 		$this->categorys = getcache('category_content_'.$siteid,'commons');
 		$models = getcache('model','commons');
 		$tree = pc_base::load_sys_class('tree');
-		$tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
-		$tree->nbsp = '&nbsp;&nbsp;&nbsp;';
 		$categorys = array();
 		if(!cleck_admin($_SESSION['roleid'])) {
 			$this->priv_db = pc_base::load_model('category_priv_model');
