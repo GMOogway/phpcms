@@ -37,10 +37,6 @@ include $this->admin_tpl('header', 'admin');?>
 </div>
 </div>
 </div>
-</body>
-</html>
-
-
 <?php } elseif(ROUTE_A=='add') {?>
 <script type="text/javascript">
 <!--
