@@ -47,10 +47,6 @@ if(is_array($array)){
 </div>
 </div>
 </div>
-</body>
-</html>
-
-
 <?php } elseif(ROUTE_A=='add') {?>
 <script type="text/javascript">
 <!--
