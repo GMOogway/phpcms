@@ -49,6 +49,8 @@ class function_list {
             $url = '?m='.$this->m.'&c='.$this->c.'&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'';
         }
 
+        $this->m!='content' && $this->c!='content' && $data['url'] = $url = '';
+
         return isset($data['url']) && $data['url'] && $url ? ('<a href="'.$url.'" target="_blank"'.($data['status']!=99 ? ' onclick=\'window.open("?m='.$this->m.'&c='.$this->c.'&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'","manage")\'' : '').' class="tooltips" data-container="body" data-placement="top" data-original-title="'.$value.'" title="'.$value.'">'.$title.'</a>'.($data['islink'] > 0 ? '  <i class="fa fa-link font-green tooltips" data-container="body" data-placement="top" data-original-title="'.L('转向链接').'" title="'.L('转向链接').'"></i>' : '')) : $title;
     }
 
@@ -76,6 +78,8 @@ class function_list {
         } else {
             $url = '?m='.$this->m.'&c='.$this->c.'&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'';
         }
+
+        $this->m!='content' && $this->c!='content' && $data['url'] = $url = '';
 
         return isset($data['url']) && $data['url'] && $url ? '<a href="'.$url.'" target="_blank"'.($data['status']!=99 ? ' onclick=\'window.open("?m='.$this->m.'&c='.$this->c.'&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'","manage")\'' : '').' class="tooltips" data-container="body" data-placement="top" data-original-title="'.$value.'" title="'.$value.'">'.$title.'</a>' : $title;
     }
@@ -220,6 +224,8 @@ class function_list {
         } else {
             $url = '?m='.$this->m.'&c='.$this->c.'&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'';
         }
+
+        $this->m!='content' && $this->c!='content' && $data['url'] = $url = '';
 
         $html = isset($data['url']) && $data['url'] && $url ? ('<a href="'.$url.'" target="_blank"'.($data['status']!=99 ? ' onclick=\'window.open("?m='.$this->m.'&c='.$this->c.'&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'","manage")\'' : '').' class="tooltips" data-container="body" data-placement="top" data-original-title="'.$value.'" title="'.$value.'">'.$title.'</a>'.($data['islink'] > 0 ? '  <i class="fa fa-link font-green tooltips" data-original-title="'.L('转向链接').'" title="'.L('转向链接').'"></i>' : '')) : $title;
         if ($data['id']) {

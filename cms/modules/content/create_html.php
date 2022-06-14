@@ -1491,7 +1491,7 @@ class create_html extends admin {
 			$this->db->query($sql);
 		}
 
-		html_msg(1, L('正在执行中【%s】...', "$tpage/$page"), $url.'&tpage='.$tpage.'&page='.($page+1));
+		html_msg(1, L('正在执行中【'.$tpage.'/'.$page.'】...'), $url.'&tpage='.$tpage.'&page='.($page+1));
 	}
 	// 检测字段是否存在
 	private function _is_rp_field($f, $table) {

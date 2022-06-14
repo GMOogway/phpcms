@@ -247,11 +247,12 @@ textarea.form-control {height: auto;}
 .subnav{border-bottom: 1px solid #e7ecf1;border-radius: 0;background-color: #fff;padding: 0 20px;margin: 0;position: fixed;top: 0;left: 0;right: 0;z-index: 1000;}
 .subnav:after,.subnav:before {content: " ";display: table;}
 .content-menu{padding: 11px 0;display: inline-block;margin: 0;list-style: none;}
-.content-header {padding-top: 49px;background: #f5f6f8;}
 .content-menu a{color: #888;}
 .content-menu .on,.content-menu a:focus,.content-menu a:hover{color:#3ea9e2!important;text-decoration: none;}
 .content-menu a [class*=" fa-"],.content-menu a [class*=" glyphicon-"],.content-menu a [class*=" icon-"],.content-menu a [class^=fa-],.content-menu a [class^=glyphicon-],.content-menu a [class^=icon-] {display: inline-block;width: 1.25em;text-align: center;}
 .content-menu>i.fa-circle {font-size: 5px;margin: 0 10px;position: relative;top: -1px;opacity: .4;filter: alpha(opacity=40);color: #aaa;}
+.content-header {padding-top: 44px;background: #f5f6f8;}
+.dr_total{font-size: 10px; color:#ccc;}
 .tabBut li a{color: #fff;}
 .tabBut .on,.tabBut li:hover{background: #19aa8d;color:#fff;border: 1px solid #19aa8d;}
 .tabBut li{margin-left: -8px;padding: 7px 10px;border-radius: 2px;box-shadow: 0px 1px 2px rgba(0,0,0,0.1); background: #3498db;color:#fff;border: 1px solid #3498db;}

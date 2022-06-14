@@ -320,7 +320,6 @@ class cache_api {
 			$this->sitemodel_field($r['modelid']);
 		}
 		setcache('model', $model_array, 'commons');
-		$this->cache = pc_base::load_sys_class('cache');
 		$data = $this->db->select();
 		if ($data) {
 			foreach ($data as $t) {
@@ -440,7 +439,6 @@ class cache_api {
 	 * 更新会员配置缓存方法
 	 */
 	public function member_setting() {
-		$this->cache = pc_base::load_sys_class('cache');
 		$this->db = pc_base::load_model('module_model');
 		$member_setting = $this->db->get_one(array('module'=>'member'), 'setting');
 		if ($member_setting) {

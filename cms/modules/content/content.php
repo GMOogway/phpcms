@@ -47,6 +47,35 @@ class content extends admin {
 			$this->form_cache = $this->sitemodel[$this->form['tablename']];
 			$field = $this->form_cache['field'];
 			$list_field = $this->form_cache['setting']['list_field'];
+			if (!$list_field) {
+				$list_field = array(
+					'title' => array(
+						'use' => 1,
+						'name' => L('主题'),
+						'width' => '',
+						'func' => 'title',
+					),
+					'username' => array(
+						'use' => 1,
+						'name' => L('用户名'),
+						'width' => '100',
+						'func' => 'author',
+					),
+					'updatetime' => array(
+						'use' => 1,
+						'name' => L('更新时间'),
+						'width' => '160',
+						'func' => 'datetime',
+					),
+					'listorder' => array(
+						'use' => 1,
+						'name' => L('排序'),
+						'width' => '100',
+						'center' => 1,
+						'func' => 'save_text_value',
+					),
+				);
+			}
 			$date_field = $this->form_cache['setting']['search_time'] ? $this->form_cache['setting']['search_time'] : 'updatetime';
 			$model_arr = getcache('model', 'commons');
 			$MODEL = $model_arr[$modelid];

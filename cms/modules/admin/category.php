@@ -9,86 +9,217 @@ class category extends admin {
 	function __construct() {
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
+		$this->cache = pc_base::load_sys_class('cache');
 		$this->db = pc_base::load_model('category_model');
 		$this->menu_db = pc_base::load_model('menu_model');
+		$this->field_db = pc_base::load_model('sitemodel_field_model');
 		$this->siteid = $this->get_siteid();
+		$this->cat_config = $this->cache->get_file('category');
+		if (!$this->cat_config) {
+			$this->cat_config = [
+				'sys_field' => ['listorder', 'ismenu', 'disabled', 'iscatpos', 'isleft', 'id', 'typename', 'modelname'],
+				'list_field' => [],
+			];
+		}
+		if (isset($this->cat_config['popen']) && $this->cat_config['popen']) {
+			define('SYS_CAT_POPEN', 1);
+		}
 	}
 	/**
 	 * 管理栏目
 	 */
-	public function init () {
-		$show_header = $show_dialog = $show_pc_hash = true;
-		if (IS_POST) {
-			$tree = pc_base::load_sys_class('tree');
-			$models = getcache('model','commons');
-			$sitelist = getcache('sitelist','commons');
-			$category_items = array();
-			foreach ($models as $modelid=>$model) {
-				$category_items[$modelid] = getcache('category_items_'.$modelid,'commons');
-			}
-			$array = array();
-			//读取缓存
-			$result = getcache('category_content_'.$this->siteid,'commons');
-			$html_root = SYS_HTML_ROOT;
-			if(!empty($result)) {
-				foreach($result as $r) {
-					$rs['id'] = $r['catid'];
-					$rs['title'] = $r['catname'];
-					$rs['pid'] = $r['parentid'];
-					$rs['modelname'] = $models[$r['modelid']]['name'];
-					$rs['type'] = $r['type'];
-					if ($r['type'] == 0) {
-						if ($r['child']) {
-							$rs['typename'] = '<a class="badge badge-danger" onmouseover="layer.tips(\''.L('当栏目存在子栏目时我们称之为封面').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"> '.L('封面').' </a>';
-						} else {
-							$rs['typename'] = '<a class="badge badge-success" onmouseover="layer.tips(\''.L('最终的栏目我们称之为列表').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"> '.L('列表').' </a>';
-						}
-					} elseif ($r['type'] == 2) {
-						$rs['typename'] = '<a class="badge badge-warning" onmouseover="layer.tips(\''.L('属于外部链接').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"> '.L('外链').' </a>';
-					} else {
-						$rs['typename'] = '<a class="badge badge-info" onmouseover="layer.tips(\''.L('不可发布内容的介绍性质页面，例如关于我们等页面').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"> '.L('单页').' </a>';
-					}
-					$rs['display_icon'] = $r['ismenu'] ? '' : ' <img src ="'.IMG_PATH.'icon/gear_disable.png" onmouseover="layer.tips(\''.L('not_display_in_menu').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();">';
-					if($r['type'] || $r['child']) {
-						$rs['items'] = '-';
-					} else {
-						$rs['items'] = $category_items[$r['modelid']][$r['catid']];
-					}
-					$setting = string2array($r['setting']);
-					if($r['url']) {
-						if(preg_match('/^(http|https):\/\//', $r['url'])) {
-							$catdir = $r['catdir'];
-							$prefix = $r['sethtml'] ? '' : $html_root;
-							if($this->siteid==1) {
-								$catdir = $prefix.'/'.$r['parentdir'].$catdir;
-							} else {
-								$catdir = $prefix.'/'.$sitelist[$this->siteid]['dirname'].$html_root.'/'.$catdir;
-							}
-							if($r['type']==0 && $setting['ishtml'] && strpos($r['url'], '?')===false && substr_count($r['url'],'/')<4) $rs['help'] = '<span class="layui-btn layui-btn-xs layui-btn-green"><i class="fa fa-question-circle-o" onmouseover="layer.tips(\''.L('tips_domain').$r['url'].'<br>'.L('directory_binding').'<br>'.$catdir.'/\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"></i></span>';
-							$rs['url'] = $r['url'];
-						} else {
-							$rs['url'] = substr($sitelist[$this->siteid]['domain'],0,-1).$r['url'];
-						}
-					} else {
-						$rs['url'] = $r['url'];
-					}
-					$rs['ismenu'] = $r['ismenu'];
-					$rs['disabled'] = $setting['disabled'];
-					$rs['iscatpos'] = $setting['iscatpos'];
-					$rs['isleft'] = $setting['isleft'];
-					$rs['listorder'] = $r['listorder'];
-					if ($r['url']) {
-						$vistor = '<a href="'.$r['url'].'" target="_blank" class="btn btn-xs blue"><i class="fa fa-eye"></i> '.L('vistor').'</a>';
-					} else {
-						$vistor = '<a href="?m=admin&c=category&a=public_cache&menuid='.$this->input->get('menuid').'" class="layui-btn layui-btn-xs layui-btn-danger"><i class="fa fa-refresh"></i> '.L('update_backup').'</a>';
-					}
-					$rs['manage'] = '<a href="javascript:dr_iframe(\'add\', \'?m=admin&c=category&a=add&parentid='.$r['catid'].'&menuid='.$this->input->get('menuid').'&s='.$r['type'].'&pc_hash='.$this->input->get('pc_hash').'\', \'80%\', \'80%\')" class="btn btn-xs blue"><i class="fa fa-plus"></i> '.L('add_sub_category').'</a> <a href="javascript:dr_iframe(\'edit\', \'?m=admin&c=category&a=edit&catid='.$r['catid'].'&menuid='.$this->input->get('menuid').'&type='.$r['type'].'&pc_hash='.$this->input->get('pc_hash').'\', \'80%\', \'80%\')" class="btn btn-xs green"><i class="fa fa-edit"></i> '.L('edit').'</a> <a class="btn btn-xs red" lay-event="del"><i class="fa fa-trash-o"></i> '.L('delete').'</a> <a href="?m=admin&c=category&a=remove&catid='.$r['catid'].'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash').'" class="btn btn-xs yellow"><i class="fa fa-arrows"></i> '.L('remove','','content').'</a>';
-					$array[] = $rs;
+	public function init() {
+		$show_pc_hash = true;
+		list($cat_head, $cat_list, $pcats) = $this->_get_tree_list($this->cat_data(0));
+		include $this->admin_tpl('category_manage');
+	}
+	// 获取树形结构列表
+	protected function _get_tree_list($data) {
+		$models = getcache('model','commons');
+		$sitelist = getcache('sitelist','commons');
+		$category_items = array();
+		foreach ($models as $modelid=>$model) {
+			$category_items[$modelid] = getcache('category_items_'.$modelid,'commons');
+		}
+		$html_root = SYS_HTML_ROOT;
+
+		$list = "<tr class='\$class'>";
+		$head = '<tr class="heading">';
+
+		/*$list.= "<td class='myselect'>
+					<label class='mt-table mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline'>
+						<input type='checkbox' class='checkboxes' name='ids[]' value='\$catid' />
+						<span></span>
+					</label>
+				</td>";
+		$head.= '<th class="myselect">
+						<label class="mt-table mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
+							<input type="checkbox" class="group-checkable" data-set=".checkboxes" />
+							<span></span>
+						</label>
+					</th>';*/
+
+		if (dr_in_array('listorder', $this->cat_config['sys_field'])) {
+			$head.= '<th width="70" style="text-align:center"> '.L('排序').' </th>';
+			$list.= "<td style='text-align:center'>\$listorder_html</td>";
+		}
+
+		if (dr_in_array('ismenu', $this->cat_config['sys_field'])) {
+			$head .= '<th width="50" style="text-align:center"> ' . L('导航') . ' </th>';
+			$list .= "<td style='text-align:center'>\$is_menu_html</td>";
+		}
+
+		if (dr_in_array('disabled', $this->cat_config['sys_field'])) {
+			$head .= '<th width="50" style="text-align:center"> ' . L('可用') . ' </th>';
+			$list .= "<td style='text-align:center'>\$is_disabled_html</td>";
+		}
+
+		if (dr_in_array('iscatpos', $this->cat_config['sys_field'])) {
+			$head .= '<th width="70" style="text-align:center"> ' . L('显示') . ' </th>';
+			$list .= "<td style='text-align:center'>\$is_catpos_html</td>";
+		}
+
+		if (dr_in_array('isleft', $this->cat_config['sys_field'])) {
+			$head .= '<th width="50" style="text-align:center"> ' . L('左侧') . ' </th>';
+			$list .= "<td style='text-align:center'>\$is_left_html</td>";
+		}
+
+		if (dr_in_array('id', $this->cat_config['sys_field'])) {
+			$head .= '<th width="70" style="text-align:center"> '.L('number').' </th>';
+			$list .= "<td style='text-align:center'>\$catid</td>";
+		}
+
+		$head.= '<th> '.L('栏目信息').' </th>';
+		$list.= "<td>\$spacer<a target='_blank' href='\$url'>\$catname</a> \$parent \$ctotal</td>";
+
+		if (dr_in_array('typename', $this->cat_config['sys_field'])) {
+			$head.= '<th width="60" style="text-align:center"> '.L('类型').' </th>';
+			$list.= "<td style='text-align:center'>\$type_html</td>";
+		}
+		if (dr_in_array('modelname', $this->cat_config['sys_field'])) {
+			$head.= '<th width="150" style="text-align:center"> '.L('所属模型').' </th>';
+			$list.= "<td style='text-align:center'>\$modelname</td>";
+		}
+
+		if (isset($this->cat_config['list_field']) && $this->cat_config['list_field']) {
+			foreach ($this->cat_config['list_field'] as $i => $t) {
+				if ($t['use']) {
+					$head.= '<th '.($t['width'] ? ' width="'.$t['width'].'"' : '').' '.($t['center'] ? ' class=\"table-center\" style="text-align:center"' : '').'>'.L($t['name']).'</th>';
+					$list.= '<td '.($t['center'] ? ' class=\"table-center\"' : '').'>$'.$i.'_html</td>';
 				}
 			}
-			exit(json_encode(array('code'=>0,'msg'=>L('to_success'),'data'=>$array,'rel'=>1)));
 		}
-		include $this->admin_tpl('category_manage');
+
+		$head.= '<th>'.L('操作').'</th>';
+		$list.= "<td>\$option</td>";
+
+		$head.= '</tr>';
+		$list.= "</tr>";
+
+		$tree = '';
+		$pcats = [];
+		foreach($data as $k => $t) {
+			$option = '';
+			!$t['modelname'] && $t['modelname'] = $models[$t['modelid']]['name'];
+			$t['catname'] = str_cut($t['catname'], 30);
+			$setting = dr_string2array($t['setting']);
+			$parentid = explode(',', $t['arrparentid']);
+			$t['listorder_html'] = '<input type="text" onblur="dr_ajax_save(this.value, \'?m=admin&c=category&a=listorder&catid='.$t['catid'].'&pc_hash=\'+pc_hash, \'listorder\')" value="'.$t['listorder'].'" class="displayorder form-control input-sm input-inline input-mini">';
+			if($t['url']) {
+				if(preg_match('/^(http|https):\/\//', $t['url'])) {
+					$catdir = $t['catdir'];
+					$prefix = $t['sethtml'] ? '' : $html_root;
+					if($this->siteid==1) {
+						$catdir = $prefix.'/'.$t['parentdir'].$catdir;
+					} else {
+						$catdir = $prefix.'/'.$sitelist[$this->siteid]['dirname'].$html_root.'/'.$catdir;
+					}
+					if($t['type']==0 && $setting['ishtml'] && strpos($t['url'], '?')===false && substr_count($t['url'],'/')<4) $t['help'] = '<span class="layui-btn layui-btn-xs layui-btn-green"><i class="fa fa-question-circle-o" onmouseover="layer.tips(\''.L('tips_domain').$t['url'].'<br>'.L('directory_binding').'<br>'.$catdir.'/\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"></i></span>';
+					$t['url'] = $t['url'];
+				} else {
+					$t['url'] = substr($sitelist[$this->siteid]['domain'],0,-1).$t['url'];
+				}
+			} else {
+				$t['url'] = $t['url'];
+			}
+			$t['disabled'] = $setting['disabled'];
+			$t['iscatpos'] = $setting['iscatpos'];
+			$t['isleft'] = $setting['isleft'];
+			$option.= '<a class="btn btn-xs blue" href="javascript:dr_iframe(\'add\', \'?m=admin&c=category&a=add&parentid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&s='.$t['type'].'&pc_hash='.$this->input->get('pc_hash').'\', \'80%\', \'80%\')"> <i class="fa fa-plus"></i> '.L('子类').'</a>';
+			$option.= '<a class="btn btn-xs green" href="javascript:dr_iframe(\'edit\', \'?m=admin&c=category&a=edit&catid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&type='.$t['type'].'&pc_hash='.$this->input->get('pc_hash').'\', \'80%\', \'80%\')"> <i class="fa fa-edit"></i> '.L('edit').'</a>';
+			$option.= '<a class="btn btn-xs red" id="del" data-catid="'.$t['catid'].'"><i class="fa fa-trash-o"></i> '.L('delete').'</a>';
+			$option.= '<a href="?m=admin&c=category&a=remove&catid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash').'" class="btn btn-xs yellow"><i class="fa fa-arrows"></i> '.L('remove','','content').'</a>';
+			if($t['type'] || $t['child']) {
+				$t['ctotal'] = '';
+			} else {
+				$t['ctotal'] = '<span class="cat-total-'.$t['catid'].' dr_total">（'.$category_items[$t['modelid']][$t['catid']].'）</span>';
+			}
+			$t['option'] = $option;
+			// 判断显示和隐藏开关
+			$t['is_menu_html'] = '<a data-container="body" data-placement="right" data-original-title="'.L('前端循环调用不会显示，但可以正常访问').'" href="javascript:;" onclick="dr_ajax_open_close(this, \'?m=admin&c=category&a=public_show_edit&catid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash').'\', 0);" class="tooltips badge badge-'.(!$t['ismenu'] ? 'no' : 'yes').'"><i class="fa fa-'.(!$t['ismenu'] ? 'times' : 'check').'"></i></a>';
+			$t['is_disabled_html'] = '<a data-container="body" data-placement="right" data-original-title="'.L('禁用状态下此栏目不能正常访问').'" href="javascript:;" onclick="dr_ajax_open_close(this, \'?m=admin&c=category&a=public_show_edit&at=disabled&catid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash').'\', 1);" class="tooltips badge badge-'.($t['disabled'] ? 'no' : 'yes').'"><i class="fa fa-'.($t['disabled'] ? 'times' : 'check').'"></i></a>';
+			$t['is_catpos_html'] = '<a data-container="body" data-placement="right" data-original-title="'.L('前端栏目面包屑导航调用不会显示，但可以正常访问，您现在的位置不显示').'" href="javascript:;" onclick="dr_ajax_open_close(this, \'?m=admin&c=category&a=public_show_edit&at=iscatpos&catid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash').'\', 0);" class="tooltips badge badge-'.(!$t['iscatpos'] ? 'no' : 'yes').'"><i class="fa fa-'.(!$t['iscatpos'] ? 'times' : 'check').'"></i></a>';
+			$t['is_left_html'] = '<a data-container="body" data-placement="right" data-original-title="'.L('前端栏目调用左侧不会显示，但可以正常访问').'" href="javascript:;" onclick="dr_ajax_open_close(this, \'?m=admin&c=category&a=public_show_edit&at=isleft&catid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash').'\', 0);" class="tooltips badge badge-'.(!$t['isleft'] ? 'no' : 'yes').'"><i class="fa fa-'.(!$t['isleft'] ? 'times' : 'check').'"></i></a>';
+			if ($t['type'] == 0) {
+				if ($t['child']) {
+					$t['type_html'] = '<a class="tooltips badge badge-danger" data-container="body" data-placement="right" data-original-title="'.L('当栏目存在子栏目时我们称之为封面').'"> '.L('封面').' </a>';
+				} else {
+					$t['type_html'] = '<a class="tooltips badge badge-success" data-container="body" data-placement="right" data-original-title="'.L('最终的栏目我们称之为列表').'"> '.L('列表').' </a>';
+				}
+			} elseif ($t['type'] == 2) {
+				$t['type_html'] = '<a class="tooltips badge badge-warning" data-container="body" data-placement="right" data-original-title="'.L('属于外部链接').'"> '.L('外链').' </a>';
+			} else {
+				$t['type_html'] = '<a class="tooltips badge badge-info" data-container="body" data-placement="right" data-original-title="'.L('不可发布内容的介绍性质页面，例如关于我们等页面').'"> '.L('单页').' </a>';
+			}
+			if (isset($this->cat_config['list_field']) && $this->cat_config['list_field']) {
+				foreach ($this->cat_config['list_field'] as $i => $tt) {
+					if ($tt['use']) {
+						$t[$i . '_html'] = dr_list_function($tt['func'], $t[$i], [], $t);
+					}
+				}
+			}
+			if ($t['child']) {
+				$pcats[] = $t['catid'];
+				$t['spacer'] = $this->_get_spacer($t['arrparentid']).'<a href="javascript:dr_tree_data('.$t['catid'].');" class="blue select-cat-'.$t['catid'].'">[+]</a>&nbsp;';
+			} else {
+				$t['spacer'] = $this->_get_spacer($t['arrparentid']);
+			}
+
+			$t['class'] = 'dr_catid_'.$t['catid']. ' dr_pid_'.$t['parentid'];
+			$arr = explode(',', $t['arrparentid']);
+			if ($arr) {
+				foreach ($arr as $a) {
+					$t['class'].= ' dr_pid_'.$a;
+				}
+			}
+			extract($t);
+			eval("\$nstr = \"$list\";");
+			$tree.= $nstr;
+		}
+
+		return [$head, $tree, $pcats];
+	}
+	public function public_list_index() {
+		$pid = intval($this->input->get('pid'));
+		list($cat_head, $cat_list, $pcats) = $this->_get_tree_list($this->cat_data($pid));
+		dr_json(1, $cat_list);
+	}
+	// 替换空格填充符号
+	protected function _get_spacer($str) {
+		$rt = '';
+		$num = substr_count((string)$str, ',') * 2;
+		if ($num) {
+			for ($i = 0; $i < $num; $i ++) {
+				$rt.= '&nbsp;&nbsp;&nbsp;';
+			}
+		}
+		return $rt;
+	}
+	/**
+	 * 获取菜单数据
+	 */
+	public function cat_data($pid) {
+		return $this->db->select(array('parentid'=>$pid),'*','','listorder ASC,catid ASC');
 	}
 	/**
 	 * 添加栏目
@@ -337,7 +468,7 @@ class category extends admin {
 							);
 							$this->db->update(array('setting'=>$new_setting), 'catid='.$v['catid']);
 						}
-					}                                
+					}
 				}
 			}
 			
@@ -397,31 +528,48 @@ class category extends admin {
 		}	
 	}
 	/**
-	 * 更新
+	 * 设置栏目属性
 	 */
-	function ismenu() {
-		if($this->input->post('dosubmit')) {
-			$this->db->update(array('ismenu'=>$this->input->post('ismenu')),array('catid'=>$this->input->post('catid')));
-			$this->cache();
-			dr_json(1, L('operation_success'));
-		} else {
-			dr_json(0, L('operation_failure'));
+	function config_add() {
+		$sysfield = [
+			'listorder' => ['排序', '设置栏目的排列顺序'],
+			'ismenu' => ['导航显示', '前端循环调用不会显示'],
+			'disabled' => ['可用', '设置栏目是否可用的快捷开关'],
+			'iscatpos' => ['显示', '前端栏目面包屑导航调用不会显示，您现在的位置不显示'],
+			'isleft' => ['左侧', '前端栏目调用左侧不会显示'],
+			'id' => ['编号', '显示栏目的id号'],
+			'typename' => ['类型', '显示栏目的类型，有：单页、模型、外链'],
+			'modelname' => ['模型', '显示所属模型的名称'],
+		];
+
+		if (IS_POST) {
+			$cat_config = $this->input->post('data');
+			$this->cache->set_file('category', $cat_config);
+			dr_json(1, L('operation_success'), array('url' => '?m=admin&c=category&a=config_add&page='.$this->input->post('page').'&menuid='.$this->input->post('menuid').'&pc_hash='.dr_get_csrf_token()));
 		}
+		$data = $this->cat_config;
+		// 主表字段
+		$field = $this->field_db->select(array('modelid'=>'-1'),'*','','listorder ASC,fieldid ASC');
+		$field = dr_list_field_value($data['list_field'], [], $field);
+		include $this->admin_tpl('category_config');
 	}
 	/**
-	 * 更新禁用可用
+	 * 保存显示状态
 	 */
-	function disabled() {
-		if($this->input->post('dosubmit')) {
-			$row = $this->db->get_one(array('catid'=>$this->input->post('catid')));
-			if (!$row) {
-				dr_json(0, L('栏目数据不存在'));
-			}
+	function public_show_edit() {
+		$catid = (int)$this->input->get('catid');
+		$row = $this->db->get_one(array('catid'=>$catid));
+		if (!$row) {
+			dr_json(0, L('栏目数据不存在'));
+		}
+		$at = $this->input->get('at');
+		if ($at == 'disabled') {
+			// 可用状态
 			$row['setting'] = string2array($row['setting']);
 			$row['setting']['disabled'] = $row['setting']['disabled'] ? 0 : 1;
 			$this->content_db = pc_base::load_model('content_model');
 			$this->categorys = getcache('category_content_'.$this->siteid,'commons');
-			$modelid = $this->categorys[$this->input->post('catid')]['modelid'];
+			$modelid = $this->categorys[$catid]['modelid'];
 			if ($modelid) {
 				$this->content_db->set_model($modelid);
 				$where = "catid IN(".$row['arrchildid'].")";
@@ -430,60 +578,45 @@ class category extends admin {
 					dr_json(0, L('当前栏目存在内容数据，无法禁用'));
 				}
 			}
-			$this->db->update(array('setting'=>array2string($row['setting'])),array('catid'=>$this->input->post('catid')));
+			$this->db->update(array('setting'=>array2string($row['setting'])),array('catid'=>$catid));
 			$this->cache();
-			dr_json(1, L($row['setting']['disabled'] ? '禁用状态' : '可用状态'));
-		} else {
-			dr_json(0, L('operation_failure'));
-		}
-	}
-	/**
-	 * 更新显示隐藏
-	 */
-	function iscatpos() {
-		if($this->input->post('dosubmit')) {
-			$row = $this->db->get_one(array('catid'=>$this->input->post('catid')));
-			if (!$row) {
-				dr_json(0, L('栏目数据不存在'));
-			}
+			dr_json(1, L($row['setting']['disabled'] ? '设置为禁用状态' : '设置为可用状态'), array('value' => $row['setting']['disabled']));
+		} elseif ($at == 'iscatpos') {
+			// 显示状态
 			$row['setting'] = string2array($row['setting']);
 			$row['setting']['iscatpos'] = $row['setting']['iscatpos'] ? 0 : 1;
-			$this->db->update(array('setting'=>array2string($row['setting'])),array('catid'=>$this->input->post('catid')));
+			$this->db->update(array('setting'=>array2string($row['setting'])),array('catid'=>$catid));
 			$this->cache();
-			dr_json(1, L($row['setting']['iscatpos'] ? '显示状态' : '隐藏状态'));
-		} else {
-			dr_json(0, L('operation_failure'));
-		}
-	}
-	/**
-	 * 更新左侧显示隐藏
-	 */
-	function isleft() {
-		if($this->input->post('dosubmit')) {
-			$row = $this->db->get_one(array('catid'=>$this->input->post('catid')));
-			if (!$row) {
-				dr_json(0, L('栏目数据不存在'));
-			}
+			dr_json(1, L($row['setting']['iscatpos'] ? '设置为显示状态' : '设置为隐藏状态'), array('value' => $row['setting']['iscatpos']));
+		} elseif ($at == 'isleft') {
+			// 显示状态
 			$row['setting'] = string2array($row['setting']);
 			$row['setting']['isleft'] = $row['setting']['isleft'] ? 0 : 1;
-			$this->db->update(array('setting'=>array2string($row['setting'])),array('catid'=>$this->input->post('catid')));
+			$this->db->update(array('setting'=>array2string($row['setting'])),array('catid'=>$catid));
 			$this->cache();
-			dr_json(1, L($row['setting']['isleft'] ? '显示状态' : '隐藏状态'));
+			dr_json(1, L($row['setting']['isleft'] ? '设置为显示状态' : '设置为隐藏状态'), array('value' => $row['setting']['isleft']));
 		} else {
-			dr_json(0, L('operation_failure'));
+			// 显示状态
+			$v = $row['ismenu'] ? 0 : 1;
+			$this->db->update(array('ismenu'=>$v),array('catid'=>$catid));
+			$this->cache();
+			dr_json(1, L($v ? '设置为显示状态' : '设置为隐藏状态'), array('value' => $v));
 		}
 	}
 	/**
 	 * 排序
 	 */
 	public function listorder() {
-		if($this->input->post('dosubmit')) {
-			$this->db->update(array('listorder'=>$this->input->post('listorder')),array('catid'=>$this->input->post('catid')));
-			$this->cache();
-			dr_json(1, L('operation_success'));
-		} else {
-			dr_json(0, L('operation_failure'));
+		// 查询数据
+		$catid = (int)$this->input->get('catid');
+		$row = $this->db->get_one(array('catid'=>$catid));
+		if (!$row) {
+			dr_json(0, L('数据#'.$catid.'不存在'));
 		}
+		$value = (int)$this->input->get('value');
+		$this->db->update(array('listorder'=>$value),array('catid'=>$catid));
+		$this->cache();
+		dr_json(1, L('operation_success'));
 	}
 	/**
 	 * 删除栏目
@@ -660,6 +793,21 @@ class category extends admin {
 		}
 	}
 	/**
+	 * 重新统计栏目信息数量
+	 */
+	public function count_items() {
+		$this->content_db = pc_base::load_model('content_model');
+		$result = getcache('category_content_'.$this->siteid,'commons');
+		foreach($result as $r) {
+			if($r['type'] == 0) {
+				$modelid = $r['modelid'];
+				$this->content_db->set_model($modelid);
+				$number = $this->content_db->count(array('catid'=>$r['catid']));
+				$this->db->update(array('items'=>$number),array('catid'=>$r['catid']));
+			}
+		}
+	}
+	/**
 	 * 更新缓存
 	 */
 	public function cache() {
@@ -672,8 +820,9 @@ class category extends admin {
 	 */
 	public function public_cache() {
 		$this->repair();
+		$this->count_items();
 		$this->cache();
-		dr_admin_msg(1,L('operation_success'),'?m=admin&c=category&a=init&menuid='.$this->input->get('menuid'));
+		dr_admin_msg(1, L('operation_success'), '?m=admin&c=category&a=init&menuid='.$this->input->get('menuid'));
 	}
 	/**
 	* 修复栏目数据
@@ -922,22 +1071,6 @@ class category extends admin {
 		return $checked;
 	}
 	/**
-	 * 重新统计栏目信息数量
-	 */
-	public function count_items() {
-		$this->content_db = pc_base::load_model('content_model');
-		$result = getcache('category_content_'.$this->siteid,'commons');
-		foreach($result as $r) {
-			if($r['type'] == 0) {
-				$modelid = $r['modelid'];
-				$this->content_db->set_model($modelid);
-				$number = $this->content_db->count(array('catid'=>$r['catid']));
-				$this->db->update(array('items'=>$number),array('catid'=>$r['catid']));
-			}
-		}
-		dr_admin_msg(1,L('operation_success'),HTTP_REFERER);
-	}
-	/**
 	 * json方式加载模板
 	 */
 	public function public_tpl_file_list() {
@@ -1163,7 +1296,8 @@ class category extends admin {
 				$r['setting']['isleft'] = $setting['isleft'];
 				$this->db->update(array('ismenu'=>$info['ismenu'], 'setting'=>dr_array2string($r['setting'])), array('catid'=>$r['catid']));
 			}
-			dr_json(1, L('operation_success'), array('tourl' => '?m=admin&c=category&a=public_cache&menuid='.$menu_data['id'].'&pc_hash='.dr_get_csrf_token()));
+			$this->cache();
+			dr_json(1, L('operation_success'));
 		} else {
 			include $this->admin_tpl('category_batch_save');
 		}

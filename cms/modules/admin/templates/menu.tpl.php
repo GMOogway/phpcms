@@ -9,23 +9,36 @@ include $this->admin_tpl('header');?>
 <div class="note note-danger">
     <p><a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=init&pc_hash='+pc_hash+'&is_ajax=1',1);"><?php echo L('update_cache_all');?></a></p>
 </div>
+<form class="form-horizontal" role="form" id="myform">
 <div class="table-list">
-    <table width="100%" cellspacing="0">
+    <table class="table-checkable">
         <thead>
-		<tr class="heading">
-		<th width="70" style="text-align:center"><?php echo L('listorder')?></th>
-		<th width="60" style="text-align:center"> <?php echo L('可用')?> </th>
-		<th width="300"> <?php echo L('chinese_name')?> </th>
-		<th width="80" style="text-align:center"> <?php echo L('类型')?> </th>
-		<th><?php echo L('operations_manage')?></th>
-		</tr>
+        <tr class="heading">
+        <th class="myselect">
+            <label class="mt-table mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
+                <input type="checkbox" class="group-checkable" data-set=".checkboxes" />
+                <span></span>
+            </label>
+        </th>
+        <th width="70" style="text-align:center"><?php echo L('listorder')?></th>
+        <th width="60" style="text-align:center"> <?php echo L('可用')?> </th>
+        <th width="300"> <?php echo L('chinese_name')?> </th>
+        <th width="80" style="text-align:center"> <?php echo L('类型')?> </th>
+        <th><?php echo L('operations_manage')?></th>
+        </tr>
         </thead>
         <tbody>
 <?php 
 if(is_array($array)){
-	foreach($array as $info){
+    foreach($array as $info){
 ?>
 <tr>
+<td class="myselect">
+<label class="mt-table mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
+<input type="checkbox" class="checkboxes<?php echo $info['tid'];?> group-checkable" data-set=".checkboxes<?php echo $info['id'];?>"  name="ids[]" value="<?php echo $info['id'];?>" />
+<span></span>
+</label>
+</td>
 <td style="text-align:center"> <input type="text" onblur="dr_ajax_save(this.value, '?m=admin&c=menu&a=listorder&id=<?php echo $info['id'];?>&pc_hash='+pc_hash, 'listorder')" value="<?php echo $info['listorder'];?>" class="displayorder form-control input-sm input-inline input-mini"> </td>
 <td style="text-align:center"><a href="javascript:;" onclick="dr_ajax_open_close(this, '?m=admin&c=menu&a=display&id=<?php echo $info['id'];?>&pc_hash='+pc_hash, 0);" class="badge badge-<?php if ($info['display']) {?>yes<?php } else { ?>no<?php }?>"><i class="fa fa-<?php if ($info['display']) {?>check<?php } else { ?>times<?php }?>"></i></a></td>
 <td><?php echo $info['spacer'].' '.$info['title'];?></td>
@@ -33,16 +46,25 @@ if(is_array($array)){
 <td>
 <a href="?m=admin&c=menu&a=add&parentid=<?php echo $info['id'];?>&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo $this->input->get('pc_hash');?>" class="btn btn-xs blue"> <i class="fa fa-plus"></i> <?php echo L('add')?> </a>
 <a href="?m=admin&c=menu&a=edit&id=<?php echo $info['id'];?>&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo $this->input->get('pc_hash');?>" class="btn btn-xs green"> <i class="fa fa-edit"></i> <?php echo L('edit')?></a>
-<a href="javascript:confirmurl('?m=admin&c=menu&a=delete&id=<?php echo $info['id'];?>&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo $this->input->get('pc_hash');?>', '您确定要删除该菜单吗？')" class="btn btn-xs red"> <i class="fa fa-trash-o"></i> <?php echo L('delete');?></a>
 </td>
 </tr>
 <?php 
-	}
+    }
 }
 ?>
 </tbody>
 </table>
 </div>
+<div class="row list-footer table-checkable">
+    <div class="col-md-12 list-select">
+        <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
+            <input type="checkbox" class="group-checkable" data-set=".checkboxes" />
+            <span></span>
+        </label>
+        <button type="button" onclick="dr_ajax_option('?m=admin&c=menu&a=delete&menuid=<?php echo $this->input->get('menuid');?>', '<?php echo L('你确定要删除它们吗？');?>', 1)" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete');?></button>
+    </div>
+</div>
+</form>
 </div>
 </div>
 </div>

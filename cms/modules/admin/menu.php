@@ -18,6 +18,7 @@ class menu extends admin {
 			$rs['id'] = $r['id'];
 			$rs['title'] = '<i class="'.$r['icon'].'"></i> '.L($r['name']);
 			$rs['parentid'] = $r['parentid'];
+			$rs['tid'] = $this->parentid($r['parentid']);
 			$rs['display'] = $r['display'];
 			$rs['listorder'] = $r['listorder'];
 			if ($r['parentid'] == 0) {
@@ -72,14 +73,15 @@ class menu extends admin {
 		}
 	}
 	function delete() {
-		if($this->input->get('id')) {
-			$id = intval($this->input->get('id'));
-			$this->delete_child($id);
+		$ids = $this->input->get_post_ids();
+		if (!$ids) {
+		    dr_json(0, L('你还没有选择呢'));
+        }
+		foreach ($ids as $id) {
+			$this->delete_child((int)$id);
 			$this->db->delete(array('id'=>$id));
-			dr_admin_msg(1, L('operation_success'), '?m=admin&c=menu&a=init&menuid='.$this->input->get('menuid'));
-		} else {
-			dr_admin_msg(0, L('operation_failure'), '?m=admin&c=menu&a=init&menuid='.$this->input->get('menuid'));
 		}
+		dr_json(1, L('operation_success'), ['ids' => $ids]);
 	}
 	/**
 	 * 递归删除
@@ -94,6 +96,13 @@ class menu extends admin {
 			$this->db->delete(array('id'=>$r['id']));
 		}
 		return true;
+	}
+	private function parentid($parentid) {
+		$parentid = intval($parentid);
+		if (empty($parentid)) return '';
+		$r = $this->db->get_one(array('id'=>$parentid));
+		if (!$r) return '';
+		return ' checkboxes'.$r['id'].$this->parentid($r['parentid']);
 	}
 	
 	function edit() {

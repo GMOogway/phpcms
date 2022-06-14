@@ -24,7 +24,7 @@ include $this->admin_tpl('header','admin');?>
             <?php 
             if(is_array($list)){
             foreach($list as $id => $t){
-            ?>  
+            ?>
             <tr>
                 <td>
                     <span class="badge badge-success"> <?php echo $id+1;?> </span>
