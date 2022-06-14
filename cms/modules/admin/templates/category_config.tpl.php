@@ -48,39 +48,39 @@ jQuery(document).ready(function() {
                         <label class="col-md-2 control-label"><?php echo L('后台列表显示字段');?></label>
                         <div class="col-md-9">
 
-                            <div class="table-scrollable">
+                            <div class="table-list">
+                                <table>
+                                    <thead>
+                                    <tr class="heading">
+                                        <th class="myselect">
+                                            <?php echo L('显示');?>
+                                        </th>
+                                        <th width="180"> <?php echo L('字段');?> </th>
+                                        <th> <?php echo L('说明');?> </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="field-sort-items2">
+                                    <?php 
+                                    if(is_array($sysfield)){
+                                    foreach($sysfield as $n => $t){
+                                    ?>
+                                    <tr class="odd gradeX">
+                                        <td class="myselect">
+                                            <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
+                                                <input type="checkbox" class="checkboxes" name="data[sys_field][]" value="<?php echo $n;?>"<?php if (dr_in_array($n, $data['sys_field'])){?> checked<?php }?> />
+                                                <span></span>
+                                            </label>
+                                        </td>
+                                        <td><?php echo $t[0];?></td>
+                                        <td><?php echo $t[1];?></td>
+                                    </tr>
+                                    <?php }}?>
+                                    </tbody>
+                                </table>
+                            </div>
 
-                            <table class="table table-striped table-bordered table-hover table-checkable dataTable">
-                                <thead>
-                                <tr class="heading">
-                                    <th class="myselect">
-                                        <?php echo L('显示');?>
-                                    </th>
-                                    <th width="180"> <?php echo L('字段');?> </th>
-                                    <th> <?php echo L('说明');?> </th>
-                                </tr>
-                                </thead>
-                                <tbody class="field-sort-items2">
-                                <?php 
-                                if(is_array($sysfield)){
-                                foreach($sysfield as $n => $t){
-                                ?>
-                                <tr class="odd gradeX">
-                                    <td class="myselect">
-                                        <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
-                                            <input type="checkbox" class="checkboxes" name="data[sys_field][]" value="<?php echo $n;?>"<?php if (dr_in_array($n, $data['sys_field'])){?> checked<?php }?> />
-                                            <span></span>
-                                        </label>
-                                    </td>
-                                    <td><?php echo $t[0];?></td>
-                                    <td><?php echo $t[1];?></td>
-                                </tr>
-                                <?php }}?>
-                                </tbody>
-                            </table></div>
-
-                                <div class="table-scrollable" style="margin-top: 30px">
-                                <table class="table table-striped table-bordered table-hover table-checkable dataTable">
+                            <div class="table-list" style="margin-top: 30px">
+                                <table>
                                     <thead>
                                     <tr class="heading">
                                         <th class="myselect">
@@ -121,7 +121,7 @@ jQuery(document).ready(function() {
                                     <?php }}?>
                                     </tbody>
                                 </table>
-                        </div>
+                            </div>
                         </div>
                     </div>
 
