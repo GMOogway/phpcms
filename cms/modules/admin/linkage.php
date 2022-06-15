@@ -222,30 +222,31 @@ class linkage extends admin {
 		if (!$page) {
 			$path = CACHE_PATH.'caches_linkage/'.$link['type'].'_'.$link['code'].'/';
 			dr_dir_delete($path);
-			$this->repair($link); // 修复菜单
+			$links = $this->repair($link); // 修复菜单
 			$pids = $this->child_pids;
 			$total = dr_count($pids);
 			if (!$total) {
 				html_msg(0, L('无可用数据'));
 			}
 			// 存储执行
+			$this->cache->set_auth_data('linkage-all-'.$key, $links, $link['type']);
 			$this->cache->set_auth_data('linkage-cache-'.$key, array_chunk($pids, $psize), $link['type']);
 			html_msg(1, L('正在执行中...'), '?m=admin&c=linkage&a=public_cache&key='.$key.'&total='.$total.'&page='.($page+1));
 		}
 
+		$tpage = ceil($total / $psize); // 总页数
 		$pids = $this->cache->get_auth_data('linkage-cache-'.$key, $link['type']);
 		if (!$pids) {
 			html_msg(0, L('临时数据读取失败'));
-		} elseif (!isset($pids[$page-1])) {
+		} elseif (!isset($pids[$page-1]) || $page > $tpage) {
+			// 生成级联关系
+			$links = $this->cache->get_auth_data('linkage-all-'.$key, $link['type']);
+			$this->get_json($link, $links);
+			$this->cache->del_auth_data('linkage-all-'.$key, $link['type']);
+			$this->cache->del_auth_data('linkage-cache-'.$key, $link['type']);
 			html_msg(1, L('更新完成'));
 		}
 
-		$tpage = ceil($total / $psize); // 总页数
-
-		// 更新完成
-		if ($page > $tpage) {
-			html_msg(1, L('更新完成'));
-		}
 		foreach ($pids[$page-1] as $pid) {
 			$this->cache_list($link, $pid);
 		}
@@ -302,6 +303,23 @@ class linkage extends admin {
 		return $this->categorys;
 	}
 
+	public function get_child_row($pid) {
+		$newArr = [];
+		foreach ($this->categorys as $cat) {
+			$item = [
+				'value' => $cat['id'],
+				'label' => $cat['name'],
+				'children' => [],
+			];
+			if ($pid == $cat['pid']) {
+				$item['children'] = $this->get_child_row($cat['id']);
+				$newArr[] = $item;
+			}
+
+		}
+		return $newArr;
+	}
+
 	/**
 	 * 获取父栏目ID列表
 	 *
@@ -351,6 +369,19 @@ class linkage extends admin {
 		}
 
 		return $childids;
+	}
+
+	public function get_json($link, $links) {
+
+		$json = [];
+		if ($links) {
+			$this->categorys = $links;
+			$json = $this->get_child_row(0);
+		}
+
+		$data_path = 'linkage/'.$link['type'].'_'.$link['code'].'/';
+		$this->cache->set_file('json', $json, $data_path);
+
 	}
 
 	/**

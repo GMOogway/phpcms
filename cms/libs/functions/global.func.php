@@ -2897,57 +2897,26 @@ function get_memberavatar($uid, $size = '') {
  * @param $defaultvalue 默认值
  */
 function menu_linkage($code = '', $id = 'linkid', $defaultvalue = 0) {
-	// 最大几层
-	$linklevel = dr_linkage_level($code) + 1;
-	$string = $defaultvalue && (ROUTE_A=='edit' || ROUTE_A=='account_manage_info'  || ROUTE_A=='info_publish') ? '<input type="hidden" name="info['.$id.']"  id="dr_'.$id.'" value="'.$defaultvalue.'">' : '<input type="hidden" name="info['.$id.']"  id="dr_'.$id.'" value="">';
-	$string .= load_js(JS_PATH.'jquery.ld.js');
-	$level = 1;
-	$default = '';
-	if ($defaultvalue) {
-		$link = dr_linkage($code, $defaultvalue);
-		$pids = substr($link['pids'], 2);
-		$level = substr_count($pids, ',') + 1;
-		$default = !$pids ? '["'.$defaultvalue.'"]' : '["'.str_replace(',', '","', $pids).'","'.$defaultvalue.'"]';
-	}
-	// 输出默认菜单
-	$string.= '<span id="dr_linkage_'.$id.'_select" style="'.($defaultvalue ? 'display:none' : '').'">';
-	for ($i = 1; $i <= $linklevel; $i++) {
-		$style = $i > $level ? 'style="display:none"' : '';
-		$string.= '<label style="padding-right:10px;"><select class="form-control select-'.$id.'" name="'.$id.'-'.$i.'" id="'.$id.'-'.$i.'" width="100" '.$style.'><option defaultvalue=""> -- </option></select></label>';
-	}
-	$string.= '<label id="dr_linkage_'.$id.'_html"></label>';
-	$string.= '</span>';
-	// 重新选择
-	if ($defaultvalue) {
-		$string.= '<div id="dr_linkage_'.$id.'_cxselect">';
-		$edit_html = '<div class="form-control-static" >'.dr_linkagepos($code, $defaultvalue, ' » ').'&nbsp;&nbsp;<a href="javascript:;" onclick="dr_linkage_select_'.$id.'()" style="color:blue">'.L('[重新选择]').'</a></div>';
-		$string.= $edit_html;
-		$string.= '</div>';
-	}
-	// 输出js支持
-	$string.= '
-	<script type="text/javascript">
-		function dr_linkage_select_'.$id.'() {
-			$("#dr_linkage_'.$id.'_select").show();
-			$("#dr_linkage_'.$id.'_cxselect").hide();
-		}
-		$(function(){
-			var $ld5 = $(".select-'.$id.'");					  
-			$ld5.ld({ajaxOptions:{"url": "'.WEB_PATH.'api.php?op=get_linkage&code='.$code.'"},inputId:"dr_linkage_'.$id.'_html",defaultParentId:0});
-			var ld5_api = $ld5.ld("api");
-			ld5_api.selected('.$default.');
-			$ld5.bind("change", function(e){
-				var $target = $(e.target);
-				var index = $ld5.index($target);
-				//$("#'.$id.'-'.$i.'").remove();
-				var vv = $ld5.eq(index).show().val();
-				$("#dr_'.$id.'").val(vv);
-				index ++;
-				$ld5.eq(index).show();
-				//console.log("value="+vv);
-			});
-		})
-	</script>';
+	$string = $defaultvalue && (ROUTE_A=='edit' || ROUTE_A=='account_manage_info'  || ROUTE_A=='info_publish') ? '<input type="hidden" name="info['.$id.']"  id="dr_'.$id.'" value="'.(int)$defaultvalue.'">' : '<input type="hidden" name="info['.$id.']"  id="dr_'.$id.'" value="0">'.PHP_EOL;
+	$string .= load_css(JS_PATH.'layui/css/layui.css');
+	$string .= load_css(JS_PATH.'layui/cascader/cascader.css');
+	$string .= load_js(JS_PATH.'layui/layui.js');
+	$string .= load_js(JS_PATH.'layui/cascader/cascader'.(IS_DEV ? '' : '.min').'.js');
+	$string .= '<script src="'.WEB_PATH.'api.php?op=get_linkage&code='.$code.'"></script>
+		<script type="text/javascript">
+		$(function (){
+				layui.use(\'layCascader\', function () {
+                var layCascader = layui.layCascader;
+                layCascader({
+                  elem: \'#dr_'.$id.'\',
+                  value: '.(int)$defaultvalue.',
+                    clearable: true,
+                     filterable: true,
+                  options: linkage_'.$code.'
+                });
+			})
+				});
+		</script>';
 	return $string;
 }
 /**
@@ -3380,6 +3349,22 @@ function dr_linkage($code, $id, $level = 0, $name = '') {
 		}
 	}
 	return $name ? $data[$name] : $data;
+}
+/**
+ * 联动菜单json数据
+ *
+ * @param   string  $code   菜单代码
+ * @param   intval  $pid    菜单父级id或者别名
+ * @return  array
+ */
+function dr_linkage_json($code) {
+	$cache = pc_base::load_sys_class('cache');
+	$linkage_db = pc_base::load_model('linkage_model');
+	if (!$code) {
+		return array();
+	}
+	$linkage_data = $linkage_db->get_one(array('code'=>$code));
+	return $cache->get_file('json', 'linkage/'.($linkage_data['type'] ? $linkage_data['type'] : 0).'_'.$code.'/');
 }
 /**
  * 联动菜单列表数据
