@@ -1363,6 +1363,14 @@ function load_js($js) {
 	}
 	return '';
 }
+// 动态加载script
+function load_script($js) {
+	if (!defined($js)) {
+		define($js, 1);
+		return '<script type=\'text/javascript\'>'.$js.'</script>'.PHP_EOL;
+	}
+	return '';
+}
 /**
  * 百度地图调用
  */
