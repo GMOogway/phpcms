@@ -131,6 +131,7 @@ class form {
 			$str .= "});\r\n";
 			$str .= '</script>';
 		} else {
+			$str .= '<script type="text/javascript">var ueditor_baidumap_ak = "'.SYS_BDMAP_API.'";</script>';
 			$str .= load_js(JS_PATH.'ueditor/ueditor.config.js');
 			$str .= load_js(JS_PATH.'ueditor/ueditor.all.js');
 			if($toolbar == 'basic') {

@@ -37,7 +37,7 @@
         'link':'~/dialogs/link/link.html',
         'spechars':'~/dialogs/spechars/spechars.html',
         'searchreplace':'~/dialogs/searchreplace/searchreplace.html',
-        'map':'~/dialogs/map/map.html',
+        'map':'~/dialogs/map/map.html#ak='+ueditor_baidumap_ak,
         'gmap':'~/dialogs/gmap/gmap.html',
         'insertvideo':'~/dialogs/video/video.html',
         'help':'~/dialogs/help/help.html',

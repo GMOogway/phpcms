@@ -14,7 +14,12 @@
             overflow: hidden;
         }
     </style>
-    <script type="text/javascript" src="https://api.map.baidu.com/api?key=&v=1.3&services=true&s=1"></script>
+    <script type="text/javascript">
+        function getParam(name) {
+            return location.href.match(new RegExp('[?#&]' + name + '=([^?#&]+)', 'i')) ? RegExp.$1 : '';
+        }
+        document.write("<script type=\"text/javascript\" src=\"https://api.map.baidu.com/api?v=1.0&type=webgl&ak="+getParam('ak')+"\"><\/script>");
+    </script>
 </head>
 
 <body onload="initMap();">
@@ -22,9 +27,7 @@
 <div style="width:697px;height:550px;border:#ccc solid 1px;" id="dituContent"></div>
 </body>
 <script type="text/javascript">
-    function getParam(name) {
-        return location.href.match(new RegExp('[?#&]' + name + '=([^?#&]+)', 'i')) ? RegExp.$1 : '';
-    }
+    var BMap = BMapGL;
     var map, marker;
     var centerParam = getParam('center');
     var zoomParam = getParam('zoom');
@@ -81,8 +84,6 @@
         var ctrl_nav = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_LEFT, type: BMAP_NAVIGATION_CONTROL_LARGE});
         map.addControl(ctrl_nav);
         //向地图中添加缩略图控件
-        var ctrl_ove = new BMap.OverviewMapControl({anchor: BMAP_ANCHOR_BOTTOM_RIGHT, isOpen: 1});
-        map.addControl(ctrl_ove);
         //向地图中添加比例尺控件
         var ctrl_sca = new BMap.ScaleControl({anchor: BMAP_ANCHOR_BOTTOM_LEFT});
         map.addControl(ctrl_sca);
@@ -108,9 +109,9 @@
                 center = map.getCenter(),
                 marker = window.marker.getPoint();
             containerIframe.src = containerIframe.src.
-                replace(new RegExp('([?#&])center=([^?#&]+)', 'i'), '$1center=' + center.lng + ',' + center.lat).
-                replace(new RegExp('([?#&])markers=([^?#&]+)', 'i'), '$1markers=' + marker.lng + ',' + marker.lat).
-                replace(new RegExp('([?#&])zoom=([^?#&]+)', 'i'), '$1zoom=' + zoom);
+            replace(new RegExp('([?#&])center=([^?#&]+)', 'i'), '$1center=' + center.lng + ',' + center.lat).
+            replace(new RegExp('([?#&])markers=([^?#&]+)', 'i'), '$1markers=' + marker.lng + ',' + marker.lat).
+            replace(new RegExp('([?#&])zoom=([^?#&]+)', 'i'), '$1zoom=' + zoom);
             editor.fireEvent('saveScene');
         }
     }

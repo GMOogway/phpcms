@@ -13,7 +13,7 @@ $key = str_replace(array('/','(',')','&',';'),'',$key);
 <html xmlns="http://www.w3.org/1999/xhtml"<?php if(isset($addbg)) { ?> class="addbg"<?php } ?>>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo CHARSET ?>">
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=<?php echo $key?>"></script></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=<?php echo $key?>"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH ?>Dialog/main.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH ?>layer/layer.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH ?>member_common.js"></script>
