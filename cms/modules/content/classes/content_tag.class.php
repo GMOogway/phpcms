@@ -255,6 +255,10 @@ class content_tag {
 				$i++;
 			}
 		}
+		if(isset($data['maxlimit'])){
+			$arr = explode(',', $data['maxlimit']);
+			$array = array_slice($array, $arr[0], $arr[1]);
+		}
 		return $array;
 	}
 	

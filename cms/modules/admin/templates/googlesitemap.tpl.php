@@ -5,7 +5,9 @@ include $this->admin_tpl('header');?>
 <link href="<?php echo JS_PATH?>bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" type="text/css" />
 <script src="<?php echo JS_PATH?>bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
 <script type="text/javascript">jQuery(document).ready(function(){$(":text").removeClass('input-text');$('.bs-select').selectpicker();});</script>
-<div class="page-content main-content">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
 <div class="note note-danger">
     <p><a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=init&pc_hash='+pc_hash+'&is_ajax=1',1);"><?php echo L('update_cache_all');?></a></p>
 </div>
@@ -132,5 +134,7 @@ $('.nav-tabs a').click(function (e) {
     $('#'+$(this).attr("data-toggle")).addClass('active');
 })
 </script>
+</div>
+</div>
 </body>
 </html>

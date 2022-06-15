@@ -25,7 +25,9 @@ include $this->admin_tpl('header');?>
 	}
 //-->
 </script>
-<div class="page-content main-content">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
 <div class="note note-danger">
     <p><?php echo L('最多支持创建'.MAX_CATEGORY.'个栏目，请合理的规划网站栏目');?></p>
 </div>
@@ -457,5 +459,7 @@ function load_file_list(id) {
 }
 <?php if(isset($modelid) && $modelid) echo "change_tpl($modelid)";?>
 </script>
+</div>
+</div>
 </body>
 </html>

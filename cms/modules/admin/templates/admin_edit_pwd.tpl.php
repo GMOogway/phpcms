@@ -1,7 +1,9 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');
 $show_validator = true;include $this->admin_tpl('header');?>
-<div class="page-content main-content">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
 <div class="note note-danger">
     <p><a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=init&pc_hash='+pc_hash+'&is_ajax=1',1);"><?php echo L('update_cache_all');?></a></p>
 </div>
@@ -76,5 +78,7 @@ $('.nav-tabs a').click(function (e) {
     $('#'+$(this).attr("data-toggle")).addClass('active');
 })
 </script>
+</div>
+</div>
 </body>
 </html>

@@ -26,6 +26,7 @@ class html {
         $list = array();
         foreach ($cat as $i => $t) {
             $setting = dr_string2array($t['setting']);
+            if ($setting['disabled']) continue;
             if(!$setting['ishtml']) continue;
             if ($t['modelid'] == 0 && $t['type'] == 1) {
                 // 单网页

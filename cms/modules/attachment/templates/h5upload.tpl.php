@@ -10,7 +10,9 @@ jQuery(document).ready(function() {
     $(":text").removeClass('input-text');
 });
 </script>
-<div class="page-content main-content">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
 <form action="" class="form-horizontal" method="post" name="myform" id="myform">
 <input name="page" id="dr_page" type="hidden" value="<?php echo $page;?>">
 <div class="portlet light bordered">
@@ -184,5 +186,7 @@ function att_cancel(obj,id,source){
     }
 }
 </script>
+</div>
+</div>
 </body>
 </html>

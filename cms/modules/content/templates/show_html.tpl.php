@@ -2,7 +2,6 @@
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');?>
 <style type="text/css">
-body {background-color: #f5f6f8;}
 .progress {border: 0;background-image: none;filter: none;-webkit-box-shadow: none;-moz-box-shadow: none;box-shadow: none;}
 .progress {height: 20px;background-color: #fff;border-radius: 4px;}
 .progress-bar-success {background-color: #3ea9e2;}

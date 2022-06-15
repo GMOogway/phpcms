@@ -42,10 +42,11 @@ class search_api extends admin {
 		if(empty($model_keys)) return '';
 		$model_keys = 'id,'.implode(',',$model_keys);
 		
-		foreach ($result as $v) {
+		foreach ($result as $k=>$v) {
 			if (isset($v['id']) && !empty($v['id'])) {
 				$this->db->table_name = $this->db->table_name.'_data_'.$v['tableid'];
-				$result[$v['id']] = $this->db->get_one(array('id'=>$v['id']), '*', 'id');
+				$data_rs = $this->db->get_one(array('id'=>$v['id']));
+				if (isset($data_rs)) $result[$k] = array_merge($result[$k], $data_rs);
 				$this->set_model($this->modelid);
 			} else {
 				continue;

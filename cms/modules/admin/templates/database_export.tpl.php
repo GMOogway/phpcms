@@ -1,7 +1,9 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header');?>
-<div class="page-content main-content">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
 <form action="" class="form-horizontal" method="post" name="myform" id="myform">
 <input name="dosubmit" type="hidden" value="1">
 <div class="portlet light bordered">
@@ -73,6 +75,8 @@ if(is_array($infos)){
     </div>
 </div>
 </form>
+</div>
+</div>
 </div>
 </body>
 <script type="text/javascript">

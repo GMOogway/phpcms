@@ -5,7 +5,9 @@ include $this->admin_tpl('header','admin');?>
 <link href="<?php echo JS_PATH?>bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" type="text/css" />
 <script src="<?php echo JS_PATH?>bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
 <script type="text/javascript">jQuery(document).ready(function(){$('.bs-select').selectpicker();});</script>
-<div class="page-content main-content">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
 <div class="note note-danger">
     <p><a href="?m=admin&c=category&a=init&menuid=<?php echo $this->input->get('menuid');?>"><?php echo L('category_manage');?></a></p>
 </div>
@@ -53,6 +55,8 @@ include $this->admin_tpl('header','admin');?>
     </div>
 </div>
 </form>
+</div>
+</div>
 </div>
 </body>
 </html>

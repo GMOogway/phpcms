@@ -6,7 +6,9 @@ jQuery(document).ready(function() {
     $(":text").removeClass('input-text');
 });
 </script>
-<div class="page-content main-content">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
 <div class="note note-danger">
     <p><?php echo L('attachment_address_replace_msg');?></p>
 </div>
@@ -62,5 +64,7 @@ $('.nav-tabs a').click(function (e) {
     $('#'+$(this).attr("data-toggle")).addClass('active');
 })
 </script>
+</div>
+</div>
 </body>
 </html>

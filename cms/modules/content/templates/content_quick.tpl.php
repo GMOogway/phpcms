@@ -2,7 +2,6 @@
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');?>
 <style type="text/css">
-body {background: #f5f6f8;}
 .pull-left {float: left!important;}
 .pull-right {float: right!important;}
 #iframecontent{position:relative;overflow:hidden;padding: 0;margin: 0;}

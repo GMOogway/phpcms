@@ -2,7 +2,9 @@
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');
 ?>
-<div class="page-content main-content">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
 <form name="myform" id="myform" action="?m=custom&c=custom&a=add" class="form-horizontal" method="post">
 <div class="myfbody">
         <div class="row ">
@@ -45,6 +47,8 @@ include $this->admin_tpl('header','admin');
 <input type="hidden" name="forward" value="?m=custom&c=custom&a=add">
 <input type="submit" name="dosubmit" id="dosubmit" class="dialog" value="<?php echo L('submit')?>">
 </form>
+</div>
+</div>
 </div>
 </body>
 </html> 

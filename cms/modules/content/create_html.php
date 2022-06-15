@@ -475,6 +475,7 @@ class create_html extends admin {
 						$this->db->table_name = $this->db->table_name.'_data_'.$r['tableid'];
 						$r2 = $this->db->get_one(array('id'=>$t['id']));
 						if($r2) $r = array_merge($r, $r2);
+						$this->db->set_model(intval($this->categorys[$t['catid']]['modelid']));
 						//判断是否为升级或转换过来的数据
 						if($r['upgrade']) {
 							$urls[1] = $t['url'];

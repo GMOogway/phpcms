@@ -1,7 +1,6 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.'); 
-include $this->admin_tpl('header', 'admin');
-?>
+include $this->admin_tpl('header', 'admin');?>
 <link href="<?php echo JS_PATH;?>codemirror/lib/codemirror.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo JS_PATH;?>codemirror/theme/neat.css" rel="stylesheet" type="text/css" />
 <script src="<?php echo JS_PATH;?>codemirror/lib/codemirror.js" type="text/javascript"></script>
@@ -13,7 +12,9 @@ html{_overflow:hidden}
 .rraa{float: right; width:230px;}
 .pt{margin-top: 4px;}
 </style>
-<div class="page-content main-content">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
 <form action="" class="form-horizontal" method="post" name="myform" id="myform">
 <div class="portlet light bordered myfbody">
     <div class="portlet-body form">
@@ -83,6 +84,8 @@ html{_overflow:hidden}
     </div>
 </div>
 </form>
+</div>
+</div>
 </div>
 <script type="text/javascript">
 var myTextArea = document.getElementById('file_code');

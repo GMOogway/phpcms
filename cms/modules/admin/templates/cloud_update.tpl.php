@@ -1,7 +1,9 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header', 'admin');?>
-<div class="page-content main-content">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
 <div class="note note-danger">
     <p>升级程序之前，请务必备份全站数据</p>
 </div>
@@ -200,5 +202,7 @@ include $this->admin_tpl('header', 'admin');?>
         });
     }
 </script>
+</div>
+</div>
 </body>
 </html>

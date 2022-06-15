@@ -6,7 +6,9 @@ include $this->admin_tpl('header','admin');?>
 <?php echo load_css(JS_PATH.'jquery-minicolors/jquery.minicolors.css');?>
 <?php echo load_js(JS_PATH.'jquery-minicolors/jquery.minicolors.min.js');?>
 <script type="text/javascript">var catid=<?php echo $catid;?></script>
-<div class="page-content main-content">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
 <div class="row my-content-top-tool">
     <div class="col-md-12 col-sm-12">
         <label style="margin-right:10px"><a href="javascript:location.reload(true);" class="btn green"> <?php echo L('page_manage');?></a></label>
@@ -132,5 +134,7 @@ $(document).ready(function() {
     });
 });
 </script>
+</div>
+</div>
 </body>
 </html>

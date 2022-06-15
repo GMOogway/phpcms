@@ -2,7 +2,9 @@
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header', 'admin');
 $menu_data = $this->menu_db->get_one(array('name' => 'version_update', 'm' => 'admin', 'c' => 'cloud', 'a' => 'upgrade'));?>
-<div class="page-content main-content">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
 <form class="form-horizontal" role="form" id="myform">
 <div class="row">
     <div class="col-md-6">
@@ -130,5 +132,7 @@ layui.use(['layer', 'miniTab','echarts'], function () {
     miniTab.listen();
 });
 </script>
+</div>
+</div>
 </body>
 </html>

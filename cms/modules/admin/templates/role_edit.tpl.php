@@ -14,7 +14,9 @@ jQuery(document).ready(function() {
     $(":text").removeClass('input-text');
 });
 </script>
-<div class="page-content main-content">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
 <form action="?m=admin&c=role&a=edit" class="form-horizontal" method="post" name="myform" id="myform">
 <input name="page" id="dr_page" type="hidden" value="<?php echo $page;?>">
 <input name="menuid" type="hidden" value="<?php echo $this->input->get('menuid');?>">
@@ -81,5 +83,7 @@ $('.nav-tabs a').click(function (e) {
     $('#'+$(this).attr("data-toggle")).addClass('active');
 })
 </script>
+</div>
+</div>
 </body>
 </html>

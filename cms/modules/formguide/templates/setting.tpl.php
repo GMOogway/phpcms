@@ -2,7 +2,9 @@
 defined('IS_ADMIN') or exit('No permission resources.');
 $show_header = true;
 include $this->admin_tpl('header', 'admin');?>
-<div class="page-content main-content">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
 <form action="?m=formguide&c=formguide&a=setting" class="form-horizontal" method="post" name="myform" id="myform">
 <input name="page" id="dr_page" type="hidden" value="<?php echo $page;?>">
 <div class="portlet light bordered">
@@ -106,5 +108,7 @@ $("input:radio[name='setting[code]']").click(function (){
 	}
 });
 </script>
+</div>
+</div>
 </body>
 </html>

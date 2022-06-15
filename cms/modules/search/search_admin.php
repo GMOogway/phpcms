@@ -96,7 +96,7 @@ class search_admin extends admin {
 			}
 			dr_admin_msg(1,'全站索引更新完成','?m=search&c=search_admin&a=createindex&menuid='.$this->input->get('menuid'));
 		} else {
-			$big_menu = array('javascript:artdialog(\'add\',iframe:\'?m=search&c=search_type&a=add\',\''.L('add_search_type').'\',580,240);void(0);', L('add_search_type'));
+			$big_menu = array('javascript:artdialog(\'add\',\'?m=search&c=search_type&a=add\',\''.L('add_search_type').'\',580,240);void(0);', L('add_search_type'));
 			include $this->admin_tpl('createindex');
 		}
 	}

@@ -8,7 +8,6 @@ jQuery(document).ready(function() {
 });
 </script>
 <style type="text/css">
-body {background: #f5f6f8;}
 body .table-list table tr>td:first-child, body .table-list table tr>th:first-child {text-align: left;padding: 8px;}
 </style>
 <div class="page-container" style="margin-bottom: 0px !important;">

@@ -17,7 +17,9 @@ jQuery(document).ready(function() {
     $(":text").removeClass('input-text');
 });
 </script>
-<div class="page-content main-content">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
 <div class="note note-danger">
     <p><?php echo L('确保网站目录必须有可写权限');?></p>
 </div>
@@ -97,5 +99,7 @@ function change_model(modelid) {
     window.location.href='?m=content&c=create_html&a=show&modelid='+modelid+'&pc_hash='+pc_hash;
 }
 </script>
+</div>
+</div>
 </body>
 </html>

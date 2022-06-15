@@ -958,7 +958,7 @@ table.dataTable tr.heading>th {background-color: #fbfcfd;}
 .page-container {margin: 0;padding: 0;position: relative;}
 .page-container:after, .page-container:before {content: " ";display: table;}
 .page-content-wrapper {float: left;width: 100%;}
-.page-content-wrapper .page-content {margin-left: 158px;margin-top: 0;padding: 25px 20px 10px;}
+.page-content-wrapper .page-content {margin-left: 200px;margin-top: 0;padding: 25px 20px 10px;}
 .main-content2 {background: #fff!important}
 .main-content2 .note.note-danger {background-color: #f5f6f8 !important}
 .page-content3 {margin-left:0px!important; border-left:0!important;}

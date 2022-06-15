@@ -15,9 +15,6 @@ jQuery(document).ready(function() {
     $(":text").removeClass('input-text');
 });
 </script>
-<style type="text/css">
-body {background: #f5f6f8;}
-</style>
 <div class="page-content-white page-container" style="margin-bottom: 0px !important;">
     <div class="page-content-wrapper">
         <div class="page-content page-content3 mybody-nheader main-content  ">
