@@ -100,7 +100,7 @@ $(function(){
         <li class="dropdown">
             <a href="javascript:void(0);" class="dropdown-toggle on" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-th-large"></i> 菜单 <i class="fa fa-angle-double-down"></i></a>
             <ul class="dropdown-menu">
-                <?php if(isset($big_menu)) { echo '<li><a class="add fb" href="'.$big_menu[0].'"><i class="fa fa-plus"></i> '.$big_menu[1].'</a></li><div class="dropdown-line"></div>';} else {$big_menu = '';} ?>
+                <?php if(isset($big_menu)) {echo '<li><a class="add fb" href="'.$big_menu[0].'"><i class="fa fa-plus"></i> '.$big_menu[1].'</a></li><div class="dropdown-line"></div>';} else {$big_menu = '';}?>
                 <?php echo admin::submenu($this->input->get('menuid'),$big_menu); ?>
             </ul>
         </li>

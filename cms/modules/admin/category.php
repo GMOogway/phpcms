@@ -13,7 +13,9 @@ class category extends admin {
 		$this->db = pc_base::load_model('category_model');
 		$this->menu_db = pc_base::load_model('menu_model');
 		$this->field_db = pc_base::load_model('sitemodel_field_model');
+		$this->content_db = pc_base::load_model('content_model');
 		$this->siteid = $this->get_siteid();
+		$this->categorys = getcache('category_content_'.$this->siteid,'commons');
 		$this->cat_config = $this->cache->get_file('category');
 		if (!$this->cat_config) {
 			$this->cat_config = [
@@ -46,7 +48,7 @@ class category extends admin {
 		$list = "<tr class='\$class'>";
 		$head = '<tr class="heading">';
 
-		/*$list.= "<td class='myselect'>
+		$list.= "<td class='myselect'>
 					<label class='mt-table mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline'>
 						<input type='checkbox' class='checkboxes' name='ids[]' value='\$catid' />
 						<span></span>
@@ -57,7 +59,7 @@ class category extends admin {
 							<input type="checkbox" class="group-checkable" data-set=".checkboxes" />
 							<span></span>
 						</label>
-					</th>';*/
+					</th>';
 
 		if (dr_in_array('listorder', $this->cat_config['sys_field'])) {
 			$head.= '<th width="70" style="text-align:center"> '.L('排序').' </th>';
@@ -147,8 +149,7 @@ class category extends admin {
 			$t['isleft'] = $setting['isleft'];
 			$option.= '<a class="btn btn-xs blue" href="javascript:dr_iframe(\'add\', \'?m=admin&c=category&a=add&parentid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&s='.$t['type'].'&pc_hash='.$this->input->get('pc_hash').'\', \'80%\', \'80%\')"> <i class="fa fa-plus"></i> '.L('子类').'</a>';
 			$option.= '<a class="btn btn-xs green" href="javascript:dr_iframe(\'edit\', \'?m=admin&c=category&a=edit&catid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&type='.$t['type'].'&pc_hash='.$this->input->get('pc_hash').'\', \'80%\', \'80%\')"> <i class="fa fa-edit"></i> '.L('edit').'</a>';
-			$option.= '<a class="btn btn-xs red" id="del" data-catid="'.$t['catid'].'"><i class="fa fa-trash-o"></i> '.L('delete').'</a>';
-			$option.= '<a href="?m=admin&c=category&a=remove&catid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash').'" class="btn btn-xs yellow"><i class="fa fa-arrows"></i> '.L('remove','','content').'</a>';
+			$option.= '<a href="?m=admin&c=category&a=remove&catid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash').'" class="btn btn-xs yellow"><i class="fa fa-arrows"></i> '.L('移动').'</a>';
 			if($t['type'] || $t['child']) {
 				$t['ctotal'] = '';
 			} else {
@@ -232,6 +233,14 @@ class category extends admin {
 			$info['type'] = intval($this->input->post('type'));
 			if(!$info['type']) {
 				if(!$info['modelid']) dr_json(0, L('select_model'), array('field' => 'modelid'));
+			}
+			$modelid = $this->categorys[$info['parentid']]['modelid'];
+			if ($modelid) {
+				$this->content_db->set_model($modelid);
+				$total = $this->content_db->count(array('catid'=>$info['parentid']));
+				if ($total) {
+					dr_json(0, L('目标栏目【'.$this->categorys[$info['parentid']]['catname'].'】存在内容数据，无法作为父栏目'));
+				}
 			}
 			if(!$this->input->post('addtype')) {
 				$info['catname'] = safe_replace($info['catname']);
@@ -390,6 +399,14 @@ class category extends admin {
 					$info['catdir'] = $pinyin->result($info['catname'], 0);
 				}
 			}
+			$modelid = $this->categorys[$info['parentid']]['modelid'];
+			if ($modelid) {
+				$this->content_db->set_model($modelid);
+				$total = $this->content_db->count(array('catid'=>$info['parentid']));
+				if ($total) {
+					dr_json(0, L('目标栏目【'.$this->categorys[$info['parentid']]['catname'].'】存在内容数据，无法作为父栏目'));
+				}
+			}
 			//上级栏目不能是自身
 			//if($info['parentid']==$catid){
 				//dr_json(0, L('operation_failure'));
@@ -400,8 +417,6 @@ class category extends admin {
 			if(in_array($info['parentid'],$arrchildid_arr,true)){
 				dr_json(0, L('operation_failure'));
 			}
-			$this->content_db = pc_base::load_model('content_model');
-			$this->categorys = getcache('category_content_'.$this->siteid,'commons');
 			$modelid = $this->categorys[$catid]['modelid'];
 			if ($modelid) {
 				$this->content_db->set_model($modelid);
@@ -567,8 +582,6 @@ class category extends admin {
 			// 可用状态
 			$row['setting'] = string2array($row['setting']);
 			$row['setting']['disabled'] = $row['setting']['disabled'] ? 0 : 1;
-			$this->content_db = pc_base::load_model('content_model');
-			$this->categorys = getcache('category_content_'.$this->siteid,'commons');
 			$modelid = $this->categorys[$catid]['modelid'];
 			if ($modelid) {
 				$this->content_db->set_model($modelid);
@@ -622,22 +635,46 @@ class category extends admin {
 	 * 删除栏目
 	 */
 	public function delete() {
-		if($this->input->post('dosubmit')) {
-			$catid = intval($this->input->post('catid'));
-			$categorys = getcache('category_content_'.$this->siteid,'commons');
-			$sethtml = $categorys[$catid]['sethtml'];
+
+		$ids = $this->input->get_post_ids();
+		if (!$ids) {
+			dr_json(0, L('所选栏目不存在'));
+		}
+
+		// 筛选栏目id
+		$catid = '';
+		foreach ($ids as $id) {
+			$catid.= ','.($this->categorys[$id]['arrchildid'] ? $this->categorys[$id]['arrchildid'] : $id);
+		}
+
+        $catid = explode(',', trim($catid, ','));
+        $catid = array_flip(array_flip($catid));
+
+		foreach ($catid as $id) {
+			$modelid = $this->categorys[$id]['modelid'];
+			if ($modelid) {
+				$this->content_db->set_model($modelid);
+				$num = $this->content_db->count(array('catid'=>$id));
+				if ($num) {
+					dr_json(0, L('目标栏目【'.$this->categorys[$id]['catname'].'】内容存在'.$num.'条数据，无法删除'));
+				}
+			}
+		}
+
+		foreach ($catid as $id) {
+			$sethtml = $this->categorys[$id]['sethtml'];
 			$html_root = SYS_HTML_ROOT;
 			if($sethtml) $html_root = '';
-			$setting = string2array($categorys[$catid]['setting']);
+			$setting = string2array($this->categorys[$id]['setting']);
 			$ishtml = $setting['ishtml'];
 			$this->url = pc_base::load_app_class('url', 'content');
 			$sitelist = getcache('sitelist','commons');
-			$modelid = $categorys[$catid]['modelid'];
+			$modelid = $this->categorys[$id]['modelid'];
 			$items = getcache('category_items_'.$modelid,'commons');
-			//if($items[$catid]) dr_admin_msg(0,L('category_does_not_allow_delete'));
+			//if($items[$id]) dr_json(0, L('category_does_not_allow_delete'));
 			if($ishtml) {
 				pc_base::load_sys_func('dir');
-				$fileurl = $html_root.'/'.$this->url->category_url($catid, 1);
+				$fileurl = $html_root.'/'.$this->url->category_url($id, 1);
 				if($this->siteid != 1) {
 					$fileurl = $sitelist[$this->siteid]['dirname'].$fileurl;
 				}
@@ -647,16 +684,15 @@ class category extends admin {
 					dir_delete(CMS_PATH.$mobilefileurl);	
 				}
 			}
-			$this->delete_child($catid, $modelid);
-			$this->db->delete(array('catid'=>$catid));
+			$this->delete_child($id, $modelid);
+			$this->db->delete(array('catid'=>$id));
 			if ($modelid != 0) {
-				$this->delete_category_content($catid, $modelid);
+				$this->delete_category_content($id, $modelid);
 			}
-			$this->cache();
-			dr_json(1, L('operation_success'));
-		} else {
-			dr_json(0, L('operation_failure'));
 		}
+
+		$this->cache();
+		dr_json(1, L('operation_success'));
 	}
 	/**
 	 * 递归删除栏目
@@ -665,11 +701,10 @@ class category extends admin {
 	private function delete_child($catid, $modelid) {
 		$catid = intval($catid);
 		if (empty($catid)) return false;
-		$categorys = getcache('category_content_'.$this->siteid,'commons');
-		$sethtml = $categorys[$catid]['sethtml'];
+		$sethtml = $this->categorys[$catid]['sethtml'];
 		$html_root = SYS_HTML_ROOT;
 		if($sethtml) $html_root = '';
-		$setting = string2array($categorys[$catid]['setting']);
+		$setting = string2array($this->categorys[$catid]['setting']);
 		$ishtml = $setting['ishtml'];
 		$this->url = pc_base::load_app_class('url', 'content');
 		$sitelist = getcache('sitelist','commons');
@@ -700,14 +735,12 @@ class category extends admin {
 	 * @param $catid 要删除内容的栏目id
 	 */
 	private function delete_category_content($catid, $modelid) {
-		$content_model = pc_base::load_model('content_model');
-		$categorys = getcache('category_content_'.$this->siteid,'commons');
-		$sethtml = $categorys[$catid]['sethtml'];
+		$sethtml = $this->categorys[$catid]['sethtml'];
 		$html_root = SYS_HTML_ROOT;
 		if($sethtml) $html_root = '';
-		$setting = string2array($categorys[$catid]['setting']);
+		$setting = string2array($this->categorys[$catid]['setting']);
 		$content_ishtml = $setting['content_ishtml'];
-		$content_model->set_model($modelid);
+		$this->content_db->set_model($modelid);
 		$this->hits_db = pc_base::load_model('hits_model');
 		$this->queue = pc_base::load_model('queue_model');
 		//附件初始化
@@ -720,7 +753,7 @@ class category extends admin {
 		$typeid = $search_model[$modelid]['typeid'];
 		$this->url = pc_base::load_app_class('url', 'content');
 		$sitelist = getcache('sitelist','commons');
-		$result = $content_model->select(array('catid'=>$catid), 'id,inputtime');
+		$result = $this->content_db->select(array('catid'=>$catid), 'id,inputtime');
 		if (is_array($result) && !empty($result)) {
 			foreach ($result as $key=>$val) {
 				if($content_ishtml && !$val['islink']) {
@@ -760,7 +793,7 @@ class category extends admin {
 					$fileurl = 0;
 				}
 				//删除内容
-				$content_model->delete_content($val['id'],$fileurl,$catid);
+				$this->content_db->delete_content($val['id'],$fileurl,$catid);
 				//删除统计表数据
 				$this->hits_db->delete(array('hitsid'=>'c-'.$modelid.'-'.$val['id']));
 				//删除附件
@@ -796,7 +829,6 @@ class category extends admin {
 	 * 重新统计栏目信息数量
 	 */
 	public function count_items() {
-		$this->content_db = pc_base::load_model('content_model');
 		$result = getcache('category_content_'.$this->siteid,'commons');
 		foreach($result as $r) {
 			if($r['type'] == 0) {
@@ -1160,7 +1192,6 @@ class category extends admin {
 	 * 批量修改
 	 */
 	public function batch_edit() {
-		$categorys = getcache('category_content_'.$this->siteid,'commons');
 		if($this->input->post('dosubmit')) {
 			pc_base::load_sys_func('iconv');	
 			$catid = intval($this->input->post('catid'));
@@ -1171,7 +1202,7 @@ class category extends admin {
 			if(empty($infos)) dr_admin_msg(0,L('operation_success'));
 			$this->attachment_db = pc_base::load_model('attachment_model');
 			foreach ($infos as $catid=>$info) {
-				$setting = string2array($categorys[$catid]['setting']);
+				$setting = string2array($this->categorys[$catid]['setting']);
 				if($this->input->post('type') != 2) {
 					if($post_setting[$catid]['ishtml']) {
 						$setting['category_ruleid'] = $this->input->post('category_html_ruleid')[$catid];
@@ -1191,8 +1222,7 @@ class category extends admin {
 				}
 				if($setting['repeatchargedays']<1) $setting['repeatchargedays'] = 1;
 				$row = $this->db->get_one(array('catid'=>$catid));
-				$this->content_db = pc_base::load_model('content_model');
-				$modelid = $categorys[$catid]['modelid'];
+				$modelid = $this->categorys[$catid]['modelid'];
 				if ($modelid) {
 					$this->content_db->set_model($modelid);
 					$where = "catid IN(".$row['arrchildid'].")";
@@ -1234,7 +1264,7 @@ class category extends admin {
 				
 				if(empty($this->input->post('catids'))) dr_admin_msg(0,L('illegal_parameters'));
 				$batch_array = $workflows = array();
-				foreach ($categorys as $catid=>$cat) {
+				foreach ($this->categorys as $catid=>$cat) {
 					if($cat['type']==$type && in_array($catid, $this->input->post('catids'))) {
 						$batch_array[$catid] = $cat;
 					}
@@ -1259,7 +1289,7 @@ class category extends admin {
 				
 				$tree = pc_base::load_sys_class('tree');
 				$category = array();
-				foreach($categorys as $catid=>$r) {
+				foreach($this->categorys as $catid=>$r) {
 					if($this->siteid != $r['siteid'] || ($r['type']==2 && $r['child']==0)) continue;
 					$category[$catid] = $r;
 				}
@@ -1275,7 +1305,6 @@ class category extends admin {
 	public function public_batch_category() {
 		$show_header = $show_dialog  = true;
 		$menu_data = $this->menu_db->get_one(array('name' => 'category_manage', 'm' => 'admin', 'c' => 'category', 'a' => 'init'));
-		$this->content_db = pc_base::load_model('content_model');
 		if(IS_AJAX_POST) {
 			$info = $this->input->post('info');
 			$setting = $this->input->post('setting');
@@ -1306,8 +1335,6 @@ class category extends admin {
 	 * 批量移动文章
 	 */
 	public function remove() {
-		$this->categorys = getcache('category_content_'.$this->siteid,'commons');
-		$this->content_db = pc_base::load_model('content_model');
 		if($this->input->post('dosubmit')) {
 			$this->content_check_db = pc_base::load_model('content_check_model'); 
 			if(!$this->input->post('fromid')) dr_admin_msg(0,L('please_input_move_source','','content'));
@@ -1337,8 +1364,6 @@ class category extends admin {
 			$str  = "<option value='\$catid' \$disabled>\$spacer \$catname</option>";
  			$tree->init($categorys);
 			$string .= $tree->get_tree(0, $str);
-			
-			
 			$str  = "<option value='\$catid' \$selected>\$spacer \$catname</option>";
 			$source_string = '';
 			$tree->init($categorys);

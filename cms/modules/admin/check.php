@@ -505,14 +505,18 @@ class check extends admin {
                 }
 
                 $this->db->table_name = $prefix.'linkage';
+                if (!$this->db->field_exists('style')) {
+                    $this->db->query('ALTER TABLE `'.$this->db->table_name.'` ADD `style` tinyint(1) unsigned NOT NULL COMMENT \'菜单风格\' AFTER `name`');
+                }
                 $linkage = $this->db->get_one();
                 if ($linkage['linkageid']) {
                     $this->db->query('DROP TABLE IF EXISTS `'.$this->db->table_name.'`');
                     $this->db->query(format_create_sql('CREATE TABLE `'.$this->db->table_name.'` (
                     `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
                     `name` varchar(255) NOT NULL COMMENT \'菜单名称\',
-                    `type` tinyint(1) unsigned NOT NULL,
-                    `code` char(20) NOT NULL,
+                    `style` tinyint(1) unsigned NOT NULL COMMENT \'菜单风格\',
+                    `type` tinyint(1) unsigned NOT NULL COMMENT \'站点\',
+                    `code` char(20) NOT NULL  COMMENT \'别名\',
                     PRIMARY KEY (`id`),
                     UNIQUE KEY `code` (`code`),
                     KEY `module` (`id`)

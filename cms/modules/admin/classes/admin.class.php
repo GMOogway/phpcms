@@ -163,7 +163,7 @@ class admin {
 				$url = 'javascript:'.substr($uri, 3).'();';
 			} elseif (strpos($uri, 'hide:') === 0) {
 				$url = dr_now_url();
-				$_li_class = substr($uri, 5) == $input->get('a') ? '' : '{HIDE}';
+				$_li_class = substr($uri, 5) == ROUTE_A ? '' : '{HIDE}';
 			} elseif (strpos($uri, 'url:') === 0) {
 				$url = substr($uri, 4);
 				if (!$url) {

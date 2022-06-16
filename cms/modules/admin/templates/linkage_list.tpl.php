@@ -8,14 +8,14 @@ include $this->admin_tpl('header');?>
     <p><?php echo L('联动菜单可以作为地区、行业、类型等，也可以按站点来设置联动菜单值');?></p>
 </div>
 <div class="right-card-box">
-<form class="form-horizontal" role="form" name="myform" id="myform" action="?m=admin&c=linkage&a=delete" method="post">
+<form class="form-horizontal" role="form" name="myform" id="myform">
     <div class="table-list">
-        <table width="100%" cellspacing="0">
+        <table class="table-checkable">
             <thead>
             <tr class="heading">
                 <th class="myselect">
                     <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
-                        <input type="checkbox" class="group-checkable" value="" id="check_box" onclick="selectall('ids[]');" />
+                        <input type="checkbox" class="group-checkable" data-set=".checkboxes" />
                         <span></span>
                     </label>
                 </th>
@@ -51,8 +51,8 @@ include $this->admin_tpl('header');?>
                     <?php echo $info['count'];?>
                 </td>
                 <td style="overflow:visible">
-                    <label><a href="javascript:dr_iframe('edit','?m=admin&c=linkage&a=edit&id=<?php echo $info['id'];?>',500,300);" class="btn btn-xs green"> <i class="fa fa-edit"></i> <?php echo L('修改');?> </a></label>
-                    <label><a href="?m=admin&c=linkage&a=public_manage_submenu&key=<?php echo $info['id'];?>" class="btn btn-xs dark"> <i class="fa fa-table"></i> <?php echo L('数据管理');?> </a></label>
+                    <label><a href="javascript:dr_iframe('edit','?m=admin&c=linkage&a=edit&id=<?php echo $info['id'];?>',500,350);" class="btn btn-xs green"> <i class="fa fa-edit"></i> <?php echo L('修改');?> </a></label>
+                    <label><a href="?m=admin&c=linkage&a=public_manage_submenu&key=<?php echo $info['id'];?>&menuid=<?php echo $this->input->get('menuid');?>" class="btn btn-xs dark"> <i class="fa fa-table"></i> <?php echo L('数据管理');?> </a></label>
                     <label><a href="javascript:iframe_show('<?php echo L('一键生成');?>', '?m=admin&c=linkage&a=public_cache&key=<?php echo $info['id'];?>', '500px', '300px');" class="btn btn-xs yellow"> <i class="fa fa-refresh"></i> <?php echo L('一键生成');?></a></label>
                     <?php 
                     if(is_array($dt_data)){
@@ -75,7 +75,7 @@ include $this->admin_tpl('header');?>
                 <input type="checkbox" class="group-checkable" data-set=".checkboxes" />
                 <span></span>
             </label>
-            <button type="button" onclick="Dialog.confirm('<?php echo L('confirm', array('message' => L('selected')));?>',function(){document.myform.action='?m=admin&c=linkage&a=delete';$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete');?></button>
+            <button type="button" onclick="dr_ajax_option('?m=admin&c=linkage&a=delete', '<?php echo L('confirm', array('message' => L('selected')));?>', 1)" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete');?></button>
         </div>
      </div>
 

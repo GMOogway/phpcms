@@ -82,6 +82,7 @@ $LANG['remote_add'] = 'Add';
 $LANG['remote_edit'] = 'Edit';
 $LANG['remote_delete'] = 'Delete';
 $LANG['linkage'] = 'Linkage menu';
+$LANG['manage_submenu'] = 'Data management';
 $LANG['special'] = 'Topic';
 $LANG['template_editor'] = 'Edit template';
 $LANG['template_visualization'] = 'Template visualization';

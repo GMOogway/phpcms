@@ -496,8 +496,9 @@ DROP TABLE IF EXISTS `cms_linkage`;
 CREATE TABLE `cms_linkage` (
   `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL COMMENT '菜单名称',
-  `type` tinyint(1) unsigned NOT NULL,
-  `code` char(20) NOT NULL,
+  `style` tinyint(1) unsigned NOT NULL COMMENT '菜单风格',
+  `type` tinyint(1) unsigned NOT NULL COMMENT '站点',
+  `code` char(20) NOT NULL  COMMENT '别名',
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`),
   KEY `module` (`id`)
@@ -1730,14 +1731,15 @@ INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`,
 INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('280', 'linkageadd', '279', 'admin', 'linkage', 'add', '', 'fa fa-plus', '0', '0', '1', '1', '1', '1', '1');
 INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('281', 'linkage_edit', '279', 'admin', 'linkage', 'edit', '', 'fa fa-edit', '0', '0', '1', '1', '1', '1', '1');
 INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('282', 'linkage_delete', '279', 'admin', 'linkage', 'delete', '', 'fa fa-trash-o', '0', '0', '1', '1', '1', '1', '1');
-INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('283', 'workflow', '227', 'content', 'workflow', 'init', '', 'fa fa-sort-numeric-asc', '0', '1', '1', '1', '1', '1', '1');
-INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('284', 'add_workflow', '283', 'content', 'workflow', 'add', '', 'fa fa-plus', '0', '1', '1', '1', '1', '1', '1');
-INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('285', 'edit_workflow', '283', 'content', 'workflow', 'edit', '', 'fa fa-edit', '0', '0', '1', '1', '1', '1', '1');
-INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('286', 'delete_workflow', '283', 'content', 'workflow', 'delete', '', 'fa fa-trash-o', '0', '0', '1', '1', '1', '1', '1');
-INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('287', 'cloud_service', '226', 'admin', 'cloud', 'init', '', 'fa fa-cloud', '0', '1', '1', '1', '1', '1', '1');
-INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('288', 'my_website', '287', 'admin', 'cloud', 'init', '', 'fa fa-cog', '0', '1', '1', '1', '1', '1', '1');
-INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('289', 'version_update', '287', 'admin', 'cloud', 'upgrade', '', 'fa fa-refresh', '0', '1', '1', '1', '1', '1', '1');
-INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('290', 'file_compare', '287', 'admin', 'cloud', 'compare', '', 'fa fa-code', '0', '1', '1', '1', '1', '1', '1');
+INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('283', 'manage_submenu', '279', 'admin', 'linkage', 'hide:public_manage_submenu', '', 'fa fa-table', '0', '1', '1', '1', '1', '1', '1');
+INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('284', 'workflow', '227', 'content', 'workflow', 'init', '', 'fa fa-sort-numeric-asc', '0', '1', '1', '1', '1', '1', '1');
+INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('285', 'add_workflow', '284', 'content', 'workflow', 'add', '', 'fa fa-plus', '0', '1', '1', '1', '1', '1', '1');
+INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('286', 'edit_workflow', '284', 'content', 'workflow', 'edit', '', 'fa fa-edit', '0', '0', '1', '1', '1', '1', '1');
+INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('287', 'delete_workflow', '284', 'content', 'workflow', 'delete', '', 'fa fa-trash-o', '0', '0', '1', '1', '1', '1', '1');
+INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('288', 'cloud_service', '226', 'admin', 'cloud', 'init', '', 'fa fa-cloud', '0', '1', '1', '1', '1', '1', '1');
+INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('289', 'my_website', '288', 'admin', 'cloud', 'init', '', 'fa fa-cog', '0', '1', '1', '1', '1', '1', '1');
+INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('290', 'version_update', '288', 'admin', 'cloud', 'upgrade', '', 'fa fa-refresh', '0', '1', '1', '1', '1', '1', '1');
+INSERT INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES('291', 'file_compare', '288', 'admin', 'cloud', 'compare', '', 'fa fa-code', '0', '1', '1', '1', '1', '1', '1');
 
 -- ----------------------------
 -- Records of cms_model

@@ -9,7 +9,6 @@ class linkage extends admin {
 		$this->input = pc_base::load_sys_class('input');
 		$this->cache = pc_base::load_sys_class('cache');
 		$this->db = pc_base::load_model('linkage_model');
-		$this->menu_db = pc_base::load_model('menu_model');
 		$this->sites = pc_base::load_app_class('sites');
 		$this->siteid = $this->get_siteid();
 		pc_base::load_sys_class('form', '', 0);
@@ -32,7 +31,7 @@ class linkage extends admin {
 			$number = $this->db->count();
 			$infos[$k]['count'] = $number;
 		}
-		$big_menu = array('javascript:dr_iframe(\'add\',\'?m=admin&c=linkage&a=add\',500,300);void(0);', L('linkage_add'));
+		$big_menu = array('javascript:dr_iframe(\'add\',\'?m=admin&c=linkage&a=add\',500,350);void(0);', L('linkage_add'));
 		include $this->admin_tpl('linkage_list');
 	}
 	
@@ -438,7 +437,6 @@ class linkage extends admin {
 			dr_admin_msg(0, L('联动菜单不存在'));
 		}
 		$linkage = dr_linkage_list($link['code'], 0);
-		$list = $this->getList($link, $pid);
 		if (!$linkage) {
 			if (CI_DEBUG) {
 				$select = '<div class="form-control-static" style="color:red">联动菜单【'.$link['code'].'】没有数据</div>';
@@ -448,13 +446,29 @@ class linkage extends admin {
 		} else {
 			$select = dr_rp(menu_linkage($link['code'], 'pid', 0), 'info[pid]', 'pid');
 		}
-		$menu_data = $this->menu_db->get_one(array('name' => 'linkage', 'm' => 'admin', 'c' => 'linkage', 'a' => 'init'));
-		$big_menu = array('?m=admin&c=linkage&a=init&menuid='.$menu_data['id'], L('linkage'));		
+		$list = $this->getList($link, $pid);
 		include $this->admin_tpl('linkage_submenu');
 	}
 
+	// 删除子菜单
+	public function public_list_del() {
+
+		$ids = $this->input->get_post_ids();
+		$key = (int)$this->input->get('key');
+		if (!$ids) {
+			dr_json(0, L('你还没有选择呢'));
+		}
+
+		$this->db->table_name = $this->db->db_tablepre.'linkage_data_'.$key;
+		foreach ($ids as $id) {
+			$this->db->delete(array('id'=>$id));
+		}
+
+		dr_json(1, L('操作成功'), ['ids' => $ids]);
+	}
+
 	// 变更分类
-	public function pid_edit() {
+	public function public_pid_edit() {
 
 		$ids = $this->input->get_post_ids();
 		$key = (int)$this->input->get('key');

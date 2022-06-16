@@ -84,6 +84,7 @@ $LANG['remote_add'] = '添加';
 $LANG['remote_edit'] = '编辑';
 $LANG['remote_delete'] = '删除';
 $LANG['linkage'] = '联动菜单';
+$LANG['manage_submenu'] = '数据管理';
 $LANG['special'] = '专题';
 $LANG['template_editor'] = '模板编辑';
 $LANG['template_visualization'] = '模板可视化';

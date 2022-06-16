@@ -9,9 +9,9 @@ include $this->admin_tpl('header');?>
 </div>
 
 <div class="right-card-box">
-    <form class="form-horizontal" role="form" id="myform" name="myform" action="?m=admin&c=linkage&a=public_list_del" method="post">
+    <form class="form-horizontal" role="form" id="myform" name="myform">
         <div class="table-list">
-            <table width="100%" cellspacing="0" class="table-checkable">
+            <table class="table-checkable">
                 <thead>
                 <tr class="heading">
                     <th class="myselect">
@@ -26,7 +26,7 @@ include $this->admin_tpl('header');?>
                     <th> <?php echo L('名称 / 别名');?> </th>
                     <th>
                         <a href="javascript:dr_iframe('add', '?m=admin&c=linkage&a=public_listk_add&key=<?php echo $key;?>pid=<?php echo $pid;?>');" class="btn btn-xs blue"> <i class="fa fa-plus"></i> <?php echo L('快速添加');?> </a>
-                        <a href="?m=admin&c=linkage&a=public_manage_submenu&key=<?php echo $key;?>pid=0" class="btn btn-xs dark"> <i class="fa fa-reply"></i> <?php echo L('全部数据');?> </a>
+                        <a href="?m=admin&c=linkage&a=public_manage_submenu&key=<?php echo $key;?>pid=0&menuid=<?php echo $this->input->get('menuid');?>" class="btn btn-xs dark"> <i class="fa fa-reply"></i> <?php echo L('全部数据');?> </a>
                     </th>
                 </tr>
                 </thead>
@@ -51,7 +51,7 @@ include $this->admin_tpl('header');?>
                     <td>
                         <label><a href="javascript:dr_iframe('add', '?m=admin&c=linkage&a=public_listk_add&key=<?php echo $key;?>&pid=<?php echo $t['id'];?>');" class="btn btn-xs blue"> <i class="fa fa-plus"></i> <?php echo L('快速添加');?> </a></label>
                         <label><a href="javascript:dr_iframe('edit','?m=admin&c=linkage&a=public_list_edit&key=<?php echo $key;?>&id=<?php echo $t['id'];?>',500,400);" class="btn btn-xs green"> <i class="fa fa-edit"></i> <?php echo L('修改');?> </a></label>
-                        <?php if ($t['child']){?><label><a href="?m=admin&c=linkage&a=public_manage_submenu&key=<?php echo $key;?>&pid=<?php echo $t['id'];?>" class="btn btn-xs dark"> <i class="fa fa-table"></i> <?php echo L('下级数据管理');?> </a></label><?php }?>
+                        <?php if ($t['child']){?><label><a href="?m=admin&c=linkage&a=public_manage_submenu&key=<?php echo $key;?>&pid=<?php echo $t['id'];?>&menuid=<?php echo $this->input->get('menuid');?>" class="btn btn-xs dark"> <i class="fa fa-table"></i> <?php echo L('下级数据管理');?> </a></label><?php }?>
                     </td>
                 </tr>
                 <?php }}?>
@@ -65,9 +65,9 @@ include $this->admin_tpl('header');?>
                     <input type="checkbox" class="group-checkable" data-set=".checkboxes" />
                     <span></span>
                 </label>
-                <label><button type="button" onclick="Dialog.confirm('<?php echo L('confirm', array('message' => L('selected')));?>',function(){document.myform.action='?m=admin&c=linkage&a=public_list_del&key=<?php echo $key;?>';$('#myform').submit();});" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete');?></button></label>
+                <label><button type="button" onclick="dr_ajax_option('?m=admin&c=linkage&a=public_list_del&key=<?php echo $key;?>', '<?php echo L('confirm', array('message' => L('selected')));?>', 1)" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete');?></button></label>
                 <label><?php echo $select;?></label>
-                <label><button type="button" onclick="dr_ajax_option('?m=admin&c=linkage&a=pid_edit&key=<?php echo $key;?>', '<?php echo L('你确定要批量移动它们吗？');?>', 1)" class="btn green btn-sm"> <i class="fa fa-edit"></i> <?php echo L('变更分类');?></button></label>
+                <label><button type="button" onclick="dr_ajax_option('?m=admin&c=linkage&a=public_pid_edit&key=<?php echo $key;?>', '<?php echo L('你确定要批量移动它们吗？');?>', 1)" class="btn green btn-sm"> <i class="fa fa-edit"></i> <?php echo L('变更分类');?></button></label>
             </div>
          </div>
     </form>

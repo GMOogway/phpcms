@@ -51,10 +51,9 @@ $(function() {
     <p><a href="javascript:dr_admin_menu_ajax('?m=admin&c=category&a=public_cache&pc_hash='+pc_hash+'&is_ajax=1');"><?php echo L('变更栏目属性之后，需要一键更新栏目配置信息');?></a></p>
 </div>
 <div class="right-card-box">
-
     <form class="form-horizontal" role="form" id="myform">
         <div class="table-list">
-            <table>
+            <table class="table-checkable">
                 <thead>
                 <?php echo $cat_head;?>
                 </thead>
@@ -63,34 +62,20 @@ $(function() {
                 </tbody>
             </table>
         </div>
+        <div class="row list-footer table-checkable ">
+            <div class="col-md-12 list-select">
+                <label class="mt-table mt-checkbox mt-checkbox-single mt-checkbox-outline">
+                    <input type="checkbox" class="group-checkable" data-set=".checkboxes" />
+                    <span></span>
+                </label>
+                <label><button type="button" onclick="dr_ajax_option('?m=admin&c=category&a=delete&pc_hash='+pc_hash, '<?php echo L('你确定要删除它们吗？');?>', 1)" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete');?></button></label>
+            </div>
+        </div>
     </form>
 </div>
 </div>
 </div>
 </div>
 </div>
-<script>
-$(function() {
-    $('body').on('click','#del',function() {
-        var that = this;
-        Dialog.confirm('您确定要删除该栏目吗？', function() {
-            var loading = layer.load(1, {shade: [0.1, '#fff']});
-            $.ajax({
-                type: 'post',
-                url: '?m=admin&c=category&a=delete&pc_hash='+pc_hash,
-                data: {catid: $(that).data('catid'),dosubmit:1,csrf_test_name:csrf_hash},
-                dataType: 'json',
-                success: function(res) {
-                    layer.close(loading);
-                    if (res.code==1) {
-                        setTimeout("window.location.reload(true)", 2000);
-                    }
-                    dr_tips(res.code, res.msg);
-                }
-            });
-        });
-    })
-});
-</script>
 </body>
 </html>

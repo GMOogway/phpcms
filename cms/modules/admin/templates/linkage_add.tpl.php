@@ -35,6 +35,21 @@ body {background-color: #fff;}
             </div>
         </div>
         <div class="form-group">
+            <label class="col-xs-3 control-label ajax_name"><?php echo L('linkage_menu_style');?></label>
+            <div class="col-xs-7">
+                <div class="mt-radio-inline">
+                    <label class="mt-radio">
+                        <input type="radio" name="data[style]" value="0" checked> <?php echo L('linkage_option_style');?>
+                        <span></span>
+                    </label>
+                    <label class="mt-radio">
+                        <input type="radio" name="data[style]" value="1"> <?php echo L('linkage_select_style');?>
+                        <span></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
             <label class="col-xs-3 control-label ajax_name"><?php echo L('sites');?></label>
             <div class="col-xs-9">
                 <?php echo form::select($sitelist,'','name="data[type]"',L('all_sites'))?>
