@@ -334,16 +334,6 @@ class check extends admin {
                 if (!$this->db->field_exists('icon')) {
                     $this->db->query('ALTER TABLE `'.$this->db->table_name.'` ADD `icon` varchar(255) NULL DEFAULT NULL COMMENT \'图标标示\' AFTER `data`');
                 }
-                $this->db->delete(array('name' => 'card', 'id' => 1043));
-                $this->db->delete(array('name' => 'creat_card', 'id' => 1044));
-                $this->db->delete(array('name' => 'remove_card', 'id' => 1045));
-                $menu = $this->db->get_one(array('id' => 9, 'name' => 'video', 'parentid' => 0, 'm' => 'video', 'c' => 'video', 'a' => 'init'));
-                if ($menu) {
-                    $this->delete_child(9);
-                }
-                $this->db->update(array('name' => 'email_config', 'icon' => 'fa fa-envelope'),array('id' => 980, 'name' => 'sso_config'));
-                $this->db->update(array('name' => 'connect_config', 'icon' => 'fa fa-html5'),array('id' => 981, 'name' => 'email_config'));
-                $this->db->update(array('name' => 'setting_keyword_enable', 'icon' => 'fa fa-cog'),array('id' => 1093, 'name' => 'connect_config'));
 
                 $this->db->table_name = $prefix.'site';
                 if ($this->db->field_exists('uuid')) {
@@ -882,19 +872,6 @@ class check extends admin {
         }
         $counts = $this->content_db->count();
         return isset($counts) && $counts ? $counts : 0;
-    }
-
-    private function delete_child($id) {
-        $menu_db = pc_base::load_model('menu_model');
-        $id = intval($id);
-        if (empty($id)) return false;
-        $list = $menu_db->select(array('parentid'=>$id));
-        foreach($list as $r) {
-            $this->delete_child($r['id']);
-            $menu_db->delete(array('id'=>$r['id']));
-        }
-        $menu_db->delete(array('id'=>$id));
-        return true;
     }
 
     private function string2array($data) {
