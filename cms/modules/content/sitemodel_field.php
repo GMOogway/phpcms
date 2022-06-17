@@ -56,7 +56,17 @@ class sitemodel_field extends admin {
 			$field = $info['field'];
 			$cname = $info['name'];
 			$where = 'modelid='.$modelid.' AND field=\''.$field.'\' AND siteid='.$this->siteid.'';
-			$model_field = $this->db->get_one($where);
+			$model_field = $this->db->field_exists($where);
+			if (!$model_field) {
+				if(!$modelid || $modelid==-1 || $modelid==-2) {
+					$field_rs = $this->db->query('SHOW FULL COLUMNS FROM `'.$tablename.'`');
+					foreach ($field_rs as $rs) {
+						if ($rs['Field']==$field) {
+							$model_field = 1;
+						}
+					}
+				}
+			}
 			if ($model_field) dr_json(0, L('fieldname').'（'.$field.'）'.L('already_exist'), array('field' => 'field'));
 			$minlength = $info['minlength'] ? $info['minlength'] : 0;
 			$maxlength = $info['maxlength'] ? $info['maxlength'] : 0;

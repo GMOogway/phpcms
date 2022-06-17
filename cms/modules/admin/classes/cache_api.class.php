@@ -312,6 +312,9 @@ class cache_api {
 			file_put_contents(CACHE_MODEL_PATH.'content_'.$classtype.'.class.php',$cache_data);
 			chmod(CACHE_MODEL_PATH.'content_'.$classtype.'.class.php',0777);
 		}
+		$this->sitemodel_field(0);
+		$this->sitemodel_field(-1);
+		$this->sitemodel_field(-2);
 		//更新模型数据缓存
 		$model_array = array();
 		$datas = $this->db->select(array('type'=>0,'disabled'=>0));
@@ -364,6 +367,9 @@ class cache_api {
 		$field_array = array();
 		$db = pc_base::load_model('sitemodel_field_model');
 		$fields = $db->select(array('modelid'=>$modelid,'disabled'=>0),'*',100,'listorder ASC,fieldid ASC');
+		if ($modelid=='-2') {
+			$field_array['content'] = array('fieldid' => '0','modelid' => '-2','siteid' => '1','field' => 'content','name' => '内容','tips' => '','css' => '','minlength' => '1','maxlength' => '999999','pattern' => '','errortips' => '内容不能为空','formtype' => 'editor','setting' => '{"width":"","height":"","toolbar":"full","toolvalue":"\'Bold\', \'Italic\', \'Underline\'","defaultvalue":"","enablekeylink":"1","replacenum":"2","link_mode":"0","enablesaveimage":"1","show_bottom_boot":"0","color":"","theme":"default","autofloat":"0","div2p":"1","autoheight":"0","enter":"0","watermark":"1","attachment":"0","image_reduce":"","allowupload":"0","upload_number":"","upload_maxsize":"","local_img":"1","local_watermark":"1","local_attachment":"0","local_image_reduce":"","disabled_page":"1"}','formattribute' => '','unsetgroupids' => '','unsetroleids' => '','iscore' => '0','issystem' => '1','isunique' => '0','isbase' => '1','issearch' => '0','isadd' => '1','isfulltext' => '1','isposition' => '0','listorder' => '0','disabled' => '0','isomnipotent' => '0','width' => '','height' => '','toolbar' => 'full','toolvalue' => '\'Bold\', \'Italic\', \'Underline\'','defaultvalue' => '','enablekeylink' => '1','replacenum' => '2','link_mode' => '0','enablesaveimage' => '1','show_bottom_boot' => '0','color' => '','theme' => 'default','autofloat' => '0','div2p' => '1','autoheight' => '0','enter' => '0','watermark' => '1','attachment' => '0','image_reduce' => '','allowupload' => '0','upload_number' => '','upload_maxsize' => '','local_img' => '1','local_watermark' => '1','local_attachment' => '0','local_image_reduce' => '','disabled_page' => '1');
+		}
 		foreach($fields as $_value) {
 			if (is_array(string2array($_value['setting']))) {
 				$setting = string2array($_value['setting']);

@@ -29,10 +29,11 @@ class search_model extends model {
 		
 		if($r) {
 			$searchid = $r['searchid'];
-			$this->update(array('data'=>$fulltext_data,'adddate'=>$adddate),array('typeid'=>$typeid,'id'=>$id));
+			$this->update(array('data'=>$fulltext_data,'adddate'=>$adddate ? $adddate : SYS_TIME),array('typeid'=>$typeid,'id'=>$id));
 		} else {
 			$siteid = param::get_cookie('siteid');
-			$searchid = $this->insert(array('typeid'=>$typeid,'id'=>$id,'adddate'=>$adddate,'data'=>$fulltext_data,'siteid'=>$siteid),true);
+			!$siteid && $siteid = get_siteid();
+			$searchid = $this->insert(array('typeid'=>$typeid,'id'=>$id,'adddate'=>$adddate ? $adddate : SYS_TIME,'data'=>$fulltext_data,'siteid'=>$siteid),true);
 		}
 		return $searchid;
 	}

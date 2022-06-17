@@ -53,14 +53,7 @@ include $this->admin_tpl('header','admin');?>
         <span class="help-block" id="dr_keywords_tips"><?php echo L('explode_keywords');?></span>
     </div>
 </div>
-<div class="form-group" id="dr_row_content">
-    <label class="control-label col-md-2"><?php echo L('content');?></label>
-    <div class="col-md-10">
-        <textarea class="dr_ueditor" name="info[content]" id="content"><?php echo $content?></textarea>
-        <?php echo form::editor('content','full','','',$catid,'',1,1);?>
-    </div>
-</div>
-                           <?php
+<?php
 if(is_array($forminfos['base'])) {
  foreach($forminfos['base'] as $field=>$info) {
      if($info['isomnipotent']) continue;

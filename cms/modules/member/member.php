@@ -221,6 +221,64 @@ class member extends admin {
 		$memberlist = $this->db->listinfo(($where ? implode(' AND ', $where) : ''), $this->input->get('order') ? $this->input->get('order') : 'userid DESC', $page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		$list_field = $this->list_field;
+		if (!$list_field) {
+			$list_field = array (
+				'avatar' =>
+					array (
+						'use' => '1',
+						'name' => '头像',
+						'width' => '60',
+						'func' => 'avatar',
+					),
+				'username' =>
+					array (
+						'use' => '1',
+						'name' => '账号',
+						'width' => '110',
+						'func' => 'author',
+					),
+				'groupid' =>
+					array (
+						'func' => 'group',
+						'center' => '1',
+					),
+				'nickname' =>
+					array (
+						'use' => '1',
+						'name' => '昵称',
+						'width' => '120',
+						'func' => '',
+					),
+				'amount' =>
+					array (
+						'use' => '1',
+						'name' => '余额',
+						'width' => '120',
+						'func' => 'money',
+					),
+				'point' =>
+					array (
+						'use' => '1',
+						'name' => '积分',
+						'width' => '120',
+						'func' => 'score',
+					),
+				'regip' =>
+					array (
+						'use' => '1',
+						'name' => '注册IP',
+						'width' => '140',
+						'func' => 'ip',
+					),
+				'regdate' =>
+					array (
+						'use' => '1',
+						'name' => '注册时间',
+						'width' => '160',
+						'func' => 'datetime',
+					),
+			);
+		}
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=member&c=member&a=add\',\''.L('member_add').'\',700,500);void(0);', L('member_add'));
 		include $this->admin_tpl('member_list');
 	}

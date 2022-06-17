@@ -915,7 +915,6 @@ form .portlet.light .portlet-body {padding-top: 20px;padding-bottom: 20px;}
 .portlet.light .portlet-body {padding-top: 20px;}
 .portlet>.portlet-body {-webkit-border-radius: 0 0 4px 4px;-moz-border-radius: 0 0 4px 4px;-ms-border-radius: 0 0 4px 4px;-o-border-radius: 0 0 4px 4px;border-radius: 0 0 4px 4px;}
 .btn-group-vertical>.btn-group:after, .btn-toolbar:after, .clearfix:after, .container-fluid:after, .container:after, .dropdown-menu>li>a, .feeds li:after, .form .form-actions:after, .form-horizontal .form-group:after, .form-recaptcha-img, .modal-footer:after, .modal-header:after, .nav:after, .navbar-collapse:after, .navbar-header:after, .navbar:after, .pager:after, .panel-body:after, .portlet-form .form-actions:after, .portlet>.portlet-body, .portlet>.portlet-title:after, .row:after, .scroller-footer:after, .tabbable:after, .table-toolbar:after, .ui-helper-clearfix:after {clear: both;}
-.myfooter {margin: 0 -20px!important;font-size: 13px;position: fixed;left: 0;right: 0;z-index: 100;bottom: 0;}
 .form {padding: 0!important;}
 .table-scrollable {width: 100%;overflow-x: auto;overflow-y: hidden;border: 1px solid #e7ecf1;margin: 10px 0!important;}
 .table-scrollable.table-scrollable-borderless,.table-scrollable>.table-bordered {border: 0;}

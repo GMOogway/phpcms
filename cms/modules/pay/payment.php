@@ -209,7 +209,7 @@ class payment extends admin {
 	 * Enter description here ...
 	 */
 	public function modify_deposit() {
-		if($this->input->post('dosubmit')) {
+		if(IS_POST) {
 			$username = $this->input->post('username') && trim($this->input->post('username')) ? trim($this->input->post('username')) : dr_admin_msg(0,L('username').L('error'));
 			$usernote = $this->input->post('usernote') && trim($this->input->post('usernote')) ? trim($this->input->post('usernote')) : dr_admin_msg(0,L('usernote').L('error'));	
 			$userinfo = $this->get_useid($username);

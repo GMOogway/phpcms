@@ -62,7 +62,7 @@ class form {
 		}
 		$str ='';
 		if (SYS_EDITOR) {
-			$str = load_js(JS_PATH.'ckeditor/ckeditor.js');
+			$str .= load_js(JS_PATH.'ckeditor/ckeditor.js');
 			if($toolbar == 'basic') {
 				$tool = defined('IS_ADMIN') && IS_ADMIN ? "['Source']," : '';
 				$tool .= "['Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink' ],['Maximize'],\r\n";

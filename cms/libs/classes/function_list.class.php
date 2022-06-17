@@ -340,9 +340,9 @@ class function_list {
     // 用于列表显示用户组
     public function group($value, $param = array(), $data = array()) {
 
-        $user = dr_member_info($value);
+        $user = dr_member_info($data['userid'] ? $data['userid'] : $value);
         if ($user && $user['groupid']) {
-            $rt =getcache('grouplist', 'member');
+            $rt = getcache('grouplist', 'member');
             return $rt[$user['groupid']]['name'] ? $rt[$user['groupid']]['name'] : L('无');
         }
 

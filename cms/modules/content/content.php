@@ -172,6 +172,35 @@ class content extends admin {
 			$this->form_cache = $this->sitemodel[$this->form['tablename']];
 			$field = $this->form_cache['field'];
 			$list_field = $this->form_cache['setting']['list_field'];
+			if (!$list_field) {
+				$list_field = array(
+					'title' => array(
+						'use' => 1,
+						'name' => L('主题'),
+						'width' => '',
+						'func' => 'title',
+					),
+					'username' => array(
+						'use' => 1,
+						'name' => L('用户名'),
+						'width' => '100',
+						'func' => 'author',
+					),
+					'updatetime' => array(
+						'use' => 1,
+						'name' => L('更新时间'),
+						'width' => '160',
+						'func' => 'datetime',
+					),
+					'listorder' => array(
+						'use' => 1,
+						'name' => L('排序'),
+						'width' => '100',
+						'center' => 1,
+						'func' => 'save_text_value',
+					),
+				);
+			}
 			$date_field = $this->form_cache['setting']['search_time'] ? $this->form_cache['setting']['search_time'] : 'updatetime';
 			$this->db->set_model($modelid);
 			if($this->db->table_name==$this->db->db_tablepre) dr_admin_msg(0,L('model_table_not_exists'));
@@ -229,6 +258,35 @@ class content extends admin {
 		$this->form_cache = $this->sitemodel[$this->form['tablename']];
 		$field = $this->form_cache['field'];
 		$list_field = $this->form_cache['setting']['list_field'];
+		if (!$list_field) {
+			$list_field = array(
+				'title' => array(
+					'use' => 1,
+					'name' => L('主题'),
+					'width' => '',
+					'func' => 'title',
+				),
+				'username' => array(
+					'use' => 1,
+					'name' => L('用户名'),
+					'width' => '100',
+					'func' => 'author',
+				),
+				'updatetime' => array(
+					'use' => 1,
+					'name' => L('更新时间'),
+					'width' => '160',
+					'func' => 'datetime',
+				),
+				'listorder' => array(
+					'use' => 1,
+					'name' => L('排序'),
+					'width' => '100',
+					'center' => 1,
+					'func' => 'save_text_value',
+				),
+			);
+		}
 		$date_field = $this->form_cache['setting']['search_time'] ? $this->form_cache['setting']['search_time'] : 'updatetime';
 		$this->db->set_model($modelid);
 		if($this->db->table_name==$this->db->db_tablepre) dr_admin_msg(0,L('model_table_not_exists'));
@@ -288,7 +346,6 @@ class content extends admin {
 			} else {
 				//单网页
 				if(!trim($info['title'])) dr_json(0, L('title_is_empty'), array('field' => 'title'));
-				if(!$info['content']) dr_json(0, L('content').L('empty'), array('field' => 'content'));
 				$this->page_db = pc_base::load_model('page_model');
 				$style_font_weight = $this->input->post('style_font_weight') ? 'font-weight:'.clearhtml($this->input->post('style_font_weight')) : '';
 				$info['style'] = clearhtml($this->input->post('style_color')).';'.$style_font_weight;
@@ -303,6 +360,7 @@ class content extends admin {
 				} else {
 					$catid = $this->page_db->insert($info,1);
 				}
+				$systeminfo['content'] = code2html($systeminfo['content']);
 				$this->page_db->update($systeminfo,array('catid'=>$catid));
 				$this->page_db->create_html($catid,$info);
 				dr_json(1, $this->input->post('edit') ? L('update_success') : L('add_success'));
@@ -347,19 +405,18 @@ class content extends admin {
 					//单网页
 					$this->page_db = pc_base::load_model('page_model');
 					require CACHE_MODEL_PATH.'content_form.class.php';
-					$content_form = new content_form(-2,$catid);
-					$forminfos = $content_form->get();
+					$content_form = new content_form(-2);
 					$formValidator = $content_form->formValidator;
 					$checkall = $content_form->checkall;
-					
 					$r = $this->page_db->get_one(array('catid'=>$catid));
-					
-					if($r) {
+					if ($r) {
 						$forminfos = $content_form->get($r);
 						extract($r);
 						$style_arr = explode(';',$style);
 						$style_color = $style_arr[0];
 						$style_font_weight = $style_arr[1] ? $style_arr[1] : '';
+					} else {
+						$forminfos = $content_form->get();
 					}
 					include $this->admin_tpl('content_page');
 				}
