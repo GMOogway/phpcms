@@ -9,6 +9,7 @@ include $this->admin_tpl('header','admin');
 <div class="right-card-box">
 <div class="row table-search-tool">
 <form name="searchform" action="?m=message&c=message&a=search_message&menuid=<?php echo $_GET['menuid'];?>" method="post" >
+<input name="dosubmit" type="hidden" value="1">
 <div class="col-md-12 col-sm-12">
 <label><?php echo L('query_type')?></label>
 				<label><i class="fa fa-caret-right"></i></label>
