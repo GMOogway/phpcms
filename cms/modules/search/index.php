@@ -77,7 +77,16 @@ class index {
                     $result = $res['matches'];
                 }
             } else {
-                $sql = "`siteid`= '$siteid' $sql_tid $sql_time AND `data` like '%".$this->db->escape($q)."%'";
+				pc_base::load_sys_class('segment', '', 0);
+				$segment = new segment();
+				//分词结果
+				$segment_q = $segment->get_keyword($segment->split_result($q));
+				//如果分词结果为空
+				if(!empty($segment_q)) {
+					$sql = "`siteid`= '$siteid' AND `typeid` = '$typeid' $sql_time AND MATCH (`data`) AGAINST ('$segment_q' IN BOOLEAN MODE)";
+				} else {
+					$sql = "`siteid`= '$siteid' $sql_tid $sql_time AND `data` like '%".$this->db->escape($q)."%'";
+				}
                 $result = $this->db->listinfo($sql, 'searchid DESC', $page, 10);
             }
             //var_dump($result);
@@ -113,8 +122,12 @@ class index {
                             $this->content_db->set_model($modelid);
                         }
                         $datas = $this->content_db->select($where, '*');
-                    }
-                    $data = array_merge($data,$datas);
+                    } else {
+						//读取专题搜索接口
+						$this->special_db = pc_base::load_model('special_content_model');
+						$datas = $this->special_db->select($where, '*');
+					}
+                    $datas && $data = array_merge($data,$datas);
                 }
 
                 $pages = $this->db->pages;

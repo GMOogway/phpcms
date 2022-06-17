@@ -28,7 +28,10 @@ class html {
 		pc_base::load_app_func('global', 'special');
 		$r = $this->c_db->get_one(array('id'=>$contentid));
 		$_special = $s_info = $this->db->get_one(array('id'=>$r['specialid']));
-		if($s_info['ishtml']==0) return content_url($contentid, '1', 0, 'php');
+		if($s_info['ishtml']==0){
+			list($urls) = content_url($contentid, '1', 0, 'php');
+			return $urls;
+		}
 		unset($arr_content);
 		$arr_content = $this->data_db->get_one(array('id'=>$contentid));
 		@extract($r);
@@ -105,7 +108,7 @@ class html {
 						$content = $content.'</p>';
 					}
 				}
-				$file_url = content_url($contentid, $currentpage, $inputtime, 'html', $site_info);
+				list($file_url) = content_url($contentid, $currentpage, $inputtime, 'html', $site_info);
 				if ($currentpage==1) $urls = $file_url;
 				pc_base::load_app_func('util', 'content');
 				$title_pages = content_pages($pagenumber,$currentpage,$showurls);
@@ -125,7 +128,7 @@ class html {
 			$title = clearhtml($title);
 			$SEO = seo($s_info['siteid'], '', $title);
 			$content = $arr_content['content'];
-			$urls = content_url($contentid, $page, $inputtime, 'html', $site_info);
+			list($urls) = content_url($contentid, $page, $inputtime, 'html', $site_info);
 			$file = $urls[1];
 			
 			//如果是分站的文件，将文件写入到信息队列中
