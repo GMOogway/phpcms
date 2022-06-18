@@ -352,6 +352,9 @@ class function_list {
                 foreach ($value as $v) {
                     $rt[] = $grouplist[$v]['name'];
                 }
+                if (dr_is_empty($rt)) {
+                    return L('无');
+                }
                 return implode('、', $rt);
             }
         }
