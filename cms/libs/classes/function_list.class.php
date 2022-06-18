@@ -358,6 +358,9 @@ class function_list {
                 return implode('、', $rt);
             }
         }
+
+        $rt = getcache('grouplist', 'member');
+        return $rt[$value]['name'] ? $rt[$value]['name'] : L('无');
     }
 
     // 用于列表显示价格
