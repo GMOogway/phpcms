@@ -340,13 +340,21 @@ class function_list {
     // 用于列表显示用户组
     public function group($value, $param = array(), $data = array()) {
 
-        $user = dr_member_info($data['userid'] ? $data['userid'] : $value);
-        if ($user && $user['groupid']) {
-            $rt = getcache('grouplist', 'member');
-            return $rt[$user['groupid']]['name'] ? $rt[$user['groupid']]['name'] : L('无');
+        if (dr_is_empty($value)) {
+            return L('无');
         }
 
-        return L('无');
+        if ($value) {
+            $value = explode(',',$value);
+            $grouplist = getcache('grouplist', 'member');
+            if ($grouplist) {
+                $rt = array();
+                foreach ($value as $v) {
+                    $rt[] = $grouplist[$v]['name'];
+                }
+                return implode('、', $rt);
+            }
+        }
     }
 
     // 用于列表显示价格

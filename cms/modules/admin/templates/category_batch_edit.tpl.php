@@ -51,7 +51,7 @@ include $this->admin_tpl('header');?>
 	 <?php
 		foreach($batch_array as $catid=>$cat) {
 	?>
-		<td><b><?php echo L('catgory_img')?>：</b><br><?php echo form::images('info['.$catid.'][image]', 'image'.$catid, $cat['image'], 'content', '', 15);?></td>
+		<td><b><?php echo L('catgory_img')?>：</b><br><?php echo form::images('info['.$catid.'][image]', 'image'.$catid, $cat['image'], 'content', '', (is_mobile(0) ? 14 : 15));?></td>
 	<?php
 		}
 	?>

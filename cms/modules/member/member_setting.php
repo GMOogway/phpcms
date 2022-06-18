@@ -60,11 +60,6 @@ class member_setting extends admin {
 							'width' => '110',
 							'func' => 'author',
 						),
-					'groupid' =>
-						array (
-							'func' => 'group',
-							'center' => '1',
-						),
 					'nickname' =>
 						array (
 							'use' => '1',
@@ -152,11 +147,6 @@ class member_setting extends admin {
 							'name' => '账号',
 							'width' => '110',
 							'func' => 'author',
-						),
-					'groupid' =>
-						array (
-							'func' => 'group',
-							'center' => '1',
 						),
 					'nickname' =>
 						array (

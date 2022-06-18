@@ -237,11 +237,6 @@ class member extends admin {
 						'width' => '110',
 						'func' => 'author',
 					),
-				'groupid' =>
-					array (
-						'func' => 'group',
-						'center' => '1',
-					),
 				'nickname' =>
 					array (
 						'use' => '1',

@@ -405,7 +405,7 @@ class content extends admin {
 					//单网页
 					$this->page_db = pc_base::load_model('page_model');
 					require CACHE_MODEL_PATH.'content_form.class.php';
-					$content_form = new content_form(-2);
+					$content_form = new content_form(-2,$catid,$this->categorys);
 					$formValidator = $content_form->formValidator;
 					$checkall = $content_form->checkall;
 					$r = $this->page_db->get_one(array('catid'=>$catid));

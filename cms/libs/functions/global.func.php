@@ -688,8 +688,8 @@ function sys_field($field) {
 function dr_list_function($func, $value, $param = array(), $data = array(), $field = array(), $name = '') {
 	if (!$func) {
 		$dfunc = array(
-			'userid' => 'userid',
-			'username' => 'username',
+			'author' => 'author',
+			'groupid' => 'group',
 			'datetime' => 'datetime',
 			'editor' => 'content',
 			'image' => 'image',
@@ -701,6 +701,9 @@ function dr_list_function($func, $value, $param = array(), $data = array(), $fie
 			'title' => 'title',
 			'catid' => 'catid',
 			'author' => 'author',
+			'username' => 'author',
+			'groupid' => 'group',
+			'avatar' => 'avatar',
 			'hits' => 'hits',
 			'status' => 'status',
 			'listorder' => 'save_text_value',
