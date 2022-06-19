@@ -5,16 +5,20 @@ include $this->admin_tpl('header','admin');?>
 <link href="<?php echo JS_PATH?>bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" type="text/css" />
 <script src="<?php echo JS_PATH?>bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
 <script type="text/javascript">jQuery(document).ready(function(){$('.bs-select').selectpicker();});</script>
+<div class="subnav">
+    <div class="content-menu ib-a">
+        <a href="?m=content&c=sitemodel_field&a=init&modelid=<?php echo $modelid?>&menuid=<?php echo $this->input->get('menuid')?>"> <i class="fa fa-reorder"></i> <?php if($modelid==-1) {echo L('category').L('field_manage');} else if($modelid==-2) {echo L('category_page').L('field_manage');} else if($modelid) {echo L('manage_field');} else {echo L('sites').L('field_manage');}?></a>
+        <i class="fa fa-circle"></i>
+        <a href="?m=content&c=sitemodel_field&a=add&modelid=<?php echo $modelid?>&menuid=<?php echo $this->input->get('menuid')?>"> <i class="fa fa-plus"></i> <?php echo L('add_field');?></a>
+        <i class="fa fa-circle"></i>
+        <a href="<?php echo dr_now_url();?>" class="on"> <i class="fa fa-edit"></i> <?php echo L('edit_field');?></a>
+    </div>
+</div>
+<div class="content-header"></div>
 <div class="page-container" style="margin-bottom: 0px !important;">
     <div class="page-content-wrapper">
         <div class="page-content page-content3 mybody-nheader main-content  ">
                             <div class="page-body" style="padding-top:0px;margin-bottom:30px;">
-<div class="row my-content-top-tool">
-    <div class="col-md-12 col-sm-12">
-        <label style="margin-right:10px"><a href="javascript:;" class="btn red"> <i class="fa fa-edit"></i> <?php echo L('edit_field');?></a></label>
-        <label><a href="?m=content&c=sitemodel_field&a=init&modelid=<?php echo $modelid?>&menuid=<?php echo $_GET['menuid']?>" class="btn green"> <i class="fa fa-reorder"></i> <?php if($modelid==-1) {echo L('category').L('field_manage');} else if($modelid==-2) {echo L('category_page').L('field_manage');} else if($modelid) {echo L('manage_field');} else {echo L('sites').L('field_manage');}?></a></label>
-    </div>
-</div>
 <div class="note note-danger">
     <p><a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=init&pc_hash='+pc_hash+'&is_ajax=1',1);"><?php echo L('update_cache_all');?></a></p>
 </div>

@@ -6,21 +6,22 @@ include $this->admin_tpl('header','admin');?>
 <?php echo load_css(JS_PATH.'jquery-minicolors/jquery.minicolors.css');?>
 <?php echo load_js(JS_PATH.'jquery-minicolors/jquery.minicolors.min.js');?>
 <script type="text/javascript">var catid=<?php echo $catid;?></script>
-<div class="page-container" style="margin-bottom: 0px !important;">
+<div class="page-content-white page-container" style="margin-bottom: 0px !important;">
     <div class="page-content-wrapper">
         <div class="page-content page-content3 mybody-nheader main-content  ">
-<div class="row my-content-top-tool">
-    <div class="col-md-12 col-sm-12">
-        <label style="margin-right:10px"><a href="javascript:location.reload(true);" class="btn green"> <?php echo L('page_manage');?></a></label>
-        <label style="margin-right:10px"><a href="<?php if(strpos($category['url'],'http://')===false && strpos($category['url'],'https://') ===false) echo siteurl($this->siteid);echo $category['url'];?>" target="_blank" class="btn red"> <i class="fa fa-home"></i> <?php echo L('click_vistor');?></a></label>
-        <label style="margin-right:10px"><a href="?m=block&c=block_admin&a=public_visualization&catid=<?php echo $catid;?>&type=page" class="btn blue"> <i class="fa fa-code"></i> <?php echo L('visualization_edit');?></a></label>
-    </div>
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li> <a href="javascript:location.reload(true);" class="on"> <?php echo L('page_manage');?></a> <i class="fa fa-circle"></i> </li>
+        <li> <a href="<?php if(strpos($category['url'],'http://')===false && strpos($category['url'],'https://') ===false) echo siteurl($this->siteid);echo $category['url'];?>" target="_blank"> <i class="fa fa-home"></i> <?php echo L('click_vistor');?></a> <i class="fa fa-circle"></i> </li>
+        <li> <a href="?m=block&c=block_admin&a=public_visualization&catid=<?php echo $catid;?>&type=page"> <i class="fa fa-code"></i> <?php echo L('visualization_edit');?></a> </li>
+    </ul>
 </div>
 <form name="myform" id="myform" action="?m=content&c=content&a=add" class="form-horizontal" method="post" enctype="multipart/form-data">
 <input type="hidden" name="dosubmit" value="1" />
 <input type="hidden" name="info[catid]" value="<?php echo $catid;?>" />
 <input type="hidden" name="edit" value="<?php echo $title ? 1 : 0;?>" />
-<div class="myfbody">
+<input type="hidden" name="info[updatetime]" value="<?php echo dr_date($updatetime, 'Y-m-d H:i:s');?>" />
+<div class="myfbody" style="margin-top: 20px;padding-top:15px;">
         <div class="row ">
             <div class="col-md-12">
                 <div class="portlet light bordered">
@@ -34,25 +35,7 @@ include $this->admin_tpl('header','admin');?>
                         </div>
                     </div>
                     <div class="portlet-body">
-                        <div class="form-body clear">
-<div class="form-group" id="dr_row_title">
-    <label class="control-label col-md-2"><?php echo L('title');?></label>
-    <div class="col-md-10">
-        <input type="text" style="width:<?php echo (is_mobile(0) ? '100%;' : '400px;').($style_color ? 'color:'.$style_color.';' : '').($style_font_weight ? 'font-weight:'.$style_font_weight.';' : '');?>" name="info[title]" id="title" value="<?php echo $title?>" style="color:<?php echo $style;?>" class="measure-input " onBlur="$.post('<?php echo WEB_PATH;?>api.php?op=get_keywords&sid='+Math.random()*5, {data:$('#title').val()}, function(data){if(data && $('#keywords').val()=='') {$('#keywords').val(data); $('#keywords').tagsinput('add', data);}})"/>
-        <input type="hidden" name="style_font_weight" id="style_font_weight" value="<?php echo $style_font_weight;?>">
-        <input type="hidden" name="style_color" id="style_color" value="<?php echo $style_color;?>">
-        <script type="text/javascript">$(function(){$("#style_color").minicolors({control:$("#style_color").attr("data-control")||"hue",defaultValue:$("#style_color").attr("data-defaultValue")||"",inline:"true"===$("#style_color").attr("data-inline"),letterCase:$("#style_color").attr("data-letterCase")||"lowercase",opacity:$("#style_color").attr("data-opacity"),position:$("#style_color").attr("data-position")||"bottom left",change:function(t,o){t&&(o&&(t+=", "+o),"object"==typeof console&&console.log(t));$("#title").css("color",$("#style_color").val())},theme:"bootstrap"})});</script>
-        <a href="javascript:;" onclick="set_title_color('');$('.minicolors-swatch-color').css('background','');"><?php echo L('清空');?></a>
-        <i class="fa fa-bold" onclick="input_font_bold()" style="cursor:pointer"></i>
-    </div>
-</div>
-<div class="form-group">
-    <label class="control-label col-md-2"><?php echo L('keywords');?></label>
-    <div class="col-md-10">
-        <input type="text" name="info[keywords]" id="keywords" value="<?php echo $keywords?>" size="50" style='width:400px' data-role='tagsinput'>
-        <span class="help-block" id="dr_keywords_tips"><?php echo L('explode_keywords');?></span>
-    </div>
-</div>
+                        <div class="form-body">
 <?php
 if(is_array($forminfos['base'])) {
  foreach($forminfos['base'] as $field=>$info) {

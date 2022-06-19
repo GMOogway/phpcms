@@ -345,23 +345,26 @@ class content extends admin {
 				dr_json(1, L('add_success'));
 			} else {
 				//单网页
-				if(!trim($info['title'])) dr_json(0, L('title_is_empty'), array('field' => 'title'));
 				$this->page_db = pc_base::load_model('page_model');
-				$style_font_weight = $this->input->post('style_font_weight') ? 'font-weight:'.clearhtml($this->input->post('style_font_weight')) : '';
-				$info['style'] = clearhtml($this->input->post('style_color')).';'.$style_font_weight;
 				$modelid = $this->categorys[$catid]['modelid'];
 				require_once CACHE_MODEL_PATH.'content_input.class.php';
 				require_once CACHE_MODEL_PATH.'content_update.class.php';
 				$content_input = new content_input(-2);
 				$inputinfo = $content_input->get($info);
 				$systeminfo = $inputinfo['system'];
-				if($this->input->post('edit')) {
-					$this->page_db->update($info,array('catid'=>$catid));
+				if($systeminfo['updatetime'] && !is_numeric($systeminfo['updatetime'])) {
+					$systeminfo['updatetime'] = strtotime($systeminfo['updatetime']);
+				} elseif(!$systeminfo['updatetime']) {
+					$systeminfo['updatetime'] = SYS_TIME;
 				} else {
-					$catid = $this->page_db->insert($info,1);
+					$systeminfo['updatetime'] = $systeminfo['updatetime'];
 				}
 				$systeminfo['content'] = code2html($systeminfo['content']);
-				$this->page_db->update($systeminfo,array('catid'=>$catid));
+				if($this->input->post('edit')) {
+					$this->page_db->update($systeminfo,array('catid'=>$catid));
+				} else {
+					$catid = $this->page_db->insert($systeminfo,true);
+				}
 				$this->page_db->create_html($catid,$info);
 				dr_json(1, $this->input->post('edit') ? L('update_success') : L('add_success'));
 			}
@@ -1162,12 +1165,12 @@ class content extends admin {
 						$r['vs_show'] ='';
 					}
 					$r['icon_type'] = 'file';
-					$r['category_edit'] = " <a href='?m=content&c=content&a=add&menuid=".intval($this->input->get('menuid'))."&catid=".$r['catid']."' target='right'>".L('edit')."</a>";
+					$r['category_edit'] = "<span class='folder'></span><a href='?m=content&c=content&a=add&menuid=".intval($this->input->get('menuid'))."&catid=".$r['catid']."' target='right'>".$r['catname']."</a>";
 					$r['add_icon'] = '';
 					$r['type'] = 'add';
 				} else {
 					$r['icon_type'] = $r['vs_show'] = '';
-					$r['category_edit'] = '';
+					$r['category_edit'] = "<span class='folder'>".$r['catname']."</span>";
 					$r['type'] = 'init';
 					$r['add_icon'] = "<a target='right' href='?m=content&c=content&menuid=".intval($this->input->get('menuid'))."&catid=".$r['catid']."' onclick=\"javascript:dr_content_submit('?m=content&c=content&a=add&menuid=".intval($this->input->get('menuid'))."&catid=".$r['catid']."','add')\"><img src='".IMG_PATH."add_content.png' alt='".L('add')."'></a> ";
 				}
@@ -1184,7 +1187,7 @@ class content extends admin {
 
 					default:
 						$strs = "<span class='\$icon_type'>\$add_icon<a href='?m=content&c=content&a=\$type&menuid=".intval($this->input->get('menuid'))."&catid=\$catid' target='right'>\$catname</a></span>";
-						$strs2 = "<span class='folder'>\$catname\$category_edit</span>";
+						$strs2 = "\$category_edit";
 						break;
 				}
 			$categorys = $tree->get_treeview(0,'category_tree',$strs,$strs2,$ajax_show);

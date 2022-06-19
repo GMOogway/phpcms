@@ -223,11 +223,9 @@ class check extends admin {
                     file_put_contents($rt,$database_data);
                 }
 
-                $this->content_db = pc_base::load_model('content_model');
                 $datas = $this->db->select(array('type'=>0,'disabled'=>0));
                 foreach ($datas as $r) {
-                    $this->content_db->set_model($r['modelid']);
-                    $number = $this->content_db->count();
+                    $number = $this->_table_counts($r['tablename']);
                     $this->db->update(array('items'=>$number),array('modelid'=>$r['modelid']));
                 }
 
@@ -489,6 +487,18 @@ class check extends admin {
                     if (isset($r['tips']) && strstr($r['tips'], '空格或者')) {
                         $this->db->update(array('tips'=>'多关键词之间用“,”隔开', 'formattribute'=>'data-role=\'tagsinput\''),array('modelid'=>$r['modelid']));
                     }
+                }
+                $title_field = $this->db->get_one(array('modelid' => -2, 'siteid' => 1, 'field' => 'title', 'name' => '标题'));
+                if (!$title_field) {
+                    $this->db->insert(array('modelid' => -2, 'siteid' => 1, 'field' => 'title', 'name' => '标题', 'tips' => '', 'css' => 'inputtitle', 'minlength' => 1, 'maxlength' => '80', 'pattern' => '', 'errortips' => '请输入标题', 'formtype' => 'title', 'setting' => '', 'formattribute' => '', 'unsetgroupids' => '', 'unsetroleids' => '', 'iscore' => 0, 'issystem' => 1, 'isunique' => 0, 'isbase' => 1, 'issearch' => 0, 'isadd' => 0, 'isfulltext' => 0, 'isposition' => 0, 'listorder' => 0, 'disabled' => 0, 'isomnipotent' => 0));
+                }
+                $keywords_field = $this->db->get_one(array('modelid' => -2, 'siteid' => 1, 'field' => 'keywords', 'name' => '关键词'));
+                if (!$keywords_field) {
+                    $this->db->insert(array('modelid' => -2, 'siteid' => 1, 'field' => 'keywords', 'name' => '关键词', 'tips' => '多关键词之间用“,”隔开', 'css' => '', 'minlength' => 0, 'maxlength' => '40', 'pattern' => '', 'errortips' => '', 'formtype' => 'keyword', 'setting' => '', 'formattribute' => 'data-role=\'tagsinput\'', 'unsetgroupids' => '', 'unsetroleids' => '', 'iscore' => 0, 'issystem' => 1, 'isunique' => 0, 'isbase' => 1, 'issearch' => 0, 'isadd' => 0, 'isfulltext' => 0, 'isposition' => 0, 'listorder' => 0, 'disabled' => 0, 'isomnipotent' => 0));
+                }
+                $content_field = $this->db->get_one(array('modelid' => -2, 'siteid' => 1, 'field' => 'content', 'name' => '内容'));
+                if (!$content_field) {
+                    $this->db->insert(array('modelid' => -2, 'siteid' => 1, 'field' => 'content', 'name' => '内容', 'tips' => '', 'css' => '', 'minlength' => 1, 'maxlength' => '999999', 'pattern' => '', 'errortips' => '内容不能为空', 'formtype' => 'editor', 'setting' => '{"width":"","height":"","toolbar":"full","toolvalue":"\'Bold\', \'Italic\', \'Underline\'","defaultvalue":"","enablekeylink":"1","replacenum":"2","link_mode":"0","enablesaveimage":"0","show_bottom_boot":"1","tool_select_1":"0","tool_select_2":"0","tool_select_3":"1","tool_select_4":"1","color":"","theme":"default","autofloat":"0","div2p":"1","autoheight":"0","enter":"0","watermark":"1","attachment":"0","image_reduce":"","allowupload":"0","upload_number":"","upload_maxsize":"","local_img":"1","local_watermark":"1","local_attachment":"0","local_image_reduce":"","disabled_page":"1"}', 'formattribute' => '', 'unsetgroupids' => '', 'unsetroleids' => '', 'iscore' => 0, 'issystem' => 1, 'isunique' => 0, 'isbase' => 1, 'issearch' => 0, 'isadd' => 0, 'isfulltext' => 0, 'isposition' => 0, 'listorder' => 0, 'disabled' => 0, 'isomnipotent' => 0));
                 }
 
                 break;

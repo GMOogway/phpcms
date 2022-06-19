@@ -187,6 +187,7 @@ class formguide_field extends admin {
 			}
 			dr_json(1, L('update_success'), array('url' => '?m=formguide&c=formguide_field&a=init&formid='.$formid.'&menuid='.$this->input->post('menuid').'&pc_hash='.dr_get_csrf_token()));
 		} else {
+			$show_header = $show_validator = $show_dialog = true;
 			if ($this->input->get('formid') && !empty($this->input->get('formid'))) {
 				pc_base::load_sys_class('form','',0);
 				require MODEL_PATH.'fields.inc.php'; 
