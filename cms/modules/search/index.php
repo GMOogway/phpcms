@@ -5,7 +5,7 @@ pc_base::load_sys_class('form','',0);
 pc_base::load_sys_class('format','',0);
 class index {
     function __construct() {
-		$this->input = pc_base::load_sys_class('input');
+        $this->input = pc_base::load_sys_class('input');
         $this->db = pc_base::load_model('search_model');
         $this->content_db = pc_base::load_model('content_model');
     }
@@ -24,8 +24,8 @@ class index {
 
         $search_model = getcache('search_model_'.$siteid);
         $type_module = getcache('type_module_'.$siteid);
-		$sitelist  = getcache('sitelist','commons');
-		$default_style = $sitelist[$siteid]['default_style'];
+        $sitelist  = getcache('sitelist','commons');
+        $default_style = $sitelist[$siteid]['default_style'];
 
         if($this->input->get('q')) {
             if(!trim($this->input->get('q'))) {
@@ -37,8 +37,8 @@ class index {
             $pagesize = 10;
             $q = safe_replace(trim($this->input->get('q')));
             $q = new_html_special_chars(clearhtml($q));
-            $q = str_replace('%', '', $q);	//过滤'%'，用户全文搜索
-            $search_q = $q;	//搜索原内容
+            $q = str_replace('%', '', $q); //过滤'%'，用户全文搜索
+            $search_q = $q; //搜索原内容
             $sql_time = $sql_tid = '';
             if($typeid) $sql_tid = ' AND typeid = '.$typeid;
             //按时间搜索
@@ -77,16 +77,16 @@ class index {
                     $result = $res['matches'];
                 }
             } else {
-				pc_base::load_sys_class('segment', '', 0);
-				$segment = new segment();
-				//分词结果
-				$segment_q = $segment->get_keyword($segment->split_result($q));
-				//如果分词结果为空
-				if(!empty($segment_q)) {
-					$sql = "`siteid`= '$siteid' AND `typeid` = '$typeid' $sql_time AND MATCH (`data`) AGAINST ('$segment_q' IN BOOLEAN MODE)";
-				} else {
-					$sql = "`siteid`= '$siteid' $sql_tid $sql_time AND `data` like '%".$this->db->escape($q)."%'";
-				}
+                pc_base::load_sys_class('segment', '', 0);
+                $segment = new segment();
+                //分词结果
+                $segment_q = $segment->get_keyword($segment->split_result($q));
+                //如果分词结果为空
+                if(!empty($segment_q)) {
+                    $sql = "`siteid`= '$siteid' AND `typeid` = '$typeid' $sql_time AND MATCH (`data`) AGAINST ('$segment_q' IN BOOLEAN MODE)";
+                } else {
+                    $sql = "`siteid`= '$siteid' $sql_tid $sql_time AND `data` like '%".$this->db->escape($q)."%'";
+                }
                 $result = $this->db->listinfo($sql, 'searchid DESC', $page, 10);
             }
             //var_dump($result);
@@ -121,12 +121,12 @@ class index {
                             $this->content_db = pc_base::load_model('yp_content_model');
                             $this->content_db->set_model($modelid);
                         }
-                        $datas = $this->content_db->select($where, '*');
+                        $datas = $this->content_db->select($where, '*', '', 'id DESC');
                     } else {
-						//读取专题搜索接口
-						$this->special_db = pc_base::load_model('special_content_model');
-						$datas = $this->special_db->select($where, '*');
-					}
+                        //读取专题搜索接口
+                        $this->special_db = pc_base::load_model('special_content_model');
+                        $datas = $this->special_db->select($where, '*', '', 'id DESC');
+                    }
                     $datas && $data = array_merge($data,$datas);
                 }
 
@@ -138,35 +138,35 @@ class index {
             $totalnums = isset($totalnums) ? $totalnums : 0;
             $data = isset($data) ? $data : '';
 
-			if (is_mobile($siteid) && $sitelist[$siteid]['mobileauto'] || defined('IS_MOBILE') && IS_MOBILE) {
-				if (!file_exists(PC_PATH.'templates'.DIRECTORY_SEPARATOR.$default_style.DIRECTORY_SEPARATOR.'mobile_search'.DIRECTORY_SEPARATOR.'list.html')) {
-					include template('search','list',$default_style);
-				} else {
-					if ($sitelist[$siteid]['mobile_domain']) {
-						//header('location:'.$sitelist[$siteid]['mobile_domain']);
-						//exit;
-					}
-					pc_base::load_app_func('global','mobile');
-					include template('mobile_search','list',$default_style);
-				}
-			}else{
-				include	template('search','list',$default_style);
-			}
+            if (is_mobile($siteid) && $sitelist[$siteid]['mobileauto'] || defined('IS_MOBILE') && IS_MOBILE) {
+                if (!file_exists(PC_PATH.'templates'.DIRECTORY_SEPARATOR.$default_style.DIRECTORY_SEPARATOR.'mobile_search'.DIRECTORY_SEPARATOR.'list.html')) {
+                    include template('search','list',$default_style);
+                } else {
+                    if ($sitelist[$siteid]['mobile_domain']) {
+                        //header('location:'.$sitelist[$siteid]['mobile_domain']);
+                        //exit;
+                    }
+                    pc_base::load_app_func('global','mobile');
+                    include template('mobile_search','list',$default_style);
+                }
+            }else{
+                include template('search','list',$default_style);
+            }
         } else {
-			if (is_mobile($siteid) && $sitelist[$siteid]['mobileauto'] || defined('IS_MOBILE') && IS_MOBILE) {
-				if (!file_exists(PC_PATH.'templates'.DIRECTORY_SEPARATOR.$default_style.DIRECTORY_SEPARATOR.'mobile_search'.DIRECTORY_SEPARATOR.'index.html')) {
-					include template('search','index',$default_style);
-				} else {
-					if ($sitelist[$siteid]['mobile_domain']) {
-						//header('location:'.$sitelist[$siteid]['mobile_domain']);
-						//exit;
-					}
-					pc_base::load_app_func('global','mobile');
-					include template('mobile_search','index',$default_style);
-				}
-			}else{
-				include	template('search','index',$default_style);
-			}
+            if (is_mobile($siteid) && $sitelist[$siteid]['mobileauto'] || defined('IS_MOBILE') && IS_MOBILE) {
+                if (!file_exists(PC_PATH.'templates'.DIRECTORY_SEPARATOR.$default_style.DIRECTORY_SEPARATOR.'mobile_search'.DIRECTORY_SEPARATOR.'index.html')) {
+                    include template('search','index',$default_style);
+                } else {
+                    if ($sitelist[$siteid]['mobile_domain']) {
+                        //header('location:'.$sitelist[$siteid]['mobile_domain']);
+                        //exit;
+                    }
+                    pc_base::load_app_func('global','mobile');
+                    include template('mobile_search','index',$default_style);
+                }
+            }else{
+                include template('search','index',$default_style);
+            }
         }
     }
 
