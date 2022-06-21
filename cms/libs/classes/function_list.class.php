@@ -151,7 +151,7 @@ class function_list {
         if (!$value) {
             return L('游客');
         }
-        if (IS_ADMIN && ($this->m=='content' && $this->c=='content' && !$data['sysadd']) || $this->m=='member' && $this->c=='member') {
+        if (IS_ADMIN && ($this->m=='content' && $this->c=='content' && !$data['sysadd']) || $this->m=='member' && $this->c=='member' || $this->m=='formguide' && $this->c=='formguide_info') {
             return $value ? '<a href="javascript:dr_iframe_show(\'用户信息\', \'?m=member&c=member&a=memberinfo&username='.urlencode($value).'\', \'50%\')">'.str_cut($value, 10).'</a>' : L('游客');
         }
         return $value ? str_cut($value, 10) : L('游客');
@@ -163,10 +163,11 @@ class function_list {
         if (strlen($userid) > 12) {
             return L('游客');
         }
-        $this->admin_db = pc_base::load_model('admin_model');
-        $userinfo = $this->admin_db->get_one(array('userid'=>$userid));
-        $username = $userinfo['realname'] ? $userinfo['realname'] : $userinfo['username'];
-        if (!$userinfo) {
+        if ($data['sysadd']) {
+            $this->admin_db = pc_base::load_model('admin_model');
+            $userinfo = $this->admin_db->get_one(array('userid'=>$userid));
+            $username = $userinfo['realname'] ? $userinfo['realname'] : $userinfo['username'];
+        } else {
             $this->member_db = pc_base::load_model('member_model');
             $userinfo = $this->member_db->get_one(array('userid'=>$userid));
             $username = $userinfo['nickname'] ? $userinfo['nickname'] : $userinfo['username'];
