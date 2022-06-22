@@ -25,6 +25,9 @@ class sitemodel_field extends admin {
 		$datas = $this->db->select(array('modelid'=>$modelid),'*',100,$this->input->get('order') ? $this->input->get('order') : 'listorder ASC,fieldid ASC');
 		$r = $this->model_db->get_one(array('modelid'=>$modelid));
 		require MODEL_PATH.'fields.inc.php';
+		if($modelid==-2) {
+			$forbid_delete[] = 'content';
+		}
 		include $this->admin_tpl('sitemodel_field_manage');
 	}
 	public function add() {

@@ -37,7 +37,6 @@ jQuery(document).ready(function() {
 			<label><input type='text' name="key" id="key" value="<?php echo $this->input->get('key');?>" size="25"></label>
 </div>
 <div class="col-md-12 col-sm-12">
-				<?php $start_f = $this->input->get('start_time') ? $this->input->get('start_time') : format::date(SYS_TIME-2592000);$end_f = $this->input->get('end_time') ? $this->input->get('end_time') : format::date(SYS_TIME+86400);?>
 				<label><div class="formdate">
 					<div class="input-group input-medium date-picker input-daterange">
 						<input type="text" class="form-control" value="<?php echo $this->input->get('start_time');?>" name="start_time" id="start_time">
@@ -74,7 +73,7 @@ jQuery(document).ready(function() {
                         <input type="checkbox" class="checkboxes" name='ids[]' value="<?php echo $r['id'];?>" />
                         <span></span>
                     </label></td>
-        <td align='center'><input name='listorders[<?php echo $r['id'];?>]' type='text' size='3' value='<?php echo $r['listorder'];?>' class='input-text-c'></td>
+        <td align='center'><input name='listorder[<?php echo $r['id'];?>]' type='text' size='3' value='<?php echo $r['listorder'];?>' class='input-text-c'></td>
 		<td><?php echo $r['title'];?></td>
 	</tr>
      <?php } }?>
@@ -88,7 +87,7 @@ jQuery(document).ready(function() {
             <span></span>
         </label>
         <label><?php echo form::select($types, '', 'name="typeid" id="typeid"', L('please_choose_type'))?><span id="msg_id"></span></label>
-        <label><button type="submit" class="btn green btn-sm"> <i class="fa fa-save"></i> <?php echo L('import')?></button></label>
+        <label><button type="submit" id="dosubmit" class="btn green btn-sm"> <i class="fa fa-save"></i> <?php echo L('import')?></button></label>
     </div>
     <div class="col-md-7 list-page"><?php echo $pages?></div>
 </div>

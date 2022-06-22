@@ -16,39 +16,38 @@ jQuery(document).ready(function() {
     }
 });
 </script>
-<br />
-<div class="pad-lr-10">
-<div id="searchid" style="display:">
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="right-card-box">
+<div class="row table-search-tool" id="searchid" style="display:">
 <form name="searchform" action="" method="get" >
 <input type="hidden" value="special" name="m">
 <input type="hidden" value="special" name="c">
 <input type="hidden" value="public_get_pics" name="a">
 <input type="hidden" name="dosubmit" value="1">
-<table width="100%" cellspacing="0" class="search-form">
-    <tbody>
-		<tr>
-		<td>
-		<div class="explain-col">
+<div class="col-md-12 col-sm-12">
  			<label><?php echo $model_form?></label>
+</div>
+<div class="col-md-12 col-sm-12">
 			<label id="catids"></label>
+</div>
+<div class="col-md-12 col-sm-12">
 			<span id="title" style="display:none;"><?php echo L('title')?>：<label><input type="text" name="title" size="20"></label></span>
-			<?php echo L('input_time')?>：
-			<?php $start_f = $this->input->get('start_time') ? $this->input->get('start_time') : format::date(SYS_TIME-2592000);$end_f = $this->input->get('end_time') ? $this->input->get('end_time') : format::date(SYS_TIME+86400);?>
+</div>
+<div class="col-md-12 col-sm-12">
 			<label><div class="formdate">
 				<div class="input-group input-medium date-picker input-daterange">
-					<input type="text" class="form-control" value="<?php echo $start_f;?>" name="start_time" id="start_time">
+					<input type="text" class="form-control" value="<?php echo $this->input->get('start_time');?>" name="start_time" id="start_time">
 					<span class="input-group-addon"> - </span>
-					<input type="text" class="form-control" value="<?php echo $end_f;?>" name="end_time" id="end_time">
+					<input type="text" class="form-control" value="<?php echo $this->input->get('end_time');?>" name="end_time" id="end_time">
 				</div>
 			</div></label>
-			<label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('search')?></button></label>
-	</div>
-		</td>
-		</tr>
-    </tbody>
-</table>
-</form>
 </div>
+<div class="col-md-12 col-sm-12">
+			<label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('search')?></button></label>
+</div>
+</form>
 <div class="table-list">
     <table width="100%">
         <thead>
@@ -65,9 +64,12 @@ jQuery(document).ready(function() {
 </tbody>
      </table>
 </div>
+<div class="row list-footer table-checkable">
+    <div class="col-md-12 list-page"><?php echo $pages?></div>
+</div>
 <input type="hidden" name="msg_id" id="msg_id">
-<div class="row">
-    <div class="col-md-12 col-sm-12 text-right"><?php echo $pages?></div>
+</div>
+</div>
 </div>
 </div>
 </body>

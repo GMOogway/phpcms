@@ -123,7 +123,7 @@ $p = dr_authcode(array(
                             <div class="form-group">
                                 <label class="control-label col-md-2"><?php echo L('islink')?></label>
                                 <div class="col-md-10">
-                                    <input type="text" name="linkurl" id="linkurl" value="<?php if($info['islink']) { echo $info['url']; }?>" size="30" maxlength="255"<?php if($info['islink']) {?> disabled<?php }?>> <div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="info[islink]" type="checkbox" id="islink" value="1"<?php if($info['islink']) {?> checked<?php }?> onclick="ruselinkurl();" > <font color="red"><?php echo L('islink')?></font><span></span></label></div>
+                                    <input type="text" name="linkurl" id="linkurl" value="<?php if($info['islink']) { echo $info['url']; }?>" size="30" maxlength="255"<?php if(!$info['islink']) {?> disabled<?php }?>> <div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="info[islink]" type="checkbox" id="islink" value="1"<?php if($info['islink']) {?> checked<?php }?> onclick="ruselinkurl();" > <font color="red"><?php echo L('islink')?></font><span></span></label></div>
                                 </div>
                             </div>
                             <div class="form-group">

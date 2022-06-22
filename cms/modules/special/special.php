@@ -199,13 +199,10 @@ class special extends admin {
 			if($_GET['catid']) $where .= get_sql_catid('category_content_'.$this->get_siteid(), $_GET['catid'])." AND `status`=99";
 			else $where .= " `status`=99";
 			if ($_GET['title']) {
-				$where .= " AND `title` LIKE '%".$_GET['title']."%'";
+				$where .= " AND `title` LIKE '%".$this->db->escape($_GET['title'])."%'";
 			}
-			if($_GET['start_time']) {
-				$where .= " AND `inputtime`>=".strtotime($_GET['start_time']);
-			}
-			if($_GET['end_time']) {
-				$where .= " AND `inputtime`<=".strtotime($_GET['end_time']);
+			if($this->input->get('start_time')) {
+				$where .= ' AND `inputtime` BETWEEN ' . max((int)strtotime(strpos($this->input->get('start_time'), ' ') ? $this->input->get('start_time') : $this->input->get('start_time').' 00:00:00'), 1) . ' AND ' . ($this->input->get('end_time') ? (int)strtotime(strpos($this->input->get('end_time'), ' ') ? $this->input->get('end_time') : $this->input->get('end_time').' 23:59:59') : SYS_TIME);
 			}
 			$data = $this->special_api->_get_import_data($_GET['modelid'], $where, $_GET['page']);
 			$pages = $this->special_api->pages;
