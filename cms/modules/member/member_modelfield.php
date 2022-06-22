@@ -47,7 +47,7 @@ class member_modelfield extends admin {
 			$minlength = $info['minlength'] ? $info['minlength'] : 0;
 			$maxlength = $info['maxlength'] ? $info['maxlength'] : 0;
 			$field_type = $info['formtype'];
-			$where = 'modelid='.$modelid.' AND field=\''.$field.'\' AND siteid='.$this->siteid.'';
+			$where = 'modelid='.$modelid.' AND field=\''.$field.'\'';
 			$model_field = $this->db->get_one($where);
 			if ($model_field) dr_json(0, L('fieldname').'（'.$field.'）'.L('already_exist'), array('field' => 'field'));
 			
@@ -106,7 +106,7 @@ class member_modelfield extends admin {
 			$minlength = $info['minlength'] ? $info['minlength'] : 0;
 			$maxlength = $info['maxlength'] ? $info['maxlength'] : 0;
 			$field_type = $info['formtype'];
-			$where = 'modelid='.$modelid.' AND field=\''.$field.'\' AND siteid='.$this->siteid.'';
+			$where = 'modelid='.$modelid.' AND field=\''.$field.'\'';
 			if ($fieldid) {
 				$where .= ' AND fieldid<>'.$fieldid;
 			}
