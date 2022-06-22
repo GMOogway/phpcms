@@ -37,12 +37,108 @@ class member_model extends admin {
 	 */
 	function add() {
 		if(isset($_POST['dosubmit'])) {
-			$info = array();
-			$info['name'] = $this->input->post('info')['modelname'];
-			$info['tablename'] = 'member_'.$_POST['info']['tablename'];
-			$info['description'] = $this->input->post('info')['description'];
+			$info = $this->input->post('info');
+			$info['name'] = $info['modelname'];
+			$info['tablename'] = 'member_'.$info['tablename'];
+			$info['description'] = $info['description'];
 			$info['type'] = 2;
 			$info['siteid'] = $this->get_siteid();
+			unset($info['modelname']);
+			
+			$is_exists = $this->db->table_exists($info['tablename']);
+			if($is_exists) dr_admin_msg(0,L('operation_failure'),'?m=member&c=member_model&a=manage', '', 'add');
+
+			$modelid = $this->db->insert($info, 1);
+			if($modelid) {
+				$model_sql = file_get_contents(MODEL_PATH.'model.sql');
+				$tablepre = $this->db->db_tablepre;
+				$tablename = $info['tablename'];
+				$model_sql = str_replace('$tablename', $tablepre.$tablename, $model_sql);
+				$this->db->sql_execute($model_sql);
+
+				//更新模型缓存
+				pc_base::load_app_class('member_cache','','');
+				member_cache::update_cache_model();
+				dr_admin_msg(1,L('operation_success'),'?m=member&c=member_model&a=manage', '', 'add');
+			} else {
+				dr_admin_msg(0,L('operation_failue'),'?m=member&c=member_model&a=manage', '', 'add');
+			}
+		} else {
+			$show_header = $show_scroll = true;
+			include $this->admin_tpl('member_model_add');
+		}
+		
+	}
+	
+	/**
+	 * 修改会员模型
+	 */
+	function edit() {
+		if(isset($_POST['dosubmit'])) {
+			$info = $this->input->post('info');
+			$modelid = isset($info['modelid']) ? $info['modelid'] :dr_admin_msg(0,L('operation_success'),'?m=member&c=member_model&a=manage', '', 'edit');
+			$info['name'] = $info['modelname'];
+			$info['disabled'] = $info['disabled'] ? 1 : 0;
+			$info['description'] = $info['description'];
+			
+			$this->db->update($info, array('modelid'=>$modelid));
+			
+			//更新模型缓存
+			pc_base::load_app_class('member_cache','','');
+			member_cache::update_cache_model();
+			dr_admin_msg(1,L('operation_success'),'?m=member&c=member_model&a=manage', '', 'edit');
+		} else {					
+			$show_header = $show_scroll = true;
+			$modelinfo = $this->db->get_one(array('modelid'=>$_GET['modelid']));
+			include $this->admin_tpl('member_model_edit');		
+		}
+	}
+	
+	/**
+	 * 删除会员模型
+	 */
+	function delete() {
+		$modelidarr = isset($_POST['modelid']) ? $_POST['modelid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
+		foreach($modelidarr as $id) {
+			$v = $this->db->get_one(array('modelid'=>$id));
+			$this->db->drop_table($v['tablename']);
+			
+			if ($this->db->delete(array('modelid'=>$id))) {
+				//删除模型字段
+				$this->sitemodel_field_db = pc_base::load_model('sitemodel_field_model');
+				$this->sitemodel_field_db->delete(array('modelid'=>$id));
+				//修改用户模型组为普通会员
+				$this->member_db = pc_base::load_model('members_model');
+				$this->member_db->update(array('modelid'=>10), array('modelid'=>$id));
+			}
+		}
+		
+		//更新模型缓存
+		pc_base::load_app_class('member_cache','','');
+		member_cache::update_cache_model();
+		dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
+	}
+
+	public function public_disabled() {
+		$modelid = intval($this->input->get('modelid'));
+		$r = $this->db->get_one(array('modelid'=>$modelid,'siteid'=>$this->get_siteid()));
+		
+		$status = $r['disabled'] ? '0' : '1';
+		$this->db->update(array('disabled'=>$status),array('modelid'=>$modelid,'siteid'=>$this->get_siteid()));
+		dr_json(1, L($status ? '设置为禁用状态' : '设置为可用状态'), array('value' => $status));
+	}
+	/**
+	 * 导入会员模型
+	 */
+	function import(){
+		if($this->input->post('dosubmit')) {
+			$info = $this->input->post('info');
+			$info['name'] = $info['modelname'];
+			$info['tablename'] = 'member_'.$info['tablename'];
+			$info['description'] = $info['description'];
+			$info['type'] = 2;
+			$info['siteid'] = $this->get_siteid();
+			unset($info['modelname']);
 			
 			if(!empty($_FILES['model_import']['tmp_name'])) {
 				$model_import = @file_get_contents($_FILES['model_import']['tmp_name']);
@@ -52,7 +148,7 @@ class member_model extends admin {
 			}
 
 			$is_exists = $this->db->table_exists($info['tablename']);
-			if($is_exists) dr_admin_msg(0,L('operation_failure'),'?m=member&c=member_model&a=manage', '', 'add');
+			if($is_exists) dr_admin_msg(0,L('operation_failure'),'?m=member&c=member_model&a=manage');
 
 			$modelid = $this->db->insert($info, 1);
 			if($modelid) {
@@ -74,8 +170,89 @@ class member_model extends admin {
 						if(isset($v['setting']['fieldtype'])) {
 							$field_type = $v['setting']['fieldtype'];
 						}
-						require MODEL_PATH.'add.sql.php';
-			
+						$tips = $v['name'] ? ' COMMENT \''.$v['name'].'\'' : '';
+						$defaultvalue = isset($v['setting']['defaultvalue']) ? $v['setting']['defaultvalue'] : '';
+						//正整数 UNSIGNED && SIGNED
+						$minnumber = isset($v['setting']['minnumber']) ? $v['setting']['minnumber'] : 1;
+						$decimaldigits = isset($v['setting']['decimaldigits']) ? $v['setting']['decimaldigits'] : '';
+						switch($field_type) {
+							case 'varchar':
+								if(!$maxlength) $maxlength = 255;
+								$maxlength = min($maxlength, 255);
+								$sql = "ALTER TABLE `$tablename` ADD `$field` VARCHAR( $maxlength ) NOT NULL DEFAULT '$defaultvalue' $tips";
+								$this->db->query($sql);
+							break;
+
+							case 'tinyint':
+								if(!$maxlength) $maxlength = 3;
+								$minnumber = intval($minnumber);
+								$defaultvalue = intval($defaultvalue);
+								$sql = "ALTER TABLE `$tablename` ADD `$field` TINYINT( $maxlength ) ".($minnumber >= 0 ? 'UNSIGNED' : '')." NOT NULL DEFAULT '$defaultvalue' $tips";
+								$this->db->query($sql);
+							break;
+							
+							case 'number':
+								$minnumber = intval($minnumber);
+								$defaultvalue = $decimaldigits == 0 ? intval($defaultvalue) : floatval($defaultvalue);
+								$sql = "ALTER TABLE `$tablename` ADD `$field` ".($decimaldigits == 0 ? 'INT' : 'FLOAT')." ".($minnumber >= 0 ? 'UNSIGNED' : '')." NOT NULL DEFAULT '$defaultvalue' $tips";
+								$this->db->query($sql);
+							break;
+
+							case 'smallint':
+								$minnumber = intval($minnumber);
+								$sql = "ALTER TABLE `$tablename` ADD `$field` SMALLINT ".($minnumber >= 0 ? 'UNSIGNED' : '')." NOT NULL $tips";
+								$this->db->query($sql);
+							break;
+
+							case 'int':
+								$minnumber = intval($minnumber);
+								$defaultvalue = intval($defaultvalue);
+								$sql = "ALTER TABLE `$tablename` ADD `$field` INT ".($minnumber >= 0 ? 'UNSIGNED' : '')." NOT NULL DEFAULT '$defaultvalue' $tips";
+								$this->db->query($sql);
+							break;
+
+							case 'mediumint':
+								$minnumber = intval($minnumber);
+								$defaultvalue = intval($defaultvalue);
+								$sql = "ALTER TABLE `$tablename` ADD `$field` INT ".($minnumber >= 0 ? 'UNSIGNED' : '')." NOT NULL DEFAULT '$defaultvalue' $tips";
+								$this->db->query($sql);
+							break;
+
+							case 'mediumtext':
+								$sql = "ALTER TABLE `$tablename` ADD `$field` MEDIUMTEXT NOT NULL $tips";
+								$this->db->query($sql);
+							break;
+							
+							case 'text':
+								$sql = "ALTER TABLE `$tablename` ADD `$field` TEXT NOT NULL $tips";
+								$this->db->query($sql);
+							break;
+
+							case 'date':
+								$sql = "ALTER TABLE `$tablename` ADD `$field` DATE NULL $tips";
+								$this->db->query($sql);
+							break;
+							
+							case 'datetime':
+								$sql = "ALTER TABLE `$tablename` ADD `$field` DATETIME NULL $tips";
+								$this->db->query($sql);
+							break;
+							
+							case 'timestamp':
+								$sql = "ALTER TABLE `$tablename` ADD `$field` TIMESTAMP NOT NULL $tips";
+								$this->db->query($sql);
+							break;
+							//特殊自定义字段
+							case 'pages':
+								$this->db->query("ALTER TABLE `$tablename` ADD `paginationtype` TINYINT( 1 ) NOT NULL DEFAULT '0' $tips");
+								$this->db->query("ALTER TABLE `$tablename` ADD `maxcharperpage` MEDIUMINT( 6 ) NOT NULL DEFAULT '0' $tips");
+							break;
+							case 'readpoint':
+								$defaultvalue = intval($defaultvalue);
+								$this->db->query("ALTER TABLE `$tablename` ADD `readpoint` smallint(5) unsigned NOT NULL default '$defaultvalue' $tips");
+								$this->db->query("ALTER TABLE `$tablename` ADD `paytype` tinyint(1) unsigned NOT NULL default '0' $tips");
+							break;
+						}
 						$v['setting'] = array2string($v['setting']);
 						$v['modelid'] = $modelid;
 						unset($v['fieldid']);
@@ -87,73 +264,11 @@ class member_model extends admin {
 				//更新模型缓存
 				pc_base::load_app_class('member_cache','','');
 				member_cache::update_cache_model();
-				dr_admin_msg(1,L('operation_success'),'?m=member&c=member_model&a=manage', '', 'add');
-			} else {
-				dr_admin_msg(0,L('operation_failue'),'?m=member&c=member_model&a=manage', '', 'add');
+				dr_admin_msg(1,L('operation_success'),'?m=member&c=member_model&a=manage');
 			}
 		} else {
-			$show_header = $show_scroll = true;
-			include $this->admin_tpl('member_model_add');
+			include $this->admin_tpl('member_model_import');
 		}
-		
-	}
-	
-	/**
-	 * 修改会员模型
-	 */
-	function edit() {
-		if(isset($_POST['dosubmit'])) {
-			$modelid = isset($_POST['info']['modelid']) ? $_POST['info']['modelid'] :dr_admin_msg(0,L('operation_success'),'?m=member&c=member_model&a=manage', '', 'edit');
-			$info['name'] = $this->input->post('info')['modelname'];
-			$info['disabled'] = $this->input->post('info')['disabled'] ? 1 : 0;
-			$info['description'] = $this->input->post('info')['description'];
-			
-			$this->db->update($info, array('modelid'=>$modelid));
-			
-			//更新模型缓存
-			pc_base::load_app_class('member_cache','','');
-			member_cache::update_cache_model();
-			dr_admin_msg(1,L('operation_success'),'?m=member&c=member_model&a=manage', '', 'edit');
-		} else {					
-			$show_header = $show_scroll = true;
-			$modelinfo = $this->db->get_one(array('modelid'=>$_GET['modelid']));
-			include $this->admin_tpl('member_model_edit');		
-		}
-	}
-	
-	/**
-	 * 删除会员模型
-	 */
-	function delete() {
-		$modelidarr = isset($_POST['modelid']) ? $_POST['modelid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
-		foreach($_POST['modelid'] as $id) {
-			$v = $this->db->get_one(array('modelid'=>$id));
-			$this->db->drop_table($v['tablename']);
-			
-			if ($this->db->delete(array('modelid'=>$id))) {
-				//删除模型字段
-				$this->sitemodel_field_db = pc_base::load_model('sitemodel_field_model');
-				$this->sitemodel_field_db->delete(array('modelid'=>$id));
-				//修改用户模型组为普通会员
-				$this->member_db = pc_base::load_model('members_model');
-				$this->member_db->update(array('modelid'=>10), array('modelid'=>$id));
-				
-				//更新模型缓存
-				pc_base::load_app_class('member_cache','','');
-				member_cache::update_cache_model();
-				
-				dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
-			} else {
-				dr_admin_msg(0,L('operation_failure'), HTTP_REFERER);
-			}
-		}
-	}
-
-	/**
-	 * 导入会员模型
-	 */
-	function import(){
-		include $this->admin_tpl('member_model_import');
 	}
 	
 	/**
@@ -170,7 +285,7 @@ class member_model extends admin {
 			$modelinfoarr[$k]['setting'] = string2array($v['setting']);
 		}
 
-		$res = var_export($modelinfoarr, TRUE);
+		$res = array2string($modelinfoarr);
 		header('Content-Disposition: attachment; filename="'.$modelarr[$modelid]['tablename'].'.model"');
 		exit($res);
 	}

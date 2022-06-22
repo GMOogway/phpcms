@@ -261,9 +261,9 @@ class sitemodel extends admin {
 		$modelid = intval($this->input->get('modelid'));
 		$r = $this->db->get_one(array('modelid'=>$modelid,'siteid'=>$this->siteid));
 		
-		$status = $r['disabled'] == '1' ? '0' : '1';
+		$status = $r['disabled'] ? '0' : '1';
 		$this->db->update(array('disabled'=>$status),array('modelid'=>$modelid,'siteid'=>$this->siteid));
-		dr_admin_msg(1,L('update_success'), HTTP_REFERER);
+		dr_json(1, L($status ? '设置为禁用状态' : '设置为可用状态'), array('value' => $status));
 	}
 	/**
 	 * 导出模型

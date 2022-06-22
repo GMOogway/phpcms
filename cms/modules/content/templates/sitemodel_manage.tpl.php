@@ -19,13 +19,10 @@ include $this->admin_tpl('header','admin');?>
             </tr>
         </thead>
     <tbody>
-    <?php
-    foreach($datas as $r) {
-        $tablename = $r['name'];
-    ?>
+    <?php foreach($datas as $r) {?>
     <tr>
-        <td><?php echo $r['disabled'] ? '<a href="?m=content&c=sitemodel&a=disabled&modelid='.$r['modelid'].'&menuid='.$this->input->get('menuid').'" class="badge badge-no"><i class="fa fa-times"></i></a>' : '<a href="?m=content&c=sitemodel&a=disabled&modelid='.$r['modelid'].'&menuid='.$this->input->get('menuid').'" class="badge badge-yes"><i class="fa fa-check"></i></a>';?></td>
-        <td><?php echo $tablename?> / <?php echo $r['tablename']?></td>
+        <td><a href="javascript:;" onclick="dr_ajax_open_close(this, '<?php echo '?m=content&c=sitemodel&a=disabled&modelid='.$r['modelid'].'&menuid='.$this->input->get('menuid');?>', 1);" class="badge badge-<?php echo $r['disabled'] ? 'no' : 'yes';?>"><i class="fa fa-<?php echo $r['disabled'] ? 'times' : 'check';?>"></i></a></td>
+        <td><?php echo $r['name'];?> / <?php echo $r['tablename']?></td>
         <td><?php echo $r['items']?></td>
         <td>
             <a class="btn btn-xs blue" href="?m=content&c=sitemodel_field&a=init&modelid=<?php echo $r['modelid']?>&menuid=<?php echo $this->input->get('menuid');?>"> <i class="fa fa-code"></i> <?php echo L('field_manage');?></a>

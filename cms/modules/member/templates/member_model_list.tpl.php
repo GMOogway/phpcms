@@ -20,10 +20,8 @@
                     </label></th>
 			<th width="70"><?php echo L('sort')?></th>
 			<th width="100">ID</th>
-			<th width="280"><?php echo L('model_name')?></th>
-			<th width="180"><?php echo L('table_name')?></th>
-			<th><?php echo L('model_description')?></th>
-			<th width="100"><?php echo L('status')?></th>
+			<th width="280"><?php echo L('model_name')?> / <?php echo L('tablename');?></th>
+            <th width="50" style="text-align:center"><?php echo L('可用');?></th>
 			<th><?php echo L('operation')?></th>
 		</tr>
 	</thead>
@@ -39,10 +37,8 @@
                     </label></td>
 		<td align="center"><input type="text" name="sort[<?php echo $v['modelid']?>]" class="input-text-c input-text" size="3" value="<?php echo $v['sort']?>"></td>
 		<td align="center"><?php echo $v['modelid']?></td>
-		<td align="center"><?php echo $v['name']?></td>
-		<td align="center"><?php echo $this->db->db_tablepre.$v['tablename']?></td>
-		<td><?php echo $v['description']?></td>
-		<td align="center"><?php echo $v['disabled'] ? L('icon_locked') : L('icon_unlock')?></td>
+		<td><?php echo $v['name']?> / <?php echo $v['tablename']?></td>
+        <td class="table-center" style="text-align:center"><a href="javascript:;" onclick="dr_ajax_open_close(this, '<?php echo '?m=member&c=member_model&a=public_disabled&modelid='.$v['modelid'].'&menuid='.$this->input->get('menuid');?>', 1);" class="badge badge-<?php echo $v['disabled'] ? 'no' : 'yes';?>"><i class="fa fa-<?php echo $v['disabled'] ? 'times' : 'check';?>"></i></a></td>
 		<td align="center">
 		<a class="btn btn-xs blue" href="?m=member&c=member_modelfield&a=manage&modelid=<?php echo $v['modelid']?>&menuid=<?php echo $this->input->get('menuid');?>"><?php echo L('field').L('manage')?></a><a class="btn btn-xs green" href="javascript:edit(<?php echo $v['modelid']?>, '<?php echo $v['name']?>')"><?php echo L('edit')?></a><a class="btn btn-xs yellow" href="?m=member&c=member_model&a=export&modelid=<?php echo $v['modelid']?>"><?php echo L('export')?></a><a class="btn btn-xs dark" href="javascript:move(<?php echo $v['modelid']?>, '<?php echo $v['name']?>')"><?php echo L('move')?></a>
 		</td>

@@ -46,30 +46,38 @@ $(function(){
 </script>
 <div class="pad-10">
 <div class="common-form">
-<form name="myform" action="?m=member&c=member_model&a=add" method="post" id="myform">
+<form name="myform" action="?m=member&c=member_model&a=import" method="post" id="myform" enctype="multipart/form-data">
 <fieldset>
 	<legend><?php echo L('basic_configuration')?></legend>
 	<table width="100%" class="table_form">
 		<tr>
 			<td width="80"><?php echo L('model_name')?></td> 
-			<td><input type="text" name="info[modelname]"  class="input-text" id="modelname" size="30"></input></td>
+			<td><label><input type="text" name="info[modelname]" class="input-text" id="modelname" size="30" onblur="topinyin('tablename','modelname','?m=member&c=member_model&a=public_ajax_pinyin');"></label></td>
 		</tr>
 		<tr>
 			<td><?php echo L('table_name')?></td>
 			<td>
-			<?php echo $this->db->db_tablepre?>member_<input type="text" name="info[tablename]" value="" class="input-text" id="tablename" size="16"></input>
+			<?php echo $this->db->db_tablepre?>member_<label><input type="text" name="info[tablename]" value="" class="input-text" id="tablename" size="16"></label>
 			</td>
 		</tr>
 		<tr>
 			<td><?php echo L('model_description')?></td>
 			<td>
-			<input type="text" name="info[description]" value="" class="input-text" id="description" size="80"></input>
+			<label><input type="text" name="info[description]" value="" class="input-text" id="description" size="50"></label>
+			</td>
+		</tr>
+		<tr>
+			<td><?php echo L('model_import')?></td>
+			<td>
+		<label><input type="text" class='input-text' id="myfile" name="myfile" size="26" readonly="readonly"></label> <label><span class="btn green btn-sm fileinput-button"><i class="fa fa-cloud-upload"></i> <span> <?php echo L('select_file');?> </span> <input type="file" name="model_import" id="model_import" onchange="myfile.value=this.value"></span></label>
 			</td>
 		</tr>
 	</table>
 </fieldset>
     <div class="bk15"></div>
-    <input name="dosubmit" type="submit" id="dosubmit" value="<?php echo L('submit')?>" class="dialog">
+<div class="portlet-body form myfooter">
+<div class="form-actions text-center"><input type="submit" id="dosubmit" name="dosubmit" value="<?php echo L('submit');?>" class="button"/></div>
+</div>
 </form>
 </div>
 </div>
