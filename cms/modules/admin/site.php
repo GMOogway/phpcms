@@ -335,14 +335,20 @@ class site extends admin {
 				$systeminfo = $inputinfo['system'];
 				if ($siteid == 1) unset($info['dirname']);
 				if ($this->db->update($info, array('siteid'=>$siteid))) {
-					if($siteid==1) {
+					if($siteid == 1) {
+						if (!empty($info['domain'])) {
+							$setconfig['js_path'] = $info['domain'].'statics/js/';
+							$setconfig['css_path'] = $info['domain'].'statics/css/';
+							$setconfig['img_path'] = $info['domain'].'statics/images/';
+							$setconfig['app_path'] = $info['domain'];
+						}
 						if (!empty($info['mobile_domain'])) {
 							$setconfig['mobile_js_path'] = $info['mobile_domain'].'statics/js/';
 							$setconfig['mobile_css_path'] = $info['mobile_domain'].'statics/css/';
 							$setconfig['mobile_img_path'] = $info['mobile_domain'].'statics/images/';
 							$setconfig['mobile_path'] = $info['mobile_domain'];
-							set_config($setconfig);
 						}
+						set_config($setconfig);
 					}
 					$class_site = pc_base::load_app_class('sites');
 					$class_site->set_cache();
