@@ -38,30 +38,8 @@ class site extends admin {
 	}
 	
 	public function init() {
-		$tablename = $this->db->db_tablepre.'site';
-		if ($this->db->field_exists('uuid')) {
-			$this->db->query('ALTER TABLE `'.$tablename.'` DROP `uuid`');
-		}
-		if (!$this->db->field_exists('ishtml')) {
-			$this->db->query('ALTER TABLE `'.$tablename.'` ADD `ishtml` tinyint(1) unsigned NOT NULL DEFAULT \'1\' COMMENT \'首页静态\' AFTER `domain`');
-		}
-		if (!$this->db->field_exists('mobileauto')) {
-			$this->db->query('ALTER TABLE `'.$tablename.'` ADD `mobileauto` tinyint(1) unsigned NOT NULL DEFAULT \'0\' COMMENT \'自动识别\' AFTER `ishtml`');
-		}
-		if (!$this->db->field_exists('mobilehtml')) {
-			$this->db->query('ALTER TABLE `'.$tablename.'` ADD `mobilehtml` tinyint(1) unsigned NOT NULL DEFAULT \'0\' COMMENT \'生成静态\' AFTER `mobileauto`');
-		}
-		if (!$this->db->field_exists('not_pad')) {
-			$this->db->query('ALTER TABLE `'.$tablename.'` ADD `not_pad` tinyint(1) unsigned NOT NULL DEFAULT \'0\' COMMENT \'将平板端排除\' AFTER `mobilehtml`');
-		}
-		if (!$this->db->field_exists('mobile_domain')) {
-			$this->db->query('ALTER TABLE `'.$tablename.'` ADD `mobile_domain` char(255) DEFAULT \'\' COMMENT \'手机域名\' AFTER `not_pad`');
-		}
-		if (!$this->db->field_exists('style')) {
-			$this->db->query('ALTER TABLE `'.$tablename.'` ADD `style` varchar(5) NOT NULL COMMENT \'\' AFTER `setting`');
-		}
 		$page = $this->input->get('page') && intval($this->input->get('page')) ? intval($this->input->get('page')) : 1;
-		$pagesize = 20;
+		$pagesize = SYS_ADMIN_PAGESIZE;
 		$offset = ($page - 1) * $pagesize;
 		$list = $this->db->select('', '*', $offset.','.$pagesize);
 		$total = $this->db->count();
