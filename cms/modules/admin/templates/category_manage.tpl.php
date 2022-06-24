@@ -20,7 +20,7 @@ function dr_tree_data(catid) {
                     $(".select-cat-"+catid).html('[-]');
                     $('.tooltips').tooltip();
                 } else {
-                    dr_cmf_tips(json.code, json.msg);
+                    dr_tips(json.code, json.msg);
                 }
             },
             error: function(HttpRequest, ajaxOptions, thrownError) {
