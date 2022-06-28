@@ -30,7 +30,7 @@ class module extends admin {
 				if ($author) {
 					$modules[$dir]['author'] = $author;
 				}
-				if ($author) {
+				if ($version) {
 					$modules[$dir]['version'] = $version;
 				}
 			}
