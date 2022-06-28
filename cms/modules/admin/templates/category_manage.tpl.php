@@ -69,6 +69,8 @@ $(function() {
                     <span></span>
                 </label>
                 <label><button type="button" onclick="dr_ajax_option('?m=admin&c=category&a=delete&pc_hash='+pc_hash, '<?php echo L('你确定要删除它们吗？');?>', 1)" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete');?></button></label>
+                <label><?php echo $move_select;?></label>
+                <label><button type="button" onclick="dr_ajax_option('?m=admin&c=category&a=public_move_edit&pc_hash='+pc_hash, '<?php echo L('你确定要移动它们吗？');?>', 1)" class="btn blue btn-sm"> <i class="fa fa-edit"></i> <?php echo L('move');?></button></label>
             </div>
         </div>
     </form>

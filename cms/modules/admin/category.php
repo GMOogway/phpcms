@@ -33,6 +33,21 @@ class category extends admin {
 	public function init() {
 		$show_pc_hash = true;
 		list($cat_head, $cat_list, $pcats) = $this->_get_tree_list($this->cat_data(0));
+		$categorys = array();
+		$tree = pc_base::load_sys_class('tree');
+		foreach($this->categorys as $cid=>$r) {
+			$categorys[$cid] = $r;
+		}
+		$str = "<option value='\$catid'>\$spacer \$catname</option>";
+		$tree->init($categorys);
+		$move_select = '<select class="bs-select form-control" name="catid">
+<option value=\'0\'>顶级栏目</option>';
+		$move_select .= $tree->get_tree(0, $str);
+		$move_select .= '</select>
+<script type="text/javascript"> var bs_selectAllText = \'全选\';var bs_deselectAllText = \'全删\';var bs_noneSelectedText = \'没有选择\'; var bs_noneResultsText = \'没有找到 {0}\';</script>
+<link href="'.JS_PATH.'bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" type="text/css" />
+<script src="'.JS_PATH.'bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
+<script type="text/javascript">jQuery(document).ready(function() {$(\'.bs-select\').selectpicker();});</script>';
 		include $this->admin_tpl('category_manage');
 	}
 	// 获取树形结构列表
@@ -92,7 +107,7 @@ class category extends admin {
 		}
 
 		$head.= '<th> '.L('栏目信息').' </th>';
-		$list.= "<td>\$spacer<a target='_blank' href='\$url'>\$catname</a> \$parent \$ctotal</td>";
+		$list.= "<td>\$spacer<a data-container='body' data-placement='right' data-original-title='\$parentdir\$catdir' class='tooltips' target='_blank' href='\$url'>\$catname</a> \$parent \$ctotal</td>";
 
 		if (dr_in_array('typename', $this->cat_config['sys_field'])) {
 			$head.= '<th width="60" style="text-align:center"> '.L('类型').' </th>';
@@ -149,7 +164,7 @@ class category extends admin {
 			$t['isleft'] = $setting['isleft'];
 			$option.= '<a class="btn btn-xs blue" href="javascript:dr_iframe(\'add\', \'?m=admin&c=category&a=add&parentid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&s='.$t['type'].'&pc_hash='.$this->input->get('pc_hash').'\', \'80%\', \'80%\')"> <i class="fa fa-plus"></i> '.L('子类').'</a>';
 			$option.= '<a class="btn btn-xs green" href="javascript:dr_iframe(\'edit\', \'?m=admin&c=category&a=edit&catid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&type='.$t['type'].'&pc_hash='.$this->input->get('pc_hash').'\', \'80%\', \'80%\')"> <i class="fa fa-edit"></i> '.L('edit').'</a>';
-			$option.= '<a href="?m=admin&c=category&a=remove&catid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash').'" class="btn btn-xs yellow"><i class="fa fa-arrows"></i> '.L('移动').'</a>';
+			$option.= '<a href="?m=admin&c=category&a=remove&catid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash').'" class="btn btn-xs yellow"><i class="fa fa-arrows"></i> '.L('move').'</a>';
 			if($t['type'] || $t['child']) {
 				$t['ctotal'] = '';
 			} else {
@@ -413,8 +428,8 @@ class category extends admin {
 			//}
 			//上级栏目不能是自身  ---也不能是自己的子栏目
 			$arrchildid = $this->db->get_one(array('catid'=>$catid), 'arrchildid');
-			$arrchildid_arr = explode(',',$arrchildid['arrchildid']); 
-			if(in_array($info['parentid'],$arrchildid_arr,true)){
+			$arrchildid_arr = explode(',',$arrchildid['arrchildid']);
+			if(dr_in_array($info['parentid'],$arrchildid_arr)){
 				dr_json(0, L('operation_failure'));
 			}
 			$modelid = $this->categorys[$catid]['modelid'];
@@ -647,8 +662,8 @@ class category extends admin {
 			$catid.= ','.($this->categorys[$id]['arrchildid'] ? $this->categorys[$id]['arrchildid'] : $id);
 		}
 
-        $catid = explode(',', trim($catid, ','));
-        $catid = array_flip(array_flip($catid));
+		$catid = explode(',', trim($catid, ','));
+		$catid = array_flip(array_flip($catid));
 
 		foreach ($catid as $id) {
 			$modelid = $this->categorys[$id]['modelid'];
@@ -691,7 +706,7 @@ class category extends admin {
 			}
 		}
 
-		$this->cache();
+		$this->public_cache();
 		dr_json(1, L('operation_success'));
 	}
 	/**
@@ -1325,11 +1340,54 @@ class category extends admin {
 				$r['setting']['isleft'] = $setting['isleft'];
 				$this->db->update(array('ismenu'=>$info['ismenu'], 'setting'=>dr_array2string($r['setting'])), array('catid'=>$r['catid']));
 			}
-			$this->cache();
+			$this->public_cache();
 			dr_json(1, L('operation_success'));
 		} else {
 			include $this->admin_tpl('category_batch_save');
 		}
+	}
+	// 后台批量移动栏目
+	public function public_move_edit() {
+
+		$ids = $this->input->get_post_ids();
+		if (!$ids) {
+			dr_json(0, L('所选栏目不存在'));
+		}
+
+		$topid = (int)$this->input->post('catid');
+		foreach ($ids as $id) {
+			if ($id == $topid) {
+				dr_json(0, L('栏目上级不能为本身'));
+			}
+			$arrchildid = $this->db->get_one(array('catid'=>$id), 'arrchildid');
+			$arrchildid_arr = explode(',',$arrchildid['arrchildid']);
+			if(dr_in_array($topid,$arrchildid_arr)){
+				dr_json(0, L('栏目上级不能为本身'));
+			}
+		}
+
+		if ($topid) {
+			// 重新获取数据
+			if (!$this->categorys[$topid]) {
+				dr_json(0, L('目标栏目不存在'));
+			}
+			$modelid = $this->categorys[$topid]['modelid'];
+			if ($modelid) {
+				$this->content_db->set_model($modelid);
+				$total = $this->content_db->count(array('catid'=>$topid));
+				if ($total) {
+					dr_json(0, L('目标栏目【'.$this->categorys[$topid]['catname'].'】存在内容数据，无法作为父栏目'));
+				}
+			}
+		}
+
+		foreach ($ids as $id) {
+			$this->db->update(array('parentid'=>$topid), array('catid'=>$id));
+		}
+
+		// 自动更新缓存
+		$this->public_cache();
+		dr_json(1, L('操作成功'));
 	}
 	/**
 	 * 批量移动文章
