@@ -4,9 +4,8 @@ class url{
 	private $urlrules,$categorys,$html_root,$mobile_root;
 	public function __construct() {
 		$this->input = pc_base::load_sys_class('input');
+		$this->category_db = pc_base::load_model('category_model');
 		$this->urlrules = getcache('urlrules','commons');
-		self::set_siteid();
-		$this->categorys = getcache('category_content_'.$this->siteid,'commons');
 		$this->html_root = SYS_HTML_ROOT;
 		$this->mobile_root = SYS_MOBILE_ROOT;
 	}
@@ -24,9 +23,9 @@ class url{
 	 * @return array 0=>url , 1=>生成路径
 	 */
 	public function show($id, $page = 0, $catid = 0, $time = 0, $prefix = '',$data = '',$action = 'edit',$upgrade = 0,$mobile = 0) {
+		$category = $this->category_db->get_one(array('catid'=>$catid));
 		$page = max($page,1);
 		$urls = $showurls = $catdir = '';
-		$category = $this->categorys[$catid];
 		$setting = string2array($category['setting']);
 		$content_ishtml = $setting['content_ishtml'];
 		//当内容为转换或升级时
@@ -59,10 +58,9 @@ class url{
 					$match_url = $matches[0];
 					$url = $match_url.'/';
 				}
-				$db = pc_base::load_model('category_model');
-				$r = $db->get_one(array('url'=>$url), '`catid`');
-				
-				if($r) $domain_dir = $this->get_categorydir($r['catid']).$this->categorys[$r['catid']]['catdir'].'/';
+				$r = $this->category_db->get_one(array('url'=>$url), '`catid`');
+				$r2 = $this->category_db->get_one(array('catid'=>$r['catid']));
+				if($r && $r2) $domain_dir = $this->get_categorydir($r['catid']).$r2['catdir'].'/';
 			}
 			$categorydir = $this->get_categorydir($catid);
 			$catdir = $category['catdir'];
@@ -119,7 +117,7 @@ class url{
 	 * @param intval $page 页数
 	 */
 	public function category_url($catid, $page = 1) {
-		$category = $this->categorys[$catid];
+		$category = $this->category_db->get_one(array('catid'=>$catid));
 		if($category['type']==2) return $category['url'];
 		$page = max(intval($page), 1);
 		$setting = string2array($category['setting']);
@@ -144,12 +142,12 @@ class url{
 			$parentids[] = $catid;
 			$domain_dir = '';
 			foreach ($parentids as $pid) { //循环查询父栏目是否设置了二级域名
-				$r = $this->categorys[$pid];
+				$r = $this->category_db->get_one(array('catid'=>$pid));
 				if (strpos(strtolower($r['url']), '://')!==false && strpos($r['url'], '?')===false) {
 					$r['url'] = preg_replace('/([(http|https):\/\/]{0,})([^\/]*)([\/]{1,})/i', '$1$2/', $r['url'], -1); //取消掉双'/'情况
 					if (substr_count($r['url'], '/')==3 && substr($r['url'],-1,1)=='/') { //如果url中包含‘http://’并且‘/’在3个则为二级域名设置栏目
 						$url = $r['url'];
-						$domain_dir = $this->get_categorydir($pid).$this->categorys[$pid]['catdir'].'/'; //得到二级域名的目录
+						$domain_dir = $this->get_categorydir($pid).$r['catdir'].'/'; //得到二级域名的目录
 					}
 				}
 			}
@@ -203,28 +201,16 @@ class url{
 	 * @param $dir
 	 */
 	private function get_categorydir($catid, $dir = '') {
+		$category = $this->category_db->get_one(array('catid'=>$catid));
 		$setting = array();
-		$setting = string2array($this->categorys[$catid]['setting']);
+		$setting = string2array($category['setting']);
 		if ($setting['create_to_html_root']) return $dir;
-		if ($this->categorys[$catid]['parentid']) {
-			$dir = $this->categorys[$this->categorys[$catid]['parentid']]['catdir'].'/'.$dir;
-			return $this->get_categorydir($this->categorys[$catid]['parentid'], $dir);
+		if ($category['parentid']) {
+			$r = $this->category_db->get_one(array('catid'=>$category['parentid']));
+			$dir = $r['catdir'].'/'.$dir;
+			return $this->get_categorydir($category['parentid'], $dir);
 		} else {
 			return $dir;
-		}
-	}
-	/**
-	 * 设置当前站点
-	 */
-	private function set_siteid() {
-		if(defined('IS_ADMIN') && IS_ADMIN) {
-			$this->siteid = get_siteid();
-		} else {
-			if (param::get_cookie('siteid')) {
-				$this->siteid = param::get_cookie('siteid');
-			} else {
-				$this->siteid = 1;
-			}
 		}
 	}
 }

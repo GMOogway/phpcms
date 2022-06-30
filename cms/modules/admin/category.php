@@ -33,21 +33,7 @@ class category extends admin {
 	public function init() {
 		$show_pc_hash = true;
 		list($cat_head, $cat_list, $pcats) = $this->_get_tree_list($this->cat_data(0));
-		$categorys = array();
-		$tree = pc_base::load_sys_class('tree');
-		foreach($this->categorys as $cid=>$r) {
-			$categorys[$cid] = $r;
-		}
-		$str = "<option value='\$catid'>\$spacer \$catname</option>";
-		$tree->init($categorys);
-		$move_select = '<select class="bs-select form-control" name="catid">
-<option value=\'0\'>顶级栏目</option>';
-		$move_select .= $tree->get_tree(0, $str);
-		$move_select .= '</select>
-<script type="text/javascript"> var bs_selectAllText = \'全选\';var bs_deselectAllText = \'全删\';var bs_noneSelectedText = \'没有选择\'; var bs_noneResultsText = \'没有找到 {0}\';</script>
-<link href="'.JS_PATH.'bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" type="text/css" />
-<script src="'.JS_PATH.'bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
-<script type="text/javascript">jQuery(document).ready(function() {$(\'.bs-select\').selectpicker();});</script>';
+		$move_select = $this->cat_select();
 		include $this->admin_tpl('category_manage');
 	}
 	// 获取树形结构列表
@@ -341,9 +327,10 @@ class category extends admin {
 					}
 				}
 			}
+			$this->repair();
+			$this->count_items();
 			$this->cache();
-			$menu_data = $this->menu_db->get_one(array('name' => 'category_manage', 'm' => 'admin', 'c' => 'category', 'a' => 'init'));
-			dr_json(1, L('add_success'), array('tourl' => '?m=admin&c=category&a=public_cache&menuid='.$menu_data['id'].'&pc_hash='.dr_get_csrf_token()));
+			dr_json(1, L('add_success'));
 		} else {
 			$show_header = $show_dialog = true;
 			$catid = 0;
@@ -512,6 +499,8 @@ class category extends admin {
 			$this->db->update($systeminfo,array('catid'=>$catid,'siteid'=>$this->siteid));
 			$this->update_priv($catid, $this->input->post('priv_roleid'));
 			$this->update_priv($catid, $this->input->post('priv_groupid'),0);
+			$this->repair();
+			$this->count_items();
 			$this->cache();
 			//更新附件状态
 			if($info['image'] && SYS_ATTACHMENT_STAT) {
@@ -519,7 +508,7 @@ class category extends admin {
 				$this->attachment_db->api_update($info['image'],'catid-'.$catid,1);
 			}
 			$menu_data = $this->menu_db->get_one(array('name' => 'category_manage', 'm' => 'admin', 'c' => 'category', 'a' => 'init'));
-			dr_json(1, L('operation_success'), array('tourl' => '?m=admin&c=category&a=public_cache&menuid='.$menu_data['id'].'&pc_hash='.dr_get_csrf_token()));
+			dr_json(1, L('operation_success'));
 		} else {
 			$show_header = $show_dialog = true;
 			//获取站点模板信息
@@ -869,7 +858,7 @@ class category extends admin {
 		$this->repair();
 		$this->count_items();
 		$this->cache();
-		dr_admin_msg(1, L('operation_success'), '?m=admin&c=category&a=init&menuid='.$this->input->get('menuid'));
+		dr_admin_msg(1, L('operation_success'));
 	}
 	/**
 	* 修复栏目数据
@@ -976,14 +965,10 @@ class category extends admin {
 	}
 
 	/**
-	 * 
 	 * 获取父栏目ID列表
-	 * @param integer $catid              栏目ID
-	 * @param array $arrparentid          父目录ID
-	 * @param integer $n                  查找的层次
 	 */
 	private function get_arrparentid($catid, $arrparentid = '', $n = 1) {
-		if($n > 5 || !is_array($this->categorys) || !isset($this->categorys[$catid])) return false;
+		if($n > 100 || !is_array($this->categorys) || !isset($this->categorys[$catid])) return false;
 		$parentid = $this->categorys[$catid]['parentid'];
 		$arrparentid = $arrparentid ? $parentid.','.$arrparentid : $parentid;
 		if($parentid) {
@@ -996,17 +981,17 @@ class category extends admin {
 	}
 
 	/**
-	 * 
-	 * 获取子栏目ID列表
-	 * @param $catid 栏目ID
+	 * 获取栏目的全部子栏目
 	 */
-	private function get_arrchildid($catid) {
+	private function get_arrchildid($catid, $n = 1) {
 		$arrchildid = $catid;
-		if(is_array($this->categorys)) {
-			foreach($this->categorys as $id => $cat) {
-				if($cat['parentid'] && $id != $catid && $cat['parentid']==$catid) {
-					$arrchildid .= ','.$this->get_arrchildid($id);
-				}
+		if ($n > 100 || !is_array($this->categorys) || !isset($this->categorys[$catid])) {
+			return $arrchildid;
+		}
+		$data = $this->db->select(array('parentid>'=>0, 'catid<>'=>$catid, 'parentid'=>$catid));
+		if ($data) {
+			foreach($data as $cat) {
+				$arrchildid .= ','.$this->get_arrchildid($cat['catid'], ++$n);
 			}
 		}
 		return $arrchildid;
@@ -1016,12 +1001,11 @@ class category extends admin {
 	 * @param  $catid
 	 */
 	function get_parentdir($catid) {
-		if($this->categorys[$catid]['parentid']==0) return '';
-		$r = $this->categorys[$catid];
-		$setting = string2array($r['setting']);
-		$url = $r['url'];
-		$arrparentid = $r['arrparentid'];
-		unset($r);
+		$category = $this->db->get_one(array('catid'=>$catid));
+		if($category['parentid']==0) return '';
+		$setting = string2array($category['setting']);
+		$url = $category['url'];
+		$arrparentid = $category['arrparentid'];
 		if (strpos($url, '://')===false) {
 			if ($setting['creat_to_html_root']) {
 				return '';
@@ -1050,8 +1034,9 @@ class category extends admin {
 				krsort($arrparentid);
 				foreach ($arrparentid as $id) {
 					if ($id==0) continue;
-					$arrcatdir[] = $this->categorys[$id]['catdir'];
-					if ($this->categorys[$id]['parentdir'] == '') break;
+					$r = $this->db->get_one(array('catid'=>$id));
+					$arrcatdir[] = $r['catdir'];
+					if ($r['parentdir'] == '') break;
 				}
 				krsort($arrcatdir);
 				return implode('/', $arrcatdir).'/';
@@ -1428,6 +1413,25 @@ class category extends admin {
 			$source_string .= $tree->get_tree(0, $str);
 			include $this->admin_tpl('category_remove');
  		}
+	}
+	//生成常用栏目选择框
+	private function cat_select() {
+		$categorys = array();
+		$tree = pc_base::load_sys_class('tree');
+		foreach($this->categorys as $cid=>$r) {
+			$categorys[$cid] = $r;
+		}
+		$str = "<option value='\$catid'>\$spacer \$catname</option>";
+		$tree->init($categorys);
+		$cat_select = '<select class="bs-select form-control" name="catid">
+<option value=\'0\'>顶级栏目</option>';
+		$cat_select .= $tree->get_tree(0, $str);
+		$cat_select .= '</select>
+<script type="text/javascript"> var bs_selectAllText = \'全选\';var bs_deselectAllText = \'全删\';var bs_noneSelectedText = \'没有选择\'; var bs_noneResultsText = \'没有找到 {0}\';</script>
+<link href="'.JS_PATH.'bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" type="text/css" />
+<script src="'.JS_PATH.'bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
+<script type="text/javascript">jQuery(document).ready(function() {$(\'.bs-select\').selectpicker();});</script>';
+		return $cat_select;
 	}
 	/**
 	 * 汉字转换拼音

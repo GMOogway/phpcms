@@ -426,7 +426,7 @@ if($forminfos && is_array($forminfos['base'])) {
                     <div class="form-group" id="dr_row_<?php echo $field?>">
                         <label class="col-md-2 control-label"><?php if($info['star']){ ?> <font color="red">*</font><?php } ?> <?php echo $info['name']?></label>
                         <div class="col-md-9">
-                            <label><?php echo $info['form']?></label>
+                            <?php if ($info['formtype']!='editor') {?><label><?php }?><?php echo $info['form']?><?php if ($info['formtype']!='editor') {?></label><?php }?>
                             <span class="help-block" id="dr_<?php echo $field?>_tips"><?php echo $info['tips']?></span>
                         </div>
                     </div>
