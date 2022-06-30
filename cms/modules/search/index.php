@@ -120,6 +120,12 @@ class index {
                         if(empty($this->content_db->model_tablename)) {
                             $this->content_db = pc_base::load_model('yp_content_model');
                             $this->content_db->set_model($modelid);
+                        } else {
+                            if ($where) {
+                                $where .= ' and status=99';
+                            } else {
+                                $where = 'status=99';
+                            }
                         }
                         $datas = $this->content_db->select($where, '*', '', 'id DESC');
                     } else {
