@@ -11,27 +11,13 @@ include $this->admin_tpl('header');?>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>hotkeys.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>cookie.js"></script>
 <script type="text/javascript">var catid=0</script>
-<script type="text/javascript"> 
-<!--
-	$(function(){
-		$.formValidator.initConfig({formid:"myform",autotip:true,onerror:function(msg,obj){Dialog.alert(msg,function(){$(obj).focus();})}});
-		$("#modelid").formValidator({onshow:"<?php echo L('select_model');?>",onfocus:"<?php echo L('select_model');?>",oncorrect:"<?php echo L('input_right');?>"}).inputValidator({min:1,onerror:"<?php echo L('select_model');?>"});
-		$("#url").formValidator({onshow:" ",onfocus:"<?php echo L('domain_name_format');?>",tipcss:{width:'300px'},empty:true}).inputValidator({onerror:"<?php echo L('domain_name_format');?>"}).regexValidator({regexp:"^http(s?):\/\/(.+)\/$",onerror:"<?php echo L('domain_end_string');?>"});
-		$("#template_list").formValidator({onshow:"<?php echo L('template_setting');?>",onfocus:"<?php echo L('template_setting');?>",oncorrect:"<?php echo L('input_right');?>"}).inputValidator({min:1,onerror:"<?php echo L('template_setting');?>"});
-		<?php echo $formValidator;?>
-	})
-	function checkall(){
-		<?php echo $checkall;?>
-	}
-//-->
-</script>
 <div class="page-container" style="margin-bottom: 0px !important;">
     <div class="page-content-wrapper">
         <div class="page-content page-content3 mybody-nheader main-content  ">
 <div class="note note-danger">
     <p><?php echo L('最多支持创建'.MAX_CATEGORY.'个栏目，请合理的规划网站栏目');?></p>
 </div>
-<form action="?m=admin&c=category&a=add" class="form-horizontal" method="post" name="myform" id="myform" onsubmit="return checkall()">
+<form action="?m=admin&c=category&a=add" class="form-horizontal" method="post" name="myform" id="myform">
 <input name="dosubmit" type="hidden" value="1">
 <input name="catid" type="hidden" value="<?php echo isset($catid) && $catid ? $catid : 0;?>">
 <input name="page" id="dr_page" type="hidden" value="<?php echo $page;?>">

@@ -11,25 +11,13 @@ include $this->admin_tpl('header');?>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>hotkeys.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>cookie.js"></script>
 <script type="text/javascript">var catid=0</script>
-<script type="text/javascript"> 
-<!--
-	$(function(){
-		$.formValidator.initConfig({formid:"myform",autotip:true,onerror:function(msg,obj){Dialog.alert(msg,function(){$(obj).focus();})}});
-		$("#catname").formValidator({onshow:"<?php echo L('input_catname');?>",onfocus:"<?php echo L('input_catname');?>",oncorrect:"<?php echo L('input_right');?>"}).inputValidator({min:1,onerror:"<?php echo L('input_catname');?>"})<?php if(ROUTE_A=='edit') echo '.defaultPassed()';?>;
-		$("#url").formValidator({onshow:"<?php echo L('input_linkurl');?>",onfocus:"<?php echo L('input_linkurl');?>",oncorrect:"<?php echo L('input_right');?>"}).inputValidator({min:1,onerror:"<?php echo L('input_linkurl');?>"})<?php if(ROUTE_A=='edit') echo '.defaultPassed()';?>;
-	})
-	function checkall(){
-		<?php echo $checkall;?>
-	}
-//-->
-</script>
 <div class="page-container" style="margin-bottom: 0px !important;">
     <div class="page-content-wrapper">
         <div class="page-content page-content3 mybody-nheader main-content  ">
 <div class="note note-danger">
     <p><?php echo L('最多支持创建'.MAX_CATEGORY.'个栏目，请合理的规划网站栏目');?></p>
 </div>
-<form action="?m=admin&c=category&a=<?php echo ROUTE_A;?>" class="form-horizontal" method="post" name="myform" id="myform" onsubmit="return checkall()">
+<form action="?m=admin&c=category&a=<?php echo ROUTE_A;?>" class="form-horizontal" method="post" name="myform" id="myform">
 <input name="dosubmit" type="hidden" value="1">
 <input name="catid" type="hidden" value="<?php echo $catid;?>">
 <input name="type" type="hidden" value="<?php echo $type;?>">
@@ -69,7 +57,7 @@ include $this->admin_tpl('header');?>
                             <?php echo form::images('info[image]', 'image', $image, 'content');?>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="dr_row_url">
                         <label class="col-md-2 control-label"><?php echo L('link_url')?></label>
                         <div class="col-md-9">
                             <label><input class="form-control input-large" type="text" id="url" name="info[url]" value="<?php echo $url;?>"></label>

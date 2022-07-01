@@ -10,6 +10,7 @@ class category extends admin {
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
 		$this->cache = pc_base::load_sys_class('cache');
+		$this->pinyin = pc_base::load_sys_class('pinyin');
 		$this->db = pc_base::load_model('category_model');
 		$this->menu_db = pc_base::load_model('menu_model');
 		$this->field_db = pc_base::load_model('sitemodel_field_model');
@@ -228,19 +229,20 @@ class category extends admin {
 	 */
 	public function add() {
 		if($this->input->post('dosubmit')) {
-			pc_base::load_sys_func('iconv');
 			$info = $this->input->post('info');
 			$setting = $this->input->post('setting');
 			$info['type'] = intval($this->input->post('type'));
 			if(!$info['type']) {
 				if(!$info['modelid']) dr_json(0, L('select_model'), array('field' => 'modelid'));
 			}
-			$modelid = $this->categorys[$info['parentid']]['modelid'];
-			if ($modelid) {
-				$this->content_db->set_model($modelid);
-				$total = $this->content_db->count(array('catid'=>$info['parentid']));
-				if ($total) {
-					dr_json(0, L('目标栏目【'.$this->categorys[$info['parentid']]['catname'].'】存在内容数据，无法作为父栏目'));
+			if ($info['parentid']) {
+				$modelid = $this->categorys[$info['parentid']]['modelid'];
+				if ($modelid) {
+					$this->content_db->set_model($modelid);
+					$total = $this->content_db->count(array('catid'=>$info['parentid']));
+					if ($total) {
+						dr_json(0, L('目标栏目【'.$this->categorys[$info['parentid']]['catname'].'】存在内容数据，无法作为父栏目'));
+					}
 				}
 			}
 			if(!$this->input->post('addtype')) {
@@ -248,13 +250,13 @@ class category extends admin {
 				$info['catname'] = str_replace(array('%'),'',$info['catname']);
 				if(!$info['catname']) dr_json(0, L('input_catname'), array('field' => 'catname'));
 				if($info['type']!=2) {
-					$pinyin = pc_base::load_sys_class('pinyin');
-					if(!$info['catdir']) $info['catdir'] = $pinyin->result($info['catname']);
-					if (strlen($info['catdir']) > 12) {
-						$info['catdir'] = $pinyin->result($info['catname'], 0);
+					if(!$info['catdir']) dr_json(0, L('input_dirname'), array('field' => 'catdir'));
+					$rt = $this->check_dirname(0, $info['parentid'], $info['catdir']);
+					if (!$rt['code']) {
+						dr_json(0, $rt['msg'], array('field' => 'catdir'));
 					}
-					if(!$this->public_check_catdir(0,$info['catdir'])) dr_json(0, L('catname_have_exists'), array('field' => 'catdir'));
 				}
+				$info['type']==2 && !$info['url'] && dr_json(0, L('input_linkurl'), array('field' => 'url'));
 			}
 			
 			$info['siteid'] = $this->siteid;
@@ -293,9 +295,7 @@ class category extends admin {
 				if ($this->check_counts(0)) {
 					dr_json(0, L('网站栏目数量已达到上限'));
 				}
-				$catname = CHARSET == 'gbk' ? $info['catname'] : iconv('utf-8','gbk',$info['catname']);
-				$letters = gbk_to_pinyin($catname);
-				$info['letter'] = strtolower(implode('', $letters));
+				$info['letter'] = $this->pinyin->result($info['catname']);
 				$catid = $this->db->insert($info, true);
 				$this->db->update($systeminfo,array('catid'=>$catid,'siteid'=>$this->siteid));
 				$this->update_priv($catid, $this->input->post('priv_roleid'));
@@ -312,15 +312,14 @@ class category extends admin {
 					$catname = $names[0];
 					$info['catname'] = trim($names[0]);
 					if(!$info['catname']) dr_json(0, L('input_catname'), array('field' => 'catname'));
-					$letters = gbk_to_pinyin($catname);
-					$info['letter'] = strtolower(implode('', $letters));
+					$info['letter'] = $this->pinyin->result($info['catname']);
 					$info['catdir'] = trim($names[1]) ? trim($names[1]) : trim($info['letter']);
-					$cf = $this->check_dirname(0, $info['catdir']);
+					$cf = $this->check_dirname(0, $info['parentid'], $info['catdir']);
 					$catid = $this->db->insert($info, true);
 					$this->db->update($systeminfo,array('catid'=>$catid,'siteid'=>$this->siteid));
 					$this->update_priv($catid, $this->input->post('priv_roleid'));
 					$this->update_priv($catid, $this->input->post('priv_groupid'),0);
-					if ($cf) {
+					if (!$cf['code']) {
 						// 重复验证
 						$infocf['catdir'] = $cf.$catid;
 						$this->db->update($infocf,array('catid'=>$catid,'siteid'=>$this->siteid));
@@ -389,24 +388,26 @@ class category extends admin {
 	 */
 	public function edit() {
 		if($this->input->post('dosubmit')) {
-			pc_base::load_sys_func('iconv');
 			$catid = intval($this->input->post('catid'));
 			$info = $this->input->post('info');
 			$setting = $this->input->post('setting');
 			if(!$info['catname']) dr_json(0, L('input_catname'), array('field' => 'catname'));
 			if($this->input->post('type')!=2) {
-				$pinyin = pc_base::load_sys_class('pinyin');
-				if(!$info['catdir']) $info['catdir'] = $pinyin->result($info['catname']);
-				if (strlen($info['catdir']) > 12) {
-					$info['catdir'] = $pinyin->result($info['catname'], 0);
+				if(!$info['catdir']) dr_json(0, L('input_dirname'), array('field' => 'catdir'));
+				$rt = $this->check_dirname($catid, $info['parentid'], $info['catdir']);
+				if (!$rt['code']) {
+					dr_json(0, $rt['msg'], array('field' => 'catdir'));
 				}
 			}
-			$modelid = $this->categorys[$info['parentid']]['modelid'];
-			if ($modelid) {
-				$this->content_db->set_model($modelid);
-				$total = $this->content_db->count(array('catid'=>$info['parentid']));
-				if ($total) {
-					dr_json(0, L('目标栏目【'.$this->categorys[$info['parentid']]['catname'].'】存在内容数据，无法作为父栏目'));
+			$this->input->post('type')==2 && !$info['url'] && dr_json(0, L('input_linkurl'), array('field' => 'url'));
+			if ($info['parentid']) {
+				$modelid = $this->categorys[$info['parentid']]['modelid'];
+				if ($modelid) {
+					$this->content_db->set_model($modelid);
+					$total = $this->content_db->count(array('catid'=>$info['parentid']));
+					if ($total) {
+						dr_json(0, L('目标栏目【'.$this->categorys[$info['parentid']]['catname'].'】存在内容数据，无法作为父栏目'));
+					}
 				}
 			}
 			//上级栏目不能是自身
@@ -451,10 +452,9 @@ class category extends admin {
 			$info['sethtml'] = $setting['create_to_html_root'];
 			$info['setting'] = array2string($setting);
 			$info['module'] = 'content';
-			$catname = CHARSET == 'gbk' ? safe_replace($info['catname']) : iconv('utf-8','gbk',safe_replace($info['catname']));
-			$catname = str_replace(array('%'),'',$catname);
-			$letters = gbk_to_pinyin($catname);
-			$info['letter'] = strtolower(implode('', $letters));
+			$info['catname'] = safe_replace($info['catname']);
+			$info['catname'] = str_replace(array('%'),'',$info['catname']);
+			$info['letter'] = $this->pinyin->result($info['catname']);
 			
 			//应用权限设置到子栏目
 			if($this->input->post('priv_child')) {
@@ -677,15 +677,14 @@ class category extends admin {
 			$items = getcache('category_items_'.$modelid,'commons');
 			//if($items[$id]) dr_json(0, L('category_does_not_allow_delete'));
 			if($ishtml) {
-				pc_base::load_sys_func('dir');
 				$fileurl = $html_root.'/'.$this->url->category_url($id, 1);
 				if($this->siteid != 1) {
 					$fileurl = $sitelist[$this->siteid]['dirname'].$fileurl;
 				}
-				dir_delete(CMS_PATH.$fileurl);
+				dr_dir_delete(CMS_PATH.$fileurl, true);
 				if($sitelist[$this->siteid]['mobilehtml']==1) {
 					$mobilefileurl = SYS_MOBILE_ROOT.$fileurl;
-					dir_delete(CMS_PATH.$mobilefileurl);	
+					dr_dir_delete(CMS_PATH.$mobilefileurl, true);	
 				}
 			}
 			$this->delete_child($id, $modelid);
@@ -715,15 +714,14 @@ class category extends admin {
 		$list = $this->db->select(array('parentid'=>$catid));
 		foreach($list as $r) {
 			if($ishtml) {
-				pc_base::load_sys_func('dir');
 				$fileurl = $html_root.'/'.$this->url->category_url($r['catid'], 1);
 				if($this->siteid != 1) {
 					$fileurl = $sitelist[$this->siteid]['dirname'].$fileurl;
 				}
-				dir_delete(CMS_PATH.$fileurl);
+				dr_dir_delete(CMS_PATH.$fileurl, true);
 				if($sitelist[$this->siteid]['mobilehtml']==1) {
 					$mobilefileurl = SYS_MOBILE_ROOT.$fileurl;
-					dir_delete(CMS_PATH.$mobilefileurl);	
+					dr_dir_delete(CMS_PATH.$mobilefileurl, true);	
 				}
 			}
 			$this->delete_child($r['catid'], $modelid);
@@ -864,7 +862,6 @@ class category extends admin {
 	* 修复栏目数据
 	*/
 	private function repair() {
-		pc_base::load_sys_func('iconv');
 		@set_time_limit(600);
 		$html_root = SYS_HTML_ROOT;
 		$this->categorys = $categorys = array();
@@ -884,9 +881,7 @@ class category extends admin {
 					if($categorys[$catid]['arrparentid']!=$arrparentid || $categorys[$catid]['arrchildid']!=$arrchildid || $categorys[$catid]['child']!=$child) $this->db->update(array('arrparentid'=>$arrparentid,'arrchildid'=>$arrchildid,'child'=>$child),array('catid'=>$catid));
 
 					$parentdir = $this->get_parentdir($catid);
-					$catname = $cat['catname'];
-					$letters = gbk_to_pinyin($catname);
-					$letter = strtolower(implode('', $letters));
+					$letter = $this->pinyin->result($cat['catname']);
 					$listorder = $cat['listorder'] ? $cat['listorder'] : $catid;
 					
 					$this->sethtml = $setting['create_to_html_root'];
@@ -1043,32 +1038,6 @@ class category extends admin {
 			}
 		}
 	}
-	/**
-	 * 检查目录是否存在
-	 * @param  $return_method 返回方法
-	 * @param  $catdir 目录
-	 */
-	public function public_check_catdir($return_method = 1,$catdir = '') {
-		$old_dir = '';
-		$catdir = $catdir ? $catdir : $this->input->get('catdir');
-		$parentid = intval($this->input->get('parentid'));
-		$old_dir = $this->input->get('old_dir');
-		$r = $this->db->get_one(array('siteid'=>$this->siteid,'module'=>'content','catdir'=>$catdir,'parentid'=>$parentid));
-		if($r && $old_dir != $r['catdir']) {
-			//目录存在
-			if($return_method) {
-				exit('0');
-			} else {
-				return false;
-			}
-		} else {
-			if($return_method) {
-				exit('1');
-			} else {
-				return true;
-			}
-		}
-	}
 	
 	/**
 	 * 更新权限
@@ -1193,7 +1162,6 @@ class category extends admin {
 	 */
 	public function batch_edit() {
 		if($this->input->post('dosubmit')) {
-			pc_base::load_sys_func('iconv');	
 			$catid = intval($this->input->post('catid'));
 			$post_setting = $this->input->post('setting');
 			//栏目生成静态配置
@@ -1235,9 +1203,7 @@ class category extends admin {
 				$info['setting'] = array2string($setting);
 				
 				$info['module'] = 'content';
-				$catname = CHARSET == 'gbk' ? $info['catname'] : iconv('utf-8','gbk',$info['catname']);
-				$letters = gbk_to_pinyin($catname);
-				$info['letter'] = strtolower(implode('', $letters));
+				$info['letter'] = $this->pinyin->result($info['catname']);
 				$this->db->update($info,array('catid'=>$catid,'siteid'=>$this->siteid));
 
 				//更新附件状态
@@ -1437,14 +1403,13 @@ class category extends admin {
 	 * 汉字转换拼音
 	 */
 	public function public_ajax_pinyin() {
-		$pinyin = pc_base::load_sys_class('pinyin');
 		$name = dr_safe_replace($this->input->get('name'));
 		if (!$name) {
 			exit('');
 		}
-		$py = $pinyin->result($name);
+		$py = $this->pinyin->result($name);
 		if (strlen($py) > 12) {
-			$sx = $pinyin->result($name, 0);
+			$sx = $this->pinyin->result($name, 0);
 			if ($sx) {
 				exit($sx);
 			}
@@ -1452,18 +1417,22 @@ class category extends admin {
 		exit($py);
 	}
 	// 检查目录是否可用
-	public function check_dirname($id, $value) {
+	public function check_dirname($id, $pid, $value) {
 		if (!$value) {
-			return 1;
+			return dr_return_data(0, L('目录不能为空'));
 		} elseif (!preg_match('/^[a-z0-9 \_\-]*$/i', $value)) {
-			return 1;
+			return dr_return_data(0, L('目录格式不能包含特殊符号或文字'));
+		} else {
+			if ($pid) {
+				$pcat = $this->db->get_one(array('catid'=>$pid));
+				if ($pcat && $this->db->count(array('catid<>'=>$id, 'parentdir'=>$pcat['catdir'].'/', 'catdir'=>$value))) {
+					return dr_return_data(0, L('目录不能重复'));
+				}
+			} elseif ($this->db->count(array('catid<>'=>$id, 'parentdir'=>'', 'catdir'=>$value))) {
+				return dr_return_data(0, L('目录不能重复'));
+			}
 		}
-		$where = "siteid='".$this->siteid."' AND module='content' AND catdir='".$value."'";
-		if ($id) {
-			$where .= ' AND catid<>'.$id;
-		}
-		$rt = $this->db->get_one($where);
-		return $rt['catdir'];
+		return dr_return_data(1);
 	}
 	// 检查栏目上限
 	public function check_counts($id, $fix = 1) {

@@ -112,8 +112,8 @@ include $this->admin_tpl('header');?>
 	?>
 		<td><b><?php echo L('可用')?>：</b><br>
 		<div class="mt-radio-inline">
-          <label class="mt-radio mt-radio-outline"><input boxid="disabled" catid="<?php echo $catid;?>" type='radio' name='setting[<?php echo $catid;?>][disabled]' value='0' <?php if(!$cat['setting']['disabled']) echo 'checked';?>> <?php echo L('可用');?> <span></span></label>
-          <label class="mt-radio mt-radio-outline"><input boxid="disabled"  catid="<?php echo $catid;?>" type='radio' name='setting[<?php echo $catid;?>][disabled]' value='1' <?php if($cat['setting']['disabled']) echo 'checked';?>> <?php echo L('禁用');?> <span></span></label>
+          <label class="mt-radio mt-radio-outline"><input boxid="disabled" type='radio' name='setting[<?php echo $catid;?>][disabled]' value='0' <?php if(!$cat['setting']['disabled']) echo 'checked';?> onclick="change_radio(event,'disabled',0)"> <?php echo L('可用');?> <span></span></label>
+          <label class="mt-radio mt-radio-outline"><input boxid="disabled" type='radio' name='setting[<?php echo $catid;?>][disabled]' value='1' <?php if($cat['setting']['disabled']) echo 'checked';?> onclick="change_radio(event,'disabled',1)"> <?php echo L('禁用');?> <span></span></label>
         </div>
 	  </td>
 	<?php
@@ -126,8 +126,8 @@ include $this->admin_tpl('header');?>
 	?>
 		<td><b><?php echo L('您现在的位置')?>：</b><br>
 		<div class="mt-radio-inline">
-          <label class="mt-radio mt-radio-outline"><input boxid="iscatpos" catid="<?php echo $catid;?>" type='radio' name='setting[<?php echo $catid;?>][iscatpos]' value='1' <?php if($cat['setting']['iscatpos']) echo 'checked';?>> <?php echo L('display');?> <span></span></label>
-          <label class="mt-radio mt-radio-outline"><input boxid="iscatpos"  catid="<?php echo $catid;?>" type='radio' name='setting[<?php echo $catid;?>][iscatpos]' value='0' <?php if(!$cat['setting']['iscatpos']) echo 'checked';?>> <?php echo L('hidden');?> <span></span></label>
+          <label class="mt-radio mt-radio-outline"><input boxid="iscatpos" type='radio' name='setting[<?php echo $catid;?>][iscatpos]' value='1' <?php if($cat['setting']['iscatpos']) echo 'checked';?> onclick="change_radio(event,'iscatpos',1)"> <?php echo L('display');?> <span></span></label>
+          <label class="mt-radio mt-radio-outline"><input boxid="iscatpos" type='radio' name='setting[<?php echo $catid;?>][iscatpos]' value='0' <?php if(!$cat['setting']['iscatpos']) echo 'checked';?> onclick="change_radio(event,'iscatpos',0)"> <?php echo L('hidden');?> <span></span></label>
         </div>
 	  </td>
 	<?php
@@ -140,8 +140,8 @@ include $this->admin_tpl('header');?>
 	?>
 		<td><b><?php echo L('左侧')?>：</b><br>
 		<div class="mt-radio-inline">
-          <label class="mt-radio mt-radio-outline"><input boxid="isleft" catid="<?php echo $catid;?>" type='radio' name='setting[<?php echo $catid;?>][isleft]' value='1' <?php if($cat['setting']['isleft']) echo 'checked';?>> <?php echo L('display');?> <span></span></label>
-          <label class="mt-radio mt-radio-outline"><input boxid="isleft"  catid="<?php echo $catid;?>" type='radio' name='setting[<?php echo $catid;?>][isleft]' value='0' <?php if(!$cat['setting']['isleft']) echo 'checked';?>> <?php echo L('hidden');?> <span></span></label>
+          <label class="mt-radio mt-radio-outline"><input boxid="isleft" type='radio' name='setting[<?php echo $catid;?>][isleft]' value='1' <?php if($cat['setting']['isleft']) echo 'checked';?> onclick="change_radio(event,'isleft',1)"> <?php echo L('display');?> <span></span></label>
+          <label class="mt-radio mt-radio-outline"><input boxid="isleft" type='radio' name='setting[<?php echo $catid;?>][isleft]' value='0' <?php if(!$cat['setting']['isleft']) echo 'checked';?> onclick="change_radio(event,'isleft',0)"> <?php echo L('hidden');?> <span></span></label>
         </div>
 	  </td>
 	<?php
@@ -155,7 +155,7 @@ include $this->admin_tpl('header');?>
 		<td><b><?php echo L('html_category')?>：</b><br>
 		<div class="mt-radio-inline">
           <label class="mt-radio mt-radio-outline"><input boxid="ishtml" catid="<?php echo $catid;?>" type='radio' name='setting[<?php echo $catid;?>][ishtml]' value='1' <?php if($cat['setting']['ishtml']) echo 'checked';?> onClick="change_radio(event,'ishtml',1,'category');urlrule('category',1,<?php echo $catid;?>)"> <?php echo L('yes');?> <span></span></label>
-          <label class="mt-radio mt-radio-outline"><input boxid="ishtml"  catid="<?php echo $catid;?>" type='radio' name='setting[<?php echo $catid;?>][ishtml]' value='0' <?php if(!$cat['setting']['ishtml']) echo 'checked';?>  onClick="change_radio(event,'ishtml',0,'category');urlrule('category',0,<?php echo $catid;?>)"> <?php echo L('no');?> <span></span></label>
+          <label class="mt-radio mt-radio-outline"><input boxid="ishtml" catid="<?php echo $catid;?>" type='radio' name='setting[<?php echo $catid;?>][ishtml]' value='0' <?php if(!$cat['setting']['ishtml']) echo 'checked';?>  onClick="change_radio(event,'ishtml',0,'category');urlrule('category',0,<?php echo $catid;?>)"> <?php echo L('no');?> <span></span></label>
         </div>
 	  </td>
 	<?php
@@ -247,7 +247,7 @@ function change_radio(oEvent,boxid,value,type) {
 	altKey = oEvent.altKey;
 	if(altKey) {
 		var obj = $("input[boxid="+boxid+"][value="+value+"]");
-		obj.attr('checked',true);
+		obj.prop('checked',true);
 		if(type){
 			obj.each(function(){	
 				urlrule(type,value,$(this).attr('catid'));			

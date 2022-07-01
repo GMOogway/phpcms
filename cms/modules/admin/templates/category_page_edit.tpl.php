@@ -11,25 +11,13 @@ include $this->admin_tpl('header');?>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>hotkeys.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>cookie.js"></script>
 <script type="text/javascript">var catid=0</script>
-<script type="text/javascript"> 
-<!--
-	$(function(){
-		$.formValidator.initConfig({formid:"myform",autotip:true,onerror:function(msg,obj){Dialog.alert(msg,function(){$(obj).focus();})}});
-		$("#catname").formValidator({onshow:"<?php echo L('input_catname');?>",onfocus:"<?php echo L('input_catname');?>",oncorrect:"<?php echo L('input_right');?>"}).inputValidator({min:1,onerror:"<?php echo L('input_catname');?>"}).defaultPassed();
-		$("#catdir").formValidator({onshow:"<?php echo L('input_dirname');?>",onfocus:"<?php echo L('input_dirname');?>"}).regexValidator({regexp:"^([a-zA-Z0-9]|[_-]){0,30}$",onerror:"<?php echo L('enter_the_correct_catname');?>"}).inputValidator({min:1,onerror:"<?php echo L('input_dirname');?>"}).ajaxValidator({type : "get",url : "",data :"m=admin&c=category&a=public_check_catdir&old_dir=<?php echo $catdir;?>",datatype : "html",cached:false,getdata:{parentid:'parentid'},async:'true',cached:false,success : function(data){	if( data == "1" ){return true;}else{return false;}},buttons: $("#dosubmit"),onerror : "<?php echo L('catname_have_exists');?>",onwait : "<?php echo L('connecting');?>"}).defaultPassed();
-	})
-	function checkall(){
-		<?php echo $checkall;?>
-	}
-//-->
-</script>
 <div class="page-container" style="margin-bottom: 0px !important;">
     <div class="page-content-wrapper">
         <div class="page-content page-content3 mybody-nheader main-content  ">
 <div class="note note-danger">
     <p><?php echo L('最多支持创建'.MAX_CATEGORY.'个栏目，请合理的规划网站栏目');?></p>
 </div>
-<form action="?m=admin&c=category&a=edit" class="form-horizontal" method="post" name="myform" id="myform" onsubmit="return checkall()">
+<form action="?m=admin&c=category&a=edit" class="form-horizontal" method="post" name="myform" id="myform">
 <input name="dosubmit" type="hidden" value="1">
 <input name="catid" type="hidden" value="<?php echo $catid;?>">
 <input name="type" type="hidden" value="<?php echo $type;?>">
@@ -78,7 +66,15 @@ include $this->admin_tpl('header');?>
                     <div class="form-group" id="dr_row_catdir">
                         <label class="col-md-2 control-label"><?php echo L('catdir')?></label>
                         <div class="col-md-9">
-                            <label><input class="form-control input-large" type="text" id="catdir" name="info[catdir]" value="<?php echo $catdir;?>"></label>
+                            <?php if ($parentdir) {?>
+                            <div class="input-group">
+                                <span class="input-group-addon"><?php echo $parentdir;?></span>
+                                <input class="form-control input-medium" type="text" name="info[catdir]" id="catdir" value="<?php echo htmlspecialchars($catdir);?>">
+                            </div>
+                            <?php } else {?>
+                            <input class="form-control input-large" type="text" name="info[catdir]" id="catdir" value="<?php echo htmlspecialchars($catdir);?>">
+                            <?php }?>
+                            <span class="help-block" id="dr_catdir_tips"><?php echo L('栏目目录确保唯一，用于url填充或者生成目录')?></span>
                         </div>
                     </div>
                     <div class="form-group">
