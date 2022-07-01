@@ -55,8 +55,7 @@ class html {
                     }
                     if (strstr($html, '{$pages}')) {
                         $this->db->set_model($t['modelid']);
-                        $where = 'catid IN ('.$t['arrchildid'].')';
-                        $total = $this->db->count($where); // 统计栏目的数据量
+                        $total = $this->db->count(array('catid'=>explode(',', $t['arrchildid']), 'status'=>99)); // 统计栏目的数据量
                     }
                     // 判断是封面页面
                     $list[$t['modelid']][] = array(
@@ -90,7 +89,7 @@ class html {
                     }
                 } else {
                     $this->db->set_model($t['modelid']);
-                    $total = $this->db->count(array('catid'=>$t['catid'])); // 统计栏目的数据量
+                    $total = $this->db->count(array('catid'=>$t['catid'], 'status'=>99)); // 统计栏目的数据量
                     $list[$t['modelid']][] = array(
                         'catid' => $t['catid'],
                         'modelid' => $t['modelid'],
@@ -202,7 +201,7 @@ class html {
         $count = $this->db->count($where);
         $sql = 'select id,catid,title,url,islink,inputtime from `'.$this->db->table_name.'`';
         if ($where) {
-            $sql.= ' where '.$where;
+            $sql .= ' where '.$where;
         }
 
         if (!$count) {

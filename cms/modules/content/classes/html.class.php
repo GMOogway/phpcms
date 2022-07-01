@@ -411,10 +411,10 @@ class html {
 			
 			$this->db = pc_base::load_model('content_model');
 			$this->db->set_model($modelid);
-			if ($arrchildid) {
-				$pagenumber = $this->db->count(array('catid'=>explode(',', $arrchildid)));
+			if ($child) {
+				$pagenumber = $this->db->count(array('catid'=>explode(',', $arrchildid), 'status'=>99));
 			} else {
-				$pagenumber = $this->db->count(array('catid'=>$catid));
+				$pagenumber = $this->db->count(array('catid'=>$catid, 'status'=>99));
 			}
 			$url_arr[0] = $categoryurl[0];
 			$url_arr[1] = $categoryurl[1];
