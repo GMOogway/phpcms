@@ -529,7 +529,7 @@ class index {
 			$dirname = end(explode('/',$catdir));
 		}
 		$this->category_db = pc_base::load_model('category_model');
-		$result = $this->category_db->select();
+		$result = $this->category_db->select(array('catdir'=>$dirname));
 		foreach($result as $r){
 			if ($r['parentid']) {
 				$cat_dir[$r['parentdir'].$r['catdir']] = $r['catid'];

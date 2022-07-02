@@ -407,25 +407,16 @@ class index {
 			$dirname = $catdir;
 		}else{
 			$dirname = end(explode('/',$catdir));
-			$dirlist = explode('/',$catdir);
 		}
 		$this->category_db = pc_base::load_model('category_model');
-		$this->siteid = get_siteid();
-		$CATEGORYS = getcache('category_content_' . $this->siteid, 'commons');
-		$res = $this->category_db->select(array('catdir'=>$dirname),'*','','listorder desc');
-		if(dr_count($res) > 1){
-			$end2 = $dirlist[dr_count($dirlist)-2];
-			$res2 = $this->category_db->get_one(array('catdir'=>$end2));
-			foreach($res as $k =>$r){
-				$pid = $r['parentid'];
-				if($CATEGORYS[$pid]['catdir'] == $end2){
-					$catid = $r['catid'];
-					break;
-				}
+		$result = $this->category_db->select(array('catdir'=>$dirname));
+		foreach($result as $r){
+			if ($r['parentid']) {
+				$cat_dir[$r['parentdir'].$r['catdir']] = $r['catid'];
 			}
-		}else{
-			$catid = $res[0]['catid'];
+			$cat_dir[$r['catdir']] = $r['catid'];
 		}
+		$catid = isset($cat_dir[$dirname]) ? $cat_dir[$dirname] : 0;
 		return $catid;
 	}
 	
