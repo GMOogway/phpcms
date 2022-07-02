@@ -604,6 +604,37 @@ function map(id,linkurl,title,tcstr,w,h) {
 	};
 	diag.show();
 }
+function rename(title, url, value) {
+	if (typeof pc_hash == 'string') url += (url.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
+	if (url.toLowerCase().indexOf("http://") != -1 || url.toLowerCase().indexOf("https://") != -1) {
+	} else {
+		url = geturlpathname()+url;
+	}
+	layer.prompt({title: title, value: value},function(value,index){
+		// 延迟加载
+		var loading = layer.load(2, {
+			shade: [0.3,'#fff'], //0.1透明度的白色背景
+			time: 100000000
+		});
+		$.ajax({type: "POST",dataType:"json", url: url, data: {name: value},
+			success: function(json) {
+				layer.close(loading);
+				if (json.code) {
+					layer.close(index);
+					setTimeout("window.location.reload(true)", 2000);
+					dr_tips(1, json.msg);
+				} else {
+					$(body).find('#dr_row_'+json.data.field).addClass('has-error');
+					dr_tips(0, json.msg, json.data.time);
+				}
+				return false;
+			},
+			error: function(HttpRequest, ajaxOptions, thrownError) {
+				dr_ajax_alert_error(HttpRequest, this, thrownError);
+			}
+		});
+	});
+}
 // 窗口提交
 function dr_iframe(type, url, width, height, rt) {
 	if (typeof pc_hash == 'string') url += (url.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;

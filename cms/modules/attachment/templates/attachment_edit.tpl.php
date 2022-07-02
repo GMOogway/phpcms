@@ -3,7 +3,7 @@ defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header', 'admin');
 ?>
 <style type="text/css">
-body {overflow-y: hidden;overflow-x: hidden;}
+body {background-color: #fff;overflow-y: hidden;overflow-x: hidden;}
 </style>
 <div class="page-container" style="margin-bottom: 0px !important;">
     <div class="page-content-wrapper">
