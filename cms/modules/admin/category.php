@@ -222,7 +222,7 @@ class category extends admin {
 	 * 获取菜单数据
 	 */
 	public function cat_data($pid) {
-		return $this->db->select(array('parentid'=>$pid),'*','','listorder ASC,catid ASC');
+		return $this->db->select(array('siteid'=>$this->siteid, 'parentid'=>$pid),'*','','listorder ASC,catid ASC');
 	}
 	/**
 	 * 添加栏目
