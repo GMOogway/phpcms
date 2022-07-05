@@ -89,11 +89,11 @@ jQuery(document).ready(function() {
                                         <?php $ksids = [];
                                         if(is_array($types)) {$k = 1; foreach($types as $t) {?>
                                         <tr id="dr_ftable_type_row_<?php echo $k;?>">
-                                            <td><?php echo $t['typeid']?></td>
+                                            <td><?php echo $t['typeid']?><input type="hidden" name="type[<?php echo $k?>][typeid]" value="<?php echo $t['typeid']?>"></td>
                                             <td><input type="text" class="form-control" <?php if ($k==1) {?>id="type_name"<?php }?> name="type[<?php echo $k?>][name]" value="<?php echo new_html_special_chars($t['name'])?>"></td>
                                             <td><input type="text" class="form-control" <?php if ($k==1) {?>id="type_path"<?php }?> name="type[<?php echo $k?>][typedir]" value="<?php echo $t['typedir']?>"></td>
                                             <td><input type="text" class="form-control" name="type[<?php echo $k?>][listorder]" value="<?php echo $t['listorder']?>"></td>
-                                            <td style="text-align: center"></td>
+                                            <td style="text-align: center"><?php if ($k!=1) {?><button type="button" class="btn red btn-xs" onclick="dr_del_table_type(this, <?php echo $k?>)"> <i class="fa fa-trash"></i> </button><?php }?></td>
                                         </tr>
                                         <?php $ksids[] = $k; $k++;
                                         }
@@ -105,8 +105,9 @@ jQuery(document).ready(function() {
                             <span class="help-block" id="typeTip"></span>
                             <script>
                             var special_type = {"tpl":" <tr id=\"dr_ftable_type_row_{hang}\"> <td></td><td><input type=\"text\" class=\"form-control\" name=\"type[{hang}][name]\" value=\"\"><\/td> <td><input type=\"text\" class=\"form-control\" name=\"type[{hang}][typedir]\" value=\"\"><\/td> <td><input type=\"text\" class=\"form-control\" name=\"type[{hang}][listorder]\" value=\"{hang}\"><\/td> <td style=\"text-align: center\"><button type=\"button\" class=\"btn red btn-xs\" onClick=\"dr_del_table_type(this)\"> <i class=\"fa fa-trash\"><\/i> <\/button><\/td> <\/tr>","id":<?php echo $ksid;?>};
-                            function dr_del_table_type(e) {
-                                $(e).parent().parent().remove();
+                            function dr_del_table_type(e, id) {
+                                $(e).parent().parent().append('<input type="hidden" name="type['+id+'][del]" value="1">');
+                                $(e).parent().parent().fadeOut();
                             }
                             function dr_add_table_type() {
                                 var tpl = special_type.tpl;

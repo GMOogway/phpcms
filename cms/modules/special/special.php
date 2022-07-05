@@ -27,17 +27,18 @@ class special extends admin {
 	 * 添加专题
 	 */
 	public function add() {
-		if (isset($_POST['dosubmit']) && !empty($_POST['dosubmit'])) {
-			$special = $this->check($_POST['special']);
-			if (!$_POST['type'][1]['name']) {
+		if ($this->input->post('dosubmit')) {
+			$special = $this->check($this->input->post('special'));
+			$type = $this->input->post('type');
+			if (!$type[1]['name']) {
 				dr_json(0, L('type_name').L('empty'));
 			}
-			if (!$_POST['type'][1]['typedir']) {
+			if (!$type[1]['typedir']) {
 				dr_json(0, L('type_path').L('empty'));
 			}
 			$id = $this->db->insert($special, true);
 			if ($id) {
-				$this->special_api->_update_type($id, $_POST['type']);
+				$this->special_api->_update_type($id, $type);
 				if ($special['siteid']>1) {
 					$site = pc_base::load_app_class('sites', 'admin');
 					$site_info = $site->get_by_id($special['siteid']);
@@ -84,16 +85,17 @@ class special extends admin {
 	 * 专题修改
 	 */
 	public function edit() {
-		if (!isset($_GET['specialid']) || empty($_GET['specialid'])) {
+		if (!$this->input->get('specialid') || empty($this->input->get('specialid'))) {
 			dr_json(0,L('illegal_action'), HTTP_REFERER);
 		}
-		$_GET['specialid'] = intval($_GET['specialid']);
-		if (isset($_POST['dosubmit']) && !empty($_POST['dosubmit'])) {
-			$special = $this->check($_POST['special'], 'edit');
-			if (!$_POST['type'][1]['name']) {
+		$specialid = intval($this->input->get('specialid'));
+		if ($this->input->post('dosubmit')) {
+			$special = $this->check($this->input->post('special'), 'edit');
+			$type = $this->input->post('type');
+			if (!$type[1]['name']) {
 				dr_json(0, L('type_name').L('empty'));
 			}
-			if (!$_POST['type'][1]['typedir']) {
+			if (!$type[1]['typedir']) {
 				dr_json(0, L('type_path').L('empty'));
 			}
 			$siteid = get_siteid();
@@ -108,28 +110,28 @@ class special extends admin {
 				}
 			} elseif ($special['ishtml']=='0') {
 				if ($siteid>1) {
-					$special['url'] = $site_info['domain'].'index.php?m=special&c=index&specialid='.$_GET['specialid'];
+					$special['url'] = $site_info['domain'].'index.php?m=special&c=index&specialid='.$specialid;
 				} else {
-					$special['url'] = APP_PATH.'index.php?m=special&c=index&specialid='.$_GET['specialid'];
+					$special['url'] = APP_PATH.'index.php?m=special&c=index&specialid='.$specialid;
 				}
 			}
-			$this->db->update($special, array('id'=>$_GET['specialid'], 'siteid'=>$this->get_siteid()));
-			$this->special_api->_update_type($_GET['specialid'], $_POST['type'], 'edit');
+			$this->db->update($special, array('id'=>$specialid, 'siteid'=>$this->get_siteid()));
+			$this->special_api->_update_type($specialid, $type, 'edit');
 			
 			//调用生成静态类
 			if ($special['ishtml']) {
 				$html = pc_base::load_app_class('html', 'special'); 
-				$html->_index($_GET['specialid'], 20, 5);
+				$html->_index($specialid, 20, 5);
 			}
 			//更新附件状态
 			if(SYS_ATTACHMENT_STAT) {
 				$this->attachment_db = pc_base::load_model('attachment_model');
-				$this->attachment_db->api_update(array($special['thumb'], $special['banner']),'special-'.$_GET['specialid'], 1);
+				$this->attachment_db->api_update(array($special['thumb'], $special['banner']),'special-'.$specialid, 1);
 			}
 			$this->special_cache();
 			dr_json(1, L('edit_special_success'), array('url' => '?m=special&c=special&a=init&menuid='.$this->input->post('menuid').'&pc_hash='.dr_get_csrf_token()));
 		} else {
-			$info = $this->db->get_one(array('id'=>$_GET['specialid'], 'siteid'=>$this->get_siteid()));
+			$info = $this->db->get_one(array('id'=>$specialid, 'siteid'=>$this->get_siteid()));
 			//获取站点模板信息
 			pc_base::load_app_func('global', 'admin');
 			$template_list = template_list($this->siteid, 0);
@@ -144,7 +146,7 @@ class special extends admin {
 				$vote_info = explode('|', $info['voteid']);
 			}
 			$type_db = pc_base::load_model('type_model');
-			$types = $type_db->select(array('module'=>'special', 'parentid'=>$_GET['specialid'], 'siteid'=>$this->get_siteid()), '`typeid`, `name`, `listorder`, `typedir`', '', '`listorder` ASC, `typeid` ASC');
+			$types = $type_db->select(array('module'=>'special', 'parentid'=>$specialid, 'siteid'=>$this->get_siteid()), '`typeid`, `name`, `listorder`, `typedir`', '', '`listorder` ASC, `typeid` ASC');
 			include $this->admin_tpl('special_edit');
 		}
 	}
@@ -153,30 +155,31 @@ class special extends admin {
 	 * 信息导入专题
 	 */
 	public function import() {
-		if(isset($_POST['dosubmit'])) {
-			if(!is_array($_POST['ids']) || empty($_POST['ids']) || !$_GET['modelid']) dr_admin_msg(0,L('illegal_action'), HTTP_REFERER);
-			if(!isset($_POST['typeid']) || empty($_POST['typeid'])) dr_admin_msg(0,L('select_type'), HTTP_REFERER);
-			foreach($_POST['ids'] as $id) {
-				$this->special_api->_import($_GET['modelid'], $_GET['specialid'], $id, $_POST['typeid'], $_POST['listorder'][$id]);
+		if($this->input->post('dosubmit')) {
+			$ids = $this->input->get_post_ids();
+			if(!is_array($ids) || empty($ids) || !$this->input->get('modelid')) dr_admin_msg(0,L('illegal_action'), HTTP_REFERER);
+			if(!$this->input->post('typeid') || empty($this->input->post('typeid'))) dr_admin_msg(0,L('select_type'), HTTP_REFERER);
+			foreach($ids as $id) {
+				$this->special_api->_import($this->input->get('modelid'), $this->input->get('specialid'), $id, $this->input->post('typeid'), $this->input->post('listorder')[$id]);
 			}
 			$html = pc_base::load_app_class('html', 'special'); 
-			$html->_index($_GET['specialid'], 20, 5);
+			$html->_index($this->input->get('specialid'), 20, 5);
 			dr_admin_msg(1,L('import_success'), '', '', 'import');
 		} else {
-			if(!$_GET['specialid']) dr_admin_msg(0,L('illegal_action'), HTTP_REFERER);
-			$_GET['modelid'] = $this->input->get('modelid') ? intval($_GET['modelid']) : 0;
-			$_GET['catid'] = $this->input->get('catid') ? intval($_GET['catid']) : 0;
-			$_GET['page'] = max(intval($_GET['page']), 1);
+			if(!$this->input->get('specialid')) dr_admin_msg(0,L('illegal_action'), HTTP_REFERER);
+			$modelid = $this->input->get('modelid') ? intval($this->input->get('modelid')) : 0;
+			$catid = $this->input->get('catid') ? intval($this->input->get('catid')) : 0;
+			$page = max(intval($this->input->get('page')), 1);
 			$where = '';
-			if($_GET['catid']) $where .= get_sql_catid('category_content_'.$this->get_siteid(), $_GET['catid'])." AND `status`=99";
+			if($catid) $where .= get_sql_catid('category_content_'.$this->get_siteid(), $catid)." AND `status`=99";
 			else $where .= " `status`=99";
 			if($this->input->get('start_time')) {
 				$where .= ' AND `inputtime` BETWEEN ' . max((int)strtotime(strpos($this->input->get('start_time'), ' ') ? $this->input->get('start_time') : $this->input->get('start_time').' 00:00:00'), 1) . ' AND ' . ($this->input->get('end_time') ? (int)strtotime(strpos($this->input->get('end_time'), ' ') ? $this->input->get('end_time') : $this->input->get('end_time').' 23:59:59') : SYS_TIME);
 			}
-			if ($_GET['key']) {
-				$where .= " AND `title` LIKE '%".$this->db->escape($_GET['key'])."%' OR `keywords` LIKE '%".$this->db->escape($_GET['key'])."%'";
+			if ($this->input->get('key')) {
+				$where .= " AND `title` LIKE '%".$this->db->escape($this->input->get('key'))."%' OR `keywords` LIKE '%".$this->db->escape($this->input->get('key'))."%'";
 			}
-			$data = $this->special_api->_get_import_data($_GET['modelid'], $where, $_GET['page']);
+			$data = $this->special_api->_get_import_data($modelid, $where, $page);
 			$pages = $this->special_api->pages;
 			$models = getcache('model','commons');
 			$model_datas = array();
@@ -185,41 +188,41 @@ class special extends admin {
 					$model_datas[$_v['modelid']] = $_v['name'];
 				}
 			}
-			$model_form = form::select($model_datas, $_GET['modelid'], 'name="modelid" onchange="select_categorys(this.value)"', L('select_model'));
-			$types = $this->special_api->_get_types($_GET['specialid']);
+			$model_form = form::select($model_datas, $modelid, 'name="modelid" onchange="select_categorys(this.value)"', L('select_model'));
+			$types = $this->special_api->_get_types($this->input->get('specialid'));
 			include $this->admin_tpl('import_content');
 		}
 	}
 	
 	public function public_get_pics() {
-		$_GET['modelid'] = $this->input->get('modelid') ? intval($_GET['modelid']) : 0;
-			$_GET['catid'] = $this->input->get('catid') ? intval($_GET['catid']) : 0;
-			$_GET['page'] = max(intval($_GET['page']), 1);
-			$where = '';
-			if($_GET['catid']) $where .= get_sql_catid('category_content_'.$this->get_siteid(), $_GET['catid'])." AND `status`=99";
-			else $where .= " `status`=99";
-			if ($_GET['title']) {
-				$where .= " AND `title` LIKE '%".$this->db->escape($_GET['title'])."%'";
+		$modelid = $this->input->get('modelid') ? intval($this->input->get('modelid')) : 0;
+		$catid = $this->input->get('catid') ? intval($this->input->get('catid')) : 0;
+		$page = max(intval($this->input->get('page')), 1);
+		$where = '';
+		if($catid) $where .= get_sql_catid('category_content_'.$this->get_siteid(), $catid)." AND `status`=99";
+		else $where .= " `status`=99";
+		if ($this->input->get('title')) {
+			$where .= " AND `title` LIKE '%".$this->db->escape($this->input->get('title'))."%'";
+		}
+		if($this->input->get('start_time')) {
+			$where .= ' AND `inputtime` BETWEEN ' . max((int)strtotime(strpos($this->input->get('start_time'), ' ') ? $this->input->get('start_time') : $this->input->get('start_time').' 00:00:00'), 1) . ' AND ' . ($this->input->get('end_time') ? (int)strtotime(strpos($this->input->get('end_time'), ' ') ? $this->input->get('end_time') : $this->input->get('end_time').' 23:59:59') : SYS_TIME);
+		}
+		$data = $this->special_api->_get_import_data($modelid, $where, $page);
+		$pages = $this->special_api->pages;
+		$models = getcache('model','commons');
+		$model_datas = array();
+		foreach($models as $_k=>$_v) {
+			if($_v['siteid']==$this->get_siteid()) {
+				$model_datas[$_v['modelid']] = $_v['name'];
 			}
-			if($this->input->get('start_time')) {
-				$where .= ' AND `inputtime` BETWEEN ' . max((int)strtotime(strpos($this->input->get('start_time'), ' ') ? $this->input->get('start_time') : $this->input->get('start_time').' 00:00:00'), 1) . ' AND ' . ($this->input->get('end_time') ? (int)strtotime(strpos($this->input->get('end_time'), ' ') ? $this->input->get('end_time') : $this->input->get('end_time').' 23:59:59') : SYS_TIME);
-			}
-			$data = $this->special_api->_get_import_data($_GET['modelid'], $where, $_GET['page']);
-			$pages = $this->special_api->pages;
-			$models = getcache('model','commons');
-			$model_datas = array();
-			foreach($models as $_k=>$_v) {
-				if($_v['siteid']==$this->get_siteid()) {
-					$model_datas[$_v['modelid']] = $_v['name'];
-				}
-			}
-			$model_form = form::select($model_datas, $_GET['modelid'], 'name="modelid" onchange="select_categorys(this.value)"', L('select_model'));
-			$types = $this->special_api->_get_types($_GET['specialid']);
-			include $this->admin_tpl('import_pics');
+		}
+		$model_form = form::select($model_datas, $modelid, 'name="modelid" onchange="select_categorys(this.value)"', L('select_model'));
+		$types = $this->special_api->_get_types($this->input->get('specialid'));
+		include $this->admin_tpl('import_pics');
 	}
 	
 	public function html() {
-		if((!isset($_POST['id']) || empty($_POST['id']))) {
+		if((!$this->input->post('id') || empty($this->input->post('id')))) {
 			$result = $this->db->select(array('disabled'=>0, 'siteid'=>$this->get_siteid()), 'id', '', '', '', 'id');
 			$id = array_keys($result);
 		} else {
@@ -229,7 +232,7 @@ class special extends admin {
 		$this->public_create_html();
 	}
 	
-	public	function create_special_list() {
+	public function create_special_list() {
 		$siteid = get_siteid();
 		$html = pc_base::load_app_class('html');
 		$c = pc_base::load_model('special_model');
@@ -246,9 +249,10 @@ class special extends admin {
 	 * 专题排序
 	 */
 	public function listorder() {
-		if(isset($_POST['dosubmit'])) {
-			if (isset($_POST['listorder']) && is_array($_POST['listorder'])) {
-				foreach($_POST['listorder'] as $id => $order) {
+		if($this->input->post('dosubmit')) {
+			$listorder = $this->input->post('listorder');
+			if (isset($listorder) && is_array($listorder)) {
+				foreach($listorder as $id => $order) {
 					$id = intval($id);
 					$order = intval($order);
 					$this->db->update(array('listorder'=>$order), array('id'=>$id));
@@ -288,10 +292,10 @@ class special extends admin {
 	
 	//生成专题里列表页
 	public function public_create_type() {
-		$specialid = $this->input->get('specialid') ? intval($_GET['specialid']) : 0;
+		$specialid = $this->input->get('specialid') ? intval($this->input->get('specialid')) : 0;
 		if (!$specialid) dr_admin_msg(0,L('illegal_action'));
-		$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-		$pages = isset($_GET['pages']) ? intval($_GET['pages']) : 0;
+		$page = $this->input->get('page') ? intval($this->input->get('page')) : 1;
+		$pages = $this->input->get('pages') ? intval($this->input->get('pages')) : 0;
 		$types = getcache('create_types', 'commons');
 		if (is_array($types) && !empty($types) || $pages) {
 			if (!isset($page) || $page==1) {
@@ -307,8 +311,8 @@ class special extends admin {
 				$total = $result['total'];
 				$pages = ceil($total/20);
 			}
-			if ($_GET['typeid']) {
-				$typeid = intval($_GET['typeid']);
+			if ($this->input->get('typeid')) {
+				$typeid = intval($this->input->get('typeid'));
 				$typename = $this->input->get('typename');
 			}
 			$maxpage = $page+10;
@@ -326,7 +330,7 @@ class special extends admin {
 			if ($pages<=$maxpage) {
 				dr_admin_msg(1,$typename.L('update_success'), '?m=special&c=special&a=public_create_type&specialid='.$specialid);
 			} else {
-				dr_admin_msg(1,$typename.L('type_from').($_GET['page'] ? $_GET['page'] : 1).L('type_end').$maxpage.'</font> '.L('update_success'), '?m=special&c=special&a=public_create_type&typeid='.$typeid.'&typename='.$typename.'&page='.$page.'&pages='.$pages.'&specialid='.$specialid);
+				dr_admin_msg(1,$typename.L('type_from').($this->input->get('page') ? $this->input->get('page') : 1).L('type_end').$maxpage.'</font> '.L('update_success'), '?m=special&c=special&a=public_create_type&typeid='.$typeid.'&typename='.$typename.'&page='.$page.'&pages='.$pages.'&specialid='.$specialid);
 			}
 			
 		} else {
@@ -339,10 +343,10 @@ class special extends admin {
 	
 	//生成内容页
 	public function public_create_content() {
-		$specialid = $this->input->get('specialid') ? intval($_GET['specialid']) : 0;
+		$specialid = $this->input->get('specialid') ? intval($this->input->get('specialid')) : 0;
 		if (!$specialid) dr_admin_msg(0,L('illegal_action'));
-		$pages = $this->input->get('pages') ? intval($_GET['pages']) : 0;
-		$page = $this->input->get('page') ? intval($_GET['page']) : 1;
+		$pages = $this->input->get('pages') ? intval($this->input->get('pages')) : 0;
+		$page = $this->input->get('page') ? intval($this->input->get('page')) : 1;
 		$c = pc_base::load_model('special_content_model');
 		if (!$pages) {
 			$result = $c->get_one(array('specialid'=>$specialid, 'isdata'=>1), 'COUNT(*) AS total');
@@ -368,11 +372,11 @@ class special extends admin {
 	 * 推荐专题
 	 */
 	public function elite() {
-		if(!isset($_GET['id']) || empty($_GET['id'])) {
+		if(!$this->input->get('id') || empty($this->input->get('id'))) {
 			dr_admin_msg(0,L('illegal_action'));
 		}
-		$_GET['value'] = $this->input->get('value') ? intval($_GET['value']) : 0;
-		$this->db->update(array('elite'=>$_GET['value']), array('id'=>$_GET['id'], 'siteid'=>get_siteid()));
+		$value = $this->input->get('value') ? intval($this->input->get('value')) : 0;
+		$this->db->update(array('elite'=>$value), array('id'=>$this->input->get('id'), 'siteid'=>get_siteid()));
 		dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 	}
 	
@@ -380,21 +384,21 @@ class special extends admin {
 	 * 删除专题 未执行删除操作，仅进行递归循环
 	 */
 	public function delete($id = 0) {
-		if((!isset($_GET['id']) || empty($_GET['id'])) && (!isset($_POST['id']) || empty($_POST['id'])) && !$id) {
+		if((!$this->input->get('id') || empty($this->input->get('id'))) && (!$this->input->post('id') || empty($this->input->post('id'))) && !$id) {
 			dr_admin_msg(0,L('illegal_action'), HTTP_REFERER);
 		}
-		if(is_array($_POST['id']) && !$id) {
-			foreach($_POST['id'] as $sid) {
+		if(is_array($this->input->post('id')) && !$id) {
+			foreach($this->input->post('id') as $sid) {
 				$this->special_api->_del_special($sid);
 			}
 			$this->special_cache();
 			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		} elseif(is_numeric($id) && $id) {
-			$id = $this->input->get('id') ? intval($_GET['id']) : intval($id);
+			$id = $this->input->get('id') ? intval($this->input->get('id')) : intval($id);
 			$this->special_api->_del_special($id);
 			return true;
 		} else {
-			$id = $this->input->get('id') ? intval($_GET['id']) : intval($id);
+			$id = $this->input->get('id') ? intval($this->input->get('id')) : intval($id);
 			$this->special_api->_del_special($id);
 			dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 		}
@@ -420,32 +424,32 @@ class special extends admin {
 	 * @return 返回此专题分类的下拉列表
 	 */
 	public function public_get_type() {
-		$_GET['specialid'] = intval($_GET['specialid']);
-		if(!$_GET['specialid']) return '';
-		$datas = $this->special_api->_get_types($_GET['specialid']);
-		echo form::select($types, 0, 'name="typeid" id="typeid" onchange="import_c('.$_GET['specialid'].', this.value)"', L('please_select'));
+		$specialid = intval($this->input->get('specialid'));
+		if(!$specialid) return '';
+		$datas = $this->special_api->_get_types($specialid);
+		echo form::select($types, 0, 'name="typeid" id="typeid" onchange="import_c('.$specialid.', this.value)"', L('please_select'));
 	}
 	
 	/**
 	 * 按模型ID列出模型下的栏目
 	 */
 	public function public_categorys_list() {
-		if(!isset($_GET['modelid']) || empty($_GET['modelid'])) exit('');
-		$modelid = intval($_GET['modelid']);
-		exit(form::select_category('', $_GET['catid'], 'name="catid" id="catid"', L('please_select'), $modelid, 0, 1));
+		$modelid = intval($this->input->get('modelid'));
+		if(!isset($modelid) || empty($modelid)) exit('');
+		exit(form::select_category('', $this->input->get('catid'), 'name="catid" id="catid"', L('please_select'), $modelid, 0, 1));
 	}
 	
 	/**
 	 * ajax验证专题是否已存在
 	 */
 	public function public_check_special() {
-		if(!$_GET['title']) exit(0);
+		$title = $this->input->get('title');
+		if(!$title) exit(0);
 		if(pc_base::load_config('system', 'charset')=='gbk') {
-			$_GET['title'] = safe_replace(iconv('UTF-8', 'GBK', $_GET['title']));
+			$title = safe_replace(iconv('UTF-8', 'GBK', $title));
 		}
-		$title = $_GET['title'];
-		if($_GET['id']) {
-			$id = intval($_GET['id']);
+		if($this->input->get('id')) {
+			$id = intval($this->input->get('id'));
 			if($this->db->get_one(array('title'=>$title, 'id'=>$id, 'siteid'=>$this->get_siteid()))) {
 				exit('1');
 			}
@@ -462,15 +466,15 @@ class special extends admin {
 	 * ajax检验专题静态文件名是否存在，避免专题页覆盖
 	 */
 	public function public_check_dir() {
-		if(!$_GET['filename']) exit(1);
-		if($_GET['id']) {
-			$id = intval($_GET['id']);
+		if(!$this->input->get('filename')) exit(1);
+		if($this->input->get('id')) {
+			$id = intval($this->input->get('id'));
 			$r = $this->db->get_one(array('id'=>$id, 'siteid'=>$this->get_siteid()));
 			if($r['filename'] = $this->input->get('filename')) {
 				exit('1');
 			}
 		}
-		$r = $this->db->get_one(array('siteid'=>$this->get_siteid(), 'filename'=>$_GET['filename']), 'id');
+		$r = $this->db->get_one(array('siteid'=>$this->get_siteid(), 'filename'=>$this->input->get('filename')), 'id');
 		if($r['id']) {
 			exit('0');
 		} else {
