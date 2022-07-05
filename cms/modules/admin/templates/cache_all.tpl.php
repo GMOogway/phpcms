@@ -24,10 +24,11 @@ include $this->admin_tpl('header','admin');?>
             <?php 
             if(is_array($list)){
             foreach($list as $id => $t){
+            $id=$id+1;
             ?>
             <tr>
                 <td>
-                    <span class="badge badge-success"> <?php echo $id+1;?> </span>
+                    <span class="badge badge-success"> <?php echo $id;?> </span>
                 </td>
                 <td>
                     <?php echo L($t['name']);?>
@@ -41,10 +42,88 @@ include $this->admin_tpl('header','admin');?>
                     </label>
                 </td>
             </tr>
-            <?php }}?>
+            <?php }}
+            $id=$id+1;
+            if ($module) {?>
             <tr>
                 <td>
-                    <span class="badge badge-success"> <?php echo $id+2;?> </span>
+                    <span class="badge badge-success"> <?php echo $id++;?> </span>
+                </td>
+                <td>
+                    <?php echo L('内容地址与设置地址不同步时，更新内容URL地址');?>
+                </td>
+                <td style="overflow:auto">
+                    <?php foreach($module as $c){?>
+                    <label>
+                        <a href="javascript:iframe_show('<?php echo L($c['name']);?>', '?m=content&c=create_html&a=public_show_url&modelid=<?php echo $c['modelid'];?>', '500px', '300px');" class="btn blue btn-xs"><i class="<?php echo dr_icon($c['icon']);?>"></i> <?php echo L($c['name']);?> </a>
+                    </label>
+                    <?php }?>
+                    <?php if ($module_more) {?>
+                    <div class="btn-group dropdown-btn-group" style="margin-top:0; margin-left: 10px">
+                        <button type="button" class="btn btn-xs btn-default "><?php echo L('更多');?></button>
+                        <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-angle-down"></i>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <?php foreach($module_more as $c){?>
+                            <li>
+                                <a href="javascript:iframe_show('<?php echo L($c['name']);?>', '?m=content&c=create_html&a=public_show_url&modelid=<?php echo $c['modelid'];?>', '500px', '300px');"><i class="<?php echo dr_icon($c['icon']);?>"></i> <?php echo L($c['name']);?> </a>
+                            </li>
+                            <?php }?>
+                        </ul>
+                    </div>
+                    <?php }?>
+                </td>
+            </tr>
+            <?php }
+            if ($linkage) {?>
+            <tr>
+                <td>
+                    <span class="badge badge-success"> <?php echo $id++;?> </span>
+                </td>
+                <td>
+                     <?php echo L('变更联动菜单数据后，更新缓存数据');?>
+                </td>
+                <td style="overflow:auto">
+                    <?php foreach($linkage as $c){?>
+                    <label>
+                        <a href="javascript:iframe_show('<?php echo L($c['name']);?>', '?m=admin&c=linkage&a=public_cache&key=<?php echo $c['id'];?>', '500px', '300px');" class="btn blue btn-xs"> <?php echo L($c['name']);?> </a>
+                    </label>
+                    <?php }?>
+                    <?php if ($linkage_more) {?>
+                    <div class="btn-group dropdown-btn-group" style="margin-top:0; margin-left: 10px">
+                        <button type="button" class="btn btn-xs btn-default "><?php echo L('更多');?></button>
+                        <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-angle-down"></i>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <?php foreach($linkage_more as $c){?>
+                            <li>
+                                <a href="javascript:iframe_show('<?php echo L($c['name']);?>', '?m=admin&c=linkage&a=public_cache&key=<?php echo $c['id'];?>', '500px', '300px');"> <?php echo L($c['name']);?> </a>
+                            </li>
+                            <?php }?>
+                        </ul>
+                    </div>
+                    <?php }?>
+                </td>
+            </tr>
+            <?php }?>
+            <tr>
+                <td>
+                    <span class="badge badge-success"> <?php echo $id++;?> </span>
+                </td>
+                <td>
+                    <?php echo L('当编辑器已经存在动态地图时，需要更新AK值');?>
+                </td>
+                <td style="overflow:auto">
+                    <label>
+                        <a href="javascript:dr_alldb_edit();" class="btn red btn-xs"><i class="fa fa-refresh"></i> <?php echo L('立即更新');?> </a>
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span class="badge badge-success"> <?php echo $id++;?> </span>
                 </td>
                 <td style="color:blue">
                     <?php echo L('更新CMS版本升级程序（当版本升级时必须操作）');?>
@@ -52,7 +131,7 @@ include $this->admin_tpl('header','admin');?>
                 <td style="overflow:auto">
                     <label>
                         <?php $menu_data = $this->menu_db->get_one(array('name' => 'check', 'm' => 'admin', 'c' => 'check', 'a' => 'init'));?>
-                        <a href="javascript:dr_iframe_show('<?php echo L('升级程序脚本');?>', '?m=admin&c=check&a=init&menuid=<?php echo $menu_data['id']?>&pc_hash='+pc_hash, '500px', '300px');" class="btn red btn-xs"><i class="fa fa-refresh"></i> <?php echo L('立即更新');?> </a>
+                        <a href="javascript:dr_iframe_show('<?php echo L('升级程序脚本');?>', '?m=admin&c=check&a=init&menuid=<?php echo $menu_data['id']?>&pc_hash='+pc_hash);" class="btn red btn-xs"><i class="fa fa-refresh"></i> <?php echo L('立即更新');?> </a>
                     </label>
                     <label>
                         <a href="javascript:dr_load_ajax('<?php echo L('确定初始化后台菜单吗？');?>', '?m=admin&c=menu&a=public_init', 0);" class="btn blue btn-xs"><i class="fa fa-list"></i> <?php echo L('初始化后台菜单');?> </a>
@@ -117,6 +196,14 @@ function my_update_attachment(id, page) {
             obj.html('<a href="javascript:dr_show_file_code(\'<?php echo L('查看日志');?>\', \'?m=admin&c=index&a=public_error_log&menuid=<?php echo $menu_data['id']?>&pc_hash=<?php echo dr_get_csrf_token()?>\');" style="color:red"><?php echo L("系统崩溃，请将错误日志发送给官方处理");?></a>');
         }
     });
+}
+function dr_alldb_edit() {
+    <?php if (!SYS_BDMAP_API) {?>
+    dr_tips(0, '需要前往后台设置界面，去设置百度地图AK值', -1);
+    <?php } else {?>
+    var url = '?m=content&c=create_html&a=public_dball_edit&t1='+encodeURIComponent('/statics/js/ueditor/dialogs/map/show.html#')+'&t2='+encodeURIComponent('/statics/js/ueditor/dialogs/map/show.html#ak=<?php echo SYS_BDMAP_API;?>&');
+    iframe_show('<?php echo L('批量操作');?>', url);
+    <?php }?>
 }
 </script>
 </div>

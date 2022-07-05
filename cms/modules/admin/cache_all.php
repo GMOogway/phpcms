@@ -8,11 +8,13 @@ class cache_all extends admin {
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
 		$this->menu_db = pc_base::load_model('menu_model');
+		$this->sitemodel_db = pc_base::load_model('sitemodel_model');
+		$this->linkage_db = pc_base::load_model('linkage_model');
 		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 	}
 
 	public function init() {
-        $show_header = true;
+		$show_header = true;
 		if ($this->input->get('is_ajax') || IS_AJAX) {
 			$modules = array(
 				array('function' => 'module'),
@@ -94,6 +96,24 @@ class cache_all extends admin {
 				array('name' => L('update_thumb'), 'function' => 'update_thumb'),
 				array('name' => L('cache_file'), 'function' => 'cache2database'),
 			);
+			$module_more = $module = array();
+			$module = $this->sitemodel_db->select(array('type'=>0, 'disabled'=>0));
+			if ($module) {
+				$limit = 10;
+				if (dr_count($module) > $limit) {
+					$module_more = array_slice($module, $limit);
+					$module = array_slice($module, 0, $limit);
+				}
+			}
+			$linkage_more = $linkage = array();
+			$linkage = $this->linkage_db->select();
+			if ($linkage) {
+				$limit = 10;
+				if (dr_count($linkage) > $limit) {
+					$linkage_more = array_slice($linkage, $limit);
+					$linkage = array_slice($linkage, 0, $limit);
+				}
+			}
 			include $this->admin_tpl('cache_all');
 		}
 	}
@@ -101,10 +121,10 @@ class cache_all extends admin {
 	// 执行更新缓存
 	public function public_cache() {
 
-        $function = dr_safe_replace($this->input->get('id'));
-        $param = $this->input->get('param');
-        $file = $this->input->get('file');
-        $mod = $this->input->get('mod');
+		$function = dr_safe_replace($this->input->get('id'));
+		$param = $this->input->get('param');
+		$file = $this->input->get('file');
+		$mod = $this->input->get('mod');
 		if ($mod && $function) {
 			if ($file == '') $file = $function;
 			$M = getcache('modules', 'commons');
@@ -116,7 +136,7 @@ class cache_all extends admin {
 			$this->cache_api->cache($function, $param ? $param : '');
 		}
 
-        dr_json(1, L('update').L('database_success'), 0);
-    }
+		dr_json(1, L('update').L('database_success'), 0);
+	}
 }
 ?>

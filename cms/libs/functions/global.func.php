@@ -334,6 +334,33 @@ function dr_stripos($string, $key) {
 }
 
 /**
+ * 返回图标
+ */
+function dr_icon($value) {
+	return $value ? $value : 'fa fa-table';
+}
+
+// 数组的指定元素大小排序
+function dr_array_sort($arr, $key, $type = 'asc') {
+	if (!is_array($arr)) {
+		return array();
+	}
+	uasort($arr, function($a, $b) use ($key, $type) {
+		if (!isset($a[$key])) {
+			return 0;
+		} elseif ($a[$key] == $b[$key]) {
+			return 0;
+		}
+		if ($type == 'asc') {
+			return ($a[$key] < $b[$key]) ? -1 : 1;
+		} else {
+			return ($a[$key] > $b[$key]) ? -1 : 1;
+		}
+	});
+	return $arr;
+}
+
+/**
  * 完整的文件路径
  *
  * @param   string  $url

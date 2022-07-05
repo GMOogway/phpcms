@@ -31,9 +31,8 @@ class create_html extends admin {
 		$this->db->set_model(intval($modelid));
 		$table_list = $this->db->query('show table status');
 		foreach ($table_list as $t) {
-			//if (strpos($t['Name'], $this->db->table_name) === 0) {
-				$tables[$t['Name']] = $t;
-			//}
+			$t['Name'] = str_replace('_data_0', '_data_[tableid]', $t['Name']);
+			$tables[$t['Name']] = $t;
 		}
 		include $this->admin_tpl('update_urls');
 	}
@@ -1295,7 +1294,19 @@ class create_html extends admin {
 			dr_json(0, L('表名不能为空'));
 		}
 		$tables = array();
-		$tables[$bm] = $this->_get_field($bm);
+		if (strpos($bm, '[tableid]')) {
+			for ($i = 0; $i < 200; $i ++) {
+				$table = str_replace('[tableid]', $i, $bm);
+				$this->db->query("SHOW TABLES LIKE '".$table."'");
+				$table_exists = $this->db->fetch_array();
+				if (!$table_exists) {
+					continue;
+				}
+				$tables[$table] = $this->_get_field($table);
+			}
+		} else {
+			$tables[$bm] = $this->_get_field($bm);
+		}
 
 		$t1 = $this->input->post('t1');
 		$t2 = $this->input->post('t2');
@@ -1335,7 +1346,19 @@ class create_html extends admin {
 			dr_json(0, L('表名不能为空'));
 		}
 		$tables = array();
-		$tables[$bm] = $this->_get_field($bm);
+		if (strpos($bm, '[tableid]')) {
+			for ($i = 0; $i < 200; $i ++) {
+				$table = str_replace('[tableid]', $i, $bm);
+				$this->db->query("SHOW TABLES LIKE '".$table."'");
+				$table_exists = $this->db->fetch_array();
+				if (!$table_exists) {
+					continue;
+				}
+				$tables[$table] = $this->_get_field($table);
+			}
+		} else {
+			$tables[$bm] = $this->_get_field($bm);
+		}
 
 		$t1 = $this->input->post('t1');
 		$t2 = $this->input->post('t2');
@@ -1355,7 +1378,7 @@ class create_html extends admin {
 		$where = '';
 		if ($t1) {
 			// 防范sql注入后期需要加强
-			foreach (array('outfile', 'dumpfile', '.php', 'union', ';') as $kw) {
+			foreach (array('outfile', 'dumpfile', '.php', 'union') as $kw) {
 				if (strpos(strtolower($t1), $kw) !== false) {
 					dr_json(0, L('存在非法SQL关键词：'.$kw));
 				}
@@ -1441,7 +1464,7 @@ class create_html extends admin {
 				$table = $prefix.'site';
 				foreach ($mod as $t) {
 					if ($t['issystem']) {
-						$this->_is_rp_field($t, $table) && $data[] = [ $table, $t['fieldname'] ];
+						$this->_is_rp_field($t, $table) && $data[] = [ $table, $t['field'] ];
 					}
 				}
 			}
@@ -1450,7 +1473,7 @@ class create_html extends admin {
 				$table = $prefix.'category';
 				foreach ($mod as $t) {
 					if ($t['issystem']) {
-						$this->_is_rp_field($t, $table) && $data[] = [ $table, $t['fieldname'] ];
+						$this->_is_rp_field($t, $table) && $data[] = [ $table, $t['field'] ];
 					}
 				}
 			}
@@ -1459,7 +1482,7 @@ class create_html extends admin {
 				$table = $prefix.'page';
 				foreach ($mod as $t) {
 					if ($t['issystem']) {
-						$this->_is_rp_field($t, $table) && $data[] = [ $table, $t['fieldname'] ];
+						$this->_is_rp_field($t, $table) && $data[] = [ $table, $t['field'] ];
 					}
 				}
 			}
@@ -1515,6 +1538,7 @@ class create_html extends admin {
 	// 联动加载字段
 	public function public_field_index() {
 		$table = dr_safe_replace($this->input->get('table'));
+		$table = str_replace('_data_[tableid]', '_data_0', $table);
 		$table = str_replace($this->db->db_tablepre, '', $table);
 		if (!$table) {
 			dr_json(0, L('表参数不能为空'));
