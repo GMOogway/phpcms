@@ -814,15 +814,15 @@ function iframe(type, url, width, height, rt) {
 		content: url+'&is_iframe=1'
 	});
 }
-function dr_logout(url, linkurl) {
-	Dialog.confirm('你确定要退出吗？', function(){
+function dr_logout(msg, url, tourl) {
+	Dialog.confirm(msg, function(){
 		$.ajax({
 			type: "GET",
 			dataType: "json",
 			url: url,
 			success: function(json) {
 				if (json.code == 1) {
-					setTimeout("window.location.href='" + linkurl + "'", 1000);
+					setTimeout("window.location.href='" + tourl + "'", 1000);
 				}
 				dr_tips(json.code, json.msg);
 			},
@@ -1324,7 +1324,7 @@ function dr_submit_sql_todo(e, t) {
 		}
 	})
 }
-function dr_install_uninstall(id,msg,title,linkurl,module,w,h) {
+function dr_install_uninstall(msg,linkurl,module,w,h) {
 	if (typeof pc_hash == 'string') linkurl += (linkurl.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
 	if (linkurl.toLowerCase().indexOf("http://") != -1 || linkurl.toLowerCase().indexOf("https://") != -1) {
 	} else {

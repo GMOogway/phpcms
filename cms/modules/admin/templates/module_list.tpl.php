@@ -35,7 +35,7 @@ if (is_array($directory)){
 	<td><?php echo $modules[$d]['author'] ? $modules[$d]['author'] : '系统';?></td>
 	<td><?php echo $modules[$d]['version']?></td>
 	<td>
-	<?php if ($modules[$d]['iscore']) {?><span class="btn btn-xs dark"> <i class="fa fa-ban"></i> <?php echo L('ban')?></span><?php } else {?><a class="btn btn-xs red" href="javascript:void(0);" onclick="dr_install_uninstall('uninstall','<?php echo L('confirm', array('message'=>$modules[$d]['name']))?>','<?php echo L('module_unistall', '', 'admin')?>','?m=admin&c=module&a=uninstall','<?php echo $d?>');"> <i class="fa fa-trash"></i> <?php echo L('unload')?></a><?php }?>
+	<?php if ($modules[$d]['iscore']) {?><span class="btn btn-xs dark"> <i class="fa fa-ban"></i> <?php echo L('ban')?></span><?php } else {?><a class="btn btn-xs red" href="javascript:void(0);" onclick="dr_install_uninstall('<?php echo L('confirm', array('message'=>$modules[$d]['name']))?>','?m=admin&c=module&a=uninstall','<?php echo $d?>');"> <i class="fa fa-trash"></i> <?php echo L('unload')?></a><?php }?>
 	</td>
 	</tr>
 <?php 
@@ -55,7 +55,7 @@ if (is_array($directory)){
 	<td><?php echo $author ? $author : '系统';?></td>
 	<td><?php echo $version?></td>
 	<td>
-	<?php if ($isinstall!=L('no_install')) {?> <a class="btn btn-xs blue" href="javascript:dr_install_uninstall('install','<?php echo L('install_desc')?>','<?php echo L('module_istall')?>','?m=admin&c=module&a=install','<?php echo $d?>');"> <i class="fa fa-plus"></i> <?php echo $isinstall?></a><?php } else {?><?php echo $isinstall?><?php }?>
+	<?php if ($isinstall!=L('no_install')) {?> <a class="btn btn-xs blue" href="javascript:dr_install_uninstall('<?php echo L('install_desc')?>','?m=admin&c=module&a=install','<?php echo $d?>');"> <i class="fa fa-plus"></i> <?php echo $isinstall?></a><?php } else {?><?php echo $isinstall?><?php }?>
 	</td>
 	</tr>
 <?php 

@@ -133,7 +133,7 @@ $(document).ready(function() {
     
     $tool.on('click', function () {
         var tool = $tool.children().attr("data-url");
-        dr_logout(tool, '<?php echo SELF;?>');
+        dr_logout('<?php echo L('confirm_exit_login');?>', tool, '<?php echo SELF;?>');
     });
 
     // 时间、日期
@@ -436,7 +436,7 @@ $(document).ready(function() {
         miniAdmin.render(options);
 
         $('.login-out').on("click", function () {
-            dr_logout('?m=admin&c=index&a=public_logout', '<?php echo SELF;?>');
+            dr_logout('<?php echo L('confirm_exit_login');?>', '?m=admin&c=index&a=public_logout', '<?php echo SELF;?>');
         });
     });
 function menu(menuid) {
