@@ -33,7 +33,7 @@ $LANG['password_error_lock'] = '密码错误，您还有';
 $LANG['password_error_lock2'] = '次尝试机会！';
 $LANG['wait_1_hour'] = '密码重试次数太多，请过{minute}分钟后重新登录！';
 $LANG['wait_1_hour_lock'] = '密码重试次数太多';
-$LANG['logout_success'] = '安全退出！';
+$LANG['logout_success'] = '您已经安全退出系统了！';
 $LANG['this_object_not_del'] = '该对象不能被删除';
 $LANG['gd_unsupport'] = '<font color="red">不支持</font>';
 $LANG['gd_support'] = '<font color="green">支持</font>';

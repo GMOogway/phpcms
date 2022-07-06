@@ -11,15 +11,17 @@
 <link href="<?php echo CSS_PATH?>admin/css/login.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="<?php echo JS_PATH?>Dialog/main.js"></script>
 <script type="text/javascript" src="<?php echo JS_PATH?>styleswitch.js"></script>
-<script src="<?php echo JS_PATH?>jquery.backstretch.min.js" type="text/javascript"></script>
 <script type="text/javascript" src="<?php echo JS_PATH?>layer/layer.js"></script>
+<link href="<?php echo JS_PATH?>bundle/css/bundle.css" rel="stylesheet" type="text/css" />
+<script src="<?php echo JS_PATH?>bundle/js/bundle.js"></script>
+<script src="<?php echo JS_PATH?>scripts.bundle.js"></script>
 <script src="<?php echo JS_PATH?>jquery.md5.js" type="text/javascript"></script>
+<script src="<?php echo JS_PATH?>jquery.backstretch.min.js" type="text/javascript"></script>
 <script src="<?php echo JS_PATH?>jquery.particleground.min.js" type="text/javascript"></script>
 </head>
 <body>
 <div class="container login">
-    <form class="layui-form layui-form-pane" action="?m=admin&c=index&a=<?php echo SYS_ADMIN_PATH;?>" method="post" id="myform" name="myform">
-        <input name="dosubmit" type="hidden" value="1">
+    <form class="layui-form layui-form-pane" method="post" onsubmit="return dr_submit()" id="kt_sign_in_form">
         <?php echo dr_form_hidden();?>
         <div id="content" class="content">
             <div id="large-header" class="large-header">
@@ -57,7 +59,10 @@
                                 </div>
                                 <?php }?>
                                 <div class="layui-form-item">
-                                    <button type="button" onclick="dr_login()" class="layui-btn btn-submit btn-blog">立即登录</button>
+                                    <button type="button" id="kt_sign_in_submit" class="layui-btn btn-submit btn-blog">
+                                        <span class="indicator-label">立即登录</span>
+                                        <span class="indicator-progress">请求中...<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                                    </button>
                                 </div>
                             </form>
                         </div>
@@ -75,22 +80,21 @@ $(document).ready(function() {
     if(self.parent.frames.length!=0){
         self.parent.location=document.location.href;
     }
-    if(document.myform.username.value == '') {
-        document.myform.username.focus();
+    if($('#username').value == '') {
+        $('#username').focus();
     } else {
-        document.myform.username.select();
+        $('#username').select();
     }
     $('body').keydown(function(e){
         if (e.keyCode == 13) {
-            dr_login();
+            dr_submit();
         }
     })
     $('#canvas').particleground({
         dotColor: 'rgba(255,255,255,0.2)',
         lineColor: 'rgba(255,255,255,0.2)'
     });
-    $('#large-header').backstretch([
-        "<?php echo IMG_PATH?>admin_img/bg-screen1.jpg","<?php echo IMG_PATH?>admin_img/bg-screen2.jpg","<?php echo IMG_PATH?>admin_img/bg-screen3.jpg","<?php echo IMG_PATH?>admin_img/bg-screen4.jpg","<?php echo IMG_PATH?>admin_img/bg-screen5.jpg","<?php echo IMG_PATH?>admin_img/bg-screen6.jpg","<?php echo IMG_PATH?>admin_img/bg-screen7.jpg"], {
+    $('#large-header').backstretch([<?php echo implode(',', $background);?>], {
         fade: 1000,
         duration: 8000
     });
@@ -104,80 +108,81 @@ $(document).ready(function() {
         }
     });
 });
-</script>
-<script>
-//监听提交
-function dr_login() {
-    if (!$('#username').val()){
-        layer.msg('账号不能为空！', {icon: 5, anim: 6, time: 1000});
-        $('#username').focus();
-        return false;
-    }
-    if (!$('#password').val()){
-        layer.msg('密码不能为空！', {icon: 5, anim: 6, time: 1000});
-        $('#password').focus();
-        return false;
-    }
-    <?php if (!$sysadmincode) {?>
-    if (!$('#captcha').val()){
-        layer.msg('验证码不能为空！', {icon: 5, anim: 6, time: 1000});
-        $('#captcha').focus();
-        return false;
-    }
-    <?php }?>
-    loading = layer.load(1, {shade: [0.1,'#fff'] });//0.1透明度的白色背景
-    // 这里进行md5加密存储
-    var pwd = $('#password').val();
-    if (pwd.length == 32) {
-        // 已经加密过的
-    } else {
-        pwd = $.md5(pwd); // 进行md5加密
-        $('#password').val(pwd);
-    }
-    $.ajax({
-        type: 'post',
-        url: '?m=admin&c=index&a=<?php echo SYS_ADMIN_PATH;?>',
-        data: $("#myform").serialize(),
-        dataType: 'json',
-        success: function(res) {
-            layer.close(loading);
-            if(res.code == 1){
-                layer.msg(res.msg, {icon: 1, time: 1000}, function(){
-                    location.href = res.data.url;
-                });
-            /*}else if(res.code == 2){
-                $('#username').val('');
-                $('#username').focus();
-                layer.msg(res.msg, {icon: 2, anim: 6, time: 1000});
-                <?php if (!$sysadmincode) {?>
-                $('#captcha').val('');
-                $('#code_img').trigger('click');
-                <?php }?>
-            }else if(res.code == 3){
-                $('#password').val('');
-                $('#password').focus();
-                layer.msg(res.msg, {icon: 2, anim: 6, time: 1000});
-                <?php if (!$sysadmincode) {?>
-                $('#captcha').val('');
-                $('#code_img').trigger('click');
-                <?php }?>*/
-            <?php if (!$sysadmincode) {?>
-            /*}else if(res.code == 4){
-                $('#captcha').focus();
-                $('#captcha').val('');
-                layer.msg(res.msg, {icon: 2, anim: 6, time: 1000});
-                $('#code_img').trigger('click');*/
-            <?php }?>
-            }else{
-                layer.msg(res.msg, {icon: 2, anim: 6, time: 1000});
-                <?php if (!$sysadmincode) {?>
-                $('#captcha').val('');
-                $('#code_img').trigger('click');
-                <?php }?>
-            }
+if (typeof parent.layer == 'function') {
+    parent.layer.closeAll('loading');
+}
+KTUtil.onDOMContentLoaded((function() {
+    var e = document.querySelector("#kt_sign_in_submit");
+    e.addEventListener("click", (function(n) {
+        e.setAttribute("data-kt-indicator", "on");
+        e.disabled = true;
+        // 这里进行md5加密存储
+        var pwd = $('#password').val();
+        if (pwd.length == 32) {
+            // 已经加密过的
+        } else {
+            pwd = $.md5(pwd); // 进行md5加密
+            $('#password').val(pwd);
         }
-    });
-    return false;
+        $.ajax({type: "POST",dataType:"json", url: '?m=admin&c=index&a=<?php echo SYS_ADMIN_PATH;?>', data: $("#kt_sign_in_form").serialize(),
+            success: function(json) {
+                if (json.code == 1) {
+                    layer.msg('<i class="fa fa-check-circle"></i>&nbsp;&nbsp;'+json.msg, {time: 1000}, function(){
+                        window.location.href = json.data.url;
+                    });
+                } else {
+                    <?php if (!$sysadmincode) {?>
+                    $('#captcha').val('');
+                    $('#code_img').trigger('click');
+                    <?php }?>
+                    Swal.fire({
+                        text: json.msg,
+                        icon: "error",
+                        buttonsStyling: !1,
+                        confirmButtonText: "返回",
+                        customClass: {
+                            confirmButton: "btn btn-light"
+                        }
+                    });
+                }
+                e.removeAttribute("data-kt-indicator");
+                e.disabled = false;
+            },
+            error: function(HttpRequest, ajaxOptions, thrownError) {
+                e.removeAttribute("data-kt-indicator");
+                e.disabled = false;
+                <?php if (!$sysadmincode) {?>
+                $('#captcha').val('');
+                $('#code_img').trigger('click');
+                <?php }?>
+                var msg = HttpRequest.responseText;
+                if (!msg) {
+                    Swal.fire({
+                        text: "系统故障",
+                        icon: "error",
+                        buttonsStyling: !1,
+                        confirmButtonText: "返回",
+                        customClass: {
+                            confirmButton: "btn btn-primary"
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        text: msg,
+                        icon: "error",
+                        buttonsStyling: !1,
+                        confirmButtonText: "返回",
+                        customClass: {
+                            confirmButton: "btn btn-primary"
+                        }
+                    });
+                }
+            }
+        });
+    }))
+}));
+function dr_submit() {
+    $("#kt_sign_in_submit").click();
 }
 </script>
 </body>

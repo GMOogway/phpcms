@@ -54,8 +54,7 @@ top.location="<?php echo SELF;?>";
 </div>
 <script>
 $(document).ready(function() {
-    $('#ew-lock-screen-group').backstretch([
-        "<?php echo IMG_PATH?>admin_img/bg-screen1.jpg","<?php echo IMG_PATH?>admin_img/bg-screen2.jpg","<?php echo IMG_PATH?>admin_img/bg-screen3.jpg","<?php echo IMG_PATH?>admin_img/bg-screen4.jpg","<?php echo IMG_PATH?>admin_img/bg-screen5.jpg","<?php echo IMG_PATH?>admin_img/bg-screen6.jpg","<?php echo IMG_PATH?>admin_img/bg-screen7.jpg"], {
+    $('#ew-lock-screen-group').backstretch([<?php echo implode(',', $background);?>], {
         fade: 1000,
         duration: 8000
     });
@@ -134,13 +133,7 @@ $(document).ready(function() {
     
     $tool.on('click', function () {
         var tool = $tool.children().attr("data-url");
-        layer.confirm('<?php echo L('confirm_exit_login');?>', {
-            btn: ['确定','取消']
-        }, function(){
-            location.href = tool;
-        }, function(){
-            return true;
-        });
+        dr_logout(tool, '<?php echo SELF;?>');
     });
 
     // 时间、日期
@@ -431,7 +424,7 @@ $(document).ready(function() {
 
         var options = {
             iniUrl: "<?php echo SELF;?>?m=admin&c=index&a=public_menu",    // 初始化接口
-            clearUrl: "<?php echo SELF;?>?m=admin&c=cache_all&a=init&pc_hash="+pc_hash+"&is_ajax=1", // 缓存清理接口
+            clearUrl: "<?php echo SELF;?>?m=admin&c=cache_all&a=init&pc_hash="+pc_hash, // 缓存清理接口
             urlHashLocation: true,      // 是否打开hash定位
             bgColorDefault: false,      // 主题默认配置
             multiModule: true,          // 是否开启多模块
@@ -443,7 +436,7 @@ $(document).ready(function() {
         miniAdmin.render(options);
 
         $('.login-out').on("click", function () {
-            Dialog.confirm('<?php echo L('confirm_exit_login');?>', function(){location.href='?m=admin&c=index&a=public_logout';});
+            dr_logout('?m=admin&c=index&a=public_logout', '<?php echo SELF;?>');
         });
     });
 function menu(menuid) {

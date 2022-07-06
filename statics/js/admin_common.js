@@ -814,6 +814,24 @@ function iframe(type, url, width, height, rt) {
 		content: url+'&is_iframe=1'
 	});
 }
+function dr_logout(url, linkurl) {
+	Dialog.confirm('你确定要退出吗？', function(){
+		$.ajax({
+			type: "GET",
+			dataType: "json",
+			url: url,
+			success: function(json) {
+				if (json.code == 1) {
+					setTimeout("window.location.href='" + linkurl + "'", 1000);
+				}
+				dr_tips(json.code, json.msg);
+			},
+			error: function(HttpRequest, ajaxOptions, thrownError) {
+				dr_ajax_alert_error(HttpRequest, this, thrownError);
+			}
+		});
+	});
+}
 // ajax 显示内容
 function dr_iframe_show(type, url, width, height, is_close) {
 	if (typeof pc_hash == 'string') url += (url.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;

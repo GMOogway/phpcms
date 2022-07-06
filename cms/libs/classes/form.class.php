@@ -645,7 +645,7 @@ class form {
 	 */
 	public static function checkcode($id = 'checkcode',$code_len = 4, $font_size = 20, $width = 130, $height = 50, $font = '', $font_color = '', $background = '') {
 		if (defined('IS_ADMIN') && IS_ADMIN) {
-			$js = '<div id="voices" style="width: 0px; height: 0px; overflow:hidden; text-indent:-99999px;"></div><script type="text/javascript">function voice() {$(\'#voices\').html(\'<audio id="audio" controls="controls" autoplay="autoplay"><source src="'.trim(FC_NOW_HOST, '/').WEB_PATH.'api.php?op=voice&\'+Math.random()+\'" type="audio/mpeg"></audio>\');$(\'#audio\').play();$(\'#captcha\').val(\'\');$(\'#captcha\').focus();}</script>';
+			$js = '<div id="voices" style="width: 0px; height: 0px; overflow:hidden; text-indent:-99999px;"></div><script type="text/javascript">function voice() {$(\'#voices\').html(\'<audio id="audio" controls="controls" autoplay="autoplay"><source src="'.trim(FC_NOW_HOST, '/').WEB_PATH.'api.php?op=voice&\'+Math.random()+\'" type="audio/mpeg"></audio>\');$(\'#audio\').get(0).play();$(\'#captcha\').val(\'\');$(\'#captcha\').focus();}</script>';
 			return "<img id='$id' onclick='this.src=this.src+\"&\"+Math.random();voice();' src='".trim(FC_NOW_HOST, '/').WEB_PATH."api.php?op=checkcode&code_len=$code_len&font_size=$font_size&width=$width&height=$height&font_color=".urlencode($font_color)."&background=".urlencode($background)."' style=\"vertical-align: middle;\">".$js;
 		} else {
 			return "<img id='$id' onclick='this.src=this.src+\"&\"+Math.random()' src='".trim(FC_NOW_HOST, '/').WEB_PATH."api.php?op=checkcode&code_len=$code_len&font_size=$font_size&width=$width&height=$height&font_color=".urlencode($font_color)."&background=".urlencode($background)."' style=\"vertical-align: middle;\">";

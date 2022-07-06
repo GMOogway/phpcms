@@ -33,7 +33,7 @@ $LANG['password_error_lock'] = 'Incorrect Password, you have';
 $LANG['password_error_lock2'] = 'tries to log in！';
 $LANG['wait_1_hour'] = 'You have entered an incorrect password too many times. To work around this issue, wait for {minute} minutes, and then try to sign in again.';
 $LANG['wait_1_hour_lock'] = 'You have entered an incorrect password too many times';
-$LANG['logout_success'] = 'You have successfully logged out.';
+$LANG['logout_success'] = 'You have safely logged out of the system!';
 $LANG['this_object_not_del'] = 'The object cannot be deleted';
 $LANG['gd_unsupport'] = '<font color="red">Non-Support</font>';
 $LANG['gd_support'] = '<font color="green">Support</font>';

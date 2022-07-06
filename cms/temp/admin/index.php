@@ -25,6 +25,14 @@ class index extends admin {
 		/*管理员收藏栏*/
 		$adminpanel = $this->panel_db->select(array('userid'=>$userid), "*",20 , 'datetime');
 		$site_model = param::get_cookie('site_model');
+		$background = array('"'.IMG_PATH.'admin_img/bg-screen1.jpg"',
+			'"'.IMG_PATH.'admin_img/bg-screen2.jpg"',
+			'"'.IMG_PATH.'admin_img/bg-screen3.jpg"',
+			'"'.IMG_PATH.'admin_img/bg-screen4.jpg"',
+			'"'.IMG_PATH.'admin_img/bg-screen5.jpg"',
+			'"'.IMG_PATH.'admin_img/bg-screen7.jpg"',
+			'"'.IMG_PATH.'admin_img/bg-screen7.jpg"');
+		shuffle($background);
 		include $this->admin_tpl('index');
 	}
 	
@@ -33,16 +41,16 @@ class index extends admin {
 		$sysadmincode = isset($setting['sysadmincode']) ? (int)$setting['sysadmincode'] : '';
 		$maxloginfailedtimes = isset($setting['maxloginfailedtimes']) ? (int)$setting['maxloginfailedtimes'] : '';
 		$sysadminlogintimes = isset($setting['sysadminlogintimes']) ? (int)$setting['sysadminlogintimes'] : 10;
-		if($this->input->post('dosubmit')) {
+		if(IS_AJAX_POST) {
 			$username = $this->input->post('username') && trim($this->input->post('username')) ? trim($this->input->post('username')) : dr_json(0, L('nameerror'));
 			admin::admin_login_before($username);
 			if (!$sysadmincode) {
 				if (!check_captcha('code')) {
-					dr_json(4, L('code_error'));
+					dr_json(0, L('code_error'));
 				}
 			}
 			if (is_badword($username)) {
-				dr_json(2, L('username_illegal'));
+				dr_json(0, L('username_illegal'));
 			}
 			//密码错误剩余重试次数
 			$this->times_db = pc_base::load_model('times_model');
@@ -67,7 +75,7 @@ class index extends admin {
 			if(!$r) dr_json(0, L('user_not_exist'));
 			//如果账号被锁定
 			if($r['islock']) {
-				dr_json(3, L('管理员已经被锁定'));
+				dr_json(0, L('管理员已经被锁定'));
 			}
 			$password = md5(trim($this->input->post('password')).$r['encrypt']);
 			
@@ -82,9 +90,9 @@ class index extends admin {
 						$this->times_db->insert(array('username'=>$username,'ip'=>$ip,'isadmin'=>1,'logintime'=>SYS_TIME,'times'=>1));
 						$times = $maxloginfailedtimes;
 					}
-					dr_json(3, str_replace('{times}',$times,L('password_error')));
+					dr_json(0, str_replace('{times}',$times,L('password_error')));
 				} else {
-					dr_json(3, L('密码错误'));
+					dr_json(0, L('密码错误'));
 				}
 			}
 			$this->times_db->delete(array('username'=>$username,'isadmin'=>1));
@@ -114,6 +122,11 @@ class index extends admin {
 			}
 			dr_json(1, L('login_success'), array('url' => '?m=admin&c=index&pc_hash='.dr_get_csrf_token()));
 		} else {
+			$background = array('"'.IMG_PATH.'admin_img/bg-screen1.jpg"',
+				'"'.IMG_PATH.'admin_img/bg-screen2.jpg"',
+				'"'.IMG_PATH.'admin_img/bg-screen3.jpg"',
+				'"'.IMG_PATH.'admin_img/bg-screen4.jpg"');
+			shuffle($background);
 			pc_base::load_sys_class('form', '', 0);
 			include $this->admin_tpl('login');
 		}
