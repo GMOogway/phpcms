@@ -18,17 +18,17 @@ class formguide_input {
 	}
 
 	function get($data,$isimport = 0) {
+		$_groupid = param::get_cookie('_groupid');
 		$this->data = $data;
 		$info = array();
-		if (is_array($this->fields)) {
-			foreach($this->fields as $field) {
-				//if(!isset($this->fields[$field]) || check_in($_roleid, $this->fields[$field]['unsetroleids']) || check_in($_groupid, $this->fields[$field]['unsetgroupids'])) continue;
-				$name = $field['name'];
-				$minlength = $field['minlength'];
-				$maxlength = $field['maxlength'];
-				$pattern = $field['pattern'];
-				$errortips = $field['errortips'];
-				$value = $data[$field['field']];
+		if (is_array($data)) {
+			foreach($data as $field=>$value) {
+				if(!isset($this->fields[$field]) || check_in($_groupid, $this->fields[$field]['unsetgroupids'])) continue;
+				$name = $this->fields[$field]['name'];
+				$minlength = $this->fields[$field]['minlength'];
+				$maxlength = $this->fields[$field]['maxlength'];
+				$pattern = $this->fields[$field]['pattern'];
+				$errortips = $this->fields[$field]['errortips'];
 				if(empty($errortips)) $errortips = $name.' '.L('not_meet_the_conditions');
 				$length = empty($value) ? 0 : (is_string($value) ? mb_strlen($value) : dr_strlen($value));
 
@@ -37,9 +37,9 @@ class formguide_input {
 						return false;
 					} else {
 						if (IS_ADMIN) {
-							dr_admin_msg(0, $name.' '.L('not_less_than').' '.$minlength.L('characters'), array('field' => $field['field']));
+							dr_admin_msg(0, $name.' '.L('not_less_than').' '.$minlength.L('characters'), array('field' => $field));
 						} else {
-							dr_msg(0, $name.' '.L('not_less_than').' '.$minlength.L('characters'), array('field' => $field['field']));
+							dr_msg(0, $name.' '.L('not_less_than').' '.$minlength.L('characters'), array('field' => $field));
 						}
 					}
 				}
@@ -48,9 +48,9 @@ class formguide_input {
 						$value = str_cut($value,$maxlength,'');
 					} else {
 						if (IS_ADMIN) {
-							dr_admin_msg(0, $name.' '.L('not_more_than').' '.$maxlength.L('characters'), array('field' => $field['field']));
+							dr_admin_msg(0, $name.' '.L('not_more_than').' '.$maxlength.L('characters'), array('field' => $field));
 						} else {
-							dr_msg(0, $name.' '.L('not_more_than').' '.$maxlength.L('characters'), array('field' => $field['field']));
+							dr_msg(0, $name.' '.L('not_more_than').' '.$maxlength.L('characters'), array('field' => $field));
 						}
 					}
 				} elseif($maxlength) {
@@ -58,14 +58,14 @@ class formguide_input {
 				}
 				if($pattern && $length && !preg_match($pattern, $value) && !$isimport) {
 					if (IS_ADMIN) {
-						dr_admin_msg(0, $errortips, array('field' => $field['field']));
+						dr_admin_msg(0, $errortips, array('field' => $field));
 					} else {
-						dr_msg(0, $errortips, array('field' => $field['field']));
+						dr_msg(0, $errortips, array('field' => $field));
 					}
 				}
 				$func = $field['formtype'];
-				if(method_exists($this, $func)) $value = $this->$func($field['field'], $value);
-				$info[$field['field']] = $value;
+				if(method_exists($this, $func)) $value = $this->$func($field, $value);
+				$info[$field] = $value;
 				//颜色选择为隐藏域 在这里进行取值
 				if ($this->input->post('style_color')) $info['style'] = $this->input->post('style_color');
 				if($this->input->post('style_font_weight')) $info['style'] = $info['style'].';'.clearhtml($this->input->post('style_font_weight'));

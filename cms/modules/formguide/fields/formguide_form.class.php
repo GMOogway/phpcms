@@ -21,6 +21,7 @@ class formguide_form {
 		$info = array();
 		if (is_array($this->fields)) {
 			foreach($this->fields as $field=>$v) {
+				if(!isset($v) || check_in($_groupid, $v['unsetgroupids'])) continue;
 				$func = $v['formtype'];
 				$value = isset($data[$field]) ? new_html_special_chars($data[$field]) : '';
 				if($func=='pages' && isset($data['maxcharperpage'])) {

@@ -676,7 +676,7 @@ class member extends admin {
 		$sitelist =getcache('sitelist', 'commons');
 
 		$this->db->set_model($modelid);
-		$member_modelinfo_arr = $this->db->get_one(array('userid'=>$userid));
+		$member_modelinfo_arr = $this->db->get_one(array('userid'=>$memberinfo['userid']));
 		//模型字段名称
 		$model_fieldinfo = getcache('model_field_'.$modelid, 'model');
 	

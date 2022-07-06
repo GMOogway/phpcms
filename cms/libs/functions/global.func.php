@@ -3234,7 +3234,7 @@ function is_username($username) {
 function check_in($id, $ids = '', $s = ',') {
 	if(!$ids) return false;
 	$ids = explode($s, $ids);
-	return is_array($id) ? array_intersect($id, $ids) : in_array($id, $ids);
+	return is_array($id) ? array_intersect($id, $ids) : (is_array(dr_string2array($id)) ? array_intersect(dr_string2array($id), $ids) : dr_in_array($id, $ids));
 }
 
 /**
@@ -3655,7 +3655,7 @@ function module_exists($m = '') {
 	$modules = getcache('modules', 'commons');
 	if (!$modules) return '';
 	$modules = array_keys($modules);
-	return in_array($m, $modules);
+	return dr_in_array($m, $modules);
 }
 
 /**
@@ -3798,7 +3798,7 @@ if (! function_exists('dr_is_image')) {
 		if (!$value) {
 			return false;
 		}
-		return in_array(
+		return dr_in_array(
 			strpos($value, '.') !== false ? trim(strtolower(strrchr($value, '.')), '.') : $value,
 			array('jpg', 'gif', 'png', 'jpeg', 'webp')
 		);
@@ -4182,7 +4182,7 @@ function get_image_ext($url) {
 
 	$arr = array('gif', 'jpg', 'jpeg', 'png', 'webp');
 	$ext = str_replace('.', '', trim(strtolower(strrchr($url, '.')), '.'));
-	if ($ext && in_array($ext, $arr)) {
+	if ($ext && dr_in_array($ext, $arr)) {
 		return $ext; // 满足扩展名
 	} elseif ($ext && strlen($ext) < 4) {
 		return ''; // 表示不是图片扩展名了

@@ -156,6 +156,7 @@ include $this->admin_tpl('header','admin');?>
                                         <?php }}?>
                                     </select>
                                 </label>
+                                <span class="help-block">前端发布内容时该会员组将不会看到这个字段</span>
                             </div>
                         </div>
                     </div>

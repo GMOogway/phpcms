@@ -19,6 +19,8 @@ class member_input {
 	}
 
 	function get($data) {
+		$_roleid = param::get_cookie('_roleid') ? param::get_cookie('_roleid') : $_SESSION['roleid'];
+		$_groupid = param::get_cookie('_groupid');
 		$this->data = $data;
 		$model_cache = getcache('member_model', 'commons');
 		$this->db->table_name = $this->db_pre.$model_cache[$this->modelid]['tablename'];
@@ -27,6 +29,11 @@ class member_input {
 		$debar_filed = array('catid','title','style','thumb','status','islink','description');
 		if(is_array($data)) {
 			foreach($data as $field=>$value) {
+				if(defined('IS_ADMIN') && IS_ADMIN) {
+					if($this->fields[$field]['disabled'] || $this->fields[$field]['iscore'] || check_in($_roleid, $this->fields[$field]['unsetroleids'])) continue;
+				} else {
+					if($this->fields[$field]['disabled'] || $this->fields[$field]['iscore'] || !$this->fields[$field]['isadd'] || check_in($_groupid, $this->fields[$field]['unsetgroupids'])) continue;
+				}
 				if($data['islink']==1 && !in_array($field,$debar_filed)) continue;
 				$field = safe_replace($field);
 				$name = $this->fields[$field]['name'];

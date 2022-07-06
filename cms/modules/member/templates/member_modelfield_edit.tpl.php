@@ -198,6 +198,7 @@
                                         <?php }}?>
                                     </select>
                                 </label>
+                                <span class="help-block">前端发布内容时该会员组将不会看到这个字段，如果“是否在前台显示”关闭了此功能就无效</span>
                             </div>
                         </div>
                         <div class="form-group">
@@ -211,6 +212,7 @@
                                         <?php }}?>
                                     </select>
                                 </label>
+                                <span class="help-block">后台发布内容时该角色将不会看到这个字段</span>
                             </div>
                         </div>
                     </div>

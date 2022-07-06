@@ -231,6 +231,7 @@ include $this->admin_tpl('header','admin');?>
                                         <?php }}?>
                                     </select>
                                 </label>
+                                <span class="help-block">前端发布内容时该会员组将不会看到这个字段，如果“在前台投稿中显示”关闭了此功能就无效</span>
                             </div>
                         </div>
                         <div class="form-group<?php if(!$modelid || $modelid==-1 || $modelid==-2) {echo ' hide';}?>">
@@ -244,6 +245,7 @@ include $this->admin_tpl('header','admin');?>
                                         <?php }}?>
                                     </select>
                                 </label>
+                                <span class="help-block">后台发布内容时该角色将不会看到这个字段</span>
                             </div>
                         </div>
                     </div>

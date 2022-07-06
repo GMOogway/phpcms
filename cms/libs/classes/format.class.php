@@ -26,7 +26,7 @@ class format {
 		$times = intval($timestamp);
 		if(!$times) return true;
 		$weekarray = array(L('Sunday'),L('Monday'),L('Tuesday'),L('Wednesday'),L('Thursday'),L('Friday'),L('Saturday')); 
-		return $weekarray[date("w",$timestamp)]; 
+		return $weekarray[dr_date($timestamp, "w")]; 
 	}
 }
 ?>

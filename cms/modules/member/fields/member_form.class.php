@@ -13,7 +13,7 @@ class member_form {
     }
 
 	function get($data = array()) {
-		$_roleid = param::get_cookie('_roleid');
+		$_roleid = param::get_cookie('_roleid') ? param::get_cookie('_roleid') : $_SESSION['roleid'];
 		$_groupid = param::get_cookie('_groupid');
 		$this->data = $data;
 		if(isset($data['id'])) $this->id = $data['id'];
@@ -21,9 +21,9 @@ class member_form {
 		if (is_array($this->fields)) {
 			foreach($this->fields as $field=>$v) {
 				if(defined('IS_ADMIN') && IS_ADMIN) {
-					if($v['disabled'] || $v['iscore'] || check_in($_roleid, $v['unsetroleids']) || check_in($_groupid, $v['unsetgroupids'])) continue;
+					if($v['disabled'] || $v['iscore'] || check_in($_roleid, $v['unsetroleids'])) continue;
 				} else {
-					if($v['disabled'] || $v['iscore'] || !$v['isadd'] || check_in($_roleid, $v['unsetroleids']) || check_in($_groupid, $v['unsetgroupids'])) continue;
+					if($v['disabled'] || $v['iscore'] || !$v['isadd'] || check_in($_groupid, $v['unsetgroupids'])) continue;
 				}
 				$func = $v['formtype'];
 				$value = isset($data[$field]) ? new_html_special_chars($data[$field]) : '';
