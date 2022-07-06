@@ -15,7 +15,7 @@ class formguide_form {
     }
 
 	function get($data = array()) {
-		$_groupid = param::get_cookie('_groupid');
+		$_groupid = param::get_cookie('_groupid') ? param::get_cookie('_groupid') : 8;
 		$this->data = $data;
 		if(isset($data['id'])) $this->id = $data['id'];
 		$info = array();

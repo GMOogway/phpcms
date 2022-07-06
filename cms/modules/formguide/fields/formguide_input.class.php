@@ -18,7 +18,7 @@ class formguide_input {
 	}
 
 	function get($data,$isimport = 0) {
-		$_groupid = param::get_cookie('_groupid');
+		$_groupid = param::get_cookie('_groupid') ? param::get_cookie('_groupid') : 8;
 		$this->data = $data;
 		$info = array();
 		if (is_array($data)) {
@@ -63,7 +63,7 @@ class formguide_input {
 						dr_msg(0, $errortips, array('field' => $field));
 					}
 				}
-				$func = $field['formtype'];
+				$func = $this->fields[$field]['formtype'];
 				if(method_exists($this, $func)) $value = $this->$func($field, $value);
 				$info[$field] = $value;
 				//颜色选择为隐藏域 在这里进行取值
