@@ -1368,8 +1368,10 @@ class content extends admin {
 			dr_admin_msg(0,L('please_select_modelid'));
 		} else {
 			$page = intval($this->input->get('page'));
-			
 			$modelid = intval($this->input->get('modelid'));
+			$this->form = $this->f_db->get_one(array('modelid'=>$modelid));
+			$this->sitemodel = $this->cache->get('sitemodel');
+			$this->form_cache = $this->sitemodel[$this->form['tablename']];
 			$this->db->set_model($modelid);
 			$where = array();
 			if($this->input->get('catid')) {
@@ -1389,7 +1391,8 @@ class content extends admin {
 					}
 				}
 			}
-			$infos = $this->db->listinfo(($where ? implode(' AND ', $where) : ''),'',$page,SYS_ADMIN_PAGESIZE);
+			$order = $param['order'] ? $param['order'] : ($this->form_cache['setting']['order'] ? dr_safe_replace($this->form_cache['setting']['order']) : 'id desc');
+			$infos = $this->db->listinfo(($where ? implode(' AND ', $where) : ''),$order,$page,SYS_ADMIN_PAGESIZE);
 			$pages = $this->db->pages;
 			include $this->admin_tpl('relationlist');
 		}

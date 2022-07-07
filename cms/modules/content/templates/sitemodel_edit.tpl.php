@@ -46,7 +46,7 @@ jQuery(document).ready(function() {
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('model_name');?></label>
                         <div class="col-md-9">
-                            <label><input class="form-control input-large" type="text" id="name" name="info[name]" value="<?php echo $name;?>" onblur="topinyin('tablename','name','?m=content&c=sitemodel&a=public_ajax_pinyin');"></label>
+                            <label><input class="form-control input-large" type="text" id="name" name="info[name]" value="<?php echo $name;?>"></label>
                         </div>
                     </div>
                     <div class="form-group">
@@ -68,6 +68,24 @@ jQuery(document).ready(function() {
                                 <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[updatetime_select]" value="0"<?php echo (!$updatetime_select) ? ' checked' : ''?>> <?php echo L('check_not_default');?> <span></span></label>
                                 <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[updatetime_select]" value="1"<?php echo ($updatetime_select) ? ' checked' : ''?>> <?php echo L('check_default');?> <span></span></label>
                             </div>
+                            <span class="help-block">在后台内容编辑时的更新时间字段，是否勾选"不更新"，不勾选时将自动更新为当前时间</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('自动填充内容描述');?></label>
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[desc_auto]" value="0"<?php echo (!$desc_auto) ? ' checked' : ''?>> <?php echo L('自动填充');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[desc_auto]" value="1"<?php echo ($desc_auto) ? ' checked' : ''?>> <?php echo L('手动填充');?> <span></span></label>
+                            </div>
+                            <span class="help-block">当描述为空时，系统提取内容中的文字来填充描述字段</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('自动填充内容描述');?></label>
+                        <div class="col-md-9">
+                            <label><input class="form-control input-large" type="text" id="name" name="setting[desc_limit]" value="<?php echo $desc_limit;?>"></label>
+                            <span class="help-block">在内容中提取描述信息的最大字数限制</span>
                         </div>
                     </div>
 

@@ -10,7 +10,6 @@ class linkage extends admin {
 		$this->cache = pc_base::load_sys_class('cache');
 		$this->db = pc_base::load_model('linkage_model');
 		$this->sites = pc_base::load_app_class('sites');
-		$this->siteid = $this->get_siteid();
 		pc_base::load_sys_class('form', '', 0);
 		$this->childnode = array();
 	}
@@ -74,8 +73,8 @@ class linkage extends admin {
 				dr_admin_msg(0, L('联动菜单（'.$id.'）不存在'));
 			}
 			$sitelist = $this->sites->get_list();
-			foreach($sitelist as $id=>$v) {
-				$sitelist[$id] = $v['name'];
+			foreach($sitelist as $siteid=>$v) {
+				$sitelist[$siteid] = $v['name'];
 			}
 			$show_header = $show_validator = true;
 			include $this->admin_tpl('linkage_edit');
@@ -536,11 +535,12 @@ class linkage extends admin {
 	/**
 	 * 子菜单添加
 	 */
-	public function public_listk_add() {		
+	public function public_listk_add() {
 		if(IS_AJAX_POST) {
 			$key = (int)$this->input->post('key');
 			$all = (int)$this->input->post('all');
 			$data = $this->input->post('data');
+			$link = $this->db->get_one(array('id'=>$key));
 			$this->db->table_name = $this->db->db_tablepre.'linkage_data_'.$key;
 			$pid = intval($data['pid']);
 
@@ -567,7 +567,7 @@ class linkage extends admin {
 						'pid' => $pid,
 						'pids' => '',
 						'name' => $t,
-						'site' => $this->siteid,
+						'site' => $link['type'],
 						'child' => 0,
 						'cname' => $cname,
 						'hidden' => 0,
@@ -606,7 +606,7 @@ class linkage extends admin {
 					'pid' => $pid,
 					'pids' => '',
 					'name' => $data['name'],
-					'site' => $this->siteid,
+					'site' => $link['type'],
 					'child' => 0,
 					'cname' => $data['cname'],
 					'hidden' => 0,

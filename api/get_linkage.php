@@ -16,6 +16,7 @@ if ($data['style']) {
 		if ($v['pid'] == $pid) {
 			$json[] = array(
 				'region_id' => $v['ii'],
+				'region_code' => $v['id'],
 				'region_name' => $v['name']
 			);
 		}

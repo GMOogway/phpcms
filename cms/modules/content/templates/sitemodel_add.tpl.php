@@ -18,22 +18,34 @@ include $this->admin_tpl('header','admin');
 	<table width="100%"  class="table_form">
   <tr>
     <th width="150"><?php echo L('model_name')?>：</th>
-    <td class="y-bg"><input type="text" class="input-text" name="info[name]" id="name" size="30" onblur="topinyin('tablename','name','?m=content&c=sitemodel&a=public_ajax_pinyin');"/></td>
+    <td class="y-bg"><label><input type="text" class="input-text" name="info[name]" id="name" size="30" onblur="topinyin('tablename','name','?m=content&c=sitemodel&a=public_ajax_pinyin');"/></label></td>
   </tr>
   <tr>
     <th><?php echo L('model_tablename')?>：</th>
-    <td class="y-bg"><input type="text" class="input-text" name="info[tablename]" id="tablename" size="30"/></td>
+    <td class="y-bg"><label><input type="text" class="input-text" name="info[tablename]" id="tablename" size="30"/></label></td>
   </tr>
-    <tr>
+  <tr>
     <th><?php echo L('description')?>：</th>
-    <td class="y-bg"><input type="text" class="input-text" name="info[description]" id="description"  size="30"/></td>
+    <td class="y-bg"><label><input type="text" class="input-text" name="info[description]" id="description" size="30"/></label></td>
   </tr>
-    <tr>
+  <tr>
     <th><?php echo L('updatetime_check')?>：</th>
     <td class="y-bg"><div class="mt-radio-inline">
         <label class="mt-radio mt-radio-outline"><input type="radio" name="info[setting][updatetime_select]" value="0" checked /> <?php echo L('check_not_default')?> <span></span></label>
         <label class="mt-radio mt-radio-outline"><input type="radio" name="info[setting][updatetime_select]" value="1"  /> <?php echo L('check_default')?> <span></span></label>
     </div></td>
+  </tr>
+  <tr>
+    <th><?php echo L('自动填充内容描述')?>：</th>
+    <td class="y-bg"><div class="mt-radio-inline">
+        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[setting][desc_auto]" value="0" checked /> <?php echo L('自动填充')?> <span></span></label>
+        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[setting][desc_auto]" value="1"  /> <?php echo L('手动填充')?> <span></span></label>
+    </div>
+    <div class="onShow">当描述为空时，系统提取内容中的文字来填充描述字段</div></td>
+  </tr>
+  <tr>
+    <th><?php echo L('提取内容描述字数')?>：</th>
+    <td class="y-bg"><label><input type="text" class="input-text" name="info[setting][desc_limit]" id="desc_limit" size="30" value="200" /></label><div class="onShow">在内容中提取描述信息的最大字数限制</div></td>
   </tr>
 </table>
 </fieldset>

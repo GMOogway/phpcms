@@ -6,6 +6,8 @@ class content_input {
 
 	function __construct($modelid) {
 		$this->input = pc_base::load_sys_class('input');
+		$this->cache = pc_base::load_sys_class('cache');
+		$this->f_db = pc_base::load_model('sitemodel_model');
 		$this->db = pc_base::load_model('sitemodel_field_model');
 		$this->db_pre = $this->db->db_tablepre;
 		$this->modelid = $modelid;
@@ -182,10 +184,33 @@ class content_input {
 					$info['system']['thumb'] = $images[$auto_thumb_length];
 				}
 				// 提取描述信息
-				if(isset($_POST['info']['description']) && isset($_POST['is_auto_description_'.$field]) && !$_POST['info']['description']) {
+				if($this->fields[$field]['isbase'] && isset($_POST['info']['description']) && isset($_POST['is_auto_description_'.$field]) && !$_POST['info']['description']) {
 					$content = code2html($_POST['info'][$field]);
 					$auto_description_length = intval($_POST['auto_description_'.$field]);
 					$info['system']['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', $content), $auto_description_length);
+				} else {
+					if(isset($_POST['info']['description']) && isset($_POST['is_auto_description_content']) && !$_POST['info']['description']) {
+						$content = code2html($_POST['info']['content']);
+						$auto_description_length = intval($_POST['auto_description_content']);
+						$info['system']['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', $content), $auto_description_length);
+					}
+				}
+				$this->form = $this->f_db->get_one(array('modelid'=>$this->modelid));
+				$this->sitemodel = $this->cache->get('sitemodel');
+				$this->form_cache = $this->sitemodel[$this->form['tablename']];
+				if (!$_POST['info']['description']) {
+					if (isset($this->form_cache['setting']['desc_auto']) && $this->form_cache['setting']['desc_auto']) {
+						// 手动填充描述
+					} else {
+						// 自动填充描述
+						if (isset($_POST['info']['content']) && code2html($_POST['info']['content'])) {
+							if (isset($this->form_cache['setting']['desc_auto']) && $this->form_cache['setting']['desc_auto']) {
+								$info['system']['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', code2html($_POST['info']['content'])), $this->form_cache['setting']['desc_limit']);
+							} else {
+								$info['system']['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', code2html($_POST['info']['content'])));
+							}
+						}
+					}
 				}
 				if($this->fields[$field]['issystem']) {
 					$info['system'][$field] = $value;

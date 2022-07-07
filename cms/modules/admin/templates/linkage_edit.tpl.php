@@ -53,7 +53,7 @@ body {background-color: #fff;}
         <div class="form-group">
             <label class="col-xs-3 control-label ajax_name"><?php echo L('sites');?></label>
             <div class="col-xs-9">
-                <?php echo form::select($sitelist,$siteid,'name="data[type]"',L('all_sites'))?>
+                <?php echo form::select($sitelist,$data['type'],'name="data[type]"',L('all_sites'))?>
                 <span class="help-block"> <?php echo L('站点独立是指各个站点的联动菜单数据分开录入');?> </span>
             </div>
         </div>
