@@ -437,9 +437,10 @@ class content extends admin {
 				if($this->input->post('edit')) {
 					$this->page_db->update($systeminfo,array('catid'=>$catid));
 				} else {
+					$systeminfo['catid'] = $catid;
 					$catid = $this->page_db->insert($systeminfo,true);
 				}
-				$this->page_db->create_html($catid,$info);
+				$this->page_db->create_html($catid);
 				dr_json(1, $this->input->post('edit') ? L('update_success') : L('add_success'));
 			}
 		} else {
