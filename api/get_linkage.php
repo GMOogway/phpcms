@@ -9,7 +9,7 @@ $code = dr_safe_replace($input->get('code'));
 $data = $linkage_db->get_one(array('code'=>$code));
 if ($data['style']) {
 	if ($input->get('parent_id')=='--') {
-		exit(dr_array2string(array('data' => array(), 'html' => $html)));
+		exit(dr_array2string(array('data' => array(), 'html' => '')));
 	}
 	$pid = (int)$input->get('parent_id');
 	$linkage = dr_linkage_list($code, $pid);
