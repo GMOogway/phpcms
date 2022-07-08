@@ -111,13 +111,13 @@
 						//console.log(res);
 						var ops = res.data;
 						//遍历数据，获取html字符串
-						if (ops.length > 0) { //本菜单有内容才显示，否者隐藏(添加)
+						if (ops && ops.length > 0) { //本菜单有内容才显示，否者隐藏(添加)
 							_that.$applyTo.eq(selectIndex).show();
 						} else {
 							_that.$applyTo.eq(selectIndex).hide();
 							// 说明已经选择到尾部了
 							var html = res.html;
-							if (html.length > 0) {
+							if (html && html.length > 0) {
 								$('#'+_that.options.inputId).html(html);
 								//console.log('#'+_that.options.inputId+'_select');
 							}

@@ -24,7 +24,6 @@
 		}
 		// 去除站外链接
 		if (isset($_POST['is_remove_a_'.$field]) && $_POST['is_remove_a_'.$field] && preg_match_all("/<a (.*)href=(.+)>(.*)<\/a>/Ui", $value, $arrs)) {
-			//$sites = require CACHE_PATH.'caches_commons/caches_data/domain_site.cache.php';
 			$this->sitedb = pc_base::load_model('site_model');
 			$sitedb_data = $this->sitedb->select();
 			$sites = array();

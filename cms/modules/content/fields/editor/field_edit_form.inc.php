@@ -64,16 +64,6 @@
             </div>
         </div>
     </div>
-    <div class="form-group">
-      <label class="col-md-2 control-label">下载远程图片</label>
-        <div class="col-md-9">
-            <div class="mt-radio-inline">
-          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[enablesaveimage]" value="1" <?php if($setting['enablesaveimage']) echo 'checked';?>> 自动 <span></span></label>
-          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[enablesaveimage]" value="0" <?php if(!$setting['enablesaveimage']) echo 'checked';?>> 手动 <span></span></label>
-        </div>
-        <span class="help-block">自动模式下每一次编辑内容时都会下载图片；手动模式可以在编辑器下放工具栏中控制“是否下载”</span>
-        </div>
-    </div>
     <div class="form-group"> 
       <label class="col-md-2 control-label">底部工具栏</label>
         <div class="col-md-9">
@@ -87,13 +77,13 @@
     <div class="form-group" id="sdmrx" <?php if(!$setting['show_bottom_boot']) echo 'style="display:none"';?>>
         <label class="col-md-1 control-label">&nbsp;&nbsp;</label>
         <div class="col-md-9">
-            <div class="form-group">
+            <div class="form-group"<?php if(!$modelid) {echo ' style="display: none;"';}?>>
                 <label class="col-md-2 control-label">提取描述</label>
                 <div class="col-md-9">
                     <input type="checkbox" name="setting[tool_select_1]" value="1" <?php if($setting['tool_select_1']) echo 'checked';?> data-on-text="默认选中" data-off-text="默认不选" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group"<?php if(!$modelid) {echo ' style="display: none;"';}?>>
                 <label class="col-md-2 control-label">提取缩略图</label>
                 <div class="col-md-9">
                     <input type="checkbox" name="setting[tool_select_2]" value="1" <?php if($setting['tool_select_2']) echo 'checked';?> data-on-text="默认选中" data-off-text="默认不选" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
@@ -113,6 +103,7 @@
             </div>
         </div>
     </div>
+    <hr>
     <div class="form-group"<?php if (!SYS_EDITOR) {?> style="display: none;"<?php }?>> 
       <label class="col-md-2 control-label">编辑器颜色</label>
         <div class="col-md-9">
@@ -163,6 +154,16 @@
           <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[enter]" value="0" <?php if(!$setting['enter']) echo 'checked';?>> p标签 <span></span></label>
         </div>
             <span class="help-block"><?php echo L('选择回车换行的符号，默认是p标签换行')?></span>
+        </div>
+    </div>
+    <div class="form-group">
+      <label class="col-md-2 control-label">下载远程图片</label>
+        <div class="col-md-9">
+            <div class="mt-radio-inline">
+          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[enablesaveimage]" value="1" <?php if($setting['enablesaveimage']) echo 'checked';?>> 自动 <span></span></label>
+          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[enablesaveimage]" value="0" <?php if(!$setting['enablesaveimage']) echo 'checked';?>> 手动 <span></span></label>
+        </div>
+        <span class="help-block">自动模式下每一次编辑内容时都会下载图片；手动模式可以在编辑器下放工具栏中控制“是否下载”</span>
         </div>
     </div>
     <?php if ($config['ueditor']) {?>

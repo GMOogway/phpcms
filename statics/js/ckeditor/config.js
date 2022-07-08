@@ -21,8 +21,7 @@ CKEDITOR.editorConfig = function( config ) {
 };
 CKEDITOR.on( 'instanceReady', function( ev ){ with (ev.editor.dataProcessor.writer) { setRules("p", {indent : false, breakAfterOpen : false, breakBeforeClose : false} ); setRules("h1", {indent : false, breakAfterOpen : false, breakBeforeClose : false} ); setRules("h2", {indent : false, breakAfterOpen : false, breakBeforeClose : false} ); setRules("h3", {indent : false, breakAfterOpen : false, breakBeforeClose : false} ); setRules("h4", {indent : false, breakAfterOpen : false, breakBeforeClose : false} ); setRules("h5", {indent : false, breakAfterOpen : false, breakBeforeClose : false} ); setRules("div", {indent : false, breakAfterOpen : false, breakBeforeClose : false} ); setRules("table", {indent : false, breakAfterOpen : false, breakBeforeClose : false} ); setRules("tr", {indent : false, breakAfterOpen : false, breakBeforeClose : false} ); setRules("td", {indent : false, breakAfterOpen : false, breakBeforeClose : false} ); setRules("iframe", {indent : false, breakAfterOpen : false, breakBeforeClose : false} ); setRules("li", {indent : false, breakAfterOpen : false, breakBeforeClose : false} ); setRules("ul", {indent : false, breakAfterOpen : false, breakBeforeClose : false} ); setRules("ol", {indent : false, breakAfterOpen : false, breakBeforeClose : false} ); } });
 //CKEDITOR.plugins.load('pgrfilemanager');
-function insert_page(editorid)
-{
+function insert_page(editorid) {
 	var editor = CKEDITOR.instances[editorid];
 	editor.insertHtml('<p><br/></p>[page]');
 	if($('#paginationtype').val()) {
@@ -31,29 +30,24 @@ function insert_page(editorid)
 	}
 }
 
-function insert_page_title(editorid,insertdata)
-{
-	if(insertdata)
-	{
+function insert_page_title(editorid,insertdata) {
+	if(insertdata){
 		var editor = CKEDITOR.instances[editorid];
 		var data = editor.getData();
-		var page_title_value = $("#page_title_value").val();
-		if(page_title_value=='')
-		{
-			$("#msg_page_title_value").html("<font color='red'>请输入子标题</font>");
+		var page_title_value = $(".page_"+editorid+"_value").val();
+		if(page_title_value==''){
+			$(".msg_page_"+editorid+"_value").html("<font color='red'>请输入子标题</font>");
 			return false;
 		}
 		page_title_value = '<p><br/></p>[page]'+page_title_value+'[/page]';
 		editor.insertHtml(page_title_value);
-		$("#page_title_value").val('');
-		$("#msg_page_title_value").html('');
+		$(".page_"+editorid+"_value").val('');
+		$(".msg_page_"+editorid+"_value").html('');
 		if($('#paginationtype').val()) {
 			$('#paginationtype').val(2);
 			$('#paginationtype').css("color","red");
 		}
-	}
-	else
-	{
-		$("#page_title_div").slideDown("fast");
+	}else{
+		$(".page_"+editorid+"_div").slideDown("fast");
 	}
 }

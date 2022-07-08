@@ -8,6 +8,9 @@ $linkage_db = pc_base::load_model('linkage_model');
 $code = dr_safe_replace($input->get('code'));
 $data = $linkage_db->get_one(array('code'=>$code));
 if ($data['style']) {
+	if ($input->get('parent_id')=='--') {
+		exit(dr_array2string(array('data' => array(), 'html' => $html)));
+	}
 	$pid = (int)$input->get('parent_id');
 	$linkage = dr_linkage_list($code, $pid);
 	$json = array();
@@ -21,7 +24,7 @@ if ($data['style']) {
 			);
 		}
 	}
-	exit(dr_array2string(array('data' => $json,'html' => $html)));
+	exit(dr_array2string(array('data' => $json, 'html' => $html)));
 } else {
 	$linkage = dr_linkage_json($code);
 	if (!$linkage) {

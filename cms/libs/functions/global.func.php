@@ -2978,6 +2978,13 @@ function menu_linkage($code = '', $id = 'linkid', $defaultvalue = 0) {
 					$("#dr_'.$id.'").val(vv);
 					index ++;
 					$ld5.eq(index).show();
+					if ($ld5.eq(0).show().val()=="--") {';
+					for ($i = 2; $i <= $linklevel; $i++) {
+						$string.= '
+						$ld5.eq('.$i.').hide();';
+					}
+					$string.= '
+					}
 					//console.log("value="+vv);
 				});
 			})

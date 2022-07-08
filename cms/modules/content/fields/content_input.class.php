@@ -7,13 +7,11 @@ class content_input {
 	function __construct($modelid) {
 		$this->input = pc_base::load_sys_class('input');
 		$this->cache = pc_base::load_sys_class('cache');
-		$this->f_db = pc_base::load_model('sitemodel_model');
 		$this->db = pc_base::load_model('sitemodel_field_model');
 		$this->db_pre = $this->db->db_tablepre;
 		$this->modelid = $modelid;
 		$this->fields = getcache('model_field_'.$modelid,'model');
 		//初始化附件类
-		pc_base::load_sys_class('upload','',0);
 		pc_base::load_sys_class('download','',0);
 		$this->siteid = param::get_cookie('siteid');
 		$this->userid = $_SESSION['userid'] ? $_SESSION['userid'] : (param::get_cookie('_userid') ? param::get_cookie('_userid') : param::get_cookie('userid'));
@@ -123,95 +121,6 @@ class content_input {
 				}
 				$func = $this->fields[$field]['formtype'];
 				if(method_exists($this, $func)) $value = $this->$func($field, $value);
-				// 提取缩略图
-				if(isset($_POST['info']['thumb']) && isset($_POST['is_auto_thumb_'.$field]) && !$_POST['info']['thumb']) {
-					$setting = string2array($this->fields[$field]['setting']);
-					$watermark = $setting['watermark'];
-					$attachment = $setting['attachment'];
-					$image_reduce = $setting['image_reduce'];
-					$content = $this->input->post('info')[$field];
-					$site_setting = string2array($this->site_config['setting']);
-					$watermark = $site_setting['ueditor'] || $watermark ? 1 : 0;
-					$auto_thumb_length = intval($_POST['auto_thumb_'.$field])-1;
-					if(preg_match_all("/(src)=([\"|']?)([^ \"'>]+)\\2/i", code2html($content), $matches)) {
-						$this->upload = new upload('content',$this->input->post('info')['catid'],$this->siteid);
-						foreach ($matches[3] as $img) {
-							$ext = get_image_ext($img);
-							if (!$ext) {
-								continue;
-							}
-							// 下载缩略图
-							// 判断域名白名单
-							$arr = parse_url($img);
-							$domain = $arr['host'];
-							if ($domain) {
-								$file = dr_catcher_data($img, 8);
-								if (!$file) {
-									CI_DEBUG && log_message('debug', '服务器无法下载图片：'.$img);
-								} else {
-									// 尝试找一找附件库
-									$attachmentdb = pc_base::load_model('attachment_model');
-									$att = $attachmentdb->get_one(array('related'=>'%ueditor%', 'filemd5'=>md5($file)));
-									if ($att) {
-										$images[] = dr_get_file($att['aid']);
-									} else {
-										// 下载归档
-										$rt = $this->upload->down_file([
-											'url' => $img,
-											'timeout' => 5,
-											'watermark' => $watermark,
-											'attachment' => $this->upload->get_attach_info(intval($attachment), intval($image_reduce)),
-											'file_ext' => $ext,
-											'file_content' => $file,
-										]);
-										if ($rt['code']) {
-											$att = $this->upload->save_data($rt['data'], 'ueditor:'.$this->rid);
-											if ($att['code']) {
-												// 归档成功
-												$value = str_replace($img, $rt['data']['url'], $value);
-												$images[] = dr_get_file($att['code']);
-												// 标记附件
-												$GLOBALS['downloadfiles'][] = $rt['data']['url'];
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-				if ($images) {
-					$info['system']['thumb'] = $images[$auto_thumb_length];
-				}
-				// 提取描述信息
-				if($this->fields[$field]['isbase'] && isset($_POST['info']['description']) && isset($_POST['is_auto_description_'.$field]) && !$_POST['info']['description']) {
-					$content = code2html($_POST['info'][$field]);
-					$auto_description_length = intval($_POST['auto_description_'.$field]);
-					$info['system']['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', $content), $auto_description_length);
-				} else {
-					if(isset($_POST['info']['description']) && isset($_POST['is_auto_description_content']) && !$_POST['info']['description']) {
-						$content = code2html($_POST['info']['content']);
-						$auto_description_length = intval($_POST['auto_description_content']);
-						$info['system']['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', $content), $auto_description_length);
-					}
-				}
-				$this->form = $this->f_db->get_one(array('modelid'=>$this->modelid));
-				$this->sitemodel = $this->cache->get('sitemodel');
-				$this->form_cache = $this->sitemodel[$this->form['tablename']];
-				if (!$_POST['info']['description']) {
-					if (isset($this->form_cache['setting']['desc_auto']) && $this->form_cache['setting']['desc_auto']) {
-						// 手动填充描述
-					} else {
-						// 自动填充描述
-						if (isset($_POST['info']['content']) && code2html($_POST['info']['content'])) {
-							if (isset($this->form_cache['setting']['desc_auto']) && $this->form_cache['setting']['desc_auto']) {
-								$info['system']['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', code2html($_POST['info']['content'])), $this->form_cache['setting']['desc_limit']);
-							} else {
-								$info['system']['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', code2html($_POST['info']['content'])));
-							}
-						}
-					}
-				}
 				if($this->fields[$field]['issystem']) {
 					$info['system'][$field] = $value;
 				} else {

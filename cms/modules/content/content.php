@@ -22,7 +22,6 @@ class content extends admin {
 		$this->cache_api = pc_base::load_app_class('cache_api', 'admin');
 		$this->db = pc_base::load_model('content_model');
 		$this->menu_db = pc_base::load_model('menu_model');
-		$this->f_db = pc_base::load_model('sitemodel_model');
 		$this->field_db = pc_base::load_model('sitemodel_field_model');
 		$this->siteid = $this->get_siteid();
 		$this->categorys = getcache('category_content_'.$this->siteid,'commons');
@@ -42,9 +41,11 @@ class content extends admin {
 			$catid = intval($this->input->get('catid'));
 			$category = $this->categorys[$catid];
 			$modelid = $category['modelid'];
-			$this->form = $this->f_db->get_one(array('modelid'=>$modelid));
+			$model_arr = getcache('model', 'commons');
+			$MODEL = $model_arr[$modelid];
+			unset($model_arr);
 			$this->sitemodel = $this->cache->get('sitemodel');
-			$this->form_cache = $this->sitemodel[$this->form['tablename']];
+			$this->form_cache = $this->sitemodel[$MODEL['tablename']];
 			$field = $this->form_cache['field'];
 			$list_field = $this->form_cache['setting']['list_field'];
 			if (!$list_field) {
@@ -77,9 +78,6 @@ class content extends admin {
 				);
 			}
 			$date_field = $this->form_cache['setting']['search_time'] ? $this->form_cache['setting']['search_time'] : 'updatetime';
-			$model_arr = getcache('model', 'commons');
-			$MODEL = $model_arr[$modelid];
-			unset($model_arr);
 			$admin_username = param::get_cookie('admin_username');
 			//查询当前的工作流
 			$setting = string2array($category['setting']);
@@ -167,9 +165,11 @@ class content extends admin {
 			$catid = intval($this->input->get('catid'));
 			$category = $this->categorys[$catid];
 			$modelid = $category['modelid'];
-			$this->form = $this->f_db->get_one(array('modelid'=>$modelid));
+			$model_arr = getcache('model', 'commons');
+			$MODEL = $model_arr[$modelid];
+			unset($model_arr);
 			$this->sitemodel = $this->cache->get('sitemodel');
-			$this->form_cache = $this->sitemodel[$this->form['tablename']];
+			$this->form_cache = $this->sitemodel[$MODEL['tablename']];
 			$field = $this->form_cache['field'];
 			$list_field = $this->form_cache['setting']['list_field'];
 			if (!$list_field) {
@@ -253,9 +253,11 @@ class content extends admin {
 		}
 		$modelid = intval($this->input->get('modelid'));
 		if (!$modelid) {$one = reset($datas2);$modelid = $one['modelid'];}
-		$this->form = $this->f_db->get_one(array('modelid'=>$modelid));
+		$model_arr = getcache('model', 'commons');
+		$MODEL = $model_arr[$modelid];
+		unset($model_arr);
 		$this->sitemodel = $this->cache->get('sitemodel');
-		$this->form_cache = $this->sitemodel[$this->form['tablename']];
+		$this->form_cache = $this->sitemodel[$MODEL['tablename']];
 		$field = $this->form_cache['field'];
 		$list_field = $this->form_cache['setting']['list_field'];
 		if (!$list_field) {
@@ -360,6 +362,78 @@ class content extends admin {
 					$systeminfo['updatetime'] = $systeminfo['updatetime'];
 				}
 				$systeminfo['content'] = code2html($systeminfo['content']);
+				$this->fields = getcache('model_field_-2','model');
+				pc_base::load_sys_class('upload','',0);
+				foreach($this->fields as $field=>$t) {
+					if ($t['formtype']=='editor') {
+						// 提取缩略图
+						$is_auto_thumb = $this->input->post('is_auto_thumb_'.$field);
+						if(isset($systeminfo['thumb']) && isset($is_auto_thumb) && !$systeminfo['thumb']) {
+							$setting = string2array($t['setting']);
+							$watermark = $setting['watermark'];
+							$attachment = $setting['attachment'];
+							$image_reduce = $setting['image_reduce'];
+							$site_setting = string2array($this->site_config['setting']);
+							$watermark = $site_setting['ueditor'] || $watermark ? 1 : 0;
+							$auto_thumb_length = intval($this->input->post('auto_thumb_'.$field))-1;
+							if(preg_match_all("/(src)=([\"|']?)([^ \"'>]+)\\2/i", $systeminfo[$field], $matches)) {
+								$this->upload = new upload('content',$catid,$this->siteid);
+								foreach ($matches[3] as $img) {
+									$ext = get_image_ext($img);
+									if (!$ext) {
+										continue;
+									}
+									// 下载缩略图
+									// 判断域名白名单
+									$arr = parse_url($img);
+									$domain = $arr['host'];
+									if ($domain) {
+										$file = dr_catcher_data($img, 8);
+										if (!$file) {
+											CI_DEBUG && log_message('debug', '服务器无法下载图片：'.$img);
+										} else {
+											// 尝试找一找附件库
+											$attachmentdb = pc_base::load_model('attachment_model');
+											$att = $attachmentdb->get_one(array('related'=>'%ueditor%', 'filemd5'=>md5($file)));
+											if ($att) {
+												$images[] = dr_get_file($att['aid']);
+											} else {
+												// 下载归档
+												$rt = $this->upload->down_file([
+													'url' => $img,
+													'timeout' => 5,
+													'watermark' => $watermark,
+													'attachment' => $this->upload->get_attach_info(intval($attachment), intval($image_reduce)),
+													'file_ext' => $ext,
+													'file_content' => $file,
+												]);
+												if ($rt['code']) {
+													$att = $this->upload->save_data($rt['data'], 'ueditor:'.$this->rid);
+													if ($att['code']) {
+														// 归档成功
+														$value = str_replace($img, $rt['data']['url'], $value);
+														$images[] = dr_get_file($att['code']);
+														// 标记附件
+														$GLOBALS['downloadfiles'][] = $rt['data']['url'];
+													}
+												}
+											}
+										}
+									}
+								}
+								if ($images) {
+									$systeminfo['thumb'] = $images[$auto_thumb_length];
+								}
+							}
+						}
+						// 提取描述信息
+						$is_auto_description = $this->input->post('is_auto_description_'.$field);
+						if(isset($systeminfo['description']) && isset($is_auto_description) && !$systeminfo['description']) {
+							$auto_description_length = intval($this->input->post('auto_description_'.$field));
+							$systeminfo['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', $systeminfo[$field]), $auto_description_length);
+						}
+					}
+				}
 				if($this->input->post('edit')) {
 					$this->page_db->update($systeminfo,array('catid'=>$catid));
 				} else {
@@ -1369,9 +1443,11 @@ class content extends admin {
 		} else {
 			$page = intval($this->input->get('page'));
 			$modelid = intval($this->input->get('modelid'));
-			$this->form = $this->f_db->get_one(array('modelid'=>$modelid));
+			$model_arr = getcache('model', 'commons');
+			$MODEL = $model_arr[$modelid];
+			unset($model_arr);
 			$this->sitemodel = $this->cache->get('sitemodel');
-			$this->form_cache = $this->sitemodel[$this->form['tablename']];
+			$this->form_cache = $this->sitemodel[$MODEL['tablename']];
 			$this->db->set_model($modelid);
 			$where = array();
 			if($this->input->get('catid')) {

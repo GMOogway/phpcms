@@ -4,7 +4,6 @@ class form {
 	 * 编辑器
 	 * @param string $textareaid
 	 * @param string $toolbar
-	 * @param string $toolvalue
 	 * @param string $module 模块名称
 	 * @param int $catid 栏目id
 	 * @param int $color 编辑器颜色
@@ -13,6 +12,9 @@ class form {
 	 * @param string $alowuploadexts 允许上传类型
 	 * @param string $height 编辑器高度
 	 * @param string $disabled_page 是否禁用分页和子标题
+	 * @param string $allowuploadnum
+	 * @param string $modelid
+	 * @param string $toolvalue
 	 * @param string $autofloat
 	 * @param string $autoheight
 	 * @param string $theme
@@ -22,7 +24,6 @@ class form {
 	 * @param string $div2p
 	 * @param string $enter
 	 * @param string $enablesaveimage
-	 * @param string $allowuploadnum
 	 * @param string $upload_maxsize
 	 * @param string $show_bottom_boot
 	 * @param string $tool_select_1
@@ -30,7 +31,7 @@ class form {
 	 * @param string $tool_select_3
 	 * @param string $tool_select_4
 	 */
-	public static function editor($textareaid = 'content', $toolbar = 'basic', $toolvalue = '', $module = '', $catid = '', $color = '', $allowupload = 0, $allowbrowser = 1,$alowuploadexts = '',$height = 300,$disabled_page = 0, $autofloat = 0, $autoheight = 0, $theme = '', $watermark = 1, $attachment = 0, $image_reduce = '', $div2p = 0, $enter = 0, $enablesaveimage = 1, $width = '100%', $allowuploadnum = '10', $upload_maxsize = 0, $show_bottom_boot = 0, $tool_select_1 = 0, $tool_select_2 = 0, $tool_select_3 = 0, $tool_select_4 = 0) {
+	public static function editor($textareaid = 'content', $toolbar = 'basic', $module = '', $catid = '', $color = '', $allowupload = 0, $allowbrowser = 1,$alowuploadexts = '',$height = 200,$disabled_page = 0, $allowuploadnum = '10', $modelid = '', $toolvalue = '', $autofloat = 0, $autoheight = 0, $theme = '', $watermark = 1, $attachment = 0, $image_reduce = '', $div2p = 0, $enter = 0, $enablesaveimage = 1, $width = '100%', $upload_maxsize = 0, $show_bottom_boot = 0, $tool_select_1 = 0, $tool_select_2 = 0, $tool_select_3 = 0, $tool_select_4 = 0) {
 		$input = pc_base::load_sys_class('input');
 		$siteid = $input->get('siteid') ? $input->get('siteid') : param::get_cookie('siteid');
 		if(!$siteid) $siteid = get_siteid() ? get_siteid() : 1 ;
@@ -196,13 +197,15 @@ class form {
 		$ext_str = '';
 		if (isset($show_bottom_boot) && $show_bottom_boot) {
 			$ext_str .= '<div class="mt-checkbox-inline" style="margin-top: 10px;">';
-			$ext_str .= '
-				 <label style="margin-bottom: 5px;" class="mt-checkbox mt-checkbox-outline">
-				  <input name="is_auto_description_'.$textareaid.'" type="checkbox" '.($tool_select_1 ? 'checked' : '').' value="1"> '.L('提取内容').' <span></span>
-				 </label><label style="width: 80px;margin-right: 15px;"><input type="text" name="auto_description_'.$textareaid.'" value="200" class="form-control" style="width: 80px;"></label><label style="margin-right: 15px;">'.L('作为描述信息').'</label>';
-			$ext_str .= '     <label style="margin-bottom: 5px;" class="mt-checkbox mt-checkbox-outline">
-				  <input name="is_auto_thumb_'.$textareaid.'" type="checkbox" '.($tool_select_2 ? 'checked' : '').' value="1"> '.L('提取第').' <span></span>
-				 </label><label style="width: 80px;margin-right: 15px;"><input type="text" name="auto_thumb_'.$textareaid.'" value="1" class="form-control" style="width: 80px;"></label><label style="margin-right: 15px;">'.L('个图片为缩略图').'</label>';
+			if (isset($modelid) && $modelid) {
+				$ext_str .= '
+					 <label style="margin-bottom: 5px;" class="mt-checkbox mt-checkbox-outline">
+					  <input name="is_auto_description_'.$textareaid.'" type="checkbox" '.($tool_select_1 ? 'checked' : '').' value="1"> '.L('提取内容').' <span></span>
+					 </label><label style="width: 80px;margin-right: 15px;"><input type="text" name="auto_description_'.$textareaid.'" value="200" class="form-control" style="width: 80px;"></label><label style="margin-right: 15px;">'.L('作为描述信息').'</label>';
+				$ext_str .= '     <label style="margin-bottom: 5px;" class="mt-checkbox mt-checkbox-outline">
+					  <input name="is_auto_thumb_'.$textareaid.'" type="checkbox" '.($tool_select_2 ? 'checked' : '').' value="1"> '.L('提取第').' <span></span>
+					 </label><label style="width: 80px;margin-right: 15px;"><input type="text" name="auto_thumb_'.$textareaid.'" value="1" class="form-control" style="width: 80px;"></label><label style="margin-right: 15px;">'.L('个图片为缩略图').'</label>';
+			}
 			if (!intval($enablesaveimage)) {
 				$ext_str .= '
 				 <label style="margin-bottom: 5px;" class="mt-checkbox mt-checkbox-outline">
@@ -226,10 +229,9 @@ class form {
 		}
 		$ext_str .= "</div>";
 		if ($show_page=="true") {
-			$ext_str .= "<div id='page_title_div'><div class='title'>".L('subtitle')."<span id='msg_page_title_value'></span><a class='close' href='javascript:;' onclick='javascript:$(\"#page_title_div\").hide();'><span>×</span></a></div><div class='page_content'><label><input name='page_title_value' id='page_title_value' class='input-text' value=''></label>&nbsp;<label><input type='button' class='button' value='".L('submit')."' onclick=insert_page_title(\"$textareaid\",1)></label></div></div>";
+			$ext_str .= "<div id='page_title_div' class='page_".$textareaid."_div'><div class='title'>".L('subtitle')."<span id='msg_page_title_value' class='msg_page_".$textareaid."_value'></span><a class='close' href='javascript:;' onclick='javascript:$(\".page_".$textareaid."_div\").hide();'><span>×</span></a></div><div class='page_content'><label><input name='page_title_value' id='page_title_value' class='page_".$textareaid."_value input-text' value=''></label>&nbsp;<label><input type='button' class='button' value='".L('submit')."' onclick=insert_page_title(\"$textareaid\",1)></label></div></div>";
 		}
 		$ext_str .= "</div>";
-		if(is_ie()) $ext_str .= "<div style='display:none'><OBJECT id='PC_Capture' classid='clsid:021E8C6F-52D4-42F2-9B36-BCFBAD3A0DE4'><PARAM NAME='_Version' VALUE='0'><PARAM NAME='_ExtentX' VALUE='0'><PARAM NAME='_ExtentY' VALUE='0'><PARAM NAME='_StockProps' VALUE='0'></OBJECT></div>";
 		$str .= $ext_str;
 		return $str;
 	}

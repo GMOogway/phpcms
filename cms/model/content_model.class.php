@@ -10,12 +10,15 @@ class content_model extends model {
 	public $table_name = '';
 	public $category = '';
 	public function __construct() {
+		pc_base::load_sys_class('upload','',0);
 		$this->input = pc_base::load_sys_class('input');
+		$this->cache = pc_base::load_sys_class('cache');
 		$this->db_config = pc_base::load_config('database');
 		$this->db_setting = 'default';
 		parent::__construct();
 		$this->url = pc_base::load_app_class('url', 'content');
 		$this->siteid = get_siteid();
+		$this->rid = md5(FC_NOW_URL.$this->input->get_user_agent().$this->input->ip_address().intval($this->userid));
 	}
 	public function set_model($modelid) {
 		$this->model = getcache('model', 'commons');
@@ -30,6 +33,8 @@ class content_model extends model {
 	 * @param $isimport 是否为外部接口导入
 	 */
 	public function add_content($data,$isimport = 0) {
+		$this->site_config = getcache('sitelist','commons');
+		$this->site_config = $this->site_config[$this->siteid];
 		$this->search_db = pc_base::load_model('search_model');
 		$modelid = $this->modelid;
 		require_once CACHE_MODEL_PATH.'content_input.class.php';
@@ -51,10 +56,9 @@ class content_model extends model {
 		//读取模型字段配置中，关于日期配置格式，来组合日期数据
 		$this->fields = getcache('model_field_'.$modelid,'model');
 		$setting = string2array($this->fields['inputtime']['setting']);
-		extract($setting);
-		if($fieldtype=='date') {
+		if($setting['fieldtype']=='date') {
 			$systeminfo['inputtime'] = date('Y-m-d');
-		}elseif($fieldtype=='datetime'){
+		}elseif($setting['fieldtype']=='datetime'){
  			$systeminfo['inputtime'] = date('Y-m-d H:i:s');
 		}
 
@@ -68,6 +72,95 @@ class content_model extends model {
 		$inputinfo['system']['username'] = $systeminfo['username'] = $data['username'] ? $data['username'] : param::get_cookie('admin_username');
 		$systeminfo['sysadd'] = IS_ADMIN || IS_COLLAPI ? 1 : 0;
 		
+		foreach($this->fields as $field=>$t) {
+			if ($t['formtype']=='editor') {
+				// 提取缩略图
+				$is_auto_thumb = $this->input->post('is_auto_thumb_'.$field);
+				if(isset($systeminfo['thumb']) && isset($is_auto_thumb) && !$systeminfo['thumb']) {
+					$setting = string2array($t['setting']);
+					$watermark = $setting['watermark'];
+					$attachment = $setting['attachment'];
+					$image_reduce = $setting['image_reduce'];
+					$site_setting = string2array($this->site_config['setting']);
+					$watermark = $site_setting['ueditor'] || $watermark ? 1 : 0;
+					$auto_thumb_length = intval($this->input->post('auto_thumb_'.$field))-1;
+					if(preg_match_all("/(src)=([\"|']?)([^ \"'>]+)\\2/i", code2html($modelinfo[$field]), $matches)) {
+						$this->upload = new upload('content',$systeminfo['catid'],$this->siteid);
+						foreach ($matches[3] as $img) {
+							$ext = get_image_ext($img);
+							if (!$ext) {
+								continue;
+							}
+							// 下载缩略图
+							// 判断域名白名单
+							$arr = parse_url($img);
+							$domain = $arr['host'];
+							if ($domain) {
+								$file = dr_catcher_data($img, 8);
+								if (!$file) {
+									CI_DEBUG && log_message('debug', '服务器无法下载图片：'.$img);
+								} else {
+									// 尝试找一找附件库
+									$attachmentdb = pc_base::load_model('attachment_model');
+									$att = $attachmentdb->get_one(array('related'=>'%ueditor%', 'filemd5'=>md5($file)));
+									if ($att) {
+										$images[] = dr_get_file($att['aid']);
+									} else {
+										// 下载归档
+										$rt = $this->upload->down_file([
+											'url' => $img,
+											'timeout' => 5,
+											'watermark' => $watermark,
+											'attachment' => $this->upload->get_attach_info(intval($attachment), intval($image_reduce)),
+											'file_ext' => $ext,
+											'file_content' => $file,
+										]);
+										if ($rt['code']) {
+											$att = $this->upload->save_data($rt['data'], 'ueditor:'.$this->rid);
+											if ($att['code']) {
+												// 归档成功
+												$value = str_replace($img, $rt['data']['url'], $value);
+												$images[] = dr_get_file($att['code']);
+												// 标记附件
+												$GLOBALS['downloadfiles'][] = $rt['data']['url'];
+											}
+										}
+									}
+								}
+							}
+						}
+						if ($images) {
+							$systeminfo['thumb'] = $images[$auto_thumb_length];
+						}
+					}
+				}
+				// 提取描述信息
+				$is_auto_description = $this->input->post('is_auto_description_'.$field);
+				if(isset($systeminfo['description']) && isset($is_auto_description) && !$systeminfo['description']) {
+					$auto_description_length = intval($this->input->post('auto_description_'.$field));
+					$systeminfo['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', code2html($modelinfo[$field])), $auto_description_length);
+				}
+			}
+		}
+		
+		// 提取描述信息
+		$this->form = getcache('model', 'commons');
+		$this->sitemodel = $this->cache->get('sitemodel');
+		$this->form_cache = $this->sitemodel[$this->form[$this->modelid]['tablename']];
+		if (isset($systeminfo['description']) && !$systeminfo['description']) {
+			if (isset($this->form_cache['setting']['desc_auto']) && $this->form_cache['setting']['desc_auto']) {
+				// 手动填充描述
+			} else {
+				// 自动填充描述
+				if (isset($modelinfo['content']) && code2html($modelinfo['content'])) {
+					if (isset($this->form_cache['setting']['desc_auto']) && $this->form_cache['setting']['desc_auto']) {
+						$systeminfo['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', code2html($modelinfo['content'])), $this->form_cache['setting']['desc_limit']);
+					} else {
+						$systeminfo['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', code2html($modelinfo['content'])));
+					}
+				}
+			}
+		}
 		$systeminfo['keywords'] = str_replace(array('/','\\','#','.',"'"),' ',$systeminfo['keywords']);
 		$systeminfo['tableid'] = 0;
 		
@@ -86,8 +179,8 @@ class content_model extends model {
 			// 站长工具
 			if (module_exists('bdts')) {
 				$this->bdts = pc_base::load_app_class('admin_bdts','bdts');
-				$sitemodel_model_db = pc_base::load_model('sitemodel_model');
-				$sitemodel = $sitemodel_model_db->get_one(array('modelid'=>$this->modelid));
+				$this->sitemodel_db = pc_base::load_model('sitemodel_model');
+				$sitemodel = $this->sitemodel_db->get_one(array('modelid'=>$this->modelid));
 				$this->bdts->module_bdts($sitemodel['tablename'], $urls[0], 'add');
 			}
 		}
@@ -242,7 +335,7 @@ class content_model extends model {
 		}
 		
 		$this->search_db = pc_base::load_model('search_model');
-													
+		
 		require_once CACHE_MODEL_PATH.'content_input.class.php';
 		require_once CACHE_MODEL_PATH.'content_update.class.php';
 		$content_input = new content_input($this->modelid);
@@ -274,6 +367,97 @@ class content_model extends model {
 				$systeminfo['updatetime'] = $data['updatetime'];
 			}
 		}
+		
+		$this->fields = getcache('model_field_'.$this->modelid,'model');
+		foreach($this->fields as $field=>$t) {
+			if ($t['formtype']=='editor') {
+				// 提取缩略图
+				$is_auto_thumb = $this->input->post('is_auto_thumb_'.$field);
+				if(isset($systeminfo['thumb']) && isset($is_auto_thumb) && !$systeminfo['thumb']) {
+					$setting = string2array($t['setting']);
+					$watermark = $setting['watermark'];
+					$attachment = $setting['attachment'];
+					$image_reduce = $setting['image_reduce'];
+					$site_setting = string2array($this->site_config['setting']);
+					$watermark = $site_setting['ueditor'] || $watermark ? 1 : 0;
+					$auto_thumb_length = intval($this->input->post('auto_thumb_'.$field))-1;
+					if(preg_match_all("/(src)=([\"|']?)([^ \"'>]+)\\2/i", code2html($modelinfo[$field]), $matches)) {
+						$this->upload = new upload('content',$systeminfo['catid'],$this->siteid);
+						foreach ($matches[3] as $img) {
+							$ext = get_image_ext($img);
+							if (!$ext) {
+								continue;
+							}
+							// 下载缩略图
+							// 判断域名白名单
+							$arr = parse_url($img);
+							$domain = $arr['host'];
+							if ($domain) {
+								$file = dr_catcher_data($img, 8);
+								if (!$file) {
+									CI_DEBUG && log_message('debug', '服务器无法下载图片：'.$img);
+								} else {
+									// 尝试找一找附件库
+									$attachmentdb = pc_base::load_model('attachment_model');
+									$att = $attachmentdb->get_one(array('related'=>'%ueditor%', 'filemd5'=>md5($file)));
+									if ($att) {
+										$images[] = dr_get_file($att['aid']);
+									} else {
+										// 下载归档
+										$rt = $this->upload->down_file([
+											'url' => $img,
+											'timeout' => 5,
+											'watermark' => $watermark,
+											'attachment' => $this->upload->get_attach_info(intval($attachment), intval($image_reduce)),
+											'file_ext' => $ext,
+											'file_content' => $file,
+										]);
+										if ($rt['code']) {
+											$att = $this->upload->save_data($rt['data'], 'ueditor:'.$this->rid);
+											if ($att['code']) {
+												// 归档成功
+												$value = str_replace($img, $rt['data']['url'], $value);
+												$images[] = dr_get_file($att['code']);
+												// 标记附件
+												$GLOBALS['downloadfiles'][] = $rt['data']['url'];
+											}
+										}
+									}
+								}
+							}
+						}
+						if ($images) {
+							$systeminfo['thumb'] = $images[$auto_thumb_length];
+						}
+					}
+				}
+				// 提取描述信息
+				$is_auto_description = $this->input->post('is_auto_description_'.$field);
+				if(isset($systeminfo['description']) && isset($is_auto_description) && !$systeminfo['description']) {
+					$auto_description_length = intval($this->input->post('auto_description_'.$field));
+					$systeminfo['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', code2html($modelinfo[$field])), $auto_description_length);
+				}
+			}
+		}
+		
+		// 提取描述信息
+		$this->form = getcache('model', 'commons');
+		$this->sitemodel = $this->cache->get('sitemodel');
+		$this->form_cache = $this->sitemodel[$this->form[$this->modelid]['tablename']];
+		if (isset($systeminfo['description']) && !$systeminfo['description']) {
+			if (isset($this->form_cache['setting']['desc_auto']) && $this->form_cache['setting']['desc_auto']) {
+				// 手动填充描述
+			} else {
+				// 自动填充描述
+				if (isset($modelinfo['content']) && code2html($modelinfo['content'])) {
+					if (isset($this->form_cache['setting']['desc_auto']) && $this->form_cache['setting']['desc_auto']) {
+						$systeminfo['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', code2html($modelinfo['content'])), $this->form_cache['setting']['desc_limit']);
+					} else {
+						$systeminfo['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', code2html($modelinfo['content'])));
+					}
+				}
+			}
+		}
 		if($data['islink']==1) {
 			$systeminfo['url'] = $this->input->post('linkurl');
 			$systeminfo['url'] = str_replace(array('select ',')','\\','#',"'"),' ',$systeminfo['url']);
@@ -284,8 +468,8 @@ class content_model extends model {
 			// 站长工具
 			if (module_exists('bdts')) {
 				$this->bdts = pc_base::load_app_class('admin_bdts','bdts');
-				$sitemodel_model_db = pc_base::load_model('sitemodel_model');
-				$sitemodel = $sitemodel_model_db->get_one(array('modelid'=>$this->modelid));
+				$this->sitemodel_db = pc_base::load_model('sitemodel_model');
+				$sitemodel = $this->sitemodel_db->get_one(array('modelid'=>$this->modelid));
 				$this->bdts->module_bdts($sitemodel['tablename'], $urls[0], 'edit');
 			}
 		}

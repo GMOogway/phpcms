@@ -513,7 +513,7 @@
 
 })();
 
-function insert_page(editorid){
+function insert_page(editorid) {
     UE.getEditor(editorid).execCommand('insertHtml', '<p><br/></p>[page]')
     if($('#paginationtype').val()) {
         $('#paginationtype').val(2);
@@ -521,21 +521,21 @@ function insert_page(editorid){
     }
 }
 function insert_page_title(editorid,insertdata) {
-    if(insertdata==1){
-        var page_title_value = $("#page_title_value").val();
+    if(insertdata){
+        var page_title_value = $(".page_"+editorid+"_value").val();
         if(page_title_value==''){
-            $("#msg_page_title_value").html("<font color='red'>请输入子标题</font>");
+            $(".msg_page_"+editorid+"_value").html("<font color='red'>请输入子标题</font>");
             return false;
         }
         page_title_value = '<p><br/></p>[page]'+page_title_value+'[/page]';
         UE.getEditor(editorid).execCommand('insertHtml', page_title_value)
-        $("#page_title_value").val('');
-        $("#msg_page_title_value").html('');
+        $(".page_"+editorid+"_value").val('');
+        $(".msg_page_"+editorid+"_value").html('');
         if($('#paginationtype').val()) {
             $('#paginationtype').val(2);
             $('#paginationtype').css("color","red");
         }
     }else{
-        $("#page_title_div").slideDown("fast");
+        $(".page_"+editorid+"_div").slideDown("fast");
     }
 }
