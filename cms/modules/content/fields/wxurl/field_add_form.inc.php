@@ -8,7 +8,8 @@
 	<div class="form-group">
       <label class="col-md-2 control-label">表单附加属性</label>
       <div class="col-md-9">
-            <label><input type="text" name="setting[bformattribute]" value="get_wxurl('myform','title','keywords','content')" size="40" class="form-control"><br />javascript事件：get_wxurl('表单名称','标题字段名称','关键词字段名称','内容字段名称')，内容必须是编辑器。</label>
+            <label><input type="text" name="setting[bformattribute]" value="get_wxurl('myform','title','keywords','content')" size="40" class="form-control"></label>
+            <span class="help-block">javascript事件：get_wxurl('表单名称','标题字段名称','关键词字段名称','内容字段名称')，内容必须是编辑器。</span>
       </div>
     </div>
     <div class="form-group">

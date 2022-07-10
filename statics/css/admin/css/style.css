@@ -999,6 +999,7 @@ table.dataTable thead td,table.dataTable thead th {padding: 10px 8px;}
 .btn-group>.dropdown-menu, .dropdown-toggle>.dropdown-menu, .dropdown>.dropdown-menu {margin-top: 10px;}
 .table-scrollable .dataTable td>.btn-group, .table-scrollable .dataTable th>.btn-group {position: absolute;margin-top: -2px;}
 .btn-group, .btn-group-vertical {position: relative;display: inline-block;}
+.dropzone-file-area {border: 2px dashed #e7ecf1;background: #fff;padding: 20px;text-align: center;}
 .scroll-to-top{padding:1px;text-align:center;position:fixed;bottom:20px;z-index:10002;display:none;right:20px;}
 .scroll-to-top>i{display:inline-block;color:#687991;font-size:30px;opacity:.6;filter:alpha(opacity=60);}
 .scroll-to-top:hover{cursor:pointer;}

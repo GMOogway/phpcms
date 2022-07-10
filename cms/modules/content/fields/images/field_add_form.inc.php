@@ -9,8 +9,8 @@
 	<div class="form-group">
       <label class="col-md-2 control-label">扩展名</label>
       <div class="col-md-9">
-            <label><input type="text" name="setting[upload_allowext]" value="gif|jpg|jpeg|png|bmp" size="40" class="form-control"></label>
-            <span class="help-block">格式：jpg|gif|png|exe|html|php|rar|zip</span>
+            <label><input type="text" name="setting[upload_allowext]" value="jpg|gif|png|webp|jpeg" size="40" class="form-control"></label>
+            <span class="help-block">填写用于图片上传的扩展名格式，格式：jpg|gif|png|webp|jpeg</span>
       </div>
     </div>
 	<div class="form-group">

@@ -1,12 +1,13 @@
 <?php defined('IN_CMS') or exit('No permission resources.');?>
 
+    <?php echo linkage($setting);?>
     <div class="form-group">
       <label class="col-md-2 control-label">路径分隔符</label>
       <div class="col-md-9">
-            <label><input type="text" name="setting[space]" value="<?php echo $setting['space'];?>" size="5" class="form-control"> 显示完整路径时生效</label>
+            <label><input type="text" name="setting[space]" value="<?php echo $setting['space'];?>" size="5" class="form-control"></label>
+            <span class="help-block">显示完整路径时生效</span>
       </div>
     </div>
-    <?php echo linkage($setting);?>
     <div class="form-group">
       <label class="col-md-2 control-label">强制选择最终项</label>
       <div class="col-md-9">

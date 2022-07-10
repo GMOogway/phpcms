@@ -2926,41 +2926,150 @@ function get_memberavatar($uid, $size = '') {
  * @param $code 联动菜单代码
  * @param $id 生成联动菜单的样式id
  * @param $defaultvalue 默认值
+ * @param $ck_child 强制选择最终项
+ * @param $multiple 多选
+ * @param $limit 最大选择数
+ * @param $width 控件宽度
  */
-function menu_linkage($code = '', $id = 'linkid', $defaultvalue = 0) {
+function menu_linkage($code = '', $id = 'linkid', $defaultvalue = 0, $ck_child = 0, $multiple = 0, $limit = 0, $width = 0) {
 	$linkage_db = pc_base::load_model('linkage_model');
 	$data = $linkage_db->get_one(array('code'=>$code));
-	$string = $defaultvalue && (ROUTE_A=='edit' || ROUTE_A=='account_manage_info'  || ROUTE_A=='info_publish') ? '<input type="hidden" name="info['.$id.']"  id="dr_'.$id.'" value="'.(int)$defaultvalue.'">' : '<input type="hidden" name="info['.$id.']"  id="dr_'.$id.'" value="0">'.PHP_EOL;
 	if ($data['style']) {
 		// 最大几层
 		$linklevel = dr_linkage_level($code) + 1;
-		$string .= load_js(JS_PATH.'jquery.ld.js');
+		$string = load_js(JS_PATH.'jquery.ld.js');
 		$level = 1;
-		$default = '';
-		if ($defaultvalue) {
-			$link = dr_linkage($code, $defaultvalue);
-			$pids = substr($link['pids'], 2);
-			$level = substr_count($pids, ',') + 1;
-			$default = !$pids ? '["'.$defaultvalue.'"]' : '["'.str_replace(',', '","', $pids).'","'.$defaultvalue.'"]';
-		}
-		// 输出默认菜单
-		$string.= '<span id="dr_linkage_'.$id.'_select" style="'.($defaultvalue ? 'display:none' : '').'">';
-		for ($i = 1; $i <= $linklevel; $i++) {
-			$style = $i > $level ? 'style="display:none"' : '';
-			$string.= '<label style="padding-right:10px;"><select class="form-control select-'.$id.'" name="'.$id.'-'.$i.'" id="'.$id.'-'.$i.'" width="100" '.$style.'><option defaultvalue=""> -- </option></select></label>';
-		}
-		$string.= '<label id="dr_linkage_'.$id.'_html"></label>';
-		$string.= '</span>';
-		// 重新选择
-		if ($defaultvalue) {
-			$string.= '<div id="dr_linkage_'.$id.'_cxselect">';
-			$edit_html = '<div class="form-control-static" >'.dr_linkagepos($code, $defaultvalue, ' » ').'&nbsp;&nbsp;<a href="javascript:;" onclick="dr_linkage_select_'.$id.'()" style="color:blue">'.L('[重新选择]').'</a></div>';
-			$string.= $edit_html;
+		if ($multiple) {
+			// 表单宽度设置
+			$width = is_mobile(0) ? '100%' : ($width ? $width : '100%');
+			// 输出默认菜单
+			$string.= '<div class="dropzone-file-area" id="linkages-'.$id.'-sort-items" style="width:'.$width.(is_numeric($width) ? 'px' : '').';text-align:left;">';
+			$tpl = '<div class="linkages_'.$id.'_row" id="dr_linkages_'.$id.'_row_{id}">';
+			$tpl.= '<label style="margin-right: 10px;"><a class="btn btn-sm " href="javascript:;" onclick="$(\'#dr_linkages_'.$id.'_row_{id}\').remove()"> <i class="fa fa-close"></i> </a></label>';
+			$tpl.= '<input type="hidden" name="info['.$id.'][{id}]" id="dr_'.$id.'_{id}" value="{value}" />';
+			$tpl.= '<input type="hidden" id="dr_'.$id.'_{id}_default" value="" />';
+			$tpl.= '<span id="dr_linkages_'.$id.'_select_{id}" style="display:{display}">';
+			for ($i = 1; $i <= $linklevel; $i++) {
+				$style = $i > $level ? 'style="display:none"' : '';
+				$tpl.= '<label style="padding-right:10px;"><select class="form-control cms-selects-'.$id.'-{id}" name="'.$id.'-'.$i.'-{id}" id="'.$id.'-'.$i.'-{id}" width="100" '.$style.'><option defaultvalue=""> -- </option></select></label>';
+			}
+			$tpl.= '</span>';
+			$tpl.= '</div>';
+
+			// 字段默认值
+			$values = dr_string2array($defaultvalue);
+			if ($values) {
+				foreach ($values as $j => $value) {
+					if ($value) {
+						$link = dr_linkage($code, $value);
+						if (!$link) {
+							continue;
+						}
+						$pids = substr((string)$link['pids'], 2);
+						$level = substr_count($pids, ',') + 1;
+						$default = !$pids ? '["'.$value.'"]' : '["'.str_replace(',', '","', $pids).'","'.$value.'"]';
+						$string.= '<div class="linkages_'.$id.'_row" id="dr_linkages_'.$id.'_row_'.$j.'">';
+						$string.= '<label style="margin-right: 10px;"><a class="btn btn-sm " href="javascript:;" onclick="$(\'#dr_linkages_'.$id.'_row_'.$j.'\').remove()"> <i class="fa fa-close"></i> </a></label>';
+						$string.= '<input type="hidden" name="info['.$id.']['.$j.']" id="dr_'.$id.'_'.$j.'" value="'.$value.'" />';
+						$string.= '<input type="hidden" id="dr_'.$id.'_'.$j.'_default" value="'.addslashes($default).'" />';
+						$string.= '<span id="dr_linkages_'.$id.'_select_'.$j.'" style="display:none">';
+						for ($i = 1; $i <= $linklevel; $i++) {
+							$style = $i > $level ? 'style="display:none"' : '';
+							$string.= '<label style="padding-right:10px;"><select class="form-control cms-selects-'.$id.'-'.$j.'" name="'.$id.'-'.$i.'-'.$j.'" id="'.$id.'-'.$i.'-'.$j.'" width="100" '.$style.'><option defaultvalue=""> -- </option></select></label>';
+						}
+						$string.= '</span>';
+						$string.= '<label class="form-control-static" id="dr_linkages_'.$id.'_cxselect_'.$j.'">'.dr_linkagepos($code, $value, ' » ').'&nbsp;&nbsp;<a href="javascript:;" onclick="dr_linkages_select_'.$id.'('.$j.')" style="color:blue">'.L('[重新选择]').'</a></label>';
+						$string.= '</div>';
+					}
+				}
+			}
+
+			// 整体
+			$key_html = '';
+			$key_html.= 'if ($ld5.eq(0).show().val()=="--") {';
+			for ($i = 2; $i <= $linklevel; $i++) {
+				$key_html.= '
+						$ld5.eq('.$i.').hide();';
+			}
+			$key_html.= '
+					}';
 			$string.= '</div>';
-		}
-		// 输出js支持
-		$string.= '
-		<script type="text/javascript">
+			$string.= '<div class="margin-top-10">	<a href="javascript:;" class="btn blue btn-sm" onClick="dr_add_linkages_'.$id.'()"> <i class="fa fa-plus"></i> '.L('添加').' </a>';
+			$string.= '</div>';
+			$string.= load_css(JS_PATH.'jquery-ui/jquery-ui.min.css');
+			$string.= load_js(JS_PATH.'jquery-ui/jquery-ui.min.js');
+			$string.= '<script type="text/javascript">
+			$("#linkages-'.$id.'-sort-items").sortable();
+			function dr_add_linkages_'.$id.'() {
+				var num = $("#linkages-'.$id.'-sort-items .linkages_'.$id.'_row").length;
+				if ('.(int)$limit.' > 0 && num >= '.(int)$limit.') {
+					dr_tips(0, "'.L('最多可以选择'.$limit.'项').'");
+					return;
+				}
+				var id=(num + 1) * 10;
+				var html = "'.addslashes($tpl).'";
+				html = html.replace(/\{id\}/g, id);
+				html = html.replace(/\{display\}/g, "blank");
+				html = html.replace(/\{value\}/g, "0");
+				$("#linkages-'.$id.'-sort-items").append(html);
+				dr_linkages_init_'.$id.'(id);
+			}
+			function dr_linkages_select_'.$id.'(id) {
+				$("#dr_linkages_'.$id.'_select_"+id).show();
+				$("#dr_linkages_'.$id.'_cxselect_"+id).hide();
+				dr_linkages_init_'.$id.'(id);
+			}
+			function dr_linkages_init_'.$id.'(id) {
+			  var $ld5 = $(".cms-selects-'.$id.'-"+id);					  
+				$ld5.ld({ajaxOptions:{"url": "'.WEB_PATH.'api.php?op=get_linkage&code='.$code.'"},defaultParentId:0})
+				var ld5_api = $ld5.ld("api");
+				ld5_api.selected($("#dr_'.$id.'_"+id+"_default").val());
+				$ld5.bind("change", function(e){
+					var $target = $(e.target);
+					var index = $ld5.index($target);
+					$("#dr_'.$id.'_"+id).val($ld5.eq(index).show().val());
+					index ++;
+					$ld5.eq(index).show();
+					'.$key_html.'
+				});
+				
+			}
+			</script>';
+		} else {
+			$string.= $defaultvalue && (ROUTE_A=='edit' || ROUTE_A=='account_manage_info'  || ROUTE_A=='info_publish') ? '<input type="hidden" name="info['.$id.']"  id="dr_'.$id.'" value="'.(int)$defaultvalue.'">' : '<input type="hidden" name="info['.$id.']"  id="dr_'.$id.'" value="0">'.PHP_EOL;
+			$default = '';
+			if ($defaultvalue) {
+				$link = dr_linkage($code, $defaultvalue);
+				$pids = substr($link['pids'], 2);
+				$level = substr_count($pids, ',') + 1;
+				$default = !$pids ? '["'.$defaultvalue.'"]' : '["'.str_replace(',', '","', $pids).'","'.$defaultvalue.'"]';
+			}
+			// 输出默认菜单
+			$string.= '<span id="dr_linkage_'.$id.'_select" style="'.($defaultvalue ? 'display:none' : '').'">';
+			for ($i = 1; $i <= $linklevel; $i++) {
+				$style = $i > $level ? 'style="display:none"' : '';
+				$string.= '<label style="padding-right:10px;"><select class="form-control select-'.$id.'" name="'.$id.'-'.$i.'" id="'.$id.'-'.$i.'" width="100" '.$style.'><option defaultvalue=""> -- </option></select></label>';
+			}
+			$string.= '<label id="dr_linkage_'.$id.'_html"></label>';
+			$string.= '</span>';
+			// 重新选择
+			if ($defaultvalue) {
+				$string.= '<div id="dr_linkage_'.$id.'_cxselect">';
+				$edit_html = '<div class="form-control-static" >'.dr_linkagepos($code, $defaultvalue, ' » ').'&nbsp;&nbsp;<a href="javascript:;" onclick="dr_linkage_select_'.$id.'()" style="color:blue">'.L('[重新选择]').'</a></div>';
+				$string.= $edit_html;
+				$string.= '</div>';
+			}
+			// 输出js支持
+			$key_html = '';
+			$key_html.= 'if ($ld5.eq(0).show().val()=="--") {';
+			for ($i = 2; $i <= $linklevel; $i++) {
+				$key_html.= '
+						$ld5.eq('.$i.').hide();';
+			}
+			$key_html.= '
+					}';
+			$string.= '
+			<script type="text/javascript">
 			function dr_linkage_select_'.$id.'() {
 				$("#dr_linkage_'.$id.'_select").show();
 				$("#dr_linkage_'.$id.'_cxselect").hide();
@@ -2978,36 +3087,39 @@ function menu_linkage($code = '', $id = 'linkid', $defaultvalue = 0) {
 					$("#dr_'.$id.'").val(vv);
 					index ++;
 					$ld5.eq(index).show();
-					if ($ld5.eq(0).show().val()=="--") {';
-					for ($i = 2; $i <= $linklevel; $i++) {
-						$string.= '
-						$ld5.eq('.$i.').hide();';
-					}
-					$string.= '
-					}
+					'.$key_html.'
 					//console.log("value="+vv);
 				});
 			})
-		</script>';
+			</script>';
+		}
 	} else {
+		$string.= $defaultvalue && (ROUTE_A=='edit' || ROUTE_A=='account_manage_info'  || ROUTE_A=='info_publish') ? '<input type="hidden" name="info['.$id.']"  id="dr_'.$id.'" value="'.($multiple ? ($defaultvalue ? $defaultvalue : '[]') : (int)$defaultvalue).'">' : '<input type="hidden" name="info['.$id.']"  id="dr_'.$id.'" value="'.($multiple ? '[]' : 0).'">'.PHP_EOL;
 		$string .= load_css(JS_PATH.'layui/css/layui.css');
 		$string .= load_css(JS_PATH.'layui/cascader/cascader.css');
 		$string .= load_js(JS_PATH.'layui/layui.js');
-		$string .= load_js(JS_PATH.'layui/cascader/cascader'.(IS_DEV ? '' : '.min').'.js');
+		$string .= load_js(JS_PATH.'layui/cascader/cascader.js');
 		$string .= '<script src="'.WEB_PATH.'api.php?op=get_linkage&code='.$code.'"></script>
 			<script type="text/javascript">
 			$(function (){
 					layui.use(\'layCascader\', function () {
 					var layCascader = layui.layCascader;
 					layCascader({
-					  elem: \'#dr_'.$id.'\',
-					  value: '.(int)$defaultvalue.',
+						elem: \'#dr_'.$id.'\',
+						value: '.($multiple ? ($defaultvalue ? $defaultvalue : '[]') : (int)$defaultvalue).',
 						clearable: true,
-						 filterable: true,
-					  options: linkage_'.$code.'
+						filterable: '.($multiple ? 'false' : 'true').','.($multiple ? '
+						maxSize: '.intval($limit).',
+						collapseTags: true,
+						minCollapseTagsNumber: 0,' : '').'
+						props: {'.($multiple ? '
+							multiple: true,' : '').'
+							checkStrictly: '.($ck_child ? 'false' : 'true').'
+						},
+						options: linkage_'.$code.'
 					});
 				})
-					});
+			});
 			</script>';
 	}
 	return $string;

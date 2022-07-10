@@ -182,9 +182,7 @@ layui.define(["jquery"], function (exports) {
       if (!this.leaf) {
         icon = rightIcon;
       }
-      if (label) {
-        this.$li = $('<li role="menuitem" id="cascader-menu" tabindex="-1" class="el-cascader-node" aria-haspopup="true" aria-owns="cascader-menu"><span class="el-cascader-node__label">' + label + '</span><i class="' + fromIcon + ' ' + icon + '"></i></li>');
-      }
+      this.$li = $('<li role="menuitem" id="cascader-menu" tabindex="-1" class="el-cascader-node" aria-haspopup="true" aria-owns="cascader-menu"><span class="el-cascader-node__label">' + label + '</span><i class="' + fromIcon + ' ' + icon + '"></i></li>');
 
       // 节点渲染
       if (!multiple && !checkStrictly) {
@@ -696,13 +694,11 @@ layui.define(["jquery"], function (exports) {
     _liClick: function (fun) {
       var leaf = this.leaf;
       var $li = this.$li;
-	  if ($li) {
-        if (this.props.expandTrigger === "click" || leaf) {
-          $li.click(fun);
-        } else if (this.props.expandTrigger === "hover") {
-          $li.mouseenter(fun);
-        }
-	  }
+      if (this.props.expandTrigger === "click" || leaf) {
+        $li.click(fun);
+      } else if (this.props.expandTrigger === "hover") {
+        $li.mouseenter(fun);
+      }
     },
     setChildren: function (children) {
       this.childrenNode = children;
@@ -1128,9 +1124,11 @@ layui.define(["jquery"], function (exports) {
       for (var key in data) {
         var datum = data[key];
         var node = new Node(datum, this, level, parentNode);
-        nodes.push(node);
-        if (node.children && node.children.length > 0) {
-          node.setChildren(this.initNodes(node.children, level + 1, node))
+        if (node.label) {
+          nodes.push(node);
+          if (node.children && node.children.length > 0) {
+            node.setChildren(this.initNodes(node.children, level + 1, node));
+          }
         }
       }
       return nodes;

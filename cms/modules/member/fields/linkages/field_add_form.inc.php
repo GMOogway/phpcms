@@ -1,10 +1,24 @@
 
     <?php echo linkage(array());?>
     <div class="form-group">
+      <label class="col-md-2 control-label">控件宽度</label>
+      <div class="col-md-9">
+          <label><input type="text" class="form-control" size="10" name="setting[width]" value=""></label>
+          <span class="help-block">[整数]表示固定宽度；[整数%]表示百分比</span>
+      </div>
+    </div>
+    <div class="form-group">
       <label class="col-md-2 control-label">路径分隔符</label>
       <div class="col-md-9">
             <label><input type="text" name="setting[space]" value=" - " size="5" class="form-control"></label>
             <span class="help-block">显示完整路径时生效</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-md-2 control-label">最大选择数</label>
+      <div class="col-md-9">
+          <label><input type="text" class="form-control" size="10" name="setting[limit]" value=""></label>
+          <span class="help-block">最大能选择的数量限制，0表示不限制</span>
       </div>
     </div>
     <div class="form-group">
@@ -18,8 +32,9 @@
       </div>
     </div>
     <div class="form-group">
-      <label class="col-md-2 control-label">默认值</label>
+      <label class="col-md-2 control-label">CSS样式名</label>
       <div class="col-md-9">
-            <label><input type="text" name="setting[defaultvalue]" value="" size="40" class="form-control"></label>
+          <label><input type="text" class="form-control" size="10" name="setting[css]" value=""></label>
+          <span class="help-block">定义显示的CSS样式名</span>
       </div>
     </div>

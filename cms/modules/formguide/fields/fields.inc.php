@@ -7,7 +7,8 @@ $fields = array('text'=>'单行文本',
 				'images'=>'多图片',
 				'number'=>'数字',
 				'datetime'=>'日期和时间',
-				'linkage'=>'联动菜单',
+				'linkage'=>'联动菜单（单选）',
+				'linkages'=>'联动菜单（多选）',
 				);
 //不允许删除的字段，这些字段讲不会在字段添加处显示
 $not_allow_fields = array('catid','typeid','title','keyword','posid','template','username');

@@ -737,6 +737,17 @@ class linkage extends admin {
 
 		$this->db->table_name = $this->db->db_tablepre.'linkage_data_'.$key;
 		foreach ($ids as $id) {
+			if ($id == $pid) {
+				return dr_return_data(0, L('分类上级不能为本身'));
+			}
+			$childids = $this->db->get_one(array('id'=>$id), 'childids');
+			$childids_arr = explode(',',$childids['childids']);
+			if(dr_in_array($pid,$childids_arr)){
+				return dr_return_data(0, L('分类上级不能为本身'));
+			}
+		}
+
+		foreach ($ids as $id) {
 			$row = $this->db->get_one(array('id'=>intval($id)));
 			if (!$row) {
 				return dr_return_data(0, L('数据不存在(id:'.$id.')'));
