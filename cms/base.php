@@ -35,6 +35,8 @@ define('HTTP_REFERER', isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'
 
 //系统开始时间
 define('SYS_START_TIME', microtime(true));
+//系统内存初始占用
+define('SYS_START_MEM', memory_get_usage());
 
 //PHP最低版本
 define('MIN_PHP_VERSION', '7.1.0');
@@ -158,7 +160,7 @@ define('TEMPPATH', PC_PATH.'temp/');
 //是否来自ajax提交
 define('IS_AJAX', (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'));
 //是否来自post提交
-define('IS_POST', isset($_POST) && count($_POST) ? TRUE : FALSE);
+define('IS_POST', $_SERVER['REQUEST_METHOD'] == 'POST' ? TRUE : FALSE);
 define('IS_AJAX_POST', IS_POST);
 //当前系统时间戳
 define('SYS_TIME', $_SERVER['REQUEST_TIME'] ? $_SERVER['REQUEST_TIME'] : time());

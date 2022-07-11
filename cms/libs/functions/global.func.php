@@ -2259,6 +2259,7 @@ function my_error_handler($errno, $errstr, $errfile, $errline) {
  * 重新日志记录函数
  */
 function log_message($level, $message) {
+	pc_base::load_sys_class('debug');
 	$path = CACHE_PATH.'caches_error/caches_data/';
 	create_folder($path);
 	$filepath = $path.'log-'.dr_date(SYS_TIME, 'Y-m-d').'.php';
@@ -2281,6 +2282,11 @@ function log_message($level, $message) {
 	}
 	flock($fp, LOCK_UN);
 	fclose($fp);
+	if ($level=='debug') {
+		debug::trace($msg);
+	} else {
+		debug::addmsg('<span style="color:red;">'.$msg.'</span>', 2);
+	}
 	if (isset($newfile) && $newfile === true) {
 		chmod($filepath, 0644);
 	}

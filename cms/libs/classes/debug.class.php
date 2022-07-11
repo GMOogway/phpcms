@@ -62,7 +62,7 @@ class debug {
 		if($errno==E_NOTICE || $errno==E_USER_NOTICE)
 		$color="#151515"; else
 		$color="red";
-		$mess = '<span style="color:'.$color.'">';
+		$mess = '<span style="color:'.$color.';">';
 		$mess .= '<b>'.self::$msg[$errno].'</b> [文件 '.$errfile.' 中,第 '.$errline.' 行] ：';
 		$mess .= $errstr;
 		$mess .= '</span>';
@@ -75,7 +75,7 @@ class debug {
 	 */
 	public static function exception($exception) {
 		if(defined('CI_DEBUG') && CI_DEBUG) {
-			$mess = '<span style="color:red">';
+			$mess = '<span style="color:red;">';
 			$mess .= '<b>系统异常</b> [文件 '.$exception->getFile().' 中,第 '.$exception->getLine().' 行] ：';
 			$mess .= $exception->getMessage();
 			$mess .= '</span>';
@@ -96,19 +96,19 @@ class debug {
 	public static function addmsg($msg, $type=0) {
 		switch($type) {
 			case 0:
-							self::$info[] = $msg;
+				self::$info[] = $msg;
 			break;
 			case 1:
-							self::$sqls[] = htmlspecialchars($msg).';';
+				self::$sqls[] = htmlspecialchars($msg).';';
 			break;
 			case 2:
-							self::$errors[] = $msg;
+				self::$errors[] = $msg;
 			break;
 			case 3:
-							self::$files[] = $msg;
+				self::$files[] = $msg;
 			break;
 			case 4:
-							self::$trace[] = $msg;
+				self::$trace[] = $msg;
 			break;
 		}
 	}
@@ -121,12 +121,12 @@ class debug {
 	 */
 	public static function get_debug() {
 		return array(
-					'base' => self::$info,
-					'files' => self::$files,
-					'errors' => self::$errors,
-					'sqls' => self::$sqls,
-					'trace' => self::$trace,
-				);
+			'base' => self::$info,
+			'files' => self::$files,
+			'errors' => self::$errors,
+			'sqls' => self::$sqls,
+			'trace' => self::$trace,
+		);
 	}
 	/**
 	 * 获取文件加载信息
@@ -144,12 +144,12 @@ class debug {
 	private static  function getBaseInfo() {
 		// 系统默认显示信息
 		$baseinfo_arr = array(
-				1=> ' 服务器信息： '.$_SERVER['SERVER_SOFTWARE'],
-				2=> ' 请求信息: '.date('Y-m-d H:i:s',$_SERVER['REQUEST_TIME']).' '.$_SERVER['SERVER_PROTOCOL'].' '.$_SERVER['REQUEST_METHOD'].' : '.$_SERVER["REQUEST_URI"],
-				3=> ' 内存开销: '.number_format((memory_get_usage())/1024,2).' kb',  
-				4=> ' 文件加载: '.count(self::$files).' , SQL: '.count(self::$sqls).' , '.' 错误: '.count(self::$errors).' , '.' 调试: '.count(self::$trace).' ', 
-				5=> ' 运行时间: '.self::spent().'s ',
-			  );
+			1=> ' 服务器信息： '.$_SERVER['SERVER_SOFTWARE'],
+			2=> ' 请求信息: '.date('Y-m-d H:i:s',$_SERVER['REQUEST_TIME']).' '.$_SERVER['SERVER_PROTOCOL'].' '.$_SERVER['REQUEST_METHOD'].' : '.$_SERVER["REQUEST_URI"],
+			3=> ' 内存消耗：' . number_format((memory_get_usage() - SYS_START_MEM) / 1024, 2) . 'kb',  
+			4=> ' 文件加载: '.count(self::$files).' , SQL: '.count(self::$sqls).' , '.' 错误: '.count(self::$errors).' , '.' 调试: '.count(self::$trace).' ', 
+			5=> ' 运行时间: '.self::spent().'s [ 吞吐率：' . (self::spent() > 0 ? number_format(1 / self::spent(), 2) : '∞') . 'req/s ]',
+		);
 		foreach ($baseinfo_arr as $key=>$info) {
 			self::addmsg($info, 0);
 		}

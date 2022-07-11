@@ -39,18 +39,12 @@ class application {
 			} else {
 				call_user_func(array($controller, ROUTE_A));
 				if (!in_array(ROUTE_M, array('admin')) || !in_array(ROUTE_C, array('index')) && !in_array(ROUTE_A, array('public_main'))) {
-					if (IS_ADMIN && CI_DEBUG) {
-						if(isset($_SERVER["HTTP_X_REQUESTED_WITH"]) && strtolower($_SERVER["HTTP_X_REQUESTED_WITH"])=='xmlhttprequest'){
-						} else {
-							debug::message();
-						}
-					}
-				}
-				if (!IS_ADMIN && IS_DEV) {
-					if(isset($_SERVER["HTTP_X_REQUESTED_WITH"]) && strtolower($_SERVER["HTTP_X_REQUESTED_WITH"])=='xmlhttprequest'){
-					} else {
+					if (IS_ADMIN && CI_DEBUG && !IS_AJAX) {
 						debug::message();
 					}
+				}
+				if (!IS_ADMIN && IS_DEV && !IS_AJAX) {
+					debug::message();
 				}
 			}
 		} else {
