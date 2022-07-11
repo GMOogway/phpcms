@@ -459,9 +459,9 @@ layui.define(["jquery"], function (exports) {
       }
       var children = this.getChildren();
       if (children && children.length > 0) {
-        for (var index in children) {
-          children[index].transferChildren(callback, advance, self);
-        }
+        children.forEach(function (child) {
+          child.transferChildren(callback, advance, self);
+        })
       }
     },
     /**

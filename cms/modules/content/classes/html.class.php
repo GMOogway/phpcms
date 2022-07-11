@@ -370,6 +370,12 @@ class html {
 		if($arrchild_arr=='') $arrchild_arr = $CATEGORYS[$catid]['arrchildid'];
 		$arrchild_arr = explode(',',$arrchild_arr);
 		array_shift($arrchild_arr);
+		$this->category_db = pc_base::load_model('category_model');
+		$arrchild_arr = $this->category_db->select(array('catid'=>$arrchild_arr), '*', '', 'listorder ASC, catid ASC');
+		foreach ($arrchild_arr as $cache) {
+			$arrchild[] = $cache['catid'];
+		}
+		$arrchild_arr = $arrchild;
 		foreach ($arrchild_arr as $mcatid => $cache) {
 			$arrchild_setting = string2array($CATEGORYS[$cache]['setting']);
 			if (!$arrchild_setting['isleft'] || $arrchild_setting['disabled']) {

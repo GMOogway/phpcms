@@ -1,5 +1,14 @@
 	function linkages($field, $value) {
 		$setting = string2array($this->fields[$field]['setting']);
+		if ($value == '[]') $value = '';
+		$length = empty($value) ? 0 : (is_string($value) ? mb_strlen($value) : dr_strlen($value));
+		if($this->fields[$field]['minlength'] && $length < $this->fields[$field]['minlength']) {
+			if (IS_ADMIN) {
+				dr_admin_msg(0, $this->fields[$field]['name'].' '.L('not_less_than').' '.$this->fields[$field]['minlength'].L('characters'), array('field' => $field));
+			} else {
+				dr_msg(0, $this->fields[$field]['name'].' '.L('not_less_than').' '.$this->fields[$field]['minlength'].L('characters'), array('field' => $field));
+			}
+		}
 		$values = dr_string2array($value);
 		if ($values) {
 			foreach ($values as $v) {
