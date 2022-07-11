@@ -3416,7 +3416,7 @@ function thumb($img, $width = 0, $height = 0, $water = 0, $mode = 'auto', $webim
  * @param   string  $html   格式替换
  * @return  string
  */
-function dr_catpos($catid, $symbol = ' > ', $url = true, $html= '') {
+function dr_catpos($catid, $symbol = ' > ', $url = true, $html = '') {
 	if (!$catid) {
 		return '';
 	}
@@ -3428,12 +3428,14 @@ function dr_catpos($catid, $symbol = ' > ', $url = true, $html= '') {
 		return '';
 	}
 	$name = array();
+	$siteurl = siteurl($cat[$catid]['siteid']);
 	$array = explode(',', $cat[$catid]['arrparentid']);
 	$array[] = $catid;
 	foreach ($array as $id) {
 		$setting = string2array($cat[$id]['setting']);
 		if ($id && $cat[$id] && $setting['iscatpos'] && !$setting['disabled']) {
 			$murl = $cat[$id]['url'];
+			if(strpos($murl, '://') === false) $murl = $siteurl.$murl;
 			$name[] = $url ? ($html ? str_replace(array('[url]', '[name]'), array($murl, $cat[$id]['catname']), $html) : '<a href=".'.$murl.'">'.$cat[$id]['catname'].'</a>') : $cat[$id]['catname'];
 		}
 	}
@@ -3449,7 +3451,7 @@ function dr_catpos($catid, $symbol = ' > ', $url = true, $html= '') {
  * @param   string  $html   格式替换
  * @return  string
  */
-function dr_mobile_catpos($catid, $symbol = ' > ', $url = true, $html= '') {
+function dr_mobile_catpos($catid, $symbol = ' > ', $url = true, $html = '') {
 	if (!$catid) {
 		return '';
 	}
@@ -3469,6 +3471,7 @@ function dr_mobile_catpos($catid, $symbol = ' > ', $url = true, $html= '') {
 		$setting = string2array($cat[$id]['setting']);
 		if ($id && $cat[$id] && $setting['iscatpos'] && !$setting['disabled']) {
 			$murl = str_replace($siteurl, $sitemobileurl, $cat[$id]['url']);
+			if(strpos($murl, '://') === false) $murl = $sitemobileurl.$murl;
 			$name[] = $url ? ($html ? str_replace(array('[url]', '[name]'), array($murl, $cat[$id]['catname']), $html) : '<a href="'.$murl.'">'.$cat[$id]['catname'].'</a>') : $cat[$id]['catname'];
 		}
 	}
@@ -3638,24 +3641,8 @@ function dr_linkage_cname($code, $id) {
  * @param $catid 栏目id
  * @param $symbol 栏目间隔符
  */
-function catpos($catid, $symbol=' > '){
-	$category_arr = array();
-	$siteids = getcache('category_content','commons');
-	$siteid = $siteids[$catid];
-	$category_arr = getcache('category_content_'.$siteid,'commons');
-	if(!isset($category_arr[$catid])) return '';
-	$pos = '';
-	$siteurl = siteurl($category_arr[$catid]['siteid']);
-	$arrparentid = array_filter(explode(',', $category_arr[$catid]['arrparentid'].','.$catid));
-	foreach($arrparentid as $catid) {
-		$setting = string2array($category_arr[$catid]['setting']);
-		if ($catid && $category_arr[$catid] && $setting['iscatpos'] && !$setting['disabled']) {
-			$url = $category_arr[$catid]['url'];
-			if(strpos($url, '://') === false) $url = $siteurl.$url;
-			$pos .= '<a href="'.$url.'">'.$category_arr[$catid]['catname'].'</a>'.$symbol;
-		}
-	}
-	return $pos;
+function catpos($catid, $symbol = ' > ', $url = true, $html = '') {
+	return dr_catpos($catid, $symbol, $url, $html);
 }
 
 /**
@@ -3664,25 +3651,8 @@ function catpos($catid, $symbol=' > '){
  * @param $catid 栏目id
  * @param $symbol 栏目间隔符
  */
-function mobilecatpos($catid, $symbol=' > '){
-	$category_arr = array();
-	$siteids = getcache('category_content','commons');
-	$siteid = $siteids[$catid];
-	$category_arr = getcache('category_content_'.$siteid,'commons');
-	if(!isset($category_arr[$catid])) return '';
-	$pos = '';
-	$siteurl = siteurl($category_arr[$catid]['siteid']);
-	$sitemobileurl = sitemobileurl($category_arr[$catid]['siteid']);
-	$arrparentid = array_filter(explode(',', $category_arr[$catid]['arrparentid'].','.$catid));
-	foreach($arrparentid as $catid) {
-		$setting = string2array($category_arr[$catid]['setting']);
-		if ($catid && $category_arr[$catid] && $setting['iscatpos'] && !$setting['disabled']) {
-			$url = $category_arr[$catid]['url'];
-			if(strpos($url, '://') === false) $url = $sitemobileurl.$url;
-			$pos .= '<a href="'.str_replace($siteurl,$sitemobileurl,$url).'">'.$category_arr[$catid]['catname'].'</a>'.$symbol;
-		}
-	}
-	return $pos;
+function mobilecatpos($catid, $symbol = ' > ', $url = true, $html = '') {
+	return dr_mobile_catpos($catid, $symbol, $url, $html);
 }
 
 /**
