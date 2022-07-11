@@ -3427,8 +3427,8 @@ function dr_catpos($catid, $symbol = ' > ', $url = true, $html = '') {
 	if (!isset($cat[$catid])) {
 		return '';
 	}
-	$name = array();
 	$siteurl = siteurl($cat[$catid]['siteid']);
+	$name = array();
 	$array = explode(',', $cat[$catid]['arrparentid']);
 	$array[] = $catid;
 	foreach ($array as $id) {
@@ -3636,10 +3636,13 @@ function dr_linkage_cname($code, $id) {
 }
 
 /**
- * 当前路径
- * 返回指定栏目路径层级
- * @param $catid 栏目id
- * @param $symbol 栏目间隔符
+ * 栏目面包屑导航
+ *
+ * @param   intval  $catid  栏目id
+ * @param   string  $symbol 面包屑间隔符号
+ * @param   string  $url    是否显示URL
+ * @param   string  $html   格式替换
+ * @return  string
  */
 function catpos($catid, $symbol = ' > ', $url = true, $html = '') {
 	return dr_catpos($catid, $symbol, $url, $html);
