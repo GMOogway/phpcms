@@ -342,7 +342,9 @@ class check extends admin {
                     $this->db->query('ALTER TABLE `'.$this->db->table_name.'` ADD `ishtml` tinyint(1) unsigned NOT NULL DEFAULT \'1\' COMMENT \'首页静态\' AFTER `domain`');
                 }
                 if (!$this->db->field_exists('mobilemode')) {
-                    $this->db->query('ALTER TABLE `'.$this->db->table_name.'` ADD `mobilemode` tinyint(1) unsigned NOT NULL DEFAULT \'0\' COMMENT \'访问模式\' AFTER `ishtml`');
+                    $this->db->query('ALTER TABLE `'.$this->db->table_name.'` ADD `mobilemode` tinyint(1) NOT NULL DEFAULT \'0\' COMMENT \'访问模式\' AFTER `ishtml`');
+                } else {
+                    $this->db->query('ALTER TABLE `'.$this->db->table_name.'` CHANGE `mobilemode` `mobilemode` tinyint(1) NOT NULL default \'0\' COMMENT \'访问模式\';');
                 }
                 if (!$this->db->field_exists('mobileauto')) {
                     $this->db->query('ALTER TABLE `'.$this->db->table_name.'` ADD `mobileauto` tinyint(1) unsigned NOT NULL DEFAULT \'0\' COMMENT \'自动识别\' AFTER `mobilemode`');
@@ -355,6 +357,9 @@ class check extends admin {
                 }
                 if (!$this->db->field_exists('mobile_domain')) {
                     $this->db->query('ALTER TABLE `'.$this->db->table_name.'` ADD `mobile_domain` char(255) DEFAULT \'\' COMMENT \'手机域名\' AFTER `not_pad`');
+                }
+                if (!$this->db->field_exists('mobile_dirname')) {
+                    $this->db->query('ALTER TABLE `'.$this->db->table_name.'` ADD `mobile_dirname` char(255) DEFAULT \'\' COMMENT \'手机目录\' AFTER `mobile_domain`');
                 }
                 if (!$this->db->field_exists('style')) {
                     $this->db->query('ALTER TABLE `'.$this->db->table_name.'` ADD `style` varchar(5) NOT NULL COMMENT \'\' AFTER `setting`');

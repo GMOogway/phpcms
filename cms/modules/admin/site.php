@@ -3,7 +3,6 @@ defined('IN_CMS') or exit('No permission resources.');
 define('CACHE_MODEL_PATH',CACHE_PATH.'caches_model'.DIRECTORY_SEPARATOR.'caches_data'.DIRECTORY_SEPARATOR);
 pc_base::load_app_class('admin', 'admin', 0);
 pc_base::load_sys_class('form','',0);
-pc_base::load_sys_func('dir');
 class site extends admin {
 	private $db;
 	public function __construct() {
@@ -82,8 +81,19 @@ class site extends admin {
 			if (!empty($info['domain']) && $this->db->get_one(array('domain'=>$info['domain']), 'siteid')) {
 				dr_json(0, L('site_domain').L('exists'), array('field' => 'domain'));
 			}
-			if (!$info['mobilemode']) {
-				$info['mobile_domain'] = $info['domain'].'mobile/';
+			if ($info['mobilemode'] == -1) {
+				$info['mobilehtml'] = 0;
+				$info['mobile_dirname'] = $info['mobile_domain'] = '';
+			} elseif (!$info['mobilemode']) {
+				if (!isset($info['mobile_dirname']) || !$info['mobile_dirname']) {
+					$info['mobile_dirname'] = 'mobile';
+				}
+				// 生成手机目录
+				$rt = update_mobile_webpath(CMS_PATH.(isset($info['dirname']) && $info['dirname'] ? '/'.$info['dirname'].'/' : ''), $info['mobile_dirname'], $info['dirname']);
+				if ($rt) {
+					dr_json(0, L($rt));
+				}
+				$info['mobile_domain'] = $info['domain'].$info['mobile_dirname'].'/';
 			} else {
 				$info['mobile_domain'] = isset($info['mobile_domain']) && trim($info['mobile_domain']) ? trim($info['mobile_domain']) : dr_json(0, L('mobile_domain').L('empty'), array('field' => 'mobile_domain'));
 				if (!empty($info['mobile_domain']) && !preg_match('/http(s?):\/\/(.+)\/$/i', $info['mobile_domain'])) {
@@ -125,7 +135,7 @@ class site extends admin {
 			$class_site->set_cache();
 			$this->db->update($systeminfo,array('siteid'=>$siteid));
 			//建立目录
-			dir_create(CMS_PATH.$info['dirname']);
+			dr_mkdirs(CMS_PATH.$info['dirname']);
 			//创建入口文件
 			foreach (array(
 						 //'admin.php',
@@ -139,11 +149,11 @@ class site extends admin {
 					} else {
 						$dst = CMS_PATH.$info['dirname'].'/'.$file;
 					}
-					$fix_web_dir = isset($info['dirname']) && $info['dirname'] ? $info['dirname'] : '';
+					$fix_web_dir = isset($info['dirname']) && $info['dirname'] ? $info['dirname'].'/' : '';
                     if (strpos($file, 'mobile/') !== false) {
-                        $fix_web_dir .= '/mobile';
+                        $fix_web_dir .= $info['mobile_dirname'];
                     }
-					dir_create(dirname($dst));
+					dr_mkdirs(dirname($dst));
 					$size = file_put_contents($dst, str_replace(array(
 						'{CMS_PATH}',
 						'{SITE_ID}',
@@ -179,9 +189,9 @@ class site extends admin {
 	public function del() {
 		$siteid = $this->input->get('siteid') && intval($this->input->get('siteid')) ? intval($this->input->get('siteid')) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		if($siteid==1) dr_admin_msg(0,L('operation_failure'), HTTP_REFERER);
-		$sitelist = getcache('sitelist','commons');
-		if ($sitelist[$siteid]['dirname']) {
-			dir_delete(CMS_PATH.$sitelist[$siteid]['dirname']);
+		$sitelist = siteinfo($siteid);
+		if ($sitelist['dirname']) {
+			dr_dir_delete(CMS_PATH.$sitelist['dirname'], true);
 		}
 		if ($this->db->get_one(array('siteid'=>$siteid))) {
 			if ($this->db->delete(array('siteid'=>$siteid))) {
@@ -234,7 +244,7 @@ class site extends admin {
 	
 	public function edit() {
 		$siteid = $this->input->get('siteid') && intval($this->input->get('siteid')) ? intval($this->input->get('siteid')) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
-		$sitelist = getcache('sitelist','commons');
+		$sitelist = siteinfo($siteid);
 		if ($data = $this->db->get_one(array('siteid'=>$siteid))) {
 			if ($this->input->post('dosubmit')) {
 				$info = $this->input->post('info');
@@ -259,11 +269,11 @@ class site extends admin {
 					if ($data['dirname'] != $info['dirname'] && $this->db->get_one(array('dirname'=>$info['dirname']), 'siteid')) {
 						dr_json(0, L('site_dirname').L('exists'), array('field' => 'dirname'));
 					}
-				}
-				if ($sitelist[$siteid]['dirname']!=$info['dirname']) {
-					$state = rename(CMS_PATH.$sitelist[$siteid]['dirname'], CMS_PATH.$info['dirname']);
-					if (!$state) {
-						dr_json(0, L('重命名目录['.$sitelist[$siteid]['dirname'].']失败！'), array('field' => 'dirname'));
+					if ($sitelist['dirname']!=$info['dirname']) {
+						$state = rename(CMS_PATH.$sitelist['dirname'], CMS_PATH.$info['dirname']);
+						if (!$state) {
+							dr_json(0, L('重命名目录['.$sitelist['dirname'].']失败！'), array('field' => 'dirname'));
+						}
 					}
 				}
 				
@@ -273,8 +283,25 @@ class site extends admin {
 				if (!empty($info['domain']) && $data['domain'] != $info['domain'] && $this->db->get_one(array('domain'=>$info['domain']), 'siteid')) {
 					dr_json(0, L('site_domain').L('exists'), array('field' => 'domain'));
 				}
-				if (!$info['mobilemode']) {
-					$info['mobile_domain'] = $info['domain'].'mobile/';
+				if ($info['mobilemode'] == -1) {
+					$info['mobilehtml'] = 0;
+					$info['mobile_dirname'] = $info['mobile_domain'] = '';
+				} elseif (!$info['mobilemode']) {
+					if (!isset($info['mobile_dirname']) || !$info['mobile_dirname']) {
+						$info['mobile_dirname'] = 'mobile';
+					}
+					if ($siteid == 1) {
+						$nodir_arr = array('admin','api','caches','cms','html','login','statics','uploadfile');
+						if(in_array($info['mobile_dirname'],$nodir_arr)) {
+							dr_json(0, L('不能使用CMS默认目录名（admin，api，caches，cms，login，html，statics，uploadfile）'), array('field' => 'mobile_dirname'));
+						}
+					}
+					// 生成手机目录
+					$rt = update_mobile_webpath(CMS_PATH.(isset($info['dirname']) && $info['dirname'] ? '/'.$info['dirname'].'/' : ''), $info['mobile_dirname'], $info['dirname'], $siteid);
+					if ($rt) {
+						dr_json(0, L($rt));
+					}
+					$info['mobile_domain'] = $info['domain'].$info['mobile_dirname'].'/';
 				} else {
 					$info['mobile_domain'] = isset($info['mobile_domain']) && trim($info['mobile_domain']) ? trim($info['mobile_domain']) : dr_json(0, L('mobile_domain').L('empty'), array('field' => 'mobile_domain'));
 					if (!empty($info['mobile_domain']) && !preg_match('/http(s?):\/\/(.+)\/$/i', $info['mobile_domain'])) {
@@ -350,6 +377,7 @@ class site extends admin {
 				$setting = string2array($data['setting']);
 				$release_point_db = pc_base::load_model('release_point_model');
 				$release_point_list = $release_point_db->select('', 'id, name');
+				$is_tpl = is_file(TPLPATH.$data['default_style'].'/mobile/index.html');
 				include $this->admin_tpl('site_edit');
 			}
 		} else {
@@ -467,6 +495,38 @@ class site extends admin {
 		}
 
 		dr_json(1, L('绑定正常'));
+	}
+
+	/**
+	 * 测试目录模式的域名是否可用
+	 */
+	public function public_test_mobile_dir() {
+
+		$v = trim($this->input->get('v'));
+		$siteid = intval($this->input->get('siteid'));
+		$sitelist = siteinfo($siteid);
+		if (!$v) {
+			dr_json(0, L('目录不能为空'));
+		} elseif (strpos($v, '/') !== false) {
+			dr_json(0, L('目录不能包含/符号'));
+		} elseif (!function_exists('stream_context_create')) {
+			dr_json(0, '函数没有被启用：stream_context_create');
+		}
+
+		// 生成手机目录
+		$rt = update_mobile_webpath(CMS_PATH.($sitelist['dirname'] ? '/'.$sitelist['dirname'].'/' : ''), $v, $sitelist['dirname'], $siteid);
+		if ($rt) {
+			dr_json(0, L($rt));
+		}
+
+		$url = $sitelist['domain'].($sitelist['dirname'] ? '/'.$sitelist['dirname'].'/' : '').$v . '/api.php';
+
+		$code = dr_catcher_data($url, 5);
+		if ($code != 'cms ok') {
+			dr_json(0, '['.$v.']目录绑定异常，无法访问：' . $url . '，可以尝试手动访问此地址，如果提示cms ok就表示成功');
+		}
+
+		dr_json(1, L('目录正常'));
 	}
 
 	// 验证域名

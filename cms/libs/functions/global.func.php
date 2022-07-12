@@ -458,6 +458,30 @@ function dr_get_dir_path($path) {
 	}
 }
 
+// 生成目录式手机目录
+function update_mobile_webpath($path, $mobile_dirname, $dirname, $siteid = 0) {
+	$nodir_arr = array('admin','api','caches','cms','html','login','statics','uploadfile');
+	if($siteid==1 && in_array($mobile_dirname,$nodir_arr)) {
+		return '不能使用CMS默认目录名（admin，api，caches，cms，login，html，statics，uploadfile）！';
+	}
+	foreach (array('api.php', 'index.php') as $file) {
+		if (is_file(TEMPPATH.'web/mobile/'.$file)) {
+			$dst = $path.$mobile_dirname.'/'.$file;
+			dr_mkdirs(dirname($dst));
+			$fix_web_dir = (isset($dirname) && $dirname ? $dirname.'/' : '').$mobile_dirname;
+			$size = file_put_contents($dst, str_replace(array(
+				'{FIX_WEB_DIR}'
+			), array(
+				$fix_web_dir
+			), file_get_contents(TEMPPATH.'web/mobile/'.$file)));
+			if (!$size) {
+				return '文件['.$dst.']无法写入';
+			}
+		}
+	}
+	return;
+}
+
 /**
  * 上传移动文件
  */
@@ -4423,6 +4447,27 @@ function format_create_sql($sql) {
 function dr_get_domain_name($url) {
 	list($url) = explode(':', str_replace(array('https://', 'http://', '/'), '', $url));
 	return $url;
+}
+
+/**
+ * 按百分比分割数组
+ * @param $data 数组
+ * @return 将数组按百分比等分划分
+ */
+function dr_save_bfb_data($data) {
+	$cache = array();
+	$count = dr_count($data);
+	if ($count > 100) {
+		$pagesize = ceil($count/100);
+		for ($i = 1; $i <= 100; $i ++) {
+			$cache[$i] = array_slice($data, ($i - 1) * $pagesize, $pagesize);
+		}
+	} else {
+		for ($i = 1; $i <= $count; $i ++) {
+			$cache[$i] = array_slice($data, ($i - 1), 1);
+		}
+	}
+	return $cache;
 }
 
 /**

@@ -23,18 +23,7 @@ class check_bom extends admin {
         $this->_file_map(CACHE_PATH);
         $this->_file_map(PC_PATH);
 
-        $cache = array();
-        $count = $this->phpfile ? count($this->phpfile) : 0;
-        if ($count > 100) {
-            $pagesize = ceil($count/100);
-            for ($i = 1; $i <= 100; $i ++) {
-                $cache[$i] = array_slice($this->phpfile, ($i - 1) * $pagesize, $pagesize);
-            }
-        } else {
-            for ($i = 1; $i <= $count; $i ++) {
-                $cache[$i] = array_slice($this->phpfile, ($i - 1), 1);
-            }
-        }
+        $cache = dr_save_bfb_data($this->phpfile);
 
         // 存储文件
         setcache('check-index', $cache, 'commons');

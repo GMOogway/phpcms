@@ -616,6 +616,9 @@ class create_html extends admin {
 			$row['ishtml'] = $v;
 			$this->site_db->update(array('ishtml' => $row['ishtml']),array('siteid'=>$this->siteid));
 		} else {
+			if ($row['mobilemode'] == -1) {
+				dr_json(0, L('关闭手机端'));
+			}
 			$html = (int)$row['mobilehtml'];
 			$v = $html ? 0 : 1;
 			$row['mobilehtml'] = $v;
@@ -623,7 +626,7 @@ class create_html extends admin {
 		}
 		$this->cache_site = pc_base::load_app_class('sites', 'admin');
 		$this->cache_site->set_cache();
-		dr_json(1, L($v ? '静态模式' : '动态模式'), array('value' => $v, 'share' => 1));
+		dr_json(1, L($v ? ($share ? '静态模式' : '移动端与PC端URL同步') : '动态模式'), array('value' => $v, 'share' => 1));
 	}
 	public function public_rule_edit() {
 		$show_header = $show_dialog  = true;

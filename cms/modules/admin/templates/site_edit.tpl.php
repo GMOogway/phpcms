@@ -53,14 +53,19 @@ include $this->admin_tpl('header');
     <th width="120"><?php echo L('access_mode')?>：</th>
     <td class="y-bg">
       <div class="mt-radio-inline">
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilemode]" value="0" onclick="$('.dr_mode').hide();"<?php if(!$data['mobilemode']) echo ' checked';?>> <?php echo L('directory_mode');?> <span></span></label>
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilemode]" value="1" onclick="$('.dr_mode').show();"<?php if($data['mobilemode']) echo ' checked';?>> <?php echo L('domain_mode');?> <span></span></label>
+        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilemode]" value="-1" onclick="$('.dr_zsy').hide();$('.dr_mode_0').hide();$('.dr_mode_1').hide();"<?php if($data['mobilemode']==-1) echo ' checked';?>> <?php echo L('close_mode');?> <span></span></label>
+        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilemode]" value="0" onclick="$('.dr_zsy').show();$('.dr_mode_0').show();$('.dr_mode_1').hide();"<?php if(!$data['mobilemode']) echo ' checked';?>> <?php echo L('directory_mode');?> <span></span></label>
+        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilemode]" value="1" onclick="$('.dr_zsy').show();$('.dr_mode_0').hide();$('.dr_mode_1').show();"<?php if($data['mobilemode']==1) echo ' checked';?>> <?php echo L('domain_mode');?> <span></span></label>
       </div>
     </td>
   </tr>
-  <tr class="dr_mode"<?php if(!$data['mobilemode']) echo ' style="display: none"';?>>
+  <tr id="dr_row_mobile_dirname" class="dr_mode_0"<?php if($data['mobilemode']!=0) echo ' style="display: none"';?>>
+    <th><?php echo L('mobile_dirname')?>：</th>
+    <td class="y-bg"><label><input type="text" class="input-text" name="info[mobile_dirname]" id="mobile_dirname" size="70" value="<?php echo (isset($data['mobile_dirname']) && $data['mobile_dirname'] ? htmlspecialchars($data['mobile_dirname']) : 'mobile')?>" /></label> <button type="button" onclick="javascript:dr_test_dir('mobile_dirname');" class="button"> <i class="fa fa-send"></i> <?php echo L('build_directory')?></button><div id="dr_dir_error" style="color: red;display: none"></div><br><?php echo L('mobile_dirname_desc')?></td>
+  </tr>
+  <tr id="dr_row_mobile_domain" class="dr_mode_1"<?php if($data['mobilemode']!=1) echo ' style="display: none"';?>>
     <th><?php echo L('mobile_domain')?>：</th>
-    <td class="y-bg"><label><input type="text" class="input-text" name="info[mobile_domain]" id="mobile_domain" size="70" value="<?php if($data['mobilemode']) echo $data['mobile_domain']?>" /></label> <button type="button" onclick="dr_test_domain('mobile_domain','mobile');" class="button"> <i class="fa fa-send"></i> <?php echo L('测试')?></button><div id="dr_mobile_domian_error" style="color: red;display: none"></div></td>
+    <td class="y-bg"><label><input type="text" class="input-text" name="info[mobile_domain]" id="mobile_domain" size="70" value="<?php if($data['mobilemode']==1) echo htmlspecialchars($data['mobile_domain'])?>" /></label> <button type="button" onclick="dr_test_domain('mobile_domain','mobile');" class="button"> <i class="fa fa-send"></i> <?php echo L('测试')?></button><div id="dr_mobile_domian_error" style="color: red;display: none"></div></td>
   </tr>
   <tr>
     <th><?php echo L('mobile_auto')?>：</th>
@@ -71,7 +76,7 @@ include $this->admin_tpl('header');
       </div>
     </td>
   </tr>
-  <tr>
+  <tr class="dr_zsy"<?php if($data['mobilemode']==-1) echo ' style="display: none"';?>>
     <th><?php echo L('html_mobile')?>：</th>
     <td class="y-bg">
       <div class="mt-radio-inline">
@@ -80,7 +85,7 @@ include $this->admin_tpl('header');
       </div>
     </td>
   </tr>
-  <tr>
+  <tr class="dr_zsy"<?php if($data['mobilemode']==-1) echo ' style="display: none"';?>>
     <th><?php echo L('mobile_not_pad')?>：</th>
     <td class="y-bg">
       <div class="mt-radio-inline">
@@ -89,10 +94,16 @@ include $this->admin_tpl('header');
       </div>
     </td>
   </tr>
-  <tr>
+  <tr class="dr_zsy"<?php if($data['mobilemode']==-1) echo ' style="display: none"';?>>
     <th><?php echo L('mobile_template')?>：</th>
-    <td class="y-bg"><?php echo L('mobile_template_style')?></td>
+    <td class="y-bg"><?php if (IS_DEV) {echo L(TPLPATH.$data['default_style'].'/mobile/index.html');} else {echo L('mobile_template_style');}?></td>
   </tr>
+  <?php if (!$is_tpl) {?>
+  <tr>
+    <th><?php echo L('template_tip')?>：</th>
+    <td class="y-bg" style="color:red"><?php echo L('template_tip_desc')?></td>
+  </tr>
+  <?php }?>
 </table>
 </fieldset>
 <div class="bk10"></div>
@@ -448,22 +459,39 @@ function dr_preview() {
 	diag.show();
 }
 function dr_test_domain(id,name) {
-        $('#dr_'+name+'_domian_error').html('正在测试中...');
-        $('#dr_'+name+'_domian_error').show();
-        $.ajax({type: 'GET',dataType:'json', url: '?m=admin&c=site&a=public_test_'+name+'_domain&siteid=<?php echo $data['siteid']?>&v='+encodeURIComponent($('#'+id).val()),
-            success: function(json) {
-                if (json.code) {
-                    dr_tips(json.code, json.msg);
-                    $('#dr_'+name+'_domian_error').hide();
-                } else {
-                    $('#dr_'+name+'_domian_error').html(json.msg);
-                }
-            },
-            error: function(HttpRequest, ajaxOptions, thrownError) {
-                dr_ajax_admin_alert_error(HttpRequest, ajaxOptions, thrownError)
-            }
-        });
-    }
+	$('#dr_'+name+'_domian_error').html('正在测试中...');
+	$('#dr_'+name+'_domian_error').show();
+	$.ajax({type: 'GET',dataType:'json', url: '?m=admin&c=site&a=public_test_'+name+'_domain&siteid=<?php echo $data['siteid']?>&v='+encodeURIComponent($('#'+id).val()),
+		success: function(json) {
+			if (json.code) {
+				dr_tips(json.code, json.msg);
+				$('#dr_'+name+'_domian_error').hide();
+			} else {
+				$('#dr_'+name+'_domian_error').html(json.msg);
+			}
+		},
+		error: function(HttpRequest, ajaxOptions, thrownError) {
+			dr_ajax_admin_alert_error(HttpRequest, ajaxOptions, thrownError)
+		}
+	});
+}
+function dr_test_dir(id) {
+	$('#dr_dir_error').html('正在测试中...');
+	$('#dr_dir_error').show();
+	$.ajax({type: 'GET',dataType:'json', url: '?m=admin&c=site&a=public_test_mobile_dir&siteid=<?php echo $siteid?>&v='+encodeURIComponent($('#'+id).val()),
+		success: function(json) {
+			if (json.code) {
+				dr_tips(json.code, json.msg);
+				$('#dr_dir_error').hide();
+			} else {
+				$('#dr_dir_error').html(json.msg);
+			}
+		},
+		error: function(HttpRequest, ajaxOptions, thrownError) {
+			dr_ajax_admin_alert_error(HttpRequest, ajaxOptions, thrownError)
+		}
+	});
+}
 $(function(){
     $("#wm_font_color").minicolors({
         control: $(this).attr('data-control') || 'hue',

@@ -94,18 +94,7 @@ class database extends admin {
 					$this->query($sql);
 					dr_dir_delete($dir, true);
 					/*$sqls = $this->sql_split($sql);
-					$cache = array();
-					$count = dr_count($sqls);
-					if ($count > 100) {
-						$pagesize = ceil($count/100);
-						for ($i = 1; $i <= 100; $i ++) {
-							$cache[$i] = array_slice($sqls, ($i - 1) * $pagesize, $pagesize);
-						}
-					} else {
-						for ($i = 1; $i <= $count; $i ++) {
-							$cache[$i] = array_slice($sqls, ($i - 1), 1);
-						}
-					}
+					$cache = dr_save_bfb_data($sqls);
 					// 存储文件
 					$this->cache->del_auth_data('db-todo-'.$action);
 					$this->cache->set_auth_data('db-todo-'.$action, $cache);
@@ -296,18 +285,7 @@ class database extends admin {
 		if (!$ids) {
 			dr_json(0, L('database_no_table'));
 		}
-		$cache = array();
-		$count = dr_count($ids);
-		if ($count > 100) {
-			$pagesize = ceil($count/100);
-			for ($i = 1; $i <= 100; $i ++) {
-				$cache[$i] = array_slice($ids, ($i - 1) * $pagesize, $pagesize);
-			}
-		} else {
-			for ($i = 1; $i <= $count; $i ++) {
-				$cache[$i] = array_slice($ids, ($i - 1), 1);
-			}
-		}
+		$cache = dr_save_bfb_data($ids);
 		// 存储文件
 		setcache('db-todo-'.$operation, $cache, 'commons');
 		dr_json(1, 'ok', array('url' => '?m=admin&c=database&a=public_count_index&operation='.$operation));
