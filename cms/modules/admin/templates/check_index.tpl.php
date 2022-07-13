@@ -1,12 +1,6 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');?>
-<style type="text/css">
-.progress {border: 0;background-image: none;filter: none;-webkit-box-shadow: none;-moz-box-shadow: none;box-shadow: none;}
-.progress {height: 20px;background-color: #fff;border-radius: 4px;}
-.progress-bar-success {background-color: #3ea9e2;}
-.badge-success {background-color: #36c6d3;}
-</style>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>jquery.slimscroll.min.js"></script>
 <div class="page-container" style="margin-bottom: 0px !important;">
     <div class="page-content-wrapper">

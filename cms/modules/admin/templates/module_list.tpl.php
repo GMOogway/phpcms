@@ -1,8 +1,6 @@
 <?php 
 defined('IS_ADMIN') or exit('No permission resources.');
-$show_dialog = 1; 
-include $this->admin_tpl('header', 'admin');
-?>
+$show_dialog = 1;include $this->admin_tpl('header', 'admin');?>
 <div class="page-container" style="margin-bottom: 0px !important;">
     <div class="page-content-wrapper">
         <div class="page-content page-content3 mybody-nheader main-content  ">
