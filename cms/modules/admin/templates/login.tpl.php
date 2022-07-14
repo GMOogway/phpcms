@@ -59,7 +59,7 @@
                                 </div>
                                 <?php }?>
                                 <div class="layui-form-item">
-                                    <button type="button" id="kt_sign_in_submit" class="layui-btn btn-submit btn-blog">
+                                    <button type="button" id="kt_sign_in_submit" class="layui-btn layui-btn-fluid">
                                         <span class="indicator-label">立即登录</span>
                                         <span class="indicator-progress">请求中...<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
                                     </button>
