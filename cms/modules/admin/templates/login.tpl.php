@@ -132,7 +132,6 @@ KTUtil.onDOMContentLoaded((function() {
                     });
                 } else {
                     <?php if (!$sysadmincode) {?>
-                    $('#captcha').val('');
                     $('#code_img').trigger('click');
                     <?php }?>
                     Swal.fire({
@@ -152,7 +151,6 @@ KTUtil.onDOMContentLoaded((function() {
                 e.removeAttribute("data-kt-indicator");
                 e.disabled = false;
                 <?php if (!$sysadmincode) {?>
-                $('#captcha').val('');
                 $('#code_img').trigger('click');
                 <?php }?>
                 var msg = HttpRequest.responseText;
