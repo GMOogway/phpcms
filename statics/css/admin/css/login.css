@@ -10,7 +10,7 @@ html,body,form {width: 100%;height: 100%;}
 .beg-login-main .layui-form-item {position: relative;}
 .beg-login-main .layui-form-item .beg-login-icon {position: absolute;color: #cccccc;top: 10px;left: 10px;}
 .beg-login-main .layui-form-item input {padding-left: 34px;}
-.beg-login-box footer {padding:10px 10px 0 10px;}
+.beg-login-box footer {padding:10px;word-wrap:break-word;}
 .btn-blog{width: 100%;}
 .beg-clear {clear: both;}
 .beg-login-code-box { position: relative;padding: 10px;}
