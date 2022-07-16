@@ -3466,7 +3466,7 @@ function dr_catpos($catid, $symbol = ' > ', $url = true, $html = '') {
 		if ($id && $cat[$id] && $setting['iscatpos'] && !$setting['disabled']) {
 			$murl = $cat[$id]['url'];
 			if(strpos($murl, '://') === false) $murl = $siteurl.$murl;
-			$name[] = $url ? ($html ? str_replace(array('[url]', '[name]'), array($murl, $cat[$id]['catname']), $html) : '<a href=".'.$murl.'">'.$cat[$id]['catname'].'</a>') : $cat[$id]['catname'];
+			$name[] = $url ? ($html ? str_replace(array('[url]', '[name]'), array($murl, $cat[$id]['catname']), $html) : '<a href="'.$murl.'">'.$cat[$id]['catname'].'</a>') : $cat[$id]['catname'];
 		}
 	}
 	return implode($symbol, array_unique($name));
