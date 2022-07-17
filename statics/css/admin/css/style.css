@@ -739,7 +739,7 @@ body .showMsg .bottom{padding: 10px;text-align: center;border-top: 1px solid #E9
 .form-horizontal .form-group .mt-checkbox-inline,.form-horizontal .form-group .mt-radio-inline {padding-top: 8px}
 .mt-checkbox-inline .mt-checkbox,.mt-checkbox-inline .mt-radio,.mt-radio-inline .mt-checkbox,.mt-radio-inline .mt-radio {display: inline-block;margin-right: 15px}
 .mt-checkbox-inline .mt-checkbox:last-child,.mt-checkbox-inline .mt-radio:last-child,.mt-radio-inline .mt-checkbox:last-child,.mt-radio-inline .mt-radio:last-child {margin-right: 0}
-.fileinput-button {position: relative;overflow: hidden;display: inline-block;}
+.fileinput-button {position: relative;overflow: hidden;display: inline-block;margin-bottom: 3px;}
 .fileinput-button input {position: absolute;top: 0;right: 0;margin: 0;opacity: 0;-ms-filter: 'alpha(opacity=0)';font-size: 200px;direction: ltr;cursor: pointer;}
 .help-block {margin-top: 5px;margin-bottom: 5px;display: block;color: #737373;}
 .mt-table>span {top: 2px;height: 15px;width: 15px;}
