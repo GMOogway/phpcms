@@ -158,7 +158,7 @@ $(function () {
                             <tbody>
                             <tr>
                                 <td>系统版本</td>
-                                <?php $menu_data = $this->menu_db->get_one(array('name' => 'version_update', 'm' => 'admin', 'c' => 'cloud', 'a' => 'init'));?>
+                                <?php $menu_data = $this->menu_db->get_one(array('name' => 'my_website', 'm' => 'admin', 'c' => 'cloud', 'a' => 'init'));?>
                                 <td><a href="javascript:;" layuimini-content-href="?m=admin&c=cloud&a=init&menuid=<?php echo $menu_data['id']?>&pc_hash=<?php echo dr_get_csrf_token();?>" data-title="我的网站" data-icon="fa fa-cog"><i class="fa fa-cog"></i> Cms <?php echo CMS_VERSION?> [<?php echo CMS_RELEASE?>]</a><a id="dr_cms_update" href="javascript:;" layuimini-content-href="?m=admin&c=cloud&a=upgrade&menuid=277&pc_hash=<?php echo dr_get_csrf_token()?>" data-title="版本升级" data-icon="fa fa-refresh" style="display: none" class="badge badge-danger badge-roundless ml10">  </a></td>
                             </tr>
                             <script>
