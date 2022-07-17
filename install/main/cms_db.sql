@@ -589,7 +589,7 @@ CREATE TABLE `cms_member` (
 DROP TABLE IF EXISTS `cms_member_detail`;
 CREATE TABLE `cms_member_detail` (
   `userid` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `birthday` date DEFAULT NULL,
+  `birthday` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '生日',
   UNIQUE KEY `userid` (`userid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
