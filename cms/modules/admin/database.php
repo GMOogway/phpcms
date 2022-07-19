@@ -56,56 +56,6 @@ class database extends admin {
 					dr_json(0, L($e->getMessage()));
 				}
 				dr_json(1, L('bakup_succ'));
-			} elseif ($action == 'restore') {
-				if(ADMIN_FOUNDERS && !dr_in_array($this->userid, ADMIN_FOUNDERS)) {
-					dr_json(0, L('only_fonder_operation'));
-				}
-				if (!preg_match("/^backup\-((?!\").)*\.zip$/i", $file)) {
-					dr_json(0, L('参数不正确'));
-				}
-				$file = $backupDir.$file;
-				if (!class_exists('ZipArchive')) {
-					dr_json(0, L('服务器缺少php-zip组件，无法进行还原操作'));
-				}
-				try {
-					$dir = $backupDir.'database/';
-					if (!is_dir($dir)) {
-						create_folder($dir, 0755);
-					}
-					$zip = new \ZipArchive;
-					if ($zip->open($file) !== true) {
-						dr_json(0, L('无法打开备份文件'));
-					}
-					if (!$zip->extractTo($dir)) {
-						$zip->close();
-						dr_json(0, L('无法解压备份文件'));
-					}
-					$zip->close();
-					$filename = basename($file);
-					$sqlFile = $dir . str_replace('.zip', '.sql', $filename);
-					if (!is_file($sqlFile)) {
-						dr_json(0, L('未找到SQL文件'));
-					}
-					$sql = file_get_contents($sqlFile);
-					$this->db = db_factory::get_instance($database)->get_database('default');
-					$database = $database['default'];
-					$this->db_charset = $database['charset'];
-					$this->db_tablepre = $database['tablepre'];
-					$this->query($sql);
-					dr_dir_delete($dir, true);
-					/*$sqls = $this->sql_split($sql);
-					$cache = dr_save_bfb_data($sqls);
-					// 存储文件
-					$this->cache->del_auth_data('db-todo-'.$action);
-					$this->cache->set_auth_data('db-todo-'.$action, $cache);
-					dr_dir_delete($dir, true);
-					dr_json(1, 'ok', array('url' => '?m=admin&c=database&a=public_import_index&action='.$action));*/
-				} catch (Exception $e) {
-					dr_json(0, L($e->getMessage()));
-				} catch (PDOException $e) {
-					dr_json(0, L($e->getMessage()));
-				}
-				dr_json(1, L('还原成功'));
 			} elseif ($action == 'download') {
 				if(ADMIN_FOUNDERS && !dr_in_array($this->userid, ADMIN_FOUNDERS)) {
 					dr_json(0, L('only_fonder_operation'));
@@ -165,41 +115,6 @@ class database extends admin {
 			include $this->admin_tpl('database_import');
 		}
 	}
-	
-	public function public_import_index() {
-		$show_header = true;
-		$action = $this->input->get('action');
-		$todo_url = '?m=admin&c=database&a=public_todo_import&action='.$action;
-		include $this->admin_tpl('database_bfb');
-    }
-	
-	public function public_todo_import() {
-		$show_header = true;
-		$action = $this->input->get('action');
-		$page = max(1, intval($this->input->get('page')));
-		$cache = $this->cache->get_auth_data('db-todo-'.$action);
-		if (!$cache) {
-			dr_json(0, L('未找到SQL数据'));
-		}
-		$data = $cache[$page];
-		if ($data) {
-			$html = '';
-			foreach ($data as $table) {
-				$ok = L('database_success');
-				$class = '';
-				switch ($action) {
-					case 'restore':
-						$this->query($table);
-						break;
-				}
-				$html.= '<p class="'.$class.'"><label class="rleft">'.$table.'</label><label class="rright">'.$ok.'</label></p>';
-			}
-			dr_json($page + 1, $html);
-		}
-		// 完成
-		$this->cache->del_auth_data('db-todo-'.$action);
-		dr_json(100, '');
-    }
 	
 	/**
 	 * 备份文件下载
@@ -277,6 +192,7 @@ class database extends admin {
 		}
 		return array('cmstables'=>$cms, 'othertables'=>$other);
 	}
+
 	// 批量操作
 	public function public_add() {
 		$show_header = true;
@@ -289,14 +205,14 @@ class database extends admin {
 		// 存储文件
 		setcache('db-todo-'.$operation, $cache, 'commons');
 		dr_json(1, 'ok', array('url' => '?m=admin&c=database&a=public_count_index&operation='.$operation));
-    }
+	}
 	
 	public function public_count_index() {
 		$show_header = true;
 		$operation = $this->input->get('operation');
 		$todo_url = '?m=admin&c=database&a=public_todo_index&operation='.$operation;
 		include $this->admin_tpl('database_bfb');
-    }
+	}
 	
 	public function public_todo_index() {
 		$show_header = true;
@@ -347,70 +263,6 @@ class database extends admin {
 		// 完成
 		delcache('db-todo-'.$operation, 'commons');
 		dr_json(100, '');
-    }
-	
- 	private function sql_split($sql) {
-		$database = pc_base::load_config('database');
-		$database = $database['default'];
-		$db_tablepre = $database['tablepre'];
-		$sql = str_replace('phpcms_', 'cms_', $sql);
-		if($db_tablepre != "cms_") $sql = str_replace("`cms_", '`'.$db_tablepre, $sql);
-		$sql = str_replace("\r", "\n", $sql);
-		$ret = array();
-		$num = 0;
-		$queriesarray = explode(";\n", trim($sql));
-		unset($sql);
-		foreach($queriesarray as $query) {
-			$ret[$num] = '';
-			$queries = explode("\n", trim($query));
-			$queries = array_filter($queries);
-			foreach($queries as $query) {
-				$str1 = substr($query, 0, 1);
-				if($str1 != '#' && $str1 != '-') $ret[$num] .= $query;
-			}
-			$num++;
-		}
-		return($ret);
-	}
-	
-	// 数据执行
-	private function query($sql) {
-		$database = pc_base::load_config('database');
-		$database = $database['default'];
-		$db_tablepre = $database['tablepre'];
-		$sql = str_replace('phpcms_', 'cms_', $sql);
-		if($db_tablepre != "cms_") $sql = str_replace("`cms_", '`'.$db_tablepre, $sql);
-		$this->db = db_factory::get_instance($database)->get_database('default');
-
-		if (!$sql) {
-			return '';
-		}
-
-		$sql_data = explode(';SQL_CMS_EOL', trim(str_replace(array(PHP_EOL, chr(13), chr(10)), 'SQL_CMS_EOL', $sql)));
-
-		$count = 0;
-		$this->db->query('BEGIN');
-		foreach($sql_data as $query){
-			if (!$query) {
-				continue;
-			}
-			$ret = '';
-			$queries = explode('SQL_CMS_EOL', trim($query));
-			foreach($queries as $query) {
-				$ret.= $query[0] == '#' || $query[0].$query[1] == '--' ? '' : $query;
-			}
-			if (!$ret) {
-				continue;
-			}
-			if ($this->db->query(format_create_sql($ret))) {
-				if($count%100==0){
-					$this->db->query('COMMIT');
-					$this->db->query('BEGIN');
-				}
-				$count ++;
-			}
-		}
-		$this->db->query('COMMIT');
 	}
 }
 ?>

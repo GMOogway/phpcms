@@ -119,10 +119,10 @@ $(function() {
             btn: ['确定', '取消'],
             skin: 'layui-layer-dialog layui-layer-fast'
         }, function (index) {
-            //$('#file').val($(that).attr('data-file'));
-            //dr_db_submit('<?php echo L('还原')?>', 'myform', '<?php echo SELF;?>?m=admin&c=database&a=import&pc_hash='+pc_hash+'');
+            $('#file').val($(that).attr('data-file'));
+            dr_db_submit('<?php echo L('还原')?>', 'myform', '<?php echo WEB_PATH;?>index.php?m=content&c=database&a=import&pc_hash='+pc_hash+'');
             // 延迟加载
-            var loading = layer.load(2, {
+            /*var loading = layer.load(2, {
                 shade: [0.3,'#fff'], //0.1透明度的白色背景
                 time: 100000000
             });
@@ -155,7 +155,7 @@ $(function() {
                 error: function(HttpRequest, ajaxOptions, thrownError) {
                     dr_ajax_alert_error(HttpRequest, ajaxOptions, thrownError)
                 }
-            });
+            });*/
         });
     });
     $(document).on("click", ".btn-delete", function () {
