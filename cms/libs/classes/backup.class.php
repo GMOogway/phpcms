@@ -127,9 +127,8 @@ class backup {
                     foreach ($this->db->query("SELECT * FROM " . $table) AS $data) {
                         # COUNT
                         $c++;
-                        /** ** ** ** ** **/
-                        # MYSQL DUMP: Insert into each table
-                        /*$sqldump .= "INSERT INTO `" . $table . "` (";
+                        $sqldump .= "REPLACE INTO `" . $table . "`";
+                        /*$sqldump .= " (";
                         # ARRAY
                         $rows = Array();
                         # LOOP: Get the tables
@@ -137,8 +136,8 @@ class backup {
                             $rows[] = "`" . $row[0] . "`";
                         }
                         $sqldump .= implode(', ', $rows);
-                        $sqldump .= ") VALUES(";*/
-                        $sqldump .= "INSERT INTO `" . $table . "` VALUES(";
+                        $sqldump .= ")";*/
+                        $sqldump .= " VALUES(";
                         # ARRAY
                         $cdata = Array();
                         # LOOP
@@ -206,9 +205,8 @@ class backup {
                     foreach ($this->db->query("SELECT * FROM " . $table[0]) AS $data) {
                         # COUNT
                         $c++;
-                        /** ** ** ** ** **/
-                        # MYSQL DUMP: Insert into each table
-                        /*$sqldump .= "INSERT INTO `" . $table[0] . "` (";
+                        $sqldump .= "REPLACE INTO `" . $table[0] . "`";
+                        /*$sqldump .= " (";
                         # ARRAY
                         $rows = Array();
                         # LOOP: Get the tables
@@ -216,8 +214,8 @@ class backup {
                             $rows[] = "`" . $row[0] . "`";
                         }
                         $sqldump .= implode(', ', $rows);
-                        $sqldump .= ") VALUES(";*/
-                        $sqldump .= "INSERT INTO `" . $table[0] . "` VALUES(";
+                        $sqldump .= ")";*/
+                        $sqldump .= " VALUES(";
                         # ARRAY
                         $cdata = Array();
                         # LOOP
