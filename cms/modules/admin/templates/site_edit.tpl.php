@@ -9,8 +9,6 @@ include $this->admin_tpl('header');
 //-->
 </script>
 <link href="<?php echo JS_PATH?>layui/css/layui.css" rel="stylesheet" type="text/css" />
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>formvalidator.js" charset="UTF-8"></script>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>formvalidatorregex.js" charset="UTF-8"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>content_addtop.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>hotkeys.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>cookie.js"></script>

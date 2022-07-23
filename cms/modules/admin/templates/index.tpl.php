@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
+<meta charset="<?php echo CHARSET;?>">
 <title><?php echo L('admin_site_title')?></title>
 <meta name="author" content="zhaoxunzhiyin" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -10,11 +10,11 @@
 <link rel="stylesheet" href="<?php echo JS_PATH?>layui/css/layui.css" media="all">
 <link rel="stylesheet" href="<?php echo CSS_PATH?>layuimini/css/layuimini.css" media="all">
 <link rel="stylesheet" href="<?php echo CSS_PATH?>layuimini/css/themes/default.css" media="all">
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>Dialog/main.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>styleswitch.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>dialog.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>hotkeys.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>jquery.sgallery.js"></script>
+<script type="text/javascript" src="<?php echo JS_PATH?>Dialog/main.js"></script>
+<script type="text/javascript" src="<?php echo JS_PATH?>styleswitch.js"></script>
+<script type="text/javascript" src="<?php echo JS_PATH?>dialog.js"></script>
+<script type="text/javascript" src="<?php echo JS_PATH?>hotkeys.js"></script>
+<script type="text/javascript" src="<?php echo JS_PATH?>jquery.sgallery.js"></script>
 <script src="<?php echo JS_PATH?>jquery.backstretch.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 var is_admin = 0;
@@ -24,9 +24,9 @@ if (top.location!=self.location){
 top.location="<?php echo SELF;?>";
 }
 </script>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>admin_common.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>jquery.nicescroll.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>layer/layer.js"></script>
+<script type="text/javascript" src="<?php echo JS_PATH?>admin_common.js"></script>
+<script type="text/javascript" src="<?php echo JS_PATH?>jquery.nicescroll.js"></script>
+<script type="text/javascript" src="<?php echo JS_PATH?>layer/layer.js"></script>
 <!--[if lt IE 9]>
 <script src="<?php echo CSS_PATH?>layuimini/js/html5.min.js"></script>
 <script src="<?php echo CSS_PATH?>layuimini/js/respond.min.js"></script>

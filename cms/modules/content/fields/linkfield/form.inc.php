@@ -105,7 +105,7 @@
 				<ul id="search_div{$field}"></ul>
 				<ul id="search_view{$field}" class="list-dot">{$multiple_field_value}</ul>
 			</div>
-			<script type="text/javascript" language="javascript" >
+			<script type="text/javascript" language="javascript">
 				var str_title = '{$multiple_field_value_escape}';
 				var data_json = eval({$data_json});
 				function remove_serach{$field}(title,id){

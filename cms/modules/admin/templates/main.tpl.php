@@ -3,7 +3,7 @@ defined('IS_ADMIN') or exit('No permission resources.');?>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
+<meta charset="<?php echo CHARSET;?>">
 <title><?php echo L('website_manage');?></title>
 <meta name="author" content="zhaoxunzhiyin" />
 <meta name="renderer" content="webkit">

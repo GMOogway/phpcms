@@ -1,7 +1,8 @@
 <?php defined('IS_ADMIN') or exit('No permission resources.');?>
 <!DOCTYPE html>
+<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=<?php echo CHARSET;?>" />
+<meta charset="<?php echo CHARSET;?>">
 <title><?php echo L('website_manage');?></title>
 <meta name="author" content="zhaoxunzhiyin" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -10,12 +11,13 @@
 <link href="<?php echo CSS_PATH?>admin/css/style.css" rel="stylesheet" type="text/css" />
 <link href='<?php echo CSS_PATH?>bootstrap-tagsinput.css' rel='stylesheet' type='text/css' />
 <link href="<?php echo CSS_PATH?>table_form.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo CSS_PATH?>admin/css/my.css" rel="stylesheet" type="text/css" />
 <?php
 if(!$this->get_siteid()) dr_admin_msg(0,L('admin_login'),'?m=admin&c=index&a='.SYS_ADMIN_PATH);
 if(isset($show_dialog)) {?>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>dialog.js"></script>
+<script type="text/javascript" src="<?php echo JS_PATH?>dialog.js"></script>
 <?php } ?>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>Dialog/main.js"></script>
+<script type="text/javascript" src="<?php echo JS_PATH?>Dialog/main.js"></script>
 <script type="text/javascript" src="<?php echo CSS_PATH?>bootstrap/js/bootstrap.min.js"></script>
 <script src='<?php echo JS_PATH?>bootstrap-tagsinput.min.js' type='text/javascript'></script>
 <script type="text/javascript">
@@ -28,12 +30,13 @@ var is_admin = 1;
 var pc_hash = '<?php echo dr_get_csrf_token();?>';
 var csrf_hash = '<?php echo csrf_hash();?>';
 </script>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>admin_common.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>styleswitch.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>layer/layer.js"></script>
+<script type="text/javascript" src="<?php echo JS_PATH?>admin_common.js"></script>
+<script src="<?php echo JS_PATH?>my.js" type="text/javascript"></script>
+<script type="text/javascript" src="<?php echo JS_PATH?>styleswitch.js"></script>
+<script type="text/javascript" src="<?php echo JS_PATH?>layer/layer.js"></script>
 <?php if(isset($show_validator)) { ?>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>formvalidator.js" charset="UTF-8"></script>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>formvalidatorregex.js" charset="UTF-8"></script>
+<script type="text/javascript" src="<?php echo JS_PATH?>formvalidator.js" charset="utf-8"></script>
+<script type="text/javascript" src="<?php echo JS_PATH?>formvalidatorregex.js" charset="utf-8"></script>
 <?php } ?>
 <script type="text/javascript">
 handlegotop = function() {

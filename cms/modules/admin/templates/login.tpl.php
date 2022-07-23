@@ -2,8 +2,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="<?php echo CHARSET;?>">
 <title><?php echo L('logon')?></title>
-<meta http-equiv="Content-Type" content="text/html; charset=<?php echo CHARSET;?>" />
 <meta name="author" content="zhaoxunzhiyin" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <link href="<?php echo CSS_PATH?>font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
@@ -13,6 +13,7 @@
 <script type="text/javascript" src="<?php echo JS_PATH?>styleswitch.js"></script>
 <script type="text/javascript" src="<?php echo JS_PATH?>layer/layer.js"></script>
 <link href="<?php echo JS_PATH?>bundle/css/bundle.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo CSS_PATH?>admin/css/my.css" rel="stylesheet" type="text/css" />
 <script src="<?php echo JS_PATH?>bundle/js/bundle.js"></script>
 <script src="<?php echo JS_PATH?>scripts.bundle.js"></script>
 <script src="<?php echo JS_PATH?>jquery.md5.js" type="text/javascript"></script>
@@ -67,7 +68,7 @@
                             </form>
                         </div>
                         <footer>
-                            <p>&copy;&nbsp;2006-<script language="javaScript">document.write(new Date().getFullYear());</script>&nbsp;Kaixin100&nbsp;<span>www.kaixin100.cn</span>&nbsp;<?php echo pc_base::load_config('version','cms_version');?></p>
+                            <p>&copy;&nbsp;2006-<script type="text/javascript">document.write(new Date().getFullYear());</script>&nbsp;Kaixin100&nbsp;<span>www.kaixin100.cn</span>&nbsp;<?php echo pc_base::load_config('version','cms_version');?></p>
                         </footer>
                     </div>
                 </div>
