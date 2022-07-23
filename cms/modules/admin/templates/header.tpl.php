@@ -93,8 +93,7 @@ $(function(){
 </script>
 </head>
 <body>
-<?php if(!isset($show_header)) {
-$input = pc_base::load_sys_class('input');?>
+<?php if(!isset($show_header)) {?>
 <div class="subnav">
     <?php if(is_mobile(0)) {?>
     <div class="content-menu ib-a">
@@ -102,14 +101,14 @@ $input = pc_base::load_sys_class('input');?>
             <a href="javascript:void(0);" class="dropdown-toggle on" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-th-large"></i> 菜单 <i class="fa fa-angle-double-down"></i></a>
             <ul class="dropdown-menu">
                 <?php if(isset($big_menu)) {echo '<li><a class="add fb" href="'.$big_menu[0].'"><i class="fa fa-plus"></i> '.$big_menu[1].'</a></li><div class="dropdown-line"></div>';} else {$big_menu = '';}?>
-                <?php echo admin::submenu($input->get('menuid'),$big_menu); ?>
+                <?php echo admin::submenu(param::get('menuid'),$big_menu); ?>
             </ul>
         </li>
     </div>
     <?php } else {?>
     <div class="content-menu ib-a">
     <?php if(isset($big_menu)) { echo '<a class="add fb" href="'.$big_menu[0].'"><i class="fa fa-plus"></i> '.$big_menu[1].'</a><i class="fa fa-circle"></i>';} else {$big_menu = '';} ?>
-    <?php echo admin::submenu($input->get('menuid'),$big_menu); ?>
+    <?php echo admin::submenu(param::get('menuid'),$big_menu); ?>
     </div>
     <?php }?>
 </div>

@@ -1,9 +1,6 @@
 <?php
 /**
- *  param.class.php	参数处理类
- *
- * @copyright			(C) 2005-2012
- * @lastmodify			2012-9-17
+ * 参数处理类
  */
 class param {
 
@@ -12,9 +9,7 @@ class param {
 	
 	public function __construct() {
 		$this->input = pc_base::load_sys_class('input');
-
 		$this->route_config = pc_base::load_config('route', DOMAIN_NAME) ? pc_base::load_config('route', DOMAIN_NAME) : pc_base::load_config('route', 'default');
-
 		if(isset($this->route_config['data']['POST']) && is_array($this->route_config['data']['POST'])) {
 			foreach($this->route_config['data']['POST'] as $_key => $_value) {
 				if(!isset($_POST[$_key])) $_POST[$_key] = $_value;
@@ -107,9 +102,9 @@ class param {
 
 	/**
 	 * 设置 cookie
-	 * @param string $var     变量名
-	 * @param string $value   变量值
-	 * @param int $time    过期时间
+	 * @param string $var 变量名
+	 * @param string $value 变量值
+	 * @param int $time 过期时间
 	 */
 	public static function set_cookie($var, $value = '', $time = 0) {
 		$time = $time > 0 ? $time : ($value == '' ? SYS_TIME - 3600 : 0);
@@ -141,6 +136,24 @@ class param {
 			$value = safe_replace($value);
 		}
 		return $value;
+	}
+
+	// get post解析
+	public static function request($name, $xss = true) {
+		$input = pc_base::load_sys_class('input');
+		return $input->request($name, $xss);
+	}
+
+	// post解析
+	public static function post($name, $xss = true) {
+		$input = pc_base::load_sys_class('input');
+		return $input->post($name, $xss);
+	}
+
+	// get解析
+	public static function get($name = '', $xss = true) {
+		$input = pc_base::load_sys_class('input');
+		return $input->get($name, $xss);
 	}
 
 	/**
