@@ -13,6 +13,7 @@
 <script type="text/javascript" src="<?php echo CSS_PATH?>bootstrap/js/bootstrap.min.js"></script>
 <script src='<?php echo JS_PATH?>bootstrap-tagsinput.min.js' type='text/javascript'></script>
 <script type="text/javascript">
+var web_dir = '<?php echo WEB_PATH;?>';
 var pc_hash = '<?php echo dr_get_csrf_token();?>';
 var csrf_hash = '<?php echo csrf_hash();?>';
 </script>

@@ -10,6 +10,7 @@
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>Dialog/main.js"></script>
 <script type="text/javascript">
 var is_admin = 0;
+var web_dir = '<?php echo WEB_PATH;?>';
 var pc_hash = '<?php echo dr_get_csrf_token();?>';
 var csrf_hash = '<?php echo csrf_hash();?>';
 </script>

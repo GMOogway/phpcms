@@ -15,7 +15,7 @@
 					for ($x=1; $x<=dr_count($columns); $x++) {
 						$list_str .="<td><input type='text' name='".$field."_".$x."[]' value='".$_v[$field."_".$x]."' class='form-control' style='width:100%; padding:6px 0;'></td>";
 					}
-					$list_str .= "<td><button type='button' class='btn blue btn-xs' onclick='moveUp(this)'> <i class='fa fa-arrow-up'></i> </button> <button type='button' class='btn blue btn-xs' onclick='moveDown(this)'> <i class='fa fa-arrow-down'></i> </button> <button type='button' class='btn red btn-xs' onclick='delThisAttr(this)'> <i class='fa fa-trash'></i> </button></td></tr>";
+					$list_str .= "<td style='text-align: center;'><button type='button' class='btn red btn-xs' onclick='delThisAttr(this)'> <i class='fa fa-trash'></i> </button></td></tr>";
 				}
 			}
 		}
@@ -27,7 +27,7 @@
 			for($cols=1; $cols<=dr_count($columns); $cols++){
 				$string .='<td><input type=\'text\' name=\''.$field.'_'.$cols.'[]\' value=\'\' class=\'form-control\' style=\'width:100%; padding:6px 0;\'></td>';
 			}
-			$string .='<td><button type=\'button\' class=\'btn blue btn-xs\' onclick=\'moveUp(this)\'> <i class=\'fa fa-arrow-up\'></i> </button> <button type=\'button\' class=\'btn blue btn-xs\' onclick=\'moveDown(this)\'> <i class=\'fa fa-arrow-down\'></i> </button> <button type=\'button\' class=\'btn red btn-xs\' onclick=\'delThisAttr(this)\'> <i class=\'fa fa-trash\'></i> </button></td></tr>";
+			$string .='<td style=\'text-align: center;\'><button type=\'button\' class=\'btn red btn-xs\' onclick=\'delThisAttr(this)\'> <i class=\'fa fa-trash\'></i> </button></td></tr>";
 			var temp_id = Math.random().toString(36).substr(2);
 			var html_new = html.replace(/thisisid/g,temp_id);
 			$("#"+id).append(html_new);
@@ -39,12 +39,11 @@
 		foreach($columns as $column){
 			$string .="<th align='left'>".$column."</th>";
 		}
-		$string .="<th align='left' width='110'>操作</th></tr></thead><tbody id='".$field."' class=\"".$field."-sortable\">";
+		$string .="<th width='50' style='text-align: center;'><button type=\"button\" class=\"btn blue btn-xs\" onClick=\"add".$field."('".$field."')\"> <i class=\"fa fa-plus\">
+		</i> </button></th></tr></thead><tbody id='".$field."' class=\"".$field."-sortable\">";
 		$string .= $list_str;
 		$string .= "</tbody>
 		</table></div>
-		</fieldset><script type=\"text/javascript\">$(\".".$field."-sortable\").sortable();</script>
-		<div class='bk10'></div>";
-		$string .= "<button type=\"button\" class=\"btn blue btn-sm\" onclick=\"add".$field."('".$field."')\"> <i class=\"fa fa-plus\"></i> 添加一行</button>";
+		</fieldset><script type=\"text/javascript\">$(\".".$field."-sortable\").sortable();</script>";
 		return $string;
 	}

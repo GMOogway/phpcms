@@ -1,6 +1,13 @@
 if(typeof jQuery == 'undefined'){
 	window.alert("没有引用jquery库");
 }
+// 主目录相对路径
+function dr_get_web_dir() {
+	if (typeof web_dir != "undefined" && web_dir) {
+		return web_dir;
+	}
+	return '/';
+}
 // 是否有隐藏区域
 function dr_isEllipsis(dom) {
 	var checkDom = dom.cloneNode(),parent, flag;
@@ -290,6 +297,19 @@ function dr_show_ip(url, value) {
 			icon: 1
 		})
 	}, 'text');
+}
+// 显示ip信息
+function show_ip(name) {
+	$.get(dr_get_web_dir()+'api.php?op=ip_address&value='+$('#dr_'+name).val(), function(html){
+		layer.alert(html, {
+			shade: 0,
+			title: "",
+			icon: 1
+		})
+	}, 'text');
+}
+function dr_diy_func(name) {
+    dr_tips(1, '这是一个自定义函数');
 }
 // 显示视频
 function dr_preview_video(file) {

@@ -178,6 +178,7 @@ function visualization($html, $style = '', $dir = '', $file = '') {
 		<script language=\"javascript\" type=\"text/javascript\" src=\"".JS_PATH."Dialog/main.js\"></script>
 		<script type='text/javascript'>
 		var is_admin = 0;
+		var web_dir = '".WEB_PATH."';
 		var pc_hash = '".dr_get_csrf_token()."';
 		var csrf_hash = '".csrf_hash()."';
 		</script>

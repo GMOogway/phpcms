@@ -27,6 +27,7 @@ var is_admin = 0;
 <?php } else { ?>
 var is_admin = 1;
 <?php } ?>
+var web_dir = '<?php echo WEB_PATH;?>';
 var pc_hash = '<?php echo dr_get_csrf_token();?>';
 var csrf_hash = '<?php echo csrf_hash();?>';
 </script>
