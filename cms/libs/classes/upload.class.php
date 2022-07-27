@@ -405,7 +405,6 @@ class upload {
             return;
         }
 
-        $this->att_db = pc_base::load_model('attachment_model');
         foreach ($related as $t) {
             $this->_delete_file($t);
         }
