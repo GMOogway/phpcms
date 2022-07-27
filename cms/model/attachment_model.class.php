@@ -101,7 +101,9 @@ class attachment_model extends model {
 		$att_index_db = pc_base::load_model('attachment_index_model');
 		$info = $att_index_db->select(array('keyid'=>$keyid),'aid');
 		if($info) {
-			$upload->id_delete($info);
+			foreach ($info as $_v) {
+				$upload->_delete_file($_v);
+			}
 			return true;
 		} else {
 			return false;

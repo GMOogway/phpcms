@@ -46,7 +46,7 @@ include $this->admin_tpl('header','admin');
     <?php foreach ($datas as $r) {
     	if ($r['curl']) {
     		$content_arr = explode('|', $r['curl']);
-    		$r['url'] = go($content_arr['1'], $content_arr['0']);
+    		$r['url'] = dr_go($content_arr['1'], $content_arr['0']);
     	}
     ?>
         <tr>
