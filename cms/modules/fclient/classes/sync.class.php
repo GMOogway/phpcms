@@ -5,6 +5,7 @@ class sync {
 
     public function __construct() {
         $this->input = pc_base::load_sys_class('input');
+        $this->file = pc_base::load_sys_class('file');
     }
 
     // 客户端程序下载
@@ -29,7 +30,7 @@ class sync {
         header("Content-Type: application/zip"); //zip格式的
         header("Accept-Ranges:bytes");
         header("Accept-Length:".$filesize);
-        header("Content-Disposition: attachment; filename=".$this->get_domain_name($data['domain']).".zip");
+        header("Content-Disposition: attachment; filename=".dr_get_domain_name($data['domain']).".zip");
 
         $contents = '';
         while (!feof($handle)) {
@@ -57,7 +58,7 @@ class sync {
             if (!$setting['webpath']) {
                 return dr_return_data(0, L('not_local_web_path'));
             }
-            $path = $this->get_dir_path($setting['webpath']);
+            $path = dr_get_dir_path($setting['webpath']);
             if (is_dir($path)) {
                 if (is_file($path.'index.php')) {
                     // 正常目录时
@@ -67,7 +68,7 @@ class sync {
                         return dr_return_data(0, $rt['msg']);
                     }
                     // 解压压缩包到web目录
-                    $this->unzip($rt['msg'], $path);
+                    $this->file->unzip($rt['msg'], $path);
                     if (!is_file($path.'api/fclient/index.php')) {
                         return dr_return_data(0, L('local_not_web_path'));
                     }
@@ -99,26 +100,11 @@ class sync {
             return dr_return_data(0, $json['msg']);
         }
 
-        dr_json(1, L('send_check'));
-    }
-    
-    // 获取域名部分
-    function get_domain_name($url) {
-
-        list($url) = explode(':', str_replace(array('https://', 'http://', '/'), '', $url));
-
-        return $url;
-    }
-
-    // 获取自定义目录
-    function get_dir_path($path) {
-        if ((strpos($path, '/') === 0 || strpos($path, ':') !== false)) {
-            // 相对于根目录
-            return rtrim($path, DIRECTORY_SEPARATOR).'/';
-        } else {
-            // 在当前网站目录
-            return CMS_PATH.trim($path, '/').'/';
+        if (!$json['data'] || version_compare($json['data'], $this->fversion) < 0) {
+            return dr_return_data(0, '客户端版本[v'.$json['data'].']需要更新升级到[v'.$this->fversion.']');
         }
+
+        return dr_return_data(1, L('send_check'));
     }
 
     // 客户端配置生成文件
@@ -131,7 +117,7 @@ class sync {
         $appdata = $m_db->select(array('module'=>'fclient'));
         $setting = string2array($appdata[0]['setting']);
         $app = $setting[$siteid]; //当前站点配置
-        $config = file_get_contents(CMS_PATH.'cms/modules/fclient/code/api/fclient/sync.php');
+        $config = file_get_contents(PC_PATH.'modules/fclient/code/api/fclient/sync.php');
         return str_replace(array(
             '{id}',
             '{sn}',
@@ -155,56 +141,11 @@ class sync {
         ), $config);
     }
 
-    // zip解压
-    public function unzip($zipfile, $path = '') {
+    // 客户端版本生成文件
+    private function _get_sync_version($data) {
 
-        if (!class_exists('ZipArchive')) {
-            return 0;
-        }
-
-        !$path && $path = dirname($zipfile); // 当前目录
-
-        $zip = new \ZipArchive;//新建一个ZipArchive的对象
-        /*
-        通过ZipArchive的对象处理zip文件
-        $zip->open这个方法的参数表示处理的zip文件名。
-        如果对zip文件对象操作成功，$zip->open这个方法会返回TRUE
-        */
-        if ($zip->open($zipfile) === TRUE) {
-            $zip->extractTo($path);//假设解压缩到在当前路径下images文件夹的子文件夹php
-            $zip->close();//关闭处理的zip文件
-            return 1;
-        }
-
-        return 0;
-    }
-
-    // zip压缩
-    public function zip($zfile, $path, $remove = []) {
-
-        if (!class_exists('ZipArchive')) {
-            return L('php_no_zip');
-        }
-
-        $zpath = dirname($zfile);
-        if (!is_dir($zpath)) {
-            dr_mkdirs($zpath);
-        }
-
-        $zip = new \ZipArchive;
-		$code = $zip->open($zfile, \ZipArchive::OVERWRITE | \ZipArchive::CREATE);
-        if ($code !== TRUE) {
-            return L('not_zip').$this->_zip_error($code);
-        }
-
-        $this->_create_zip(opendir($path), $zip, $path, '', $remove);
-        $zip->close();
-
-        if (!is_file($zfile)) {
-            return L('no_file_zip');
-        }
-
-        return '';
+        $config = file_get_contents(PC_PATH.'modules/fclient/code/api/fclient/version.php');
+        return str_replace('{version}', $this->fversion, $config);
     }
 
     // 创建压缩包
@@ -219,7 +160,12 @@ class sync {
         dr_dir_delete($webpath);
 
         // 复制过去
-        $this->copy_dir(CMS_PATH.'cms/modules/fclient/code/', CMS_PATH.'cms/modules/fclient/code/', $webpath);
+        $this->copy_dir(PC_PATH.'modules/fclient/code/', PC_PATH.'modules/fclient/code/', $webpath);
+
+        $size = file_put_contents($webpath.'api/fclient/version.php', $this->get_sync_version($data));
+        if (!$size) {
+            return dr_return_data(0, L('write_no'));
+        }
 
         $size = file_put_contents($webpath.'api/fclient/sync.php', $this->get_sync_config($data));
         if (!$size) {

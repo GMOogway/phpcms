@@ -398,6 +398,19 @@ class upload {
         );
     }
 
+    // 删除内容关联的文件
+    public function id_delete($related) {
+
+        if (!$related) {
+            return;
+        }
+
+        $this->att_db = pc_base::load_model('attachment_model');
+        foreach ($related as $t) {
+            $this->_delete_file($t);
+        }
+    }
+
     // 开始删除文件
     public function _delete_file($index) {
         $cache = pc_base::load_sys_class('cache');

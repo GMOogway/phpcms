@@ -61,6 +61,7 @@ $LANG['no_zip_check'] = '压缩包损坏，请联系官方纠正';
 $LANG['admin_check'] = '正在访问客户端网站后台';
 $LANG['php_zip'] = 'php_zip扩展未开启，无法使用应用市场功能';
 $LANG['php_zip_no'] = '创建zip失败';
+$LANG['write_no'] = '版本文件写入失败';
 $LANG['setting_no'] = '配置文件写入失败';
 $LANG['client_no'] = '客户端通信文件打包失败';
 $LANG['website_name'] = '网站名称，便于查找';

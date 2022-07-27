@@ -540,12 +540,9 @@ class member extends admin {
 		$upload = pc_base::load_sys_class('upload');
 		$memberinfo = $this->db->get_one(array('userid'=>$uid));
 		if ($memberinfo && $memberinfo['avatar']) {
-			$attachment_db = pc_base::load_model('attachment_model');
-			$data = $attachment_db->get_one(array('aid'=>$memberinfo['avatar']));
-			if ($data) {
-				$rt = $upload->_delete_file($data);
-				$this->db->update(array('avatar'=>''), array('userid'=>$uid));
-			}
+			$data['aid'] = $memberinfo['avatar'];
+			$rt = $upload->_delete_file($data);
+			$this->db->update(array('avatar'=>''), array('userid'=>$uid));
 		}
 	}
 	

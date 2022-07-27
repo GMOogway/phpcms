@@ -4443,8 +4443,31 @@ function format_create_sql($sql) {
 	return $sql;
 }
 
-// 获取域名部分
+/**
+ * 获取cms域名部分
+ * @param $url 指定url
+ * @return 从指定url中获取cms域名部分
+ */
+function dr_cms_domain_name($url) {
+	if (!$url) {
+		return '';
+	}
+	$param = parse_url($url);
+	if (isset($param['host']) && $param['host']) {
+		return $param['host'];
+	}
+	return $url;
+}
+
+/**
+ * 获取域名部分
+ * @param $url
+ * @return 从$url中获取到域名
+ */
 function dr_get_domain_name($url) {
+	if (!$url) {
+		return '';
+	}
 	list($url) = explode(':', str_replace(array('https://', 'http://', '/'), '', $url));
 	return $url;
 }

@@ -144,14 +144,14 @@ class manage extends admin {
 	 */
 	public function public_delete_all() {
 		$del_arr = $this->input->get_post_ids() ? $this->input->get_post_ids() : dr_json(0, L('illegal_parameters'));
-		$data = $this->db->select('aid in ('.implode(',', $del_arr).')');
+		$data = $this->db->select(array('aid'=>$del_arr));
 		if (!$data) {
 			dr_json(0, L('所选附件不存在'));
 		}
 		foreach($data as $t){
 			$rt = $this->upload->_delete_file($t);
 			if (!$rt['code']) {
-				return dr_return_data(0, $rt['msg']);
+				return dr_json(0, $rt['msg']);
 			}
 		}
 		dr_json(1, L('delete').L('success'));

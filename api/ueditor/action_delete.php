@@ -11,14 +11,7 @@ if ($userid) {
     if ($aid) {
         /* 删除数据 */
         $upload = pc_base::load_sys_class('upload');
-        $attachment_db = pc_base::load_model('attachment_model');
-        $data = $attachment_db->get_one(array('aid'=>$aid));
-        if (!$data) {
-            $result = json_encode(array(
-                'code'=> '0',
-                'state'=> '文件数据不存在'
-            ), JSON_UNESCAPED_UNICODE);
-        }
+        $data['aid'] = $aid;
         $rt = $upload->_delete_file($data);
         if (!$rt['code']) {
             $result = json_encode(array(

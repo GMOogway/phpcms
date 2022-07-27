@@ -8,5 +8,5 @@ $introduce = '独立模块';
 $author = 'zhaoxunzhiyin';
 $authorsite = 'https://gitee.com/zhaoxunzhiyin/';
 $authoremail = 'zhaoxunzhiyin@163.com';
-$version = '2.0';
+$version = '2.5';
 ?>

@@ -140,7 +140,7 @@ class linkage extends admin {
 		foreach ($ids as $id) {
 			$row = $this->db->get_one(array('id' => intval($id)));
 			if (!$row) {
-				return dr_return_data(0, L('数据不存在(id:'.$id.')'));
+				dr_admin_msg(0, L('数据不存在(id:'.$id.')'));
 			}
 			$this->db->delete(array('id' => $id));
 			// 删除表数据

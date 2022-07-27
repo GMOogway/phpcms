@@ -21,7 +21,7 @@
 var syncing = 0;
 function sync_web() {
 	if (syncing == 1) {
-		layer.msg('<i class="fa fa-times-circle"></i>&nbsp;&nbsp;{L('sync_server')}', {time: 3000});
+		dr_tips(0, '{L('sync_server')}');
 		return;
 	}
 	syncing = 1;

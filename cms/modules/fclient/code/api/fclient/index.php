@@ -86,6 +86,12 @@ switch ($at) {
             exit(_json(0, '客户端站执行数据操作失败'));
         }
 
-        _json(1, '数据通信成功');
+        if (is_file('version.php')) {
+            $version = require 'version.php';
+        } else {
+            $version = '1.0';
+        }
+
+        _json(1, '数据通信成功', $version);
         break;
 }
