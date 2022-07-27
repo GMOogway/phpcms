@@ -28,7 +28,12 @@
 			break;
 
 			case 'multiple':
-				$string = form::select($option,$value,"name='info[$field][]' id='$field' size=2 multiple='multiple' style='height:60px;'");
+				$string = load_script('var bs_selectAllText = \'全选\';var bs_deselectAllText = \'全删\';var bs_noneSelectedText = \'没有选择\'; var bs_noneResultsText = \'没有找到 {0}\';');
+				$string .= load_css(JS_PATH.'bootstrap-select/css/bootstrap-select.min.css');
+				$string .= load_js(JS_PATH.'bootstrap-select/js/bootstrap-select.min.js');
+				$string .= load_script('jQuery(document).ready(function(){$(\'.bs-select\').selectpicker();});');
+				$string .= '';
+				$string .= form::select($option,$value,"name='info[$field][]' id='$field' class='bs-select form-control' data-actions-box='true' multiple='multiple' $fieldinfo[formattribute]");
 			break;
 		}
 		return $string;

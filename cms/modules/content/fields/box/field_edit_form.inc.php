@@ -10,10 +10,10 @@
       <label class="col-md-2 control-label">选项类型</label>
       <div class="col-md-9">
             <div class="mt-radio-inline">
-          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[boxtype]" value="radio" <?php if($setting['boxtype']=='radio') echo 'checked';?> onclick="$('#setcols').show();$('#setsize').hide();"/> 单选按钮 <span></span></label>
-          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[boxtype]" value="checkbox" <?php if($setting['boxtype']=='checkbox') echo 'checked';?> onclick="$('#setcols').show();$('setsize').hide();"/> 复选框 <span></span></label>
-          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[boxtype]" value="select" <?php if($setting['boxtype']=='select') echo 'checked';?> onclick="$('#setcols').hide();$('setsize').show();" /> 下拉框 <span></span></label>
-          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[boxtype]" value="multiple" <?php if($setting['boxtype']=='multiple') echo 'checked';?> onclick="$('#setcols').hide();$('setsize').show();" /> 多选列表框 <span></span></label>
+          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[boxtype]" value="radio" <?php if($setting['boxtype']=='radio') echo 'checked';?> onclick="$('#setcols').show();"/> 单选按钮 <span></span></label>
+          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[boxtype]" value="checkbox" <?php if($setting['boxtype']=='checkbox') echo 'checked';?> onclick="$('#setcols').show();"/> 复选框 <span></span></label>
+          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[boxtype]" value="select" <?php if($setting['boxtype']=='select') echo 'checked';?> onclick="$('#setcols').hide();" /> 下拉框 <span></span></label>
+          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[boxtype]" value="multiple" <?php if($setting['boxtype']=='multiple') echo 'checked';?> onclick="$('#setcols').hide();" /> 多选列表框 <span></span></label>
         </div>
 	  </div>
     </div>
@@ -26,24 +26,17 @@
 	  <option value="smallint" <?php if($setting['fieldtype']=='smallint') echo 'selected';?>>整数 SMALLINT(5)</option>
 	  <option value="mediumint" <?php if($setting['fieldtype']=='mediumint') echo 'selected';?>>整数 MEDIUMINT(8)</option>
 	  <option value="int" <?php if($setting['fieldtype']=='int') echo 'selected';?>>整数 INT(10)</option>
-	  </select> <span id="minnumber" style="display:none"><div class="mt-radio-inline">
+	  </select> <span id="minnumber"<?php if($setting['fieldtype']=='varchar') echo ' style="display:none"';?>><div class="mt-radio-inline">
           <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[minnumber]" value="1" <?php if($setting['minnumber']==1) echo 'checked';?>/> <font color='red'>正整数</font> <span></span></label>
           <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[minnumber]" value="-1" <?php if($setting['minnumber']==-1) echo 'checked';?>/> 整数 <span></span></label>
         </div></span>
       </div>
     </div>
-	<div class="form-group" id="setcols" style="display:"> 
+	<div class="form-group" id="setcols"<?php if($setting['boxtype']=='select' || $setting['boxtype']=='multiple') echo ' style="display:none"';?>> 
       <label class="col-md-2 control-label">每列宽度</label>
       <div class="col-md-9">
             <label><input type="text" name="setting[width]" value="<?php echo $setting['width'];?>" size="5" class="form-control"></label>
             <span class="help-block"><?php echo L('px')?></span>
-      </div>
-    </div>
-	<div class="form-group" id="setsize" style="display:none"> 
-      <label class="col-md-2 control-label">高度</label>
-      <div class="col-md-9">
-            <label><input type="text" name="setting[size]" value="<?php echo $setting['size'];?>" size="5" class="form-control"></label>
-            <span class="help-block"><?php echo L('行')?></span>
       </div>
     </div>
 	<div class="form-group">

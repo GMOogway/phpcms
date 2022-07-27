@@ -17,7 +17,8 @@ include $this->admin_tpl('header', 'admin');?>
 用于列表显示状态：status
 文本显示：text
 地区联动：linkage_address
-联动菜单名称：linkage_name
+联动菜单（单选）名称: linkage_name
+联动菜单（多选）名称: linkages_name
 单选字段名称：radio_name
 下拉字段名称：select_name
 复选框字段名称：checkbox_name

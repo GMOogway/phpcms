@@ -455,6 +455,26 @@ class function_list {
         return $value;
     }
 
+    // 联动多项字段name值
+    public function linkages_name($value, $param = array(), $data = array(), $field = array()) {
+
+        if (!$value) {
+            return '';
+        }
+
+        $setting = dr_string2array($field['setting']);
+        if ($field && $setting['linkage']) {
+            $rt = array();
+            $values = dr_string2array($value);
+            foreach ($values as $value) {
+                $rt[] = dr_linkagepos($setting['linkage'], $value, $setting['space']);
+            }
+            return implode('、', $rt);
+        }
+
+        return $value;
+    }
+
     // 实时存储时间值
     public function save_time_value($value, $param = array(), $data = array(), $field = array()) {
         $cache = pc_base::load_sys_class('cache');

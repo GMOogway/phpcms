@@ -9,10 +9,10 @@
       <label class="col-md-2 control-label">选项类型</label>
       <div class="col-md-9">
             <div class="mt-radio-inline">
-          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[boxtype]" value="radio" checked onclick="$('#setcols').show();$('#setsize').hide();"/> 单选按钮 <span></span></label>
-          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[boxtype]" value="checkbox" onclick="$('#setcols').show();$('setsize').hide();"/> 复选框 <span></span></label>
-          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[boxtype]" value="select" onclick="$('#setcols').hide();$('setsize').show();" /> 下拉框 <span></span></label>
-          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[boxtype]" value="multiple" onclick="$('#setcols').hide();$('setsize').show();" /> 多选列表框 <span></span></label>
+          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[boxtype]" value="radio" checked onclick="$('#setcols').show();"/> 单选按钮 <span></span></label>
+          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[boxtype]" value="checkbox" onclick="$('#setcols').show();"/> 复选框 <span></span></label>
+          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[boxtype]" value="select" onclick="$('#setcols').hide();" /> 下拉框 <span></span></label>
+          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[boxtype]" value="multiple" onclick="$('#setcols').hide();" /> 多选列表框 <span></span></label>
         </div>
 	  </div>
     </div>
@@ -32,18 +32,11 @@
 	  </label>
       </div>
     </div>
-	<div class="form-group" id="setcols" style="display:">
+	<div class="form-group" id="setcols">
       <label class="col-md-2 control-label">每列宽度</label>
       <div class="col-md-9">
-            <label><input type="text" name="setting[width]" value="80" size="5" class="form-control"></label>
+            <label><input type="text" name="setting[width]" value="" size="5" class="form-control"></label>
             <span class="help-block"><?php echo L('px')?></span>
-      </div>
-    </div>
-	<div class="form-group" id="setsize" style="display:none">
-      <label class="col-md-2 control-label">高度</label>
-      <div class="col-md-9">
-            <label><input type="text" name="setting[size]" value="1" size="5" class="form-control"></label>
-            <span class="help-block"><?php echo L('行')?></span>
       </div>
     </div>
 	<div class="form-group">
