@@ -468,7 +468,7 @@
     border: 1px solid #dcdfe6;
     box-sizing: border-box;
     line-height: normal;
-    height: 40px
+    height: 34px
 }
 
 .el-checkbox.is-bordered.is-checked {
@@ -830,7 +830,7 @@
     border-radius: 4px;
     border: 1px solid #dcdfe6;
     box-sizing: border-box;
-    height: 40px
+    height: 34px
 }
 
 .el-radio.is-bordered.is-checked {
@@ -1479,7 +1479,7 @@
 
 .el-input__icon {
     width: 25px;
-    line-height: 40px
+    line-height: 34px
 }
 
 .el-input__icon:after {
