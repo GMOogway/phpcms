@@ -142,17 +142,6 @@ class input {
         return $page->initialize($config)->create_links();
     }
 
-    // Ftable分页
-    public function table_page($url, $total, $config, $size) {
-
-        $page = pc_base::load_sys_class('page');
-        $config['base_url'] = $url;
-        $config['per_page'] = $size;
-        $config['total_rows'] = $total;
-
-        return $page->initialize($config)->create_links();
-    }
-
     /**
      * XSS Clean
      */
