@@ -1,6 +1,7 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');
-include $this->admin_tpl('header','admin');?>
+include $this->admin_tpl('header','admin');
+$menu_data = $this->menu_db->get_one(array('name' => 'category_manage', 'm' => 'admin', 'c' => 'category', 'a' => 'init'));?>
 <?php echo load_css(JS_PATH.'layui/css/layui.css');?>
 <?php echo load_js(JS_PATH.'content_addtop.js');?>
 <?php echo load_css(JS_PATH.'jquery-minicolors/jquery.minicolors.css');?>
@@ -11,9 +12,10 @@ include $this->admin_tpl('header','admin');?>
         <div class="page-content page-content3 mybody-nheader main-content  ">
 <div class="page-bar">
     <ul class="page-breadcrumb">
-        <li> <a href="javascript:location.reload(true);" class="on"> <?php echo L('page_manage');?></a> <i class="fa fa-circle"></i> </li>
+        <li> <a href="javascript:location.reload(true);" class="on"> <i class="fa fa-list"></i> <?php echo L('page_manage');?></a> <i class="fa fa-circle"></i> </li>
         <li> <a href="<?php if(strpos($category['url'],'http://')===false && strpos($category['url'],'https://') ===false) echo siteurl($this->siteid);echo $category['url'];?>" target="_blank"> <i class="fa fa-home"></i> <?php echo L('click_vistor');?></a> <i class="fa fa-circle"></i> </li>
-        <li> <a href="?m=block&c=block_admin&a=public_visualization&catid=<?php echo $catid;?>&type=page"> <i class="fa fa-code"></i> <?php echo L('visualization_edit');?></a> </li>
+        <li> <a href="?m=block&c=block_admin&a=public_visualization&catid=<?php echo $catid;?>&type=page"> <i class="fa fa-table"></i> <?php echo L('visualization_edit');?></a> <i class="fa fa-circle"></i> </li>
+        <li> <a href="?m=content&c=sitemodel_field&a=init&modelid=-2&menuid=<?php echo $menu_data['id'];?>&pc_hash=<?php echo dr_get_csrf_token();?>"> <i class="fa fa-code"></i> <?php echo L('page_field_manage');?></a> </li>
     </ul>
 </div>
 <form name="myform" id="myform" action="?m=content&c=content&a=add" class="form-horizontal" method="post" enctype="multipart/form-data">
