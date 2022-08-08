@@ -692,7 +692,7 @@ function dr_iframe(type, url, width, height, rt) {
 	var diag = new Dialog({
 		id:'iframe',
 		title:title,
-		url:url,
+		url:url+'&is_iframe=1',
 		width:width,
 		height:height,
 		modal:true,
@@ -884,7 +884,7 @@ function dr_iframe_show(type, url, width, height, is_close) {
 	var diag = new Dialog({
 		id:'iframe_show',
 		title:title,
-		url:url,
+		url:url+'&is_iframe=1',
 		width:width,
 		height:height,
 		modal:true,
@@ -951,7 +951,7 @@ function iframe_show(type, url, width, height, is_close) {
 				window.location.reload(true);
 			}
 		},
-		content: url+'&is_ajax=1'
+		content: url+'&is_iframe=1'
 	});
 }
 // ajax保存数据
@@ -1532,6 +1532,24 @@ function dr_submit_post_todo(e, t) {
 			dr_ajax_admin_alert_error(e, t, a)
 		}
 	})
+}
+// 打开预览文件
+function dr_show_file_code(title, url) {
+	if (typeof pc_hash == 'string') url += (url.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
+	if (url.toLowerCase().indexOf("http://") != -1 || url.toLowerCase().indexOf("https://") != -1) {
+	} else {
+		url = geturlpathname()+url;
+	}
+	var diag = new Dialog({
+		id:'show_file_code',
+		title:title,
+		url:url,
+		width:'80%',
+		height:'80%',
+		modal:true,
+		draggable:true
+	});
+	diag.show();
 }
 function dr_tips(code, msg, time) {
 	if (!time || time == "undefined") {

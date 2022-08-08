@@ -376,7 +376,7 @@ class content extends admin {
 							$site_setting = string2array($this->site_config['setting']);
 							$watermark = $site_setting['ueditor'] || $watermark ? 1 : 0;
 							$auto_thumb_length = intval($this->input->post('auto_thumb_'.$field))-1;
-							if(preg_match_all("/(src)=([\"|']?)([^ \"'>]+)\\2/i", $systeminfo[$field], $matches)) {
+							if(preg_match_all("/(src)=([\"|']?)([^ \"'>]+)\\2/i", code2html($systeminfo[$field]), $matches)) {
 								$this->upload = new upload('content',$catid,$this->siteid);
 								foreach ($matches[3] as $img) {
 									$ext = get_image_ext($img);
@@ -430,7 +430,7 @@ class content extends admin {
 						$is_auto_description = $this->input->post('is_auto_description_'.$field);
 						if(isset($systeminfo['description']) && isset($is_auto_description) && !$systeminfo['description']) {
 							$auto_description_length = intval($this->input->post('auto_description_'.$field));
-							$systeminfo['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', $systeminfo[$field]), $auto_description_length);
+							$systeminfo['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', code2html($systeminfo[$field])), $auto_description_length);
 						}
 					}
 				}
@@ -441,6 +441,8 @@ class content extends admin {
 					$catid = $this->page_db->insert($systeminfo,true);
 				}
 				$this->page_db->create_html($catid);
+				$this->cache_api->cache('page');
+				$this->cache->clean();
 				dr_json(1, $this->input->post('edit') ? L('update_success') : L('add_success'));
 			}
 		} else {

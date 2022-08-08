@@ -1145,6 +1145,23 @@ function format_js($string, $isjs = 1) {
 	return $str;
 }
 /**
+ * 存储调试信息
+ * file 存储文件
+ * data 打印变量
+ */
+function dr_debug($file, $data) {
+	dr_mkdirs(CACHE_PATH.'debuglog/');
+	$debug = debug_backtrace();
+	file_put_contents(CACHE_PATH.'debuglog/'.dr_safe_filename($file).'.txt', var_export(array(
+		'时间' => dr_date(SYS_TIME, 'Y-m-d H:i:s'),
+		'终端' => (string)$_SERVER['HTTP_USER_AGENT'],
+		'文件' => $debug[0]['file'],
+		'行号' => $debug[0]['line'],
+		'地址' => FC_NOW_URL,
+		'变量' => $data,
+	), true).PHP_EOL.'=========================================================='.PHP_EOL, FILE_APPEND);
+}
+/**
  * 转为utf8编码格式
  * $str 来源字符串
  */
@@ -1160,13 +1177,20 @@ function dr_code2utf8($str) {
 if (!function_exists('is_php')) {
 	function is_php($version) {
 		static $_is_php;
-		$version = (string) $version;
+		$version = (string)$version;
 		if ( ! isset($_is_php[$version]))
 		{
 			$_is_php[$version] = version_compare(PHP_VERSION, $version, '>=');
 		}
 		return $_is_php[$version];
 	}
+}
+/**
+ * 文字转换拼音
+ */
+function dr_text2py($str) {
+	$pinyin = pc_base::load_sys_class('pinyin');
+	return $pinyin->result((string)$str);
 }
 /**
  * 将html转化为纯文字
@@ -1383,6 +1407,10 @@ function dr_now_url() {
  * 生成静态时的跳转提示
  */
 function html_msg($code, $msg, $url = '', $note = '') {
+	$input = pc_base::load_sys_class('input');
+	if ($input->get('is_ajax')) {
+		dr_json($code, $msg, $url);
+	}
 	include(admin_template('html_msg', 'admin'));
 	exit;
 }
@@ -3837,7 +3865,7 @@ function dr_site_value($name, $siteid = SITE_ID) {
 }
 
 // 获取栏目数据及自定义字段
-function dr_cat_value($catid, $name) {
+function dr_cat_value($catid, $field) {
 	if (!$catid) {
 		return '';
 	}
@@ -3848,29 +3876,34 @@ function dr_cat_value($catid, $name) {
 	}
 	$data = getcache('category_content_'.$siteid,'commons');
 	if ($data) {
-		return $data[$catid][$name];
+		return $data[$catid][$field];
 	}
 	return '';
 }
 
 // 获取单页数据及自定义字段
-function dr_page_value($catid, $name) {
-	$page_db = pc_base::load_model('page_model');
-	$data = $page_db->get_one(array('catid'=>$catid));
-	if ($data) {
-		return $data[$name];
+function dr_page_value($catid, $field) {
+	if (empty($catid)) {
+		return '';
 	}
-	return '';
+	return get_cache('page', 'data', $catid, $field);
 }
 
 // 获取模型数据及自定义字段
-function dr_value($modelid, $id, $name) {
+function dr_value($modelid, $id, $field) {
 	if ($modelid) {
 		$content_db = pc_base::load_model('content_model');
 		$content_db->set_model($modelid);
 		$data = $content_db->get_one(array('id'=>$id));
-		if ($data) {
-			return $data[$name];
+		if ($data && $data[$field]) {
+			return $data[$field];
+		}
+		$r = $content_db->get_one(array('id' => $id), 'tableid');
+		$content_db->table_name = $content_db->table_name.'_data_'.$r['tableid'];
+		$data = $content_db->get_one(array('id'=>$id));
+		$content_db->set_model($modelid);
+		if ($data && $data[$field]) {
+			return $data[$field];
 		}
 	}
 	return '';
@@ -4805,7 +4838,7 @@ function dr_fdate($sTime, $formt = 'Y-m-d') {
  * @param	string	$color	当天显示颜色
  * @return	string
  */
-function dr_date($time = '', $format = SYS_TIME_FORMAT, $color = NULL) {
+function dr_date($time = '', $format = SYS_TIME_FORMAT, $color = '') {
 	if (!$time) {
 		return '';
 	}

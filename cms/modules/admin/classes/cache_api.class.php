@@ -90,6 +90,21 @@ class cache_api {
 		return true;
 	}
 	
+	/**
+	 * 更新单网页缓存方法
+	 */
+	public function page() {
+		$data = $this->db->select();
+		$cache = array();
+		if ($data) {
+			foreach ($data as $t) {
+				$cache['data'][$t['catid']] = $t;
+			}
+		}
+		$this->cache->set_file('page', $cache);
+		return true;
+	}
+	
 	// 清理缩略图
 	public function update_thumb() {
 		if (strpos(CMS_PATH, SYS_THUMB_PATH) !== false || is_file(SYS_THUMB_PATH.'index.php')) {

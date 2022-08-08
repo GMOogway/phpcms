@@ -427,8 +427,9 @@ class index extends admin {
 	}
 	public function public_error_log_show() {
 		$show_header = $show_pc_hash = true;
-		$time = (int)strtotime($this->input->get('time'));
-		$file = CACHE_PATH.'caches_error/caches_data/log-'.date('Y-m-d',$time).'.php';
+		$time = dr_safe_filename($this->input->get('time'));
+		!$time && $time = date('Y-m-d');
+		$file = CACHE_PATH.'caches_error/caches_data/log-'.$time.'.php';
 		if (!is_file($file)) {
 			dr_admin_msg(0,L('文件不存在：'.$file),'','','edit');
 		}
@@ -447,8 +448,9 @@ class index extends admin {
 	}
 	public function public_error_log_del() {
 		$show_header = $show_pc_hash = true;
-		$time = (int)strtotime($this->input->get('time'));
-		$file = CACHE_PATH.'caches_error/caches_data/log-'.date('Y-m-d',$time).'.php';
+		$time = dr_safe_filename($this->input->get('time'));
+		!$time && $time = date('Y-m-d');
+		$file = CACHE_PATH.'caches_error/caches_data/log-'.$time.'.php';
 		unlink($file);
 		dr_json(1, L('operation_success'));
 	}

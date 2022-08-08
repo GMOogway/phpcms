@@ -142,7 +142,6 @@ include $this->admin_tpl('header','admin');?>
         </table>
     </div>
 </div>
-<?php $menu_data = $this->menu_db->get_one(array('name' => 'public_error_log', 'm' => 'admin', 'c' => 'index', 'a' => 'public_error_log'));?>
 <script>
 function dr_update_cache_all() {
     $('.update_cache').trigger('click');
@@ -166,7 +165,7 @@ function my_update_cache(id, m, mod, file, param) {
                 }
             },
             error: function(HttpRequest, ajaxOptions, thrownError) {
-                obj.html('<a href="javascript:dr_show_file_code(\'<?php echo L('查看日志');?>\', \'?m=admin&c=index&a=public_error_log&menuid=<?php echo $menu_data['id']?>&pc_hash=<?php echo dr_get_csrf_token()?>\');" style="color:red"><?php echo L("系统崩溃，请将错误日志发送给官方处理");?></a>');
+                obj.html('<a href="javascript:dr_show_file_code(\'<?php echo L('查看日志');?>\', \'?m=admin&c=index&a=public_error_log_show\');" style="color:red"><?php echo L("系统崩溃，请将错误日志发送给官方处理");?></a>');
             }
         });
     }
@@ -193,7 +192,7 @@ function my_update_attachment(id, page) {
             }
         },
         error: function(HttpRequest, ajaxOptions, thrownError) {
-            obj.html('<a href="javascript:dr_show_file_code(\'<?php echo L('查看日志');?>\', \'?m=admin&c=index&a=public_error_log&menuid=<?php echo $menu_data['id']?>&pc_hash=<?php echo dr_get_csrf_token()?>\');" style="color:red"><?php echo L("系统崩溃，请将错误日志发送给官方处理");?></a>');
+            obj.html('<a href="javascript:dr_show_file_code(\'<?php echo L('查看日志');?>\', \'?m=admin&c=index&a=public_error_log_show\');" style="color:red"><?php echo L("系统崩溃，请将错误日志发送给官方处理");?></a>');
         }
     });
 }
