@@ -660,7 +660,7 @@ class create_html extends admin {
 		if (!$showurlruleid) {$oneshowrules = reset($showrules);$showurlruleid = $oneshowrules['urlruleid'];}
 		if (!$page) {
 			// 计算数量
-			$total = $this->category_db->count();
+			$total = $this->category_db->count(array('siteid'=>$this->siteid));
 			if (!$total) {
 				html_msg(0, L('无可用栏目更新'));
 			}
@@ -677,7 +677,7 @@ class create_html extends admin {
 			html_msg(1, L('更新完成'));
 		}
 
-		$category = $this->category_db->listinfo('', 'catid DESC', $page, $psize);
+		$category = $this->category_db->listinfo(array('siteid'=>$this->siteid), 'catid DESC', $page, $psize);
 		if ($category) {
 			foreach ($category as $data) {
 				$data['setting'] = dr_string2array($data['setting']);
@@ -702,7 +702,7 @@ class create_html extends admin {
 		if (!$showurlruleid) {$oneshowrules = reset($showrules);$showurlruleid = $oneshowrules['urlruleid'];}
 		if (!$page) {
 			// 计算数量
-			$total = $this->category_db->count();
+			$total = $this->category_db->count(array('siteid'=>$this->siteid));
 			if (!$total) {
 				html_msg(0, L('无可用栏目更新'));
 			}
@@ -719,7 +719,7 @@ class create_html extends admin {
 			html_msg(1, L('更新完成'));
 		}
 
-		$category = $this->category_db->listinfo('', 'catid DESC', $page, $psize);
+		$category = $this->category_db->listinfo(array('siteid'=>$this->siteid), 'catid DESC', $page, $psize);
 		if ($category) {
 			foreach ($category as $data) {
 				$data['setting'] = dr_string2array($data['setting']);
