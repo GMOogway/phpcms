@@ -352,6 +352,11 @@ class site extends admin {
 							$setconfig['mobile_css_path'] = $info['mobile_domain'].'statics/css/';
 							$setconfig['mobile_img_path'] = $info['mobile_domain'].'statics/images/';
 							$setconfig['mobile_path'] = $info['mobile_domain'];
+						} else {
+							$setconfig['mobile_js_path'] = $info['domain'].'mobile/statics/js/';
+							$setconfig['mobile_css_path'] = $info['domain'].'mobile/statics/css/';
+							$setconfig['mobile_img_path'] = $info['domain'].'mobile/statics/images/';
+							$setconfig['mobile_path'] = $info['domain'].'mobile/';
 						}
 						set_config($setconfig);
 					}
