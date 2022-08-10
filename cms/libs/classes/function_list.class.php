@@ -244,6 +244,45 @@ class function_list {
         return $html;
     }
 
+    // 标题带推荐位图标
+    public function ptitle($value, $param = array(), $data = array()) {
+        if (!$value) {
+            return '';
+        }
+
+        $value = htmlspecialchars(clearhtml($value));
+        if ($data['id']) {
+            $position_db = pc_base::load_model('position_model');
+            $position_data_db = pc_base::load_model('position_data_model');
+            $flag = $position_data_db->count(array('id'=>$data['id'], 'catid'=>$data['catid']));
+        }
+        $title = ($data['thumb'] ? '<i class="fa fa-photo"></i> ' : '').($flag ? '<i class="fa fa-flag"></i> ' : '').dr_keyword_highlight(str_cut($value, 30), $param['keyword']);
+        !$title && $title = '...';
+
+        $siteids = getcache('category_content','commons');
+        $siteid = $siteids[$data['catid']];
+        $sitelist = getcache('sitelist','commons');
+        $release_siteurl = $sitelist[$siteid]['url'];
+        $path_len = -strlen(WEB_PATH);
+        $release_siteurl = substr($release_siteurl,0,$path_len);
+        if($data['status']==99) {
+            if($data['islink']) {
+                $url = $data['url'];
+            } elseif(strpos($data['url'],'http://')!==false || strpos($data['url'],'https://')!==false) {
+                $url = $data['url'];
+            } else {
+                $url = $release_siteurl.$data['url'];
+            }
+        } else {
+            $url = '?m='.$this->m.'&c='.$this->c.'&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'';
+        }
+
+        $this->m!='content' && $this->c!='content' && $data['url'] = $url = '';
+
+        $html = isset($data['url']) && $data['url'] && $url ? ('<a href="'.$url.'" target="_blank"'.($data['status']!=99 ? ' onclick=\'window.open("?m='.$this->m.'&c='.$this->c.'&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'","manage")\'' : '').' class="tooltips" data-container="body" data-placement="top" data-original-title="'.$value.'" title="'.$value.'">'.$title.'</a>'.($data['islink'] > 0 ? '  <i class="fa fa-link font-green tooltips" data-original-title="'.L('转向链接').'" title="'.L('转向链接').'"></i>' : '')) : $title;
+        return $html;
+    }
+
     // 用于列表显示ip地址
     public function ip($value, $param = array(), $data = array()) {
         $ip_area = pc_base::load_sys_class('ip_area');

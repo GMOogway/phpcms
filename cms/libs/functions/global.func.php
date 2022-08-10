@@ -4050,7 +4050,7 @@ function dr_show_error($msg) {
 	if (CI_DEBUG) {
 		$url = '<p>'.FC_NOW_URL.'</p>';
 	} else {
-		$url = '';
+		$url = '<p>在index.php中开启开发者模式可以看到故障详细情况</p>';
 		$msg = '您的系统遇到了故障，请联系管理员处理';
 		http_response_code(404);
 	}
