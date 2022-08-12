@@ -8,8 +8,6 @@ defined('IN_CMS') or exit('No permission resources.');
 header('Content-Type: text/html; charset=utf-8');
 error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING ^ E_STRICT);
 ini_set('display_errors', 1);
-!defined('WEBPATH') && define('WEBPATH', dirname(__FILE__).'/');
-!defined('WRITEPATH') && define('WRITEPATH', WEBPATH.'caches/');
 
 $rt = array();
 // 判断环境
@@ -19,13 +17,13 @@ if (version_compare(PHP_VERSION, MAX_PHP_VERSION) >= 0) {
     $rt[] = echo_msg('PHP版本要求：'.MIN_PHP_VERSION.'及以上，当前'.PHP_VERSION);
 }
 
-if (preg_match('/[\x{4e00}-\x{9fff}]+/u', WEBPATH)) {
-    $rt[] = echo_msg('WEB目录['.WEBPATH.']不允许出现中文或全角符号');
+if (preg_match('/[\x{4e00}-\x{9fff}]+/u', CMS_PATH)) {
+    $rt[] = echo_msg('WEB目录['.CMS_PATH.']不允许出现中文或全角符号');
 }
 
 foreach (array(' ', '[', ']') as $t) {
-    if (strpos(WEBPATH, $t) !== false) {
-        $rt[] = echo_msg('WEB目录['.WEBPATH.']不允许出现'.($t ? $t : '空格').'符号');
+    if (strpos(CMS_PATH, $t) !== false) {
+        $rt[] = echo_msg('WEB目录['.CMS_PATH.']不允许出现'.($t ? $t : '空格').'符号');
     }
 }
 
@@ -100,26 +98,26 @@ if (!class_exists('ZipArchive')) {
 
 // 判断目录权限
 foreach (array(
-             WRITEPATH,
-             WRITEPATH.'configs/',
-             WRITEPATH.'caches_admin/',
-             WRITEPATH.'caches_attach/',
-             WRITEPATH.'caches_commons/',
-             WRITEPATH.'caches_content/',
-             WRITEPATH.'caches_data/',
-             WRITEPATH.'caches_file/',
-             WRITEPATH.'caches_linkage/',
-             WRITEPATH.'caches_member/',
-             WRITEPATH.'caches_model/',
-             WRITEPATH.'caches_scan/',
-             WRITEPATH.'caches_template/',
-             WRITEPATH.'caches_tpl_data/',
-             WRITEPATH.'poster_js/',
-             WRITEPATH.'vote_js/',
-             WRITEPATH.'sessions/',
-             WEBPATH.'html/',
-             WEBPATH.'uploadfile/',
-             WEBPATH,
+             CACHE_PATH,
+             CACHE_PATH.'configs/',
+             CACHE_PATH.'caches_admin/',
+             CACHE_PATH.'caches_attach/',
+             CACHE_PATH.'caches_commons/',
+             CACHE_PATH.'caches_content/',
+             CACHE_PATH.'caches_data/',
+             CACHE_PATH.'caches_file/',
+             CACHE_PATH.'caches_linkage/',
+             CACHE_PATH.'caches_member/',
+             CACHE_PATH.'caches_model/',
+             CACHE_PATH.'caches_scan/',
+             CACHE_PATH.'caches_template/',
+             CACHE_PATH.'caches_tpl_data/',
+             CACHE_PATH.'poster_js/',
+             CACHE_PATH.'vote_js/',
+             CACHE_PATH.'sessions/',
+             CMS_PATH.'html/',
+             CMS_PATH.'uploadfile/',
+             CMS_PATH,
          ) as $t) {
     if (!dr_check_put_path($t)) {
         $rt[] = echo_msg('目录（'.$t.'）不可写');
@@ -146,24 +144,24 @@ if ($rt) {
  */
 function safe_replace_path($path) {
     foreach (array(
-                 WRITEPATH,
-                 WRITEPATH.'configs/',
-                 WRITEPATH.'caches_admin/',
-                 WRITEPATH.'caches_attach/',
-                 WRITEPATH.'caches_commons/',
-                 WRITEPATH.'caches_content/',
-                 WRITEPATH.'caches_linkage/',
-                 WRITEPATH.'caches_member/',
-                 WRITEPATH.'caches_model/',
-                 WRITEPATH.'caches_scan/',
-                 WRITEPATH.'caches_template/',
-                 WRITEPATH.'caches_tpl_data/',
-                 WRITEPATH.'poster_js/',
-                 WRITEPATH.'vote_js/',
-                 WRITEPATH.'sessions/',
-                 WEBPATH.'html/',
-                 WEBPATH.'uploadfile/',
-                 WEBPATH,
+                 CACHE_PATH,
+                 CACHE_PATH.'configs/',
+                 CACHE_PATH.'caches_admin/',
+                 CACHE_PATH.'caches_attach/',
+                 CACHE_PATH.'caches_commons/',
+                 CACHE_PATH.'caches_content/',
+                 CACHE_PATH.'caches_linkage/',
+                 CACHE_PATH.'caches_member/',
+                 CACHE_PATH.'caches_model/',
+                 CACHE_PATH.'caches_scan/',
+                 CACHE_PATH.'caches_template/',
+                 CACHE_PATH.'caches_tpl_data/',
+                 CACHE_PATH.'poster_js/',
+                 CACHE_PATH.'vote_js/',
+                 CACHE_PATH.'sessions/',
+                 CMS_PATH.'html/',
+                 CMS_PATH.'uploadfile/',
+                 CMS_PATH,
              ) as $t) {
         $path = str_replace('（'.$t.'）', '', $path);
     }
