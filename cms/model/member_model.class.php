@@ -1,6 +1,6 @@
 <?php
 defined('IN_CMS') or exit('No permission resources.');
-if(!defined('CACHE_MODEL_PATH')) define('CACHE_MODEL_PATH',CMS_PATH.'caches'.DIRECTORY_SEPARATOR.'caches_model'.DIRECTORY_SEPARATOR.'caches_data'.DIRECTORY_SEPARATOR);
+if(!defined('CACHE_MODEL_PATH')) define('CACHE_MODEL_PATH',CACHE_PATH.'caches_model'.DIRECTORY_SEPARATOR.'caches_data'.DIRECTORY_SEPARATOR);
 
 pc_base::load_sys_class('model', '', 0);
 class member_model extends model {

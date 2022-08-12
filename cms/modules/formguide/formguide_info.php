@@ -58,7 +58,7 @@ class formguide_info extends admin {
 		$formid = intval($_GET['formid']);
 		$info = $this->db->get_one(array('dataid'=>$did));
 		pc_base::load_sys_class('form', '', '');
-		define('CACHE_MODEL_PATH',CMS_PATH.'caches'.DIRECTORY_SEPARATOR.'caches_model'.DIRECTORY_SEPARATOR.'caches_data'.DIRECTORY_SEPARATOR);
+		define('CACHE_MODEL_PATH',CACHE_PATH.'caches_model'.DIRECTORY_SEPARATOR.'caches_data'.DIRECTORY_SEPARATOR);
 		require CACHE_MODEL_PATH.'formguide_output.class.php';
 		$formguide_output = new formguide_output($formid);
 		$forminfos_data = $formguide_output->get($info);

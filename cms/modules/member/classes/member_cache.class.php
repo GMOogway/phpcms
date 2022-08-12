@@ -18,7 +18,7 @@ class member_cache {
 		}
 		if(!defined('CACHE_MODEL_PATH')) {
 			//模型缓存路径
-			define('CACHE_MODEL_PATH',CMS_PATH.'caches'.DIRECTORY_SEPARATOR.'caches_model'.DIRECTORY_SEPARATOR.'caches_data'.DIRECTORY_SEPARATOR);
+			define('CACHE_MODEL_PATH',CACHE_PATH.'caches_model'.DIRECTORY_SEPARATOR.'caches_data'.DIRECTORY_SEPARATOR);
 		}
 
 		require MODEL_PATH.'fields.inc.php';

@@ -3,7 +3,7 @@ defined('IN_CMS') or exit('No permission resources.');
 //模型原型存储路径
 define('FORMGUIDE_MODEL_PATH',PC_PATH.'modules'.DIRECTORY_SEPARATOR.'formguide'.DIRECTORY_SEPARATOR.'fields'.DIRECTORY_SEPARATOR);
 //模型缓存路径
-define('FORMGUIDE_CACHE_MODEL_PATH',CMS_PATH.'caches'.DIRECTORY_SEPARATOR.'caches_model'.DIRECTORY_SEPARATOR.'caches_data'.DIRECTORY_SEPARATOR);
+define('FORMGUIDE_CACHE_MODEL_PATH',CACHE_PATH.'caches_model'.DIRECTORY_SEPARATOR.'caches_data'.DIRECTORY_SEPARATOR);
 /**
  * 更新form表单模型类
  */

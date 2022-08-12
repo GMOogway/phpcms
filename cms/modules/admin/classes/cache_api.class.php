@@ -311,7 +311,7 @@ class cache_api {
 	 */
 	public function sitemodel() {
 		define('MODEL_PATH', PC_PATH.'modules'.DIRECTORY_SEPARATOR.'content'.DIRECTORY_SEPARATOR.'fields'.DIRECTORY_SEPARATOR);
-		define('CACHE_MODEL_PATH', CMS_PATH.'caches'.DIRECTORY_SEPARATOR.'caches_model'.DIRECTORY_SEPARATOR.'caches_data'.DIRECTORY_SEPARATOR);
+		define('CACHE_MODEL_PATH', CACHE_PATH.'caches_model'.DIRECTORY_SEPARATOR.'caches_data'.DIRECTORY_SEPARATOR);
 		require MODEL_PATH.'fields.inc.php';
 		//更新内容模型类：表单生成、入库、更新、输出
 		$classtypes = array('form','input','update','output');
@@ -480,7 +480,7 @@ class cache_api {
 	public function membermodel() {
 		define('MEMBER_MODEL_PATH',PC_PATH.'modules'.DIRECTORY_SEPARATOR.'member'.DIRECTORY_SEPARATOR.'fields'.DIRECTORY_SEPARATOR);
 		//模型缓存路径
-		define('MEMBER_CACHE_MODEL_PATH',CMS_PATH.'caches'.DIRECTORY_SEPARATOR.'caches_model'.DIRECTORY_SEPARATOR.'caches_data'.DIRECTORY_SEPARATOR);
+		define('MEMBER_CACHE_MODEL_PATH',CACHE_PATH.'caches_model'.DIRECTORY_SEPARATOR.'caches_data'.DIRECTORY_SEPARATOR);
 		
 		$sitemodel_db = pc_base::load_model('sitemodel_model');
 		$data = $sitemodel_db->select(array('type'=>2), "*", 1000, 'sort', '', 'modelid');
@@ -631,7 +631,7 @@ class cache_api {
 	 * 更新删除缓存文件方法
 	 */
 	public function del_file() {
-		$path = CMS_PATH.'caches'.DIRECTORY_SEPARATOR.'caches_template'.DIRECTORY_SEPARATOR;
+		$path = CACHE_PATH.'caches_template'.DIRECTORY_SEPARATOR;
 		$files = glob($path.'*');
 		pc_base::load_sys_func('dir');
 		if (is_array($files)) {
@@ -642,7 +642,7 @@ class cache_api {
 				}
 			}
 		}
-		$path = CMS_PATH.'caches'.DIRECTORY_SEPARATOR.'caches_tpl_data'.DIRECTORY_SEPARATOR.'caches_data'.DIRECTORY_SEPARATOR;
+		$path = CACHE_PATH.'caches_tpl_data'.DIRECTORY_SEPARATOR.'caches_data'.DIRECTORY_SEPARATOR;
 		$files = glob($path.'*');
 		if (is_array($files)) {
 			foreach ($files as $f) {
