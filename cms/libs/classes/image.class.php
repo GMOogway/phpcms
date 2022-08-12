@@ -914,13 +914,13 @@ class image {
             // 文字水印
             $config['wm_text'] = $data['wm_text'] ? $data['wm_text'] : 'cms';
             $config['wm_type'] = 'text';
-            $config['wm_font_path'] = CMS_PATH.'statics/images/water/font/'.dr_safe_filename($data['wm_font_path']);
+            $config['wm_font_path'] = CACHE_PATH.'watermark/'.dr_safe_filename($data['wm_font_path']);
             $config['wm_font_size'] = $data['wm_font_size'];
             $config['wm_font_color'] = $data['wm_font_color'];
         } else {
             // 图片水印
             $config['wm_type'] = 'overlay';
-            $config['wm_overlay_path'] = CMS_PATH.'statics/images/water/'.dr_safe_filename($data['wm_overlay_path']);
+            $config['wm_overlay_path'] = CACHE_PATH.'watermark/'.dr_safe_filename($data['wm_overlay_path']);
             $config['wm_opacity'] = isset($data['wm_opacity']) && $data['wm_opacity'] ? min(100, max($data['wm_opacity'], 1)) : 100;
         }
 

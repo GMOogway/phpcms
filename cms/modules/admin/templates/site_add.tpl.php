@@ -303,11 +303,12 @@ function default_list() {
   <tr class="dr_sy dr_sy_1">
     <th><?php echo L('site_att_text_font')?></th>
     <td class="y-bg">
-      <?php if ($waterfont) {?>
+      <?php if ($waterfile) {?>
         <select style="height: 34px;background-color: rgb(255, 255, 255);box-shadow: rgba(0, 0, 0, 0.075) 0px 1px 1px inset;padding: 6px 12px;border-width: 1px;border-style: solid;border-color: rgb(194, 202, 216);border-image: initial;border-radius: 4px;transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;" name="setting[wm_font_path]" id="wm_font_path">
-            <?php foreach($waterfont as $t) {?>
-            <option<?php if ($t=='1.ttf') {?> selected=""<?php }?> value="<?php echo $t;?>"><?php echo $t;?></option>
-            <?php }?>
+            <?php foreach($waterfile as $t) {
+            if (strpos($t, '.ttf') !== false) {?>
+            <option<?php if ($t=='default.ttf') {?> selected=""<?php }?> value="<?php echo $t;?>"><?php echo $t;?></option>
+            <?php }}?>
         </select>
       <?php }?><button type="button" class="layui-btn layui-btn-sm" id="fileupload-font"><i class="layui-icon">&#xe67c;</i><?php echo L('upload');?></button><br><?php echo L('site_att_text_font_desc')?>
      </td>
@@ -335,9 +336,10 @@ function default_list() {
     <td class="y-bg">
       <?php if ($waterfile) {?>
         <select style="height: 34px;background-color: rgb(255, 255, 255);box-shadow: rgba(0, 0, 0, 0.075) 0px 1px 1px inset;padding: 6px 12px;border-width: 1px;border-style: solid;border-color: rgb(194, 202, 216);border-image: initial;border-radius: 4px;transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;" name="setting[wm_overlay_path]" id="wm_overlay_path">
-            <?php foreach($waterfile as $t) {?>
-            <option<?php if ($t=='logo.png') {?> selected=""<?php }?> value="<?php echo $t;?>"><?php echo $t;?></option>
-            <?php }?>
+            <?php foreach($waterfile as $t) {
+            if (strpos($t, '.png') !== false) {?>
+            <option<?php if ($t=='default.png') {?> selected=""<?php }?> value="<?php echo $t;?>"><?php echo $t;?></option>
+            <?php }}?>
         </select>
       <?php }?><button type="button" class="layui-btn layui-btn-sm" id="fileupload-img"><i class="layui-icon">&#xe67c;</i><?php echo L('upload');?></button><br><?php echo L('site_att_watermark_img_desc')?>
      </td>

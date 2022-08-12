@@ -22,18 +22,6 @@ class site extends admin {
 			'center-bottom' => L('site_att_watermark_pos_8'),
 			'right-bottom' => L('site_att_watermark_pos_9'),
 		);
-		$files = dr_file_map(CMS_PATH.'statics/images/water/font/', 1);
-		foreach ($files as $t) {
-			if (substr($t, -3) == 'ttf') {
-				$this->waterfont[] = $t;
-			}
-		}
-		$waterfiles = dr_file_map(CMS_PATH.'statics/images/water/', 1);
-		foreach ($waterfiles as $t) {
-			if (substr($t, -3) == 'png' || substr($t, -3) == 'gif' || substr($t, -3) == 'jpg' || substr($t, -3) == 'jpeg') {
-				$this->waterfile[] = $t;
-			}
-		}
 	}
 	
 	public function init() {
@@ -172,8 +160,7 @@ class site extends admin {
 		} else {
 			$show_dialog = $show_validator = $show_scroll = $show_header = true;
 			$locate = $this->locate;
-			$waterfont = $this->waterfont;
-			$waterfile = $this->waterfile;
+			$waterfile = dr_file_map(CACHE_PATH.'watermark/', 1);
 			require CACHE_MODEL_PATH.'content_form.class.php';
 			$content_form = new content_form(0);
 			$forminfos = $content_form->get();
@@ -370,8 +357,7 @@ class site extends admin {
 			} else {
 				$show_dialog = $show_validator = $show_header = $show_scroll = true;
 				$locate = $this->locate;
-				$waterfont = $this->waterfont;
-				$waterfile = $this->waterfile;
+				$waterfile = dr_file_map(CACHE_PATH.'watermark/', 1);
 				$data = $this->db->get_one(array('siteid'=>$siteid));
 				require CACHE_MODEL_PATH.'content_form.class.php';
 				$content_form = new content_form(0);
@@ -415,7 +401,7 @@ class site extends admin {
 		if ($at == 'font') {
 			$rt = $upload->upload_file(array(
 				'save_name' => 'null',
-				'save_path' => CMS_PATH.'statics/images/water/font/',
+				'save_path' => CACHE_PATH.'watermark/',
 				'form_name' => 'file_data',
 				'file_exts' => array('ttf'),
 				'file_size' => 20 * 1024 * 1024,
@@ -428,7 +414,7 @@ class site extends admin {
 		} else {
 			$rt = $upload->upload_file(array(
 				'save_name' => 'null',
-				'save_path' => CMS_PATH.'statics/images/water/',
+				'save_path' => CACHE_PATH.'watermark/',
 				'form_name' => 'file_data',
 				'file_exts' => array('png'),
 				'file_size' => 3 * 1024 * 1024,
