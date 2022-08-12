@@ -10,26 +10,25 @@ error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING ^ E_STRICT);
 ini_set('display_errors', 1);
 
 define('SELF', pathinfo(__FILE__, PATHINFO_BASENAME));
-define('WEBPATH', dirname(__FILE__).'/');
-define('SYSTEMPATH', true);
+define('CMS_PATH', dirname(__FILE__).DIRECTORY_SEPARATOR);
 
 echo_msg(1, '当前脚本地址：'.$_SERVER['SCRIPT_NAME']);
 
-if (preg_match('/[\x{4e00}-\x{9fff}]+/u', WEBPATH)) {
-    echo_msg(0, 'WEB目录['.WEBPATH.']不允许出现中文或全角符号');
+if (preg_match('/[\x{4e00}-\x{9fff}]+/u', CMS_PATH)) {
+    echo_msg(0, 'WEB目录['.CMS_PATH.']不允许出现中文或全角符号');
 }
 
 foreach (array(' ', '[', ']') as $t) {
-    if (strpos(WEBPATH, $t) !== false) {
-        echo_msg(0, 'WEB目录['.WEBPATH.']不允许出现'.($t ? $t : '空格').'符号');
+    if (strpos(CMS_PATH, $t) !== false) {
+        echo_msg(0, 'WEB目录['.CMS_PATH.']不允许出现'.($t ? $t : '空格').'符号');
     }
 }
 
 if (isset($_GET['log']) && $_GET['log']) {
-    if (!is_file(WEBPATH.'caches/error_log.php')) {
+    if (!is_file(CMS_PATH.'caches/error_log.php')) {
         exit('没有错误日志记录');
     }
-    echo nl2br(file_get_contents(WEBPATH.'caches/error_log.php'));
+    echo nl2br(file_get_contents(CMS_PATH.'caches/error_log.php'));
     exit;
 } elseif (isset($_GET['phpinfo']) && $_GET['phpinfo']) {
     phpinfo();
@@ -69,8 +68,8 @@ if (!function_exists('chmod')) {
     echo_msg(0, 'PHP函数chmod被禁用，需要开启');
 }
 
-if (is_file(WEBPATH.'caches/configs/database.php')) {
-    $db = require WEBPATH.'caches/configs/database.php';
+if (is_file(CMS_PATH.'caches/configs/database.php')) {
+    $db = require CMS_PATH.'caches/configs/database.php';
 }
 
 $mysqli = function_exists('mysqli_init') ? mysqli_init() : 0;
@@ -174,8 +173,8 @@ if (!class_exists('ZipArchive')) {
 }
 
 // 存在错误日志
-if (is_file(WEBPATH.'caches/error_log.php')) {
-    $log = file_get_contents(WEBPATH.'caches/error_log.php');
+if (is_file(CMS_PATH.'caches/error_log.php')) {
+    $log = file_get_contents(CMS_PATH.'caches/error_log.php');
     echo_msg(1, '系统故障的错误日志记录：<a style="color:blue;text-decoration:none;" href="'.SELF.'?log=true">查看日志</a>');
 }
 
