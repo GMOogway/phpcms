@@ -9,6 +9,8 @@ header('Content-Type: text/html; charset=utf-8');
 
 error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING ^ E_STRICT);
 
+define('IN_CMS', TRUE);
+
 define('CMS_PATH', dirname(dirname(dirname(__FILE__))).'/');
 
 require 'func.php';

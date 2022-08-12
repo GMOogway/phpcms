@@ -17,9 +17,6 @@ define('IS_DEV', FALSE);
 // 移动入口标识
 !defined('IS_MOBILE') && define('IS_MOBILE', FALSE);
 
-// 项目标识
-!defined('IS_SELF') && define('IS_SELF', 'index');
-
 // 入口文件名称
 !defined('SELF') && define('SELF', pathinfo(__FILE__, PATHINFO_BASENAME));
 

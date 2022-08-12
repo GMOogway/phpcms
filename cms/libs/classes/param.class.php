@@ -42,7 +42,7 @@ class param {
 				}
 			}
 		}
-		if (IS_SELF!='admin') {
+		if (!IS_ADMIN) {
 			if ($m == 'admin') {
 				$m = 'content';
 			}
@@ -86,7 +86,7 @@ class param {
 				$a = SYS_ADMIN_PATH;
 			}
 		}
-		if (IS_SELF!='admin') {
+		if (!IS_ADMIN) {
 			if ($this->input->get('m') == 'admin') {
 				if ($a == 'login') {
 					$a = '';

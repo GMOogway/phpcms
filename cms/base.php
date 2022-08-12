@@ -23,7 +23,7 @@ define('IN_PHPCMS', IN_CMS);
 //CMS框架路径
 !defined('PC_PATH') && define('PC_PATH', dirname(__FILE__).DIRECTORY_SEPARATOR);
 
-!defined('CMS_PATH') && define('CMS_PATH', PC_PATH.'..'.DIRECTORY_SEPARATOR);
+!defined('CMS_PATH') && define('CMS_PATH', dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR);
 !defined('PHPCMS_PATH') && define('PHPCMS_PATH', CMS_PATH);
 
 //缓存文件夹地址
