@@ -205,6 +205,16 @@ jQuery(document).ready(function() {
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('setting_csrf_time')?></label>
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setconfig[sys_csrf_time]" value="1"<?php echo $sys_csrf_time ? ' checked' : ''?> /> <?php echo L('every_time')?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setconfig[sys_csrf_time]" value="0"<?php echo empty($sys_csrf_time) ? ' checked' : ''?> /> <?php echo L('generated_periodically')?> <span></span></label>
+                            </div>
+                            <span class="help-block"><?php echo L('setting_csrf_time_desc')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('need_check_come_url')?></label>
                         <div class="col-md-9">
                             <input type="checkbox" name="setconfig[needcheckcomeurl]" value="1" <?php echo $needcheckcomeurl ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">

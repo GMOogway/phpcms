@@ -4142,11 +4142,11 @@ function csrf_hash($key = 'csrf_token') {
 		return '';
 	}
 	$cache = pc_base::load_sys_class('cache');
-	!$key && $key = 'csrf_hash_'.md5(isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT'] ? $_SERVER['HTTP_USER_AGENT'] : '');
-	$csrf_token = $cache->get_auth_data($key, 1, 1800);
+	!$key && $key = 'csrf_token_'.md5(isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT'] ? $_SERVER['HTTP_USER_AGENT'] : '');
+	$csrf_token = $cache->get_auth_data(COOKIE_PRE.ip().$key, 1, 1800);
 	if (!$csrf_token) {
 		$csrf_token = bin2hex(random_bytes(16));
-		$cache->set_auth_data($key, $csrf_token, 1);
+		$cache->set_auth_data(COOKIE_PRE.ip().$key, $csrf_token, 1);
 	}
 	return $csrf_token;
 }

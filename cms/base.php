@@ -85,10 +85,11 @@ define('ROOT_URL', siteurl(1).'/');
 	'CSS_PATH' => '',
 	'IMG_PATH' => '',
 	'MOBILE_JS_PATH' => '',
-	'MOBILE_CSS_PATH' => '/',
+	'MOBILE_CSS_PATH' => '',
 	'MOBILE_IMG_PATH' => '',
 	'APP_PATH' => '',
 	'MOBILE_PATH' => '',
+	'BDMAP_API' => '',
 	'SYS_EDITOR' => '0',
 	'SYS_MAX_CATEGORY' => 100,
 	'SYS_ADMIN_PAGESIZE' => 10,
@@ -97,6 +98,7 @@ define('ROOT_URL', siteurl(1).'/');
 	'SYS_TIME_FORMAT' => '',
 	'DEBUG' => 1,
 	'SYS_CSRF' => 0,
+	'SYS_CSRF_TIME' => 0,
 	'NEEDCHECKCOMEURL' => 1,
 	'ADMIN_LOG' => 1,
 	'ERRORLOG' => 1,
@@ -130,8 +132,8 @@ if (is_file(CONFIGPATH.'system.php')) {
 }
 
 foreach ($system as $var => $value) {
-	if (!defined($var)) {
-		define($var, isset($my[$var]) ? $my[$var] : $value);
+	if (!defined(strtoupper($var))) {
+		define(strtoupper($var), isset($my[$var]) ? $my[$var] : $value);
 	}
 }
 unset($my, $system);*/
@@ -204,6 +206,8 @@ define('SYS_KEY', pc_base::load_config('system','auth_key'));
 define('SYS_LANGUAGE', pc_base::load_config('system','lang'));
 //跨站验证
 define('SYS_CSRF', pc_base::load_config('system','sys_csrf'));
+//CSRF验证有效期
+define('SYS_CSRF_TIME', pc_base::load_config('system','sys_csrf_time'));
 //当前模板方案目录
 define('SYS_TPL_NAME', pc_base::load_config('system','tpl_name'));
 //是否允许在线编辑模板
@@ -669,7 +673,7 @@ class pc_base {
 		}
 		if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
 			$token =  $_POST['csrf_test_name'];
-			$name = 'csrf_token';
+			$name = COOKIE_PRE.ip().'csrf_token';
 			$code_file = CACHE_PATH.'caches_authcode/caches_data/'.md5('1'.$name);
 			if (is_file($code_file)) {
 				$ft = filemtime($code_file);
@@ -682,19 +686,20 @@ class pc_base {
 						$hash = file_get_contents($code_file);
 					}
 				}
-				unlink($code_file);
+				if (defined('SYS_CSRF_TIME') && SYS_CSRF_TIME) {
+					unlink($code_file);
+				}
 			}
 			if (!isset($token, $hash) || !hash_equals($hash, $token)) {
-				CI_DEBUG && log_message('debug', '跨站验证：'.FC_NOW_URL);
+				CI_DEBUG && log_message('debug', '跨站验证拦截（'.$hash.' / '.$token.'）');
 				dr_exit_msg(0, '跨站验证超时请重试', '', array('name' => $name, 'value' => $hash));
 			}
-
-			if (isset($token)) {
-				unset($token);
-			}
+			unset($token);
 			unset($name);
 			unset($code_file);
-			unset($hash);
+			if (isset($hash)) {
+				unset($hash);
+			}
 		}
 	}
 }

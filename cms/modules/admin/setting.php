@@ -97,6 +97,7 @@ class setting extends admin {
 			$setconfig['sys_admin_pagesize'] = intval($setconfig['sys_admin_pagesize']);
 			$setconfig['debug'] = intval($setconfig['debug']);
 			$setconfig['sys_csrf'] = intval($setconfig['sys_csrf']);
+			$setconfig['sys_csrf_time'] = intval($setconfig['sys_csrf_time']);
 			$setconfig['needcheckcomeurl'] = intval($setconfig['needcheckcomeurl']);
 			$setconfig['admin_log'] = intval($setconfig['admin_log']);
 			$setconfig['errorlog'] = intval($setconfig['errorlog']);
