@@ -745,7 +745,9 @@ function dr_list_function($func, $value, $param = array(), $data = array(), $fie
 			'datetime' => 'datetime',
 			'editor' => 'content',
 			'image' => 'image',
-			'images' => 'image',
+			'images' => 'images',
+			'file' => 'file',
+			'downfiles' => 'files',
 			'box' => 'checkbox_name',
 			'linkage' => 'linkage_name',
 		);

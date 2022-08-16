@@ -51,7 +51,7 @@ class function_list {
 
         $this->m!='content' && $this->c!='content' && $data['url'] = $url = '';
 
-        return isset($data['url']) && $data['url'] && $url ? ('<a href="'.$url.'" target="_blank"'.($data['status']!=99 ? ' onclick=\'window.open("?m='.$this->m.'&c='.$this->c.'&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'","manage")\'' : '').' class="tooltips" data-container="body" data-placement="top" data-original-title="'.$value.'" title="'.$value.'">'.$title.'</a>'.($data['islink'] > 0 ? '  <i class="fa fa-link font-green tooltips" data-container="body" data-placement="top" data-original-title="'.L('转向链接').'" title="'.L('转向链接').'"></i>' : '')) : $title;
+        return (isset($data['url']) && $data['url'] && $url ? '<a href="'.$url.'" target="_blank"'.($data['status']!=99 ? ' onclick=\'window.open("?m='.$this->m.'&c='.$this->c.'&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'","manage")\'' : '').' class="tooltips" '.title_style($data['style']).' data-container="body" data-placement="top" data-original-title="'.$value.'" title="'.$value.'">'.$title.'</a>' : $title).($data['islink'] > 0 ? ' <i class="fa fa-link font-green tooltips" data-container="body" data-placement="top" data-original-title="'.L('转向链接').'" title="'.L('转向链接').'"></i>' : '');
     }
 
     // 用于列表显示内容
@@ -198,6 +198,45 @@ class function_list {
         return $this->cid_data[$cid] ? $this->title($this->cid_data[$cid]['title'], $param, $this->cid_data[$cid]) : L('关联主题不存在');
     }
 
+    // 标题带推荐位图标
+    public function ptitle($value, $param = array(), $data = array()) {
+        if (!$value) {
+            return '';
+        }
+
+        $value = htmlspecialchars(clearhtml($value));
+        $title = ($data['thumb'] ? '<i class="fa fa-photo"></i> ' : '').dr_keyword_highlight(str_cut($value, 30), $param['keyword']);
+        !$title && $title = '...';
+
+        $siteids = getcache('category_content','commons');
+        $siteid = $siteids[$data['catid']];
+        $sitelist = getcache('sitelist','commons');
+        $release_siteurl = $sitelist[$siteid]['url'];
+        $path_len = -strlen(WEB_PATH);
+        $release_siteurl = substr($release_siteurl,0,$path_len);
+        if($data['status']==99) {
+            if($data['islink']) {
+                $url = $data['url'];
+            } elseif(strpos($data['url'],'http://')!==false || strpos($data['url'],'https://')!==false) {
+                $url = $data['url'];
+            } else {
+                $url = $release_siteurl.$data['url'];
+            }
+        } else {
+            $url = '?m='.$this->m.'&c='.$this->c.'&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'';
+        }
+
+        $this->m!='content' && $this->c!='content' && $data['url'] = $url = '';
+
+        if ($data['id']) {
+            $position_db = pc_base::load_model('position_model');
+            $position_data_db = pc_base::load_model('position_data_model');
+            $flag = $position_data_db->count(array('id'=>$data['id'], 'catid'=>$data['catid']));
+        }
+        $html = (isset($data['url']) && $data['url'] && $url ? '<a href="'.$url.'" target="_blank"'.($data['status']!=99 ? ' onclick=\'window.open("?m='.$this->m.'&c='.$this->c.'&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'","manage")\'' : '').' class="tooltips" '.title_style($data['style']).' data-container="body" data-placement="top" data-original-title="'.$value.'" title="'.$value.'">'.$title.'</a>' : $title).($flag ? ' <i class="fa fa-flag font-blue tooltips" data-original-title="'.L('推荐位').'" title="'.L('推荐位').'"></i>' : '').($data['islink'] > 0 ? ' <i class="fa fa-link font-green tooltips" data-original-title="'.L('转向链接').'" title="'.L('转向链接').'"></i>' : '');
+        return $html;
+    }
+
     // 标题带推荐位
     public function position($value, $param = array(), $data = array()) {
         if (!$value) {
@@ -228,7 +267,7 @@ class function_list {
 
         $this->m!='content' && $this->c!='content' && $data['url'] = $url = '';
 
-        $html = isset($data['url']) && $data['url'] && $url ? ('<a href="'.$url.'" target="_blank"'.($data['status']!=99 ? ' onclick=\'window.open("?m='.$this->m.'&c='.$this->c.'&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'","manage")\'' : '').' class="tooltips" data-container="body" data-placement="top" data-original-title="'.$value.'" title="'.$value.'">'.$title.'</a>'.($data['islink'] > 0 ? '  <i class="fa fa-link font-green tooltips" data-original-title="'.L('转向链接').'" title="'.L('转向链接').'"></i>' : '')) : $title;
+        $html = (isset($data['url']) && $data['url'] && $url ? '<a href="'.$url.'" target="_blank"'.($data['status']!=99 ? ' onclick=\'window.open("?m='.$this->m.'&c='.$this->c.'&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'","manage")\'' : '').' class="tooltips" '.title_style($data['style']).' data-container="body" data-placement="top" data-original-title="'.$value.'" title="'.$value.'">'.$title.'</a>' : $title).($data['islink'] > 0 ? ' <i class="fa fa-link font-green tooltips" data-original-title="'.L('转向链接').'" title="'.L('转向链接').'"></i>' : '');
         if ($data['id']) {
             $position_db = pc_base::load_model('position_model');
             $position_data_db = pc_base::load_model('position_data_model');
@@ -237,49 +276,10 @@ class function_list {
                 $arr = $position_db->select();
                 $ico = array(1 => 'success', 2 => 'danger', 3 => 'info', 4 => 'warning');
                 foreach($flag as $t) {
-                    $html .= '&nbsp;<span class="label label-'.($ico[$t['posid']] ? $ico[$t['posid']] : 'default').'">'.$arr[$t['posid']-1]['name'].'</span>';
+                    $html .= '&nbsp;<span class="label label-'.($ico[$t['posid']] ? $ico[$t['posid']] : 'default').' tooltips" data-original-title="'.$arr[$t['posid']-1]['name'].'" title="'.$arr[$t['posid']-1]['name'].'">'.$arr[$t['posid']-1]['name'].'</span>';
                 }
             }
         }
-        return $html;
-    }
-
-    // 标题带推荐位图标
-    public function ptitle($value, $param = array(), $data = array()) {
-        if (!$value) {
-            return '';
-        }
-
-        $value = htmlspecialchars(clearhtml($value));
-        if ($data['id']) {
-            $position_db = pc_base::load_model('position_model');
-            $position_data_db = pc_base::load_model('position_data_model');
-            $flag = $position_data_db->count(array('id'=>$data['id'], 'catid'=>$data['catid']));
-        }
-        $title = ($data['thumb'] ? '<i class="fa fa-photo"></i> ' : '').($flag ? '<i class="fa fa-flag"></i> ' : '').dr_keyword_highlight(str_cut($value, 30), $param['keyword']);
-        !$title && $title = '...';
-
-        $siteids = getcache('category_content','commons');
-        $siteid = $siteids[$data['catid']];
-        $sitelist = getcache('sitelist','commons');
-        $release_siteurl = $sitelist[$siteid]['url'];
-        $path_len = -strlen(WEB_PATH);
-        $release_siteurl = substr($release_siteurl,0,$path_len);
-        if($data['status']==99) {
-            if($data['islink']) {
-                $url = $data['url'];
-            } elseif(strpos($data['url'],'http://')!==false || strpos($data['url'],'https://')!==false) {
-                $url = $data['url'];
-            } else {
-                $url = $release_siteurl.$data['url'];
-            }
-        } else {
-            $url = '?m='.$this->m.'&c='.$this->c.'&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'';
-        }
-
-        $this->m!='content' && $this->c!='content' && $data['url'] = $url = '';
-
-        $html = isset($data['url']) && $data['url'] && $url ? ('<a href="'.$url.'" target="_blank"'.($data['status']!=99 ? ' onclick=\'window.open("?m='.$this->m.'&c='.$this->c.'&a=public_preview&catid='.$data['catid'].'&id='.$data['id'].'","manage")\'' : '').' class="tooltips" data-container="body" data-placement="top" data-original-title="'.$value.'" title="'.$value.'">'.$title.'</a>'.($data['islink'] > 0 ? '  <i class="fa fa-link font-green tooltips" data-original-title="'.L('转向链接').'" title="'.L('转向链接').'"></i>' : '')) : $title;
         return $html;
     }
 
@@ -301,7 +301,7 @@ class function_list {
         return '<a href="'.$value.'" target="_blank">'.$value.'</a>';
     }
 
-    // 用于列表显示图片专用
+    // 用于列表显示单图片专用
     public function image($value, $param = array(), $data = array()) {
 
         if ($value) {
@@ -316,34 +316,21 @@ class function_list {
         return L('无');
     }
 
-    // 用于列表显示多文件
-    public function files($value, $param = array(), $data = array()) {
+    // 用于列表显示多图片专用
+    public function images($value, $param = array(), $data = array()) {
 
         if ($value) {
             $rt = array();
             $arr = dr_get_files($value);
             foreach ($arr as $t) {
-                $file = get_attachment($t['fileurl']);
+                $file = get_attachment($t);
                 if ($file) {
                     $value = $file['url'];
                 } else {
                     $value = $t;
                 }
-                $ext = trim(strtolower(strrchr($value, '.')), '.');
-                if (dr_is_image($ext)) {
-                    $url = 'javascript:dr_preview_image(\''.$value.'\');';
-                    $rt[] = '<a href="'.$url.'"><img src="'.IMG_PATH.'ext/jpg.png'.'"></a>';
-                } elseif (is_file(CMS_PATH.'statics/images/ext/'.$ext.'.png')) {
-                    $file = IMG_PATH.'ext/'.$ext.'.png';
-                    $url = 'javascript:dr_preview_url(\''.dr_file($value).'\');';
-                    $rt[] = '<a href="'.$url.'"><img src="'.$file.'"></a>';
-                } elseif (strpos($value, 'http://') === 0) {
-                    $file = IMG_PATH.'ext/url.png';
-                    $url = 'javascript:dr_preview_url(\''.$value.'\');';
-                    $rt[] = '<a href="'.$url.'"><img src="'.$file.'"></a>';
-                } else {
-                    $rt[] = $value;
-                }
+                $url = 'javascript:dr_preview_image(\''.$value.'\');';
+                $rt[] = '<a class="thumbnail" style="display: inherit;" href="'.$url.'"><img style="width:30px" src="'.thumb($value, 100, 100).'"></a>';
             }
             return implode('', $rt);
         }
@@ -374,6 +361,41 @@ class function_list {
                 return $value;
             }
         }
+        return L('无');
+    }
+
+    // 用于列表显示多文件
+    public function files($value, $param = array(), $data = array()) {
+
+        if ($value) {
+            $rt = array();
+            $arr = dr_get_files($value);
+            foreach ($arr as $t) {
+                $file = get_attachment($t);
+                if ($file) {
+                    $value = $file['url'];
+                } else {
+                    $value = $t;
+                }
+                $ext = trim(strtolower(strrchr($value, '.')), '.');
+                if (dr_is_image($ext)) {
+                    $url = 'javascript:dr_preview_image(\''.$value.'\');';
+                    $rt[] = '<a href="'.$url.'"><img src="'.IMG_PATH.'ext/jpg.png'.'"></a>';
+                } elseif (is_file(CMS_PATH.'statics/images/ext/'.$ext.'.png')) {
+                    $file = IMG_PATH.'ext/'.$ext.'.png';
+                    $url = 'javascript:dr_preview_url(\''.dr_file($value).'\');';
+                    $rt[] = '<a href="'.$url.'"><img src="'.$file.'"></a>';
+                } elseif (strpos($value, 'http://') === 0) {
+                    $file = IMG_PATH.'ext/url.png';
+                    $url = 'javascript:dr_preview_url(\''.$value.'\');';
+                    $rt[] = '<a href="'.$url.'"><img src="'.$file.'"></a>';
+                } else {
+                    $rt[] = $value;
+                }
+            }
+            return implode('', $rt);
+        }
+
         return L('无');
     }
 

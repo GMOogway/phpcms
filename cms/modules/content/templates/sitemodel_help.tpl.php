@@ -11,7 +11,8 @@ include $this->admin_tpl('header', 'admin');?>
 日期时间：datetime
 日期：date
 会员信息：author
-用于列表显示缩略图：image
+用于列表显示单缩略图：image
+用于列表显示多缩略图：images
 用于列表显示单文件：file
 用于列表显示多文件：files
 用于列表关联主题：ctitle

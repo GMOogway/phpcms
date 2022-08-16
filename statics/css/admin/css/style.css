@@ -73,6 +73,11 @@ label {display: inline-block;margin-bottom: 5px;}
 .alert-danger {background-color: #fbe1e3;border-color: #fbe1e3;color: #e73d4a;}
 .alert {padding: 15px;border: 1px solid transparent;border-radius: 4px;}
 .alert, .thumbnail {margin-bottom: 20px;}
+.media-object,.thumbnail {display: block;}
+.thumbnail {padding: 4px;line-height: 1.42857;background-color: #fff;border: 1px solid #ddd;border-radius: 4px;-webkit-transition: border .2s ease-in-out;-o-transition: border .2s ease-in-out;transition: border .2s ease-in-out;}
+.thumbnail a>img,.thumbnail>img {display: block;max-width: 100%;height: auto;margin-left: auto;margin-right: auto;}
+.thumbnail .caption {padding: 9px;color: #333;}
+a.thumbnail.active,a.thumbnail:focus,a.thumbnail:hover {border-color: #337ab7;}
 
 /*定义清除浮动*/
 .clear:after{content:'.';display:block;clear:both;overflow:hidden;visibility:hidden;font-size:0;line-height:0;width:0;height:0;}
