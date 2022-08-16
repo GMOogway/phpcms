@@ -45,6 +45,13 @@ jQuery(document).ready(function() {
                         </div>
                     </div>
 
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('栏目列表名称长度');?></label>
+                        <div class="col-md-9">
+                            <label><input class="form-control" type="text" name="data[name_size]" value="<?php echo intval($data['name_size']);?>"></label>
+                            <span class="help-block"><?php echo L('在后台栏目列表处显示的名称长度控制值，0表示不限制');?></span>
+                        </div>
+                    </div>
 
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('后台列表显示字段');?></label>

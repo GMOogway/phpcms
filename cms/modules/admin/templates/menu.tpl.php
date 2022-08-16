@@ -61,7 +61,7 @@ if(is_array($array)){
             <input type="checkbox" class="group-checkable" data-set=".checkboxes" />
             <span></span>
         </label>
-        <button type="button" onclick="dr_ajax_option('?m=admin&c=menu&a=delete&menuid=<?php echo $this->input->get('menuid');?>', '<?php echo L('你确定要删除它们吗？');?>', 1)" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete');?></button>
+        <button type="button" onclick="ajax_option('?m=admin&c=menu&a=delete&menuid=<?php echo $this->input->get('menuid');?>', '<?php echo L('你确定要删除它们吗？');?>', 1)" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete');?></button>
     </div>
 </div>
 </form>

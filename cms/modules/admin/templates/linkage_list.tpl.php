@@ -75,7 +75,7 @@ include $this->admin_tpl('header');?>
                 <input type="checkbox" class="group-checkable" data-set=".checkboxes" />
                 <span></span>
             </label>
-            <button type="button" onclick="dr_ajax_option('?m=admin&c=linkage&a=delete', '<?php echo L('confirm', array('message' => L('selected')));?>', 1)" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete');?></button>
+            <button type="button" onclick="ajax_option('?m=admin&c=linkage&a=delete', '<?php echo L('confirm', array('message' => L('selected')));?>', 1)" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete');?></button>
         </div>
      </div>
 

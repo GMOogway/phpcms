@@ -5,7 +5,7 @@ include $this->admin_tpl('header','admin');?>
     <div class="page-content-wrapper">
         <div class="page-content page-content3 mybody-nheader main-content  ">
 <div class="note note-danger">
-    <p><a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=init&pc_hash='+pc_hash+'&is_ajax=1',1);"><?php echo L('操作之前请更新下全站缓存');?></a></p>
+    <p><a href="javascript:dr_admin_menu_ajax('?m=admin&c=cache_all&a=init&pc_hash='+pc_hash+'&is_ajax=1',1);"><?php echo L('update_all_cache');?></a></p>
 </div>
 <div class="portlet light bordered">
     <div class="portlet-title tabbable-line">

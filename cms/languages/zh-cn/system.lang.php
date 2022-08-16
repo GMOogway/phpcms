@@ -113,6 +113,7 @@ $LANG['input_code'] = '请输入验证码。';
 $LANG['code_error'] = '验证码输入错误。';
 $LANG['module_not_exists'] = '此模块未安装或已禁用！';
 $LANG['part_cache_success'] = '系统缓存文件更新中：';
+$LANG['update_all_cache'] = '操作之前请更新下全站缓存';
 $LANG['update_cache_all'] = '更改数据之后需要更新缓存之后才能生效';
 $LANG['message_tips'] = '提示信息';
 $LANG['return_previous'] = '点这里返回上一页';

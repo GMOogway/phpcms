@@ -125,7 +125,7 @@ class category extends admin {
 		foreach($data as $k => $t) {
 			$option = '';
 			!$t['modelname'] && $t['modelname'] = $models[$t['modelid']]['name'];
-			$t['catname'] = str_cut($t['catname'], 30);
+			$t['catname'] = isset($this->cat_config['name_size']) && $this->cat_config['name_size'] ? str_cut($t['catname'], intval($this->cat_config['name_size'])) : $t['catname'];
 			$setting = dr_string2array($t['setting']);
 			$parentid = explode(',', $t['arrparentid']);
 			$t['listorder_html'] = '<input type="text" onblur="dr_ajax_save(this.value, \'?m=admin&c=category&a=listorder&catid='.$t['catid'].'&pc_hash=\'+pc_hash, \'listorder\')" value="'.$t['listorder'].'" class="displayorder form-control input-sm input-inline input-mini">';
