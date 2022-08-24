@@ -11,7 +11,7 @@ CREATE TABLE `cms_slider` (
   `listorder` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
   `isshow` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '状态',
   `addtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '添加时间',
-  `description` tinytext COMMENT '描述',
+  `description` mediumtext COMMENT '描述',
   PRIMARY KEY (`id`),
   KEY `typeid` (`typeid`,`isshow`,`listorder`,`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;

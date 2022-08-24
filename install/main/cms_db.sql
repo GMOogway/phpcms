@@ -1245,7 +1245,7 @@ CREATE TABLE IF NOT EXISTS `cms_download` (
   `style` char(24) NOT NULL DEFAULT '',
   `thumb` varchar(100) NOT NULL DEFAULT '',
   `keywords` char(40) NOT NULL DEFAULT '',
-  `description` char(255) NOT NULL DEFAULT '',
+  `description` mediumtext NOT NULL,
   `posids` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `url` char(100) NOT NULL,
   `listorder` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -1275,7 +1275,7 @@ CREATE TABLE IF NOT EXISTS `cms_download` (
 DROP TABLE IF EXISTS `cms_download_data_0`;
 CREATE TABLE IF NOT EXISTS `cms_download_data_0` (
   `id` mediumint(8) unsigned DEFAULT '0',
-  `content` text NOT NULL,
+  `content` mediumtext NOT NULL,
   `readpoint` smallint(5) unsigned NOT NULL DEFAULT '0',
   `groupids_view` varchar(100) NOT NULL,
   `paginationtype` tinyint(1) NOT NULL,
@@ -1350,7 +1350,7 @@ CREATE TABLE IF NOT EXISTS `cms_picture` (
   `style` char(24) NOT NULL DEFAULT '',
   `thumb` char(100) NOT NULL DEFAULT '',
   `keywords` char(40) NOT NULL DEFAULT '',
-  `description` char(255) NOT NULL DEFAULT '',
+  `description` mediumtext NOT NULL,
   `posids` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `url` char(100) NOT NULL,
   `listorder` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -1373,7 +1373,7 @@ CREATE TABLE IF NOT EXISTS `cms_picture` (
 DROP TABLE IF EXISTS `cms_picture_data_0`;
 CREATE TABLE IF NOT EXISTS `cms_picture_data_0` (
   `id` mediumint(8) unsigned DEFAULT '0',
-  `content` text NOT NULL,
+  `content` mediumtext NOT NULL,
   `readpoint` smallint(5) unsigned NOT NULL DEFAULT '0',
   `groupids_view` varchar(100) NOT NULL,
   `paginationtype` tinyint(1) NOT NULL,

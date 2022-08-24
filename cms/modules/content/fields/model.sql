@@ -7,7 +7,7 @@ CREATE TABLE `$basic_table` (
   `style` char(24) NOT NULL default '',
   `thumb` char(100) NOT NULL default '',
   `keywords` char(40) NOT NULL default '',
-  `description` char(255) NOT NULL default '',
+  `description` mediumtext NOT NULL,
   `posids` tinyint(1) unsigned NOT NULL default '0',
   `url` char(100) NOT NULL,
   `listorder` tinyint(3) unsigned NOT NULL default '0',
@@ -27,7 +27,7 @@ CREATE TABLE `$basic_table` (
 -- 从表
 CREATE TABLE `$table_data` (
   `id` mediumint(8) unsigned default '0',
-  `content` text NOT NULL,
+  `content` mediumtext NOT NULL,
   `readpoint` smallint(5) unsigned NOT NULL default '0',
   `groupids_view` varchar(100) NOT NULL,
   `paginationtype` tinyint(1) NOT NULL,
