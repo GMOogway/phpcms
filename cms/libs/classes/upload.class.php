@@ -147,7 +147,7 @@ class upload {
             'url' => $url,
             'md5' => $rt['data']['md5'],
             'file' => $file_path,
-            'size' => $file['s'],
+            'size' => $file['size'],
             'path' => ($config['attachment']['value']['path'] && $config['attachment']['value']['path'] != 'null' ? $config['attachment']['value']['path'] : '').$file_path,
             'name' => $file_name,
             'info' => $rt['data']['info'],
