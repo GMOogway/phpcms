@@ -17,7 +17,6 @@ class upload {
         $this->catid = intval($catid);
         $this->siteid = intval($siteid)== 0 ? 1 : intval($siteid);
         $this->module = $module ? $module : 'content';
-        pc_base::load_sys_func('dir');
         pc_base::load_sys_class('image');
         // 返回错误信息
         $this->error = array(
@@ -562,7 +561,6 @@ class storage {
         $this->catid = intval($catid);
         $this->siteid = intval($siteid)== 0 ? 1 : intval($siteid);
         $this->module = $module ? $module : 'content';
-        pc_base::load_sys_func('dir');
         pc_base::load_sys_class('image');
     }
 
@@ -701,7 +699,6 @@ class local {
         $this->catid = intval($catid);
         $this->siteid = intval($siteid)== 0 ? 1 : intval($siteid);
         $this->module = $module ? $module : 'content';
-        pc_base::load_sys_func('dir');
         pc_base::load_sys_class('image');
     }
 
