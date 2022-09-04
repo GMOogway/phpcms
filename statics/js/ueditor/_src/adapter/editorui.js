@@ -45,6 +45,7 @@
         'emotion':'~/dialogs/emotion/emotion.html',
         'wordimage':'~/dialogs/wordimage/wordimage.html',
         'attachment':'~/dialogs/attachment/attachment.html',
+        'importword':'~/dialogs/importword/importword.html',
         'insertframe':'~/dialogs/insertframe/insertframe.html',
         'edittip':'~/dialogs/table/edittip.html',
         'edittable':'~/dialogs/table/edittable.html',
@@ -183,7 +184,7 @@
 
     var dialogBtns = {
         noOk:['searchreplace', 'help', 'spechars', 'webapp','preview'],
-        ok:['attachment', 'anchor', 'link', 'insertimage', 'map', 'gmap', 'insertframe', 'wordimage',
+        ok:['attachment', 'anchor', 'link', 'insertimage', 'map', 'gmap', 'insertframe', 'wordimage', 'importword',
             'insertvideo', 'insertframe', 'edittip', 'edittable', 'edittd', 'scrawl', 'template', 'music', 'background', 'charts', 'subtitle']
     };
 

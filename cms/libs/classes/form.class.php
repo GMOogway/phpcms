@@ -144,13 +144,13 @@ class form {
 				} else {
 					$tool = '[';
 				}
-				$tool .= "'FullScreen', 'Undo', 'Redo', '|', 'Bold', 'Italic', 'Underline', 'StrikeThrough', 'Superscript', 'Subscript', 'RemoveFormat', 'FormatMatch', 'AutoTypeSet', '|', 'BlockQuote', '|', 'PastePlain', '|', 'ForeColor', 'BackColor', 'InsertOrderedList', 'InsertUnorderedList', 'SelectAll', 'ClearDoc', '|', 'CustomStyle', 'Paragraph', '|', 'RowSpacingTop', 'RowSpacingBottom', 'LineHeight', '|', 'FontFamily', 'FontSize', '|', 'DirectionalityLtr', 'DirectionalityRtl', '|', '', 'Indent', '|', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyJustify', '|', 'Link', 'Unlink', 'Anchor', '|', 'ImageNone', 'ImageLeft', 'ImageRight', 'ImageCenter', '|', 'InsertImage', 'Emotion', 'Scrawl', 'InsertVideo', 'Attachment', 'Map', 'InsertFrame'";
+				$tool .= "'FullScreen', 'Undo', 'Redo', '|', 'Bold', 'Italic', 'Underline', 'StrikeThrough', 'Superscript', 'Subscript', 'RemoveFormat', 'FormatMatch', 'AutoTypeSet', '|', 'BlockQuote', '|', 'PastePlain', '|', 'ForeColor', 'BackColor', 'InsertOrderedList', 'InsertUnorderedList', 'SelectAll', 'ClearDoc', '|', 'CustomStyle', 'Paragraph', '|', 'RowSpacingTop', 'RowSpacingBottom', 'LineHeight', '|', 'FontFamily', 'FontSize', '|', 'DirectionalityLtr', 'DirectionalityRtl', '|', '', 'Indent', '|', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyJustify', '|', 'Link', 'Unlink', 'Anchor', '|', 'ImageNone', 'ImageLeft', 'ImageRight', 'ImageCenter', '|', 'InsertImage', 'ImportWord', 'Emotion', 'Scrawl', 'InsertVideo', 'Attachment', 'Map', 'InsertFrame'";
 				if ($show_page=="true") {
 					$tool .= ", 'PageBreak'";
 				}
 				$tool .= ", 'HighlightCode', '|', 'Horizontal', 'Date', 'Time', 'Spechars', '|', 'InsertTable', 'DeleteTable', 'InsertParagraphBeforeTable', 'InsertRow', 'DeleteRow', 'InsertCol', 'DeleteCol', 'MergeCells', 'MergeRight', 'MergeDown', 'SplittoCells', 'SplittoRows', 'SplittoCols', '|', 'Print', 'Preview', 'SearchReplace', 'Help']";
 			} elseif($toolbar == 'desc') {
-				$tool = "['Bold', 'Italic', '|', 'InsertOrderedList', 'InsertUnorderedList', '|', 'Link', 'Unlink', '|', 'InsertImage', '|', 'Source']";
+				$tool = "['Bold', 'Italic', '|', 'InsertOrderedList', 'InsertUnorderedList', '|', 'Link', 'Unlink', '|', 'InsertImage', 'ImportWord', '|', 'Source']";
 			} elseif($toolbar == 'full') {
 				if(defined('IS_ADMIN') && IS_ADMIN) {
 					$tool = "['Source',";
@@ -164,7 +164,7 @@ class form {
 				'Directionalityltr', 'Directionalityrtl', 'Indent', '|',
 				'Justifyleft', 'Justifycenter', 'Justifyright', 'Justifyjustify', '|', 'Touppercase', 'Tolowercase', '|',
 				'Link', 'Unlink', 'Anchor', '|', 'Imagenone', 'Imageleft', 'Imageright', 'Imagecenter', '|',
-				'Insertimage', 'Emotion', 'Scrawl', 'Insertvideo', 'Attachment', 'Map', 'Insertframe', 'Insertcode'";
+				'Insertimage', 'ImportWord', 'Emotion', 'Scrawl', 'Insertvideo', 'Attachment', 'Map', 'Insertframe', 'Insertcode'";
 				if ($show_page=="true") {
 					$tool .= ", 'PageBreak', 'Subtitle'";
 				}

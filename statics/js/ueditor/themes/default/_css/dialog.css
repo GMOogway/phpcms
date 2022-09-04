@@ -213,6 +213,13 @@
     overflow: hidden;
 }
 
+/*importword-dialog*/
+.edui-default .edui-for-importword .edui-dialog-content {
+    width: 650px;
+    height: 370px;
+    overflow: hidden;
+}
+
 /*attachment-dialog*/
 .edui-default .edui-for-attachment .edui-dialog-content {
     width: 650px;
@@ -393,6 +400,13 @@
         width: 340px;
         height: 255px;
         overflow: hidden;
+    }
+
+    /*importword-dialog*/
+    .edui-default .edui-for-importword .edui-dialog-content {
+        width: 340px;
+        height: 370px;
+        overflow: hidden
     }
 
     /*searchreplace-dialog*/

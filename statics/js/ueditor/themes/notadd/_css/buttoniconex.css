@@ -140,6 +140,8 @@
 
 .edui-for-wordimage .edui-icon:before { content: "\e652"; }
 
+.edui-for-importword .edui-icon:before { content: "\e646"; }
+
 .edui-for-edittd .edui-icon:before { content: "\e65a"; }
 
 .edui-for-lineheight .edui-icon:before { content: "\e62a"; }

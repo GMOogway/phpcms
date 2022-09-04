@@ -483,7 +483,29 @@ class upload {
      * 获取文件扩展名
      */
     protected function _file_ext($name) {
-        return str_replace('.', '', trim(strtolower(strrchr($name, '.')), '.'));
+
+        if (strlen($name) > 300) {
+            return '';
+        }
+
+        $ext = str_replace('.', '', trim(strtolower(strrchr($name, '.')), '.'));
+
+        if (strlen($ext) > 10) {
+            foreach (array('gif', 'jpg', 'jpeg', 'png', 'webp') as $t) {
+                if (stripos($name, $t) !== false) {
+                    return $t;
+                }
+            }
+        }
+
+        return $ext;
+    }
+
+    /**
+     * 随机存储的文件名
+     */
+    protected function _rand_save_file_name($file) {
+        return substr(md5(SYS_TIME.(is_array($file) ? dr_array2string($file) : $file).uniqid()), rand(0, 20), 15);
     }
 
     /**
@@ -506,7 +528,7 @@ class upload {
         }
 
         // 随机新名字
-        !$name && $name = substr(md5(SYS_TIME.(is_array($file) ? dr_array2string($file) : $file).uniqid()), rand(0, 20), 15);
+        !$name && $name = $this->_rand_save_file_name($file);
 
         if (isset($config['save_file']) && $config['save_file']) {
             // 指定存储名称

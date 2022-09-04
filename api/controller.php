@@ -116,6 +116,14 @@ $CONFIG = array (
     "fileMaxSize"=>$site_setting['fileMaxSize'] * 1024 *1024, /* 上传大小限制，单位B，默认50MB */
     "fileAllowFiles"=>$fileAllowFiles, /* 上传文件格式显示 */
 
+    /* 上传Word配置 */
+    "wordActionName"=>"uploadword", /* controller里,执行上传视频的action名称 */
+    "wordFieldName"=>"upfile", /* 提交的文件表单名称 */
+    "wordPathFormat"=>$filename, /* 上传保存路径,可以自定义保存路径和文件名格式 */
+    "wordUrlPrefix"=>'', /* 文件访问路径前缀 */
+    "wordMaxSize"=>$site_setting['fileMaxSize'] * 1024 *1024, /* 上传大小限制，单位B，默认50MB */
+    "wordAllowFiles"=>$fileAllowFiles, /* 上传文件格式显示 */
+
     /* 列出指定目录下的图片 */
     'imageManagerActionName'=>'listimage', /* 执行图片管理的action名称 */
     'imageManagerListPath'=>'', /* 指定要列出图片的目录 */
@@ -154,6 +162,8 @@ if (intval($userid)) {
         case 'uploadvideo':
         /* 上传文件 */
         case 'uploadfile':
+        /* 上传文件 */
+        case 'uploadword':
         /* 上传截图 */
         case 'uploadscreen':
             $result = include("ueditor/action_upload.php");

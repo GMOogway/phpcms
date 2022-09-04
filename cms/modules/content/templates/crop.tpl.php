@@ -67,10 +67,10 @@ include $this->admin_tpl('header','admin');
             viewMode : 1,
             preview: '.preview_img', 
             crop: function(data) {
-                $("input[name='x']").val(data.detail.x);
-                $("input[name='y']").val(data.detail.y);
-                $("input[name='w']").val(data.detail.width);
-                $("input[name='h']").val(data.detail.height);
+                $("input[name='x']").val(Math.round(data.detail.x));
+                $("input[name='y']").val(Math.round(data.detail.y));
+                $("input[name='w']").val(Math.round(data.detail.width));
+                $("input[name='h']").val(Math.round(data.detail.height));
             }
         })
     });

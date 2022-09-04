@@ -1334,7 +1334,7 @@ class content extends admin {
 	public function public_crop() {
 		$this->userid = $_SESSION['userid'] ? $_SESSION['userid'] : (param::get_cookie('_userid') ? param::get_cookie('_userid') : param::get_cookie('userid'));
 		$siteid = param::get_cookie('siteid');
-		if(!$siteid) $siteid = $this->get_siteid() ? $this->get_siteid() : 1 ;
+		if(!$siteid) $siteid = $this->siteid;
 		if($this->input->post('filepath')){
 			$x = $this->input->post('x');
 			$y = $this->input->post('y');
@@ -1342,45 +1342,74 @@ class content extends admin {
 			$h = $this->input->post('h');
 			pc_base::load_sys_class('image');
 			$image = new image();
-			$filename = (SYS_ATTACHMENT_FILE ? $siteid.'/' : '').date('Y/md/').date("ymdhis").substr(md5(SYS_TIME.($this->input->post('filepath')).uniqid()), rand(0, 20), 15);
-			//$new_file = date('Y/md/').'thumb_'.$w.'_'.$h.'_'.basename($this->input->post('filepath'));
-			$filetype = fileext($this->input->post('filepath'));
-			$fileinfo = $image->crops(CMS_PATH.$this->input->post('filepath'), SYS_UPLOAD_PATH.$filename.'.'.$filetype, $w, $h, $x, $y);
-			//$fileinfo = $image->crops(CMS_PATH.$this->input->post('filepath'), SYS_UPLOAD_PATH.$new_file, $w, $h, $x, $y);
-			if($fileinfo){
-				if (dr_is_image(SYS_UPLOAD_PATH.$filename.'.'.$filetype)) {
-					$img = getimagesize(SYS_UPLOAD_PATH.$filename.'.'.$filetype);
-					$info = array(
-						'width' => $img[0],
-						'height' => $img[1],
-					);
+
+			!$name && $name = substr(md5(SYS_TIME.$this->input->post('filepath').uniqid()), rand(0, 20), 15);
+
+			if (defined('SYS_ATTACHMENT_SAVE_TYPE') && SYS_ATTACHMENT_SAVE_TYPE) {
+				// 按后台设置目录
+				if (SYS_ATTACHMENT_SAVE_DIR) {
+					$path = str_replace(
+							array('{y}', '{m}', '{d}', '{yy}', '.'),
+							array(date('Y', SYS_TIME), date('m', SYS_TIME), date('d', SYS_TIME), date('y', SYS_TIME), ''),
+							trim(SYS_ATTACHMENT_SAVE_DIR, '/')).'/';
+				} else {
+					$path = '';
 				}
-				$this->att_db = pc_base::load_model('attachment_model');
-				$uploadedfile['module'] = $this->input->get('module');
-				$uploadedfile['catid'] = $this->input->get('catid');
-				$uploadedfile['siteid'] = $siteid;
-				$uploadedfile['userid'] = $this->userid;
-				$uploadedfile['uploadtime'] = SYS_TIME;
-				$uploadedfile['uploadip'] = ip();
-				$uploadedfile['status'] = SYS_ATTACHMENT_STAT ? 0 : 1;
-				$uploadedfile['authcode'] = md5($filename.'.'.$filetype);
-				$uploadedfile['filemd5'] = md5_file(SYS_UPLOAD_PATH.$filename.'.'.$filetype);
-				$uploadedfile['remote'] = 0;
-				$uploadedfile['attachinfo'] = dr_array2string($info);
-				$uploadedfile['isimage'] = in_array($filetype, array('gif', 'jpg', 'jpeg', 'png', 'bmp', 'webp')) ? 1 : 0;
-				$uploadedfile['filepath'] = $filename.'.'.$filetype;
-				$uploadedfile['related'] = 'rand';
-				$uploadedfile['filename'] = file_name($this->input->post('filepath'));
-				$uploadedfile['filesize'] = $fileinfo['size'];
-				$uploadedfile['fileext'] = $filetype;
-				$uploadedfile['downloads'] = 0;
-				$aid = $this->att_db->api_add($uploadedfile);
-				$this->upload_json($aid,SYS_UPLOAD_URL.$filename.'.'.$filetype,file_name($this->input->post('filepath')),format_file_size($fileinfo['size']));
-				dr_json(1, L('operation_success'), array('filepath' => SYS_UPLOAD_URL.$filename.'.'.$filetype));
-				//dr_json(1, L('operation_success'), array('filepath' => SYS_UPLOAD_URL.$new_file));
-			}else{
-				dr_json(0, L('operation_failure'));
+			} else {
+				// 默认目录格式
+				$path = date('Y/md/', SYS_TIME);
 			}
+			$filetype = fileext($this->input->post('filepath'));
+			$file_path = (SYS_ATTACHMENT_FILE ? $siteid.'/' : '').$path.$name.'.'.$filetype;
+			$new_file = SYS_UPLOAD_PATH.$file_path;
+
+			$config = array();
+			$config['source_image'] = CMS_PATH.$this->input->post('filepath');
+			if(!dr_is_image($config['source_image'])) dr_json(0, L('只支持jpg|jpeg|gif|png|webp裁切'));
+			$config['new_image'] = $new_file;
+			$config['maintain_ratio'] = false;
+			$config['width'] = $w;
+			$config['height'] = $h;
+			$config['x_axis'] = $x;
+			$config['y_axis'] = $y;
+			$image->initialize($config);
+
+			if (!$image->crop()) {
+				$err = $image->display_errors();
+				dr_json(0, $err ? $err : L('剪切失败'));
+			}
+
+			if (dr_is_image($config['new_image'])) {
+				$imageinfo = $image->info($config['new_image']);
+				$info = array(
+					'width' => $imageinfo['width'],
+					'height' => $imageinfo['height'],
+				);
+			}
+
+			$this->att_db = pc_base::load_model('attachment_model');
+			$uploadedfile['module'] = $this->input->get('module');
+			$uploadedfile['catid'] = $this->input->get('catid');
+			$uploadedfile['siteid'] = $siteid;
+			$uploadedfile['userid'] = $this->userid;
+			$uploadedfile['uploadtime'] = SYS_TIME;
+			$uploadedfile['uploadip'] = ip();
+			$uploadedfile['status'] = SYS_ATTACHMENT_STAT ? 0 : 1;
+			$uploadedfile['authcode'] = md5($file_path);
+			$uploadedfile['filemd5'] = md5_file($config['new_image']);
+			$uploadedfile['remote'] = 0;
+			$uploadedfile['attachinfo'] = dr_array2string($info);
+			$uploadedfile['isimage'] = in_array($filetype, array('gif', 'jpg', 'jpeg', 'png', 'bmp', 'webp')) ? 1 : 0;
+			$uploadedfile['filepath'] = $file_path;
+			$uploadedfile['related'] = 'rand';
+			$uploadedfile['filename'] = file_name($this->input->post('filepath'));
+			$uploadedfile['filesize'] = filesize($config['new_image']);
+			$uploadedfile['fileext'] = $filetype;
+			$uploadedfile['downloads'] = 0;
+			$aid = $this->att_db->api_add($uploadedfile);
+			$this->upload_json($aid,SYS_UPLOAD_URL.$file_path,file_name($this->input->post('filepath')),format_file_size(filesize($config['new_image'])));
+
+			dr_json(1, L('operation_success'), array('filepath' => SYS_UPLOAD_URL.$file_path));
 		}
 		if ($this->input->get('picurl') && !empty($this->input->get('picurl'))) {
 			$picurl = $this->input->get('picurl');

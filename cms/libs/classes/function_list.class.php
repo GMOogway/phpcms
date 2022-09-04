@@ -152,9 +152,9 @@ class function_list {
             return L('游客');
         }
         if (IS_ADMIN && ($this->m=='content' && $this->c=='content' && !$data['sysadd']) || $this->m=='member' && $this->c=='member' || $this->m=='formguide' && $this->c=='formguide_info') {
-            return $value ? '<a href="javascript:dr_iframe_show(\'用户信息\', \'?m=member&c=member&a=memberinfo&username='.urlencode($value).'\', \'50%\')">'.str_cut($value, 10).'</a>' : L('游客');
+            return $value ? '<a href="javascript:dr_iframe_show(\'用户信息\', \'?m=member&c=member&a=memberinfo&username='.urlencode($value).'\', \'50%\')">'.$value.'</a>' : L('游客');
         }
-        return $value ? str_cut($value, 10) : L('游客');
+        return $value ? $value : L('游客');
     }
 
     // 用于列表显示作者
@@ -173,7 +173,7 @@ class function_list {
             $username = $userinfo['nickname'] ? $userinfo['nickname'] : $userinfo['username'];
         }
         $this->uid_data[$userid] = isset($this->uid_data[$userid]) && $this->uid_data[$userid] ? $this->uid_data[$userid] : $username;
-        return $this->uid_data[$userid] ? str_cut($this->uid_data[$userid], 10) : L('游客');
+        return $this->uid_data[$userid] ? $this->uid_data[$userid] : L('游客');
     }
 
     // 头像
