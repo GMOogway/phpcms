@@ -43,13 +43,43 @@
             <label><?php echo color_select('setting[color]', '');?></label>
         </div>
     </div>
-    <div class="form-group"<?php if (SYS_EDITOR) {?> style="display: none;"<?php }?>> 
-      <label class="col-md-2 control-label">编辑器样式</label>
+    <div class="form-group"> 
+      <label class="col-md-2 control-label">编辑器主题</label>
         <div class="col-md-9">
+            <?php if (!SYS_EDITOR) {?>
             <div class="mt-radio-inline">
                 <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[theme]" value="default" checked> 默认 <span></span></label>
-                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[theme]" value="notadd"> 样式1 <span></span></label>
+                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[theme]" value="notadd"> 主题1 <span></span></label>
             </div>
+            <?php } else {
+            $waterfile = dr_dir_map(CMS_PATH.'statics/js/ckeditor/skins/', 1);?>
+            <label><select class="form-control" name="setting[theme]">
+                <option value="" selected> 默认 </option>
+                <?php foreach($waterfile as $t) {?>
+                <option value="<?php echo $t;?>"><?php echo $t;?></option>
+                <?php }?>
+            </select></label>
+            <?php }?>
+        </div>
+    </div>
+    <div class="form-group"> 
+      <label class="col-md-2 control-label">编辑器语言</label>
+        <div class="col-md-9">
+            <?php if (!SYS_EDITOR) {?>
+            <div class="mt-radio-inline">
+                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[language]" value="zh-cn" checked> 中文 <span></span></label>
+                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[language]" value="en"> 英文 <span></span></label>
+            </div>
+            <?php } else {
+            $waterfile = dr_file_map(CMS_PATH.'statics/js/ckeditor/lang/', 1);?>
+            <label><select class="form-control" name="setting[language]">
+                <option value="" selected> 默认 </option>
+                <?php foreach($waterfile as $t) {
+                if (strpos($t, '.js') !== false) {?>
+                <option value="<?php echo str_replace('.js', '', $t);?>"><?php echo str_replace('.js', '', $t);?></option>
+                <?php }}?>
+            </select></label>
+            <?php }?>
         </div>
     </div>
     <div class="form-group"<?php if (SYS_EDITOR) {?> style="display: none;"<?php }?>> 

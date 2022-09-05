@@ -43,13 +43,43 @@
             <label><?php echo color_select('setting[color]', $setting['color']);?></label>
         </div>
     </div>
-    <div class="form-group"<?php if (SYS_EDITOR) {?> style="display: none;"<?php }?>> 
-      <label class="col-md-2 control-label">编辑器样式</label>
+    <div class="form-group"> 
+      <label class="col-md-2 control-label">编辑器主题</label>
         <div class="col-md-9">
+            <?php if (!SYS_EDITOR) {?>
             <div class="mt-radio-inline">
-                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[theme]" value="default" <?php if($setting['theme']=='default') echo 'checked';?>> 默认 <span></span></label>
-                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[theme]" value="notadd" <?php if($setting['theme']=='notadd') echo 'checked';?>> 样式1 <span></span></label>
+                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[theme]" value="default" <?php if(!$setting['theme'] || $setting['theme']=='default' || !file_exists(CMS_PATH.'statics/js/ueditor/themes/'.$setting['theme'].'/')) echo 'checked';?>> 默认 <span></span></label>
+                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[theme]" value="notadd" <?php if($setting['theme']=='notadd') echo 'checked';?>> 主题1 <span></span></label>
             </div>
+            <?php } else {
+            $waterfile = dr_dir_map(CMS_PATH.'statics/js/ckeditor/skins/', 1);?>
+            <label><select class="form-control" name="setting[theme]">
+                <option value="" <?php if(!$setting['theme']) echo 'selected';?>> 默认 </option>
+                <?php foreach($waterfile as $t) {?>
+                <option<?php if ($t==$setting['theme']) {?> selected=""<?php }?> value="<?php echo $t;?>"><?php echo $t;?></option>
+                <?php }?>
+            </select></label>
+            <?php }?>
+        </div>
+    </div>
+    <div class="form-group"> 
+      <label class="col-md-2 control-label">编辑器语言</label>
+        <div class="col-md-9">
+            <?php if (!SYS_EDITOR) {?>
+            <div class="mt-radio-inline">
+                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[language]" value="zh-cn" <?php if($setting['language']=='zh-cn' || !file_exists(CMS_PATH.'statics/js/ueditor/lang/'.$setting['language'].'/'.$setting['language'].'.js')) echo 'checked';?>> 中文 <span></span></label>
+                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[language]" value="en" <?php if($setting['language']=='en') echo 'checked';?>> 英文 <span></span></label>
+            </div>
+            <?php } else {
+            $waterfile = dr_file_map(CMS_PATH.'statics/js/ckeditor/lang/', 1);?>
+            <label><select class="form-control" name="setting[language]">
+                <option value="" <?php if(!$setting['language']) echo 'selected';?>> 默认 </option>
+                <?php foreach($waterfile as $t) {
+                if (strpos($t, '.js') !== false) {?>
+                <option<?php if (str_replace('.js', '', $t)==$setting['language']) {?> selected=""<?php }?> value="<?php echo str_replace('.js', '', $t);?>"><?php echo str_replace('.js', '', $t);?></option>
+                <?php }}?>
+            </select></label>
+            <?php }?>
         </div>
     </div>
     <div class="form-group"<?php if (SYS_EDITOR) {?> style="display: none;"<?php }?>> 

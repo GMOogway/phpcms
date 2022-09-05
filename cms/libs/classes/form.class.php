@@ -18,6 +18,7 @@ class form {
 	 * @param string $autofloat
 	 * @param string $autoheight
 	 * @param string $theme
+	 * @param string $language
 	 * @param string $watermark
 	 * @param string $attachment
 	 * @param string $image_reduce
@@ -31,7 +32,7 @@ class form {
 	 * @param string $tool_select_3
 	 * @param string $tool_select_4
 	 */
-	public static function editor($textareaid = 'content', $toolbar = 'basic', $module = '', $catid = '', $color = '', $allowupload = 0, $allowbrowser = 1,$alowuploadexts = '',$height = 200,$disabled_page = 0, $allowuploadnum = '10', $modelid = '', $toolvalue = '', $autofloat = 0, $autoheight = 0, $theme = '', $watermark = 1, $attachment = 0, $image_reduce = '', $div2p = 0, $enter = 0, $enablesaveimage = 1, $width = '100%', $upload_maxsize = 0, $show_bottom_boot = 0, $tool_select_1 = 0, $tool_select_2 = 0, $tool_select_3 = 0, $tool_select_4 = 0) {
+	public static function editor($textareaid = 'content', $toolbar = 'basic', $module = '', $catid = '', $color = '', $allowupload = 0, $allowbrowser = 1,$alowuploadexts = '',$height = 200,$disabled_page = 0, $allowuploadnum = '10', $modelid = '', $toolvalue = '', $autofloat = 0, $autoheight = 0, $theme = '', $language = '', $watermark = 1, $attachment = 0, $image_reduce = '', $div2p = 0, $enter = 0, $enablesaveimage = 1, $width = '100%', $upload_maxsize = 0, $show_bottom_boot = 0, $tool_select_1 = 0, $tool_select_2 = 0, $tool_select_3 = 0, $tool_select_4 = 0) {
 		$input = pc_base::load_sys_class('input');
 		$siteid = $input->get('siteid') ? $input->get('siteid') : param::get_cookie('siteid');
 		if(!$siteid) $siteid = get_siteid() ? get_siteid() : 1 ;
@@ -122,8 +123,14 @@ class form {
 			$str .= "height:{$height},";
 			$str .="textareaid:'".$textareaid."',module:'".$module."',catid:'".$catid."',\r\n";
 			if($allowupload) $str .= "filebrowserUploadUrl : '".SELF."?m=attachment&c=attachments&a=upload&module=".$module."&catid=".$catid."&dosubmit=1&args=".$p."&authkey=".$authkey."',\r\n";
+			if($language && file_exists(CMS_PATH.'statics/js/ckeditor/lang/'.$language.'.js')) {
+				$str .= "language: '$language',";
+			}
 			if($color) {
 				$str .= "uiColor: '$color',";
+			}
+			if($theme && file_exists(CMS_PATH.'statics/js/ckeditor/skins/'.$theme.'/') && $theme!='moono-lisa') {
+				$str .= "skin: '$theme',";
 			}
 			$str .= "toolbar :\r\n";
 			$str .= "[\r\n";
@@ -184,7 +191,8 @@ class form {
 			$str .= "<script type=\"text/javascript\">\r\n";
 			$opt = array();
 			if($tool) {$opt[] = "toolbars:[".$tool."]";}
-			if($theme && $theme!='default') {$opt[] = "theme:'".$theme."'";}
+			if($theme && file_exists(CMS_PATH.'statics/js/ueditor/themes/'.$theme.'/') && $theme!='default') {$opt[] = "theme:'".$theme."'";}
+			if($language && file_exists(CMS_PATH.'statics/js/ueditor/lang/'.$language.'/'.$language.'.js') && $language!='zh-cn') {$opt[] = "lang:'".$language."'";}
 			$opt[] = "initialFrameWidth:\"".$width."\"";
 			$opt[] = "initialFrameHeight:".$height;
 			$opt[] = "autoHeightEnabled:".$autoHeightEnabled;
