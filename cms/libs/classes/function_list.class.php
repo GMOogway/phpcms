@@ -350,11 +350,11 @@ class function_list {
                 $url = 'javascript:dr_preview_image(\''.$value.'\');';
                 return '<a href="'.$url.'"><img src="'.IMG_PATH.'ext/jpg.png'.'"></a>';
             } elseif (is_file(CMS_PATH.'statics/images/ext/'.$ext.'.png')) {
-                $file = IMG_PATH.'assets/images/ext/'.$ext.'.png';
+                $file = IMG_PATH.'ext/'.$ext.'.png';
                 $url = 'javascript:dr_preview_url(\''.dr_file($value).'\');';
                 return '<a href="'.$url.'"><img src="'.$file.'"></a>';
             } elseif (strpos($value, 'http://') === 0) {
-                $file = IMG_PATH.'assets/images/ext/url.png';
+                $file = IMG_PATH.'ext/url.png';
                 $url = 'javascript:dr_preview_url(\''.$value.'\');';
                 return '<a href="'.$url.'"><img src="'.$file.'"></a>';
             } else {

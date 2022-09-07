@@ -3,7 +3,7 @@
 		extract($setting);
 		$str = load_js(JS_PATH.'h5upload/h5editor.js');
 		$str = load_js(JS_PATH.'content_addtop.js');
-		$authkey = upload_key($this->input->get('siteid').",1,$upload_allowext,$upload_maxsize,$isselectimage,$images_width,$images_height,,$attachment,$image_reduce");
+		$authkey = upload_key($this->input->get('siteid').",1,$upload_allowext,$upload_maxsize,$isselectimage,$images_width,$images_height,,$attachment,$image_reduce,$chunk");
 		$p = dr_authcode(array(
 			'siteid' => $this->input->get('siteid'),
 			'file_upload_limit' => 1,
@@ -15,6 +15,7 @@
 			'watermark_enable' => $watermark,
 			'attachment' => $attachment,
 			'image_reduce' => $image_reduce,
+			'chunk' => $chunk,
 		), 'ENCODE');
 		if($show_type) {
 			$preview_img = $value ? $value : IMG_PATH.'icon/upload-pic.png';

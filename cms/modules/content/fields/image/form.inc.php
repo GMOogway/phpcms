@@ -12,7 +12,7 @@
 	var diag = new Dialog({id:'crop',title:'".L('cut_the_picture','','content')."',url:'".SELF."?m=content&c=content&a=public_crop&module=content&catid='+catid+'&spec=2&picurl='+window.btoa(unescape(encodeURIComponent(id)))+'&input=$field&preview=".($show_type && defined('IS_ADMIN') && IS_ADMIN ? $field."_preview" : '')."',width:w,height:h,modal:true});diag.onOk = function(){\$DW.dosbumit();return false;};diag.onCancel=function() {\$DW.close();};diag.show();
 };</script>";
 		}
-		$authkey = upload_key($this->input->get('siteid').",1,$upload_allowext,$upload_maxsize,$isselectimage,$images_width,$images_height,$watermark,$attachment,$image_reduce");
+		$authkey = upload_key($this->input->get('siteid').",1,$upload_allowext,$upload_maxsize,$isselectimage,$images_width,$images_height,$watermark,$attachment,$image_reduce,$chunk");
 		$p = dr_authcode(array(
 			'siteid' => $this->input->get('siteid'),
 			'file_upload_limit' => 1,
@@ -24,6 +24,7 @@
 			'watermark_enable' => $watermark,
 			'attachment' => $attachment,
 			'image_reduce' => $image_reduce,
+			'chunk' => $chunk,
 		), 'ENCODE');
 		if($show_type && defined('IS_ADMIN') && IS_ADMIN) {
 			$preview_img = $value ? $value : IMG_PATH.'icon/upload-pic.png';

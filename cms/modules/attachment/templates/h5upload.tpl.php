@@ -1,7 +1,13 @@
 <?php $show_header = $show_validator = $show_scroll = true; include $this->admin_tpl('header', 'attachment');?>
 <link href="<?php echo JS_PATH?>h5upload/h5upload.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" href="<?php echo JS_PATH?>layui/css/layui.css" media="all" />
-<script type="text/javascript" src="<?php echo JS_PATH?>layui/layui.js"></script>
+<style type="text/css">
+.progress {border: 0;background-image: none;filter: none;-webkit-box-shadow: none;-moz-box-shadow: none;box-shadow: none;}
+.progress {height: 20px;background-color: #fff;border-radius: 4px;}
+.progress-bar-success {background-color: #3ea9e2;}
+</style>
+<script type="text/javascript" src="<?php echo JS_PATH?>jquery-ui/jquery-ui.js"></script>
+<link rel="stylesheet" href="<?php echo JS_PATH?>jquery-fileupload/css/jquery.fileupload.css" media="all" />
+<script type="text/javascript" src="<?php echo JS_PATH?>jquery-fileupload/js/jquery.fileupload.js"></script>
 <script type="text/javascript">
 <?php echo initupload($this->input->get('module'),$this->input->get('catid'),$args,$this->userid,$this->groupid,$this->isadmin)?>
 </script>
@@ -47,13 +53,13 @@ jQuery(document).ready(function() {
 
                     <div>
                         <div id="queue"></div>
-                        <button type="button" class="layui-btn" id="file_upload"><i class="layui-icon">&#xe67c;</i><?php echo L('select_file')?></button>
+                        <span class="btn green fileinput-button" id="file_upload"><i class="fa fa-cloud-upload"></i> <span> <?php echo L('select_file')?> </span> <input type="file" name="file_upload"<?php echo $file_upload_limit > 1 ? ' multiple=""' : ''?>></span>
                         <div id="nameTip" class="onShow"><?php echo L('upload_up_to')?><font color="red"> <?php echo $file_upload_limit?></font> <?php echo L('attachments')?>,<?php echo L('largest')?> <font color="red"><?php echo $file_size_limit;?> MB</font></div>
                         <div class="bk3"></div>
                         <div class="lh24"><?php echo L('supported')?> <font style="font-family: Arial, Helvetica, sans-serif"><?php echo str_replace('|','、',$file_types_post)?></font> <?php echo L('formats')?></div>
-                        <div id="progress" class="fileupload-progress fade" style="display:none">
-                            <div class="layui-progress layui-progress-big progress progress-striped active" lay-showpercent="yes" lay-filter="progress">
-                                <div class="layui-progress-bar progress-bar progress-bar-success" lay-percent=""></div>
+                        <div id="progress" class="margin-top-20 fileupload-progress fade" style="display:none">
+                            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar progress-bar-success" style="width:0%;"> </div>
                             </div>
                         </div>
                     </div>

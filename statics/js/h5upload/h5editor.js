@@ -137,7 +137,7 @@ function h5upload(sysfilename, uploadid, name, textareaid, funcName, args, modul
 			var img = '';
 			for (var n=0;n<data.length;n++){
 				var filename = filenames[n];
-				img += IsImg(data[n]) ? '<p><img src="'+data[n]+'" alt="'+filename+'" /></p>' : (IsSwf(data[n]) ? '<p><object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0"><param name="quality" value="high" /><param name="movie" value="'+data[n]+'" /><embed pluginspage="http://www.macromedia.com/go/getflashplayer" quality="high" src="'+data[n]+'" type="application/x-shockwave-flash" width="460"></embed></object></p>' :'<p><a href="'+data[n]+'" title="'+filename+'" />'+data[n]+'</a></p>') ;
+				img += IsImg(data[n]) ? '<p><img src="'+data[n]+'" alt="'+filename+'" /></p>' : (IsMp4(data[n]) ? '<p><video class="edui-faked-video video-js" controls="" preload="none" width="420" height="280" src="'+data[n]+'"><source src="'+data[n]+'" type="video/mp4"/></video></p>' : (IsMp3(data[n]) ? '<p><audio src="'+data[n]+'" controls="controls"></audio></p>' : '<p><a href="'+data[n]+'" title="'+filename+'" />'+data[n]+'</a></p>'));
 			}
 			$.get(sysfilename+"?m=attachment&c=attachments&a=h5delete",{data: del_content},function(data){});
 			if (syseditor==1) {
@@ -171,10 +171,27 @@ function IsImg(url){
 	return b;
 }
 
-function IsSwf(url){
+function IsMp4(url){
 	var sTemp;
 	var b=false;
-	var opt="swf";
+	var opt="mp4";
+	var s=opt.toUpperCase().split("|");
+	for (var i=0;i<s.length ;i++ ){
+		sTemp=url.substr(url.length-s[i].length-1);
+		sTemp=sTemp.toUpperCase();
+		s[i]="."+s[i];
+		if (s[i]==sTemp){
+			b=true;
+			break;
+		}
+	}
+	return b;
+}
+
+function IsMp3(url){
+	var sTemp;
+	var b=false;
+	var opt="mp3";
 	var s=opt.toUpperCase().split("|");
 	for (var i=0;i<s.length ;i++ ){
 		sTemp=url.substr(url.length-s[i].length-1);

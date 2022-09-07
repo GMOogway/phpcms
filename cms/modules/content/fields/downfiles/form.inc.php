@@ -20,7 +20,7 @@
 		';
 		
 		$str = load_js(JS_PATH.'h5upload/h5editor.js');
-		$authkey = upload_key($this->input->get('siteid').",$upload_number,$upload_allowext,$upload_maxsize,$isselectimage,,,,$attachment,$image_reduce");
+		$authkey = upload_key($this->input->get('siteid').",$upload_number,$upload_allowext,$upload_maxsize,$isselectimage,,,,$attachment,$image_reduce,$chunk");
 		$p = dr_authcode(array(
 			'siteid' => $this->input->get('siteid'),
 			'file_upload_limit' => $upload_number,
@@ -32,6 +32,7 @@
 			'watermark_enable' => '',
 			'attachment' => $attachment,
 			'image_reduce' => $image_reduce,
+			'chunk' => $chunk,
 		), 'ENCODE');
 		$string .= $str."<label><button type=\"button\" onclick=\"javascript:h5upload('".SELF."', '{$field}_multifile', '".L('attachment_upload')."','{$field}','change_multifile','{$p}','content','$this->catid','{$authkey}',".SYS_EDITOR.")\" class=\"btn green btn-sm\"> <i class=\"fa fa-plus\"></i> ".L('multiple_file_list')."</button></label> <label><button type=\"button\" onclick=\"add_multifile('{$field}')\" class=\"btn blue btn-sm\"> <i class=\"fa fa-plus\"></i> ".L('add_remote_url')."</button></label>";
 		return $string;

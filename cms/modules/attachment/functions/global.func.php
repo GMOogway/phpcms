@@ -46,65 +46,68 @@
 		$grouplist = getcache('grouplist','member');
 		if($isadmin==0 && !$grouplist[$groupid]['allowattachment']) return false;
 		extract(geth5init($args));
-		if ($file_upload_limit==1) {
-			$multi = 'false';
-		} else {
-			$multi = 'true';
-		}
 		$sess_id = SYS_TIME;
 		$h5_auth_key = md5(SYS_KEY.$sess_id);
+		if ($file_upload_limit > 1) {
+			$add = "var myItems = data.originalFiles.length;
+					var numItems = $('#fsUpload .files_row').length;
+					if(numItems + myItems > ".$file_upload_limit."){
+						dr_tips(0, '".str_replace('{file_num}', $file_upload_limit, L('att_upload_num'))."');
+						return false;
+					}";
+		} else {
+			$add = "$('#progress').hide();";
+		}
 		$init = "$(document).ready(function(){
-			layui.use(['upload', 'element', 'layer'], function () {
-				var upload = layui.upload,element = layui.element,layer = layui.layer;
-				upload.render({
-					elem:'#file_upload',
-					accept:'file',
-					field:'file_upload',
-					data: {H5UPLOADSESSID : '".$sess_id."',module:'".$module."',catid:'".$catid."',userid:'".$userid."',siteid:'".$siteid."',dosubmit:'1',thumb_width:'".$thumb_width."',thumb_height:'".$thumb_height."',watermark_enable:'".$watermark_enable."',attachment:'".$attachment."',image_reduce:'".$image_reduce."',filetype_post:'".$file_types_post."',h5_auth_key:'".$h5_auth_key."',isadmin:'".$isadmin."',groupid:'".$groupid."',args:'".$args."'},
-					url: '".SELF."?m=attachment&c=attachments&a=h5upload',
-					exts: '".$file_types_post."',
-					size: " . $file_size_limit * 1024 * 1024 . ",
-					multiple: ".$multi.",
-					number: ".$file_upload_limit.",
-					before: function (obj) {
-						var number = $('#fsUpload .files_row').length;
-						if (number >= ".$file_upload_limit.") {
-							dr_tips(0, '".str_replace('{file_num}', $file_upload_limit, L('att_upload_num'))."');
-							return delete files[index];
-						}
-						element.progress('progress', '0%');
-						dr_tips(1, '上传中……', 999999);
-					},
-					done: function(json){
-						if(json.code == 1){
-							dr_tips(json.code, json.msg);
-							var data = json.data;
-							if(data.id == 0) {
-								dr_tips(0, data.url)
-								return false;
-							}
-							if(data.ext == 1) {
-								var img = '<div onmouseover=\"layer.tips(\''+data.name+'&nbsp;&nbsp;'+data.size+'\',this,{tips: [1, \'#fff\']});\" onmouseout=\"layer.closeAll();\"><span class=\"checkbox\"></span><input type=\"checkbox\" class=\"checkboxes\" name=\"ids[]\" value=\"'+data.id+'\" /><a onclick=\"javascript:att_cancel(this,'+data.id+',\'upload\')\" class=\"on\"><div class=\"icon\"></div><img src=\"'+data.url+'\" width=\"80\" id=\"'+data.id+'\" path=\"'+data.url+'\" filename=\"'+data.name+'\"/><i class=\"size\">'+data.size+'</i><i class=\"name\" title=\"'+data.name+'\">'+data.name+'</i></a></div>';
-							} else {
-								var img = '<div onmouseover=\"layer.tips(\''+data.name+'&nbsp;&nbsp;'+data.size+'\',this,{tips: [1, \'#fff\']});\" onmouseout=\"layer.closeAll();\"><span class=\"checkbox\"></span><input type=\"checkbox\" class=\"checkboxes\" name=\"ids[]\" value=\"'+data.id+'\" /><a onclick=\"javascript:att_cancel(this,'+data.id+',\'upload\')\" class=\"on\"><div class=\"icon\"></div><img src=\"".IMG_PATH."ext/'+data.ext+'.png\" width=\"80\" id=\"'+data.id+'\" path=\"'+data.url+'\" filename=\"'+data.name+'\"/><i class=\"size\">'+data.size+'</i><i class=\"name\" title=\"'+data.name+'\">'+data.name+'</i></a></div>';
-							}
-							$.get('".SELF."?m=attachment&c=attachments&a=h5upload_json&aid='+data.id+'&src='+data.url+'&filename='+data.name+'&size='+data.size);
-							$('#fsUpload').append('<div class=\"col-md-2 col-sm-2 col-xs-6\"><div id=\"attachment_'+data.id+'\" class=\"files_row on\"></div></div>');
-							$('#attachment_'+data.id).html(img);
-							$('#att-status').append('|'+data.url);
-							$('#att-name').append('|'+data.name);
-						}else{
-							dr_tips(json.code, json.msg);
-						}
-						$('#progress').hide();
-						$('#progress').addClass('fade');
-					},
-					progress: function(n, elem, e){
-						$('#progress').show();
-						$('#progress').removeClass('fade');
-						element.progress('progress', n + '%');
+			// 初始化上传组件
+			$('#file_upload').fileupload({
+				disableImageResize: false,
+				autoUpload: true,
+				maxFileSize: " . $file_size_limit * 1024 * 1024 . ",
+				acceptFileTypes: /(\.|\/)(".$file_types_post.")$/i,
+				maxChunkSize: ".($chunk ? 20 * 1024 * 1024 : 0).",
+				formData: {H5UPLOADSESSID : '".$sess_id."',module:'".$module."',catid:'".$catid."',userid:'".$userid."',siteid:'".$siteid."',dosubmit:'1',thumb_width:'".$thumb_width."',thumb_height:'".$thumb_height."',watermark_enable:'".$watermark_enable."',attachment:'".$attachment."',image_reduce:'".$image_reduce."',filetype_post:'".$file_types_post."',h5_auth_key:'".$h5_auth_key."',isadmin:'".$isadmin."',groupid:'".$groupid."',args:'".$args."'},
+				url: '".SELF."?m=attachment&c=attachments&a=h5upload',
+				dataType: 'json',
+				progressall: function (e, data) {
+					// 上传进度条 all
+					var progress = parseInt(data.loaded / data.total * 100, 10);
+					$('#progress').show();
+					$('#progress').removeClass('fade');
+					$('#progress .progress-bar-success').attr('style', 'width: '+progress+'%');
+				},
+				add: function (e, data) {
+					".$add."
+					data.submit();
+				},
+				done: function (e, data) {
+					dr_tips(data.result.code, data.result.msg);
+					$('#progress').hide();
+					$('#progress').addClass('fade');
+					if (data.result.code == 0) {
+						return false;
 					}
-				});
+					var json = data.result.data;
+					if (json.id == undefined || json.id == 'undefined') {
+						return false;
+					}
+					if(json.ext == 1) {
+						var img = '<div onmouseover=\"layer.tips(\''+json.name+'&nbsp;&nbsp;'+json.size+'\',this,{tips: [1, \'#fff\']});\" onmouseout=\"layer.closeAll();\"><span class=\"checkbox\"></span><input type=\"checkbox\" class=\"checkboxes\" name=\"ids[]\" value=\"'+json.id+'\" /><a onclick=\"javascript:att_cancel(this,'+json.id+',\'upload\')\" class=\"on\"><div class=\"icon\"></div><img src=\"'+json.url+'\" width=\"80\" id=\"'+json.id+'\" path=\"'+json.url+'\" size=\"'+json.size+'\" filename=\"'+json.name+'\"/><i class=\"size\">'+json.size+'</i><i class=\"name\" title=\"'+json.name+'\">'+json.name+'</i></a></div>';
+					} else {
+						var img = '<div onmouseover=\"layer.tips(\''+json.name+'&nbsp;&nbsp;'+json.size+'\',this,{tips: [1, \'#fff\']});\" onmouseout=\"layer.closeAll();\"><span class=\"checkbox\"></span><input type=\"checkbox\" class=\"checkboxes\" name=\"ids[]\" value=\"'+json.id+'\" /><a onclick=\"javascript:att_cancel(this,'+json.id+',\'upload\')\" class=\"on\"><div class=\"icon\"></div><img src=\"".IMG_PATH."ext/'+json.ext+'.png\" width=\"80\" id=\"'+json.id+'\" size=\"'+json.size+'\" path=\"'+json.url+'\" filename=\"'+json.name+'\"/><i class=\"size\">'+json.size+'</i><i class=\"name\" title=\"'+json.name+'\">'+json.name+'</i></a></div>';
+					}
+					$.get('".SELF."?m=attachment&c=attachments&a=h5upload_json&aid='+json.id+'&src='+json.url+'&filename='+json.name+'&size='+json.size);
+					$('#fsUpload').append('<div class=\"col-md-2 col-sm-2 col-xs-6\"><div id=\"attachment_'+json.id+'\" class=\"files_row on\"></div></div>');
+					$('#attachment_'+json.id).html(img);
+					$('#att-status').append('|'+json.url);
+					$('#att-name').append('|'+json.name);
+				},
+				fail: function (e, data) {
+					//console.log(data.errorThrown);
+					dr_tips(0, '系统故障：'+data.errorThrown);
+					$('#progress').addClass('fade');
+					$('#progress').hide();
+				},
 			});
 		})";
 		return $init;
@@ -141,6 +144,7 @@
 		$arr['watermark_enable'] = ($args['watermark_enable']=='') ? 1 : intval($args['watermark_enable']);
 		$arr['attachment'] = intval($args['attachment']);
 		$arr['image_reduce'] = intval($args['image_reduce']);
+		$arr['chunk'] = intval($args['chunk']);
 		return $arr;
 	}
 ?>

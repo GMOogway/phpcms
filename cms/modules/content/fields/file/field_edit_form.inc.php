@@ -1,4 +1,6 @@
 <?php defined('IN_CMS') or exit('No permission resources.');?>
+<link rel="stylesheet" href="<?php echo JS_PATH;?>bootstrap-switch/css/bootstrap-switch.min.css" media="all" />
+<script type="text/javascript" src="<?php echo JS_PATH;?>bootstrap-switch/js/bootstrap-switch.min.js"></script>
 
 	<div class="form-group">
       <label class="col-md-2 control-label">文本框长度</label>
@@ -19,6 +21,13 @@
             <span class="help-block">单位MB</span>
       </div>
     </div>
+    <div class="form-group">
+      <label class="col-md-2 control-label">分段上传</label>
+      <div class="col-md-9">
+        <input type="checkbox" name="setting[chunk]" <?php if($setting['chunk']) echo 'checked';?> value="1" data-on-text="已开启" data-off-text="已关闭" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+        <span class="help-block">当文件太大时可以采取分段上传，可以提升上传效率</span>
+      </div>
+    </div>
 	<div class="form-group">
       <label class="col-md-2 control-label">扩展名</label>
       <div class="col-md-9">
@@ -37,3 +46,8 @@
         <span class="help-block">允许用户选取自己已经上传的附件</span>
       </div>
     </div>
+<script type="text/javascript">
+$(function() {
+    $(".make-switch").bootstrapSwitch();
+});
+</script>

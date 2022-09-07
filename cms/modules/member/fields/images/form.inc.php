@@ -29,7 +29,7 @@
 		<div class="bk10"></div>
 		';
 		$str = load_js(JS_PATH.'h5upload/h5editor.js');
-		$authkey = upload_key($this->input->get('siteid').",$upload_number,$upload_allowext,$upload_maxsize,$isselectimage,,,,$attachment,$image_reduce");
+		$authkey = upload_key($this->input->get('siteid').",$upload_number,$upload_allowext,$upload_maxsize,$isselectimage,,,,$attachment,$image_reduce,$chunk");
 		$p = dr_authcode(array(
 			'siteid' => $this->input->get('siteid'),
 			'file_upload_limit' => $upload_number,
@@ -41,6 +41,7 @@
 			'watermark_enable' => '',
 			'attachment' => $attachment,
 			'image_reduce' => $image_reduce,
+			'chunk' => $chunk,
 		), 'ENCODE');
 		if($show_type && defined('IS_ADMIN') && IS_ADMIN) {
 			$string .= $str."<input type='button' class='button' onclick=\"javascript:h5upload('".SELF."', '{$field}_images', '".L('attachment_upload')."','{$field}','change_thumbs','{$p}','content','$this->catid','{$authkey}',".SYS_EDITOR.")\"/ value='".L('select_pic')."'>";

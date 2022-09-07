@@ -22,6 +22,7 @@ class form {
 	 * @param string $watermark
 	 * @param string $attachment
 	 * @param string $image_reduce
+	 * @param string $chunk
 	 * @param string $div2p
 	 * @param string $enter
 	 * @param string $enablesaveimage
@@ -32,7 +33,7 @@ class form {
 	 * @param string $tool_select_3
 	 * @param string $tool_select_4
 	 */
-	public static function editor($textareaid = 'content', $toolbar = 'basic', $module = '', $catid = '', $color = '', $allowupload = 0, $allowbrowser = 1,$alowuploadexts = '',$height = 200,$disabled_page = 0, $allowuploadnum = '10', $modelid = '', $toolvalue = '', $autofloat = 0, $autoheight = 0, $theme = '', $language = '', $watermark = 1, $attachment = 0, $image_reduce = '', $div2p = 0, $enter = 0, $enablesaveimage = 1, $width = '100%', $upload_maxsize = 0, $show_bottom_boot = 0, $tool_select_1 = 0, $tool_select_2 = 0, $tool_select_3 = 0, $tool_select_4 = 0) {
+	public static function editor($textareaid = 'content', $toolbar = 'basic', $module = '', $catid = '', $color = '', $allowupload = 0, $allowbrowser = 1,$alowuploadexts = '',$height = 200,$disabled_page = 0, $allowuploadnum = '10', $modelid = '', $toolvalue = '', $autofloat = 0, $autoheight = 0, $theme = '', $language = '', $watermark = 1, $attachment = 0, $image_reduce = '', $chunk = 0, $div2p = 0, $enter = 0, $enablesaveimage = 1, $width = '100%', $upload_maxsize = 0, $show_bottom_boot = 0, $tool_select_1 = 0, $tool_select_2 = 0, $tool_select_3 = 0, $tool_select_4 = 0) {
 		$input = pc_base::load_sys_class('input');
 		$siteid = $input->get('siteid') ? $input->get('siteid') : param::get_cookie('siteid');
 		if(!$siteid) $siteid = get_siteid() ? get_siteid() : 1 ;
@@ -48,7 +49,7 @@ class form {
 		}
 		$show_page = ($module == 'content' && !$disabled_page) ? 'true' : 'false';
 		if($allowupload) {
-			$authkey = upload_key("$siteid,$allowuploadnum,$alowuploadexts,$upload_maxsize,$allowbrowser,,,$watermark,$attachment,$image_reduce");
+			$authkey = upload_key("$siteid,$allowuploadnum,$alowuploadexts,$upload_maxsize,$allowbrowser,,,$watermark,$attachment,$image_reduce,$chunk");
 			$p = dr_authcode(array(
 				'siteid' => $siteid,
 				'file_upload_limit' => $allowuploadnum,
@@ -60,6 +61,7 @@ class form {
 				'watermark_enable' => $watermark,
 				'attachment' => $attachment,
 				'image_reduce' => $image_reduce,
+				'chunk' => $chunk,
 			), 'ENCODE');
 		}
 		$str ='';
@@ -259,8 +261,9 @@ class form {
 	 * @param int $watermark_setting  0或1
 	 * @param int $attachment
 	 * @param int $image_reduce
+	 * @param int $chunk
 	 */
-	public static function images($name, $id = '', $value = '', $moudle='', $catid='', $size = 50, $class = '', $ext = '', $alowexts = '',$thumb_setting = array(),$watermark_setting = 0,$attachment = 0, $image_reduce = '', $upload_maxsize = 0) {
+	public static function images($name, $id = '', $value = '', $moudle='', $catid='', $size = 50, $class = '', $ext = '', $alowexts = '',$thumb_setting = array(),$watermark_setting = 0,$attachment = 0, $image_reduce = '', $chunk = 0, $upload_maxsize = 0) {
 		$input = pc_base::load_sys_class('input');
 		$siteid = $input->get('siteid') ? $input->get('siteid') : param::get_cookie('siteid');
 		if(!$siteid) $siteid = get_siteid() ? get_siteid() : 1 ;
@@ -271,7 +274,7 @@ class form {
 		if(!$alowexts) $alowexts = 'jpg|jpeg|gif|bmp|png';
 		$str = load_js(JS_PATH.'h5upload/h5editor.js');
 		$value = new_html_special_chars($value);
-		$authkey = upload_key("$siteid,1,$alowexts,$upload_maxsize,1,$thumb_ext,$watermark_setting,$attachment,$image_reduce");
+		$authkey = upload_key("$siteid,1,$alowexts,$upload_maxsize,1,$thumb_ext,$watermark_setting,$attachment,$image_reduce,$chunk");
 		$p = dr_authcode(array(
 			'siteid' => $siteid,
 			'file_upload_limit' => 1,
@@ -283,6 +286,7 @@ class form {
 			'watermark_enable' => $watermark_setting,
 			'attachment' => $attachment,
 			'image_reduce' => $image_reduce,
+			'chunk' => $chunk,
 		), 'ENCODE');
 		return $str."<label><input type=\"text\" name=\"$name\" id=\"$id\" value=\"$value\" size=\"$size\" class=\"".($class ? $class : 'form-control')."\" $ext/></label> <label><button type=\"button\" onclick=\"javascript:h5upload('".SELF."', '{$id}_images', '".L('attachmentupload')."','{$id}','submit_images','{$p}','{$moudle}','{$catid}','{$authkey}',".SYS_EDITOR.")\" class=\"btn btn-sm green\"> <i class=\"fa fa-plus\"></i> ".L('imagesupload')."</button></label>";
 	}
@@ -301,8 +305,9 @@ class form {
 	 * @param array $file_setting 
 	 * @param int $attachment
 	 * @param int $image_reduce
+	 * @param int $chunk
 	 */
-	public static function upfiles($name, $id = '', $value = '', $moudle='', $catid='', $size = 50, $class = '', $ext = '', $alowexts = '',$file_setting = array(),$attachment = 0, $image_reduce = '', $upload_maxsize = 0) {
+	public static function upfiles($name, $id = '', $value = '', $moudle='', $catid='', $size = 50, $class = '', $ext = '', $alowexts = '',$file_setting = array(),$attachment = 0, $image_reduce = '', $chunk = 0, $upload_maxsize = 0) {
 		$input = pc_base::load_sys_class('input');
 		$siteid = $input->get('siteid') ? $input->get('siteid') : param::get_cookie('siteid');
 		if(!$siteid) $siteid = get_siteid() ? get_siteid() : 1 ;
@@ -312,7 +317,7 @@ class form {
 		else $file_ext = ',';
 		if(!$alowexts) $alowexts = 'rar|zip';
 		$str = load_js(JS_PATH.'h5upload/h5editor.js');
-		$authkey = upload_key("$siteid,1,$alowexts,$upload_maxsize,1,$file_ext,,$attachment,$image_reduce");
+		$authkey = upload_key("$siteid,1,$alowexts,$upload_maxsize,1,$file_ext,,$attachment,$image_reduce,$chunk");
 		$p = dr_authcode(array(
 			'siteid' => $siteid,
 			'file_upload_limit' => 1,
@@ -324,6 +329,7 @@ class form {
 			'watermark_enable' => '',
 			'attachment' => $attachment,
 			'image_reduce' => $image_reduce,
+			'chunk' => $chunk,
 		), 'ENCODE');
 		return $str."<label><input type=\"text\" name=\"$name\" id=\"$id\" value=\"$value\" size=\"$size\" class=\"".($class ? $class : 'form-control')."\" $ext/></label><label><button type=\"button\" onclick=\"javascript:h5upload('".SELF."', '{$id}_files', '".L('attachmentupload')."','{$id}','submit_attachment','{$p}','{$moudle}','{$catid}','{$authkey}',".SYS_EDITOR.")\" class=\"btn btn-sm green\"> <i class=\"fa fa-plus\"></i> ".L('filesupload')."</button></label>";
 	}

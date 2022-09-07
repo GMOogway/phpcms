@@ -5,6 +5,8 @@ if (is_array($server_list)) {
 foreach($server_list as $_r) if (in_array($_r['siteid'],array(0,$this->siteid))) $str .='<span class="ib" style="width:25%">'.$_r['sitename'].'</span>';
 }
 ?>
+<link rel="stylesheet" href="<?php echo JS_PATH;?>bootstrap-switch/css/bootstrap-switch.min.css" media="all" />
+<script type="text/javascript" src="<?php echo JS_PATH;?>bootstrap-switch/js/bootstrap-switch.min.js"></script>
     <div class="form-group">
       <label class="col-md-2 control-label">镜像服务器列表</label>
         <div class="col-md-9">
@@ -36,6 +38,13 @@ foreach($server_list as $_r) if (in_array($_r['siteid'],array(0,$this->siteid)))
             <span class="help-block">单位MB</span>
       </div>
     </div>
+    <div class="form-group">
+      <label class="col-md-2 control-label">分段上传</label>
+      <div class="col-md-9">
+        <input type="checkbox" name="setting[chunk]" <?php if($setting['chunk']) echo 'checked';?> value="1" data-on-text="已开启" data-off-text="已关闭" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+        <span class="help-block">当文件太大时可以采取分段上传，可以提升上传效率</span>
+      </div>
+    </div>
 	<div class="form-group">
       <label class="col-md-2 control-label">扩展名</label>
       <div class="col-md-9">
@@ -60,15 +69,8 @@ foreach($server_list as $_r) if (in_array($_r['siteid'],array(0,$this->siteid)))
       </div>
     </div>
     <?php echo attachment($setting);?>
-
-<SCRIPT LANGUAGE="JavaScript">
-<!--
-	function add_mirrorsite(obj)
-	{
-		var name = $(obj).siblings("#addname").val();
-		var url = $(obj).siblings("#addurl").val();
-		var servers = $("#servers").text()+name+" | "+url+"\r\n";
-		$("#servers").text(servers);
-	}
-//-->
-</SCRIPT>
+<script type="text/javascript">
+$(function() {
+    $(".make-switch").bootstrapSwitch();
+});
+</script>

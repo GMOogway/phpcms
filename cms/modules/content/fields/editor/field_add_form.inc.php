@@ -239,6 +239,13 @@
       </div>
     </div>
     <div class="form-group">
+      <label class="col-md-2 control-label">分段上传</label>
+      <div class="col-md-9">
+        <input type="checkbox" name="setting[chunk]" value="1" data-on-text="已开启" data-off-text="已关闭" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+        <span class="help-block">当文件太大时可以采取分段上传，可以提升上传效率</span>
+      </div>
+    </div>
+    <div class="form-group">
       <label class="col-md-2 control-label">本地图片自动上传</label>
         <div class="col-md-9">
             <div class="mt-radio-inline">

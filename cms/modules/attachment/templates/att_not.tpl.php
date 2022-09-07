@@ -8,7 +8,7 @@ jQuery(document).ready(function() {
 });
 </script>
 <!--上传组件js-->
-<script src="<?php echo JS_PATH?>assets/ds.min.js"></script>
+<script src="<?php echo JS_PATH?>h5upload/ds.min.js"></script>
 <link href="<?php echo JS_PATH?>h5upload/h5upload.css" rel="stylesheet" type="text/css" />
 <style type="text/css">
 body{background: #fff;}

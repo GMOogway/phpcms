@@ -4,7 +4,7 @@ defined('IS_ADMIN') or exit('No permission resources.');
 $show_dialog = $show_header = true; 
 include $this->admin_tpl('header', 'admin');
 $thisExt = isset($this->setting['ext'])?$this->setting['ext']:'';
-$authkey = upload_key('1,'.$thisExt.',0,1,,,,,');
+$authkey = upload_key('1,'.$thisExt.',0,1,,,,,,0');
 $p = dr_authcode(array(
 	'file_upload_limit' => 1,
 	'file_types_post' => $thisExt,
@@ -15,6 +15,7 @@ $p = dr_authcode(array(
 	'watermark_enable' => '',
 	'attachment' => '',
 	'image_reduce' => '',
+	'chunk' => 0,
 ), 'ENCODE');
 ?>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH;?>formvalidator.js" charset="UTF-8"></script>

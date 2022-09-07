@@ -2,7 +2,7 @@
 defined('IS_ADMIN') or exit('No permission resources.'); 
 $show_dialog = $show_validator = $show_header = true; 
 include $this->admin_tpl('header','admin');
-$authkey = upload_key('1,jpg|jpeg|gif|bmp|png,0,,300,300,,,');
+$authkey = upload_key('1,jpg|jpeg|gif|bmp|png,0,,300,300,,,,0');
 $p = dr_authcode(array(
 	'file_upload_limit' => 1,
 	'file_types_post' => 'jpg|jpeg|gif|bmp|png',
@@ -13,6 +13,7 @@ $p = dr_authcode(array(
 	'watermark_enable' => '',
 	'attachment' => '',
 	'image_reduce' => '',
+	'chunk' => 0,
 ), 'ENCODE');
 ?>
 <?php echo load_css(JS_PATH.'layui/css/layui.css');?>

@@ -486,8 +486,9 @@ function update_mobile_webpath($path, $mobile_dirname, $dirname, $siteid = 0) {
  * 上传移动文件
  */
 function dr_move_uploaded_file($tempfile, $fullname) {
-	$contentType = $_SERVER['CONTENT_TYPE'] ? getenv('CONTENT_TYPE') : 0;
-	if (strpos($contentType, 'multipart') !== false && strpos($_SERVER['HTTP_CONTENT_RANGE'], 'bytes') === 0) {
+	$contentType = $_SERVER['CONTENT_TYPE'] ?? getenv('CONTENT_TYPE');
+	if ($contentType && $_SERVER['HTTP_CONTENT_RANGE']
+		&& strpos($contentType, 'multipart') !== false && strpos($_SERVER['HTTP_CONTENT_RANGE'], 'bytes') === 0) {
 
 		// 命名一个新名称
 		$value = str_replace('bytes ', '', $_SERVER['HTTP_CONTENT_RANGE']);
@@ -523,7 +524,7 @@ function dr_move_uploaded_file($tempfile, $fullname) {
 				unlink($temp_file);
 				return false;
 			}*/
-			return file_put_contents($temp_file, file_get_contents($tempfile), FILE_APPEND);
+			echo file_put_contents($temp_file, file_get_contents($tempfile), FILE_APPEND);exit;
 		}
 	} else {
 		return move_uploaded_file($tempfile, $fullname);
