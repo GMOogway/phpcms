@@ -110,8 +110,8 @@ function readWordToHtml($source, $userid, $siteid, $rid) {
 	foreach ($phpWord->getSections() as $section) {
 		foreach ($section->getElements() as $ele1) {
 			$paragraphStyle = $ele1->getParagraphStyle();
-			if ($paragraphStyle) {
-				$html .= '<p style="text-align:'. $paragraphStyle->getAlignment() .';text-indent:20px;">';
+			if ($paragraphStyle && $paragraphStyle->getAlignment()) {
+				$html .= '<p style="text-align:'. $paragraphStyle->getAlignment() .';">';
 			} else {
 				$html .= '<p>';
 			}
@@ -126,10 +126,14 @@ function readWordToHtml($source, $userid, $siteid, $rid) {
 						$fontFamily && $styleString .= "font-family:{$fontFamily};";
 						$fontSize && $styleString .= "font-size:{$fontSize}px;";
 						$isBold && $styleString .= "font-weight:bold;";
-						$html .= sprintf('<span style="%s">%s</span>',
-							$styleString,
-							mb_convert_encoding($ele2->getText(), 'GBK', 'UTF-8')
-						);
+						if ($styleString) {
+							$html .= sprintf('<span style="%s">%s</span>',
+								$styleString,
+								mb_convert_encoding($ele2->getText(), 'GBK', 'UTF-8')
+							);
+						} else {
+							$html .= mb_convert_encoding($ele2->getText(), 'GBK', 'UTF-8');
+						}
 					} elseif ($ele2 instanceof \PhpOffice\PhpWord\Element\Image) {
 						$imageData = $ele2->getImageStringData(true);
 						//$imageData = 'data:' . $ele2->getImageType() . ';base64,' . $imageData;
@@ -173,6 +177,7 @@ function readWordToHtml($source, $userid, $siteid, $rid) {
 			$html .= '</p>';
 		}
 	}
+	$html = preg_replace('/<Object:([^"]*).bin>/i', '', code2html($html));
 	return mb_convert_encoding($html, 'UTF-8', 'GBK');
 }
 ?>
