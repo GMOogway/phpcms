@@ -32,7 +32,7 @@ if(is_array($list)):
 <?php if (is_dir($v)) {
 	echo '<td align="left"><img src="'.IMG_PATH.'folder-closed.png" /> <a href="?m=attachment&c=attachments&a=album_dir&args='.$this->input->get('args').'&authkey='.$this->input->get('authkey').'&dir='.($this->input->get('dir') && !empty($this->input->get('dir')) ? stripslashes($this->input->get('dir')).'/' : '').$filename.'"><b>'.$filename.'</b></a></td>';
 } else {
-	echo '<td align="left" onclick="javascript:album_cancel(this)"><img src="'.file_icon($filename,'gif').'" /> <a href="javascript:;" rel="'.$url.$filename.'" name="'.file_name($filename).'"';
+	echo '<td align="left" onclick="javascript:album_cancel(this)"><img src="?m=attachment&c=manage&a=public_icon&fileext='.fileext($filename).'" width="20" /> <a href="javascript:;" rel="'.$url.$filename.'" name="'.file_name($filename).'"';
 	if (dr_is_image(CMS_PATH.$local.'/'.$filename)) {
 		echo ' onmouseover="layer.tips(\'<img src='.$url.$filename.'>\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';
 	}

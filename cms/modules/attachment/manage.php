@@ -59,7 +59,7 @@ class manage extends admin {
 					$rs['filepath'] = dr_get_file_url($r);
 				}
 				$rs['filename'] = dr_keyword_highlight($r['filename']!='' ? $r['filename'] : '...', $param['keyword']);
-				$rs['fileext'] = dr_keyword_highlight($r['fileext'], $param['fileext']).'<img src="'.file_icon('.'.$r['fileext'],'gif').'" />'.($thumb ? '<img title="'.L('att_thumb_manage').'" src="'.IMG_PATH.'admin_img/havthumb.png" onclick="showthumb('.$r['aid'].', \''.$r['filename'].'\')"/>':'').($r['status'] ? ' <img src="'.IMG_PATH.'admin_img/link.png"':'');
+				$rs['fileext'] = dr_keyword_highlight($r['fileext'], $param['fileext']).'<img src="?m=attachment&c=manage&a=public_icon&fileext='.$r['fileext'].'" width="20" />'.($thumb ? '<img src="'.IMG_PATH.'admin_img/havthumb.png" onclick="showthumb('.$r['aid'].', \''.$r['filename'].'\')"/>':'').($r['status'] ? ' <img src="'.IMG_PATH.'admin_img/link.png"':'');
 				$rs['related'] = $r['related'];
 				$rs['status'] = $r['status'];
 				$rs['filesize'] = format_file_size($r['filesize']);
@@ -73,7 +73,7 @@ class manage extends admin {
 	/**
 	 * 附件改名
 	 */
-	public function pulic_name_edit() {
+	public function public_name_edit() {
 		$show_header = true; 
 		$aid = (int)$this->input->get('aid');
 		if (!$aid) {
@@ -120,25 +120,6 @@ class manage extends admin {
 		}
 	}
 	
-	public function pulic_dirmode_del() {
-		$filename = urldecode($this->input->get('filename'));
-		$tmpdir = $dir = urldecode($this->input->get('dir'));
-		$tmpdir = str_replace('\\','/',$tmpdir);
-		$tmpdirs = explode('/',$tmpdir);
-		$tmpdir = CMS_PATH.$tmpdirs[0].'/';
-		if($tmpdir!=SYS_UPLOAD_PATH) {
-			dr_admin_msg(0,L('illegal_operation'));
-		}
-		$file = CMS_PATH.$dir.DIRECTORY_SEPARATOR.$filename;
-		$file = str_replace(array('/','\\'), DIRECTORY_SEPARATOR, $file);
-		$file = str_replace('..', '', $file);
-		if(@unlink($file)) {
-			dr_json(1, L('operation_success'));
-		} else {
-			dr_json(0, L('operation_failure'));
-		}
-	}
-	
 	/**
 	 * 批量删除附件
 	 */
@@ -177,10 +158,15 @@ class manage extends admin {
 	public function pullic_delthumbs() {
 		$filepath = urldecode($this->input->get('filepath'));
 		$ext = fileext($filepath);
-		if(!in_array(strtoupper($ext),array('JPG','GIF','BMP','PNG','JPEG')))  exit('0');
+		if(!in_array(strtoupper($ext),array('JPG','GIF','BMP','PNG','JPEG','WEBP'))) exit('0');
 		$reslut = @unlink($filepath);
 		if($reslut) exit('1');
 		 exit('0');
+	}
+	
+	public function public_icon() {
+		$fileext = $this->input->get('fileext');
+		exit(icon($fileext));
 	}
 }
 ?>

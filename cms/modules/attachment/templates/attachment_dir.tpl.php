@@ -16,13 +16,13 @@ body .table-list table tr>td:first-child, body .table-list table tr>th:first-chi
 <table width="100%" cellspacing="0">
 <thead>
 	<tr>
-		<th><?php echo L("local_dir")?>：<?php echo $local?></th><th width="180"></th><th width="180"></th>
+		<th><?php echo L("local_dir")?>：<?php echo $local?></th><th width="200"></th>
 	</tr>
 </thead>
 <tbody>
 <?php if ($dir !='' && $dir != '.'):?>
 <tr>
-<td align="left"><a href="<?php echo '?m=attachment&c=manage&a=dir&dir='.stripslashes(dirname($dir)).'&menuid='.$this->input->get('menuid')?>"><img src="<?php echo IMG_PATH?>folder-closed.png" /><?php echo L("parent_directory")?></a></td><td></td><td></td>
+<td align="left"><a href="<?php echo '?m=attachment&c=manage&a=dir&dir='.stripslashes(dirname($dir)).'&menuid='.$this->input->get('menuid')?>"><img src="<?php echo IMG_PATH?>folder-closed.png" /><?php echo L("parent_directory")?></a></td><td></td>
 </tr>
 <?php endif;?>
 <?php 
@@ -32,9 +32,9 @@ if(is_array($list)) {
 ?>
 <tr>
 <?php if (is_dir($v)) {
-	echo '<td><img src="'.IMG_PATH.'folder-closed.png" /> <a href="?m=attachment&c=manage&a=dir&dir='.($this->input->get('dir') && !empty($this->input->get('dir')) ? stripslashes($this->input->get('dir')).'/' : '').$filename.'&menuid='.$this->input->get('menuid').'"><b>'.$filename.'</b></a></td><td width="10%"></td><td width="10%"></td>';
+	echo '<td><img src="'.IMG_PATH.'folder-closed.png" /> <a href="?m=attachment&c=manage&a=dir&dir='.($this->input->get('dir') && !empty($this->input->get('dir')) ? stripslashes($this->input->get('dir')).'/' : '').$filename.'&menuid='.$this->input->get('menuid').'"><b>'.$filename.'</b></a></td><td></td>';
 } else {
-	echo '<td><img src="'.file_icon($filename,'gif').'" /><a href="javascript:;" onclick="preview(\''.$local.'/'.$filename.'\')">'.$filename.'</a></td><td width="10%">'.format_file_size(filesize(CMS_PATH.$local.'/'.$filename)).'</td><td width="10%"><a href="javascript:;" onclick="preview(\''.$local.'/'.$filename.'\')">'.L('preview').'</a> | <a href="javascript:;" onclick="att_delete(this,\''.urlencode($filename).'\',\''.urlencode($local).'\')">'.L('delete').'</a></td>';
+	echo '<td><img src="?m=attachment&c=manage&a=public_icon&fileext='.fileext($filename).'" width="20" /><a href="javascript:;" onclick="preview(\''.$local.'/'.$filename.'\')">'.$filename.'</a></td><td>'.format_file_size(filesize(CMS_PATH.$local.'/'.$filename)).'</td>';
 }?>
 </tr>
 <?php 
@@ -98,9 +98,6 @@ function preview(file) {
         diag.show();
     }
 }
-function att_delete(obj,filename,localdir){
-	Dialog.confirm('<?php echo L('del_confirm')?>', function(){$.get('?m=attachment&c=manage&a=pulic_dirmode_del&filename='+filename+'&dir='+localdir+'&pc_hash='+pc_hash,function(data){if(data == 1) $(obj).parent().parent().fadeOut("slow");})});
-};
 function IsImg(url){
     var sTemp;
     var b=false;

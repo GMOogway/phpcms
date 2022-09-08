@@ -11,13 +11,18 @@ include $this->admin_tpl('header', 'admin');
 .attachment-list li{margin:10px 15px;}
 }
 </style>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+    $('.tooltips').tooltip();
+});
+</script>
 <div class="pad-10">
 <ul class="attachment-list">
 	<?php foreach($thumbs as $thumb) {
     ?>
     <li>
             <img src="<?php echo $thumb['thumb_url']?>" alt="<?php echo $thumb['width']?> X <?php echo $thumb['height']?>" width="120" />
-            <span class="cu" title="<?php echo L('delete')?>" onclick="thumb_delete('<?php echo urlencode($thumb['thumb_filepath'])?>',this)"></span>
+            <span class="tooltips cu" data-original-title="<?php echo L('delete')?>" onclick="thumb_delete('<?php echo urlencode($thumb['thumb_filepath'])?>',this)"></span>
             <?php echo $thumb['width']?> X <?php echo $thumb['height']?>
     </li>
     <?php } ?>
