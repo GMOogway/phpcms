@@ -111,7 +111,7 @@ function readWordToHtml($source, $userid, $siteid, $rid) {
 		foreach ($section->getElements() as $ele1) {
 			$paragraphStyle = $ele1->getParagraphStyle();
 			if ($paragraphStyle && $paragraphStyle->getAlignment()) {
-				$html .= '<p style="text-align:'. $paragraphStyle->getAlignment() .';">';
+				$html .= '<p style="text-align:'. $paragraphStyle->s() .';">';
 			} else {
 				$html .= '<p>';
 			}
