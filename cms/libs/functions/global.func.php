@@ -2967,12 +2967,12 @@ if (!function_exists('icon')) {
 	 */
 	function icon($icon, $background = '') {
 		header('Content-Type:image/svg+xml');
-		$suffix = $icon ? $icon : "FILE";
+		$suffix = $icon ? $icon : 'FILE';
 		$data = build_suffix_image($suffix, $background);
 		$offset = 30 * 60 * 60 * 24; // 缓存一个月
 		header('Cache-Control: public');
 		header('Pragma: cache');
-		header('Expires: ' . gmdate("D, d M Y H:i:s", time() + $offset) . ' GMT');
+		header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $offset) . ' GMT');
 		return $data;
 	}
 }

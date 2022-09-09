@@ -385,6 +385,54 @@ class index {
 		dr_jsonp(1, '服务器支持伪静态功能，可以自定义URL规则和解析规则了');
 	}
 	
+	//JSON 输出
+	public function json_list() {
+		if($this->input->get('type')=='keyword' && $this->input->get('modelid') && $this->input->get('keywords')) {
+		//根据关键字搜索
+			$modelid = intval($this->input->get('modelid'));
+			$id = intval($this->input->get('id'));
+
+			$MODEL = getcache('model','commons');
+			if(isset($MODEL[$modelid])) {
+				$keywords = safe_replace(new_html_special_chars($this->input->get('keywords')));
+				$keywords = $this->db->escape($keywords);
+				$this->db->set_model($modelid);
+				$result = $this->db->select("keywords LIKE '%$keywords%'",'id,title,url',10);
+				if(!empty($result)) {
+					$data = array();
+					foreach($result as $rs) {
+						if($rs['id']==$id) continue;
+						$data[] = $rs;
+					}
+					if(dr_count($data)==0) exit('0');
+					echo json_encode($data);
+				} else {
+					//没有数据
+					exit('0');
+				}
+			}
+		}
+
+	}
+	
+	/**
+	 * 检查支付状态
+	 */
+	protected function _check_payment($flag,$paytype) {
+		$_userid = $this->_userid;
+		$_username = $this->_username;
+		if(!$_userid) return false;
+		pc_base::load_app_class('spend','pay',0);
+		$setting = $this->category_setting;
+		$repeatchargedays = intval($setting['repeatchargedays']);
+		if($repeatchargedays) {
+			$fromtime = SYS_TIME - 86400 * $repeatchargedays;
+			$r = spend::spend_time($_userid,$fromtime,$flag);
+			if($r['id']) return true;
+		}
+		return false;
+	}
+	
 	/**
 	 * 检查阅读权限
 	 *
