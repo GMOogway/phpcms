@@ -93,7 +93,7 @@ class attachment_model extends model {
 	 * @param string 传入附件关系表中的组装id
 	 */
 	public function api_delete($keyid) {
-		if(!SYS_ATTACHMENT_STAT && !SYS_ATTACHMENT_DEL) return false;
+		if(!SYS_ATTACHMENT_STAT || !SYS_ATTACHMENT_DEL) return false;
 		pc_base::load_sys_class('upload');
 		$upload = new upload();
 		$keyid = trim($keyid);
