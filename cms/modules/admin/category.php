@@ -329,7 +329,7 @@ class category extends admin {
 			$this->repair();
 			$this->count_items();
 			$this->cache();
-			dr_json(1, L('add_success'));
+			dr_json(1, L('正在自动更新栏目缓存，请等待...'));
 		} else {
 			$show_header = $show_dialog = true;
 			$catid = 0;
@@ -508,7 +508,7 @@ class category extends admin {
 				$this->attachment_db->api_update($info['image'],'catid-'.$catid,1);
 			}
 			$menu_data = $this->menu_db->get_one(array('name' => 'category_manage', 'm' => 'admin', 'c' => 'category', 'a' => 'init'));
-			dr_json(1, L('operation_success'));
+			dr_json(1, L('正在自动更新栏目缓存，请等待...'));
 		} else {
 			$show_header = $show_dialog = true;
 			//获取站点模板信息
