@@ -16,13 +16,13 @@ body .table-list table tr>td:first-child, body .table-list table tr>th:first-chi
 <table width="100%" cellspacing="0">
 <thead>
 	<tr>
-		<th><?php echo L("local_dir")?>：<?php echo $local?></th><th width="200"></th>
+		<th><?php echo L("local_dir")?>：<?php echo $local?></th>
 	</tr>
 </thead>
 <tbody>
 <?php if ($dir !='' && $dir != '.'):?>
 <tr>
-<td align="left"><a href="<?php echo '?m=attachment&c=manage&a=dir&dir='.stripslashes(dirname($dir)).'&menuid='.$this->input->get('menuid')?>"><img src="<?php echo IMG_PATH?>folder-closed.png" /><?php echo L("parent_directory")?></a></td><td></td>
+<td align="left"><a href="<?php echo '?m=attachment&c=manage&a=dir&dir='.stripslashes(dirname($dir)).'&menuid='.$this->input->get('menuid')?>"><img src="<?php echo IMG_PATH?>folder-closed.png" /><?php echo L("parent_directory")?></a></td>
 </tr>
 <?php endif;?>
 <?php 
@@ -32,9 +32,9 @@ if(is_array($list)) {
 ?>
 <tr>
 <?php if (is_dir($v)) {
-	echo '<td><img src="'.IMG_PATH.'folder-closed.png" /> <a href="?m=attachment&c=manage&a=dir&dir='.($this->input->get('dir') && !empty($this->input->get('dir')) ? stripslashes($this->input->get('dir')).'/' : '').$filename.'&menuid='.$this->input->get('menuid').'"><b>'.$filename.'</b></a></td><td></td>';
+	echo '<td><img src="'.IMG_PATH.'folder-closed.png" /> <a href="?m=attachment&c=manage&a=dir&dir='.($this->input->get('dir') && !empty($this->input->get('dir')) ? stripslashes($this->input->get('dir')).'/' : '').$filename.'&menuid='.$this->input->get('menuid').'"><b>'.$filename.'</b></a></td>';
 } else {
-	echo '<td><img src="?m=attachment&c=manage&a=public_icon&fileext='.fileext($filename).'" width="20" /><a href="javascript:;" onclick="preview(\''.$local.'/'.$filename.'\')">'.$filename.'</a></td><td>'.format_file_size(filesize(CMS_PATH.$local.'/'.$filename)).'</td>';
+	echo '<td><img src="?m=attachment&c=manage&a=public_icon&fileext='.fileext($filename).'" width="20" /><a href="javascript:;" onclick="preview(\''.$local.'/'.$filename.'\')">'.$filename.'</a><span style="float: right;">'.format_file_size(filesize(CMS_PATH.$local.'/'.$filename)).'</span></td>';
 }?>
 </tr>
 <?php 
