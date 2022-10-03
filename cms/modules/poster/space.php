@@ -8,6 +8,7 @@ class space extends admin {
 	function __construct() {
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
+		pc_base::load_app_func('global','poster');
 		$setting = new_html_special_chars(getcache('poster', 'commons'));
 		if ($this->setting) {
 			$this->setting = $setting[$this->get_siteid()];
@@ -46,7 +47,7 @@ class space extends admin {
 			}
 		} else {
 			$TYPES = $this->template_type();
-			$poster_template = getcache('poster_template_'.$this->get_siteid(), 'commons');
+			$poster_template = poster_template();
 			$show_header = $show_validator = true;
 			include $this->admin_tpl('space_add');
 		}
@@ -76,7 +77,7 @@ class space extends admin {
 			$info = $this->db->get_one(array('spaceid' => $spaceid));
 			$setting = string2array($info['setting']);
 			$TYPES = $this->template_type();
-			$poster_template = getcache('poster_template_'.$this->get_siteid(), 'commons');
+			$poster_template = poster_template();
 			$show_header = $show_validator = true;
 			include $this->admin_tpl('space_edit');
 		}
@@ -115,7 +116,6 @@ class space extends admin {
 	}
 	
 	private function template_type() {
-		pc_base::load_app_func('global','poster');
 		return get_types();
 	}
 	
@@ -175,94 +175,19 @@ class space extends admin {
 	}
 	
 	/**
-	 * 配置模板
-	 */
-	public function poster_template() {
-		$tpl_root = SYS_TPL_ROOT;
-		$templatedir = PC_PATH.$tpl_root.SYS_TPL_NAME.DIRECTORY_SEPARATOR.'poster'.DIRECTORY_SEPARATOR;
-		$poster_template = getcache('poster_template_'.get_siteid(), 'commons');
-		$templates = glob($templatedir.'*.html');
-		if (is_array($templates) && !empty($templates)) {
-			foreach ($templates as $k => $tem) {
-				$templates[$k] = basename($tem, ".html");
-			}
-		}
-		$big_menu = array('javascript:artdialog(\'add\',\'?m=poster&c=space&a=add\',\''.L('add_space').'\',540,320);void(0);', L('add_space'));
-		include $this->admin_tpl('poster_template');
-	}
-	
-	/**
-	 * 删除模板配置
-	 */
-	public function public_tempate_del() {
-		if (!$this->input->get('id')) dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
-		$siteid = $this->get_siteid();
-		$poster_template = getcache('poster_template_'.$siteid, 'commons');
-		if ($poster_template[$this->input->get('id')]) {
-			unset($poster_template[$this->input->get('id')]);
-		}
-		setcache('poster_template_'.$siteid, $poster_template, 'commons');
-		dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
-	}
-	
-	/**
-	 * 配置模板
-	 */
-	public function public_tempate_setting() {
-		$siteid = $this->get_siteid();
-		$poster_template = getcache('poster_template_'.$siteid, 'commons');
-		if ($this->input->post('dosubmit')) {
-			$info = $this->input->post('info');
-			if (is_array($info['type']) && !empty($info['type'])) {
-				$type2name = array('images'=>L('photo'), 'flash'=>L('flash'), 'text'=>L('title'));
-				$type = array();
-				foreach ($info['type'] as $t) {
-					if (in_array($t, array('images', 'flash', 'text'))) {
-						$type[$t] = $type2name[$t];
-					} else {
-						continue;
-					}
-				}
-			}
-			unset($info['type']);
-			$info['type'] = $type;
-			$poster_template[$this->input->post('template')] = $info;
-			setcache('poster_template_'.$siteid, $poster_template, 'commons');
-			dr_admin_msg(1,L('setting_success'), '', '', 'testIframe');
-		} else {
-			if (!$this->input->get('template')) {
-			dr_admin_msg(0,L('illegal_parameters'));
-			} else {
-				$template = $this->input->get('template');
-			}
-			if ($poster_template[$template]) {
-				$info = $poster_template[$template];
-				if (is_array($info['type']) && !empty($info['type'])) {
-					$type = array();
-					$type = array_keys($info['type']);
-					unset($info['type']);
-					$info['type'] = $type;
-				}
-			}
-			include $this->admin_tpl('template_setting');	
-		}
-	}
-	
-	/**
 	 * 更新js
 	 */
 	public function create_js($page = 0) {
 		$page = max(intval($this->input->get('page')), 1);
 		if ($page==1) {
-			$result = $this->db->get_one(array('disabled'=>0, 'siteid'=>get_siteid()), 'COUNT(*) AS num');
-			if ($result['num']) {
-				$total = $result['num'];
-				$pages = ceil($total/20);
+			$total = $this->db->count(array('disabled'=>0, 'siteid'=>get_siteid()));
+			if ($total) {
+				$pages = ceil($total/SYS_ADMIN_PAGESIZE);
 			}
 		} else {
 			$pages = $this->input->get('pages') ? intval($this->input->get('pages')) : 0;
 		}
-		$offset = ($page-1)*20;
+		$offset = ($page-1)*SYS_ADMIN_PAGESIZE;
 		$data = $this->db->listinfo(array('disabled'=>0, 'siteid'=>get_siteid()), 'spaceid ASC', $page, SYS_ADMIN_PAGESIZE);
 		$html = pc_base::load_app_class('html');
 		foreach ($data as $d) {
@@ -274,9 +199,9 @@ class space extends admin {
 		}
 		$page++;
 		if ($page>$pages) {
-			dr_admin_msg(1,L('update_js_success'), '?m=poster&c=space&a=init');
+			dr_admin_msg(1,L('update_js_success'), '?m=poster&c=space&a=init&menuid='.$this->input->get('menuid'));
 		} else {
-			dr_admin_msg(1,L('update_js').'<font style="color:red">'.($page-1).'/'.$pages.'</font>', '?m=poster&c=space&a=create_js&page='.$page.'&pages='.$pages);
+			dr_admin_msg(1,L('update_js').'<font style="color:red">'.($page-1).'/'.$pages.'</font>', '?m=poster&c=space&a=create_js&menuid='.$this->input->get('menuid').'&page='.$page.'&pages='.$pages);
 		}
 	}
 	

@@ -38,7 +38,6 @@ include $this->admin_tpl('header', 'admin');
 </html>
 <script language="javascript" type="text/javascript">
 function AdsType(adstype) {
-	$('input[type=checkbox]').attr('checked', false);
 	$('#ScrollSpan').css('display', 'none');
 	$('#AlignSpan').css('display', 'none');
 	$('#trPosition').css('display', 'none');
@@ -46,43 +45,43 @@ function AdsType(adstype) {
 	$('#PaddingLeft').attr('disabled', false);
 	$('#PaddingTop').attr('disabled', false);
 	<?php 
-			if (is_array($poster_template) && !empty($poster_template)) {
-				$n = 0;
-				foreach ($poster_template as $key => $p) {
-					if ($n==0) {
-						echo 'if (adstype==\''.$key.'\') {';
-					} else {
-						echo '} else if (adstype==\''.$key.'\') {';
-					}
-					if ($p['align']) {
-						if ($p['align']=='align') {
-							echo '$(\'#AlignSpan\').css(\'display\', \'\');';
-							if ($setting['align']) {
-								echo '$(\'#AlignBox\').attr(\'checked\', \'true\');';
-								echo '$(\'#PaddingLeft\').attr(\'disabled\', true);';
-								echo '$(\'#PaddingTop\').attr(\'disabled\', true);';
-							}
-						} elseif ($p['align']=='scroll') {
-							echo '$(\'#ScrollSpan\').css(\'display\', \'\');';
-							if ($setting['scroll']) {
-								echo '$(\'#ScrollBox\').attr(\'checked\', \'true\');';
-							}
+		if (is_array($poster_template) && !empty($poster_template)) {
+			$n = 0;
+			foreach ($poster_template as $key => $p) {
+				if ($n==0) {
+					echo 'if (adstype==\''.$key.'\') {';
+				} else {
+					echo '} else if (adstype==\''.$key.'\') {';
+				}
+				if ($p['align']) {
+					if ($p['align']=='align') {
+						echo '$(\'#AlignSpan\').css(\'display\', \'\');';
+						if ($setting['align']) {
+							echo '$(\'#AlignBox\').prop(\'checked\', \'true\');';
+							echo '$(\'#PaddingLeft\').attr(\'disabled\', true);';
+							echo '$(\'#PaddingTop\').attr(\'disabled\', true);';
+						}
+					} elseif ($p['align']=='scroll') {
+						echo '$(\'#ScrollSpan\').css(\'display\', \'\');';
+						if ($setting['scroll']) {
+							echo '$(\'#ScrollBox\').prop(\'checked\', \'true\');';
 						}
 					}
-					if ($p['padding']) {
-						echo '$(\'#trPosition\').css(\'display\', \'\');';
-					}
-					if (!isset($p['size']) || !$p['size']) {
-						echo '$(\'#SizeFormat\').css(\'display\', \'none\');';
-					}
-					$n++;
 				}
+				if ($p['padding']) {
+					echo '$(\'#trPosition\').css(\'display\', \'\');';
+				}
+				if (!isset($p['size']) || !$p['size']) {
+					echo '$(\'#SizeFormat\').css(\'display\', \'none\');';
+				}
+				$n++;
 			}
-			echo '}';
-		?>
+		}
+		echo '}';
+	?>
 }
 $('#AlignBox').click( function (){
-	if($('#AlignBox').attr('checked')) {
+	if($('#AlignBox').is(':checked')) {
 		$('#PaddingLeft').attr('disabled', true);
 		$('#PaddingTop').attr('disabled', true);
 	} else {
@@ -109,5 +108,6 @@ $(document).ready(function(){
 	}).defaultPassed();
 	$('#type').formValidator({onshow:"<?php echo L('choose_space_type')?>",onfocus:"<?php echo L('choose_space_type')?>",oncorrect:"<?php echo L('correct')?>"}).inputValidator();
 	$('#s_width').formValidator({tipid:"w_hTip",onshow:"<?php echo L('input_width_height')?>",onfocus:"<?php echo L('three_numeric')?>",oncorrect:"<?php echo L('correct')?>"}).inputValidator().defaultPassed();
+	$('#h_height').formValidator({tipid:"w_hTip",onshow:"<?php echo L('input_width_height')?>",onfocus:"<?php echo L('three_numeric')?>",oncorrect:"<?php echo L('correct')?>"}).inputValidator();
 })
 </script>

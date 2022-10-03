@@ -252,53 +252,9 @@ class poster extends admin {
 	 */
 	private function get_setting($type) {
 		$data = $poster_template = array();
-		$poster_template = getcache('poster_template_'.$this->get_siteid(), 'commons');
+		$poster_template = poster_template();
 		if (is_array($poster_template) && !empty($poster_template)) {
 			$data = $poster_template[$type];
-		} else {
-			switch($type) {
-				case 'banner':
-					$data['type'] = array('images' => L('photo'), 'flash' => L('flash'));
-					$data['num'] = 1;
-					break;
-				
-				case 'fixure':
-					$data['type'] = array('images' => L('photo'), 'flash' => L('flash'));
-					$data['num'] = 1;
-					break;
-				
-				case 'float':
-					$data['type'] = array('images' => L('photo'), 'flash' => L('flash'));
-					$data['num'] = 1;
-					break;
-				
-				case 'couplet':
-					$data['type'] = array('images' => L('photo'), 'flash' => L('flash'));
-					$data['num'] = 2;
-					break;
-					
-				case 'imagechange':
-					$data['type'] = array('images' => L('photo'));
-					$data['num'] = 1;
-					break;
-					
-				case 'imagelist':
-					$data['type'] = array('images' => L('photo'));
-					$data['num'] = 1;
-					break;
-				
-				case 'text':
-					$data['type'] = array('text' => L('title'));
-					break;
-					
-				case 'code':
-					$data['type'] = array('text' => L('title'));
-					break;
-					
-				default :
-					$data['type'] = array('images' => L('photo'), 'flash' => L('flash'));
-					$data['num'] = 1;
-			}
 		}
 		return $data;
 	}

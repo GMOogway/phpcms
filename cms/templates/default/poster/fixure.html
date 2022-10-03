@@ -22,7 +22,7 @@ function PCMSAD(PID) {
 function statAD() {
 	var new_element = document.createElement("script"); 
 	new_element.type = "text/javascript";
-	new_element.src="{APP_PATH}index.php?m=poster&c=index&a=show&siteid="+this.SiteID+"&id="+this.ADID+"&spaceid="+this.PosID;
+	new_element.src="{APP_PATH}index.php?m=poster&c=index&a=show&siteid="+this.SiteID+"&spaceid="+this.ADID+"&id="+this.PosID;
 	document.body.appendChild(new_element);
 }
 
@@ -33,9 +33,9 @@ function showADContent() {
   var str = "<div id='PCMSAD_"+this.PosID+"' style='left:"+this.PaddingLeft+"px;top:"+this.PaddingTop+"px;width:"+this.Width+"px; height:"+this.Height+"px; position: absolute;visibility: visible;z-index:999998;'>";
   var AD = eval('('+content+')');
   if (this.ADType == "images") {
-	  if (AD.Images[0].imgADLinkUrl) str += "<a href='"+this.URL+"?m=poster&c=index&a=poster_click&siteid="+this.SiteID+"&id="+this.ADID+"&url="+AD.Images[0].imgADLinkUrl+"' target='_blank'>";
+	  str += "<a href='"+this.URL+"?m=poster&c=index&a=poster_click&siteid="+this.SiteID+"&id="+this.ADID+"&url="+AD.Images[0].imgADLinkUrl+"' target='_blank'>";
 	  str += "<img title='"+AD.Images[0].imgADAlt+"' src='"+this.UploadFilePath+AD.Images[0].ImgPath+"' width='"+this.Width+"' height='"+this.Height+"' style='border:0px;'>";
-	  if (AD.Images[0].imgADLinkUrl) str += "</a>";
+	  str += "</a>";
   }else if(this.ADType == "flash"){
 	  str += "<object classid='clsid:D27CDB6E-AE6D-11cf-96B8-444553540000' width='"+this.Width+"' height='"+this.Height+"' id='FlashAD_"+this.PosID+"' codebase='http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0'>";
 	  str += "<param name='movie' value='"+this.UploadFilePath+AD.Images[0].ImgPath+"' />"; 
@@ -80,10 +80,10 @@ cmsAD_{$spaceid}.ADName = "{$p_name}";
 cmsAD_{$spaceid}.ADContent = "{'Images':[{'imgADLinkUrl':'{urlencode($p_setting[1]['linkurl'])}','imgADAlt':'{$p_setting[1]['alt']}','ImgPath':'<?php echo $p_type=='images' ? $p_setting[1]['imageurl'] : $p_setting[1]['flashurl'];?>'}],'imgADLinkTarget':'New','Count':'1','showAlt':'Y'}"; 
 cmsAD_{$spaceid}.URL = "{APP_PATH}index.php?m=poster&c=index"; 
 cmsAD_{$spaceid}.SiteID = {$siteid}; 
-cmsAD_{$spaceid}.PaddingLeft = {if $space_setting['paddleft']} {$space_setting['paddleft']} {else}0{/if}; 
-cmsAD_{$spaceid}.PaddingTop = {if $space_setting['paddtop']} {$space_setting['paddtop']} {else}0{/if}; 
-cmsAD_{$spaceid}.Scroll = '{if $space_setting['align']}Y{else}N{/if}'; 
-cmsAD_{$spaceid}.Align = '{if $space_setting['align']}Y{else}N{/if}'; 
+cmsAD_{$spaceid}.PaddingLeft = {if $setting['paddleft']} {$setting['paddleft']} {else}0{/if}; 
+cmsAD_{$spaceid}.PaddingTop = {if $setting['paddtop']} {$setting['paddtop']} {else}0{/if}; 
+cmsAD_{$spaceid}.Scroll = '{if $setting['align']}Y{else}N{/if}'; 
+cmsAD_{$spaceid}.Align = '{if $setting['align']}Y{else}N{/if}'; 
 cmsAD_{$spaceid}.Width = {$width}; 
 cmsAD_{$spaceid}.Height = {$height}; 
 cmsAD_{$spaceid}.UploadFilePath = ""; 

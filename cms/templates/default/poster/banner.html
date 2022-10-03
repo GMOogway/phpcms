@@ -20,7 +20,7 @@ function PCMSAD(PID) {
 function statAD() {
 	var new_element = document.createElement("script"); 
 	new_element.type = "text/javascript";
-	new_element.src="{APP_PATH}index.php?m=poster&c=index&a=show&siteid="+this.SiteID+"&id="+this.ADID+"&spaceid="+this.PosID; 
+	new_element.src="{APP_PATH}index.php?m=poster&c=index&a=show&siteid="+this.SiteID+"&spaceid="+this.ADID+"&id="+this.PosID; 
 	document.body.appendChild(new_element);
 }
 
@@ -29,9 +29,9 @@ function showADContent() {
   var str = "";
   var AD = eval('('+content+')');
   if (this.ADType == "images") {
-	  if (AD.Images[0].imgADLinkUrl) str += "<a href='"+this.URL+'&a=poster_click&sitespaceid='+this.SiteID+"&id="+this.ADID+"&url="+AD.Images[0].imgADLinkUrl+"' target='_blank'>";
+	  str += "<a href='"+this.URL+'&a=poster_click&sitespaceid='+this.SiteID+"&id="+this.ADID+"&url="+AD.Images[0].imgADLinkUrl+"' target='_blank'>";
 	  str += "<img title='"+AD.Images[0].imgADAlt+"' src='"+this.UploadFilePath+AD.Images[0].ImgPath+"' width='"+this.Width+"' height='"+this.Height+"' style='border:0px;'>";
-	  if (AD.Images[0].imgADLinkUrl) str += "</a>";
+	  str += "</a>";
   }else if(this.ADType == "flash"){
 	  str += "<object classid='clsid:D27CDB6E-AE6D-11cf-96B8-444553540000' width='"+this.Width+"' height='"+this.Height+"' id='FlashAD_"+this.ADID+"' codebase='http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0'>";
 	  str += "<param name='movie' value='"+this.UploadFilePath+AD.Images[0].ImgPath+"' />"; 

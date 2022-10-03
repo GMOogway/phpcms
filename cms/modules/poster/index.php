@@ -34,7 +34,7 @@ class index {
 		} else {
 			$url = isset($_GET['url']) ? $_GET['url'] : $setting['1']['linkurl'];
 		}
-		header('Location: '.$url);
+		redirect($url);
 	}
 	
 	/**
@@ -49,7 +49,8 @@ class index {
 		$r = $sdb->get_one(array('siteid'=>$siteid, 'spaceid'=>$id));
 		if(!$r) exit();
 		if($r['setting']) $r['setting'] = string2array($r['setting']);
-		$poster_template = getcache('poster_template_'.$siteid, 'commons');
+		pc_base::load_app_func('global','poster');
+		$poster_template = poster_template();
 		if ($poster_template[$r['type']]['option']) {
 			$where = "`spaceid`='".$id."' AND `disabled`=0 AND `startdate`<='".$now."' AND (`enddate`>='".$now."' OR `enddate`=0) ";
 			$pinfo = $this->db->select($where, '*', '', '`listorder` ASC, `id` DESC');

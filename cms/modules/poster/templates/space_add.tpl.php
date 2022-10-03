@@ -24,7 +24,7 @@ include $this->admin_tpl('header', 'admin');
 	
 	<tr id="SizeFormat" style="display: ;">
 		<th><strong><?php echo L('size_format')?>：</strong></th>
-		<td><?php echo L('plate_width')?><label><input name="space[width]" id="s_width" class="input-text" type="text" size="10"></label> px &nbsp;&nbsp;&nbsp;&nbsp; <?php echo L('plate_height')?><label><input name="space[height]" type="text" id="h_height" class="input-text" size="10"></label> px</td>
+		<td><?php echo L('plate_width')?><label><input name="space[width]" id="s_width" class="input-text" type="text" size="10"></label> px &nbsp;&nbsp;&nbsp;&nbsp; <?php echo L('plate_height')?><label><input name="space[height]" type="text" id="h_height" class="input-text" size="10"></label> px<div id="w_hTip"></div></td>
 	</tr>
 	<tr>
 		<th><strong><?php echo L('description')?>：</strong></th>
@@ -46,7 +46,6 @@ function AdsType(adstype) {
 	$('#SizeFormat').css('display', '');
 	$('#PaddingLeft').attr('disabled', false);
 	$('#PaddingTop').attr('disabled', false);
-
 	<?php 
 		if (is_array($poster_template) && !empty($poster_template)) {
 			$n = 0;
@@ -60,14 +59,14 @@ function AdsType(adstype) {
 					if ($p['align']=='align') {
 						echo '$(\'#AlignSpan\').css(\'display\', \'\');';
 						if ($p['select']) {
-							echo '$(\'#AlignBox\').attr(\'checked\', \'true\');';
+							echo '$(\'#AlignBox\').prop(\'checked\', \'true\');';
 							echo '$(\'#PaddingLeft\').attr(\'disabled\', true);';
 							echo '$(\'#PaddingTop\').attr(\'disabled\', true);';
 						}
 					} elseif ($p['align']=='scroll') {
 						echo '$(\'#ScrollSpan\').css(\'display\', \'\');';
 						if ($p['select']) {
-							echo '$(\'#ScrollBox\').attr(\'checked\', \'true\');';
+							echo '$(\'#ScrollBox\').prop(\'checked\', \'true\');';
 						}
 					}
 				}
@@ -84,7 +83,7 @@ function AdsType(adstype) {
 	?>
 }
 $('#AlignBox').click( function (){
-	if($('#AlignBox').attr('checked')) {
+	if($('#AlignBox').attr(':checked')) {
 		$('#PaddingLeft').attr('disabled', true);
 		$('#PaddingTop').attr('disabled', true);
 	} else {
@@ -110,6 +109,6 @@ $(document).ready(function(){
 	});
 	$('#type').formValidator({onshow:"<?php echo L('choose_space_type')?>",onfocus:"<?php echo L('choose_space_type')?>",oncorrect:"<?php echo L('correct')?>"}).inputValidator();
 	$('#s_width').formValidator({tipid:"w_hTip",onshow:"<?php echo L('input_width_height')?>",onfocus:"<?php echo L('three_numeric')?>",oncorrect:"<?php echo L('correct')?>"}).inputValidator();
-	$('#s_width').formValidator({tipid:"w_hTip",onshow:"<?php echo L('choose_space_type')?>",onfocus:"<?php echo L('choose_space_type')?>",oncorrect:"<?php echo L('correct')?>"}).inputValidator();
+	$('#h_height').formValidator({tipid:"w_hTip",onshow:"<?php echo L('input_width_height')?>",onfocus:"<?php echo L('three_numeric')?>",oncorrect:"<?php echo L('correct')?>"}).inputValidator();
 })
 </script>
