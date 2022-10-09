@@ -6,9 +6,8 @@
 <title><?php echo $steps[$step];?> - 安装向导</title>
 <link href="./css/install.css" rel="stylesheet" type="text/css" />
 <script language="JavaScript" src="../statics/js/Dialog/main.js"></script>
-<script language="JavaScript" src="./images/jquery.min.js"></script>
-<script language="JavaScript" src="./layer/layer.js"></script>
-<script language="javascript" type="text/javascript" src="./images/formvalidator.js" charset="UTF-8"></script>
-<script language="javascript" type="text/javascript" src="./images/formvalidatorregex.js" charset="UTF-8"></script>
+<script language="JavaScript" src="../statics/js/layer/layer.js"></script>
+<script language="javascript" type="text/javascript" src="../statics/js/formvalidator.js" charset="UTF-8"></script>
+<script language="javascript" type="text/javascript" src="../statics/js/formvalidatorregex.js" charset="UTF-8"></script>
 </head>
 <body>

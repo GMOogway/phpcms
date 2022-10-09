@@ -128,15 +128,11 @@ body fieldset table td{padding:5px 0;}
 .set7s .nr{height:auto;}
 .set7s .gxwc{margin-top:20px; color:#D1F368;}
 .clj{margin:0 auto;text-align:center;width:200px;}
-.clj .zdsy{background:url(../images/i_index.png) no-repeat 0px 50%;}
-.clj .htgl{background:url(../images/i_mng.png) no-repeat 0px 50%;}
 .h65{height:65px;}
 .txt_c{text-align:center; color:#98FB98;margin:40px 0px 20px 0px;}
 .d_n{display:none;color:#fff; padding:10px; background-color:#555;}
 .d_n input{margin-left:14px;}
 .w260{width:240px;}
-.err_info{color:#FFFF00;padding-left:80px; line-height:30px; width:300px; margin:50px auto 0px; background:url(../images/i_gth.png) no-repeat 0% 50%;}
-.err_info span{color:#fff;}
 .warmtips{background: #ffcdcd;font-size: 14px;color: #e74c3c;padding: 15px 20px;border-radius: 4px;margin-bottom: 20px;}
 .warmtips a {background: #ffffff7a;display: block;height: 30px;line-height: 30px;margin-top: 10px;color: #e21a1a;border-radius: 3px;text-decoration: none;}
 .warmtips a:hover {text-decoration: underline;}
