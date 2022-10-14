@@ -439,7 +439,7 @@ class check extends admin {
                     UNIQUE KEY `code` (`code`),
                     KEY `module` (`id`)
                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT=\'联动菜单表\''));
-                    $this->db->query('INSERT INTO `'.$this->db->table_name.'` (`id`, `name`, `type`, `code`) VALUES(1, \'中国地区\', 0, \'address\')');
+                    $this->db->query('INSERT INTO `'.$this->db->table_name.'` (`id`, `name`, `style`, `type`, `code`) VALUES(1, \'中国地区\', 0, 0, \'address\')');
                     $this->db->query('DROP TABLE IF EXISTS `'.$this->db->table_name.'_data_1`');
                     $this->db->query(format_create_sql('CREATE TABLE `'.$this->db->table_name.'_data_1` (
                     `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,

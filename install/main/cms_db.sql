@@ -1421,7 +1421,7 @@ INSERT INTO `cms_category` (`catid`, `siteid`, `module`, `type`, `modelid`, `par
 -- ----------------------------
 -- Records of cms_linkage
 -- ----------------------------
-INSERT INTO `cms_linkage` (`id`, `name`, `type`, `code`) VALUES('1', '中国地区', '0', 'address');
+INSERT INTO `cms_linkage` (`id`, `name`, `style`, `type`, `code`) VALUES('1', '中国地区', '0', '0', 'address');
 
 -- ----------------------------
 -- Records of cms_linkage_data_1
