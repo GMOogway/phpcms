@@ -3242,7 +3242,7 @@ function dr_linkage_level($code) {
 	if (!$code) {
 		return 0;
 	}
-	return (int)$cache->get_file('level', 'linkage/0_'.$code.'/');
+	return (int)$cache->get_file('level', 'linkage/'.$code.'/');
 }
 /**
  * 通过catid获取显示菜单完整结构
@@ -3629,12 +3629,10 @@ function dr_linkagepos($code, $id, $symbol = ' > ', $url = '', $html = '') {
  * @return  array
  */
 function dr_linkage($code, $id, $level = 0, $name = '') {
-	$linkage_db = pc_base::load_model('linkage_model');
 	$cache = pc_base::load_sys_class('cache');
 	if (!$id) {
 		return false;
 	}
-	$linkage_data = $linkage_db->get_one(array('code'=>$code));
 	// id 查询
 	if (is_numeric($id)) {
 		$id = dr_linkage_id($code, $id);
@@ -3642,7 +3640,7 @@ function dr_linkage($code, $id, $level = 0, $name = '') {
 			return false;
 		}
 	}
-	$data = $cache->get_file('data-'.$id, 'linkage/'.($linkage_data['type'] ? $linkage_data['type'] : 0).'_'.$code.'/');
+	$data = $cache->get_file('data-'.$id, 'linkage/'.$code.'/');
 	if (!$data) {
 		return false;
 	}
@@ -3674,12 +3672,10 @@ function dr_linkage($code, $id, $level = 0, $name = '') {
  */
 function dr_linkage_json($code) {
 	$cache = pc_base::load_sys_class('cache');
-	$linkage_db = pc_base::load_model('linkage_model');
 	if (!$code) {
 		return array();
 	}
-	$linkage_data = $linkage_db->get_one(array('code'=>$code));
-	return $cache->get_file('json', 'linkage/'.($linkage_data['type'] ? $linkage_data['type'] : 0).'_'.$code.'/');
+	return $cache->get_file('json', 'linkage/'.$code.'/');
 }
 /**
  * 联动菜单列表数据
@@ -3690,16 +3686,14 @@ function dr_linkage_json($code) {
  */
 function dr_linkage_list($code, $pid) {
 	$cache = pc_base::load_sys_class('cache');
-	$linkage_db = pc_base::load_model('linkage_model');
 	if (!$code) {
 		return false;
 	}
-	$linkage_data = $linkage_db->get_one(array('code'=>$code));
 	if ($pid && !is_numeric($pid)) {
 		// 别名情况时获取id号
 		$pid = dr_linkage_cname($code, $pid);
 	}
-	return $cache->get_file('list-'.$pid, 'linkage/'.($linkage_data['type'] ? $linkage_data['type'] : 0).'_'.$code.'/');
+	return $cache->get_file('list-'.$pid, 'linkage/'.$code.'/');
 }
 /**
  * 联动菜单的id号获取
@@ -3710,12 +3704,10 @@ function dr_linkage_list($code, $pid) {
  */
 function dr_linkage_id($code, $cname) {
 	$cache = pc_base::load_sys_class('cache');
-	$linkage_db = pc_base::load_model('linkage_model');
 	if (!$code || !$cname) {
 		return false;
 	}
-	$linkage_data = $linkage_db->get_one(array('code'=>$code));
-	$ids = $cache->get_file('id', 'linkage/'.($linkage_data['type'] ? $linkage_data['type'] : 0).'_'.$code.'/');
+	$ids = $cache->get_file('id', 'linkage/'.$code.'/');
 	if (isset($ids[$cname]) && $ids[$cname]) {
 		return $ids[$cname];
 	}
@@ -3730,12 +3722,10 @@ function dr_linkage_id($code, $cname) {
  */
 function dr_linkage_cname($code, $id) {
 	$cache = pc_base::load_sys_class('cache');
-	$linkage_db = pc_base::load_model('linkage_model');
 	if (!$code || !$id) {
 		return 0;
 	}
-	$linkage_data = $linkage_db->get_one(array('code'=>$code));
-	$ids = array_flip($cache->get_file('id', 'linkage/'.($linkage_data['type'] ? $linkage_data['type'] : 0).'_'.$code.'/'));
+	$ids = array_flip($cache->get_file('id', 'linkage/'.$code.'/'));
 	if (isset($ids[$id]) && $ids[$id]) {
 		return $ids[$id];
 	}
