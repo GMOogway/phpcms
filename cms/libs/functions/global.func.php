@@ -3209,7 +3209,7 @@ function menu_linkage($code = '', $id = 'linkid', $defaultvalue = 0, $ck_child =
 		$string .= '<script src="'.WEB_PATH.'api.php?op=get_linkage&code='.$code.'"></script>
 			<script type="text/javascript">
 			$(function (){
-					layui.use(\'layCascader\', function () {
+				layui.use(\'layCascader\', function () {
 					var layCascader = layui.layCascader;
 					layCascader({
 						elem: \'#dr_'.$id.'\',
