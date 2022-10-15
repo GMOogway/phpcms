@@ -52,11 +52,15 @@ include $this->admin_tpl('header');
     <th width="120"><?php echo L('access_mode')?>：</th>
     <td class="y-bg">
       <div class="mt-radio-inline">
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilemode]" value="-1" onclick="$('.dr_zsy').hide();$('.dr_mode_0').hide();$('.dr_mode_1').hide();" checked> <?php echo L('close_mode');?> <span></span></label>
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilemode]" value="0" onclick="$('.dr_zsy').show();$('.dr_mode_0').show();$('.dr_mode_1').hide();"> <?php echo L('directory_mode');?> <span></span></label>
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilemode]" value="1" onclick="$('.dr_zsy').show();$('.dr_mode_0').hide();$('.dr_mode_1').show();"> <?php echo L('domain_mode');?> <span></span></label>
+        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilemode]" value="-1" onclick="$('.dr_zsy').hide();$('.dr_mode_0').hide();$('.dr_mode_1').hide();$('.dr_mode_2').show();" checked> <?php echo L('close_mode');?> <span></span></label>
+        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilemode]" value="0" onclick="$('.dr_zsy').show();$('.dr_mode_0').show();$('.dr_mode_1').hide();$('.dr_mode_2').hide();"> <?php echo L('directory_mode');?> <span></span></label>
+        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilemode]" value="1" onclick="$('.dr_zsy').show();$('.dr_mode_0').hide();$('.dr_mode_1').show();$('.dr_mode_2').hide();"> <?php echo L('domain_mode');?> <span></span></label>
       </div>
     </td>
+  </tr>
+  <tr class="dr_mode_2">
+    <th><?php echo L('self_adaption')?>：</th>
+    <td class="y-bg"><div class="form-control-static"><label><?php echo L('self_adaption_desc')?></label></div></td>
   </tr>
   <tr id="dr_row_mobile_dirname" class="dr_mode_0" style="display: none">
     <th><?php echo L('mobile_dirname')?>：</th>
