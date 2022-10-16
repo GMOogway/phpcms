@@ -3201,11 +3201,11 @@ function menu_linkage($code = '', $id = 'linkid', $defaultvalue = 0, $ck_child =
 			</script>';
 		}
 	} else {
-		$string.= $defaultvalue && (ROUTE_A=='edit' || ROUTE_A=='account_manage_info'  || ROUTE_A=='info_publish') ? '<input type="hidden" name="info['.$id.']"  id="dr_'.$id.'" value="'.($multiple ? ($defaultvalue ? $defaultvalue : '[]') : (int)$defaultvalue).'">' : '<input type="hidden" name="info['.$id.']"  id="dr_'.$id.'" value="'.($multiple ? '[]' : 0).'">'.PHP_EOL;
 		$string .= load_css(JS_PATH.'layui/css/layui.css');
 		$string .= load_css(JS_PATH.'layui/cascader/cascader.css');
 		$string .= load_js(JS_PATH.'layui/layui.js');
 		$string .= load_js(JS_PATH.'layui/cascader/cascader.js');
+		$string .= ($defaultvalue && (ROUTE_A=='edit' || ROUTE_A=='account_manage_info'  || ROUTE_A=='info_publish') ? '<input type="hidden" name="info['.$id.']"  id="dr_'.$id.'" value="'.($multiple ? ($defaultvalue ? $defaultvalue : '[]') : (int)$defaultvalue).'">' : '<input type="hidden" name="info['.$id.']"  id="dr_'.$id.'" value="'.($multiple ? '[]' : 0).'">').PHP_EOL;
 		$string .= '<script src="'.WEB_PATH.'api.php?op=get_linkage&code='.$code.'"></script>
 			<script type="text/javascript">
 			$(function (){
@@ -3213,7 +3213,7 @@ function menu_linkage($code = '', $id = 'linkid', $defaultvalue = 0, $ck_child =
 					var layCascader = layui.layCascader;
 					layCascader({
 						elem: \'#dr_'.$id.'\',
-						value: '.($multiple ? ($defaultvalue ? $defaultvalue : '[]') : (int)$defaultvalue).',
+						value: '.($multiple ? ($defaultvalue ? $defaultvalue : '[]') : '\''.(int)$defaultvalue.'\'').',
 						clearable: true,
 						filterable: '.($multiple ? 'false' : 'true').','.($multiple ? '
 						maxSize: '.intval($limit).',

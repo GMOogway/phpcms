@@ -449,6 +449,40 @@ class linkage extends admin {
 		include $this->admin_tpl('linkage_submenu');
 	}
 
+	// 批量启用
+	public function public_list_open() {
+
+		$ids = $this->input->get_post_ids();
+		$key = (int)$this->input->get('key');
+		if (!$ids) {
+			dr_json(0, L('你还没有选择呢'));
+		}
+
+		$this->db->table_name = $this->db->db_tablepre.'linkage_data_'.$key;
+		foreach ($ids as $id) {
+			$this->db->update(array('hidden' => 0), array('id' => $id));
+		}
+
+		dr_json(1, L('操作成功'));
+	}
+
+	// 批量禁用
+	public function public_list_close() {
+
+		$ids = $this->input->get_post_ids();
+		$key = (int)$this->input->get('key');
+		if (!$ids) {
+			dr_json(0, L('你还没有选择呢'));
+		}
+
+		$this->db->table_name = $this->db->db_tablepre.'linkage_data_'.$key;
+		foreach ($ids as $id) {
+			$this->db->update(array('hidden' => 1), array('id' => $id));
+		}
+
+		dr_json(1, L('操作成功'));
+	}
+
 	// 删除子菜单
 	public function public_list_del() {
 

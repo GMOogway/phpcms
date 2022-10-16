@@ -66,6 +66,8 @@ include $this->admin_tpl('header');?>
                     <span></span>
                 </label>
                 <label><button type="button" onclick="ajax_option('?m=admin&c=linkage&a=public_list_del&key=<?php echo $key;?>', '<?php echo L('confirm', array('message' => L('selected')));?>', 1)" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete');?></button></label>
+                <label><button type="button" onclick="ajax_option('?m=admin&c=linkage&a=public_list_open&key=<?php echo $key;?>', '<?php echo L('你确定要启用它们吗？');?>', 1)" class="btn blue btn-sm"> <i class="fa fa fa-check-circle"></i> <?php echo L('启用');?></button></label>
+                <label><button type="button" onclick="ajax_option('?m=admin&c=linkage&a=public_list_close&key=<?php echo $key;?>', '<?php echo L('你确定要禁用它们吗？');?>', 1)" class="btn red btn-sm"> <i class="fa fa fa-times-circle"></i> <?php echo L('禁用');?></button></label>
                 <label><?php echo $select;?></label>
                 <label><button type="button" onclick="ajax_option('?m=admin&c=linkage&a=public_pid_edit&key=<?php echo $key;?>', '<?php echo L('你确定要批量移动它们吗？');?>', 1)" class="btn green btn-sm"> <i class="fa fa-edit"></i> <?php echo L('变更分类');?></button></label>
             </div>
