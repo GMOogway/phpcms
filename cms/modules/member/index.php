@@ -1523,7 +1523,7 @@ class index extends foreground {
 				$data = $this->db->get_one(array('email'=>$username));
 			} elseif (dr_in_array('phone', $member_setting['login']['field'])
 				&& check_phone($username)) {
-				$data = $this->db->get_one(array('phone'=>$username));
+				$data = $this->db->get_one(array('mobile'=>$username));
 			}
 		}
 

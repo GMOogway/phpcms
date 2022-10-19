@@ -12,7 +12,7 @@
 			'allowupload' => $isselectimage,
 			'thumb_width' => $images_width,
 			'thumb_height' => $images_height,
-			'watermark_enable' => $watermark,
+			'watermark_enable' => '',
 			'attachment' => $attachment,
 			'image_reduce' => $image_reduce,
 			'chunk' => $chunk,
