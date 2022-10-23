@@ -247,7 +247,8 @@ class sitemodel extends admin {
 			$tablename_data = '';
 			$this->db->drop_table($model_table.'_data_'.$i);
 		}
-		
+		$this->category_db = pc_base::load_model('category_model');
+		$this->category_db->delete(array('modelid'=>$modelid,'siteid'=>$this->siteid));
 		$this->db->delete(array('modelid'=>$modelid,'siteid'=>$this->siteid));
 		//删除全站搜索接口数据
 		$this->type_db = pc_base::load_model('type_model');

@@ -27,7 +27,7 @@ include $this->admin_tpl('header','admin');?>
         <td>
             <a class="btn btn-xs blue" href="?m=content&c=sitemodel_field&a=init&modelid=<?php echo $r['modelid']?>&menuid=<?php echo $this->input->get('menuid');?>"> <i class="fa fa-code"></i> <?php echo L('field_manage');?></a>
             <a class="btn btn-xs green" href="?m=content&c=sitemodel&a=edit&modelid=<?php echo $r['modelid']?>&menuid=<?php echo $this->input->get('menuid');?>"> <i class="fa fa-edit"></i> <?php echo L('edit');?></a>
-            <a class="btn btn-xs red" href="javascript:;" onclick="model_delete(this,'<?php echo $r['modelid']?>','<?php echo L('confirm_delete_model',array('message'=>new_addslashes($tablename)));?>','<?php echo $r['items']?>')"> <i class="fa fa-trash"></i> <?php echo L('delete')?></a>
+            <a class="btn btn-xs red" href="javascript:;" onclick="model_delete(this,'<?php echo $r['modelid']?>','<?php echo L('confirm_delete_model',array('message'=>new_addslashes($r['name'])));?>','<?php echo $r['items']?>')"> <i class="fa fa-trash"></i> <?php echo L('delete')?></a>
             <a class="btn btn-xs yellow" href="?m=content&c=sitemodel&a=export&modelid=<?php echo $r['modelid']?>&menuid=<?php echo $this->input->get('menuid');?>"> <i class="fa fa-sign-out"></i> <?php echo L('export');?></a>
         </td>
     </tr>
