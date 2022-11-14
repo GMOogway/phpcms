@@ -11,6 +11,40 @@
 <script src="{JS_PATH}cms.js" type="text/javascript"></script>
 <script type="text/javascript" src="{CSS_PATH}default/plugin/layer/layer.js"></script>
 <script type="text/javascript" src="{JS_PATH}register.js"></script>
+<script type="text/javascript" src="{JS_PATH}formvalidator.js" charset="UTF-8"></script>
+<script type="text/javascript" src="{JS_PATH}formvalidatorregex.js" charset="UTF-8"></script>
+<script language="JavaScript">
+<!--
+$(function(){
+	$.formValidator.initConfig({autotip:true,formid:"myform",onerror:function(msg){}});
+	$(":checkbox[name='protocol']").formValidator({tipid:"protocoltip",onshow:"{L('read_protocol')}",onfocus:"{L('read_protocol')}"}).inputValidator({min:1,onerror:"{L('read_protocol')}"});
+	{if $member_setting['mobile_checktype']=='2' && $sms_setting['sms_enable']=='1'}
+	$("#mobile").formValidator({onshow:"请输入手机号码",onfocus:"请输入手机号码"}).inputValidator({min:1,max:11,onerror:"请输入正确的手机号码"});
+	{/if}
+	$("#mobile_verify").formValidator({onshow:"请输入手机收到的验证码",onfocus:"请输入手机收到的验证码"}).inputValidator({min:1,onerror:"请输入手机收到的验证码"}).ajaxValidator({
+		type : "get",
+		url : "api.php",
+		data :"op=sms_idcheck&action=id_code",
+		datatype : "html",
+		{if $member_setting['mobile_checktype']=='2'}
+		getdata:{mobile:"mobile"},
+		{/if}
+		async:"false",
+		success : function(data){
+			if( data == "1" ) {
+				return true;
+			} else {
+				return false;
+			}
+		},
+		buttons: $("#dosubmit"),
+		onerror : "验证码错误",
+		onwait : "请稍候..."
+	});
+	{$formValidator}
+});
+//-->
+</script>
 </head>
 <body>
 <div class="member-container register">

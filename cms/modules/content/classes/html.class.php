@@ -567,40 +567,83 @@ class html {
 	* 生成相关栏目列表、只生成前5页
 	* @param $catid
 	*/
-	public function create_relation_html($catid) {
+	public function create_relation_html($catids, $content = array()) {
 		$this->db = pc_base::load_model('content_model');
-		$CAT = $this->categorys[$catid];
-		$array_child = array();
-		$self_array = explode(',', $CAT['arrchildid']);
-		foreach ($self_array as $arr) {
-			if($arr!=$catid) $array_child[] = $arr;
-		}
-		$arrchildid = implode(',', $array_child);
-		$this->db->set_model($CAT['modelid']);
-		$setting = string2array($CAT['setting']);
-		$pagesize = (int)$setting['pagesize'];
-		$maxsize = (int)$setting['maxsize'];
-		$maxsize && $maxsize = $maxsize;
-		!$pagesize && $pagesize = 10;
-		if ($arrchildid) {
-			$pagenumber = $this->db->count(array('catid'=>explode(',', $arrchildid)));
-		} else {
-			$pagenumber = $this->db->count(array('catid'=>$catid));
-		}
-		!$maxsize && $maxsize = ceil($pagenumber/$pagesize);
-		$maxsize > 10 && $maxsize = 10;
-		!$setting['maxsize'] && $maxsize > 5 && $maxsize = 5;
-		!$maxsize && $maxsize = 2;
-		for($page = 1; $page < $maxsize + 1; $page++) {
-			$this->category($catid,$page,$setting['maxsize'] ? $maxsize : 0);
-		}
-		//检查当前栏目的父栏目，如果存在则生成
-		$arrparentid = $this->categorys[$catid]['arrparentid'];
-		if($arrparentid) {
-			$arrparentid = explode(',', $arrparentid);
-			foreach ($arrparentid as $catid) {
-				if($catid) $this->category($catid,1,$setting['maxsize'] ? $maxsize : 0);
+        if(!empty($content)) {
+            foreach ($content as $rs) {
+                $this->_create_previous_next($rs[0], $rs[1]);
+            }
+        }
+        if(!is_array($catids)) {
+            $catids = array($catids);
+        }
+        foreach ($catids as $catid) {
+			$CAT = $this->categorys[$catid];
+			$array_child = array();
+			$self_array = explode(',', $CAT['arrchildid']);
+			foreach ($self_array as $arr) {
+				if($arr!=$catid) $array_child[] = $arr;
 			}
+			$arrchildid = implode(',', $array_child);
+			$this->db->set_model($CAT['modelid']);
+			$setting = string2array($CAT['setting']);
+			$pagesize = (int)$setting['pagesize'];
+			$maxsize = (int)$setting['maxsize'];
+			$maxsize && $maxsize = $maxsize;
+			!$pagesize && $pagesize = 10;
+			if ($arrchildid) {
+				$pagenumber = $this->db->count(array('catid'=>explode(',', $arrchildid)));
+			} else {
+				$pagenumber = $this->db->count(array('catid'=>$catid));
+			}
+			!$maxsize && $maxsize = ceil($pagenumber/$pagesize);
+			$maxsize > 10 && $maxsize = 10;
+			!$setting['maxsize'] && $maxsize > 5 && $maxsize = 5;
+			!$maxsize && $maxsize = 2;
+			for($page = 1; $page < $maxsize + 1; $page++) {
+				$this->category($catid,$page,$setting['maxsize'] ? $maxsize : 0);
+			}
+            //检查当前栏目的父栏目，如果存在则生成
+            $arrparentid = $this->categorys[$catid]['arrparentid'];
+            if($arrparentid) {
+                $arrparentid = explode(',', $arrparentid);
+                foreach ($arrparentid as $catid) {
+                    if($catid) $this->category($catid,1);
+                }
+            }
+        }
+	}
+
+	/**
+	 * 生成相关上下页
+	 * @param $id
+	 * @param $catid
+	 * @return void
+	 */
+	private function _create_previous_next($id, $catid){
+		$db = pc_base::load_model('content_model');
+		$db->set_model($this->categorys[$catid]['modelid']);
+		$previous = $db->get_one("catid = $catid AND id < $id", '*', 'id DESC');
+		$this->_update_show($previous);
+		$next = $db->get_one("catid = $catid AND id > $id", '*', 'id ASC');
+		$this->_update_show($next);
+	}
+
+	/**
+	 * 更新页面
+	 * @param $data
+	 * @return void
+	 */
+	private function _update_show($data){
+		if(!empty($data)) {
+			$db = pc_base::load_model('content_model');
+			$db->set_model($this->categorys[$data['catid']]['modelid']);
+			$db->table_name .= '_data_'.$data['tableid'];
+			$rs = $db->get_one(array('id' => $data['id']));
+			$db->set_model($this->categorys[$data['catid']]['modelid']);
+			$data = array_merge($data, $rs);
+			list($urls) = $this->url->show($data['id'], 0, $data['catid'], $data['inputtime'], $data['prefix'], $data);
+			$urls['content_ishtml'] && $this->show($urls[1], $data, 0);
 		}
 	}
 }

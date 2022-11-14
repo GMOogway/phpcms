@@ -149,7 +149,7 @@ class create_all_html extends admin {
 						if($r['upgrade']) {
 							$urls[1] = $t['url'];
 						} else {
-							list($urls) = $this->url->show($t['id'], '', $t['catid'], $t['inputtime']);
+							list($urls) = $this->url->show($t['id'], 0, $t['catid'], $t['inputtime']);
 						}
 						if (strpos($t['url'], 'index.php?')!==false) {
 							$class = 'p_error';

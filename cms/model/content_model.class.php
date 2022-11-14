@@ -316,7 +316,13 @@ class content_model extends model {
 		if(!$isimport && $data['status']==99) {
 			//在添加和修改内容处定义了 INDEX_HTML
 			if(defined('INDEX_HTML')) $html->index();
-			if(defined('RELATION_HTML')) $html->create_relation_html($catid);
+			if(defined('RELATION_HTML')) {
+				$relation_catids = array($catid);
+				if($this->input->post('othor_catid') && is_array($this->input->post('othor_catid'))) {
+					$relation_catids = array_merge($relation_catids, $this->input->post('othor_catid'));
+				}
+				$html->create_relation_html($relation_catids, $relation_content);
+			}
 		}
 		return $id;
 	}
@@ -508,7 +514,9 @@ class content_model extends model {
 		}
 		//在添加和修改内容处定义了 INDEX_HTML
 		if(defined('INDEX_HTML')) $html->index();
-		if(defined('RELATION_HTML')) $html->create_relation_html($systeminfo['catid']);
+		if(defined('RELATION_HTML')) {
+			$html->create_relation_html($systeminfo['catid'], array(array($id, $systeminfo['catid'])));
+		}
 		return true;
 	}
 	
@@ -578,6 +586,9 @@ class content_model extends model {
 		$this->table_name = $this->db_tablepre.$this->model_tablename;
 		//更新栏目统计
 		$this->update_category_items($catid,'delete',1);
+		//更新相关
+		$html = pc_base::load_app_class('html', 'content');
+		$html->create_relation_html($catid, array(array($id, $catid)));
 	}
 	
 	

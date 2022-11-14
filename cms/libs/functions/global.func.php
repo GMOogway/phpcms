@@ -2797,6 +2797,7 @@ function get_nickname($userid='', $field='') {
 		if(is_array($member_modelinfo)) {
 			$memberinfo = array_merge($memberinfo, $member_modelinfo);
 		}
+		$member_db->set_model();
 		if(!empty($field) && $field != 'nickname' && isset($memberinfo[$field]) &&!empty($memberinfo[$field])) {
 			$return = $memberinfo[$field];
 		} else {
@@ -2829,6 +2830,7 @@ function get_memberinfo($userid, $field='') {
 			if(is_array($member_modelinfo[$userid])) {
 				$memberinfo[$userid] = array_merge($memberinfo[$userid], $member_modelinfo[$userid]);
 			}
+			$member_db->set_model();
 		}
 		if(!empty($field) && !empty($memberinfo[$userid][$field])) {
 			return $memberinfo[$userid][$field];
@@ -2854,6 +2856,7 @@ function get_memberinfo_buyusername($username, $field='') {
 		if(is_array($member_modelinfo[$username])) {
 			$memberinfo[$username] = array_merge($memberinfo[$username], $member_modelinfo[$username]);
 		}
+		$member_db->set_model();
 	}
 	if(!empty($field) && !empty($memberinfo[$username][$field])) {
 		return $memberinfo[$username][$field];
@@ -2877,6 +2880,7 @@ function dr_member_info($userid, $name = '') {
 	if(is_array($member_modelinfo)) {
 		$data = array_merge($data, $member_modelinfo);
 	}
+	$member_db->set_model();
 	return $name && $data[$name] ? $data[$name] : $data;
 }
 
@@ -2888,6 +2892,7 @@ function dr_member_username_info($username, $name = '') {
 	if(is_array($member_modelinfo)) {
 		$data = array_merge($data, $member_modelinfo);
 	}
+	$member_db->set_model();
 	return $name && $data[$name] ? $data[$name] : $data;
 }
 
