@@ -17,7 +17,7 @@
 <!--
 $(function(){
 	$.formValidator.initConfig({autotip:true,formid:"myform",onerror:function(msg){}});
-	$(":checkbox[name='protocol']").formValidator({tipid:"protocoltip",onshow:"{L('read_protocol')}",onfocus:"{L('read_protocol')}"}).inputValidator({min:1,onerror:"{L('read_protocol')}"});
+	$(":checkbox[name='agree']").formValidator({tipid:"protocoltip",onshow:"{L('read_protocol')}",onfocus:"{L('read_protocol')}"}).inputValidator({min:1,onerror:"{L('read_protocol')}"});
 	{if $member_setting['mobile_checktype']=='2' && $sms_setting['sms_enable']=='1'}
 	$("#mobile").formValidator({onshow:"请输入手机号码",onfocus:"请输入手机号码"}).inputValidator({min:1,max:11,onerror:"请输入正确的手机号码"});
 	{/if}
