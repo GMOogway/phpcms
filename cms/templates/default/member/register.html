@@ -90,26 +90,39 @@ $(function(){
                                 $('#mobile').focus();
                                 return false;
                             }
-                            
                             $.ajax({
-                                type: "GET",
-                                dataType: "json",
-                                url: "api.php?op=sms",
-                                data: {mobile: mobile,session_code:session_code,random:Math.random()},
-                                success: function(json) {
-                                    if (json.code) {
-                                        $("#mobile_send").html(mobile);
-                                        $("#mobile_div").css("display","none");
-                                        $("#mobile_send_div").css("display","");
-                                        times = 120;
-                                        $("#GetVerify").attr("disabled", true);
-                                        isinerval = setInterval("CountDown()", 1000);
-                                    } else {
-                                        alert(json.msg);
-                                    }
+                                type: "get",   
+                                url: "?m=member&c=index&a=public_checkmobile_ajax",   
+                                dataType: "html",
+                                async: false,
+                                data: "mobile="+mobile,
+                                success: function(msg){  
+                                if(msg == '1'){
+                                    $.ajax({
+                                        type: "GET",
+                                        dataType: "json",
+                                        url: "api.php?op=sms",
+                                        data: {mobile: mobile,session_code:session_code,random:Math.random()},
+                                        success: function(json) {
+                                            if (json.code) {
+                                                $("#mobile_send").html(mobile);
+                                                $("#mobile_div").css("display","none");
+                                                $("#mobile_send_div").css("display","");
+                                                times = 120;
+                                                $("#GetVerify").attr("disabled", true);
+                                                isinerval = setInterval("CountDown()", 1000);
+                                            } else {
+                                                alert(json.msg);
+                                            }
+                                        }
+                                    });
+                                }else if(msg == '-1'){
+                                    layer.msg('手机号码已存在', {icon:2,time: 1000});
+                                }else if(msg == '0'){
+                                    layer.msg('手机号码格式不正确', {icon:2,time: 1000});
+                                }
                                 }
                             });
-                            
                         }
                         function CountDown() {
                             if (times < 1) {
@@ -150,16 +163,16 @@ $(function(){
 function checkname(){
     var res = false;
     if($("#username").val() != ''){
-        $.ajax({   
-            type: "get",   
-            url: "?m=member&c=index&a=public_checkname_ajax",   
+        $.ajax({
+            type: "get",
+            url: "?m=member&c=index&a=public_checkname_ajax",
             dataType: "html",
             async: false,
-            data: "username="+$('#username').val(), 
+            data: "username="+$('#username').val(),
             beforeSend: function(){
-                $("#dosubmit").attr({ disabled: "disabled" });
+                $("#dosubmit").attr({disabled: "disabled" });
             },
-            success: function(msg){  
+            success: function(msg){
             if(msg == '1'){
                 $("#dosubmit").removeAttr("disabled");
                 res = true;
@@ -174,21 +187,21 @@ function checkname(){
     }else{
         layer.msg('{L('username')}不能为空', {icon:2,time: 1000});
         return res;
-    }           
+    }
 }
 function checknickname(){
     var res = false;
     if($("#nickname").val() != ''){
-        $.ajax({   
-            type: "get",   
-            url: "?m=member&c=index&a=public_checknickname_ajax",   
+        $.ajax({
+            type: "get",
+            url: "?m=member&c=index&a=public_checknickname_ajax",
             dataType: "html",
             async: false,
             data: "nickname="+$('#nickname').val(), 
             beforeSend: function(){
-                $("#dosubmit").attr({ disabled: "disabled" });
+                $("#dosubmit").attr({disabled: "disabled" });
             },
-            success: function(msg){  
+            success: function(msg){
             if(msg == '1'){
                 $("#dosubmit").removeAttr("disabled");
                 res = true;
@@ -203,37 +216,37 @@ function checknickname(){
     }else{
         layer.msg('{L('nickname')}不能为空', {icon:2,time: 1000});
         return res;
-    }           
+    }
 }
 function checkemail(){
      var reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/; 
      var res = false;
      if(reg.test($("#email").val())){
-      $.ajax({   
-        type: "get",   
-        url: "?m=member&c=index&a=public_checkemail_ajax",   
-        dataType: "html",
-        async: false,    
-        data: "email="+$('#email').val(), 
-        beforeSend: function(){
-             $("#dosubmit").attr({ disabled: "disabled" });
-        },
-        success: function(msg){  
-         if(msg == '1'){
-              $("#dosubmit").removeAttr("disabled");
-              res = true;
-         }else if(msg == '-1'){
-              layer.msg('{L('email')}已存在', {icon:2,time: 1000});
-         }else if(msg == '0'){
-              layer.msg('{L('email')}格式不正确', {icon:2,time: 1000});  
-         }
-        } 
-      });
-       return res;
-     }else{
-          layer.msg('{L('email')}格式不正确', {icon:2,time: 1000});
-          return res;
-     }           
+        $.ajax({
+            type: "get",
+            url: "?m=member&c=index&a=public_checkemail_ajax",
+            dataType: "html",
+            async: false,    
+            data: "email="+$('#email').val(), 
+            beforeSend: function(){
+                $("#dosubmit").attr({disabled: "disabled" });
+            },
+            success: function(msg){  
+                if(msg == '1'){
+                    $("#dosubmit").removeAttr("disabled");
+                    res = true;
+                }else if(msg == '-1'){
+                    layer.msg('{L('email')}已存在', {icon:2,time: 1000});
+                }else if(msg == '0'){
+                    layer.msg('{L('email')}格式不正确', {icon:2,time: 1000});  
+                }
+            }
+        });
+        return res;
+    }else{
+        layer.msg('{L('email')}格式不正确', {icon:2,time: 1000});
+        return res;
+    }
 }
 {if !isset($_GET['modelid']) && !isset($_GET['t']) && !empty($member_setting['showregprotocol'])}
 show_protocol();

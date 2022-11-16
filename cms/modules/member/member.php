@@ -333,6 +333,9 @@ class member extends admin {
 			$info['nickname'] = $info['nickname'];
 			$info['email'] = $info['email'];
 			$info['mobile'] = $info['mobile'];
+			if ($info['mobile'] && $this->db->count(array('mobile'=>$info['mobile']))) {
+				dr_admin_msg(0,L('手机号码已经注册'));
+			}
 			$info['groupid'] = $info['groupid'];
 			$info['point'] = $info['point'];
 			$info['modelid'] = $info['modelid'];
@@ -382,6 +385,9 @@ class member extends admin {
 			$basicinfo['modelid'] = $post['modelid'];
 			$basicinfo['vip'] = $post['vip'];
 			$basicinfo['mobile'] = $post['mobile'];
+			if ($basicinfo['mobile'] && $this->db->count(array('userid<>'=>$basicinfo['userid'], 'mobile'=>$basicinfo['mobile']))) {
+				dr_admin_msg(0,L('手机号码'.$basicinfo['mobile'].'已经注册'));
+			}
 			$basicinfo['overduedate'] = strtotime($post['overduedate']);
 
 			//会员基本信息

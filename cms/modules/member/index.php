@@ -66,15 +66,16 @@ class index extends foreground {
 			}
 			$userinfo['nickname'] = $this->input->post('nickname') ? $this->input->post('nickname') : '';
 			
-			$userinfo['email'] = ($this->input->post('email') && is_email($this->input->post('email'))) ? $this->input->post('email') : exit('0');
+			$userinfo['email'] = $this->input->post('email') && is_email($this->input->post('email')) ? $this->input->post('email') : exit('0');
+			if ($this->db->count(array('email'=>$userinfo['email']))) {
+				showmessage(L('email_already_exist'), HTTP_REFERER);
+			}
 			$userinfo['password'] = dr_safe_password($this->input->post('password'));
 			$rt = $this->check_password($userinfo['password'], $userinfo['username']);
 			if (!$rt['code']) {
 				showmessage($rt['msg'], HTTP_REFERER);
 			}
 			
-			$userinfo['email'] = ($this->input->post('email') && is_email($this->input->post('email'))) ? $this->input->post('email') : exit('0');
-
 			$userinfo['modelid'] = $this->input->post('modelid') ? intval($this->input->post('modelid')) : 10;
 			$userinfo['regip'] = ip_info();
 			$userinfo['point'] = $member_setting['defualtpoint'] ? $member_setting['defualtpoint'] : 0;
@@ -88,7 +89,7 @@ class index extends foreground {
 			if($member_setting['mobile_checktype']=='1'){
 				//取用户手机号
 				$mobile_verify = $this->input->post('mobile_verify') ? intval($this->input->post('mobile_verify')) : '';
-				if($mobile_verify=='') showmessage('请提供正确的手机验证码！', HTTP_REFERER);
+				if($mobile_verify=='') showmessage(L('请提供正确的手机验证码！'), HTTP_REFERER);
  				$sms_report_db = pc_base::load_model('sms_report_model');
 				$sys_cache_sms = defined('SYS_CACHE_SMS') && SYS_CACHE_SMS ? SYS_CACHE_SMS : 300;
 				$posttime = SYS_TIME-$sys_cache_sms;
@@ -97,17 +98,20 @@ class index extends foreground {
  				if(!empty($r)){
 					$userinfo['mobile'] = $r['mobile'];
 				}else{
-					showmessage('未检测到正确的手机号码！', HTTP_REFERER);
+					showmessage(L('未检测到正确的手机号码！'), HTTP_REFERER);
 				}
  			}elseif($member_setting['mobile_checktype']=='2'){
 				//获取验证码，直接通过POST，取mobile值
 				$userinfo['mobile'] = $this->input->post('mobile') ? $this->input->post('mobile') : '';
-			} 
+			}
 			if($userinfo['mobile']!=""){
 				if(!preg_match('/^1([0-9]{10})$/',$userinfo['mobile'])) {
-					showmessage('请提供正确的手机号码！', HTTP_REFERER);
+					showmessage(L('请提供正确的手机号码！'), HTTP_REFERER);
 				}
-			} 
+				if ($this->db->count(array('mobile'=>$userinfo['mobile']))) {
+					showmessage(L('手机号码已经注册'), HTTP_REFERER);
+				}
+			}
  			unset($_SESSION['connectid'], $_SESSION['from']);
 			
 			if($member_setting['enablemailcheck']) {	//是否需要邮件验证
@@ -487,6 +491,9 @@ class index extends foreground {
 			}
 			//修改会员邮箱
 			if($this->memberinfo['email'] != $info['email'] && is_email($info['email'])) {
+				if ($this->db->count(array('userid<>'=>$this->memberinfo['userid'], 'email'=>$info['email']))) {
+					showmessage(L('email_already_exist'), HTTP_REFERER);
+				}
 				$email = $info['email'];
 				$updateinfo['email'] = $info['email'];
 			} else {
@@ -526,6 +533,9 @@ class index extends foreground {
 			$mobile = $this->input->post('mobile');
 			if($mobile){
 				if(!preg_match('/^1([0-9]{10})$/',$mobile)) exit('check phone error');
+				if ($mobile && $this->db->count(array('userid<>'=>$memberinfo['userid'], 'mobile'=>$mobile))) {
+					showmessage(L('手机号码已经注册'), HTTP_REFERER);
+				}
 				$sys_cache_sms = defined('SYS_CACHE_SMS') && SYS_CACHE_SMS ? SYS_CACHE_SMS : 300;
 				$posttime = SYS_TIME-$sys_cache_sms;
 				$where = "`mobile`='$mobile' AND `send_userid`='".$memberinfo['userid']."' AND `posttime`>'$posttime'";
@@ -533,12 +543,12 @@ class index extends foreground {
 				if($r && $r['id_code']==$mobile_verify) {
 					$sms_report_db->update(array('id_code'=>''),$where);
 					$this->db->update(array('mobile'=>$mobile),array('userid'=>$memberinfo['userid']));
-					showmessage("手机号码更新成功！",'?m=member&c=index&a=account_change_mobile&t=1');
+					showmessage(L('手机号码更新成功！'),'?m=member&c=index&a=account_change_mobile&t=1');
 				} else {
-					showmessage("短信验证码错误！请重新获取！");
+					showmessage(L('短信验证码错误！请重新获取！'), HTTP_REFERER);
 				}
 			}else{
-				showmessage("短信验证码已过期！请重新获取！");
+				showmessage(L('短信验证码已过期！请重新获取！'), HTTP_REFERER);
 			}
 		} else {
 			include template('member', 'account_change_mobile');
@@ -974,7 +984,7 @@ class index extends foreground {
 		//首先判断会员审核表
 		$this->verify_db = pc_base::load_model('member_verify_model');
 		if($this->verify_db->get_one(array('username'=>$username))) {
-			exit('0');
+			exit('-1');
 		}
 		$status = $this->db->get_one(array('username'=>$username));
 		$status ? exit('-1') : exit('1');
@@ -993,7 +1003,7 @@ class index extends foreground {
 		//首先判断会员审核表
 		$this->verify_db = pc_base::load_model('member_verify_model');
 		if($this->verify_db->get_one(array('nickname'=>$nickname))) {
-			exit('0');
+			exit('-1');
 		}
 		if($this->input->get('userid')) {
 			$userid = intval($this->input->get('userid'));
@@ -1004,7 +1014,7 @@ class index extends foreground {
 			}else{//已改变，判断是否已有此名
 				$res = $this->db->get_one(array('nickname'=>$nickname));
 				if($res) {
-					exit('0');
+					exit('-1');
 				} else {
 					exit('1');
 				}
@@ -1012,7 +1022,7 @@ class index extends foreground {
  		} else {
 			$res = $this->db->get_one(array('nickname'=>$nickname));
 			if($res) {
-				exit('0');
+				exit('-1');
 			} else {
 				exit('1');
 			}
@@ -1027,7 +1037,7 @@ class index extends foreground {
 	public function public_checkemail_ajax() {
 		$email = $this->input->get('email') && trim($this->input->get('email')) && is_email(trim($this->input->get('email')))  ? trim($this->input->get('email')) : exit(0);
 		if (!check_email($email)) {
-			exit('-1');
+			exit('0');
 		}
 		if($this->input->get('userid')) {
 			$userid = intval($this->input->get('userid'));
@@ -1041,6 +1051,32 @@ class index extends foreground {
 			}
  		} else {
 			$status = $this->db->get_one(array('email'=>$email));
+			$status ? exit('-1') : exit('1');
+		}
+	}
+	
+	/**
+	 * 检查手机
+	 * @param string $mobile
+	 * @return $status {-1:mobile已经存在;1:成功}
+	 */
+	public function public_checkmobile_ajax() {
+		$mobile = $this->input->get('mobile') && trim($this->input->get('mobile')) ? trim($this->input->get('mobile')) : exit(0);
+		if (!check_phone($mobile)) {
+			exit('0');
+		}
+		if($this->input->get('userid')) {
+			$userid = intval($this->input->get('userid'));
+			//如果是会员修改，而且NICKNAME和原来优质一致返回1，否则返回0
+			$info = get_memberinfo($userid);
+			if($info['mobile'] == $mobile){//未改变
+				exit('1');
+			}else{//已改变，判断是否已有此名
+				$status = $this->db->get_one(array('mobile'=>$mobile));
+				$status ? exit('-1') : exit('1');
+			}
+ 		} else {
+			$status = $this->db->get_one(array('mobile'=>$mobile));
 			$status ? exit('-1') : exit('1');
 		}
 	}
@@ -1396,7 +1432,7 @@ class index extends foreground {
 			if($r['mobile']=='') {
 				$_SESSION['mobile'] = '';
 				$_SESSION['userid'] = '';
-				showmessage("该账号没有绑定手机号码，请选择其他方式找回！");
+				showmessage(L('该账号没有绑定手机号码，请选择其他方式找回！'));
 			}
 			$_SESSION['mobile'] = $r['mobile'];
 			$_SESSION['userid'] = $r['userid'];
@@ -1431,12 +1467,12 @@ class index extends foreground {
 					if(!$status['code']) showmessage($status['msg']);
 					$_SESSION['mobile'] = '';
 					$_SESSION['userid'] = '';
-					showmessage("密码已重置成功！请查收手机",'?m=member&c=index&a=login');
+					showmessage(L('密码已重置成功！请查收手机'),'?m=member&c=index&a=login');
 				} else {
-					showmessage("短信验证码错误！请重新获取！");
+					showmessage(L('短信验证码错误！请重新获取！'));
 				}
 			}else{
-				showmessage("短信验证码已过期！请重新获取！");
+				showmessage(L('短信验证码已过期！请重新获取！'));
 			}
 		} else {
 			$siteid = $this->input->request('siteid') && trim($this->input->request('siteid')) ? intval($this->input->request('siteid')) : 1;
@@ -1464,7 +1500,7 @@ class index extends foreground {
 			$r = $this->db->get_one(array('username'=>$username),'userid,email');
 			if($r['email']=='') {
 				$_SESSION['userid'] = '';
-				showmessage("该账号没有绑定邮箱，请选择其他方式找回！");
+				showmessage(L('该账号没有绑定邮箱，请选择其他方式找回！'));
 			} else {
 				$_SESSION['userid'] = $r['userid'];
 				$_SESSION['email'] = $r['email'];
@@ -1480,7 +1516,7 @@ class index extends foreground {
 			if($email){
 				if(!preg_match('/^([a-z0-9_]+)@([a-z0-9_]+).([a-z]{2,6})$/',$email)) exit('check email error');
 				if($_SESSION['emc_times']=='' || $_SESSION['emc_times']<=0){
-					showmessage("验证次数超过5次,验证码失效，请重新获取邮箱验证码！",HTTP_REFERER,3000);
+					showmessage(L('验证次数超过5次,验证码失效，请重新获取邮箱验证码！'),HTTP_REFERER,3000);
 				}
 				$_SESSION['emc_times'] = $_SESSION['emc_times']-1;
 				if($_SESSION['emc']!='' && $this->input->post('email_verify')==$_SESSION['emc']) {
@@ -1502,10 +1538,10 @@ class index extends foreground {
 					include template('member', 'forget_password_username');
 					exit;
 				} else {
-					showmessage("验证码错误！请重新获取！",HTTP_REFERER,3000);
+					showmessage(L('验证码错误！请重新获取！'),HTTP_REFERER,3000);
 				}
 			} else {
-				showmessage("非法请求！");
+				showmessage(L('非法请求！'));
 			}
 		} else {
  			include template('member', 'forget_password_username');
