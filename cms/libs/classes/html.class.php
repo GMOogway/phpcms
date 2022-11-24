@@ -150,7 +150,10 @@ class html {
     public function get_show_data($modelid, $param) {
 
         $cache_class = pc_base::load_sys_class('cache');
-        $name = 'show-'.$modelid.'-html-file';
+        $models = getcache('model','commons');
+        $html = isset($param['fromdate']) && $param['fromdate'] && isset($param['todate']) && $param['todate'] ? '-'.$param['fromdate'].'-'.$param['todate'] : '';
+        $html .= isset($param['fromid']) && $param['fromid'] && isset($param['toid']) && $param['toid'] ? '-'.$param['fromid'].'-'.$param['toid'] : '';
+        $name = 'show-'.$modelid.'-html-file'.$html;
         $cache_class->del_auth_data($name, $param['siteid']);
 
         // 获取生成栏目
@@ -196,7 +199,7 @@ class html {
         if ($cids) {
             $where .= ' AND catid IN ('. implode(',', $cids).')';
         } else {
-            dr_json(0, '没有可用生成的内容数据');
+            dr_json(0, '['.$models[$modelid]['name'].']没有可用生成的内容数据');
         }
         $count = $this->db->count($where);
         $sql = 'select id,catid,title,url,islink,inputtime from `'.$this->db->table_name.'`';
@@ -205,7 +208,7 @@ class html {
         }
 
         if (!$count) {
-            dr_json(0, '没有可用生成的内容数据');
+            dr_json(0, '['.$models[$modelid]['name'].']没有可用生成的内容数据');
         }
 
         $psize = $param['pagesize'] ? $param['pagesize'] : $this->psize;

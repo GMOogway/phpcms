@@ -36,13 +36,13 @@
 		<tr>
 			<td width="120"><?php echo L('the_withdrawal_of_the_summary')?>：</td> 
 			<td>
-			<label class="mt-checkbox mt-checkbox-outline"><input name="add_introduce" type="checkbox"  value="1"><?php echo L('if_the_contents_of_intercepted')?><span></span></label> <label><input type="text" name="introcude_length" value="200" size="3"></label> <label><?php echo L('characters_to_a_summary_of_contents')?></label>
+			<label class="mt-checkbox mt-checkbox-outline"><input name="is_auto_description_content" type="checkbox" value="1"><?php echo L('if_the_contents_of_intercepted')?><span></span></label> <label><input type="text" name="auto_description_content" value="200" size="3"></label> <label><?php echo L('characters_to_a_summary_of_contents')?></label>
 			</td>
 		</tr>
 		<tr>
 			<td width="120"><?php echo L('the_withdrawal_of_thumbnails')?>：</td> 
 			<td>
-			<label class="mt-checkbox mt-checkbox-outline"><input type='checkbox' name='auto_thumb' value="1"><?php echo L('whether_access_to_the_content_of')?><span></span></label> <label><input type="text" name="auto_thumb_no" value="1" size="2" class=""></label> <label><?php echo L('picture_a_caption_pictures')?></label>
+			<label class="mt-checkbox mt-checkbox-outline"><input type='checkbox' name='is_auto_thumb_content' value="1"><?php echo L('whether_access_to_the_content_of')?><span></span></label> <label><input type="text" name="auto_thumb_content" value="1" size="2" class=""></label> <label><?php echo L('picture_a_caption_pictures')?></label>
 			
 			</td>
 		</tr>
