@@ -16,7 +16,7 @@ include $this->admin_tpl('header','admin');
 <div class="col-md-12 col-sm-12">
 	<label>IP: </label>
 	<label><i class="fa fa-caret-right"></i></label>
-	<label><input type="text" value="" class="input-text" id="ip" name="search[ip]"></label>
+	<label><input type="text" value="<?php echo $ip;?>" class="input-text" id="ip" name="search[ip]"></label>
 </div>
 <div class="col-md-12 col-sm-12">
 	<label><button type="submit" class="btn blue btn-sm onloading" name="submit"> <i class="fa fa-search"></i> <?php echo L('search')?></button></label>

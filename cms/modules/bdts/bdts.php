@@ -114,6 +114,7 @@ class bdts extends admin {
 	//批量百度主动推送
 	public function add() {
 
+		$this->categorys = getcache('category_content_'.$this->siteid, 'commons');
 		$mid = intval($this->input->get('modelid'));
 		$ids = $this->input->post('ids');
 		if (!$ids) {
@@ -142,7 +143,12 @@ class bdts extends admin {
 
 		$ct = 0;
 		foreach ($data as $t) {
-			$this->bdts->module_bdts($sitemodel['tablename'], $t['url'], 'add');
+			if ($this->categorys[$t['catid']]['content_ishtml']) {
+				$linkurl = siteurl($this->siteid).$t['url'];
+			} else {
+				$linkurl = $t['url'];
+			}
+			$this->bdts->module_bdts($sitemodel['tablename'], $linkurl, 'add');
 			$ct++;
 		}
 

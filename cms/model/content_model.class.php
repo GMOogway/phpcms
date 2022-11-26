@@ -172,16 +172,20 @@ class content_model extends model {
 		if($data['islink']==1) {
 			$urls[0] = trim_script($this->input->post('linkurl'));
 			$urls[0] = remove_xss($urls[0]);
-			
 			$urls[0] = str_replace(array('select ',')','\\','#',"'"),' ',$urls[0]);
 		} else {
 			list($urls) = $this->url->show($id, 0, $systeminfo['catid'], $systeminfo['inputtime'], $data['prefix'],$inputinfo,'add');
 			// 站长工具
 			if (module_exists('bdts')) {
+				if ($urls['content_ishtml']) {
+					$bdts_linkurl = siteurl($this->siteid).$urls[0];
+				} else {
+					$bdts_linkurl = $urls[0];
+				}
 				$this->bdts = pc_base::load_app_class('admin_bdts','bdts');
 				$this->sitemodel_db = pc_base::load_model('sitemodel_model');
 				$sitemodel = $this->sitemodel_db->get_one(array('modelid'=>$this->modelid));
-				$this->bdts->module_bdts($sitemodel['tablename'], $urls[0], 'add');
+				$this->bdts->module_bdts($sitemodel['tablename'], $bdts_linkurl, 'add');
 			}
 		}
 		$this->table_name = $tablename;
@@ -473,10 +477,15 @@ class content_model extends model {
 			$systeminfo['url'] = $urls[0];
 			// 站长工具
 			if (module_exists('bdts')) {
+				if ($urls['content_ishtml']) {
+					$bdts_linkurl = siteurl($this->siteid).$urls[0];
+				} else {
+					$bdts_linkurl = $urls[0];
+				}
 				$this->bdts = pc_base::load_app_class('admin_bdts','bdts');
 				$this->sitemodel_db = pc_base::load_model('sitemodel_model');
 				$sitemodel = $this->sitemodel_db->get_one(array('modelid'=>$this->modelid));
-				$this->bdts->module_bdts($sitemodel['tablename'], $urls[0], 'edit');
+				$this->bdts->module_bdts($sitemodel['tablename'], $bdts_linkurl, 'edit');
 			}
 		}
 		$systeminfo['keywords'] = str_replace(array('/','\\','#','.',"'"),' ',$systeminfo['keywords']);

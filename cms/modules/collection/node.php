@@ -189,8 +189,8 @@ class node extends admin {
 				$data = array_iconv($data);
 			}
 			header("Content-type: application/octet-stream");
-		    header("Content-Disposition: attachment; filename=pc_collection_".$nodeid.'.txt');
-		    exit(base64_encode(json_encode($data)));
+			header("Content-Disposition: attachment; filename=pc_collection_".$nodeid.'.txt');
+			exit(base64_encode(json_encode($data)));
 		} else {
 			dr_admin_msg(0,L('notfound'));
 		}
@@ -347,7 +347,7 @@ class node extends admin {
 			}
 			
 			if ($total_page > $page) {
-				dr_admin_msg(1,L('collectioning').($i+($page-1)*2).'/'.$total.'<script type="text/javascript">location.href="?m=collection&c=node&a=col_content&page='.($page+1).'&nodeid='.$nodeid.'&total='.$total.'&pc_hash='.dr_get_csrf_token().'"</script>', '?m=collection&c=node&a=col_content&page='.($page+1).'&nodeid='.$nodeid.'&total='.$total);
+				dr_admin_msg(1,L('collectioning').($i+($page-1)*2).'/'.$total, '?m=collection&c=node&a=col_content&page='.($page+1).'&nodeid='.$nodeid.'&total='.$total);
 			} else {
 				$this->db->update(array('lastdate'=>SYS_TIME), array('nodeid'=>$nodeid));
 				dr_admin_msg(1,L('collection_success'), '?m=collection&c=node&a=manage');
@@ -439,10 +439,11 @@ class node extends admin {
 			$node_field = isset($_POST['node_field']) ? $_POST['node_field'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			$funcs = isset($_POST['funcs']) ? $_POST['funcs'] : array();
 			
-			$config['add_introduce'] = isset($_POST['add_introduce']) && intval($_POST['add_introduce']) ? intval($_POST['add_introduce']) : 0;
-			$config['auto_thumb'] = isset($_POST['auto_thumb']) && intval($_POST['auto_thumb']) ? intval($_POST['auto_thumb']) : 0;
-			$config['introcude_length'] = isset($_POST['introcude_length']) && intval($_POST['introcude_length']) ? intval($_POST['introcude_length']) : 0;
-			$config['auto_thumb_no'] = isset($_POST['auto_thumb_no']) && intval($_POST['auto_thumb_no']) ? intval($_POST['auto_thumb_no']) : 0;
+			$config['is_auto_description_content'] = isset($_POST['is_auto_description_content']) && intval($_POST['is_auto_description_content']) ? intval($_POST['is_auto_description_content']) : 0;
+			$config['is_auto_thumb_content'] = isset($_POST['is_auto_thumb_content']) && intval($_POST['is_auto_thumb_content']) ? intval($_POST['is_auto_thumb_content']) : 0;
+			$config['auto_description_content'] = isset($_POST['auto_description_content']) && intval($_POST['auto_description_content']) ? intval($_POST['auto_description_content']) : 0;
+			$config['auto_thumb_content'] = isset($_POST['auto_thumb_content']) && intval($_POST['auto_thumb_content']) ? intval($_POST['auto_thumb_content']) : 0;
+			$config['is_remove_a_content'] = isset($_POST['is_remove_a_content']) && intval($_POST['is_remove_a_content']) ? intval($_POST['is_remove_a_content']) : 0;
 			$config['content_status'] = isset($_POST['content_status']) && intval($_POST['content_status']) ? intval($_POST['content_status']) : 1;
 			
 			foreach ($node_field as $k => $v) {
@@ -529,10 +530,11 @@ class node extends admin {
 		}
 		$program = $program_db->get_one(array('id'=>$programid));
 		$program['config'] = string2array($program['config']);
-		$_POST['add_introduce'] = $program['config']['add_introduce'];
-		$_POST['introcude_length'] = $program['config']['introcude_length'];
-		$_POST['auto_thumb'] = $program['config']['auto_thumb'];
-		$_POST['auto_thumb_no'] = $program['config']['auto_thumb_no'];
+		$_POST['is_auto_description_content'] = $program['config']['is_auto_description_content'];
+		$_POST['auto_description_content'] = $program['config']['auto_description_content'];
+		$_POST['is_auto_thumb_content'] = $program['config']['is_auto_thumb_content'];
+		$_POST['auto_thumb_content'] = $program['config']['auto_thumb_content'];
+		$_POST['is_remove_a_content'] = $program['config']['is_remove_a_content'];
 		$i = 0;
 		$content_db->set_model($program['modelid']);
 		$coll_contentid = array();
@@ -554,6 +556,8 @@ class node extends admin {
 					$sql[$a] = isset($v['data'][$b]) && $v['data'][$b] ? $v['data'][$b] : '';
 				}
 			}
+			!$sql['thumb'] && $sql['thumb'] = '';
+			!$sql['description'] && $sql['description'] = '';
 			if ($node['content_page'] == 1) $sql['paginationtype'] = 2;
 			$contentid = $content_db->add_content($sql, 1);
 			if ($contentid) {

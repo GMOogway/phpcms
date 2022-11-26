@@ -17,6 +17,7 @@ class message extends admin {
 	} 
 	
 	public function init() {
+ 		$param = $this->input->get();
 		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
 		$infos = $this->db->listinfo($where,$order = 'messageid DESC',$page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
@@ -129,8 +130,8 @@ class message extends admin {
 			if(empty($_POST['info']['subject'])||empty($_POST['info']['content'])) return false;
 			$group_message['subject'] = $this->input->post('info')['subject'];
 			$group_message['content'] = $this->input->post('info')['content'];
-			$group_message['typeid']    = $this->input->post('info')['type'];
-			$group_message['inputtime']    = SYS_TIME;
+			$group_message['typeid'] = $this->input->post('info')['type'];
+			$group_message['inputtime'] = SYS_TIME;
 			if($group_message['typeid']==1){
 				$group_message['groupid'] = $this->input->post('info')['groupid'];
 			}else {
@@ -276,7 +277,8 @@ class message extends admin {
 					//$where .= "AND `message_time` >= '$start' AND `message_time` <= '$end' ";
 					$where .= $where ? "AND `message_time` >= '$start' AND `message_time` <= '$end' " : " `message_time` >= '$start' AND `message_time` <= '$end' ";
 				}
-  		} 
+  		}
+ 		$param = $this->input->get();
   		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
 		$infos = $this->db->listinfo($where,$order = 'messageid DESC',$page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;

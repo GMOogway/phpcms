@@ -23,9 +23,9 @@ include $this->admin_tpl('header','admin');
 <div class="col-md-12 col-sm-12">
 				<label><div class="formdate">
             <div class="input-group input-medium date-picker input-daterange">
-                <input type="text" class="form-control" value="<?php echo $this->input->get('search')['start_time'];?>" name="search[start_time]">
+                <input type="text" class="form-control" value="<?php echo $param['start_time'];?>" name="search[start_time]">
                 <span class="input-group-addon"> <?php echo L('to')?> </span>
-                <input type="text" class="form-control" value="<?php echo $this->input->get('search')['end_time'];?>" name="search[end_time]">
+                <input type="text" class="form-control" value="<?php echo $param['end_time'];?>" name="search[end_time]">
             </div>
         </div></label>
 </div>
