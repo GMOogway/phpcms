@@ -73,7 +73,7 @@ $(function(){
 		</tr>
 
 		<tr>
-			<td width="80"><?php echo L('member_group_upgradeprice')?></td> 
+			<td width="100"><?php echo L('member_group_upgradeprice')?></td> 
 			<td>
 				<span class="ik lf" style="width:120px;">
 					<?php echo L('member_group_dayprice')?>：
@@ -90,23 +90,23 @@ $(function(){
 			</td>
 		</tr>
 		<tr>
-			<td width="80"><?php echo L('member_group_maxmessagenum')?></td> 
+			<td width="100"><?php echo L('member_group_maxmessagenum')?></td> 
 			<td><input type="text" name="info[allowmessage]" class="input-text" id="allowmessage" size="8"></td>
 		</tr>
 		<tr>
-			<td width="80"><?php echo L('allowpostnum')?></td> 
+			<td width="100"><?php echo L('allowpostnum')?></td> 
 			<td><input type="text" name="info[allowpostnum]" class="input-text" id="allowpostnum" size="8"> <?php echo L('zero_nolimit')?></td>
 		</tr>
 		<tr>
-			<td width="80"><?php echo L('member_group_username_color')?></td> 
+			<td width="100"><?php echo L('member_group_username_color')?></td> 
 			<td><input type="text" name="info[usernamecolor]" class="input-text" id="usernamecolor" size="8" value="#000000"></td>
 		</tr>
 		<tr>
-			<td width="80"><?php echo L('member_group_icon')?></td> 
+			<td width="100"><?php echo L('member_group_icon')?></td> 
 			<td><input type="text" name="info[icon]" class="input-text" id="icon" value="images/group/vip.jpg" size="40"></td>
 		</tr>
 		<tr>
-			<td width="80"><?php echo L('member_group_description')?></td> 
+			<td width="100"><?php echo L('member_group_description')?></td> 
 			<td><input type="text" name="info[description]" class="input-text" size="60"></td>
 		</tr>
 	</table>

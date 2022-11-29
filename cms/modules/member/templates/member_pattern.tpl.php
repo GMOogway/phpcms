@@ -26,8 +26,17 @@ include $this->admin_tpl('header', 'admin');?>
                         <div class="form-group">
                             <label class="col-md-2 control-label"><?php echo L('正则表达式')?></label>
                             <div class="col-md-9">
-                                <textarea name="data[code]" class="form-control" style="height:100px; width:100%;"></textarea>
-                                <p class="help-block"> <?php echo L('填写正则表达式代码，例如纯数字写法为：/^[0-9]+$/')?></p>
+                                <textarea name="data[code]" id="dr_code" class="form-control" style="height:100px; width:100%;"></textarea>
+                                <p class="help-block"> <?php echo L('填写PHP格式的正则表达式代码，匹配函数preg_match')?></p>
+                                <label><select class="form-control" onchange="dr_add_code(this.value)">
+                                    <option value=""><?php echo L('常用正则表达式');?></option>
+                                    <?php 
+                                    if(is_array($code)){
+                                    foreach($code as $name=>$cc){
+                                    ?>
+                                    <option value="<?php echo $cc;?>"><?php echo L($name);?></option>
+                                    <?php }}?>
+                                </select></label>
                             </div>
                         </div>
 
@@ -48,6 +57,9 @@ include $this->admin_tpl('header', 'admin');?>
     </div>
 </form>
 <script type="text/javascript">
+    function dr_add_code(v) {
+        $('#dr_code').val(v);
+    }
     function dr_test_pattern() {
         var loading = layer.load(2, {
             shade: [0.3,'#fff'], //0.1透明度的白色背景

@@ -34,19 +34,77 @@ jQuery(document).ready(function() {
     <div class="portlet-title tabbable-line">
         <ul class="nav nav-tabs" style="float:left;">
             <li<?php if ($page==0) {?> class="active"<?php }?>>
-                <a data-toggle="tab_0" onclick="$('#dr_page').val('0')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('member_setting').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-cog"></i> <?php if (!is_mobile(0)) {echo L('member_setting');}?> </a>
+                <a data-toggle="tab_0" onclick="$('#dr_page').val('0')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('常用设置').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-cog"></i> <?php if (!is_mobile(0)) {echo L('常用设置');}?> </a>
             </li>
             <li<?php if ($page==1) {?> class="active"<?php }?>>
-                <a data-toggle="tab_1" onclick="$('#dr_page').val('1')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('格式规范').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-user-md"></i> <?php if (!is_mobile(0)) {echo L('格式规范');}?> </a>
+                <a data-toggle="tab_1" onclick="$('#dr_page').val('1')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('登录设置').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-user"></i> <?php if (!is_mobile(0)) {echo L('登录设置');}?> </a>
             </li>
             <li<?php if ($page==2) {?> class="active"<?php }?>>
-                <a data-toggle="tab_2" onclick="$('#dr_page').val('2')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('后台列表显示字段').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-table"></i> <?php if (!is_mobile(0)) {echo L('后台列表显示字段');}?> </a>
+                <a data-toggle="tab_2" onclick="$('#dr_page').val('2')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('注册设置').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-user-plus"></i> <?php if (!is_mobile(0)) {echo L('注册设置');}?> </a>
+            </li>
+            <li<?php if ($page==3) {?> class="active"<?php }?>>
+                <a data-toggle="tab_3" onclick="$('#dr_page').val('3')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('格式规范').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-user-md"></i> <?php if (!is_mobile(0)) {echo L('格式规范');}?> </a>
+            </li>
+            <li<?php if ($page==4) {?> class="active"<?php }?>>
+                <a data-toggle="tab_4" onclick="$('#dr_page').val('4')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('后台列表显示字段').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-table"></i> <?php if (!is_mobile(0)) {echo L('后台列表显示字段');}?> </a>
             </li>
         </ul>
     </div>
     <div class="portlet-body form">
         <div class="tab-content">
             <div class="tab-pane<?php if ($page==0) {?> active<?php }?>" id="tab_0">
+
+                <div class="form-body">
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('enablcodecheck')?></label>
+                        <div class="col-md-9">
+                            <input type="checkbox" name="info[enablcodecheck]" value="1" <?php echo $member_setting['enablcodecheck'] ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+                            <span class="help-block"><?php echo L('网页中的图片验证码')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('show_app_point')?></label>
+                        <div class="col-md-9">
+                            <input type="checkbox" name="info[showapppoint]" value="1" <?php echo $member_setting['showapppoint'] ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+                        </div>
+                    </div>
+                    <div class="form-group" id="dr_row_rmb_point_rate">
+                        <label class="col-md-2 control-label"><?php echo L('rmb_point_rate')?></label>
+                        <div class="col-md-9">
+                            <label><input class="form-control input-large" type="text" id="rmb_point_rate" name="info[rmb_point_rate]" value="<?php echo $member_setting['rmb_point_rate'];?>" ></label>
+                            <span class="help-block"><?php echo L('rmb_point_rate').L('between_1_to_8_num')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('show_register_protocol')?></label>
+                        <div class="col-md-9">
+                            <input type="checkbox" name="info[showregprotocol]" value="1" <?php echo $member_setting['showregprotocol'] ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('register_protocol')?></label>
+                        <div class="col-md-9">
+                            <textarea name='info[regprotocol]' id='regprotocol' class="form-control" style="width:80%;height:120px;"><?php echo $member_setting['regprotocol']?></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('register_verify_message')?></label>
+                        <div class="col-md-9">
+                            <textarea name='info[registerverifymessage]' id='registerverifymessage' class="form-control" style="width:80%;height:120px;"><?php echo $member_setting['registerverifymessage']?></textarea>
+                            <span class="help-block"><?php echo L('register_func_tips')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('forgetpasswordmessage')?></label>
+                        <div class="col-md-9">
+                            <textarea name='info[forgetpassword]' id='forgetpassword' class="form-control" style="width:80%;height:120px;"><?php echo $member_setting['forgetpassword']?></textarea>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="tab-pane<?php if ($page==1) {?> active<?php }?>" id="tab_1">
 
                 <div class="form-body">
 
@@ -96,6 +154,13 @@ jQuery(document).ready(function() {
                             <span class="help-block"><?php echo L('可同时选择多个字段作为登录主字段')?></span>
                         </div>
                     </div>
+
+                </div>
+            </div>
+            <div class="tab-pane<?php if ($page==2) {?> active<?php }?>" id="tab_2">
+
+                <div class="form-body">
+
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('allow_register')?></label>
                         <div class="col-md-9">
@@ -112,12 +177,6 @@ jQuery(document).ready(function() {
                         <label class="col-md-2 control-label"><?php echo L('register_email_auth')?></label>
                         <div class="col-md-9">
                             <input type="checkbox" name="info[enablemailcheck]" value="1"<?php if($mail_disabled) {echo ' disabled';}else{echo $member_setting['enablemailcheck'] ? ' checked' : '';}?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-2 control-label"><?php echo L('enablcodecheck')?></label>
-                        <div class="col-md-9">
-                            <input type="checkbox" name="info[enablcodecheck]" value="1" <?php echo $member_setting['enablcodecheck'] ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
                         </div>
                     </div>
                     <?php if (!$sms_disabled) {?>
@@ -144,19 +203,6 @@ jQuery(document).ready(function() {
                             <input type="checkbox" name="info[registerverify]" value="1" <?php echo $member_setting['registerverify'] ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-md-2 control-label"><?php echo L('show_app_point')?></label>
-                        <div class="col-md-9">
-                            <input type="checkbox" name="info[showapppoint]" value="1" <?php echo $member_setting['showapppoint'] ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
-                        </div>
-                    </div>
-                    <div class="form-group" id="dr_row_rmb_point_rate">
-                        <label class="col-md-2 control-label"><?php echo L('rmb_point_rate')?></label>
-                        <div class="col-md-9">
-                            <label><input class="form-control input-large" type="text" id="rmb_point_rate" name="info[rmb_point_rate]" value="<?php echo $member_setting['rmb_point_rate'];?>" ></label>
-                            <span class="help-block"><?php echo L('rmb_point_rate').L('between_1_to_8_num')?></span>
-                        </div>
-                    </div>
                     <div class="form-group" id="dr_row_defualtpoint">
                         <label class="col-md-2 control-label"><?php echo L('defualtpoint')?></label>
                         <div class="col-md-9">
@@ -172,31 +218,6 @@ jQuery(document).ready(function() {
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-2 control-label"><?php echo L('show_register_protocol')?></label>
-                        <div class="col-md-9">
-                            <input type="checkbox" name="info[showregprotocol]" value="1" <?php echo $member_setting['showregprotocol'] ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-2 control-label"><?php echo L('register_protocol')?></label>
-                        <div class="col-md-9">
-                            <textarea name='info[regprotocol]' id='regprotocol' class="form-control" style="width:80%;height:120px;"><?php echo $member_setting['regprotocol']?></textarea>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-2 control-label"><?php echo L('register_verify_message')?></label>
-                        <div class="col-md-9">
-                            <textarea name='info[registerverifymessage]' id='registerverifymessage' class="form-control" style="width:80%;height:120px;"><?php echo $member_setting['registerverifymessage']?></textarea>
-                            <span class="help-block"><?php echo L('register_func_tips')?></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-2 control-label"><?php echo L('forgetpasswordmessage')?></label>
-                        <div class="col-md-9">
-                            <textarea name='info[forgetpassword]' id='forgetpassword' class="form-control" style="width:80%;height:120px;"><?php echo $member_setting['forgetpassword']?></textarea>
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('不允许账号的字符串')?></label>
                         <div class="col-md-9">
                             <textarea class="form-control" style="height:150px; width:100%;" name="info[notallow]"><?php echo $member_setting['notallow']?></textarea>
@@ -206,7 +227,7 @@ jQuery(document).ready(function() {
 
                 </div>
             </div>
-            <div class="tab-pane<?php if ($page==1) {?> active<?php }?>" id="tab_1">
+            <div class="tab-pane<?php if ($page==3) {?> active<?php }?>" id="tab_3">
                 <div class="form-body">
 
                     <div class="form-group">
@@ -326,7 +347,7 @@ jQuery(document).ready(function() {
 
                 </div>
             </div>
-            <div class="tab-pane<?php if ($page==2) {?> active<?php }?>" id="tab_2">
+            <div class="tab-pane<?php if ($page==4) {?> active<?php }?>" id="tab_4">
                 <div class="form-body">
 
                     <div class="table-list">

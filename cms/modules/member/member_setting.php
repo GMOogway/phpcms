@@ -212,6 +212,13 @@ class member_setting extends admin {
 			dr_json(1, L('正则表达式验证结果：通过'));
 		}
 
+		$code = array(
+			'纯数字' => '/^[0-9]+$/',
+			'纯汉字' => '/^[\x{4e00}-\x{9fa5}]+$/u',
+			'手机号码' => '/^1[345789]\d{9}$/ims',
+			'电子邮箱' => '/^[a-zA-Z0-9]+([-_.][a-zA-Z0-9]+)*@([a-zA-Z0-9]+[-.])+([a-z]{2,5})$/ims',
+		);
+
 		include $this->admin_tpl('member_pattern');;exit;
 	}
 
