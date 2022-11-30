@@ -14,11 +14,14 @@ include $this->admin_tpl('header','admin');?>
     <div class="table-list">
         <table width="100%">
             <tbody>
-            <?php foreach ($list as $t) {?>
+            <?php 
+            if(is_array($list)){
+            foreach($list as $t){
+            ?>
             <tr>
                 <td><?php echo $t;?></td>
             </tr>
-            <?php }?>
+            <?php }}?>
             </tbody>
         </table>
     </div>

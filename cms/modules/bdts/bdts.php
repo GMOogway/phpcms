@@ -18,17 +18,15 @@ class bdts extends admin {
 	//百度推送
 	public function log_index() {
 		$data = $list = array();
+		$page = max(1, (int)$this->input->get('page'));
 		$file = CACHE_PATH.'caches_bdts/bdts_log.php';
-		if (is_file(CACHE_PATH.'caches_bdts/bdts_log.php')) {
-			$data = explode(PHP_EOL, str_replace(array(chr(13), chr(10)), PHP_EOL, file_get_contents($file)));
+		if (is_file($file)) {
+			$data = explode(PHP_EOL, file_get_contents($file));
 			$data = $data ? array_reverse($data) : array();
-			unset($data[0]);
-			$getpage = max(intval($this->input->get('page')), 1);
-			$page = max(1, (int)$getpage);
 			$limit = ($page - 1) * SYS_ADMIN_PAGESIZE;
 			$i = $j = 0;
 			foreach ($data as $v) {
-				if ($i >= $limit && $j < SYS_ADMIN_PAGESIZE) {
+				if ($v && $i > $limit && $j < SYS_ADMIN_PAGESIZE) {
 					$list[] = $v;
 					$j ++;
 				}
@@ -36,7 +34,7 @@ class bdts extends admin {
 			}
 		}
 		$total = $data ? max(0, count($data) - 1) : 0;
-		$pages = pages($total, $getpage, SYS_ADMIN_PAGESIZE);
+		$pages = pages($total, $page, SYS_ADMIN_PAGESIZE);
 		include $this->admin_tpl('index');
 	}
 	
