@@ -40,16 +40,16 @@ class create_all_html extends admin {
 	public function show() {
 		$show_header = $show_dialog  = true;
 		$modelid = $this->input->get('modelid');
-		$ids = $this->input->get('catids');
-		if ($ids && is_array($ids)) {
-			$ids = implode(',', $ids);
+		$catids = $this->input->get('catids');
+		if ($catids && is_array($catids)) {
+			$catids = implode(',', $catids);
 		}
 		$nmid = ''; // 下一个模块
 		$module = getcache('model', 'commons');
 		if ($module) {
 			$is_find = 0;
 			foreach ($module as $t) {
-				if ($t['siteid']==$this->siteid && $t['modelid']) {
+				if ($t['siteid']==$this->siteid && $t['modelid'] && $t['items']) {
 					if ($is_find) {
 						$nmid = $t['modelid'];
 						break;
@@ -60,20 +60,21 @@ class create_all_html extends admin {
 				}
 			}
 		}
-		$this->db->set_model(intval($nmid));
+		$this->db->set_model($nmid ? intval($nmid) : $modelid);
 		$total = $this->db->count();
 		$go_url = $this->input->get('go_url');
 		$go_url = $go_url ? trim('?m=content&c=create_all_html&a=show&modelid='.$nmid.'&go_url=1&pc_hash='.$this->input->get('pc_hash')) : '';
 		if (!$total || !$nmid) $go_url = '';
 		$modulename = $module[$modelid]['name'];
-		$count_url = '?m=content&c=create_all_html&a=public_show_count&pagesize='.intval($this->input->get('pagesize')).'&modelid='.intval($this->input->get('modelid')).'&catids='.$ids.'&fromdate='.$this->input->get('fromdate').'&todate='.$this->input->get('todate').'&fromid='.intval($this->input->get('fromid')).'&toid='.intval($this->input->get('toid'));
-		$todo_url = '?m=content&c=create_all_html&a=public_show_add&pagesize='.intval($this->input->get('pagesize')).'&modelid='.intval($this->input->get('modelid')).'&catids='.$ids.'&fromdate='.$this->input->get('fromdate').'&todate='.$this->input->get('todate').'&fromid='.intval($this->input->get('fromid')).'&toid='.intval($this->input->get('toid'));
+		$count_url = '?m=content&c=create_all_html&a=public_show_count&pagesize='.intval($this->input->get('pagesize')).'&modelid='.intval($this->input->get('modelid')).'&catids='.$catids.'&fromdate='.$this->input->get('fromdate').'&todate='.$this->input->get('todate').'&fromid='.intval($this->input->get('fromid')).'&toid='.intval($this->input->get('toid'));
+		$todo_url = '?m=content&c=create_all_html&a=public_show_add&pagesize='.intval($this->input->get('pagesize')).'&modelid='.intval($this->input->get('modelid')).'&catids='.$catids.'&fromdate='.$this->input->get('fromdate').'&todate='.$this->input->get('todate').'&fromid='.intval($this->input->get('fromid')).'&toid='.intval($this->input->get('toid'));
 		include $this->admin_tpl('show_html');
 	}
 	// 内容数量统计
 	public function public_show_count() {
 		$html = pc_base::load_sys_class('html');
 		$html->get_show_data($this->input->get('modelid'), array(
+			'ids' => $this->input->get('ids'),
 			'catids' => $this->input->get('catids'),
 			'todate' => $this->input->get('todate'),
 			'fromdate' => $this->input->get('fromdate'),
@@ -177,10 +178,6 @@ class create_all_html extends admin {
 	public function category() {
 		$show_header = $show_dialog  = true;
 		$cache_class = pc_base::load_sys_class('cache');
-		$ids = $this->input->get('ids');
-		if ($ids && is_array($ids)) {
-			$ids = implode(',', $ids);
-		}
 		$fmid = ''; // 第一个模块
 		$module = getcache('model', 'commons');
 		if ($module) {
@@ -199,8 +196,8 @@ class create_all_html extends admin {
 		$go_url = $go_url ? trim('?m=content&c=create_all_html&a=show&modelid='.$fmid.'&go_url=1&pc_hash='.$this->input->get('pc_hash')) : '';
 		if (!$total || !$fmid) $go_url = '';
 		$modulename = '栏目';
-		$count_url = '?m=content&c=create_all_html&a=public_category_count&ids='.$ids.'&maxsize='.$maxsize;
-		$todo_url = '?m=content&c=create_all_html&a=public_category_add&ids='.$ids.'&go_url='.urlencode($go_url).'&maxsize='.$maxsize;
+		$count_url = '?m=content&c=create_all_html&a=public_category_count&maxsize='.$maxsize;
+		$todo_url = '?m=content&c=create_all_html&a=public_category_add&go_url='.urlencode($go_url).'&maxsize='.$maxsize;
 		include $this->admin_tpl('show_html');
 	}
 	// 栏目的数量统计

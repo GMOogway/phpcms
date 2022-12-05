@@ -57,20 +57,24 @@ class create_html extends admin {
 		$show_header = $show_dialog  = true;
 		if($this->input->get('dosubmit')) {
 			$modelid = intval($this->input->get('modelid'));
+			$ids = $this->input->get('ids');
 			$catids = $this->input->get('catids');
 			$pagesize = intval($this->input->get('pagesize'));
 			$fromdate = $this->input->get('fromdate');
 			$todate = $this->input->get('todate');
 			$fromid = intval($this->input->get('fromid'));
 			$toid = intval($this->input->get('toid'));
+			if ($ids && is_array($ids)) {
+				$ids = implode(',', $ids);
+			}
 			if ($catids && is_array($catids)) {
 				$catids = implode(',', $catids);
 			}
 			$this->model_db = pc_base::load_model('sitemodel_model');
 			$model = $this->model_db->get_one(array('siteid'=>$this->siteid,'modelid'=>$modelid));
 			$modulename = $model['name'];
-			$count_url = '?m=content&c=create_html&a=public_show_count&pagesize='.$pagesize.'&modelid='.$modelid.'&catids='.$catids.'&fromdate='.$fromdate.'&todate='.$todate.'&fromid='.$fromid.'&toid='.$toid;
-			$todo_url = '?m=content&c=create_html&a=public_show_add&pagesize='.$pagesize.'&modelid='.$modelid.'&catids='.$catids.'&fromdate='.$fromdate.'&todate='.$todate.'&fromid='.$fromid.'&toid='.$toid;
+			$count_url = '?m=content&c=create_html&a=public_show_count&pagesize='.$pagesize.'&modelid='.$modelid.'&catids='.$catids.'&ids='.$ids.'&fromdate='.$fromdate.'&todate='.$todate.'&fromid='.$fromid.'&toid='.$toid;
+			$todo_url = '?m=content&c=create_html&a=public_show_add&pagesize='.$pagesize.'&modelid='.$modelid.'&catids='.$catids.'&ids='.$ids.'&fromdate='.$fromdate.'&todate='.$todate.'&fromid='.$fromid.'&toid='.$toid;
 			include $this->admin_tpl('show_html');
 		} else {
 			$admin_username = param::get_cookie('admin_username');
@@ -111,8 +115,8 @@ class create_html extends admin {
 		if ($catids && is_array($catids)) {
 			$catids = implode(',', $catids);
 		}
-        $html_file = isset($fromdate) && $fromdate && isset($todate) && $todate ? '-'.$fromdate.'-'.$todate : '';
-        $html_file .= isset($fromid) && $fromid && isset($toid) && $toid ? '-'.$fromid.'-'.$toid : '';
+		$html_file = isset($fromdate) && $fromdate && isset($todate) && $todate ? '-'.$fromdate.'-'.$todate : '';
+		$html_file .= isset($fromid) && $fromid && isset($toid) && $toid ? '-'.$fromid.'-'.$toid : '';
 		$name = 'show-'.$modelid.'-html-file'.$html_file;
 		$page = $cache_class->get_auth_data($name.'-error'); // 设置断点
 		if (!$page) {
@@ -134,8 +138,8 @@ class create_html extends admin {
 		$todate = $this->input->get('todate');
 		$fromid = intval($this->input->get('fromid'));
 		$toid = intval($this->input->get('toid'));
-        $html_file = isset($fromdate) && $fromdate && isset($todate) && $todate ? '-'.$fromdate.'-'.$todate : '';
-        $html_file .= isset($fromid) && $fromid && isset($toid) && $toid ? '-'.$fromid.'-'.$toid : '';
+		$html_file = isset($fromdate) && $fromdate && isset($todate) && $todate ? '-'.$fromdate.'-'.$todate : '';
+		$html_file .= isset($fromid) && $fromid && isset($toid) && $toid ? '-'.$fromid.'-'.$toid : '';
 		$name = 'show-'.$modelid.'-html-file'.$html_file;
 		$page = $cache_class->get_auth_data($name.'-error'); // 设置断点
 		if (!$page) {
@@ -152,6 +156,7 @@ class create_html extends admin {
 	public function public_show_count() {
 		$html = pc_base::load_sys_class('html');
 		$html->get_show_data($this->input->get('modelid'), array(
+			'ids' => $this->input->get('ids'),
 			'catids' => $this->input->get('catids'),
 			'todate' => $this->input->get('todate'),
 			'fromdate' => $this->input->get('fromdate'),
@@ -289,10 +294,6 @@ class create_html extends admin {
 	*/
 	public function batch_show() {
 		if($this->input->post('dosubmit')) {
-			// 生成权限文件
-			if (!dr_html_auth(1)) {
-				dr_admin_msg(0, L('/cache/html/ 无法写入文件'));
-			}
 			$catid = intval($this->input->get('catid'));
 			if(!$catid) dr_json(0, L('missing_part_parameters'));
 			$modelid = $this->categorys[$catid]['modelid'];
@@ -305,36 +306,9 @@ class create_html extends admin {
 			if($content_ishtml) {
 				$ids = $this->input->get_post_ids();
 				if(empty($ids)) dr_json(0, L('you_do_not_check'));
-				$count = dr_count($ids);
-				$this->db->set_model($modelid);
-				$sql = 'select id,catid,title,url,islink,inputtime from `'.$this->db->table_name.'` where id IN ('. implode(',', $ids).')';
-				$cache_class->set_auth_data($name, ceil($count/10), $this->siteid);
-				$cache_class->set_auth_data($name.'-data', array(
-					'sql' => $sql,
-					'pagesize' => 10,
-				), $this->siteid);
-				dr_json(1, 'ok', array('url' => '?m=content&c=create_html&a=public_batch_show_add&modelid='.$modelid.'&count='.$count.'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash')));
-				include $this->admin_tpl('show_html');
+				dr_json(1, '?m=content&c=create_html&a=show&modelid='.$modelid.'&ids='.implode(',', $ids).'&dosubmit='.$this->input->post('dosubmit').'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash'));
 			}
 		}
-	}
-	/**
-	* 批量生成内容页
-	*/
-	public function public_batch_show_add() {
-		$show_header = $show_dialog = $show_pc_hash = true;
-		$modelid = intval($this->input->get('modelid'));
-		$count = intval($this->input->get('count'));
-		$count_url = '?m=content&c=create_html&a=public_batch_show_count&count='.$count;
-		$todo_url = '?m=content&c=create_html&a=public_show_add&&modelid='.$modelid.'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash');
-		include $this->admin_tpl('show_html');
-	}
-	/**
-	* 内容数量统计
-	*/
-	public function public_batch_show_count() {
-		$count = intval($this->input->get('count'));
-		dr_json(1, '共'.$count.'条，分'.ceil($count/10).'页');
 	}
 	/**
 	* 批量批量更新URL
@@ -440,8 +414,8 @@ class create_html extends admin {
 		$todate = $this->input->get('todate');
 		$fromid = intval($this->input->get('fromid'));
 		$toid = intval($this->input->get('toid'));
-        $html_file = isset($fromdate) && $fromdate && isset($todate) && $todate ? '-'.$fromdate.'-'.$todate : '';
-        $html_file .= isset($fromid) && $fromid && isset($toid) && $toid ? '-'.$fromid.'-'.$toid : '';
+		$html_file = isset($fromdate) && $fromdate && isset($todate) && $todate ? '-'.$fromdate.'-'.$todate : '';
+		$html_file .= isset($fromid) && $fromid && isset($toid) && $toid ? '-'.$fromid.'-'.$toid : '';
 		$name = 'show-'.$modelid.'-html-file'.$html_file;
 		$name2 = $name.'-data';
 		$pcount = $cache_class->get_auth_data($name, $this->siteid);

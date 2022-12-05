@@ -197,9 +197,12 @@ class html {
             $where .= ' AND `id` BETWEEN '.(int)$param['fromid'].' AND ' . (int)$param['toid'];
         }
         if ($cids) {
-            $where .= ' AND catid IN ('. implode(',', $cids).')';
+            $where .= ' AND `catid` IN ('. implode(',', $cids).')';
         } else {
             dr_json(0, '['.$models[$modelid]['name'].']没有可用生成的内容数据');
+        }
+        if ($param['ids']) {
+            $where .= ' AND `id` IN ('. dr_safe_replace($param['ids']).')';
         }
         $count = $this->db->count($where);
         $sql = 'select id,catid,title,url,islink,inputtime from `'.$this->db->table_name.'`';

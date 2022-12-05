@@ -7,17 +7,17 @@ function dr_tree_data(catid) {
         shade: [0.3,'#fff'], //0.1透明度的白色背景
         time: 100000
     });
-    var value = $(".select-cat-"+catid).html();
+    var value = $('.select-cat-'+catid).html();
     if (value == '[+]') {
         $.ajax({
-            type: "GET",
-            dataType: "json",
-            url: "?m=admin&c=category&a=public_list_index&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo $this->input->get('pc_hash');?>&pid="+catid,
+            type: 'GET',
+            dataType: 'json',
+            url: '?m=admin&c=category&a=public_list_index&menuid=<?php echo $this->input->get('menuid');?>&pc_hash='+pc_hash+'&pid='+catid,
             success: function(json) {
                 layer.close(index);
                 if (json.code == 1) {
-                    $(".dr_catid_"+catid).after(json.msg);
-                    $(".select-cat-"+catid).html('[-]');
+                    $('.dr_catid_'+catid).after(json.msg);
+                    $('.select-cat-'+catid).html('[-]');
                     $('.tooltips').tooltip();
                 } else {
                     dr_tips(json.code, json.msg);
@@ -29,9 +29,28 @@ function dr_tree_data(catid) {
         });
     } else {
         layer.close(index);
-        $(".dr_pid_"+catid).remove();
-        $(".select-cat-"+catid).html('[+]');
+        $('.dr_pid_'+catid).remove();
+        $('.select-cat-'+catid).html('[+]');
     }
+}
+function dr_scjt() {
+    $.ajax({
+        type: 'POST',
+        dataType: 'json',
+        url: '?m=admin&c=category&a=public_scjt_edit&pc_hash='+pc_hash,
+        data: $('#myform').serialize(),
+        success: function(json) {
+            if (json.code == 1) {
+                dr_bfb('<?php echo L('生成栏目页面');?>', '', json.msg);
+            } else {
+                dr_tips(json.code, json.msg);
+            }
+
+        },
+        error: function(HttpRequest, ajaxOptions, thrownError) {
+            dr_ajax_alert_error(HttpRequest, this, thrownError);
+        }
+    });
 }
 $(function() {
     $('.tooltips').tooltip();
@@ -69,8 +88,11 @@ $(function() {
                     <span></span>
                 </label>
                 <label><button type="button" onclick="ajax_option('?m=admin&c=category&a=delete&pc_hash='+pc_hash, '<?php echo L('将同步删除其下级所有栏目和内容，且无法恢复，你确定要删除它们吗？');?>', 1)" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete');?></button></label>
+                <label><button type="button" onclick="ajax_option('?m=admin&c=category&a=public_htmlall_edit&pc_hash='+pc_hash, '<?php echo L('你确定要批量设置为静态模式吗？');?>', 1)" class="btn green btn-sm"> <i class="fa fa-file-o"></i> <?php echo L('静态');?></button></label>
+                <label><button type="button" onclick="ajax_option('?m=admin&c=category&a=public_phpall_edit&pc_hash='+pc_hash, '<?php echo L('你确定要批量设置为动态模式吗？');?>', 1)" class="btn red btn-sm"> <i class="fa fa-file"></i> <?php echo L('动态');?></button></label>
                 <label><?php echo $move_select;?></label>
                 <label><button type="button" onclick="ajax_option('?m=admin&c=category&a=public_move_edit&pc_hash='+pc_hash, '<?php echo L('你确定要移动它们吗？');?>', 1)" class="btn blue btn-sm"> <i class="fa fa-edit"></i> <?php echo L('move');?></button></label>
+                <label><button type="button" onclick="dr_scjt()" class="btn green btn-sm"> <i class="fa fa-reorder"></i> <?php echo L('生成栏目静态');?> </button></label>
             </div>
         </div>
     </form>

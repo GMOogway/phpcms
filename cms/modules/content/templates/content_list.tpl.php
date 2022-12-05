@@ -152,15 +152,11 @@ if(is_array($datas)){
                 <a class="btn blue btn-sm dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="false" href="javascript:;"><i class="fa fa-cogs"></i> <?php echo L('批量操作')?> <i class="fa fa-angle-up"></i></a>
                 <ul class="dropdown-menu">
                     <li><a href="javascript:;" class="dropdown-item" id="remove"><i class="fa fa-arrows"></i> <?php echo L('remove');?></a></li>
-                    <?php if($category['content_ishtml']) {?>
-                    <div class="dropdown-line"></div>
-                    <li><a href="javascript:;" class="dropdown-item" id="createhtml"><i class="fa fa-check"></i> <?php echo L('createhtml');?></a></li>
-                    <?php }
-                    if($status!=99) {?>
+                    <?php if($status!=99) {?>
                     <div class="dropdown-line"></div>
                     <li><a href="javascript:;" class="dropdown-item" id="passed"><i class="fa fa-check"></i> <?php echo L('passed_checked');?></a></li>
                     <?php }?>
-                    <?php if(!$this->input->get('reject')) { ?>
+                    <?php if(!$this->input->get('reject')) {?>
                     <div class="dropdown-line"></div>
                     <li><a href="javascript:;" class="dropdown-item" id="push"><i class="fa fa-window-restore"></i> <?php echo L('push');?></a></li>
                     <div class="dropdown-line"></div>
@@ -168,7 +164,11 @@ if(is_array($datas)){
                     <?php }?>
                     <div class="dropdown-line"></div>
                     <li><a href="javascript:;" class="dropdown-item" id="recycle"><i class="fa fa-trash-o"></i> <?php echo L('in_recycle');?></a></li>
-                    <?php if (module_exists('bdts')) {?>
+                    <?php if($category['content_ishtml']) {?>
+                    <div class="dropdown-line"></div>
+                    <li><a href="javascript:;" class="dropdown-item" id="createhtml"><i class="fa fa-html5"></i> <?php echo L('createhtml');?></a></li>
+                    <?php }
+                    if (module_exists('bdts')) {?>
                     <div class="dropdown-line"></div>
                     <li><a href="javascript:;" class="dropdown-item" id="bdts"><i class="fa fa-paw"></i> <?php echo L('批量百度主动推送');?></a></li>
                     <?php }?>
@@ -317,38 +317,9 @@ $(function() {
                 success:function(json) {
                     layer.close(loading);
                     if (json.code == 1) {
-                        layer.open({
-                            type:2,
-                            title:'生成内容页面',
-                            scrollbar:false,
-                            resize:true,
-                            maxmin:true,
-                            shade:0,
-                            area:[ "80%", "80%" ],
-                            success:function(layero, index) {
-                                var body = layer.getChildFrame("body", index);
-                                var json = $(body).html();
-                                if (json.indexOf('"code":0') > 0 && json.length < 150) {
-                                    var obj = JSON.parse(json);
-                                    layer.close(loading);
-                                    dr_tips(0, obj.msg);
-                                }
-                            },
-                            content:json.data.url,
-                            cancel: function(e, t) {
-                                var a = layer.getChildFrame("body", e);
-                                if ("1" == $(a).find("#dr_check_status").val()) return layer.confirm("关闭后将中断操作，是否确认关闭呢？", {
-                                    icon: 3,
-                                    shade: 0,
-                                    title: "提示",
-                                    btn: ["确定", "取消"]
-                                }, function(e) {
-                                    layer.closeAll()
-                                }), !1
-                            }
-                        });
+                       dr_bfb('<?php echo L('生成内容页面');?>', '', json.msg);
                     } else {
-                        dr_tips(0, json.msg, 90000);
+                        dr_tips(0, json.msg);
                     }
                     return false;
                 },

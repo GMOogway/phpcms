@@ -20,7 +20,7 @@ class category extends admin {
 		$this->cat_config = $this->cache->get_file('category');
 		if (!$this->cat_config) {
 			$this->cat_config = [
-				'sys_field' => ['listorder', 'ismenu', 'disabled', 'iscatpos', 'isleft', 'id', 'typename', 'modelname'],
+				'sys_field' => ['listorder', 'ismenu', 'disabled', 'iscatpos', 'isleft', 'id', 'typename', 'modelname', 'html'],
 				'list_field' => [],
 			];
 		}
@@ -105,6 +105,11 @@ class category extends admin {
 			$list.= "<td style='text-align:center'>\$modelname</td>";
 		}
 
+		if (dr_in_array('html', $this->cat_config['sys_field'])) {
+			$head.= '<th width="50" style="text-align:center"> ' . L('静态') . ' </th>';
+			$list.= "<td style='text-align:center'>\$is_page_html</td>";
+		}
+
 		if (isset($this->cat_config['list_field']) && $this->cat_config['list_field']) {
 			foreach ($this->cat_config['list_field'] as $i => $t) {
 				if ($t['use']) {
@@ -149,6 +154,7 @@ class category extends admin {
 			$t['disabled'] = $setting['disabled'];
 			$t['iscatpos'] = $setting['iscatpos'];
 			$t['isleft'] = $setting['isleft'];
+			$t['ishtml'] = $setting['ishtml'];
 			$option.= '<a class="btn btn-xs blue" href="javascript:dr_iframe(\'add\', \'?m=admin&c=category&a=add&parentid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&s='.$t['type'].'&pc_hash='.$this->input->get('pc_hash').'\', \'80%\', \'80%\')"> <i class="fa fa-plus"></i> '.L('子类').'</a>';
 			$option.= '<a class="btn btn-xs green" href="javascript:dr_iframe(\'edit\', \'?m=admin&c=category&a=edit&catid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&type='.$t['type'].'&pc_hash='.$this->input->get('pc_hash').'\', \'80%\', \'80%\')"> <i class="fa fa-edit"></i> '.L('edit').'</a>';
 			$option.= '<a href="?m=admin&c=category&a=remove&catid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash').'" class="btn btn-xs yellow"><i class="fa fa-arrows"></i> '.L('move').'</a>';
@@ -174,6 +180,8 @@ class category extends admin {
 			} else {
 				$t['type_html'] = '<a class="tooltips badge badge-info" data-container="body" data-placement="right" data-original-title="'.L('不可发布内容的介绍性质页面，例如关于我们等页面').'"> '.L('单页').' </a>';
 			}
+			// 判断是否生成静态
+			$t['is_page_html'] = '<a href="javascript:;" onclick="dr_ajax_open_close(this, \'?m=admin&c=category&a=public_show_edit&at=ishtml&catid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash').'\', 0);" class="tooltips badge badge-'.(!$t['ishtml'] ? 'no' : 'yes').'"><i class="fa fa-'.(!$t['ishtml'] ? 'times' : 'check').'"></i></a>';
 			if (isset($this->cat_config['list_field']) && $this->cat_config['list_field']) {
 				foreach ($this->cat_config['list_field'] as $i => $tt) {
 					if ($tt['use']) {
@@ -559,6 +567,7 @@ class category extends admin {
 			'id' => ['编号', '显示栏目的id号'],
 			'typename' => ['类型', '显示栏目的类型，有：单页、模型、外链'],
 			'modelname' => ['模型', '显示所属模型的名称'],
+			'html' => ['静态', '设置栏目是否生成静态的开关'],
 		];
 
 		if (IS_POST) {
@@ -596,6 +605,8 @@ class category extends admin {
 				}
 			}
 			$this->db->update(array('setting'=>array2string($row['setting'])),array('catid'=>$catid));
+			$this->repair();
+			$this->count_items();
 			$this->cache();
 			dr_json(1, L($row['setting']['disabled'] ? '设置为禁用状态' : '设置为可用状态'), array('value' => $row['setting']['disabled']));
 		} elseif ($at == 'iscatpos') {
@@ -603,6 +614,8 @@ class category extends admin {
 			$row['setting'] = string2array($row['setting']);
 			$row['setting']['iscatpos'] = $row['setting']['iscatpos'] ? 0 : 1;
 			$this->db->update(array('setting'=>array2string($row['setting'])),array('catid'=>$catid));
+			$this->repair();
+			$this->count_items();
 			$this->cache();
 			dr_json(1, L($row['setting']['iscatpos'] ? '设置为显示状态' : '设置为隐藏状态'), array('value' => $row['setting']['iscatpos']));
 		} elseif ($at == 'isleft') {
@@ -610,12 +623,28 @@ class category extends admin {
 			$row['setting'] = string2array($row['setting']);
 			$row['setting']['isleft'] = $row['setting']['isleft'] ? 0 : 1;
 			$this->db->update(array('setting'=>array2string($row['setting'])),array('catid'=>$catid));
+			$this->repair();
+			$this->count_items();
 			$this->cache();
 			dr_json(1, L($row['setting']['isleft'] ? '设置为显示状态' : '设置为隐藏状态'), array('value' => $row['setting']['isleft']));
+		} elseif ($at == 'ishtml') {
+			// 显示状态
+			$this->urlrule_db = pc_base::load_model('urlrule_model');
+			$row['setting'] = string2array($row['setting']);
+			$row['setting']['ishtml'] = $row['setting']['ishtml'] ? 0 : 1;
+			$urlrule = $this->urlrule_db->get_one(array('ishtml'=>$row['setting']['ishtml']), '*', 'urlruleid asc');
+			$row['setting']['category_ruleid'] = $urlrule['urlruleid'];
+			$this->db->update(array('setting'=>array2string($row['setting'])),array('catid'=>$catid));
+			$this->repair();
+			$this->count_items();
+			$this->cache();
+			dr_json(1, L($row['setting']['ishtml'] ? '设置为静态模式' : '设置为动态模式'), array('value' => $row['setting']['ishtml']));
 		} else {
 			// 显示状态
 			$v = $row['ismenu'] ? 0 : 1;
 			$this->db->update(array('ismenu'=>$v),array('catid'=>$catid));
+			$this->repair();
+			$this->count_items();
 			$this->cache();
 			dr_json(1, L($v ? '设置为显示状态' : '设置为隐藏状态'), array('value' => $v));
 		}
@@ -632,6 +661,8 @@ class category extends admin {
 		}
 		$value = (int)$this->input->get('value');
 		$this->db->update(array('listorder'=>$value),array('catid'=>$catid));
+		$this->repair();
+		$this->count_items();
 		$this->cache();
 		dr_json(1, L('operation_success'));
 	}
@@ -826,6 +857,76 @@ class category extends admin {
 				
 			}
 		}
+	}
+	// 批量设置动态模式
+	public function public_phpall_edit() {
+
+		$this->urlrule_db = pc_base::load_model('urlrule_model');
+		$ids = $this->input->get_post_ids();
+		if (!$ids) {
+			dr_json(0, L('所选栏目不存在'));
+		}
+		$urlrule = $this->urlrule_db->get_one(array('ishtml'=>0), '*', 'urlruleid asc');
+
+		foreach ($ids as $id) {
+
+			$row = $this->db->get_one(array('catid'=>$id));
+			if (!$row) {
+				dr_json(0, L('栏目数据不存在'));
+			}
+
+			$row['setting'] = dr_string2array($row['setting']);
+			$row['setting']['ishtml'] = 0;
+			$row['setting']['category_ruleid'] = $urlrule['urlruleid'];
+			$this->db->update(array('setting'=>dr_array2string($row['setting'])),array('catid'=>$id));
+		}
+
+		// 自动更新缓存
+		$this->repair();
+		$this->count_items();
+		$this->cache();
+
+		dr_json(1, L('operation_success'));
+	}
+	// 批量设置静态模式
+	public function public_htmlall_edit() {
+
+		$this->urlrule_db = pc_base::load_model('urlrule_model');
+		$ids = $this->input->get_post_ids();
+		if (!$ids) {
+			dr_json(0, L('所选栏目不存在'));
+		}
+		$urlrule = $this->urlrule_db->get_one(array('ishtml'=>1), '*', 'urlruleid asc');
+
+		foreach ($ids as $id) {
+
+			$row = $this->db->get_one(array('catid'=>$id));
+			if (!$row) {
+				dr_json(0, L('栏目数据不存在'));
+			}
+
+			$row['setting'] = dr_string2array($row['setting']);
+			$row['setting']['ishtml'] = 1;
+			$row['setting']['category_ruleid'] = $urlrule['urlruleid'];
+			$this->db->update(array('setting'=>dr_array2string($row['setting'])),array('catid'=>$id));
+		}
+
+		// 自动更新缓存
+		$this->repair();
+		$this->count_items();
+		$this->cache();
+
+		dr_json(1, L('operation_success'));
+	}
+	// 生成内容静态
+	public function public_scjt_edit() {
+
+		$ids = $this->input->get_post_ids();
+		if (!$ids) {
+			dr_json(0, L('没有选择任何栏目'));
+		}
+
+		dr_json(1, '?m=content&c=create_html&a=category&catids='.implode(',', $ids).'&dosubmit=1&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash'));
 	}
 	/**
 	 * 重新统计栏目信息数量
@@ -1338,7 +1439,7 @@ class category extends admin {
 
 		// 自动更新缓存
 		$this->public_cache();
-		dr_json(1, L('操作成功'));
+		dr_json(1, L('operation_success'));
 	}
 	/**
 	 * 批量移动文章
