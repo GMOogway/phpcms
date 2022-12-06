@@ -26,8 +26,8 @@ include $this->admin_tpl('header','admin');?>
                         <label class="col-md-2 control-label"> <?php echo L('from_where');?> </label>
                         <div class="col-md-9">
                             <div class="mt-radio-inline">
-                                <label class="mt-radio mt-radio-outline"><input type="radio" name="type" value="0" checked id="fromtype_1" onclick="if(this.checked){$('#frombox_1').show();$('#frombox_2').hide();}"> <?php echo L('从指定ID');?> <span></span></label>
-                                <label class="mt-radio mt-radio-outline"><input type="radio" name="type" value="1" id="fromtype_2" onclick="if(this.checked){$('#frombox_1').hide();$('#frombox_2').show();}"> <?php echo L('从指定栏目');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="fromtype" value="0" checked id="fromtype_1" onclick="if(this.checked){$('#frombox_1').show();$('#frombox_2').hide();}"> <?php echo L('从指定ID');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="fromtype" value="1" id="fromtype_2" onclick="if(this.checked){$('#frombox_1').hide();$('#frombox_2').show();}"> <?php echo L('从指定栏目');?> <span></span></label>
                             </div>
                         </div>
                     </div>

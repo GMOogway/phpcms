@@ -763,6 +763,7 @@ class content extends admin {
 	 * 更新
 	 */
 	public function recycle() {
+		$this->content_check_db = pc_base::load_model('content_check_model');
 		if($this->input->post('dosubmit')) {
 			$modelid = intval($this->input->get('modelid'));
 			$catid = intval($this->input->get('catid'));
@@ -780,8 +781,10 @@ class content extends admin {
 					foreach($ids as $id) {
 						if ($recycle) {
 							$this->db->update(array('status'=>100),array('id'=>$id));
+							$this->content_check_db->update(array('status'=>100),array('checkid'=>'c-'.$id.'-'.$modelid));
 						} else {
 							$this->db->update(array('status'=>99),array('id'=>$id));
+							$this->content_check_db->update(array('status'=>99),array('checkid'=>'c-'.$id.'-'.$modelid));
 						}
 					}
 					dr_json(1, L('operation_success'));
@@ -800,8 +803,10 @@ class content extends admin {
 					foreach($ids as $id) {
 						if ($recycle) {
 							$this->db->update(array('status'=>100),array('id'=>$id));
+							$this->content_check_db->update(array('status'=>100),array('checkid'=>'c-'.$id.'-'.$modelid));
 						} else {
 							$this->db->update(array('status'=>99),array('id'=>$id));
+							$this->content_check_db->update(array('status'=>99),array('checkid'=>'c-'.$id.'-'.$modelid));
 						}
 					}
 					dr_json(1, L('operation_success'));
@@ -1758,23 +1763,7 @@ class content extends admin {
 		if($this->input->post('dosubmit')) {
 			$this->content_check_db = pc_base::load_model('content_check_model');
 			$this->hits_db = pc_base::load_model('hits_model');
-			if($this->input->post('fromtype')==0) {
-				if($this->input->post('ids')=='') dr_admin_msg(0,L('please_input_move_source'));
-				if(!$this->input->post('tocatid')) dr_admin_msg(0,L('please_select_target_category'));
-				$tocatid = intval($this->input->post('tocatid'));
-				$modelid = $this->categorys[$tocatid]['modelid'];
-				if(!$modelid) dr_admin_msg(0,L('illegal_operation'));
-				$ids = array_filter(explode(',', $this->input->post('ids')),"is_numeric");
-				foreach ($ids as $id) {
-					$checkid = 'c-'.$id.'-'.$this->siteid;
-					$this->content_check_db->update(array('catid'=>$tocatid), array('checkid'=>$checkid));
-					$hitsid = 'c-'.$modelid.'-'.$id;
-					$this->hits_db->update(array('catid'=>$tocatid),array('hitsid'=>$hitsid));
-				}
-				$ids = implode(',', $ids);
-				$this->db->set_model($modelid);
-				$this->db->update(array('catid'=>$tocatid),"id IN($ids)");
-			} else {
+			if($this->input->post('fromtype')) {
 				if(!$this->input->post('fromid')) dr_admin_msg(0,L('please_input_move_source'));
 				if(!$this->input->post('tocatid')) dr_admin_msg(0,L('please_select_target_category'));
 				$tocatid = intval($this->input->post('tocatid'));
@@ -1785,6 +1774,22 @@ class content extends admin {
 				$this->db->set_model($modelid);
 				$this->db->update(array('catid'=>$tocatid),"catid IN($fromid)");
 				$this->hits_db->update(array('catid'=>$tocatid),"catid IN($fromid)");
+			} else {
+				if(!$this->input->post('ids')) dr_admin_msg(0,L('please_input_move_source'));
+				if(!$this->input->post('tocatid')) dr_admin_msg(0,L('please_select_target_category'));
+				$tocatid = intval($this->input->post('tocatid'));
+				$modelid = $this->categorys[$tocatid]['modelid'];
+				if(!$modelid) dr_admin_msg(0,L('illegal_operation'));
+				$ids = array_filter(explode(',', $this->input->post('ids')),"is_numeric");
+				foreach ($ids as $id) {
+					$checkid = 'c-'.$id.'-'.$modelid;
+					$this->content_check_db->update(array('catid'=>$tocatid), array('checkid'=>$checkid));
+					$hitsid = 'c-'.$modelid.'-'.$id;
+					$this->hits_db->update(array('catid'=>$tocatid),array('hitsid'=>$hitsid));
+				}
+				$ids = implode(',', $ids);
+				$this->db->set_model($modelid);
+				$this->db->update(array('catid'=>$tocatid),"id IN($ids)");
 			}
 			dr_admin_msg(1,L('operation_success'), '', '', 'remove');
 			//ids
