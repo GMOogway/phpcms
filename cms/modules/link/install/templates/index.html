@@ -10,32 +10,32 @@
      <div class="tag_a">
         	{pc:link action="lists" typeid="0" siteid="$siteid" linktype="1" order="desc" num="6" return="dat"}
 				{loop $dat $v}
-	       		 <a href="{$v[url]}" title="{$v['name']}" target="_blank"><img src="{$v['logo']}" width="92" height="31" /></a>
+	       		 <a href="{$v['url']}" title="{$v['name']}" target="_blank"><img src="{$v['logo']}" width="92" height="31" /></a>
 		        {/loop}
 			{/pc}
       </div>
       <div class="tag_a">
       	{pc:link action="lists" typeid="0" siteid="$siteid" linktype="0" order="desc" num="10" return="dat"}
 		{loop $dat $v}
-      		 <a href="{$v[url]}" title="{$v['name']}"  target="_blank">{$v['name']} </a>
+      		 <a href="{$v['url']}" title="{$v['name']}"  target="_blank">{$v['name']} </a>
         {/loop}
 		{/pc}
        </div>
          
      {pc:link action="type_lists" listorder="desc" siteid="$siteid"}
 		{loop $data $type_v}
-    	<h5>{$type_v['name']} <a href="{APP_PATH}index.php?m=link&c=index&a=list_type&type_id={$type_v[typeid]}&siteid={$siteid}" class="more">更多>></a></h5>
+    	<h5>{$type_v['name']} <a href="{APP_PATH}index.php?m=link&c=index&a=list_type&type_id={$type_v['typeid']}&siteid={$siteid}" class="more">更多>></a></h5>
         <div class="tag_a">
-        	{pc:link action="lists" typeid="$type_v[typeid]" siteid="$siteid" linktype="1" order="desc" num="6" return="dat"}
+        	{pc:link action="lists" typeid="$type_v['typeid']" siteid="$siteid" linktype="1" order="desc" num="6" return="dat"}
 				{loop $dat $v}
-	       		 <a href="{$v[url]}" title="{$v['name']}" target="_blank"><img src="{$v['logo']}" width="92" height="31" /></a>
+	       		 <a href="{$v['url']}" title="{$v['name']}" target="_blank"><img src="{$v['logo']}" width="92" height="31" /></a>
 		        {/loop}
 			{/pc}
          </div>
         <div class="tag_a">
-        	{pc:link action="lists" typeid="$type_v[typeid]" siteid="$siteid" linktype="0" order="desc" num="10" return="dat"}
+        	{pc:link action="lists" typeid="$type_v['typeid']" siteid="$siteid" linktype="0" order="desc" num="10" return="dat"}
 				{loop $dat $v}
-	       		 <a href="{$v[url]}" title="{$v['name']}"  target="_blank">{$v['name']} </a>
+	       		 <a href="{$v['url']}" title="{$v['name']}"  target="_blank">{$v['name']} </a>
 		        {/loop}
 			{/pc}
          </div>
@@ -54,7 +54,7 @@
             <a href="{APP_PATH}index.php?m=link&c=index&a=list_type&type_id=0&siteid={$siteid}" title="默认分类">默认分类</a>
             {pc:link action="type_lists" listorder="desc" siteid="$siteid"}
             {loop $data $type_v}
-            <a href="{APP_PATH}index.php?m=link&c=index&a=list_type&type_id={$type_v[typeid]}&siteid={$siteid}" title="{$type_v['name']}">{$type_v['name']}</a>
+            <a href="{APP_PATH}index.php?m=link&c=index&a=list_type&type_id={$type_v['typeid']}&siteid={$siteid}" title="{$type_v['name']}">{$type_v['name']}</a>
             {/loop}
             {/pc}
              </div>

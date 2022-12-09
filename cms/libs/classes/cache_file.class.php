@@ -2,11 +2,13 @@
 
 class cache_file {
 	
+	protected $header;
+	
 	/*缓存默认配置*/
 	protected $_setting = array(
-								'suf' => '.cache.php',	/*缓存文件后缀*/
-								'type' => 'array',		/*缓存格式：array数组，serialize序列化，null字符串*/
-							);
+		'suf' => '.cache.php',	/*缓存文件后缀*/
+		'type' => 'array',		/*缓存格式：array数组，serialize序列化，null字符串*/
+	);
 	
 	/*缓存路径*/
 	protected $filepath = '';
