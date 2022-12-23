@@ -4475,7 +4475,7 @@ function dr_catcher_data($url, $timeout = 0, $is_log = true, $ct = 0) {
 		}
 		curl_setopt($ch, CURLOPT_HEADER, 0);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1 );
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 		// 最大执行时间
 		$timeout && curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
 		$data = curl_exec($ch);
