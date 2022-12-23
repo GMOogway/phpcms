@@ -319,6 +319,18 @@ function dr_count($array_or_countable, $mode = COUNT_NORMAL){
 	return is_array($array_or_countable) || is_object($array_or_countable) ? count($array_or_countable, $mode) : 0;
 }
 
+// 是否是完整的url
+function dr_is_url($url) {
+	if (!$url) {
+		return false;
+	} elseif (strpos((string)$url, 'http://') === 0) {
+		return true;
+	} elseif (strpos((string)$url, 'https://') === 0) {
+		return true;
+	}
+	return false;
+}
+
 /**
  * 字符是否包含
  */
@@ -4426,11 +4438,22 @@ function get_image_ext($url) {
  * @param	intval	$timeout 超时时间，0不超时
  * @return	string
  */
-function dr_catcher_data($url, $timeout = 0) {
+function dr_catcher_data($url, $timeout = 0, $is_log = true, $ct = 0) {
+
+	if (!$url) {
+		return '';
+	}
 
 	// 获取本地文件
 	if (strpos($url, 'file://')  === 0) {
 		return file_get_contents($url);
+	} elseif (strpos($url, '/')  === 0 && is_file(CMS_PATH.$url)) {
+		return file_get_contents(CMS_PATH.$url);
+	} elseif (!dr_is_url($url)) {
+		if (CI_DEBUG && $is_log) {
+			log_message('error', '获取远程数据失败['.$url.']：地址前缀要求是http开头');
+		}
+		return '';
 	}
 
 	// curl模式
@@ -4440,14 +4463,26 @@ function dr_catcher_data($url, $timeout = 0) {
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // 跳过证书检查
 			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, true); // 从证书中检查SSL加密算法是否存在
 		}
+		if ($ct) {
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+				'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:40.0)' . 'Gecko/20100101 Firefox/40.0',
+				'Accept: */*',
+				'X-Requested-With: XMLHttpRequest',
+				'Referer: '.$url,
+				'Accept-Language: pt-BR,en-US;q=0.7,en;q=0.3',
+			));
+			curl_setopt($ch, CURLOPT_USERAGENT,'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
+		}
+		///
 		curl_setopt($ch, CURLOPT_HEADER, 0);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1 );
 		// 最大执行时间
 		$timeout && curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
 		$data = curl_exec($ch);
 		$code = curl_getinfo($ch,CURLINFO_HTTP_CODE);
 		$errno = curl_errno($ch);
-		if (CI_DEBUG && $errno) {
+		if (CI_DEBUG && $errno && $is_log) {
 			log_message('error', '获取远程数据失败['.$url.']：（'.$errno.'）'.curl_error($ch));
 		}
 		curl_close($ch);
@@ -4456,6 +4491,12 @@ function dr_catcher_data($url, $timeout = 0) {
 		} elseif ($errno == 35) {
 			// 当服务器不支持时改为普通获取方式
 		} else {
+			if (!$ct) {
+				// 尝试重试
+				return dr_catcher_data($url, $timeout, $is_log, 1);
+			} elseif (CI_DEBUG && $code && $is_log) {
+				log_message('error', '获取远程数据失败['.$url.']http状态：'.$code);
+			}
 			return '';
 		}
 	}

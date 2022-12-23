@@ -121,7 +121,7 @@ class index {
 			$self_array = explode(',', $arrchildid);
 			//获取一级栏目ids
 			foreach ($self_array as $arr) {
-				if($arr!=$catid && $CATEGORYS[$arr][parentid]==$catid) {
+				if($arr!=$catid && $CATEGORYS[$arr]['parentid']==$catid) {
 					$array_child[] = $arr;
 				}
 			}

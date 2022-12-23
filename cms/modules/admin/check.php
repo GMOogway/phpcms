@@ -864,8 +864,8 @@ class check extends admin {
             return '数据表【'.$name.'/'.$this->db->db_tablepre.$table.'】不存在，请创建';
         }
         $counts = $this->db->count();
-        if ($counts > 100000) {
-            return '<font color="green">数据表【'.$name.'/'.$this->db->db_tablepre.$table.'】数据量超过10万，会影响加载速度，建议对其进行数据优化</font>';
+        if ($counts > 1000000) {
+            return '<font color="green">数据表【'.$name.'/'.$this->db->db_tablepre.$table.'】数据量超过100万，会影响加载速度，建议对其进行数据优化</font>';
         }
     }
 
