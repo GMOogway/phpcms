@@ -142,10 +142,10 @@ class admin_bdts {
                     $rt = json_decode(curl_exec($ch), true);
                     if ($rt['error']) {
                         // 错误日志
-                        @file_put_contents(CACHE_PATH.'caches_bdts/bdts_log.php', date('Y-m-d H:i:s').' PC端['.$purl.'] - 失败 - '.$rt['message'].PHP_EOL, FILE_APPEND);
+                        @file_put_contents(CACHE_PATH.'caches_bdts/bdts_log.php', date('Y-m-d H:i:s').' PC端['.$purl.'] - '.$action.' - 失败 - '.$rt['message'].PHP_EOL, FILE_APPEND);
                     } else {
                         // 推送成功
-                        @file_put_contents(CACHE_PATH.'caches_bdts/bdts_log.php', date('Y-m-d H:i:s').' PC端['.$purl.'] - 成功'.PHP_EOL, FILE_APPEND);
+                        @file_put_contents(CACHE_PATH.'caches_bdts/bdts_log.php', date('Y-m-d H:i:s').' PC端['.$purl.'] - '.$action.' - 成功'.PHP_EOL, FILE_APPEND);
                     }
                 }
             }
@@ -168,10 +168,10 @@ class admin_bdts {
                     $rt = json_decode(curl_exec($ch), true);
                     if ($rt['error']) {
                         // 错误日志
-                        @file_put_contents(CACHE_PATH . 'caches_bdts/bdts_log.php', date('Y-m-d H:i:s') . ' 移动端[' . $murl . '] - 失败 - ' . $rt['message'] . PHP_EOL, FILE_APPEND);
+                        @file_put_contents(CACHE_PATH . 'caches_bdts/bdts_log.php', date('Y-m-d H:i:s') . ' 移动端[' . $murl . '] - '.$action.' - 失败 - ' . $rt['message'] . PHP_EOL, FILE_APPEND);
                     } else {
                         // 推送成功
-                        @file_put_contents(CACHE_PATH . 'caches_bdts/bdts_log.php', date('Y-m-d H:i:s') . ' 移动端[' . $murl . '] - 成功' . PHP_EOL, FILE_APPEND);
+                        @file_put_contents(CACHE_PATH . 'caches_bdts/bdts_log.php', date('Y-m-d H:i:s') . ' 移动端[' . $murl . '] - '.$action.' - 成功' . PHP_EOL, FILE_APPEND);
                     }
                 }
             }

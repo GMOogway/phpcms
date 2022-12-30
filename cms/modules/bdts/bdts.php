@@ -114,27 +114,18 @@ class bdts extends admin {
 
 		$this->categorys = getcache('category_content_'.$this->siteid, 'commons');
 		$mid = intval($this->input->get('modelid'));
-		$ids = $this->input->post('ids');
+		$ids = $this->input->get_post_ids();
 		if (!$ids) {
 			dr_json(0, L('所选数据不存在'));
 		} elseif (!$mid) {
 			dr_json(0, L('模块参数不存在'));
-		}
-		foreach ($ids as $id) {
-			if ($field=='') {
-				$field .= $id;
-			}else{
-				$field .= ','.$id;
-			}
 		}
 
 		$this->db->set_model($mid);
 		$sitemodel_model_db = pc_base::load_model('sitemodel_model');
 		$sitemodel = $sitemodel_model_db->get_one(array('modelid'=>$mid));
 		if($this->db->table_name==$this->db->db_tablepre) dr_json(0, L('模型被禁用或者是模型内容表不存在'));
-		$status = 99;
-		$where = 'id in ('.$field.')';
-		$data = $this->db->select($where,'*',100);
+		$data = $this->db->select(array('id'=>$ids));
 		if (!$data) {
 			dr_json(0, L('所选数据为空'));
 		}
@@ -146,7 +137,7 @@ class bdts extends admin {
 			} else {
 				$linkurl = $t['url'];
 			}
-			$this->bdts->module_bdts($sitemodel['tablename'], $linkurl, 'add');
+			$this->bdts->module_bdts($sitemodel['tablename'], $linkurl, 'edit');
 			$ct++;
 		}
 
