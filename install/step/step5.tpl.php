@@ -49,7 +49,8 @@
                 <div class="ct_box nobrd i6v">
                     <div class="nr">
                         <form id="install" name="myform" action="<?php echo SELF;?>" method="post">    
-                            <input type="hidden" name="step" value="6">    
+                            <input type="hidden" name="step" value="6">
+                            <input type="hidden" name="selectmod" value="<?php echo $selectmod?>" />
                             <fieldset>
                                 <legend>填写数据库信息</legend>
                                 <div class="content">
@@ -81,7 +82,7 @@
                                         <tr>
                                             <th align="right">数据库字符集：</th>
                                             <td><div class="mt-radio-inline">
-                                                <label class="mt-radio mt-radio-outline"><input name="dbcharset" type="radio" id="dbcharset" value="utf8mb4" <?php if(strtolower($charset)=='utf8mb4') echo '  checked="checked" '?> <?php if(strtolower($charset)!='utf8mb4') echo 'disabled'?>/> utf8mb4 <span></span></label>
+                                                <label class="mt-radio mt-radio-outline"><input name="dbcharset" type="radio" id="dbcharset" value="utf8mb4"<?php if(strtolower($charset)=='utf8mb4') echo ' checked="checked"'?><?php if(strtolower($charset)!='utf8mb4') echo ' disabled'?>/> utf8mb4 <span></span></label>
                                                 <img src="./images/help.png" style="cursor:pointer;" onmouseover="layer.tips('如果Mysql版本为4.0.x，则请选择默认；如果Mysql版本为4.1.x或以上，则请选择其他字符集（一般选GBK）',this,{tips: [1, '#000']});" onmouseout="layer.closeAll();" align="absmiddle" />
                                                 <span id='helpdbcharset'></span></div></td>
                                         </tr>
@@ -91,7 +92,7 @@
                                                 <label class="mt-radio mt-radio-outline"><input name="pconnect" type="radio" id="pconnect" value="1" <?php if($pconnect==1) echo ' checked="checked" '?>/> 是 <span></span></label>
                                                 <label class="mt-radio mt-radio-outline"><input name="pconnect" type="radio" id="pconnect" value="0" <?php if($pconnect==0) echo ' checked="checked" '?>/> 否 <span></span></label>
                                                 <img src="./images/help.png" style="cursor:pointer;" onmouseover="layer.tips('如果启用持久连接，则数据库连接上后不释放，保存一直连接状态；如果不启用，则每次请求都会重新连接数据库，使用完自动关闭连接。',this,{tips: [1, '#000']});" onmouseout="layer.closeAll();" align="absmiddle" /><span id='helppconnect'></span>
-                                                <span id='helptablepre'></span></div></td>
+                                                <span id='helppconnect'></span></div></td>
                                         </tr>
                                     </table>
                                 </div>
@@ -133,8 +134,7 @@
                                         </tr>
                                         <tr>
                                             <th align="right">管理员E-mail：</th>
-                                            <td><input name="email" type="text" id="email" value="zhaoxunzhiyin@163.com" class="input-text" />
-                                                <input type="hidden" name="selectmod" value="<?php echo $selectmod?>" /></td>
+                                            <td><input name="email" type="text" id="email" value="zhaoxunzhiyin@163.com" class="input-text" /></td>
                                         </tr>
                                     </table>
                                 </div>
@@ -220,13 +220,26 @@ function checkdb() {
         type: "POST",
         dataType:"json",
         url: '<?php echo SELF;?>',
-        data: 'step=dbtest&adminpath='+$('#adminpath').val()+'&dbhost='+$('#dbhost').val()+'&dbport='+$('#dbport').val()+'&dbuser='+$('#dbuser').val()+'&dbpw='+$('#dbpw').val()+'&dbname='+$('#dbname').val()+'&tablepre='+$('#tablepre').val()+'&sid='+Math.random()*5,
+        data: 'step=dbtest&adminpath='+$('#adminpath').val()+'&dbhost='+$('#dbhost').val()+'&dbport='+$('#dbport').val()+'&dbuser='+$('#dbuser').val()+'&dbpw='+$('#dbpw').val()+'&dbname='+$('#dbname').val()+'&tablepre='+$('#tablepre').val()+'&dbcharset='+$(':radio[name="dbcharset"]:checked').val()+'&pconnect='+$(':radio[name="pconnect"]:checked').val()+'&sid='+Math.random()*5,
         success: function(json){
             if(json.code == 1) {
                 $('#install').submit();
             } else if(json.code == 2) {
                 Dialog.confirm(json.msg,function() {
-                    $('#install').submit();
+                    $.ajax({
+                        type: "POST",
+                        dataType:"json",
+                        url: '<?php echo SELF;?>',
+                        data: 'step=dbdel&dbhost='+$('#dbhost').val()+'&dbport='+$('#dbport').val()+'&dbuser='+$('#dbuser').val()+'&dbpw='+$('#dbpw').val()+'&dbname='+$('#dbname').val()+'&tablepre='+$('#tablepre').val()+'&dbcharset='+$(':radio[name="dbcharset"]:checked').val()+'&pconnect='+$(':radio[name="pconnect"]:checked').val()+'&sid='+Math.random()*5,
+                        success: function(json){
+                            if(json.code == 1) {
+                                $('#install').submit();
+                            } else {
+                                Dialog.alert(json.msg);
+                                return false;
+                            }
+                        }
+                    });
                 });
             } else {
                 Dialog.alert(json.msg);
@@ -237,8 +250,19 @@ function checkdb() {
     return false;
 }
 function to_key() {
-    $.get('<?php echo SELF;?>?step=alpha', function(data){
-        $('#adminpath').val(data);
+    $.ajax({
+        type: "GET",
+        dataType:"json",
+        url: '<?php echo SELF;?>',
+        data: 'step=alpha',
+        success: function(json){
+            if(json.code == 1) {
+                $('#adminpath').val(json.msg);
+            } else {
+                Dialog.alert(json.msg);
+                return false;
+            }
+        }
     });
 }
 //-->

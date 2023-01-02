@@ -1,4 +1,6 @@
 <?php
+// 是否是开发者模式（TRUE开启、FALSE关闭）
+define('IS_DEV', FALSE);
 // 入口文件名称
 !defined('SELF') && define('SELF', pathinfo(__FILE__, PATHINFO_BASENAME));
 
@@ -9,9 +11,9 @@ defined('IN_CMS') or exit('No permission resources.');
 if (is_file(CACHE_PATH.'install.lock')) exit('安装程序已经被锁定，重新安装请删除：caches/install.lock');
 // 判断环境
 if (version_compare(PHP_VERSION, MAX_PHP_VERSION) >= 0) {
-	exit("<font color=red>PHP版本过高，请在".MAX_PHP_VERSION."以下的环境使用，当前".PHP_VERSION."，高版本需要等待官方对CMS版本的更新升级！~</font>");
+	exit('<font color=red>PHP版本过高，请在'.MAX_PHP_VERSION.'以下的环境使用，当前'.PHP_VERSION.'，高版本需要等待官方对CMS版本的更新升级！~</font>');
 } elseif (version_compare(PHP_VERSION, MIN_PHP_VERSION) < 0) {
-	exit("<font color=red>PHP版本必须在".MIN_PHP_VERSION."及以上，当前".PHP_VERSION."</font>");
+	exit('<font color=red>PHP版本必须在'.MIN_PHP_VERSION.'及以上，当前'.PHP_VERSION.'</font>');
 }
 if (preg_match('/[\x{4e00}-\x{9fff}]+/u', CMS_PATH)) {
 	exit('<font color=red>WEB目录['.CMS_PATH.']不允许出现中文或全角符号</font>');
@@ -28,12 +30,7 @@ $step = trim($_REQUEST['step']) ? trim($_REQUEST['step']) : 1;
 $PHP_SELF = isset($_SERVER['PHP_SELF']) ? $_SERVER['PHP_SELF'] : (isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : $_SERVER['ORIG_PATH_INFO']);
 $rootpath = str_replace('\\','\/',dirname($PHP_SELF));
 $rootpath = substr($rootpath,0,-7);
-$rootpath = strlen($rootpath)>1 ? $rootpath : "/";
-if(strrpos(strtolower(PHP_OS),"win") === FALSE) {
-	define('ISUNIX', TRUE);
-} else {
-	define('ISUNIX', FALSE);
-}
+$rootpath = strlen($rootpath)>1 ? $rootpath : '/';
 if (is_file(CACHE_PATH.'configs/version.php')) {
 	$app = pc_base::load_config('version');
 	define('PC_VERSION', $app['pc_version']);
@@ -50,9 +47,9 @@ if (is_file(CACHE_PATH.'configs/version.php')) {
 switch($step)
 {
 	case '1': //安装许可协议
-		$license = file_get_contents(CMS_PATH."install/license.txt");
+		$license = file_get_contents(CMS_PATH.'install/license.txt');
 		
-		include CMS_PATH."install/step/step".$step.".tpl.php";
+		include CMS_PATH.'install/step/step'.$step.'.tpl.php';
 
 		break;
 	
@@ -151,23 +148,23 @@ switch($step)
 				'name' => 'DNS解析',
 				'value' => '√',
 				'error_value' => '建议开启',
-				'code' => preg_match("/^[0-9.]{7,15}$/", @gethostbyname('www.baidu.com')) ? 1 : 0,
+				'code' => preg_match('/^[0-9.]{7,15}$/', @gethostbyname('www.baidu.com')) ? 1 : 0,
 				'help' => '&nbsp;不支持采集和保存远程图片',
 				'error' => 0,
 			),
 		);
-		include CMS_PATH."install/step/step".$step.".tpl.php";
+		include CMS_PATH.'install/step/step'.$step.'.tpl.php';
 		break;
 	
 	case '3'://选择安装模块
 		require CMS_PATH.'install/modules.inc.php';
-		include CMS_PATH."install/step/step".$step.".tpl.php";
+		include CMS_PATH.'install/step/step'.$step.'.tpl.php';
 		break;
 	
 	case '4': //检测目录属性
 		$selectmod = $_POST['selectmod'];
 		$selectmod = isset($selectmod) ? ','.implode(',', $selectmod) : '';
-		$needmod = 'admin';
+		$needmod = 'admin|后台管理主模块';
 		
 		$selectmod = $needmod.$selectmod;
 		$error = 0;
@@ -201,136 +198,153 @@ switch($step)
 				$error = 1;
 			}
 		}
-		include CMS_PATH."install/step/step".$step.".tpl.php";
+		include CMS_PATH.'install/step/step'.$step.'.tpl.php';
 		break;
 
 	case '5': //配置帐号 （MYSQL帐号、管理员帐号、）
 		$database = pc_base::load_config('database');
 		extract($database['default']);
 		$selectmod = $_POST['selectmod'];
-		include CMS_PATH."install/step/step".$step.".tpl.php";
+		include CMS_PATH.'install/step/step'.$step.'.tpl.php';
 		break;
 
 	case '6': //安装详细过程
 		extract($_POST);
-		include CMS_PATH."install/step/step".$step.".tpl.php";
+		include CMS_PATH.'install/step/step'.$step.'.tpl.php';
 		break;
 
-	case '7': //完成安装
+	case '7': //安装详细过程
+		extract($_POST);
+		include CMS_PATH.'install/step/step'.$step.'.tpl.php';
+		break;
+
+	case '8': //完成安装
 		//设置cms 报错信息
 		set_config(array('errorlog'=>'1'),'system');
 		file_put_contents(CACHE_PATH.'install.lock', time());
-		include CMS_PATH."install/step/step".$step.".tpl.php";
+		include CMS_PATH.'install/step/step'.$step.'.tpl.php';
 		break;
 	
-	case 'installmodule': //执行SQL
+	case 'sql': //安装数据
 		extract($_POST);
 		$GLOBALS['dbcharset'] = $dbcharset;
-
-		if($module == 'admin') {
-			$sys_config = array('cookie_pre'=>token().'_',
-				'auth_key'=>token($name),
-				'web_path'=>$rootpath,
-				'errorlog'=>'0',
-				'js_path'=>FC_NOW_HOST.substr($rootpath, 1).'statics/js/',
-				'css_path'=>FC_NOW_HOST.substr($rootpath, 1).'statics/css/',
-				'img_path'=>FC_NOW_HOST.substr($rootpath, 1).'statics/images/',
-				'mobile_js_path'=>FC_NOW_HOST.substr($rootpath, 1).'mobile/statics/js/',
-				'mobile_css_path'=>FC_NOW_HOST.substr($rootpath, 1).'mobile/statics/css/',
-				'mobile_img_path'=>FC_NOW_HOST.substr($rootpath, 1).'mobile/statics/images/',
-				'app_path'=>FC_NOW_HOST.substr($rootpath, 1),
-				'mobile_path'=>FC_NOW_HOST.substr($rootpath, 1).'mobile/',
-			);
-			$db_config = array('hostname'=>$dbhost,
-				'port'=>$dbport,
-				'username'=>$dbuser,
-				'password'=>$dbpw,
-				'database'=>$dbname,
-				'tablepre'=>$tablepre,
-				'pconnect'=>$pconnect,
-				'charset'=>$dbcharset,
-			);
-			set_config($sys_config,'system');			
-			set_config($db_config,'database');
-			
-			$mysqli = function_exists('mysqli_init') ? mysqli_init() : 0;
-			if (!$mysqli) {
-				exit('PHP环境必须启用Mysqli扩展！');
-			} elseif (!mysqli_real_connect($mysqli, $dbhost, $dbuser, $dbpw, null, $dbport)) {
-				exit('['.mysqli_connect_errno().'] - 无法连接到数据库服务器（'.$dbhost.'），请检查端口（'.$dbport.'）和用户名（'.$dbuser.'）和密码（'.$dbpw.'）是否正确！');
-			} elseif (!mysqli_select_db($mysqli, $dbname)) {
-				if (!mysqli_query($mysqli, 'CREATE DATABASE '.$dbname.' CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci')) {
-					exit('指定的数据库（'.$dbname.'）不存在，系统尝试创建失败，请先通过其他方式建立好数据库！');
-				}
-			}
-			if (!mysqli_set_charset($mysqli, "utf8mb4")) {
-				exit('当前MySQL不支持utf8mb4编码（'.mysqli_error($mysqli).'）！');
-			}
-			if (mysqli_get_server_version($mysqli) < 50600) {
-				exit('数据库版本低于Mysql 5.6，无法安装CMS，请升级数据库版本！');
-			}
-			$version = mysqli_get_server_info($mysqli);
-
-			if($version > '4.1' && $dbcharset) {
-				mysqli_query($mysqli, "SET NAMES '$dbcharset'");
-			}
-			
-			if($version > '5.0') {
-				mysqli_query($mysqli, "SET sql_mode=''");
-			}
-			$dbfile =  'cms_db.sql';	
-			if(file_exists(CMS_PATH."install/main/".$dbfile)) {
-				$sql = file_get_contents(CMS_PATH."install/main/".$dbfile);
-				$sql = str_replace('CMS演示站', $name , $sql);
-				$sql = str_replace('http://www.kaixin100.cn/', FC_NOW_HOST.substr($rootpath, 1), $sql);
-				_sql_execute($mysqli,$sql);
-				//创建网站创始人
-				$password_arr = password($password);
-				$password = $password_arr['password'];
-				$encrypt = $password_arr['encrypt'];
-				$email = trim($email);
-				_sql_execute($mysqli,"INSERT INTO ".$tablepre."admin (`userid`,`username`,`password`,`roleid`,`encrypt`,`lastloginip`,`lastlogintime`,`email`,`realname`) VALUES ('1','$username','$password','[\"1\"]','$encrypt','','','$email','创始人')");
-				if ($adminpath) {
-					//设置后台登录地址
-					$adminpath = trim($adminpath);
-					if(pc_base::load_config('system','admin_login_path')) {
-						//建立自定义后台登录目录
-						create_folder(CMS_PATH.$adminpath);
-						$admin = file_get_contents(CMS_PATH.pc_base::load_config('system','admin_login_path').'/index.php');
-						file_put_contents(CMS_PATH.$adminpath.'/index.php',$admin);
-						//删除原后台登录地址
-						dr_dir_delete(CMS_PATH.pc_base::load_config('system','admin_login_path'), TRUE);
-						$index = file_get_contents(CMS_PATH.'cms/modules/admin/index.php');
-						$index = str_replace("public function ".pc_base::load_config('system','admin_login_path'),"public function ".$adminpath,$index);
-						$index = str_replace("m=admin&c=index&a=".pc_base::load_config('system','admin_login_path'),"m=admin&c=index&a=".$adminpath,$index);
-						file_put_contents(CMS_PATH."cms/modules/admin/index.php",$index);
-					} else {
-						//建立自定义后台登录目录
-						create_folder(CMS_PATH.$adminpath);
-						$admin = file_get_contents(CMS_PATH.'admin.php');
-						$admin = str_replace("index.php","../index.php",$admin);
-						file_put_contents(CMS_PATH.$adminpath.'/index.php',$admin);
-						//删除原后台登录地址
-						@unlink(CMS_PATH.'admin.php');
-						$index = file_get_contents(CMS_PATH.'cms/modules/admin/index.php');
-						$index = str_replace("public function login","public function ".$adminpath,$index);
-						$index = str_replace("m=admin&c=index&a=login","m=admin&c=index&a=".$adminpath,$index);
-						file_put_contents(CMS_PATH."cms/modules/admin/index.php",$index);
-					}
-					$sys_config = array('admin_login_path'=>$adminpath,);
-					set_config($sys_config,'system');
-				}
-			} else {
-				exit('2');//数据库文件不存在
-			}
-		} else {
-			//安装可选模块
-			if(in_array($module,array('announce','comment','link','vote','message','mood','poster','formguide','tag','bdts','custom','customfield','fclient','guestbook','import','slider','sqltoolplus','taglist'))) {
-				$install_module = pc_base::load_app_class('module_api','admin');
-				$install_module->install($module);
+		
+		$mysqli = function_exists('mysqli_init') ? mysqli_init() : 0;
+		if (!$mysqli) {
+			dr_json(0, 'PHP环境必须启用Mysqli扩展！');
+		} elseif (!mysqli_real_connect($mysqli, $dbhost, $dbuser, $dbpw, null, $dbport)) {
+			dr_json(0, '['.mysqli_connect_errno().'] - 无法连接到数据库服务器（'.$dbhost.'），请检查端口（'.$dbport.'）和用户名（'.$dbuser.'）和密码（'.$dbpw.'）是否正确！');
+		} elseif (!mysqli_select_db($mysqli, $dbname)) {
+			if (!mysqli_query($mysqli, 'CREATE DATABASE '.$dbname.' CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci')) {
+				dr_json(0, '指定的数据库（'.$dbname.'）不存在，系统尝试创建失败，请先通过其他方式建立好数据库！');
 			}
 		}
-		echo $module;
+		if (!mysqli_set_charset($mysqli, 'utf8mb4')) {
+			dr_json(0, '当前MySQL不支持utf8mb4编码（'.mysqli_error($mysqli).'）！');
+		}
+		if (mysqli_get_server_version($mysqli) < 50600) {
+			dr_json(0, '数据库版本低于Mysql 5.6，无法安装CMS，请升级数据库版本！');
+		}
+		$version = mysqli_get_server_info($mysqli);
+
+		if($version > '4.1' && $dbcharset) {
+			mysqli_query($mysqli, 'SET NAMES '.$dbcharset);
+		}
+		
+		if($version > '5.0') {
+			mysqli_query($mysqli, 'SET sql_mode=""');
+		}
+		$dbfile =  'cms_db.sql';	
+		if(file_exists(CMS_PATH.'install/main/'.$dbfile)) {
+			// 导入数据结构
+			if ($page) {
+				$sql = file_get_contents(CMS_PATH.'install/main/'.$dbfile);
+				$sql = str_replace('CMS演示站', $name , $sql);
+				$sql = str_replace('http://www.kaixin100.cn/', FC_NOW_HOST.substr($rootpath, 1), $sql);
+				$sql = str_replace('{dbprefix}', $tablepre, $sql);
+				$rows = query_rows($sql, 10);
+				$key = $page - 1;
+				if (isset($rows[$key]) && $rows[$key]) {
+					// 安装本次结构
+					foreach($rows[$key] as $query){
+						if (!$query) {
+							continue;
+						}
+						$ret = '';
+						$queries = explode('SQL_CMS_EOL', trim($query));
+						foreach($queries as $query) {
+							$ret.= $query[0] == '#' || $query[0].$query[1] == '--' ? '' : $query;
+						}
+						if (!$ret) {
+							continue;
+						}
+						_sql_execute($mysqli, $ret);
+					}
+					dr_json(1, '正在执行：'.str_cut($ret, 70), ['page' => $page + 1]);
+
+				} else {
+					//创建网站创始人
+					$password_arr = password($password);
+					$password = $password_arr['password'];
+					$encrypt = $password_arr['encrypt'];
+					$email = trim($email);
+					_sql_execute($mysqli, "INSERT INTO ".$tablepre."admin (`userid`,`username`,`password`,`roleid`,`encrypt`,`lastloginip`,`lastlogintime`,`email`,`realname`) VALUES ('1','$username','$password','[\"1\"]','$encrypt','','','$email','创始人')");
+					dr_json(1, '执行完成，即将安装数据信息...', ['page' => 99]);
+				}
+			}
+		} else {
+			dr_json(0, '/install/main/cms_db.sql 数据库文件不存在');
+		}
+		break;
+	
+	case 'module': //安装模块
+		extract($_POST);
+		$selectmod = explode(',', $selectmod);
+		$pcount = dr_count($selectmod);
+		$module = explode('|', $selectmod[$page-1]);
+		
+		if (!$pcount) {
+			dr_json(0, '临时缓存数据不存在');
+		} elseif ($page > $pcount) {
+			// 完成
+			$cache = pc_base::load_app_class('cache_api','admin');
+			$cache->cache('category');
+			$cache->cache('cache_site');
+			$cache->cache('downservers');
+			$cache->cache('badword');
+			$cache->cache('ipbanned');
+			$cache->cache('keylink');
+			$cache->cache('position');
+			$cache->cache('admin_role');
+			$cache->cache('urlrule');
+			$cache->cache('module');
+			$cache->cache('sitemodel');
+			$cache->cache('workflow');
+			$cache->cache('dbsource');
+			$cache->cache('member_group');
+			$cache->cache('membermodel');
+			$cache->cache('type','search');
+			$cache->cache('special');
+			$cache->cache('setting');
+			$cache->cache('database');
+			$cache->cache('member_setting');
+			$cache->cache('member_model_field');
+			$cache->cache('search_setting');
+			$cache->cache('attachment_remote');
+			$cache->cache('cache2database');
+			dr_json(1, '缓存更新成功......<img src="images/correct.png" /></p><p>安装完成......<img src="images/correct.png" />', ['page' => 99]);
+		}
+
+		if($module[0] == 'admin') {
+			dr_json(1, $module[1].'模块安装成功......<img src="images/correct.png" />', ['page' => $page + 1]);
+		} else {
+			//安装可选模块
+			if(in_array($module[0],array('announce','comment','link','vote','message','mood','poster','formguide','tag','bdts','custom','customfield','fclient','guestbook','import','slider','sqltoolplus','taglist'))) {
+				$install_module = pc_base::load_app_class('module_api','admin');
+				if ($install_module->check($module[0])) $install_module->install($module[0]);
+				dr_json(1, $module[1].'模块安装成功......<img src="images/correct.png" />', ['page' => $page + 1]);
+			}
+		}
 		break;
 		
 	//数据库测试
@@ -358,7 +372,7 @@ switch($step)
 		$conn = mysqli_connect($dbhost, $dbuser, $dbpw, null, $dbport);
 		if (!$conn) {
 			dr_json(0, '['.mysqli_connect_error().'] - 无法连接到数据库服务器（'.$dbhost.'），请检查端口（'.$dbport.'）和用户名（'.$dbuser.'）和密码（'.$dbpw.'）是否正确！');
-		} elseif (!mysqli_set_charset($conn, "utf8mb4")) {
+		} elseif (!mysqli_set_charset($conn, 'utf8mb4')) {
 			dr_json(0, '当前MySQL不支持utf8mb4编码（'.mysqli_error($conn).'）！');
 		} elseif (mysqli_get_server_version($conn) < 50600) {
 			dr_json(0, '数据库版本低于Mysql 5.6，无法安装CMS，请升级数据库版本！');
@@ -366,53 +380,136 @@ switch($step)
 			dr_json(0, '指定的数据库（'.$dbname.'）不存在，系统尝试创建失败，请先通过其他方式建立好数据库！');
 		}
 		$tables = array();
-		$query = mysqli_query($conn, "SHOW TABLES FROM `$dbname`");
+		$query = mysqli_query($conn, 'SHOW TABLES FROM `'.$dbname.'`');
 		while($r = mysqli_fetch_row($query)) {
 			$tables[] = $r[0];
 		}
 		if($tables && in_array($tablepre.'module', $tables)) {
 			dr_json(2, '您已经安装过CMS，系统会自动删除老数据！是否继续？');
 		} else {
+			$sys_config = array('cookie_pre'=>token().'_',
+				'auth_key'=>token($name),
+				'web_path'=>$rootpath,
+				'errorlog'=>'0',
+				'js_path'=>FC_NOW_HOST.substr($rootpath, 1).'statics/js/',
+				'css_path'=>FC_NOW_HOST.substr($rootpath, 1).'statics/css/',
+				'img_path'=>FC_NOW_HOST.substr($rootpath, 1).'statics/images/',
+				'mobile_js_path'=>FC_NOW_HOST.substr($rootpath, 1).'mobile/statics/js/',
+				'mobile_css_path'=>FC_NOW_HOST.substr($rootpath, 1).'mobile/statics/css/',
+				'mobile_img_path'=>FC_NOW_HOST.substr($rootpath, 1).'mobile/statics/images/',
+				'app_path'=>FC_NOW_HOST.substr($rootpath, 1),
+				'mobile_path'=>FC_NOW_HOST.substr($rootpath, 1).'mobile/',
+			);
+			$db_config = array('hostname'=>$dbhost,
+				'port'=>$dbport,
+				'username'=>$dbuser,
+				'password'=>$dbpw,
+				'database'=>$dbname,
+				'tablepre'=>$tablepre,
+				'pconnect'=>$pconnect,
+				'charset'=>$dbcharset,
+			);
+			set_config($sys_config,'system');
+			set_config($db_config,'database');
+			if ($adminpath) {
+				//设置后台登录地址
+				if(pc_base::load_config('system','admin_login_path')) {
+					//建立自定义后台登录目录
+					create_folder(CMS_PATH.$adminpath);
+					$admin = file_get_contents(CMS_PATH.pc_base::load_config('system','admin_login_path').'/index.php');
+					file_put_contents(CMS_PATH.$adminpath.'/index.php',$admin);
+					//删除原后台登录地址
+					dr_dir_delete(CMS_PATH.pc_base::load_config('system','admin_login_path'), TRUE);
+					$index = file_get_contents(CMS_PATH.'cms/modules/admin/index.php');
+					$index = str_replace('public function '.pc_base::load_config('system','admin_login_path'),'public function '.$adminpath,$index);
+					$index = str_replace('m=admin&c=index&a='.pc_base::load_config('system','admin_login_path'),'m=admin&c=index&a='.$adminpath,$index);
+					file_put_contents(CMS_PATH.'cms/modules/admin/index.php',$index);
+				} else {
+					//建立自定义后台登录目录
+					create_folder(CMS_PATH.$adminpath);
+					$admin = file_get_contents(CMS_PATH.'admin.php');
+					$admin = str_replace('index.php','../index.php',$admin);
+					file_put_contents(CMS_PATH.$adminpath.'/index.php',$admin);
+					//删除原后台登录地址
+					@unlink(CMS_PATH.'admin.php');
+					$index = file_get_contents(CMS_PATH.'cms/modules/admin/index.php');
+					$index = str_replace('public function login','public function '.$adminpath,$index);
+					$index = str_replace('m=admin&c=index&a=login','m=admin&c=index&a='.$adminpath,$index);
+					file_put_contents(CMS_PATH.'cms/modules/admin/index.php',$index);
+				}
+				$sys_config = array('admin_login_path'=>$adminpath,);
+				set_config($sys_config,'system');
+			}
 			dr_json(1, '成功');
 		}
 		break;
 		
-	case 'cache_all':
-		$cache = pc_base::load_app_class('cache_api','admin');
-		$cache->cache('category');
-		$cache->cache('cache_site');
-		$cache->cache('downservers');
-		$cache->cache('badword');
-		$cache->cache('ipbanned');
-		$cache->cache('keylink');
-		$cache->cache('position');
-		$cache->cache('admin_role');
-		$cache->cache('urlrule');
-		$cache->cache('module');
-		$cache->cache('sitemodel');
-		$cache->cache('workflow');
-		$cache->cache('dbsource');
-		$cache->cache('member_group');
-		$cache->cache('membermodel');
-		$cache->cache('type','search');
-		$cache->cache('special');
-		$cache->cache('setting');
-		$cache->cache('database');
-		$cache->cache('member_setting');
-		$cache->cache('member_model_field');
-		$cache->cache('search_setting');
-		$cache->cache('attachment_remote');
-		$cache->cache('cache2database');
+	//数据库删除
+	case 'dbdel':
+		extract($_POST);
+		if (is_numeric($dbname)) {
+			dr_json(0, '数据库名称（'.$dbname.'）不能是数字');
+		} elseif (is_numeric(substr($dbname, 0, 1))) {
+			dr_json(0, '数据库名称（'.$dbname.'）不能是数字开头');
+		} elseif (strpos($dbname, '.') !== false) {
+			dr_json(0, '数据库名称（'.$dbname.'）不能存在.号');
+		}
+		$mysqli = function_exists('mysqli_init') ? mysqli_init() : 0;
+		if (!$mysqli) {
+			dr_json(0, 'PHP环境必须启用Mysqli扩展！');
+		}
+		$conn = mysqli_connect($dbhost, $dbuser, $dbpw, null, $dbport);
+		if (!$conn) {
+			dr_json(0, '['.mysqli_connect_error().'] - 无法连接到数据库服务器（'.$dbhost.'），请检查端口（'.$dbport.'）和用户名（'.$dbuser.'）和密码（'.$dbpw.'）是否正确！');
+		} elseif (!mysqli_set_charset($conn, 'utf8mb4')) {
+			dr_json(0, '当前MySQL不支持utf8mb4编码（'.mysqli_error($conn).'）！');
+		} elseif (mysqli_get_server_version($conn) < 50600) {
+			dr_json(0, '数据库版本低于Mysql 5.6，无法安装CMS，请升级数据库版本！');
+		} elseif (!mysqli_query($conn, 'DROP DATABASE IF EXISTS '.$dbname.'')) {
+			dr_json(0, '指定的数据库（'.$dbname.'）删除失败！');
+		} elseif (!mysqli_query($conn, 'CREATE DATABASE IF NOT EXISTS '.$dbname.' CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci')) {
+			dr_json(0, '指定的数据库（'.$dbname.'）不存在，系统尝试创建失败，请先通过其他方式建立好数据库！');
+		}
+		dr_json(1, '成功');
 		break;
 		
 	case 'alpha':
-		exit(build('alpha'));
+		dr_json(1, build('alpha'));
 		break;
 
 }
 
 function format_textarea($string) {
 	return nl2br(str_replace(' ', '&nbsp;', htmlspecialchars($string,ENT_COMPAT,'utf-8')));
+}
+
+// 数据分组
+function query_rows($sql, $num = 0) {
+
+	if (!$sql) {
+		return '';
+	}
+
+	$rt = [];
+	$sql = format_create_sql($sql);
+	$sql_data = explode(';SQL_CMS_EOL', trim(str_replace(array(PHP_EOL, chr(13), chr(10)), 'SQL_CMS_EOL', $sql)));
+
+	foreach($sql_data as $query){
+		if (!$query) {
+			continue;
+		}
+		$ret = '';
+		$queries = explode('SQL_CMS_EOL', trim($query));
+		foreach($queries as $query) {
+			$ret.= $query[0] == '#' || $query[0].$query[1] == '--' ? '' : $query;
+		}
+		if (!$ret) {
+			continue;
+		}
+		$rt[] = $ret;
+	}
+
+	return $num ? array_chunk($rt, $num) : $rt;
 }
 
 function _sql_execute($mysqli,$sql,$r_tablepre = '',$s_tablepre = 'cms_') {
@@ -469,13 +566,5 @@ function set_config($config,$cfgfile) {
 	$str = file_get_contents($configfile);
 	$str = preg_replace($pattern, $replacement, $str);
 	return file_put_contents($configfile, $str);
-}
-
-function remote_file_exists($url_file){
-	$headers = get_headers($url_file);
-	if (!preg_match("/200/", $headers[0])){
-		return false;
-	}
-	return true;
 }
 ?>

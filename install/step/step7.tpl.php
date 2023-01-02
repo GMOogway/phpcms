@@ -10,10 +10,10 @@
                     <li class="ma4 on">权限检测</li>
                     <li class="ma5 on">配置信息</li>
                     <li class="ma6 on">开始安装</li>
-                    <li class="ma7 on">安装完成</li>
+                    <li class="ma7">安装完成</li>
                 </ul>
             </div>
-            <div class="bz a7"><div class="jj_bg"></div></div>
+            <div class="bz a6"><div class="jj_bg"></div></div>
         </div>
         <div class="ct">
             <div class="bg_t"></div>
@@ -36,30 +36,63 @@
                         <?php }?>
                     </dl>
                 </div>
-                <div class="ct_box nobrd set7s">
+                <div class="ct_box">
                     <div class="nr">
-                        <div class="gxwc"><h1>恭喜您，安装成功！</h1></div>
-                        <div class="clj">
-                            <ul>
-                                <li><a href="<?php echo FC_NOW_HOST.substr($rootpath, 1).(pc_base::load_config('system','admin_login_path') ? pc_base::load_config('system','admin_login_path') : 'admin.php')?>" class="btn btn-success">后台管理</a></li>
-                            </ul>
-                        </div>                    
-                        <div class="txt_c">
-                        <?php if(pc_base::load_config('system','admin_login_path')){ ?>
-                        <div class="warmtips">温馨提示：请将以下后台登录入口添加到你的收藏夹，为了你的安全，不要泄漏或发送给他人！如有泄漏请及时修改！<a href="<?php echo FC_NOW_HOST.substr($rootpath, 1).pc_base::load_config('system','admin_login_path')?>"><?php echo FC_NOW_HOST.substr($rootpath, 1).pc_base::load_config('system','admin_login_path')?></a></div>
-                        <?php }?>
-                        <span style="margin-right:8px;">*</span>安装完毕请登录后台生成首页，更新缓存<br/>
-                        <span style="margin-right:8px;">*</span>为了您站点的安全，安装完成后即可将网站根目录下的“install”文件夹删除。</div>
+                        <div id="dr_check_html">
+                            <p>正在执行安装程序...</p>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="bg_b"></div>
         </div>
-        <div class="h65"></div>
-        <form id="install" action="<?php echo SELF;?>" method="post">
-        <input type="hidden" name="step" value="7">
-        </form>
+        <div class="btn_box">
+            <a href="javascript:history.back();" class="btn btn-success"> 返回上一步 </a>
+            <a href="javascript:void(0);" class="btn default" id="finish">正在执行安装程序</a>
+        </div>            
     </div>
 </div>
+<div id="hiddenop"></div>
+<form id="install" action="<?php echo SELF;?>" method="post">
+<input type="hidden" name="step" value="8">
+</form>
 </body>
+<script language="JavaScript">
+<!--
+$().ready(function() {
+    reloads(1);
+})
+var selectmod = '<?php echo $selectmod?>';
+function reloads(page) {
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: '<?php echo SELF;?>',
+        data: "step=module&page="+page+"&selectmod="+selectmod+"&sid="+Math.random()*5,
+        success: function (json) {
+            $('#dr_check_html').append("<p>"+json.msg+"</p>");
+            document.getElementById('dr_check_html').scrollTop = document.getElementById('dr_check_html').scrollHeight;
+
+            if (json.code == 0) {
+                $('.btn_box').removeClass("d_n");
+                $('#dr_check_html').append("<p style='color:red'>出现故障："+json.msg+"</p>");
+                return;
+            } else {
+                if (json.data.page == 99) {
+                    // 完成
+                    $('#btn_box').removeClass("d_n");
+                    $('#finish').html('安装完成');
+                    setTimeout("$('#install').submit();",1000);
+                } else {
+                    reloads(json.data.page);
+                }
+            }
+        },
+        error: function(HttpRequest, ajaxOptions, thrownError) {
+            $('#dr_check_html').append("<p style='color:red'>出现故障："+HttpRequest.responseText+"</p>");
+        }
+    });
+}
+//-->
+</script>
 </html>

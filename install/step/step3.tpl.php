@@ -69,7 +69,7 @@
                                     <?php
                                     $count = count($CMS_MODULES['name']);
                                     foreach($CMS_MODULES['name'] as  $i=>$module) {?>
-                                        <label class="mt-checkbox mt-checkbox-outline" style="width:16%;"><input type="checkbox" name="selectmod[]" value="<?php echo $module?>" class="checkboxes"> <?php echo $CMS_MODULES['modulename'][$i]?>模块 <span></span></label>
+                                        <label class="mt-checkbox mt-checkbox-outline" style="width:16%;"><input type="checkbox" name="selectmod[]" value="<?php echo $module?>|<?php echo $CMS_MODULES['modulename'][$i]?>模块" class="checkboxes"> <?php echo $CMS_MODULES['modulename'][$i]?>模块 <span></span></label>
                                     <?php }?>
                                     </div>
                                 </div>

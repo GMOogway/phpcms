@@ -44,11 +44,28 @@
             </div>
             <div class="bg_b"></div>
         </div>
-        <div class="btn_box"><a href="javascript:void(0);" class="btn btn-success" onclick="$('#install').submit();return false;">开始安装</a></div>
+        <div class="btn_box"><a href="javascript:void(0);" disabled="" id="ok" class="btn btn-success" onclick=""> ... </a></div>
         <form id="install" action="<?php echo SELF;?>" method="post">
         <input type="hidden" name="step" value="2">
         </form>
     </div>
 </div>
+<script>
+    var Seconds = 10;
+    var setIntervalID;
+    function ok() {
+        var ok = $("#ok");
+        if (Seconds <= 0) {
+            ok.html("同意协议");
+            ok.attr('onclick', '$("#install").submit();return false;');
+            ok.attr('disabled', false);
+            clearInterval(setIntervalID);
+        } else {
+            ok.html("请仔细阅读协议还剩下（" + Seconds + "）秒");
+        }
+        Seconds--;
+    }
+    setIntervalID=setInterval("ok()", 1000);
+</script>
 </body>
 </html>

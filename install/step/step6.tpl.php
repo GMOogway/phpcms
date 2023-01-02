@@ -38,7 +38,9 @@
                 </div>
                 <div class="ct_box">
                     <div class="nr">
-                        <div id="installmessage">正在准备安装 ...<br /></div>
+                        <div id="dr_check_html">
+                            <p>正在执行安装程序...</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -52,40 +54,15 @@
 </div>
 <div id="hiddenop"></div>
 <form id="install" action="<?php echo SELF;?>" method="post">
-<input type="hidden" name="module" id="module" value="<?php echo $module?>" />
-<input type="hidden" id="selectmod" name="selectmod" value="<?php echo $selectmod?>" />
 <input type="hidden" name="step" value="7">
+<input type="hidden" name="selectmod" value="<?php echo $selectmod?>" />
 </form>
 </body>
 <script language="JavaScript">
 <!--
 $().ready(function() {
-    reloads();
+    reloads(1);
 })
-var n = 0;
-var setting =  new Array();
-setting['admin'] = '后台管理主模块安装成功......';
-setting['comment'] = '评论模块安装成功......';
-setting['announce'] = '公告模块安装成功......';
-setting['poster'] = '广告模块安装成功......';
-setting['link'] = '友情链接模块安装成功......';
-setting['vote'] = '投票模块安装成功......';
-setting['mood'] = '心情指数模块安装成功......';
-setting['message'] = '短消息模块安装成功......';
-setting['formguide'] = '表单向导模块安装成功......';
-setting['mobile'] = '手机门户模块安装成功......';
-setting['tag'] = '标签模块安装成功......';
-setting['sms'] = '短信模块安装成功......';
-setting['404'] = '404错误页模块安装成功......';
-setting['bdts'] = '百度主动推送模块安装成功......';
-setting['custom'] = '资料模块安装成功......';
-setting['customfield'] = '变量模块安装成功......';
-setting['fclient'] = '客户站群模块安装成功......';
-setting['guestbook'] = '留言板模块安装成功......';
-setting['import'] = '外部数据导入模块安装成功......';
-setting['slider'] = '幻灯片模块安装成功......';
-setting['sqltoolplus'] = 'SQL工具箱模块安装成功......';
-setting['taglist'] = 'TAG管理模块安装成功......';
 var dbhost = '<?php echo $dbhost?>';
 var dbport = '<?php echo $dbport?>';
 var dbuser = '<?php echo $dbuser?>';
@@ -93,42 +70,38 @@ var dbpw = '<?php echo $dbpw?>';
 var dbname = '<?php echo $dbname?>';
 var tablepre = '<?php echo $tablepre?>';
 var dbcharset = '<?php echo $dbcharset?>';
-var pconnect = '<?php echo $pconnect?>';
 var name = '<?php echo $name?>';
 var adminpath = '<?php echo $adminpath?>';
 var username = '<?php echo $username?>';
 var password = '<?php echo $password?>';
 var email = '<?php echo $email?>';
-var ftp_user = '<?php echo $dbuser?>';
-var password_key = '<?php echo $password_key?>';
-function reloads() {
-    var module = $('#selectmod').val();
-    m_d = module.split(',');
+function reloads(page) {
     $.ajax({
         type: "POST",
+        dataType: "json",
         url: '<?php echo SELF;?>',
-        data: "step=installmodule&module="+m_d[n]+"&dbhost="+dbhost+"&dbport="+dbport+"&dbuser="+dbuser+"&dbpw="+dbpw+"&dbname="+dbname+"&tablepre="+tablepre+"&dbcharset="+dbcharset+"&pconnect="+pconnect+"&name="+name+"&adminpath="+adminpath+"&username="+username+"&password="+password+"&email="+email+"&ftp_user="+ftp_user+"&password_key="+password_key+"&sid="+Math.random()*5,
-        success: function(msg){
-            if(msg==1) {
-                Dialog.alert('指定的数据库不存在，系统尝试创建失败，请通过其他方式建立数据库！');
-            } else if(msg==2) {
-                $('#installmessage').append("<font color='#ff0000'>"+m_d[n]+"/install/main/cms_db.sql 数据库文件不存在</font>");
-            } else if(msg.length>20) {
-                $('#installmessage').append("<font color='#ff0000'>错误信息：</font>"+msg);
+        data: "step=sql&page="+page+"&dbhost="+dbhost+"&dbport="+dbport+"&dbuser="+dbuser+"&dbpw="+dbpw+"&dbname="+dbname+"&tablepre="+tablepre+"&dbcharset="+dbcharset+"&name="+name+"&adminpath="+adminpath+"&username="+username+"&password="+password+"&email="+email+"&sid="+Math.random()*5,
+        success: function (json) {
+            $('#dr_check_html').append("<p>"+json.msg+"</p>");
+            document.getElementById('dr_check_html').scrollTop = document.getElementById('dr_check_html').scrollHeight;
+
+            if (json.code == 0) {
+                $('.btn_box').removeClass("d_n");
+                $('#dr_check_html').append("<p style='color:red'>出现故障："+json.msg+"</p>");
+                return;
             } else {
-                $('#installmessage').append(setting[m_d[n]] + msg + "<img src='images/correct.png' /><br>");                   
-                n++;
-                if(n < m_d.length) {
-                    reloads();
-                } else {            
-                    $('#hiddenop').load('?step=cache_all&sid='+Math.random()*5);                        
-                    $('#installmessage').append("<font color='yellow'>缓存更新成功</font><br>");
-                    $('#installmessage').append("<font color='yellow'>安装完成</font>");
+                if (json.data.page == 99) {
+                    // 完成
+                    $('#btn_box').removeClass("d_n");
                     $('#finish').html('安装完成');
-                    setTimeout("$('#install').submit();",1000);                         
+                    setTimeout("$('#install').submit();",1000);
+                } else {
+                    reloads(json.data.page);
                 }
-                document.getElementById('installmessage').scrollTop = document.getElementById('installmessage').scrollHeight;
             }
+        },
+        error: function(HttpRequest, ajaxOptions, thrownError) {
+            $('#dr_check_html').append("<p style='color:red'>出现故障："+HttpRequest.responseText+"</p>");
         }
     });
 }
