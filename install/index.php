@@ -240,7 +240,7 @@ switch($step)
 			}
 		}
 		if (!mysqli_set_charset($mysqli, 'utf8mb4')) {
-			dr_json(0, '当前MySQL不支持utf8mb4编码（'.mysqli_error($mysqli).'）！');
+			dr_json(0, '当前MySQL不支持utf8mb4编码（'.mysqli_error($mysqli).'）建议升级MySQL版本！');
 		}
 		if (mysqli_get_server_version($mysqli) < 50600) {
 			dr_json(0, '数据库版本低于Mysql 5.6，无法安装CMS，请升级数据库版本！');
@@ -373,7 +373,7 @@ switch($step)
 		if (!$conn) {
 			dr_json(0, '['.mysqli_connect_error().'] - 无法连接到数据库服务器（'.$dbhost.'），请检查端口（'.$dbport.'）和用户名（'.$dbuser.'）和密码（'.$dbpw.'）是否正确！');
 		} elseif (!mysqli_set_charset($conn, 'utf8mb4')) {
-			dr_json(0, '当前MySQL不支持utf8mb4编码（'.mysqli_error($conn).'）！');
+			dr_json(0, '当前MySQL不支持utf8mb4编码（'.mysqli_error($conn).'）建议升级MySQL版本！');
 		} elseif (mysqli_get_server_version($conn) < 50600) {
 			dr_json(0, '数据库版本低于Mysql 5.6，无法安装CMS，请升级数据库版本！');
 		} elseif (!mysqli_query($conn, 'CREATE DATABASE IF NOT EXISTS `'.$dbname.'` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci')) {
@@ -462,11 +462,11 @@ switch($step)
 		if (!$conn) {
 			dr_json(0, '['.mysqli_connect_error().'] - 无法连接到数据库服务器（'.$dbhost.'），请检查端口（'.$dbport.'）和用户名（'.$dbuser.'）和密码（'.$dbpw.'）是否正确！');
 		} elseif (!mysqli_set_charset($conn, 'utf8mb4')) {
-			dr_json(0, '当前MySQL不支持utf8mb4编码（'.mysqli_error($conn).'）！');
+			dr_json(0, '当前MySQL不支持utf8mb4编码（'.mysqli_error($conn).'）建议升级MySQL版本！');
 		} elseif (mysqli_get_server_version($conn) < 50600) {
 			dr_json(0, '数据库版本低于Mysql 5.6，无法安装CMS，请升级数据库版本！');
 		} elseif (!mysqli_query($conn, 'DROP DATABASE IF EXISTS `'.$dbname.'`')) {
-			dr_json(0, '指定的数据库（'.$dbname.'）删除失败！');
+			dr_json(0, '指定的数据库（'.$dbname.'）删除失败，请手段删除数据库（'.$dbname.'）或者你可以尝试修改数据库名或者数据表前缀！');
 		} elseif (!mysqli_query($conn, 'CREATE DATABASE IF NOT EXISTS `'.$dbname.'` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci')) {
 			dr_json(0, '指定的数据库（'.$dbname.'）不存在，系统尝试创建失败，请先通过其他方式建立好数据库！');
 		}
