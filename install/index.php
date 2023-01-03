@@ -466,7 +466,7 @@ switch($step)
 		} elseif (mysqli_get_server_version($conn) < 50600) {
 			dr_json(0, '数据库版本低于Mysql 5.6，无法安装CMS，请升级数据库版本！');
 		} elseif (!mysqli_query($conn, 'DROP DATABASE IF EXISTS `'.$dbname.'`')) {
-			dr_json(0, '指定的数据库（'.$dbname.'）删除失败，请手段删除数据库（'.$dbname.'）或者你可以尝试修改数据库名或者数据表前缀！');
+			dr_json(0, '指定的数据库（'.$dbname.'）删除失败，请手动删除数据库（'.$dbname.'）或者你可以尝试修改数据库名或者数据表前缀！');
 		} elseif (!mysqli_query($conn, 'CREATE DATABASE IF NOT EXISTS `'.$dbname.'` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci')) {
 			dr_json(0, '指定的数据库（'.$dbname.'）不存在，系统尝试创建失败，请先通过其他方式建立好数据库！');
 		}
