@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS `cms_import`;
-CREATE TABLE `phpcms_import` (
+CREATE TABLE IF NOT EXISTS `cms_import` (
   `id` smallint(4) NOT NULL auto_increment,
   `type` varchar(20) default NULL,
   `import_name` varchar(30) NOT NULL,

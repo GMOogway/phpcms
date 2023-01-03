@@ -235,7 +235,7 @@ switch($step)
 		} elseif (!mysqli_real_connect($mysqli, $dbhost, $dbuser, $dbpw, null, $dbport)) {
 			dr_json(0, '['.mysqli_connect_errno().'] - 无法连接到数据库服务器（'.$dbhost.'），请检查端口（'.$dbport.'）和用户名（'.$dbuser.'）和密码（'.$dbpw.'）是否正确！');
 		} elseif (!mysqli_select_db($mysqli, $dbname)) {
-			if (!mysqli_query($mysqli, 'CREATE DATABASE '.$dbname.' CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci')) {
+			if (!mysqli_query($mysqli, 'CREATE DATABASE `'.$dbname.'` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci')) {
 				dr_json(0, '指定的数据库（'.$dbname.'）不存在，系统尝试创建失败，请先通过其他方式建立好数据库！');
 			}
 		}
@@ -376,7 +376,7 @@ switch($step)
 			dr_json(0, '当前MySQL不支持utf8mb4编码（'.mysqli_error($conn).'）！');
 		} elseif (mysqli_get_server_version($conn) < 50600) {
 			dr_json(0, '数据库版本低于Mysql 5.6，无法安装CMS，请升级数据库版本！');
-		} elseif (!mysqli_query($conn, 'CREATE DATABASE IF NOT EXISTS '.$dbname.' CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci')) {
+		} elseif (!mysqli_query($conn, 'CREATE DATABASE IF NOT EXISTS `'.$dbname.'` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci')) {
 			dr_json(0, '指定的数据库（'.$dbname.'）不存在，系统尝试创建失败，请先通过其他方式建立好数据库！');
 		}
 		$tables = array();
@@ -384,7 +384,7 @@ switch($step)
 		while($r = mysqli_fetch_row($query)) {
 			$tables[] = $r[0];
 		}
-		if($tables && in_array($tablepre.'module', $tables)) {
+		if($tables && in_array($tablepre.'admin', $tables) || in_array($tablepre.'module', $tables)) {
 			dr_json(2, '您已经安装过CMS，系统会自动删除老数据！是否继续？');
 		} else {
 			$sys_config = array('cookie_pre'=>token().'_',
@@ -465,9 +465,9 @@ switch($step)
 			dr_json(0, '当前MySQL不支持utf8mb4编码（'.mysqli_error($conn).'）！');
 		} elseif (mysqli_get_server_version($conn) < 50600) {
 			dr_json(0, '数据库版本低于Mysql 5.6，无法安装CMS，请升级数据库版本！');
-		} elseif (!mysqli_query($conn, 'DROP DATABASE IF EXISTS '.$dbname.'')) {
+		} elseif (!mysqli_query($conn, 'DROP DATABASE IF EXISTS `'.$dbname.'`')) {
 			dr_json(0, '指定的数据库（'.$dbname.'）删除失败！');
-		} elseif (!mysqli_query($conn, 'CREATE DATABASE IF NOT EXISTS '.$dbname.' CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci')) {
+		} elseif (!mysqli_query($conn, 'CREATE DATABASE IF NOT EXISTS `'.$dbname.'` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci')) {
 			dr_json(0, '指定的数据库（'.$dbname.'）不存在，系统尝试创建失败，请先通过其他方式建立好数据库！');
 		}
 		dr_json(1, '成功');

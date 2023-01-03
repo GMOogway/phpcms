@@ -3,7 +3,7 @@ SET FOREIGN_KEY_CHECKS=0;
 -- Table structure for `cms_admin`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_admin`;
-CREATE TABLE `cms_admin` (
+CREATE TABLE IF NOT EXISTS `cms_admin` (
   `userid` mediumint(6) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(50) DEFAULT NULL COMMENT '用户名',
   `password` varchar(50) DEFAULT NULL COMMENT '加密密码',
@@ -24,7 +24,7 @@ CREATE TABLE `cms_admin` (
 -- Table structure for `cms_admin_login`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_admin_login`;
-CREATE TABLE `cms_admin_login` (
+CREATE TABLE IF NOT EXISTS `cms_admin_login` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `uid` mediumint(8) unsigned DEFAULT NULL COMMENT '会员uid',
   `is_login` int(10) unsigned DEFAULT NULL COMMENT '是否首次登录',
@@ -41,7 +41,7 @@ CREATE TABLE `cms_admin_login` (
 -- Table structure for `cms_admin_panel`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_admin_panel`;
-CREATE TABLE `cms_admin_panel` (
+CREATE TABLE IF NOT EXISTS `cms_admin_panel` (
   `menuid` mediumint(8) unsigned NOT NULL COMMENT '菜单id',
   `userid` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '管理员userid',
   `name` char(32) DEFAULT NULL COMMENT '名称',
@@ -55,7 +55,7 @@ CREATE TABLE `cms_admin_panel` (
 -- Table structure for `cms_admin_role`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_admin_role`;
-CREATE TABLE `cms_admin_role` (
+CREATE TABLE IF NOT EXISTS `cms_admin_role` (
   `roleid` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `rolename` varchar(50) NOT NULL COMMENT '角色名称',
   `description` text NOT NULL COMMENT '角色描述',
@@ -70,7 +70,7 @@ CREATE TABLE `cms_admin_role` (
 -- Table structure for `cms_admin_role_priv`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_admin_role_priv`;
-CREATE TABLE `cms_admin_role_priv` (
+CREATE TABLE IF NOT EXISTS `cms_admin_role_priv` (
   `roleid` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `menuid` mediumint(8) unsigned NOT NULL COMMENT '菜单id',
   `m` char(20) NOT NULL,
@@ -85,7 +85,7 @@ CREATE TABLE `cms_admin_role_priv` (
 -- Table structure for `cms_attachment`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_attachment`;
-CREATE TABLE `cms_attachment` (
+CREATE TABLE IF NOT EXISTS `cms_attachment` (
   `aid` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `module` char(15) NOT NULL,
   `catid` smallint(5) unsigned NOT NULL DEFAULT '0',
@@ -118,7 +118,7 @@ CREATE TABLE `cms_attachment` (
 -- Table structure for `cms_attachment_index`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_attachment_index`;
-CREATE TABLE `cms_attachment_index` (
+CREATE TABLE IF NOT EXISTS `cms_attachment_index` (
   `keyid` char(30) NOT NULL,
   `aid` char(10) NOT NULL,
   KEY `keyid` (`keyid`),
@@ -128,7 +128,7 @@ CREATE TABLE `cms_attachment_index` (
 -- Table structure for `cms_attachment_remote`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_attachment_remote`;
-CREATE TABLE `cms_attachment_remote` (
+CREATE TABLE IF NOT EXISTS `cms_attachment_remote` (
   `id` tinyint(2) unsigned NOT NULL AUTO_INCREMENT,
   `type` tinyint(2) NOT NULL COMMENT '类型',
   `name` varchar(50) NOT NULL COMMENT '名称',
@@ -140,7 +140,7 @@ CREATE TABLE `cms_attachment_remote` (
 -- Table structure for `cms_badword`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_badword`;
-CREATE TABLE `cms_badword` (
+CREATE TABLE IF NOT EXISTS `cms_badword` (
   `badid` smallint(5) unsigned NOT NULL auto_increment,
   `badword` char(20) NOT NULL,
   `level` tinyint(5) NOT NULL default '1',
@@ -157,7 +157,7 @@ CREATE TABLE `cms_badword` (
 -- Table structure for `cms_block`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_block`;
-CREATE TABLE `cms_block` (
+CREATE TABLE IF NOT EXISTS `cms_block` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `siteid` smallint(5) unsigned DEFAULT '0',
   `name` char(50) DEFAULT NULL,
@@ -175,7 +175,7 @@ CREATE TABLE `cms_block` (
 -- Table structure for `cms_block_history`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_block_history`;
-CREATE TABLE `cms_block_history` (
+CREATE TABLE IF NOT EXISTS `cms_block_history` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `blockid` int(10) unsigned DEFAULT '0',
   `data` text,
@@ -189,7 +189,7 @@ CREATE TABLE `cms_block_history` (
 -- Table structure for `cms_block_priv`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_block_priv`;
-CREATE TABLE `cms_block_priv` (
+CREATE TABLE IF NOT EXISTS `cms_block_priv` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `roleid` tinyint(3) unsigned DEFAULT '0',
   `siteid` smallint(5) unsigned DEFAULT '0',
@@ -203,7 +203,7 @@ CREATE TABLE `cms_block_priv` (
 -- Table structure for `cms_cache`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_cache`;
-CREATE TABLE `cms_cache` (
+CREATE TABLE IF NOT EXISTS `cms_cache` (
   `filename` char(50) NOT NULL,
   `path` char(50) NOT NULL,
   `data` mediumtext NOT NULL,
@@ -214,7 +214,7 @@ CREATE TABLE `cms_cache` (
 -- Table structure for `cms_category`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_category`;
-CREATE TABLE `cms_category` (
+CREATE TABLE IF NOT EXISTS `cms_category` (
   `catid` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `siteid` smallint(5) unsigned NOT NULL DEFAULT '0',
   `module` varchar(15) NOT NULL,
@@ -248,7 +248,7 @@ CREATE TABLE `cms_category` (
 -- Table structure for `cms_category_priv`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_category_priv`;
-CREATE TABLE `cms_category_priv` (
+CREATE TABLE IF NOT EXISTS `cms_category_priv` (
  `catid` smallint(5) unsigned NOT NULL DEFAULT '0',
   `siteid` smallint(5) unsigned NOT NULL DEFAULT '0',
   `roleid` smallint(5) unsigned NOT NULL DEFAULT '0',
@@ -262,7 +262,7 @@ CREATE TABLE `cms_category_priv` (
 -- Table structure for `cms_collection_content`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_collection_content`;
-CREATE TABLE `cms_collection_content` (
+CREATE TABLE IF NOT EXISTS `cms_collection_content` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `nodeid` int(10) unsigned NOT NULL DEFAULT '0',
   `siteid` mediumint(5) unsigned NOT NULL DEFAULT '0',
@@ -279,7 +279,7 @@ CREATE TABLE `cms_collection_content` (
 -- Table structure for `cms_collection_history`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_collection_history`;
-CREATE TABLE `cms_collection_history` (
+CREATE TABLE IF NOT EXISTS `cms_collection_history` (
   `md5` char(32) NOT NULL,
   `siteid` smallint(5) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`md5`,`siteid`)
@@ -289,7 +289,7 @@ CREATE TABLE `cms_collection_history` (
 -- Table structure for `cms_collection_node`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_collection_node`;
-CREATE TABLE `cms_collection_node` (
+CREATE TABLE IF NOT EXISTS `cms_collection_node` (
   `nodeid` smallint(6) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL,
   `lastdate` int(10) unsigned NOT NULL DEFAULT '0',
@@ -332,7 +332,7 @@ CREATE TABLE `cms_collection_node` (
 -- Table structure for `cms_collection_program`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_collection_program`;
-CREATE TABLE `cms_collection_program` (
+CREATE TABLE IF NOT EXISTS `cms_collection_program` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `siteid` smallint(5) unsigned NOT NULL DEFAULT '0',
   `nodeid` int(10) unsigned NOT NULL DEFAULT '0',
@@ -345,7 +345,7 @@ CREATE TABLE `cms_collection_program` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `cms_content_check`;
-CREATE TABLE `cms_content_check` (
+CREATE TABLE IF NOT EXISTS `cms_content_check` (
   `checkid` char(15) NOT NULL,
   `catid` smallint(5) unsigned NOT NULL DEFAULT '0',
   `siteid` smallint(5) unsigned NOT NULL DEFAULT '0',
@@ -362,7 +362,7 @@ CREATE TABLE `cms_content_check` (
 -- Table structure for `cms_datacall`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_datacall`;
-CREATE TABLE `cms_datacall` (
+CREATE TABLE IF NOT EXISTS `cms_datacall` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `name` char(40) DEFAULT NULL,
   `dis_type` tinyint(1) unsigned DEFAULT '0',
@@ -381,7 +381,7 @@ CREATE TABLE `cms_datacall` (
 -- Table structure for `cms_dbsource`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_dbsource`;
-CREATE TABLE `cms_dbsource` (
+CREATE TABLE IF NOT EXISTS `cms_dbsource` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `siteid` smallint(5) unsigned NOT NULL DEFAULT '0',
   `name` varchar(50) NOT NULL,
@@ -400,7 +400,7 @@ CREATE TABLE `cms_dbsource` (
 -- Table structure for `cms_downservers`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_downservers`;
-CREATE TABLE `cms_downservers` (
+CREATE TABLE IF NOT EXISTS `cms_downservers` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT,
   `sitename` varchar(100) DEFAULT NULL,
   `siteurl` varchar(255) DEFAULT NULL,
@@ -413,7 +413,7 @@ CREATE TABLE `cms_downservers` (
 -- Table structure for `cms_favorite`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_favorite`;
-CREATE TABLE `cms_favorite` (
+CREATE TABLE IF NOT EXISTS `cms_favorite` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `userid` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `title` char(100) NOT NULL,
@@ -427,7 +427,7 @@ CREATE TABLE `cms_favorite` (
 -- Table structure for `cms_hits`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_hits`;
-CREATE TABLE `cms_hits` (
+CREATE TABLE IF NOT EXISTS `cms_hits` (
   `hitsid` char(30) NOT NULL,
   `catid` smallint(5) unsigned NOT NULL DEFAULT '0',
   `views` int(10) unsigned NOT NULL DEFAULT '0',
@@ -443,7 +443,7 @@ CREATE TABLE `cms_hits` (
 -- Table structure for `cms_ipbanned`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_ipbanned`;
-CREATE TABLE `cms_ipbanned` (
+CREATE TABLE IF NOT EXISTS `cms_ipbanned` (
   `ipbannedid` smallint(5) NOT NULL auto_increment,
   `ip` char(200) NOT NULL,
   `expires` int(10) unsigned NOT NULL default '0',
@@ -454,7 +454,7 @@ CREATE TABLE `cms_ipbanned` (
 -- Table structure for `cms_keylink`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_keylink`;
-CREATE TABLE `cms_keylink` (
+CREATE TABLE IF NOT EXISTS `cms_keylink` (
   `keylinkid` smallint(5) unsigned NOT NULL auto_increment,
   `word` char(40) NOT NULL,
   `url` char(100) NOT NULL,
@@ -493,7 +493,7 @@ CREATE TABLE IF NOT EXISTS `cms_keyword_data` (
 -- Table structure for `cms_linkage`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_linkage`;
-CREATE TABLE `cms_linkage` (
+CREATE TABLE IF NOT EXISTS `cms_linkage` (
   `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL COMMENT '菜单名称',
   `style` tinyint(1) unsigned NOT NULL COMMENT '菜单风格',
@@ -508,7 +508,7 @@ CREATE TABLE `cms_linkage` (
 -- Table structure for `cms_linkage_data_1`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_linkage_data_1`;
-CREATE TABLE `cms_linkage_data_1` (
+CREATE TABLE IF NOT EXISTS `cms_linkage_data_1` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `site` mediumint(5) unsigned NOT NULL COMMENT '站点id',
   `pid` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '上级id',
@@ -529,7 +529,7 @@ CREATE TABLE `cms_linkage_data_1` (
 -- Table structure for `cms_log`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_log`;
-CREATE TABLE `cms_log` (
+CREATE TABLE IF NOT EXISTS `cms_log` (
   `logid` int(10) unsigned NOT NULL auto_increment,
   `field` varchar(15) NOT NULL,
   `value` int(10) unsigned NOT NULL default '0',
@@ -551,7 +551,7 @@ CREATE TABLE `cms_log` (
 -- Table structure for `cms_member`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_member`;
-CREATE TABLE `cms_member` (
+CREATE TABLE IF NOT EXISTS `cms_member` (
   `userid` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `username` char(50) NOT NULL DEFAULT '' COMMENT '用户名',
   `password` char(50) NOT NULL DEFAULT '' COMMENT '加密密码',
@@ -587,7 +587,7 @@ CREATE TABLE `cms_member` (
 -- Table structure for `cms_member_detail`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_member_detail`;
-CREATE TABLE `cms_member_detail` (
+CREATE TABLE IF NOT EXISTS `cms_member_detail` (
   `userid` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `birthday` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '生日',
   UNIQUE KEY `userid` (`userid`)
@@ -597,7 +597,7 @@ CREATE TABLE `cms_member_detail` (
 -- Table structure for `cms_member_group`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_member_group`;
-CREATE TABLE `cms_member_group` (
+CREATE TABLE IF NOT EXISTS `cms_member_group` (
   `groupid` tinyint(3) unsigned NOT NULL auto_increment,
   `name` char(15) NOT NULL,
   `issystem` tinyint(1) unsigned NOT NULL default '0',
@@ -629,7 +629,7 @@ CREATE TABLE `cms_member_group` (
 -- Table structure for `cms_member_login`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_member_login`;
-CREATE TABLE `cms_member_login` (
+CREATE TABLE IF NOT EXISTS `cms_member_login` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `uid` mediumint(8) unsigned DEFAULT NULL COMMENT '会员uid',
   `is_login` int(10) unsigned DEFAULT NULL COMMENT '是否首次登录',
@@ -646,7 +646,7 @@ CREATE TABLE `cms_member_login` (
 -- Table structure for `cms_member_verify`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_member_verify`;
-CREATE TABLE `cms_member_verify` (
+CREATE TABLE IF NOT EXISTS `cms_member_verify` (
   `userid` mediumint(8) unsigned NOT NULL auto_increment,
   `username` char(50) NOT NULL,
   `password` char(50) NOT NULL,
@@ -672,7 +672,7 @@ CREATE TABLE `cms_member_verify` (
 -- Table structure for `cms_member_menu`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_member_menu`;
-CREATE TABLE `cms_member_menu` (
+CREATE TABLE IF NOT EXISTS `cms_member_menu` (
   `id` smallint(6) unsigned NOT NULL AUTO_INCREMENT,
   `name` char(40) NOT NULL DEFAULT '',
   `parentid` smallint(6) NOT NULL DEFAULT '0',
@@ -694,7 +694,7 @@ CREATE TABLE `cms_member_menu` (
 -- Table structure for `cms_member_vip`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_member_vip`;
-CREATE TABLE `cms_member_vip` (
+CREATE TABLE IF NOT EXISTS `cms_member_vip` (
   `userid` mediumint(8) unsigned NOT NULL DEFAULT '0',
   UNIQUE KEY `userid` (`userid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -703,7 +703,7 @@ CREATE TABLE `cms_member_vip` (
 -- Table structure for `cms_menu`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_menu`;
-CREATE TABLE `cms_menu` (
+CREATE TABLE IF NOT EXISTS `cms_menu` (
   `id` smallint(6) unsigned NOT NULL auto_increment,
   `name` char(40) NOT NULL default '' COMMENT '菜单语言名称',
   `parentid` smallint(6) NOT NULL default '0' COMMENT '上级菜单id',
@@ -795,7 +795,7 @@ CREATE TABLE IF NOT EXISTS `cms_model_field` (
 -- Table structure for `cms_module`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_module`;
-CREATE TABLE `cms_module` (
+CREATE TABLE IF NOT EXISTS `cms_module` (
   `module` varchar(15) NOT NULL,
   `name` varchar(20) NOT NULL,
   `url` varchar(50) NOT NULL,
@@ -814,7 +814,7 @@ CREATE TABLE `cms_module` (
 -- Table structure for `cms_page`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_page`;
-CREATE TABLE `cms_page` (
+CREATE TABLE IF NOT EXISTS `cms_page` (
   `catid` smallint(5) unsigned NOT NULL DEFAULT '0',
   `title` varchar(160) NOT NULL,
   `style` varchar(24) NOT NULL,
@@ -829,7 +829,7 @@ CREATE TABLE `cms_page` (
 -- Table structure for `cms_pay_account`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_pay_account`;
-CREATE TABLE `cms_pay_account` (
+CREATE TABLE IF NOT EXISTS `cms_pay_account` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `trade_sn` char(50) NOT NULL,
   `userid` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -860,7 +860,7 @@ CREATE TABLE `cms_pay_account` (
 -- Table structure for `cms_pay_payment`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_pay_payment`;
-CREATE TABLE `cms_pay_payment` (
+CREATE TABLE IF NOT EXISTS `cms_pay_payment` (
   `pay_id` tinyint(3) unsigned NOT NULL auto_increment,
   `name` varchar(120) NOT NULL,
   `pay_name` varchar(120) NOT NULL,
@@ -884,7 +884,7 @@ CREATE TABLE `cms_pay_payment` (
 -- Table structure for `cms_pay_spend`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_pay_spend`;
-CREATE TABLE `cms_pay_spend` (
+CREATE TABLE IF NOT EXISTS `cms_pay_spend` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `creat_at` int(10) unsigned NOT NULL default '0',
   `userid` int(10) unsigned NOT NULL default '0',
@@ -906,7 +906,7 @@ CREATE TABLE `cms_pay_spend` (
 -- Table structure for `cms_position`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_position`;
-CREATE TABLE `cms_position` (
+CREATE TABLE IF NOT EXISTS `cms_position` (
   `posid` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `modelid` smallint(5) unsigned DEFAULT '0',
   `catid` smallint(5) unsigned DEFAULT '0',
@@ -923,7 +923,7 @@ CREATE TABLE `cms_position` (
 -- Table structure for `cms_position_data`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_position_data`;
-CREATE TABLE `cms_position_data` (
+CREATE TABLE IF NOT EXISTS `cms_position_data` (
   `id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `catid` smallint(5) unsigned NOT NULL DEFAULT '0',
   `posid` smallint(5) unsigned NOT NULL DEFAULT '0',
@@ -944,7 +944,7 @@ CREATE TABLE `cms_position_data` (
 -- Table structure for `cms_queue`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_queue`;
-CREATE TABLE `cms_queue` (
+CREATE TABLE IF NOT EXISTS `cms_queue` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `type` char(5) DEFAULT NULL,
   `siteid` smallint(5) unsigned DEFAULT '0',
@@ -963,7 +963,7 @@ CREATE TABLE `cms_queue` (
 -- Table structure for `cms_release_point`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_release_point`;
-CREATE TABLE `cms_release_point` (
+CREATE TABLE IF NOT EXISTS `cms_release_point` (
   `id` mediumint(8) NOT NULL auto_increment,
   `name` varchar(30) default NULL,
   `host` varchar(100) default NULL,
@@ -980,7 +980,7 @@ CREATE TABLE `cms_release_point` (
 -- Table structure for `cms_search`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_search`;
-CREATE TABLE `cms_search` (
+CREATE TABLE IF NOT EXISTS `cms_search` (
   `searchid` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `typeid` smallint(5) unsigned NOT NULL DEFAULT '0',
   `id` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -997,7 +997,7 @@ CREATE TABLE `cms_search` (
 -- Table structure for `cms_search_keyword`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_search_keyword`;
-CREATE TABLE `cms_search_keyword` (
+CREATE TABLE IF NOT EXISTS `cms_search_keyword` (
   `keyword` char(20) NOT NULL,
   `pinyin` char(20) NOT NULL,
   `searchnums` int(10) unsigned NOT NULL,
@@ -1011,7 +1011,7 @@ CREATE TABLE `cms_search_keyword` (
 -- Table structure for `cms_session`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_session`;
-CREATE TABLE `cms_session` (
+CREATE TABLE IF NOT EXISTS `cms_session` (
   `sessionid` char(32) NOT NULL,
   `userid` mediumint(8) unsigned NOT NULL default '0',
   `ip` char(200) NOT NULL,
@@ -1030,7 +1030,7 @@ CREATE TABLE `cms_session` (
 -- Table structure for `cms_site`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_site`;
-CREATE TABLE `cms_site` (
+CREATE TABLE IF NOT EXISTS `cms_site` (
   `siteid` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `name` char(30) DEFAULT '',
   `dirname` char(255) DEFAULT '',
@@ -1136,7 +1136,7 @@ CREATE TABLE IF NOT EXISTS `cms_special_content` (
 -- Table structure for `cms_sphinx_counter`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_sphinx_counter`;
-CREATE TABLE `cms_sphinx_counter` (
+CREATE TABLE IF NOT EXISTS `cms_sphinx_counter` (
   `counter_id` int(11) unsigned NOT NULL,
   `max_doc_id` int(11) unsigned NOT NULL,
   PRIMARY KEY  (`counter_id`)
@@ -1146,7 +1146,7 @@ CREATE TABLE `cms_sphinx_counter` (
 -- Table structure for `cms_template_bak`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_template_bak`;
-CREATE TABLE `cms_template_bak` (
+CREATE TABLE IF NOT EXISTS `cms_template_bak` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `creat_at` int(10) unsigned DEFAULT '0',
   `fileid` char(50) DEFAULT NULL,
@@ -1161,7 +1161,7 @@ CREATE TABLE `cms_template_bak` (
 -- Table structure for `cms_times`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_times`;
-CREATE TABLE `cms_times` (
+CREATE TABLE IF NOT EXISTS `cms_times` (
   `username` char(50) NOT NULL,
   `ip` char(200) NOT NULL,
   `logintime` int(10) unsigned NOT NULL default '0',
@@ -1174,7 +1174,7 @@ CREATE TABLE `cms_times` (
 -- Table structure for `cms_type`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_type`;
-CREATE TABLE `cms_type` (
+CREATE TABLE IF NOT EXISTS `cms_type` (
   `typeid` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `siteid` smallint(5) unsigned NOT NULL DEFAULT '0',
   `module` char(15) NOT NULL,
@@ -1194,7 +1194,7 @@ CREATE TABLE `cms_type` (
 -- Table structure for `cms_urlrule`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_urlrule`;
-CREATE TABLE `cms_urlrule` (
+CREATE TABLE IF NOT EXISTS `cms_urlrule` (
   `urlruleid` smallint(5) unsigned NOT NULL auto_increment,
   `module` varchar(15) NOT NULL,
   `file` varchar(20) NOT NULL,
@@ -1208,7 +1208,7 @@ CREATE TABLE `cms_urlrule` (
 -- Table structure for `cms_workflow`
 -- ----------------------------
 DROP TABLE IF EXISTS `cms_workflow`;
-CREATE TABLE `cms_workflow` (
+CREATE TABLE IF NOT EXISTS `cms_workflow` (
   `workflowid` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `siteid` smallint(5) unsigned NOT NULL DEFAULT '0',
   `steps` tinyint(1) unsigned NOT NULL DEFAULT '1',

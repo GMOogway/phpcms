@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS `cms_slider`;
-CREATE TABLE `cms_slider` (
+CREATE TABLE IF NOT EXISTS `cms_slider` (
   `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `siteid` smallint(5) unsigned DEFAULT '1' COMMENT '站点id',
   `typeid` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '所属位置',

@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS `cms_fclient`;
-CREATE TABLE `cms_fclient` (
+CREATE TABLE IF NOT EXISTS `cms_fclient` (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `uid` int(10) NOT NULL COMMENT '作者',
   `username` varchar(200) NOT NULL COMMENT '账号',

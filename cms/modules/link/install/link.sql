@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS `cms_link`;
-CREATE TABLE `cms_link` (
+CREATE TABLE IF NOT EXISTS `cms_link` (
   `linkid` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `siteid` smallint(5) unsigned DEFAULT '0',
   `typeid` smallint(5) unsigned NOT NULL DEFAULT '0',

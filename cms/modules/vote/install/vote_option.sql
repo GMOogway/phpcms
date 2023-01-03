@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS `cms_vote_option`;
-CREATE TABLE `cms_vote_option` (
+CREATE TABLE IF NOT EXISTS `cms_vote_option` (
   `optionid` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `siteid` smallint(5) unsigned DEFAULT '0',
   `subjectid` mediumint(8) unsigned NOT NULL DEFAULT '0',

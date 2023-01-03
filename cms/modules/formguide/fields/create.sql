@@ -5,4 +5,4 @@ CREATE TABLE IF NOT EXISTS `cms_form_table` (
   `datetime` int(10) unsigned NOT NULL,
   `ip` char(15) NOT NULL,
   PRIMARY KEY (`dataid`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;

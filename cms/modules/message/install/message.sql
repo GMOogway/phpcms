@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS `cms_message`;
-CREATE TABLE `cms_message` (
+CREATE TABLE IF NOT EXISTS `cms_message` (
   `messageid` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `send_from_id` char(30) NOT NULL DEFAULT '0',
   `send_to_id` char(30) NOT NULL DEFAULT '0',

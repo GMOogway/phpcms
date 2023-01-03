@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS `cms_menu`;
-CREATE TABLE `cms_menu` (
+CREATE TABLE IF NOT EXISTS `cms_menu` (
   `id` smallint(6) unsigned NOT NULL auto_increment,
   `name` char(40) NOT NULL default '' COMMENT '菜单语言名称',
   `parentid` smallint(6) NOT NULL default '0' COMMENT '上级菜单id',

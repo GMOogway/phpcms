@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS `cms_message_group`;
-CREATE TABLE `cms_message_group` (
+CREATE TABLE IF NOT EXISTS `cms_message_group` (
   `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `typeid` smallint(5) unsigned NOT NULL DEFAULT '0',
   `groupid` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '用户组id',

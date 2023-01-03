@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS `cms_vote_data`;
-CREATE TABLE `cms_vote_data` (
+CREATE TABLE IF NOT EXISTS `cms_vote_data` (
   `userid` mediumint(8) unsigned DEFAULT '0',
   `username` char(20) NOT NULL,
   `subjectid` mediumint(8) unsigned NOT NULL DEFAULT '0',

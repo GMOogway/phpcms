@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS `cms_guestbook`;
-CREATE TABLE `cms_guestbook` (
+CREATE TABLE IF NOT EXISTS `cms_guestbook` (
   `guestid` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `siteid` smallint(5) unsigned DEFAULT '0',
   `typeid` smallint(5) unsigned NOT NULL DEFAULT '0',

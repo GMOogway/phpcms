@@ -1,4 +1,5 @@
-CREATE TABLE `cms_customfield` (
+DROP TABLE IF EXISTS `cms_customfield`;
+CREATE TABLE IF NOT EXISTS `cms_customfield` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `pid` int(11) NOT NULL,
   `siteid` smallint(5) unsigned NOT NULL DEFAULT '0',
