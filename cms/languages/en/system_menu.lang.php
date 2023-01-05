@@ -340,6 +340,7 @@ $LANG['attachment_manager_dir'] = 'Catalogue mode';
 $LANG['attachment_manager_db'] = 'Database mode';
 $LANG['attachment_address_replace'] = 'Replace attachment address';
 $LANG['attachment_address_update'] = 'Bulk update address';
+$LANG['attachment_remote_edit'] = 'Change storage strategy';
 $LANG['delete_content'] = 'Delete content';
 $LANG['member_menu_manage'] = 'Manage frontend menu';
 $LANG['member_menu_add'] = 'Add menu';

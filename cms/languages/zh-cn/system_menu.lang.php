@@ -361,6 +361,7 @@ $LANG['attachment_manager_dir'] = '目录模式';
 $LANG['attachment_manager_db'] = '数据库模式';
 $LANG['attachment_address_replace'] = '附件地址替换';
 $LANG['attachment_address_update'] = '批量更新地址处理程序';
+$LANG['attachment_remote_edit'] = '变更储存策略';
 $LANG['delete_content'] = '删除内容';
 $LANG['member_menu_manage'] = '前台菜单管理';
 $LANG['member_menu_add'] = '添加菜单';

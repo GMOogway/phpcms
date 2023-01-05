@@ -21,6 +21,7 @@ include $this->admin_tpl('header');?>
                 </th>
                 <th width="150"> <?php echo L('名称');?> </th>
                 <th width="120"> <?php echo L('别名');?> </th>
+                <th width="120"> <?php echo L('表名');?> </th>
                 <th width="120" style="text-align:center"> <?php echo L('站点');?> </th>
                 <th width="120" style="text-align:center"> <?php echo L('数据');?> </th>
                 <th> <?php echo L('operations_manage');?> </th>
@@ -40,6 +41,7 @@ include $this->admin_tpl('header');?>
                 </td>
                 <td><?php echo $info['name'];?></td>
                 <td><?php echo $info['code'];?></td>
+                <td><?php echo 'linkage_data_'.$info['id'];?></td>
                 <td style="text-align:center">
                     <?php if ($info['type']){?>
                     <span class="label label-success"> <?php echo L('站点独立');?> </span>

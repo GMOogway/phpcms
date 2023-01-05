@@ -74,7 +74,7 @@ class manage extends admin {
 	 * 附件改名
 	 */
 	public function public_name_edit() {
-		$show_header = true; 
+		$show_header = true;
 		$aid = (int)$this->input->get('aid');
 		if (!$aid) {
 			dr_json(0, L('附件id不能为空'));
@@ -119,6 +119,29 @@ class manage extends admin {
 			dr_json(0, L('operation_failure'));
 		}
 	}
+
+	// 变更储存策略
+	public function remote_edit() {
+
+		if (IS_POST) {
+			$post = $this->input->post('data');
+			if ($post['o'] == $post['n']) {
+				dr_json(0, L('储存策略不能相同'));
+			}
+
+			$this->db->update(array('remote'=>intval($post['n'])),array('remote'=>intval($post['o'])));
+
+			dr_dir_delete(CACHE_PATH.'caches_attach/caches_data');
+			dr_mkdirs(CACHE_PATH.'caches_attach/caches_data');
+			
+			dr_json(1, L('操作成功'));
+		}
+
+		$show_header = true;
+		$this->remote_db = pc_base::load_model('attachment_remote_model');
+		$remote = $this->remote_db->select();
+		include $this->admin_tpl('attachment_remote_edit');
+	}
 	
 	/**
 	 * 批量删除附件
@@ -162,6 +185,29 @@ class manage extends admin {
 		$reslut = @unlink($filepath);
 		if($reslut) exit('1');
 		 exit('0');
+	}
+	
+	// 批量变更储存策略
+	public function pullic_type_edit() {
+
+		$ids = $this->input->get_post_ids();
+		if (!$ids) {
+			dr_json(0, L('你还没有选择呢'));
+		}
+
+		$rid = intval($this->input->post('remote'));
+		if ($rid < 0) {
+			dr_json(0, L('你还没有选择储存策略'));
+		}
+
+		foreach($ids as $id){
+			$this->db->update(array('remote'=>$rid),array('aid'=>$id));
+		}
+
+		dr_dir_delete(CACHE_PATH.'caches_attach/caches_data');
+		dr_mkdirs(CACHE_PATH.'caches_attach/caches_data');
+
+		dr_json(1, L('操作成功'));
 	}
 	
 	public function public_icon() {

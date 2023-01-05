@@ -1021,7 +1021,7 @@ class create_html extends admin {
 
 		$url = '?m=content&c=create_html&a=public_cat_edit&modelid='.$modelid;
 		$url.= '&toid='.$toid;
-		$where = '';
+		$where = array();
 
 		// 获取栏目
 		$catid = $this->input->get('catid');
@@ -1036,8 +1036,26 @@ class create_html extends admin {
 					$url.= '&catid[]='.intval($i);
 				}
 			}
-			$cat && $where.= ' catid IN ('.implode(',', $cat).')';
+			$cat && $where[] = ' catid IN ('.implode(',', $cat).')';
 		}
+		$sql = $this->input->get('sql', true);
+		if ($sql) {
+			// 防范sql注入后期需要加强
+			foreach (array('outfile', 'dumpfile', '.php', 'union', ';') as $kw) {
+				if (strpos(strtolower($sql), $kw) !== false) {
+					html_msg(0, L('存在非法SQL关键词：%s', $kw));
+				}
+			}
+			$where[] = addslashes($sql);
+			$url.= '&sql='.$sql;
+		}
+
+		if ($where) {
+			$where = implode(' AND ', $where);
+		} else {
+			$where = '';
+		}
+		
 		if (!$page) {
 			// 计算数量
 			$total = $this->db->count($where);

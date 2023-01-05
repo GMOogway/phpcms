@@ -127,7 +127,20 @@ jQuery(document).ready(function() {
                         <input type="checkbox" class="group-checkable" data-set=".checkboxes" />
                         <span></span>
                     </label>
-                    <button type="button" id="delAll" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete');?></button>
+                    <label><button type="button" id="delAll" class="btn red btn-sm"> <i class="fa fa-trash"></i> <?php echo L('delete');?></button></label>
+                    <label>
+                        <select name="remote" class="form-control">
+                            <option value="-1"> -- </option>
+                            <option value="0"> <?php echo L('默认');?> </option>
+                            <?php 
+                            if (is_array($remote)) {
+                            foreach ($remote as $t) {
+                            ?>
+                            <option value="<?php echo $t['id'];?>"<?php if ($param['remote']==$t['id']) {?> selected<?php }?>><?php echo $t['name'];?></option>
+                            <?php }} ?>
+                        </select>
+                    </label>
+                    <label><button type="button" onclick="ajax_option('?m=attachment&c=manage&a=pullic_type_edit', '<?php echo L('需要手动将这些附件复制到储存策略的目录中，你确定要变更吗？');?>', 1)" class="btn green btn-sm"> <i class="fa fa-cloud"></i> <?php echo L('变更储存策略');?></button></label>
                     <label>
                         <div class="btn-group dropup">
                             <a class="btn blue btn-sm dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="false" href="javascript:;"><i class="fa fa-files-o"></i> <?php echo L('附件状态')?> <i class="fa fa-angle-up"></i></a>

@@ -21,6 +21,15 @@ include $this->admin_tpl('header','admin');?>
             <div class="row">
                 <div class="col-md-12" style="text-align:left">
                     <div class="form-group" style="margin-bottom:5px">
+                        <label> <?php echo L('自定义条件')?> </label>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" style="height:100px" name="sql"></textarea>
+                        <p style="padding-top:9px;" class="help-block"> <?php echo L('支持自定义条件的SQL语句')?> </p>
+                    </div>
+                </div>
+                <div class="col-md-12" style="text-align:left">
+                    <div class="form-group" style="margin-bottom:5px">
                         <label> <?php echo L('变更为')?> </label>
                     </div>
                     <div class="form-group">
