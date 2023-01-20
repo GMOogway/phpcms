@@ -120,7 +120,7 @@ class attachment extends admin {
 		$datas = $this->db->listinfo('', $order, $page, $pagesize);
 		$total = $this->db->count();
 		$pages = $this->db->pages;
-		$color = array(0 => '', 1 => 'primary', 2 => 'info', 3 => 'success', 4 => 'danger', 5 => 'warning');
+		$color = array(1 => 'primary', 2 => 'info', 3 => 'success', 4 => 'danger', 5 => 'warning');
 		include $this->admin_tpl('attachment_remote');
 	}
 	

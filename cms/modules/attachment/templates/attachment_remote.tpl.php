@@ -33,7 +33,7 @@ include $this->admin_tpl('header', 'admin');
                             </label>
                         </td>
                         <td><?php echo $t['id'];?></td>
-                        <td style="text-align:center"> <span class="badge badge-<?php echo $color[$t['type']];?>"> <?php echo $this->type[$t['type']]['name'];?> </span> </td>
+                    <td style="text-align:center"> <span class="badge<?php if ($color[$t['type']]) {?> badge-<?php echo $color[$t['type']];?><?php }?>"> <?php echo $this->type[$t['type']]['name'];?> </span> </td>
                         <td><?php echo $t['name'];?></td>
                         <td>
                             <label><a href="?m=attachment&c=attachment&a=remote_edit&id=<?php echo $t['id'];?>&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo $this->input->get('pc_hash');?>" class="btn btn-xs green"><i class="fa fa-edit"></i> <?php echo L('edit');?></a></label>

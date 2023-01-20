@@ -42,11 +42,15 @@ class manage extends admin {
 		$datas = $this->db->listinfo(($where ? implode(' AND ', $where) : ''), $order, $page, $pagesize);
 		$total = $this->db->count(($where ? implode(' AND ', $where) : ''));
 		$pages = $this->db->pages;
+		$color = array(1 => 'primary', 2 => 'info', 3 => 'success', 4 => 'danger', 5 => 'warning');
+		foreach ($remote as $t) {
+			$this->type[$t['id']] = $t;
+		}
 		if(!empty($datas)) {
 			foreach($datas as $r) {
 				$thumb = glob(dirname(SYS_UPLOAD_PATH.$r['filepath']).'/thumb_*'.basename($r['filepath']));
 				$rs['aid'] = $r['aid'];
-				$rs['type'] = '<label>'.(!$r['remote'] ? '<span class="label label-sm label-danger">'.L('默认').'</span>' : '<span class="label label-sm label-warning">'.L('自定义').'</span>').'</label>';
+				$rs['type'] = '<label>'.(!$r['remote'] ? '<span class="label label-sm label-default">'.L('默认').'</span>' : '<span class="label label-sm label-'.$color[$this->type[$r['remote']]['type']].'">'.L($this->type[$r['remote']]['name']).'</span>').'</label>';
 				$rs['module'] = $modules[$r['module']]['name'];
 				if ($r['module']=='member' && $r['catid']==0) {
 					$rs['catname'] = '头像';
@@ -58,7 +62,7 @@ class manage extends admin {
 					$rs['catname'] = $category[$r['catid']]['catname'];
 					$rs['filepath'] = dr_get_file_url($r);
 				}
-				$rs['filename'] = dr_keyword_highlight($r['filename']!='' ? $r['filename'] : '...', $param['keyword']);
+				$rs['filename'] = dr_keyword_highlight(!$r['filename'] ? '未命名' : $r['filename'], $param['keyword']);
 				$rs['fileext'] = dr_keyword_highlight($r['fileext'], $param['fileext']).'<img src="?m=attachment&c=manage&a=public_icon&fileext='.$r['fileext'].'" width="20" />'.($thumb ? '<img src="'.IMG_PATH.'admin_img/havthumb.png" onclick="showthumb('.$r['aid'].', \''.$r['filename'].'\')"/>':'').($r['status'] ? ' <img src="'.IMG_PATH.'admin_img/link.png"':'');
 				$rs['related'] = $r['related'];
 				$rs['status'] = $r['status'];
