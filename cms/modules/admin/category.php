@@ -482,11 +482,9 @@ class category extends admin {
 			if($this->input->post('template_child')){
 				$this->categorys = $categorys = $this->db->select(array('siteid'=>$this->siteid,'module'=>'content'), '*', '', 'listorder ASC, catid ASC', '', 'catid');
 				$idstr = $this->get_arrchildid($catid);
-				 if(!empty($idstr)){
-					$sql = "select catid,setting from cms_category where catid in($idstr)";
-					$this->db->query($sql);
-					$arr = $this->db->fetch_array();
-					 if(!empty($arr)){
+				if(!empty($idstr)){
+					 
+					if(!empty($arr)){
 						foreach ($arr as $v){
 							$new_setting = array2string(
 							array_merge(string2array($v['setting']), array('category_template' => $setting['category_template'],'list_template' =>  $setting['list_template'],'show_template' =>  $setting['show_template']))
@@ -1526,10 +1524,10 @@ class category extends admin {
 		} else {
 			if ($pid) {
 				$pcat = $this->db->get_one(array('catid'=>$pid));
-				if ($pcat && $this->db->count(array('catid<>'=>$id, 'parentdir'=>$pcat['catdir'].'/', 'catdir'=>$value))) {
+				if ($pcat && $this->db->count(array('catid<>'=>$id, 'parentdir'=>$pcat['catdir'].'/', 'catdir'=>$value, 'siteid'=>$this->siteid))) {
 					return dr_return_data(0, L('目录不能重复'));
 				}
-			} elseif ($this->db->count(array('catid<>'=>$id, 'parentdir'=>'', 'catdir'=>$value))) {
+			} elseif ($this->db->count(array('catid<>'=>$id, 'parentdir'=>'', 'catdir'=>$value, 'siteid'=>$this->siteid))) {
 				return dr_return_data(0, L('目录不能重复'));
 			}
 		}
