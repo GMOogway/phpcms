@@ -483,7 +483,7 @@ class category extends admin {
 				$this->categorys = $categorys = $this->db->select(array('siteid'=>$this->siteid,'module'=>'content'), '*', '', 'listorder ASC, catid ASC', '', 'catid');
 				$idstr = $this->get_arrchildid($catid);
 				if(!empty($idstr)){
-					 
+					$arr = $this->db->select(array('catid'=>explode(',', $idstr)), 'catid,setting');
 					if(!empty($arr)){
 						foreach ($arr as $v){
 							$new_setting = array2string(
