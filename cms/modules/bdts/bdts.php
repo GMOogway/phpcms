@@ -19,7 +19,7 @@ class bdts extends admin {
 	public function log_index() {
 		$data = $list = array();
 		$page = max(1, (int)$this->input->get('page'));
-		$file = CACHE_PATH.'caches_bdts/bdts_log.php';
+		$file = CACHE_PATH.'caches_bdts/bdts'.$this->siteid.'_log.php.php';
 		if (is_file($file)) {
 			$data = explode(PHP_EOL, file_get_contents($file));
 			$data = $data ? array_reverse($data) : array();
@@ -75,7 +75,7 @@ class bdts extends admin {
 	
 	public function del() {
 
-		@unlink(CACHE_PATH.'caches_bdts/bdts_log.php');
+		@unlink(CACHE_PATH.'caches_bdts/bdts'.$this->siteid.'_log.php.php');
 
 		dr_admin_msg(1,L('操作成功'), '?m=bdts&c=bdts&a=log_index&menuid='.$this->input->get('menuid'));
 	}

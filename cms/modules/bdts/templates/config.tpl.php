@@ -31,12 +31,6 @@ jQuery(document).ready(function() {
 
                 <div class="form-body">
 
-                    <div class="form-group">
-                        <label class="col-md-2 control-label"><?php echo L('接口地址');?>：</label>
-                        <div class="col-md-9">
-                            <a href="https://ziyuan.baidu.com/linksubmit/index" target="_blank" class="btn yellow"><?php echo L('申请接口');?></a>
-                        </div>
-                    </div>
                     <?php foreach((array)$sitemodel_data as $t){?>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo $t['name'];?>：</label>

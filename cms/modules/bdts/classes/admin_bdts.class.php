@@ -8,6 +8,13 @@ class admin_bdts {
 
 
     private $zzconfig;
+    
+    public function __construct() {
+        $this->input = pc_base::load_sys_class('input');
+        $this->config = pc_base::load_sys_class('config');
+        $this->cache = pc_base::load_sys_class('cache');
+        $this->siteid = get_siteid() ? get_siteid() : 1 ;
+    }
 
     // 配置信息
     public function getConfig() {
@@ -16,8 +23,8 @@ class admin_bdts {
             return $this->zzconfig;
         }
 
-        if (is_file(CACHE_PATH.'caches_bdts/bdts.php')) {
-            $this->zzconfig = require CACHE_PATH.'caches_bdts/bdts.php';
+        if (is_file(CACHE_PATH.'caches_bdts/bdts'.$this->siteid.'.php')) {
+            $this->zzconfig = require CACHE_PATH.'caches_bdts/bdts'.$this->siteid.'.php';
             return $this->zzconfig;
         }
 
@@ -27,8 +34,7 @@ class admin_bdts {
     // 配置信息
     public function setConfig($data) {
 
-        $this->config = pc_base::load_sys_class('config');
-        $this->config->file(CACHE_PATH.'caches_bdts/bdts.php', '站长配置文件', 32)->to_require($data);
+        $this->config->file(CACHE_PATH.'caches_bdts/bdts'.$this->siteid.'.php', '站长配置文件', 32)->to_require($data);
 
     }
 
@@ -70,10 +76,10 @@ class admin_bdts {
         $rt = json_decode(curl_exec($ch), true);
         if ($rt['error']) {
             // 错误日志
-            @file_put_contents(CACHE_PATH.'caches_bdts/bdts_log.php', date('Y-m-d H:i:s').' '.$name.'['.$url.'] - 失败 - '.$rt['message'].PHP_EOL, FILE_APPEND);
+            @file_put_contents(CACHE_PATH.'caches_bdts/bdts'.$this->siteid.'_log.php', date('Y-m-d H:i:s').' '.$name.'['.$url.'] - 失败 - '.$rt['message'].PHP_EOL, FILE_APPEND);
         } else {
             // 推送成功
-            @file_put_contents(CACHE_PATH.'caches_bdts/bdts_log.php', date('Y-m-d H:i:s').' '.$name.'['.$url.'] - 成功'.PHP_EOL, FILE_APPEND);
+            @file_put_contents(CACHE_PATH.'caches_bdts/bdts'.$this->siteid.'_log.php.php', date('Y-m-d H:i:s').' '.$name.'['.$url.'] - 成功'.PHP_EOL, FILE_APPEND);
         }
 
         return dr_return_data(1, 'ok');
@@ -81,7 +87,6 @@ class admin_bdts {
 
     // 进行百度推送
     public function module_bdts($mid, $url, $action = 'add') {
-        $siteid = get_siteid() ? get_siteid() : 1 ;
 
         $config = $this->getConfig();
         if (!$config) {
@@ -102,13 +107,22 @@ class admin_bdts {
         }
 
         // 获取移动端域名
-        $murl = str_replace(siteurl($siteid), sitemobileurl($siteid), $url);
-        $uri = parse_url($murl);
-        $m_site = $uri['host'];
+        $murl = str_replace(siteurl($this->siteid), sitemobileurl($this->siteid), $url);
+        $sitelist = siteinfo($this->siteid);
+        if ($sitelist['mobilemode']==0 && $sitelist['mobile_dirname']) {
+            $m_site = $site.'/'.$sitelist['mobile_dirname'];
+        } else {
+            $uri = parse_url($murl);
+            $m_site = $uri['host'];
+        }
         if ($m_site && $m_site != $site) {
             $murl = str_replace($site, $m_site, $purl); // 替换移动端url
         } else {
             $m_site = '';
+        }
+
+        if ($sitelist['mobilemode']==0 && $sitelist['mobile_dirname'] && strpos($m_site, $sitelist['mobile_dirname']) !== false) {
+            list($m_site) = explode('/', $m_site);
         }
 
         // 百度主动推送
@@ -123,56 +137,49 @@ class admin_bdts {
                     $m_token = $t['token'];
                 }
             }
+
             if ($token) {
                 // pc域名
-                if (strpos($purl, siteurl($siteid)) === false ) {
-                    @file_put_contents(CACHE_PATH.'caches_bdts/bdts_log.php', date('Y-m-d H:i:s').' PC端['.$purl.'] - 域名规范或者域名不是PC域名（'.siteurl($siteid).'） - 未推送 '.PHP_EOL, FILE_APPEND);
+                $api = $this->zzurl[$action].'?site='.$site.'&token='.$token;
+                $urls = [$purl];
+                $ch = curl_init();
+                $options =  array(
+                    CURLOPT_URL => $api,
+                    CURLOPT_POST => true,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_POSTFIELDS => implode("\n", $urls),
+                    CURLOPT_HTTPHEADER => array('Content-Type: text/plain'),
+                );
+                curl_setopt_array($ch, $options);
+                $rt = json_decode(curl_exec($ch), true);
+                if ($rt['error']) {
+                    // 错误日志
+                    @file_put_contents(CACHE_PATH.'caches_bdts/bdts'.$this->siteid.'_log.php.php', date('Y-m-d H:i:s').' PC端['.$purl.'] - '.$action.' - 失败 - '.$rt['message'].PHP_EOL, FILE_APPEND);
                 } else {
-                    $api = $this->zzurl[$action].'?site='.$site.'&token='.$token;
-                    $urls = [$purl];
-                    $ch = curl_init();
-                    $options =  array(
-                        CURLOPT_URL => $api,
-                        CURLOPT_POST => true,
-                        CURLOPT_RETURNTRANSFER => true,
-                        CURLOPT_POSTFIELDS => implode("\n", $urls),
-                        CURLOPT_HTTPHEADER => array('Content-Type: text/plain'),
-                    );
-                    curl_setopt_array($ch, $options);
-                    $rt = json_decode(curl_exec($ch), true);
-                    if ($rt['error']) {
-                        // 错误日志
-                        @file_put_contents(CACHE_PATH.'caches_bdts/bdts_log.php', date('Y-m-d H:i:s').' PC端['.$purl.'] - '.$action.' - 失败 - '.$rt['message'].PHP_EOL, FILE_APPEND);
-                    } else {
-                        // 推送成功
-                        @file_put_contents(CACHE_PATH.'caches_bdts/bdts_log.php', date('Y-m-d H:i:s').' PC端['.$purl.'] - '.$action.' - 成功'.PHP_EOL, FILE_APPEND);
-                    }
+                    // 推送成功
+                    @file_put_contents(CACHE_PATH.'caches_bdts/bdts'.$this->siteid.'_log.php.php', date('Y-m-d H:i:s').' PC端['.$purl.'] - '.$action.' - 成功'.PHP_EOL, FILE_APPEND);
                 }
             }
             if ($m_token && $m_site) {
                 // 移动端
-                if (strpos($murl, sitemobileurl($siteid)) === false ) {
-                    @file_put_contents(CACHE_PATH.'caches_bdts/bdts_log.php', date('Y-m-d H:i:s').' 移动端['.$murl.'] - 域名规范或者域名不是移动端域名（'.sitemobileurl($siteid).'） - 未推送 '.PHP_EOL, FILE_APPEND);
+                $api = $this->zzurl[$action] . '?site=' . $m_site . '&token=' . $m_token;
+                $urls = [$murl];
+                $ch = curl_init();
+                $options = array(
+                    CURLOPT_URL => $api,
+                    CURLOPT_POST => true,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_POSTFIELDS => implode("\n", $urls),
+                    CURLOPT_HTTPHEADER => array('Content-Type: text/plain'),
+                );
+                curl_setopt_array($ch, $options);
+                $rt = json_decode(curl_exec($ch), true);
+                if ($rt['error']) {
+                    // 错误日志
+                    @file_put_contents(CACHE_PATH . 'caches_bdts/bdts'.$this->siteid.'_log.php.php', date('Y-m-d H:i:s') . ' 移动端[' . $murl . '] - '.$action.' - 失败 - ' . $rt['message'] . PHP_EOL, FILE_APPEND);
                 } else {
-                    $api = $this->zzurl[$action] . '?site=' . $m_site . '&token=' . $m_token;
-                    $urls = [$murl];
-                    $ch = curl_init();
-                    $options = array(
-                        CURLOPT_URL => $api,
-                        CURLOPT_POST => true,
-                        CURLOPT_RETURNTRANSFER => true,
-                        CURLOPT_POSTFIELDS => implode("\n", $urls),
-                        CURLOPT_HTTPHEADER => array('Content-Type: text/plain'),
-                    );
-                    curl_setopt_array($ch, $options);
-                    $rt = json_decode(curl_exec($ch), true);
-                    if ($rt['error']) {
-                        // 错误日志
-                        @file_put_contents(CACHE_PATH . 'caches_bdts/bdts_log.php', date('Y-m-d H:i:s') . ' 移动端[' . $murl . '] - '.$action.' - 失败 - ' . $rt['message'] . PHP_EOL, FILE_APPEND);
-                    } else {
-                        // 推送成功
-                        @file_put_contents(CACHE_PATH . 'caches_bdts/bdts_log.php', date('Y-m-d H:i:s') . ' 移动端[' . $murl . '] - '.$action.' - 成功' . PHP_EOL, FILE_APPEND);
-                    }
+                    // 推送成功
+                    @file_put_contents(CACHE_PATH . 'caches_bdts/bdts'.$this->siteid.'_log.php.php', date('Y-m-d H:i:s') . ' 移动端[' . $murl . '] - '.$action.' - 成功' . PHP_EOL, FILE_APPEND);
                 }
             }
 
