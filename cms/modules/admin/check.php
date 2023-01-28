@@ -178,7 +178,7 @@ class check extends admin {
                 // 必备模板检测
                 foreach (array('message.html', 'msg.html') as $tt) {
                     if (!is_file(TPLPATH.SITE_TEMPLATE.'/content/'.$tt)) {
-                        $rt[] = '前端模板【电脑版】不存在：TPLPATH/'.SITE_TEMPLATE.'/home/'.$tt;
+                        $rt[] = '前端模板【电脑版】不存在：TPLPATH/'.SITE_TEMPLATE.'/content/'.$tt;
                     }
                 }
                 
