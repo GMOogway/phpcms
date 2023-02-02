@@ -48,7 +48,21 @@ include $this->admin_tpl('header');?>
                     <div class="form-group" id="dr_row_catname">
                         <label class="col-md-2 control-label"><?php echo L('catname')?></label>
                         <div class="col-md-9">
-                            <label><input class="form-control input-large" type="text" name="info[catname]" id="catname" value="<?php echo $catname;?>"></label>
+                            <label><input class="form-control input-large" type="text" name="info[catname]" id="catname" value="<?php echo $catname;?>" onblur="topinyin('catdir','catname','?m=admin&c=category&a=public_ajax_pinyin');"></label>
+                        </div>
+                    </div>
+                    <div class="form-group" id="dr_row_catdir">
+                        <label class="col-md-2 control-label"><?php echo L('catdir')?></label>
+                        <div class="col-md-9">
+                            <?php if ($parentdir) {?>
+                            <div class="input-group">
+                                <span class="input-group-addon"><?php echo $parentdir;?></span>
+                                <input class="form-control input-medium" type="text" name="info[catdir]" id="catdir" value="<?php echo htmlspecialchars($catdir);?>">
+                            </div>
+                            <?php } else {?>
+                            <input class="form-control input-large" type="text" name="info[catdir]" id="catdir" value="<?php echo htmlspecialchars($catdir);?>">
+                            <?php }?>
+                            <span class="help-block" id="dr_catdir_tips"><?php echo L('栏目目录确保唯一，用于url填充或者生成目录')?></span>
                         </div>
                     </div>
                     <div class="form-group">

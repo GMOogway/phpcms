@@ -325,6 +325,11 @@ class index {
 			$arrchild_arr[$mcatid] = $cache;
 		}
 		
+		// 判断是否外链
+		if ($type==2) {
+			dr_redirect($url, 'refresh');exit;
+		}
+		
 		if($type==0) {
 			$template = $child ? $template : $template_list;
 			$arrparentid = explode(',', $arrparentid);
@@ -534,7 +539,7 @@ class index {
 			$dirname = end(explode('/',$catdir));
 		}
 		$this->category_db = pc_base::load_model('category_model');
-		$result = $this->category_db->select(array('catdir'=>$dirname));
+		$result = $this->category_db->select(array('catdir'=>$dirname, 'siteid'=>SITE_ID));
 		foreach($result as $r){
 			if ($r['parentid']) {
 				$cat_dir[$r['parentdir'].$r['catdir']] = $r['catid'];

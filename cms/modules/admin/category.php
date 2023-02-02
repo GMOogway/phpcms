@@ -244,6 +244,13 @@ class category extends admin {
 				if(!$info['modelid']) dr_json(0, L('select_model'), array('field' => 'modelid'));
 			}
 			if ($info['parentid']) {
+				$pcat = $this->db->get_one(array('catid'=>$info['parentid']));
+				if (!$pcat) {
+					dr_json(0, L('父栏目不存在'));
+				}
+				if ($pcat && $info['type'] != 2 && $pcat['type'] == 2) {
+					dr_json(0, L('父级栏目是外部地址类型，下级栏目只能选择外部地址'));
+				}
 				$modelid = $this->categorys[$info['parentid']]['modelid'];
 				if ($modelid) {
 					$this->content_db->set_model($modelid);
@@ -257,12 +264,10 @@ class category extends admin {
 				$info['catname'] = safe_replace($info['catname']);
 				$info['catname'] = str_replace(array('%'),'',$info['catname']);
 				if(!$info['catname']) dr_json(0, L('input_catname'), array('field' => 'catname'));
-				if($info['type']!=2) {
-					if(!$info['catdir']) dr_json(0, L('input_dirname'), array('field' => 'catdir'));
-					$rt = $this->check_dirname(0, $info['parentid'], $info['catdir']);
-					if (!$rt['code']) {
-						dr_json(0, $rt['msg'], array('field' => 'catdir'));
-					}
+				if(!$info['catdir']) dr_json(0, L('input_dirname'), array('field' => 'catdir'));
+				$rt = $this->check_dirname(0, $info['parentid'], $info['catdir']);
+				if (!$rt['code']) {
+					dr_json(0, $rt['msg'], array('field' => 'catdir'));
 				}
 				$info['type']==2 && !$info['url'] && dr_json(0, L('input_linkurl'), array('field' => 'url'));
 			}
@@ -400,15 +405,20 @@ class category extends admin {
 			$info = $this->input->post('info');
 			$setting = $this->input->post('setting');
 			if(!$info['catname']) dr_json(0, L('input_catname'), array('field' => 'catname'));
-			if($this->input->post('type')!=2) {
-				if(!$info['catdir']) dr_json(0, L('input_dirname'), array('field' => 'catdir'));
-				$rt = $this->check_dirname($catid, $info['parentid'], $info['catdir']);
-				if (!$rt['code']) {
-					dr_json(0, $rt['msg'], array('field' => 'catdir'));
-				}
+			if(!$info['catdir']) dr_json(0, L('input_dirname'), array('field' => 'catdir'));
+			$rt = $this->check_dirname($catid, $info['parentid'], $info['catdir']);
+			if (!$rt['code']) {
+				dr_json(0, $rt['msg'], array('field' => 'catdir'));
 			}
 			$this->input->post('type')==2 && !$info['url'] && dr_json(0, L('input_linkurl'), array('field' => 'url'));
 			if ($info['parentid']) {
+				$pcat = $this->db->get_one(array('catid'=>$info['parentid']));
+				if (!$pcat) {
+					dr_json(0, L('父栏目不存在'));
+				}
+				if ($pcat && $info['type'] != 2 && $pcat['type'] == 2) {
+					dr_json(0, L('父级栏目是外部地址类型，下级栏目只能选择外部地址'));
+				}
 				$modelid = $this->categorys[$info['parentid']]['modelid'];
 				if ($modelid) {
 					$this->content_db->set_model($modelid);
@@ -969,40 +979,35 @@ class category extends admin {
 		$this->get_categorys($categorys);
 		if(is_array($this->categorys)) {
 			foreach($this->categorys as $catid => $cat) {
-				if($cat['type'] == 2) {
-					$listorder = $cat['listorder'] ? $cat['listorder'] : $catid;
-					$this->db->update(array('listorder'=>$listorder), array('catid'=>$catid));
-				} else {
-					$arrparentid = $this->get_arrparentid($catid);
-					$setting = string2array($cat['setting']);
-					$arrchildid = $this->get_arrchildid($catid);
-					$child = is_numeric($arrchildid) ? 0 : 1;
-					if($categorys[$catid]['arrparentid']!=$arrparentid || $categorys[$catid]['arrchildid']!=$arrchildid || $categorys[$catid]['child']!=$child) $this->db->update(array('arrparentid'=>$arrparentid,'arrchildid'=>$arrchildid,'child'=>$child),array('catid'=>$catid));
+				$arrparentid = $this->get_arrparentid($catid);
+				$setting = string2array($cat['setting']);
+				$arrchildid = $this->get_arrchildid($catid);
+				$child = is_numeric($arrchildid) ? 0 : 1;
+				if($categorys[$catid]['arrparentid']!=$arrparentid || $categorys[$catid]['arrchildid']!=$arrchildid || $categorys[$catid]['child']!=$child) $this->db->update(array('arrparentid'=>$arrparentid,'arrchildid'=>$arrchildid,'child'=>$child),array('catid'=>$catid));
 
-					$parentdir = $this->get_parentdir($catid);
-					$letter = $this->pinyin->result($cat['catname']);
-					$listorder = $cat['listorder'] ? $cat['listorder'] : $catid;
-					
-					$this->sethtml = $setting['create_to_html_root'];
-					//检查是否生成到根目录
-					$this->get_sethtml($catid);
-					$sethtml = $this->sethtml ? 1 : 0;
-					
-					if($setting['ishtml']) {
-					//生成静态时
-						$url = $this->update_url($catid);
-						if(!preg_match('/^(http|https):\/\//i', $url)) {
-							$url = $sethtml ? '/'.$url : $html_root.'/'.$url;
-						}
-					} else {
-					//不生成静态时
-						$url = $this->update_url($catid);
-						$url = APP_PATH.$url;
+				$parentdir = $this->get_parentdir($catid);
+				$letter = $this->pinyin->result($cat['catname']);
+				$listorder = $cat['listorder'] ? $cat['listorder'] : $catid;
+				
+				$this->sethtml = $setting['create_to_html_root'];
+				//检查是否生成到根目录
+				$this->get_sethtml($catid);
+				$sethtml = $this->sethtml ? 1 : 0;
+				
+				if($setting['ishtml']) {
+				//生成静态时
+					$url = $this->update_url($catid);
+					if(!preg_match('/^(http|https):\/\//i', $url)) {
+						$url = $sethtml ? '/'.$url : $html_root.'/'.$url;
 					}
-					if($cat['url']!=$url) $this->db->update(array('url'=>$url), array('catid'=>$catid));
-
-					if($categorys[$catid]['parentdir']!=$parentdir || $categorys[$catid]['sethtml']!=$sethtml || $categorys[$catid]['letter']!=$letter || $categorys[$catid]['listorder']!=$listorder) $this->db->update(array('parentdir'=>$parentdir,'sethtml'=>$sethtml,'letter'=>$letter,'listorder'=>$listorder), array('catid'=>$catid));
+				} else {
+				//不生成静态时
+					$url = $this->update_url($catid);
+					$url = APP_PATH.$url;
 				}
+				if($cat['type'] != 2) if($cat['url']!=$url) $this->db->update(array('url'=>$url), array('catid'=>$catid));
+
+				if($categorys[$catid]['parentdir']!=$parentdir || $categorys[$catid]['sethtml']!=$sethtml || $categorys[$catid]['letter']!=$letter || $categorys[$catid]['listorder']!=$listorder) $this->db->update(array('parentdir'=>$parentdir,'sethtml'=>$sethtml,'letter'=>$letter,'listorder'=>$listorder), array('catid'=>$catid));
 			}
 		}
 		
