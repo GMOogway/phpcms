@@ -49,7 +49,7 @@ function dr_checking() {
                 //$('#dr_check_result').show();
                 $('#dr_check_button').html('正在初始化');
                 $('#dr_check_button').attr('disabled', true);
-                dr_ajax2ajax(1);
+                dr_ajax2ajax(<?php echo max(intval($page), 1);?>);
             }
         },
         error: function(HttpRequest, ajaxOptions, thrownError) {

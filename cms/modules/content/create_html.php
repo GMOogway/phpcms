@@ -146,8 +146,6 @@ class create_html extends admin {
 			dr_json(0, L('没有找到上次中断生成的记录'));
 		} elseif (!$cache_class->get_auth_data($name)) {
 			dr_json(0, L('生成记录已过期，请重新开始生成'));
-		} elseif (!$cache_class->get_auth_data($name.'-'.$page)) {
-			dr_json(0, L('生成记录已过期，请重新开始生成'));
 		}
 
 		dr_json(1, 'ok');
@@ -354,11 +352,11 @@ class create_html extends admin {
 		$this->html = pc_base::load_app_class('html');
 		$maxsize = $this->input->get('maxsize');
 		$page = max(1, intval($this->input->get('pp')));
-		$name = 'category-html-file-'.$page;
-		$name2 = 'category-html-file';
-		$pcount = $cache_class->get_auth_data($name2, $this->siteid);
+		$name = 'category-html-file';
+		$name2 = $name.'-'.$page;
+		$pcount = $cache_class->get_auth_data($name, $this->siteid);
 		if (!$pcount) {
-			dr_json(0, '临时缓存数据不存在：'.$name2);
+			dr_json(0, '临时缓存数据不存在：'.$name);
 		} elseif ($page > $pcount) {
 			// 完成
 			$cache_class->del_auth_data($name, $this->siteid);
@@ -366,9 +364,9 @@ class create_html extends admin {
 			dr_json(-1, '');
 		}
 
-		$cache = $cache_class->get_auth_data($name, $this->siteid);
+		$cache = $cache_class->get_auth_data($name2, $this->siteid);
 		if (!$cache) {
-			dr_json(0, '临时缓存数据不存在：'.$name);
+			dr_json(0, '临时缓存数据不存在：'.$name2);
 		}
 
 		if ($cache) {
@@ -385,11 +383,11 @@ class create_html extends admin {
 						$ok = '<a class="error" href="'.$t['url'].'" target="_blank">地址【'.$t['url'].'】是动态，请更新内容URL地址为静态模式</a>';
 					} else {
 						$this->html->category($t['catid'],$t['page'],$maxsize);
-						$cache_class->set_auth_data($name2.'-error', $page); // 设置断点
 						$class = 'ok';
 						$ok = '<a class="ok" href="'.$t['url'].'" target="_blank">生成成功</a>';
 					}
 				}
+				$cache_class->set_auth_data($name.'-error', $page); // 设置断点
 				$html.= '<p class="todo_p '.$class.'"><label class="rleft">(#'.$t['catid'].')'.$t['catname'].'</label><label class="rright">'.$ok.'</label></p>';
 			}
 			// 完成
@@ -420,7 +418,7 @@ class create_html extends admin {
 		$name2 = $name.'-data';
 		$pcount = $cache_class->get_auth_data($name, $this->siteid);
 		if (!$pcount) {
-			dr_json(0, '临时数据不存在：'.$name);
+			dr_json(0, '临时缓存数据不存在：'.$name);
 		} elseif ($page > $pcount) {
 			// 完成
 			$cache_class->del_auth_data($name, $this->siteid);
@@ -430,7 +428,7 @@ class create_html extends admin {
 
 		$cache = $cache_class->get_auth_data($name2, $this->siteid);
 		if (!$cache) {
-			dr_json(0, '临时数据不存在：'.$name2);
+			dr_json(0, '临时缓存数据不存在：'.$name2);
 		} elseif (!$cache['sql']) {
 			dr_json(0, '临时数据SQL未生成成功：'.$name2);
 		}
@@ -474,7 +472,6 @@ class create_html extends admin {
 							$ok = '<a class="error" href="'.$t['url'].'" target="_blank">地址【'.$t['url'].'】是动态，请更新内容URL地址为静态模式</a>';
 						} else {
 							$this->html->show($urls[1],$r,0,'edit',$r['upgrade']);
-							$cache_class->set_auth_data($name.'-error', $page); // 设置断点
 							$class = 'ok';
 							$ok = '<a class="ok" href="'.$t['url'].'" target="_blank">生成成功</a>';
 						}
@@ -483,6 +480,7 @@ class create_html extends admin {
 					$class = 'p_error';
 					$ok = '<a class="error" href="'.$t['url'].'" target="_blank">它是动态模式</a>';
 				}
+				$cache_class->set_auth_data($name.'-error', $page); // 设置断点
 				$html.= '<p class="todo_p '.$class.'"><label class="rleft">(#'.$t['id'].')'.$t['title'].'</label><label class="rright">'.$ok.'</label></p>';
 			}
 			// 完成
