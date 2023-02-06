@@ -70,7 +70,7 @@ include $this->admin_tpl('header');?>
                         <label class="col-md-2 control-label"><?php echo L('catname')?></label>
                         <div class="col-md-9">
                             <label id="normal_add"><input class="form-control input-large" type="text" name="info[catname]" id="catname" value="" onblur="topinyin('catdir','catname','?m=admin&c=category&a=public_ajax_pinyin');"></label>
-                            <span id="batch_add" style="display:none"><textarea class="form-control" name="batch_add" id="batch" maxlength="255" style="height:90px;"></textarea>
+                            <span id="batch_add" style="display:none"><textarea class="form-control" name="batch_add" id="batch" style="height:190px;"></textarea>
                             <span class="help-block" id="dr_catname_tips"><?php echo L('batch_add_tips')?></span>
                             </span>
                         </div>

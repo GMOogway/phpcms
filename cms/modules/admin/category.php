@@ -356,7 +356,7 @@ class category extends admin {
 					$this->update_priv($catid, $this->input->post('priv_groupid'),0);
 					if (!$cf['code']) {
 						// 重复验证
-						$infocf['catdir'] = $cf.$catid;
+						$infocf['catdir'] = $info['catdir'].$catid;
 						$this->db->update($infocf,array('catid'=>$catid,'siteid'=>$this->siteid));
 					}
 				}
