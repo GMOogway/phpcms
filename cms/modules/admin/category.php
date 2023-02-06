@@ -180,7 +180,10 @@ class category extends admin {
 				$t['type_html'] = '<a class="tooltips badge badge-info" data-container="body" data-placement="right" data-original-title="'.L('不可发布内容的介绍性质页面，例如关于我们等页面').'"> '.L('单页').' </a>';
 			}
 			// 判断是否生成静态
-			$t['is_page_html'] = '<a href="javascript:;" onclick="dr_ajax_open_close(this, \'?m=admin&c=category&a=public_show_edit&at=ishtml&catid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash').'\', 0);" class="tooltips badge badge-'.(!$t['ishtml'] ? 'no' : 'yes').'"><i class="fa fa-'.(!$t['ishtml'] ? 'times' : 'check').'"></i></a>';
+			$t['is_page_html'] = '';
+			if ($t['type'] != 2) {
+				$t['is_page_html'] = '<a href="javascript:;" onclick="dr_ajax_open_close(this, \'?m=admin&c=category&a=public_show_edit&at=ishtml&catid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash').'\', 0);" class="tooltips badge badge-'.(!$t['ishtml'] ? 'no' : 'yes').'"><i class="fa fa-'.(!$t['ishtml'] ? 'times' : 'check').'"></i></a>';
+			}
 			if (isset($this->cat_config['list_field']) && $this->cat_config['list_field']) {
 				foreach ($this->cat_config['list_field'] as $i => $tt) {
 					if ($tt['use']) {
