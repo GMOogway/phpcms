@@ -44,10 +44,6 @@ class category extends admin {
 	protected function _get_tree_list($data) {
 		$models = getcache('model','commons');
 		$sitelist = getcache('sitelist','commons');
-		$category_items = array();
-		foreach ($models as $modelid=>$model) {
-			$category_items[$modelid] = getcache('category_items_'.$modelid,'commons');
-		}
 		$html_root = SYS_HTML_ROOT;
 
 		$list = "<tr class='\$class'>";
@@ -736,8 +732,6 @@ class category extends admin {
 			$this->url = pc_base::load_app_class('url', 'content');
 			$sitelist = getcache('sitelist','commons');
 			$modelid = $this->categorys[$id]['modelid'];
-			$items = getcache('category_items_'.$modelid,'commons');
-			//if($items[$id]) dr_json(0, L('category_does_not_allow_delete'));
 			if($ishtml) {
 				$fileurl = $html_root.'/'.$this->url->category_url($id, 1);
 				if($this->siteid != 1) {
