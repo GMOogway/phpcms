@@ -12,10 +12,29 @@ function dr_tree_data(catid) {
         $.ajax({
             type: 'GET',
             dataType: 'json',
-            url: '?m=admin&c=category&a=public_list_index&menuid=<?php echo $this->input->get('menuid');?>&pc_hash='+pc_hash+'&pid='+catid,
+            url: '?m=admin&c=category&a=public_list_index&pid='+catid,
             success: function(json) {
                 layer.close(index);
                 if (json.code == 1) {
+                    <?php if (defined('SYS_TOTAL_POPEN') && SYS_TOTAL_POPEN) {?>
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        url: "?m=admin&c=category&a=public_ctotal",
+                        data: {
+                            'catid': json.data,
+                            'csrf_test_name': "<?php echo csrf_hash();?>",
+                        },
+                        success: function(json2) {
+                            if (json2.code == 1) {
+                                eval(json2.msg);
+                            }
+                        },
+                        error: function(HttpRequest, ajaxOptions, thrownError) {
+                            dr_ajax_alert_error(HttpRequest, ajaxOptions, thrownError)
+                        }
+                    });
+                    <?php }?>
                     $('.dr_catid_'+catid).after(json.msg);
                     $('.select-cat-'+catid).html('[-]');
                     $('.tooltips').tooltip();
@@ -60,6 +79,22 @@ $(function() {
     ?>
     dr_tree_data(<?php echo $ii;?>);
     <?php }}}?>
+    <?php if (defined('SYS_TOTAL_POPEN') && SYS_TOTAL_POPEN) {?>
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: "?m=admin&c=category&a=public_ctotal",
+        data: <?php echo json_encode(['catid'=>$tcats, 'csrf_test_name' => csrf_hash()]);?>,
+        success: function(json) {
+            if (json.code == 1) {
+                eval(json.msg);
+            }
+        },
+        error: function(HttpRequest, ajaxOptions, thrownError) {
+            dr_ajax_alert_error(HttpRequest, ajaxOptions, thrownError)
+        }
+    });
+    <?php }?>
 });
 </script>
 <div class="page-container" style="margin-bottom: 0px !important;">

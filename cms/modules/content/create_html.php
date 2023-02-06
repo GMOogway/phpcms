@@ -10,6 +10,7 @@ class create_html extends admin {
 	public function __construct() {
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
+		$this->cache = pc_base::load_sys_class('cache');
 		$this->db = pc_base::load_model('content_model');
 		$this->siteid = $this->get_siteid();
 		$this->categorys = getcache('category_content_'.$this->siteid,'commons');
@@ -521,41 +522,99 @@ class create_html extends admin {
 	// 按栏目设置URL规则
 	public function public_html_index() {
 		$show_header = $show_dialog  = true;
-		$tree = pc_base::load_sys_class('tree');
-		$categorys = array();
-		if(!empty($this->categorys)) {
-			foreach($this->categorys as $catid=>$r) {
-				$setting = string2array($r['setting']);
-				if($this->siteid != $r['siteid'] || $r['type']==2) continue;
-				$r['name'] = str_cut($r['catname'], 30);
-				$ishtml = intval($setting['ishtml']);
-				$r['is_page_html'] = '<a href="javascript:;" onclick="dr_cat_ajax_open_close(this, \'?m=content&c=create_html&a=public_html_edit&share=1&catid='.$r['catid'].'&pc_hash=\'+pc_hash, 0);" class="badge badge-'.(!$ishtml ? 'no' : 'yes').'"><i class="fa fa-'.(!$ishtml ? 'times' : 'check').'"></i></a>';
-				if ($r['type']==0) {
-					$content_ishtml = intval($setting['content_ishtml']);
-					$r['is_show_html'] = '<a href="javascript:;" onclick="dr_cat_ajax_open_close(this, \'?m=content&c=create_html&a=public_html_edit&share=0&catid='.$r['catid'].'&pc_hash=\'+pc_hash, 0);" class="badge badge-'.(!$content_ishtml ? 'no' : 'yes').'"><i class="fa fa-'.(!$content_ishtml ? 'times' : 'check').'"></i></a>';
-				} else {
-					$r['is_show_html'] = '';
-				}
-				$r['category'] = form::urlrule('content','category',$ishtml,$setting['category_ruleid'],'class="form-control" onchange="dr_save_urlrule(1, \''.$r['catid'].'\', this.value)"');
-				if ($r['type']==0) {
-					$r['show'] = form::urlrule('content','show',$content_ishtml,$setting['show_ruleid'],'class="form-control" onchange="dr_save_urlrule(0, \''.$r['catid'].'\', this.value)"');
-				} else {
-					$r['show'] = '';
-				}
-				$categorys[$catid] = $r;
-			}
+		$this->cat_config = $this->cache->get_file('category');
+		if (!$this->cat_config) {
+			$this->cat_config = [
+				'sys_field' => ['listorder', 'ismenu', 'disabled', 'iscatpos', 'isleft', 'id', 'typename', 'modelname', 'html'],
+				'list_field' => [],
+			];
 		}
-		$str = "<tr>";
+		if (isset($this->cat_config['popen']) && $this->cat_config['popen']) {
+			define('SYS_CAT_POPEN', 1);
+		}
+		list($list, $pcats) = $this->_get_tree_list($this->cat_data(0));
+		include $this->admin_tpl('module_content_html');
+	}
+	/**
+	 * 获取菜单数据
+	 */
+	public function cat_data($pid) {
+		$this->category_db = pc_base::load_model('category_model');
+		return $this->category_db->select(array('siteid'=>$this->siteid, 'parentid'=>$pid),'*','','listorder ASC,catid ASC');
+	}
+	// 获取树形结构列表
+	private function _get_tree_list($data) {
+
+		$str = "<tr class='\$class'>";
 		$str.= "<td style='text-align:center'>\$catid</td>";
-		$str.= "<td>\$spacer \$name</td>";
+		$str.= "<td>\$spacer<a data-container='body' data-placement='right' data-original-title='\$parentdir\$catdir' class='tooltips' target='_blank' href='\$url'>\$catname</a> </td>";
 		$str.= "<td style='text-align:center'>\$is_page_html</td>";
 		$str.= "<td style='text-align:center'>\$is_show_html</td>";
 		$str.= "<td>\$category</td>";
 		$str.= "<td>\$show</td>";
 		$str.= "</tr>";
-		$tree->init($categorys);
-		$string = $tree->get_tree(0, $str);
-		include $this->admin_tpl('module_content_html');
+
+		$tree = '';
+		$pcats = [];
+		foreach($data as $t) {
+			if($t['type']==2) continue;
+			$t['setting'] = dr_string2array($t['setting']);
+			$t['catname'] = isset($this->cat_config['name_size']) && $this->cat_config['name_size'] ? str_cut($t['catname'], intval($this->cat_config['name_size'])) : $t['catname'];
+			// 判断是否生成静态
+			$ishtml = intval($t['setting']['ishtml']);
+			$t['is_page_html'] = '<a href="javascript:;" onclick="dr_cat_ajax_open_close(this, \'?m=content&c=create_html&a=public_html_edit&share=1&catid='.$t['catid'].'&pc_hash=\'+pc_hash, 0);" class="badge badge-'.(!$ishtml ? 'no' : 'yes').'"><i class="fa fa-'.(!$ishtml ? 'times' : 'check').'"></i></a>';
+			if ($t['type']==0) {
+				$content_ishtml = intval($t['setting']['content_ishtml']);
+				$t['is_show_html'] = '<a href="javascript:;" onclick="dr_cat_ajax_open_close(this, \'?m=content&c=create_html&a=public_html_edit&share=0&catid='.$t['catid'].'&pc_hash=\'+pc_hash, 0);" class="badge badge-'.(!$content_ishtml ? 'no' : 'yes').'"><i class="fa fa-'.(!$content_ishtml ? 'times' : 'check').'"></i></a>';
+			} else {
+				$t['is_show_html'] = '';
+			}
+			$t['category'] = form::urlrule('content','category',$ishtml,$t['setting']['category_ruleid'],'class="form-control" onchange="dr_save_urlrule(1, \''.$t['catid'].'\', this.value)"');
+			if ($t['type']==0) {
+				$t['show'] = form::urlrule('content','show',$content_ishtml,$t['setting']['show_ruleid'],'class="form-control" onchange="dr_save_urlrule(0, \''.$t['catid'].'\', this.value)"');
+			} else {
+				$t['show'] = '';
+			}
+
+			$pid = explode(',', $t['arrparentid']);
+			$t['topid'] = isset($pid[1]) ? $pid[1] : $t['catid'];
+
+			if ($t['child']) {
+				$pcats[] = $t['catid'];
+				$t['spacer'] = $this->_get_spacer($t['arrparentid']).'<a href="javascript:dr_tree_data('.$t['catid'].');" class="blue select-cat-'.$t['catid'].'">[+]</a>&nbsp;';
+			} else {
+				$t['spacer'] = $this->_get_spacer($t['arrparentid']);
+			}
+
+			$t['class'] = 'dr_catid_'.$t['catid']. ' dr_pid_'.$t['pid'];
+			$arr = explode(',', $t['arrparentid']);
+			if ($arr) {
+				foreach ($arr as $a) {
+					$t['class'].= ' dr_pid_'.$a;
+				}
+			}
+			extract($t);
+			eval("\$nstr = \"$str\";");
+			$tree.= $nstr;
+		}
+
+		return [$tree, $pcats];
+	}
+	public function public_list_index() {
+		$pid = intval($this->input->get('pid'));
+		list($b, $pcats) = $this->_get_tree_list($this->cat_data($pid));
+		dr_json(1, $b);
+	}
+	// 替换空格填充符号
+	private function _get_spacer($str) {
+		$rt = '';
+		$num = substr_count((string)$str, ',') * 2;
+		if ($num) {
+			for ($i = 0; $i < $num; $i ++) {
+				$rt.= '&nbsp;&nbsp;&nbsp;';
+			}
+		}
+		return $rt;
 	}
 	public function public_html_edit() {
 		$show_header = $show_dialog  = true;

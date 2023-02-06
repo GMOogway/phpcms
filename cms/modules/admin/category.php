@@ -27,13 +27,16 @@ class category extends admin {
 		if (isset($this->cat_config['popen']) && $this->cat_config['popen']) {
 			define('SYS_CAT_POPEN', 1);
 		}
+		if (!$this->cat_config['total']) {
+			define('SYS_TOTAL_POPEN', 1);
+		}
 	}
 	/**
 	 * 管理栏目
 	 */
 	public function init() {
 		$show_pc_hash = true;
-		list($cat_head, $cat_list, $pcats) = $this->_get_tree_list($this->cat_data(0));
+		list($cat_head, $cat_list, $pcats, $tcats) = $this->_get_tree_list($this->cat_data(0));
 		$move_select = $this->cat_select();
 		include $this->admin_tpl('category_manage');
 	}
@@ -94,7 +97,7 @@ class category extends admin {
 		}
 
 		$head.= '<th> '.L('栏目信息').' </th>';
-		$list.= "<td>\$spacer<a data-container='body' data-placement='right' data-original-title='\$parentdir\$catdir' class='tooltips' target='_blank' href='\$url'>\$catname</a> \$parent \$ctotal</td>";
+		$list.= "<td>\$spacer<a data-container='body' data-placement='right' data-original-title='\$parentdir\$catdir' class='tooltips' target='_blank' href='\$url'>\$catname</a> \$ctotal</td>";
 
 		if (dr_in_array('typename', $this->cat_config['sys_field'])) {
 			$head.= '<th width="60" style="text-align:center"> '.L('类型').' </th>';
@@ -126,7 +129,7 @@ class category extends admin {
 		$list.= "</tr>";
 
 		$tree = '';
-		$pcats = [];
+		$tcats = $pcats = [];
 		foreach($data as $k => $t) {
 			$option = '';
 			!$t['modelname'] && $t['modelname'] = $models[$t['modelid']]['name'];
@@ -158,10 +161,10 @@ class category extends admin {
 			$option.= '<a class="btn btn-xs blue" href="javascript:dr_iframe(\'add\', \'?m=admin&c=category&a=add&parentid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&s='.$t['type'].'&pc_hash='.$this->input->get('pc_hash').'\', \'80%\', \'80%\')"> <i class="fa fa-plus"></i> '.L('子类').'</a>';
 			$option.= '<a class="btn btn-xs green" href="javascript:dr_iframe(\'edit\', \'?m=admin&c=category&a=edit&catid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&type='.$t['type'].'&pc_hash='.$this->input->get('pc_hash').'\', \'80%\', \'80%\')"> <i class="fa fa-edit"></i> '.L('edit').'</a>';
 			$option.= '<a href="?m=admin&c=category&a=remove&catid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash').'" class="btn btn-xs yellow"><i class="fa fa-arrows"></i> '.L('move').'</a>';
-			if($t['type'] || $t['child']) {
-				$t['ctotal'] = '';
-			} else {
-				$t['ctotal'] = '<span class="cat-total-'.$t['catid'].' dr_total">（'.$category_items[$t['modelid']][$t['catid']].'）</span>';
+			$t['ctotal'] = '';
+			if(!$t['type'] && $t['modelid']) {
+				$t['ctotal'] = '<span class="cat-total-'.$t['catid'].' dr_total"></span>';
+				$tcats[] = $t['catid'].'-'.$t['modelid'];
 			}
 			$t['option'] = $option;
 			// 判断显示和隐藏开关
@@ -208,12 +211,12 @@ class category extends admin {
 			$tree.= $nstr;
 		}
 
-		return [$head, $tree, $pcats];
+		return [$head, $tree, $pcats, $tcats];
 	}
 	public function public_list_index() {
 		$pid = intval($this->input->get('pid'));
-		list($cat_head, $cat_list, $pcats) = $this->_get_tree_list($this->cat_data($pid));
-		dr_json(1, $cat_list);
+		list($cat_head, $cat_list, $pcats, $tcats) = $this->_get_tree_list($this->cat_data($pid));
+		dr_json(1, $cat_list, json_encode($tcats));
 	}
 	// 替换空格填充符号
 	protected function _get_spacer($str) {
@@ -231,6 +234,26 @@ class category extends admin {
 	 */
 	public function cat_data($pid) {
 		return $this->db->select(array('siteid'=>$this->siteid, 'parentid'=>$pid),'*','','listorder ASC,catid ASC');
+	}
+	// 统计栏目
+	public function public_ctotal() {
+		$rt = '';
+		$where = array();
+		if (IS_POST) {
+			$catids = dr_string2array($this->input->post('catid'));
+			if ($catids) {
+				foreach ($catids as $t) {
+					list($catid, $modelid) = explode('-', $t);
+					if ($catid && $modelid) {
+						$data = $this->db->get_one(array('catid'=>$catid), 'arrchildid');
+						$this->content_db->set_model($modelid);
+						$num = $this->content_db->count('catid in ('.$data['arrchildid'].')');
+						$rt.= '$(".cat-total-'.$catid.'").html("'.L('（'.$num.'）').'");';
+					}
+				}
+			}
+		}
+		dr_json(1, $rt);
 	}
 	/**
 	 * 添加栏目

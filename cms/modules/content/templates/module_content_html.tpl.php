@@ -1,38 +1,6 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');?>
-<div class="page-container" style="margin-bottom: 0px !important;">
-    <div class="page-content-wrapper">
-        <div class="page-content page-content3 mybody-nheader main-content main-content2">
-                            <div class="page-body" style="margin-top:20px;margin-bottom:30px;">
-<form id="myform" class="form-horizontal" style="padding: 0 30px;">
-
-    <div class="form-body">
-        <div class="table-list">
-
-            <table class="table table-striped table-bordered table-hover table-checkable dataTable">
-                <thead>
-                <tr class="heading">
-                    <th width="70" style="text-align:center"> Id </th>
-                    <th> <?php echo L('栏目')?> </th>
-                    <th width="100" style="text-align:center"> <?php echo L('栏目静态')?> </th>
-                    <th width="100" style="text-align:center"> <?php echo L('内容静态')?> </th>
-                    <th width="180"> <?php echo L('栏目URL规则')?> </th>
-                    <th> <?php echo L('内容URL规则')?> </th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php echo $string;?>
-                </tbody>
-            </table>
-
-        </div>
-    </div>
-</form>
-</div>
-</div>
-</div>
-</div>
 <script>
     function dr_save_urlrule(share, catid, value) {
         var index = layer.load(2, {
@@ -87,6 +55,86 @@ include $this->admin_tpl('header','admin');?>
             }
         });
     }
+    function dr_tree_data(catid) {
+        var index = layer.load(2, {
+            shade: [0.3,'#fff'], //0.1透明度的白色背景
+            time: 100000
+        });
+        var value = $(".select-cat-"+catid).html();
+        if (value == '[+]') {
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: "?m=content&c=create_html&a=public_list_index&pid="+catid,
+                success: function(json) {
+                    layer.close(index);
+                    if (json.code == 1) {
+                        $(".dr_catid_"+catid).after(json.msg);
+                        $(".select-cat-"+catid).html('[-]');
+                        $('.tooltips').tooltip();
+                    } else {
+                        dr_cmf_tips(json.code, json.msg);
+                    }
+                },
+                error: function(HttpRequest, ajaxOptions, thrownError) {
+                    dr_ajax_alert_error(HttpRequest, this, thrownError);
+                }
+            });
+        } else {
+            layer.close(index);
+            $(".dr_pid_"+catid).remove();
+            $(".select-cat-"+catid).html('[+]');
+        }
+    }
+$(function() {
+    $('.tooltips').tooltip();
+    <?php if (defined('SYS_CAT_POPEN') && SYS_CAT_POPEN) {
+    if(is_array($pcats)){
+    foreach($pcats as $ii){
+    ?>
+    dr_tree_data(<?php echo $ii;?>);
+    <?php }}}?>
+});
 </script>
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content main-content2">
+                            <div class="page-body">
+<div class="note note-danger">
+    <p><a href="javascript:dr_admin_menu_ajax('?m=admin&c=category&a=public_cache&pc_hash='+pc_hash+'&is_ajax=1',1);"><?php echo L('update_cache_all');?></a></p>
+</div>
+<div class="form-horizontal">
+    <div class="portlet-body">
+        <div class="tab-content">
+
+            <div class="tab-pane active">
+                <div class="table-list">
+
+                    <table class="table table-striped table-bordered table-hover table-checkable dataTable">
+                        <thead>
+                        <tr class="heading">
+                            <th width="70" style="text-align:center"> Id </th>
+                            <th> <?php echo L('栏目')?> </th>
+                            <th width="100" style="text-align:center"> <?php echo L('栏目静态')?> </th>
+                            <th width="100" style="text-align:center"> <?php echo L('内容静态')?> </th>
+                            <th width="180"> <?php echo L('栏目URL规则')?> </th>
+                            <th> <?php echo L('内容URL规则')?> </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php echo $list;?>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
 </body>
 </html>

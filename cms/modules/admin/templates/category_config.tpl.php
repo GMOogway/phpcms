@@ -46,6 +46,18 @@ jQuery(document).ready(function() {
                     </div>
 
                     <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('栏目列表数量统计');?></label>
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="data[total]" value="0"<?php if (empty($data['total'])) {?> checked<?php }?> /> <?php echo L('open');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="data[total]" value="1"<?php if ($data['total']) {?> checked<?php }?> /> <?php echo L('close');?> <span></span></label>
+                            </div>
+
+                            <span class="help-block"><?php echo L('进入栏目管理时可以看到栏目的文章数量，当栏目过多时建议关闭此选项，会影响加载速度');?></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('栏目列表名称长度');?></label>
                         <div class="col-md-9">
                             <label><input class="form-control" type="text" name="data[name_size]" value="<?php echo intval($data['name_size']);?>"></label>
