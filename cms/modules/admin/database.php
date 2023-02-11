@@ -9,6 +9,7 @@ class database extends admin {
 		parent::__construct();
 		$this->input = pc_base::load_sys_class('input');
 		$this->cache = pc_base::load_sys_class('cache');
+		$this->file = pc_base::load_sys_class('file');
 		$this->userid = $_SESSION['userid'];
 		pc_base::load_sys_class('db_factory');
 		pc_base::load_sys_class('form');
@@ -20,13 +21,15 @@ class database extends admin {
 	public function export() {
 		$database = pc_base::load_config('database');
 		$r = array();
-		$db = db_factory::get_instance($database)->get_database('default');
-		$tbl_show = $db->query("SHOW TABLE STATUS FROM `".$database['default']['database']."`");
-		while(($rs = $db->fetch_next()) != false) {
-			$r[] = $rs;
+		if ($database['default']['type']!='sqlite3') {
+			$db = db_factory::get_instance($database)->get_database('default');
+			$tbl_show = $db->query("SHOW TABLE STATUS FROM `".$database['default']['database']."`");
+			while(($rs = $db->fetch_next()) != false) {
+				$r[] = $rs;
+			}
+			$infos = $this->status($r,$database['default']['tablepre']);
+			$db->free_result($tbl_show);
 		}
-		$infos = $this->status($r,$database['default']['tablepre']);
-		$db->free_result($tbl_show);
 		include $this->admin_tpl('database_export');
 	}
 	
@@ -37,82 +40,97 @@ class database extends admin {
 		$database = pc_base::load_config('database');
 		$backupDir = CACHE_PATH.'bakup/default/';
 		if(IS_POST) {
-			$action = $this->input->post('action');
-			$file = $this->input->post('file');
-			$tables = $this->input->post('tables') ? $this->input->post('tables') : trim($this->input->get('tables'));
-			if ($action == 'backup') {
-				if(ADMIN_FOUNDERS && !dr_in_array($this->userid, ADMIN_FOUNDERS)) {
-					dr_json(0, L('only_fonder_operation'));
-				}
-				pc_base::load_sys_class('backup','',0);
-				if (!class_exists('ZipArchive')) {
-					dr_json(0, L('服务器缺少php-zip组件，无法进行备份操作'));
-				}
-				$database = $database['default'];
-				try {
-					$backup = new backup($database['hostname'], $database['username'], $database['database'], $database['password'], $database['port']);
-					$backup->setIgnoreTable('')->backup($backupDir);
-				} catch (Exception $e) {
-					dr_json(0, L($e->getMessage()));
-				}
-				dr_json(1, L('bakup_succ'));
-			} elseif ($action == 'download') {
-				if(ADMIN_FOUNDERS && !dr_in_array($this->userid, ADMIN_FOUNDERS)) {
-					dr_json(0, L('only_fonder_operation'));
-				}
-				if (!preg_match("/^backup\-((?!\").)*\.zip$/i", $file)) {
-					dr_json(0, L('参数不正确'));
-				}
-				if (!is_file($backupDir.$file)) {
-					dr_json(0, L('database_backup_not_exist'));
-				}
-				if(fileext($file) != 'zip') {
-					dr_json(0, L('only_zip_down'));
-				}
-				dr_json(1, L('下载成功'), array('url' => '?m=admin&c=database&a=public_down&pc_hash='.dr_get_csrf_token().'&filename='.$file));
-			} elseif ($action == 'delete') {
-				if(ADMIN_FOUNDERS && !dr_in_array($this->userid, ADMIN_FOUNDERS)) {
-					dr_json(0, L('only_fonder_operation'));
-				}
-				if (!preg_match("/^backup\-((?!\").)*\.zip$/i", $file)) {
-					dr_json(0, L('参数不正确'));
-				}
-				$file = $backupDir.$file;
-				unlink($file);
-				dr_json(1, L('删除成功'));
+			if ($database['default']['type']=='sqlite3') {
+				$date = date('YmdHis');
+				$name = file_name($database['default']['database']);
+				$filename = $backupDir.'backup-'.$name.'-'.$date.'.db';
+                if (copy(CMS_PATH.$database['default']['database'], $filename)) {
+                    dr_json(1, L('备份数据库成功'));
+                } else {
+                    dr_json(0, L('备份失败'));
+                }
 			} else {
-				if(ADMIN_FOUNDERS && !dr_in_array($this->userid, ADMIN_FOUNDERS)) {
-					dr_json(0, L('only_fonder_operation'));
+				$action = $this->input->post('action');
+				$file = $this->input->post('file');
+				$tables = $this->input->post('tables') ? $this->input->post('tables') : trim($this->input->get('tables'));
+				if ($action == 'backup') {
+					if(ADMIN_FOUNDERS && !dr_in_array($this->userid, ADMIN_FOUNDERS)) {
+						dr_json(0, L('only_fonder_operation'));
+					}
+					pc_base::load_sys_class('backup','',0);
+					if (!class_exists('ZipArchive')) {
+						dr_json(0, L('服务器缺少php-zip组件，无法进行备份操作'));
+					}
+					$database = $database['default'];
+					try {
+						$backup = new backup($database['hostname'], $database['username'], $database['database'], $database['password'], $database['port']);
+						$backup->setIgnoreTable('')->backup($backupDir);
+					} catch (Exception $e) {
+						dr_json(0, L($e->getMessage()));
+					}
+					dr_json(1, L('bakup_succ'));
+				} elseif ($action == 'download') {
+					if(ADMIN_FOUNDERS && !dr_in_array($this->userid, ADMIN_FOUNDERS)) {
+						dr_json(0, L('only_fonder_operation'));
+					}
+					if (!preg_match("/^backup\-((?!\").)*\.zip$/i", $file)) {
+						dr_json(0, L('参数不正确'));
+					}
+					if (!is_file($backupDir.$file)) {
+						dr_json(0, L('database_backup_not_exist'));
+					}
+					if(fileext($file) != 'zip') {
+						dr_json(0, L('only_zip_down'));
+					}
+					dr_json(1, L('下载成功'), array('url' => '?m=admin&c=database&a=public_down&pc_hash='.dr_get_csrf_token().'&filename='.$file));
+				} elseif ($action == 'delete') {
+					if(ADMIN_FOUNDERS && !dr_in_array($this->userid, ADMIN_FOUNDERS)) {
+						dr_json(0, L('only_fonder_operation'));
+					}
+					if (!preg_match("/^backup\-((?!\").)*\.zip$/i", $file)) {
+						dr_json(0, L('参数不正确'));
+					}
+					$file = $backupDir.$file;
+					unlink($file);
+					dr_json(1, L('删除成功'));
+				} else {
+					if(ADMIN_FOUNDERS && !dr_in_array($this->userid, ADMIN_FOUNDERS)) {
+						dr_json(0, L('only_fonder_operation'));
+					}
+					if(!isset($tables) || !is_array($tables)) dr_json(0, L('select_tbl'));
+					pc_base::load_sys_class('backup','',0);
+					if (!class_exists('ZipArchive')) {
+						dr_json(0, L('服务器缺少php-zip组件，无法进行备份操作'));
+					}
+					$database = $database['default'];
+					try {
+						$backup = new backup($database['hostname'], $database['username'], $database['database'], $database['password'], $database['port']);
+						$backup->setTable($tables)->backup($backupDir);
+					} catch (Exception $e) {
+						dr_json(0, L($e->getMessage()));
+					}
+					dr_json(1, L('bakup_succ'), array('url'=>'?m=admin&c=database&a=import&menuid='.$this->input->get('menuid').'&pc_hash='.dr_get_csrf_token()));
 				}
-				if(!isset($tables) || !is_array($tables)) dr_json(0, L('select_tbl'));
-				pc_base::load_sys_class('backup','',0);
-				if (!class_exists('ZipArchive')) {
-					dr_json(0, L('服务器缺少php-zip组件，无法进行备份操作'));
-				}
-				$database = $database['default'];
-				try {
-					$backup = new backup($database['hostname'], $database['username'], $database['database'], $database['password'], $database['port']);
-					$backup->setTable($tables)->backup($backupDir);
-				} catch (Exception $e) {
-					dr_json(0, L($e->getMessage()));
-				}
-				dr_json(1, L('bakup_succ'), array('url'=>'?m=admin&c=database&a=import&menuid='.$this->input->get('menuid').'&pc_hash='.dr_get_csrf_token()));
 			}
 		} else {
-			$infos = array();
-			if(ADMIN_FOUNDERS && dr_in_array($this->userid, ADMIN_FOUNDERS)) {
-				foreach (glob($backupDir . "*.zip") as $filename) {
-					$time = filemtime($filename);
-					$infos[] =
-						[
-							'file' => str_replace($backupDir, '', $filename),
-							'date' => dr_date($time, "Y-m-d H:i:s", 'red'),
-							'size' => format_file_size(filesize($filename))
-						];
+			if ($database['default']['type']=='sqlite3') {
+				include $this->admin_tpl('database_export');
+			} else {
+				$infos = array();
+				if(ADMIN_FOUNDERS && dr_in_array($this->userid, ADMIN_FOUNDERS)) {
+					foreach (glob($backupDir . "*.zip") as $filename) {
+						$time = filemtime($filename);
+						$infos[] =
+							[
+								'file' => str_replace($backupDir, '', $filename),
+								'date' => dr_date($time, "Y-m-d H:i:s", 'red'),
+								'size' => format_file_size(filesize($filename))
+							];
+					}
 				}
+				$show_validator = true;
+				include $this->admin_tpl('database_import');
 			}
-			$show_validator = true;
-			include $this->admin_tpl('database_import');
 		}
 	}
 	

@@ -7,6 +7,14 @@ include $this->admin_tpl('header');?>
 <form action="" class="form-horizontal" method="post" name="myform" id="myform">
 <input name="dosubmit" type="hidden" value="1">
 <div class="portlet light bordered">
+<?php if ($database['default']['type']=='sqlite3') {?>
+<div class="note note-danger">
+    <p>
+        <a href="javascript:;" class="btn green btn-backup"><i class="fa fa-compress"></i> 立即备份</a>
+        <span class="text-danger">注意：Sqlite数据库只支持直接备份。</span>
+    </p>
+</div>
+<?php } else {?>
     <div class="portlet-title tabbable-line">
         <ul class="nav nav-tabs" style="float:left;">
             <li class="active">
@@ -17,9 +25,7 @@ include $this->admin_tpl('header');?>
     <div class="portlet-body form">
         <div class="table-list">
 <table width="100%" cellspacing="0" class="table-checkable">
- <?php 
-if(is_array($infos)){
-?>
+ <?php if(is_array($infos)){?>
     <thead>
        <tr>
            <th class="myselect">
@@ -50,13 +56,11 @@ if(is_array($infos)){
     <td align="center"><?php echo $v['rows']?></td>
     <td align="center"><?php echo format_file_size($v['size'])?></td>
     <td align="center"><?php echo dr_date($v['updatetime'], null, 'red')?></td>
-    <td align="center"><a href="?m=admin&c=database&a=public_repair&operation=optimize&tables=<?php echo $v['name']?>"><?php echo L('database_optimize')?></a> | <a href="?m=admin&c=database&a=public_repair&operation=repair&tables=<?php echo $v['name']?>"><?php echo L('database_repair')?></a> | <a href="?m=admin&c=database&a=public_repair&operation=flush&tables=<?php echo $v['name']?>"><?php echo L('database_flush')?></a> | <a href="?m=admin&c=database&a=public_repair&operation=jc&tables=<?php echo $v['name']?>"><?php echo L('database_check')?></a> | <a href="javascript:void(0);" onclick="showcreat('<?php echo $v['name']?>')"><?php echo L('database_showcreat')?></a></td>
+    <td align="center"><a href="?m=admin&c=database&a=public_repair&operation=optimize&tables=<?php echo $v['name']?>&menuid=<?php echo $this->input->get('menuid');?>"><?php echo L('database_optimize')?></a> | <a href="?m=admin&c=database&a=public_repair&operation=repair&tables=<?php echo $v['name']?>&menuid=<?php echo $this->input->get('menuid');?>"><?php echo L('database_repair')?></a> | <a href="?m=admin&c=database&a=public_repair&operation=flush&tables=<?php echo $v['name']?>&menuid=<?php echo $this->input->get('menuid');?>"><?php echo L('database_flush')?></a> | <a href="?m=admin&c=database&a=public_repair&operation=jc&tables=<?php echo $v['name']?>&menuid=<?php echo $this->input->get('menuid');?>"><?php echo L('database_check')?></a> | <a href="javascript:void(0);" onclick="showcreat('<?php echo $v['name']?>')"><?php echo L('database_showcreat')?></a></td>
     </tr>
-    <?php } ?>
+    <?php }?>
     </tbody>
-<?php 
-}
-?>
+<?php }?>
 </table>
 </div>
 <?php if(is_array($infos)){?>
@@ -73,6 +77,7 @@ if(is_array($infos)){
 </div>
 <?php }?>
     </div>
+<?php }?>
 </div>
 </form>
 </div>
@@ -81,6 +86,32 @@ if(is_array($infos)){
 </body>
 <script type="text/javascript">
 $(function() {
+    <?php if ($database['default']['type']=='sqlite3') {?>
+    $(document).on("click", ".btn-backup", function () {
+        // 延迟加载
+        var loading = layer.load(2, {
+            shade: [0.3,'#fff'], //0.1透明度的白色背景
+            time: 5000
+        });
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: '?m=admin&c=database&a=import&pc_hash='+pc_hash,
+            data: {action: 'backup', csrf_test_name: csrf_hash},
+            success: function(json) {
+                layer.close(loading);
+                if (json.code == 1) {
+                    setTimeout("window.location.reload(true)", 2000);
+                }
+                dr_tips(json.code, json.msg);
+                return false;
+            },
+            error: function(HttpRequest, ajaxOptions, thrownError) {
+                dr_ajax_alert_error(HttpRequest, ajaxOptions, thrownError)
+            }
+        });
+    });
+    <?php } else {?>
     $(document).on("click", ".btn-backup", function () {
         // 延迟加载
         var loading = layer.load(2, {
@@ -109,11 +140,8 @@ $(function() {
             }
         });
     });
+    <?php }?>
 });
-function show_tbl(obj) {
-    var pdoname = $(obj).val();
-    location.href='?m=admin&c=database&a=export&pdoname='+pdoname+'&menuid=<?php echo $this->input->get('menuid');?>&pc_hash=<?php echo dr_get_csrf_token()?>';
-}
 function showcreat(tblname) {
     omnipotent('show','?m=admin&c=database&a=public_repair&operation=showcreat&menuid=<?php echo $this->input->get('menuid');?>&tables='+tblname,tblname,1,'60%','70%')
 }
