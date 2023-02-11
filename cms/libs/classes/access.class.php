@@ -1,6 +1,6 @@
 <?php
 defined('IN_CMS') or exit('Access Denied');
-class access{
+class access {
 	var $querynum = 0;
 	var $conn;
 	var $insertid = 0;
@@ -49,7 +49,7 @@ class access{
 
 	function get_one($query) {
 		$this->querynum++;
-	    $rs = $this->conn->Execute($query);
+		$rs = $this->conn->Execute($query);
  		$r = $this->fetch_array($rs);
 		$this->free_result($rs);
 		return $r;
@@ -63,7 +63,7 @@ class access{
 			$array = array();
 			for($i = 0; $i < $this->num_fields($rs); $i++){
 				$fielddata = $rs->Fields[$i]->Value;
-			    $array[$rs->Fields[$i]->Name] = $fielddata;
+				$array[$rs->Fields[$i]->Name] = $fielddata;
 			}
 			$rs->MoveNext();
 			return $array;
@@ -87,35 +87,35 @@ class access{
 	}
 
 	function num_rows($rs){
-	    return is_array($rs) ? count($rs) : $rs->recordcount;
+		return is_array($rs) ? count($rs) : $rs->recordcount;
 	}
 
 	function num_fields($rs){
-	    return $rs->Fields->Count;
+		return $rs->Fields->Count;
 	}
 
 	function fetch_assoc($rs){
-	    return $this->fetch_array($rs, ASSOC);
+		return $this->fetch_array($rs, ASSOC);
 	}
 
 	function fetch_row($rs){
-	    return $this->fetch_array($rs, NUM);
+		return $this->fetch_array($rs, NUM);
 	}
 
 	function free_result($rs){
-	    if(is_resource($rs)) $rs->close();
+		if(is_resource($rs)) $rs->close();
 	}
 
 	function error(){
-	    return $this->conn->Errors[$this->conn->Errors->Count-1]->Number;
+		return $this->conn->Errors[$this->conn->Errors->Count-1]->Number;
 	}
 
 	function errormsg(){
-	    return $this->conn->Errors[$this->conn->Errors->Count-1]->Description;
+		return $this->conn->Errors[$this->conn->Errors->Count-1]->Description;
 	}
 
 	function close(){
-	    $this->conn->close();
+		$this->conn->close();
 	}
 
 	function limit($rs, $offset, $pagesize = 0){

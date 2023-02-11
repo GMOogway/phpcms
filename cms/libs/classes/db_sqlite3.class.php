@@ -2,8 +2,8 @@
 /**
  *  db_sqlite3.class.php SQLite3数据库实现类
  *
- * @copyright			(C) 2005-2015
- * @lastmodify			2016-02-01
+ * @copyright			(C) 2005-2023
+ * @lastmodify			2023-02-10
  */
 
 final class db_sqlite3 {
@@ -84,7 +84,7 @@ final class db_sqlite3 {
 		return $this->lastqueryid;
 	}
 	
-    private function isWriteType($sql): bool {
+	private function isWriteType($sql): bool {
 		if (preg_match('/^\s*"?(EXEC\s*sp_rename)\s/i', $sql)) {
 			return true;
 		}
@@ -383,12 +383,12 @@ final class db_sqlite3 {
 
 	public function num_rows($sql) {
 		$this->lastqueryid = $this->execute($sql);
-        if (! ! $row = $this->lastqueryid->fetchArray(2)) {
-            $this->lastqueryid->finalize();
-            return $row[0];
-        } else {
-            return 0;
-        }
+		if (! ! $row = $this->lastqueryid->fetchArray(2)) {
+			$this->lastqueryid->finalize();
+			return $row[0];
+		} else {
+			return 0;
+		}
 	}
 
 	public function num_fields($sql) {

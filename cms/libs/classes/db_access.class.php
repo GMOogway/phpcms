@@ -1,6 +1,6 @@
 <?php
 /**
- *  access.class.php 数据库实现类
+ *  db_access.class.php ACCESS数据库实现类
  *
  * @copyright			(C) 2005-2010
  * @lastmodify			2010-6-1
@@ -69,8 +69,7 @@ final class db_access {
 		return $this->conn->state; 
 	}
 	 
-	
-function select_db($dbname)
+	function select_db($dbname)
 	{
 		return $this->conn->state;
 	} 
@@ -96,7 +95,7 @@ function select_db($dbname)
 	function get_one($query)
 	{
 		$this->querynum++;
-	    $rs = $this->conn->Execute($query);
+		$rs = $this->conn->Execute($query);
 		$r = $this->fetch_array($rs);
 		$this->free_result($rs);
 		return $r;
@@ -115,8 +114,8 @@ function select_db($dbname)
 			for($i = 0; $i < $this->num_fields($rs); $i++)
 			{
 				$fielddata = $rs->Fields[$i]->Value;
-			    if($result_type == NUM || $result_type == BOTH) $array[$i] = $fielddata;
-			    if($result_type == ASSOC || $result_type == BOTH) $array[$rs->Fields[$i]->Name] = $fielddata;
+				if($result_type == NUM || $result_type == BOTH) $array[$i] = $fielddata;
+				if($result_type == ASSOC || $result_type == BOTH) $array[$rs->Fields[$i]->Name] = $fielddata;
 			}
 			$rs->MoveNext();
 			return $array;
@@ -145,42 +144,42 @@ function select_db($dbname)
 
 	function num_rows($rs)
 	{
-	    return is_array($rs) ? count($rs) : $rs->recordcount;
+		return is_array($rs) ? count($rs) : $rs->recordcount;
 	}
 
 	function num_fields($rs)
 	{
-	    return $rs->Fields->Count;
+		return $rs->Fields->Count;
 	}
 
 	function fetch_assoc($rs)
 	{
-	    return $this->fetch_array($rs, ASSOC);
+		return $this->fetch_array($rs, ASSOC);
 	}
 
 	function fetch_row($rs)
 	{
-	    return $this->fetch_array($rs, NUM);
+		return $this->fetch_array($rs, NUM);
 	}
 
 	function free_result($rs)
 	{
-	    if(is_resource($rs)) $rs->close();
+		if(is_resource($rs)) $rs->close();
 	}
 
 	function error()
 	{
-	    return $this->conn->Errors[$this->conn->Errors->Count-1]->Number;
+		return $this->conn->Errors[$this->conn->Errors->Count-1]->Number;
 	}
 
 	function errormsg()
 	{
-	    return $this->conn->Errors[$this->conn->Errors->Count-1]->Description;
+		return $this->conn->Errors[$this->conn->Errors->Count-1]->Description;
 	}
 
 	function close()
 	{
-	    $this->conn->close();
+		$this->conn->close();
 	}
 
 	function limit($rs, $offset, $pagesize = 0)
