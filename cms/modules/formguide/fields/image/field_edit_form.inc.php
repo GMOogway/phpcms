@@ -1,6 +1,4 @@
 <?php defined('IN_CMS') or exit('No permission resources.');?>
-<link rel="stylesheet" href="<?php echo JS_PATH;?>bootstrap-switch/css/bootstrap-switch.min.css" media="all" />
-<script type="text/javascript" src="<?php echo JS_PATH;?>bootstrap-switch/js/bootstrap-switch.min.js"></script>
 
 	<div class="form-group">
       <label class="col-md-2 control-label">文本框长度</label>

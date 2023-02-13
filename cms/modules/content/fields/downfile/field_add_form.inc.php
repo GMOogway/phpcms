@@ -4,8 +4,6 @@ if (is_array($server_list)) {
 foreach($server_list as $_r) if (in_array($_r['siteid'],array(0,$this->siteid))) $str .='<span class="ib" style="width:25%">'.$_r['sitename'].'</span>';
 }
 ?>
-<link rel="stylesheet" href="<?php echo JS_PATH;?>bootstrap-switch/css/bootstrap-switch.min.css" media="all" />
-<script type="text/javascript" src="<?php echo JS_PATH;?>bootstrap-switch/js/bootstrap-switch.min.js"></script>
     <div class="form-group">
       <label class="col-md-2 control-label">镜像服务器列表</label>
         <div class="col-md-9">

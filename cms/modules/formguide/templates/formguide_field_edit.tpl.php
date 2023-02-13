@@ -6,6 +6,8 @@ include $this->admin_tpl('header','admin');?>
 <link href="<?php echo JS_PATH?>bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" type="text/css" />
 <script src="<?php echo JS_PATH?>bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
 <script type="text/javascript">jQuery(document).ready(function(){$('.bs-select').selectpicker();});</script>
+<link rel="stylesheet" href="<?php echo JS_PATH;?>bootstrap-switch/css/bootstrap-switch.min.css" media="all" />
+<script type="text/javascript" src="<?php echo JS_PATH;?>bootstrap-switch/js/bootstrap-switch.min.js"></script>
 <div class="subnav">
     <div class="content-menu ib-a">
         <?php if (isset($formid) && !empty($formid)) {?><a href="?m=formguide&c=formguide_field&a=init&formid=<?php echo $formid?>&menuid=<?php echo $this->input->get('menuid')?>"> <i class="fa fa-reorder"></i> <?php echo L('manage_field');?></a><?php } else {?><a href="?m=formguide&c=formguide_field&a=init&menuid=<?php echo $this->input->get('menuid')?>"> <i class="fa fa-reorder"></i> <?php echo L('public_field_manage')?></a><?php }?>

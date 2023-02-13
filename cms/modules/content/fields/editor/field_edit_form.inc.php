@@ -1,6 +1,4 @@
 <?php defined('IN_CMS') or exit('No permission resources.');$siteinfo = getcache('sitelist', 'commons');$config = string2array($siteinfo[$this->siteid]['setting']);?>
-<link rel="stylesheet" href="<?php echo JS_PATH;?>bootstrap-switch/css/bootstrap-switch.min.css" media="all" />
-<script type="text/javascript" src="<?php echo JS_PATH;?>bootstrap-switch/js/bootstrap-switch.min.js"></script>
     <div class="form-group">
       <label class="col-md-2 control-label">编辑器默认宽度</label>
       <div class="col-md-9">
