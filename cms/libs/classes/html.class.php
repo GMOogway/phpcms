@@ -151,8 +151,15 @@ class html {
 
         $cache_class = pc_base::load_sys_class('cache');
         $models = getcache('model','commons');
-        $html = isset($param['fromdate']) && $param['fromdate'] && isset($param['todate']) && $param['todate'] ? '-'.$param['fromdate'].'-'.$param['todate'] : '';
-        $html .= isset($param['fromid']) && $param['fromid'] && isset($param['toid']) && $param['toid'] ? '-'.$param['fromid'].'-'.$param['toid'] : '';
+        $html = '';
+        if (isset($param['fromdate']) && $param['fromdate']) {
+            $html .= '-' . strtotime($param['fromdate'].' 00:00:00') . '-' . ($param['todate'] ? strtotime($param['todate'].' 23:59:59') : SYS_TIME);
+        } elseif (isset($param['todate']) && $param['todate']) {
+            $html .= '-0-' . strtotime($param['todate'].' 23:59:59');
+        }
+        $html .= $param['pagesize'] ? '-'.$param['pagesize'] : '';
+        $html .= $param['number'] ? '-'.$param['number'] : '';
+        $html .= $param['fromid'] && $param['toid'] ? '-'.$param['fromid'].'-'.$param['toid'] : '';
         $name = 'show-'.$modelid.'-html-file'.$html;
         $cache_class->del_auth_data($name, $param['siteid']);
 
@@ -204,7 +211,7 @@ class html {
         if ($param['ids']) {
             $where .= ' AND `id` IN ('. dr_safe_replace($param['ids']).')';
         }
-        $count = $this->db->count($where);
+        $count = $param['number'] ? $param['number'] : $this->db->count($where);
         $sql = 'select id,catid,title,url,islink,inputtime from `'.$this->db->table_name.'`';
         if ($where) {
             $sql .= ' where '.$where;
@@ -218,6 +225,7 @@ class html {
         $cache_class->set_auth_data($name, ceil($count/$psize), $param['siteid']);
         $cache_class->set_auth_data($name.'-data', array(
             'sql' => $sql,
+            'number' => $param['number'],
             'pagesize' => $psize,
         ), $param['siteid']);
 

@@ -48,6 +48,12 @@ jQuery(document).ready(function() {
                         <label><input type="text" placeholder="<?php echo L('建议不要太多');?>" class="form-control" value="10" name="pagesize"></label>
                     </div>
                 </div>
+                <div class="form-group ">
+                    <label class="col-md-2 control-label"><?php echo L('最新发布数量');?></label>
+                    <div class="col-md-9">
+                        <label><input type="text" placeholder="<?php echo L('按最新发布数量');?>" class="form-control" value="" name="number"></label>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label class="col-md-2 control-label"><?php echo L('按内容ID范围');?></label>
                     <div class="col-md-9">

@@ -61,6 +61,7 @@ class create_html extends admin {
 			$ids = $this->input->get('ids');
 			$catids = $this->input->get('catids');
 			$pagesize = intval($this->input->get('pagesize'));
+			$number = intval($this->input->get('number'));
 			$fromdate = $this->input->get('fromdate');
 			$todate = $this->input->get('todate');
 			$fromid = intval($this->input->get('fromid'));
@@ -74,8 +75,8 @@ class create_html extends admin {
 			$this->model_db = pc_base::load_model('sitemodel_model');
 			$model = $this->model_db->get_one(array('siteid'=>$this->siteid,'modelid'=>$modelid));
 			$modulename = $model['name'];
-			$count_url = '?m=content&c=create_html&a=public_show_count&pagesize='.$pagesize.'&modelid='.$modelid.'&catids='.$catids.'&ids='.$ids.'&fromdate='.$fromdate.'&todate='.$todate.'&fromid='.$fromid.'&toid='.$toid;
-			$todo_url = '?m=content&c=create_html&a=public_show_add&pagesize='.$pagesize.'&modelid='.$modelid.'&catids='.$catids.'&ids='.$ids.'&fromdate='.$fromdate.'&todate='.$todate.'&fromid='.$fromid.'&toid='.$toid;
+			$count_url = '?m=content&c=create_html&a=public_show_count&pagesize='.$pagesize.'&number='.$number.'&modelid='.$modelid.'&catids='.$catids.'&ids='.$ids.'&fromdate='.$fromdate.'&todate='.$todate.'&fromid='.$fromid.'&toid='.$toid;
+			$todo_url = '?m=content&c=create_html&a=public_show_add&pagesize='.$pagesize.'&number='.$number.'&modelid='.$modelid.'&catids='.$catids.'&ids='.$ids.'&fromdate='.$fromdate.'&todate='.$todate.'&fromid='.$fromid.'&toid='.$toid;
 			include $this->admin_tpl('show_html');
 		} else {
 			$admin_username = param::get_cookie('admin_username');
@@ -109,6 +110,7 @@ class create_html extends admin {
 		$modelid = intval($this->input->get('modelid'));
 		$catids = $this->input->get('catids');
 		$pagesize = intval($this->input->get('pagesize'));
+		$number = intval($this->input->get('number'));
 		$fromdate = $this->input->get('fromdate');
 		$todate = $this->input->get('todate');
 		$fromid = intval($this->input->get('fromid'));
@@ -116,8 +118,15 @@ class create_html extends admin {
 		if ($catids && is_array($catids)) {
 			$catids = implode(',', $catids);
 		}
-		$html_file = isset($fromdate) && $fromdate && isset($todate) && $todate ? '-'.$fromdate.'-'.$todate : '';
-		$html_file .= isset($fromid) && $fromid && isset($toid) && $toid ? '-'.$fromid.'-'.$toid : '';
+		$html_file = '';
+		if (isset($fromdate) && $fromdate) {
+			$html_file .= '-' . strtotime($fromdate.' 00:00:00') . '-' . ($todate ? strtotime($todate.' 23:59:59') : SYS_TIME);
+		} elseif (isset($todate) && $todate) {
+			$html_file .= '-0-' . strtotime($todate.' 23:59:59');
+		}
+		$html_file .= $pagesize ? '-'.$pagesize : '';
+		$html_file .= $number ? '-'.$number : '';
+		$html_file .= $fromid && $toid ? '-'.$fromid.'-'.$toid : '';
 		$name = 'show-'.$modelid.'-html-file'.$html_file;
 		$page = $cache_class->get_auth_data($name.'-error'); // 设置断点
 		if (!$page) {
@@ -127,20 +136,29 @@ class create_html extends admin {
 		$this->model_db = pc_base::load_model('sitemodel_model');
 		$model = $this->model_db->get_one(array('siteid'=>$this->siteid,'modelid'=>$modelid));
 		$modulename = $model['name'];
-		$count_url = '?m=content&c=create_html&a=public_show_point_count&pagesize='.$pagesize.'&modelid='.$modelid.'&catids='.$catids.'&fromdate='.$fromdate.'&todate='.$todate.'&fromid='.$fromid.'&toid='.$toid;
-		$todo_url = '?m=content&c=create_html&a=public_show_add&pagesize='.$pagesize.'&modelid='.$modelid.'&catids='.$catids.'&fromdate='.$fromdate.'&todate='.$todate.'&fromid='.$fromid.'&toid='.$toid;
+		$count_url = '?m=content&c=create_html&a=public_show_point_count&pagesize='.$pagesize.'&number='.$number.'&modelid='.$modelid.'&catids='.$catids.'&fromdate='.$fromdate.'&todate='.$todate.'&fromid='.$fromid.'&toid='.$toid;
+		$todo_url = '?m=content&c=create_html&a=public_show_add&pagesize='.$pagesize.'&number='.$number.'&modelid='.$modelid.'&catids='.$catids.'&fromdate='.$fromdate.'&todate='.$todate.'&fromid='.$fromid.'&toid='.$toid;
 		include $this->admin_tpl('show_html');
 	}
 	// 断点内容的数量统计
 	public function public_show_point_count() {
 		$cache_class = pc_base::load_sys_class('cache');
 		$modelid = intval($this->input->get('modelid'));
+		$pagesize = intval($this->input->get('pagesize'));
+		$number = intval($this->input->get('number'));
 		$fromdate = $this->input->get('fromdate');
 		$todate = $this->input->get('todate');
 		$fromid = intval($this->input->get('fromid'));
 		$toid = intval($this->input->get('toid'));
-		$html_file = isset($fromdate) && $fromdate && isset($todate) && $todate ? '-'.$fromdate.'-'.$todate : '';
-		$html_file .= isset($fromid) && $fromid && isset($toid) && $toid ? '-'.$fromid.'-'.$toid : '';
+		$html_file = '';
+		if (isset($fromdate) && $fromdate) {
+			$html_file .= '-' . strtotime($fromdate.' 00:00:00') . '-' . ($todate ? strtotime($todate.' 23:59:59') : SYS_TIME);
+		} elseif (isset($todate) && $todate) {
+			$html_file .= '-0-' . strtotime($todate.' 23:59:59');
+		}
+		$html_file .= $pagesize ? '-'.$pagesize : '';
+		$html_file .= $number ? '-'.$number : '';
+		$html_file .= $fromid && $toid ? '-'.$fromid.'-'.$toid : '';
 		$name = 'show-'.$modelid.'-html-file'.$html_file;
 		$page = $cache_class->get_auth_data($name.'-error'); // 设置断点
 		if (!$page) {
@@ -162,6 +180,7 @@ class create_html extends admin {
 			'toid' => $this->input->get('toid'),
 			'fromid' => $this->input->get('fromid'),
 			'pagesize' => $this->input->get('pagesize'),
+			'number' => $this->input->get('number'),
 			'siteid' => $this->siteid
 		));
 	}
@@ -408,13 +427,22 @@ class create_html extends admin {
 		$this->html = pc_base::load_app_class('html');
 		$this->url = pc_base::load_app_class('url');
 		$modelid = intval($this->input->get('modelid'));
+		$pagesize = intval($this->input->get('pagesize'));
+		$number = intval($this->input->get('number'));
 		$page = max(1, intval($this->input->get('pp')));
 		$fromdate = $this->input->get('fromdate');
 		$todate = $this->input->get('todate');
 		$fromid = intval($this->input->get('fromid'));
 		$toid = intval($this->input->get('toid'));
-		$html_file = isset($fromdate) && $fromdate && isset($todate) && $todate ? '-'.$fromdate.'-'.$todate : '';
-		$html_file .= isset($fromid) && $fromid && isset($toid) && $toid ? '-'.$fromid.'-'.$toid : '';
+		$html_file = '';
+		if (isset($fromdate) && $fromdate) {
+			$html_file .= '-' . strtotime($fromdate.' 00:00:00') . '-' . ($todate ? strtotime($todate.' 23:59:59') : SYS_TIME);
+		} elseif (isset($todate) && $todate) {
+			$html_file .= '-0-' . strtotime($todate.' 23:59:59');
+		}
+		$html_file .= $pagesize ? '-'.$pagesize : '';
+		$html_file .= $number ? '-'.$number : '';
+		$html_file .= $fromid && $toid ? '-'.$fromid.'-'.$toid : '';
 		$name = 'show-'.$modelid.'-html-file'.$html_file;
 		$name2 = $name.'-data';
 		$pcount = $cache_class->get_auth_data($name, $this->siteid);
@@ -435,7 +463,12 @@ class create_html extends admin {
 		}
 		
 		if ($cache) {
-			$sql = $cache['sql']. ' order by id asc limit '.($cache['pagesize'] * ($page - 1)).','.$cache['pagesize'];
+			$order = 'asc';
+			if (isset($cache['number']) && $cache['number']) {
+				$order = 'desc';
+				$cache['pagesize'] = $cache['number'];
+			}
+			$sql = $cache['sql']. ' order by id '.$order.' limit '.($cache['pagesize'] * ($page - 1)).','.$cache['pagesize'];
 			$data = $this->db->query($sql);
 			if (!$data) {
 				// 完成
