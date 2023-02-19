@@ -324,7 +324,7 @@ class create_html extends admin {
 			if($content_ishtml) {
 				$ids = $this->input->get_post_ids();
 				if(empty($ids)) dr_json(0, L('you_do_not_check'));
-				dr_json(1, '?m=content&c=create_html&a=show&modelid='.$modelid.'&ids='.implode(',', $ids).'&dosubmit='.$this->input->post('dosubmit').'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash'));
+				dr_json(1, '?m=content&c=create_html&a=show&modelid='.$modelid.'&ids='.implode(',', $ids).'&dosubmit='.$this->input->post('dosubmit').'&menuid='.$this->input->get('menuid').'&pc_hash='.dr_get_csrf_token());
 			}
 		}
 	}

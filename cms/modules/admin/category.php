@@ -154,9 +154,9 @@ class category extends admin {
 			$t['iscatpos'] = $setting['iscatpos'];
 			$t['isleft'] = $setting['isleft'];
 			$t['ishtml'] = $setting['ishtml'];
-			$option.= '<a class="btn btn-xs blue" href="javascript:dr_iframe(\'add\', \'?m=admin&c=category&a=add&parentid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&s='.$t['type'].'&pc_hash='.$this->input->get('pc_hash').'\', \'80%\', \'80%\')"> <i class="fa fa-plus"></i> '.L('子类').'</a>';
-			$option.= '<a class="btn btn-xs green" href="javascript:dr_iframe(\'edit\', \'?m=admin&c=category&a=edit&catid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&type='.$t['type'].'&pc_hash='.$this->input->get('pc_hash').'\', \'80%\', \'80%\')"> <i class="fa fa-edit"></i> '.L('edit').'</a>';
-			$option.= '<a href="?m=admin&c=category&a=remove&catid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash').'" class="btn btn-xs yellow"><i class="fa fa-arrows"></i> '.L('move').'</a>';
+			$option.= '<a class="btn btn-xs blue" href="javascript:dr_iframe(\'add\', \'?m=admin&c=category&a=add&parentid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&s='.$t['type'].'\', \'80%\', \'80%\')"> <i class="fa fa-plus"></i> '.L('子类').'</a>';
+			$option.= '<a class="btn btn-xs green" href="javascript:dr_iframe(\'edit\', \'?m=admin&c=category&a=edit&catid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&type='.$t['type'].'\', \'80%\', \'80%\')"> <i class="fa fa-edit"></i> '.L('edit').'</a>';
+			$option.= '<a href="?m=admin&c=category&a=remove&catid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&pc_hash='.dr_get_csrf_token().'" class="btn btn-xs yellow"><i class="fa fa-arrows"></i> '.L('move').'</a>';
 			$t['ctotal'] = '';
 			if(!$t['type'] && $t['modelid']) {
 				$t['ctotal'] = '<span class="cat-total-'.$t['catid'].' dr_total"></span>';
@@ -164,10 +164,10 @@ class category extends admin {
 			}
 			$t['option'] = $option;
 			// 判断显示和隐藏开关
-			$t['is_menu_html'] = '<a data-container="body" data-placement="right" data-original-title="'.L('前端循环调用不会显示，但可以正常访问').'" href="javascript:;" onclick="dr_ajax_open_close(this, \'?m=admin&c=category&a=public_show_edit&catid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash').'\', 0);" class="tooltips badge badge-'.(!$t['ismenu'] ? 'no' : 'yes').'"><i class="fa fa-'.(!$t['ismenu'] ? 'times' : 'check').'"></i></a>';
-			$t['is_disabled_html'] = '<a data-container="body" data-placement="right" data-original-title="'.L('禁用状态下此栏目不能正常访问').'" href="javascript:;" onclick="dr_ajax_open_close(this, \'?m=admin&c=category&a=public_show_edit&at=disabled&catid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash').'\', 1);" class="tooltips badge badge-'.($t['disabled'] ? 'no' : 'yes').'"><i class="fa fa-'.($t['disabled'] ? 'times' : 'check').'"></i></a>';
-			$t['is_catpos_html'] = '<a data-container="body" data-placement="right" data-original-title="'.L('前端栏目面包屑导航调用不会显示，但可以正常访问，您现在的位置不显示').'" href="javascript:;" onclick="dr_ajax_open_close(this, \'?m=admin&c=category&a=public_show_edit&at=iscatpos&catid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash').'\', 0);" class="tooltips badge badge-'.(!$t['iscatpos'] ? 'no' : 'yes').'"><i class="fa fa-'.(!$t['iscatpos'] ? 'times' : 'check').'"></i></a>';
-			$t['is_left_html'] = '<a data-container="body" data-placement="right" data-original-title="'.L('前端栏目调用左侧不会显示，但可以正常访问').'" href="javascript:;" onclick="dr_ajax_open_close(this, \'?m=admin&c=category&a=public_show_edit&at=isleft&catid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash').'\', 0);" class="tooltips badge badge-'.(!$t['isleft'] ? 'no' : 'yes').'"><i class="fa fa-'.(!$t['isleft'] ? 'times' : 'check').'"></i></a>';
+			$t['is_menu_html'] = '<a data-container="body" data-placement="right" data-original-title="'.L('前端循环调用不会显示，但可以正常访问').'" href="javascript:;" onclick="dr_ajax_open_close(this, \'?m=admin&c=category&a=public_show_edit&catid='.$t['catid'].'&menuid='.$this->input->get('menuid').'\', 0);" class="tooltips badge badge-'.(!$t['ismenu'] ? 'no' : 'yes').'"><i class="fa fa-'.(!$t['ismenu'] ? 'times' : 'check').'"></i></a>';
+			$t['is_disabled_html'] = '<a data-container="body" data-placement="right" data-original-title="'.L('禁用状态下此栏目不能正常访问').'" href="javascript:;" onclick="dr_ajax_open_close(this, \'?m=admin&c=category&a=public_show_edit&at=disabled&catid='.$t['catid'].'&menuid='.$this->input->get('menuid').'\', 1);" class="tooltips badge badge-'.($t['disabled'] ? 'no' : 'yes').'"><i class="fa fa-'.($t['disabled'] ? 'times' : 'check').'"></i></a>';
+			$t['is_catpos_html'] = '<a data-container="body" data-placement="right" data-original-title="'.L('前端栏目面包屑导航调用不会显示，但可以正常访问，您现在的位置不显示').'" href="javascript:;" onclick="dr_ajax_open_close(this, \'?m=admin&c=category&a=public_show_edit&at=iscatpos&catid='.$t['catid'].'&menuid='.$this->input->get('menuid').'\', 0);" class="tooltips badge badge-'.(!$t['iscatpos'] ? 'no' : 'yes').'"><i class="fa fa-'.(!$t['iscatpos'] ? 'times' : 'check').'"></i></a>';
+			$t['is_left_html'] = '<a data-container="body" data-placement="right" data-original-title="'.L('前端栏目调用左侧不会显示，但可以正常访问').'" href="javascript:;" onclick="dr_ajax_open_close(this, \'?m=admin&c=category&a=public_show_edit&at=isleft&catid='.$t['catid'].'&menuid='.$this->input->get('menuid').'\', 0);" class="tooltips badge badge-'.(!$t['isleft'] ? 'no' : 'yes').'"><i class="fa fa-'.(!$t['isleft'] ? 'times' : 'check').'"></i></a>';
 			if ($t['type'] == 0) {
 				if ($t['child']) {
 					$t['type_html'] = '<a class="tooltips badge badge-danger" data-container="body" data-placement="right" data-original-title="'.L('当栏目存在子栏目时我们称之为封面').'"> '.L('封面').' </a>';
@@ -182,7 +182,7 @@ class category extends admin {
 			// 判断是否生成静态
 			$t['is_page_html'] = '';
 			if ($t['type'] != 2) {
-				$t['is_page_html'] = '<a href="javascript:;" onclick="dr_ajax_open_close(this, \'?m=admin&c=category&a=public_show_edit&at=ishtml&catid='.$t['catid'].'&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash').'\', 0);" class="tooltips badge badge-'.(!$t['ishtml'] ? 'no' : 'yes').'"><i class="fa fa-'.(!$t['ishtml'] ? 'times' : 'check').'"></i></a>';
+				$t['is_page_html'] = '<a href="javascript:;" onclick="dr_ajax_open_close(this, \'?m=admin&c=category&a=public_show_edit&at=ishtml&catid='.$t['catid'].'&menuid='.$this->input->get('menuid').'\', 0);" class="tooltips badge badge-'.(!$t['ishtml'] ? 'no' : 'yes').'"><i class="fa fa-'.(!$t['ishtml'] ? 'times' : 'check').'"></i></a>';
 			}
 			if (isset($this->cat_config['list_field']) && $this->cat_config['list_field']) {
 				foreach ($this->cat_config['list_field'] as $i => $tt) {
@@ -954,7 +954,7 @@ class category extends admin {
 			dr_json(0, L('没有选择任何栏目'));
 		}
 
-		dr_json(1, '?m=content&c=create_html&a=category&catids='.implode(',', $ids).'&dosubmit=1&menuid='.$this->input->get('menuid').'&pc_hash='.$this->input->get('pc_hash'));
+		dr_json(1, '?m=content&c=create_html&a=category&catids='.implode(',', $ids).'&dosubmit=1&menuid='.$this->input->get('menuid').'&pc_hash='.dr_get_csrf_token());
 	}
 	/**
 	 * 重新统计栏目信息数量

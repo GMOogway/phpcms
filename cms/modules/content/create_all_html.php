@@ -63,7 +63,7 @@ class create_all_html extends admin {
 		$this->db->set_model($nmid ? intval($nmid) : $modelid);
 		$total = $this->db->count();
 		$go_url = $this->input->get('go_url');
-		$go_url = $go_url ? trim('?m=content&c=create_all_html&a=show&modelid='.$nmid.'&go_url=1&pc_hash='.$this->input->get('pc_hash')) : '';
+		$go_url = $go_url ? trim('?m=content&c=create_all_html&a=show&modelid='.$nmid.'&go_url=1&pc_hash='.dr_get_csrf_token()) : '';
 		if (!$total || !$nmid) $go_url = '';
 		$modulename = $module[$modelid]['name'];
 		$count_url = '?m=content&c=create_all_html&a=public_show_count&pagesize='.intval($this->input->get('pagesize')).'&modelid='.intval($this->input->get('modelid')).'&catids='.$catids.'&fromdate='.$this->input->get('fromdate').'&todate='.$this->input->get('todate').'&fromid='.intval($this->input->get('fromid')).'&toid='.intval($this->input->get('toid'));
@@ -193,7 +193,7 @@ class create_all_html extends admin {
 		$total = $this->db->count();
 		$maxsize = $this->input->get('maxsize');
 		$go_url = $this->input->get('go_url');
-		$go_url = $go_url ? trim('?m=content&c=create_all_html&a=show&modelid='.$fmid.'&go_url=1&pc_hash='.$this->input->get('pc_hash')) : '';
+		$go_url = $go_url ? trim('?m=content&c=create_all_html&a=show&modelid='.$fmid.'&go_url=1&pc_hash='.dr_get_csrf_token()) : '';
 		if (!$total || !$fmid) $go_url = '';
 		$modulename = '栏目';
 		$count_url = '?m=content&c=create_all_html&a=public_category_count&maxsize='.$maxsize;
