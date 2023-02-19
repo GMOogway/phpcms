@@ -122,7 +122,13 @@ class role extends admin {
 			if ($siteid) {
 				$menu = pc_base::load_sys_class('tree');
 				$result = $this->menu_db->select();
-				$priv_data = $this->priv_db->select(); //获取权限表数据
+				$priv_rs = $this->priv_db->select(); //获取权限表数据
+				foreach ($priv_rs as $n=>$t) {
+					if ($t['menuid']>290) {
+						unset($t['menuid']);
+					}
+					$priv_data[] = $t;
+				}
 				$modules = 'admin,system';
 				foreach ($result as $n=>$t) {
 					$result[$n]['cname'] = L($t['name'],'',$modules);

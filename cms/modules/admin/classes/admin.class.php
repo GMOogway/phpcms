@@ -2,6 +2,7 @@
 defined('IN_CMS') or exit('No permission resources.');
 $session_storage = 'session_'.pc_base::load_config('system','session_storage');
 pc_base::load_sys_class($session_storage);
+pc_base::load_app_func('global','admin');
 if(param::get_cookie('sys_lang')) {
 	define('SYS_STYLE',param::get_cookie('sys_lang'));
 } else {
@@ -16,7 +17,6 @@ class admin {
 		self::login_before();
 		self::check_admin();
 		self::check_priv();
-		pc_base::load_app_func('global','admin');
 		if (!module_exists(ROUTE_M)) dr_admin_msg(0,L('module_not_exists'));
 		self::manage_log();
 		self::check_ip();
@@ -74,12 +74,7 @@ class admin {
 	final public static function admin_menu($parentid, $with_self = 0) {
 		$parentid = intval($parentid);
 		$menudb = pc_base::load_model('menu_model');
-		$site_model = param::get_cookie('site_model');
-		$where = array('parentid'=>$parentid,'display'=>1);
-		if ($site_model && $parentid) {
-			$where[$site_model] = 1;
- 		}
-		$result =$menudb->select($where,'*',1000,'listorder ASC,id ASC');
+		$result =$menudb->select(array('parentid'=>$parentid,'display'=>1),'*',1000,'listorder ASC,id ASC');
 		if($with_self) {
 			$result2[] = $menudb->get_one(array('id'=>$parentid));
 			$result = array_merge($result2,$result);
@@ -95,7 +90,11 @@ class admin {
 				$array[] = $v;
 			} else {
 				if(preg_match('/^ajax_([a-z]+)_/',$action,$_match)) $action = $_match[1];
-				$r = $privdb->get_one(array('menuid'=>$v['id'],'m'=>$v['m'],'c'=>$v['c'],'a'=>$action,'roleid'=>is_array(dr_string2array($_SESSION['roleid'])) ? dr_string2array($_SESSION['roleid']) : $_SESSION['roleid'],'siteid'=>$siteid));
+				if ($v['id']<=290) {
+					$r = $privdb->get_one(array('menuid'=>$v['id'],'m'=>$v['m'],'c'=>$v['c'],'a'=>$action,'roleid'=>is_array(dr_string2array($_SESSION['roleid'])) ? dr_string2array($_SESSION['roleid']) : $_SESSION['roleid'],'siteid'=>$siteid));
+				} else {
+					$r = $privdb->get_one(array('m'=>$v['m'],'c'=>$v['c'],'a'=>$action,'roleid'=>is_array(dr_string2array($_SESSION['roleid'])) ? dr_string2array($_SESSION['roleid']) : $_SESSION['roleid'],'siteid'=>$siteid));
+				}
 				if($r) $array[] = $v;
 			}
 		}
@@ -108,6 +107,7 @@ class admin {
 	 */
 	final public static function submenu($parentid = '', $big_menu = false) {
 		$input = pc_base::load_sys_class('input');
+		$s = $input->get('s');
 		if(empty($parentid)) {
 			$menudb = pc_base::load_model('menu_model');
 			$r = $menudb->get_one(array('m'=>ROUTE_M,'c'=>ROUTE_C,'a'=>ROUTE_A));
@@ -120,11 +120,11 @@ class admin {
 		$string = '';
 		$pc_hash = dr_get_csrf_token();
 		foreach($array as $_value) {
-			if (!$input->get('s')) {
-				$classname = ROUTE_M == $_value['m'] && ROUTE_C == $_value['c'] && ROUTE_A == $_value['a'] ? 'class="on"' : '';
-			} else {
+			if (isset($s)) {
 				$_s = !empty($_value['data']) ? str_replace('=', '', strstr($_value['data'], '=')) : '';
 				$classname = ROUTE_M == $_value['m'] && ROUTE_C == $_value['c'] && ROUTE_A == $_value['a'] && $input->get('s') == $_s ? 'class="on"' : '';
+			} else {
+				$classname = ROUTE_M == $_value['m'] && ROUTE_C == $_value['c'] && ROUTE_A == $_value['a'] ? 'class="on"' : '';
 			}
 			if (isset($_value['data']) && $_value['data']) {
 				if (strstr($_value['data'], '&') && substr($_value['data'], 0, 1)=='&') {

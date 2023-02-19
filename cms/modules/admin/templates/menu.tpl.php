@@ -129,12 +129,6 @@ if(is_array($array)){
           <label class="mt-radio mt-radio-outline"><input type="radio" name="info[display]" value="0"> <?php echo L('no')?> <span></span></label>
         </div></td>
       </tr>
-	  <tr>
-        <th><?php echo L('show_in_model')?>：</th>
-        <td><div class="mt-checkbox-inline">
-          <?php foreach($models as $_k => $_m) {?><label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="info[<?php echo $_k?>]" value="1"> <?php echo $_m?> <span></span></label><?php }?>
-        </div></td>
-      </tr>
 </table>
 </div>
 	<div class="portlet-body form myfooter">
@@ -201,12 +195,6 @@ if(is_array($array)){
         <td><div class="mt-radio-inline">
           <label class="mt-radio mt-radio-outline"><input type="radio" name="info[display]" value="1" <?php if($display) echo 'checked';?>> <?php echo L('yes')?> <span></span></label>
           <label class="mt-radio mt-radio-outline"><input type="radio" name="info[display]" value="0" <?php if(!$display) echo 'checked';?>> <?php echo L('no')?> <span></span></label>
-        </div></td>
-      </tr>
-	<tr>
-        <th><?php echo L('show_in_model')?>：</th>
-        <td><div class="mt-checkbox-inline">
-          <?php foreach($models as $_k => $_m) {?><label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="info[<?php echo $_k?>]" value="1"<?php if (${$_k}) {?> checked<?php }?>> <?php echo $_m?> <span></span></label><?php }?>
         </div></td>
       </tr>
 </table>

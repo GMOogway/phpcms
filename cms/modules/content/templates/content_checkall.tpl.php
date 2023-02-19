@@ -6,7 +6,7 @@ include $this->admin_tpl('header','admin');?>
     <div class="content-menu btn-group dropdown-btn-group"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><i class="fa fa-th-large"></i> 菜单 <i class="fa fa-angle-down"></i></a>
         <ul class="dropdown-menu">
 		<?php if($super_admin) {?>
-		<li><a class="add on" href="?m=content&c=content&a=public_checkall&menuid=<?php echo $this->input->get('menuid');?>"><i class="fa fa-check"></i> <?php echo L('all_check_list');?></a></li>
+		<li><a class="add<?php if(!$status && $status!=0) echo ' on';?>" href="?m=content&c=content&a=public_checkall&menuid=<?php echo $this->input->get('menuid');?>"><i class="fa fa-check"></i> <?php echo L('all_check_list');?></a></li>
 <?php } else {
 	echo '<li><a class="on"><i class="fa fa-check"></i> '.L('check_status').'</a></li>';
 }
@@ -20,7 +20,7 @@ for ($j=0;$j<5;$j++) {
     <?php } else {?>
 <div class="content-menu ib-a">
 <?php if($super_admin) {?>
-<a href='?m=content&c=content&a=public_checkall&menuid=<?php echo $this->input->get('menuid');?>' class="on"><i class="fa fa-check"></i> <?php echo L('all_check_list');?></a>
+<a href='?m=content&c=content&a=public_checkall&menuid=<?php echo $this->input->get('menuid');?>' class="<?php if(!$status && $status!=0) echo 'on';?>"><i class="fa fa-check"></i> <?php echo L('all_check_list');?></a>
 <?php } else {
 	echo '<a class="on"><i class="fa fa-check"></i> '.L('check_status').'</a>';
 }
@@ -32,8 +32,11 @@ for ($j=0;$j<5;$j++) {
     <?php }?>
 </div>
 <div class="content-header"></div>
-<div class="pad-10">
-
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="portlet-body">
+<div class="right-card-box">
 <form name="myform" id="myform" action="" method="post" >
 <div class="table-list">
     <table width="100%">
@@ -92,6 +95,10 @@ for ($j=0;$j<5;$j++) {
     <div class="col-md-12 col-sm-12 text-right"><?php echo $pages?></div>
 </div>
 </form>
+</div>
+</div>
+</div>
+</div>
 </div>
 <script type="text/javascript"> 
 <!--

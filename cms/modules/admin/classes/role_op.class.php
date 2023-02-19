@@ -53,7 +53,9 @@ class role_op {
 		foreach($data as $key=>$value){
 			if(!in_array($key,$priv_arr)) unset($data[$key]);
 		}
-		$data['menuid'] = $data['id'];
+		if ($data['id']<=290) {
+			$data['menuid'] = $data['id'];
+		}
 		$data['roleid'] = $roleid;
 		$data['siteid'] = $siteid;
 		unset($data['id']);
@@ -63,7 +65,6 @@ class role_op {
 		} else {
 			return false;
 		}
-		
 	}
 	/**
 	 * 是否为设置状态
@@ -83,8 +84,7 @@ class role_op {
 	 */
 	public function get_level($id,$array=array(),$i=0) {
 		foreach($array as $n=>$value){
-			if($value['id'] == $id)
-			{
+			if($value['id'] == $id){
 				if($value['parentid']== '0') return $i;
 				$i++;
 				return $this->get_level($value['parentid'],$array,$i);

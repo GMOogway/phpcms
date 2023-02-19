@@ -1753,6 +1753,7 @@ class content extends admin {
 		$this->content_check_db = pc_base::load_model('content_check_model');
 		$datas = $this->content_check_db->listinfo($sql,'inputtime DESC',$page,SYS_ADMIN_PAGESIZE);		
 		$pages = $this->content_check_db->pages;
+		$status = $this->input->get('status');
 		include $this->admin_tpl('content_checkall');
 	}
 	
@@ -2030,6 +2031,7 @@ class content extends admin {
 			dr_admin_msg(1,L('clear_data_message'));
 		} else {
 			//读取网站的所有模型
+			$show_header = true;
 			$model_arr = getcache('model', 'commons');
 			include $this->admin_tpl('clear_data');
 		}

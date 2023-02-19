@@ -4,8 +4,11 @@ include $this->admin_tpl('header','admin');?>
 <style type="text/css">
 body .table-list table tr>td:first-child, body .table-list table tr>th:first-child {text-align: left;padding: 8px;}
 </style>
-<div class="pad-10">
-<div class="bk10"></div>
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<div class="portlet-body">
+<div class="right-card-box">
 <div class="table-list">
 <form action="?m=content&c=content&a=clear_data" method="post" name="myform">
 <table width="100%" cellspacing="0">
@@ -32,6 +35,10 @@ body .table-list table tr>td:first-child, body .table-list table tr>th:first-chi
 </tr>
 </table>
 </form>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 <script language="JavaScript">

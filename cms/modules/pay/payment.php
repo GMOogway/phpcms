@@ -104,8 +104,12 @@ class payment extends admin {
 	 */
 	public function delete() {
 		$pay_id = intval($this->input->get('id'));
-		$this->db->delete(array('pay_id'=>$pay_id));
-		dr_admin_msg(1,L('delete_succ'),'?m=pay&c=payment&menuid='.$this->input->get('menuid'));
+		if ($pay_id) {
+			$this->db->delete(array('pay_id'=>$pay_id));
+			dr_admin_msg(1,L('delete_succ'),'?m=pay&c=payment&menuid='.$this->input->get('menuid'));
+		} else {
+			dr_admin_msg(0, L('operation_failure'));
+		}
 	}
 	
 	/**
@@ -250,8 +254,12 @@ class payment extends admin {
 	 */
 	public function pay_del() {
 		$id = intval($this->input->get('id'));
-		$this->account_db->delete(array('id'=>$id));
-		dr_admin_msg(1,L('delete_succ'),'?m=pay&c=payment&a=pay_list&menuid='.$this->input->get('menuid'));
+		if ($id) {
+			$this->account_db->delete(array('id'=>$id));
+			dr_admin_msg(1,L('delete_succ'),'?m=pay&c=payment&a=pay_list&menuid='.$this->input->get('menuid'));
+		} else {
+			dr_admin_msg(0, L('operation_failure'));
+		}
 	}
 	
 	/*

@@ -333,6 +333,11 @@ class check extends admin {
                 if (!$this->db->field_exists('icon')) {
                     $this->db->query('ALTER TABLE `'.$this->db->table_name.'` ADD `icon` varchar(255) NULL DEFAULT NULL COMMENT \'图标标示\' AFTER `data`');
                 }
+                for ($i = 1; $i <= 5; $i++) {
+                    if ($this->db->field_exists('project'.$i)) {
+                        $this->db->query('ALTER TABLE `'.$this->db->table_name.'` DROP `project'.$i.'`');
+                    }
+                }
 
                 $this->db->table_name = $prefix.'site';
                 if ($this->db->field_exists('uuid')) {

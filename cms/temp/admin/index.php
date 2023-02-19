@@ -24,7 +24,6 @@ class index extends admin {
 		$currentsite = $this->get_siteinfo(param::get_cookie('siteid'));
 		/*管理员收藏栏*/
 		$adminpanel = $this->panel_db->select(array('userid'=>$userid), "*",20 , 'datetime');
-		$site_model = param::get_cookie('site_model');
 		$background = array('"'.IMG_PATH.'admin_img/bg-screen1.jpg"',
 			'"'.IMG_PATH.'admin_img/bg-screen2.jpg"',
 			'"'.IMG_PATH.'admin_img/bg-screen3.jpg"',
@@ -606,36 +605,5 @@ class index extends admin {
 		}
 		return $role;
 	}
-
-	/**
-	 * @设置网站模式 设置了模式后，后台仅出现在此模式中的菜单
-	 */
-	public function public_set_model() {
-		$model = $this->input->get('site_model');
-		if (!$model) {
-			param::set_cookie('site_model','');
-		} else {
-			$models = pc_base::load_config('model_config');
-			if (in_array($model, array_keys($models))) {
-				param::set_cookie('site_model', $model);
-			} else {
-				param::set_cookie('site_model','');
-			}
-		}
-		$menudb = pc_base::load_model('menu_model');
-		$where = array('parentid'=>0,'display'=>1);
-		if ($model) {
-			$where[$model] = 1;
- 		}
-		$result =$menudb->select($where,'id',1000,'listorder ASC');
-		$menuids = array();
-		if (is_array($result)) {
-			foreach ($result as $r) {
-				$menuids[] = $r['id'];
-			}
-		}
-		exit(json_encode($menuids));
-	}
-
 }
 ?>
