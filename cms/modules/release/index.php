@@ -17,7 +17,7 @@ class index extends admin {
 	
 	public function init() {
 		if (empty($this->point[0])) {
-			dr_admin_msg(0,L("the_site_not_release"));
+			dr_admin_msg(0,L('the_site_not_release'),'close');
 		}
 		$ids = isset($_GET['ids']) && trim($_GET['ids']) ? trim($_GET['ids']) : 0;
 		$statuses = isset($_GET['statuses']) && intval($_GET['statuses']) ? intval($_GET['statuses']) : 0;

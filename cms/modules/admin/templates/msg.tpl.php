@@ -33,7 +33,9 @@ var csrf_hash = '<?php echo csrf_hash();?>';
         <div class="details">
             <h4><?php echo $msg;?></h4>
             <p class="alert_btnleft">
-                <?php if ($url) {if(strpos($url,'&pc_hash')===false) $url .= '&pc_hash='.dr_get_csrf_token();?>
+                <?php if($url=='close') {?>
+                <a id="close"><?php echo L('close');?></a>
+                <?php } else if ($url) {if(strpos($url,'&pc_hash')===false) $url .= '&pc_hash='.dr_get_csrf_token();?>
                 <a href="<?php echo $url;?>"><?php echo L('如果您的浏览器没有自动跳转，请点击这里');?></a>
                 <meta http-equiv="refresh" content="<?php echo $time;?>; url=<?php echo $url;?>">
                 <?php } else {if($backurl!='javascript:history.back();' && strpos($backurl,'&pc_hash')===false) $backurl .= '&pc_hash='.dr_get_csrf_token();?>
@@ -55,6 +57,22 @@ $(function(){
     }
     ownerDialog.close();
 })
+</script>
+<?php }?>
+<?php if($url=='close') {?>
+<script src="<?php echo JS_PATH?>layui/layui.js" charset="utf-8"></script>
+<script src="<?php echo CSS_PATH?>layuimini/js/lay-config.js?v=2.0.0" charset="utf-8"></script>
+<script>
+    layui.use(['form','miniTab'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            miniTab = layui.miniTab;
+
+        //监听关闭
+        $('#close').on('click', function() {
+            miniTab.deleteCurrentByIframe();
+        });
+    });
 </script>
 <?php }?>
 </body>

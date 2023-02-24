@@ -211,25 +211,26 @@ class html {
         if ($param['ids']) {
             $where .= ' AND `id` IN ('. dr_safe_replace($param['ids']).')';
         }
-        $count = $param['number'] ? $param['number'] : $this->db->count($where);
+        $count = $this->db->count($where);
+        $pcount = $param['number'] && $param['number']<=$count ? $param['number'] : $count;
         $sql = 'select id,catid,title,url,islink,inputtime from `'.$this->db->table_name.'`';
         if ($where) {
             $sql .= ' where '.$where;
         }
 
-        if (!$count) {
+        if (!$pcount) {
             dr_json(0, '['.$models[$modelid]['name'].']没有可用生成的内容数据');
         }
 
         $psize = $param['pagesize'] ? $param['pagesize'] : $this->psize;
-        $cache_class->set_auth_data($name, ceil($count/$psize), $param['siteid']);
+        $cache_class->set_auth_data($name, ceil($pcount/$psize), $param['siteid']);
         $cache_class->set_auth_data($name.'-data', array(
             'sql' => $sql,
             'number' => $param['number'],
-            'pagesize' => $psize,
+            'pagesize' => $psize>$pcount ? $pcount : $psize,
         ), $param['siteid']);
 
-        dr_json(1, '共'.$count.'条，分'.ceil($count/$psize).'页');
+        dr_json(1, '共'.$pcount.'条，分'.ceil($pcount/$psize).'页');
     }
 
 }

@@ -466,7 +466,6 @@ class create_html extends admin {
 			$order = 'asc';
 			if (isset($cache['number']) && $cache['number']) {
 				$order = 'desc';
-				$cache['pagesize'] = $cache['number'];
 			}
 			$sql = $cache['sql']. ' order by id '.$order.' limit '.($cache['pagesize'] * ($page - 1)).','.$cache['pagesize'];
 			$data = $this->db->query($sql);
