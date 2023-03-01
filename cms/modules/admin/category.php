@@ -756,6 +756,9 @@ class category extends admin {
 			}
 		}
 
+		// 自动更新缓存
+		$this->cache();
+
 		dr_json(1, L('operation_success'));
 	}
 	/**
