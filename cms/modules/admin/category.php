@@ -360,17 +360,9 @@ class category extends admin {
 				}
 			}
 			if ($this->is_link_update) {
-				if($this->input->post('addtype')) {
-					dr_json(1, L('批量添加'.$count.'个栏目').'<script type="text/javascript">Dialog.confirm("'.L("需要更新栏目后才会生效，现在更新吗？").'",function() {iframe_show("'.L('更新栏目').'","?m=admin&c=category&a=public_repair&pc_hash="+pc_hash,"500px","300px","load");});</script>');
-				} else {
-					dr_json(1, L('operation_success').'<script type="text/javascript">Dialog.confirm("'.L("需要更新栏目后才会生效，现在更新吗？").'",function() {iframe_show("'.L('更新栏目').'","?m=admin&c=category&a=public_repair&pc_hash="+pc_hash,"500px","300px","load");});</script>');
-				}
+				dr_json(1, ($this->input->post('addtype') ? L('批量添加'.$count.'个栏目') : L('operation_success')).'<script type="text/javascript">Dialog.confirm("'.L("需要更新栏目后才会生效，现在更新吗？").'",function() {iframe_show("'.L('更新栏目').'","?m=admin&c=category&a=public_repair&pc_hash="+pc_hash,"500px","300px","load");});</script>');
 			} else {
-				if($this->input->post('addtype')) {
-					dr_json(1, L('批量添加'.$count.'个栏目！正在自动更新栏目缓存，请等待...').'<script type="text/javascript">dr_link_ajax_url(\'?m=admin&c=category&a=public_repair\');</script>');
-				} else {
-					dr_json(1, L('正在自动更新栏目缓存，请等待...').'<script type="text/javascript">dr_link_ajax_url(\'?m=admin&c=category&a=public_repair\');</script>');
-				}
+				dr_json(1, ($this->input->post('addtype') ? L('批量添加'.$count.'个栏目！') : '').L('正在自动更新栏目缓存，请等待...').'<script type="text/javascript">dr_link_ajax_url(\'?m=admin&c=category&a=public_repair\');</script>');
 			}
 		} else {
 			$show_header = $show_dialog = true;
@@ -550,7 +542,6 @@ class category extends admin {
 			}
 			if ($this->is_link_update) {
 				dr_json(1, L('operation_success').'<script type="text/javascript">Dialog.confirm("'.L("需要更新栏目后才会生效，现在更新吗？").'",function() {iframe_show("'.L('更新栏目').'","?m=admin&c=category&a=public_repair&pc_hash="+pc_hash,"500px","300px","load");});</script>');
-				dr_json(1, L('operation_success').'<script type="text/javascript">dr_link_ajax_url("?m=admin&c=category&a=public_repair&pc_hash="+pc_hash);</script>');
 			} else {
 				dr_json(1, L('正在自动更新栏目缓存，请等待...').'<script type="text/javascript">dr_link_ajax_url(\'?m=admin&c=category&a=public_repair\');</script>');
 			}
