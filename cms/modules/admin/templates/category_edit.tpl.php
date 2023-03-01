@@ -14,9 +14,6 @@ include $this->admin_tpl('header');?>
 <div class="page-container" style="margin-bottom: 0px !important;">
     <div class="page-content-wrapper">
         <div class="page-content page-content3 mybody-nheader main-content  ">
-<div class="note note-danger">
-    <p><?php echo L('最多支持创建'.MAX_CATEGORY.'个栏目，请合理的规划网站栏目');?></p>
-</div>
 <form action="?m=admin&c=category&a=edit" class="form-horizontal" method="post" name="myform" id="myform">
 <input name="dosubmit" type="hidden" value="1">
 <input name="catid" type="hidden" value="<?php echo $catid;?>">

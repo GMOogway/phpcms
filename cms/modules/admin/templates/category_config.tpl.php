@@ -14,7 +14,7 @@ jQuery(document).ready(function() {
     <div class="page-content-wrapper">
         <div class="page-content page-content3 mybody-nheader main-content  ">
 <div class="note note-danger">
-    <p><a href="javascript:dr_admin_menu_ajax('?m=admin&c=category&a=public_cache&pc_hash='+pc_hash+'&is_ajax=1',1);"><?php echo L('变更栏目属性之后，需要一键更新栏目配置信息');?></a></p>
+    <p><a href="javascript:iframe_show('<?php echo L('一键更新栏目');?>','?m=admin&c=category&a=public_repair&pc_hash='+pc_hash,'500px','300px');"><?php echo L('变更栏目属性之后，需要一键更新栏目配置信息');?></a></p>
 </div>
 <form action="?m=admin&c=category&a=config_add" class="form-horizontal" method="post" name="myform" id="myform">
 <input name="page" id="dr_page" type="hidden" value="<?php echo $page;?>">
@@ -62,6 +62,15 @@ jQuery(document).ready(function() {
                         <div class="col-md-9">
                             <label><input class="form-control" type="text" name="data[name_size]" value="<?php echo intval($data['name_size']);?>"></label>
                             <span class="help-block"><?php echo L('在后台栏目列表处显示的名称长度控制值，0表示不限制');?></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('栏目数量阈值');?></label>
+                        <div class="col-md-9">
+                            <label><input class="form-control" type="text" name="data[max_category]" value="<?php echo intval($data['max_category']);?>"></label>
+                            <span class="help-block"><?php echo L('当栏目总数量在阈值范围内时，变动栏目时系统会自动更新缓存，可能会造成延迟情况');?></span>
+                            <span class="help-block"><?php echo L('当栏目数量大于阈值时，系统将不会自动更新缓存，需要手动更新缓存才会生效');?></span>
                         </div>
                     </div>
 

@@ -309,7 +309,7 @@ function show_ip(name) {
 	}, 'text');
 }
 function dr_diy_func(name) {
-    dr_tips(1, '这是一个自定义函数');
+	dr_tips(1, '这是一个自定义函数');
 }
 // 显示视频
 function dr_preview_video(file) {
@@ -1532,6 +1532,38 @@ function dr_submit_post_todo(e, t) {
 			dr_ajax_admin_alert_error(e, t, a)
 		}
 	})
+}
+function dr_link_ajax_url(url, index) {
+	if (typeof pc_hash == 'string') url += (url.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
+	if (url.toLowerCase().indexOf("http://") != -1 || url.toLowerCase().indexOf("https://") != -1) {
+	} else {
+		url = geturlpathname()+url;
+	}
+	if (index == undefined) {
+		var index = layer.msg("正在自动更新栏目缓存，请等待...", {time: 999999999});
+	}
+	$.ajax({
+		type: "GET",
+		cache: false,
+		url: url+"&is_ajax=1",
+		dataType: "json",
+		success: function (json) {
+			if (json.code) {
+				if (json.data) {
+					dr_link_ajax_url(json.data, index);
+				} else {
+					layer.close(index);
+					setTimeout("window.location.reload(true)", 2000);
+					dr_tips(1, json.msg, json.data.time);
+				}
+			} else {
+				dr_tips(0, json.msg);
+			}
+		},
+		error: function(HttpRequest, ajaxOptions, thrownError) {
+			layer.close(index);
+		}
+	});
 }
 // 打开预览文件
 function dr_show_file_code(title, url) {

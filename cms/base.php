@@ -91,7 +91,6 @@ define('ROOT_URL', siteurl(1).'/');
 	'MOBILE_PATH' => '',
 	'BDMAP_API' => '',
 	'SYS_EDITOR' => '0',
-	'SYS_MAX_CATEGORY' => 100,
 	'SYS_ADMIN_PAGESIZE' => 10,
 	'CHARSET' => 'utf-8',
 	'TIMEZONE' => '8',
@@ -153,8 +152,6 @@ define('SYS_TPL_ROOT', pc_base::load_config('system','tpl_root'));
 !defined('TPLPATH') && define('TPLPATH', PC_PATH.SYS_TPL_ROOT);
 //网站时间显示格式与date函数一致，默认Y-m-d H:i:s
 define('SYS_TIME_FORMAT', pc_base::load_config('system','sys_time_format'));
-// 最大栏目数量限制category
-!defined('MAX_CATEGORY') && define('MAX_CATEGORY', intval(pc_base::load_config('system','sys_max_category')));
 // 后台数据分页显示数量
 define('SYS_ADMIN_PAGESIZE', intval(pc_base::load_config('system','sys_admin_pagesize')));
 //temp目录

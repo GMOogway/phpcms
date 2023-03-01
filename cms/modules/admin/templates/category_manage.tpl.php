@@ -102,7 +102,7 @@ $(function() {
         <div class="page-content page-content3 mybody-nheader main-content  ">
                 <div class="page-body">
 <div class="note note-danger">
-    <p><a href="javascript:dr_admin_menu_ajax('?m=admin&c=category&a=public_cache&pc_hash='+pc_hash+'&is_ajax=1');"><?php echo L('变更栏目属性之后，需要一键更新栏目配置信息');?></a></p>
+    <p><a href="javascript:iframe_show('<?php echo L('一键更新栏目');?>','?m=admin&c=category&a=public_repair&pc_hash='+pc_hash,'500px','300px');"><?php echo L('变更栏目属性之后，需要一键更新栏目配置信息');?></a></p>
 </div>
 <div class="right-card-box">
     <form class="form-horizontal" role="form" id="myform">

@@ -53,7 +53,7 @@ class cache_api {
 		$models = getcache('model','commons');
 		if (is_array($models)) {
 			foreach ($models as $modelid=>$model) {
-				$datas = $this->db->select(array('modelid'=>$modelid),'catid,type,items',10000);
+				$datas = $this->db->select(array('modelid'=>$modelid),'catid,type,items');
 				$array = array();
 				foreach ($datas as $r) {
 					if($r['type']==0) $array[$r['catid']] = $r['items'];
@@ -62,13 +62,13 @@ class cache_api {
 			}
 		}
 		$array = array();
-		$categorys = $this->db->select(array('module'=>'content'),'catid,siteid',20000,'listorder ASC');
+		$categorys = $this->db->select(array('module'=>'content'),'catid,siteid','','listorder ASC,catid ASC');
 		foreach ($categorys as $r) {
 			$array[$r['catid']] = $r['siteid'];
 		}
 		setcache('category_content',$array,'commons');
 		$categorys = $this->categorys = array();
-		$this->categorys = $this->db->select(array('siteid'=>$this->siteid, 'module'=>'content'),'*',10000,'listorder ASC');
+		$this->categorys = $this->db->select(array('siteid'=>$this->siteid, 'module'=>'content'),'*','','listorder ASC,catid ASC');
 		foreach($this->categorys as $r) {
 			unset($r['module']);
 			$setting = string2array($r['setting']);
@@ -134,33 +134,33 @@ class cache_api {
 	// 更新附件缓存
 	public function attachment() {
 		$page = intval($this->input->get('page'));
-        if (!$page) {
+		if (!$page) {
 			dr_file_delete(CACHE_PATH.'caches_attach/caches_data', true, true);
-            /*不清理缩略图文件是因为静态页面会导致缩略图404的悲剧
-            dr_dir_delete(SYS_THUMB_PATH);
-            create_folder(SYS_THUMB_PATH);*/
-            dr_json(1, L('正在检查附件'), 1);
-        }
+			/*不清理缩略图文件是因为静态页面会导致缩略图404的悲剧
+			dr_dir_delete(SYS_THUMB_PATH);
+			create_folder(SYS_THUMB_PATH);*/
+			dr_json(1, L('正在检查附件'), 1);
+		}
 
-        $total = $this->db->count();
-        if (!$total) {
-            dr_json(1, L('无可用附件更新'), 0);
-        }
+		$total = $this->db->count();
+		if (!$total) {
+			dr_json(1, L('无可用附件更新'), 0);
+		}
 
-        $psize = 300;
-        $tpage = ceil($total/$psize);
-        $result = $this->db->listinfo('','aid ASC',$page,$psize);
-        if ($result) {
-            foreach ($result as $t) {
-                get_attachment($t['aid']);
-            }
-        }
+		$psize = 300;
+		$tpage = ceil($total/$psize);
+		$result = $this->db->listinfo('','aid ASC',$page,$psize);
+		if ($result) {
+			foreach ($result as $t) {
+				get_attachment($t['aid']);
+			}
+		}
 
-        if ($page > $tpage) {
-            dr_json(1, L('已更新'.$total.'个附件'), 0);
-        }
+		if ($page > $tpage) {
+			dr_json(1, L('已更新'.$total.'个附件'), 0);
+		}
 
-        dr_json(1, L('正在更新中（'.$page.'/'.$tpage.'）'), $page + 1);
+		dr_json(1, L('正在更新中（'.$page.'/'.$tpage.'）'), $page + 1);
 	}
 	
 	/**
@@ -213,7 +213,7 @@ class cache_api {
 	 * 更新推荐位缓存方法
 	 */
 	public function position() {
-		$infos = $this->db->select('','*',1000,'listorder DESC');
+		$infos = $this->db->select('','*','','listorder DESC');
 		$positions = array();
 		foreach ($infos as $info){
 			$positions[$info['posid']] = $info;
@@ -381,7 +381,7 @@ class cache_api {
 	public function sitemodel_field($modelid) {
 		$field_array = array();
 		$db = pc_base::load_model('sitemodel_field_model');
-		$fields = $db->select(array('modelid'=>$modelid,'disabled'=>0),'*',100,'listorder ASC,fieldid ASC');
+		$fields = $db->select(array('modelid'=>$modelid,'disabled'=>0),'*','','listorder ASC,fieldid ASC');
 		foreach($fields as $_value) {
 			if (is_array(string2array($_value['setting']))) {
 				$setting = string2array($_value['setting']);
@@ -400,7 +400,7 @@ class cache_api {
 	 */
 	public function type($param = '') {
 		$datas = array();
-		$result_datas = $this->db->select(array('siteid'=>get_siteid(),'module'=>$param),'*',1000,'listorder ASC,typeid ASC');
+		$result_datas = $this->db->select(array('siteid'=>get_siteid(),'module'=>$param),'*','','listorder ASC,typeid ASC');
 		foreach($result_datas as $_key=>$_value) {
 			$datas[$_value['typeid']] = $_value;
 		}
@@ -419,7 +419,7 @@ class cache_api {
 	 */
 	public function workflow() {
 		$datas = array();
-		$workflow_datas = $this->db->select(array('siteid'=>get_siteid()),'*',1000);
+		$workflow_datas = $this->db->select(array('siteid'=>get_siteid()));
 		foreach($workflow_datas as $_k=>$_v) {
 			$datas[$_v['workflowid']] = $_v;
 		}
@@ -448,7 +448,7 @@ class cache_api {
 	 * 更新会员组缓存方法
 	 */
 	public function member_group() {
-		$grouplist = $this->db->listinfo('', '', 1, 100, 'groupid');
+		$grouplist = $this->db->select('', '*', '', '', '', 'groupid');
 		setcache('grouplist', $grouplist,'member');
 		return true;
 	}
@@ -483,7 +483,7 @@ class cache_api {
 		define('MEMBER_CACHE_MODEL_PATH',CACHE_PATH.'caches_model'.DIRECTORY_SEPARATOR.'caches_data'.DIRECTORY_SEPARATOR);
 		
 		$sitemodel_db = pc_base::load_model('sitemodel_model');
-		$data = $sitemodel_db->select(array('type'=>2), "*", 1000, 'sort', '', 'modelid');
+		$data = $sitemodel_db->select(array('type'=>2), "*", '', 'sort', '', 'modelid');
 		setcache('member_model', $data, 'commons');
 		
 		require MEMBER_MODEL_PATH.'fields.inc.php';
@@ -513,7 +513,7 @@ class cache_api {
 		$this->db = pc_base::load_model('sitemodel_field_model');
 		foreach ($member_model as $modelid => $m) {
 			$field_array = array();
-			$fields = $this->db->select(array('modelid'=>$modelid,'disabled'=>0),'*',100,'listorder ASC');
+			$fields = $this->db->select(array('modelid'=>$modelid,'disabled'=>0),'*','','listorder ASC');
 			foreach($fields as $_value) {
 				if (is_array(string2array($_value['setting']))) {
 					$setting = string2array($_value['setting']);
@@ -546,7 +546,7 @@ class cache_api {
 		$sitelist = getcache('sitelist','commons');
 		foreach ($sitelist as $siteid=>$_v) {
 			$datas = $search_model = array();
-			$result_datas = $result_datas2 = $this->db->select(array('siteid'=>$siteid,'module'=>'search'),'*',1000,'listorder ASC');
+			$result_datas = $result_datas2 = $this->db->select(array('siteid'=>$siteid,'module'=>'search'),'*','','listorder ASC');
 			foreach($result_datas as $_key=>$_value) {
 				if(!$_value['modelid']) continue;
 				$datas[$_value['modelid']] = $_value['typeid'];

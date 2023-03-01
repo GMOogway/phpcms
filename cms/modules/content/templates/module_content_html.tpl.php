@@ -101,7 +101,7 @@ $(function() {
         <div class="page-content page-content3 mybody-nheader main-content main-content2">
                             <div class="page-body">
 <div class="note note-danger">
-    <p><a href="javascript:dr_admin_menu_ajax('?m=admin&c=category&a=public_cache&pc_hash='+pc_hash+'&is_ajax=1',1);"><?php echo L('update_cache_all');?></a></p>
+    <p><a href="javascript:iframe_show('<?php echo L('一键更新栏目');?>','?m=admin&c=category&a=public_repair&pc_hash='+pc_hash,'500px','300px');"><?php echo L('update_cache_all');?></a></p>
 </div>
 <div class="form-horizontal">
     <div class="portlet-body">

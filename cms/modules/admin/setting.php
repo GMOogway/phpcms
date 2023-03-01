@@ -62,12 +62,6 @@ class setting extends admin {
 			if (!$setting['errorlog_size']) {
 				dr_json(0, L('setting_error_log_size').L('empty'), array('field' => 'errorlog_size'));
 			}
-			if (!$setconfig['sys_max_category']) {
-				dr_json(0, L('setting_max_category').L('empty'), array('field' => 'sys_max_category'));
-			}
-			if ($setconfig['sys_max_category']>10000) {
-				dr_json(0, L('setting_max_category_not'), array('field' => 'sys_max_category'));
-			}
 			if (!$setting['captcha_charset'] && $setting['sysadmincodemodel']==3) {
 				dr_json(0, L('setting_code_character').L('empty'), array('field' => 'captcha_charset'));
 			}
@@ -93,7 +87,6 @@ class setting extends admin {
 			$setting = array2string($setting);
 			$this->db->update(array('setting'=>$setting), array('module'=>'admin')); //存入admin模块setting字段
 			
-			$setconfig['sys_max_category'] = intval($setconfig['sys_max_category']);
 			$setconfig['sys_admin_pagesize'] = intval($setconfig['sys_admin_pagesize']);
 			$setconfig['debug'] = intval($setconfig['debug']);
 			$setconfig['sys_csrf'] = intval($setconfig['sys_csrf']);
