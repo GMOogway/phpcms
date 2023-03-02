@@ -520,11 +520,11 @@ function artdialog(id,url,title,w,h) {
 	omnipotent(id,url,title,0,w,h);
 }
 //选择图标
-function menuicon(id,linkurl,title,w,h) {
-	if (typeof pc_hash == 'string') linkurl += (linkurl.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
-	if (linkurl.toLowerCase().indexOf("http://") != -1 || linkurl.toLowerCase().indexOf("https://") != -1) {
+function menuicon(id,url,title,w,h) {
+	if (typeof pc_hash == 'string') url += (url.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
+	if (url.toLowerCase().indexOf("http://") != -1 || url.toLowerCase().indexOf("https://") != -1) {
 	} else {
-		linkurl = geturlpathname()+linkurl;
+		url = geturlpathname()+url;
 	}
 	if(!w) w=700;
 	if(!h) h=500;
@@ -539,7 +539,7 @@ function menuicon(id,linkurl,title,w,h) {
 	var diag = new Dialog({
 		id:id,
 		title:title,
-		url:linkurl,
+		url:url,
 		width:w,
 		height:h,
 		modal:true,
@@ -551,11 +551,11 @@ function menuicon(id,linkurl,title,w,h) {
 	diag.show();
 }
 //弹出对话框
-function omnipotent(id,linkurl,title,close_type,w,h) {
-	if (typeof pc_hash == 'string') linkurl += (linkurl.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
-	if (linkurl.toLowerCase().indexOf("http://") != -1 || linkurl.toLowerCase().indexOf("https://") != -1) {
+function omnipotent(id,url,title,rt,w,h) {
+	if (typeof pc_hash == 'string') url += (url.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
+	if (url.toLowerCase().indexOf("http://") != -1 || url.toLowerCase().indexOf("https://") != -1) {
 	} else {
-		linkurl = geturlpathname()+linkurl;
+		url = geturlpathname()+url;
 	}
 	if(!w) w=700;
 	if(!h) h=500;
@@ -570,13 +570,13 @@ function omnipotent(id,linkurl,title,close_type,w,h) {
 	var diag = new Dialog({
 		id:id,
 		title:title,
-		url:linkurl,
+		url:url,
 		width:w,
 		height:h,
 		modal:true,
 		draggable:drag
 	});
-	if(!close_type) {
+	if(!rt) {
 		diag.onOk = function(){
 			var form = $DW.$('#dosubmit');
 			form.click();
@@ -590,11 +590,11 @@ function omnipotent(id,linkurl,title,close_type,w,h) {
 	};
 	diag.show();
 }
-function map(id,linkurl,title,tcstr,w,h) {
-	if (typeof pc_hash == 'string') linkurl += (linkurl.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
-	if (linkurl.toLowerCase().indexOf("http://") != -1 || linkurl.toLowerCase().indexOf("https://") != -1) {
+function map(id,url,title,tcstr,w,h) {
+	if (typeof pc_hash == 'string') url += (url.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
+	if (url.toLowerCase().indexOf("http://") != -1 || url.toLowerCase().indexOf("https://") != -1) {
 	} else {
-		linkurl = geturlpathname()+linkurl;
+		url = geturlpathname()+url;
 	}
 	if(!w) w=700;
 	if(!h) h=500;
@@ -609,7 +609,7 @@ function map(id,linkurl,title,tcstr,w,h) {
 	var diag = new Dialog({
 		id:id,
 		title:title,
-		url:linkurl,
+		url:url,
 		width:w,
 		height:h,
 		modal:true,
@@ -853,7 +853,7 @@ function dr_logout(msg, url, tourl) {
 	});
 }
 // ajax 显示内容
-function dr_iframe_show(type, url, width, height, is_close) {
+function dr_iframe_show(type, url, width, height, rt) {
 	if (typeof pc_hash == 'string') url += (url.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
 	if (url.toLowerCase().indexOf("http://") != -1 || url.toLowerCase().indexOf("https://") != -1) {
 	} else {
@@ -892,12 +892,12 @@ function dr_iframe_show(type, url, width, height, is_close) {
 	});
 	diag.cancelText = '关闭(X)';
 	diag.onCancel=function(){
-		if (is_close == "load") {
+		if (rt == "load") {
 			window.location.reload(true);
 		}
 		$DW.close();
 	};
-	if (is_close == "load") {
+	if (rt == "load") {
 		diag.onClose=function(){
 			window.location.reload(true);
 			$DW.close();
@@ -906,7 +906,7 @@ function dr_iframe_show(type, url, width, height, is_close) {
 	diag.show();
 }
 // ajax 显示内容
-function iframe_show(type, url, width, height, is_close) {
+function iframe_show(type, url, width, height, rt) {
 	var title = '';
 	if (type == 'show') {
 		title = '<i class="fa fa-search"></i> 查看';
@@ -947,7 +947,7 @@ function iframe_show(type, url, width, height, is_close) {
 				dr_tips(0, obj.msg);
 			}
 		},end: function(){
-			if (is_close == "load") {
+			if (rt == "load") {
 				window.location.reload(true);
 			}
 		},
@@ -1344,11 +1344,11 @@ function dr_submit_sql_todo(e, t) {
 		}
 	})
 }
-function dr_install_uninstall(msg,linkurl,module,w,h) {
-	if (typeof pc_hash == 'string') linkurl += (linkurl.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
-	if (linkurl.toLowerCase().indexOf("http://") != -1 || linkurl.toLowerCase().indexOf("https://") != -1) {
+function dr_install_uninstall(msg,url,module,w,h) {
+	if (typeof pc_hash == 'string') url += (url.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
+	if (url.toLowerCase().indexOf("http://") != -1 || url.toLowerCase().indexOf("https://") != -1) {
 	} else {
-		linkurl = geturlpathname()+linkurl;
+		url = geturlpathname()+url;
 	}
 	if(!w) w=500;
 	if(!h) h=260;
@@ -1363,7 +1363,7 @@ function dr_install_uninstall(msg,linkurl,module,w,h) {
 		$.ajax({
 			type: "POST",
 			dataType: "json",
-			url: linkurl,
+			url: url,
 			data: {module:module,csrf_test_name:csrf_hash},
 			success: function(e) {
 				layer.close(t), dr_tips(e.code, e.msg), 1 == e.code && setTimeout("dr_install_confirm()", 2e3)
@@ -1742,26 +1742,26 @@ function dr_slimScroll_init(a, b) {
 		$(c).attr("data-inited", "1");
 	}
 }
-function check_title(linkurl,title) {
-	if (typeof pc_hash == 'string') linkurl += (linkurl.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
-	if (linkurl.toLowerCase().indexOf("http://") != -1 || linkurl.toLowerCase().indexOf("https://") != -1) {
+function check_title(url,title) {
+	if (typeof pc_hash == 'string') url += (url.indexOf('?') > -1 ? '&': '?') + 'pc_hash=' + pc_hash;
+	if (url.toLowerCase().indexOf("http://") != -1 || url.toLowerCase().indexOf("https://") != -1) {
 	} else {
-		linkurl = geturlpathname()+linkurl;
+		url = geturlpathname()+url;
 	}
 	var val = $('#'+title).val();
-	$.get(linkurl+"&data=" + val + "&is_ajax=1",
+	$.get(url+"&data=" + val + "&is_ajax=1",
 	function(data) {
 		if (data) {
 			dr_tips(0, data);
 		}
 	});
 }
-function get_wxurl(syseditor, field, linkurl, formname, titlename, keywordname, contentname) {
+function get_wxurl(syseditor, field, url, formname, titlename, keywordname, contentname) {
 	var index = layer.load(2, {
 		shade: [0.3,'#fff'], //0.1透明度的白色背景
 		time: 5000
 	});
-	$.ajax({type: "POST",dataType:"json", url: linkurl+'&field='+field, data: $('#'+formname).serialize(),
+	$.ajax({type: "POST",dataType:"json", url: url+'&field='+field, data: $('#'+formname).serialize(),
 		success: function(json) {
 			layer.close(index);
 			dr_tips(json.code, json.msg);

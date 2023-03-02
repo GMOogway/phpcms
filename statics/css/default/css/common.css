@@ -103,7 +103,7 @@ a:hover{color:#1eaff1;}
 .menu{height:43px;line-height:43px;background-color:#2196f3;}
 .nav{width:1170px;margin:0 auto;}
 .nav li{float:left;position:relative;z-index:98;background-color:#2196f3;}
-.nav li a{float:left;width:110px;display:block;line-height:43px;text-align:center;font-weight:normal;font-size:14px;color:#fff;transition:all 0.3s}
+.nav li a{float:left;width:106px;display:block;line-height:43px;text-align:center;font-weight:normal;font-size:14px;color:#fff;transition:all 0.3s}
 .nav li a:focus{-moz-outline-style: none;}
 .nav li a:hover{text-decoration:none;color:#fff;background:#1784db;}
 .nav li .current{text-decoration:none;color:#fff;background:#1784db;}

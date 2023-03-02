@@ -31,7 +31,7 @@ class category extends admin {
 			define('SYS_TOTAL_POPEN', 1);
 		}
 		$this->max_category = $this->cat_config['max_category'] ? intval($this->cat_config['max_category']) : 200;
-		$this->is_link_update = $this->db->count(array('siteid'=>$this->siteid)) > $this->max_category ? 1 : 0;
+		$this->is_link_update = $this->db->count(array('siteid'=>$this->siteid, 'module'=>'content')) > $this->max_category ? 1 : 0;
 	}
 	/**
 	 * 管理栏目
@@ -234,7 +234,7 @@ class category extends admin {
 	 * 获取菜单数据
 	 */
 	public function cat_data($pid) {
-		return $this->db->select(array('siteid'=>$this->siteid, 'parentid'=>$pid),'*','','listorder ASC,catid ASC');
+		return $this->db->select(array('siteid'=>$this->siteid, 'parentid'=>$pid, 'module'=>'content'),'*','','listorder ASC,catid ASC');
 	}
 	// 统计栏目
 	public function public_ctotal() {
@@ -334,6 +334,7 @@ class category extends admin {
 				$this->db->update($systeminfo,array('catid'=>$catid,'siteid'=>$this->siteid));
 				$this->update_priv($catid, $this->input->post('priv_roleid'));
 				$this->update_priv($catid, $this->input->post('priv_groupid'),0);
+				$this->repair_cat($catid);
 			} else {//批量添加
 				if(!$this->input->post('batch_add')) dr_json(0, L('input_catname'), array('field' => 'catname', 'batch' => 'batch'));
 				$batch_adds = explode("\n", $this->input->post('batch_add'));
@@ -351,6 +352,7 @@ class category extends admin {
 					$this->db->update($systeminfo,array('catid'=>$catid,'siteid'=>$this->siteid));
 					$this->update_priv($catid, $this->input->post('priv_roleid'));
 					$this->update_priv($catid, $this->input->post('priv_groupid'),0);
+					$this->repair_cat($catid);
 					if (!$cf['code']) {
 						// 重复验证
 						$infocf['catdir'] = $info['catdir'].$catid;
@@ -360,7 +362,7 @@ class category extends admin {
 				}
 			}
 			if ($this->is_link_update) {
-				dr_json(1, ($this->input->post('addtype') ? L('批量添加'.$count.'个栏目') : L('operation_success')).'<script type="text/javascript">Dialog.confirm("'.L("需要更新栏目后才会生效，现在更新吗？").'",function() {iframe_show("'.L('更新栏目').'","?m=admin&c=category&a=public_repair&pc_hash="+pc_hash,"500px","300px","load");});</script>');
+				dr_json(1, ($this->input->post('addtype') ? L('批量添加'.$count.'个栏目') : L('operation_success')).'<script type="text/javascript">Dialog.confirm("'.($this->input->post('addtype') ? L('批量添加'.$count.'个栏目！') : '').L("需要更新栏目后才会生效，现在更新吗？").'",function() {iframe_show("'.L('更新栏目').'","?m=admin&c=category&a=public_repair&pc_hash="+pc_hash,"500px","300px","load");});</script>');
 			} else {
 				dr_json(1, ($this->input->post('addtype') ? L('批量添加'.$count.'个栏目！') : '').L('正在自动更新栏目缓存，请等待...').'<script type="text/javascript">dr_link_ajax_url(\'?m=admin&c=category&a=public_repair\');</script>');
 			}
@@ -448,10 +450,6 @@ class category extends admin {
 					}
 				}
 			}
-			//上级栏目不能是自身
-			//if($info['parentid']==$catid){
-				//dr_json(0, L('operation_failure'));
-			//}
 			//上级栏目不能是自身  ---也不能是自己的子栏目
 			$arrchildid = $this->db->get_one(array('catid'=>$catid), 'arrchildid');
 			$arrchildid_arr = explode(',',$arrchildid['arrchildid']);
@@ -510,7 +508,7 @@ class category extends admin {
 			
 			//应用模板到所有子栏目
 			if($this->input->post('template_child')){
-				$this->categorys = $categorys = $this->db->select(array('siteid'=>$this->siteid,'module'=>'content'), '*', '', 'listorder ASC, catid ASC', '', 'catid');
+				$this->categorys = $categorys = $this->db->select(array('siteid'=>$this->siteid, 'module'=>'content'), '*', '', 'listorder ASC, catid ASC', '', 'catid');
 				$idstr = $this->get_arrchildid($catid);
 				if(!empty($idstr)){
 					$arr = $this->db->select(array('catid'=>explode(',', $idstr)), 'catid,setting');
@@ -535,6 +533,7 @@ class category extends admin {
 			$this->db->update($systeminfo,array('catid'=>$catid,'siteid'=>$this->siteid));
 			$this->update_priv($catid, $this->input->post('priv_roleid'));
 			$this->update_priv($catid, $this->input->post('priv_groupid'),0);
+			$this->repair_cat($catid);
 			//更新附件状态
 			if($info['image'] && SYS_ATTACHMENT_STAT) {
 				$this->attachment_db = pc_base::load_model('attachment_model');
@@ -970,6 +969,100 @@ class category extends admin {
 		$this->cache_api->cache('category');
 		return true;
 	}
+	// 更新栏目缓存配置
+	public function public_cache() {
+		$url = '?m=admin&c=category&a=public_cache';
+		$page = (int)$this->input->get('page');
+		$psize = $this->max_category; // 每页处理的数量
+		$total = (int)$this->input->get('total');
+
+		if (!$page) {
+			// 修复栏目数据
+			$total = $this->repair_data($psize, 'cache');
+			dr_dir_delete(CACHE_PATH.'caches_module/category-'.$this->siteid.'-data/');
+			if (!$total) {
+				html_msg(1, L('更新完成'));
+			}
+			$this->cache->set_auth_data(
+				'category-cache-cache',
+				[],
+				$this->siteid
+			);
+			$this->cache->set_auth_data(
+				'category-cache-dir',
+				[],
+				$this->siteid
+			);
+			$this->cache->set_auth_data(
+				'category-cache-main',
+				[],
+				$this->siteid
+			);
+			html_msg(1, L('正在执行中...'), $url.'&total='.$total.'&page='.($page+1));
+		}
+
+		$tpage = ceil($total / $psize); // 总页数
+
+		$cats = $this->cache->get_auth_data('category-cache-page', $this->siteid);
+		if (!$cats) {
+			html_msg(0, L('临时数据读取失败'));
+		} elseif (!isset($cats[$page-1]) || $page > $tpage) {
+			$this->cache->set_file(
+				'cache',
+				$this->cache->get_auth_data('category-cache-cache', $this->siteid),
+				'module/category-'.$this->siteid.''.'-data'
+			);
+			$this->cache->set_file(
+				'main',
+				$this->cache->get_auth_data('category-cache-main', $this->siteid),
+				'module/category-'.$this->siteid.''.'-data'
+			);
+			$this->cache->set_file(
+				'dir',
+				$this->cache->get_auth_data('category-cache-dir', $this->siteid),
+				'module/category-'.$this->siteid.''.'-data'
+			);
+			$this->count_items();
+			$this->cache();
+			$this->cache->del_auth_data('category-cache-main', $this->siteid);
+			$this->cache->del_auth_data('category-cache-cache', $this->siteid);
+			$this->cache->del_auth_data('category-cache-page', $this->siteid);
+			$this->cache->del_auth_data('category-cache-data', $this->siteid);
+			$this->cache->del_auth_data('category-cache-dir', $this->siteid);
+			html_msg(1, L('更新完成'));
+		}
+
+		$cat = $this->cache->get_auth_data('category-cache-data', $this->siteid);
+		$this->cat_init([
+			'cat_dir' => $this->cache->get_auth_data('category-cache-dir', $this->siteid),
+			'cat_cache' => $this->cache->get_auth_data('category-cache-cache', $this->siteid),
+			'cat_main' => $this->cache->get_auth_data('category-cache-main', $this->siteid),
+			'repair_categorys' => $cat,
+		]);
+		foreach ($cats[$page-1] as $v) {
+			$cat[$v['catid']] && $this->get_cache($v['catid']);
+		}
+
+		$this->cache->set_auth_data(
+			'category-cache-main',
+			$this->get_cat_main(),
+			$this->siteid
+		);
+		$this->cache->set_auth_data(
+			'category-cache-cache',
+			$this->get_cat_cache(),
+			$this->siteid
+		);
+		$this->cache->set_auth_data(
+			'category-cache-dir',
+			$this->get_cat_dir(),
+			$this->siteid
+		);
+
+		html_msg( 1, L('正在更新栏目配置【'.$tpage.'/'.$page.'】...'),
+			$url.'&total='.$total.'&page='.($page+1)
+		);
+	}
 	// 批量更新栏目关系
 	public function public_repair() {
 		$url = '?m=admin&c=category&a=public_repair';
@@ -979,25 +1072,26 @@ class category extends admin {
 
 		if (!$page) {
 			// 修复栏目数据
-			$total = $this->repair_data($psize);
+			$total = $this->repair_data($psize, 'repair');
 			if (!$total) {
-				$this->count_items();
-				$this->cache();
-				$this->cache->del_auth_data('category-page', $this->siteid);
 				html_msg(1, L('更新完成'));
 			}
+			dr_dir_delete(CACHE_PATH.'caches_module/category-'.$this->siteid.'-child');
+			dr_dir_delete(CACHE_PATH.'caches_module/category-'.$this->siteid.'-data');
+			dr_dir_delete(CACHE_PATH.'caches_module/category-'.$this->siteid.'-min');
+			dr_dir_delete(CACHE_PATH.'caches_module/category-'.$this->siteid.'-main');
 			html_msg(1, L('正在执行中...'), $url.'&total='.$total.'&page='.($page+1));
 		}
 
 		$tpage = ceil($total / $psize); // 总页数
-		$cats = $this->cache->get_auth_data('category-page', $this->siteid);
+		$cats = $this->cache->get_auth_data('category-repair-page', $this->siteid);
 		if (!$cats) {
 			html_msg(0, L('临时数据读取失败'));
 		} elseif (!isset($cats[$page-1]) || $page > $tpage) {
-			$this->count_items();
-			$this->cache();
-			$this->cache->del_auth_data('category-page', $this->siteid);
-			html_msg(1, L('更新完成'));
+			$this->cache->del_auth_data('category-repair-page', $this->siteid);
+			$this->cache->del_auth_data('category-repair-data', $this->siteid);
+			$this->cache->del_auth_data('category-repair-dir', $this->siteid);
+			html_msg(1, L('更新完成'), '?m=admin&c=category&a=public_cache');
 		}
 
 		foreach ($cats[$page-1] as $cat) {
@@ -1008,16 +1102,36 @@ class category extends admin {
 			$url.'&total='.$total.'&page='.($page+1)
 		);
 	}
+	private function cat_init($cat) {
+		$this->cat_dir = $cat['cat_dir'] ? $cat['cat_dir'] : [];
+		$this->cat_main = $cat['cat_main'] ? $cat['cat_main'] : [];
+		$this->cat_cache = $cat['cat_cache'] ? $cat['cat_cache'] : [];
+		$this->repair_categorys = $cat['repair_categorys'];
+		return $this;
+	}
+	private function get_cat_dir() {
+		return $this->cat_dir;
+	}
+
+	private function get_cat_cache() {
+		return $this->cat_cache;
+	}
+
+	private function get_cat_main() {
+		return $this->cat_main;
+	}
 	// 修复栏目数据格式分组存储
-	private function repair_data($psize) {
-		$_data = $this->db->select(array('siteid'=>$this->siteid,'module'=>'content'),'*','','listorder ASC,catid ASC');
+	private function repair_data($psize, $mid) {
+		$_data = $this->db->select(array('siteid'=>$this->siteid, 'module'=>'content'),'*','','listorder ASC,catid ASC');
 		if (!$_data) {
 			return 0;
 		}
 
 		// 全部栏目数据
-		$rt = array();
+		$data = $dir = $rt = array();
 		foreach ($_data as $t) {
+			$t['setting'] = dr_string2array($t['setting']);
+			$dir[$t['catdir']] = $t['catid'];
 			$rt[$t['catid']] = [
 				'catid' => $t['catid'],
 				'parentid' => $t['parentid'],
@@ -1027,42 +1141,47 @@ class category extends admin {
 				'catdir' => $t['catdir'],
 				'parentdir' => $t['parentdir'],
 			];
+			$data[$t['catid']] = $t;
 		}
 
-		$this->cache->set_auth_data('category-page', array_chunk($rt, $psize), $this->siteid);
+		$this->cache->set_auth_data('category-'.$mid.'-page', array_chunk($rt, $psize), $this->siteid);
+		$this->cache->set_auth_data('category-'.$mid.'-data', $data, $this->siteid);
+		$this->cache->set_auth_data('category-'.$mid.'-dir', $dir, $this->siteid);
 
 		return count($rt);
 	}
 	// 同步修复栏目
 	private function repair_sync($cat) {
 		$html_root = SYS_HTML_ROOT;
-		$_data = $this->db->select(array('siteid'=>$this->siteid,'module'=>'content'),'*','','listorder ASC,catid ASC');
-		if (!$_data) {
-			return;
-		}
-		// 全部栏目数据
-		$this->categorys = array();
-		foreach ($_data as $t) {
-			$this->categorys[$t['catid']] = [
-				'catid' => $t['catid'],
-				'parentid' => (int)$t['parentid'],
-				'arrparentid' => $t['arrparentid'],
-				'child' => $t['child'],
-				'arrchildid' => $t['arrchildid'],
-				'catdir' => $t['catdir'],
-				'parentdir' => $t['parentdir'],
-				'type' => $t['type'],
-				'url' => $t['url'],
-				'setting' => dr_string2array($t['setting']),
-			];
+		if (!$this->repair_categorys) {
+			$_data = $this->db->select(array('siteid'=>$this->siteid, 'module'=>'content'),'*','','listorder ASC,catid ASC');
+			if (!$_data) {
+				return;
+			}
+			// 全部栏目数据
+			$this->repair_categorys = array();
+			foreach ($_data as $t) {
+				$this->repair_categorys[$t['catid']] = [
+					'catid' => $t['catid'],
+					'parentid' => (int)$t['parentid'],
+					'arrparentid' => $t['arrparentid'],
+					'child' => $t['child'],
+					'arrchildid' => $t['arrchildid'],
+					'catdir' => $t['catdir'],
+					'parentdir' => $t['parentdir'],
+					'type' => $t['type'],
+					'url' => $t['url'],
+					'setting' => $t['setting'],
+				];
+			}
 		}
 
-		$this->categorys[$cat['catid']]['arrparentid'] = $this->get_arrparentid($cat['catid']);
-		$this->categorys[$cat['catid']]['arrchildid'] = $this->get_arrchildid($cat['catid']);
-		$this->categorys[$cat['catid']]['child'] = is_numeric($this->categorys[$cat['catid']]['arrchildid']) ? 0 : 1;
-		$this->categorys[$cat['catid']]['parentdir'] = $this->get_parentdir($cat['catid']);
+		$this->repair_categorys[$cat['catid']]['arrparentid'] = $this->get_arrparentid($cat['catid']);
+		$this->repair_categorys[$cat['catid']]['arrchildid'] = $this->get_arrchildid($cat['catid']);
+		$this->repair_categorys[$cat['catid']]['child'] = is_numeric($this->repair_categorys[$cat['catid']]['arrchildid']) ? 0 : 1;
+		$this->repair_categorys[$cat['catid']]['parentdir'] = $this->get_parentdir($cat['catid']);
 
-		$setting = $this->categorys[$cat['catid']]['setting'];
+		$setting = dr_string2array($this->repair_categorys[$cat['catid']]['setting']);
 		$this->sethtml = $setting['create_to_html_root'];
 		//检查是否生成到根目录
 		$this->get_sethtml($cat['catid']);
@@ -1078,17 +1197,84 @@ class category extends admin {
 			//不生成静态时
 			$url = APP_PATH.$url;
 		}
-		if($this->categorys[$cat['catid']]['type']!=2) if($this->categorys[$cat['catid']]['url']!=$url) $this->db->update(array('url'=>$url), array('catid'=>$cat['catid']));
+		if($this->repair_categorys[$cat['catid']]['type']!=2 && $this->repair_categorys[$cat['catid']]['url']!=$url) $this->db->update(array('url'=>$url), array('catid'=>$cat['catid']));
 
 		$this->db->update(array(
-			'parentid' => (int)$this->categorys[$cat['catid']]['parentid'],
-			'arrparentid' => $this->categorys[$cat['catid']]['arrparentid'],
-			'child' => $this->categorys[$cat['catid']]['child'],
-			'arrchildid' => $this->categorys[$cat['catid']]['arrchildid'],
-			'parentdir' => $this->categorys[$cat['catid']]['parentdir'],
+			'parentid' => (int)$this->repair_categorys[$cat['catid']]['parentid'],
+			'arrparentid' => $this->repair_categorys[$cat['catid']]['arrparentid'],
+			'child' => $this->repair_categorys[$cat['catid']]['child'],
+			'arrchildid' => $this->repair_categorys[$cat['catid']]['arrchildid'],
+			'parentdir' => $this->repair_categorys[$cat['catid']]['parentdir'],
 			'sethtml'=>$sethtml,
 			'letter'=>$this->pinyin->result($cat['catname'])
 		), array('catid'=>$cat['catid']));
+
+		// 单独存储栏目关系
+		if ($this->repair_categorys[$cat['catid']]['child']) {
+			$this->cache->set_file($cat['catid'], $this->_get_nextids($cat['catid']), 'module/category-'.$this->siteid.'-child');
+		}
+	}
+	//生成顶级栏目下级
+	private function repair_top_nextids() {
+		$this->cache->set_file(0, $this->_get_nextids(0), 'module/category-'.$this->siteid.'-child');
+	}
+	/**
+	 * 获取栏目的下级子栏目
+	 */
+	protected function _get_nextids($catid) {
+		$rt = [];
+		$data = $this->db->select(array('siteid'=>$this->siteid, 'parentid'=>$catid, 'module'=>'content'),'*','','listorder ASC,catid ASC');
+		if ($data) {
+			foreach($data as $cat) {
+				$rt[] = $cat['catid'];
+			}
+		}
+		return $rt;
+	}
+	// 单个栏目缓存文件
+	private function get_cache($catid) {
+
+		$cat = $this->repair_categorys[$catid];
+
+		$pid = explode(',', (string)$cat['arrparentid']);
+		$cat['topid'] = isset($pid[1]) ? $pid[1] : $cat['catid'];
+		$cat['catids'] = explode(',', $cat['arrchildid']);
+		$cat['is_post'] = ($cat['child'] ? 0 : 1); // 是否允许发布内容
+
+		// 统计栏目文章数量
+		$cat['total'] = '-';
+		if ($cat['parentid']) {
+			$this->cat_dir[$cat['parentdir'].$cat['catdir']] = $cat['catid'];
+		}
+		$this->cat_dir[$cat['catdir']] = $cat['catid'];
+		// 缓存数据
+		$this->cat_cache[$cat['catid']] = [
+			'catid' => $cat['catid'],
+			'url' => $cat['url'],
+			'type' => $cat['type'],
+			'parentid' => $cat['parentid'],
+			'module' => $cat['module'],
+			'catname' => $cat['catname'],
+			'image' => $cat['image'],
+			'arrparentid' => $cat['arrparentid'],
+			'child' => $cat['child'],
+			'arrchildid' => $cat['arrchildid'],
+			'catdir' => $cat['catdir'],
+			'parentdir' => $cat['parentdir'],
+		];
+		$this->cat_main[$cat['catid']] = $this->cat_cache[$cat['catid']];
+		$this->cache->set_file($cat['catid'], $cat, 'module/category-'.$this->siteid.'-data');
+		$this->cache->set_file($cat['catid'], $this->cat_cache[$cat['catid']], 'module/category-'.$this->siteid.'-min');
+	}
+	// 修改后修复栏目
+	private function repair_cat($catid) {
+		// 存储单个数据
+		$cat = $this->db->get_one(array('catid'=>$catid));
+		$cat['setting'] = dr_string2array($cat['setting']);
+		$this->repair_categorys = [
+			$catid => $cat,
+		] ;
+		$this->get_cache($catid);
 	}
 	/**
 	 * 获取父栏目是否生成到根目录
@@ -1430,7 +1616,7 @@ class category extends admin {
 		if(IS_AJAX_POST) {
 			$info = $this->input->post('info');
 			$setting = $this->input->post('setting');
-			$row = $this->db->select(array('siteid'=>$this->siteid));
+			$row = $this->db->select(array('siteid'=>$this->siteid, 'module'=>'content'));
 			foreach($row as $r) {
 				$r['setting'] = dr_string2array($r['setting']);
 				if ($r['modelid']) {
@@ -1582,10 +1768,10 @@ class category extends admin {
 		} else {
 			if ($pid) {
 				$pcat = $this->db->get_one(array('catid'=>$pid));
-				if ($pcat && $this->db->count(array('catid<>'=>$id, 'parentdir'=>$pcat['catdir'].'/', 'catdir'=>$value, 'siteid'=>$this->siteid))) {
+				if ($pcat && $this->db->count(array('catid<>'=>$id, 'parentdir'=>$pcat['catdir'].'/', 'catdir'=>$value, 'siteid'=>$this->siteid, 'module'=>'content'))) {
 					return dr_return_data(0, L('目录不能重复'));
 				}
-			} elseif ($this->db->count(array('catid<>'=>$id, 'parentdir'=>'', 'catdir'=>$value, 'siteid'=>$this->siteid))) {
+			} elseif ($this->db->count(array('catid<>'=>$id, 'parentdir'=>'', 'catdir'=>$value, 'siteid'=>$this->siteid, 'module'=>'content'))) {
 				return dr_return_data(0, L('目录不能重复'));
 			}
 		}
