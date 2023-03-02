@@ -1088,10 +1088,12 @@ class category extends admin {
 		if (!$cats) {
 			html_msg(0, L('临时数据读取失败'));
 		} elseif (!isset($cats[$page-1]) || $page > $tpage) {
+			// 更新完成,新生成顶级分类的关系
+			$this->repair_top_nextids();
 			$this->cache->del_auth_data('category-repair-page', $this->siteid);
 			$this->cache->del_auth_data('category-repair-data', $this->siteid);
 			$this->cache->del_auth_data('category-repair-dir', $this->siteid);
-			html_msg(1, L('更新完成'), '?m=admin&c=category&a=public_cache');
+			html_msg(1, L('正在执行中...'), '?m=admin&c=category&a=public_cache');
 		}
 
 		foreach ($cats[$page-1] as $cat) {
