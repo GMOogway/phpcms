@@ -215,7 +215,7 @@ class member_modelfield extends admin {
 		$this->db->table_name = $this->db->db_tablepre.$tablename;
 
 		$fields = $this->db->get_fields();*/
-		$where = 'modelid='.$modelid.' AND field=\''.$field.'\' AND siteid='.$this->siteid.'';
+		$where = 'modelid='.$modelid.' AND field=\''.$field.'\'';
 		if ($fieldid) {
 			$where .= ' AND fieldid<>'.$fieldid;
 		}
