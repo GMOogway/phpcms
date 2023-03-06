@@ -334,6 +334,8 @@ class category extends admin {
 				$this->db->update($systeminfo,array('catid'=>$catid,'siteid'=>$this->siteid));
 				$this->update_priv($catid, $this->input->post('priv_roleid'));
 				$this->update_priv($catid, $this->input->post('priv_groupid'),0);
+				$info['catid'] = $catid;
+				$this->repair_sync($info);
 				$this->repair_cat($catid);
 			} else {//批量添加
 				if(!$this->input->post('batch_add')) dr_json(0, L('input_catname'), array('field' => 'catname', 'batch' => 'batch'));
@@ -352,6 +354,8 @@ class category extends admin {
 					$this->db->update($systeminfo,array('catid'=>$catid,'siteid'=>$this->siteid));
 					$this->update_priv($catid, $this->input->post('priv_roleid'));
 					$this->update_priv($catid, $this->input->post('priv_groupid'),0);
+					$info['catid'] = $catid;
+					$this->repair_sync($info);
 					$this->repair_cat($catid);
 					if (!$cf['code']) {
 						// 重复验证
@@ -424,6 +428,7 @@ class category extends admin {
 	public function edit() {
 		if($this->input->post('dosubmit')) {
 			$catid = intval($this->input->post('catid'));
+			$data = $this->db->get_one(array('catid'=>$catid));
 			$info = $this->input->post('info');
 			$setting = $this->input->post('setting');
 			if(!$info['catname']) dr_json(0, L('input_catname'), array('field' => 'catname'));
@@ -533,6 +538,10 @@ class category extends admin {
 			$this->db->update($systeminfo,array('catid'=>$catid,'siteid'=>$this->siteid));
 			$this->update_priv($catid, $this->input->post('priv_roleid'));
 			$this->update_priv($catid, $this->input->post('priv_groupid'),0);
+			if ($info['parentid'] != $data['parentid']) {
+				$info['catid'] = $catid;
+				$this->repair_sync($info);
+			}
 			$this->repair_cat($catid);
 			//更新附件状态
 			if($info['image'] && SYS_ATTACHMENT_STAT) {
@@ -948,20 +957,6 @@ class category extends admin {
 		dr_json(1, '?m=content&c=create_html&a=category&catids='.implode(',', $ids).'&dosubmit=1&menuid='.$this->input->get('menuid').'&pc_hash='.dr_get_csrf_token());
 	}
 	/**
-	 * 重新统计栏目信息数量
-	 */
-	public function count_items() {
-		$result = getcache('category_content_'.$this->siteid,'commons');
-		foreach($result as $r) {
-			if($r['type'] == 0) {
-				$modelid = $r['modelid'];
-				$this->content_db->set_model($modelid);
-				$number = $this->content_db->count(array('catid'=>$r['catid']));
-				$this->db->update(array('items'=>$number),array('catid'=>$r['catid']));
-			}
-		}
-	}
-	/**
 	 * 更新缓存
 	 */
 	public function cache() {
@@ -1022,7 +1017,6 @@ class category extends admin {
 				$this->cache->get_auth_data('category-cache-dir', $this->siteid),
 				'module/category-'.$this->siteid.''.'-data'
 			);
-			$this->count_items();
 			$this->cache();
 			$this->cache->del_auth_data('category-cache-main', $this->siteid);
 			$this->cache->del_auth_data('category-cache-cache', $this->siteid);
@@ -1132,6 +1126,12 @@ class category extends admin {
 		// 全部栏目数据
 		$data = $dir = $rt = array();
 		foreach ($_data as $t) {
+			if($t['type'] == 0) {
+				$modelid = $t['modelid'];
+				$this->content_db->set_model($modelid);
+				$number = $this->content_db->count(array('catid'=>$t['catid']));
+				$this->db->update(array('items'=>$number),array('catid'=>$t['catid']));
+			}
 			$t['setting'] = dr_string2array($t['setting']);
 			$dir[$t['catdir']] = $t['catid'];
 			$rt[$t['catid']] = [
@@ -1215,6 +1215,13 @@ class category extends admin {
 		if ($this->repair_categorys[$cat['catid']]['child']) {
 			$this->cache->set_file($cat['catid'], $this->_get_nextids($cat['catid']), 'module/category-'.$this->siteid.'-child');
 		}
+
+		//删除在非正常显示的栏目
+		foreach($this->repair_categorys as $catid => $cat) {
+			if($cat['parentid'] != 0 && !isset($this->repair_categorys[$cat['parentid']])) {
+				$this->db->delete(array('catid'=>$catid));
+			}
+		}
 	}
 	//生成顶级栏目下级
 	private function repair_top_nextids() {
@@ -1241,7 +1248,6 @@ class category extends admin {
 		$pid = explode(',', (string)$cat['arrparentid']);
 		$cat['topid'] = isset($pid[1]) ? $pid[1] : $cat['catid'];
 		$cat['catids'] = explode(',', $cat['arrchildid']);
-		$cat['is_post'] = ($cat['child'] ? 0 : 1); // 是否允许发布内容
 
 		// 统计栏目文章数量
 		$cat['total'] = '-';
@@ -1282,10 +1288,10 @@ class category extends admin {
 	 * 获取父栏目是否生成到根目录
 	 */
 	private function get_sethtml($catid) {
-		foreach($this->categorys as $id => $cat) {
+		foreach($this->repair_categorys as $id => $cat) {
 			if($catid==$id) {
 				$parentid = $cat['parentid'];
-				if($this->categorys[$parentid]['sethtml']) {
+				if($this->repair_categorys[$parentid]['sethtml']) {
 					$this->sethtml = 1;
 				}
 				if($parentid) {
@@ -1308,15 +1314,15 @@ class category extends admin {
 	 * 获取父栏目ID列表
 	 */
 	private function get_arrparentid($catid, $arrparentid = '', $n = 1) {
-		if($n > 100 || !is_array($this->categorys) || !isset($this->categorys[$catid])) return false;
-		$parentid = $this->categorys[$catid]['parentid'];
+		if($n > 100 || !is_array($this->repair_categorys) || !isset($this->repair_categorys[$catid])) return false;
+		$parentid = $this->repair_categorys[$catid]['parentid'];
 		$arrparentid = $arrparentid ? $parentid.','.$arrparentid : $parentid;
 		if($parentid) {
 			$arrparentid = $this->get_arrparentid($parentid, $arrparentid, ++$n);
 		} else {
-			$this->categorys[$catid]['arrparentid'] = $arrparentid;
+			$this->repair_categorys[$catid]['arrparentid'] = $arrparentid;
 		}
-		$parentid = $this->categorys[$catid]['parentid'];
+		$parentid = $this->repair_categorys[$catid]['parentid'];
 		return $arrparentid;
 	}
 
@@ -1325,7 +1331,7 @@ class category extends admin {
 	 */
 	private function get_arrchildid($catid, $n = 1) {
 		$arrchildid = $catid;
-		if ($n > 100 || !is_array($this->categorys) || !isset($this->categorys[$catid])) {
+		if ($n > 100 || !is_array($this->repair_categorys) || !isset($this->repair_categorys[$catid])) {
 			return $arrchildid;
 		}
 		$data = $this->db->select(array('parentid>'=>0, 'catid<>'=>$catid, 'parentid'=>$catid));
@@ -1341,11 +1347,12 @@ class category extends admin {
 	 * @param  $catid
 	 */
 	function get_parentdir($catid) {
-		$category = $this->db->get_one(array('catid'=>$catid));
-		if($category['parentid']==0) return '';
-		$setting = string2array($category['setting']);
-		$url = $category['url'];
-		$arrparentid = $category['arrparentid'];
+		if($this->repair_categorys[$catid]['parentid']==0) return '';
+		$r = $this->repair_categorys[$catid];
+		$setting = string2array($r['setting']);
+		$url = $r['url'];
+		$arrparentid = $r['arrparentid'];
+		unset($r);
 		if (strpos($url, '://')===false) {
 			if ($setting['creat_to_html_root']) {
 				return '';
@@ -1354,7 +1361,7 @@ class category extends admin {
 				$arrcatdir = array();
 				foreach($arrparentid as $id) {
 					if($id==0) continue;
-					$arrcatdir[] = $this->categorys[$id]['catdir'];
+					$arrcatdir[] = $this->repair_categorys[$id]['catdir'];
 				}
 				return implode('/', $arrcatdir).'/';
 			}
@@ -1374,9 +1381,8 @@ class category extends admin {
 				krsort($arrparentid);
 				foreach ($arrparentid as $id) {
 					if ($id==0) continue;
-					$r = $this->db->get_one(array('catid'=>$id));
-					$arrcatdir[] = $r['catdir'];
-					if ($r['parentdir'] == '') break;
+					$arrcatdir[] = $this->repair_categorys[$id]['catdir'];
+					if ($this->repair_categorys[$id]['parentdir'] == '') break;
 				}
 				krsort($arrcatdir);
 				return implode('/', $arrcatdir).'/';
@@ -1424,17 +1430,16 @@ class category extends admin {
 		$catid = $this->input->get('catid') && intval($this->input->get('catid')) ? intval($this->input->get('catid')) : 0;
 		$batch_str = $this->input->get('batch_str') ? '['.$catid.']' : '';
 		if ($catid) {
-			$cat = getcache('category_content_'.$this->siteid,'commons');
-			$cat = $cat[$catid];
-			$cat['setting'] = string2array($cat['setting']);
+			$this->categorys = $this->categorys[$catid];
+			$this->categorys['setting'] = string2array($this->categorys['setting']);
 		}
 		pc_base::load_sys_class('form','',0);
 		if($this->input->get('type')==1) {
-			$html = array('page_template'=>form::select_template($style, 'content',(isset($cat['setting']['page_template']) && !empty($cat['setting']['page_template']) ? $cat['setting']['page_template'] : 'page'),'name="setting'.$batch_str.'[page_template]"','page'));
+			$html = array('page_template'=>form::select_template($style, 'content',(isset($this->categorys['setting']['page_template']) && !empty($this->categorys['setting']['page_template']) ? $this->categorys['setting']['page_template'] : 'page'),'name="setting'.$batch_str.'[page_template]"','page'));
 		} else {
-			$html = array('category_template'=> form::select_template($style, 'content',(isset($cat['setting']['category_template']) && !empty($cat['setting']['category_template']) ? $cat['setting']['category_template'] : 'category'),'name="setting'.$batch_str.'[category_template]"','category'), 
-				'list_template'=>form::select_template($style, 'content',(isset($cat['setting']['list_template']) && !empty($cat['setting']['list_template']) ? $cat['setting']['list_template'] : 'list'),'name="setting'.$batch_str.'[list_template]"','list'),
-				'show_template'=>form::select_template($style, 'content',(isset($cat['setting']['show_template']) && !empty($cat['setting']['show_template']) ? $cat['setting']['show_template'] : 'show'),'name="setting'.$batch_str.'[show_template]"','show')
+			$html = array('category_template'=> form::select_template($style, 'content',(isset($this->categorys['setting']['category_template']) && !empty($this->categorys['setting']['category_template']) ? $this->categorys['setting']['category_template'] : 'category'),'name="setting'.$batch_str.'[category_template]"','category'), 
+				'list_template'=>form::select_template($style, 'content',(isset($this->categorys['setting']['list_template']) && !empty($this->categorys['setting']['list_template']) ? $this->categorys['setting']['list_template'] : 'list'),'name="setting'.$batch_str.'[list_template]"','list'),
+				'show_template'=>form::select_template($style, 'content',(isset($this->categorys['setting']['show_template']) && !empty($this->categorys['setting']['show_template']) ? $this->categorys['setting']['show_template'] : 'show'),'name="setting'.$batch_str.'[show_template]"','show')
 			);
 		}
 		if ($this->input->get('module')) {

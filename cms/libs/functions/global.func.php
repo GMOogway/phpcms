@@ -3921,8 +3921,9 @@ function dr_site_value($name, $siteid = SITE_ID) {
 }
 
 // 获取栏目数据及自定义字段
-function dr_cat_value($catid, $field) {
-	if (!$catid) {
+function dr_cat_value($catid = '', $name = '', $c = '') {
+	$cache = pc_base::load_sys_class('cache');
+	if (empty($catid)) {
 		return '';
 	}
 	$siteids = getcache('category_content','commons');
@@ -3930,36 +3931,41 @@ function dr_cat_value($catid, $field) {
 	if (!$siteid) {
 		return '';
 	}
-	$data = getcache('category_content_'.$siteid,'commons');
-	if ($data) {
-		return $data[$catid][$field];
+	if ($c) {
+		$cache_dir = 'module/category-'.$siteid.'-min';
+	} else {
+		$cache_dir = 'module/category-'.$siteid.'-data';
 	}
-	return '';
+	$cat = $cache->get_file($catid, $cache_dir);
+	if ($name) {
+		return $cat[$name];
+	}
+	return $cat;
 }
 
 // 获取单页数据及自定义字段
-function dr_page_value($catid, $field) {
+function dr_page_value($catid, $name) {
 	if (empty($catid)) {
 		return '';
 	}
-	return get_cache('page', 'data', $catid, $field);
+	return get_cache('page', 'data', $catid, $name);
 }
 
 // 获取模型数据及自定义字段
-function dr_value($modelid, $id, $field) {
+function dr_value($modelid, $id, $name) {
 	if ($modelid) {
 		$content_db = pc_base::load_model('content_model');
 		$content_db->set_model($modelid);
 		$data = $content_db->get_one(array('id'=>$id));
-		if ($data && $data[$field]) {
-			return $data[$field];
+		if ($data && $data[$name]) {
+			return $data[$name];
 		}
 		$r = $content_db->get_one(array('id' => $id), 'tableid');
 		$content_db->table_name = $content_db->table_name.'_data_'.$r['tableid'];
 		$data = $content_db->get_one(array('id'=>$id));
 		$content_db->set_model($modelid);
-		if ($data && $data[$field]) {
-			return $data[$field];
+		if ($data && $data[$name]) {
+			return $data[$name];
 		}
 	}
 	return '';
