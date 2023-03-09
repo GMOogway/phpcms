@@ -323,11 +323,14 @@ class function_list {
             $rt = array();
             $arr = dr_get_files($value);
             foreach ($arr as $t) {
-                $file = get_attachment($t);
+                if (!$t['url']) {
+                    $t['url'] = $t['fileurl'];
+                }
+                $file = get_attachment($t['url']);
                 if ($file) {
                     $value = $file['url'];
                 } else {
-                    $value = $t;
+                    $value = $t['url'];
                 }
                 $url = 'javascript:dr_preview_image(\''.$value.'\');';
                 $rt[] = '<a class="thumbnail" style="display: inherit;" href="'.$url.'"><img style="width:30px" src="'.thumb($value, 100, 100).'"></a>';
@@ -371,11 +374,14 @@ class function_list {
             $rt = array();
             $arr = dr_get_files($value);
             foreach ($arr as $t) {
-                $file = get_attachment($t);
+                if (!$t['url']) {
+                    $t['url'] = $t['fileurl'];
+                }
+                $file = get_attachment($t['url']);
                 if ($file) {
                     $value = $file['url'];
                 } else {
-                    $value = $t;
+                    $value = $t['url'];
                 }
                 $ext = trim(strtolower(strrchr($value, '.')), '.');
                 if (dr_is_image($ext)) {
