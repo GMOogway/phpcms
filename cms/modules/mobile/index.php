@@ -7,6 +7,7 @@ pc_base::load_app_func('global');
 class index {
 	function __construct() {
 		$this->input = pc_base::load_sys_class('input');
+		$this->cache = pc_base::load_sys_class('cache');
 		$this->db = pc_base::load_model('content_model');
 		$this->_userid = param::get_cookie('_userid');
 		$this->_username = param::get_cookie('_username');
@@ -115,7 +116,26 @@ class index {
 		
 		// 判断是否外链
 		if ($type==2) {
-			dr_redirect($url, 'refresh');exit;
+			redirect($url, 'refresh');exit;
+		}
+		
+		// 验证是否存在子栏目，是否将下级第一个栏目作为当前页
+		if ($type != 2 && $child && $setting['getchild']) {
+			$temp = explode(',', $arrchildid);
+			if ($temp) {
+				foreach ($temp as $i) {
+					$row = dr_cat_value($i);
+					if ($i != $catid && $row['type'] != 2 && !$row['setting']['getchild']) {
+						$catid = $i;
+						$category = $row;
+						$url = $category['url'];
+						$url = str_replace(array($sitelist[$siteid]['domain'], 'm=content'), array($sitelist[$siteid]['mobile_domain'], 'm=mobile'), $url);
+						dr_redirect($url);
+						exit;
+						break;
+					}
+				}
+			}
 		}
 		
 		if($type==0) {
@@ -206,6 +226,25 @@ class index {
 		require_once CACHE_MODEL_PATH.'content_output.class.php';
 		$content_output = new content_output($modelid,$catid,$CATEGORYS);
 		$data = $content_output->get($rs);
+		// 检测转向字段
+		foreach ($this->form_cache['field'] as $t) {
+			if ($t['formtype'] == 'redirect' && $data[$t['field']]) {
+				// 存在转向字段时的情况
+				$this->hits_db = pc_base::load_model('hits_model');
+				$hitsid = 'c-'.$modelid.'-'.$id;
+				$hits_data = $this->hits_db->get_one(array('hitsid'=>$hitsid));
+				if ($hits_data) {
+					$views = $hits_data['views'] + 1;
+					$yesterdayviews = (date('Ymd', $hits_data['updatetime']) == date('Ymd', strtotime('-1 day'))) ? $hits_data['dayviews'] : $hits_data['yesterdayviews'];
+					$dayviews = (date('Ymd', $hits_data['updatetime']) == date('Ymd', SYS_TIME)) ? ($hits_data['dayviews'] + 1) : 1;
+					$weekviews = (date('YW', $hits_data['updatetime']) == date('YW', SYS_TIME)) ? ($hits_data['weekviews'] + 1) : 1;
+					$monthviews = (date('Ym', $hits_data['updatetime']) == date('Ym', SYS_TIME)) ? ($hits_data['monthviews'] + 1) : 1;
+					$this->hits_db->update(array('views'=>$views,'yesterdayviews'=>$yesterdayviews,'dayviews'=>$dayviews,'weekviews'=>$weekviews,'monthviews'=>$monthviews,'updatetime'=>SYS_TIME),array('hitsid'=>$hitsid));
+				}
+				$goto_url = $data[$t['field']];
+				include admin_template('go', 'admin');
+			}
+		}
 		extract($data);
 		
 		//检查文章会员组权限

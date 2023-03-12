@@ -66,7 +66,7 @@ class html {
 		$data = ob_get_contents();
 		ob_end_clean();
 		
-		$strlen = pc_base::load_config('system','lock_ex') ? file_put_contents($file, $data, LOCK_EX) : file_put_contents($file, $data);
+		$strlen = file_put_contents($file, $data, LOCK_EX);
 		@chmod($file,0777);
 		return true;
 	}

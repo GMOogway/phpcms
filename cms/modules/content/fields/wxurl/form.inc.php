@@ -5,7 +5,7 @@
 		if(!$value) $value = $defaultvalue;
 		//if (defined('IS_ADMIN') && IS_ADMIN) {
 			return '<div class="input-group">
-            <input type="text" name="info['.$field.']" id="'.$field.'" value="'.$value.'" class="form-control" '.$formattribute.' '.$css.'>
+            <input type="text" name="info['.$field.']" id="'.$field.'" value="'.$value.'" class="form-control">
             <span class="input-group-btn"><button type="button" class="btn red" onclick="javascript:'.$bformattribute.';"><i class="fa fa-plus"></i> '.L('import_wxurl').'</button></span>
         </div>';
 		//} else {

@@ -137,26 +137,41 @@ class content_model extends model {
 				// 提取描述信息
 				$is_auto_description = $this->input->post('is_auto_description_'.$field);
 				if(isset($systeminfo['description']) && isset($is_auto_description) && !$systeminfo['description']) {
+					$this->form = getcache('model', 'commons');
+					$this->sitemodel = $this->cache->get('sitemodel');
+					$this->form_cache = $this->sitemodel[$this->form[$this->modelid]['tablename']];
 					$auto_description_length = intval($this->input->post('auto_description_'.$field));
-					$systeminfo['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', code2html($modelinfo[$field])), $auto_description_length);
+					if (isset($this->form_cache['setting']['desc_clear']) && $this->form_cache['setting']['desc_clear']) {
+						$systeminfo['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', str_replace(' ', '', code2html($modelinfo[$field]))), $auto_description_length);
+					} else {
+						$systeminfo['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', code2html($modelinfo[$field])), $auto_description_length);
+					}
 				}
 			}
 		}
 		
 		// 提取描述信息
-		$this->form = getcache('model', 'commons');
-		$this->sitemodel = $this->cache->get('sitemodel');
-		$this->form_cache = $this->sitemodel[$this->form[$this->modelid]['tablename']];
 		if (isset($systeminfo['description']) && !$systeminfo['description']) {
+			$this->form = getcache('model', 'commons');
+			$this->sitemodel = $this->cache->get('sitemodel');
+			$this->form_cache = $this->sitemodel[$this->form[$this->modelid]['tablename']];
 			if (isset($this->form_cache['setting']['desc_auto']) && $this->form_cache['setting']['desc_auto']) {
 				// 手动填充描述
 			} else {
 				// 自动填充描述
 				if (isset($modelinfo['content']) && code2html($modelinfo['content'])) {
-					if (isset($this->form_cache['setting']['desc_auto']) && $this->form_cache['setting']['desc_auto']) {
-						$systeminfo['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', code2html($modelinfo['content'])), $this->form_cache['setting']['desc_limit']);
+					if (isset($this->form_cache['setting']['desc_limit']) && $this->form_cache['setting']['desc_limit']) {
+						if (isset($this->form_cache['setting']['desc_clear']) && $this->form_cache['setting']['desc_clear']) {
+							$systeminfo['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', str_replace(' ', '', code2html($modelinfo['content']))), $this->form_cache['setting']['desc_limit']);
+						} else {
+							$systeminfo['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', code2html($modelinfo['content'])), $this->form_cache['setting']['desc_limit']);
+						}
 					} else {
-						$systeminfo['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', code2html($modelinfo['content'])));
+						if (isset($this->form_cache['setting']['desc_clear']) && $this->form_cache['setting']['desc_clear']) {
+							$systeminfo['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', str_replace(' ', '', code2html($modelinfo['content']))));
+						} else {
+							$systeminfo['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', code2html($modelinfo['content'])));
+						}
 					}
 				}
 			}
@@ -444,26 +459,41 @@ class content_model extends model {
 				// 提取描述信息
 				$is_auto_description = $this->input->post('is_auto_description_'.$field);
 				if(isset($systeminfo['description']) && isset($is_auto_description) && !$systeminfo['description']) {
+					$this->form = getcache('model', 'commons');
+					$this->sitemodel = $this->cache->get('sitemodel');
+					$this->form_cache = $this->sitemodel[$this->form[$this->modelid]['tablename']];
 					$auto_description_length = intval($this->input->post('auto_description_'.$field));
-					$systeminfo['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', code2html($modelinfo[$field])), $auto_description_length);
+					if (isset($this->form_cache['setting']['desc_clear']) && $this->form_cache['setting']['desc_clear']) {
+						$systeminfo['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', str_replace(' ', '', code2html($modelinfo[$field]))), $auto_description_length);
+					} else {
+						$systeminfo['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', code2html($modelinfo[$field])), $auto_description_length);
+					}
 				}
 			}
 		}
 		
 		// 提取描述信息
-		$this->form = getcache('model', 'commons');
-		$this->sitemodel = $this->cache->get('sitemodel');
-		$this->form_cache = $this->sitemodel[$this->form[$this->modelid]['tablename']];
 		if (isset($systeminfo['description']) && !$systeminfo['description']) {
+			$this->form = getcache('model', 'commons');
+			$this->sitemodel = $this->cache->get('sitemodel');
+			$this->form_cache = $this->sitemodel[$this->form[$this->modelid]['tablename']];
 			if (isset($this->form_cache['setting']['desc_auto']) && $this->form_cache['setting']['desc_auto']) {
 				// 手动填充描述
 			} else {
 				// 自动填充描述
 				if (isset($modelinfo['content']) && code2html($modelinfo['content'])) {
-					if (isset($this->form_cache['setting']['desc_auto']) && $this->form_cache['setting']['desc_auto']) {
-						$systeminfo['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', code2html($modelinfo['content'])), $this->form_cache['setting']['desc_limit']);
+					if (isset($this->form_cache['setting']['desc_limit']) && $this->form_cache['setting']['desc_limit']) {
+						if (isset($this->form_cache['setting']['desc_clear']) && $this->form_cache['setting']['desc_clear']) {
+							$systeminfo['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', str_replace(' ', '', code2html($modelinfo['content']))), $this->form_cache['setting']['desc_limit']);
+						} else {
+							$systeminfo['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', code2html($modelinfo['content'])), $this->form_cache['setting']['desc_limit']);
+						}
 					} else {
-						$systeminfo['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', code2html($modelinfo['content'])));
+						if (isset($this->form_cache['setting']['desc_clear']) && $this->form_cache['setting']['desc_clear']) {
+							$systeminfo['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', str_replace(' ', '', code2html($modelinfo['content']))));
+						} else {
+							$systeminfo['description'] = dr_get_description(str_replace(array("'","\r\n","\t",'[page]','[/page]'), '', code2html($modelinfo['content'])));
+						}
 					}
 				}
 			}

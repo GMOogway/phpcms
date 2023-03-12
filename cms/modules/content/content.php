@@ -116,19 +116,32 @@ class content extends admin {
 			$where[] = 'catid='.$catid.' AND status='.$status;
 			//搜索
 			$param = $this->input->get();
+			// 默认以显示字段为搜索字段
+			if (!isset($param['field']) && !$param['field']) {
+				$param['field'] = isset($this->form_cache['setting']['search_first_field']) && $this->form_cache['setting']['search_first_field'] ? $this->form_cache['setting']['search_first_field'] : 'title';
+			}
 			if($param['start_time']) {
 				$where[] = $date_field.' BETWEEN ' . max((int)strtotime(strpos($param['start_time'], ' ') ? $param['start_time'] : $param['start_time'].' 00:00:00'), 1) . ' AND ' . ($param['end_time'] ? (int)strtotime(strpos($param['end_time'], ' ') ? $param['end_time'] : $param['end_time'].' 23:59:59') : SYS_TIME);
 			}
 			if($param['keyword']) {
-				$type_array = array('title','description','username');
-				$searchtype = intval($param['searchtype']);
-				if($searchtype < 3) {
-					$searchtype = $type_array[$searchtype];
-					$keyword = clearhtml(trim($param['keyword']));
-					$where[] = "`$searchtype` like '%".$this->db->escape($keyword)."%'";
-				} elseif($searchtype==3) {
-					$keyword = intval($param['keyword']);
-					$where[] = "`id`='$keyword'";
+				$param['keyword'] = htmlspecialchars($param['keyword']);
+				if ($param['field'] == 'id') {
+					// 按id查询
+					$id = [];
+					$ids = explode(',', $param['keyword']);
+					foreach ($ids as $i) {
+						$id[] = (int)$i;
+					}
+					dr_count($id) == 1 ? $where[] = '`id`='.(int)$id[0] : $where[] = '`id` in ('.$param['keyword'].')';
+				} elseif (dr_in_array($field[$param['field']]['formtype'], ['number'])) {
+					// 数字类型
+					$where[] = '`'.$param['field'].'`='.intval($param['keyword']);
+				} elseif (dr_in_array($field[$param['field']]['formtype'], ['box'])) {
+					// 选项类型
+					$where[] = '`'.$param['field'].'`=\''.$param['keyword'].'\'';
+				} else {
+					$param['keyword'] = clearhtml(trim($param['keyword']));
+					$where[] = '`'.$param['field'].'` like \'%'.$this->db->escape($param['keyword']).'%\'';
 				}
 			}
 			if($param['posids'] && !empty($param['posids'])) {
@@ -208,19 +221,32 @@ class content extends admin {
 			$where[] = 'catid='.$catid.' AND status=100';
 			//搜索
 			$param = $this->input->get();
+			// 默认以显示字段为搜索字段
+			if (!isset($param['field']) && !$param['field']) {
+				$param['field'] = isset($this->form_cache['setting']['search_first_field']) && $this->form_cache['setting']['search_first_field'] ? $this->form_cache['setting']['search_first_field'] : 'title';
+			}
 			if($param['start_time']) {
 				$where[] = $date_field.' BETWEEN ' . max((int)strtotime(strpos($param['start_time'], ' ') ? $param['start_time'] : $param['start_time'].' 00:00:00'), 1) . ' AND ' . ($param['end_time'] ? (int)strtotime(strpos($param['end_time'], ' ') ? $param['end_time'] : $param['end_time'].' 23:59:59') : SYS_TIME);
 			}
 			if($param['keyword']) {
-				$type_array = array('title','description','username');
-				$searchtype = intval($param['searchtype']);
-				if($searchtype < 3) {
-					$searchtype = $type_array[$searchtype];
-					$keyword = clearhtml(trim($param['keyword']));
-					$where[] = "`$searchtype` like '%".$this->db->escape($keyword)."%'";
-				} elseif($searchtype==3) {
-					$keyword = intval($param['keyword']);
-					$where[] = "`id`='$keyword'";
+				$param['keyword'] = htmlspecialchars($param['keyword']);
+				if ($param['field'] == 'id') {
+					// 按id查询
+					$id = [];
+					$ids = explode(',', $param['keyword']);
+					foreach ($ids as $i) {
+						$id[] = (int)$i;
+					}
+					dr_count($id) == 1 ? $where[] = '`id`='.(int)$id[0] : $where[] = '`id` in ('.$param['keyword'].')';
+				} elseif (dr_in_array($field[$param['field']]['formtype'], ['number'])) {
+					// 数字类型
+					$where[] = '`'.$param['field'].'`='.intval($param['keyword']);
+				} elseif (dr_in_array($field[$param['field']]['formtype'], ['box'])) {
+					// 选项类型
+					$where[] = '`'.$param['field'].'`=\''.$param['keyword'].'\'';
+				} else {
+					$param['keyword'] = clearhtml(trim($param['keyword']));
+					$where[] = '`'.$param['field'].'` like \'%'.$this->db->escape($param['keyword']).'%\'';
 				}
 			}
 			if($param['posids'] && !empty($param['posids'])) {
@@ -295,6 +321,10 @@ class content extends admin {
 		$where = array();
 		//搜索
 		$param = $this->input->get();
+		// 默认以显示字段为搜索字段
+		if (!isset($param['field']) && !$param['field']) {
+			$param['field'] = isset($this->form_cache['setting']['search_first_field']) && $this->form_cache['setting']['search_first_field'] ? $this->form_cache['setting']['search_first_field'] : 'title';
+		}
 		if($param['recycle']) {
 			$where[] = 'status=100';
 		}
@@ -302,15 +332,24 @@ class content extends admin {
 			$where[] = $date_field.' BETWEEN ' . max((int)strtotime(strpos($param['start_time'], ' ') ? $param['start_time'] : $param['start_time'].' 00:00:00'), 1) . ' AND ' . ($param['end_time'] ? (int)strtotime(strpos($param['end_time'], ' ') ? $param['end_time'] : $param['end_time'].' 23:59:59') : SYS_TIME);
 		}
 		if($param['keyword']) {
-			$type_array = array('title','description','username');
-			$searchtype = intval($param['searchtype']);
-			if($searchtype < 3) {
-				$searchtype = $type_array[$searchtype];
-				$keyword = clearhtml(trim($param['keyword']));
-				$where[] = "`$searchtype` like '%".$this->db->escape($keyword)."%'";
-			} elseif($searchtype==3) {
-				$keyword = intval($param['keyword']);
-				$where[] = "`id`='$keyword'";
+			$param['keyword'] = htmlspecialchars($param['keyword']);
+			if ($param['field'] == 'id') {
+				// 按id查询
+				$id = [];
+				$ids = explode(',', $param['keyword']);
+				foreach ($ids as $i) {
+					$id[] = (int)$i;
+				}
+				dr_count($id) == 1 ? $where[] = '`id`='.(int)$id[0] : $where[] = '`id` in ('.$param['keyword'].')';
+			} elseif (dr_in_array($field[$param['field']]['formtype'], ['number'])) {
+				// 数字类型
+				$where[] = '`'.$param['field'].'`='.intval($param['keyword']);
+			} elseif (dr_in_array($field[$param['field']]['formtype'], ['box'])) {
+				// 选项类型
+				$where[] = '`'.$param['field'].'`=\''.$param['keyword'].'\'';
+			} else {
+				$param['keyword'] = clearhtml(trim($param['keyword']));
+				$where[] = '`'.$param['field'].'` like \'%'.$this->db->escape($param['keyword']).'%\'';
 			}
 		}
 		if($param['posids'] && !empty($param['posids'])) {

@@ -34,5 +34,5 @@
 			'.$default.'
 		});
 		</script>';
-		return '<input type="text" class="form-control color '.$css.'" name="info['.$field.']" id="dr_'.$field.'" '.$style.' value="'.$value.'" >'.$str;
+		return '<input type="text" class="form-control color'.(isset($css) && $css ? ' '.$css : '').'" name="info['.$field.']" id="dr_'.$field.'" '.$style.' value="'.$value.'" >'.$str;
 	}

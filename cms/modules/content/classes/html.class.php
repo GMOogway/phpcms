@@ -8,6 +8,7 @@ class html {
 	private $siteid,$url,$html_root,$mobile_root,$queue,$categorys;
 	public function __construct() {
 		$this->input = pc_base::load_sys_class('input');
+		$this->cache = pc_base::load_sys_class('cache');
 		$this->queue = pc_base::load_model('queue_model');
 		define('HTML',true);
 		self::set_siteid();
@@ -69,7 +70,10 @@ class html {
 		
 		$this->queue->add_queue($action,$file,$this->siteid);
 		
+		$MODEL = getcache('model','commons');
 		$modelid = $CAT['modelid'];
+		$this->sitemodel = $this->cache->get('sitemodel');
+		$this->form_cache = $this->sitemodel[$MODEL[$modelid]['tablename']];
 		require_once CACHE_MODEL_PATH.'content_output.class.php';
 		$content_output = new content_output($modelid,$catid,$CATEGORYS);
 		$output_data = $content_output->get($data);
@@ -240,6 +244,35 @@ class html {
 		}
 		//分页处理结束
 		$file = CMS_PATH.$file;
+		// 检测转向字段
+		foreach ($this->form_cache['field'] as $t) {
+			if ($t['formtype'] == 'redirect' && $output_data[$t['field']]) {
+				// 存在转向字段时的情况
+				$this->hits_db = pc_base::load_model('hits_model');
+				$hitsid = 'c-'.$modelid.'-'.$id;
+				$hits_data = $this->hits_db->get_one(array('hitsid'=>$hitsid));
+				if ($hits_data) {
+					$views = $hits_data['views'] + 1;
+					$yesterdayviews = (date('Ymd', $hits_data['updatetime']) == date('Ymd', strtotime('-1 day'))) ? $hits_data['dayviews'] : $hits_data['yesterdayviews'];
+					$dayviews = (date('Ymd', $hits_data['updatetime']) == date('Ymd', SYS_TIME)) ? ($hits_data['dayviews'] + 1) : 1;
+					$weekviews = (date('YW', $hits_data['updatetime']) == date('YW', SYS_TIME)) ? ($hits_data['weekviews'] + 1) : 1;
+					$monthviews = (date('Ym', $hits_data['updatetime']) == date('Ym', SYS_TIME)) ? ($hits_data['monthviews'] + 1) : 1;
+					$this->hits_db->update(array('views'=>$views,'yesterdayviews'=>$yesterdayviews,'dayviews'=>$dayviews,'weekviews'=>$weekviews,'monthviews'=>$monthviews,'updatetime'=>SYS_TIME),array('hitsid'=>$hitsid));
+				}
+				$goto_url = $output_data[$t['field']];
+				ob_start();
+				include admin_template('go', 'admin');
+				$this->createhtml($file);
+				if($this->sitelist[$this->siteid]['mobilehtml']==1) {
+					$mobilefile = CMS_PATH.$this->mobile_root.'/'.str_replace(CMS_PATH,'',$file);
+					ob_start();
+					$goto_url = str_replace(array($this->sitelist[$this->siteid]['domain'], 'm=content'), array($this->sitelist[$this->siteid]['mobile_domain'], 'm=mobile'), $goto_url);
+					include admin_template('go', 'admin');
+					$this->createhtml($mobilefile);
+				}
+				return $output_data;
+			}
+		}
 		ob_start();
 		include template('content', $template);
 		$this->createhtml($file);
@@ -438,22 +471,50 @@ class html {
 			$keywords = $keywords ? $keywords : $setting['meta_keywords'];
 			$SEO = seo($siteid, 0, $setting['meta_title'] ? $setting['meta_title'] : $title,$setting['meta_description'],$keywords);
 		}
-		ob_start();
-		include template('content',$template);
-		$this->createhtml($file, $copyjs);
-		if($this->sitelist[$this->siteid]['mobilehtml']==1) {
-			if($type==0) {
-				$mobile_category = !$this->sitelist[$this->siteid]['mobilemode'] ? $this->mobile_root : '';
-				$url_arr[0] = $mobile_category.$categoryurl[0];
-				$url_arr[1] = $mobile_category.$categoryurl[1];
-				if($pagenumber > $pagesize) {
-					$pages = category_pages($pagenumber,$page,$pagesize,$url_arr);
+		// 验证是否存在子栏目，是否将下级第一个栏目作为当前页
+		if ($type != 2 && $child && $setting['getchild']) {
+			$temp = explode(',', $arrchildid);
+			if ($temp) {
+				foreach ($temp as $i) {
+					$row = dr_cat_value($i);
+					if ($i != $catid && $row['type'] != 2 && !$row['setting']['getchild']) {
+						$catid = $i;
+						$category = $row;
+						$url = $category['url'];
+						$goto_url = $url;
+						ob_start();
+						include admin_template('go', 'admin');
+						$this->createhtml($file, $copyjs);
+						if($this->sitelist[$this->siteid]['mobilehtml']==1) {
+							ob_start();
+							$url = str_replace(array($this->sitelist[$this->siteid]['domain'], 'm=content'), array($this->sitelist[$this->siteid]['mobile_domain'], 'm=mobile'), $url);
+							$goto_url = $url;
+							include admin_template('go', 'admin');
+							$this->createhtml($mobilefile);
+						}
+						return $category;
+						break;
+					}
 				}
 			}
+		} else {
 			ob_start();
-			$url = str_replace(array($this->sitelist[$this->siteid]['domain'], 'm=content'), array($this->sitelist[$this->siteid]['mobile_domain'], 'm=mobile'), $url);
-			include template('mobile',$template);
-			$this->createhtml($mobilefile);
+			include template('content',$template);
+			$this->createhtml($file, $copyjs);
+			if($this->sitelist[$this->siteid]['mobilehtml']==1) {
+				if($type==0) {
+					$mobile_category = !$this->sitelist[$this->siteid]['mobilemode'] ? $this->mobile_root : '';
+					$url_arr[0] = $mobile_category.$categoryurl[0];
+					$url_arr[1] = $mobile_category.$categoryurl[1];
+					if($pagenumber > $pagesize) {
+						$pages = category_pages($pagenumber,$page,$pagesize,$url_arr);
+					}
+				}
+				ob_start();
+				$url = str_replace(array($this->sitelist[$this->siteid]['domain'], 'm=content'), array($this->sitelist[$this->siteid]['mobile_domain'], 'm=mobile'), $url);
+				include template('mobile',$template);
+				$this->createhtml($mobilefile);
+			}
 		}
 		return true;
 	}

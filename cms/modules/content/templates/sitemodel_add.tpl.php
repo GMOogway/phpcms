@@ -47,6 +47,14 @@ include $this->admin_tpl('header','admin');
     <th><?php echo L('提取内容描述字数')?>：</th>
     <td class="y-bg"><label><input type="text" class="input-text" name="info[setting][desc_limit]" id="desc_limit" size="30" value="200" /></label><div class="onShow">在内容中提取描述信息的最大字数限制</div></td>
   </tr>
+  <tr>
+    <th><?php echo L('清理描述中的空格')?>：</th>
+    <td class="y-bg"><div class="mt-radio-inline">
+        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[setting][desc_clear]" value="0" checked /> <?php echo L('不清理')?> <span></span></label>
+        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[setting][desc_clear]" value="1"  /> <?php echo L('清理空格')?> <span></span></label>
+    </div>
+    <div class="onShow">提取描述字段时是否情况空格符号，一般英文站点不需要清理空格</div></td>
+  </tr>
 </table>
 </fieldset>
 <div class="bk15"></div>

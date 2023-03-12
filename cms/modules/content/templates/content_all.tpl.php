@@ -96,11 +96,12 @@ jQuery(document).ready(function() {
         </select></label>
         </div>
         <div class="col-md-12 col-sm-12">
-        <label><select id="searchtype" name="searchtype" class="form-control">
-            <option value='0' <?php if($param['searchtype']==0) echo 'selected';?>><?php echo L('title');?></option>
-            <option value='1' <?php if($param['searchtype']==1) echo 'selected';?>><?php echo L('intro');?></option>
-            <option value='2' <?php if($param['searchtype']==2) echo 'selected';?>><?php echo L('username');?></option>
-            <option value='3' <?php if($param['searchtype']==3) echo 'selected';?>>ID</option>
+        <label><select name="field" class="form-control">
+            <option value="id"> ID </option>
+            <?php foreach($field as $t) {?>
+            <?php if (dr_is_admin_search_field($t)) {?>
+            <option value="<?php echo $t['field'];?>"<?php if ($param['field']==$t['field']) {?> selected<?php }?>><?php echo L($t['name']);?></option>
+            <?php }}?>
         </select></label>
         <label><i class="fa fa-caret-right"></i></label>
         <label><input type="text" class="form-control" placeholder="" value="<?php echo $param['keyword'];?>" name="keyword" /></label>

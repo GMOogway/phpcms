@@ -96,11 +96,11 @@ class sitemodel_field extends admin {
 			require MODEL_PATH.'fields.inc.php';
 			$modelid = $this->input->get('modelid');
 			if (!$modelid) {
-				$not_allow_fields = array('catid','typeid','title','keyword','posid','template','username','groupid','author','readpoint','downfile','copyfrom','pages','wxurl','word');
+				$not_allow_fields = array('catid','typeid','title','keyword','posid','islink','template','username','groupid','author','readpoint','downfile','copyfrom','pages','redirect','wxurl','word');
 			} elseif ($modelid==-1) {
-				$not_allow_fields = array('catid','typeid','title','keyword','posid','template','username','pages','wxurl','word');
+				$not_allow_fields = array('catid','typeid','title','keyword','posid','islink','template','username','pages','redirect','wxurl','word');
 			} elseif ($modelid==-2) {
-				$not_allow_fields = array('catid','typeid','title','keyword','posid','template','username','pages');
+				$not_allow_fields = array('catid','typeid','title','keyword','posid','islink','template','username','pages');
 			}
 			$f_datas = $this->db->select(array('modelid'=>$modelid),'field,name',100,'listorder ASC');
 			$m_r = $this->model_db->get_one(array('modelid'=>$modelid));

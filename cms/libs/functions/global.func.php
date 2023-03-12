@@ -1279,19 +1279,19 @@ if (! function_exists('clearhtml')) {
 	 */
 	function clearhtml($str) {
 
-		if (is_array($str)) {
+		if (is_array($str) || !$str) {
 			return '';
 		}
 
-		$str = strip_tags($str);
+		$str = strip_tags((string)$str);
 		$str = code2html($str);
 		$str = str_replace(
 			array('&nbsp;', '&amp;', '&quot;', '&#039;', '&ldquo;', '&rdquo;', '&mdash;', '&lt;', '&gt;', '&middot;', '&hellip;'),
 			array(' ', '&', '"', "'", '“', '”', '—', '<', '>', '·', '…'), $str
 		);
 
-		$str = preg_replace("/\<[a-z]+(.*)\>/iU", "", $str);
-		$str = preg_replace("/\<\/[a-z]+\>/iU", "", $str);
+		$str = preg_replace("/\<[a-z]+(.*)\>/iU", "", (string)$str);
+		$str = preg_replace("/\<\/[a-z]+\>/iU", "", (string)$str);
 		$str = str_replace(array(PHP_EOL, chr(13), chr(10), '&nbsp;'), '', $str);
 
 		return trim($str);
@@ -4012,6 +4012,27 @@ function is_mobile($siteid) {
 	return false;
 }
 
+/**
+ * 后台搜索字段过滤函数
+ * @param $array 单个字段数组
+ * @return 是否被搜索时可用
+ */
+function dr_is_admin_search_field($t) {
+	if (!$t) {
+		return 0;
+	}
+	if (!$t['issystem']) {
+		return 0;
+	} elseif (in_array($t['formtype'], [
+		'title', 'text', 'keyword', 'textarea', 'textbtn',
+		'editor', 'box', 'number', 'author', 'linkfield',
+		'linkage', 'linkages'
+	])) {
+		return 1;
+	}
+	return 0;
+}
+
 if (! function_exists('dr_is_image')) {
 	// 文件是否是图片
 	function dr_is_image($value) {
@@ -4143,7 +4164,7 @@ function show_error($msg, $file = '') {
 }
 // 附表分表规则
 function get_table_id($id) {
-    return floor($id / 100000);
+	return floor($id / 100000);
 }
 // 附表不存在时创建附表
 function is_data_table($table, $tid) {

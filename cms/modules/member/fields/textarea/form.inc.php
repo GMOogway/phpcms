@@ -11,5 +11,5 @@
 		if($minlength || $pattern) $allow_empty = '';
 		if($errortips && $this->fields[$field]['isbase']) $this->formValidator .= '$("#'.$field.'").formValidator({'.$allow_empty.'onshow:"'.$errortips.'",onfocus:"'.$errortips.'"}).inputValidator({min:1,onerror:"'.$errortips.'"});';
 		$value = empty($value) ? $setting['defaultvalue'] : $value;
-		return "<textarea name='info[{$field}]' id='$field' style='width:{$width}".(is_numeric($width) ? 'px' : '').";height:{$height}px;' $formattribute $css>".code2html($value)."</textarea>";
+		return "<textarea name='info[{$field}]' id='$field' class='form-control".(isset($css) && $css ? ' '.$css : '')."' style='width:{$width}".(is_numeric($width) ? 'px' : '').";height:{$height}px;' $formattribute>".code2html($value)."</textarea>";
 	}

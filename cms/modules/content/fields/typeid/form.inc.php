@@ -23,5 +23,5 @@
 				if(in_array($_key,$usable_array)) $data[$_key] = $_value['name'];
 			}
 		}
-		return form::select($data,$value,'name="info['.$field.']" id="'.$field.'" '.$formattribute.' '.$css,L('copyfrom_tips'));
+		return form::select($data,$value,'name="info['.$field.']" id="'.$field.'"'.(isset($css) && $css ? ' class="form-control '.$css.'"' : '').' '.$formattribute,L('copyfrom_tips'));
 	}

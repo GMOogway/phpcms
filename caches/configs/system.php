@@ -60,7 +60,6 @@ return array(
 'gzip' => 1, //是否Gzip压缩后输出
 'auth_key' => 'CMSa278236734ef2f4dda55c7de9aa2a96d', //安全密钥
 'lang' => 'zh-cn', //网站语言包
-'lock_ex' => '1', //写入缓存时是否建立文件互斥锁定（如果使用nfs建议关闭）
 
 'admin_founders' => '1', //网站创始人ID，多个ID逗号分隔
 'execution_sql' => 0, //EXECUTION_SQL

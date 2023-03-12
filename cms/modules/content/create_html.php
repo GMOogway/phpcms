@@ -997,7 +997,10 @@ class create_html extends admin {
 	// 提取描述信息
 	public function public_desc_edit() {
 		$show_header = $show_dialog  = true;
+		$this->form = getcache('model', 'commons');
+		$this->sitemodel = $this->cache->get('sitemodel');
 		$modelid = intval($this->input->get('modelid'));
+		$this->form_cache = $this->sitemodel[$this->form[$modelid]['tablename']];
 		$page = (int)$this->input->get('page');
 		$psize = 100; // 每页处理的数量
 		$total = (int)$this->input->get('total');
@@ -1048,12 +1051,19 @@ class create_html extends admin {
 
 		$data = $this->db->listinfo($where, 'id DESC', $page, $psize);
 		foreach ($data as $row) {
-			$content = get_content($modelid, $row['id']);
+			$content = code2html(get_content($modelid, $row['id']));
+			if (isset($this->form_cache['setting']['desc_clear']) && $this->form_cache['setting']['desc_clear']) {
+				$content = str_replace(' ', '', $content);
+			}
 			$this->db->set_model($modelid);
-			if ($row && $content && dr_get_description(code2html($content), $nums)) {
-				$this->db->update(array('description' => dr_get_description(code2html($content), $nums)), array('id' => $row['id']));
+			if ($row && $content && dr_get_description($content, $nums)) {
+				$this->db->update(array('description' => dr_get_description($content, $nums)), array('id' => $row['id']));
 			} elseif ($row['title']) {
-				$this->db->update(array('description' => dr_get_description(code2html($row['title']), $nums)), array('id' => $row['id']));
+				if (isset($this->form_cache['setting']['desc_clear']) && $this->form_cache['setting']['desc_clear']) {
+					$this->db->update(array('description' => dr_get_description(code2html(str_replace(' ', '', $row['title'])), $nums)), array('id' => $row['id']));
+				} else {
+					$this->db->update(array('description' => dr_get_description(code2html($row['title']), $nums)), array('id' => $row['id']));
+				}
 			}
 		}
 

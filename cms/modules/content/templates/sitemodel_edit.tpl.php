@@ -82,10 +82,20 @@ jQuery(document).ready(function() {
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-2 control-label"><?php echo L('自动填充内容描述');?></label>
+                        <label class="col-md-2 control-label"><?php echo L('提取内容描述字数');?></label>
                         <div class="col-md-9">
                             <label><input class="form-control input-large" type="text" id="name" name="setting[desc_limit]" value="<?php echo $desc_limit;?>"></label>
                             <span class="help-block">在内容中提取描述信息的最大字数限制</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('清理描述中的空格');?></label>
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[desc_clear]" value="0"<?php echo (!$desc_clear) ? ' checked' : ''?> /> <?php echo L('不清理');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[desc_clear]" value="1"<?php echo ($desc_clear) ? ' checked' : ''?> /> <?php echo L('清理空格');?> <span></span></label>
+                            </div>
+                            <span class="help-block"><?php echo L('提取描述字段时是否情况空格符号，一般英文站点不需要清理空格');?></span>
                         </div>
                     </div>
 
@@ -97,7 +107,7 @@ jQuery(document).ready(function() {
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('列表默认排序');?></label>
                         <div class="col-md-9">
-                            <label><input class="form-control input-xlarge" type="text" name="setting[order]" value="<?php if ($order){?><?php echo htmlspecialchars($order);?><?php }else{?>updatetime DESC<?php }?>" ></label>
+                            <label><input class="form-control input-xlarge" type="text" name="setting[order]" value="<?php if ($order){?><?php echo htmlspecialchars($order);?><?php }else{?>listorder DESC,updatetime DESC<?php }?>" ></label>
                             <span class="help-block"><?php echo L('排序格式符号MySQL的语法，例如：主表字段 desc');?></span>
                         </div>
                     </div>
@@ -107,6 +117,20 @@ jQuery(document).ready(function() {
 
                             <label><input class="form-control" type="text" name="setting[search_time]" value="<?php if ($search_time){?><?php echo htmlspecialchars($search_time);?><?php }else{?>updatetime<?php }?>" ></label>
                             <span class="help-block"><?php echo L('设置后台时间范围搜索字段，默认为更新时间字段：updatetime');?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">列表默认搜索字段</label>
+                        <div class="col-md-9">
+                            <label><select name="setting[search_first_field]" class="form-control">
+                                <?php foreach($this->field as $t) {?>
+                                <?php if (dr_is_admin_search_field($t)) {?>
+                                <option value="<?php echo $t['field'];?>"<?php if ($search_first_field==$t['field']) {?> selected<?php }?>><?php echo L($t['name']);?></option>
+                                <?php }?>
+                                <?php }?>
+                                <option value="id"<?php if ($search_first_field=='id') {?> selected<?php }?>> ID </option>
+                            </select></label>
+                            <span class="help-block">设置后台列表的默认搜索字段，也就是第一个选中的字段</span>
                         </div>
                     </div>
                     <div class="form-group">

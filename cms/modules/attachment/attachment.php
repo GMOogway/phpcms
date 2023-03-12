@@ -99,7 +99,7 @@ class attachment extends admin {
 		}
 		$str = file_get_contents($configfile);
 		$str = preg_replace($pattern, $replacement, $str);
-		return pc_base::load_config('system','lock_ex') ? file_put_contents($configfile, $str, LOCK_EX) : file_put_contents($configfile, $str);		
+		return file_put_contents($configfile, $str, LOCK_EX);		
 	}
 	
 	/**

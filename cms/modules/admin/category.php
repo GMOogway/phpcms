@@ -1165,6 +1165,7 @@ class category extends admin {
 			foreach ($_data as $t) {
 				$this->repair_categorys[$t['catid']] = [
 					'catid' => $t['catid'],
+					'catname' => $t['catname'],
 					'parentid' => (int)$t['parentid'],
 					'arrparentid' => $t['arrparentid'],
 					'child' => $t['child'],
@@ -1207,8 +1208,8 @@ class category extends admin {
 			'child' => $this->repair_categorys[$cat['catid']]['child'],
 			'arrchildid' => $this->repair_categorys[$cat['catid']]['arrchildid'],
 			'parentdir' => $this->repair_categorys[$cat['catid']]['parentdir'],
-			'sethtml'=>$sethtml,
-			'letter'=>$this->pinyin->result($cat['catname'])
+			'sethtml' => $sethtml,
+			'letter' => $this->pinyin->result($this->repair_categorys[$cat['catid']]['catname'])
 		), array('catid'=>$cat['catid']));
 
 		// 单独存储栏目关系
@@ -1334,7 +1335,7 @@ class category extends admin {
 		if ($n > 100 || !is_array($this->repair_categorys) || !isset($this->repair_categorys[$catid])) {
 			return $arrchildid;
 		}
-		$data = $this->db->select(array('parentid>'=>0, 'catid<>'=>$catid, 'parentid'=>$catid));
+		$data = $this->db->select(array('parentid>'=>0, 'catid<>'=>$catid, 'parentid'=>$catid),'*','','listorder ASC,catid ASC');
 		if ($data) {
 			foreach($data as $cat) {
 				$arrchildid .= ','.$this->get_arrchildid($cat['catid'], ++$n);
@@ -1476,7 +1477,7 @@ class category extends admin {
 				$catname = trim($this->input->get('catname'));
 				if (CHARSET == 'gbk') $catname = iconv('utf-8','gbk',$catname);
 			}
-			$result = $this->db->select("$field LIKE('$catname%') AND siteid='$this->siteid' AND child=0",'catid,type,catname,letter',10);
+			$result = $this->db->select(array($field=>'%'.$catname.'%', 'siteid'=>$this->siteid, 'child'=>0),'catid,type,catname,letter',10);
 			if (CHARSET == 'gbk') {
 				$result = array_iconv($result, 'gbk', 'utf-8');
 			}

@@ -96,6 +96,16 @@ include $this->admin_tpl('header');?>
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('继承下级')?></label>
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input type='radio' name='setting[getchild]' value='1' <?php if($setting['getchild']) echo 'checked';?>> <?php echo L('open');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type='radio' name='setting[getchild]' value='0' <?php if(!$setting['getchild']) echo 'checked';?>> <?php echo L('close');?> <span></span></label>
+                            </div>
+                            <span class="help-block"><?php echo L('将下级第一个栏目数据作为当前的栏目，不对外链类型的栏目有效')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('可用')?></label>
                         <div class="col-md-9">
                             <div class="mt-radio-inline">

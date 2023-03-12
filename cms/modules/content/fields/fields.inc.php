@@ -31,6 +31,7 @@ $fields = array('text'=>'单行文本',
 	'color'=>'颜色选取',
 	'touchspin'=>'增减量',
 	'textbtn'=>' 文本事件',
+	'redirect'=>'转向链接',
 	'wxurl'=>'导入微信文章',
 	'word'=>'Word导入编辑器',
 );

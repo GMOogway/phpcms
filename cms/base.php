@@ -62,11 +62,11 @@ define('ROOT_URL', siteurl(1).'/');
 	'COOKIE_PATH' => '',
 	'COOKIE_PRE' => '',
 	'COOKIE_TTL' => 0,
-	'TPL_ROOT' => 'templates/',
-	'TPL_NAME' => 'default',
+	'SYS_TPL_ROOT' => 'templates/',
+	'SYS_TPL_NAME' => 'default',
 	'TPL_CSS' => 'default',
 	'TPL_REFERESH' => 1,
-	'TPL_EDIT'=> 0,
+	'IS_EDIT_TPL'=> 0,
 	'ATTACHMENT_STAT' => '1',
 	'ATTACHMENT_FILE' => '0',
 	'ATTACHMENT_DEL' => '1',
@@ -89,22 +89,21 @@ define('ROOT_URL', siteurl(1).'/');
 	'MOBILE_IMG_PATH' => '',
 	'APP_PATH' => '',
 	'MOBILE_PATH' => '',
-	'BDMAP_API' => '',
+	'SYS_BDMAP_API' => '',
 	'SYS_EDITOR' => '0',
 	'SYS_ADMIN_PAGESIZE' => 10,
 	'CHARSET' => 'utf-8',
-	'TIMEZONE' => '8',
+	'SYS_TIMEZONE' => '8',
 	'SYS_TIME_FORMAT' => '',
-	'DEBUG' => 1,
+	'SYS_DEBUG' => 1,
 	'SYS_CSRF' => 0,
 	'SYS_CSRF_TIME' => 0,
 	'NEEDCHECKCOMEURL' => 1,
-	'ADMIN_LOG' => 1,
-	'ERRORLOG' => 1,
-	'GZIP' => 1,
-	'AUTH_KEY' => '',
-	'LANG' => 'zh-cn',
-	'LOCK_EX' => '1',
+	'SYS_ADMIN_LOG' => 1,
+	'SYS_ERRORLOG' => 1,
+	'SYS_GZIP' => 1,
+	'SYS_KEY' => '',
+	'SYS_LANGUAGE' => 'zh-cn',
 	'ADMIN_FOUNDERS' => '1',
 	'EXECUTION_SQL' => 0,
 	'HTML_ROOT' => '/html',
@@ -468,7 +467,7 @@ class pc_base {
 	 * @param intger $initialize 是否初始化
 	 */
 	public static function load_sys_class($classname, $path = '', $initialize = 1) {
-			return self::_load_class($classname, $path, $initialize);
+		return self::_load_class($classname, $path, $initialize);
 	}
 	
 	/**

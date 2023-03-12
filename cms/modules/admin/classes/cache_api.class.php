@@ -607,7 +607,7 @@ class cache_api {
 			}
 		}
 		$module = "<?php\nreturn ".var_export($module, true).";\n?>";
-		return $file_size = pc_base::load_config('system','lock_ex') ? file_put_contents(CONFIGPATH.'modules.php', $module, LOCK_EX) : file_put_contents(CONFIGPATH.'modules.php', $module);
+		return $file_size = file_put_contents(CONFIGPATH.'modules.php', $module, LOCK_EX);
 	}
 	
 	/**
@@ -619,7 +619,7 @@ class cache_api {
 		if (is_array($result) && !empty($result)) {
 			foreach ($result as $re) {
 				if (!file_exists(CACHE_PATH.$re['path'].$re['filename'])) {
-					$filesize = pc_base::load_config('system','lock_ex') ? file_put_contents(CACHE_PATH.$re['path'].$re['filename'], $re['data'], LOCK_EX) : file_put_contents(CACHE_PATH.$re['path'].$re['filename'], $re['data']);
+					$filesize = file_put_contents(CACHE_PATH.$re['path'].$re['filename'], $re['data'], LOCK_EX);
 				} else {
 					continue;
 				}

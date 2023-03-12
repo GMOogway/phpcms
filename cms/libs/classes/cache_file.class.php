@@ -57,12 +57,7 @@ class cache_file {
 			}
 		}
 		
-		//是否开启互斥锁
-		if(pc_base::load_config('system', 'lock_ex')) {
-			$file_size = file_put_contents($filepath.$filename, $data, LOCK_EX);
-		} else {
-			$file_size = file_put_contents($filepath.$filename, $data);
-		}
+		$file_size = file_put_contents($filepath.$filename, $data, LOCK_EX);
 		
 		return $file_size ? $file_size : 'false';
 	}
