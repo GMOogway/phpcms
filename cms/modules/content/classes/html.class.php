@@ -77,6 +77,35 @@ class html {
 		require_once CACHE_MODEL_PATH.'content_output.class.php';
 		$content_output = new content_output($modelid,$catid,$CATEGORYS);
 		$output_data = $content_output->get($data);
+		// 检测转向字段
+		foreach ($this->form_cache['field'] as $t) {
+			if ($t['formtype'] == 'redirect' && $output_data[$t['field']]) {
+				// 存在转向字段时的情况
+				$this->hits_db = pc_base::load_model('hits_model');
+				$hitsid = 'c-'.$modelid.'-'.$id;
+				$hits_data = $this->hits_db->get_one(array('hitsid'=>$hitsid));
+				if ($hits_data) {
+					$views = $hits_data['views'] + 1;
+					$yesterdayviews = (date('Ymd', $hits_data['updatetime']) == date('Ymd', strtotime('-1 day'))) ? $hits_data['dayviews'] : $hits_data['yesterdayviews'];
+					$dayviews = (date('Ymd', $hits_data['updatetime']) == date('Ymd', SYS_TIME)) ? ($hits_data['dayviews'] + 1) : 1;
+					$weekviews = (date('YW', $hits_data['updatetime']) == date('YW', SYS_TIME)) ? ($hits_data['weekviews'] + 1) : 1;
+					$monthviews = (date('Ym', $hits_data['updatetime']) == date('Ym', SYS_TIME)) ? ($hits_data['monthviews'] + 1) : 1;
+					$this->hits_db->update(array('views'=>$views,'yesterdayviews'=>$yesterdayviews,'dayviews'=>$dayviews,'weekviews'=>$weekviews,'monthviews'=>$monthviews,'updatetime'=>SYS_TIME),array('hitsid'=>$hitsid));
+				}
+				$goto_url = $output_data[$t['field']];
+				ob_start();
+				include admin_template('go', 'admin');
+				$this->createhtml(CMS_PATH.$file);
+				if($this->sitelist[$this->siteid]['mobilehtml']==1) {
+					$mobilefile = CMS_PATH.$this->mobile_root.'/'.$file;
+					ob_start();
+					$goto_url = str_replace(array($this->sitelist[$this->siteid]['domain'], 'm=content'), array($this->sitelist[$this->siteid]['mobile_domain'], 'm=mobile'), $goto_url);
+					include admin_template('go', 'admin');
+					$this->createhtml($mobilefile);
+				}
+				return $output_data;
+			}
+		}
 		extract($output_data);
 		if(module_exists('comment')) {
 			$allow_comment = isset($allow_comment) ? $allow_comment : 1;
@@ -244,35 +273,6 @@ class html {
 		}
 		//分页处理结束
 		$file = CMS_PATH.$file;
-		// 检测转向字段
-		foreach ($this->form_cache['field'] as $t) {
-			if ($t['formtype'] == 'redirect' && $output_data[$t['field']]) {
-				// 存在转向字段时的情况
-				$this->hits_db = pc_base::load_model('hits_model');
-				$hitsid = 'c-'.$modelid.'-'.$id;
-				$hits_data = $this->hits_db->get_one(array('hitsid'=>$hitsid));
-				if ($hits_data) {
-					$views = $hits_data['views'] + 1;
-					$yesterdayviews = (date('Ymd', $hits_data['updatetime']) == date('Ymd', strtotime('-1 day'))) ? $hits_data['dayviews'] : $hits_data['yesterdayviews'];
-					$dayviews = (date('Ymd', $hits_data['updatetime']) == date('Ymd', SYS_TIME)) ? ($hits_data['dayviews'] + 1) : 1;
-					$weekviews = (date('YW', $hits_data['updatetime']) == date('YW', SYS_TIME)) ? ($hits_data['weekviews'] + 1) : 1;
-					$monthviews = (date('Ym', $hits_data['updatetime']) == date('Ym', SYS_TIME)) ? ($hits_data['monthviews'] + 1) : 1;
-					$this->hits_db->update(array('views'=>$views,'yesterdayviews'=>$yesterdayviews,'dayviews'=>$dayviews,'weekviews'=>$weekviews,'monthviews'=>$monthviews,'updatetime'=>SYS_TIME),array('hitsid'=>$hitsid));
-				}
-				$goto_url = $output_data[$t['field']];
-				ob_start();
-				include admin_template('go', 'admin');
-				$this->createhtml($file);
-				if($this->sitelist[$this->siteid]['mobilehtml']==1) {
-					$mobilefile = CMS_PATH.$this->mobile_root.'/'.str_replace(CMS_PATH,'',$file);
-					ob_start();
-					$goto_url = str_replace(array($this->sitelist[$this->siteid]['domain'], 'm=content'), array($this->sitelist[$this->siteid]['mobile_domain'], 'm=mobile'), $goto_url);
-					include admin_template('go', 'admin');
-					$this->createhtml($mobilefile);
-				}
-				return $output_data;
-			}
-		}
 		ob_start();
 		include template('content', $template);
 		$this->createhtml($file);

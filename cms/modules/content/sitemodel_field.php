@@ -100,7 +100,7 @@ class sitemodel_field extends admin {
 			} elseif ($modelid==-1) {
 				$not_allow_fields = array('catid','typeid','title','keyword','posid','islink','template','username','pages','redirect','wxurl','word');
 			} elseif ($modelid==-2) {
-				$not_allow_fields = array('catid','typeid','title','keyword','posid','islink','template','username','pages');
+				$not_allow_fields = array('catid','typeid','title','keyword','posid','islink','template','username','pages','redirect');
 			}
 			$f_datas = $this->db->select(array('modelid'=>$modelid),'field,name',100,'listorder ASC');
 			$m_r = $this->model_db->get_one(array('modelid'=>$modelid));

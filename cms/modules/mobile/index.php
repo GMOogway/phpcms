@@ -210,6 +210,8 @@ class index {
 		
 		$MODEL = getcache('model','commons');
 		$modelid = $CAT['modelid'];
+		$this->sitemodel = $this->cache->get('sitemodel');
+		$this->form_cache = $this->sitemodel[$MODEL[$modelid]['tablename']];
 		
 		$tablename = $this->db->table_name = $this->db->db_tablepre.$MODEL[$modelid]['tablename'];
 		$r = $this->db->get_one(array('id'=>$id));
