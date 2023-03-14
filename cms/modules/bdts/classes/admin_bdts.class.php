@@ -108,9 +108,8 @@ class admin_bdts {
 
         // 获取移动端域名
         $murl = str_replace(siteurl($this->siteid), sitemobileurl($this->siteid), $url);
-        $sitelist = siteinfo($this->siteid);
-        if ($sitelist['mobilemode']==0 && $sitelist['mobile_dirname']) {
-            $m_site = $site.'/'.$sitelist['mobile_dirname'];
+        if (dr_site_info('mobilemode', $this->siteid)==0 && dr_site_info('mobile_dirname', $this->siteid)) {
+            $m_site = $site.'/'.dr_site_info('mobile_dirname', $this->siteid);
         } else {
             $uri = parse_url($murl);
             $m_site = $uri['host'];
@@ -121,7 +120,7 @@ class admin_bdts {
             $m_site = '';
         }
 
-        if ($sitelist['mobilemode']==0 && $sitelist['mobile_dirname'] && strpos($m_site, $sitelist['mobile_dirname']) !== false) {
+        if (dr_site_info('mobilemode', $this->siteid)==0 && dr_site_info('mobile_dirname', $this->siteid) && strpos($m_site, dr_site_info('mobile_dirname', $this->siteid)) !== false) {
             list($m_site) = explode('/', $m_site);
         }
 

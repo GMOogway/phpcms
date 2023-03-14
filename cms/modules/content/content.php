@@ -1451,7 +1451,7 @@ class content extends admin {
 			$uploadedfile['fileext'] = $filetype;
 			$uploadedfile['downloads'] = 0;
 			$aid = $this->att_db->api_add($uploadedfile);
-			$this->upload_json($aid,SYS_UPLOAD_URL.$file_path,file_name($this->input->post('filepath')),format_file_size(filesize($config['new_image'])));
+			upload_json($aid,SYS_UPLOAD_URL.$file_path,file_name($this->input->post('filepath')),format_file_size(filesize($config['new_image'])));
 
 			dr_json(1, L('operation_success'), array('filepath' => SYS_UPLOAD_URL.$file_path));
 		}
@@ -1486,25 +1486,6 @@ class content extends admin {
 				  $spec = '3 / 2';
 			}
 			include $this->admin_tpl('crop');
-		}
-	}
-	/**
-	 * 设置upload上传的json格式cookie
-	 */
-	private function upload_json($aid,$src,$filename,$size) {
-		$arr['aid'] = intval($aid);
-		$arr['src'] = trim($src);
-		$arr['filename'] = urlencode($filename);
-		$arr['size'] = $size;
-		$json_str = json_encode($arr);
-		$att_arr_exist = $this->cache->get_data('att_json');
-		$att_arr_exist_tmp = explode('||', $att_arr_exist);
-		if(is_array($att_arr_exist_tmp) && in_array($json_str, $att_arr_exist_tmp)) {
-			return true;
-		} else {
-			$json_str = $att_arr_exist ? $att_arr_exist.'||'.$json_str : $json_str;
-			$this->cache->set_data('att_json', $json_str, 3600);
-			return true;			
 		}
 	}
 	/**

@@ -27,12 +27,9 @@ class cloud extends admin {
         define('CMS_DOWNTIME', pc_base::load_config('version','cms_downtime'));
         $this->cloud = CACHE_PATH.'cloud/';
         create_folder($this->cloud);
-        $this->site = siteinfo(1);
-        $this->sitename = $this->site['name'];
-        $this->siteurl = $this->site['domain'];
 
         list($this->admin_url) = explode('?', FC_NOW_URL);
-        $this->service_url = 'http://ceshi.kaixin100.cn/index.php?m=cloud&c=index&a=cloud&domain='.dr_get_domain_name(ROOT_URL).'&admin='.urlencode($this->admin_url).'&version='.CMS_VERSION.'&cms='.CMS_ID.'&license='.CMS_LICENSE.'&updatetime='.strtotime(CMS_UPDATETIME).'&downtime='.strtotime(CMS_DOWNTIME).'&sitename='.base64_encode($this->sitename).'&siteurl='.urlencode($this->siteurl).'&php='.PHP_VERSION.'&mysql='.$this->db->version().'&os='.PHP_OS;
+        $this->service_url = 'http://ceshi.kaixin100.cn/index.php?m=cloud&c=index&a=cloud&domain='.dr_get_domain_name(ROOT_URL).'&admin='.urlencode($this->admin_url).'&version='.CMS_VERSION.'&cms='.CMS_ID.'&license='.CMS_LICENSE.'&updatetime='.strtotime(CMS_UPDATETIME).'&downtime='.strtotime(CMS_DOWNTIME).'&sitename='.base64_encode(dr_site_info('name', 1)).'&siteurl='.urlencode(dr_site_info('domain', 1)).'&php='.PHP_VERSION.'&mysql='.$this->db->version().'&os='.PHP_OS;
     }
 
     // 我的网站

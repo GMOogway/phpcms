@@ -185,8 +185,7 @@ class setting extends admin {
 		if ($action=='cookie_pre') {
 			echo token().'_';exit;
 		} else {
-			$site = siteinfo(1);
-			echo token($site['name']);exit;
+			echo token(dr_site_info('name', 1));exit;
 		}
 	}
 	

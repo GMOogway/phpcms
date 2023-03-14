@@ -73,10 +73,8 @@ class Uploader
         $this->image_reduce = $this->config['image_reduce'];
         $this->upload = new upload($this->module,$this->catid,$this->siteid);
         $this->upload->set_userid($this->userid);
-        $config = siteinfo($this->siteid);
-        $site_setting = string2array($config['setting']);
         $this->rid = md5(FC_NOW_URL.$this->input->get_user_agent().$this->input->ip_address().$this->userid);
-        $this->watermark = $site_setting['ueditor'] ? 1 : intval($this->is_wm);
+        $this->watermark = dr_site_value('ueditor', $this->siteid) ? 1 : intval($this->is_wm);
         $this->attachment_info = $this->upload->get_attach_info((int)$this->attachment, (int)$this->image_reduce);
 
         if (!$this->userid) {
@@ -421,29 +419,9 @@ class Uploader
             $this->fileUrl = $this->attachment_info['url'].$rt['data']['filepath'];
         }
         if($rt && $data) {
-            $this->upload_json($data['code'],$this->fileUrl,strstr($this->oriName, '.', true),format_file_size($this->fileSize));
+            upload_json($data['code'],$this->fileUrl,strstr($this->oriName, '.', true),format_file_size($this->fileSize));
         } else {
             $this->stateInfo = $rt['msg'];
-        }
-    }
-    
-    /**
-     * 设置upload上传的json格式cookie
-     */
-    private function upload_json($aid,$src,$filename,$size) {
-        $arr['aid'] = intval($aid);
-        $arr['src'] = trim($src);
-        $arr['filename'] = urlencode($filename);
-        $arr['size'] = $size;
-        $json_str = json_encode($arr);
-        $att_arr_exist = $this->cache->get_data('att_json');
-        $att_arr_exist_tmp = explode('||', $att_arr_exist);
-        if(is_array($att_arr_exist_tmp) && in_array($json_str, $att_arr_exist_tmp)) {
-            return true;
-        } else {
-            $json_str = $att_arr_exist ? $att_arr_exist.'||'.$json_str : $json_str;
-            $this->cache->set_data('att_json', $json_str, 3600);
-            return true;
         }
     }
 

@@ -59,8 +59,7 @@ class index {
 	public function post() {
 		$comment = pc_base::load_app_class('comment');
 		$id = isset($_GET['id']) && intval($_GET['id']) ? intval($_GET['id']) : '';
-		$SITE = siteinfo($this->siteid);
-		$username = param::get_cookie('_username',$SITE['name'].L('friends'));
+		$username = param::get_cookie('_username',dr_site_info('name', $this->siteid).L('friends'));
 		$userid = param::get_cookie('_userid');
 		$comment_setting_db = pc_base::load_model('comment_setting_model');
 		$setting = $comment_setting_db->get_one(array('siteid'=>$this->siteid));

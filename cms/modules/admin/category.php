@@ -45,7 +45,6 @@ class category extends admin {
 	// 获取树形结构列表
 	protected function _get_tree_list($data) {
 		$models = getcache('model','commons');
-		$sitelist = getcache('sitelist','commons');
 		$html_root = SYS_HTML_ROOT;
 
 		$list = "<tr class='\$class'>";
@@ -142,12 +141,12 @@ class category extends admin {
 					if($this->siteid==1) {
 						$catdir = $prefix.'/'.$t['parentdir'].$catdir;
 					} else {
-						$catdir = $prefix.'/'.$sitelist[$this->siteid]['dirname'].$html_root.'/'.$catdir;
+						$catdir = $prefix.'/'.dr_site_info('dirname', $this->siteid).$html_root.'/'.$catdir;
 					}
 					if($t['type']==0 && $setting['ishtml'] && strpos($t['url'], '?')===false && substr_count($t['url'],'/')<4) $t['help'] = '<span class="layui-btn layui-btn-xs layui-btn-green"><i class="fa fa-question-circle-o" onmouseover="layer.tips(\''.L('tips_domain').$t['url'].'<br>'.L('directory_binding').'<br>'.$catdir.'/\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"></i></span>';
 					$t['url'] = $t['url'];
 				} else {
-					$t['url'] = substr($sitelist[$this->siteid]['domain'],0,-1).$t['url'];
+					$t['url'] = substr(dr_site_info('domain', $this->siteid),0,-1).$t['url'];
 				}
 			} else {
 				$t['url'] = $t['url'];
@@ -378,11 +377,7 @@ class category extends admin {
 			//获取站点模板信息
 			pc_base::load_app_func('global');
 			$page = max(0, intval($this->input->get('page')));
-
-			$sitelist = siteinfo($this->siteid);
-			if($this->input->get('s')==0) {
-				$sitelist['default_style'] = '';
-			}
+			
 			$template_list = template_list($this->siteid, 0);
 			foreach ($template_list as $k=>$v) {
 				$template_list[$v['dirname']] = $v['name'] ? $v['name'] : $v['dirname'];
@@ -394,7 +389,7 @@ class category extends admin {
 				if($r) extract($r,EXTR_SKIP);
 				$setting = string2array($setting);
 			} else {
-				$setting = array('ishtml'=>'', 'category_ruleid'=>'', 'content_ishtml'=>'', 'show_ruleid'=>'', 'create_to_html_root'=>'', 'template_list'=>$sitelist['default_style']);
+				$setting = array('ishtml'=>'', 'category_ruleid'=>'', 'content_ishtml'=>'', 'show_ruleid'=>'', 'create_to_html_root'=>'', 'template_list'=>$this->input->get('s')==0 ? '' : dr_site_info('default_style', get_siteid()));
 			}
 			
 			pc_base::load_sys_class('form','',0);
@@ -735,15 +730,14 @@ class category extends admin {
 			$setting = string2array($this->categorys[$id]['setting']);
 			$ishtml = $setting['ishtml'];
 			$this->url = pc_base::load_app_class('url', 'content');
-			$sitelist = getcache('sitelist','commons');
 			$modelid = $this->categorys[$id]['modelid'];
 			if($ishtml) {
 				$fileurl = $html_root.'/'.$this->url->category_url($id, 1);
 				if($this->siteid != 1) {
-					$fileurl = $sitelist[$this->siteid]['dirname'].$fileurl;
+					$fileurl = dr_site_info('dirname', $this->siteid).$fileurl;
 				}
 				dr_dir_delete(CMS_PATH.$fileurl, true);
-				if($sitelist[$this->siteid]['mobilehtml']==1) {
+				if(dr_site_info('mobilehtml', $this->siteid)==1) {
 					$mobilefileurl = SYS_MOBILE_ROOT.$fileurl;
 					dr_dir_delete(CMS_PATH.$mobilefileurl, true);	
 				}
@@ -773,16 +767,15 @@ class category extends admin {
 		$setting = string2array($this->categorys[$catid]['setting']);
 		$ishtml = $setting['ishtml'];
 		$this->url = pc_base::load_app_class('url', 'content');
-		$sitelist = getcache('sitelist','commons');
 		$list = $this->db->select(array('parentid'=>$catid));
 		foreach($list as $r) {
 			if($ishtml) {
 				$fileurl = $html_root.'/'.$this->url->category_url($r['catid'], 1);
 				if($this->siteid != 1) {
-					$fileurl = $sitelist[$this->siteid]['dirname'].$fileurl;
+					$fileurl = dr_site_info('dirname', $this->siteid).$fileurl;
 				}
 				dr_dir_delete(CMS_PATH.$fileurl, true);
-				if($sitelist[$this->siteid]['mobilehtml']==1) {
+				if(dr_site_info('mobilehtml', $this->siteid)==1) {
 					$mobilefileurl = SYS_MOBILE_ROOT.$fileurl;
 					dr_dir_delete(CMS_PATH.$mobilefileurl, true);	
 				}
@@ -817,7 +810,6 @@ class category extends admin {
 		$search_model = getcache('search_model_'.$this->siteid,'search');
 		$typeid = $search_model[$modelid]['typeid'];
 		$this->url = pc_base::load_app_class('url', 'content');
-		$sitelist = getcache('sitelist','commons');
 		$result = $this->content_db->select(array('catid'=>$catid), 'id,inputtime');
 		if (is_array($result) && !empty($result)) {
 			foreach ($result as $key=>$val) {
@@ -825,7 +817,7 @@ class category extends admin {
 					list($urls) = $this->url->show($val['id'], 0, $catid, $val['inputtime']);
 					$fileurl = $urls[1];
 					if($this->siteid != 1) {
-						$fileurl = $html_root.'/'.$sitelist[$this->siteid]['dirname'].$fileurl;
+						$fileurl = $html_root.'/'.dr_site_info('dirname', $this->siteid).$fileurl;
 					}
 					$mobilefileurl = SYS_MOBILE_ROOT.$fileurl;
 					//删除静态文件，排除htm/html/shtml外的文件
@@ -847,7 +839,7 @@ class category extends admin {
 						$delfile = str_replace(CMS_PATH, '/', $delfile);
 						$this->queue->add_queue('del',$delfile,$this->siteid);
 					}
-					if($sitelist[$this->siteid]['mobilehtml']==1) {
+					if(dr_site_info('mobilehtml', $this->siteid)==1) {
 						foreach ($mobilefilelist as $mobiledelfile) {
 							$mobilelasttext = strrchr($mobiledelfile,'.');
 							if(!in_array($mobilelasttext, array('.htm','.html','.shtml'))) continue;

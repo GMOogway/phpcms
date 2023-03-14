@@ -240,7 +240,6 @@ class content_tag {
 		$array = array();
 		$siteid = $data['siteid'] && intval($data['siteid']) ? intval($data['siteid']) : get_siteid();
 		$categorys = getcache('category_content_'.$siteid,'commons');
-		$site = siteinfo($siteid);
 		$i = 1;
 		is_array($categorys)?null:$categorys= array();
 		foreach ($categorys as $catid=>$cat) {
@@ -248,7 +247,7 @@ class content_tag {
 			if($i>$data['limit']) break;
 			if((!$cat['ismenu'] || $setting['disabled']) || $siteid && $cat['siteid']!=$siteid) continue;
 			if (strpos($cat['url'], '://') === false) {
-				$cat['url'] = substr($site['domain'],0,-1).$cat['url'];
+				$cat['url'] = substr(dr_site_info('domain', $siteid),0,-1).$cat['url'];
 			}
 			if($cat['parentid']==$data['catid']) {
 				$array[$catid] = $cat;

@@ -176,9 +176,8 @@ class site extends admin {
 	public function del() {
 		$siteid = $this->input->get('siteid') && intval($this->input->get('siteid')) ? intval($this->input->get('siteid')) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		if($siteid==1) dr_admin_msg(0,L('operation_failure'), HTTP_REFERER);
-		$sitelist = siteinfo($siteid);
-		if ($sitelist['dirname']) {
-			dr_dir_delete(CMS_PATH.$sitelist['dirname'], true);
+		if (dr_site_info('dirname', $siteid)) {
+			dr_dir_delete(CMS_PATH.dr_site_info('dirname', $siteid), true);
 		}
 		if ($this->db->get_one(array('siteid'=>$siteid))) {
 			if ($this->db->delete(array('siteid'=>$siteid))) {
@@ -231,7 +230,6 @@ class site extends admin {
 	
 	public function edit() {
 		$siteid = $this->input->get('siteid') && intval($this->input->get('siteid')) ? intval($this->input->get('siteid')) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
-		$sitelist = siteinfo($siteid);
 		if ($data = $this->db->get_one(array('siteid'=>$siteid))) {
 			if ($this->input->post('dosubmit')) {
 				$info = $this->input->post('info');
@@ -256,10 +254,10 @@ class site extends admin {
 					if ($data['dirname'] != $info['dirname'] && $this->db->get_one(array('dirname'=>$info['dirname']), 'siteid')) {
 						dr_json(0, L('site_dirname').L('exists'), array('field' => 'dirname'));
 					}
-					if ($sitelist['dirname']!=$info['dirname']) {
-						$state = rename(CMS_PATH.$sitelist['dirname'], CMS_PATH.$info['dirname']);
+					if (dr_site_info('dirname', $siteid)!=$info['dirname']) {
+						$state = rename(CMS_PATH.dr_site_info('dirname', $siteid), CMS_PATH.$info['dirname']);
 						if (!$state) {
-							dr_json(0, L('重命名目录['.$sitelist['dirname'].']失败！'), array('field' => 'dirname'));
+							dr_json(0, L('重命名目录['.dr_site_info('dirname', $siteid).']失败！'), array('field' => 'dirname'));
 						}
 					}
 				}
@@ -495,7 +493,6 @@ class site extends admin {
 
 		$v = trim($this->input->get('v'));
 		$siteid = intval($this->input->get('siteid'));
-		$sitelist = siteinfo($siteid);
 		if (!$v) {
 			dr_json(0, L('目录不能为空'));
 		} elseif (strpos($v, '/') !== false) {
@@ -505,12 +502,12 @@ class site extends admin {
 		}
 
 		// 生成手机目录
-		$rt = update_mobile_webpath(CMS_PATH.($sitelist['dirname'] ? '/'.$sitelist['dirname'].'/' : ''), $v, $sitelist['dirname'], $siteid);
+		$rt = update_mobile_webpath(CMS_PATH.(dr_site_info('dirname', $siteid) ? '/'.dr_site_info('dirname', $siteid).'/' : ''), $v, dr_site_info('dirname', $siteid), $siteid);
 		if ($rt) {
 			dr_json(0, L($rt));
 		}
 
-		$url = $sitelist['domain'].($sitelist['dirname'] ? '/'.$sitelist['dirname'].'/' : '').$v . '/api.php';
+		$url = dr_site_info('domain', $siteid).(dr_site_info('dirname', $siteid) ? '/'.dr_site_info('dirname', $siteid).'/' : '').$v . '/api.php';
 
 		$code = dr_catcher_data($url, 5);
 		if ($code != 'cms ok') {

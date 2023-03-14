@@ -15,9 +15,7 @@ class email {
         if(!$config) {
             $config = getcache('common','commons');
             if(!$config['sitename']) {
-                $siteid = get_siteid();
-                $siteinfo = siteinfo($siteid);
-                $config['sitename'] = $siteinfo['site_title'];
+                $config['sitename'] = dr_site_info('site_title', get_siteid());
             }
             $this->config = array(
                 'port' => $config['mail_port'],
@@ -34,9 +32,7 @@ class email {
             );
         } else {
             if(!$config['sitename']) {
-                $siteid = get_siteid();
-                $siteinfo = siteinfo($siteid);
-                $config['sitename'] = $siteinfo['site_title'];
+                $config['sitename'] = dr_site_info('site_title', get_siteid());
             }
             $this->config = array(
                 'port' => $config['port'],

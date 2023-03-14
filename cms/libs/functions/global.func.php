@@ -1401,12 +1401,11 @@ function dr_msg($code, $msg, $url = '', $time = 3, $dialog = '') {
  * 当前URL
  */
 function now_url($url, $siteid = 1, $ismobile = 1, $ishtml = 1) {
-	$sitelist = siteinfo($siteid);
 	if ($ishtml) {
 		if ($ismobile) {
-			return $url ? $url : $sitelist['mobile_domain'];
+			return $url ? $url : dr_site_info('mobile_domain', $siteid);
 		} else {
-			return $url ? $url : $sitelist['domain'];
+			return $url ? $url : dr_site_info('domain', $siteid);
 		}
 	} else {
 		return FC_NOW_URL;
@@ -2261,9 +2260,8 @@ function template($module = 'content', $template = 'index', $style = '') {
 			$siteid = param::get_cookie('siteid');
 		}
 		if (!$siteid) $siteid = 1;
-		$sitelist = siteinfo($siteid);
 		if(!empty($siteid)) {
-			$style = $sitelist['default_style'];
+			$style = dr_site_info('default_style', $siteid);
 		}
 	} elseif (empty($style) && defined('STYLE')) {
 		$style = STYLE;
@@ -3518,9 +3516,7 @@ function thumb($img, $width = 0, $height = 0, $water = 0, $mode = 'auto', $webim
 	}
 	if ($img || $webimg) {
 		// 强制缩略图水印
-		$config = siteinfo((defined('SITEID') && SITEID ? SITEID : (get_siteid() ? get_siteid() : SITE_ID)));
-		$site_setting = string2array($config['setting']);
-		if ($site_setting['thumb']) {
+		if (dr_site_value('thumb', (defined('SITEID') && SITEID ? SITEID : (get_siteid() ? get_siteid() : SITE_ID)))) {
 			$water = 1;
 		}
 		pc_base::load_sys_class('image');
@@ -3829,8 +3825,7 @@ function dr_go($catid, $id, $allurl = 0) {
 	$r = $db->get_one(array('id'=>$id), '`url`');
 	if (!empty($allurl)) {
 		if (strpos($r['url'], '://')===false) {
-			$site = siteinfo($category[$catid]['siteid']);
-			$r['url'] = substr($site['domain'], 0, -1).$r['url'];
+			$r['url'] = substr(dr_site_info('domain', $category[$catid]['siteid']), 0, -1).$r['url'];
 		}
 	}
 
@@ -3845,10 +3840,9 @@ function atturl($path) {
 	if(strpos($path, ':/')) {
 		return $path;
 	} else {
-		$sitelist = siteinfo($siteid);
-		$siteid =  get_siteid();
-		$siteurl = $sitelist['domain'];
-		$domainlen = strlen($sitelist['domain'])-1;
+		$siteid = get_siteid();
+		$siteurl = dr_site_info('domain', $siteid);
+		$domainlen = strlen(dr_site_info('domain', $siteid))-1;
 		$path = $siteurl.$path;
 		$path = substr_replace($path, '/', strpos($path, '//',$domainlen),2);
 		return 	$path;
@@ -3879,8 +3873,6 @@ function seo($siteid, $catid = '', $title = '', $description = '', $keyword = ''
 	if (!empty($title))$title = clearhtml($title);
 	if (!empty($description)) $description = clearhtml($description);
 	if (!empty($keyword)) $keyword = str_replace(' ', ',', clearhtml($keyword));
-	$sites = siteinfo($siteid);
-	$site = $sites;
 	$cat = array();
 	if (!empty($catid)) {
 		$siteids = getcache('category_content','commons');
@@ -3889,9 +3881,9 @@ function seo($siteid, $catid = '', $title = '', $description = '', $keyword = ''
 		$cat = $categorys[$catid];
 		$cat['setting'] = string2array($cat['setting']);
 	}
-	$seo['site_title'] =isset($site['site_title']) && !empty($site['site_title']) ? $site['site_title'] : $site['name'];
-	$seo['keyword'] = !empty($keyword) ? $keyword : $site['keywords'];
-	$seo['description'] = isset($description) && !empty($description) ? $description : (isset($cat['setting']['meta_description']) && !empty($cat['setting']['meta_description']) ? $cat['setting']['meta_description'] : (isset($site['description']) && !empty($site['description']) ? $site['description'] : ''));
+	$seo['site_title'] = dr_site_info('site_title', $siteid) ? dr_site_info('site_title', $siteid) : dr_site_info('name', $siteid);
+	$seo['keyword'] = !empty($keyword) ? $keyword : dr_site_info('keywords', $siteid);
+	$seo['description'] = isset($description) && !empty($description) ? $description : (isset($cat['setting']['meta_description']) && !empty($cat['setting']['meta_description']) ? $cat['setting']['meta_description'] : (dr_site_info('description', $siteid) ? dr_site_info('description', $siteid) : ''));
 	$seo['title'] =  (isset($title) && !empty($title) ? $title.' - ' : '').(isset($cat['setting']['meta_title']) && !empty($cat['setting']['meta_title']) ? $cat['setting']['meta_title'].' - ' : (isset($cat['catname']) && !empty($cat['catname']) ? $cat['catname'].' - ' : ''));
 	foreach ($seo as $k=>$v) {
 		$seo[$k] = str_replace(array("\n","\r"),	'', $v);
@@ -3974,8 +3966,7 @@ function dr_value($modelid, $id, $name) {
 // 判断是否是移动端终端
 function is_mobile($siteid) {
 	if($siteid) {
-		$config = siteinfo($siteid);
-		$not_pad = $config['not_pad'];
+		$not_pad = dr_site_info('not_pad', $siteid);
 	} else {
 		$not_pad = '';
 	}
@@ -4031,6 +4022,121 @@ function dr_is_admin_search_field($t) {
 		return 1;
 	}
 	return 0;
+}
+
+/**
+ * 设置upload上传的json格式cookie
+ */
+function upload_json($aid,$src,$filename,$size) {
+	if(!SYS_ATTACHMENT_STAT) return false;
+	$cache = pc_base::load_sys_class('cache');
+	$arr['aid'] = intval($aid);
+	$arr['src'] = trim($src);
+	$arr['filename'] = urlencode($filename);
+	$arr['size'] = $size;
+	$json_str = json_encode($arr);
+	$att_arr_exist = $cache->get_data('att_json');
+	$att_arr_exist_tmp = explode('||', $att_arr_exist);
+	if(is_array($att_arr_exist_tmp) && in_array($json_str, $att_arr_exist_tmp)) {
+		return true;
+	} else {
+		$json_str = $att_arr_exist ? $att_arr_exist.'||'.$json_str : $json_str;
+		$cache->set_data('att_json', $json_str, 3600);
+		return true;			
+	}
+}
+
+/**
+ * 删除upload上传的json格式cookie
+ */	
+function upload_json_del($aid,$src,$filename,$size) {
+	$cache = pc_base::load_sys_class('cache');
+	$arr['aid'] = intval($aid);
+	$arr['src'] = trim($src);
+	$arr['filename'] = urlencode($filename);
+	$arr['size'] = $size;
+	$json_str = json_encode($arr);
+	$att_arr_exist = $cache->get_data('att_json');
+	$att_arr_exist = str_replace(array($json_str,'||||'), array('','||'), $att_arr_exist);
+	$att_arr_exist = preg_replace('/^\|\|||\|\|$/i', '', $att_arr_exist);
+	$cache->set_data('att_json', $att_arr_exist, 3600);
+}
+
+function readWordToHtml($source, $module, $userid, $catid, $siteid, $watermark, $attachment, $image_reduce, $rid) {
+	include_once PC_PATH."plugin/vendor/autoload.php";
+	$phpWord = \PhpOffice\PhpWord\IOFactory::load($source);
+	$html = '';
+	foreach ($phpWord->getSections() as $section) {
+		foreach ($section->getElements() as $ele1) {
+			$paragraphStyle = $ele1->getParagraphStyle();
+			if ($paragraphStyle && $paragraphStyle->getAlignment()) {
+				$html .= '<p style="text-align:'. $paragraphStyle->getAlignment() .';">';
+			} else {
+				$html .= '<p>';
+			}
+			if ($ele1 instanceof \PhpOffice\PhpWord\Element\TextRun) {
+				foreach ($ele1->getElements() as $ele2) {
+					if ($ele2 instanceof \PhpOffice\PhpWord\Element\Text) {
+						$style = $ele2->getFontStyle();
+						$fontFamily = mb_convert_encoding($style->getName(), 'GBK', 'UTF-8');
+						$fontSize = $style->getSize();
+						$isBold = $style->isBold();
+						$styleString = '';
+						$fontFamily && $styleString .= "font-family:{$fontFamily};";
+						$fontSize && $styleString .= "font-size:{$fontSize}px;";
+						$isBold && $styleString .= "font-weight:bold;";
+						if ($styleString) {
+							$html .= sprintf('<span style="%s">%s</span>',
+								$styleString,
+								mb_convert_encoding($ele2->getText(), 'GBK', 'UTF-8')
+							);
+						} else {
+							$html .= mb_convert_encoding($ele2->getText(), 'GBK', 'UTF-8');
+						}
+					} elseif ($ele2 instanceof \PhpOffice\PhpWord\Element\Image) {
+						$imageData = $ele2->getImageStringData(true);
+						//$imageData = 'data:' . $ele2->getImageType() . ';base64,' . $imageData;
+						$upload = new upload(trim($module),intval($catid),$siteid);
+						$upload->set_userid($userid);
+						$rt = $upload->base64_image(array(
+							'ext' => $ele2->getImageExtension(),
+							'content' => base64_decode($imageData),
+							'watermark' => intval($watermark),
+							'attachment' => $upload->get_attach_info(intval($attachment), intval($image_reduce)),
+						));
+						$data = array();
+						if (defined('SYS_ATTACHMENT_CF') && SYS_ATTACHMENT_CF && $rt['data']['md5']) {
+							$att_db = pc_base::load_model('attachment_model');
+							$att = $att_db->get_one(array('userid'=>$userid,'filemd5'=>$rt['data']['md5'],'fileext'=>$rt['data']['ext'],'filesize'=>$rt['data']['size']));
+							if ($att) {
+								$data = dr_return_data($att['aid'], 'ok');
+								// 删除现有附件
+								// 开始删除文件
+								$storage = new storage(trim($module),intval($catid),$siteid);
+								$storage->delete($upload->get_attach_info((int)$attachment), $rt['data']['file']);
+								$rt['data'] = get_attachment($att['aid']);
+								if ($rt['data']) {
+									$rt['data']['name'] = $rt['data']['filename'];
+								}
+							}
+						}
+						if (!$data) {
+							$data = $upload->save_data($rt['data'], 'ueditor:'.$rid);
+							if ($data['code']) {
+								// 归档成功
+								// 标记附件
+								upload_json($data['code'],$rt['data']['url'],$rt['data']['name'],format_file_size($rt['data']['size']));
+							}
+						}
+						$html .= '<img src="'.$rt['data']['url'].'" title="'.$rt['data']['name'].'" alt="'.$rt['data']['name'].'"/>';
+					}
+				}
+			}
+			$html .= '</p>';
+		}
+	}
+	$html = preg_replace('/<Object:([^"]*).bin>/i', '', code2html($html));
+	return mb_convert_encoding($html, 'UTF-8', 'GBK');
 }
 
 if (! function_exists('dr_is_image')) {

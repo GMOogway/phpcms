@@ -31,9 +31,7 @@ function is_gb2312($str) {
 
 function sendmail($toemail, $subject, $message, $from='',$cfg = array(), $sitename='') {
 	if($sitename=='') {
-		$siteid = get_siteid();
-		$siteinfo = siteinfo($siteid);
-		$sitename = $siteinfo['site_title'];
+		$sitename = dr_site_info('site_title', get_siteid());
 	}
 	
 	if($cfg && is_array($cfg)) {

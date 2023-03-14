@@ -121,24 +121,4 @@ dr_json(1, L('导入成功'), array(
 	'keyword' => dr_get_keywords($title),
 	'content' => $body,
 ));
-/**
- * 设置upload上传的json格式cookie
- */
-function upload_json($aid,$src,$filename,$size) {
-	$arr['aid'] = intval($aid);
-	$arr['src'] = trim($src);
-	$arr['filename'] = urlencode($filename);
-	$arr['size'] = $size;
-	$json_str = json_encode($arr);
-	$cache = pc_base::load_sys_class('cache');
-	$att_arr_exist = $cache->get_data('att_json');
-	$att_arr_exist_tmp = explode('||', $att_arr_exist);
-	if(is_array($att_arr_exist_tmp) && in_array($json_str, $att_arr_exist_tmp)) {
-		return true;
-	} else {
-		$json_str = $att_arr_exist ? $att_arr_exist.'||'.$json_str : $json_str;
-		$cache->set_data('att_json', $json_str, 3600);
-		return true;
-	}
-}
 ?>

@@ -625,6 +625,7 @@ class cache_api {
 				}
 			}
 		}
+		return true;
 	}
 	
 	/**
@@ -633,12 +634,11 @@ class cache_api {
 	public function del_file() {
 		$path = CACHE_PATH.'caches_template'.DIRECTORY_SEPARATOR;
 		$files = glob($path.'*');
-		pc_base::load_sys_func('dir');
 		if (is_array($files)) {
 			foreach ($files as $f) {
 				$dir = basename($f);
 				if (!in_array($dir, array('block', 'dbsource'))) {
-					dir_delete($path.$dir);
+					dr_dir_delete($path.$dir, TRUE);
 				}
 			}
 		}

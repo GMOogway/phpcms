@@ -91,7 +91,7 @@ class attachments {
 		
 		if($rt && $data){
 			$fn = intval($this->input->get('CKEditorFuncNum'));
-			$this->upload_json($data['code'],$rt['data']['url'],$rt['data']['name'],format_file_size($rt['data']['size']));
+			upload_json($data['code'],$rt['data']['url'],$rt['data']['name'],format_file_size($rt['data']['size']));
 			$result = array("uploaded"=>true,
 				"fileName"=>$rt['data']['name'],
 				"url"=>$rt['data']['url'],
@@ -282,7 +282,7 @@ class attachments {
 			}
 		}
 		
-		$this->upload_json($data['code'],$rt['data']['url'],$rt['data']['name'],format_file_size($rt['data']['size']));
+		upload_json($data['code'],$rt['data']['url'],$rt['data']['name'],format_file_size($rt['data']['size']));
 		exit(dr_array2string(array('code' => 1, 'msg' => L('上传成功'), 'id' => $data['code'], 'info' => $rt['data'])));
 	}
 	/**
@@ -391,61 +391,26 @@ class attachments {
 	}
 	
 	/**
-	 * 设置upload上传的json格式cookie
-	 */
-	private function upload_json($aid,$src,$filename,$size) {
-		if(!SYS_ATTACHMENT_STAT) return false;
-		$arr['aid'] = intval($aid);
-		$arr['src'] = trim($src);
-		$arr['filename'] = urlencode($filename);
-		$arr['size'] = $size;
-		$json_str = json_encode($arr);
-		$att_arr_exist = $this->cache->get_data('att_json');
-		$att_arr_exist_tmp = explode('||', $att_arr_exist);
-		if(is_array($att_arr_exist_tmp) && in_array($json_str, $att_arr_exist_tmp)) {
-			return true;
-		} else {
-			$json_str = $att_arr_exist ? $att_arr_exist.'||'.$json_str : $json_str;
-			$this->cache->set_data('att_json', $json_str, 3600);
-			return true;			
-		}
-	}
-	
-	/**
 	 * 设置h5upload上传的json格式cookie
 	 */
 	public function h5upload_json() {
-		if(!SYS_ATTACHMENT_STAT) return false;
-		$arr['aid'] = intval($this->input->get('aid'));
-		$arr['src'] = safe_replace(trim($this->input->get('src')));
-		$arr['filename'] = urlencode(safe_replace($this->input->get('filename')));
-		$arr['size'] = $this->input->get('size');
-		$json_str = json_encode($arr);
-		$att_arr_exist = $this->cache->get_data('att_json');
-		$att_arr_exist_tmp = explode('||', $att_arr_exist);
-		if(is_array($att_arr_exist_tmp) && in_array($json_str, $att_arr_exist_tmp)) {
-			return true;
-		} else {
-			$json_str = $att_arr_exist ? $att_arr_exist.'||'.$json_str : $json_str;
-			$this->cache->set_data('att_json', $json_str, 3600);
-			return true;			
-		}
+		$aid = intval($this->input->get('aid'));
+		$src = safe_replace(trim($this->input->get('src')));
+		$filename = urlencode(safe_replace($this->input->get('filename')));
+		$size = $this->input->get('size');
+		upload_json($aid,$src,$filename,$size);
 	}
 	
 	/**
 	 * 删除h5upload上传的json格式cookie
 	 */	
 	public function h5upload_json_del() {
-		$arr['aid'] = intval($this->input->get('aid'));
-		$arr['src'] = trim($this->input->get('src'));
-		$arr['filename'] = urlencode($this->input->get('filename'));
-		$arr['size'] = $this->input->get('size');
-		$json_str = json_encode($arr);
-		$att_arr_exist = $this->cache->get_data('att_json');
-		$att_arr_exist = str_replace(array($json_str,'||||'), array('','||'), $att_arr_exist);
-		$att_arr_exist = preg_replace('/^\|\|||\|\|$/i', '', $att_arr_exist);
-		$this->cache->set_data('att_json', $att_arr_exist, 3600);
-	}	
+		$aid = intval($this->input->get('aid'));
+		$src = trim($this->input->get('src'));
+		$filename = urlencode($this->input->get('filename'));
+		$size = $this->input->get('size');
+		upload_json_del($aid,$src,$filename,$size);
+	}
 
 	private function att_not_used() {
 		$this->att_db= pc_base::load_model('attachment_model');
