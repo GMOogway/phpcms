@@ -508,14 +508,14 @@ class category extends admin {
 			
 			//应用模板到所有子栏目
 			if($this->input->post('template_child')){
-				$this->categorys = $categorys = $this->db->select(array('siteid'=>$this->siteid, 'module'=>'content'), '*', '', 'listorder ASC, catid ASC', '', 'catid');
+				$this->repair_categorys = $categorys = $this->db->select(array('siteid'=>$this->siteid, 'module'=>'content'), '*', '', 'listorder ASC, catid ASC', '', 'catid');
 				$idstr = $this->get_arrchildid($catid);
 				if(!empty($idstr)){
 					$arr = $this->db->select(array('catid'=>explode(',', $idstr)), 'catid,setting');
 					if(!empty($arr)){
 						foreach ($arr as $v){
 							$new_setting = array2string(
-							array_merge(string2array($v['setting']), array('category_template' => $setting['category_template'],'list_template' =>  $setting['list_template'],'show_template' =>  $setting['show_template']))
+							array_merge(string2array($v['setting']), array('template_list' => $setting['template_list'],'category_template' => $setting['category_template'],'list_template' =>  $setting['list_template'],'show_template' =>  $setting['show_template']))
 							);
 							$this->db->update(array('setting'=>$new_setting), 'catid='.$v['catid']);
 						}
