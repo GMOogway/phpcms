@@ -3,7 +3,7 @@
 		extract($setting);
 		if($fieldtype=='int') {
 			if($format) {
-				$value = dr_date($value, 'Y-m-d h:i:s');
+				$value = dr_date($value, 'Y-m-d H:i:s');
 			} else {
 				$value = dr_date($value, 'Y-m-d');
 			}

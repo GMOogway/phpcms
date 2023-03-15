@@ -426,7 +426,10 @@ class index {
 		//单网页
 			$this->page_db = pc_base::load_model('page_model');
 			$r = $this->page_db->get_one(array('catid'=>$catid));
-			if($r) extract($r);
+			require_once CACHE_MODEL_PATH.'content_output.class.php';
+			$content_output = new content_output(-2);
+			$data = $content_output->get($r);
+			if($data) extract($data);
 			$template = $setting['page_template'] ? $setting['page_template'] : 'page';
 			$keywords = $keywords ? $keywords : $setting['meta_keywords'];
 			$SEO = seo($siteid, 0, $setting['meta_title'] ? $setting['meta_title'] : $title,$setting['meta_description'],$keywords);

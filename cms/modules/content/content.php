@@ -400,7 +400,6 @@ class content extends admin {
 				} else {
 					$systeminfo['updatetime'] = $systeminfo['updatetime'];
 				}
-				$systeminfo['content'] = code2html($systeminfo['content']);
 				$this->fields = getcache('model_field_-2','model');
 				pc_base::load_sys_class('upload','',0);
 				foreach($this->fields as $field=>$t) {
