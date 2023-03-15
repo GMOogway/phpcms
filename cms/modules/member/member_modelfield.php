@@ -49,6 +49,14 @@ class member_modelfield extends admin {
 			$field_type = $info['formtype'];
 			$where = 'modelid='.$modelid.' AND field=\''.$field.'\'';
 			$model_field = $this->db->get_one($where);
+			if (!$model_field) {
+				$field_rs = $this->db->query('SHOW FULL COLUMNS FROM `'.$tablename.'`');
+				foreach ($field_rs as $rs) {
+					if ($rs['Field']==$field) {
+						$model_field = 1;
+					}
+				}
+			}
 			if ($model_field) dr_json(0, L('fieldname').'（'.$field.'）'.L('already_exist'), array('field' => 'field'));
 			
 			require MODEL_PATH.$field_type.DIRECTORY_SEPARATOR.'config.inc.php';
@@ -106,12 +114,6 @@ class member_modelfield extends admin {
 			$minlength = $info['minlength'] ? $info['minlength'] : 0;
 			$maxlength = $info['maxlength'] ? $info['maxlength'] : 0;
 			$field_type = $info['formtype'];
-			$where = 'modelid='.$modelid.' AND field=\''.$field.'\'';
-			if ($fieldid) {
-				$where .= ' AND fieldid<>'.$fieldid;
-			}
-			$model_field = $this->db->get_one($where);
-			if ($model_field) dr_json(0, L('fieldname').'（'.$field.'）'.L('already_exist'), array('field' => 'field'));
 			
 			require MODEL_PATH.$field_type.DIRECTORY_SEPARATOR.'config.inc.php';
 			
@@ -119,6 +121,20 @@ class member_modelfield extends admin {
 				$field_type = $setting['fieldtype'];
 			}
 			$oldfield = $this->input->post('oldfield');
+			$where = 'modelid='.$modelid.' AND field=\''.$field.'\'';
+			if ($fieldid) {
+				$where .= ' AND fieldid<>'.$fieldid;
+			}
+			$model_field = $this->db->get_one($where);
+			if (!$model_field && $field!=$oldfield) {
+				$field_rs = $this->db->query('SHOW FULL COLUMNS FROM `'.$tablename.'`');
+				foreach ($field_rs as $rs) {
+					if ($rs['Field']==$field) {
+						$model_field = 1;
+					}
+				}
+			}
+			if ($model_field) dr_json(0, L('fieldname').'（'.$field.'）'.L('already_exist'), array('field' => 'field'));
 			require MODEL_PATH.'edit.sql.php';
 			//附加属性值
 			$info['setting'] = array2string($setting);

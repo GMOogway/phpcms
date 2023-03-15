@@ -65,11 +65,19 @@ class formguide_field extends admin {
 			}
 			if (isset($info['modelid']) && !empty($info['modelid'])) {
 				$formid = intval($info['modelid']);
-				$where = 'modelid='.$formid.' AND field=\''.$field.'\' AND siteid='.$this->siteid.'';
-				$model_field = $this->db->get_one($where);
-				if ($model_field) dr_json(0, L('fieldname').'（'.$field.'）'.L('already_exist'), array('field' => 'field'));
 				$forminfo = $this->model_db->get_one(array('modelid'=>$formid, 'siteid'=>$this->siteid), 'tablename');
 				$tablename = $this->db->db_tablepre.'form_'.$forminfo['tablename'];
+				$where = 'modelid='.$formid.' AND field=\''.$field.'\' AND siteid='.$this->siteid.'';
+				$model_field = $this->db->get_one($where);
+				if (!$model_field) {
+					$field_rs = $this->db->query('SHOW FULL COLUMNS FROM `'.$tablename.'`');
+					foreach ($field_rs as $rs) {
+						if ($rs['Field']==$field) {
+							$model_field = 1;
+						}
+					}
+				}
+				if ($model_field) dr_json(0, L('fieldname').'（'.$field.'）'.L('already_exist'), array('field' => 'field'));
 				require MODEL_PATH.'add.sql.php';
 				
 				$this->db->insert($info);
@@ -145,14 +153,22 @@ class formguide_field extends admin {
 			if (isset($info['modelid']) && !empty($info['modelid'])) {
 				$formid = intval($info['modelid']);
 				$fieldid = intval($this->input->post('fieldid'));
+				$forminfo = $this->model_db->get_one(array('modelid'=>$formid, 'siteid'=>$this->siteid), 'tablename');
+				$tablename = $this->db->db_tablepre.'form_'.$forminfo['tablename'];
 				$where = 'modelid='.$formid.' AND field=\''.$field.'\' AND siteid='.$this->siteid.'';
 				if ($fieldid) {
 					$where .= ' AND fieldid<>'.$fieldid;
 				}
 				$model_field = $this->db->get_one($where);
+				if (!$model_field && $field!=$oldfield) {
+					$field_rs = $this->db->query('SHOW FULL COLUMNS FROM `'.$tablename.'`');
+					foreach ($field_rs as $rs) {
+						if ($rs['Field']==$field) {
+							$model_field = 1;
+						}
+					}
+				}
 				if ($model_field) dr_json(0, L('fieldname').'（'.$field.'）'.L('already_exist'), array('field' => 'field'));
-				$forminfo = $this->model_db->get_one(array('modelid'=>$formid, 'siteid'=>$this->siteid), 'tablename');
-				$tablename = $this->db->db_tablepre.'form_'.$forminfo['tablename'];
 				
 				require MODEL_PATH.'edit.sql.php';
 				$this->db->update($info,array('fieldid'=>$fieldid,'siteid'=>$this->siteid));
