@@ -19,20 +19,12 @@ class member_verify extends admin {
 	}
 
 	/**
-	 * defalut
-	 */
-	function init() {
-
-		include $this->admin_tpl('member_init');
-	}
-	
-	/**
 	 * member list
 	 */
-	function manage() {
-		$status = !empty($_GET['s']) ? $_GET['s'] : 0;
+	function init() {
+		$status = !empty($this->input->get('s')) ? $this->input->get('s') : 0;
 		$where = array('status'=>$status);
-		$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+		$page = $this->input->get('page') ? intval($this->input->get('page')) : 1;
 		$memberlist = $this->db->listinfo($where, 'regdate DESC', $page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		$member_model = getcache('member_model', 'commons');
@@ -41,8 +33,8 @@ class member_verify extends admin {
 	
 	function modelinfo() {
 		$show_header = true;
-		$userid = !empty($_GET['userid']) ? intval($_GET['userid']) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
-		$modelid = !empty($_GET['modelid']) ? intval($_GET['modelid']) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
+		$userid = !empty($this->input->get('userid')) ? intval($this->input->get('userid')) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
+		$modelid = !empty($this->input->get('modelid')) ? intval($this->input->get('modelid')) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		
 		$memberinfo = $this->db->get_one(array('userid'=>$userid));
 		//模型字段名称
@@ -68,9 +60,9 @@ class member_verify extends admin {
 	 * pass member
 	 */
 	function pass() {
-		if (isset($_POST['userid'])) {
+		if ($this->input->post('userid')) {
 			$this->member_db = pc_base::load_model('member_model');
-			$uidarr = isset($_POST['userid']) ? $_POST['userid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
+			$uidarr = $this->input->post('userid') ? $this->input->post('userid') : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			$where = to_sqls($uidarr, '', 'userid');
 			$userarr = $this->db->listinfo($where);
 			$success_uids = $info = array();
@@ -103,14 +95,14 @@ class member_verify extends admin {
 				}
 			}
 			$where = to_sqls($success_uids, '', 'userid');			
-			$this->db->update(array('status'=>1, 'message'=>$_POST['message']), $where);
+			$this->db->update(array('status'=>1, 'message'=>$this->input->post('message')), $where);
 			
 			//发送 email通知
-			if($_POST['sendemail']) {
+			if($this->input->post('sendemail')) {
 				$memberinfo = $this->db->select($where);
 				foreach ($memberinfo as $v) {
 					$this->email->set();
-					$this->email->send($v['email'], L('reg_pass'), $_POST['message']);
+					$this->email->send($v['email'], L('reg_pass'), $this->input->post('message'));
 				}
 			}
 			
@@ -124,9 +116,9 @@ class member_verify extends admin {
 	 * delete member
 	 */
 	function delete() {
-		if(isset($_POST['userid'])) {
-			$uidarr = isset($_POST['userid']) ? $_POST['userid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
-			$message = stripslashes($_POST['message']);
+		if($this->input->post('userid')) {
+			$uidarr = $this->input->post('userid') ? $this->input->post('userid') : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
+			$message = stripslashes($this->input->post('message'));
 			$where = to_sqls($uidarr, '', 'userid');
 			$this->db->delete($where);
 						
@@ -140,17 +132,17 @@ class member_verify extends admin {
 	 * reject member
 	 */
 	function reject() {
-		if(isset($_POST['userid'])) {
-			$uidarr = isset($_POST['userid']) ? $_POST['userid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
+		if($this->input->post('userid')) {
+			$uidarr = $this->input->post('userid') ? $this->input->post('userid') : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			$where = to_sqls($uidarr, '', 'userid');
-			$res = $this->db->update(array('status'=>4, 'message'=>$_POST['message']), $where);
+			$res = $this->db->update(array('status'=>4, 'message'=>$this->input->post('message')), $where);
 			//发送 email通知
 			if($res) {
-				if($_POST['sendemail']) {
+				if($this->input->post('sendemail')) {
 					$memberinfo = $this->db->select($where);
 					foreach ($memberinfo as $v) {
 						$this->email->set();
-						$this->email->send($v['email'], L('reg_reject'), $_POST['message']);
+						$this->email->send($v['email'], L('reg_reject'), $this->input->post('message'));
 					}
 				}
 			}
@@ -165,17 +157,17 @@ class member_verify extends admin {
 	 * ignore member
 	 */
 	function ignore() {
-		if(isset($_POST['userid'])) {		
-			$uidarr = isset($_POST['userid']) ? $_POST['userid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
+		if($this->input->post('userid')) {		
+			$uidarr = $this->input->post('userid') ? $this->input->post('userid') : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			$where = to_sqls($uidarr, '', 'userid');
-			$res = $this->db->update(array('status'=>2, 'message'=>$_POST['message']), $where);
+			$res = $this->db->update(array('status'=>2, 'message'=>$this->input->post('message')), $where);
 			//发送 email通知
 			if($res) {
-				if($_POST['sendemail']) {
+				if($this->input->post('sendemail')) {
 					$memberinfo = $this->db->select($where);
 					foreach ($memberinfo as $v) {
 						$this->email->set();
-						$this->email->send($v['email'], L('reg_ignore'), $_POST['message']);
+						$this->email->send($v['email'], L('reg_ignore'), $this->input->post('message'));
 					}
 				}
 			}
@@ -220,7 +212,7 @@ class member_verify extends admin {
 	}
 	
 	private function _checkname($username) {
-		$username =  trim($username);
+		$username = trim($username);
 		if ($this->db->get_one(array('username'=>$username))){
 			return false;
 		}
@@ -263,11 +255,11 @@ class member_verify extends admin {
 	 * check uername status
 	 */
 	public function checkname_ajax() {
-		$username = isset($_GET['username']) && trim($_GET['username']) ? trim($_GET['username']) : exit(0);
+		$username = $this->input->get('username') && trim($this->input->get('username')) ? trim($this->input->get('username')) : exit(0);
 		$username = iconv('utf-8', CHARSET, $username);
 		
-		if(isset($_GET['userid'])) {
-			$userid = intval($_GET['userid']);
+		if($this->input->get('userid')) {
+			$userid = intval($this->input->get('userid'));
 			//如果是会员修改，而且NICKNAME和原来优质一致返回1，否则返回0
 			$info = get_memberinfo($userid);
 			if($info['username'] == $username){//未改变
@@ -296,10 +288,10 @@ class member_verify extends admin {
 	 * check email status
 	 */
 	public function checkemail_ajax() {
-		$email = isset($_GET['email']) && trim($_GET['email']) ? trim($_GET['email']) : exit(0);
+		$email = $this->input->get('email') && trim($this->input->get('email')) ? trim($this->input->get('email')) : exit(0);
 		
-		if(isset($_GET['userid'])) {
-			$userid = intval($_GET['userid']);
+		if($this->input->get('userid')) {
+			$userid = intval($this->input->get('userid'));
 			//如果是会员修改，而且NICKNAME和原来优质一致返回1，否则返回0
 			$info = get_memberinfo($userid);
 			if($info['email'] == $email){//未改变

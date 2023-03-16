@@ -22,7 +22,7 @@ class member_menu extends admin {
 
 		foreach($result as $r) {
 			$r['cname'] = L($r['name'], '', 'member_menu');
-			$r['str_manage'] = '<a class="btn btn-xs green" href="?m=member&c=member_menu&a=edit&id='.$r['id'].'&menuid='.$_GET['menuid'].'">'.L('edit').'</a><a class="btn btn-xs red" href="javascript:confirmurl(\'?m=member&c=member_menu&a=delete&id='.$r['id'].'&menuid='.$_GET['menuid'].'\',\''.L('confirm',array('message'=>$r['cname'])).'\')">'.L('delete').'</a> ';
+			$r['str_manage'] = '<a class="btn btn-xs green" href="?m=member&c=member_menu&a=edit&id='.$r['id'].'&menuid='.$this->input->get('menuid').'">'.L('edit').'</a><a class="btn btn-xs red" href="javascript:confirmurl(\'?m=member&c=member_menu&a=delete&id='.$r['id'].'&menuid='.$this->input->get('menuid').'\',\''.L('confirm',array('message'=>$r['cname'])).'\')">'.L('delete').'</a> ';
 			$array[] = $r;
 		}
 
@@ -37,19 +37,20 @@ class member_menu extends admin {
 		include $this->admin_tpl('member_menu');
 	}
 	function add() {
-		if(isset($_POST['dosubmit'])) {
-			$this->db->insert($_POST['info']);
+		if($this->input->post('dosubmit')) {
+			$info = $this->input->post('info');
+			$this->db->insert($info);
 			//开发过程中用于自动创建语言包
 			$file = PC_PATH.'languages'.DIRECTORY_SEPARATOR.'zh-cn'.DIRECTORY_SEPARATOR.'member_menu.lang.php';
 			if(file_exists($file)) {
 				$content = file_get_contents($file);
 				$content = substr($content,0,-2);
-				$key = $this->input->post('info')['name'];
+				$key = $info['name'];
 				$data = $content."\$LANG['$key'] = '$_POST[language]';\r\n?>";
 				file_put_contents($file,$data);
 			} else {
 				
-				$key = $this->input->post('info')['name'];
+				$key = $info['name'];
 				$data = "<?php\r\n\$LANG['$key'] = '$_POST[language]';\r\n?>";
 				file_put_contents($file,$data);
 			}
@@ -72,10 +73,10 @@ class member_menu extends admin {
 		}
 	}
 	function delete() {
-		$_GET['id'] = intval($_GET['id']);
-		$menu = $this->db->get_one(array("id"=>$_GET['id']));
+		$id = intval($this->input->get('id'));
+		$menu = $this->db->get_one(array("id"=>$id));
 		if(!$menu)dr_admin_msg(0,'菜单不存在！请返回！',HTTP_REFERER);
-		$this->db->delete(array('id'=>$_GET['id']));
+		$this->db->delete(array('id'=>$id));
 		//删除member_menu语言包
 		$file = PC_PATH.'languages'.DIRECTORY_SEPARATOR.'zh-cn'.DIRECTORY_SEPARATOR.'member_menu.lang.php';
 		require $file;
@@ -88,13 +89,14 @@ class member_menu extends admin {
 	}
 	
 	function edit() {
-		if(isset($_POST['dosubmit'])) {
-			$id = intval($_POST['id']);
-			$this->db->update($_POST['info'],array('id'=>$id));
+		if($this->input->post('dosubmit')) {
+			$id = intval($this->input->post('id'));
+			$info = $this->input->post('info');
+			$this->db->update($info,array('id'=>$id));
 			//修改语言文件
 			$file = PC_PATH.'languages'.DIRECTORY_SEPARATOR.'zh-cn'.DIRECTORY_SEPARATOR.'member_menu.lang.php';
 			require $file;
-			$key = $this->input->post('info')['name'];
+			$key = $info['name'];
 			if(!isset($LANG[$key])) {
 				$content = file_get_contents($file);
 				$content = substr($content,0,-2);
@@ -103,7 +105,7 @@ class member_menu extends admin {
 			} elseif(isset($LANG[$key]) && $LANG[$key]!=$this->input->post('language')) {
 				$content = file_get_contents($file);
 				$LANG[$key] = safe_replace($LANG[$key]);
-				$content = str_replace($LANG[$key],$_POST['language'],$content);
+				$content = str_replace($LANG[$key],$this->input->post('language'),$content);
 				file_put_contents($file,$content);
 			}
 			
@@ -112,7 +114,7 @@ class member_menu extends admin {
 		} else {
 			$show_validator = '';
 			$tree = pc_base::load_sys_class('tree');
-			$id = intval($_GET['id']);
+			$id = intval($this->input->get('id'));
 			$r = $this->db->get_one(array('id'=>$id));
 			if($r) extract($r);
 			$result = $this->db->select();
@@ -132,9 +134,9 @@ class member_menu extends admin {
 	 * 排序
 	 */
 	function listorder() {
-		if(isset($_POST['dosubmit'])) {
-			if (isset($_POST['listorders']) && is_array($_POST['listorders'])) {
-				foreach($_POST['listorders'] as $id => $listorder) {
+		if($this->input->post('dosubmit')) {
+			if ($this->input->post('listorders') && is_array($this->input->post('listorders'))) {
+				foreach($this->input->post('listorders') as $id => $listorder) {
 					$this->db->update(array('listorder'=>$listorder),array('id'=>$id));
 				}
 			}

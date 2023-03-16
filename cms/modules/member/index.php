@@ -60,7 +60,7 @@ class index extends foreground {
 			$userinfo['encrypt'] = create_randomstr(10);
 
 			$userinfo['username'] = $this->input->post('username');
-			$rt = $this->check_username($userinfo['username']);
+			$rt = check_username($userinfo['username']);
 			if (!$rt['code']) {
 				showmessage($rt['msg'], HTTP_REFERER);
 			}
@@ -71,7 +71,7 @@ class index extends foreground {
 				showmessage(L('email_already_exist'), HTTP_REFERER);
 			}
 			$userinfo['password'] = dr_safe_password($this->input->post('password'));
-			$rt = $this->check_password($userinfo['password'], $userinfo['username']);
+			$rt = check_password($userinfo['password'], $userinfo['username']);
 			if (!$rt['code']) {
 				showmessage($rt['msg'], HTTP_REFERER);
 			}
@@ -117,10 +117,18 @@ class index extends foreground {
 			if($member_setting['enablemailcheck']) {	//是否需要邮件验证
 				$userinfo['groupid'] = 7;
 			} elseif($member_setting['registerverify']) {	//是否需要管理员审核
-				$modelinfo_str = $userinfo['modelinfo'] = $info ? array2string(array_map("safe_replace", new_html_special_chars($info))) : '';
+				if($member_setting['choosemodel']) {
+					require_once CACHE_MODEL_PATH.'member_input.class.php';
+					require_once CACHE_MODEL_PATH.'member_update.class.php';
+					$member_input = new member_input($userinfo['modelid']);
+					if ($info) {
+						$info = array_map('new_html_special_chars',$info);
+					}
+					$modelinfo_str = $member_input->get($info);
+				}
 				$this->verify_db = pc_base::load_model('member_verify_model');
 				unset($userinfo['lastdate'],$userinfo['connectid'],$userinfo['from']);
-				$userinfo['modelinfo'] = $modelinfo_str;
+				$userinfo['modelinfo'] = array2string($modelinfo_str);
 				$this->verify_db->insert($userinfo);
 				showmessage(L('operation_success'), APP_PATH.'index.php?m=member&c=index&a=register&t=3');
 			} else {
@@ -499,7 +507,7 @@ class index extends foreground {
 			} else {
 				$email = '';
 			}
-			$rt = $this->check_password($info['newpassword'], $this->memberinfo['username']);
+			$rt = check_password($info['newpassword'], $this->memberinfo['username']);
 			if (!$rt['code']) {
 				showmessage($rt['msg'], HTTP_REFERER);
 			}
@@ -661,7 +669,7 @@ class index extends foreground {
 			}
 			
 			//查询帐号
-			$r = $this->_find_member_info($username);
+			$r = find_member_info($username);
 
 			if(!$r) showmessage(L('user_not_exist'),APP_PATH.'index.php?m=member&c=index&a=login');
 			
@@ -999,7 +1007,7 @@ class index extends foreground {
 		$nickname = $this->input->get('nickname') && trim($this->input->get('nickname')) ? trim($this->input->get('nickname')) : exit('0');
 		if(CHARSET != 'utf-8') {
 			$nickname = iconv('utf-8', CHARSET, $nickname);
-		} 
+		}
 		//首先判断会员审核表
 		$this->verify_db = pc_base::load_model('member_verify_model');
 		if($this->verify_db->get_one(array('nickname'=>$nickname))) {
@@ -1012,20 +1020,12 @@ class index extends foreground {
 			if($info['nickname'] == $this->db->escape($nickname)){//未改变
 				exit('1');
 			}else{//已改变，判断是否已有此名
-				$res = $this->db->get_one(array('nickname'=>$nickname));
-				if($res) {
-					exit('-1');
-				} else {
-					exit('1');
-				}
+				$status = $this->db->get_one(array('nickname'=>$nickname));
+				$status ? exit('-1') : exit('1');
 			}
  		} else {
-			$res = $this->db->get_one(array('nickname'=>$nickname));
-			if($res) {
-				exit('-1');
-			} else {
-				exit('1');
-			}
+			$status = $this->db->get_one(array('nickname'=>$nickname));
+			$status ? exit('-1') : exit('1');
 		}
 	}
 	
@@ -1038,6 +1038,11 @@ class index extends foreground {
 		$email = $this->input->get('email') && trim($this->input->get('email')) && is_email(trim($this->input->get('email')))  ? trim($this->input->get('email')) : exit(0);
 		if (!check_email($email)) {
 			exit('0');
+		}
+		//首先判断会员审核表
+		$this->verify_db = pc_base::load_model('member_verify_model');
+		if($this->verify_db->get_one(array('email'=>$email))) {
+			exit('-1');
 		}
 		if($this->input->get('userid')) {
 			$userid = intval($this->input->get('userid'));
@@ -1065,11 +1070,16 @@ class index extends foreground {
 		if (!check_phone($mobile)) {
 			exit('0');
 		}
+		//首先判断会员审核表
+		$this->verify_db = pc_base::load_model('member_verify_model');
+		if($this->verify_db->get_one(array('mobile'=>$mobile))) {
+			exit('-1');
+		}
 		if($this->input->get('userid')) {
 			$userid = intval($this->input->get('userid'));
 			//如果是会员修改，而且NICKNAME和原来优质一致返回1，否则返回0
 			$info = get_memberinfo($userid);
-			if($info['mobile'] == $mobile){//未改变
+			if($info['mobile'] == $this->db->escape($mobile)){//未改变
 				exit('1');
 			}else{//已改变，判断是否已有此名
 				$status = $this->db->get_one(array('mobile'=>$mobile));
@@ -1546,84 +1556,6 @@ class index extends foreground {
 		} else {
  			include template('member', 'forget_password_username');
 		}
-	}
-
-	// 查询会员信息
-	protected function _find_member_info($username) {
-		$member_setting = getcache('member_setting');
-
-		$data = $this->db->get_one(array('username'=>$username));
-		if (!$data && $member_setting['login']['field']) {
-			if (dr_in_array('email', $member_setting['login']['field'])
-				&& check_email($username)) {
-				$data = $this->db->get_one(array('email'=>$username));
-			} elseif (dr_in_array('phone', $member_setting['login']['field'])
-				&& check_phone($username)) {
-				$data = $this->db->get_one(array('mobile'=>$username));
-			}
-		}
-
-		if (!$data) {
-			return array();
-		}
-
-		return $data;
-	}
-
-	// 验证账号
-	public function check_username($value) {
-		$member_setting = getcache('member_setting');
-
-		if (!$value) {
-			return dr_return_data(0, L('账号不能为空'), array('field' => 'username'));
-		} elseif ($member_setting['config']['preg']
-			&& !preg_match($member_setting['config']['preg'], $value)) {
-			// 验证账号的组成格式
-			return dr_return_data(0, L('账号格式不正确'), array('field' => 'username'));
-		} elseif (strpos($value, '"') !== false || strpos($value, '\'') !== false) {
-			// 引号判断
-			return dr_return_data(0, L('账号名存在非法字符'), array('field' => 'username'));
-		} elseif ($member_setting['config']['userlen']
-			&& mb_strlen($value) < $member_setting['config']['userlen']) {
-			// 验证账号长度
-			return dr_return_data(0, L('账号长度不能小于'.$member_setting['config']['userlen'].'位，当前'.mb_strlen($value).'位'), array('field' => 'username'));
-		} elseif ($member_setting['config']['userlenmax']
-			&& mb_strlen($value) > $member_setting['config']['userlenmax']) {
-			// 验证账号长度
-			return dr_return_data(0, L('账号长度不能大于'.$member_setting['config']['userlenmax'].'位，当前'.mb_strlen($value).'位'), array('field' => 'username'));
-		}
-		$notallow = [$member_setting['notallow']];
-		$notallow[] = L('游客');
-		// 后台不允许注册的词语，放在最后一次比较
-		foreach ($notallow as $a) {
-			if (dr_strlen($a) && strpos($value, $a) !== false) {
-				return dr_return_data(0, L('账号名不允许注册'), array('field' => 'username'));
-			}
-		}
-
-		return dr_return_data(1, 'ok');
-	}
-
-	// 验证账号的密码
-	public function check_password($value, $username) {
-		$member_setting = getcache('member_setting');
-
-		if (!$value) {
-			return dr_return_data(0, L('密码不能为空'), array('field' => 'password'));
-		} elseif (!$member_setting['config']['user2pwd'] && $value == $username) {
-			return dr_return_data(0, L('密码不能与账号相同'), array('field' => 'password'));
-		} elseif ($member_setting['config']['pwdpreg']
-			&& !preg_match(trim($member_setting['config']['pwdpreg']), $value)) {
-			return dr_return_data(0, L('密码格式不正确'), array('field' => 'password'));
-		} elseif ($member_setting['config']['pwdlen']
-			&& mb_strlen($value) < $member_setting['config']['pwdlen']) {
-			return dr_return_data(0, L('密码长度不能小于'.$member_setting['config']['pwdlen'].'位，当前'.mb_strlen($value).'位'), array('field' => 'password'));
-		} elseif ($member_setting['config']['pwdmax']
-			&& mb_strlen($value) > $member_setting['config']['pwdmax']) {
-			return dr_return_data(0, L('密码长度不能大于'.$member_setting['config']['pwdmax'].'位，当前'.mb_strlen($value).'位'), array('field' => 'password'));
-		}
-
-		return dr_return_data(1, 'ok');
 	}
 }
 ?>

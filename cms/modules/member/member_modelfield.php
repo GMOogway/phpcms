@@ -152,8 +152,8 @@ class member_modelfield extends admin {
 			$show_header = $show_validator= $show_dialog = true;
 			pc_base::load_sys_class('form','',0);
 			require MODEL_PATH.'fields.inc.php'; 
-			$modelid = intval($_GET['modelid']);
-			$fieldid = intval($_GET['fieldid']);
+			$modelid = intval($this->input->get('modelid'));
+			$fieldid = intval($this->input->get('fieldid'));
 			$r = $this->db->get_one(array('fieldid'=>$fieldid));
 			extract($r);
 			if($unsetgroupids != '') $unsetgroupids = strpos($unsetgroupids, ',') ? explode(',', $unsetgroupids) : array($unsetgroupids);
@@ -177,7 +177,7 @@ class member_modelfield extends admin {
 	}
 	
 	public function delete() {
-		$fieldid = intval($_GET['fieldid']);
+		$fieldid = intval($this->input->get('fieldid'));
 		$r = $this->db->get_one(array('fieldid'=>$fieldid));
 		
 		//删除模型字段
@@ -197,8 +197,8 @@ class member_modelfield extends admin {
 	 *  禁用字段
 	 */
 	public function disable() {
-		$fieldid = intval($_GET['fieldid']);
-		$disabled = intval($_GET['disabled']);
+		$fieldid = intval($this->input->get('fieldid'));
+		$disabled = intval($this->input->get('disabled'));
 		$this->db->update(array('disabled'=>$disabled), array('fieldid'=>$fieldid));
 		dr_admin_msg(1,L('operation_success'), HTTP_REFERER);
 	}
@@ -223,7 +223,7 @@ class member_modelfield extends admin {
 	public function public_checkfield() {
 		$field = strtolower($this->input->get('field'));
 		$fieldid = intval($this->input->get('fieldid'));
-		//$oldfield = strtolower($_GET['oldfield']);
+		//$oldfield = strtolower($this->input->get('oldfield'));
 		//if($field==$oldfield) exit('1');
 		$modelid = intval($this->input->get('modelid'));
 		/*$model_cache = getcache('member_model','commons');
@@ -275,7 +275,7 @@ class member_modelfield extends admin {
 	public function public_priview() {
 		pc_base::load_sys_class('form','',0);
 		$show_header = true;
-		$modelid = intval($_GET['modelid']);
+		$modelid = intval($this->input->get('modelid'));
 
 		require CACHE_MODEL_PATH.'content_form.class.php';
 		$content_form = new content_form($modelid);

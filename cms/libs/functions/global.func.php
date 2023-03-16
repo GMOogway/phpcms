@@ -2720,7 +2720,7 @@ function url_par($par, $url = '') {
  * @param $email
  */
 function is_email($email) {
-	return strlen($email) > 6 && preg_match("/^[\w\-\.]+@[\w\-\.]+(\.\w+)+$/", $email);
+	return check_email($email);
 }
 
 /**
@@ -3394,6 +3394,62 @@ function create_randomstr($lenth = 10, $chars = '123456789abcdefghijklmnpqrstuvw
 	return substr(md5($hash), 0, $lenth);
 }
 
+// 验证账号
+function check_username($value) {
+	$member_setting = getcache('member_setting');
+
+	if (!$value) {
+		return dr_return_data(0, L('账号不能为空'), array('field' => 'username'));
+	} elseif ($member_setting['config']['preg']
+		&& !preg_match($member_setting['config']['preg'], $value)) {
+		// 验证账号的组成格式
+		return dr_return_data(0, L('账号格式不正确'), array('field' => 'username'));
+	} elseif (strpos($value, '"') !== false || strpos($value, '\'') !== false) {
+		// 引号判断
+		return dr_return_data(0, L('账号名存在非法字符'), array('field' => 'username'));
+	} elseif ($member_setting['config']['userlen']
+		&& mb_strlen($value) < $member_setting['config']['userlen']) {
+		// 验证账号长度
+		return dr_return_data(0, L('账号长度不能小于'.$member_setting['config']['userlen'].'位，当前'.mb_strlen($value).'位'), array('field' => 'username'));
+	} elseif ($member_setting['config']['userlenmax']
+		&& mb_strlen($value) > $member_setting['config']['userlenmax']) {
+		// 验证账号长度
+		return dr_return_data(0, L('账号长度不能大于'.$member_setting['config']['userlenmax'].'位，当前'.mb_strlen($value).'位'), array('field' => 'username'));
+	}
+	$notallow = [$member_setting['notallow']];
+	$notallow[] = L('游客');
+	// 后台不允许注册的词语，放在最后一次比较
+	foreach ($notallow as $a) {
+		if (dr_strlen($a) && strpos($value, $a) !== false) {
+			return dr_return_data(0, L('账号名不允许注册'), array('field' => 'username'));
+		}
+	}
+
+	return dr_return_data(1, 'ok');
+}
+
+// 验证账号的密码
+function check_password($value, $username) {
+	$member_setting = getcache('member_setting');
+
+	if (!$value) {
+		return dr_return_data(0, L('密码不能为空'), array('field' => 'password'));
+	} elseif (!$member_setting['config']['user2pwd'] && $value == $username) {
+		return dr_return_data(0, L('密码不能与账号相同'), array('field' => 'password'));
+	} elseif ($member_setting['config']['pwdpreg']
+		&& !preg_match(trim($member_setting['config']['pwdpreg']), $value)) {
+		return dr_return_data(0, L('密码格式不正确'), array('field' => 'password'));
+	} elseif ($member_setting['config']['pwdlen']
+		&& mb_strlen($value) < $member_setting['config']['pwdlen']) {
+		return dr_return_data(0, L('密码长度不能小于'.$member_setting['config']['pwdlen'].'位，当前'.mb_strlen($value).'位'), array('field' => 'password'));
+	} elseif ($member_setting['config']['pwdmax']
+		&& mb_strlen($value) > $member_setting['config']['pwdmax']) {
+		return dr_return_data(0, L('密码长度不能大于'.$member_setting['config']['pwdmax'].'位，当前'.mb_strlen($value).'位'), array('field' => 'password'));
+	}
+
+	return dr_return_data(1, 'ok');
+}
+
 // 验证手机号码
 function check_phone($value) {
 	if (!$value) {
@@ -3476,6 +3532,25 @@ function check_in($id, $ids = '', $s = ',') {
 	if(!$ids) return false;
 	$ids = explode($s, $ids);
 	return is_array($id) ? array_intersect($id, $ids) : (is_array(dr_string2array($id)) ? array_intersect(dr_string2array($id), $ids) : dr_in_array($id, $ids));
+}
+
+// 查询会员信息
+function find_member_info($username) {
+	$member_setting = getcache('member_setting');
+	$data = $this->db->get_one(array('username'=>$username));
+	if (!$data && $member_setting['login']['field']) {
+		if (dr_in_array('email', $member_setting['login']['field'])
+			&& check_email($username)) {
+			$data = $this->db->get_one(array('email'=>$username));
+		} elseif (dr_in_array('phone', $member_setting['login']['field'])
+			&& check_phone($username)) {
+			$data = $this->db->get_one(array('mobile'=>$username));
+		}
+	}
+	if (!$data) {
+		return array();
+	}
+	return $data;
 }
 
 /**

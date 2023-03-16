@@ -30,61 +30,31 @@ class member extends admin {
 	}
 
 	/**
-	 * defalut
-	 */
-	function init() {
-		$show_header = $show_scroll = true;
-		pc_base::load_sys_class('form', '', 0);
-		$this->verify_db = pc_base::load_model('member_verify_model');
-		
-		//搜索框
-		$keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
-		$type = isset($_GET['type']) ? $_GET['type'] : '';
-		$groupid = isset($_GET['groupid']) ? $_GET['groupid'] : '';
-		$start_time = isset($_GET['start_time']) ? $_GET['start_time'] : '';
-		$end_time = isset($_GET['end_time']) ? $_GET['end_time'] : '';
-		$grouplist = getcache('grouplist');
-		foreach($grouplist as $k=>$v) {
-			$grouplist[$k] = $v['name'];
-		}
-
-		$memberinfo['totalnum'] = $this->db->count();
-		$memberinfo['vipnum'] = $this->db->count(array('vip'=>1));
-		$memberinfo['verifynum'] = $this->verify_db->count(array('status'=>0));
-
-		$todaytime = strtotime(date('Y-m-d', SYS_TIME));
-		$memberinfo['today_member'] = $this->db->count("`regdate` > '$todaytime'");
-		
-		include $this->admin_tpl('member_init');
-	}
-	
-	/**
 	 * 会员列表
 	 */
-	function manage() {
-
+	function init() {
 		//搜索框
-		$keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
-		$type = isset($_GET['type']) ? $_GET['type'] : '';
-		$groupid = isset($_GET['groupid']) ? $_GET['groupid'] : '';
-		$modelid = isset($_GET['modelid']) ? $_GET['modelid'] : '';
+		$keyword = $this->input->get('keyword') ? $this->input->get('keyword') : '';
+		$type = $this->input->get('type') ? $this->input->get('type') : '';
+		$groupid = $this->input->get('groupid') ? $this->input->get('groupid') : '';
+		$modelid = $this->input->get('modelid') ? $this->input->get('modelid') : '';
 		
 		//站点信息
 		$sitelistarr = getcache('sitelist', 'commons');
-		$siteid = isset($_GET['siteid']) ? $_GET['siteid'] : '';
+		$siteid = $this->input->get('siteid') ? $this->input->get('siteid') : '';
 		
 		foreach ($sitelistarr as $k=>$v) {
 			$sitelist[$k] = $v['name'];
 		}
 		
-		$status = isset($_GET['status']) ? $_GET['status'] : '';
-		$amount_from = isset($_GET['amount_from']) ? $_GET['amount_from'] : '';
-		$amount_to = isset($_GET['amount_to']) ? $_GET['amount_to'] : '';
-		$point_from = isset($_GET['point_from']) ? $_GET['point_from'] : '';
-		$point_to = isset($_GET['point_to']) ? $_GET['point_to'] : '';
+		$status = $this->input->get('status') ? $this->input->get('status') : '';
+		$amount_from = $this->input->get('amount_from') ? $this->input->get('amount_from') : '';
+		$amount_to = $this->input->get('amount_to') ? $this->input->get('amount_to') : '';
+		$point_from = $this->input->get('point_from') ? $this->input->get('point_from') : '';
+		$point_to = $this->input->get('point_to') ? $this->input->get('point_to') : '';
 				
-		$start_time = isset($_GET['start_time']) ? $_GET['start_time'] : '';
-		$end_time = isset($_GET['end_time']) ? $_GET['end_time'] : '';
+		$start_time = $this->input->get('start_time') ? $this->input->get('start_time') : '';
+		$end_time = $this->input->get('end_time') ? $this->input->get('end_time') : '';
 		$grouplist = getcache('grouplist');
 		foreach($grouplist as $k=>$v) {
 			$grouplist[$k] = $v['name'];
@@ -95,7 +65,7 @@ class member extends admin {
 			$modellist[$k] = $v['name'];
 		}
 
-		if (isset($_GET['dosubmit'])) {
+		if ($this->input->get('dosubmit')) {
 			
 			//默认选取一个月内的用户，防止用户量过大给数据造成灾难
 			$where_start_time = strtotime($start_time) ? strtotime($start_time) : 0;
@@ -217,7 +187,7 @@ class member extends admin {
 			}
 		}
 
-		$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+		$page = $this->input->get('page') ? intval($this->input->get('page')) : 1;
 		$memberlist = $this->db->listinfo(($where ? implode(' AND ', $where) : ''), $this->input->get('order') ? $this->input->get('order') : 'userid DESC', $page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		$list_field = $this->list_field;
@@ -297,7 +267,7 @@ class member extends admin {
             } elseif ($this->db->count(array('username'=>$name))) {
                 dr_json(0, L('新账号'.$name.'已经注册'), array('field' => 'name'));
             }
-			$rt = $this->check_username($name);
+			$rt = check_username($name);
 			if (!$rt['code']) {
 				dr_json(0, $rt['msg'], array('field' => 'name'));
 			}
@@ -315,7 +285,7 @@ class member extends admin {
 	 */
 	function add() {
 		header("Cache-control: private");
-		if(isset($_POST['dosubmit'])) {
+		if($this->input->post('dosubmit')) {
 			$info = $this->input->post('info');
 			if(!$this->_checkname($info['username'])){
 				dr_admin_msg(0,L('member_exist'));
@@ -372,7 +342,7 @@ class member extends admin {
 	 * edit member
 	 */
 	function edit() {
-		if(isset($_POST['dosubmit'])) {
+		if($this->input->post('dosubmit')) {
 			$memberinfo = $info = array();
 			$post = $this->input->post('info');
 			$basicinfo['userid'] = $post['userid'];
@@ -416,7 +386,7 @@ class member extends admin {
 			}
 			
 			//删除用户头像
-			if(!empty($_POST['delavatar'])) {
+			if(!empty($this->input->post('delavatar'))) {
 				$this->deleteavatar($userinfo['userid']);
 			}
 
@@ -451,7 +421,7 @@ class member extends admin {
 		} else {
 			$show_header = $show_scroll = true;
 			$siteid = get_siteid();
-			$userid = isset($_GET['userid']) ? $_GET['userid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
+			$userid = $this->input->get('userid') ? $this->input->get('userid') : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			
 			//会员组缓存
 			$group_cache = getcache('grouplist', 'member');
@@ -482,7 +452,7 @@ class member extends admin {
 			
 			$memberinfo['avatar'] = get_memberavatar($memberinfo['userid']);
 			
-			$modelid = isset($_GET['modelid']) ? $_GET['modelid'] : $memberinfo['modelid'];
+			$modelid = $this->input->get('modelid') ? $this->input->get('modelid') : $memberinfo['modelid'];
 			
 			//获取会员模型表单
 			require CACHE_MODEL_PATH.'member_form.class.php';
@@ -556,7 +526,7 @@ class member extends admin {
 	 * delete member
 	 */
 	function delete() {
-		$uidarr = isset($_POST['userid']) ? $_POST['userid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
+		$uidarr = $this->input->post('userid') ? $this->input->post('userid') : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		$uidarr = array_map('intval',$uidarr);
 		$where = to_sqls($uidarr, '', 'userid');
 		//查询用户信息
@@ -586,8 +556,8 @@ class member extends admin {
 	 * lock member
 	 */
 	function lock() {
-		if(isset($_POST['userid'])) {
-			$uidarr = isset($_POST['userid']) ? $_POST['userid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
+		if($this->input->post('userid')) {
+			$uidarr = $this->input->post('userid') ? $this->input->post('userid') : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			$where = to_sqls($uidarr, '', 'userid');
 			$this->db->update(array('islock'=>1), $where);
 			dr_admin_msg(1,L('member_lock').L('operation_success'), HTTP_REFERER);
@@ -600,8 +570,8 @@ class member extends admin {
 	 * unlock member
 	 */
 	function unlock() {
-		if(isset($_POST['userid'])) {
-			$uidarr = isset($_POST['userid']) ? $_POST['userid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
+		if($this->input->post('userid')) {
+			$uidarr = $this->input->post('userid') ? $this->input->post('userid') : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			$where = to_sqls($uidarr, '', 'userid');
 			if($this->db->update(array('islock'=>0), $where)) {
 				$config = getcache('common','commons');
@@ -624,9 +594,9 @@ class member extends admin {
 	 * move member
 	 */
 	function move() {
-		if(isset($_POST['dosubmit'])) {
-			$uidarr = isset($_POST['userid']) ? $_POST['userid'] : dr_admin_msg(0,L('please_select').L('member'), HTTP_REFERER);
-			$groupid = isset($_POST['groupid']) && !empty($_POST['groupid']) ? $_POST['groupid'] : dr_admin_msg(0,L('please_select').L('member_group'), HTTP_REFERER);
+		if($this->input->post('dosubmit')) {
+			$uidarr = $this->input->post('userid') ? $this->input->post('userid') : dr_admin_msg(0,L('please_select').L('member'), HTTP_REFERER);
+			$groupid = $this->input->post('groupid') && !empty($this->input->post('groupid')) ? $this->input->post('groupid') : dr_admin_msg(0,L('please_select').L('member_group'), HTTP_REFERER);
 			
 			$where = to_sqls($uidarr, '', 'userid');
 			$this->db->update(array('groupid'=>$groupid), $where);
@@ -638,7 +608,7 @@ class member extends admin {
 				$grouplist[$k] = $v['name'];
 			}
 			
-			$ids = isset($_GET['ids']) ? explode(',', $_GET['ids']): dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
+			$ids = $this->input->get('ids') ? explode(',', $this->input->get('ids')) : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			array_pop($ids);
 			if(!empty($ids)) {
 				$where = to_sqls($ids, '', 'userid');
@@ -654,8 +624,8 @@ class member extends admin {
 	function memberinfo() {
 		$show_header = false;
 		
-		$userid = !empty($_GET['userid']) ? intval($_GET['userid']) : '';
-		$username = !empty($_GET['username']) ? trim($_GET['username']) : '';
+		$userid = !empty($this->input->get('userid')) ? intval($this->input->get('userid')) : '';
+		$username = !empty($this->input->get('username')) ? trim($this->input->get('username')) : '';
 		if(!empty($userid)) {
 			$memberinfo = $this->db->get_one(array('userid'=>$userid));
 		} elseif(!empty($username)) {
@@ -674,7 +644,7 @@ class member extends admin {
 		//会员模型缓存
 		$modellist = getcache('member_model', 'commons');
 
-		$modelid = !empty($_GET['modelid']) ? intval($_GET['modelid']) : $memberinfo['modelid'];
+		$modelid = !empty($this->input->get('modelid')) ? intval($this->input->get('modelid')) : $memberinfo['modelid'];
 		//站群缓存
 		$sitelist =getcache('sitelist', 'commons');
 
@@ -751,7 +721,7 @@ class member extends admin {
 	}
 	
 	private function _checkname($username) {
-		$username =  trim($username);
+		$username = trim($username);
 		if ($this->db->get_one(array('username'=>$username))){
 			return false;
 		}
@@ -764,32 +734,29 @@ class member extends admin {
 	 * @return $status {-4：用户名禁止注册;-1:用户名已经存在 ;1:成功}
 	 */
 	public function public_checkname_ajax() {
-		$username = isset($_GET['username']) && trim($_GET['username']) ? trim($_GET['username']) : exit(0);
+		$username = $this->input->get('username') && trim($this->input->get('username')) && is_username(trim($this->input->get('username'))) ? trim($this->input->get('username')) : exit(0);
 		if(CHARSET != 'utf-8') {
 			$username = iconv('utf-8', CHARSET, $username);
 		}
-			
-		if(isset($_GET['userid'])) {
-			$userid = intval($_GET['userid']);
+		$username = safe_replace($username);
+		//首先判断会员审核表
+		$this->verify_db = pc_base::load_model('member_verify_model');
+		if($this->verify_db->get_one(array('username'=>$username))) {
+			exit('0');
+		}
+		if($this->input->get('userid')) {
+			$userid = intval($this->input->get('userid'));
 			//如果是会员修改，而且NICKNAME和原来优质一致返回1，否则返回0
 			$info = get_memberinfo($userid);
 			if($info['username'] == $this->db->escape($username)){//未改变
 				exit('1');
 			}else{//已改变，判断是否已有此名
-				$res = $this->db->get_one(array('username'=>$username));
-				if($res) {
-					exit('0');
-				} else {
-					exit('1');
-				}
+				$status = $this->db->get_one(array('username'=>$username));
+				$status ? exit('0') : exit('1');
 			}
  		} else {
-			$res = $this->db->get_one(array('username'=>$username));
-			if($res) {
-				exit('0');
-			} else {
-				exit('1');
-			}
+			$status = $this->db->get_one(array('username'=>$username));
+			$status ? exit('0') : exit('1');
 		}
 		
 	}
@@ -800,31 +767,28 @@ class member extends admin {
 	 * @return $status {-1:email已经存在 ;-5:邮箱禁止注册;1:成功}
 	 */
 	public function public_checkemail_ajax() {
-		$email = isset($_GET['email']) && trim($_GET['email']) ? trim($_GET['email']) : exit(0);
-		
-		if(isset($_GET['userid'])) {
-			$userid = intval($_GET['userid']);
+		$email = $this->input->get('email') && trim($this->input->get('email')) && is_email(trim($this->input->get('email')))  ? trim($this->input->get('email')) : exit(0);
+		if (!check_email($email)) {
+			exit('0');
+		}
+		//首先判断会员审核表
+		$this->verify_db = pc_base::load_model('member_verify_model');
+		if($this->verify_db->get_one(array('email'=>$email))) {
+			exit('0');
+		}
+		if($this->input->get('userid')) {
+			$userid = intval($this->input->get('userid'));
 			//如果是会员修改，而且NICKNAME和原来优质一致返回1，否则返回0
 			$info = get_memberinfo($userid);
 			if($info['email'] == $email){//未改变
 				exit('1');
 			}else{//已改变，判断是否已有此名
-				$where = array('email'=>$email);
-				$res = $this->db->get_one($where);
-				if($res) {
-					exit('0');
-				} else {
-					exit('1');
-				}
+				$status = $this->db->get_one(array('email'=>$email));
+				$status ? exit('0') : exit('1');
 			}
  		} else {
-			$where = array('email'=>$email);
-			$res = $this->db->get_one($where);
-			if($res) {
-				exit('0');
-			} else {
-				exit('1');
-			}
+			$status = $this->db->get_one(array('email'=>$email));
+			$status ? exit('0') : exit('1');
 		}
 	}
 	
@@ -834,94 +798,29 @@ class member extends admin {
 	 * @return $status {0:已存在;1:成功}
 	 */
 	public function public_checknickname_ajax() {
-		$nickname = isset($_GET['nickname']) && trim($_GET['nickname']) && is_username(trim($_GET['nickname'])) ? trim($_GET['nickname']) : exit('0');
+		$nickname = $this->input->get('nickname') && trim($this->input->get('nickname')) ? trim($this->input->get('nickname')) : exit('0');
 		if(CHARSET != 'utf-8') {
 			$nickname = iconv('utf-8', CHARSET, $nickname);
-		} 
+		}
 		//首先判断会员审核表
 		$this->verify_db = pc_base::load_model('member_verify_model');
 		if($this->verify_db->get_one(array('nickname'=>$nickname))) {
 			exit('0');
 		}
-		if(isset($_GET['userid'])) {
-			$userid = intval($_GET['userid']);
+		if($this->input->get('userid')) {
+			$userid = intval($this->input->get('userid'));
 			//如果是会员修改，而且NICKNAME和原来优质一致返回1，否则返回0
 			$info = get_memberinfo($userid);
 			if($info['nickname'] == $this->db->escape($nickname)){//未改变
 				exit('1');
 			}else{//已改变，判断是否已有此名
-				$res = $this->db->get_one(array('nickname'=>$nickname));
-				if($res) {
-					exit('0');
-				} else {
-					exit('1');
-				}
+				$status = $this->db->get_one(array('nickname'=>$nickname));
+				$status ? exit('0') : exit('1');
 			}
  		} else {
-			$res = $this->db->get_one(array('nickname'=>$nickname));
-			if($res) {
-				exit('0');
-			} else {
-				exit('1');
-			}
+			$status = $this->db->get_one(array('nickname'=>$nickname));
+			$status ? exit('0') : exit('1');
 		}
-	}
-
-	// 验证账号
-	public function check_username($value) {
-		$member_setting = getcache('member_setting', 'member');
-
-		if (!$value) {
-			return dr_return_data(0, L('账号不能为空'), array('field' => 'username'));
-		} elseif ($member_setting['config']['preg']
-			&& !preg_match($member_setting['config']['preg'], $value)) {
-			// 验证账号的组成格式
-			return dr_return_data(0, L('账号格式不正确'), array('field' => 'username'));
-		} elseif (strpos($value, '"') !== false || strpos($value, '\'') !== false) {
-			// 引号判断
-			return dr_return_data(0, L('账号名存在非法字符'), array('field' => 'username'));
-		} elseif ($member_setting['config']['userlen']
-			&& mb_strlen($value) < $member_setting['config']['userlen']) {
-			// 验证账号长度
-			return dr_return_data(0, L('账号长度不能小于'.$member_setting['config']['userlen'].'位，当前'.mb_strlen($value).'位'), array('field' => 'username'));
-		} elseif ($member_setting['config']['userlenmax']
-			&& mb_strlen($value) > $member_setting['config']['userlenmax']) {
-			// 验证账号长度
-			return dr_return_data(0, L('账号长度不能大于'.$member_setting['config']['userlenmax'].'位，当前'.mb_strlen($value).'位'), array('field' => 'username'));
-		}
-		$notallow = [$member_setting['notallow']];
-		$notallow[] = L('游客');
-		// 后台不允许注册的词语，放在最后一次比较
-		foreach ($notallow as $a) {
-			if (dr_strlen($a) && strpos($value, $a) !== false) {
-				return dr_return_data(0, L('账号名不允许注册'), array('field' => 'username'));
-			}
-		}
-
-		return dr_return_data(1, 'ok');
-	}
-
-	// 验证账号的密码
-	public function check_password($value, $username) {
-		$member_setting = getcache('member_setting', 'member');
-
-		if (!$value) {
-			return dr_return_data(0, L('密码不能为空'), array('field' => 'password'));
-		} elseif (!$member_setting['config']['user2pwd'] && $value == $username) {
-			return dr_return_data(0, L('密码不能与账号相同'), array('field' => 'password'));
-		} elseif ($member_setting['config']['pwdpreg']
-			&& !preg_match(trim($member_setting['config']['pwdpreg']), $value)) {
-			return dr_return_data(0, L('密码格式不正确'), array('field' => 'password'));
-		} elseif ($member_setting['config']['pwdlen']
-			&& mb_strlen($value) < $member_setting['config']['pwdlen']) {
-			return dr_return_data(0, L('密码长度不能小于'.$member_setting['config']['pwdlen'].'位，当前'.mb_strlen($value).'位'), array('field' => 'password'));
-		} elseif ($member_setting['config']['pwdmax']
-			&& mb_strlen($value) > $member_setting['config']['pwdmax']) {
-			return dr_return_data(0, L('密码长度不能大于'.$member_setting['config']['pwdmax'].'位，当前'.mb_strlen($value).'位'), array('field' => 'password'));
-		}
-
-		return dr_return_data(1, 'ok');
-	}
-	
+	}	
 }
 ?>

@@ -21,15 +21,7 @@ class member_group extends admin {
 	 * 会员组首页
 	 */
 	function init() {
-
-		include $this->admin_tpl('member_init');
-	}
-	
-	/**
-	 * 会员组列表
-	 */
-	function manage() {
-		$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+		$page = $this->input->get('page') ? intval($this->input->get('page')) : 1;
 		$member_group_list = $this->db->listinfo('', 'sort ASC', $page, SYS_ADMIN_PAGESIZE);
 		$this->member_db = pc_base::load_model('member_model');
 		//TODO 此处循环中执行sql，会严重影响效率，稍后考虑在memebr_group表中加入会员数字段和统计会员总数功能解决。
@@ -47,12 +39,11 @@ class member_group extends admin {
 	 * 添加会员组
 	 */
 	function add() {
-		if(isset($_POST['dosubmit'])) {
-			$info = array();
-			if(!$this->_checkname($_POST['info']['name'])){
+		if($this->input->post('dosubmit')) {
+			$info = $this->input->post('info');
+			if(!$this->_checkname($info['name'])){
 				dr_admin_msg(0,'会员组名称已经存在');
 			}
-			$info = $this->input->post('info');
 			$info['allowpost'] = $info['allowpost'] ? 1 : 0;
 			$info['allowupgrade'] = $info['allowupgrade'] ? 1 : 0;
 			$info['allowpostverify'] = $info['allowpostverify'] ? 1 : 0;
@@ -77,10 +68,8 @@ class member_group extends admin {
 	 * 修改会员组
 	 */
 	function edit() {
-		if(isset($_POST['dosubmit'])) {
-			$info = array();
+		if($this->input->post('dosubmit')) {
 			$info = $this->input->post('info');
-
 			$info['allowpost'] = isset($info['allowpost']) ? 1 : 0;
 			$info['allowupgrade'] = isset($info['allowupgrade']) ? 1 : 0;
 			$info['allowpostverify'] = isset($info['allowpostverify']) ? 1 : 0;
@@ -95,7 +84,7 @@ class member_group extends admin {
 			dr_admin_msg(1,L('operation_success'), '?m=member&c=member_group&a=manage', '', 'edit');
 		} else {					
 			$show_header = $show_scroll = true;
-			$groupid = isset($_GET['groupid']) ? $_GET['groupid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
+			$groupid = $this->input->get('groupid') ? $this->input->get('groupid') : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			
 			$groupinfo = $this->db->get_one(array('groupid'=>$groupid));
 			include $this->admin_tpl('member_group_edit');		
@@ -106,8 +95,8 @@ class member_group extends admin {
 	 * 排序会员组
 	 */
 	function sort() {		
-		if(isset($_POST['sort'])) {
-			foreach($_POST['sort'] as $k=>$v) {
+		if($this->input->post('sort')) {
+			foreach($this->input->post('sort') as $k=>$v) {
 				$this->db->update(array('sort'=>$v), array('groupid'=>$k));
 			}
 			
@@ -121,7 +110,7 @@ class member_group extends admin {
 	 * 删除会员组
 	 */
 	function delete() {	
-		$groupidarr = isset($_POST['groupid']) ? $_POST['groupid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
+		$groupidarr = $this->input->post('groupid') ? $this->input->post('groupid') : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		$where = to_sqls($groupidarr, '', 'groupid');
 		if ($this->db->delete($where)) {
 			$this->_updatecache();
@@ -151,11 +140,11 @@ class member_group extends admin {
 	}
 	
 	public function public_checkname_ajax() {
-		$name = isset($_GET['name']) && trim($_GET['name']) ? trim($_GET['name']) : exit(0);
+		$name = $this->input->get('name') && trim($this->input->get('name')) ? trim($this->input->get('name')) : exit(0);
 		$name = iconv('utf-8', CHARSET, $name);
 		
-		if(isset($_GET['groupid'])) {
-			$groupid = intval($_GET['groupid']);
+		if($this->input->get('groupid')) {
+			$groupid = intval($this->input->get('groupid'));
 			$info = $this->db->get_one(array('groupid'=>$groupid));
 			if($info['name'] == $name){//未改变
 				exit('1');

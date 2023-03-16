@@ -25,7 +25,7 @@ class member_model extends admin {
 	 * 会员模型列表
 	 */
 	function manage() {
-		$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+		$page = $this->input->get('page') ? intval($this->input->get('page')) : 1;
 		$member_model_list = $this->db->listinfo(array('type'=>2, 'siteid'=>$this->get_siteid()), 'sort', $page, SYS_ADMIN_PAGESIZE);
 		$pages = $this->db->pages;
 		$big_menu = array('javascript:artdialog(\'add\',\'?m=member&c=member_model&a=add\',\''.L('add_model').'\',700,500);void(0);', L('member_model_add'));
@@ -36,7 +36,7 @@ class member_model extends admin {
 	 * 添加会员模型
 	 */
 	function add() {
-		if(isset($_POST['dosubmit'])) {
+		if($this->input->post('dosubmit')) {
 			$info = $this->input->post('info');
 			$info['name'] = $info['modelname'];
 			$info['tablename'] = 'member_'.$info['tablename'];
@@ -74,7 +74,7 @@ class member_model extends admin {
 	 * 修改会员模型
 	 */
 	function edit() {
-		if(isset($_POST['dosubmit'])) {
+		if($this->input->post('dosubmit')) {
 			$info = $this->input->post('info');
 			$modelid = isset($info['modelid']) ? $info['modelid'] :dr_admin_msg(0,L('operation_success'),'?m=member&c=member_model&a=manage', '', 'edit');
 			$info['name'] = $info['modelname'];
@@ -89,7 +89,7 @@ class member_model extends admin {
 			dr_admin_msg(1,L('operation_success'),'?m=member&c=member_model&a=manage', '', 'edit');
 		} else {					
 			$show_header = $show_scroll = true;
-			$modelinfo = $this->db->get_one(array('modelid'=>$_GET['modelid']));
+			$modelinfo = $this->db->get_one(array('modelid'=>$this->input->get('modelid')));
 			include $this->admin_tpl('member_model_edit');		
 		}
 	}
@@ -98,7 +98,7 @@ class member_model extends admin {
 	 * 删除会员模型
 	 */
 	function delete() {
-		$modelidarr = isset($_POST['modelid']) ? $_POST['modelid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
+		$modelidarr = $this->input->post('modelid') ? $this->input->post('modelid') : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		foreach($modelidarr as $id) {
 			$v = $this->db->get_one(array('modelid'=>$id));
 			$this->db->drop_table($v['tablename']);
@@ -275,7 +275,7 @@ class member_model extends admin {
 	 * 导出会员模型
 	 */
 	function export() {
-		$modelid = isset($_GET['modelid']) ? $_GET['modelid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
+		$modelid = $this->input->get('modelid') ? $this->input->get('modelid') : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 		$modelarr = getcache('member_model', 'commons');
 		
 		$this->sitemodel_field_db = pc_base::load_model('sitemodel_field_model');
@@ -294,9 +294,9 @@ class member_model extends admin {
 	 * 修改会员模型
 	 */
 	function move() {
-		if(isset($_POST['dosubmit'])) {
-			$from_modelid = isset($_POST['from_modelid']) ? $_POST['from_modelid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
-			$to_modelid = !empty($_POST['to_modelid']) && $_POST['to_modelid'] != $from_modelid ? $_POST['to_modelid'] : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
+		if($this->input->post('dosubmit')) {
+			$from_modelid = $this->input->post('from_modelid') ? $this->input->post('from_modelid') : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
+			$to_modelid = !empty($this->input->post('to_modelid')) && $this->input->post('to_modelid') != $from_modelid ? $this->input->post('to_modelid') : dr_admin_msg(0,L('illegal_parameters'), HTTP_REFERER);
 			
 			//更新会员表modelid
 			$this->db->change_member_modelid($from_modelid, $to_modelid);
@@ -317,8 +317,8 @@ class member_model extends admin {
 	 * 排序会员模型
 	 */
 	function sort() {		
-		if(isset($_POST['sort'])) {
-			foreach($_POST['sort'] as $k=>$v) {
+		if($this->input->post('sort')) {
+			foreach($this->input->post('sort') as $k=>$v) {
 				$this->db->update(array('sort'=>$v), array('modelid'=>$k));
 			}
 			
@@ -338,7 +338,7 @@ class member_model extends admin {
 	 * @return $status {0:模型名已经存在 ;1:成功}
 	 */
 	public function public_checkmodelname_ajax() {
-		$modelname = isset($_GET['modelname']) ? trim($_GET['modelname']) : exit('0');
+		$modelname = $this->input->get('modelname') ? trim($this->input->get('modelname')) : exit('0');
 		if(CHARSET != 'utf-8') {
 			$modelname = iconv('utf-8', CHARSET, $modelname);
 		}
@@ -361,7 +361,7 @@ class member_model extends admin {
 	 * @return $status {0:模型表名已经存在 ;1:成功}
 	 */
 	public function public_checktablename_ajax() {
-		$tablename = isset($_GET['tablename']) ? trim($_GET['tablename']) : exit('0');
+		$tablename = $this->input->get('tablename') ? trim($this->input->get('tablename')) : exit('0');
 		
 		$status = $this->db->table_exists('member_'.$tablename);
 		if($status) {

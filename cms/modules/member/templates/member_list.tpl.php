@@ -25,7 +25,7 @@ jQuery(document).ready(function() {
 <form name="searchform" action="" method="get" >
 <input type="hidden" value="member" name="m">
 <input type="hidden" value="member" name="c">
-<input type="hidden" value="manage" name="a">
+<input type="hidden" value="init" name="a">
 <input type="hidden" name="dosubmit" value="1">
 <input type="hidden" value="<?php echo $this->input->get('menuid');?>" name="menuid">
 				<div class="col-md-12 col-sm-12">

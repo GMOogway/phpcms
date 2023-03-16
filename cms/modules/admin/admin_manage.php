@@ -48,6 +48,9 @@ class admin_manage extends admin {
 
 		if (IS_POST) {
 			$name = trim(dr_safe_filename($this->input->post('name')));
+			if (is_badword($name)) {
+				dr_json(0, L('username_illegal'));
+			}
 			if (!$name) {
 				dr_json(0, L('新账号不能为空'), array('field' => 'name'));
 			} elseif ($info['username'] == $name) {
@@ -78,6 +81,9 @@ class admin_manage extends admin {
 			}
 			$info = $this->input->post('info');
 			$info['password'] = dr_safe_password($info['password']);
+			if (is_badword($info['username'])) {
+				dr_json(0, L('username_illegal'));
+			}
 			$rs = $this->check_username($info['username']);
 			if (!$rs['code']) {
 				dr_json(0, $rs['msg'], array('field' => 'username'));

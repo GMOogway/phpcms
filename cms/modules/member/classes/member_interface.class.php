@@ -24,7 +24,7 @@ class member_interface {
 		} elseif($type==2) {
 			$userinfo = $this->db->get_one(array('username'=>$mix));
 		} elseif($type==3) {
-			if(!$this->_is_email($mix)) {
+			if(!is_email($mix)) {
 				return -4;
 			}
 			$userinfo = $this->db->get_one(array('email'=>$mix));

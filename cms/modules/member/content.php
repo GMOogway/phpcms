@@ -35,9 +35,9 @@ class content extends foreground {
 		}
 		$siteids = getcache('category_content', 'commons');
 		header("Cache-control: private");
-		if(isset($_POST['dosubmit'])) {
-			
-			$catid = intval($_POST['info']['catid']);
+		if($this->input->post('dosubmit')) {
+			$post = $this->input->post('info');
+			$catid = intval($post['catid']);
 			//判断此类型用户是否有权限在此栏目下提交投稿
 			if (!$this->priv_db->get_one(array('catid'=>$catid, 'roleid'=>$memberinfo['groupid'], 'is_admin'=>0, 'action'=>'add'))) showmessage(L('category').L('publish_deny'), APP_PATH.'index.php?m=member');
 			
@@ -56,15 +56,14 @@ class content extends foreground {
 			$fields = array_merge($fields_sys,$fields_attr);
 			$fields = array_keys($fields);
 			$info = array();
-			foreach($_POST['info'] as $_k=>$_v) {
+			foreach($post as $_k=>$_v) {
 				if($_k == 'content') {
 					$info[$_k] = remove_xss(strip_tags($_v, '<p><a><br><img><ul><li><div>'));
 				} elseif(in_array($_k, $fields)) {
 					$info[$_k] = new_html_special_chars(trim_script($_v));
 				}
 			}
-			$_POST['linkurl'] = str_replace(array('"','(',')',",",' ','%'),'',new_html_special_chars(clearhtml($_POST['linkurl'])));
-			$post_fields = array_keys($_POST['info']);
+			$post_fields = array_keys($post);
 			$post_fields = array_intersect_assoc($fields,$post_fields);
 			$setting = string2array($category['setting']);
 			if (!$setting['presentpoint']) $setting['presentpoint'] = 0;
@@ -116,19 +115,19 @@ class content extends foreground {
 			$show_header = $show_dialog = $show_validator = true;
 			$temp_language = L('news','','content');
 			$sitelist = getcache('sitelist','commons');
-			if(!isset($_GET['siteid']) && dr_count($sitelist)>1) {
+			if(!$this->input->get('siteid') && dr_count($sitelist)>1) {
 				include template('member', 'content_publish_select_model');
 				exit;
 			}
 			//设置cookie 在附件添加处调用
 			param::set_cookie('module', 'content');
-			$siteid = intval($_GET['siteid']);
+			$siteid = intval($this->input->get('siteid'));
 			if(!$siteid) $siteid = 1;
 			$CATEGORYS = getcache('category_content_'.$siteid, 'commons'); 
 			foreach ($CATEGORYS as $catid=>$cat) {
 				if($cat['siteid']==$siteid && $cat['child']==0 && $cat['type']==0 && $this->priv_db->get_one(array('catid'=>$catid, 'roleid'=>$memberinfo['groupid'], 'is_admin'=>0, 'action'=>'add'))) break;
 			}
-			$catid = $this->input->get('catid') ? intval($_GET['catid']) : $catid;
+			$catid = $this->input->get('catid') ? intval($this->input->get('catid')) : $catid;
 			if (!$catid) showmessage(L('category').L('publish_deny'), APP_PATH.'index.php?m=member');
 
 			//判断本栏目是否允许投稿
@@ -174,17 +173,17 @@ class content extends foreground {
 	public function published() {
 		$memberinfo = $this->memberinfo;
 		$sitelist = getcache('sitelist','commons');
-		if(!isset($_GET['siteid']) && dr_count($sitelist)>1) {
+		$_username = $this->memberinfo['username'];
+		$_userid = $this->memberinfo['userid'];
+		$siteid = intval($this->input->get('siteid'));
+		if(!isset($siteid) && dr_count($sitelist)>1) {
 			include template('member', 'content_publish_select_model');
 			exit;
 		}
-		$_username = $this->memberinfo['username'];
-		$_userid = $this->memberinfo['userid'];
-		$siteid = intval($_GET['siteid']);
 		if(!$siteid) $siteid = 1;
 		$CATEGORYS = getcache('category_content_'.$siteid, 'commons');
 		$siteurl = siteurl($siteid);
-		$page = max(intval($_GET['page']),1);
+		$page = max(intval($this->input->get('page')),1);
 		$workflows = getcache('workflow_'.$siteid,'commons');	
 		$this->content_check_db = pc_base::load_model('content_check_model');
 		$infos = $this->content_check_db->listinfo(array('username'=>$_username, 'siteid'=>$siteid),'inputtime DESC',$page);
@@ -207,8 +206,10 @@ class content extends foreground {
 	 */
 	public function edit() {
 		$_username = $this->memberinfo['username'];
-		if(isset($_POST['dosubmit'])) {
-			$catid = intval($this->input->post('info')['catid']);
+		if($this->input->post('dosubmit')) {
+			$id = intval($this->input->post('id'));
+			$info = $this->input->post('info');
+			$catid = intval($info['catid']);
 			$siteids = getcache('category_content', 'commons');
 			$siteid = $siteids[$catid];
 			$CATEGORYS = getcache('category_content_'.$siteid, 'commons');
@@ -216,8 +217,6 @@ class content extends foreground {
 			//判断此类型用户是否有权限在此栏目下提交投稿
 			if (!$this->priv_db->get_one(array('catid'=>$catid, 'roleid'=>$this->memberinfo['groupid'], 'is_admin'=>0, 'action'=>'edit'))) showmessage(L('当前栏目['.$category['catname'].']没有修改权限'), APP_PATH.'index.php?m=member&c=content&a=published');
 			if($category['type']==0) {
-				$id = intval($_POST['id']);
-				$catid = intval($this->input->post('info')['catid']);
 				$this->content_db = pc_base::load_model('content_model');
 				$modelid = $category['modelid'];
 				$this->content_db->set_model($modelid);
@@ -226,20 +225,18 @@ class content extends foreground {
 				$grouplist = getcache('grouplist');
 				$setting = string2array($category['setting']);
 				if($grouplist[$memberinfo['groupid']]['allowpostverify'] || !$setting['workflowid']) {
-					$_POST['info']['status'] = 99;
+					$info['status'] = 99;
 				} else {
-					$_POST['info']['status'] = 1;
+					$info['status'] = 1;
 				}
-				$info = array();
-				foreach($_POST['info'] as $_k=>$_v) {
+				foreach($info as $_k=>$_v) {
 					if($_k == 'content') {
-						$_POST['info'][$_k] = strip_tags($_v, '<p><a><br><img><ul><li><div>');
+						$info[$_k] = strip_tags($_v, '<p><a><br><img><ul><li><div>');
 					} elseif($fields && in_array($_k, $fields)) {
-						$_POST['info'][$_k] = new_html_special_chars(trim_script($_v));
+						$info[$_k] = new_html_special_chars(trim_script($_v));
 					}
 				}
-				$_POST['linkurl'] = str_replace(array('"','(',')',",",' ','%'),'',new_html_special_chars(clearhtml($_POST['linkurl'])));
-				$this->content_db->edit_content($_POST['info'],$id);
+				$this->content_db->edit_content($info,$id);
 				$forward = $this->input->post('forward');
 				showmessage(L('update_success'),$forward);
 			}
@@ -248,8 +245,8 @@ class content extends foreground {
 			$temp_language = L('news','','content');
 			//设置cookie 在附件添加处调用
 			param::set_cookie('module', 'content');
-			$id = intval($_GET['id']);
-			if(isset($_GET['catid']) && $_GET['catid']) {
+			$id = intval($this->input->get('id'));
+			if($this->input->get('catid')) {
 				$catid = intval($this->input->get('catid'));
 				param::set_cookie('catid', $catid);
 				$siteids = getcache('category_content', 'commons');
@@ -302,7 +299,7 @@ class content extends foreground {
 	 * 会员删除投稿 ...
 	 */
 	public function delete(){
-		$id = intval($_GET['id']);
+		$id = intval($this->input->get('id'));
  		if(!$id){
 			return false;
 		}
@@ -310,7 +307,7 @@ class content extends foreground {
 		$username = param::get_cookie('_username');
 		$userid = param::get_cookie('_userid');
 		$siteid = get_siteid();
-		$catid = intval($_GET['catid']);
+		$catid = intval($this->input->get('catid'));
 		$siteids = getcache('category_content', 'commons');
 		$siteid = $siteids[$catid];
 		$CATEGORYS = getcache('category_content_'.$siteid, 'commons');
@@ -340,7 +337,7 @@ class content extends foreground {
 		$exist_posids = array();
 		$memberinfo = $this->memberinfo;
 		$_username = $this->memberinfo['username'];
-		$id = intval($_GET['id']);
+		$id = intval($this->input->get('id'));
 		
 		$catid = $this->input->get('catid');
 		$pos_data = pc_base::load_model('position_data_model');
@@ -400,18 +397,18 @@ class content extends foreground {
 							   '2'=>$infos['top_zone_posid'],
 							   '3'=>$infos['top_district_posid'],
 							  );							  				
-		if(isset($_POST['dosubmit'])) {
+		if($this->input->post('dosubmit')) {
 			$posids = array();
 			$push_api = pc_base::load_app_class('push_api','admin');
 			$pos_data = pc_base::load_model('position_data_model');
-			$catid = intval($_POST['catid']);
-			$id = intval($_POST['id']);
+			$catid = intval($this->input->post('catid'));
+			$id = intval($this->input->post('id'));
 			$flag = $catid.'_'.$id;			
-			$toptime = intval($_POST['toptime']);
-			if($toptime == 0 || empty($_POST['toptype'])) showmessage(L('info_top_not_setting_toptime'));
+			$toptime = intval($this->input->post('toptime'));
+			if($toptime == 0 || empty($this->input->post('toptype'))) showmessage(L('info_top_not_setting_toptime'));
 			//计算置顶扣费积分，时间
-			if(is_array($_POST['toptype']) && !empty($_POST['toptype'])) {
-				foreach($_POST['toptype'] as $r) {
+			if(is_array($this->input->post('toptype')) && !empty($this->input->post('toptype'))) {
+				foreach($this->input->post('toptype') as $r) {
 					if(is_numeric($r) && in_array($r, $toptype_arr)) {
 						$posids[] = $toptype_posid[$r];
 						$amount += $toptype_price[$r];
@@ -452,13 +449,13 @@ class content extends foreground {
 			
 			$push_api->position_update($id, $modelid, $catid, $posids, $r, $expiration, 1);	
 			$refer = $this->input->post('msg') ? $r['url'] : '';
-			if($_POST['msg']) showmessage(L('ding_success'),$refer);
+			if($this->input->post('msg')) showmessage(L('ding_success'),$refer);
 			else showmessage(L('ding_success'), '', '', 'top');
 			
 		} else {	
 				
-			$toptype = trim($_POST['toptype']);
-			$toptime = trim($_POST['toptime']);
+			$toptype = trim($this->input->post('toptype'));
+			$toptime = trim($this->input->post('toptime'));
 			$types = explode('_', $toptype);
 			if(is_array($types) && !empty($types)) {
 				foreach($types as $r) {
@@ -477,7 +474,7 @@ class content extends foreground {
 	public function public_check_title() {
 		$this->content_db = pc_base::load_model('content_model');
 		$siteids = getcache('category_content', 'commons');
-		if($this->input->get('data')=='' || (!$this->input->get('catid'))) return '';
+		if(!$this->input->get('data') || !$this->input->get('catid')) return '';
 		$is_ajax = intval($this->input->get('is_ajax'));
 		$catid = intval($this->input->get('catid'));
 		$id = intval($this->input->get('id'));
