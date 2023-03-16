@@ -176,7 +176,7 @@ class content extends foreground {
 		$_username = $this->memberinfo['username'];
 		$_userid = $this->memberinfo['userid'];
 		$siteid = intval($this->input->get('siteid'));
-		if(!isset($siteid) && dr_count($sitelist)>1) {
+		if(!$this->input->get('siteid') && dr_count($sitelist)>1) {
 			include template('member', 'content_publish_select_model');
 			exit;
 		}
