@@ -143,7 +143,7 @@ $(function(){
                     </div></div>
                     <div class="input"><label>短信校验码：</label><input type="text" name="mobile_verify" id="mobile_verify" value="" size="14" class="input-text"></div>    
                 {/if}
-                {if $member_setting['enablcodecheck']=='1' && $sms_setting['sms_enable']!='1'}
+                {if $member_setting['register']['code'] && $sms_setting['sms_enable']!='1'}
                 <li><input type="text" class="input code" name="code" id="code" placeholder="请输入{L('checkcode')}">{form::checkcode('code_img', '5', '20', 126, 40)}</li>
                 {/if}
                 <li><input type="submit" class="submit" name="dosubmit" id="dosubmit" value="{L('agree_protocol_post')}"></li>

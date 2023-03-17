@@ -67,8 +67,7 @@ class formguide_field extends admin {
 				$formid = intval($info['modelid']);
 				$forminfo = $this->model_db->get_one(array('modelid'=>$formid, 'siteid'=>$this->siteid), 'tablename');
 				$tablename = $this->db->db_tablepre.'form_'.$forminfo['tablename'];
-				$where = 'modelid='.$formid.' AND field=\''.$field.'\' AND siteid='.$this->siteid.'';
-				$model_field = $this->db->get_one($where);
+				$model_field = $this->db->get_one(array('modelid'=>$formid, 'field'=>$field, 'siteid'=>$this->siteid));
 				if (!$model_field) {
 					$field_rs = $this->db->query('SHOW FULL COLUMNS FROM `'.$tablename.'`');
 					foreach ($field_rs as $rs) {
@@ -155,11 +154,7 @@ class formguide_field extends admin {
 				$fieldid = intval($this->input->post('fieldid'));
 				$forminfo = $this->model_db->get_one(array('modelid'=>$formid, 'siteid'=>$this->siteid), 'tablename');
 				$tablename = $this->db->db_tablepre.'form_'.$forminfo['tablename'];
-				$where = 'modelid='.$formid.' AND field=\''.$field.'\' AND siteid='.$this->siteid.'';
-				if ($fieldid) {
-					$where .= ' AND fieldid<>'.$fieldid;
-				}
-				$model_field = $this->db->get_one($where);
+				$model_field = $this->db->get_one(array('modelid'=>$formid, 'field'=>$field, 'fieldid<>'=>$fieldid, 'siteid'=>$this->siteid));
 				if (!$model_field && $field!=$oldfield) {
 					$field_rs = $this->db->query('SHOW FULL COLUMNS FROM `'.$tablename.'`');
 					foreach ($field_rs as $rs) {

@@ -58,8 +58,7 @@ class sitemodel_field extends admin {
 
 			$field = $info['field'];
 			$cname = $info['name'];
-			$where = 'modelid='.$modelid.' AND field=\''.$field.'\' AND siteid='.$this->siteid.'';
-			$model_field = $this->db->get_one($where);
+			$model_field = $this->db->get_one(array('modelid'=>$modelid, 'field'=>$field, 'siteid'=>$this->siteid));
 			if (!$model_field) {
 				$field_rs = $this->db->query('SHOW FULL COLUMNS FROM `'.$tablename.'`');
 				foreach ($field_rs as $rs) {
@@ -161,11 +160,7 @@ class sitemodel_field extends admin {
 				$field_type = $setting['fieldtype'];
 			}
 			$oldfield = $this->input->post('oldfield');
-			$where = 'modelid='.$modelid.' AND field=\''.$field.'\' AND siteid='.$this->siteid.'';
-			if ($fieldid) {
-				$where .= ' AND fieldid<>'.$fieldid;
-			}
-			$model_field = $this->db->get_one($where);
+			$model_field = $this->db->get_one(array('modelid'=>$modelid, 'field'=>$field, 'fieldid<>'=>$fieldid, 'siteid'=>$this->siteid));
 			if (!$model_field && $field!=$oldfield) {
 				$field_rs = $this->db->query('SHOW FULL COLUMNS FROM `'.$tablename.'`');
 				foreach ($field_rs as $rs) {

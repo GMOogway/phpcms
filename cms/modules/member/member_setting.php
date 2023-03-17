@@ -31,7 +31,6 @@ class member_setting extends admin {
 			$member_setting['allowregister'] = intval($member_setting['allowregister']);
 			$member_setting['choosemodel'] = intval($member_setting['choosemodel']);
 			$member_setting['enablemailcheck'] = intval($member_setting['enablemailcheck']);
-			$member_setting['enablcodecheck'] = intval($member_setting['enablcodecheck']);
 			$member_setting['registerverify'] = intval($member_setting['registerverify']);
 			$member_setting['showapppoint'] = intval($member_setting['showapppoint']);
 			$member_setting['showregprotocol'] = intval($member_setting['showregprotocol']);

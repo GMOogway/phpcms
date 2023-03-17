@@ -3396,7 +3396,7 @@ function create_randomstr($lenth = 10, $chars = '123456789abcdefghijklmnpqrstuvw
 
 // 验证账号
 function check_username($value) {
-	$member_setting = getcache('member_setting');
+	$member_setting = getcache('member_setting', 'member');
 
 	if (!$value) {
 		return dr_return_data(0, L('账号不能为空'), array('field' => 'username'));
@@ -3430,7 +3430,7 @@ function check_username($value) {
 
 // 验证账号的密码
 function check_password($value, $username) {
-	$member_setting = getcache('member_setting');
+	$member_setting = getcache('member_setting', 'member');
 
 	if (!$value) {
 		return dr_return_data(0, L('密码不能为空'), array('field' => 'password'));
@@ -3536,15 +3536,16 @@ function check_in($id, $ids = '', $s = ',') {
 
 // 查询会员信息
 function find_member_info($username) {
-	$member_setting = getcache('member_setting');
-	$data = $this->db->get_one(array('username'=>$username));
+	$member_db = pc_base::load_model('member_model');
+	$member_setting = getcache('member_setting', 'member');
+	$data = $member_db->get_one(array('username'=>$username));
 	if (!$data && $member_setting['login']['field']) {
 		if (dr_in_array('email', $member_setting['login']['field'])
 			&& check_email($username)) {
-			$data = $this->db->get_one(array('email'=>$username));
+			$data = $member_db->get_one(array('email'=>$username));
 		} elseif (dr_in_array('phone', $member_setting['login']['field'])
 			&& check_phone($username)) {
-			$data = $this->db->get_one(array('mobile'=>$username));
+			$data = $member_db->get_one(array('mobile'=>$username));
 		}
 	}
 	if (!$data) {

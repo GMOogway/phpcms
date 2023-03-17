@@ -50,7 +50,7 @@ class index extends foreground {
 		
 		header("Cache-control: private");
 		if($this->input->post('dosubmit')) {
-			if($member_setting['enablcodecheck']=='1'){//开启验证码
+			if($member_setting['register']['code']){//开启验证码
 				if (empty($_SESSION['connectid']) && !check_captcha('code')) {
 					showmessage(L('code_error'));
 				}
@@ -638,7 +638,7 @@ class index extends foreground {
 		$sms_setting = $sms_setting_arr[$siteid];
 		
 		if($this->input->post('dosubmit')) {
-			if($member_setting['enablcodecheck']=='1'){//开启验证码
+			if($member_setting['login']['code']){//开启验证码
 				if (empty($_SESSION['connectid']) && !check_captcha('code')) {
 					showmessage(L('code_error'));
 				}

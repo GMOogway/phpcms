@@ -57,13 +57,6 @@ jQuery(document).ready(function() {
                 <div class="form-body">
 
                     <div class="form-group">
-                        <label class="col-md-2 control-label"><?php echo L('enablcodecheck')?></label>
-                        <div class="col-md-9">
-                            <input type="checkbox" name="info[enablcodecheck]" value="1" <?php echo $member_setting['enablcodecheck'] ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
-                            <span class="help-block"><?php echo L('网页中的图片验证码')?></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('show_app_point')?></label>
                         <div class="col-md-9">
                             <input type="checkbox" name="info[showapppoint]" value="1" <?php echo $member_setting['showapppoint'] ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
@@ -109,6 +102,24 @@ jQuery(document).ready(function() {
                 <div class="form-body">
 
                     <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('登录主字段')?></label>
+                        <div class="col-md-9">
+                            <div class="mt-checkbox-inline">
+                                <label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" checked disabled /> <?php echo L('username')?> <span></span></label>
+                                <label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="info[login][field][]" value="phone" <?php if (dr_in_array('phone', (array)$member_setting['login']['field'])){?>checked<?php }?> /> <?php echo L('手机号')?> <span></span></label>
+                                <label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="info[login][field][]" value="email" <?php if (dr_in_array('email', (array)$member_setting['login']['field'])){?>checked<?php }?> /> <?php echo L('email')?> <span></span></label>
+                            </div>
+                            <span class="help-block"><?php echo L('可同时选择多个字段作为登录主字段')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('登录图片验证码')?></label>
+                        <div class="col-md-9">
+                            <input type="checkbox" name="info[login][code]" value="1" <?php echo $member_setting['login']['code'] ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+                            <span class="help-block"><?php echo L('网页中的图片验证码')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('setting_maxloginfailedtimes')?></label>
                         <div class="col-md-9">
                             <div class="input-inline input-medium">
@@ -143,17 +154,6 @@ jQuery(document).ready(function() {
                             <span class="help-block"><?php echo L('单位秒，默认为86400秒，超时之后自动退出账号')?></span>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-md-2 control-label"><?php echo L('登录主字段')?></label>
-                        <div class="col-md-9">
-                            <div class="mt-checkbox-inline">
-                                <label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" checked disabled /> <?php echo L('username')?> <span></span></label>
-                                <label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="info[login][field][]" value="phone" <?php if (dr_in_array('phone', (array)$member_setting['login']['field'])){?>checked<?php }?> /> <?php echo L('手机号')?> <span></span></label>
-                                <label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="info[login][field][]" value="email" <?php if (dr_in_array('email', (array)$member_setting['login']['field'])){?>checked<?php }?> /> <?php echo L('email')?> <span></span></label>
-                            </div>
-                            <span class="help-block"><?php echo L('可同时选择多个字段作为登录主字段')?></span>
-                        </div>
-                    </div>
 
                 </div>
             </div>
@@ -171,6 +171,13 @@ jQuery(document).ready(function() {
                         <label class="col-md-2 control-label"><?php echo L('register_model')?></label>
                         <div class="col-md-9">
                             <input type="checkbox" name="info[choosemodel]" value="1" <?php echo $member_setting['choosemodel'] ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('注册图片验证码')?></label>
+                        <div class="col-md-9">
+                            <input type="checkbox" name="info[register][code]" value="1" <?php echo $member_setting['register']['code'] ? ' checked' : ''?> data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+                            <span class="help-block"><?php echo L('网页中的图片验证码')?></span>
                         </div>
                     </div>
                     <div class="form-group">

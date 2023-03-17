@@ -47,8 +47,9 @@ class member_modelfield extends admin {
 			$minlength = $info['minlength'] ? $info['minlength'] : 0;
 			$maxlength = $info['maxlength'] ? $info['maxlength'] : 0;
 			$field_type = $info['formtype'];
-			$where = 'modelid='.$modelid.' AND field=\''.$field.'\'';
-			$model_field = $this->db->get_one($where);
+			$checkmobile = $this->db->get_one(array('modelid'=>$modelid, 'formtype'=>'checkmobile'));
+			if ($checkmobile) dr_json(0, L('filedtype').'（短信验证）'.L('already_exist').'，只能一个短信验证', array('field' => 'formtype'));
+			$model_field = $this->db->get_one(array('modelid'=>$modelid, 'field'=>$field));
 			if (!$model_field) {
 				$field_rs = $this->db->query('SHOW FULL COLUMNS FROM `'.$tablename.'`');
 				foreach ($field_rs as $rs) {
@@ -121,11 +122,7 @@ class member_modelfield extends admin {
 				$field_type = $setting['fieldtype'];
 			}
 			$oldfield = $this->input->post('oldfield');
-			$where = 'modelid='.$modelid.' AND field=\''.$field.'\'';
-			if ($fieldid) {
-				$where .= ' AND fieldid<>'.$fieldid;
-			}
-			$model_field = $this->db->get_one($where);
+			$model_field = $this->db->get_one(array('modelid'=>$modelid, 'field'=>$field, 'fieldid<>'=>$fieldid));
 			if (!$model_field && $field!=$oldfield) {
 				$field_rs = $this->db->query('SHOW FULL COLUMNS FROM `'.$tablename.'`');
 				foreach ($field_rs as $rs) {
