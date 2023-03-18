@@ -997,17 +997,17 @@ class category extends admin {
 			$this->cache->set_file(
 				'cache',
 				$this->cache->get_auth_data('category-cache-cache', $this->siteid),
-				'module/category-'.$this->siteid.''.'-data'
+				'module/category-'.$this->siteid.'-data'
 			);
 			$this->cache->set_file(
 				'main',
 				$this->cache->get_auth_data('category-cache-main', $this->siteid),
-				'module/category-'.$this->siteid.''.'-data'
+				'module/category-'.$this->siteid.'-data'
 			);
 			$this->cache->set_file(
 				'dir',
 				$this->cache->get_auth_data('category-cache-dir', $this->siteid),
-				'module/category-'.$this->siteid.''.'-data'
+				'module/category-'.$this->siteid.'-data'
 			);
 			$this->cache();
 			$this->cache->del_auth_data('category-cache-main', $this->siteid);
@@ -1251,9 +1251,11 @@ class category extends admin {
 		// 缓存数据
 		$this->cat_cache[$cat['catid']] = [
 			'catid' => $cat['catid'],
+			'siteid' => $cat['siteid'],
 			'url' => $cat['url'],
 			'type' => $cat['type'],
 			'parentid' => $cat['parentid'],
+			'modelid' => $cat['modelid'],
 			'module' => $cat['module'],
 			'catname' => $cat['catname'],
 			'image' => $cat['image'],
