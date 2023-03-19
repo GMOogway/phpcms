@@ -41,5 +41,5 @@
         });
     });
 </script>';
-		return $str.'<div'.$style.'><input type="text" name="info[$field]" id="dr_'.$field.'" value="'.$value.'" class="form-control"></div>'.$js;
+		return $str.'<div'.$style.'><input type="text" name="info['.$field.']" id="dr_'.$field.'" value="'.$value.'" class="form-control"></div>'.$js;
 	}

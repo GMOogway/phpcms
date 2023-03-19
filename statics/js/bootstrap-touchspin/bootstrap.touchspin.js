@@ -1,53 +1,56 @@
 /*
- *  Bootstrap TouchSpin - v4.3.0
- *  A mobile and touch friendly input spinner component for Bootstrap 3 & 4.
+ *  Bootstrap TouchSpin - v3.0.1
+ *  A mobile and touch friendly input spinner component for Bootstrap 3.
  *  http://www.virtuosoft.eu/code/bootstrap-touchspin/
  *
  *  Made by István Ujj-Mészáros
  *  Under Apache License v2.0 License
  */
-(function(factory) {
-  if (typeof define === 'function' && define.amd) {
-    define(['jquery'], factory);
-  } else if (typeof module === 'object' && module.exports) {
-    module.exports = function(root, jQuery) {
-      if (jQuery === undefined) {
-        if (typeof window !== 'undefined') {
-          jQuery = require('jquery');
-        }
-        else {
-          jQuery = require('jquery')(root);
-        }
-      }
-      factory(jQuery);
-      return jQuery;
-    };
-  } else {
-    factory(jQuery);
-  }
-}(function($) {
+(function($) {
   'use strict';
 
   var _currentSpinnerId = 0;
 
+  function _scopedEventName(name, id) {
+    return name + '.touchspin_' + id;
+  }
+
+  function _scopeEventNames(names, id) {
+    return $.map(names, function(name) {
+      return _scopedEventName(name, id);
+    });
+  }
+
   $.fn.TouchSpin = function(options) {
 
+    if (options === 'destroy') {
+      this.each(function() {
+        var originalinput = $(this),
+            originalinput_data = originalinput.data();
+        $(document).off(_scopeEventNames([
+          'mouseup',
+          'touchend',
+          'touchcancel',
+          'mousemove',
+          'touchmove',
+          'scroll',
+          'scrollstart'], originalinput_data.spinnerid).join(' '));
+      });
+      return;
+    }
+
     var defaults = {
-      min: 0, // If null, there is no minimum enforced
-      max: 100, // If null, there is no maximum enforced
+      min: 0,
+      max: 100,
       initval: '',
-      replacementval: '',
-      firstclickvalueifempty: null,
       step: 1,
       decimals: 0,
       stepinterval: 100,
       forcestepdivisibility: 'round', // none | floor | round | ceil
       stepintervaldelay: 500,
       verticalbuttons: false,
-      verticalup: '+',
-      verticaldown: '-',
-      verticalupclass: '',
-      verticaldownclass: '',
+      verticalupclass: 'fa fa-chevron-up',
+      verticaldownclass: 'fa fa-chevron-down',
       prefix: '',
       postfix: '',
       prefix_extraclass: '',
@@ -56,24 +59,16 @@
       boostat: 10,
       maxboostedstep: false,
       mousewheel: true,
-      buttondown_class: 'btn btn-primary',
-      buttonup_class: 'btn btn-primary',
-      buttondown_txt: '-',
-      buttonup_txt: '+',
-      callback_before_calculation: function(value) {
-        return value;
-      },
-      callback_after_calculation: function(value) {
-        return value;
-      }
+      buttondown_class: 'btn btn-default',
+      buttonup_class: 'btn btn-default',
+	  buttondown_txt: '-',
+	  buttonup_txt: '+'
     };
 
     var attributeMap = {
       min: 'min',
       max: 'max',
       initval: 'init-val',
-      replacementval: 'replacement-val',
-      firstclickvalueifempty: 'first-click-value-if-empty',
       step: 'step',
       decimals: 'decimals',
       stepinterval: 'step-interval',
@@ -92,28 +87,27 @@
       mousewheel: 'mouse-wheel',
       buttondown_class: 'button-down-class',
       buttonup_class: 'button-up-class',
-      buttondown_txt: 'button-down-txt',
-      buttonup_txt: 'button-up-txt'
+	  buttondown_txt: 'button-down-txt',
+	  buttonup_txt: 'button-up-txt'
     };
 
     return this.each(function() {
 
       var settings,
-        originalinput = $(this),
-        originalinput_data = originalinput.data(),
-        _detached_prefix,
-        _detached_postfix,
-        container,
-        elements,
-        value,
-        downSpinTimer,
-        upSpinTimer,
-        downDelayTimeout,
-        upDelayTimeout,
-        spincount = 0,
-        spinning = false;
+          originalinput = $(this),
+          originalinput_data = originalinput.data(),
+          container,
+          elements,
+          value,
+          downSpinTimer,
+          upSpinTimer,
+          downDelayTimeout,
+          upDelayTimeout,
+          spincount = 0,
+          spinning = false;
 
       init();
+
 
       function init() {
         if (originalinput.data('alreadyinitialized')) {
@@ -123,6 +117,7 @@
         originalinput.data('alreadyinitialized', true);
         _currentSpinnerId += 1;
         originalinput.data('spinnerid', _currentSpinnerId);
+
 
         if (!originalinput.is('input')) {
           console.log('Must be an input.');
@@ -137,6 +132,7 @@
         _hideEmptyPrefixPostfix();
         _bindEvents();
         _bindEventsInterface();
+        elements.input.css('display', 'block');
       }
 
       function _setInitval() {
@@ -152,8 +148,8 @@
         var value = elements.input.val();
 
         if (value !== '') {
-          value = Number(settings.callback_before_calculation(elements.input.val()));
-          elements.input.val(settings.callback_after_calculation(Number(value).toFixed(settings.decimals)));
+          value = Number(elements.input.val());
+          elements.input.val(value.toFixed(settings.decimals));
         }
       }
 
@@ -172,58 +168,16 @@
         return data;
       }
 
-      function _destroy() {
-        var $parent = originalinput.parent();
-
-        stopSpin();
-
-        originalinput.off('.touchspin');
-
-        if ($parent.hasClass('bootstrap-touchspin-injected')) {
-          originalinput.siblings().remove();
-          originalinput.unwrap();
-        }
-        else {
-          $('.bootstrap-touchspin-injected', $parent).remove();
-          $parent.removeClass('bootstrap-touchspin');
-        }
-
-        originalinput.data('alreadyinitialized', false);
-      }
-
       function _updateSettings(newsettings) {
         settings = $.extend({}, settings, newsettings);
-
-        // Update postfix and prefix texts if those settings were changed.
-        if (newsettings.postfix) {
-          var $postfix = originalinput.parent().find('.bootstrap-touchspin-postfix');
-
-          if ($postfix.length === 0) {
-            _detached_postfix.insertAfter(originalinput);
-          }
-
-          originalinput.parent().find('.bootstrap-touchspin-postfix .input-group-text').text(newsettings.postfix);
-        }
-
-        if (newsettings.prefix) {
-          var $prefix = originalinput.parent().find('.bootstrap-touchspin-prefix');
-
-          if ($prefix.length === 0) {
-            _detached_prefix.insertBefore(originalinput);
-          }
-
-          originalinput.parent().find('.bootstrap-touchspin-prefix .input-group-text').text(newsettings.prefix);
-        }
-
-        _hideEmptyPrefixPostfix();
       }
 
       function _buildHtml() {
         var initval = originalinput.val(),
-          parentelement = originalinput.parent();
+            parentelement = originalinput.parent();
 
         if (initval !== '') {
-          initval = settings.callback_after_calculation(Number(initval).toFixed(settings.decimals));
+          initval = Number(initval).toFixed(settings.decimals);
         }
 
         originalinput.data('initvalue', initval).val(initval);
@@ -241,28 +195,28 @@
         parentelement.addClass('bootstrap-touchspin');
 
         var prev = originalinput.prev(),
-          next = originalinput.next();
+            next = originalinput.next();
 
         var downhtml,
-          uphtml,
-          prefixhtml = '<span class="input-group-addon input-group-prepend bootstrap-touchspin-prefix input-group-prepend bootstrap-touchspin-injected"><span class="input-group-text">' + settings.prefix + '</span></span>',
-          postfixhtml = '<span class="input-group-addon input-group-append bootstrap-touchspin-postfix input-group-append bootstrap-touchspin-injected"><span class="input-group-text">' + settings.postfix + '</span></span>';
+            uphtml,
+            prefixhtml = '<span class="input-group-addon bootstrap-touchspin-prefix">' + settings.prefix + '</span>',
+            postfixhtml = '<span class="input-group-addon bootstrap-touchspin-postfix">' + settings.postfix + '</span>';
 
-        if (prev.hasClass('input-group-btn') || prev.hasClass('input-group-prepend')) {
-          downhtml = '<button class="' + settings.buttondown_class + ' bootstrap-touchspin-down bootstrap-touchspin-injected" type="button">' + settings.buttondown_txt + '</button>';
+        if (prev.hasClass('input-group-btn')) {
+          downhtml = '<button class="' + settings.buttondown_class + ' bootstrap-touchspin-down" type="button">' + settings.buttondown_txt + '</button>';
           prev.append(downhtml);
         }
         else {
-          downhtml = '<span class="input-group-btn input-group-prepend bootstrap-touchspin-injected"><button class="' + settings.buttondown_class + ' bootstrap-touchspin-down" type="button">' + settings.buttondown_txt + '</button></span>';
+          downhtml = '<span class="input-group-btn"><button class="' + settings.buttondown_class + ' bootstrap-touchspin-down" type="button">' + settings.buttondown_txt + '</button></span>';
           $(downhtml).insertBefore(originalinput);
         }
 
-        if (next.hasClass('input-group-btn') || next.hasClass('input-group-append')) {
-          uphtml = '<button class="' + settings.buttonup_class + ' bootstrap-touchspin-up bootstrap-touchspin-injected" type="button">' + settings.buttonup_txt + '</button>';
+        if (next.hasClass('input-group-btn')) {
+          uphtml = '<button class="' + settings.buttonup_class + ' bootstrap-touchspin-up" type="button">' + settings.buttonup_txt + '</button>';
           next.prepend(uphtml);
         }
         else {
-          uphtml = '<span class="input-group-btn input-group-append bootstrap-touchspin-injected"><button class="' + settings.buttonup_class + ' bootstrap-touchspin-up" type="button">' + settings.buttonup_txt + '</button></span>';
+          uphtml = '<span class="input-group-btn"><button class="' + settings.buttonup_class + ' bootstrap-touchspin-up" type="button">' + settings.buttonup_txt + '</button></span>';
           $(uphtml).insertAfter(originalinput);
         }
 
@@ -275,20 +229,11 @@
       function _buildInputGroup() {
         var html;
 
-        var inputGroupSize = '';
-        if (originalinput.hasClass('input-sm')) {
-          inputGroupSize = 'input-group-sm';
-        }
-
-        if (originalinput.hasClass('input-lg')) {
-          inputGroupSize = 'input-group-lg';
-        }
-
         if (settings.verticalbuttons) {
-          html = '<div class="input-group ' + inputGroupSize + ' bootstrap-touchspin bootstrap-touchspin-injected"><span class="input-group-addon input-group-prepend bootstrap-touchspin-prefix"><span class="input-group-text">' + settings.prefix + '</span></span><span class="input-group-addon bootstrap-touchspin-postfix input-group-append"><span class="input-group-text">' + settings.postfix + '</span></span><span class="input-group-btn-vertical"><button class="' + settings.buttonup_class + ' bootstrap-touchspin-up ' + settings.verticalupclass + '" type="button">' + settings.verticalup + '</button><button class="' + settings.buttondown_class + ' bootstrap-touchspin-down ' + settings.verticaldownclass + '" type="button">' + settings.verticaldown + '</button></span></div>';
+          html = '<div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix">' + settings.prefix + '</span><span class="input-group-addon bootstrap-touchspin-postfix">' + settings.postfix + '</span><span class="input-group-btn-vertical"><button class="' + settings.buttondown_class + ' bootstrap-touchspin-up" type="button"><i class="' + settings.verticalupclass + '"></i></button><button class="' + settings.buttonup_class + ' bootstrap-touchspin-down" type="button"><i class="' + settings.verticaldownclass + '"></i></button></span></div>';
         }
         else {
-          html = '<div class="input-group bootstrap-touchspin bootstrap-touchspin-injected"><span class="input-group-btn input-group-prepend"><button class="' + settings.buttondown_class + ' bootstrap-touchspin-down" type="button">' + settings.buttondown_txt + '</button></span><span class="input-group-addon bootstrap-touchspin-prefix input-group-prepend"><span class="input-group-text">' + settings.prefix + '</span></span><span class="input-group-addon bootstrap-touchspin-postfix input-group-append"><span class="input-group-text">' + settings.postfix + '</span></span><span class="input-group-btn input-group-append"><button class="' + settings.buttonup_class + ' bootstrap-touchspin-up" type="button">' + settings.buttonup_txt + '</button></span></div>';
+          html = '<div class="input-group bootstrap-touchspin"><span class="input-group-btn"><button class="' + settings.buttondown_class + ' bootstrap-touchspin-down" type="button">' + settings.buttondown_txt + '</button></span><span class="input-group-addon bootstrap-touchspin-prefix">' + settings.prefix + '</span><span class="input-group-addon bootstrap-touchspin-postfix">' + settings.postfix + '</span><span class="input-group-btn"><button class="' + settings.buttonup_class + ' bootstrap-touchspin-up" type="button">' + settings.buttonup_txt + '</button></span></div>';
         }
 
         container = $(html).insertBefore(originalinput);
@@ -315,16 +260,16 @@
 
       function _hideEmptyPrefixPostfix() {
         if (settings.prefix === '') {
-          _detached_prefix = elements.prefix.detach();
+          elements.prefix.hide();
         }
 
         if (settings.postfix === '') {
-          _detached_postfix = elements.postfix.detach();
+          elements.postfix.hide();
         }
       }
 
       function _bindEvents() {
-        originalinput.on('keydown.touchspin', function(ev) {
+        originalinput.on('keydown', function(ev) {
           var code = ev.keyCode || ev.which;
 
           if (code === 38) {
@@ -343,7 +288,7 @@
           }
         });
 
-        originalinput.on('keyup.touchspin', function(ev) {
+        originalinput.on('keyup', function(ev) {
           var code = ev.keyCode || ev.which;
 
           if (code === 38) {
@@ -354,9 +299,8 @@
           }
         });
 
-        originalinput.on('blur.touchspin', function() {
+        originalinput.on('blur', function() {
           _checkValue();
-          originalinput.val(settings.callback_after_calculation(originalinput.val()));
         });
 
         elements.down.on('keydown', function(ev) {
@@ -371,7 +315,7 @@
           }
         });
 
-        elements.down.on('keyup.touchspin', function(ev) {
+        elements.down.on('keyup', function(ev) {
           var code = ev.keyCode || ev.which;
 
           if (code === 32 || code === 13) {
@@ -379,7 +323,7 @@
           }
         });
 
-        elements.up.on('keydown.touchspin', function(ev) {
+        elements.up.on('keydown', function(ev) {
           var code = ev.keyCode || ev.which;
 
           if (code === 32 || code === 13) {
@@ -391,7 +335,7 @@
           }
         });
 
-        elements.up.on('keyup.touchspin', function(ev) {
+        elements.up.on('keyup', function(ev) {
           var code = ev.keyCode || ev.which;
 
           if (code === 32 || code === 13) {
@@ -455,7 +399,7 @@
           ev.stopPropagation();
         });
 
-        elements.up.on('mouseup.touchspin mouseout.touchspin touchleave.touchspin touchend.touchspin touchcancel.touchspin', function(ev) {
+        elements.up.on('mouseout touchleave touchend touchcancel', function(ev) {
           if (!spinning) {
             return;
           }
@@ -464,7 +408,7 @@
           stopSpin();
         });
 
-        elements.down.on('mouseup.touchspin mouseout.touchspin touchleave.touchspin touchend.touchspin touchcancel.touchspin', function(ev) {
+        elements.down.on('mouseout touchleave touchend touchcancel', function(ev) {
           if (!spinning) {
             return;
           }
@@ -473,7 +417,7 @@
           stopSpin();
         });
 
-        elements.down.on('mousemove.touchspin touchmove.touchspin', function(ev) {
+        elements.down.on('mousemove touchmove', function(ev) {
           if (!spinning) {
             return;
           }
@@ -482,7 +426,7 @@
           ev.preventDefault();
         });
 
-        elements.up.on('mousemove.touchspin touchmove.touchspin', function(ev) {
+        elements.up.on('mousemove touchmove', function(ev) {
           if (!spinning) {
             return;
           }
@@ -491,7 +435,25 @@
           ev.preventDefault();
         });
 
-        originalinput.on('mousewheel.touchspin DOMMouseScroll.touchspin', function(ev) {
+        $(document).on(_scopeEventNames(['mouseup', 'touchend', 'touchcancel'], _currentSpinnerId).join(' '), function(ev) {
+          if (!spinning) {
+            return;
+          }
+
+          ev.preventDefault();
+          stopSpin();
+        });
+
+        $(document).on(_scopeEventNames(['mousemove', 'touchmove', 'scroll', 'scrollstart'], _currentSpinnerId).join(' '), function(ev) {
+          if (!spinning) {
+            return;
+          }
+
+          ev.preventDefault();
+          stopSpin();
+        });
+
+        originalinput.on('mousewheel DOMMouseScroll', function(ev) {
           if (!settings.mousewheel || !originalinput.is(':focus')) {
             return;
           }
@@ -511,10 +473,6 @@
       }
 
       function _bindEventsInterface() {
-        originalinput.on('touchspin.destroy', function() {
-          _destroy();
-        });
-
         originalinput.on('touchspin.uponce', function() {
           stopSpin();
           upOnce();
@@ -551,20 +509,16 @@
           case 'ceil':
             return (Math.ceil(value / settings.step) * settings.step).toFixed(settings.decimals);
           default:
-            return value.toFixed(settings.decimals);
+            return value;
         }
       }
 
       function _checkValue() {
         var val, parsedval, returnval;
 
-        val = settings.callback_before_calculation(originalinput.val());
+        val = originalinput.val();
 
         if (val === '') {
-          if (settings.replacementval !== '') {
-            originalinput.val(settings.replacementval);
-            originalinput.trigger('change');
-          }
           return;
         }
 
@@ -575,12 +529,7 @@
         parsedval = parseFloat(val);
 
         if (isNaN(parsedval)) {
-          if (settings.replacementval !== '') {
-            parsedval = settings.replacementval;
-          }
-          else {
-            parsedval = 0;
-          }
+          parsedval = 0;
         }
 
         returnval = parsedval;
@@ -589,11 +538,11 @@
           returnval = parsedval;
         }
 
-        if ((settings.min !== null) && (parsedval < settings.min)) {
+        if (parsedval < settings.min) {
           returnval = settings.min;
         }
 
-        if ((settings.max !== null) && (parsedval > settings.max)) {
+        if (parsedval > settings.max) {
           returnval = settings.max;
         }
 
@@ -623,36 +572,26 @@
         }
       }
 
-      function valueIfIsNaN() {
-        if(typeof(settings.firstclickvalueifempty) === 'number') {
-          return settings.firstclickvalueifempty;
-        } else {
-          return (settings.min + settings.max) / 2;
-        }
-      }
-
       function upOnce() {
         _checkValue();
 
-        value = parseFloat(settings.callback_before_calculation(elements.input.val()));
-
-        var initvalue = value;
-        var boostedstep;
-
+        value = parseFloat(elements.input.val());
         if (isNaN(value)) {
-          value = valueIfIsNaN();
-        } else {
-          boostedstep = _getBoostedStep();
-          value = value + boostedstep;
+          value = 0;
         }
 
-        if ((settings.max !== null) && (value > settings.max)) {
+        var initvalue = value,
+            boostedstep = _getBoostedStep();
+
+        value = value + boostedstep;
+
+        if (value > settings.max) {
           value = settings.max;
           originalinput.trigger('touchspin.on.max');
           stopSpin();
         }
 
-        elements.input.val(settings.callback_after_calculation(Number(value).toFixed(settings.decimals)));
+        elements.input.val(Number(value).toFixed(settings.decimals));
 
         if (initvalue !== value) {
           originalinput.trigger('change');
@@ -662,25 +601,23 @@
       function downOnce() {
         _checkValue();
 
-        value = parseFloat(settings.callback_before_calculation(elements.input.val()));
-
-        var initvalue = value;
-        var boostedstep;
-
+        value = parseFloat(elements.input.val());
         if (isNaN(value)) {
-          value = valueIfIsNaN();
-        } else {
-          boostedstep = _getBoostedStep();
-          value = value - boostedstep;
+          value = 0;
         }
 
-        if ((settings.min !== null) && (value < settings.min)) {
+        var initvalue = value,
+            boostedstep = _getBoostedStep();
+
+        value = value - boostedstep;
+
+        if (value < settings.min) {
           value = settings.min;
           originalinput.trigger('touchspin.on.min');
           stopSpin();
         }
 
-        elements.input.val(settings.callback_after_calculation(Number(value).toFixed(settings.decimals)));
+        elements.input.val(value.toFixed(settings.decimals));
 
         if (initvalue !== value) {
           originalinput.trigger('change');
@@ -746,4 +683,4 @@
 
   };
 
-}));
+})(jQuery);
