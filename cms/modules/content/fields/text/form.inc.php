@@ -3,7 +3,7 @@
 		$setting = string2array($setting);
 		// 表单宽度设置
 		$width = is_mobile(0) ? '100%' : ($width ? $width : '100%');
-		if(!$value) $value = $defaultvalue;
+		if(!$value && $value!=0) $value = $defaultvalue;
 		$type = $ispassword ? 'password' : 'text';
 		$errortips = $this->fields[$field]['errortips'];
 		if($errortips || $minlength) $this->formValidator .= '$("#'.$field.'").formValidator({onshow:"",onfocus:"'.$errortips.'"}).inputValidator({min:1,onerror:"'.$errortips.'"});';

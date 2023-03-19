@@ -3,7 +3,7 @@
 		$setting = string2array($setting);
 		// 表单宽度设置
 		$width = is_mobile(0) ? '100%' : ($width ? $width : '100%');
-		if(!$value) $value = $defaultvalue;
+		if(!$value && $value!=0) $value = $defaultvalue;
 		$errortips = $this->fields[$field]['errortips'];
 		$min = $minnumber ? ",min:$minnumber" : '';
 		$max = $maxnumber ? ",max:$maxnumber" : '';

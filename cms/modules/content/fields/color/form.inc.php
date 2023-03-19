@@ -5,7 +5,7 @@
 		$width = is_mobile(0) ? '100%' : ($setting['width'] ? $setting['width'] : '100%');
 		// 风格
 		$style = ' style="width:'.$width.(is_numeric($width) ? 'px' : '').';"';
-		if(!$value) $value = $defaultvalue;
+		if(!$value && $value!=0) $value = $defaultvalue;
 
 		// 加载js
 		$str = load_css(JS_PATH.'jquery-minicolors/jquery.minicolors.css');

@@ -3,7 +3,7 @@
 		$setting = string2array($setting);
 		// 表单宽度设置
 		$width = is_mobile(0) ? '100%' : ($width ? $width : '100%');
-		if(!$value) $value = $defaultvalue;
+		if(!$value && $value!=0) $value = $defaultvalue;
 		$errortips = $this->fields[$field]['errortips'];
 		if($errortips) $this->formValidator .= '$("#'.$field.'").formValidator({onshow:"'.$errortips.'",onfocus:"'.$errortips.'"}).inputValidator({min:'.$minnumber.',max:'.$maxnumber.',onerror:"'.$errortips.'"}).regexValidator({regexp:"num",datatype:"enum",onerror:"'.$errortips.'"});';
 		return "<input type='text' name='info[$field]' id='$field' value='$value' class='form-control".(isset($css) && $css ? ' '.$css : '')."' style='width:".$width.(is_numeric($width) ? "px" : "").";' $this->no_allowed {$formattribute}>";

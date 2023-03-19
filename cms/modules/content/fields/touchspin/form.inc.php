@@ -10,7 +10,7 @@
 		$down = $setting['down'] ? $setting['down'] : '';
 		!$setting['maxnumber'] && $setting['maxnumber'] = 999999999999999;
 		!$setting['minnumber'] && $setting['minnumber'] = 0;
-		if(!$value) $value = $defaultvalue;
+		if(!$value && $value!=0) $value = $defaultvalue;
 		$str = load_css(JS_PATH.'bootstrap-touchspin/bootstrap.touchspin.css');
 		$str .= load_js(JS_PATH.'bootstrap-touchspin/bootstrap.touchspin.js');
 		if($up || $down) {

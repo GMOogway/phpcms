@@ -2,7 +2,7 @@
 		extract($fieldinfo);
 		$setting = string2array($setting);
 		$bformattribute = str_replace('get_wxurl(','get_wxurl('.SYS_EDITOR.',\''.$field.'\',\''.WEB_PATH.'api.php?op=get_wxurl&module=content&catid='.$this->catid.'&userid='.$this->userid.'&siteid='.$this->siteid.'&is_esi='.$enablesaveimage.'&watermark='.$watermark.'&attachment='.$attachment.'&image_reduce='.$image_reduce.'&fieldname='.L($name).'\',',$setting['bformattribute']);
-		if(!$value) $value = $defaultvalue;
+		if(!$value && $value!=0) $value = $defaultvalue;
 		//if (defined('IS_ADMIN') && IS_ADMIN) {
 			return '<div class="input-group">
             <input type="text" name="info['.$field.']" id="'.$field.'" value="'.$value.'" class="form-control">

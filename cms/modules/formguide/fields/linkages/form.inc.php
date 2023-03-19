@@ -5,6 +5,6 @@
 		$width = $setting['width'];
 		$ck_child = $setting['ck_child'];
 		$limit = intval($setting['limit']);
-		if(!$value) $value = $defaultvalue;
+		if(!$value && $value!=0) $value = $defaultvalue;
 		return menu_linkage($linkage,$field,code2html($value),$ck_child,1,$limit,$width);
 	}

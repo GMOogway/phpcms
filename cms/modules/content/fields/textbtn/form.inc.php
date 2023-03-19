@@ -9,7 +9,7 @@
 		$color = $color ? $color : 'default';
 		// 函数
 		$func = $func ? $func : 'dr_diy_func';
-		if(!$value) $value = $defaultvalue;
+		if(!$value && $value!=0) $value = $defaultvalue;
 		$errortips = $this->fields[$field]['errortips'];
 		if($errortips || $minlength) $this->formValidator .= '$("#'.$field.'").formValidator({onshow:"",onfocus:"'.$errortips.'"}).inputValidator({min:1,onerror:"'.$errortips.'"});';
 		return '
