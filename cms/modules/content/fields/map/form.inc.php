@@ -2,7 +2,7 @@
 		extract($fieldinfo);
 		$setting = string2array($setting);
 		// 表单宽度设置
-		$width = is_mobile(0) ? '100%' : ($setting['width'] ? $setting['width'] : 400);
+		$width = is_mobile(0) ? '100%' : ($setting['width'] ? $setting['width'] : '100%');
 		$height = $setting['height'] ? $setting['height'] : 200;
 		// 地图默认值
 		$value = ($value == '0,0' || $value == '0.000000,0.000000' || strlen($value) < 5) ? '' : $value;

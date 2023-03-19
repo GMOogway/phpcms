@@ -349,9 +349,9 @@ class form {
 		$str = '';
 		if($isdatetime==1 || !$isdatetime) {
 			// 表单宽度设置
-			$width = is_mobile(0) ? '100%' : ($width ? $width : 200);
+			$width = is_mobile(0) ? '100%' : ($width ? $width : '100%');
 			// 风格
-			$style = 'style="width:'.$width.(is_numeric($width) ? 'px' : '').';"';
+			$style = ' style="width:'.$width.(is_numeric($width) ? 'px' : '').';"';
 			$str .= load_css(JS_PATH.'bootstrap-datepicker/css/bootstrap-datepicker.min.css');
 			$str .= load_css(JS_PATH.'bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css');
 			$str .= load_js(JS_PATH.'bootstrap-datepicker/js/bootstrap-datepicker.min.js');
@@ -370,14 +370,14 @@ class form {
 				$value = strtotime($value);
 			}
 			$value = $isdatetime ? dr_date($value, 'Y-m-d H:i:s') : dr_date($value, 'Y-m-d');
-			$shuru = '<input type="text" name="'.$name.'" id="'.$id.'" '.$style.' value="'.$value.'" class="form-control dateright field_date_'.$id.'">';
+			$shuru = '<input type="text" name="'.$name.'" id="'.$id.'" value="'.$value.'" class="form-control dateright field_date_'.$id.'">';
 			$tubiao = '<span class="input-group-btn">
 				<button class="btn default date-set"'.($color ? ' style="color: '.$color.';"' : '').' type="button">
 					<i class="fa fa-calendar"></i>
 				</button>
 			</span>';
 			if($datepicker) {
-				$str .= '<div class="form-date input-group"><div class="input-group date">';
+				$str .= '<div class="form-date input-group"><div class="input-group date"'.$style.'>';
 				$str .= $is_left ? $shuru.$tubiao : $tubiao.$shuru;
 				$str .= '</div></div>';
 				defined('ROUTE_M')=='content' && ROUTE_M=='content' && $model && $id == 'updatetime' && $str .= '<div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="no_time"'.(isset($updatetime_select) && $updatetime_select ? ' checked' : '').' class="dr_no_time" type="checkbox" value="1" /> '.L('不更新').'<span></span></label></div>';
@@ -417,9 +417,9 @@ class form {
 		}
 		if($isdatetime==2 || $isdatetime==3) {
 			// 表单宽度设置
-			$width = is_mobile(0) ? '100%' : ($width ? $width : 100);
+			$width = is_mobile(0) ? '100%' : ($width ? $width : '100%');
 			// 风格
-			$style = 'style="width:'.$width.(is_numeric($width) ? 'px' : '').';"';
+			$style = ' style="width:'.$width.(is_numeric($width) ? 'px' : '').';"';
 			$format = (int)$isdatetime==2 ? 'H:i:s' : 'H:i';
 			// 字段默认值
 			if ($value == 'SYS_TIME') {
@@ -427,14 +427,14 @@ class form {
 			}
 			$str .= load_css(JS_PATH.'bootstrap-timepicker/css/bootstrap-timepicker.min.css');
 			$str .= load_js(JS_PATH.'bootstrap-timepicker/js/bootstrap-timepicker.min.js');
-			$shuru = '<input type="text" name="'.$name.'" id="'.$id.'" '.$style.' value="'.$value.'" class="form-control timepicker dateright field_time_'.$id.'">';
+			$shuru = '<input type="text" name="'.$name.'" id="'.$id.'" value="'.$value.'" class="form-control timepicker dateright field_time_'.$id.'">';
 			$tubiao = '<span class="input-group-btn">
 				<button class="btn default"'.($color ? ' style="color: '.$color.';"' : '').' type="button">
 					<i class="fa fa-clock-o"></i>
 				</button>
 			</span>';
 			if($datepicker) {
-				$str .= '<div class="form-date input-group"><div class="input-group">';
+				$str .= '<div class="form-date input-group"><div class="input-group"'.$style.'>';
 				$str .= $is_left ? $shuru.$tubiao : $tubiao.$shuru;
 				$str .= '</div></div>';
 			} else {

@@ -2,9 +2,9 @@
 		extract($fieldinfo);
 		$setting = string2array($setting);
 		// 表单宽度设置
-		$width = is_mobile(0) ? '100%' : ($setting['width'] ? $setting['width'] : 200);
+		$width = is_mobile(0) ? '100%' : ($setting['width'] ? $setting['width'] : '100%');
 		// 风格
-		$style = 'style="width:'.$width.(is_numeric($width) ? 'px' : '').';"';
+		$style = ' style="width:'.$width.(is_numeric($width) ? 'px' : '').';"';
 		// 按钮颜色
 		$up = $setting['up'] ? $setting['up'] : '';
 		$down = $setting['down'] ? $setting['down'] : '';
@@ -41,5 +41,5 @@
         });
     });
 </script>';
-		return $str."<div $style><input type='text' name='info[$field]' id='dr_$field' value='$value' class='form-control'></div>".$js;
+		return $str.'<div'.$style.'><input type="text" name="info[$field]" id="dr_'.$field.'" value="'.$value.'" class="form-control"></div>'.$js;
 	}

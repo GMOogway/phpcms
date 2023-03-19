@@ -1,6 +1,6 @@
 	function copyfrom($field, $value, $fieldinfo) {
 		// 表单宽度设置
-		$width = is_mobile(0) ? '100%' : 400;
+		$width = is_mobile(0) ? '100%' : ($width ? $width : '100%');
 		$value_data = '';
 		if($value && strpos($value,'|')!==false) {
 			$arr = explode('|',$value);

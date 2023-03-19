@@ -2,7 +2,7 @@
 		extract($fieldinfo);
 		$setting = string2array($setting);
 		// 表单宽度设置
-		$width = is_mobile(0) ? '100%' : 400;
+		$width = is_mobile(0) ? '100%' : ($width ? $width : '100%');
 		if(!$value) $value = $defaultvalue;
 		$errortips = $this->fields[$field]['errortips'];
 		if($errortips) $this->formValidator .= '$("#'.$field.'").formValidator({onshow:"'.$errortips.'",onfocus:"'.$errortips.'"}).inputValidator({min:'.$minnumber.',max:'.$maxnumber.',onerror:"'.$errortips.'"}).regexValidator({regexp:"num",datatype:"enum",onerror:"'.$errortips.'"});';

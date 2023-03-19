@@ -3072,8 +3072,8 @@ function menu_linkage($code = '', $id = 'linkid', $defaultvalue = 0, $ck_child =
 			$tpl.= '<input type="hidden" id="dr_'.$id.'_{id}_default" value="" />';
 			$tpl.= '<span id="dr_linkages_'.$id.'_select_{id}" style="display:{display}">';
 			for ($i = 1; $i <= $linklevel; $i++) {
-				$style = $i > $level ? 'style="display:none"' : '';
-				$tpl.= '<label style="padding-right:10px;"><select class="form-control cms-selects-'.$id.'-{id}" name="'.$id.'-'.$i.'-{id}" id="'.$id.'-'.$i.'-{id}" width="100" '.$style.'><option defaultvalue=""> -- </option></select></label>';
+				$style = $i > $level ? ' style="display:none"' : '';
+				$tpl.= '<label style="padding-right:10px;"><select class="form-control cms-selects-'.$id.'-{id}" name="'.$id.'-'.$i.'-{id}" id="'.$id.'-'.$i.'-{id}" width="100"'.$style.'><option defaultvalue=""> -- </option></select></label>';
 			}
 			$tpl.= '</span>';
 			$tpl.= '</div>';
@@ -3096,8 +3096,8 @@ function menu_linkage($code = '', $id = 'linkid', $defaultvalue = 0, $ck_child =
 						$string.= '<input type="hidden" id="dr_'.$id.'_'.$j.'_default" value="'.addslashes($default).'" />';
 						$string.= '<span id="dr_linkages_'.$id.'_select_'.$j.'" style="display:none">';
 						for ($i = 1; $i <= $linklevel; $i++) {
-							$style = $i > $level ? 'style="display:none"' : '';
-							$string.= '<label style="padding-right:10px;"><select class="form-control cms-selects-'.$id.'-'.$j.'" name="'.$id.'-'.$i.'-'.$j.'" id="'.$id.'-'.$i.'-'.$j.'" width="100" '.$style.'><option defaultvalue=""> -- </option></select></label>';
+							$style = $i > $level ? ' style="display:none"' : '';
+							$string.= '<label style="padding-right:10px;"><select class="form-control cms-selects-'.$id.'-'.$j.'" name="'.$id.'-'.$i.'-'.$j.'" id="'.$id.'-'.$i.'-'.$j.'" width="100"'.$style.'><option defaultvalue=""> -- </option></select></label>';
 						}
 						$string.= '</span>';
 						$string.= '<label class="form-control-static" id="dr_linkages_'.$id.'_cxselect_'.$j.'">'.dr_linkagepos($code, $value, ' » ').'&nbsp;&nbsp;<a href="javascript:;" onclick="dr_linkages_select_'.$id.'('.$j.')" style="color:blue">'.L('[重新选择]').'</a></label>';
@@ -3169,8 +3169,8 @@ function menu_linkage($code = '', $id = 'linkid', $defaultvalue = 0, $ck_child =
 			// 输出默认菜单
 			$string.= '<span id="dr_linkage_'.$id.'_select" style="'.($defaultvalue ? 'display:none' : '').'">';
 			for ($i = 1; $i <= $linklevel; $i++) {
-				$style = $i > $level ? 'style="display:none"' : '';
-				$string.= '<label style="padding-right:10px;"><select class="form-control select-'.$id.'" name="'.$id.'-'.$i.'" id="'.$id.'-'.$i.'" width="100" '.$style.'><option defaultvalue=""> -- </option></select></label>';
+				$style = $i > $level ? ' style="display:none"' : '';
+				$string.= '<label style="padding-right:10px;"><select class="form-control select-'.$id.'" name="'.$id.'-'.$i.'" id="'.$id.'-'.$i.'" width="100"'.$style.'><option defaultvalue=""> -- </option></select></label>';
 			}
 			$string.= '<label id="dr_linkage_'.$id.'_html"></label>';
 			$string.= '</span>';

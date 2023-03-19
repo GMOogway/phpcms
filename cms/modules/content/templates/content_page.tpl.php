@@ -69,7 +69,7 @@ if(is_array($forminfos['base'])) {
 <div class="form-group" id="dr_row_<?php echo $field?>">
     <label class="control-label col-md-2"><?php if($info['star']){ ?><span class="required" aria-required="true"> * </span><?php } ?><?php echo $info['name']?></label>
     <div class="col-md-10">
-        <?php if ($info['formtype']!='editor') {?><label><?php }?><?php echo $info['form']?><?php if ($info['formtype']!='editor') {?></label><?php }?>
+        <?php echo $info['form']?>
         <span class="help-block" id="dr_<?php echo $field?>_tips"><?php echo $info['tips']?></span>
     </div>
 </div>
