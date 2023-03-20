@@ -571,6 +571,7 @@ class html {
 		require_once CACHE_MODEL_PATH.'content_output.class.php';
 		$content_output = new content_output(-2);
 		$data = $content_output->get($r);
+		$data = array_merge($r,$data);
 		return $data;
 	}
 	/**
