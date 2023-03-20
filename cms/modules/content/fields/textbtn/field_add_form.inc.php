@@ -22,7 +22,7 @@
     <div class="form-group">
         <label class="col-md-2 control-label">按钮颜色</label>
         <div class="col-md-9">
-            <label><?php echo color_select('setting[color]', '');?></label>
+            <?php echo color_select('setting[color]', '');?>
         </div>
     </div>
     <div class="form-group">

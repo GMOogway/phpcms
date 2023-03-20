@@ -909,12 +909,16 @@ function dr_dir_delete($path, $del_dir = FALSE, $htdocs = FALSE, $_level = 0) {
 	return $del_dir && $_level == 0 ? rmdir($path) : TRUE;
 }
 // 颜色选取
-function color_select($name, $color) {
+function color_select($name, $color, $width = '100%') {
+	// 表单宽度设置
+	$width = is_mobile(0) ? '100%' : ($width ? $width : '100%');
+	// 风格
+	$style = ' style="width:'.$width.(is_numeric($width) ? 'px' : '').';"';
 	$id = preg_match("/\[(.*)\]/", $name, $m) ? $m[1] : $name;
 	$str = load_css(JS_PATH.'jquery-minicolors/jquery.minicolors.css');
 	$str .= load_js(JS_PATH.'jquery-minicolors/jquery.minicolors.min.js');
 	$str.= '
-	<input type="text" class="form-control color input-text" name="'.$name.'" id="dr_'.$id.'" value="'.$color.'">';
+	<input type="text" class="form-control color input-text" name="'.$name.'" id="dr_'.$id.'"'.$style.' value="'.$color.'">';
 	$str.= '
 <script type="text/javascript">
 $(function(){

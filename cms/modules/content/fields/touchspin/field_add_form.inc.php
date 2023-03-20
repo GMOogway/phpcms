@@ -42,12 +42,12 @@
     <div class="form-group">
       <label class="col-md-2 control-label">加按钮颜色</label>
       <div class="col-md-9">
-            <label><?php echo color_select('setting[up]', '');?></label>
+            <?php echo color_select('setting[up]', '');?>
       </div>
     </div>
     <div class="form-group">
       <label class="col-md-2 control-label">减按钮颜色</label>
       <div class="col-md-9">
-            <label><?php echo color_select('setting[down]', '');?></label>
+            <?php echo color_select('setting[down]', '');?>
       </div>
     </div>

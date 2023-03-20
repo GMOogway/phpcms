@@ -2,7 +2,7 @@ body fieldset{border:1px solid #D8D8D8; padding:10px;}
 body fieldset legend{padding:3px 8px;font-weight:700;border:1px solid #D8D8D8;background-color: #F9F9F9;font-size: 14px;}
 body fieldset.blue{border:1px solid #dce3ed}
 body fieldset.blue legend{padding:3px 8px;font-weight:700;color:#347add; background:none; border:none}
-.picBut {background:url("../images/admin_img/picBnt.png") no-repeat 0 -28px;color:#FFF;float:left; text-align:center;font-weight:700;height:28px;line-height:26px;*line-height:30px;margin-right:10px;width:75px}
+.picBut {background:url(../images/admin_img/picBnt.png) no-repeat 0 -28px;color:#FFF;float:left; text-align:center;font-weight:700;height:28px;line-height:26px;*line-height:30px;margin-right:10px;width:75px}
 .picBut a{color:#fff;text-decoration: none; width:75px; height:28px;display:inline-block;zoom:1;*display:inline;}
 
 div.btn{padding:6px 12px 0 12px;margin-bottom: 20px;}
@@ -50,7 +50,7 @@ ul.newList {margin:0; padding:0; list-style:none; color:#000; background:#fff; p
 .newListSelected span {display:block;}
 ul.newList li a {padding:3px 8px;display:block;text-decoration: none;}
 .selectedTxt {overflow:hidden; height:16px; padding:0 23px 0 0;}
-.measure-input {background:url("../images/ruler.gif") repeat-x scroll 0 18px transparent}
+.measure-input {background:url(../images/ruler.gif) repeat-x scroll 0 19px transparent;}
 .hiLite {background:#e0ebf4!important; color:#444!important;}
 .newListHover {background:#f2f7fb!important; color:#000!important; cursor:default;}
 .newListSelHover, .newListSelFocus {background-position:right -26px; cursor:default;}

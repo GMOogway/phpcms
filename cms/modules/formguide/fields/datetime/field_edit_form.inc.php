@@ -51,6 +51,6 @@
     <div class="form-group">
       <label class="col-md-2 control-label">图标颜色</label>
       <div class="col-md-9">
-            <label><?php echo color_select('setting[color]', $setting['color']);?></label>
+            <?php echo color_select('setting[color]', $setting['color']);?>
       </div>
     </div>

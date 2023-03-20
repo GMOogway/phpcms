@@ -40,7 +40,7 @@
     <div class="form-group"<?php if (!SYS_EDITOR) {?> style="display: none;"<?php }?>> 
       <label class="col-md-2 control-label">编辑器颜色</label>
         <div class="col-md-9">
-            <label><?php echo color_select('setting[color]', '');?></label>
+            <?php echo color_select('setting[color]', '');?>
         </div>
     </div>
     <div class="form-group"> 

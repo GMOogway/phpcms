@@ -63,11 +63,10 @@ table{border-collapse:collapse;}
 img,th {vertical-align: middle;}
 button[disabled],html input[disabled] {cursor: default;}
 input.dialog{height:0; font-size:0; line-height:0; border:none}
-label{font-weight:400!important;}
+label{font-weight:400;}
 li [class*=" fa-"],li [class*=" glyphicon-"],li [class*=" icon-"],li [class^=fa-],li [class^=glyphicon-],li [class^=icon-] {display: inline-block;text-align: center;}
 .layui-field-title legend{width: auto!important;}
 pre,textarea{overflow: auto;}
-label {display: inline-block;margin-bottom: 5px;}
 .badge,.label,dt,kbd kbd {font-weight: 700;}
 .alert {border-width: 1px;}
 .alert-danger {background-color: #fbe1e3;border-color: #fbe1e3;color: #e73d4a;}
@@ -637,11 +636,9 @@ body .showMsg .bottom{padding: 10px;text-align: center;border-top: 1px solid #E9
 
 .btn,.btn-group,.btn-group-vertical,.caret,.checkbox-inline,.radio-inline,img {vertical-align: middle;}
 .btn,.btn-danger.active,.btn-danger:active,.btn-default.active,.btn-default:active,.btn-info.active,.btn-info:active,.btn-primary.active,.btn-primary:active,.btn-success.active,.btn-success:active,.btn-warning.active,.btn-warning:active,.btn.active,.btn:active,.dropdown-menu>.disabled>a:focus,.dropdown-menu>.disabled>a:hover,.form-control,.navbar-toggle,.open>.btn-danger.dropdown-toggle,.open>.btn-default.dropdown-toggle,.open>.btn-info.dropdown-toggle,.open>.btn-primary.dropdown-toggle,.open>.btn-success.dropdown-toggle,.open>.btn-warning.dropdown-toggle {background-image: none;}
-.btn {display: inline-block;margin-bottom: 0;font-weight: 400;text-align: center;touch-action: manipulation;cursor: pointer;border: 1px solid transparent;white-space: nowrap;padding: 6px 12px;font-size: 14px;line-height: 1.42857;border-radius: 4px;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;}
 .btn {outline: 0!important;}
 .btn.focus, .btn:focus, .btn:hover {color: #333;text-decoration: none;}
 .btn:hover {transition: all .3s;}
-.btn:not(.btn-sm):not(.btn-lg) {line-height: 1.44;}
 .btn.white:not(.btn-outline) {color: #666;background-color: #fff;border-color: #fff;}
 .btn.white:not(.btn-outline).focus,.btn.white:not(.btn-outline):focus {color: #666;background-color: #e6e6e6;border-color: #bfbfbf;}
 .btn.white:not(.btn-outline).active,.btn.white:not(.btn-outline):active,.btn.white:not(.btn-outline):hover,.open>.btn.white:not(.btn-outline).dropdown-toggle {color: #666;background-color: #e6e6e6;border-color: #e0e0e0;}
@@ -806,14 +803,13 @@ form .portlet.light .portlet-body {padding-top: 20px;padding-bottom: 20px;}
 .form {padding: 0!important;}
 .myfooter .form-actions {background-color: #ecf0f1 !important;padding: 15px !important;}
 .form .form-actions,.portlet-form .form-actions {padding: 20px;margin: 0;background-color: #f5f5f5;border-top: 1px solid #e7ecf1;}
-.minicolors {width: 28px;height: 28px;display: inline-block;}
+.minicolors {height: 28px;}
 .minicolors-theme-bootstrap .minicolors-swatch {width: 28px;height: 28px;}
 .minicolors-theme-bootstrap .minicolors-swatch .minicolors-swatch-color {width: 28px;height: 28px;}
 .CodeMirror {border: 1px solid #eee;height: auto;}
 .formdate {display: inline-block;vertical-align: middle;}
 .input-time {width: 150px!important;}
 .form-date .dateright {margin-right: 0px;}
-.input-group,.input-group-btn,.input-group-btn>.btn {position: relative;}
 .input-group {display: table;border-collapse: separate;}
 .input-group[class*=col-] {float: none;padding-left: 0;padding-right: 0;}
 .input-group .form-control {position: relative;z-index: 2;float: left;width: 100%;margin-bottom: 0;}
@@ -862,7 +858,6 @@ form .portlet.light .portlet-body {padding-top: 20px;padding-bottom: 20px;}
 .datetimepicker table tr td span {overflow: hidden!important;}
 .datepicker-dropdown .datepicker-days {display: block;}
 .bootstrap-select .dropdown-menu {z-index: 9999!important;}
-.minicolors-input {width: 120px!important;}
 .layui-layer-tips .layui-layer-content {color: #000!important;}
 .layui-layer-tips .layui-layer-content .btn{margin-right:10px;}
 .order_sorting,.order_sorting_asc,.order_sorting_desc {padding-right: 10px;cursor: pointer;}
@@ -1126,9 +1121,6 @@ table.dataTable thead td,table.dataTable thead th {padding: 10px 8px;}
 	}
 	input[name='introcude_length'],input[name='auto_thumb_no'] {
 		width: auto!important;
-	}
-	.minicolors-input {
-		width: 120px!important;
 	}
 	#page_title_div{
 		left:-20px
