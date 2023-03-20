@@ -429,7 +429,7 @@ class index {
 			require_once CACHE_MODEL_PATH.'content_output.class.php';
 			$content_output = new content_output(-2);
 			$data = $content_output->get($r);
-			$data = array_merge($r,$data);
+			$data = $r ? array_merge($r,$data) : $data;
 			if($data) extract($data);
 			$template = $setting['page_template'] ? $setting['page_template'] : 'page';
 			$keywords = $keywords ? $keywords : $setting['meta_keywords'];
