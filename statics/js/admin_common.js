@@ -443,7 +443,7 @@ function dr_content_submit(url,type,w,h) {
 				} else {
 					if (json.data.field) {
 						$(body).find('#dr_row_'+json.data.field).addClass('has-error');
-						Dialog.warn(json.msg, function(){$(body).find('#'+json.data.field).focus();});
+						Dialog.warn(json.msg, function(){if ($(body).find('#'+json.data.field).attr('class') == 'dr_ueditor dr_ueditor_'+json.data.field+' edui-default') {$DW.UE.getEditor(json.data.field).focus();}else{if($(body).find('#'+json.data.field).length > 0){$(body).find('#'+json.data.field).focus();}else{$(body).find('#dr_'+json.data.field).focus();}}});
 					} else {
 						Dialog.warn(json.msg);
 					}
@@ -471,7 +471,7 @@ function dr_content_submit(url,type,w,h) {
 				} else {
 					if (json.data.field) {
 						$(body).find('#dr_row_'+json.data.field).addClass('has-error');
-						Dialog.warn(json.msg, function(){$(body).find('#'+json.data.field).focus();});
+						Dialog.warn(json.msg, function(){if ($(body).find('#'+json.data.field).attr('class') == 'dr_ueditor dr_ueditor_'+json.data.field+' edui-default') {$DW.UE.getEditor(json.data.field).focus();}else{if($(body).find('#'+json.data.field).length > 0){$(body).find('#'+json.data.field).focus();}else{$(body).find('#dr_'+json.data.field).focus();}}});
 					} else {
 						Dialog.warn(json.msg);
 					}
@@ -720,7 +720,7 @@ function dr_iframe(type, url, width, height, rt) {
 				} else {
 					if (json.data.field) {
 						$(body).find('#dr_row_'+json.data.field).addClass('has-error');
-						Dialog.warn(json.msg, function(){if(json.data.batch){$(body).find('#'+json.data.batch).focus();}else{$(body).find('#'+json.data.field).focus();}});
+						Dialog.warn(json.msg, function(){if(json.data.batch){$(body).find('#'+json.data.batch).focus();}else{if ($(body).find('#'+json.data.field).attr('class') == 'dr_ueditor dr_ueditor_'+json.data.field+' edui-default') {$DW.UE.getEditor(json.data.field).focus();}else{if($(body).find('#'+json.data.field).length > 0){$(body).find('#'+json.data.field).focus();}else{$(body).find('#dr_'+json.data.field).focus();}}}});
 					} else {
 						Dialog.warn(json.msg);
 					}

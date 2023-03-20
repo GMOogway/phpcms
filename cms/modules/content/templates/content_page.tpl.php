@@ -112,7 +112,15 @@ $(document).ready(function() {
                     dr_tips(0, json.msg);
                     if (json.data.field) {
                         $('#dr_row_'+json.data.field).addClass('has-error');
-                        $('#'+json.data.field).focus();
+                        if ($('#'+json.data.field).attr('class') == 'dr_ueditor dr_ueditor_'+json.data.field+' edui-default') {
+                            UE.getEditor(json.data.field).focus();
+                        }else{
+                            if($('#'+json.data.field).length > 0){
+                                $('#'+json.data.field).focus();
+                            }else{
+                                $('#dr_'+json.data.field).focus();
+                            }
+                        }
                     }
                 }
             },
