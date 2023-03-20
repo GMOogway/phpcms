@@ -1,7 +1,7 @@
 <?php
 defined('IN_CMS') or exit('Access Denied');
 defined('INSTALL') or exit('Access Denied');
-$parentid = $menu_db->insert(array('name'=>'slider', 'parentid'=>71, 'm'=>'slider', 'c'=>'slider', 'a'=>'init', 'data'=>'', 'icon'=>'fa fa-photo', 'listorder'=>0, 'display'=>'1'), true);
+$parentid = $menu_db->insert(array('name'=>'slider', 'parentid'=>70, 'm'=>'slider', 'c'=>'slider', 'a'=>'init', 'data'=>'', 'icon'=>'fa fa-photo', 'listorder'=>0, 'display'=>'1'), true);
 
 $menu_db->insert(array('name'=>'add_slider', 'parentid'=>$parentid, 'm'=>'slider', 'c'=>'slider', 'a'=>'add', 'data'=>'', 'icon'=>'fa fa-plus', 'listorder'=>0, 'display'=>'0'));
 $menu_db->insert(array('name'=>'edit_slider', 'parentid'=>$parentid, 'm'=>'slider', 'c'=>'slider', 'a'=>'edit', 'data'=>'', 'icon'=>'fa fa-edit', 'listorder'=>0, 'display'=>'0'));
