@@ -567,7 +567,10 @@ class html {
 	 */
 	public function page($catid) {
 		$this->page_db = pc_base::load_model('page_model');
-		$data = $this->page_db->get_one(array('catid'=>$catid));
+		$r = $this->page_db->get_one(array('catid'=>$catid));
+		require_once CACHE_MODEL_PATH.'content_output.class.php';
+		$content_output = new content_output(-2);
+		$data = $content_output->get($r);
 		return $data;
 	}
 	/**
@@ -630,15 +633,15 @@ class html {
 	*/
 	public function create_relation_html($catids, $content = array()) {
 		$this->db = pc_base::load_model('content_model');
-        if(!empty($content)) {
-            foreach ($content as $rs) {
-                $this->_create_previous_next($rs[0], $rs[1]);
-            }
-        }
-        if(!is_array($catids)) {
-            $catids = array($catids);
-        }
-        foreach ($catids as $catid) {
+		if(!empty($content)) {
+			foreach ($content as $rs) {
+				$this->_create_previous_next($rs[0], $rs[1]);
+			}
+		}
+		if(!is_array($catids)) {
+			$catids = array($catids);
+		}
+		foreach ($catids as $catid) {
 			$CAT = $this->categorys[$catid];
 			$array_child = array();
 			$self_array = explode(',', $CAT['arrchildid']);
@@ -664,15 +667,15 @@ class html {
 			for($page = 1; $page < $maxsize + 1; $page++) {
 				$this->category($catid,$page,$setting['maxsize'] ? $maxsize : 0);
 			}
-            //检查当前栏目的父栏目，如果存在则生成
-            $arrparentid = $this->categorys[$catid]['arrparentid'];
-            if($arrparentid) {
-                $arrparentid = explode(',', $arrparentid);
-                foreach ($arrparentid as $catid) {
-                    if($catid) $this->category($catid,1);
-                }
-            }
-        }
+			//检查当前栏目的父栏目，如果存在则生成
+			$arrparentid = $this->categorys[$catid]['arrparentid'];
+			if($arrparentid) {
+				$arrparentid = explode(',', $arrparentid);
+				foreach ($arrparentid as $catid) {
+					if($catid) $this->category($catid,1);
+				}
+			}
+		}
 	}
 
 	/**
