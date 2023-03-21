@@ -276,7 +276,7 @@
       <label class="col-md-2 control-label">显示分页符与子标题</label>
         <div class="col-md-9">
             <div class="mt-radio-inline">
-          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[disabled_page]" value="1" <?php if($setting['disabled_page']) echo 'checked';?>> 禁止<span></span></label>
+          <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[disabled_page]" value="1" checked> 禁止<span></span></label>
         </div>
         </div>
     </div>
