@@ -86,6 +86,7 @@ jQuery(document).ready(function() {
         <input type="hidden" value="content" name="m">
         <input type="hidden" value="content" name="c">
         <input type="hidden" value="initall" name="a">
+        <?php if($param['recycle']){?><input type="hidden" value="<?php echo $param['recycle'];?>" name="recycle"><?php }?>
         <input type="hidden" value="<?php echo $modelid;?>" name="modelid">
         <input type="hidden" value="1" name="search">
         <input type="hidden" value="<?php echo dr_get_csrf_token();?>" name="pc_hash">

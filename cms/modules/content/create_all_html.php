@@ -1,6 +1,6 @@
 <?php
+@set_time_limit(0);
 defined('IN_CMS') or exit('No permission resources.');
-
 pc_base::load_app_class('admin','admin',0);
 pc_base::load_sys_class('form','',0);
 
