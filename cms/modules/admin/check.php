@@ -512,6 +512,16 @@ class check extends admin {
                     $this->db->insert(array('modelid' => -2, 'siteid' => 1, 'field' => 'content', 'name' => '内容', 'tips' => '', 'css' => '', 'minlength' => 1, 'maxlength' => '999999', 'pattern' => '', 'errortips' => '内容不能为空', 'formtype' => 'editor', 'setting' => '{"width":"","height":"","toolbar":"full","toolvalue":"\'Bold\', \'Italic\', \'Underline\'","defaultvalue":"","enablekeylink":"1","replacenum":"2","link_mode":"0","enablesaveimage":"1","show_bottom_boot":"1","tool_select_1":"0","tool_select_2":"0","tool_select_3":"1","tool_select_4":"1","color":"","theme":"default","autofloat":"0","div2p":"1","autoheight":"0","enter":"0","watermark":"1","attachment":"0","image_reduce":"","allowupload":"0","upload_number":"","upload_maxsize":"","local_img":"1","local_watermark":"1","local_attachment":"0","local_image_reduce":"","disabled_page":"1"}', 'formattribute' => '', 'unsetgroupids' => '', 'unsetroleids' => '', 'iscore' => 0, 'issystem' => 1, 'isunique' => 0, 'isbase' => 1, 'issearch' => 0, 'isadd' => 0, 'isfulltext' => 0, 'isposition' => 0, 'listorder' => 0, 'disabled' => 0, 'isomnipotent' => 0));
                 }
 
+                $this->db->table_name = $prefix.'slider';
+                if ($this->db->table_exists('slider')) {
+                    if (!$this->db->field_exists('pic')) {
+                        $this->db->query('ALTER TABLE `'.$this->db->table_name.'` ADD `pic` varchar(255) NOT NULL DEFAULT \'\' COMMENT \'手机图片\' AFTER `image`');
+                    }
+                    if (!$this->db->field_exists('icon')) {
+                        $this->db->query('ALTER TABLE `'.$this->db->table_name.'` ADD `icon` varchar(255) NULL DEFAULT NULL COMMENT \'图标标示\' AFTER `pic`');
+                    }
+                }
+
                 break;
 
             case '08':
