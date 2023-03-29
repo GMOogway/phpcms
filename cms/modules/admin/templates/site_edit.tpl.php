@@ -446,14 +446,24 @@ function dr_preview() {
     } else {
         linkurl = geturlpathname()+linkurl;
     }
+    var width = '50%';
+    var height = '60%';
+    if (is_mobile()) {
+        width = height = '100%';
+    }
+    if (width=='100%' && height=='100%') {
+        var drag = false;
+    } else {
+        var drag = true;
+    }
     var diag = new Dialog({
         id:'preview',
         title:'水印预览',
         html:'<div style="text-align:center"><img style="max-width: 400px;width: 100%;-webkit-user-select: none;" src="'+linkurl+'"></div>',
-        width:'50%',
-        height:'60%',
+        width:width,
+        height:height,
         modal:true,
-        draggable:true
+        draggable:drag
     });
     diag.onOk = function(){
         diag.close();
