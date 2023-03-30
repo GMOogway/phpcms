@@ -37,7 +37,7 @@ class role_cat {
 	public static function get_category($siteid) {
 		$category = getcache('category_content_'.$siteid, 'commons');
 		foreach ($category as $k=>$v) {
-			if (!in_array($v['type'], array(0,1))) unset($category[$k]); 
+			if (!dr_in_array($v['type'], array(0,1))) unset($category[$k]); 
 		}
 		return $category;
 	}

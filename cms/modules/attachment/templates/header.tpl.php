@@ -4,26 +4,26 @@
 <title><?php echo L('website_manage');?></title>
 <meta name="author" content="zhaoxunzhiyin" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="stylesheet" href="<?php echo CSS_PATH;?>bootstrap/css/bootstrap.min.css" media="all" />
-<link href="<?php echo CSS_PATH?>font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-<link href="<?php echo CSS_PATH?>admin/css/style.css" rel="stylesheet" type="text/css" />
-<link href="<?php echo CSS_PATH?>table_form.css" rel="stylesheet" type="text/css" />
-<link href="<?php echo CSS_PATH?>admin/css/my.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="<?php echo JS_PATH?>Dialog/main.js"></script>
-<script type="text/javascript" src="<?php echo CSS_PATH?>bootstrap/js/bootstrap.min.js"></script>
+<?php echo load_css(CSS_PATH.'bootstrap/css/bootstrap.min.css');?>
+<?php echo load_css(CSS_PATH.'font-awesome/css/font-awesome.min.css');?>
+<?php echo load_css(CSS_PATH.'admin/css/style.css');?>
+<?php echo load_css(CSS_PATH.'table_form.css');?>
+<?php echo load_css(CSS_PATH.'admin/css/my.css');?>
+<?php echo load_js(JS_PATH.'Dialog/main.js');?>
+<?php echo load_js(JS_PATH.'bootstrap/js/bootstrap.min.js');?>
 <script type="text/javascript">
 var is_admin = 0;
 var web_dir = '<?php echo WEB_PATH;?>';
 var pc_hash = '<?php echo dr_get_csrf_token();?>';
 var csrf_hash = '<?php echo csrf_hash();?>';
 </script>
-<script type="text/javascript" src="<?php echo JS_PATH?>admin_common.js"></script>
-<script src="<?php echo JS_PATH?>my.js" type="text/javascript"></script>
-<script type="text/javascript" src="<?php echo JS_PATH?>styleswitch.js"></script>
-<script type="text/javascript" src="<?php echo JS_PATH?>layer/layer.js"></script>
+<?php echo load_js(JS_PATH.'admin_common.js');?>
+<?php echo load_js(JS_PATH.'my.js');?>
+<?php echo load_js(JS_PATH.'styleswitch.js');?>
+<?php echo load_js(JS_PATH.'layer/layer.js');?>
 <?php if(isset($show_validator)) { ?>
-<script type="text/javascript" src="<?php echo JS_PATH?>formvalidator.js" charset="utf-8"></script>
-<script type="text/javascript" src="<?php echo JS_PATH?>formvalidatorregex.js" charset="utf-8"></script>
+<?php echo load_js(JS_PATH.'formvalidator.js');?>
+<?php echo load_js(JS_PATH.'formvalidatorregex.js');?>
 <?php } ?>
 <?php if(!$this->get_siteid()) exit('error');?>
 <script type="text/javascript">

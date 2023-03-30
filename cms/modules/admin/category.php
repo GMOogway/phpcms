@@ -335,6 +335,7 @@ class category extends admin {
 				$this->update_priv($catid, $this->input->post('priv_groupid'),0);
 				$info['catid'] = $catid;
 				$this->repair_sync($info);
+				unset($info['catid']);
 				$this->repair_cat($catid);
 			} else {//批量添加
 				if(!$this->input->post('batch_add')) dr_json(0, L('input_catname'), array('field' => 'catname', 'batch' => 'batch'));
@@ -356,6 +357,7 @@ class category extends admin {
 					$info['catid'] = $catid;
 					$this->repair_sync($info);
 					$this->repair_cat($catid);
+					unset($info['catid']);
 					if (!$cf['code']) {
 						// 重复验证
 						$infocf['catdir'] = $info['catdir'].$catid;

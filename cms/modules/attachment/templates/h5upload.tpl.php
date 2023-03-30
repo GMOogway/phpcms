@@ -5,9 +5,9 @@
 .progress {height: 20px;background-color: #fff;border-radius: 4px;}
 .progress-bar-success {background-color: #3ea9e2;}
 </style>
-<script type="text/javascript" src="<?php echo JS_PATH?>jquery-ui/jquery-ui.js"></script>
-<link rel="stylesheet" href="<?php echo JS_PATH?>jquery-fileupload/css/jquery.fileupload.css" media="all" />
-<script type="text/javascript" src="<?php echo JS_PATH?>jquery-fileupload/js/jquery.fileupload.js"></script>
+<?php echo load_js(JS_PATH.'jquery-ui/jquery-ui.js');?>
+<?php echo load_css(JS_PATH.'jquery-fileupload/css/jquery.fileupload.css');?>
+<?php echo load_js(JS_PATH.'jquery-fileupload/js/jquery.fileupload.min.js');?>
 <script type="text/javascript">
 <?php echo initupload($this->input->get('module'),$this->input->get('catid'),$args,$this->userid,$this->groupid,$this->isadmin)?>
 </script>

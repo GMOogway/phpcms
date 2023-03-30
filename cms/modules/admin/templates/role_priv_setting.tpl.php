@@ -3,7 +3,6 @@ defined('IS_ADMIN') or exit('No permission resources.');
 $show_header = $show_scroll = true;
 include $this->admin_tpl('header');
 ?>
-<body scroll="no">
 <div style="padding:6px 3px">
     <div class="col-2 col-left mr6" style="width:200px;background:#fff;">
       <h6><i class="fa fa-home"></i> <?php echo L('site_select');?></h6>

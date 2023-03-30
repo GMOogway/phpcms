@@ -51,7 +51,7 @@ class role_op {
 		$priv_arr = array('id','m','c','a','data');
 		if($data['m'] == '') return false;
 		foreach($data as $key=>$value){
-			if(!in_array($key,$priv_arr)) unset($data[$key]);
+			if(!dr_in_array($key,$priv_arr)) unset($data[$key]);
 		}
 		if ($data['id']<=290) {
 			$data['menuid'] = $data['id'];
@@ -59,8 +59,7 @@ class role_op {
 		$data['roleid'] = $roleid;
 		$data['siteid'] = $siteid;
 		unset($data['id']);
-		$info = in_array($data, $priv_data);
-		if($info){
+		if(dr_in_array($data, $priv_data)){
 			return true;
 		} else {
 			return false;

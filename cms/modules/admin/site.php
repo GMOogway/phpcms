@@ -402,7 +402,7 @@ class site extends admin {
 				'save_path' => CACHE_PATH.'watermark/',
 				'form_name' => 'file_data',
 				'file_exts' => array('ttf'),
-				'file_size' => 20 * 1024 * 1024,
+				'file_size' => 50 * 1024 * 1024,
 				'attachment' => array(
 					'value' => array(
 						'path' => 'null'
@@ -415,7 +415,7 @@ class site extends admin {
 				'save_path' => CACHE_PATH.'watermark/',
 				'form_name' => 'file_data',
 				'file_exts' => array('png'),
-				'file_size' => 3 * 1024 * 1024,
+				'file_size' => 10 * 1024 * 1024,
 				'attachment' => array(
 					'value' => array(
 						'path' => 'null'

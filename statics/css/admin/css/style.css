@@ -744,7 +744,6 @@ body .showMsg .bottom{padding: 10px;text-align: center;border-top: 1px solid #E9
 .form-group .fileinput-button {margin-bottom: 3px;}
 .fileinput-button {position: relative;overflow: hidden;display: inline-block;}
 .fileinput-button input {position: absolute;top: 0;right: 0;margin: 0;opacity: 0;-ms-filter: 'alpha(opacity=0)';font-size: 200px;direction: ltr;cursor: pointer;}
-.help-block {margin-top: 5px;margin-bottom: 5px;display: block;color: #737373;}
 .mt-table>span {top: 2px;height: 15px;width: 15px;}
 td>.mt-table.mt-checkbox-single,th>.mt-table.mt-checkbox-single {right: -6px;}
 .mt-table>span:after {left: 4px;top: 1px;}
@@ -794,8 +793,6 @@ form .portlet.light .portlet-body {padding-top: 20px;padding-bottom: 20px;}
 .portlet>.portlet-body {clear: both;-webkit-border-radius: 0 0 4px 4px;-moz-border-radius: 0 0 4px 4px;-ms-border-radius: 0 0 4px 4px;-o-border-radius: 0 0 4px 4px;border-radius: 0 0 4px 4px;}
 .control-label {margin-top: 1px;font-weight: 400;}
 .control-label .required,.form-group .required {color: #e02222;font-size: 12px;padding-left: 2px;}
-.help-block {margin-top: 5px;margin-bottom: 5px;}
-.help-block {display: block;color: #737373;}
 .my-sysfield .col-md-2 {width: 100%!important;}
 .my-sysfield .control-label {text-align: left!important;margin-bottom: 10px;}
 .myfbody {margin-bottom: 90px;}

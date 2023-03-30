@@ -654,15 +654,16 @@ class pc_base {
 	 * CSRF Verify
 	 */
 	public static function verify() {
+		$input = pc_base::load_sys_class('input');
 		if (defined('SYS_CSRF') && !SYS_CSRF) {
 			return '';
 		} elseif (defined('SYS_CSRF') && SYS_CSRF == 1 && IS_ADMIN) {
 			return '';
 		} elseif (defined('IS_API') && IS_API) {
 			return '';
-		} elseif (in_array($_GET['c'], array('attachments'))) {
+		} elseif (in_array($input->get('c'), array('attachments'))) {
 			return '';
-		} elseif (in_array($_GET['a'], array('public_upload_index', 'uploadavatar', 'public_ajax_add_panel', 'public_ajax_delete_panel'))) {
+		} elseif (in_array($input->get('a'), array('public_upload_index', 'uploadavatar', 'public_ajax_add_panel', 'public_ajax_delete_panel'))) {
 			return '';
 		} elseif (defined('IS_INSTALL')) {
 			return '';

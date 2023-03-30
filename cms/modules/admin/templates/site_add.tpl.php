@@ -2,22 +2,12 @@
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header');
 ?>
-<script type="text/javascript">
-<!--
-    var charset = '<?php echo CHARSET;?>';
-    var uploadurl = '<?php echo SYS_UPLOAD_URL;?>';
-//-->
-</script>
-<link href="<?php echo JS_PATH?>layui/css/layui.css" rel="stylesheet" type="text/css" />
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>content_addtop.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>hotkeys.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>cookie.js"></script>
-<script type="text/javascript" src="<?php echo JS_PATH?>layui/layui.js"></script>
-<script type="text/javascript">var catid=0</script>
+<?php echo load_js(JS_PATH.'jquery-ui/jquery-ui.js');?>
+<?php echo load_css(JS_PATH.'jquery-fileupload/css/jquery.fileupload.css');?>
+<?php echo load_js(JS_PATH.'jquery-fileupload/js/jquery.fileupload.min.js');?>
 <div class="pad-10">
 <form action="?m=admin&c=site&a=add" method="post" id="myform">
 <input name="dosubmit" type="hidden" value="1">
-<div>
 <fieldset>
     <legend><?php echo L('basic_configuration')?></legend>
     <table width="100%"  class="table_form">
@@ -75,7 +65,8 @@ include $this->admin_tpl('header');
     <td class="y-bg">
       <div class="mt-radio-inline">
         <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobileauto]" value="1"> <?php echo L('open');?> <span></span></label>
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobileauto]" value="0" checked> <?php echo L('close');?> <span></span></label><br><?php echo L('mobile_auto_desc')?>
+        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobileauto]" value="0" checked> <?php echo L('close');?> <span></span></label>
+        <span class="help-block"><?php echo L('mobile_auto_desc')?></span>
       </div>
     </td>
   </tr>
@@ -84,7 +75,8 @@ include $this->admin_tpl('header');
     <td class="y-bg">
       <div class="mt-radio-inline">
         <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilehtml]" value="1"> <?php echo L('html_mobile_url');?> <span></span></label>
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilehtml]" value="0" checked> <?php echo L('dynamic_address');?> <span></span></label><br><?php echo L('html_mobile_desc')?>
+        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilehtml]" value="0" checked> <?php echo L('dynamic_address');?> <span></span></label>
+        <span class="help-block"><?php echo L('html_mobile_desc')?></span>
       </div>
     </td>
   </tr>
@@ -93,7 +85,8 @@ include $this->admin_tpl('header');
     <td class="y-bg">
       <div class="mt-radio-inline">
         <label class="mt-radio mt-radio-outline"><input type="radio" name="info[not_pad]" value="1"> <?php echo L('open');?> <span></span></label>
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[not_pad]" value="0" checked> <?php echo L('close');?> <span></span></label><br><?php echo L('mobile_not_pad_desc')?>
+        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[not_pad]" value="0" checked> <?php echo L('close');?> <span></span></label>
+        <span class="help-block"><?php echo L('mobile_not_pad_desc')?></span>
       </div>
     </td>
   </tr>
@@ -221,7 +214,8 @@ function default_list() {
     <table width="100%" class="radio-label">
   <tr>
     <th width="130" valign="top"><?php echo L('ueditor_filename')?></th>
-    <td class="y-bg"><label><input type="text" class="input-text" name="setting[filename]" id="filename" size="50" value="{yyyy}/{mm}{dd}/{time}{rand:6}"/></label><br><?php echo L('ueditor_filename_desc')?></td>
+    <td class="y-bg"><label><input type="text" class="input-text" name="setting[filename]" id="filename" size="50" value="{yyyy}/{mm}{dd}/{time}{rand:6}"/></label>
+    <span class="help-block"><?php echo L('ueditor_filename_desc')?></span></td>
   </tr>
   <tr>
     <th width="130" valign="top"><?php echo L('ueditor_image_max_size')?></th>
@@ -307,26 +301,30 @@ function default_list() {
   <tr class="dr_sy dr_sy_1">
     <th><?php echo L('site_att_text_font')?></th>
     <td class="y-bg">
-      <?php if ($waterfile) {?>
+        <?php if ($waterfile) {?>
         <select style="height: 34px;background-color: rgb(255, 255, 255);box-shadow: rgba(0, 0, 0, 0.075) 0px 1px 1px inset;padding: 6px 12px;border-width: 1px;border-style: solid;border-color: rgb(194, 202, 216);border-image: initial;border-radius: 4px;transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;" name="setting[wm_font_path]" id="wm_font_path">
             <?php foreach($waterfile as $t) {
             if (strpos($t, '.ttf') !== false) {?>
             <option<?php if ($t=='default.ttf') {?> selected=""<?php }?> value="<?php echo $t;?>"><?php echo $t;?></option>
             <?php }}?>
         </select>
-      <?php }?><button type="button" class="layui-btn layui-btn-sm" id="fileupload-font"><i class="layui-icon">&#xe67c;</i><?php echo L('upload');?></button><br><?php echo L('site_att_text_font_desc')?>
+        <?php }?>
+        <label class="wm-fileupload-font"><span class="btn green btn-sm fileinput-button"><i class="fa fa-cloud-upload"></i> <span><?php echo L('upload');?></span> <input type="file" name="file_data"> </span> </label>
+        <span class="help-block"><?php echo L('site_att_text_font_desc')?></span>
      </td>
   </tr>
   <tr class="dr_sy dr_sy_1">
     <th><?php echo L('site_att_watermark_text')?></th>
     <td class="y-bg">
-      <input type="text" class="input-text" name="setting[wm_text]" id="wm_text" size="10" value="cms" /><br><?php echo L('site_att_text_desc')?>
+      <input type="text" class="input-text" name="setting[wm_text]" id="wm_text" size="10" value="cms" />
+      <span class="help-block"><?php echo L('site_att_text_desc')?></span>
      </td>
   </tr>
   <tr class="dr_sy dr_sy_1">
     <th><?php echo L('site_att_text_size')?></th>
     <td class="y-bg">
-      <input type="text" class="input-text" name="setting[wm_font_size]" id="wm_font_size" size="10" value="" /><br><?php echo L('site_att_text_size_desc')?>
+      <input type="text" class="input-text" name="setting[wm_font_size]" id="wm_font_size" size="10" value="" />
+      <span class="help-block"><?php echo L('site_att_text_size_desc')?></span>
      </td>
   </tr>
   <tr class="dr_sy dr_sy_1">
@@ -338,41 +336,68 @@ function default_list() {
   <tr class="dr_sy dr_sy_0">
     <th><?php echo L('site_att_watermark_img')?></th>
     <td class="y-bg">
-      <?php if ($waterfile) {?>
-        <select style="height: 34px;background-color: rgb(255, 255, 255);box-shadow: rgba(0, 0, 0, 0.075) 0px 1px 1px inset;padding: 6px 12px;border-width: 1px;border-style: solid;border-color: rgb(194, 202, 216);border-image: initial;border-radius: 4px;transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;" name="setting[wm_overlay_path]" id="wm_overlay_path">
+        <?php if ($waterfile) {?>
+        <label><select class="form-control" name="setting[wm_overlay_path]" id="wm_overlay_path">
             <?php foreach($waterfile as $t) {
             if (strpos($t, '.png') !== false) {?>
             <option<?php if ($t=='default.png') {?> selected=""<?php }?> value="<?php echo $t;?>"><?php echo $t;?></option>
             <?php }}?>
-        </select>
-      <?php }?><button type="button" class="layui-btn layui-btn-sm" id="fileupload-img"><i class="layui-icon">&#xe67c;</i><?php echo L('upload');?></button><br><?php echo L('site_att_watermark_img_desc')?>
+        </select></label>
+        <?php }?>
+        <label class="wm-fileupload-img"><span class="btn green btn-sm fileinput-button"><i class="fa fa-cloud-upload"></i> <span><?php echo L('upload');?></span> <input type="file" name="file_data"> </span> </label>
+        <span class="help-block"><?php echo L('site_att_watermark_img_desc')?></span>
      </td>
   </tr>
    <tr>
     <th width="130" valign="top"><?php echo L('site_att_watermark_pct')?></th>
-    <td class="y-bg"><input type="text" class="input-text" name="setting[wm_opacity]" id="wm_opacity" size="10" value="100" /><br><?php echo L('site_att_watermark_pct_desc')?></td>
+    <td class="y-bg"><input type="text" class="input-text" name="setting[wm_opacity]" id="wm_opacity" size="10" value="100" />
+    <span class="help-block"><?php echo L('site_att_watermark_pct_desc')?></span></td>
   </tr> 
    <tr>
     <th width="130" valign="top"><?php echo L('site_att_watermark_quality')?></th>
-    <td class="y-bg"><input type="text" class="input-text" name="setting[quality]" id="quality" size="10" value="80" /><br><?php echo L('site_att_watermark_quality_desc')?></td>
+    <td class="y-bg"><input type="text" class="input-text" name="setting[quality]" id="quality" size="10" value="80" />
+    <span class="help-block"><?php echo L('site_att_watermark_quality_desc')?></span></td>
   </tr>
   <tr>
     <th><?php echo L('site_att_watermark_padding')?></th>
     <td class="y-bg">
-      <label><input type="text" class="input-text" name="setting[wm_padding]" id="wm_padding" size="10" value="0" placeholder="px" /></label><br><?php echo L('site_att_watermark_padding_desc')?>
+      <label><input type="text" class="input-text" name="setting[wm_padding]" id="wm_padding" size="10" value="0" placeholder="px" /></label>
+      <span class="help-block"><?php echo L('site_att_watermark_padding_desc')?></span>
      </td>
   </tr>
   <tr>
     <th><?php echo L('site_att_watermark_offset')?></th>
     <td class="y-bg">
-      <?php echo L('site_att_watermark_hor_offset')?>
-<label><input type="text" class="input-text" name="setting[wm_hor_offset]" id="wm_hor_offset" size="10" value="0" placeholder="px" /></label> PX <?php echo L('site_att_watermark_vrt_offset')?><label><input type="text" class="input-text" name="setting[wm_vrt_offset]" id="wm_vrt_offset" size="10" value="0" placeholder="px" /></label> PX
+        <div class="input-inline input-small">
+            <div class="input-group">
+                <span class="input-group-addon"><?php echo L('site_att_watermark_hor_offset')?></span>
+                <input type="text" name="setting[wm_hor_offset]" id="wm_hor_offset" value="" class="form-control" placeholder="px">
+            </div>
+        </div>
+        <div class="input-inline input-small">
+            <div class="input-group">
+                <span class="input-group-addon"><?php echo L('site_att_watermark_vrt_offset')?></span>
+                <input type="text" name="setting[wm_vrt_offset]" id="wm_vrt_offset" value="" class="form-control" placeholder="px">
+            </div>
+        </div>
      </td>
   </tr>
   <tr>
     <th><?php echo L('site_att_watermark_photo')?></th>
-    <td class="y-bg"><?php echo L('site_att_watermark_minwidth')?>
-<label><input type="text" class="input-text" name="setting[width]" id="width" size="10" value="0" placeholder="px" /></label> PX <?php echo L('site_att_watermark_minheight')?><label><input type="text" class="input-text" name="setting[height]" id="height" size="10" value="0" placeholder="px" /></label> PX<br><?php echo L('site_att_watermark_photo_desc')?>
+    <td class="y-bg">
+        <div class="input-inline input-large">
+            <div class="input-group">
+                <span class="input-group-addon"><?php echo L('site_att_watermark_minwidth')?></span>
+                <input type="text" name="setting[width]" id="width" value="" class="form-control" placeholder="px">
+            </div>
+        </div>
+        <div class="input-inline input-large">
+            <div class="input-group">
+                <span class="input-group-addon"><?php echo L('site_att_watermark_minheight')?></span>
+                <input type="text" name="setting[height]" id="height" value="" class="form-control" placeholder="px">
+            </div>
+        </div>
+        <span class="help-block"><?php echo L('site_att_watermark_photo_desc')?></span>
      </td>
   </tr>
   <tr>
@@ -390,7 +415,8 @@ function default_list() {
     <td class="y-bg">
       <div class="mt-radio-inline">
         <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[ueditor]" value="0" checked> <?php echo L('site_att_watermark_ueditor');?> <span></span></label>
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[ueditor]" value="1"> <?php echo L('site_att_watermark_all');?> <span></span></label><br><?php echo L('site_att_ueditor_desc')?>
+        <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[ueditor]" value="1"> <?php echo L('site_att_watermark_all');?> <span></span></label>
+        <span class="help-block"><?php echo L('site_att_ueditor_desc')?></span>
       </div>
     </td>
   </tr>
@@ -399,20 +425,19 @@ function default_list() {
     <td class="y-bg">
       <div class="mt-radio-inline">
         <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[thumb]" value="0" checked> <?php echo L('按调用参数');?> <span></span></label>
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[thumb]" value="1"> <?php echo L('site_att_watermark_all');?> <span></span></label><br><?php echo L('是否对缩略图函数thumb的图片进行强制水印')?>
+        <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[thumb]" value="1"> <?php echo L('site_att_watermark_all');?> <span></span></label>
+        <span class="help-block"><?php echo L('是否对缩略图函数thumb的图片进行强制水印')?></span>
       </div>
     </td>
   </tr>
    <tr>
     <th width="130" valign="top"></th>
-    <td class="y-bg"><button type="button" onclick="dr_preview()" class="layui-btn layui-btn-danger layui-btn-sm"> <i class="fa fa-photo"></i> <?php echo L('site_att_watermark_review');?></button></td>
+    <td class="y-bg"><button type="button" onclick="dr_preview()" class="btn red btn-sm"> <i class="fa fa-photo"></i> <?php echo L('site_att_watermark_review');?></button></td>
   </tr>
 </table>
 </fieldset>
-</div>
-</div>
-</div>
 </form>
+</div>
 <link rel="stylesheet" href="<?php echo JS_PATH?>ion-rangeslider/ion.rangeSlider.min.css">
 <script src="<?php echo JS_PATH?>ion-rangeslider/ion.rangeSlider.min.js"></script>
 <link href="<?php echo JS_PATH?>jquery-minicolors/jquery.minicolors.css" rel="stylesheet" type="text/css" />
@@ -483,34 +508,59 @@ $(function(){
         max: 100,
         from: 80
     });
-    layui.use('upload', function () {
-        var upload = layui.upload;
-        upload.render({
-            elem:'#fileupload-font',
-            accept:'file',
-            field:'file_data',
-            url: '?m=admin&c=site&a=public_upload_index&at=font&pc_hash='+pc_hash,
-            exts: 'ttf',
-            done: function(data){
-                dr_tips(data.code, data.msg);
-                if(data.code == 1){
-                    setTimeout("location.reload(true)", 2000);
-                }
+    // 初始化上传组件
+    $('.wm-fileupload-font').fileupload({
+        disableImageResize: false,
+        autoUpload: true,
+        maxFileSize: 2,
+        url: '?m=admin&c=site&a=public_upload_index&at=font',
+        dataType: 'json',
+        formData : {
+            'csrf_test_name': '<?php echo csrf_hash();?>',
+        },
+        progressall: function (e, data) {
+            // 上传进度条 all
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            layer.msg(progress+'%');
+        },
+        add: function (e, data) {
+            data.submit();
+        },
+        done: function (e, data) {
+            //console.log($(this).html());
+            dr_tips(data.result.code, data.result.msg);
+            if (data.result.code) {
+                setTimeout("window.location.reload(true)", 2000);
             }
-        });
-        upload.render({
-            elem:'#fileupload-img',
-            accept:'file',
-            field:'file_data',
-            url: '?m=admin&c=site&a=public_upload_index&at=img&pc_hash='+pc_hash,
-            exts: 'png',
-            done: function(data){
-                dr_tips(data.code, data.msg);
-                if(data.code == 1){
-                    setTimeout("location.reload(true)", 2000);
-                }
+
+        },
+    });
+    // 初始化上传组件
+    $('.wm-fileupload-img').fileupload({
+        disableImageResize: false,
+        autoUpload: true,
+        maxFileSize: 2,
+        url: '?m=admin&c=site&a=public_upload_index&at=img',
+        dataType: 'json',
+        formData : {
+            'csrf_test_name': '<?php echo csrf_hash();?>',
+        },
+        progressall: function (e, data) {
+            // 上传进度条 all
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            layer.msg(progress+'%');
+        },
+        add: function (e, data) {
+            data.submit();
+        },
+        done: function (e, data) {
+            //console.log($(this).html());
+            dr_tips(data.result.code, data.result.msg);
+            if (data.result.code) {
+                setTimeout("window.location.reload(true)", 2000);
             }
-        });
+
+        },
     });
 });
 </script>
