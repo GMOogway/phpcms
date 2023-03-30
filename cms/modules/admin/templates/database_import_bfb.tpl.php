@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo CHARSET;?>" />
 <title><?php echo L('website_manage');?></title>
