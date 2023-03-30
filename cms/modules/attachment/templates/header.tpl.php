@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html>
 <head>
 <meta charset="<?php echo CHARSET;?>">
 <title><?php echo L('website_manage');?></title>
@@ -10,7 +11,7 @@
 <?php echo load_css(CSS_PATH.'table_form.css');?>
 <?php echo load_css(CSS_PATH.'admin/css/my.css');?>
 <?php echo load_js(JS_PATH.'Dialog/main.js');?>
-<?php echo load_js(JS_PATH.'bootstrap/js/bootstrap.min.js');?>
+<?php echo load_js(CSS_PATH.'bootstrap/js/bootstrap.min.js');?>
 <script type="text/javascript">
 var is_admin = 0;
 var web_dir = '<?php echo WEB_PATH;?>';

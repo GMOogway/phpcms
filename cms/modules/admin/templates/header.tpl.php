@@ -1,5 +1,6 @@
 <?php defined('IS_ADMIN') or exit('No permission resources.');?>
 <!DOCTYPE html>
+<html>
 <head>
 <meta charset="<?php echo CHARSET;?>">
 <title><?php echo L('website_manage');?></title>
@@ -17,7 +18,7 @@ if(isset($show_dialog)) {?>
 <?php echo load_js(JS_PATH.'dialog.js');?>
 <?php } ?>
 <?php echo load_js(JS_PATH.'Dialog/main.js');?>
-<?php echo load_js(JS_PATH.'bootstrap/js/bootstrap.min.js');?>
+<?php echo load_js(CSS_PATH.'bootstrap/js/bootstrap.min.js');?>
 <?php echo load_js(JS_PATH.'bootstrap-tagsinput.min.js');?>
 <script type="text/javascript">
 <?php
