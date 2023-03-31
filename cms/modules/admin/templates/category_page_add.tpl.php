@@ -37,9 +37,11 @@ include $this->admin_tpl('header');?>
             <li<?php if ($page==4) {?> class="active"<?php }?>>
                 <a data-toggle="tab_4" onclick="$('#dr_page').val('4')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('catgory_private').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-user-circle"></i> <?php if (!is_mobile(0)) {echo L('catgory_private');}?> </a>
             </li>
+            <?php if($forminfos && is_array($forminfos['base'])) {?>
             <li<?php if ($page==5) {?> class="active"<?php }?>>
                 <a data-toggle="tab_5" onclick="$('#dr_page').val('5')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('field_manage').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-code"></i> <?php if (!is_mobile(0)) {echo L('field_manage');}?> </a>
             </li>
+            <?php }?>
         </ul>
     </div>
     <div class="portlet-body form">
@@ -87,7 +89,7 @@ include $this->admin_tpl('header');?>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('description')?></label>
                         <div class="col-md-9">
-                            <textarea class="form-control" name="info[description]" maxlength="255" style="height:90px;"></textarea>
+                            <textarea class="form-control" name="info[description]" style="height:90px;"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
@@ -192,21 +194,21 @@ include $this->admin_tpl('header');?>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('SEO标题')?></label>
                         <div class="col-md-9">
-                            <textarea class="form-control" name="setting[meta_title]" maxlength="255" style="height:90px;"></textarea>
+                            <textarea class="form-control" name="setting[meta_title]" style="height:90px;"></textarea>
                             <span class="help-block"><?php echo L('针对搜索引擎设置的标题')?></span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('SEO关键字')?></label>
                         <div class="col-md-9">
-                            <textarea class="form-control" name="setting[meta_keywords]" maxlength="255" style="height:90px;"></textarea>
+                            <textarea class="form-control" name="setting[meta_keywords]" style="height:90px;"></textarea>
                             <span class="help-block"><?php echo L('关键字中间用半角逗号隔开')?></span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-2 control-label"><?php echo L('SEO描述信息')?></label>
                         <div class="col-md-9">
-                            <textarea class="form-control" name="setting[meta_description]" maxlength="255" style="height:90px;"></textarea>
+                            <textarea class="form-control" name="setting[meta_description]" style="height:90px;"></textarea>
                             <span class="help-block"><?php echo L('针对搜索引擎设置的网页描述')?></span>
                         </div>
                     </div>
@@ -268,12 +270,11 @@ include $this->admin_tpl('header');?>
 
                 </div>
             </div>
+            <?php if($forminfos && is_array($forminfos['base'])) {?>
             <div class="tab-pane<?php if ($page==5) {?> active<?php }?>" id="tab_5">
                 <div class="form-body">
 
-<?php
-if($forminfos && is_array($forminfos['base'])) {
- foreach($forminfos['base'] as $field=>$info) {
+<?php foreach($forminfos['base'] as $field=>$info) {
      if($info['isomnipotent']) continue;
      if($info['formtype']=='omnipotent') {
         foreach($forminfos['base'] as $_fm=>$_fm_value) {
@@ -287,7 +288,7 @@ if($forminfos && is_array($forminfos['base'])) {
             }
         }
     }
- ?>
+?>
                     <div class="form-group" id="dr_row_<?php echo $field?>">
                         <label class="col-md-2 control-label"><?php if($info['star']){ ?> <font color="red">*</font><?php } ?> <?php echo $info['name']?></label>
                         <div class="col-md-9">
@@ -295,12 +296,11 @@ if($forminfos && is_array($forminfos['base'])) {
                             <span class="help-block" id="dr_<?php echo $field?>_tips"><?php echo $info['tips']?></span>
                         </div>
                     </div>
-<?php
-} }
-?>
+<?php }?>
 
                 </div>
             </div>
+            <?php }?>
         </div>
     </div>
 </div>

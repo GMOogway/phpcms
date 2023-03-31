@@ -51,7 +51,7 @@ endif;
 <script type="text/javascript">
 <!--
 function edit(id, name) {
-	dr_iframe('edit','?m=admin&c=site&a=edit&siteid='+id,'60%','60%');
+	dr_iframe('edit','?m=admin&c=site&a=edit&siteid='+id,'80%','80%');
 }
 //-->
 </script>

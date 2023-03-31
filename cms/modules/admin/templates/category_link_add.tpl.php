@@ -25,9 +25,11 @@ include $this->admin_tpl('header');?>
             <li<?php if ($page==0) {?> class="active"<?php }?>>
                 <a data-toggle="tab_0" onclick="$('#dr_page').val('0')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('catgory_basic').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-cog"></i> <?php if (!is_mobile(0)) {echo L('catgory_basic');}?> </a>
             </li>
+            <?php if($forminfos && is_array($forminfos['base'])) {?>
             <li<?php if ($page==1) {?> class="active"<?php }?>>
                 <a data-toggle="tab_1" onclick="$('#dr_page').val('1')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('field_manage').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-code"></i> <?php if (!is_mobile(0)) {echo L('field_manage');}?> </a>
             </li>
+            <?php }?>
         </ul>
     </div>
     <div class="portlet-body form">
@@ -108,12 +110,11 @@ include $this->admin_tpl('header');?>
 
                 </div>
             </div>
+            <?php if($forminfos && is_array($forminfos['base'])) {?>
             <div class="tab-pane<?php if ($page==1) {?> active<?php }?>" id="tab_1">
                 <div class="form-body">
 
-<?php
-if($forminfos && is_array($forminfos['base'])) {
- foreach($forminfos['base'] as $field=>$info) {
+<?php foreach($forminfos['base'] as $field=>$info) {
      if($info['isomnipotent']) continue;
      if($info['formtype']=='omnipotent') {
         foreach($forminfos['base'] as $_fm=>$_fm_value) {
@@ -135,12 +136,11 @@ if($forminfos && is_array($forminfos['base'])) {
                             <span class="help-block" id="dr_<?php echo $field?>_tips"><?php echo $info['tips']?></span>
                         </div>
                     </div>
-<?php
-} }
-?>
+<?php }?>
 
                 </div>
             </div>
+            <?php }?>
         </div>
     </div>
 </div>

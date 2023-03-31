@@ -1,128 +1,557 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');
-include $this->admin_tpl('header');
-?>
+include $this->admin_tpl('header');?>
 <?php echo load_js(JS_PATH.'jquery-ui/jquery-ui.js');?>
 <?php echo load_css(JS_PATH.'jquery-fileupload/css/jquery.fileupload.css');?>
 <?php echo load_js(JS_PATH.'jquery-fileupload/js/jquery.fileupload.min.js');?>
-<div class="pad-10">
-<form action="?m=admin&c=site&a=add" method="post" id="myform">
+<script type="text/javascript">
+jQuery(document).ready(function() {
+    $(":text").removeClass('input-text');
+});
+</script>
+<div class="page-container" style="margin-bottom: 0px !important;">
+    <div class="page-content-wrapper">
+        <div class="page-content page-content3 mybody-nheader main-content  ">
+<form action="?m=admin&c=site&a=add" class="form-horizontal" method="post" name="myform" id="myform">
 <input name="dosubmit" type="hidden" value="1">
-<fieldset>
-    <legend><?php echo L('basic_configuration')?></legend>
-    <table width="100%"  class="table_form">
-  <tr id="dr_row_name">
-    <th width="100"><?php echo L('site_name')?>：</th>
-    <td class="y-bg"><label><input type="text" class="input-text" name="info[name]" id="name" size="70" /></label></td>
-  </tr>
-  <tr id="dr_row_dirname">
-    <th><?php echo L('site_dirname')?>：</th>
-    <td class="y-bg"><label><input type="text" class="input-text" name="info[dirname]" id="dirname" size="70" /></label></td>
-  </tr>
-    <tr id="dr_row_domain">
-    <th><?php echo L('site_domain')?>：</th>
-    <td class="y-bg"><label><input type="text" class="input-text" name="info[domain]" id="domain"  size="70"/></label></td>
-  </tr>
-  <tr>
-    <th><?php echo L('html_home')?>：</th>
-    <td class="y-bg">
-      <div class="mt-radio-inline">
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[ishtml]" value="1"> <?php echo L('open');?> <span></span></label>
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[ishtml]" value="0" checked> <?php echo L('close');?> <span></span></label>
-      </div>
-    </td>
-  </tr>
-</table>
-</fieldset>
-<div class="bk15"></div>
-<fieldset>
-    <legend><?php echo L('mobile_configuration')?></legend>
-    <table width="100%"  class="table_form">
-  <tr>
-    <th width="120"><?php echo L('access_mode')?>：</th>
-    <td class="y-bg">
-      <div class="mt-radio-inline">
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilemode]" value="-1" onclick="$('.dr_zsy').hide();$('.dr_mode_0').hide();$('.dr_mode_1').hide();$('.dr_mode_2').show();" checked> <?php echo L('close_mode');?> <span></span></label>
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilemode]" value="0" onclick="$('.dr_zsy').show();$('.dr_mode_0').show();$('.dr_mode_1').hide();$('.dr_mode_2').hide();"> <?php echo L('directory_mode');?> <span></span></label>
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilemode]" value="1" onclick="$('.dr_zsy').show();$('.dr_mode_0').hide();$('.dr_mode_1').show();$('.dr_mode_2').hide();"> <?php echo L('domain_mode');?> <span></span></label>
-      </div>
-    </td>
-  </tr>
-  <tr class="dr_mode_2">
-    <th><?php echo L('self_adaption')?>：</th>
-    <td class="y-bg"><div class="form-control-static"><label><?php echo L('self_adaption_desc')?></label></div></td>
-  </tr>
-  <tr id="dr_row_mobile_dirname" class="dr_mode_0" style="display: none">
-    <th><?php echo L('mobile_dirname')?>：</th>
-    <td class="y-bg"><label><input type="text" class="input-text" name="info[mobile_dirname]" id="mobile_dirname" size="70" value="mobile"/></label></td>
-  </tr>
-  <tr id="dr_row_mobile_domain" class="dr_mode_1" style="display: none">
-    <th><?php echo L('mobile_domain')?>：</th>
-    <td class="y-bg"><label><input type="text" class="input-text" name="info[mobile_domain]" id="mobile_domain" size="70"/></label></td>
-  </tr>
-  <tr>
-    <th><?php echo L('mobile_auto')?>：</th>
-    <td class="y-bg">
-      <div class="mt-radio-inline">
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobileauto]" value="1"> <?php echo L('open');?> <span></span></label>
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobileauto]" value="0" checked> <?php echo L('close');?> <span></span></label>
-        <span class="help-block"><?php echo L('mobile_auto_desc')?></span>
-      </div>
-    </td>
-  </tr>
-  <tr class="dr_zsy" style="display: none">
-    <th><?php echo L('html_mobile')?>：</th>
-    <td class="y-bg">
-      <div class="mt-radio-inline">
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilehtml]" value="1"> <?php echo L('html_mobile_url');?> <span></span></label>
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilehtml]" value="0" checked> <?php echo L('dynamic_address');?> <span></span></label>
-        <span class="help-block"><?php echo L('html_mobile_desc')?></span>
-      </div>
-    </td>
-  </tr>
-  <tr class="dr_zsy" style="display: none">
-    <th><?php echo L('mobile_not_pad')?>：</th>
-    <td class="y-bg">
-      <div class="mt-radio-inline">
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[not_pad]" value="1"> <?php echo L('open');?> <span></span></label>
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="info[not_pad]" value="0" checked> <?php echo L('close');?> <span></span></label>
-        <span class="help-block"><?php echo L('mobile_not_pad_desc')?></span>
-      </div>
-    </td>
-  </tr>
-  <tr class="dr_zsy" style="display: none">
-    <th><?php echo L('mobile_template')?>：</th>
-    <td class="y-bg"><?php echo L('mobile_template_style')?></td>
-  </tr>
-</table>
-</fieldset>
-<div class="bk15"></div>
-<fieldset>
-    <legend><?php echo L('seo_configuration')?></legend>
-    <table width="100%"  class="table_form">
-  <tr>
-    <th width="100"><?php echo L('site_title')?>：</th>
-    <td class="y-bg"><label><input type="text" class="input-text" name="info[site_title]" id="site_title" size="80" /></label></td>
-  </tr>
-  <tr>
-    <th><?php echo L('keyword_name')?>：</th>
-    <td class="y-bg"><label><input type="text" class="input-text" name="info[keywords]" id="keywords" size="80" /></label></td>
-  </tr>
-    <tr>
-    <th><?php echo L('description')?>：</th>
-    <td class="y-bg"><label><input type="text" class="input-text" name="info[description]" id="description" size="80" /></label></td>
-  </tr>
-</table>
-</fieldset>
-<div class="bk15"></div>
-<?php if($forminfos && is_array($forminfos['base'])) {?>
-<fieldset>
-    <legend><?php echo L('field_manage')?></legend>
-    <table width="100%"  class="table_form">
+<input name="page" id="dr_page" type="hidden" value="<?php echo $page;?>">
+<input name="pc_hash" type="hidden" value="<?php echo dr_get_csrf_token();?>">
+<div class="portlet light bordered myfbody">
+    <div class="portlet-title tabbable-line">
+        <ul class="nav nav-tabs" style="float:left;">
+            <li<?php if ($page==0) {?> class="active"<?php }?>>
+                <a data-toggle="tab_0" onclick="$('#dr_page').val('0')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('basic_configuration').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-cog"></i> <?php if (!is_mobile(0)) {echo L('basic_configuration');}?> </a>
+            </li>
+            <li<?php if ($page==1) {?> class="active"<?php }?>>
+                <a data-toggle="tab_1" onclick="$('#dr_page').val('1')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('mobile_configuration').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-mobile"></i> <?php if (!is_mobile(0)) {echo L('mobile_configuration');}?> </a>
+            </li>
+            <li<?php if ($page==2) {?> class="active"<?php }?>>
+                <a data-toggle="tab_2" onclick="$('#dr_page').val('2')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('seo_configuration').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-internet-explorer"></i> <?php if (!is_mobile(0)) {echo L('seo_configuration');}?> </a>
+            </li>
+            <li<?php if ($page==3) {?> class="active"<?php }?>>
+                <a data-toggle="tab_3" onclick="$('#dr_page').val('3')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('release_point_configuration').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-send"></i> <?php if (!is_mobile(0)) {echo L('release_point_configuration');}?> </a>
+            </li>
+            <li<?php if ($page==4) {?> class="active"<?php }?>>
+                <a data-toggle="tab_4" onclick="$('#dr_page').val('4')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('template_style_configuration').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-html5"></i> <?php if (!is_mobile(0)) {echo L('template_style_configuration');}?> </a>
+            </li>
+            <li<?php if ($page==5) {?> class="active"<?php }?>>
+                <a data-toggle="tab_5" onclick="$('#dr_page').val('5')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('site_att_config').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-folder"></i> <?php if (!is_mobile(0)) {echo L('site_att_config');}?> </a>
+            </li>
+            <li<?php if ($page==6) {?> class="active<?php if (SYS_EDITOR) {?> hide<?php }?>"<?php }?>>
+                <a data-toggle="tab_6" onclick="$('#dr_page').val('6')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('att_ueditor').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-edit"></i> <?php if (!is_mobile(0)) {echo L('att_ueditor');}?> </a>
+            </li>
+            <?php if($forminfos && is_array($forminfos['base'])) {?>
+            <li<?php if ($page==7) {?> class="active"<?php }?>>
+                <a data-toggle="tab_7" onclick="$('#dr_page').val('7')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('field_manage').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-code"></i> <?php if (!is_mobile(0)) {echo L('field_manage');}?> </a>
+            </li>
+            <?php }?>
+        </ul>
+    </div>
+    <div class="portlet-body form">
+        <div class="tab-content">
+            <div class="tab-pane<?php if ($page==0) {?> active<?php }?>" id="tab_0">
+
+                <div class="form-body">
+
+                    <div class="form-group" id="dr_row_name">
+                        <label class="col-md-2 control-label"><?php echo L('site_name')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="name" name="info[name]" value="" >
+                        </div>
+                    </div>
+                    <div class="form-group" id="dr_row_dirname">
+                        <label class="col-md-2 control-label"><?php echo L('site_dirname')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="dirname" name="info[dirname]" value="" >
+                        </div>
+                    </div>
+                    <div class="form-group" id="dr_row_domain">
+                        <label class="col-md-2 control-label"><?php echo L('site_domain')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="domain" name="info[domain]" value="" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('html_home')?></label>
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="info[ishtml]" value="1"> <?php echo L('open');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="info[ishtml]" value="0" checked> <?php echo L('close');?> <span></span></label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="tab-pane<?php if ($page==1) {?> active<?php }?>" id="tab_1">
+                <div class="form-body">
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('access_mode')?></label>
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilemode]" value="-1" onclick="$('.dr_zsy').hide();$('.dr_mode_0').hide();$('.dr_mode_1').hide();$('.dr_mode_2').show();" checked> <?php echo L('close_mode');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilemode]" value="0" onclick="$('.dr_zsy').show();$('.dr_mode_0').show();$('.dr_mode_1').hide();$('.dr_mode_2').hide();"> <?php echo L('directory_mode');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilemode]" value="1" onclick="$('.dr_zsy').show();$('.dr_mode_0').hide();$('.dr_mode_1').show();$('.dr_mode_2').hide();"> <?php echo L('domain_mode');?> <span></span></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group dr_mode_2">
+                        <label class="col-md-2 control-label"><?php echo L('self_adaption')?></label>
+                        <div class="col-md-9">
+                            <div class="form-control-static"><?php echo L('self_adaption_desc')?></div>
+                        </div>
+                    </div>
+                    <div id="dr_row_mobile_dirname" class="form-group dr_mode_0" style="display: none">
+                        <label class="col-md-2 control-label"><?php echo L('mobile_dirname')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="mobile_dirname" name="info[mobile_dirname]" value="mobile" >
+                        </div>
+                    </div>
+                    <div id="dr_row_mobile_domain" class="form-group dr_mode_1" style="display: none">
+                        <label class="col-md-2 control-label"><?php echo L('mobile_domain')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="mobile_domain" name="info[mobile_domain]" value="" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('mobile_auto')?></label>
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobileauto]" value="1"> <?php echo L('open');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobileauto]" value="0" checked> <?php echo L('close');?> <span></span></label>
+                            </div>
+                            <span class="help-block"><?php echo L('mobile_auto_desc')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group dr_zsy" style="display: none">
+                        <label class="col-md-2 control-label"><?php echo L('html_mobile')?></label>
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilehtml]" value="1"> <?php echo L('html_mobile_url');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="info[mobilehtml]" value="0" checked> <?php echo L('dynamic_address');?> <span></span></label>
+                            </div>
+                            <span class="help-block"><?php echo L('html_mobile_desc')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group dr_zsy" style="display: none">
+                        <label class="col-md-2 control-label"><?php echo L('mobile_not_pad')?></label>
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="info[not_pad]" value="1"> <?php echo L('open');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="info[not_pad]" value="0" checked> <?php echo L('close');?> <span></span></label>
+                            </div>
+                            <span class="help-block"><?php echo L('mobile_not_pad_desc')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group dr_zsy" style="display: none">
+                        <label class="col-md-2 control-label"><?php echo L('mobile_template')?></label>
+                        <div class="col-md-9">
+                            <div class="form-control-static"><?php echo L('mobile_template_style')?></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="tab-pane<?php if ($page==2) {?> active<?php }?>" id="tab_2">
+                <div class="form-body">
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('site_title')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="site_title" name="info[site_title]" maxlength="255" value="" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('keyword_name')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="keywords" name="info[keywords]" maxlength="255" value="" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('description')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="description" name="info[description]" maxlength="255" value="" >
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="tab-pane<?php if ($page==3) {?> active<?php }?>" id="tab_3">
+                <div class="form-body">
+
+                    <div class="form-group" id="dr_row_release_point">
+                        <label class="col-md-2 control-label"><?php echo L('release_point')?></label>
+                        <div class="col-md-9">
+                            <label><select name="info[release_point][]" id="release_point" multiple title="<?php echo L('ctrl_more_selected')?>">
+                                <option value='' selected><?php echo L('not_use_the_publishers_some')?></option>
+                                <?php if(is_array($release_point_list) && !empty($release_point_list)){
+                                foreach($release_point_list as $v){?>
+                                <option value="<?php echo $v['id']?>"><?php echo $v['name']?></option>
+                                <?php }}?>
+                            </select></label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="tab-pane<?php if ($page==4) {?> active<?php }?>" id="tab_4">
+                <div class="form-body">
+
+                    <div class="form-group" id="dr_row_template">
+                        <label class="col-md-2 control-label"><?php echo L('style_name')?></label>
+                        <div class="col-md-9">
+                            <label><select name="template[]" id="template" multiple title="<?php echo L('ctrl_more_selected')?>" onchange="default_list()" ondblclick="default_list()">
+                                <?php if(is_array($template_list)){
+                                foreach ($template_list as $key=>$val){?>
+                                <option value="<?php echo $val['dirname']?>"><?php echo $val['name']?></option>
+                                <?php }}?>
+                            </select></label>
+                        </div>
+                        <script type="text/javascript">
+                        function default_list() {
+                            var html = '';
+                            var old = $('#default_style_input').val();
+                            var checked = '';
+                            $('#template option:selected').each(function(i,n){
+                                if (old == $(n).val()) {
+                                    checked = 'checked';
+                                }
+                                 html += '<div class="mt-radio-inline"><label class="mt-radio mt-radio-outline"><input type="radio" name="default_style_radio" value="'+$(n).val()+'" onclick="$(\'#default_style_input\').val(this.value);" '+checked+'> '+$(n).text()+' <span></span></label></div>';
+                            });
+                            if(!checked)  $('#default_style_input').val('0');
+                            $('#default_style').html(html);
+                        }
+                        </script>
+                    </div>
+                    <div class="form-group" id="dr_row_default_style">
+                        <label class="col-md-2 control-label"><?php echo L('default_style')?></label>
+                        <div class="col-md-9">
+                            <input type="hidden" name="info[default_style]" id="default_style_input" value="0">
+                            <span id="default_style">
+                                <div class="mt-radio-inline">
+                                    <label class="mt-radio mt-radio-outline"><input type="radio" name="default_style_radio" disabled> <span></span></label>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="tab-pane<?php if ($page==5) {?> active<?php }?>" id="tab_5">
+                <div class="form-body">
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('site_att_upload_maxsize')?></label>
+                        <div class="col-md-9">
+                            <div class="input-inline input-medium">
+                                <div class="input-group">
+                                    <input class="form-control" type="text" id="upload_maxsize" name="setting[upload_maxsize]" value="2" >
+                                    <span class="input-group-addon"><?php echo L('MB')?></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('site_att_allow_ext')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="upload_allowext" name="setting[upload_allowext]" value="jpg|jpeg|gif|bmp|png|doc|docx|xls|xlsx|ppt|pptx|pdf|txt|rar|zip|swf" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('site_att_upload_maxsize')?></label>
+                        <div class="col-md-9">
+                            <div class="form-control-static"><?php echo $this->check_gd();?></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('site_att_watermark_enable')?></label>
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[watermark_enable]" value="1" checked> <?php echo L('site_att_watermark_open');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[watermark_enable]" value="0"> <?php echo L('site_att_watermark_close');?> <span></span></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label class="col-md-2 control-label"><?php echo L('site_att_watermark_type')?></label>
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[type]" value="0" onclick="dr_type(0)" checked> <?php echo L('site_att_photo');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[type]" value="1" onclick="dr_type(1)"> <?php echo L('site_att_text');?> <span></span></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group dr_sy dr_sy_1">
+                        <label class="col-md-2 control-label"><?php echo L('site_att_text_font')?></label>
+                        <div class="col-md-9">
+                            <?php if ($waterfile) {?>
+                            <label><select class="form-control" name="setting[wm_font_path]" id="wm_font_path">
+                                <?php foreach($waterfile as $t) {
+                                if (strpos($t, '.ttf') !== false) {?>
+                                <option<?php if ($t=='default.ttf') {?> selected=""<?php }?> value="<?php echo $t;?>"><?php echo $t;?></option>
+                                <?php }}?>
+                            </select></label>
+                            <?php }?>
+                            <label class="wm-fileupload-font"><span class="btn green btn-sm fileinput-button"><i class="fa fa-cloud-upload"></i> <span><?php echo L('upload');?></span> <input type="file" name="file_data"> </span> </label>
+                            <span class="help-block"><?php echo L('site_att_text_font_desc')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group dr_sy dr_sy_1">
+                        <label class="col-md-2 control-label"><?php echo L('site_att_watermark_text')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="wm_text" name="setting[wm_text]" value="cms" >
+                            <span class="help-block"><?php echo L('site_att_text_desc')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group dr_sy dr_sy_1">
+                        <label class="col-md-2 control-label"><?php echo L('site_att_text_size')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="wm_font_size" name="setting[wm_font_size]" value="" >
+                            <span class="help-block"><?php echo L('site_att_text_size_desc')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group dr_sy dr_sy_1">
+                        <label class="col-md-2 control-label"><?php echo L('site_att_text_color')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="wm_font_color" name="setting[wm_font_color]" value="" >
+                        </div>
+                    </div>
+                    <div class="form-group dr_sy dr_sy_0">
+                        <label class="col-md-2 control-label"><?php echo L('site_att_watermark_img')?></label>
+                        <div class="col-md-9">
+                            <?php if ($waterfile) {?>
+                            <label><select class="form-control" name="setting[wm_overlay_path]" id="wm_overlay_path">
+                                <?php foreach($waterfile as $t) {
+                                if (strpos($t, '.png') !== false) {?>
+                                <option<?php if ($t=='default.png') {?> selected=""<?php }?> value="<?php echo $t;?>"><?php echo $t;?></option>
+                                <?php }}?>
+                            </select></label>
+                            <?php }?>
+                            <label class="wm-fileupload-img"><span class="btn green btn-sm fileinput-button"><i class="fa fa-cloud-upload"></i> <span><?php echo L('upload');?></span> <input type="file" name="file_data"> </span> </label>
+                            <span class="help-block"><?php echo L('site_att_watermark_img_desc')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('site_att_watermark_pct')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="wm_opacity" name="setting[wm_opacity]" value="100" >
+                            <span class="help-block"><?php echo L('site_att_watermark_pct_desc')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('site_att_watermark_quality')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="quality" name="setting[quality]" value="80" >
+                            <span class="help-block"><?php echo L('site_att_watermark_quality_desc')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('site_att_watermark_padding')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="wm_padding" name="setting[wm_padding]" value="0" placeholder="<?php echo L('px')?>" >
+                            <span class="help-block"><?php echo L('site_att_watermark_padding_desc')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('site_att_watermark_offset')?></label>
+                        <div class="col-md-9">
+                            <div class="input-inline input-small">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><?php echo L('site_att_watermark_hor_offset')?></span>
+                                    <input type="text" name="setting[wm_hor_offset]" id="wm_hor_offset" value="" class="form-control" placeholder="<?php echo L('px')?>">
+                                </div>
+                            </div>
+                            <div class="input-inline input-small">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><?php echo L('site_att_watermark_vrt_offset')?></span>
+                                    <input type="text" name="setting[wm_vrt_offset]" id="wm_vrt_offset" value="" class="form-control" placeholder="<?php echo L('px')?>">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('site_att_watermark_photo')?></label>
+                        <div class="col-md-9">
+                            <div class="input-inline input-large">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><?php echo L('site_att_watermark_minwidth')?></span>
+                                    <input type="text" name="setting[width]" id="width" value="" class="form-control" placeholder="<?php echo L('px')?>">
+                                </div>
+                            </div>
+                            <div class="input-inline input-large">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><?php echo L('site_att_watermark_minheight')?></span>
+                                    <input type="text" name="setting[height]" id="height" value="" class="form-control" placeholder="<?php echo L('px')?>">
+                                </div>
+                            </div>
+                            <span class="help-block"><?php echo L('site_att_watermark_photo_desc')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('site_att_watermark_pos')?></label>
+                        <div class="col-md-9">
+                            <div class="btn-group c-3x3" data-toggle="buttons">
+                                <?php foreach ($locate as $i=>$t) {?>
+                                <label class="btn btn-default<?php if ($i == 'right-bottom') {?> active<?php }?><?php if (strpos($i, 'bottom')!==false) {?> btn2<?php }?>"><input type="radio" name="setting[locate]" value="<?php echo $i?>"<?php if ($i == 'right-bottom') {?> checked<?php }?> class="toggle"><?php echo L($t)?></label>
+                                <?php }?>
+                            </div>
+                            <span class="help-block"><?php echo L('选择水印在图片中的位置')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('site_att_ueditor')?></label>
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[ueditor]" value="0" checked> <?php echo L('site_att_watermark_ueditor');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[ueditor]" value="1"> <?php echo L('site_att_watermark_all');?> <span></span></label>
+                            </div>
+                            <span class="help-block"><?php echo L('site_att_ueditor_desc')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('缩略图水印')?></label>
+                        <div class="col-md-9">
+                            <div class="mt-radio-inline">
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[thumb]" value="0" checked> <?php echo L('按调用参数');?> <span></span></label>
+                                <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[thumb]" value="1"> <?php echo L('site_att_watermark_all');?> <span></span></label>
+                            </div>
+                            <span class="help-block"><?php echo L('是否对缩略图函数thumb的图片进行强制水印')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"></label>
+                        <div class="col-md-9">
+                            <button type="button" onclick="dr_preview()" class="btn red btn-sm"> <i class="fa fa-photo"></i> <?php echo L('site_att_watermark_review');?></button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="tab-pane<?php if ($page==6) {?> active<?php }?>" id="tab_6">
+                <div class="form-body">
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('ueditor_filename')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="filename" name="setting[filename]" value="{yyyy}/{mm}{dd}/{time}{rand:6}" >
+                            <span class="help-block"><?php echo L('ueditor_filename_desc')?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('ueditor_image_max_size')?></label>
+                        <div class="col-md-9">
+                            <div class="input-inline input-medium">
+                                <div class="input-group">
+                                    <input class="form-control" type="text" id="imageMaxSize" name="setting[imageMaxSize]" value="2" >
+                                    <span class="input-group-addon"><?php echo L('MB')?></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('ueditor_image_allow_ext')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="imageAllowFiles" name="setting[imageAllowFiles]" value="png|jpg|jpeg|gif|bmp" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('ueditor_catcher_max_size')?></label>
+                        <div class="col-md-9">
+                            <div class="input-inline input-medium">
+                                <div class="input-group">
+                                    <input class="form-control" type="text" id="catcherMaxSize" name="setting[catcherMaxSize]" value="2" >
+                                    <span class="input-group-addon"><?php echo L('MB')?></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('ueditor_catcher_allow_ext')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="catcherAllowFiles" name="setting[catcherAllowFiles]" value="png|jpg|jpeg|gif|bmp" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('ueditor_video_max_size')?></label>
+                        <div class="col-md-9">
+                            <div class="input-inline input-medium">
+                                <div class="input-group">
+                                    <input class="form-control" type="text" id="videoMaxSize" name="setting[videoMaxSize]" value="100" >
+                                    <span class="input-group-addon"><?php echo L('MB')?></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('ueditor_video_allow_ext')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="videoAllowFiles" name="setting[videoAllowFiles]" value="flv|swf|mkv|avi|rm|rmvb|mpeg|mpg|ogg|ogv|mov|wmv|mp4|webm|mp3|wav|mid" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('ueditor_file_max_size')?></label>
+                        <div class="col-md-9">
+                            <div class="input-inline input-medium">
+                                <div class="input-group">
+                                    <input class="form-control" type="text" id="fileMaxSize" name="setting[fileMaxSize]" value="50" >
+                                    <span class="input-group-addon"><?php echo L('MB')?></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('ueditor_file_allow_ext')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="fileAllowFiles" name="setting[fileAllowFiles]" value="png|jpg|jpeg|gif|bmp|flv|swf|mkv|avi|rm|rmvb|mpeg|mpg|ogg|ogv|mov|wmv|mp4|webm|mp3|wav|mid|rar|zip|tar|gz|7z|bz2|cab|iso|doc|docx|xls|xlsx|ppt|pptx|pdf|txt|md|xml" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('ueditor_imagemanager_max_size')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="imageManagerListSize" name="setting[imageManagerListSize]" value="20" >
+                        </div>
+                    </div>
+                    <div class="form-group" style="display: none">
+                        <label class="col-md-2 control-label"><?php echo L('ueditor_imagemanager_allow_ext')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="imageManagerAllowFiles" name="setting[imageManagerAllowFiles]" value="png|jpg|jpeg|gif|bmp" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('ueditor_filemanager_max_size')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="fileManagerListSize" name="setting[fileManagerListSize]" value="20" >
+                        </div>
+                    </div>
+                    <div class="form-group" style="display: none">
+                        <label class="col-md-2 control-label"><?php echo L('ueditor_filemanager_allow_ext')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="fileManagerAllowFiles" name="setting[fileManagerAllowFiles]" value="png|jpg|jpeg|gif|bmp|flv|swf|mkv|avi|rm|rmvb|mpeg|mpg|ogg|ogv|mov|wmv|mp4|webm|mp3|wav|mid|rar|zip|tar|gz|7z|bz2|cab|iso|doc|docx|xls|xlsx|ppt|pptx|pdf|txt|md|xml" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('ueditor_videomanager_max_size')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="videoManagerListSize" name="setting[videoManagerListSize]" value="20" >
+                        </div>
+                    </div>
+                    <div class="form-group" style="display: none">
+                        <label class="col-md-2 control-label"><?php echo L('ueditor_videomanager_allow_ext')?></label>
+                        <div class="col-md-9">
+                            <input class="form-control" type="text" id="videoManagerAllowFiles" name="setting[videoManagerAllowFiles]" value="flv|swf|mkv|avi|rm|rmvb|mpeg|mpg|ogg|ogv|mov|wmv|mp4|webm|mp3|wav|mid" >
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <?php if($forminfos && is_array($forminfos['base'])) {?>
+            <div class="tab-pane<?php if ($page==7) {?> active<?php }?>" id="tab_7">
+                <div class="form-body">
 <?php
- foreach($forminfos['base'] as $field=>$info) {
-     if($info['isomnipotent']) continue;
-     if($info['formtype']=='omnipotent') {
+foreach($forminfos['base'] as $field=>$info) {
+    if($info['isomnipotent']) continue;
+    if($info['formtype']=='omnipotent') {
         foreach($forminfos['base'] as $_fm=>$_fm_value) {
             if($_fm_value['isomnipotent']) {
                 $info['form'] = str_replace('{'.$_fm.'}',$_fm_value['form'],$info['form']);
@@ -134,315 +563,37 @@ include $this->admin_tpl('header');
             }
         }
     }
- ?>
-    <tr id="dr_row_<?php echo $field?>">
-      <th width="100"><?php if($info['star']){ ?> <font color="red">*</font><?php } ?> <?php echo $info['name']?>
-      </th>
-      <td class="y-bg"><?php echo $info['form']?>  <?php echo $info['tips']?></td>
-    </tr>
+?>
+                    <div class="form-group" id="dr_row_<?php echo $field?>">
+                        <label class="col-md-2 control-label"><?php if($info['star']){ ?><span class="required" aria-required="true"> * </span><?php } ?><?php echo $info['name']?></label>
+                        <div class="col-md-9">
+                            <?php echo $info['form']?>
+                            <span class="help-block" id="dr_<?php echo $field?>_tips"><?php echo $info['tips']?></span>
+                        </div>
+                    </div>
 <?php }?>
-</table>
-</fieldset>
-<div class="bk15"></div>
-<?php }?>
-<fieldset>
-    <legend><?php echo L('release_point_configuration')?></legend>
-    <table width="100%"  class="table_form">
-  <tr id="dr_row_release_point">
-    <th width="80" valign="top"><?php echo L('release_point')?>：</th>
-    <td> <select name="info[release_point][]" size="3" id="release_point" multiple title="<?php echo L('ctrl_more_selected')?>">
-            <option value='' selected><?php echo L('not_use_the_publishers_some')?></option>
-    <?php if(is_array($release_point_list) && !empty($release_point_list)): foreach($release_point_list as $v):?>
-          <option value="<?php echo $v['id']?>"><?php echo $v['name']?></option>
-    <?php endforeach;endif;?>
-        </select> </td>
-        
-  </tr>
-</table>
-</fieldset>
-<div class="bk15"></div>
-<fieldset>
-    <legend><?php echo L('template_style_configuration')?></legend>
-    <table width="100%"  class="table_form">
-  <tr id="dr_row_template">
-    <th width="100" valign="top"><?php echo L('style_name')?>：</th>
-    <td class="y-bg"> <select name="template[]" size="3" id="template" multiple title="<?php echo L('ctrl_more_selected')?>" onchange="default_list()" ondblclick="default_list()">
-        <?php if(is_array($template_list)):
-            foreach ($template_list as $key=>$val):
-        ?>
-          <option value="<?php echo $val['dirname']?>"><?php echo $val['name']?></option>
-          <?php endforeach;endif;?>
-        </select></td>
-  </tr>
-   </tr>
-    <tr id="dr_row_default_style">
-    <th width="100" valign="top"><?php echo L('default_style')?>：<input type="hidden" name="info[default_style]" id="default_style_input" value="0"></th>
-    <td class="y-bg"><span id="default_style"><div class="mt-radio-inline"><label class="mt-radio mt-radio-outline"><input type="radio" name="default_style_radio" disabled> <span></span></label></div></span><span id="default_style_msg"></span></td>
-  </tr>
-</table>
-<script type="text/javascript">
-function default_list() {
-    var html = '';
-    var old = $('#default_style_input').val();
-    var checked = '';
-    $('#template option:selected').each(function(i,n){
-        if (old == $(n).val()) {
-            checked = 'checked';
-        }
-         html += '<div class="mt-radio-inline"><label class="mt-radio mt-radio-outline"><input type="radio" name="default_style_radio" value="'+$(n).val()+'" onclick="$(\'#default_style_input\').val(this.value);" '+checked+'> '+$(n).text()+' <span></span></label></div>';
-    });
-    if(!checked)  $('#default_style_input').val('0');
-    $('#default_style').html(html);
-}
-</script>
-</fieldset>
-<div class="bk15"></div>
-<fieldset>
-    <legend><?php echo L('site_att_config')?></legend>
-    <table width="100%"  class="table_form">
-  <tr>
-    <th width="130" valign="top"><?php echo L('site_att_upload_maxsize')?></th>
-    <td class="y-bg"><label><input type="text" class="input-text" name="setting[upload_maxsize]" id="upload_maxsize" size="10" value="2"/></label> MB </td>
-  </tr>
-  <tr>
-    <th width="130" valign="top"><?php echo L('site_att_allow_ext')?></th>
-    <td class="y-bg"><label><input type="text" class="input-text" name="setting[upload_allowext]" id="upload_allowext" size="80" value="jpg|jpeg|gif|bmp|png|doc|docx|xls|xlsx|ppt|pptx|pdf|txt|rar|zip|swf"/></label></td>
-  </tr>
-  <tr<?php if (SYS_EDITOR) {?> style="display: none;"<?php }?>>
-    <td valign="top" colspan="2"><fieldset>
-    <legend><?php echo L('att_ueditor')?></legend>
-    <table width="100%" class="radio-label">
-  <tr>
-    <th width="130" valign="top"><?php echo L('ueditor_filename')?></th>
-    <td class="y-bg"><label><input type="text" class="input-text" name="setting[filename]" id="filename" size="50" value="{yyyy}/{mm}{dd}/{time}{rand:6}"/></label>
-    <span class="help-block"><?php echo L('ueditor_filename_desc')?></span></td>
-  </tr>
-  <tr>
-    <th width="130" valign="top"><?php echo L('ueditor_image_max_size')?></th>
-    <td class="y-bg"><label><input type="text" class="input-text" name="setting[imageMaxSize]" id="imageMaxSize" size="10" value="2"/></label> MB </td>
-  </tr>
-  <tr>
-    <th width="130" valign="top"><?php echo L('ueditor_image_allow_ext')?></th>
-    <td class="y-bg"><label><input type="text" class="input-text" name="setting[imageAllowFiles]" id="imageAllowFiles" size="80" value="png|jpg|jpeg|gif|bmp"/></label></td>
-  </tr>
-  <tr>
-    <th width="130" valign="top"><?php echo L('ueditor_catcher_max_size')?></th>
-    <td class="y-bg"><label><input type="text" class="input-text" name="setting[catcherMaxSize]" id="catcherMaxSize" size="10" value="2"/></label> MB </td>
-  </tr>
-  <tr>
-    <th width="130" valign="top"><?php echo L('ueditor_catcher_allow_ext')?></th>
-    <td class="y-bg"><label><input type="text" class="input-text" name="setting[catcherAllowFiles]" id="catcherAllowFiles" size="80" value="png|jpg|jpeg|gif|bmp"/></label></td>
-  </tr>
-  <tr>
-    <th width="130" valign="top"><?php echo L('ueditor_video_max_size')?></th>
-    <td class="y-bg"><label><input type="text" class="input-text" name="setting[videoMaxSize]" id="videoMaxSize" size="10" value="100"/></label> MB </td>
-  </tr>
-  <tr>
-    <th width="130" valign="top"><?php echo L('ueditor_video_allow_ext')?></th>
-    <td class="y-bg"><label><input type="text" class="input-text" name="setting[videoAllowFiles]" id="videoAllowFiles" size="80" value="flv|swf|mkv|avi|rm|rmvb|mpeg|mpg|ogg|ogv|mov|wmv|mp4|webm|mp3|wav|mid"/></label></td>
-  </tr>
-  <tr>
-    <th width="130" valign="top"><?php echo L('ueditor_file_max_size')?></th>
-    <td class="y-bg"><label><input type="text" class="input-text" name="setting[fileMaxSize]" id="fileMaxSize" size="10" value="50"/></label> MB </td>
-  </tr>
-  <tr>
-    <th width="130" valign="top"><?php echo L('ueditor_file_allow_ext')?></th>
-    <td class="y-bg"><label><input type="text" class="input-text" name="setting[fileAllowFiles]" id="fileAllowFiles" size="80" value="png|jpg|jpeg|gif|bmp|flv|swf|mkv|avi|rm|rmvb|mpeg|mpg|ogg|ogv|mov|wmv|mp4|webm|mp3|wav|mid|rar|zip|tar|gz|7z|bz2|cab|iso|doc|docx|xls|xlsx|ppt|pptx|pdf|txt|md|xml"/></label></td>
-  </tr>
-  <tr>
-    <th width="130" valign="top"><?php echo L('ueditor_imagemanager_max_size')?></th>
-    <td class="y-bg"><label><input type="text" class="input-text" name="setting[imageManagerListSize]" id="imageManagerListSize" size="10" value="20"/></label></td>
-  </tr>
-  <tr style="display: none;">
-    <th width="130" valign="top"><?php echo L('ueditor_imagemanager_allow_ext')?></th>
-    <td class="y-bg"><label><input type="text" class="input-text" name="setting[imageManagerAllowFiles]" id="imageManagerAllowFiles" size="80" value="png|jpg|jpeg|gif|bmp"/></label></td>
-  </tr>
-  <tr>
-    <th width="130" valign="top"><?php echo L('ueditor_filemanager_max_size')?></th>
-    <td class="y-bg"><label><input type="text" class="input-text" name="setting[fileManagerListSize]" id="fileManagerListSize" size="10" value="20"/></label></td>
-  </tr>
-  <tr style="display: none;">
-    <th width="130" valign="top"><?php echo L('ueditor_filemanager_allow_ext')?></th>
-    <td class="y-bg"><label><input type="text" class="input-text" name="setting[fileManagerAllowFiles]" id="fileManagerAllowFiles" size="80" value="png|jpg|jpeg|gif|bmp|flv|swf|mkv|avi|rm|rmvb|mpeg|mpg|ogg|ogv|mov|wmv|mp4|webm|mp3|wav|mid|rar|zip|tar|gz|7z|bz2|cab|iso|doc|docx|xls|xlsx|ppt|pptx|pdf|txt|md|xml"/></label></td>
-  </tr>
-  <tr>
-    <th width="130" valign="top"><?php echo L('ueditor_videomanager_max_size')?></th>
-    <td class="y-bg"><label><input type="text" class="input-text" name="setting[videoManagerListSize]" id="videoManagerListSize" size="10" value="20"/></label></td>
-  </tr>
-  <tr style="display: none;">
-    <th width="130" valign="top"><?php echo L('ueditor_videomanager_allow_ext')?></th>
-    <td class="y-bg"><label><input type="text" class="input-text" name="setting[videoManagerAllowFiles]" id="videoManagerAllowFiles" size="80" value="flv|swf|mkv|avi|rm|rmvb|mpeg|mpg|ogg|ogv|mov|wmv|mp4|webm|mp3|wav|mid"/></label></td>
-  </tr>
-</table>
-</fieldset></td>
-  </tr>
-  <tr>
-    <th><?php echo L('site_att_upload_maxsize')?> </th>
-    <td class="y-bg"><?php echo $this->check_gd()?></td>
-  </tr>
-  <tr>
-    <th><?php echo L('site_att_watermark_enable')?></th>
-    <td class="y-bg">
-      <div class="mt-radio-inline">
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[watermark_enable]" value="1" checked="checked"> <?php echo L('site_att_watermark_open');?> <span></span></label>
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[watermark_enable]" value="0"> <?php echo L('site_att_watermark_close');?> <span></span></label>
-      </div>
-    </td>
-  </tr>
-  <tr>
-    <th><?php echo L('site_att_watermark_type')?></th>
-    <td class="y-bg">
-      <div class="mt-radio-inline">
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[type]" value="0" onclick="dr_type(0)" checked="checked"> <?php echo L('site_att_photo');?> <span></span></label>
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[type]" value="1" onclick="dr_type(1)"> <?php echo L('site_att_text');?> <span></span></label>
-      </div>
-    </td>
-  </tr>
-  <tr class="dr_sy dr_sy_1">
-    <th><?php echo L('site_att_text_font')?></th>
-    <td class="y-bg">
-        <?php if ($waterfile) {?>
-        <select style="height: 34px;background-color: rgb(255, 255, 255);box-shadow: rgba(0, 0, 0, 0.075) 0px 1px 1px inset;padding: 6px 12px;border-width: 1px;border-style: solid;border-color: rgb(194, 202, 216);border-image: initial;border-radius: 4px;transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;" name="setting[wm_font_path]" id="wm_font_path">
-            <?php foreach($waterfile as $t) {
-            if (strpos($t, '.ttf') !== false) {?>
-            <option<?php if ($t=='default.ttf') {?> selected=""<?php }?> value="<?php echo $t;?>"><?php echo $t;?></option>
-            <?php }}?>
-        </select>
-        <?php }?>
-        <label class="wm-fileupload-font"><span class="btn green btn-sm fileinput-button"><i class="fa fa-cloud-upload"></i> <span><?php echo L('upload');?></span> <input type="file" name="file_data"> </span> </label>
-        <span class="help-block"><?php echo L('site_att_text_font_desc')?></span>
-     </td>
-  </tr>
-  <tr class="dr_sy dr_sy_1">
-    <th><?php echo L('site_att_watermark_text')?></th>
-    <td class="y-bg">
-      <input type="text" class="input-text" name="setting[wm_text]" id="wm_text" size="10" value="cms" />
-      <span class="help-block"><?php echo L('site_att_text_desc')?></span>
-     </td>
-  </tr>
-  <tr class="dr_sy dr_sy_1">
-    <th><?php echo L('site_att_text_size')?></th>
-    <td class="y-bg">
-      <input type="text" class="input-text" name="setting[wm_font_size]" id="wm_font_size" size="10" value="" />
-      <span class="help-block"><?php echo L('site_att_text_size_desc')?></span>
-     </td>
-  </tr>
-  <tr class="dr_sy dr_sy_1">
-    <th><?php echo L('site_att_text_color')?></th>
-    <td class="y-bg">
-      <input type="text" class="input-text" name="setting[wm_font_color]" id="wm_font_color" size="10" value="" />
-     </td>
-  </tr>
-  <tr class="dr_sy dr_sy_0">
-    <th><?php echo L('site_att_watermark_img')?></th>
-    <td class="y-bg">
-        <?php if ($waterfile) {?>
-        <label><select class="form-control" name="setting[wm_overlay_path]" id="wm_overlay_path">
-            <?php foreach($waterfile as $t) {
-            if (strpos($t, '.png') !== false) {?>
-            <option<?php if ($t=='default.png') {?> selected=""<?php }?> value="<?php echo $t;?>"><?php echo $t;?></option>
-            <?php }}?>
-        </select></label>
-        <?php }?>
-        <label class="wm-fileupload-img"><span class="btn green btn-sm fileinput-button"><i class="fa fa-cloud-upload"></i> <span><?php echo L('upload');?></span> <input type="file" name="file_data"> </span> </label>
-        <span class="help-block"><?php echo L('site_att_watermark_img_desc')?></span>
-     </td>
-  </tr>
-   <tr>
-    <th width="130" valign="top"><?php echo L('site_att_watermark_pct')?></th>
-    <td class="y-bg"><input type="text" class="input-text" name="setting[wm_opacity]" id="wm_opacity" size="10" value="100" />
-    <span class="help-block"><?php echo L('site_att_watermark_pct_desc')?></span></td>
-  </tr> 
-   <tr>
-    <th width="130" valign="top"><?php echo L('site_att_watermark_quality')?></th>
-    <td class="y-bg"><input type="text" class="input-text" name="setting[quality]" id="quality" size="10" value="80" />
-    <span class="help-block"><?php echo L('site_att_watermark_quality_desc')?></span></td>
-  </tr>
-  <tr>
-    <th><?php echo L('site_att_watermark_padding')?></th>
-    <td class="y-bg">
-      <label><input type="text" class="input-text" name="setting[wm_padding]" id="wm_padding" size="10" value="0" placeholder="px" /></label>
-      <span class="help-block"><?php echo L('site_att_watermark_padding_desc')?></span>
-     </td>
-  </tr>
-  <tr>
-    <th><?php echo L('site_att_watermark_offset')?></th>
-    <td class="y-bg">
-        <div class="input-inline input-small">
-            <div class="input-group">
-                <span class="input-group-addon"><?php echo L('site_att_watermark_hor_offset')?></span>
-                <input type="text" name="setting[wm_hor_offset]" id="wm_hor_offset" value="" class="form-control" placeholder="px">
+
+                </div>
             </div>
+            <?php }?>
         </div>
-        <div class="input-inline input-small">
-            <div class="input-group">
-                <span class="input-group-addon"><?php echo L('site_att_watermark_vrt_offset')?></span>
-                <input type="text" name="setting[wm_vrt_offset]" id="wm_vrt_offset" value="" class="form-control" placeholder="px">
-            </div>
-        </div>
-     </td>
-  </tr>
-  <tr>
-    <th><?php echo L('site_att_watermark_photo')?></th>
-    <td class="y-bg">
-        <div class="input-inline input-large">
-            <div class="input-group">
-                <span class="input-group-addon"><?php echo L('site_att_watermark_minwidth')?></span>
-                <input type="text" name="setting[width]" id="width" value="" class="form-control" placeholder="px">
-            </div>
-        </div>
-        <div class="input-inline input-large">
-            <div class="input-group">
-                <span class="input-group-addon"><?php echo L('site_att_watermark_minheight')?></span>
-                <input type="text" name="setting[height]" id="height" value="" class="form-control" placeholder="px">
-            </div>
-        </div>
-        <span class="help-block"><?php echo L('site_att_watermark_photo_desc')?></span>
-     </td>
-  </tr>
-  <tr>
-    <th width="130" valign="top"><?php echo L('site_att_watermark_pos')?></th>
-    <td>
-      <div class="btn-group c-3x3" data-toggle="buttons">
-        <?php foreach ($locate as $i=>$t) {?>
-        <label class="btn btn-default<?php if ($i == 'right-bottom') {?> active<?php }?><?php if (strpos($i, 'bottom')!==false) {?> btn2<?php }?>"><input type="radio" name="setting[locate]" value="<?php echo $i?>"<?php if ($i == 'right-bottom') {?> checked<?php }?> class="toggle"><?php echo L($t)?></label>
-        <?php }?>
-      </div>
-    </td>
-  </tr>
-  <tr>
-    <th><?php echo L('site_att_ueditor')?></th>
-    <td class="y-bg">
-      <div class="mt-radio-inline">
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[ueditor]" value="0" checked> <?php echo L('site_att_watermark_ueditor');?> <span></span></label>
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[ueditor]" value="1"> <?php echo L('site_att_watermark_all');?> <span></span></label>
-        <span class="help-block"><?php echo L('site_att_ueditor_desc')?></span>
-      </div>
-    </td>
-  </tr>
-  <tr>
-    <th><?php echo L('缩略图水印')?></th>
-    <td class="y-bg">
-      <div class="mt-radio-inline">
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[thumb]" value="0" checked> <?php echo L('按调用参数');?> <span></span></label>
-        <label class="mt-radio mt-radio-outline"><input type="radio" name="setting[thumb]" value="1"> <?php echo L('site_att_watermark_all');?> <span></span></label>
-        <span class="help-block"><?php echo L('是否对缩略图函数thumb的图片进行强制水印')?></span>
-      </div>
-    </td>
-  </tr>
-   <tr>
-    <th width="130" valign="top"></th>
-    <td class="y-bg"><button type="button" onclick="dr_preview()" class="btn red btn-sm"> <i class="fa fa-photo"></i> <?php echo L('site_att_watermark_review');?></button></td>
-  </tr>
-</table>
-</fieldset>
+    </div>
+</div>
 </form>
+</div>
+</div>
 </div>
 <link rel="stylesheet" href="<?php echo JS_PATH?>ion-rangeslider/ion.rangeSlider.min.css">
 <script src="<?php echo JS_PATH?>ion-rangeslider/ion.rangeSlider.min.js"></script>
 <link href="<?php echo JS_PATH?>jquery-minicolors/jquery.minicolors.css" rel="stylesheet" type="text/css" />
 <script src="<?php echo JS_PATH?>jquery-minicolors/jquery.minicolors.min.js" type="text/javascript"></script>
 <script type="text/javascript">
+$('.nav-tabs a').click(function (e) {
+    $('.nav-tabs').find('li').removeClass('active');
+    $('.tab-pane').removeClass('active');
+    $(this).parent().addClass('active');
+    $('#'+$(this).attr("data-toggle")).addClass('active');
+})
 function dr_type(v) {
     $('.dr_sy').hide();
     $('.dr_sy_'+v).show();

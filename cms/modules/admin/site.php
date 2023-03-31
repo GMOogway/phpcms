@@ -32,7 +32,7 @@ class site extends admin {
 		$total = $this->db->count();
 		$pages = pages($total, $page, $pagesize);
 		$show_dialog = true;
-		$big_menu = array('javascript:dr_iframe(\'add\',\'?m=admin&c=site&a=add\',\'60%\',\'60%\');void(0);', L('add_site'));
+		$big_menu = array('javascript:dr_iframe(\'add\',\'?m=admin&c=site&a=add\',\'80%\',\'80%\');void(0);', L('add_site'));
 		include $this->admin_tpl('site_list');
 	}
 	
@@ -138,9 +138,9 @@ class site extends admin {
 						$dst = CMS_PATH.$info['dirname'].'/'.$file;
 					}
 					$fix_web_dir = isset($info['dirname']) && $info['dirname'] ? $info['dirname'].'/' : '';
-                    if (strpos($file, 'mobile/') !== false) {
-                        $fix_web_dir .= $info['mobile_dirname'];
-                    }
+					if (strpos($file, 'mobile/') !== false) {
+						$fix_web_dir .= $info['mobile_dirname'];
+					}
 					dr_mkdirs(dirname($dst));
 					$size = file_put_contents($dst, str_replace(array(
 						'{CMS_PATH}',
@@ -169,6 +169,7 @@ class site extends admin {
 			$release_point_db = pc_base::load_model('release_point_model');
 			$release_point_list = $release_point_db->select('', 'id, name');
 			$template_list = template_list();
+			$page = intval($this->input->get('page'));
 			include $this->admin_tpl('site_add');
 		}
 	}
@@ -367,6 +368,7 @@ class site extends admin {
 				$release_point_db = pc_base::load_model('release_point_model');
 				$release_point_list = $release_point_db->select('', 'id, name');
 				$is_tpl = is_file(TPLPATH.$data['default_style'].'/mobile/index.html');
+				$page = intval($this->input->get('page'));
 				include $this->admin_tpl('site_edit');
 			}
 		} else {
@@ -423,9 +425,9 @@ class site extends admin {
 				),
 			));
 		}
-        if (!$rt['code']) {
-            exit(dr_array2string($rt));
-        }
+		if (!$rt['code']) {
+			exit(dr_array2string($rt));
+			}
 		dr_json(1, L('上传成功'));
 	}
 
