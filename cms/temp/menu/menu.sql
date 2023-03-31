@@ -25,7 +25,7 @@ REPLACE INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`
 REPLACE INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`) VALUES('8', 'correlative_setting', '7', 'admin', 'admin', 'admin', '', 'fa fa-cogs', '0', '1');
 REPLACE INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`) VALUES('9', 'settingsave', '8', 'admin', 'setting', 'save', '', 'fa fa-save', '0', '0');
 REPLACE INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`) VALUES('10', 'site_management', '8', 'admin', 'site', 'init', '', 'fa fa-cog', '0', '1');
-REPLACE INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`) VALUES('11', 'add_site', '10', 'admin', 'site', 'add', '', 'fa fa-plus', '0', '0');
+REPLACE INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`) VALUES('11', 'add_site', '10', 'admin', 'site', 'add:add,80%,80%', '', 'fa fa-plus', '0', '1');
 REPLACE INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`) VALUES('12', 'site_edit', '10', 'admin', 'site', 'edit', '', 'fa fa-edit', '0', '0');
 REPLACE INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`) VALUES('13', 'site_del', '10', 'admin', 'site', 'del', '', 'fa fa-trash-o', '0', '0');
 REPLACE INTO `cms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `icon`, `listorder`, `display`) VALUES('14', 'site_field_manage', '10', 'content', 'sitemodel_field', 'init', '&modelid=0', 'fa fa-puzzle-piece', '0', '1');

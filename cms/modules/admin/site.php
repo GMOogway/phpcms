@@ -32,7 +32,6 @@ class site extends admin {
 		$total = $this->db->count();
 		$pages = pages($total, $page, $pagesize);
 		$show_dialog = true;
-		$big_menu = array('javascript:dr_iframe(\'add\',\'?m=admin&c=site&a=add\',\'80%\',\'80%\');void(0);', L('add_site'));
 		include $this->admin_tpl('site_list');
 	}
 	
