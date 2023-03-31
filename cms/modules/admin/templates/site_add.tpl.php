@@ -37,7 +37,7 @@ jQuery(document).ready(function() {
             <li<?php if ($page==5) {?> class="active"<?php }?>>
                 <a data-toggle="tab_5" onclick="$('#dr_page').val('5')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('site_att_config').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-folder"></i> <?php if (!is_mobile(0)) {echo L('site_att_config');}?> </a>
             </li>
-            <li<?php if ($page==6) {?> class="active<?php if (SYS_EDITOR) {?> hide<?php }?>"<?php }?>>
+            <li<?php if ($page==6) {?> class="active<?php if (SYS_EDITOR) {?> hide<?php }?>"<?php }else{?><?php if (SYS_EDITOR) {?> class="hide"<?php }}?>>
                 <a data-toggle="tab_6" onclick="$('#dr_page').val('6')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('att_ueditor').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-edit"></i> <?php if (!is_mobile(0)) {echo L('att_ueditor');}?> </a>
             </li>
             <?php if($forminfos && is_array($forminfos['base'])) {?>
