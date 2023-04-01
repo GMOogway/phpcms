@@ -228,8 +228,9 @@ function dr_get_data($title, $content) {
 /**
  * 提取关键字
  */
-function dr_get_keywords($kw) {
-	$rt = dr_get_data($kw, $kw);
+function dr_get_keywords($title, $content = '') {
+	$content = isset($content) && $content ? $content : $title;
+	$rt = dr_get_data($title, $content);
 	if (!$rt['code']) {
 		return '';
 	}
