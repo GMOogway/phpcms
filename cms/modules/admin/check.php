@@ -744,11 +744,11 @@ class check extends admin {
 \'qq_appid\' => \''.pc_base::load_config('system','qq_appid').'\', //QQ号码登录 appid
 \'qq_callback\' => \''.pc_base::load_config('system','qq_callback').'\', //QQ号码登录 callback
 
-\'keywordapi\' => \''.(pc_base::load_config('system','keywordapi') ? pc_base::load_config('system','keywordapi') : 0).'\', //关键词提取    0 百度 1 讯飞
+\'keywordapi\' => \''.(int)pc_base::load_config('system','keywordapi').'\', //关键词提取    0 本地 1 百度 2 讯飞
 \'baidu_aid\' => \''.pc_base::load_config('system','baidu_aid').'\', //百度关键词提取 APPID
 \'baidu_skey\' => \''.pc_base::load_config('system','baidu_skey').'\', //百度关键词提取 APIKey
 \'baidu_arcretkey\' => \''.pc_base::load_config('system','baidu_arcretkey').'\', //百度关键词提取 Secret Key
-\'baidu_qcnum\' => \''.(pc_base::load_config('system','baidu_qcnum') ? pc_base::load_config('system','baidu_qcnum') : 10).'\', //百度关键词提取 百度分词数量
+\'baidu_qcnum\' => \''.(int)pc_base::load_config('system','baidu_qcnum').'\', //分词数量
 \'xunfei_aid\' => \''.pc_base::load_config('system','xunfei_aid').'\', //讯飞关键词提取 APPID
 \'xunfei_skey\' => \''.pc_base::load_config('system','xunfei_skey').'\', //讯飞关键词提取 APIKey
 

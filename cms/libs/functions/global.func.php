@@ -134,9 +134,11 @@ function dr_get_data($title, $content) {
 	if (!$title) {
 		return dr_return_data(0, '分词接口-没有获取标题');
 	}
-	$cfg_bdqc_qcnum = pc_base::load_config('system', 'baidu_qcnum') ? pc_base::load_config('system', 'baidu_qcnum') : 10;
-	if (pc_base::load_config('system', 'keywordapi')==1) {
-		$cfg = array('id'=>pc_base::load_config('system', 'baidu_aid'), 'ak'=>pc_base::load_config('system', 'baidu_skey'), 'sk'=>pc_base::load_config('system', 'baidu_arcretkey'));
+	if (!(int)SYS_BAIDU_QCNUM) {
+		return dr_return_data(0, '分词接口-没有分词数量');
+	}
+	if (SYS_KEYWORDAPI==1) {
+		$cfg = array('id'=>SYS_BAIDU_AID, 'ak'=>SYS_BAIDU_SKEY, 'sk'=>SYS_BAIDU_ARCRETKEY);
 		if (!isset($cfg['id']) || !isset($cfg['ak']) || !isset($cfg['sk'])) {
 			log_message('error', '百度ai插件-分词接口配置没有成功');
 			return dr_return_data(0, '百度ai插件-分词接口配置没有成功');
@@ -153,16 +155,16 @@ function dr_get_data($title, $content) {
 			foreach ($rt['items'] as $t) {
 				$tag[] = $t['tag'];
 				$n++;
-				if( $n >= $cfg_bdqc_qcnum ) break;
+				if( $n >= (int)SYS_BAIDU_QCNUM ) break;
 			}
 			return dr_return_data(1, implode(',', $tag));
 			
 		}
 		log_message('error', '百度ai插件-没有分析出关键词');
 		return dr_return_data(0, '百度ai插件-没有分析出关键词', $rt);
-	} else if (pc_base::load_config('system', 'keywordapi')==2) {
-		$XAppid = pc_base::load_config('system', 'xunfei_aid');
-		$Apikey = pc_base::load_config('system', 'xunfei_skey');
+	} else if (SYS_KEYWORDAPI==2) {
+		$XAppid = SYS_XUNFEI_AID;
+		$Apikey = SYS_XUNFEI_SKEY;
 		if (!isset($XAppid) || !isset($Apikey)) {
 			log_message('error', '讯飞接口-分词接口配置没有成功');
 			return dr_return_data(0, '讯飞接口-分词接口配置没有成功');
@@ -201,7 +203,7 @@ function dr_get_data($title, $content) {
 			foreach ($rt['data']['ke'] as $t) {
 				$resultstr .= ','.$t['word'];
 				$n++;
-				if( $n >= $cfg_bdqc_qcnum ) break;
+				if( $n >= (int)SYS_BAIDU_QCNUM ) break;
 			}
 			return dr_return_data(1, trim($resultstr, ','));
 		}
@@ -213,7 +215,7 @@ function dr_get_data($title, $content) {
 		$phpanalysis->LoadDict();
 		$phpanalysis->SetSource($title);
 		$phpanalysis->StartAnalysis(true);
-		$rt = $phpanalysis->GetFinallyKeywords($cfg_bdqc_qcnum);
+		$rt = $phpanalysis->GetFinallyKeywords((int)SYS_BAIDU_QCNUM);
 		if (!$rt) {
 			log_message('error', '本地接口-没有分析出关键词');
 			return dr_return_data(0, '本地接口-没有分析出关键词');

@@ -588,6 +588,7 @@ jQuery(document).ready(function() {
                         <label class="col-md-2 control-label"><?php echo L('setting_qcnum')?></label>
                         <div class="col-md-9">
                             <input class="form-control input-large" type="text" id="baidu_qcnum" name="setconfig[baidu_qcnum]" value="<?php echo intval($baidu_qcnum);?>" >
+                            <span class="help-block"><?php echo L('分词数量，为0时关闭分词功能');?></span>
                         </div>
                     </div>
                     <div class="form-group<?php echo ($keywordapi=='2' || $keywordapi=='0') ? ' hidden' : ''?>" id="baidu">

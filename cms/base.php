@@ -222,6 +222,20 @@ define('ADMIN_FOUNDERS', explode(',', pc_base::load_config('system','admin_found
 define('SYS_HTML_ROOT', pc_base::load_config('system','html_root'));
 //生成手机静态文件路径
 define('SYS_MOBILE_ROOT', pc_base::load_config('system','mobile_root'));
+//关键词提取
+define('SYS_KEYWORDAPI', pc_base::load_config('system','keywordapi'));
+//百度关键词提取 APPID
+define('SYS_BAIDU_AID', pc_base::load_config('system','baidu_aid'));
+//百度关键词提取 APIKey
+define('SYS_BAIDU_SKEY', pc_base::load_config('system','baidu_skey'));
+//百度关键词提取 Secret Key
+define('SYS_BAIDU_ARCRETKEY', pc_base::load_config('system','baidu_arcretkey'));
+//分词数量
+define('SYS_BAIDU_QCNUM', pc_base::load_config('system','baidu_qcnum'));
+//讯飞关键词提取 APPID
+define('SYS_XUNFEI_AID', pc_base::load_config('system','xunfei_aid'));
+//讯飞关键词提取 APIKey
+define('SYS_XUNFEI_SKEY', pc_base::load_config('system','xunfei_skey'));
 //站点id
 !defined('SITE_ID') && define('SITE_ID', 1);
 define('SITE_URL', siteurl(SITE_ID));
