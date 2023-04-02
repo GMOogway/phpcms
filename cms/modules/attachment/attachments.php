@@ -395,8 +395,8 @@ class attachments {
 	 */
 	public function h5upload_json() {
 		$aid = intval($this->input->get('aid'));
-		$src = safe_replace(trim($this->input->get('src')));
-		$filename = urlencode(safe_replace($this->input->get('filename')));
+		$src = safe_replace($this->input->get('src'));
+		$filename = safe_replace($this->input->get('filename'));
 		$size = $this->input->get('size');
 		upload_json($aid,$src,$filename,$size);
 	}
@@ -406,8 +406,8 @@ class attachments {
 	 */	
 	public function h5upload_json_del() {
 		$aid = intval($this->input->get('aid'));
-		$src = trim($this->input->get('src'));
-		$filename = urlencode($this->input->get('filename'));
+		$src = safe_replace($this->input->get('src'));
+		$filename = safe_replace($this->input->get('filename'));
 		$size = $this->input->get('size');
 		upload_json_del($aid,$src,$filename,$size);
 	}

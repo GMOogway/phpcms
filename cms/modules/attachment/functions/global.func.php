@@ -87,9 +87,9 @@
 						return false;
 					}
 					if(json.ext == 1) {
-						var img = '<span class=\"checkbox\"></span><input type=\"checkbox\" class=\"checkboxes\" name=\"ids[]\" value=\"'+json.id+'\" /><a class=\"on\"><div class=\"icon\"></div><img src=\"'+json.url+'\" width=\"80\" id=\"'+json.id+'\" path=\"'+json.url+'\" size=\"'+json.size+'\" filename=\"'+json.name+'\"/></a><i class=\"size\">'+json.size+'</i><i class=\"name\" title=\"'+json.name+'\">'+json.name+'</i>';
+						var img = '<span class=\"checkbox\"></span><input type=\"checkbox\" class=\"checkboxes\" name=\"ids[]\" value=\"'+json.id+'\" /><a class=\"on\"><div class=\"icon\"></div><img src=\"'+json.url+'\" width=\"80\" id=\"'+json.id+'\" path=\"'+json.url+'\" size=\"'+json.size+'\" filename=\"'+json.name+'\"/></a><i class=\"size\">'+json.size+'</i><i class=\"name\">'+json.name+'</i>';
 					} else {
-						var img = '<span class=\"checkbox\"></span><input type=\"checkbox\" class=\"checkboxes\" name=\"ids[]\" value=\"'+json.id+'\" /><a class=\"on\"><div class=\"icon\"></div><img src=\"".IMG_PATH."ext/'+json.ext+'.png\" width=\"80\" id=\"'+json.id+'\" size=\"'+json.size+'\" path=\"'+json.url+'\" filename=\"'+json.name+'\"/></a><i class=\"size\">'+json.size+'</i><i class=\"name\" title=\"'+json.name+'\">'+json.name+'</i>';
+						var img = '<span class=\"checkbox\"></span><input type=\"checkbox\" class=\"checkboxes\" name=\"ids[]\" value=\"'+json.id+'\" /><a class=\"on\"><div class=\"icon\"></div><img src=\"".IMG_PATH."ext/'+json.ext+'.png\" width=\"80\" id=\"'+json.id+'\" size=\"'+json.size+'\" path=\"'+json.url+'\" filename=\"'+json.name+'\"/></a><i class=\"size\">'+json.size+'</i><i class=\"name\">'+json.name+'</i>';
 					}
 					$.get('".SELF."?m=attachment&c=attachments&a=h5upload_json&aid='+json.id+'&src='+json.url+'&filename='+json.name+'&size='+json.size);
 					$('#fileupload_files').append('<div class=\"col-md-2 col-sm-2 col-xs-6\"><div id=\"attachment_'+json.id+'\" class=\"files_row on\" onclick=\"javascript:att_cancel(this)\"></div></div>');
