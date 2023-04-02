@@ -51,23 +51,20 @@ jQuery(document).ready(function() {
 
                 <div class="form-body">
 
-                    <div>
-                        <div id="queue"></div>
-                        <span class="btn green fileinput-button" id="file_upload"><i class="fa fa-cloud-upload"></i> <span> <?php echo L('select_file')?> </span> <input type="file" name="file_upload"<?php echo $file_upload_limit > 1 ? ' multiple=""' : ''?>></span>
-                        <div id="nameTip" class="onShow"><?php echo L('upload_up_to')?><font color="red"> <?php echo $file_upload_limit?></font> <?php echo L('attachments')?>,<?php echo L('largest')?> <font color="red"><?php echo $file_size_limit;?> MB</font></div>
-                        <div class="bk3"></div>
-                        <div class="lh24"><?php echo L('supported')?> <font style="font-family: Arial, Helvetica, sans-serif"><?php echo str_replace('|','、',$file_types_post)?></font> <?php echo L('formats')?></div>
-                        <div id="progress" class="margin-top-20 fileupload-progress fade" style="display:none">
-                            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-                                <div class="progress-bar progress-bar-success" style="width:0%;"> </div>
-                            </div>
+                    <div id="queue"></div>
+                    <span class="btn green fileinput-button" id="file_upload"><i class="fa fa-cloud-upload"></i> <span> <?php echo L('select_file')?> </span> <input type="file" name="file_upload"<?php echo $file_upload_limit > 1 ? ' multiple=""' : ''?> title=""></span>
+                    <div id="nameTip" class="onShow"><?php echo L('upload_up_to')?><font color="red"> <?php echo $file_upload_limit?></font> <?php echo L('attachments')?>,<?php echo L('largest')?> <font color="red"><?php echo $file_size_limit;?> MB</font></div>
+                    <div class="bk3"></div>
+                    <div class="lh24"><?php echo L('supported')?> <font style="font-family: Arial, Helvetica, sans-serif"><?php echo str_replace('|','、',$file_types_post)?></font> <?php echo L('formats')?></div>
+                    <div id="progress" class="margin-top-20 fileupload-progress fade" style="display:none">
+                        <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                            <div class="progress-bar progress-bar-success" style="width:0%;"> </div>
                         </div>
                     </div>
                     <div class="bk10"></div>
                     <fieldset class="blue pad-10" id="h5upload">
                         <legend><?php echo L('lists')?></legend>
-                        <div id="fsUploadProgress"></div>
-                        <div class="files" id="fsUpload"></div>
+                        <div class="files row" id="fileupload_files"></div>
                     </fieldset>
 
                 </div>
@@ -123,7 +120,6 @@ jQuery(document).ready(function() {
             </div>
             <?php }?>
             <div id="att-status" class="hidden"></div>
-            <div id="att-status-del" class="hidden"></div>
             <div id="att-name" class="hidden"></div>
         </div>
     </div>
@@ -162,33 +158,36 @@ function dr_download(obj) {
         }
     });
 }
-function att_cancel(obj,id,source){
-    var src = $(obj).children("img").attr("path");
-    var filename = $(obj).children("img").attr("filename");
+function att_cancel(obj){
+    var id = $(obj).children("a").children("img").attr("id");
+    var src = $(obj).children("a").children("img").attr("path");
+    var filename = $(obj).children("a").children("img").attr("filename");
+    var size = $(obj).children("a").children("img").attr("size");
     if($(obj).hasClass('on')){
         $(obj).removeClass("on");
+        $(obj).children("a").removeClass("on");
         $('#attachment_'+id).removeClass('on').find('input[type="checkbox"]').prop('checked', false);
         var imgstr = $("#att-status").html();
         var length = $("a[class='on']").children("img").length;
         var strs = filenames = '';
+        $.get('<?php echo SELF;?>?m=attachment&c=attachments&a=h5upload_json_del&aid='+id+'&src='+src+'&filename='+filename+'&size='+size);
         for(var i=0;i<length;i++){
             strs += '|'+$("a[class='on']").children("img").eq(i).attr('path');
             filenames += '|'+$("a[class='on']").children("img").eq(i).attr('filename');
         }
         $('#att-status').html(strs);
         $('#att-name').html(filenames);
-        if(source=='upload') $('#att-status-del').append('|'+id);
     } else {
         $(obj).addClass("on");
+        $(obj).children("a").addClass("on");
+        $.get('<?php echo SELF;?>?m=attachment&c=attachments&a=h5upload_json&aid='+id+'&src='+src+'&filename='+filename+'&size='+size);
         $('#attachment_'+id).addClass('on').find('input[type="checkbox"]').prop('checked', true);
         $('#att-status').append('|'+src);
         $('#att-name').append('|'+filename);
-        var imgstr_del = $("#att-status-del").html();
         var imgstr_del_obj = $("a[class!='on']").children("img")
         var length_del = imgstr_del_obj.length;
         var strs_del='';
         for(var i=0;i<length_del;i++){strs_del += '|'+imgstr_del_obj.eq(i).attr('id');}
-        if(source=='upload') $('#att-status-del').html(strs_del);
     }
 }
 </script>

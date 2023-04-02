@@ -48,22 +48,12 @@
 		extract(geth5init($args));
 		$sess_id = SYS_TIME;
 		$h5_auth_key = md5(SYS_KEY.$sess_id);
-		if ($file_upload_limit > 1) {
-			$add = "var myItems = data.originalFiles.length;
-					var numItems = $('#fsUpload .files_row').length;
-					if(numItems + myItems > ".$file_upload_limit."){
-						dr_tips(0, '".str_replace('{file_num}', $file_upload_limit, L('att_upload_num'))."');
-						return false;
-					}";
-		} else {
-			$add = "$('#progress').hide();";
-		}
 		$init = "$(document).ready(function(){
 			// 初始化上传组件
 			$('#file_upload').fileupload({
 				disableImageResize: false,
 				autoUpload: true,
-				maxFileSize: " . $file_size_limit * 1024 * 1024 . ",
+				maxFileSize: " . floatval($file_size_limit) * 1024 * 1024 . ",
 				acceptFileTypes: /(\.|\/)(".$file_types_post.")$/i,
 				maxChunkSize: ".($chunk ? 20 * 1024 * 1024 : 0).",
 				formData: {H5UPLOADSESSID : '".$sess_id."',module:'".$module."',catid:'".$catid."',userid:'".$userid."',siteid:'".$siteid."',dosubmit:'1',thumb_width:'".$thumb_width."',thumb_height:'".$thumb_height."',watermark_enable:'".$watermark_enable."',attachment:'".$attachment."',image_reduce:'".$image_reduce."',filetype_post:'".$file_types_post."',h5_auth_key:'".$h5_auth_key."',isadmin:'".$isadmin."',groupid:'".$groupid."',args:'".$args."'},
@@ -77,7 +67,12 @@
 					$('#progress .progress-bar-success').attr('style', 'width: '+progress+'%');
 				},
 				add: function (e, data) {
-					".$add."
+					var myItems = data.originalFiles.length;
+					var numItems = $('#fileupload_files .files_row').length;
+					if(numItems + myItems > ".$file_upload_limit."){
+						dr_tips(0, '".str_replace('{file_num}', $file_upload_limit, L('att_upload_num')).(CI_DEBUG ? '（可在自定义字段中设置本字段的个数值）' : '')."');
+						return false;
+					}
 					data.submit();
 				},
 				done: function (e, data) {
@@ -92,12 +87,12 @@
 						return false;
 					}
 					if(json.ext == 1) {
-						var img = '<div onmouseover=\"layer.tips(\''+json.name+'&nbsp;&nbsp;'+json.size+'\',this,{tips: [1, \'#fff\']});\" onmouseout=\"layer.closeAll();\"><span class=\"checkbox\"></span><input type=\"checkbox\" class=\"checkboxes\" name=\"ids[]\" value=\"'+json.id+'\" /><a onclick=\"javascript:att_cancel(this,'+json.id+',\'upload\')\" class=\"on\"><div class=\"icon\"></div><img src=\"'+json.url+'\" width=\"80\" id=\"'+json.id+'\" path=\"'+json.url+'\" size=\"'+json.size+'\" filename=\"'+json.name+'\"/><i class=\"size\">'+json.size+'</i><i class=\"name\" title=\"'+json.name+'\">'+json.name+'</i></a></div>';
+						var img = '<span class=\"checkbox\"></span><input type=\"checkbox\" class=\"checkboxes\" name=\"ids[]\" value=\"'+json.id+'\" /><a class=\"on\"><div class=\"icon\"></div><img src=\"'+json.url+'\" width=\"80\" id=\"'+json.id+'\" path=\"'+json.url+'\" size=\"'+json.size+'\" filename=\"'+json.name+'\"/></a><i class=\"size\">'+json.size+'</i><i class=\"name\" title=\"'+json.name+'\">'+json.name+'</i>';
 					} else {
-						var img = '<div onmouseover=\"layer.tips(\''+json.name+'&nbsp;&nbsp;'+json.size+'\',this,{tips: [1, \'#fff\']});\" onmouseout=\"layer.closeAll();\"><span class=\"checkbox\"></span><input type=\"checkbox\" class=\"checkboxes\" name=\"ids[]\" value=\"'+json.id+'\" /><a onclick=\"javascript:att_cancel(this,'+json.id+',\'upload\')\" class=\"on\"><div class=\"icon\"></div><img src=\"".IMG_PATH."ext/'+json.ext+'.png\" width=\"80\" id=\"'+json.id+'\" size=\"'+json.size+'\" path=\"'+json.url+'\" filename=\"'+json.name+'\"/><i class=\"size\">'+json.size+'</i><i class=\"name\" title=\"'+json.name+'\">'+json.name+'</i></a></div>';
+						var img = '<span class=\"checkbox\"></span><input type=\"checkbox\" class=\"checkboxes\" name=\"ids[]\" value=\"'+json.id+'\" /><a class=\"on\"><div class=\"icon\"></div><img src=\"".IMG_PATH."ext/'+json.ext+'.png\" width=\"80\" id=\"'+json.id+'\" size=\"'+json.size+'\" path=\"'+json.url+'\" filename=\"'+json.name+'\"/></a><i class=\"size\">'+json.size+'</i><i class=\"name\" title=\"'+json.name+'\">'+json.name+'</i>';
 					}
 					$.get('".SELF."?m=attachment&c=attachments&a=h5upload_json&aid='+json.id+'&src='+json.url+'&filename='+json.name+'&size='+json.size);
-					$('#fsUpload').append('<div class=\"col-md-2 col-sm-2 col-xs-6\"><div id=\"attachment_'+json.id+'\" class=\"files_row on\"></div></div>');
+					$('#fileupload_files').append('<div class=\"col-md-2 col-sm-2 col-xs-6\"><div id=\"attachment_'+json.id+'\" class=\"files_row on\" onclick=\"javascript:att_cancel(this)\"></div></div>');
 					$('#attachment_'+json.id).html(img);
 					$('#att-status').append('|'+json.url);
 					$('#att-name').append('|'+json.name);
