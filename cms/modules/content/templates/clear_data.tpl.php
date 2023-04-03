@@ -1,65 +1,93 @@
 <?php
 defined('IS_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');?>
-<style type="text/css">
-body .table-list table tr>td:first-child, body .table-list table tr>th:first-child {text-align: left;padding: 8px;}
-</style>
+<link rel="stylesheet" href="<?php echo JS_PATH;?>bootstrap-switch/css/bootstrap-switch.min.css" media="all" />
+<script type="text/javascript" src="<?php echo JS_PATH;?>bootstrap-switch/js/bootstrap-switch.min.js"></script>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+    $(":text").removeClass('input-text');
+});
+</script>
 <div class="page-container" style="margin-bottom: 0px !important;">
     <div class="page-content-wrapper">
         <div class="page-content page-content3 mybody-nheader main-content  ">
-<div class="portlet-body">
-<div class="right-card-box">
-<div class="table-list">
-<form action="?m=content&c=content&a=clear_data" method="post" name="myform">
-<table width="100%" cellspacing="0">
-  <input type="hidden" name="dosubmit" value="1"> 
-<thead>
-<tr>
-<th align="center"><?php echo L('please_choose_talbes')?></th>
-</tr>
-</thead>
-<tr>
-	<td><div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="tables[]" type="checkbox" value="category" class="input-text-c input-text"><?php echo L('category');?><span></span></label></div></td>
-</tr>
-<tr>
-	<td><div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="tables[]" id="model" type="checkbox" value="content" class="input-text-c input-text"><?php echo L('models')?><span></span></label></div></td>
-</tr>
-<tr id="models" class="hidden">
-	<td><div class="mt-checkbox-inline"><?php foreach($model_arr as $m) {?><label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" name="model[]" value="<?php echo $m['modelid'];?>" > <?php echo $m['name']?><span></span></label><?php }?></div></td>
-</tr>
-<tr>
-	<td><div class="mt-checkbox-inline"><label class="mt-checkbox mt-checkbox-outline"><input name="tables[]" type="checkbox" value="comment" class="input-text-c input-text"><?php echo L('comment')?><span></span></label>（<span style="color:#d55"><?php echo L('can_not_recovered')?></span>）</div></td>
-</tr>
-<tr>
-	<td><input type="submit" class="button" value="<?php echo L('clear')?>" ></td>
-</tr>
-</table>
+<form action="?m=content&c=content&a=clear_data" class="form-horizontal" method="post" name="myform" id="myform">
+<input name="page" id="dr_page" type="hidden" value="<?php echo $page;?>">
+<input name="pc_hash" type="hidden" value="<?php echo dr_get_csrf_token();?>">
+<input type="hidden" name="dosubmit" value="1"> 
+<div class="portlet light bordered myfbody">
+    <div class="portlet-title tabbable-line">
+        <ul class="nav nav-tabs" style="float:left;">
+            <li<?php if ($page==0) {?> class="active"<?php }?>>
+                <a data-toggle="tab_0" onclick="$('#dr_page').val('0')"<?php if (is_mobile(0)) {echo ' onmouseover="layer.tips(\''.L('please_choose_talbes').'\',this,{tips: [1, \'#fff\']});" onmouseout="layer.closeAll();"';}?>> <i class="fa fa-cog"></i> <?php if (!is_mobile(0)) {echo L('please_choose_talbes');}?> </a>
+            </li>
+        </ul>
+    </div>
+    <div class="portlet-body form">
+        <div class="tab-content">
+            <div class="tab-pane<?php if ($page==0) {?> active<?php }?>" id="tab_0">
+
+                <div class="form-body">
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('category')?></label>
+                        <div class="col-md-9">
+                            <input type="checkbox" name="tables[]" value="category" data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('models')?></label>
+                        <div class="col-md-9">
+                            <input type="checkbox" id="model" name="tables[]" value="content" data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+                        </div>
+                    </div>
+                    <div class="form-group hide" id="models">
+                        <label class="col-md-2 control-label"><?php echo L('models')?></label>
+                        <div class="col-md-9">
+                            <?php foreach($model_arr as $m) {?>
+                            <input type="checkbox" name="model[]" value="<?php echo $m['modelid'];?>" data-on-text="<?php echo $m['name']?>" data-off-text="<?php echo $m['name']?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+                            <?php }?>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"><?php echo L('comment')?></label>
+                        <div class="col-md-9">
+                            <input type="checkbox" name="tables[]" value="comment" data-on-text="<?php echo L('open')?>" data-off-text="<?php echo L('close')?>" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+                            <span class="help-block"><?php echo L('can_not_recovered')?></span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="portlet-body form myfooter">
+            <div class="form-actions text-center">
+                <button type="button" onclick="Dialog.confirm('<?php echo L('确定要清理选中的数据吗？')?>', function() {dr_ajax_submit('?m=content&c=content&a=clear_data&page='+$('#dr_page').val(), 'myform', '2000');});" class="btn green"> <i class="fa fa-save"></i> <?php echo L('submit')?></button>
+            </div>
+        </div>
+    </div>
+</div>
 </form>
 </div>
 </div>
 </div>
-</div>
-</div>
-</div>
-<script language="JavaScript">
-<!--
-	function change_model(modelid) {
-		window.location.href='?m=content&c=create_html&a=category&modelid='+modelid+'&pc_hash='+pc_hash;
-	}
-
-	$('#model').click(function (){
-		if ($('#models').attr('class') == 'hidden'){
-			$("[name='model[]']").each(function (i) {
-				$(this).prop('checked', true);
-			});
-			$('#models').removeClass('hidden');
-		} else {
-			$("[name='model[]']").each(function (i) {
-				$(this).prop('checked', false);
-			});
-			$('#models').addClass('hidden');
-		}
-
-	})
-//-->
+<script type="text/javascript">
+$('.nav-tabs a').click(function (e) {
+    $('.nav-tabs').find('li').removeClass('active');
+    $('.tab-pane').removeClass('active');
+    $(this).parent().addClass('active');
+    $('#'+$(this).attr("data-toggle")).addClass('active');
+})
+$(function() {
+    $(".make-switch").bootstrapSwitch();
+    $('#model').on('switchChange.bootstrapSwitch',function(event,state){
+        if(state){ 
+            $('#models').removeClass('hide');
+        }else{
+            $('#models').addClass('hide');
+        }
+    });
+});
 </script>
+</body>
+</html>

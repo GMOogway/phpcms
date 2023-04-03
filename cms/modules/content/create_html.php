@@ -834,6 +834,8 @@ class create_html extends admin {
 	// 提取tag
 	public function public_tag_edit() {
 		$show_header = $show_dialog  = true;
+		$this->keyword_db = pc_base::load_model('keyword_model');
+		$this->keyword_data_db = pc_base::load_model('keyword_data_model');
 		$modelid = intval($this->input->get('modelid'));
 		$page = (int)$this->input->get('page');
 		$psize = 10; // 每页处理的数量
@@ -841,7 +843,7 @@ class create_html extends admin {
 		$this->db->set_model($modelid);
 
 		$where = 'status = 99';
-		$catid = $this->input->get('catid');
+		$catid = intval($this->input->get('catid'));
 
 		$url = '?m=content&c=create_html&a=public_tag_edit&modelid='.$modelid;
 
@@ -871,6 +873,17 @@ class create_html extends admin {
 				html_msg(0, L('无可用内容更新'));
 			}
 
+			if (!$keyword) {
+				$result = $this->keyword_data_db->select(array('contentid'=>'%-'.$modelid.'%'));
+				if ($result) {
+					foreach ($result as $t) {
+						$this->keyword_db->update(array('videonum'=>'-=1'),array('siteid'=>$this->siteid,'id'=>$t['tagid']));
+					}
+				}
+				$result = $this->keyword_data_db->delete(array('contentid'=>'%-'.$modelid.'%'));
+				$this->keyword_db->delete(array('videonum'=>'0'));
+			}
+
 			html_msg(1, L('正在执行中...'), $url.'&total='.$total.'&page='.($page+1), L('在使用网络分词接口时可能会很慢'));
 		}
 
@@ -878,14 +891,50 @@ class create_html extends admin {
 
 		// 更新完成
 		if ($page > $tpage) {
+			$this->keyword_db->delete(array('videonum'=>'0'));
 			html_msg(1, L('更新完成'));
 		}
 
+		$keywords = array();
 		$data = $this->db->listinfo($where, 'id DESC', $page, $psize);
 		foreach ($data as $t) {
 			$tag = dr_get_keywords($t['title'].' '.$t['description']);
 			if ($tag) {
 				$this->db->update(array('keywords' => $tag), array('id' => $t['id']));
+			}
+			if ($t['keywords']) {
+				pc_base::load_sys_func('iconv');
+				$keywords = preg_split("/[ ,]+/", $t['keywords']);
+				if (is_array($keywords) && !empty($keywords)) {
+					foreach ($keywords as $v) {
+						$v = str_replace(array('//','#','.'),' ',$v);
+						if ($v) {
+							if (!$r = $this->keyword_db->get_one(array('keyword'=>$v, 'siteid'=>$this->siteid))) {
+								$letters = gbk_to_pinyin($v);
+								$letter = strtolower(implode('', $letters));
+								$tagid = $this->keyword_db->insert(array('keyword'=>$v, 'siteid'=>$this->siteid, 'pinyin'=>$letter, 'videonum'=>1), true);
+							} else {
+								$tagid = $r['id'];
+							}
+							$contentid = $t['id'].'-'.$modelid;
+							if (!$this->keyword_data_db->get_one(array('tagid'=>$tagid, 'siteid'=>$this->siteid, 'contentid'=>$contentid))) {
+								$this->keyword_db->update(array('videonum'=>'+=1'), array('id'=>$r['id']));
+								$this->keyword_data_db->insert(array('tagid'=>$tagid, 'siteid'=>$this->siteid, 'contentid'=>$contentid));
+							}
+						}
+						unset($contentid, $tagid, $letters);
+					}
+				}
+				$keyword_data_arr = $this->keyword_data_db->select(array('siteid'=>$this->siteid,'contentid'=>$t['id'].'-'.$modelid));
+				if($keyword_data_arr){
+					foreach ($keyword_data_arr as $val){
+						$keyword_arr = $this->keyword_db->get_one(array('siteid'=>$this->siteid,'id'=>$val['tagid']));
+						if (!in_array($keyword_arr['keyword'], $keywords)) {
+							$this->keyword_db->update(array('videonum'=>'-=1'),array('siteid'=>$this->siteid,'id'=>$keyword_arr['id']));
+							$this->keyword_data_db->delete(array('siteid'=>$this->siteid,'tagid'=>$keyword_arr['id'],'contentid'=>$t['id'].'-'.$modelid));
+						}
+					}
+				}
 			}
 		}
 
@@ -922,7 +971,7 @@ class create_html extends admin {
 		$this->db->set_model($modelid);
 
 		$where = 'status = 99';
-		$catid = $this->input->get('catid');
+		$catid = intval($this->input->get('catid'));
 
 		$url = '?m=content&c=create_html&a=public_thumb_edit&modelid='.$modelid;
 
@@ -1007,7 +1056,7 @@ class create_html extends admin {
 		$this->db->set_model($modelid);
 
 		$where = 'status = 99';
-		$catid = $this->input->get('catid');
+		$catid = intval($this->input->get('catid'));
 
 		$url = '?m=content&c=create_html&a=public_desc_edit&modelid='.$modelid;
 
@@ -1123,7 +1172,7 @@ class create_html extends admin {
 		$where = array();
 
 		// 获取栏目
-		$catid = $this->input->get('catid');
+		$catid = intval($this->input->get('catid'));
 		if ($catid) {
 			$cat = array();
 			foreach ($catid as $i) {
@@ -1225,7 +1274,7 @@ class create_html extends admin {
 		$sitelist = getcache('sitelist','commons');
 
 		$where = array();
-		$catid = $this->input->get('catid');
+		$catid = intval($this->input->get('catid'));
 
 		$url = '?m=content&c=create_html&a=public_del_edit&modelid='.$modelid;
 

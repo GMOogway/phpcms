@@ -19,10 +19,21 @@ class database {
 		if(ADMIN_FOUNDERS && !dr_in_array($this->userid, ADMIN_FOUNDERS)) {
 			dr_json(0, L('only_fonder_operation'));
 		}
+		if (fileext($file)=='sql') {
+			try {
+				if (!is_file($backupDir.$file)) {
+					dr_json(0, L('未找到SQL文件'));
+				}
+				dr_json(1, 'ok', array('url' => WEB_PATH.'index.php?m=content&c=database&a=import_index&file='.$file));
+			} catch (Exception $e) {
+				dr_json(0, L($e->getMessage()));
+			} catch (PDOException $e) {
+				dr_json(0, L($e->getMessage()));
+			}
+		}
 		if (!preg_match("/^backup\-((?!\").)*\.zip$/i", $file)) {
 			dr_json(0, L('参数不正确'));
 		}
-		$file = $backupDir.$file;
 		if (!class_exists('ZipArchive')) {
 			dr_json(0, L('服务器缺少php-zip组件，无法进行还原操作'));
 		}
@@ -32,7 +43,7 @@ class database {
 				create_folder($dir, 0755);
 			}
 			$zip = new \ZipArchive;
-			if ($zip->open($file) !== true) {
+			if ($zip->open($backupDir.$file) !== true) {
 				dr_json(0, L('无法打开备份文件'));
 			}
 			if (!$zip->extractTo($dir)) {
@@ -40,8 +51,7 @@ class database {
 				dr_json(0, L('无法解压备份文件'));
 			}
 			$zip->close();
-			$filename = basename($file);
-			$sqlFile = $dir . str_replace('.zip', '.sql', $filename);
+			$sqlFile = $dir.file_name($file).'.sql';
 			if (!is_file($sqlFile)) {
 				dr_json(0, L('未找到SQL文件'));
 			}
@@ -74,10 +84,12 @@ class database {
 			dr_json(0, '数据缓存不存在');
 		}
 
-		$filedir = $backupDir.'database/';
-		$file = $backupDir.$file;
-		$filename = basename($file);
-		$sqlFile = $filedir . str_replace('.zip', '.sql', $filename);
+		if (fileext($file)=='sql') {
+			$sqlFile = $backupDir.$file;
+		} else {
+			$filedir = $backupDir.'database/';
+			$sqlFile = $filedir.file_name($file).'.sql';
+		}
 		if (!is_file($sqlFile)) {
 			dr_json(0, L('未找到SQL文件'));
 		}

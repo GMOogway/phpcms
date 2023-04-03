@@ -1963,16 +1963,20 @@ class content extends admin {
 								$content_data = $db->get_one('', '*', 'id desc');
 								$tid = $content_data['id'] ? get_table_id($content_data['id']) + 1 : 200;
 								if ($r = $db->count()) { //判断模型下是否有数据
-									$sql_file = CACHE_PATH.'bakup'.DIRECTORY_SEPARATOR.'default'.DIRECTORY_SEPARATOR.$model_arr[$modelid]['tablename'].'.sql';
 									$result = $data = $db->select();
-									$this->create_sql_file($result, $db->db_tablepre.$model_arr[$modelid]['tablename'], $sql_file);
+									if (is_array($result) && $result) {
+										$sql_file = CACHE_PATH.'bakup'.DIRECTORY_SEPARATOR.'default'.DIRECTORY_SEPARATOR.$model_arr[$modelid]['tablename'].'.sql';
+										$this->create_sql_file($result, $db->db_tablepre.$model_arr[$modelid]['tablename'], $sql_file);
+									}
 									$db->query('TRUNCATE TABLE `cms_'.$model_arr[$modelid]['tablename'].'`');
 									//开始清理模型data表数据
 									for ($i = 0; $i < $tid; $i ++) {
 										$db->table_name = $db->table_name.'_data_'.$i;
-										$sql_file = CACHE_PATH.'bakup'.DIRECTORY_SEPARATOR.'default'.DIRECTORY_SEPARATOR.$model_arr[$modelid]['tablename'].'_data_'.$i.'.sql';
 										$result = $db->select();
-										$this->create_sql_file($result, $db->db_tablepre.$model_arr[$modelid]['tablename'].'_data_'.$i.'', $sql_file);
+										if (is_array($result) && $result) {
+											$sql_file = CACHE_PATH.'bakup'.DIRECTORY_SEPARATOR.'default'.DIRECTORY_SEPARATOR.$model_arr[$modelid]['tablename'].'_data_'.$i.'.sql';
+											$this->create_sql_file($result, $db->db_tablepre.$model_arr[$modelid]['tablename'].'_data_'.$i.'', $sql_file);
+										}
 										$db->query('TRUNCATE TABLE `cms_'.$model_arr[$modelid]['tablename'].'_data_'.$i.'`');
 										$db->set_model($modelid);
 									}
@@ -1980,7 +1984,7 @@ class content extends admin {
 									$hits_db = pc_base::load_model('hits_model');
 									$hitsid = 'c-'.$modelid.'-';
 									$result = $hits_db->select("`hitsid` LIKE '%$hitsid%'");
-									if (is_array($result)) {
+									if (is_array($result) && $result) {
 										$sql_file = CACHE_PATH.'bakup'.DIRECTORY_SEPARATOR.'default'.DIRECTORY_SEPARATOR.'hits-'.$modelid.'.sql';
 										$this->create_sql_file($result, $hits_db->db_tablepre.'hits', $sql_file);
 									}
@@ -1990,7 +1994,7 @@ class content extends admin {
 									$type_model = getcache('type_model_'.$model_arr[$modelid]['siteid'], 'search');
 									$typeid = $type_model[$modelid];
 									$result = $search_db->select("`typeid`=".$typeid);
-									if (is_array($result)) {
+									if (is_array($result) && $result) {
 										$sql_file = CACHE_PATH.'bakup'.DIRECTORY_SEPARATOR.'default'.DIRECTORY_SEPARATOR.'search-'.$modelid.'.sql';
 										$this->create_sql_file($result, $search_db->db_tablepre.'search', $sql_file);
 									}
@@ -1998,7 +2002,7 @@ class content extends admin {
 									//Delete the model data in the position table
 									$position_db = pc_base::load_model('position_data_model');
 									$result = $position_db->select('`modelid`='.$modelid.' AND `module`=\'content\'');
-									if (is_array($result)) {
+									if (is_array($result) && $result) {
 										$sql_file = CACHE_PATH.'bakup'.DIRECTORY_SEPARATOR.'default'.DIRECTORY_SEPARATOR.'position_data-'.$modelid.'.sql';
 										$this->create_sql_file($result, $position_db->db_tablepre.'position_data', $sql_file);
 									}
@@ -2026,9 +2030,11 @@ class content extends admin {
 								$comment_db->table_name($i);
 								if ($comment_db->table_exists(str_replace($comment_db->db_tablepre, '', $comment_db->table_name))) {
 									if ($r = $comment_db->count()) {
-										$sql_file = CACHE_PATH.'bakup'.DIRECTORY_SEPARATOR.'default'.DIRECTORY_SEPARATOR.'comment_data_'.$i.'.sql';
 										$result = $comment_db->select();
-										$this->create_sql_file($result, $comment_db->db_tablepre.'comment_data_'.$i, $sql_file);
+										if (is_array($result) && $result) {
+											$sql_file = CACHE_PATH.'bakup'.DIRECTORY_SEPARATOR.'default'.DIRECTORY_SEPARATOR.'comment_data_'.$i.'.sql';
+											$this->create_sql_file($result, $comment_db->db_tablepre.'comment_data_'.$i, $sql_file);
+										}
 										$comment_db->query('TRUNCATE TABLE `cms_comment_data_'.$i.'`');
 									}
 								} else {
@@ -2047,7 +2053,7 @@ class content extends admin {
 					}
 				}
 			}
-			dr_admin_msg(1,L('clear_data_message'));
+			dr_admin_msg(1, L('clear_data_message'), array('url' => '?m=content&c=content&a=clear_data&&page='.(int)($this->input->post('page')).'&pc_hash='.dr_get_csrf_token()));
 		} else {
 			//读取网站的所有模型
 			$show_header = true;

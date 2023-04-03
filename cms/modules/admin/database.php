@@ -44,11 +44,11 @@ class database extends admin {
 				$date = date('YmdHis');
 				$name = file_name($database['default']['database']);
 				$filename = $backupDir.'backup-'.$name.'-'.$date.'.db';
-                if (copy(CMS_PATH.$database['default']['database'], $filename)) {
-                    dr_json(1, L('备份数据库成功'));
-                } else {
-                    dr_json(0, L('备份失败'));
-                }
+				if (copy(CMS_PATH.$database['default']['database'], $filename)) {
+					dr_json(1, L('备份数据库成功'));
+				} else {
+					dr_json(0, L('备份失败'));
+				}
 			} else {
 				$action = $this->input->post('action');
 				$file = $this->input->post('file');
@@ -87,8 +87,10 @@ class database extends admin {
 					if(ADMIN_FOUNDERS && !dr_in_array($this->userid, ADMIN_FOUNDERS)) {
 						dr_json(0, L('only_fonder_operation'));
 					}
-					if (!preg_match("/^backup\-((?!\").)*\.zip$/i", $file)) {
-						dr_json(0, L('参数不正确'));
+					if (fileext($file)!='sql') {
+						if (!preg_match("/^backup\-((?!\").)*\.zip$/i", $file)) {
+							dr_json(0, L('参数不正确'));
+						}
 					}
 					$file = $backupDir.$file;
 					unlink($file);
@@ -118,13 +120,16 @@ class database extends admin {
 			} else {
 				$infos = array();
 				if(ADMIN_FOUNDERS && dr_in_array($this->userid, ADMIN_FOUNDERS)) {
-					foreach (glob($backupDir . "*.zip") as $filename) {
-						$time = filemtime($filename);
+					foreach (dr_file_map($backupDir) as $filename) {
+						if (fileext($filename)!='zip' && fileext($filename)!='sql') {
+							continue;
+						}
+						$time = filemtime($backupDir.$filename);
 						$infos[] =
 							[
-								'file' => str_replace($backupDir, '', $filename),
+								'file' => $filename,
 								'date' => dr_date($time, "Y-m-d H:i:s", 'red'),
-								'size' => format_file_size(filesize($filename))
+								'size' => format_file_size(filesize($backupDir.$filename))
 							];
 					}
 				}
